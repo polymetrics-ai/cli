@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_9_plan",
+  "currentCycle": "correction_cycle_10_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -218,15 +218,20 @@
       "cycle": "correction_cycle_9_plan_amendment",
       "decision": "local_critical_path",
       "reason": "The completed read-only seam map is committed as the required multi-agent trace and binds Cycle 9 to closed-field terminal parsing plus public Pi 0.80.6 tool types without a brittle transitive TypeBox import or new dependency."
+    },
+    {
+      "cycle": "correction_cycle_10_plan",
+      "decision": "local_critical_path",
+      "reason": "Both complete Cycle 9 reports collapse into one overlapping runtime/policy correction lane; a read-only architecture explorer was attempted but rejected by the runtime thread cap, so the isolated issue worker records and executes the complete matrix locally."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_9_red_and_green; retained_cycle_8_green_70_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_9; retained_cycle_8_environment_blocked_207_executed_176_passed_31_spawn_eperm_failures_only_controller_and_state_store",
-    "strictTypeScriptPi0806": "pending_cycle_9; retained_cycle_8_passed_focused_and_all_production",
-    "offlineRpcSmoke": "pending_cycle_9_rpc_and_no_model_tool_exercise; retained_cycle_8_pm_shepherd_registered",
-    "diffCheck": "pending_cycle_9",
-    "ownedScope": "pending_cycle_9; immutable_base_e659d6f1_and_frozen_head_0cdcda7e; remote_push_deferred_by_dns",
+    "focusedTests": "pending_cycle_10_red_and_green; retained_cycle_9_green_86_passed_0_failed",
+    "fullShepherdTests": "pending_cycle_10; retained_cycle_9_environment_blocked_223_executed_192_passed_31_spawn_eperm_failures_only_controller_and_state_store",
+    "strictTypeScriptPi0806": "pending_cycle_10; retained_cycle_9_passed_focused_and_all_production",
+    "offlineRpcSmoke": "pending_cycle_10_rpc_and_no_model_tool_exercise; retained_cycle_9_pm_shepherd_registered_and_tool_validation_passed",
+    "diffCheck": "pending_cycle_10",
+    "ownedScope": "pending_cycle_10; immutable_base_e659d6f1_and_frozen_head_f63957ae; no_push_or_github_authorized",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

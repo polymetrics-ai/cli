@@ -231,3 +231,22 @@
 - Read-only agent prompt and structured result: `agents/cycle9-seam-map.md` and
   `traces/cycle9-seam-map-trace.md`. The result prohibits generic hostile-Proxy enumeration and
   brittle imports from Pi's nested transitive TypeBox installation.
+
+## Consolidated Stable-Head Correction Cycle 10 Snapshot
+
+- Frozen candidate: `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE9-1.md` and `/tmp/475-REVIEW-CYCLE9-2.md`, including
+  WR-01; no report row is deferred.
+- Objective: close authoritative native signal leasing, staged returned-session cleanup, detached
+  timer ownership, multi-phase close joining, exact creation-result arrays, cumulative Pi event
+  accounting, prototype/pre-allocation-safe snapshots, typed redacted boundary failures, and the
+  remaining redaction/path/capability/control grammar without widening authority.
+- Method: recorded manual-GSD artifact-only PLAN -> one comprehensive test-only RED -> architectural
+  GREEN/refactor -> declared verification. Production remains frozen through RED.
+- Execution decision: `local_critical_path`; the attempted read-only explorer was rejected by the
+  runtime thread cap and all production findings overlap the issue-owned runtime/policy boundary.
+- Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, and `RUN-STATE.json`.
+- Verification result: pending Cycle 10 RED and GREEN. Required evidence is focused retained/new
+  counts, both strict Pi 0.80.6 TypeScript scopes, pinned offline RPC/no-model validation, serialized
+  full-suite classification, exact diff/base/scope/head checks, and no external mutation.

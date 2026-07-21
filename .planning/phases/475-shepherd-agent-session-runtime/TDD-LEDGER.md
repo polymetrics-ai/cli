@@ -739,3 +739,55 @@ add dependencies, change scheduler/parent files, or widen tools.
 - `git diff --check`, immutable-base/frozen-candidate ancestry, and exact issue-owned path checks
   pass. No dependency, Go/connector/certification, `make`, service, live GitHub, review-bot, merge,
   credential, or model call was made. Push remains parent/DNS-deferred.
+
+## Cycle 10 — Consolidated Finding-To-RED Matrix
+
+### PLAN
+
+- Frozen candidate: `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; worktree clean before planning.
+- Review sources read completely: `/tmp/475-REVIEW-CYCLE9-1.md` and
+  `/tmp/475-REVIEW-CYCLE9-2.md`; their union includes seven overlapping blockers, six additional
+  behavior families, and WR-01.
+- GSD: `scripts/gsd doctor` passed. The healthy adapter still lacks `programming-loop`, so the
+  required manual-GSD PLAN -> RED -> GREEN/refactor -> verify fallback is explicit.
+- Orchestration: `local_critical_path`. A read-only architecture explorer was attempted but rejected
+  by the runtime thread cap; one isolated worker retains the only mutating scope.
+- Production lock at RED: runtime `03cf916b59ef291dab309e6251a6f10ebf897eb0`, policy
+  `1c8f701091a49c60cf41f83a6c16f2ae49a896c3`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+
+### Comprehensive test-only RED matrix
+
+| ID | Finding source | Independent behavior row required to fail at frozen head |
+|---|---|---|
+| C10-01 | R1-1 / BL-03 | Genuine request and parent signals with own silent no-op add/remove hooks still cancel and finish with zero native abort listeners; captured throw/mutation rows remain. |
+| C10-02 | R1-2 / BL-01 | Each missing/invalid/throwing session method or getter, after any cleanup method becomes available, is cleaned exactly once in foreground and abandoned fulfillment; successful forced cleanup permits retry, cleanup failure alone quarantines. |
+| C10-03 | R1-3 | Hung late unsubscribe and hung late dispose each leave zero referenced timeout handles while close observes the eventual cleanup terminal. |
+| C10-04 | BL-02 | Late abort/idle/unsubscribe/dispose may cumulatively exceed one phase bound while each phase succeeds; close, shutdown, and coalesced close return only after dispose without quarantine, while never-fulfilling creation remains bounded. |
+| C10-05 | R1-4 | Foreground and late creation reject proxy, sparse, hidden/accessor/extra-field, symbol, and alternating-length extension containers captured once as exact closed empty arrays, while disposing the exact returned session. |
+| C10-06 | R1-5 | A Pi-0.80.6-shaped cumulative `message_update` stream reaches a near-bound terminal handoff without quadratic charging; one-above delta/event/assistant/terminal bounds still reject. |
+| C10-07 | R1-6 | Top-level and nested `__proto__`, `prototype`, and `constructor` schema/result keys remain own frozen data properties and serialize identically; inherited authority cannot satisfy required schema/result fields. |
+| C10-08 | BL-07 | Wide plain schemas/events prove bounded early enumerable visits before rejection, and every known terminal event rejects an unknown field without first allocating the adversarial complete key set. |
+| C10-09 | R1-7 | Unique secret markers in SDK setup/session/listener/cleanup and workspace/capability primary, dual, quarantine, and close failures never appear in public/model errors or causes; only bounded typed redacted snapshots cross the boundary. |
+| C10-10 | BL-04 | Documentary prefixes after `=` redact, `Proxy-Authorization`, quoted YAML/flow keys, and OAuth fragments redact through direct, prompt, workspace, mutation/capability, and every handoff consumer; explicit harmless colon prose stays byte-identical. |
+| C10-11 | BL-05 | AWS config, Azure token caches, GCloud legacy credentials, `.envrc`, and common private-key names reject before callback for root, nested, and case variants with opaque non-assignment content. |
+| C10-12 | BL-06 | show/view/download/obtain/copy/reveal/lookup/print and sensitive noun compounds in both orders, aliases, and singular/plural are absent for read-only and mutating roles. |
+| C10-13 | WR-01 | Every forbidden control combined with a redacted assignment in summary, finding, verification name, and verification summary rejects the original string instead of returning sanitized success. |
+
+RED acceptance requires one test-only commit. First run the preexisting focused files at their
+Cycle 9 revision and record 86/86. Then run the augmented focused suite: every retained test must
+remain green, every C10 row must load/execute and fail only its intended behavior assertion, and
+focused strict TypeScript must pass. Finally compare both Git object IDs and content hashes for all
+three production files against `f63957ae`; any production difference invalidates RED.
+
+### GREEN / REFACTOR contract
+
+- Implement the ownership/state/snapshot/event/sanitizer/classifier architecture in `PLAN.md` only
+  after RED is committed.
+- Do not weaken, skip, rename away, or merge independent matrix assertions merely to reduce the RED
+  failure count.
+- Commit the first coherent GREEN after focused tests and strict focused TypeScript pass; refactor
+  only while retained and Cycle 10 behavior remains green.
+- Terminal evidence must record exact counts, commands, commit IDs, head, production scope, and the
+  serialized full-suite environment classification.

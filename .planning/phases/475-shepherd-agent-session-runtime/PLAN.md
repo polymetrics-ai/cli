@@ -645,3 +645,108 @@ Cycle 9 execution followed the required checkpoints: PLAN `b175cc4a`, read-only 
 all 70 Cycle 8 focused regressions and passes all 16 new behavior rows. Verification is recorded in
 `TDD-LEDGER.md` and `VERIFICATION.md`; the only complete-suite failures are the unchanged managed-
 sandbox denial of `/bin/ps` in parent-owned state-store/controller tests.
+
+## Consolidated Stable-Head Correction Cycle 10 — `f63957aed6fd1406eb3bd9a82adbd10b23b34c33`
+
+Cycle 10 treats the complete `/tmp/475-REVIEW-CYCLE9-1.md` and
+`/tmp/475-REVIEW-CYCLE9-2.md` reports as one binding contract, including WR-01. The immutable
+comparison base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Production is frozen at
+the exact clean Cycle 9 evidence head until one comprehensive test-only RED commit exists. The
+frozen production blob IDs are:
+
+| Production path | Frozen blob |
+|---|---|
+| `.pi/extensions/shepherd/agent-session-runtime.ts` | `03cf916b59ef291dab309e6251a6f10ebf897eb0` |
+| `.pi/extensions/shepherd/tool-policy.ts` | `1c8f701091a49c60cf41f83a6c16f2ae49a896c3` |
+| `.pi/extensions/shepherd/role-prompts.ts` | `cfc2d253c323ad01f34b8c9688b3bad0acd16171` |
+
+### Cycle 10 binding invariants
+
+1. A genuine request or parent `AbortSignal` always acquires and releases the canonical native
+   `EventTarget` listener lease. Captured add/remove hooks remain observable for typed failure
+   reporting, but a silent no-op, mutation, or throw cannot defeat native cancellation or detach.
+2. Returned-session ownership is staged. A minimal exact cleanup capsule captures every available
+   cleanup operation before full operational/result validation. Any later missing, throwing, or
+   malformed surface in foreground or abandoned fulfillment runs bounded exactly-once cleanup;
+   successful forced cleanup is not quarantine, while an actual cleanup failure is.
+3. Every timeout used by detached late cleanup—abort, idle, unsubscribe, and dispose—is unreferenced;
+   foreground awaited bounds remain referenced and useful.
+4. Close, shutdown, and coalesced close calls distinguish an uncancellable pending creation from a
+   cleanup pipeline already in progress. A never-settling creation remains bounded, but once cleanup
+   begins no shorter outer one-phase deadline may return before its internally bounded terminal.
+5. The SDK creation result, `extensionsResult`, `extensions`, `errors`, and fallback field are
+   captured once through data descriptors. Only closed, non-proxy, canonical dense empty extension
+   arrays are valid in foreground and late paths; accessors, symbols, hidden fields, sparse arrays,
+   extra fields, and alternating length observations fail closed while retaining cleanup ownership.
+6. Pi 0.80.6 cumulative `message_update` envelopes are parsed as known closed shapes and charged by
+   delta once. Terminal `message_end` and `agent_end` evidence is fully snapshotted/accounted so the
+   assistant-byte, event-count, and aggregate-event-byte maxima are jointly attainable.
+7. Schema and external result snapshots are prototype-safe: every captured JSON key is an own data
+   property, validation uses own descriptors only, and frozen in-memory versus serialized structure
+   is identical for `__proto__`, `prototype`, and `constructor` at every nesting level.
+8. Schema and event breadth is rejected during bounded incremental traversal before a complete
+   adversarial key array is materialized. Known event kinds use closed per-kind field allowlists;
+   terminal events reject unknown fields.
+9. Every external SDK, workspace, capability, listener, and cleanup failure is normalized before a
+   public/runtime/model boundary into a bounded terminal-safe typed and redacted error. Raw external
+   errors never survive as a public cause; primary, dual, quarantine, and close aggregation preserve
+   only sanitized failure DTOs.
+10. The shared redactor treats documentary `=` assignments as credentials, closes
+    `Proxy-Authorization`, quoted YAML/flow keys, and OAuth URL fragments, while preserving explicitly
+    harmless colon prose byte-identically.
+11. Root-scoped reads reject segment-aware cloud config/token/legacy stores, `.envrc`, and common
+    private-key names before invoking the workspace, including nested and case variants.
+12. Host capability authority rejects sensitive nouns anywhere in the bounded `host_` namespace
+    unless an explicit reviewed non-secret allowlist says otherwise. Acquisition synonyms, aliases,
+    noun order, singular/plural, and every role are covered.
+13. Handoff strings are validated for forbidden terminal controls on the original value before
+    redaction. A credential elsewhere in the same string can never turn malformed evidence into an
+    accepted sanitized handoff.
+
+All 86 Cycle 9 focused tests, the Cycle 8 disjoint-mutator contract, timer/rejection accounting,
+private tool oracle, strict Pi typing, and every prior parser/lifecycle regression remain mandatory.
+
+### Architectural GREEN target
+
+The correction will be organized around bounded ownership components rather than finding-local
+branches:
+
+- an authoritative native signal lease that separately records captured-hook failures;
+- a staged session cleanup capsule plus operational owner, with an explicit creation state machine
+  for `pending | cleaning | terminal` and an internally bounded late-cleanup terminal;
+- reusable foreground/detached deadline policies so only detached timers are unreferenced;
+- descriptor-safe closed SDK-result/array capture and prototype-safe JSON/result materialization;
+- incremental bounded record traversal followed by per-kind event DTO parsing and delta-aware Pi
+  stream accounting;
+- one boundary failure sanitizer shared by runtime and tool ports, backed by the existing redaction
+  grammar but never retaining the external object;
+- segment/token classifiers for sensitive paths and capability names, and original-text-first
+  terminal validation.
+
+No dependency, tool authority, scheduler/controller, parent issue, Go/connector, GitHub, service, or
+credential scope is added.
+
+### Ordered checkpoints and declared gates
+
+The mandatory order is artifact-only PLAN -> one comprehensive test-only RED -> architectural
+GREEN/refactor -> terminal evidence. Before GREEN, all 86 retained focused tests must still pass,
+every new matrix row must execute and fail for its intended assertion, strict focused TypeScript
+must compile, and all three production blob IDs above must remain exact. No production edit may be
+amended into RED.
+
+GREEN verification comprises the focused runtime/tool-policy tests, focused and all-production
+strict TypeScript 5.9.3 against explicit Pi 0.80.6 package/type roots, the explicit 0.80.6 offline
+RPC registration plus no-model tool validation, serialized complete Shepherd classification,
+`git diff --check`, immutable-base/frozen-head ancestry, exact issue-owned path scope, and a clean
+head. The known managed-sandbox `/bin/ps` `spawn EPERM` family is evidence-classified, never called
+green. Push, live GitHub, review bots, merge, Go/connectors/certification, `make verify`, runtime
+services, credentials, and model calls remain outside this lane.
+
+`scripts/gsd doctor` passes, while `scripts/gsd prompt programming-loop ...` again returns
+`unknown GSD command: programming-loop`; Cycle 10 therefore records the permitted
+`manual_gsd_fallback` without weakening TDD. Skills loaded completely are `gsd-programming-loop`,
+`javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`, and
+`github-issue-first-delivery`, together with required routing, Pi-adapter, universal-loop,
+issue-contract, project prompt/PRD, and runtime/Pi references. Execution decision is
+`local_critical_path`: all findings collide in the two issue-owned runtime/policy modules, and the
+attempted read-only architecture sidecar was rejected by the runtime thread cap.
