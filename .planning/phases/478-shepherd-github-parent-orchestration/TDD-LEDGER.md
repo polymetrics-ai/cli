@@ -180,3 +180,26 @@ Frozen candidate: `d3b6b5e226b17db6ec8350163acdbb41368ec3bf`.
 
 The next commit after the Cycle 4 plan checkpoint may change only tests and issue-478 fixtures.
 Production blob identity and the focused expected-failure matrix must be recorded before GREEN.
+
+## Cycle 4 RED, GREEN, and verification evidence
+
+- PLAN `607e203ef1f76ff112c130ccff5d155973d984f6` preceded every Cycle 4 test and
+  production edit.
+- Single test-only RED `abbf388b8a852836e0dd10a55b9f17720b9fde22` ran 68 tests: 50 pass and
+  18 expected fail. The production blobs still exactly matched frozen candidate `d3b6b5e2`:
+  orchestrator `ed576e6455384f123b075d078aed33ca242f2339`, evidence
+  `a3076e39e53e2e5c9e7d3dfbc3e52d94af322a7a`, router
+  `ca0c8116266be9b31d87657713b40c57e0b10759`.
+- Architectural GREEN `b92b5ff7dd3738dc3b3350ebb4d2f2b42074f954` passes all 68 focused tests.
+  Stable PR identity/observation, canonical readiness topology, cancellable external ports,
+  sensitive-text/error normalization, current policy observation, pseudo-ref grammar, CAS
+  progression, descriptor-first dense arrays, and tuple identities are now enforced together.
+- Strict owned TypeScript 5.9.3 passes without dependency-check suppression. All 20 production
+  Shepherd modules pass strict TypeScript against cached Pi 0.80.6 with third-party declaration
+  checking skipped; project source remains fully checked.
+- Serialized Shepherd: 332 total, 266 pass, 65 fail, 1 intentional skip. Every #478 test passes;
+  every failure is outside owned files and reports the managed sandbox's `spawn EPERM` at the
+  process-identity child-process boundary.
+- Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`; only expected global
+  settings lock warnings are emitted. Immutable base/ancestry, full-range diff, 17-path scope,
+  `git diff --check`, and credential-literal scan pass.

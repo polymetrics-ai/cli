@@ -65,3 +65,18 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   lifecycle; no controller/#479, parent planning, live GitHub, Go, connector, `make`, or reviewer work
 - push and PR synchronization remain deferred because the existing GitHub DNS failure is external
   to the local correction lifecycle
+
+## Cycle 4 consolidated-review correction
+
+- PLAN `607e203e`, single test-only RED `abbf388b`, and architectural GREEN `b92b5ff7` close all
+  ten findings from the final two Cycle 3 review ledgers
+- stable PR identity is separated from observation evidence; restart/readiness reconstructs the
+  authoritative issue-derived child and validates exact current PR/receipt topology
+- every external port receives a deadline/`AbortSignal` and normalized bounded errors; policy
+  freshness, sensitive text, pseudo refs, CAS progression, dense bounds, and tuple identities fail
+  closed
+- focused 68/68, strict owned/all-production TypeScript, pinned Pi 0.80.6 offline discovery, and
+  base/diff/scope/data gates pass; serialized Shepherd is environmentally blocked only by 65
+  unrelated sandbox `spawn EPERM` failures (266 pass, 1 skip)
+- no controller/#479, live GitHub, reviewer, network, Go, connector, `make`, or merge action ran;
+  two fresh exact-head `xhigh` reviews remain parent-owned

@@ -67,3 +67,11 @@ separates stable receipt topology from observations, validates canonical child t
 and readiness, introduces bounded cancellable/redacted external ports and a current policy source,
 completes pseudo-ref/CAS/dense-bound/tuple-key safety, and retains all Cycle 3 contracts. This
 artifact-only checkpoint precedes the single required test-only RED; production/tests are unchanged.
+
+Cycle 4 is locally complete at PLAN `607e203e`, single test-only RED `abbf388b`, and architectural
+GREEN `b92b5ff7`. All ten consolidated contracts pass 68/68 focused tests and strict owned plus
+all-production TypeScript against pinned Pi 0.80.6. Offline RPC still discovers `pm-shepherd`, and
+base/ancestry/diff/17-path/data scans pass. The serialized suite records 266 pass, 65 unrelated
+sandbox `spawn EPERM` failures, and one intentional skip across 332 tests; all #478 tests pass.
+No live/network/prohibited action ran. The evidence commit and clean candidate are handed to the
+parent for two fresh exact-head `xhigh` reviews.

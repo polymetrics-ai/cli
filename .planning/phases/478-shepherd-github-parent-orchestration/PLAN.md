@@ -349,8 +349,17 @@ reference, and the Pi/runtime integration reference. `scripts/gsd doctor` passes
 
 ### Cycle 4 checkpoints
 
-- [ ] Artifact-only PLAN commit.
-- [ ] One all-contract test/fixture-only RED with frozen production blob proof.
-- [ ] One architectural GREEN/refactor commit.
-- [ ] Authorized verification/evidence commit and clean candidate.
+- [x] Artifact-only PLAN commit: `607e203ef1f76ff112c130ccff5d155973d984f6`.
+- [x] One all-contract test/fixture-only RED with frozen production blob proof:
+      `abbf388b8a852836e0dd10a55b9f17720b9fde22`.
+- [x] One architectural GREEN/refactor commit:
+      `b92b5ff7dd3738dc3b3350ebb4d2f2b42074f954`.
+- [x] Authorized verification/evidence commit and clean candidate; the evidence commit hash is
+      reported in the worker handoff because a commit cannot contain its own identity.
 - [ ] Two fresh exact-head independent reviews remain parent-owned.
+
+Cycle 4 local verification: focused 68/68; strict owned and all-production TypeScript pass against
+pinned Pi 0.80.6; pinned offline RPC discovers `pm-shepherd`; immutable-base, ancestry, diff,
+17-path ownership, and credential-literal scans pass. The serialized suite ran 332 tests: 266 pass,
+65 unrelated managed-sandbox `spawn EPERM` failures, and one intentional skip; every #478 test
+passes. No prohibited, network, reviewer, controller/#479, or merge action ran.

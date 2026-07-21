@@ -121,3 +121,19 @@
   project artifacts. `scripts/gsd doctor` passes; the missing adapter command activates
   `manual_gsd_fallback`.
 - Collaboration capacity was full, so this isolated worker remains `local_critical_path`.
+
+## 2026-07-22 Cycle 4 GREEN and verification
+
+- PLAN `607e203e` fixed frozen candidate/base and all ten contracts. RED `abbf388b` changed only
+  three test files, produced 50 pass / 18 expected fail, and preserved exact production blob IDs.
+- GREEN `b92b5ff7` implements stable PR identity plus separate observations, authoritative
+  issue-derived readiness topology, cancellable/deadlined/redacted ports, current controller policy
+  observations, complete pseudo-ref rejection, advancing CAS revisions, descriptor-first dense
+  arrays, and tuple-safe identities.
+- Focused #478: 68/68 pass. Strict owned/all-production TypeScript against pinned Pi 0.80.6 passes.
+  Pinned offline RPC discovers `pm-shepherd` from `extension` with only sandbox settings warnings.
+- Serialized Shepherd: 332 total, 266 pass, 65 unrelated process-identity `spawn EPERM` failures,
+  1 intentional skip; all #478 tests pass. Immutable-base/ancestry, full-range diff, 17-path scope,
+  `git diff --check`, and credential-literal scans pass.
+- No network, live GitHub, Go, connector, certification, runtime, `make`, #479, reviewer, or merge
+  action ran. Parent owns the two fresh exact-head `xhigh` reviews and every human/integration gate.

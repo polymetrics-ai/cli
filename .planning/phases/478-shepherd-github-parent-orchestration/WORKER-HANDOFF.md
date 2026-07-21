@@ -148,3 +148,21 @@ session-attestation contract and fixtures required to verify independent-review 
   `manual_gsd_fallback` is active. Thread capacity forces `local_critical_path`.
 - Implementation route is `openai-codex/gpt-5.6-sol:high`. Parent owns #479, planning, two fresh
   exact-head reviews, publication, integration, and human merge gates.
+
+## Cycle 4 completed local handoff
+
+- Checkpoints: PLAN `607e203ef1f76ff112c130ccff5d155973d984f6`; single RED
+  `abbf388b8a852836e0dd10a55b9f17720b9fde22`; GREEN
+  `b92b5ff7dd3738dc3b3350ebb4d2f2b42074f954`; evidence hash is reported by the worker after commit.
+- Focused #478: 68/68 pass. Strict TypeScript passes for owned production/tests and all 20
+  production modules against pinned Pi 0.80.6. Offline RPC discovers `pm-shepherd` from
+  `extension`.
+- Serialized Shepherd: 332 total, 266 pass, 65 unrelated managed-sandbox `spawn EPERM` failures,
+  1 intentional skip; every #478 test passes. This environmental broad-gate result is not claimed
+  as a full-suite pass.
+- Immutable base/frozen-candidate ancestry, full-range `git diff --check`, 17-path owned scope, and
+  credential-literal scan pass. No Go, connector, certification, runtime, `make`, network, live
+  GitHub, controller/#479, reviewer, Claude/Copilot, or merge action ran.
+- No unresolved local design blocker remains. Parent next runs two fresh independent exact-head
+  `openai-codex/gpt-5.6-sol:xhigh` reviews, then owns disposition, publication, integration, and
+  human gates.

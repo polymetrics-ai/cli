@@ -94,14 +94,27 @@ all earlier pass statements are historical and do not satisfy the fourteen accep
 Status: planned against frozen candidate `d3b6b5e226b17db6ec8350163acdbb41368ec3bf`.
 All prior pass statements are historical until the consolidated correction is complete.
 
-- [ ] Artifact-only plan precedes every Cycle 4 test and production edit.
-- [ ] Exactly one behavior-level test/fixture-only RED covers all ten contracts with frozen
+- [x] Artifact-only plan precedes every Cycle 4 test and production edit.
+- [x] Exactly one behavior-level test/fixture-only RED covers all ten contracts with frozen
       production blob proof.
-- [ ] Focused #478 passes after one architectural GREEN/refactor.
-- [ ] Strict owned and all-production TypeScript passes against pinned Pi 0.80.6 declarations.
-- [ ] Serialized Shepherd is recorded with unrelated sandbox failures separated from owned tests.
-- [ ] Pinned offline RPC, immutable base/ancestry, full-range diff, owned scope, and data scans pass.
-- [ ] No Go, connector, certification, runtime, `make`, network, GitHub, #479 controller,
+- [x] Focused #478 passes after one architectural GREEN/refactor: 68/68 at `b92b5ff7`.
+- [x] Strict owned and all-production TypeScript passes against pinned Pi 0.80.6 declarations.
+- [x] Serialized Shepherd is recorded with unrelated sandbox failures separated from owned tests.
+- [x] Pinned offline RPC, immutable base/ancestry, full-range diff, owned scope, and data scans pass.
+- [x] No Go, connector, certification, runtime, `make`, network, GitHub, #479 controller,
       reviewer, or merge action runs.
-- [ ] Exact PLAN/RED/GREEN/evidence SHAs and clean candidate are handed to the parent for two
+- [x] Exact PLAN/RED/GREEN/evidence SHAs and clean candidate are handed to the parent for two
       fresh exact-head reviews.
+
+### Cycle 4 gate results
+
+| Gate | Result |
+| --- | --- |
+| Focused #478 | pass; 68 pass, 0 fail; 564.711875 ms |
+| Strict owned TypeScript | pass; TypeScript 5.9.3, production plus matching tests |
+| Strict production TypeScript | pass; all 20 modules against pinned Pi 0.80.6; third-party declaration checking skipped |
+| Serialized Shepherd | environmental failure; 332 total, 266 pass, 65 unrelated `spawn EPERM` failures, 1 intentional skip; all #478 tests pass |
+| Offline extension discovery | pass; pinned Pi 0.80.6 discovers `pm-shepherd` from `extension`; sandbox-only settings-lock warnings |
+| Base/head/diff/scope/data | pass; immutable base and frozen candidate are ancestors, `git diff --check` clean, 17 paths owned, no credential literals |
+| Prohibited/live actions | not run |
+| Fresh review | pending; two exact-head `xhigh` reviews remain parent-owned |
