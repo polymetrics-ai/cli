@@ -20,6 +20,7 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | Commit/push revalidate immutable-base ancestry; history audit unions every touched commit path; push transfers an exact SHA refspec | Unrelated and add/remove heads reject before remote refs/objects change; handoff rejects erased net diffs | green/refactored |
 | Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | Mutations use a deterministic config environment and reject executable/local transport configuration before Git mutation | Worktree, clean-filter, pre-push hook, credential-helper, and SSH-command markers remain absent | green/refactored |
 | Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | Inspection and schema-v4 claims bind local origin symbolic HEAD; pre-push `ls-remote --symref` revalidates live HEAD | Caller and live-remote mismatch both reject before the issue ref exists remotely | green/refactored |
+| Correction 4: pre-transfer full workspace scope | pending test-only RED matrix for untracked, tracked-dirty, staged, rename, and literal-backslash paths | pending | pending | planned |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -107,3 +108,6 @@ offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks 
   strict Pi 0.80.6 TypeScript, offline RPC, and exact diff/scope gates pass.
 - Execution decision, correction 3 summary: `local_critical_path` — exact checkpoint and gate
   evidence is durable; the parent owns the fresh exact-head xhigh review and merge decisions.
+- Execution decision, correction 4 plan: `local_critical_path` — the single finding is confined to
+  the owned Git push boundary. A read-only recon sidecar was attempted, but the runtime thread cap
+  was occupied; production remains frozen while the local test-only RED matrix is prepared.

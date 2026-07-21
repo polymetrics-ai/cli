@@ -64,3 +64,18 @@
 - Result: plan `2e255372`, RED `fa607d31`, GREEN `db6bdd67`, refactor `f7cb0cab`; focused
   36/36, serialized Shepherd 173/173 in 107.5s, strict Pi 0.80.6 TypeScript, offline RPC `true`,
   and immutable-base diff/path-scope gates pass.
+
+## Exact-head review correction 4
+
+- Reviewed head: `1fe994a68ec3286ee69f1be4fadf71416d601257`.
+- Blocker: push does not audit the union of committed history and current staged/tracked-dirty/
+  untracked paths immediately before the remote mutation.
+- RED plan: independent temporary repositories cover untracked, tracked modification, staged
+  addition, staged rename, and literal-backslash paths outside `allowedScopes`; every remote issue
+  ref must remain absent.
+- GREEN boundary: reuse canonical status/path parsing inside the existing queued mutation and lease
+  boundary immediately before the exact-SHA push, while retaining endpoint/default/head checks.
+- GSD command: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop ...` remains
+  unavailable (`unknown GSD command`), so the recorded manual strict-TDD lifecycle continues.
+- Authorized gates remain focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
+  TypeScript, offline Pi RPC, and immutable-base diff/path-scope checks only.

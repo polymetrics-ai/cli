@@ -173,3 +173,39 @@ Correction 3 result: plan `2e255372`, genuine test-only RED `fa607d31`, GREEN
 173/173 in 107.5s, strict cached-Pi TypeScript, offline Pi RPC `true`, and immutable-base
 diff/path-scope gates pass. Evidence checkpoint `0a3cdfa4ce1ac46f87fc31ed14e295d17a4bb62c`
 matched the local, tracking, and remote branch refs exactly before this terminal attestation.
+
+## Exact-head correction cycle 4
+
+Independent xhigh review of `1fe994a68ec3286ee69f1be4fadf71416d601257` found one remaining
+pre-transfer scope invariant: push audits committed history but does not include current staged,
+tracked-dirty, or untracked paths immediately before changing the remote. This cycle preserves the
+immutable base and existing issue-owned file boundary.
+
+Production is frozen until the correction-4 RED checkpoint. Baseline hashes at the reviewed head:
+
+- `git-adapter.ts`: `fc4f95aa0b701f8ca29b418954eed9f1b1066cecb4435240760c2137666b8c14`
+- `workspace-adapter.ts`: `59711b18cf3b2fe1ae38994c5ea491d0890d068fa7d2122cd1208b038ec854f0`
+
+1. Add a test-only RED matrix for an out-of-scope untracked path, tracked modification, staged
+   addition, staged rename, and literal-backslash path. Every case must reject and prove the bare
+   remote still has no canonical issue ref.
+2. GREEN inside the existing queued mutation/lease boundary: immediately before transfer, collect
+   canonical status evidence, union both rename endpoints with the already-audited committed
+   history, validate the union against the immutable lease scopes, then retain the existing exact
+   SHA/ref, endpoint, default-branch, and lease checks.
+3. REFACTOR only after GREEN: centralize status-path extraction/pre-transfer scope validation so
+   commit, handoff, and push use one canonical interpretation without widening capabilities or the
+   race window.
+4. Commit and push plan, genuine test-only RED, minimal GREEN, refactor, and terminal evidence
+   checkpoints. Run only focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
+   TypeScript, offline Pi RPC, and immutable-base diff/path checks. Go, connector, certification,
+   runtime-backed, and `make` gates remain forbidden.
+
+### Correction 4 verification checklist
+
+- [ ] focused adapter tests pass after a recorded test-only RED
+- [ ] complete Shepherd suite passes with `--test-concurrency=1`
+- [ ] strict no-emit TypeScript passes against cached Pi 0.80.6 types
+- [ ] documented offline Pi 0.80.6 RPC returns `true`
+- [ ] immutable-base diff check and exact changed-path scope pass
+- [ ] final local, tracking, and remote branch heads match exactly

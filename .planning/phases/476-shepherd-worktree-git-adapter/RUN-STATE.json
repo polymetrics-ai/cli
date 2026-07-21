@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": true,
-  "verificationBlocker": null,
+  "verificationPassed": false,
+  "verificationBlocker": "correction4_red_not_yet_captured",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -126,6 +126,11 @@
       "cycle": "correction3-summary",
       "decision": "local_critical_path",
       "reason": "Correction 3 checkpoints and exact gate evidence are durable; fresh exact-head xhigh review and merge decisions remain parent-owned."
+    },
+    {
+      "cycle": "correction4-plan",
+      "decision": "local_critical_path",
+      "reason": "The one exact-head finding is confined to the owned Git push boundary; a read-only recon sidecar could not start because the runtime thread cap was occupied, so production remains frozen while the local test-only RED matrix is prepared."
     }
   ]
 }

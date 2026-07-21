@@ -1,6 +1,11 @@
 # Issue 476 Verification
 
-Status: `pass`
+Status: `in_progress`
+
+Correction 4 is active from reviewed head `1fe994a68ec3286ee69f1be4fadf71416d601257`.
+Production remains unchanged pending a genuine test-only RED for the missing pre-transfer union of
+committed, staged, tracked-dirty, and untracked paths. Correction-3 results below remain historical
+evidence for their exact head but do not satisfy correction 4.
 
 Correction 3 supersedes reviewed head `9728f9ed12e8e545eabd8b9b1b8028af80150427` with GREEN
 checkpoint `db6bdd675aaced17f0d709b08a647258dfb87f15` and refactor checkpoint
