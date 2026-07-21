@@ -181,3 +181,25 @@
   all-production strict TypeScript against explicit Pi 0.80.6; explicit offline RPC; diff,
   immutable-base, pushed-head equality, and issue-owned scope all pass. No Go, connector,
   certification, `make verify`, runtime-backed, live-GitHub, merge, or review-bot gate was run.
+
+## Stable-Head Correction Cycle 8 Snapshot
+
+- Frozen candidate: `f219b730c63adc9188c93093a40511433a3d0110`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Review inputs: `/tmp/475-REVIEW-SECURITY-CYCLE7.md` and the parent-provided final lifecycle
+  disposition.
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: close the complete deduplicated request/lifecycle/resource/parser/event/handoff set
+  without widening authority or adding a dependency.
+- Method: manual-GSD PLAN -> one behavior-level test-only RED -> one architectural GREEN/refactor ->
+  declared verification; production is frozen through the RED checkpoint.
+- Required architecture: immutable normalized request/authority snapshot, explicit listener lease,
+  explicit failure-presence state, awaited cleanup thenables, central hard maxima, monotonic redactor
+  with bounded decoded keys, bounded cycle-safe event estimator, canonical prefixes, safe handoff
+  text.
+- Execution decision: `read_only_spawned`; a read-only lifecycle sidecar supports the plan while the
+  issue worker retains the isolated mutating critical path.
+- Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
+- Verification result: pending one compiled assertion-level RED and subsequent GREEN; only focused/
+  full Shepherd, pinned Pi 0.80.6 strict TypeScript, offline RPC, and diff/base/head/scope gates are
+  authorized.

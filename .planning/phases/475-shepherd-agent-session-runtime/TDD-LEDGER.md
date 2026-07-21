@@ -588,3 +588,47 @@
 | Focused / full Shepherd | pass | focused 53/53; complete 190/190 |
 | Strict TypeScript / offline RPC | pass | both strict scopes and explicit Pi 0.80.6 RPC registration |
 | Diff / base / head / scope | pass | immutable base, pushed implementation head, and issue-owned paths only |
+
+## Cycle 8 — Immutable Request Ownership, Total Cleanup, Hard Bounds, And Parser Closure
+
+### PLAN
+
+- Status: captured against frozen reviewed head
+  `f219b730c63adc9188c93093a40511433a3d0110` and immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; production and tests remain unchanged.
+- Review sources: `/tmp/475-REVIEW-SECURITY-CYCLE7.md` plus the parent-provided final lifecycle
+  disposition covering listener target mutation, explicit undefined failures, async cleanup hooks,
+  repeated request accessors, and Node timer ceilings.
+- GSD: `scripts/gsd doctor` passes; `scripts/gsd prompt programming-loop ...` is absent from the
+  healthy 69-command registry, so the recorded `manual_gsd_fallback` remains active.
+- Skills/policy reloaded: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, `github-issue-first-delivery`, required
+  routing, issue contract, universal runtime loop, Pi adapter, and runtime/Pi guidance.
+- Orchestration: `read_only_spawned`; one read-only lifecycle sidecar maps test and implementation
+  seams while this isolated issue worker owns the only mutating path.
+
+### Behavior RED contract
+
+- Exactly one test-only commit will cover all eleven deduplicated behavior families: listener lease
+  attach/remove/parent/mutation, reasonless failures, awaited thenable cleanup, immutable normalized
+  request and mutator fence, all hard ceilings, comma/Auth-param redaction, multiline-flow YAML
+  continuation, escaped quoted keys, bounded cycle-safe event estimation, canonical normalized
+  prefixes, and terminal-safe handoff strings.
+- Every test must load and execute under strict pinned Pi 0.80.6 TypeScript. Only intended behavior
+  assertions may fail; compile, module, fixture, and file-load failures are inadmissible.
+- Production source hashes must remain identical to frozen `f219b730` through the RED commit.
+- Focused command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+### GREEN / REFACTOR contract
+
+- Normalize/freeze the request and authority once, capture explicit listener leases, use explicit
+  failure-presence state, await cleanup thenables, validate central hard maxima, extend the monotonic
+  structured redactor with bounded key decoding, add a bounded cycle-safe event estimator, share one
+  canonical prefix set, and enforce safe handoff text.
+- Preserve every prior 53 focused regression and add no dependency.
+- Terminal verification is pending the required RED and GREEN checkpoints.

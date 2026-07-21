@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_7_complete",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_8_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -183,15 +183,20 @@
       "cycle": "correction_cycle_7_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 7 evidence is terminal; parent orchestration owns the fresh stable-head review campaign and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_8_plan",
+      "decision": "read_only_spawned",
+      "reason": "A read-only lifecycle sidecar maps exact test and implementation seams while this isolated issue worker retains the single mutating critical path for the deduplicated Cycle 8 batch."
     }
   ],
   "gates": {
-    "focusedTests": "green_53_passed_0_failed",
-    "fullShepherdTests": "green_190_passed_0_failed",
-    "strictTypeScriptPi0806": "green_focused_and_all_production",
-    "offlineRpcSmoke": "green_pm_shepherd_registered",
-    "diffCheck": "green",
-    "ownedScope": "green_immutable_base_pushed_head_and_issue_owned_paths",
+    "focusedTests": "pending_cycle_8_red_and_green; retained_cycle_7_green_53_passed_0_failed",
+    "fullShepherdTests": "pending_cycle_8; retained_cycle_7_green_190_passed_0_failed",
+    "strictTypeScriptPi0806": "pending_cycle_8; retained_cycle_7_green_focused_and_all_production",
+    "offlineRpcSmoke": "pending_cycle_8; retained_cycle_7_green_pm_shepherd_registered",
+    "diffCheck": "pending_cycle_8",
+    "ownedScope": "pending_cycle_8; immutable_base_e659d6f1_and_frozen_head_f219b730",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

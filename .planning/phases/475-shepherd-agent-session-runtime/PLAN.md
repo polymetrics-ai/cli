@@ -440,3 +440,72 @@ suite passes 190/190. Focused and all-production strict TypeScript pass with Typ
 against the explicit Pi 0.80.6 package/type roots; the explicit Pi 0.80.6 offline RPC registers
 `pm-shepherd`. Diff, immutable-base, pushed-head equality, and issue-owned path checks pass. Fresh
 stable-head review and integration remain parent-owned.
+
+## Stable-Head Correction Cycle 8 — `f219b730c63adc9188c93093a40511433a3d0110`
+
+Cycle 8 batches the deduplicated lifecycle and security/parser review findings against frozen PR
+#486 head `f219b730c63adc9188c93093a40511433a3d0110`; the immutable comparison base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The security/parser source is
+`/tmp/475-REVIEW-SECURITY-CYCLE7.md`; the parent-provided lifecycle disposition identifies mutable
+signal rereads, ambiguous `undefined` failure state, unawaited thenable cleanup, repeated request
+accessors, and cleanup timeouts above Node's timer ceiling. Production stays byte-identical to the
+frozen head until one complete behavior-level test-only RED is committed and pushed.
+
+### Lifecycle, request snapshot, and bound matrix
+
+The RED checkpoint will exercise independent assertion-level rows for:
+
+1. a signal target whose `addEventListener` attaches and then throws, whose `removeEventListener`
+   throws, whose parent listener is removed, and whose request signal accessor/target mutates after
+   admission; the exact acquired listener lease must be finalized without rereading attacker state;
+2. cleanup and validation throws/rejections whose reason is literally `undefined`, using explicit
+   failure presence rather than an `undefined` sentinel;
+3. promise/thenable-returning session `dispose` and subscription `unsubscribe`, including rejection,
+   proving cleanup and quarantine wait for the owned terminal operation;
+4. one normalized, immutable request snapshot covering role/task/context/authority/workspace/
+   binding/signal, hostile getters, mutate-after-reload attempts, and mutator-fence checks so cwd,
+   head, prompt, tool authority, and lane identity cannot drift;
+5. one-above-ceiling rejection for every configurable size, count, request timeout, cleanup timeout,
+   and concurrency option, with all timer ceilings at or below Node's maximum supported delay;
+6. cycle-safe, bounded event accounting that rejects oversized/deep/cyclic input before unbounded
+   `JSON.stringify` or terminal-output materialization;
+7. one canonical normalized prefix set shared by tool construction, prompt authority, and handoff
+   validation; and C0/C1 terminal controls rejected or neutralized in every handoff string field.
+
+### Structured redaction matrix
+
+One compact adversarial payload and focused direct controls will cover line-context comma-bearing
+secrets, Digest/Signature/AWS-style Authorization auth parameters, key-only and continued unquoted
+scalars inside multiline flow collections, and bounded decoding of escaped double-quoted JSON/YAML
+keys (`client\\u005fsecret`, `to\\u006ben`) plus YAML doubled single quotes. Malformed escaped keys
+with a secret-looking prefix fail closed. The shared payload traverses direct redaction, serialized
+prompt, `workspace_read`, typed capability/mutation output, and handoff summary/finding/verification
+consumers; harmless controls and all 53 prior focused tests remain mandatory. Scanner and event work
+are asserted through deterministic counters/early exits, never wall-clock thresholds.
+
+### Architectural GREEN and checkpoints
+
+After the pushed RED only, implement one cohesive correction: normalize and deeply freeze the
+request and canonical authority once; acquire an explicit listener lease with a captured cleanup
+target; represent failure as a discriminated/presence state; assimilate and await cleanup thenables;
+validate central hard limit constants; keep the structured redactor monotonic while decoding keys
+within a 64-character bound; estimate event size with bounded cycle-safe traversal before any
+serialization; reuse the canonical prefix set everywhere; and return only terminal-safe handoff
+text. No dependency or authority expansion is permitted.
+
+Strict order is PLAN -> one test-only RED -> one architectural GREEN/refactor -> declared verify,
+with each checkpoint committed and pushed. RED must compile under strict pinned Pi 0.80.6 types,
+execute every focused test, and fail only intended assertions while the production blobs match
+`f219b730`. Final gates are focused tests, the serialized complete Shepherd suite, focused and
+all-production strict TypeScript 5.9.3 against explicit Pi 0.80.6 package/type roots, explicit Pi
+0.80.6 offline RPC registration, and diff/base/head/issue-scope checks. Go, connectors,
+certification, `make verify`, runtime services, live GitHub/CI/review bots, merge, and shared parent
+artifacts remain forbidden.
+
+GSD adapter health passes while its 69-command registry still rejects `programming-loop`, so
+`manual_gsd_fallback` remains active without weakening TDD. Skills reloaded: `gsd-programming-loop`,
+`javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`, and
+`github-issue-first-delivery`, plus required routing, issue contract, universal runtime loop, Pi
+adapter, and runtime/Pi guidance. The Cycle 8 plan decision is `read_only_spawned`: a read-only
+lifecycle sidecar maps the exact code/test seams while this isolated worker retains the single
+mutating critical path.

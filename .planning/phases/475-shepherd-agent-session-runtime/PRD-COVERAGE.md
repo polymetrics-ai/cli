@@ -1,5 +1,30 @@
 # PRD Coverage — Issue #475
 
+## Cycle 8 Stable-Head Diagnostic
+
+The frozen candidate is `f219b730c63adc9188c93093a40511433a3d0110`; the immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Cycle 8 uses the accepted issue contract,
+`/tmp/475-REVIEW-SECURITY-CYCLE7.md`, and the parent-provided lifecycle disposition as its
+phase-equivalent coverage gate.
+
+| Required outcome | RED boundary | Status before Cycle 8 execution |
+|---|---|---|
+| Listener cleanup owns the acquired target despite add/remove throws, parent removal, or signal mutation | independent fake signal leases with reservation/timer/listener accounting | pending RED |
+| Literal `undefined` rejection/throw is not erased | cleanup and validation reasonless failures | pending RED |
+| Thenable dispose/unsubscribe is awaited and rejection quarantines | delayed and rejecting thenable hooks | pending RED |
+| Request, authority, workspace, binding, and signal normalize/freeze once | hostile getters, mutation, reload, mutator-fence, cwd/head/prompt assertions | pending RED |
+| Every configurable limit has a hard reviewed maximum | one-above-ceiling table including Node timer maximum | pending RED |
+| Comma-bearing line/Auth parameters redact completely | direct plus all shared-redactor consumers | pending RED |
+| Multiline-flow key-only/continued scalars redact | mapping and sequence cross-products | pending RED |
+| Escaped quoted secret keys classify after bounded decode | JSON escapes, YAML doubled quote, malformed fail-closed controls | pending RED |
+| Event accounting is bounded and cycle-safe before materialization | oversized, deep, cyclic event probes | pending RED |
+| Tools, prompt, and handoff share canonical prefixes | trailing/redundant separator compatibility | pending RED |
+| Handoff strings cannot carry terminal controls | summary/finding/verification C0/C1 matrix | pending RED |
+| Prior behavior and declared lane gates remain intact | 53 retained focused tests; full Shepherd, strict Pi 0.80.6 TS, offline RPC, diff/base/head/scope | mandatory |
+
+No dependency, Go, connector, CLI/help/docs/website, runtime-service, live-GitHub, review-bot,
+merge, or parent-artifact work is required or authorized.
+
 ## Cycle 7 Stable-Head Diagnostic
 
 Issue #475 remains a narrow Pi AgentSession runtime slice under parent issue #471. The repository

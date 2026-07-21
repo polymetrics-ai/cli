@@ -1,5 +1,15 @@
 # Verification — Issue #475
 
+## Cycle 8 Pending Verification
+
+Cycle 8 is planned against frozen reviewed head `f219b730c63adc9188c93093a40511433a3d0110`
+and immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Verification is intentionally pending:
+the artifact-only PLAN checkpoint precedes one behavior-level test-only RED and one architectural
+GREEN/refactor. Required terminal gates remain focused tests, the complete serialized Shepherd
+suite, both strict TypeScript scopes against explicit Pi 0.80.6 package/type roots, explicit Pi
+0.80.6 offline RPC registration, and diff/base/head/issue-owned-scope checks. No Cycle 7 result is
+being represented as Cycle 8 evidence.
+
 Cycle 7 terminal verification is complete at implementation head
 `5c638d7f21a3910f40e499dba5c82cb7646642ac`. The frozen candidate was
 `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, the immutable base remains

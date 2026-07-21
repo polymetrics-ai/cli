@@ -1,6 +1,14 @@
 # Summary — Issue #475
 
-Status: stable-head correction Cycle 7 complete; every declared Shepherd-only gate passes.
+Status: stable-head correction Cycle 8 planned against `f219b730`; behavior RED and GREEN pending.
+
+Cycle 8 batches the final lifecycle and security/parser findings into one strict test-first
+correction. It will normalize and freeze request authority once, own signal listeners and async
+cleanup explicitly, preserve literal-`undefined` failures, enforce hard size/count/timer maxima,
+bound event estimation before materialization, close comma/multiline-flow/escaped-key redaction
+gaps, share canonical prefixes, and reject terminal-control handoff text. Production remains frozen
+through one compiled assertion-level RED commit; Cycle 7's green evidence below is retained only as
+the baseline that all new tests must preserve.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
