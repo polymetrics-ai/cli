@@ -1,0 +1,129 @@
+# Issue #475 Plan — Scoped In-Process AgentSession Runtime
+
+## Contract
+
+- Primary issue: #475 (`feat(shepherd): add scoped in-process AgentSession runtime`)
+- Parent issue / PR: #471 / #472
+- Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+- Branch / PR base: `feat/475-shepherd-agent-session-runtime` / `feat/471-pi-agent-session-shepherd`
+- Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-475-shepherd-agent-session-runtime`
+- Execution decision: `local_critical_path` — this is one isolated issue worker with an exclusive write scope; no nested worker is required or authorized.
+
+## GSD And Skill Route
+
+- Requested command: `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run`
+- Result: adapter health passed, but the command registry returned `unknown GSD command: programming-loop`.
+- Mode: `manual_gsd_fallback`; the universal plan → RED → GREEN → REFACTOR → verify lifecycle remains mandatory.
+- Required skills loaded completely: `gsd-programming-loop`, `gsd-workstreams`, `gsd-plan-phase`, `github-issue-first-delivery`, `architecture-patterns`, `javascript-testing-patterns`.
+- Required policy read: issue-agent contract, worker handoff, universal runtime loop, Pi adapter, runtime/RLM/Pi integration reference, required-skills routing, and task/security routing matrix.
+- Architecture application: ports-and-adapters boundary around a fake-injected Pi SDK, opaque workspace, and typed host capabilities.
+- Testing application: deterministic fake sessions, race tests, failure-path assertions, and strict RED evidence before production code.
+
+## Owned Scope
+
+Production:
+
+- `.pi/extensions/shepherd/agent-session-runtime.ts`
+- `.pi/extensions/shepherd/tool-policy.ts`
+- `.pi/extensions/shepherd/role-prompts.ts`
+- Shepherd-namespaced role prompt assets only when needed
+
+Tests:
+
+- `.pi/extensions/shepherd/agent-session-runtime.test.ts`
+- `.pi/extensions/shepherd/tool-policy.test.ts`
+- `.pi/extensions/shepherd/role-prompts.test.ts` when prompt-contract behavior warrants it
+
+Durable issue memory:
+
+- `.planning/phases/475-shepherd-agent-session-runtime/**`
+
+All controller, domain, runner, SDK-runner, extension/index wiring, target-evidence, scheduler,
+workspace/Git, GitHub, and shared parent artifacts are excluded.
+
+## Design Boundaries
+
+1. Define an injected Pi 0.80.6-compatible session factory port. Production wiring remains a later
+   lane; this issue must make no subprocess, tmux, worktree, Git, GitHub, or network mutation.
+2. Route implementation/correction workers only to `openai-codex/gpt-5.6-sol` with `high`;
+   planning/research/review/validation/verification/orchestration only to the same model with
+   `xhigh`. Reject caller overrides, 5.5, missing/unknown models, and terminal route drift.
+3. Treat role input as untrusted data. Construct the system prompt from a trusted role template and
+   immutable authority envelope; never let task text override issue, branch, workspace, tool,
+   model, secret, recursion, or handoff authority.
+4. Keep context bounded: bounded task/context/system prompt, in-memory sessions, no context files,
+   extensions, skills, prompt templates, persistence, retries, or automatic compaction; bounded
+   event/output accounting.
+5. Create least-authority custom tools from an opaque workspace port and allowlisted typed host
+   capability ports. Read-only roles get only read operations; mutating roles get workspace-bound
+   read/edit/write plus explicitly declared typed capabilities. Generic shell, HTTP/SQL write,
+   credentials/secrets, and orchestration/delegation tools are structurally unavailable.
+6. Prevent recursive orchestration through role policy, reserved/forbidden tool namespaces, and a
+   non-delegating system prompt.
+7. Own session lifecycle with first-wins cancellation, timeout/deadline, abort, close, and parent
+   shutdown; abort/wait/dispose and join are coalesced exactly once. Cleanup failure quarantines the
+   runtime and prevents further dispatch.
+8. Parse exactly one bounded JSON handoff. Validate a closed schema and exact
+   `runId/generation/laneId/candidateHead/validationNonce` binding, redact secret-like material,
+   bound arrays/text, and reject unknown fields or authority/tool/model claims.
+
+## TDD Slices And Checkpoints
+
+### PLAN checkpoint
+
+- Commit these phase artifacts before tests or production edits.
+
+### RED checkpoint
+
+- Add fake-injected SDK/session tests for exact model/thinking routing and route drift rejection.
+- Add tool-policy tests for workspace bounds, read-only mutation denial, typed-capability allowlists,
+  forbidden generic/recursive tools, and prompt-injection authority expansion attempts.
+- Add lifecycle tests for abort, timeout, explicit close, parent shutdown, late creation,
+  abort/wait/dispose exactly once, teardown failure, quarantine, and concurrent join coalescing.
+- Add structured handoff tests for closed schema, bounds, redaction, identity/head/nonce binding,
+  recursion/authority fields, and malformed/unserializable/excess output.
+- Run the focused tests and record the expected missing-module/failing behavior before production.
+
+### GREEN checkpoint
+
+- Implement the smallest role routing, prompt envelope, tool policy, lifecycle owner, and handoff
+  validator that makes focused tests pass.
+- Commit and push once the focused tests are green.
+
+### REFACTOR checkpoint
+
+- Remove duplication, harden invariants, and improve typed boundaries without widening authority.
+- Run the entire Shepherd suite, strict TypeScript, offline smoke, diff, and scope checks.
+- Commit/push final evidence updates separately.
+
+## Verification Boundary
+
+This worker runs only:
+
+```bash
+node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+  .pi/extensions/shepherd/tool-policy.test.ts
+node --test .pi/extensions/shepherd/*.test.ts
+<pinned Pi 0.80.6 TypeScript compiler> --noEmit --strict <owned and Shepherd TypeScript inputs>
+printf '{"id":"commands","type":"get_commands"}\n' |
+  PI_OFFLINE=1 pi --mode rpc --no-session --approve \
+    --no-extensions --no-skills --no-prompt-templates --no-context-files \
+    -e .pi/extensions/shepherd/index.ts
+git diff --check
+<owned-scope status/diff assertions>
+```
+
+The exact strict TypeScript command will use the compiler bundled with the installed pinned Pi
+0.80.6 distribution or another already-installed compiler; no dependency will be added.
+
+Do **not** run `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, `make verify`, connector
+certification, or any repository-wide Go gate. Those are parent-integration/GitHub-CI gates. This
+boundary supersedes the generic repo verification block for this worker.
+
+## Safety And Human Gates
+
+- No dependency, auth-scope, secret, live credential, production, deployment, destructive, reverse
+  ETL, Git/worktree, GitHub, shell, generic HTTP write, or generic SQL write action is authorized.
+- No human gate is expected for the owned local implementation.
+- Never merge this sub-PR or request Claude/Copilot review; independent exact-head Codex review is
+  owned by the parent lane.

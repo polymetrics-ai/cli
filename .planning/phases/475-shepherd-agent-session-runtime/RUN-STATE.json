@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "phase": "475-shepherd-agent-session-runtime",
+  "issue": 475,
+  "status": "running",
+  "gsdMode": "manual_gsd_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
+  "verificationPolicy": "issue_focused_shepherd_typescript_only",
+  "verificationPassed": false,
+  "currentCycle": "red",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "An isolated sub-issue worker owns a single exclusive TypeScript scope; nested delegation is neither required nor authorized."
+    }
+  ],
+  "gates": {
+    "focusedTests": "pending",
+    "fullShepherdTests": "pending",
+    "strictTypeScriptPi0806": "pending",
+    "offlineRpcSmoke": "pending",
+    "diffCheck": "pending",
+    "ownedScope": "pending",
+    "parentGoConnectorGates": "not_run_parent_integration_boundary"
+  },
+  "deviations": [
+    "manual_gsd_fallback: healthy adapter registry does not expose programming-loop",
+    "repository-wide Go/connector gates intentionally deferred to parent integration and GitHub CI by explicit policy"
+  ]
+}
