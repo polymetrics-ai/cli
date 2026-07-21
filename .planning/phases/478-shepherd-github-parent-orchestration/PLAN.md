@@ -119,7 +119,7 @@ git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 
 - [x] Exact base/branch/parent topology confirmed.
 - [x] Plan, TDD ledger, and verification checklist created before production edits.
-- [ ] Test-only RED matrix committed and pushed.
+- [x] Test-only RED matrix committed and pushed.
 - [ ] Minimal GREEN implemented.
 - [ ] Refactor and all authorized gates pass.
 - [ ] Ready stacked PR opened with correct title/base/body.

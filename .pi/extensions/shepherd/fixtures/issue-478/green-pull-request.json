@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "number": 812,
+  "marker": "<!-- shepherd-child-pr:v1:471:evidence:0123456789abcdef01234567 -->",
+  "title": "feat(shepherd): add GitHub evidence",
+  "body": "Refs #811\nRefs #471\n\n<!-- shepherd-child-pr:v1:471:evidence:0123456789abcdef01234567 -->",
+  "state": "open",
+  "draft": false,
+  "baseBranch": "feat/471-pi-agent-session-shepherd",
+  "headBranch": "feat/811-github-evidence",
+  "baseSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "mergeState": "clean",
+  "checks": [
+    {
+      "name": "shepherd-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "headSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ],
+  "requestedChanges": [],
+  "threads": [],
+  "reviews": [],
+  "dispositions": [],
+  "observedAt": "2026-07-21T12:00:00.000Z"
+}
