@@ -75,8 +75,14 @@ test("scope collision conservatively folds Darwin/Git case and Unicode aliases",
 	assert.equal(scopesCollide(["src/Readme.md"], ["src/README.md"]), true);
 	assert.equal(scopesCollide(["src/caf\u00e9/file.ts"], ["src/cafe\u0301/file.ts"]), true);
 	assert.equal(scopesCollide(["src/Stra\u00dfe/file.ts"], ["src/STRASSE/file.ts"]), true);
+	assert.equal(scopesCollide(["src/\u1e9e/file.ts"], ["src/\u00df/file.ts"]), true);
+	assert.equal(scopesCollide(["src/\u1e9e/file.ts"], ["src/ss/file.ts"]), true);
 	assert.throws(
 		() => validateDependencyGraph([item({ id: "aliases", writeScopes: ["src/Readme.md", "src/README.md"] })]),
+		(error: unknown) => error instanceof DependencyGraphError && error.code === "ambiguous_scope",
+	);
+	assert.throws(
+		() => validateDependencyGraph([item({ id: "sharp-s", writeScopes: ["src/\u1e9e", "src/ss"] })]),
 		(error: unknown) => error instanceof DependencyGraphError && error.code === "ambiguous_scope",
 	);
 });

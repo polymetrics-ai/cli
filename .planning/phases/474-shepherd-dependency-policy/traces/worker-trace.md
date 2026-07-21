@@ -129,6 +129,14 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - Mapped all three blockers and two warnings to owned modules/tests/artifacts before production
   edits. Execution decision: `local_critical_path`.
 
+## Exact-head correction 2 RED cycle
+
+- Added tests only; production stayed byte-identical to reviewed head.
+- Focused RED: 40 tests, 35 pass, 5 expected failures, exit 1.
+- Failures independently cover capital sharp-S aliases, pending-work completion bypass,
+  failed/blocked dependency ready-work bypass, Proxy iterator mutation, and terminal BLOCKED.
+- Execution decision: `local_critical_path`; RED gate satisfied without full-repository commands.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

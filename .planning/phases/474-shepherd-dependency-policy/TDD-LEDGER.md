@@ -102,12 +102,17 @@ this evidence-only checkpoint was `ef2fd1e280128ccb2a0e46b749f9638472fad865`.
 
 ## Exact-head correction loop 2
 
-Status: RED pending against reviewed `82ec59c0b3161639893ff2bce7a40dbafe7745df`.
+Status: RED captured against reviewed `82ec59c0b3161639893ff2bce7a40dbafe7745df`;
+production remained untouched.
 
 | Slice | Expected reviewed-head failure | Status |
 |---|---|---|
-| Conservative sharp-S aliases | `ẞ` does not collide with `ß`/`ss` | pending |
-| Lifecycle/queue cross-validation | asserted facts bypass pending or dependency-blocked work | pending |
-| Caller-owned Proxy snapshot | hostile iterator is reached after validation and can throw | pending |
-| Terminal BLOCKED | returns ordinary `await_stage_evidence` | pending |
+| Conservative sharp-S aliases | `ẞ` does not collide with `ß`/`ss` | red |
+| Lifecycle/queue cross-validation | asserted facts bypass pending or dependency-blocked work | red |
+| Caller-owned Proxy snapshot | hostile iterator mutates pending work into false completion | red |
+| Terminal BLOCKED | returns ordinary `await_stage_evidence` | red |
 | Primary run-state truth | primary fields remain at historical 26/163 | pending |
+
+Focused RED command: 40 tests, 35 pass, **5 expected failures**, exit 1. The failures separately
+prove sharp-S alias incompleteness, pending-work completion bypass, dependency-blocked ready-work
+bypass, caller iterator mutation, and non-terminal BLOCKED reconciliation.

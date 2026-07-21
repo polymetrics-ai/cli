@@ -109,6 +109,38 @@ test("ordinary missing evidence waits, skipped transitions are invalid, and corr
 	assert.deepEqual(reconcileAutonomy(correction), { kind: "await_stage_evidence", stage: "VERIFY" });
 });
 
+test("lifecycle advancement cannot contradict the authoritative schedule queue", () => {
+	const prematureCompletion = input({ canonical: {
+		...input().canonical,
+		proposedStage: "FINAL_VERIFY",
+		transitionFacts: { allTasksIntegrated: true },
+		workItems: [item({ id: "pending" })],
+	} });
+	assert.deepEqual(reconcileAutonomy(prematureCompletion), {
+		kind: "invalid_snapshot",
+		reason: "lifecycle facts conflict with authoritative work queue",
+	});
+});
+
+test("dependency blockers override claimed ready-work lifecycle facts", () => {
+	for (const status of ["failed", "blocked"] as const) {
+		const dependencyBlocked = input({ canonical: {
+			...input().canonical,
+			proposedStage: "TASK_PLAN",
+			transitionFacts: { readyWorkAvailable: true },
+			workItems: [
+				item({ id: "prerequisite", status }),
+				item({ id: "waiting", dependsOn: ["prerequisite"] }),
+			],
+		} });
+		assert.deepEqual(reconcileAutonomy(dependencyBlocked), {
+			kind: "no_spawn",
+			blocker: "not_spawned_dependency_blocked",
+			reason: "not_spawned_dependency_blocked",
+		}, status);
+	}
+});
+
 test("transient failures retry, then correct, while real decision points enter resumable human wait", () => {
 	const retry = input({ failure: "transient_verification" });
 	assert.deepEqual(reconcileAutonomy(retry), {
@@ -352,6 +384,14 @@ test("completion is not masked by capabilities needed only for future spawns", (
 	assert.deepEqual(reconcileAutonomy(candidate), { kind: "complete" });
 });
 
+test("canonical BLOCKED state returns a terminal reconciliation result", () => {
+	const candidate = input({
+		persisted: { stage: "BLOCKED", retryAttempts: 0, correctionRounds: 0 },
+		canonical: { ...input().canonical, observedStage: "BLOCKED" },
+	});
+	assert.deepEqual(reconcileAutonomy(candidate), { kind: "blocked", reason: "terminal_blocked" });
+});
+
 test("runtime-invalid stages and concurrency facts fail closed without throwing", () => {
 	const invalidStage = input({
 		canonical: { ...input().canonical, observedStage: "UNKNOWN" as "SCHEDULE" },
@@ -393,6 +433,38 @@ test("complete exact runtime DTO validation is BigInt-safe and returns one typed
 		assert.doesNotThrow(() => reconcileAutonomy(candidate as ReconcileInput));
 		assert.deepEqual(reconcileAutonomy(candidate as ReconcileInput), expected);
 	}
+});
+
+test("caller-owned Proxy iterators are rejected before they can mutate or escape validation", () => {
+	const expected = { kind: "invalid_snapshot", reason: "invalid autonomy snapshot" } as const;
+	const mutableItems = [item({ id: "worker" })];
+	const changingItems = new Proxy(mutableItems, {
+		get(target, property, receiver) {
+			if (property === Symbol.iterator) {
+				return function* hostileIterator() {
+					target[0].status = "succeeded";
+					yield target[0];
+				};
+			}
+			return Reflect.get(target, property, receiver);
+		},
+	});
+	const changing = input({ canonical: {
+		...input().canonical,
+		workItems: changingItems,
+	} });
+	assert.deepEqual(reconcileAutonomy(changing), expected);
+	assert.equal(mutableItems[0].status, "pending", "caller iterator must never run");
+
+	const throwingItems = new Proxy([item({ id: "worker" })], {
+		get(target, property, receiver) {
+			if (property === Symbol.iterator) return () => { throw new Error("hostile iterator invoked"); };
+			return Reflect.get(target, property, receiver);
+		},
+	});
+	const throwing = input({ canonical: { ...input().canonical, workItems: throwingItems } });
+	assert.doesNotThrow(() => reconcileAutonomy(throwing));
+	assert.deepEqual(reconcileAutonomy(throwing), expected);
 });
 
 test("reconciliation is pure and idempotent for the same persisted and canonical snapshot", () => {
