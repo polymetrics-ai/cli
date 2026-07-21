@@ -39,6 +39,12 @@ Every in-process implementation/correction session receives all of the following
 Planning, research, issue proposal, verification, review, disposition, and orchestration sessions
 use `openai-codex/gpt-5.6-sol`/`xhigh` and cannot mutate outside their explicit role.
 
+For #471, automated quality review specifically means an independent controller-owned Codex
+`gpt-5.6-sol`/`xhigh` AgentSession bound to the exact base/head/range. Claude and Copilot are
+intentionally skipped for this program and must not be claimed in evidence. Any head change
+invalidates the record and requires a fresh stable-head review; parent merge remains a separate
+exact-head human decision.
+
 ## Shepherd sub-worker verification boundary
 
 Every Shepherd implementation, correction, and independent-review prompt must keep local

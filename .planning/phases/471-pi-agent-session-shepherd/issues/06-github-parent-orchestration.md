@@ -26,10 +26,14 @@ Controller/command integration remains reserved for the integration issue.
 - [ ] Parent branch/draft PR setup, sub-issue creation, sub-PR creation, and roster/status updates are
       retry-safe and reconcile existing GitHub state before mutation.
 - [ ] Child PRs target the parent branch and use `Refs`; only the parent PR closes the parent issue.
-- [ ] CI, requested changes, unresolved threads, exact reviewed commit ranges, Claude primary review,
-      Copilot/human fallback, and dispositions are represented as authoritative evidence.
-- [ ] Only green, scoped, reviewed sub-PRs integrate; skipped stacked-PR review records parent-PR
-      fallback coverage rather than claiming completion.
+- [ ] CI, requested changes, unresolved threads, exact reviewed commit ranges, and finding
+      dispositions are represented as authoritative evidence.
+- [ ] This program's automated quality gate is a controller-owned, in-process independent Codex
+      review using `gpt-5.6-sol` with `xhigh`. Coverage binds the exact base/head/range, observed
+      stable head, changed paths, findings, and dispositions, and reruns after any head change.
+      Claude and Copilot are intentionally not claimed as review coverage for this program.
+- [ ] Only green, scoped, reviewed sub-PRs integrate. Missing or stale exact-head Codex coverage is
+      recorded as blocked rather than inferred from CI, prose, scores, or another provider.
 - [ ] Parent PR never becomes ready or mergeable until every required child and exact-head gate passes.
 
 ## TDD and verification

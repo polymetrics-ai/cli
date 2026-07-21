@@ -29,7 +29,8 @@ The deterministic controller depends on explicit ports:
 4. isolated worktree plus typed Git operations;
 5. durable GitHub human-decision broker;
 6. parent issue/sub-issue/stacked-PR/review orchestration;
-7. autonomous controller and `/pm-shepherd` command integration; and
+7. autonomous controller, v2 state/effect journal, typed parent refresh/rebase, concrete host
+   adapters, and `/pm-shepherd` command integration; and
 8. crash recovery, bounded audit log, operator UX, and cutover/canary harness.
 
 Target stage machine:
@@ -89,10 +90,12 @@ For each child:
 
 ## Current critical path
 
-#473 is `worker_ready`. Its uncommitted remediation already contains useful foundation fixes but
-still has blocking state-store and cancellation findings. Finish its RED/GREEN/refactor cycle,
-open a child PR to #472, obtain review coverage, and integrate it. Then create four isolated
-worktrees and dispatch #474-#477 concurrently.
+#473, #474, #476, and #477 are integrated. #475 is completing one consolidated stable-head
+RED/GREEN correction, including workspace-keyed disjoint mutator reservations. #478 is in a fresh
+exact-head independent-review campaign after its consolidated correction. Once both are clean and
+integrated, execute #479 using the preflight scope and RED matrix recorded in
+`traces/479-preflight-interface-audit.md`; do not begin production wiring against the old read-only
+v1 DTO or immutable initial-parent-base assumptions.
 
 ## Verification
 

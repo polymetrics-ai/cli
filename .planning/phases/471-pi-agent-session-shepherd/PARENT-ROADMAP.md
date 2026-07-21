@@ -27,6 +27,10 @@ First end-to-end consumer: #397 and draft PR #438 (CLI Architecture v2).
   one PR base, and bounded tools. They never share the coordinator checkout.
 - Implementation workers use `openai-codex/gpt-5.6-sol` with `high`; planning, research, review,
   validation, and orchestration workers use the same model with `xhigh`. No 5.5 route is allowed.
+- Automated quality review for this program is an independent controller-owned Codex
+  `gpt-5.6-sol`/`xhigh` AgentSession. Claude and Copilot are intentionally skipped; Shepherd records
+  exact base/head/range, stable-head observation, changed paths, findings, dispositions, and a fresh
+  rerun after movement. This never substitutes for exact-head human parent-merge approval.
 - Agent prose is untrusted evidence. Git, GitHub, test, CI, review, and persisted state are the
   authoritative sources for transitions.
 - Persist bounded redacted state and an append-only decision/audit trail. Never persist prompts,
@@ -58,8 +62,9 @@ Planned dependency waves:
 1. Harden the durable control-plane foundation already present on the parent branch.
 2. In parallel, implement the dependency policy/reconciler, scoped in-process worker runtime,
    isolated workspace/Git adapter, and durable GitHub human-decision broker.
-3. Implement parent/sub-issue/stacked-PR and automated-review orchestration on those ports.
-4. Integrate the autonomous parallel scheduler, correction loop, and command surface.
+3. Implement parent/sub-issue/stacked-PR and independent Codex-review orchestration on those ports.
+4. Integrate the autonomous parallel scheduler, v2 state/effect journal, typed parent refresh and
+   child rebase/reclaim, correction loop, and command surface.
 5. Prove crash recovery, auditability, operator UX, and legacy-shell cutover.
 6. Run an end-to-end canary against CLI Architecture v2 and finish exact-head parent verification.
 
