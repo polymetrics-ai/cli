@@ -314,18 +314,18 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 	activeToolsOverride: string[] | undefined;
 
 	getAgentDir(): string { return "/opaque/pi-agent"; }
-	findModel(provider: string, model: string): unknown {
+	findModel(provider: string, model: string): any {
 		return provider === "openai-codex" && model === "gpt-5.6-sol"
 			? { provider, id: model }
 			: undefined;
 	}
 	hasConfiguredAuth(): boolean { return true; }
-	createSettingsManager(settings: Record<string, unknown>): unknown {
+	createSettingsManager(settings: Record<string, unknown>): any {
 		this.settings = settings;
 		return { kind: "settings" };
 	}
-	createSessionManager(cwd: string): unknown { return { kind: "memory", cwd }; }
-	createResourceLoader(options: Record<string, unknown>) {
+	createSessionManager(cwd: string): any { return { kind: "memory", cwd }; }
+	createResourceLoader(options: Record<string, unknown>): any {
 		this.loaderOptions = options;
 		return { reload: async () => { if (this.reloadGate) await this.reloadGate; } };
 	}

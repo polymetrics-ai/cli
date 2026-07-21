@@ -1,4 +1,5 @@
 import { posix, win32 } from "node:path";
+import { types as nodeTypes } from "node:util";
 
 import type {
 	AgentSessionEvent,
@@ -19,7 +20,7 @@ import {
 	validateScopedPath,
 	type HostCapability,
 	type ScopedWorkspace,
-	type SessionTool,
+	type ToolPolicy,
 	type ToolAuthority,
 } from "./tool-policy.ts";
 
@@ -39,6 +40,8 @@ const MAX_ASSISTANT_BYTES = 1024 * 1024;
 const MAX_CLEANUP_TIMEOUT_MS = MAX_TIMEOUT_MS;
 const MAX_EVENT_DEPTH = 64;
 const MAX_EVENT_NODES = 65_536;
+const MAX_EVENT_RECORD_KEYS = 256;
+const MAX_EVENT_ARRAY_ITEMS = 4_096;
 const MAX_HANDOFF_SUMMARY_CHARACTERS = 4 * 1024;
 const MAX_HANDOFF_ARRAY_ITEMS = 32;
 const MAX_HANDOFF_ITEM_CHARACTERS = 2 * 1024;
@@ -47,13 +50,18 @@ interface RuntimeResourceLoader {
 	reload(): Promise<void>;
 }
 
-interface RuntimeModel {
+interface RuntimeSessionModel {
 	provider: string;
 	id: string;
 }
 
+type RuntimeModel = NonNullable<CreateAgentSessionOptions["model"]>;
+type RuntimeResourceLoaderOption = NonNullable<CreateAgentSessionOptions["resourceLoader"]>;
+type RuntimeSessionManager = NonNullable<CreateAgentSessionOptions["sessionManager"]>;
+type RuntimeSettingsManager = NonNullable<CreateAgentSessionOptions["settingsManager"]>;
+
 export interface RuntimeAgentSession {
-	model: RuntimeModel | undefined;
+	model: RuntimeSessionModel | undefined;
 	thinkingLevel: ShepherdAgentThinking | string;
 	sessionFile: string | undefined;
 	getActiveToolNames(): string[];
@@ -75,11 +83,11 @@ export interface AgentSessionRuntimeSdk {
 	version: string;
 	requiredVersion?: string;
 	getAgentDir(): string;
-	findModel(provider: string, model: string): unknown;
-	hasConfiguredAuth(model: unknown): boolean;
-	createSettingsManager(settings: Record<string, unknown>, options: Record<string, unknown>): unknown;
-	createSessionManager(cwd: string): unknown;
-	createResourceLoader(options: Record<string, unknown>): RuntimeResourceLoader;
+	findModel(provider: string, model: string): RuntimeModel | undefined;
+	hasConfiguredAuth(model: RuntimeModel): boolean;
+	createSettingsManager(settings: Record<string, unknown>, options: Record<string, unknown>): RuntimeSettingsManager;
+	createSessionManager(cwd: string): RuntimeSessionManager;
+	createResourceLoader(options: Record<string, unknown>): RuntimeResourceLoader & RuntimeResourceLoaderOption;
 	createAgentSession(options: CreateAgentSessionOptions): Promise<RuntimeSessionResult>;
 }
 
@@ -130,7 +138,9 @@ export interface AgentSessionRuntimeOptions {
 
 export class AgentSessionRuntimeError extends Error {
 	constructor(message: string, options?: ErrorOptions) {
-		super(message, options);
+		// Passing an options object even for a literal-undefined reason gives every public
+		// failure a stable own `cause` field instead of erasing reasonless adapter failures.
+		super(message, { cause: options?.cause });
 		this.name = "AgentSessionRuntimeError";
 	}
 }
@@ -192,52 +202,87 @@ class CancellationScope {
 }
 
 class OwnedSession {
-	readonly session: RuntimeAgentSession;
-	unsubscribe: (() => void | PromiseLike<void>) | undefined;
+	readonly #session: RuntimeAgentSession;
+	readonly #abort: RuntimeAgentSession["abort"];
+	readonly #dispose: RuntimeAgentSession["dispose"];
+	readonly #prompt: RuntimeAgentSession["prompt"];
+	readonly #subscribe: RuntimeAgentSession["subscribe"];
+	readonly #waitForIdle: RuntimeAgentSession["waitForIdle"];
+	readonly #getActiveToolNames: RuntimeAgentSession["getActiveToolNames"];
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
+	#unsubscribe: (() => void | PromiseLike<void>) | undefined;
+	#unsubscribePromise: Promise<void> | undefined;
 	#waitPromise: Promise<void> | undefined;
 
 	constructor(session: RuntimeAgentSession) {
-		this.session = session;
+		this.#session = session;
+		// Capture the exact acquired operations. Host mutation after ownership transfer must
+		// not redirect validation, prompting, cancellation, or cleanup to another surface.
+		this.#abort = session.abort;
+		this.#dispose = session.dispose;
+		this.#prompt = session.prompt;
+		this.#subscribe = session.subscribe;
+		this.#waitForIdle = session.waitForIdle;
+		this.#getActiveToolNames = session.getActiveToolNames;
+		if (typeof this.#abort !== "function" || typeof this.#dispose !== "function" ||
+			typeof this.#prompt !== "function" || typeof this.#subscribe !== "function" ||
+			typeof this.#waitForIdle !== "function" || typeof this.#getActiveToolNames !== "function") {
+			throw new AgentSessionRuntimeError("Pi returned an incomplete AgentSession surface");
+		}
+	}
+
+	activeToolNames(): unknown {
+		return Reflect.apply(this.#getActiveToolNames, this.#session, []);
+	}
+
+	prompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void> {
+		return Promise.resolve(Reflect.apply(this.#prompt, this.#session, [value, options]));
+	}
+
+	subscribe(listener: (event: AgentSessionEvent) => void): void {
+		if (this.#unsubscribe !== undefined || this.#unsubscribePromise !== undefined) {
+			throw new AgentSessionRuntimeError("AgentSession subscription ownership was already acquired");
+		}
+		const unsubscribe = Reflect.apply(this.#subscribe, this.#session, [listener]);
+		if (typeof unsubscribe !== "function") {
+			throw new AgentSessionRuntimeError("AgentSession subscribe returned an invalid cleanup operation");
+		}
+		this.#unsubscribe = unsubscribe;
 	}
 
 	abortOnce(): Promise<void> {
-		if (!this.#abortPromise) this.#abortPromise = Promise.resolve().then(() => this.session.abort());
+		if (!this.#abortPromise) {
+			this.#abortPromise = Promise.resolve().then(() => Reflect.apply(this.#abort, this.#session, []));
+			this.#abortPromise.catch(() => undefined);
+		}
 		return this.#abortPromise;
 	}
 
 	waitOnce(): Promise<void> {
 		if (!this.#waitPromise) {
-			this.#waitPromise = Promise.resolve().then(() => this.session.waitForIdle());
+			this.#waitPromise = Promise.resolve().then(() => Reflect.apply(this.#waitForIdle, this.#session, []));
 			this.#waitPromise.catch(() => undefined);
 		}
 		return this.#waitPromise;
 	}
 
+	unsubscribeOnce(): Promise<void> {
+		if (!this.#unsubscribePromise) {
+			const unsubscribe = this.#unsubscribe;
+			this.#unsubscribe = undefined;
+			this.#unsubscribePromise = Promise.resolve().then(() => {
+				if (unsubscribe) return Promise.resolve(unsubscribe());
+			});
+			this.#unsubscribePromise.catch(() => undefined);
+		}
+		return this.#unsubscribePromise;
+	}
+
 	disposeOnce(): Promise<void> {
 		if (!this.#disposePromise) {
-			this.#disposePromise = Promise.resolve().then(async () => {
-				let failurePresent = false;
-				let firstError: unknown;
-				const unsubscribe = this.unsubscribe;
-				this.unsubscribe = undefined;
-				try {
-					if (unsubscribe) await Promise.resolve(unsubscribe());
-				} catch (error) {
-					failurePresent = true;
-					firstError = error;
-				}
-				try {
-					await Promise.resolve(this.session.dispose());
-				} catch (error) {
-					if (!failurePresent) {
-						failurePresent = true;
-						firstError = error;
-					}
-				}
-				if (failurePresent) throw firstError;
-			});
+			this.#disposePromise = Promise.resolve().then(() =>
+				Promise.resolve(Reflect.apply(this.#dispose, this.#session, [])));
 			this.#disposePromise.catch(() => undefined);
 		}
 		return this.#disposePromise;
@@ -249,34 +294,36 @@ async function cleanupOwnedSession(
 	abort: boolean,
 	timeoutMs: number,
 ): Promise<void> {
-	let failurePresent = false;
-	let firstError: unknown;
+	const failures: unknown[] = [];
 	if (abort) {
 		try {
 			await bounded(owned.abortOnce(), timeoutMs, "session abort");
 		} catch (error) {
-			failurePresent = true;
-			firstError = error;
+			failures.push(error);
 		}
 	}
 	try {
 		await bounded(owned.waitOnce(), timeoutMs, "session idle wait");
 	} catch (error) {
-		if (!failurePresent) {
-			failurePresent = true;
-			firstError = error;
-		}
+		failures.push(error);
 	}
-	// Teardown must remain reachable after either bounded phase, including for thenable adapters.
 	try {
-		await owned.disposeOnce();
+		await bounded(owned.unsubscribeOnce(), timeoutMs, "session unsubscribe");
 	} catch (error) {
-		if (!failurePresent) {
-			failurePresent = true;
-			firstError = error;
-		}
+		failures.push(error);
 	}
-	if (failurePresent) throw firstError;
+	// Disposal owns a separate bound and remains reachable after every earlier phase.
+	try {
+		await bounded(owned.disposeOnce(), timeoutMs, "session dispose");
+	} catch (error) {
+		failures.push(error);
+	}
+	if (failures.length > 0) throw combineFailures(failures, "AgentSession cleanup phases failed");
+}
+
+interface CreatedSessionClaim {
+	readonly owned: OwnedSession;
+	validate(): void;
 }
 
 class SessionCreationOwnership {
@@ -284,7 +331,7 @@ class SessionCreationOwnership {
 	readonly terminal: Promise<void>;
 	readonly #cleanupTimeoutMs: number;
 	readonly #onCleanupFailure: (error: unknown) => void;
-	readonly #validateCreated: (created: RuntimeSessionResult) => void;
+	readonly #captureCreated: (created: RuntimeSessionResult) => CreatedSessionClaim;
 	readonly #resolveTerminal: () => void;
 	#state: "pending" | "claimed" | "abandoned" | "failed" = "pending";
 	#settlement:
@@ -297,12 +344,12 @@ class SessionCreationOwnership {
 	constructor(
 		promise: Promise<RuntimeSessionResult>,
 		cleanupTimeoutMs: number,
-		validateCreated: (created: RuntimeSessionResult) => void,
+		captureCreated: (created: RuntimeSessionResult) => CreatedSessionClaim,
 		onCleanupFailure: (error: unknown) => void,
 	) {
 		this.promise = promise;
 		this.#cleanupTimeoutMs = cleanupTimeoutMs;
-		this.#validateCreated = validateCreated;
+		this.#captureCreated = captureCreated;
 		this.#onCleanupFailure = onCleanupFailure;
 		const completion = deferred();
 		this.terminal = completion.promise;
@@ -321,13 +368,13 @@ class SessionCreationOwnership {
 
 	get pending(): boolean { return this.#state === "pending"; }
 
-	claim(created: RuntimeSessionResult): OwnedSession {
+	claim(created: RuntimeSessionResult): CreatedSessionClaim {
 		if (this.#state !== "pending") {
 			throw new AgentSessionRuntimeError("AgentSession creation ownership was already settled");
 		}
-		let owned: OwnedSession;
+		let claim: CreatedSessionClaim;
 		try {
-			owned = ownedSessionFromResult(created);
+			claim = this.#captureCreated(created);
 		} catch (error) {
 			this.#state = "failed";
 			this.#reportFailure(error);
@@ -336,7 +383,7 @@ class SessionCreationOwnership {
 		}
 		this.#state = "claimed";
 		this.#settleTerminal();
-		return owned;
+		return claim;
 	}
 
 	abandon(): void {
@@ -353,41 +400,32 @@ class SessionCreationOwnership {
 	}
 
 	async #finishLateCreation(created: RuntimeSessionResult): Promise<void> {
-		let owned: OwnedSession | undefined;
-		let failurePresent = false;
-		let firstError: unknown;
+		let claim: CreatedSessionClaim | undefined;
+		const failures: unknown[] = [];
 		try {
-			owned = ownedSessionFromResult(created);
+			claim = this.#captureCreated(created);
 		} catch (error) {
-			failurePresent = true;
-			firstError = error;
+			failures.push(error);
 		}
-		if (owned) {
+		if (claim) {
 			try {
-				this.#validateCreated(created);
+				claim.validate();
 			} catch (error) {
-				if (!failurePresent) {
-					failurePresent = true;
-					firstError = error;
-				}
+				failures.push(error);
 			}
 			try {
-				await this.#cleanup(owned);
+				await this.#cleanup(claim.owned);
 			} catch (error) {
-				if (!failurePresent) {
-					failurePresent = true;
-					firstError = error;
-				}
+				failures.push(error);
 			}
 		}
-		if (failurePresent) this.#reportFailure(firstError);
+		if (failures.length > 0) this.#reportFailure(combineFailures(failures, "late AgentSession ownership failed"));
 		this.#settleTerminal();
 	}
 
 	async #cleanup(owned: OwnedSession): Promise<void> {
 		const deadlineAt = Date.now() + this.#cleanupTimeoutMs;
-		let failurePresent = false;
-		let firstError: unknown;
+		const failures: unknown[] = [];
 		const abort = boundedUntil(
 			owned.abortOnce(),
 			deadlineAt,
@@ -403,20 +441,19 @@ class SessionCreationOwnership {
 			true,
 		);
 		for (const settlement of await Promise.allSettled([abort, idle])) {
-			if (settlement.status === "rejected" && !failurePresent) {
-				failurePresent = true;
-				firstError = settlement.reason;
-			}
+			if (settlement.status === "rejected") failures.push(settlement.reason);
 		}
 		try {
-			await owned.disposeOnce();
+			await bounded(owned.unsubscribeOnce(), this.#cleanupTimeoutMs, "abandoned session unsubscribe");
 		} catch (error) {
-			if (!failurePresent) {
-				failurePresent = true;
-				firstError = error;
-			}
+			failures.push(error);
 		}
-		if (failurePresent) throw firstError;
+		try {
+			await bounded(owned.disposeOnce(), this.#cleanupTimeoutMs, "abandoned session dispose");
+		} catch (error) {
+			failures.push(error);
+		}
+		if (failures.length > 0) throw combineFailures(failures, "abandoned AgentSession cleanup phases failed");
 	}
 
 	#reportFailure(error: unknown): void {
@@ -437,25 +474,51 @@ class SessionCreationOwnership {
 class AbortListenerLease {
 	readonly #signal: AbortSignal;
 	readonly #listener: () => void;
+	readonly #add: AbortSignal["addEventListener"];
+	readonly #remove: AbortSignal["removeEventListener"];
+	readonly #removeWasOwn: boolean;
 	#mayBeAttached = false;
 	#released = false;
 
 	constructor(signal: AbortSignal, listener: () => void) {
 		this.#signal = signal;
 		this.#listener = listener;
+		this.#add = signal.addEventListener;
+		this.#remove = signal.removeEventListener;
+		this.#removeWasOwn = Object.hasOwn(signal, "removeEventListener");
+		if (typeof this.#add !== "function" || typeof this.#remove !== "function") {
+			throw new AgentSessionRuntimeError("AbortSignal listener operations are invalid");
+		}
 	}
 
 	attach(): void {
 		if (this.#mayBeAttached) return;
 		// EventTarget may mutate before a hostile wrapper throws. Own the possible lease first.
 		this.#mayBeAttached = true;
-		this.#signal.addEventListener("abort", this.#listener, { once: true });
+		Reflect.apply(this.#add, this.#signal, ["abort", this.#listener, { once: true }]);
 	}
 
 	release(): void {
 		if (this.#released || !this.#mayBeAttached) return;
 		this.#released = true;
-		this.#signal.removeEventListener("abort", this.#listener);
+		try {
+			Reflect.apply(this.#remove, this.#signal, ["abort", this.#listener]);
+			if (!this.#removeWasOwn && Object.hasOwn(this.#signal, "removeEventListener")) {
+				throw new AgentSessionRuntimeError("AbortSignal listener operation mutated after acquisition");
+			}
+		} catch (error) {
+			let fallbackFailurePresent = false;
+			let fallbackFailure: unknown;
+			try {
+				EventTarget.prototype.removeEventListener.call(this.#signal, "abort", this.#listener);
+			} catch (fallbackError) {
+				fallbackFailurePresent = true;
+				fallbackFailure = fallbackError;
+			}
+			throw fallbackFailurePresent
+				? combineFailures([error, fallbackFailure], "AbortSignal listener detach failed")
+				: error;
+		}
 	}
 }
 
@@ -494,7 +557,7 @@ interface AssistantTerminal {
 	model: string;
 	stopReason: string;
 	timestamp: number;
-	content: Array<{ type: string; text?: string }>;
+	content: ReadonlyArray<Readonly<{ type: string; text?: string }>>;
 }
 
 export class ShepherdAgentSessionRuntime {
@@ -546,9 +609,24 @@ export class ShepherdAgentSessionRuntime {
 	}
 
 	async run(request: RoleRunRequest): Promise<AgentSessionHandoff> {
+		try {
+			return await this.#run(request);
+		} catch (error) {
+			throw normalizeRuntimeError(error);
+		}
+	}
+
+	async #run(request: RoleRunRequest): Promise<AgentSessionHandoff> {
 		const normalizedRequest = normalizeRunRequest(request);
 		this.#assertSdk();
 		this.#assertOpen();
+		// Capability schemas become bounded immutable Pi tools before any SDK lookup or await.
+		const toolPolicy = createToolPolicy({
+			readOnly: normalizedRequest.authority.readOnly,
+			workspace: normalizedRequest.workspace,
+			authority: normalizedRequest.authority,
+			capabilities: normalizedRequest.capabilities,
+		});
 		const route = routeForRole(normalizedRequest.role);
 		const model = this.#sdk.findModel(route.provider, route.model);
 		if (!isRecord(model) || model.provider !== REQUIRED_PROVIDER || model.id !== REQUIRED_MODEL) {
@@ -568,46 +646,67 @@ export class ShepherdAgentSessionRuntime {
 		);
 		const scope = active.scope;
 		const externalAbort = () => scope.cancel(new AgentSessionRuntimeError("AgentSession run was cancelled by its parent signal"));
-		const listenerLease = normalizedRequest.signal
-			? new AbortListenerLease(normalizedRequest.signal, externalAbort)
-			: undefined;
-		let listenerFailurePresent = false;
-		let listenerFailure: unknown;
+		let listenerLease: AbortListenerLease | undefined;
+		let result: AgentSessionHandoff | undefined;
+		let primaryFailurePresent = false;
+		let primaryFailure: unknown;
 		try {
 			if (normalizedRequest.signal) {
+				listenerLease = new AbortListenerLease(normalizedRequest.signal, externalAbort);
 				listenerLease?.attach();
 				if (normalizedRequest.signal.aborted) externalAbort();
 			}
-			return await this.#execute(normalizedRequest, route.thinking, model, active);
+			result = await this.#execute(normalizedRequest, route.thinking, model, active, toolPolicy);
+		} catch (error) {
+			primaryFailurePresent = true;
+			primaryFailure = error;
+		}
+		let listenerFailurePresent = false;
+		let listenerFailure: unknown;
+		try {
+			listenerLease?.release();
+		} catch (error) {
+			listenerFailurePresent = true;
+			listenerFailure = error;
 		} finally {
 			try {
-				listenerLease?.release();
-			} catch (error) {
-				listenerFailurePresent = true;
-				listenerFailure = error;
+				scope.finish();
 			} finally {
-				try {
-					scope.finish();
-				} finally {
-					this.#release(active);
-				}
+				this.#release(active);
 			}
-			if (listenerFailurePresent) throw listenerFailure;
 		}
+		if (primaryFailurePresent && listenerFailurePresent) {
+			throw new AgentSessionRuntimeError("AgentSession run and listener cleanup both failed", {
+				cause: combineFailures([primaryFailure, listenerFailure], "AgentSession primary and listener failures"),
+			});
+		}
+		if (listenerFailurePresent) throw listenerFailure;
+		if (primaryFailurePresent) throw primaryFailure;
+		if (!result) throw new AgentSessionRuntimeError("AgentSession completed without a handoff");
+		return result;
 	}
 
 	async abort(runId: string): Promise<void> {
-		if (!validIdentifier(runId)) throw new AgentSessionRuntimeError("abort runId is invalid");
-		const matches = [...this.#active.values()].filter((active) => active.runId === runId);
-		for (const active of matches) {
-			active.scope.cancel(new AgentSessionRuntimeError(`AgentSession run ${runId} was aborted`));
-			void active.owned?.abortOnce().catch(() => undefined);
+		try {
+			if (!validIdentifier(runId)) throw new AgentSessionRuntimeError("abort runId is invalid");
+			const matches = [...this.#active.values()].filter((active) => active.runId === runId);
+			for (const active of matches) {
+				active.scope.cancel(new AgentSessionRuntimeError(`AgentSession run ${runId} was aborted`));
+				void active.owned?.abortOnce().catch(() => undefined);
+			}
+			await Promise.all(matches.map((active) => active.done));
+		} catch (error) {
+			throw normalizeRuntimeError(error);
 		}
-		await Promise.all(matches.map((active) => active.done));
 	}
 
-	close(): Promise<void> { return this.#close("AgentSession runtime closed"); }
-	shutdown(): Promise<void> { return this.#close("AgentSession parent shutdown requested"); }
+	async close(): Promise<void> {
+		try { await this.#close("AgentSession runtime closed"); } catch (error) { throw normalizeRuntimeError(error); }
+	}
+
+	async shutdown(): Promise<void> {
+		try { await this.#close("AgentSession parent shutdown requested"); } catch (error) { throw normalizeRuntimeError(error); }
+	}
 
 	#close(reason: string): Promise<void> {
 		if (!this.#closePromise) {
@@ -627,17 +726,25 @@ export class ShepherdAgentSessionRuntime {
 		if (creationOwners.length > 0) {
 			const terminal = Promise.all(creationOwners.map((creation) => creation.terminal)).then(() => undefined);
 			const settlement = await settleWithin(terminal, this.#options.cleanupTimeoutMs);
-			if (!settlement.settled) {
+			if (settlement.status === "pending") {
 				this.#setQuarantine(new AgentSessionRuntimeError(
 					"AgentSession creation remained pending during bounded close",
 				));
 			}
 		}
 		this.#closed = true;
-		this.#parentListenerLease?.release();
+		const failures: unknown[] = [];
+		try {
+			this.#parentListenerLease?.release();
+		} catch (error) {
+			failures.push(error);
+		}
 		if (this.#quarantineFailurePresent) {
-			throw new AgentSessionRuntimeError("AgentSession runtime closed while quarantined after cleanup failure", {
-				cause: this.#quarantineFailure,
+			failures.push(this.#quarantineFailure);
+		}
+		if (failures.length > 0) {
+			throw new AgentSessionRuntimeError("AgentSession runtime closed while cleanup failed", {
+				cause: combineFailures(failures, "AgentSession close failures"),
 			});
 		}
 	}
@@ -645,16 +752,14 @@ export class ShepherdAgentSessionRuntime {
 	async #execute(
 		request: RoleRunRequest,
 		thinking: ShepherdAgentThinking,
-		model: Record<string, unknown>,
+		model: RuntimeModel,
 		active: ActiveRun,
+		toolPolicy: ToolPolicy,
 	): Promise<AgentSessionHandoff> {
 		const scope = active.scope;
-		const toolPolicy = createToolPolicy({
-			readOnly: request.authority.readOnly,
-			workspace: request.workspace,
-			authority: request.authority,
-			capabilities: request.capabilities,
-		});
+		const expectedToolNames = frozenArray([...toolPolicy.names]);
+		const piToolNames = frozenArray([...expectedToolNames]);
+		const piCustomTools = frozenArray([...toolPolicy.tools]);
 		const prompts = buildRolePrompts({
 			role: request.role,
 			task: request.task,
@@ -666,7 +771,7 @@ export class ShepherdAgentSessionRuntime {
 					readOnly: request.authority.readOnly,
 					readPrefixes: request.authority.readPrefixes,
 					writePrefixes: request.authority.writePrefixes,
-					toolNames: toolPolicy.names,
+					toolNames: expectedToolNames,
 				binding: request.binding,
 			},
 		});
@@ -707,24 +812,25 @@ export class ShepherdAgentSessionRuntime {
 			await scope.race(reloadPromise);
 			scope.assertActive();
 
-			const createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession({
+			const createOptions: CreateAgentSessionOptions = {
 				cwd: request.workspace.cwd,
 				agentDir: this.#sdk.getAgentDir(),
 				model,
 				thinkingLevel: thinking,
 				scopedModels: [{ model, thinkingLevel: thinking }],
 				noTools: "all",
-				tools: toolPolicy.names,
-				excludeTools: ["bash"],
-				customTools: toolPolicy.tools as unknown as CreateAgentSessionOptions["customTools"],
+				tools: piToolNames,
+				excludeTools: frozenArray(["bash"]),
+				customTools: piCustomTools,
 				resourceLoader,
 				sessionManager,
 				settingsManager,
-			} as unknown as CreateAgentSessionOptions));
+			};
+			const createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession(createOptions));
 			const owner = new SessionCreationOwnership(
 				createPromise,
 				this.#options.cleanupTimeoutMs,
-				(created) => validateCreatedSession(created, thinking, toolPolicy.names),
+				(created) => captureCreatedSession(created, thinking, expectedToolNames),
 				(error) => {
 					this.#setQuarantine(error);
 				},
@@ -733,18 +839,24 @@ export class ShepherdAgentSessionRuntime {
 			this.#creations.add(owner);
 			void owner.terminal.then(() => { this.#creations.delete(owner); });
 			const created = await scope.race(createPromise);
-			owned = creation.claim(created);
+			const claim = creation.claim(created);
+			owned = claim.owned;
 			active.owned = owned;
 			scope.setOnCancel(() => { void owned?.abortOnce().catch(() => undefined); });
 			scope.assertActive();
-			validateCreatedSession(created, thinking, toolPolicy.names);
+			try {
+				claim.validate();
+			} catch (error) {
+				this.#setQuarantine(error);
+				throw error;
+			}
 
 			const capture = newTerminalCapture();
-			owned.unsubscribe = created.session.subscribe((event) => {
+			owned.subscribe((event) => {
 				captureEvent(capture, event, this.#options);
 				if (capture.failure) void owned?.abortOnce().catch(() => undefined);
 			});
-			await scope.race(created.session.prompt(prompts.userPrompt, {
+			await scope.race(owned.prompt(prompts.userPrompt, {
 				expandPromptTemplates: false,
 				source: "extension",
 			}));
@@ -763,24 +875,27 @@ export class ShepherdAgentSessionRuntime {
 		let cleanupFailurePresent = false;
 		let cleanupFailure: unknown;
 		if (reloadPromise) {
-			try {
-				await bounded(reloadPromise, this.#options.cleanupTimeoutMs, "resource loader settlement");
-			} catch (error) {
+			const settlement = await settleWithin(reloadPromise, this.#options.cleanupTimeoutMs);
+			if (settlement.status === "pending") {
 				cleanupFailurePresent = true;
-				cleanupFailure = error;
+				cleanupFailure = new AgentSessionRuntimeError(
+					`resource loader settlement timed out after ${this.#options.cleanupTimeoutMs}ms`,
+				);
 			}
 		}
 		if (!owned && creation?.pending) {
 			try {
 				const settlement = await settleWithin(creation.promise, this.#options.cleanupTimeoutMs);
-				if (!settlement.settled) {
+				if (settlement.status === "pending" || settlement.status === "rejected") {
 					creation.abandon();
 				} else {
-					owned = creation.claim(settlement.value);
+					const claim = creation.claim(settlement.value);
+					owned = claim.owned;
 					active.owned = owned;
 					try {
-						validateCreatedSession(settlement.value, thinking, toolPolicy.names);
+						claim.validate();
 					} catch (error) {
+						this.#setQuarantine(error);
 						if (!cleanupFailurePresent) {
 							cleanupFailurePresent = true;
 							cleanupFailure = error;
@@ -810,7 +925,11 @@ export class ShepherdAgentSessionRuntime {
 		}
 
 		if (cleanupFailurePresent) {
-			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", { cause: cleanupFailure });
+			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", {
+				cause: primaryFailurePresent
+					? combineFailures([primaryFailure, cleanupFailure], "AgentSession primary and cleanup failures")
+					: cleanupFailure,
+			});
 		}
 		if (primaryFailurePresent) throw normalizeRuntimeError(primaryFailure);
 		// Cancellation may win after terminal evidence is parsed but before child settlement completes.
@@ -1045,7 +1164,7 @@ function normalizeCapability(capability: HostCapability): HostCapability {
 		name,
 		description,
 		mutates,
-		parameters: isRecord(parameters) ? Object.freeze({ ...parameters }) : parameters,
+		parameters,
 		execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
 			return Reflect.apply(execute, capability, [input, signal]);
 		},
@@ -1067,44 +1186,90 @@ function mutationLeasesCollide(left: MutationLease, right: MutationLease): boole
 		left.workspaceId === right.workspaceId || left.workspaceCwd === right.workspaceCwd;
 }
 
-function validateCreatedSession(
+function captureCreatedSession(
 	created: RuntimeSessionResult,
 	thinking: ShepherdAgentThinking,
-	expectedTools: string[],
-): void {
-	if (!created || !created.extensionsResult || !Array.isArray(created.extensionsResult.extensions) ||
-		!Array.isArray(created.extensionsResult.errors)) {
+	expectedTools: readonly string[],
+): CreatedSessionClaim {
+	if (!created || typeof created !== "object") {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
 	}
-	if (created.modelFallbackMessage) throw new AgentSessionRuntimeError("Pi attempted a forbidden model fallback");
-	if (created.extensionsResult.extensions.length > 0 || created.extensionsResult.errors.length > 0) {
-		throw new AgentSessionRuntimeError("embedded AgentSession unexpectedly loaded extensions or extension errors");
-	}
+	// This is the sole read of the SDK-owned result's session field. Every later operation is
+	// invoked through methods captured by OwnedSession from this exact object.
 	const session = created.session;
-	if (!session || typeof session.prompt !== "function" || typeof session.abort !== "function" ||
-		typeof session.waitForIdle !== "function" || typeof session.dispose !== "function" ||
-		typeof session.subscribe !== "function" || typeof session.getActiveToolNames !== "function") {
-		throw new AgentSessionRuntimeError("Pi returned an incomplete AgentSession surface");
-	}
-	if (session.model?.provider !== REQUIRED_PROVIDER || session.model?.id !== REQUIRED_MODEL) {
-		throw new AgentSessionRuntimeError("embedded AgentSession model routing mismatch");
-	}
-	if (session.thinkingLevel !== thinking) throw new AgentSessionRuntimeError("embedded AgentSession thinking route mismatch");
-	if (session.sessionFile !== undefined) throw new AgentSessionRuntimeError("embedded AgentSession persistence is forbidden");
-	const activeTools = session.getActiveToolNames();
-	if (!Array.isArray(activeTools) || activeTools.length !== expectedTools.length ||
-		activeTools.some((name, index) => name !== expectedTools[index])) {
-		throw new AgentSessionRuntimeError("embedded AgentSession active tool authority drifted");
-	}
-}
-
-function ownedSessionFromResult(created: RuntimeSessionResult): OwnedSession {
-	const session = created?.session;
-	if (!session || typeof session.abort !== "function" || typeof session.waitForIdle !== "function" ||
-		typeof session.dispose !== "function") {
+	if (!session || typeof session !== "object") {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result without a cleanable session");
 	}
-	return new OwnedSession(session);
+	const owned = new OwnedSession(session);
+	let captureFailurePresent = false;
+	let captureFailure: unknown;
+	let extensionShapeValid = false;
+	let extensionCount = 0;
+	let extensionErrorCount = 0;
+	let fallbackMessage: unknown;
+	let modelProvider: unknown;
+	let modelId: unknown;
+	let thinkingLevel: unknown;
+	let sessionFile: unknown;
+	let activeTools: readonly string[] | undefined;
+	try {
+		const extensionsResult = created.extensionsResult;
+		fallbackMessage = created.modelFallbackMessage;
+		if (extensionsResult && typeof extensionsResult === "object") {
+			const extensions = extensionsResult.extensions;
+			const errors = extensionsResult.errors;
+			extensionShapeValid = Array.isArray(extensions) && Array.isArray(errors);
+			if (extensionShapeValid) {
+				extensionCount = extensions.length;
+				extensionErrorCount = errors.length;
+			}
+		}
+		const model = session.model;
+		modelProvider = model?.provider;
+		modelId = model?.id;
+		thinkingLevel = session.thinkingLevel;
+		sessionFile = session.sessionFile;
+		activeTools = captureToolNameArray(owned.activeToolNames());
+	} catch (error) {
+		captureFailurePresent = true;
+		captureFailure = error;
+	}
+
+	return Object.freeze({
+		owned,
+		validate(): void {
+			if (captureFailurePresent) throw captureFailure;
+			if (!extensionShapeValid) throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
+			if (fallbackMessage !== undefined) throw new AgentSessionRuntimeError("Pi attempted a forbidden model fallback");
+			if (extensionCount > 0 || extensionErrorCount > 0) {
+				throw new AgentSessionRuntimeError("embedded AgentSession unexpectedly loaded extensions or extension errors");
+			}
+			if (modelProvider !== REQUIRED_PROVIDER || modelId !== REQUIRED_MODEL) {
+				throw new AgentSessionRuntimeError("embedded AgentSession model routing mismatch");
+			}
+			if (thinkingLevel !== thinking) throw new AgentSessionRuntimeError("embedded AgentSession thinking route mismatch");
+			if (sessionFile !== undefined) throw new AgentSessionRuntimeError("embedded AgentSession persistence is forbidden");
+			if (!activeTools || activeTools.length !== expectedTools.length ||
+				activeTools.some((name, index) => name !== expectedTools[index])) {
+				throw new AgentSessionRuntimeError("embedded AgentSession active tool authority drifted");
+			}
+		},
+	});
+}
+
+function captureToolNameArray(value: unknown): readonly string[] | undefined {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value) || value.length > 256) return undefined;
+	if (Reflect.ownKeys(value).length !== value.length + 1) return undefined;
+	const names: string[] = [];
+	for (let index = 0; index < value.length; index += 1) {
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
+			typeof descriptor.value !== "string") {
+			return undefined;
+		}
+		names.push(descriptor.value);
+	}
+	return Object.freeze(names);
 }
 
 function newTerminalCapture(): TerminalCapture {
@@ -1134,14 +1299,24 @@ function captureEvent(
 		capture.failure = new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
 		return;
 	}
-	if (!isRecord(event) || typeof event.type !== "string") return;
-	if (event.type === "message_end" && isAssistantTerminal(event.message)) capture.messageEnd = event.message;
-	if (event.type === "agent_end") {
-		capture.agentEndCount += 1;
-		capture.agentEndWillRetry ||= event.willRetry === true;
-		if (Array.isArray(event.messages)) {
-			capture.agentEnd = [...event.messages].reverse().find(isAssistantTerminal);
+	try {
+		const eventFields = captureClosedRecordFields(event, "AgentSession event", MAX_EVENT_RECORD_KEYS);
+		const eventType = eventFields.get("type");
+		if (typeof eventType !== "string") return;
+		if (eventType === "message_end") {
+			capture.messageEnd = captureAssistantTerminal(eventFields.get("message"));
 		}
+		if (eventType === "agent_end") {
+			capture.agentEndCount += 1;
+			capture.agentEndWillRetry ||= eventFields.get("willRetry") === true;
+			const messages = captureDenseArray(eventFields.get("messages"), "AgentSession terminal messages");
+			for (const message of messages) {
+				const terminal = captureAssistantTerminal(message);
+				if (terminal) capture.agentEnd = terminal;
+			}
+		}
+	} catch (error) {
+		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an invalid terminal event", { cause: error });
 	}
 }
 
@@ -1173,14 +1348,31 @@ function boundedEventBytes(root: unknown, maximum: number): number {
 			default: throw new AgentSessionRuntimeError("AgentSession event contains an unsupported value");
 		}
 		const object = value as object;
+		if (nodeTypes.isProxy(object)) throw new AgentSessionRuntimeError("AgentSession event contains a proxy");
 		if (seen.has(object)) throw new AgentSessionRuntimeError("AgentSession event contains a cycle");
 		seen.add(object);
-		const descriptors = Object.getOwnPropertyDescriptors(object);
-		add(Array.isArray(value) ? 2 : 2);
-		for (const key of Reflect.ownKeys(descriptors)) {
+		const array = Array.isArray(value);
+		const keys = Reflect.ownKeys(object);
+		if (array) {
+			if (value.length > MAX_EVENT_ARRAY_ITEMS || keys.length !== value.length + 1) {
+				throw new AgentSessionRuntimeError("AgentSession event contains a sparse or oversized array");
+			}
+			for (let index = 0; index < value.length; index += 1) {
+				if (!Object.hasOwn(value, String(index))) {
+					throw new AgentSessionRuntimeError("AgentSession event contains a sparse array");
+				}
+			}
+		} else if (keys.length > MAX_EVENT_RECORD_KEYS) {
+			throw new AgentSessionRuntimeError("AgentSession event record is too wide");
+		}
+		add(2);
+		for (const key of keys) {
 			if (typeof key !== "string") throw new AgentSessionRuntimeError("AgentSession event contains a symbol key");
-			const descriptor = descriptors[key];
-			if (!descriptor?.enumerable) continue;
+			const descriptor = Reflect.getOwnPropertyDescriptor(object, key);
+			if (array && key === "length" && descriptor && !descriptor.enumerable && "value" in descriptor) continue;
+			if (!descriptor?.enumerable) {
+				throw new AgentSessionRuntimeError("AgentSession event contains a non-enumerable field");
+			}
 			if (descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new AgentSessionRuntimeError("AgentSession event contains an accessor");
 			}
@@ -1189,6 +1381,79 @@ function boundedEventBytes(root: unknown, maximum: number): number {
 		}
 	}
 	return bytes;
+}
+
+function captureClosedRecordFields(
+	value: unknown,
+	description: string,
+	maximumKeys: number,
+): ReadonlyMap<string, unknown> {
+	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy record`);
+	}
+	const keys = Reflect.ownKeys(value);
+	if (keys.length > maximumKeys) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
+	const fields = new Map<string, unknown>();
+	for (const key of keys) {
+		if (typeof key !== "string") throw new AgentSessionRuntimeError(`${description} contains a symbol field`);
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, key);
+		if (!descriptor?.enumerable) throw new AgentSessionRuntimeError(`${description} contains a non-enumerable field`);
+		if (descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentSessionRuntimeError(`${description} contains an accessor field`);
+		}
+		fields.set(key, descriptor.value);
+	}
+	return fields;
+}
+
+function captureDenseArray(value: unknown, description: string): readonly unknown[] {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value) || value.length > MAX_EVENT_ARRAY_ITEMS) {
+		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
+	}
+	const keys = Reflect.ownKeys(value);
+	if (keys.length !== value.length + 1) {
+		throw new AgentSessionRuntimeError(`${description} must not be sparse or contain extra fields`);
+	}
+	const captured: unknown[] = [];
+	for (let index = 0; index < value.length; index += 1) {
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentSessionRuntimeError(`${description} contains an invalid array element`);
+		}
+		captured.push(descriptor.value);
+	}
+	return Object.freeze(captured);
+}
+
+function captureAssistantTerminal(value: unknown): AssistantTerminal | undefined {
+	const fields = captureClosedRecordFields(value, "AgentSession terminal message", 32);
+	const role = fields.get("role");
+	if (role !== "assistant") return undefined;
+	const provider = fields.get("provider");
+	const model = fields.get("model");
+	const stopReason = fields.get("stopReason");
+	const timestamp = fields.get("timestamp");
+	if (typeof provider !== "string" || typeof model !== "string" || typeof stopReason !== "string" ||
+		typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+		throw new AgentSessionRuntimeError("AgentSession assistant terminal contains invalid routing fields");
+	}
+	const content = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content").map((part) => {
+		const partFields = captureClosedRecordFields(part, "AgentSession assistant content part", 16);
+		const type = partFields.get("type");
+		const text = partFields.get("text");
+		if (typeof type !== "string" || (type === "text" && typeof text !== "string")) {
+			throw new AgentSessionRuntimeError("AgentSession assistant content part is invalid");
+		}
+		return Object.freeze(type === "text" ? { type, text: text as string } : { type });
+	});
+	return Object.freeze({
+		role: "assistant",
+		provider,
+		model,
+		stopReason,
+		timestamp,
+		content: Object.freeze(content),
+	});
 }
 
 function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
@@ -1289,22 +1554,24 @@ function boundedArray(value: unknown, description: string): unknown[] {
 }
 
 function redactedBoundedString(value: unknown, description: string, max: number, allowEmpty: boolean): string {
-	if (typeof value !== "string" || (!allowEmpty && value.length < 1) || value.length > max ||
-		/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/.test(value)) {
+	if (typeof value !== "string" || (!allowEmpty && value.length < 1) || value.length > max) {
 		throw new AgentSessionRuntimeError(`${description} must be ${allowEmpty ? "a" : "a non-empty"} bounded string`);
 	}
-	return redactSensitiveText(value);
+	const redacted = redactSensitiveText(value);
+	const terminalControls = /[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/;
+	if (!terminalControls.test(redacted)) return redacted;
+	// Retained multiline structured diagnostics are allowed only when the redactor actually
+	// consumed credential material; remove every remaining terminal control before delivery.
+	// An unchanged string containing any such control remains a hard validation failure.
+	if (redacted === value) {
+		throw new AgentSessionRuntimeError(`${description} contains a terminal control character`);
+	}
+	return redacted.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ");
 }
 
 function computeDeadline(timeoutMs: number, deadlineAt: number | undefined): number {
 	const timeoutDeadline = Date.now() + timeoutMs;
 	return deadlineAt === undefined ? timeoutDeadline : Math.min(timeoutDeadline, deadlineAt);
-}
-
-function isAssistantTerminal(value: unknown): value is AssistantTerminal {
-	return isRecord(value) && value.role === "assistant" && typeof value.provider === "string" &&
-		typeof value.model === "string" && typeof value.stopReason === "string" &&
-		typeof value.timestamp === "number" && Array.isArray(value.content);
 }
 
 function isAbsoluteNonTraversingPath(value: unknown): value is string {
@@ -1344,7 +1611,8 @@ function boundedPositiveInteger(value: number, description: string, maximum: num
 }
 
 function frozenArray<T>(values: T[]): T[] {
-	return Object.freeze(values) as unknown as T[];
+	Object.freeze(values);
+	return values;
 }
 
 function byteLength(value: string): number { return new TextEncoder().encode(value).byteLength; }
@@ -1392,17 +1660,21 @@ function unrefTimeout(timer: ReturnType<typeof setTimeout>): void {
 }
 
 type BoundedSettlement<T> =
-	| { settled: true; value: T }
-	| { settled: false };
+	| { status: "fulfilled"; value: T }
+	| { status: "rejected"; reason: unknown }
+	| { status: "pending" };
 
 async function settleWithin<T>(operation: Promise<T>, timeoutMs: number): Promise<BoundedSettlement<T>> {
 	let timer: ReturnType<typeof setTimeout> | undefined;
 	const timeout = new Promise<BoundedSettlement<T>>((resolve) => {
-		timer = setTimeout(() => resolve({ settled: false }), timeoutMs);
+		timer = setTimeout(() => resolve({ status: "pending" }), timeoutMs);
 	});
 	try {
 		return await Promise.race([
-			operation.then((value): BoundedSettlement<T> => ({ settled: true, value })),
+			operation.then<BoundedSettlement<T>, BoundedSettlement<T>>(
+				(value) => ({ status: "fulfilled", value }),
+				(reason) => ({ status: "rejected", reason }),
+			),
 			timeout,
 		]);
 	} finally {
@@ -1413,5 +1685,13 @@ async function settleWithin<T>(operation: Promise<T>, timeoutMs: number): Promis
 function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
 	return error instanceof AgentSessionRuntimeError
 		? error
-		: new AgentSessionRuntimeError("AgentSession run failed", { cause: error });
+		: new AgentSessionRuntimeError(
+			`AgentSession run failed${error instanceof Error && error.message ? `: ${error.message}` : ""}`,
+			{ cause: error },
+		);
+}
+
+function combineFailures(failures: readonly unknown[], message: string): unknown {
+	if (failures.length === 1) return failures[0];
+	return new AggregateError([...failures], message);
 }
