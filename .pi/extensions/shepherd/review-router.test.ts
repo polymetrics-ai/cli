@@ -12,6 +12,7 @@ import {
 	type IndependentReviewRecord,
 	type IndependentReviewTarget,
 } from "./review-router.ts";
+import * as reviewRouterApi from "./review-router.ts";
 
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
@@ -249,6 +250,60 @@ test("cycle 4 rejects every pseudo or symbolic Git ref at review and attestation
 		assert.throws(() => createIndependentReviewWork(target({ headBranch: invalid })), /branch|ref|pseudo|symbolic/i, invalid);
 		assert.throws(() => validateIndependentReviewRecord({ ...cleanReview(), baseBranch: invalid }), /branch|ref|marker|review/i, invalid);
 	}
+});
+
+test("cycle 5 rejects cookie and session response-header forms through the shared grammar", () => {
+	const assertSafe = (reviewRouterApi as Record<string, unknown>).assertNoSensitiveText as
+		| ((value: string, description?: string) => void)
+		| undefined;
+	assert.equal(typeof assertSafe, "function");
+	for (const value of [
+		"Set-Cookie: session_id=SYNTHETIC_SESSION_VALUE; HttpOnly; Secure",
+		"Cookie: sid=SYNTHETIC_COOKIE_VALUE; theme=dark",
+		"X-Session-Token: SYNTHETIC_HEADER_VALUE",
+		"X-CSRF-Token: SYNTHETIC_CSRF_VALUE",
+		"session cookie=SYNTHETIC_PROSE_VALUE",
+	]) {
+		assert.throws(() => assertSafe!(value, "cycle 5 synthetic field"), /credential|secret|sensitive/i, value);
+		assert.notEqual((reviewRouterApi.redactSensitiveText as (input: string) => string)(value), value, value);
+	}
+
+	const review = cleanReview({
+		verdict: "findings",
+		findings: [{
+			id: "cycle-5-cookie-finding",
+			severity: "warning",
+			summary: "Set-Cookie: session=SYNTHETIC_REVIEW_VALUE; HttpOnly",
+		}],
+	});
+	assert.throws(() => validateIndependentReviewRecord(review), /credential|secret|sensitive/i);
+});
+
+test("cycle 5 byte-bounds raw JSON and schema-bounds oversized objects before descriptor expansion", () => {
+	const decode = (reviewRouterApi as Record<string, unknown>).decodeBoundedJsonPayload as
+		| ((value: string | Uint8Array, maximumBytes?: number) => unknown)
+		| undefined;
+	assert.equal(typeof decode, "function");
+	assert.deepEqual(decode!("{\"schemaVersion\":1}", 64), { schemaVersion: 1 });
+	assert.throws(
+		() => decode!(`{\"payload\":\"${"x".repeat(1_024)}\"}`, 128),
+		/byte|bound|oversize|payload/i,
+	);
+
+	const oversized: Record<string, unknown> = { ...target() };
+	for (let index = 0; index < 10_000; index += 1) oversized[`extra-${index}`] = index;
+	const original = Object.getOwnPropertyDescriptors;
+	let expanded = false;
+	Object.getOwnPropertyDescriptors = ((value: object) => {
+		if (value === oversized) expanded = true;
+		return original(value);
+	}) as typeof Object.getOwnPropertyDescriptors;
+	try {
+		assert.throws(() => createIndependentReviewWork(oversized as unknown as IndependentReviewTarget), /unknown|bound|shape|field/i);
+	} finally {
+		Object.getOwnPropertyDescriptors = original;
+	}
+	assert.equal(expanded, false, "oversized envelope must reject before generic descriptor expansion");
 });
 
 test("cycle 4 uses collision-free session and run tuple identities", () => {

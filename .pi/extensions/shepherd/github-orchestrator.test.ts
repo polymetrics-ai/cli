@@ -2158,3 +2158,403 @@ test("cycle 4 passes AbortSignal to workspace handoff and redacts workspace fail
 	assert.equal((rejection as any).code, "external_port_failed");
 	assert.doesNotMatch(String(rejection), /CYCLE4_WORKSPACE_MARKER/u);
 });
+
+async function cycle5ReadinessScenario() {
+	const candidate = await cycle3Plan(true);
+	const transport = new FakeTransport();
+	const receipts = seedIntegrationRoster(candidate, transport);
+	addParentPullRequest(candidate, transport);
+	return { candidate, transport, receipts };
+}
+
+function handoffForReceipt(
+	candidate: ParentOrchestrationPlan,
+	transport: FakeTransport,
+	receipt: ChildIntegrationReceipt,
+): { child: ReturnType<typeof materializeChildRecord>; handoff: WorkspaceHandoffEvidence } {
+	const issue = transport.issues.find((entry) => entry.number === receipt.pullRequest - 1);
+	assert.ok(issue);
+	const child = materializeChildRecord(candidate, receipt.childId, issue);
+	return {
+		child,
+		handoff: {
+			issue: issue.number,
+			branch: child.branch,
+			prBase: child.prBase,
+			baseHead: receipt.baseSha,
+			head: receipt.headSha,
+			changedScope: [...receipt.pullRequestSnapshot.changedPaths],
+			verificationState: "passed",
+			repositoryIdentity: "1".repeat(64),
+			worktreeIdentity: "2".repeat(64),
+			dirty: false,
+		},
+	};
+}
+
+async function assertReadinessDoesNotMutate(
+	transport: FakeTransport,
+	operation: () => Promise<unknown>,
+): Promise<void> {
+	let result: unknown;
+	try {
+		result = await operation();
+	} catch {
+		// A typed/normalized rejection is an acceptable fail-closed result at an untrusted boundary.
+	}
+	assert.notEqual((result as { kind?: string } | undefined)?.kind, "ready");
+	assert.equal(transport.markReadyCalls, 0);
+}
+
+test("cycle 5 runtime-validates exact broker request, poll, and consume records before ready", async (t) => {
+	const recordMutations: Array<[string, (record: Record<string, unknown>) => void]> = [
+		["extra field", (record) => { record.extra = true; }],
+		["wrong request ID", (record) => { record.requestId = "other-request"; }],
+		["wrong gate", (record) => { record.gate = "merge"; }],
+		["forged marker", (record) => { record.idempotencyMarker = "<!-- forged -->"; }],
+		["wrong options", (record) => { record.allowedOptions = ["reject", "approve-merge"]; }],
+		["wrong allowlist", (record) => { record.actorAllowlist = ["other-maintainer"]; }],
+		["wrong expiry", (record) => { record.expiresAt = "2028-07-21T12:00:00.000Z"; }],
+		["wrong question", (record) => { record.question = "Different approval question"; }],
+		["incoherent consumed status", (record) => { record.status = "consumed"; }],
+	];
+	for (const [name, mutate] of recordMutations) {
+		await t.test(`request ${name}`, async () => {
+			const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+			const broker = new FakeDecisionBroker();
+			const request = broker.request.bind(broker);
+			broker.request = (async (value: GitHubDecisionRequest, context?: TestCallContext) => {
+				const record = structuredClone(await request(value, context)) as unknown as Record<string, unknown>;
+				mutate(record);
+				return record as unknown as HumanDecisionRecord;
+			}) as never;
+			await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, broker)
+				.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+		});
+	}
+
+	await t.test("poll record cannot forge immutable request fields", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const broker = new FakeDecisionBroker();
+		broker.poll = (async () => ({
+			...createHumanDecisionRecord({
+				requestId: "wrong-polled-request",
+				gate: "parent_merge",
+				binding: {
+					repository: candidate.repository,
+					target: { kind: "pull_request", number: 900 },
+					generation: candidate.generation,
+					headSha: "e".repeat(40),
+				},
+				allowedOptions: ["approve-merge", "reject"],
+				actorAllowlist: ["maintainer"],
+				expiresAt: decisionPolicy.expiresAt,
+				question: decisionPolicy.question,
+			}, new Date("2026-07-21T12:00:00.000Z")),
+			status: "decided",
+			decision: approvedDecision,
+		})) as never;
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, broker)
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+	});
+
+	await t.test("poll and consume decision evidence requires actor, source, and timestamp", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const broker = new FakeDecisionBroker();
+		broker.pollResult = { status: "decided", decision: { option: "approve-merge" } as never, attempts: 1 };
+		broker.consume = (async () => ({ option: "approve-merge" })) as never;
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, broker)
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+	});
+});
+
+test("cycle 5 refreshes every plan-bound policy for receipt reuse and each readiness stage", async (t) => {
+	await t.test("moved child-base policy blocks receipt reuse", async () => {
+		const candidate = await cycle3Plan(true);
+		const transport = new FakeTransport();
+		const receipts = seedIntegrationRoster(candidate, transport);
+		const { child, handoff } = handoffForReceipt(candidate, transport, receipts[0]);
+		const queries: string[] = [];
+		const source = {
+			async findRequiredCheckPolicies(query: { repository: string; baseBranch: string }): Promise<unknown> {
+				queries.push(query.baseBranch);
+				const policy = cycle3CheckPolicy(query.baseBranch, query.baseBranch === candidate.parentBranch ? { revision: 8 } : {});
+				return { items: [{
+					schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch,
+					revision: policy.revision, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z",
+				}], complete: true };
+			},
+		};
+		const result = await orchestratorFor(transport, undefined, source).integrateChild(candidate, child, handoff);
+		assert.equal(result.kind, "blocked");
+		assert.deepEqual(new Set(queries), new Set(candidate.requiredCheckPolicies.map((policy) => policy.baseBranch)));
+	});
+
+	await t.test("moved child-base policy blocks readiness before broker", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const broker = new FakeDecisionBroker();
+		const queries: string[] = [];
+		const source = {
+			async findRequiredCheckPolicies(query: { repository: string; baseBranch: string }): Promise<unknown> {
+				queries.push(query.baseBranch);
+				const policy = cycle3CheckPolicy(query.baseBranch, query.baseBranch === candidate.parentBranch ? { revision: 8 } : {});
+				return { items: [{
+					schemaVersion: 1, authority: "controller", repository: query.repository, baseBranch: query.baseBranch,
+					revision: policy.revision, digest: policy.digest, observedAt: "2026-07-21T12:06:00.000Z",
+				}], complete: true };
+			},
+		};
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, broker, source)
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+		assert.equal(broker.requests.length, 0);
+		assert.deepEqual(new Set(queries), new Set(candidate.requiredCheckPolicies.map((policy) => policy.baseBranch)));
+	});
+
+	await t.test("exact readiness queries the complete set before, after, and during recovery", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const queries: string[] = [];
+		const source = {
+			async findRequiredCheckPolicies(query: { repository: string; baseBranch: string }): Promise<unknown> {
+				queries.push(query.baseBranch);
+				return defaultPolicySource(transport).findRequiredCheckPolicies(query);
+			},
+		};
+		const result = await orchestratorFor(transport, new FakeDecisionBroker(), source)
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+		assert.equal(result.kind, "ready");
+		for (const policy of candidate.requiredCheckPolicies) {
+			assert.ok(queries.filter((branch) => branch === policy.baseBranch).length >= 3, policy.baseBranch);
+		}
+	});
+});
+
+test("cycle 5 exposes an authoritative full-policy async plan boundary for a port-only controller", async () => {
+	const objective = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const transport = new FakeTransport();
+	const queries: unknown[] = [];
+	const policySource = {
+		async findParentOrchestrationPolicyBundle(query: Record<string, unknown>, context?: TestCallContext): Promise<unknown> {
+			queries.push(structuredClone(query));
+			transport.trackContext("findParentOrchestrationPolicyBundle", context);
+			return {
+				items: [{
+					schemaVersion: 1,
+					authority: "controller",
+					repository: objective.repository,
+					parentIssue: objective.parentIssue,
+					generation: objective.generation,
+					parentBranch: objective.parentBranch,
+					parentBaseBranch: objective.parentBaseBranch,
+					revision: 7,
+					observedAt: "2026-07-21T12:06:00.000Z",
+					policyBundle: {
+						schemaVersion: 1,
+						requiredCheckPolicies: [
+							cycle3CheckPolicy(String(objective.parentBranch)),
+							cycle3CheckPolicy(String(objective.parentBaseBranch)),
+						],
+					},
+				}],
+				complete: true,
+			};
+		},
+		...defaultPolicySource(transport),
+	};
+	const orchestrator = orchestratorFor(transport, undefined, policySource);
+	const createPlan = (orchestrator as unknown as Record<string, unknown>).createPlan;
+	assert.equal(typeof createPlan, "function");
+	const created = await (createPlan as (this: GitHubParentOrchestrator, value: unknown, context?: unknown) => Promise<ParentOrchestrationPlan>)
+		.call(orchestrator, objective, {});
+	assert.equal(created.canonical.digest.length, 64);
+	assert.deepEqual(created.requiredCheckPolicies.map((policy) => policy.baseBranch).sort(), [
+		String(objective.parentBaseBranch), String(objective.parentBranch),
+	].sort());
+	assert.equal(queries.length, 1);
+	assert.equal(transport.createIssueCalls + transport.createPullRequestCalls + transport.publishRosterCalls, 0);
+});
+
+test("cycle 5 independently reauthorizes current child evidence instead of trusting receipt claims", async (t) => {
+	await t.test("missing current child review and attestation blocks readiness", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		for (let index = 0; index < transport.pullRequests.length; index += 1) {
+			if (transport.pullRequests[index].number !== 900) {
+				transport.pullRequests[index] = { ...transport.pullRequests[index], reviews: [] };
+			}
+		}
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, new FakeDecisionBroker())
+			.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+	});
+
+	await t.test("forged controller revision/time plus recomputed transport digest still blocks", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const forged = structuredClone(receipts);
+		forged[0].controllerProvenance.evidenceRevision = 1;
+		forged[0].controllerProvenance.observedAt = "2026-07-21T10:00:00.000Z";
+		const child = candidate.children[0];
+		const mutation = createDurableMutationIntent(
+			"child_integration",
+			[candidate.repository, child.markers.pullRequest],
+			{
+				repository: candidate.repository,
+				childId: child.id,
+				pullRequest: forged[0].pullRequest,
+				generation: candidate.generation,
+				marker: child.markers.pullRequest,
+				baseSha: forged[0].baseSha,
+				headSha: forged[0].headSha,
+				parentBranch: candidate.parentBranch,
+				pullRequestSnapshot: forged[0].pullRequestSnapshot,
+				observation: forged[0].observation,
+				controllerProvenance: forged[0].controllerProvenance,
+			},
+			null,
+		);
+		forged[0].transportProvenance = {
+			...forged[0].transportProvenance,
+			idempotencyKey: mutation.idempotencyKey,
+			intentDigest: mutation.intentDigest,
+		};
+		transport.integrations.splice(0, transport.integrations.length, ...forged);
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, new FakeDecisionBroker())
+			.reconcileParentReadiness(candidate, forged, decisionPolicy));
+	});
+});
+
+test("cycle 5 centralizes current child PR eligibility for reuse and readiness", async (t) => {
+	for (const state of ["open", "merged"] as const) {
+		await t.test(`draft ${state} child`, async () => {
+			const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+			for (let index = 0; index < transport.pullRequests.length; index += 1) {
+				if (transport.pullRequests[index].number !== 900) {
+					transport.pullRequests[index] = { ...transport.pullRequests[index], state, draft: true };
+				}
+			}
+			await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, new FakeDecisionBroker())
+				.reconcileParentReadiness(candidate, receipts, decisionPolicy));
+		});
+	}
+});
+
+test("cycle 5 binds CAS preconditions while keeping volatile child observations outside mutation identity", async () => {
+	const first = createDurableMutationIntent("parent_ready", ["polymetrics-ai/cli", "ready"], { logical: "ready" }, 41);
+	const second = createDurableMutationIntent("parent_ready", ["polymetrics-ai/cli", "ready"], { logical: "ready" }, 42);
+	assert.notEqual(first.idempotencyKey, second.idempotencyKey);
+	assert.notEqual(first.intentDigest, second.intentDigest);
+
+	const mutations: Array<{ idempotencyKey: string; intentDigest: string }> = [];
+	for (const [revision, observedAt] of [[42, "2026-07-21T12:05:00.000Z"], [43, "2026-07-21T12:06:00.000Z"]] as const) {
+		const candidate = await cycle3Plan(true);
+		const transport = new FakeTransport();
+		const issue = issueFrom({
+			repository: candidate.repository,
+			parentIssue: candidate.parentIssue,
+			marker: candidate.children[0].markers.issue,
+			title: candidate.children[0].title,
+			body: candidate.children[0].issueBody,
+		}, 811);
+		transport.issues.push(issue);
+		const child = materializeChildRecord(candidate, "evidence", issue);
+		const handoff = childHandoff(issue.number, child.branch, child.prBase);
+		transport.pullRequests.push(cleanPullRequest(childPullRequestRequest(candidate, child, handoff), {
+			revision,
+			observedAt,
+		}, 812));
+		transport.integrateChild = (async (request: IntegrateChildRequest) => {
+			mutations.push(request.mutation);
+			throw new Error("synthetic integration boundary failure");
+		}) as never;
+		await assert.rejects(orchestratorFor(transport).integrateChild(candidate, child, handoff));
+	}
+	assert.equal(mutations.length, 2);
+	assert.equal(mutations[0].idempotencyKey, mutations[1].idempotencyKey);
+	assert.equal(mutations[0].intentDigest, mutations[1].intentDigest);
+});
+
+test("cycle 5 rejects cookie/session values across plan, outbound bodies, and decision questions", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const child = (source.children as Array<Record<string, unknown>>)[0];
+	const marker = "SYNTHETIC_CYCLE5_SESSION";
+	const variants: Array<[string, Record<string, unknown>]> = [
+		["parent title", { ...source, title: `Set-Cookie: session=${marker}; HttpOnly` }],
+		["parent objective", { ...source, objective: `Cookie: sid=${marker}` }],
+		["child title", { ...source, children: [{ ...child, title: `X-Session-Token: ${marker}` }] }],
+		["child objective/issue body", { ...source, children: [{ ...child, objective: `session cookie=${marker}` }] }],
+		["verification description", {
+			...source,
+			children: [{ ...child, verification: [{ id: "focused", kind: "test", description: `X-CSRF-Token: ${marker}` }] }],
+		}],
+	];
+	for (const [name, value] of variants) {
+		await t.test(name, () => assert.throws(() => createPlanFromSource(value), /credential|secret|sensitive/i));
+	}
+
+	await t.test("decision question", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		await assertReadinessDoesNotMutate(transport, () => orchestratorFor(transport, new FakeDecisionBroker())
+			.reconcileParentReadiness(candidate, receipts, {
+				...decisionPolicy,
+				question: `Set-Cookie: session=${marker}; HttpOnly`,
+			}));
+	});
+});
+
+test("cycle 5 links caller lifecycle and retains keyed ownership until live port settlement", async () => {
+	const candidate = await cycle3Plan(true);
+	const preAbortedTransport = new FakeTransport();
+	const preAborted = new AbortController();
+	preAborted.abort();
+	await assert.rejects(
+		(orchestratorFor(preAbortedTransport).ensureChildIssue as any)(candidate, "evidence", { signal: preAborted.signal }),
+		/cancel|abort|deadline|timeout|external/i,
+	);
+	assert.equal(preAbortedTransport.createIssueCalls, 0);
+	assert.equal(preAbortedTransport.callContexts.length, 0);
+
+	const deadlineTransport = new FakeTransport();
+	let observedDeadline = "";
+	deadlineTransport.findChildIssues = (async (_query: unknown, context?: TestCallContext & { deadlineAt?: string }) => {
+		observedDeadline = context?.deadlineAt ?? "";
+		return { items: [], complete: true };
+	}) as never;
+	const callerDeadline = new Date(Date.now() + 5).toISOString();
+	await (orchestratorFor(deadlineTransport, undefined, defaultPolicySource(deadlineTransport), 50).ensureChildIssue as any)(
+		candidate,
+		"evidence",
+		{ deadlineAt: callerDeadline },
+	);
+	assert.ok(observedDeadline <= callerDeadline);
+
+	const transport = new FakeTransport();
+	let starts = 0;
+	transport.findChildIssues = (async (_query: unknown, context?: TestCallContext & { acknowledgeAbort?: () => void }) => {
+		starts += 1;
+		context?.signal?.addEventListener("abort", () => context.acknowledgeAbort?.(), { once: true });
+		return new Promise(() => {});
+	}) as never;
+	const orchestrator = orchestratorFor(transport, undefined, defaultPolicySource(transport), 10);
+	const first = await settleWithin((orchestrator.ensureChildIssue as any)(candidate, "evidence")
+		.then(() => "resolved", () => "rejected"), 100);
+	assert.equal(first, "rejected");
+	const secondDeadline = new Date(Date.now() + 25).toISOString();
+	const second = await settleWithin((orchestrator.ensureChildIssue as any)(candidate, "evidence", { deadlineAt: secondDeadline })
+		.then(() => "resolved", () => "rejected"), 100);
+	assert.equal(second, "rejected");
+	assert.equal(starts, 1, "same key must remain quarantined while the first port invocation is live");
+	const stop = (orchestrator as unknown as Record<string, unknown>).stop;
+	assert.equal(typeof stop, "function");
+	const stopped = await (stop as (this: GitHubParentOrchestrator, context?: unknown) => Promise<Record<string, unknown>>)
+		.call(orchestrator, { deadlineAt: new Date(Date.now() + 20).toISOString() });
+	assert.equal(stopped.kind, "incomplete");
+	assert.equal(stopped.active, 1);
+});
+
+test("cycle 5 durable run state names current review truth and exact available checkpoints", async () => {
+	const raw = await readFile(".planning/phases/478-shepherd-github-parent-orchestration/RUN-STATE.json", "utf8");
+	const state = JSON.parse(raw) as any;
+	assert.equal(state.details.frozenCandidate, "ca6f6873d168db707bbe58291b5ee1b582e9404f");
+	assert.equal(state.details.reviewState.review1, "blocked");
+	assert.equal(state.details.reviewState.review2, "blocked");
+	assert.equal(state.details.checkpoints.cycle5Plan, "7cf9c88ddadee395020444c19ee9f001b0807a53");
+	assert.match(state.details.checkpoints.cycle5Red, /^[0-9a-f]{40}$/u);
+	assert.doesNotMatch(raw, /3f285722a505ea426d53a34f95716781d1aca7c2/u);
+});

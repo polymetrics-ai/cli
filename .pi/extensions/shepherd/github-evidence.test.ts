@@ -785,3 +785,55 @@ test("cycle 4 pre-bounds dense and sparse evidence arrays before descriptor mate
 	sparse.length = 1_000_000;
 	assert.throws(() => validateGitHubPullRequestEvidence({ ...cycle3Evidence(), reviews: sparse }), /bounded|dense|reviews|array/i);
 });
+
+test("cycle 5 allows only documented non-draft integrated PR states during receipt reauthorization", async () => {
+	const merged = await evidence({ state: "merged", draft: false });
+	const accepted = evaluateGitHubPullRequestEvidence(merged, expected, { allowIntegrated: true } as never);
+	assert.equal(accepted.kind, "eligible");
+
+	for (const invalid of [
+		{ state: "merged" as const, draft: true },
+		{ state: "closed" as const, draft: false },
+	]) {
+		const decision = evaluateGitHubPullRequestEvidence(await evidence(invalid), expected, { allowIntegrated: true } as never);
+		assert.equal(decision.kind, "blocked");
+	}
+});
+
+test("cycle 5 rejects cookie/session values in every PR review and disposition text boundary", async (t) => {
+	const candidate = await evidence();
+	const marker = "SYNTHETIC_CYCLE5_VALUE";
+	const findingReview: IndependentReviewRecord = {
+		...canonicalReview,
+		verdict: "findings",
+		findings: [{ id: "cycle-5-finding", severity: "warning", summary: "Synthetic review finding" }],
+	};
+	const cases: Array<[string, Record<string, unknown>]> = [
+		["PR title", { ...candidate, title: `Set-Cookie: session=${marker}; HttpOnly` }],
+		["PR body", { ...candidate, body: `${candidate.body}\nCookie: sid=${marker}` }],
+		["review finding", {
+			...candidate,
+			reviews: [{
+				...findingReview,
+				findings: [{ id: "cycle-5-finding", severity: "warning", summary: `X-Session-Token: ${marker}` }],
+			}],
+		}],
+		["finding disposition", {
+			...candidate,
+			reviews: [findingReview],
+			dispositions: [{
+				findingId: "cycle-5-finding",
+				kind: "fixed",
+				rationale: `session cookie=${marker}`,
+				actor: "maintainer",
+				headSha,
+				recordedAt: "2026-07-21T12:01:00.000Z",
+			}],
+		}],
+	];
+	for (const [name, value] of cases) {
+		await t.test(name, () => {
+			assert.throws(() => validateGitHubPullRequestEvidence(value), /credential|secret|sensitive/i);
+		});
+	}
+});
