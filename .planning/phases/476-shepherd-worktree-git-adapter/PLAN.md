@@ -165,10 +165,11 @@ base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8` and the existing issue-owned fil
 - [x] strict no-emit TypeScript passes against cached Pi 0.80.6 types
 - [x] documented offline Pi 0.80.6 RPC returns `true`
 - [x] immutable-base diff check and exact changed-path scope pass
-- [ ] final local, tracking, and remote branch heads match exactly after the evidence commit
+- [x] final local, tracking, and remote branch heads match exactly after the evidence commit
 
 Correction 3 result: plan `2e255372`, genuine test-only RED `fa607d31`, GREEN
 `db6bdd675aaced17f0d709b08a647258dfb87f15`, and refactor
 `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`. Focused 36/36, serialized Shepherd
 173/173 in 107.5s, strict cached-Pi TypeScript, offline Pi RPC `true`, and immutable-base
-diff/path-scope gates pass. The final exact-head equality check follows the evidence-only commit.
+diff/path-scope gates pass. Evidence checkpoint `0a3cdfa4ce1ac46f87fc31ed14e295d17a4bb62c`
+matched the local, tracking, and remote branch refs exactly before this terminal attestation.

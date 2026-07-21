@@ -18,6 +18,7 @@ failures, with no production-adapter changes relative to the correction-2 implem
 | offline Pi discovery | pass | pinned Pi 0.80.6 RPC `get_commands` returned `true` for `pm-shepherd` |
 | immutable-base diff | pass | `git diff --check e659d6f1...HEAD` exited 0 |
 | owned path scope | pass | only issue-owned adapters, matching tests/fixture, and phase 476 artifacts changed |
+| pushed exact-head equality | pass | evidence checkpoint `0a3cdfa4ce1ac46f87fc31ed14e295d17a4bb62c` matched local, tracking, and remote refs |
 | forbidden gates | not run | no Go, connector, certification, runtime-backed, or `make` command ran |
 
 Correction 2 verification covers implementation/refactor checkpoint
