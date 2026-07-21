@@ -12,4 +12,5 @@
   offline RPC smoke, diff/scope checks; no lane-local repository-wide Go gates.
 - Execution decision: `local_critical_path`.
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`
-- Verification result: pending implementation.
+- Verification result: complete — focused 22/22; full Shepherd 159/159; strict pinned Pi 0.80.6
+  TypeScript; offline RPC smoke; diff and owned-scope checks all pass.

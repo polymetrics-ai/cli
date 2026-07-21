@@ -49,8 +49,15 @@
 
 ### REFACTOR
 
-- Status: blocked on GREEN.
-- Refactor notes and broader gates: pending.
+- Status: captured.
+- Refactor notes: joined resource-loader setup under cancellation; bounded and quarantined hung
+  setup; rejected valid-looking evidence when close/shutdown wins during child settlement; bounded
+  typed capability schemas; verified secret redaction in the actual user prompt.
+- Focused result after refactor: 22 passed / 0 failed.
+- Complete Shepherd result: 159 passed / 0 failed.
+- Strict no-emit TypeScript: owned production/tests and all Shepherd production files passed with
+  `--strict` against the explicitly pinned Pi 0.80.6 installation/types.
+- Offline smoke, diff, immutable-base, and owned-scope checks passed.
 
 ## Gate History
 
@@ -60,3 +67,8 @@
 | GSD command | `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run` | unavailable | `unknown GSD command: programming-loop`; manual fallback activated |
 | RED | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/tool-policy.test.ts` | expected fail | 0 passed; missing owned production modules |
 | GREEN | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/tool-policy.test.ts` | pass | 19 passed; 0 failed |
+| REFACTOR focused | same focused command | pass | 22 passed; 0 failed |
+| REFACTOR full | `node --test .pi/extensions/shepherd/*.test.ts` | pass | 159 passed; 0 failed |
+| TypeScript | pinned TypeScript 5.9.3 `tsc --noEmit --strict ...` against explicit Pi 0.80.6 base/type roots | pass | owned tests/production and all Shepherd production files |
+| Offline smoke | explicit Pi 0.80.6 RPC `get_commands` with `PI_OFFLINE=1` | pass | `pm-shepherd` extension command registered |
+| Scope/diff | `git diff --check` plus immutable-base owned-path assertion | pass | only issue #475 files changed |
