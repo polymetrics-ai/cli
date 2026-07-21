@@ -305,6 +305,9 @@
   cohesive remaining GREEN/refactor -> terminal evidence. Production is frozen through RED.
 - Baseline: focused 114/114. Planned RED: 114 retained passes plus exactly ten intended C12
   failures, strict TypeScript green, exact production blobs frozen.
+- RED captured at `58af21f1`: focused 124 executed / 114 retained passes / exactly 10 intended C12
+  failures / 0 skipped, cancelled, or todo; strict focused TypeScript passes and all three frozen
+  production blobs remain exact. The checkpoint is test-only.
 - Execution decision: `read_only_spawned`; a bounded no-write lifecycle mapper assists while the
   issue worker owns the only mutating path.
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, `RUN-STATE.json`, `AGENTS.md`,

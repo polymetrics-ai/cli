@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_12_plan",
+  "currentCycle": "correction_cycle_12_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -278,14 +278,19 @@
       "cycle": "correction_cycle_12_plan",
       "decision": "read_only_spawned",
       "reason": "One bounded read-only explorer maps exact installed Pi 0.80.6 no-tool/one-tool lifecycle and the public inert whole-session seam while this isolated issue worker retains the only mutating PLAN, RED, GREEN, verification, commit, and handoff path."
+    },
+    {
+      "cycle": "correction_cycle_12_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 58af21f1 executed 124 focused tests with all 114 retained passes and exactly 10 intended Cycle 12 behavior failures; strict focused TypeScript passed and every production blob remained exact to frozen start 7882cd70."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_12_baseline_passed_114_of_114_0_failed_0_skipped_cancelled_todo",
+    "focusedTests": "cycle_12_red_124_executed_114_retained_passed_exactly_10_intended_behavior_failures_0_skipped_cancelled_todo",
     "fullShepherdTests": "cycle_11_environment_blocked_251_executed_220_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_177_passed_0_failed",
     "strictTypeScriptPi0806": "cycle_11_passed_focused_and_all_12_production_files_typescript_5_9_3",
     "offlineRpcSmoke": "cycle_11_passed_explicit_pi_0_80_6_rpc_registration_and_actual_no_model_factory_result_cleanup",
-    "diffCheck": "cycle_12_plan_pending_commit",
+    "diffCheck": "cycle_12_red_passed_test_only_commit_58af21f1_production_blobs_frozen",
     "ownedScope": "cycle_12_frozen_start_7882cd70_and_immutable_base_e659d6f1_issue_owned_paths_only; no_push_network_github_live_model_go_connectors_or_make",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },

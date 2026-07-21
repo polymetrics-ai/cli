@@ -976,3 +976,16 @@ structured/prefixed Cookie redaction.
 No RED assertion may be weakened. Any retained-fixture alignment must be minimal, explicit in the
 GREEN record, and preserve all Cycle 11 behavioral assertions. No push/network/GitHub/live model,
 Go/connectors, `make`, credentials, services, or parent-owned integration gate is permitted.
+
+### RED evidence
+
+- Status: captured in the test-only commit
+  `58af21f14538375a39b5e48efb8935b5a1182ff0`.
+- Focused result: exit 1; 124 executed, 114 retained passes, exactly 10 intended Cycle 12 behavior
+  failures, and 0 skipped/cancelled/todo. Every failure is one named top-level Cycle 12 row; there
+  is no fixture, loader, timeout, or compile failure.
+- Strict focused TypeScript: exit 0 against the explicit Pi 0.80.6 package/type roots.
+- Production lock: runtime `cfb1b40b8835c7bdffe162a7b4d368bde30d54f8`, policy
+  `734927712eaadc9bb8eca383621740d59c5bb7b6`, and role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`; all remain exact to frozen start `7882cd70`.
+- `git diff --check`: pass. The RED commit contains only the two issue-owned test files.
