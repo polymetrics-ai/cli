@@ -596,6 +596,8 @@ interface TerminalCapture {
 	piTurnAssistant?: AssistantTerminal;
 	piSettled: boolean;
 	frozen: boolean;
+	contentPhases: Map<number, { kind: "text" | "thinking" | "toolCall"; phase: "open" | "ended" }>;
+	toolExecutions: Map<string, { toolName: string; argsIdentity: string; phase: "started" | "ended" }>;
 	stream?: AssistantTerminal;
 	failure?: AgentSessionRuntimeError;
 	eventCount: number;
@@ -1493,6 +1495,8 @@ function newTerminalCapture(): TerminalCapture {
 		piPhase: "initial",
 		piSettled: false,
 		frozen: false,
+		contentPhases: new Map(),
+		toolExecutions: new Map(),
 		eventCount: 0,
 		eventBytes: 0,
 	};
@@ -1541,6 +1545,7 @@ function captureEvent(
 				const initial = captureAssistantTerminal(eventFields.get("message"), true, options.maxEventBytes);
 				if (!initial) throw new AgentSessionRuntimeError("message_start did not contain an assistant message");
 				capture.stream = initial;
+				capture.contentPhases.clear();
 				break;
 			}
 			case "message_update":
@@ -1555,6 +1560,7 @@ function captureEvent(
 			case "message_end": {
 				assertExactCapturedFields(eventFields, ["type", "message"], "message_end event");
 				capture.messageEndCount += 1;
+				assertCompletedContentPhases(capture);
 				if (capture.messageEndCount !== 1 || capture.phase !== "open") {
 					throw new AgentSessionRuntimeError("AgentSession emitted duplicate or out-of-order message_end evidence");
 				}
@@ -1617,6 +1623,10 @@ function capturePiLifecycleEvent(
 			capture.piPhase = "turn";
 			capture.piTurnAssistant = undefined;
 			capture.stream = undefined;
+			if ([...capture.toolExecutions.values()].some((execution) => execution.phase !== "ended")) {
+				throw new AgentSessionRuntimeError("turn_start preceded completion of tool execution");
+			}
+			capture.toolExecutions.clear();
 			return undefined;
 		case "message_start": {
 			assertExactCapturedFields(fields, ["type", "message"], "message_start event");
@@ -1629,6 +1639,7 @@ function capturePiLifecycleEvent(
 				const initial = captureAssistantTerminal(fields.get("message"), true, options.maxEventBytes);
 				if (!initial) throw new AgentSessionRuntimeError("assistant message_start is invalid");
 				capture.stream = initial;
+				capture.contentPhases.clear();
 			}
 			return undefined;
 		}
@@ -1655,6 +1666,7 @@ function capturePiLifecycleEvent(
 			if (role === "assistant") {
 				const terminal = captureAssistantTerminal(fields.get("message"), false, options.maxEventBytes);
 				if (!terminal) throw new AgentSessionRuntimeError("assistant message_end is invalid");
+				assertCompletedContentPhases(capture);
 				capture.messageEndCount += 1;
 				capture.messageEnd = terminal;
 				capture.piTurnAssistant = terminal;
@@ -1672,6 +1684,9 @@ function capturePiLifecycleEvent(
 				throw new AgentSessionRuntimeError("turn_end assistant does not match message_end");
 			}
 			captureDenseArray(fields.get("toolResults"), "turn_end tool results");
+			if ([...capture.toolExecutions.values()].some((execution) => execution.phase !== "ended")) {
+				throw new AgentSessionRuntimeError("turn_end preceded completion of tool execution");
+			}
 			capture.piPhase = "turn-ended";
 			return undefined;
 		}
@@ -1706,12 +1721,82 @@ function capturePiLifecycleEvent(
 			capture.piPhase = "settled";
 			capture.frozen = true;
 			return undefined;
-		case "tool_execution_start":
-		case "tool_execution_update":
-		case "tool_execution_end":
-			throw new AgentSessionRuntimeError("tool execution lifecycle is not yet accepted");
+		case "tool_execution_start": {
+			assertExactCapturedFields(fields, ["type", "toolCallId", "toolName", "args"], "tool_execution_start event");
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined) {
+				throw new AgentSessionRuntimeError("tool_execution_start is out of order");
+			}
+			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
+			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
+			if (capture.toolExecutions.has(toolCallId)) {
+				throw new AgentSessionRuntimeError("tool execution ID is duplicated");
+			}
+			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
+			capture.toolExecutions.set(toolCallId, { toolName, argsIdentity: canonicalJson(args), phase: "started" });
+			return undefined;
+		}
+		case "tool_execution_update": {
+			assertExactCapturedFields(
+				fields,
+				["type", "toolCallId", "toolName", "args", "partialResult"],
+				"tool_execution_update event",
+			);
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined) {
+				throw new AgentSessionRuntimeError("tool_execution_update is out of order");
+			}
+			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
+			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
+			const execution = capture.toolExecutions.get(toolCallId);
+			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
+			if (!execution || execution.phase !== "started" || execution.toolName !== toolName ||
+				execution.argsIdentity !== canonicalJson(args)) {
+				throw new AgentSessionRuntimeError("tool execution update does not match its start");
+			}
+			snapshotEventJson(fields.get("partialResult"), "tool execution partial result", options.maxEventBytes);
+			return undefined;
+		}
+		case "tool_execution_end": {
+			assertExactCapturedFields(
+				fields,
+				["type", "toolCallId", "toolName", "result", "isError"],
+				"tool_execution_end event",
+			);
+			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined) {
+				throw new AgentSessionRuntimeError("tool_execution_end is out of order");
+			}
+			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
+			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
+			const execution = capture.toolExecutions.get(toolCallId);
+			if (!execution || execution.phase !== "started" || execution.toolName !== toolName ||
+				typeof fields.get("isError") !== "boolean") {
+				throw new AgentSessionRuntimeError("tool execution end does not match its start");
+			}
+			snapshotEventJson(fields.get("result"), "tool execution result", options.maxEventBytes);
+			execution.phase = "ended";
+			return undefined;
+		}
 		default:
 			throw new AgentSessionRuntimeError(`unsupported Pi AgentSession event ${JSON.stringify(type)}`);
+	}
+}
+
+function requiredLifecycleString(
+	fields: ReadonlyMap<string, unknown>,
+	name: string,
+	description: string,
+): string {
+	const value = fields.get(name);
+	if (typeof value !== "string" || value.length === 0) {
+		throw new AgentSessionRuntimeError(`${description} is invalid`);
+	}
+	return value;
+}
+
+function assertCompletedContentPhases(capture: TerminalCapture): void {
+	for (const phase of capture.contentPhases.values()) {
+		if (phase.phase !== "ended") {
+			throw new AgentSessionRuntimeError("assistant content stream ended with an open phase");
+		}
 	}
 }
 
@@ -1772,7 +1857,7 @@ function captureStreamingUpdateCharge(
 		throw new AgentSessionRuntimeError("Pi error reason is invalid");
 	}
 	const growth = fields.has("contentIndex")
-		? validateIndexedStreamTransition(capture.stream, message, type, fields)
+		? validateIndexedStreamTransition(capture, capture.stream, message, type, fields)
 		: streamSnapshotGrowth(capture.stream, message);
 	capture.stream = message;
 	const metadata = byteLength(type) + (typeof variable === "string" ? byteLength(variable) : 0) + 32;
@@ -1781,6 +1866,7 @@ function captureStreamingUpdateCharge(
 }
 
 function validateIndexedStreamTransition(
+	capture: TerminalCapture,
 	previous: AssistantTerminal | undefined,
 	current: AssistantTerminal,
 	type: string,
@@ -1802,6 +1888,17 @@ function validateIndexedStreamTransition(
 	const prior = previousContent[index];
 	const next = current.content[index];
 	if (!next) throw new AgentSessionRuntimeError(`Pi ${type} content item is missing`);
+	const kind = type.startsWith("text_") ? "text" : type.startsWith("thinking_") ? "thinking" : "toolCall";
+	const transition = type.endsWith("_start") ? "start" : type.endsWith("_delta") ? "delta" : "end";
+	const ownedPhase = capture.contentPhases.get(index);
+	if (transition === "start") {
+		if (ownedPhase) throw new AgentSessionRuntimeError(`Pi ${type} duplicated an owned content phase`);
+		capture.contentPhases.set(index, { kind, phase: "open" });
+	} else if (!ownedPhase || ownedPhase.kind !== kind || ownedPhase.phase !== "open") {
+		throw new AgentSessionRuntimeError(`Pi ${type} has no matching open content phase`);
+	} else if (transition === "end") {
+		ownedPhase.phase = "ended";
+	}
 	const delta = fields.get("delta");
 	if (type.startsWith("text_")) {
 		if (next.type !== "text") throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
