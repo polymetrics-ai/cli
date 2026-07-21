@@ -213,11 +213,33 @@
     then fixed by resuming within unredacted prose).
 - Focused result after refactor: exit 0, 31 passed / 0 failed.
 - Strict focused TypeScript: exit 0 against explicit Pi 0.80.6 package/type roots.
-- REFACTOR/VERIFY status: pending the complete declared gate set.
+- REFACTOR/VERIFY status: complete at implementation head
+  `01b42ae168176956d864ff10f40d1c981f37ac04`.
+- Results:
+  - focused tests: 31 passed / 0 failed;
+  - complete Shepherd tests: 168 passed / 0 failed;
+  - strict owned production/tests plus role prompt inputs: pass;
+  - strict all-Shepherd production inputs: pass;
+  - explicit Pi 0.80.6 offline RPC `get_commands`: pass, `pm-shepherd` registered;
+  - immutable-base diff check and issue-owned changed-path assertion: pass.
 - Declared gates remain focused issue tests, the complete Shepherd suite, strict TypeScript against
   explicit Pi 0.80.6 types, pinned offline RPC, diff check, immutable-base, and owned-scope checks.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
   commands remain forbidden in this lane.
+
+## Cycle 4 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | exact reviewed head `b4061d4e1a1545b0c8810b14b510cf048385a567`; correction scope pushed at `190b0ec7` |
+| RED | expected fail | exit 1; 23 passed / 8 expected failures; production unchanged; pushed at `21535513` |
+| Adversarial mini-REDs | expected fail | apostrophe boundary and nested-flow hiding each failed 0/1 before its production support |
+| GREEN / REFACTOR | pass | implementation `01b42ae168176956d864ff10f40d1c981f37ac04`; 31 passed / 0 failed |
+| Focused strict TypeScript | pass | owned source/tests plus role prompt inputs against explicit Pi 0.80.6 types |
+| Complete Shepherd | pass | 168 passed / 0 failed |
+| Strict TypeScript | pass | focused owned inputs and all Shepherd production source against explicit Pi 0.80.6 types |
+| Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
+| Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
 
 ## Cycle 3 — Multiline Redaction And Bounded Abandoned Cleanup
 

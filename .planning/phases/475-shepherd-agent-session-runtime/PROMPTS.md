@@ -73,5 +73,10 @@
   TypeScript passes. Foreground cleanup bounds abort and idle independently before unconditional
   coalesced disposal; the linear scanner recognizes flow mappings and spaced structured
   `client_secret` values while preserving harmless prose. Two local adversarial probes also close
-  apostrophe quote-state and nested-flow hiding regressions.
-- Verification status: complete Cycle 4 gates pending; all Cycle 3 terminal evidence is superseded.
+  apostrophe quote-state and nested-flow hiding regressions; each probe captured a targeted 0/1
+  RED before its production support.
+- Verification result: complete at implementation head
+  `01b42ae168176956d864ff10f40d1c981f37ac04` — focused 31/31; full Shepherd 168/168; focused and
+  all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
+  immutable-base, and issue-owned scope checks all pass. Cycle 3 terminal evidence is superseded.
+  No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.

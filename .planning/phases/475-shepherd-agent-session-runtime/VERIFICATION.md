@@ -1,12 +1,9 @@
 # Verification — Issue #475
 
-> Superseded pending Cycle 4 revalidation. Exact-head review at
-> `b4061d4e1a1545b0c8810b14b510cf048385a567` found foreground forced-disposal and unquoted YAML
-> flow/spaced-scalar gaps. Cycle 3 results below remain historical evidence only.
-
-PR #486 correction Cycle 3 revalidation is complete. The final-review findings against
-`526dfec4282b442c4b32138ab036d4cc7e97b475` are covered by the committed test-only RED checkpoint
-`9c4ed5fd` and pass at implementation head `d499e721a85abbe1a1d1be7fb0069649927c923c`.
+PR #486 correction Cycle 4 revalidation is complete. The independent-review findings against
+`b4061d4e1a1545b0c8810b14b510cf048385a567` are covered by PLAN checkpoint `190b0ec7`, committed
+test-only RED checkpoint `21535513`, and pass at implementation head
+`01b42ae168176956d864ff10f40d1c981f37ac04`.
 
 ## Declared Phase Equivalent
 
@@ -16,8 +13,8 @@ means every declared command here passed; it does not claim parent-level Go/conn
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Focused AgentSession/tool-policy tests | pass | 27 passed, 0 failed, exit 0 |
-| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 164 passed, 0 failed, exit 0 |
+| Focused AgentSession/tool-policy tests | pass | 31 passed, 0 failed, exit 0 |
+| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 168 passed, 0 failed, exit 0 |
 | Strict no-emit TypeScript against installed Pi 0.80.6 types | pass | owned production/tests plus all Shepherd production `.ts`; exit 0 |
 | Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `pm-shepherd` registered, exit 0 |
 | `git diff --check` | pass | exit 0 |
@@ -43,10 +40,10 @@ skip, pass, or failure.
 ```bash
 node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
   .pi/extensions/shepherd/tool-policy.test.ts
-# 27 passed, 0 failed
+# 31 passed, 0 failed
 
 node --test .pi/extensions/shepherd/*.test.ts
-# 164 passed, 0 failed
+# 168 passed, 0 failed
 ```
 
 TypeScript used the already-installed TypeScript 5.9.3 compiler and explicit Pi 0.80.6 package/type
@@ -76,14 +73,17 @@ printf '%s\n' '{"type":"get_commands"}' |
 The explicit binary reports `0.80.6`; RPC `get_commands` returned success with the `pm-shepherd`
 command registered.
 
-Cycle 3 proves both never-settling abandoned-session hook cases independently. A late session is
-never prompted; abort and wait-for-idle are each invoked once against one cleanup deadline; forced
-unsubscribe/dispose occurs exactly once; the runtime quarantines and rejects the next dispatch; no
-unhandled rejection is observed; and detached deadline timers are unref'ed. The scanner proves
-multiline YAML quoted values, literal/folded block scalars, normalized `client_secret` assignments,
-and multiline quoted Bearer credentials through direct probes, serialized role prompts, typed tool
-output, and handoff summary/finding fields. Synthetic markers are absent, `[REDACTED]` is present,
-and ambiguous multiword assignment prose remains byte-for-byte unchanged.
+Cycle 4 proves the four foreground cleanup rows independently: a session created during cleanup
+grace or claimed before cancellation, each with never-settling `abort()` or `waitForIdle()`. Every
+run settles within the test bound, quarantines and rejects subsequent dispatch before another
+prompt, forces coalesced disposal exactly once, and produces no unhandled rejection. Idle wait may
+be skipped only after abort exceeds its own independent bound; disposal remains unconditional.
+
+The scanner proves unquoted YAML flow-map credentials and spaced line-start `client_secret`
+assignments through direct probes, serialized role prompts, typed tool output, and handoff
+summary/finding fields. Synthetic markers are absent, `[REDACTED]` is present, and non-assignment
+prose remains byte-for-byte unchanged. Targeted adversarial REDs also prove that apostrophes in
+ordinary prose cannot open quote state and preserved ambiguous prose cannot hide a nested flow map.
 
 The immutable-base check retained
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; every changed path is an issue-owned Shepherd

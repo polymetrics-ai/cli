@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 4 GREEN; complete revalidation pending and Cycle 3 evidence is
-superseded.
+Status: exact-head correction Cycle 4 complete; every declared Shepherd-only gate passes and Cycle
+3 evidence is superseded.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -17,7 +17,7 @@ shutdown coalesce; child setup/session settlement joins once; failed cleanup qua
 dispatch. Handoffs accept one closed bounded JSON schema bound to run/generation/lane/head/nonce and
 redact secret-like material before return.
 
-The focused suite passes 24/24 and the complete Shepherd suite passes 161/161. Strict owned plus
+The focused suite passes 31/31 and the complete Shepherd suite passes 168/168. Strict owned plus
 all-Shepherd-production TypeScript passes against the explicit Pi 0.80.6 installation, as do the
 pinned offline RPC smoke and diff/scope checks. The healthy repo-local GSD adapter does not expose
 `programming-loop`, so the phase completed under the recorded `manual_gsd_fallback`.
@@ -46,9 +46,13 @@ bots.
 Review at `b4061d4e1a1545b0c8810b14b510cf048385a567` found that the foreground/main cleanup path can
 still skip disposal when abort or idle never settles, both for a session obtained during cleanup
 grace and for an ordinary claimed session. It also found unquoted YAML flow-map and spaced
-line-start `client_secret` gaps. Cycle 4 is active under a fresh strict test-only RED gate and the
-same narrow Shepherd-only verification boundary. RED is now captured with 23 passes and 8 expected
-failures; production remained unchanged. The focused suite now passes 31/31 after independently
+line-start `client_secret` gaps. Cycle 4 captured a fresh strict test-only RED with 23 passes and 8
+expected failures while production remained unchanged. At implementation head
+`01b42ae168176956d864ff10f40d1c981f37ac04`, the focused suite passes 31/31 after independently
 bounded abort/idle phases with unconditional exactly-once disposal and a linear flow-aware scanner
-for spaced structured `client_secret` values. Complete Shepherd, all-production strict TypeScript,
-pinned offline RPC, and diff/scope gates remain pending.
+for flow-map and spaced structured `client_secret` values. Two adversarial refactor probes each
+captured a targeted 0/1 RED before closing apostrophe quote-state and nested-flow hiding gaps. The
+complete Shepherd suite passes 168/168; both strict TypeScript scopes, pinned offline RPC, diff,
+immutable-base, and issue-owned path checks pass. Parent orchestration owns fresh independent
+exact-head review and integration; this lane did not invoke Go/connectors, `make verify`, live
+GitHub, merge, or review bots.

@@ -212,3 +212,11 @@ recorded `manual_gsd_fallback` remains active. Skills reloaded for Cycle 4:
 with required routing, issue-agent, universal-loop, Pi-adapter, and runtime/Pi guidance. Execution
 decision is `local_critical_path`: both findings collide in the two issue-owned source/test modules,
 and a read-only design sidecar was rejected by the runtime thread cap.
+
+Cycle 4 result: PLAN was pushed at `190b0ec7`; test-only RED was pushed at `21535513` with 23
+passes and 8 expected failures; GREEN/refactor was pushed at
+`01b42ae168176956d864ff10f40d1c981f37ac04`. Focused 31/31 and complete Shepherd 168/168 tests,
+both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and
+issue-owned path gates pass. Two adversarial refactor probes each captured their own targeted RED
+before production support. Fresh independent exact-head review and integration remain
+parent-owned.
