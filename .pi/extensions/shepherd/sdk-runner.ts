@@ -8,7 +8,6 @@ import type {
 const REQUIRED_PI_VERSION = "0.80.6";
 const REQUIRED_PROVIDER = "openai-codex";
 const REQUIRED_MODEL = "gpt-5.6-sol";
-const READ_ONLY_TOOLS = new Set(["read", "grep", "find", "ls"]);
 const DIMENSION_NAMES = [
 	"correctStage",
 	"artifactValid",
@@ -231,7 +230,9 @@ export class SdkAgentRunner implements AgentRunner {
 				modelRegistry: this.#modelRegistry,
 				model,
 				thinkingLevel: request.thinking,
-				tools: [...request.tools],
+				noTools: "all",
+				tools: [],
+				customTools: [],
 				resourceLoader,
 				sessionManager,
 				settingsManager,
@@ -389,12 +390,13 @@ function validateRequest(request: AgentRunRequest): void {
 		request.prompt.length === 0 || request.prompt.length > 64 * 1024) {
 		throw new AgentRunnerError("AgentSession prompts must be non-empty and bounded");
 	}
-	if (request.tools.length === 0 || new Set(request.tools).size !== request.tools.length ||
-		request.tools.some((tool) => !/^[a-z][a-z0-9_-]{0,63}$/.test(tool))) {
-		throw new AgentRunnerError("tool allowlist is invalid");
+	if (!Array.isArray(request.tools) || request.tools.length !== 0) {
+		throw new AgentRunnerError("embedded AgentSession child tools are disabled; tools must be []");
 	}
-	if (request.readOnly && request.tools.some((tool) => !READ_ONLY_TOOLS.has(tool))) {
-		throw new AgentRunnerError("read-only lane requested a mutating or unknown tool");
+	const untrustedRequest = request as AgentRunRequest & { customTools?: unknown };
+	if (untrustedRequest.customTools !== undefined &&
+		(!Array.isArray(untrustedRequest.customTools) || untrustedRequest.customTools.length !== 0)) {
+		throw new AgentRunnerError("embedded AgentSession custom child tools are disabled");
 	}
 
 	const bindingPairs: Array<[string, unknown, unknown]> = [
@@ -449,8 +451,9 @@ function validateCreatedSession(
 	if (session.sessionFile !== undefined) {
 		throw new AgentRunnerError("embedded AgentSession unexpectedly enabled persistence");
 	}
-	if (!sameStringSet(session.getActiveToolNames(), request.tools)) {
-		throw new AgentRunnerError("embedded AgentSession tool allowlist mismatch");
+	const activeToolNames = session.getActiveToolNames();
+	if (!Array.isArray(activeToolNames) || activeToolNames.length !== 0) {
+		throw new AgentRunnerError("embedded AgentSession must expose zero active tools");
 	}
 }
 
@@ -530,13 +533,6 @@ async function withTimeout<T>(
 	} finally {
 		if (timer) clearTimeout(timer);
 	}
-}
-
-function sameStringSet(left: string[], right: string[]): boolean {
-	if (!Array.isArray(left) || left.length !== right.length) return false;
-	if (new Set(left).size !== left.length) return false;
-	const expected = new Set(right);
-	return left.every((value) => expected.has(value));
 }
 
 function byteLength(value: string): number {
