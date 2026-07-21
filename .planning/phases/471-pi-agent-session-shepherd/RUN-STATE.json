@@ -3,7 +3,7 @@
   "phase": "471-pi-agent-session-shepherd",
   "issue": 471,
   "status": "in_progress",
-  "reason": "Ownership/shutdown audit corrections are green; final canary rerun, root verification, and exact-head review remain.",
+  "reason": "Ownership/shutdown corrections and corrected-checkpoint canary pass; root verification and exact-head review remain.",
   "details": {
     "branch": "feat/471-pi-agent-session-shepherd",
     "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
@@ -43,6 +43,11 @@
         "cycle": "ownership-shutdown-review",
         "decision": "blocking_findings_corrected",
         "reason": "Cross-process double dispatch, early-stop, delayed-create abort, hung cleanup, and graceful-shutdown state reproductions were added and corrected with a global fenced lease, lifecycle cancellation, and bounded unconditional cleanup; 49 focused tests and strict TypeScript pass."
+      },
+      {
+        "cycle": "corrected-canary",
+        "decision": "read_only_completed",
+        "reason": "Checkpoint ccf0daf3 completed generation 2 against exact clean PR #438 head with both zero-tool lanes successful, score 0.9794, no hard gates, the global lease released, and target state unchanged."
       }
     ],
     "humanGates": [
@@ -54,5 +59,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T13:25:00Z"
+  "updatedAt": "2026-07-21T13:45:00Z"
 }

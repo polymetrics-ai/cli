@@ -12,6 +12,7 @@ Independent review findings became regression tests for crash resume, stop races
 changes, cross-process leasing, early cancellation, bounded shutdown, output bounds, and persisted
 DTO safety. The focused suite is 49/49 green, strict TypeScript passes, and Pi 0.80.6 discovers
 `/pm-shepherd` offline. The initial live
-read-only PR #438 canary also passed: two zero-tool xhigh sessions completed at the exact clean head
-with both lanes successful, score 0.9819, no hard gates, and no local or GitHub target mutation.
+read-only PR #438 canary also passed again on corrected checkpoint `ccf0daf3`: two zero-tool xhigh
+sessions completed at the exact clean head with both lanes successful, score 0.9794, no hard gates,
+the global lease released, and no local or GitHub target mutation.
 Root gates, final exact-head review, and the human-gated main merge remain.
