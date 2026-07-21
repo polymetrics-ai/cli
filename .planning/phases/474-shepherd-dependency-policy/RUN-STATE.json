@@ -1,0 +1,116 @@
+{
+  "schemaVersion": 1,
+  "issue": 474,
+  "phase": "474-shepherd-dependency-policy",
+  "mode": "manual_gsd_fallback",
+  "status": "completed",
+  "verificationPassed": true,
+  "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
+  "adapterEvidence": {
+    "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
+    "result": "unknown GSD command: programming-loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The isolated child worker owns one cohesive pure-policy boundary; nested delegation is unnecessary and was not requested."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Three matching table/property test files now fail on the intentionally absent policy modules; the strict RED gate is satisfied."
+    },
+    {
+      "cycle": "second-correction-execute",
+      "decision": "local_critical_path",
+      "reason": "The second correction implementation passes 40 focused tests and strict no-emit TypeScript; broader verification follows."
+    },
+    {
+      "cycle": "gap-loop",
+      "decision": "local_critical_path",
+      "reason": "Adversarial runtime-boundary tests produced 4 expected failures, then passed 26/26 after minimal fail-closed refactoring."
+    },
+    {
+      "cycle": "second-correction-refactor",
+      "decision": "local_critical_path",
+      "reason": "Alias-set naming and lifecycle agreement refactoring preserve 40 focused passes and strict production TypeScript."
+    },
+    {
+      "cycle": "second-correction-verify",
+      "decision": "local_critical_path",
+      "reason": "Final scoped gates pass: 40 focused tests, 177 full Shepherd tests, strict Pi 0.80.6 TypeScript, offline RPC, and diff/ownership."
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "Artifacts record exact RED/GREEN/refactor evidence, supplemental Go results, unsupported Pi flag deviation, and make verify cancellation by superseding parent policy."
+    },
+    {
+      "cycle": "exact-head-correction-plan",
+      "decision": "local_critical_path",
+      "reason": "Independent xhigh findings reopen the owned pure-policy slice; adversarial RED tests precede all production corrections."
+    },
+    {
+      "cycle": "exact-head-correction-2-plan",
+      "decision": "local_critical_path",
+      "reason": "Fresh xhigh blockers reopen Unicode aliases, authoritative queue facts, and caller-owned DTO isolation under a new RED gate."
+    },
+    {
+      "cycle": "exact-head-correction-3-plan",
+      "decision": "local_critical_path",
+      "reason": "The remaining accessor-boundary blocker is one cohesive owned reconciliation slice; the runtime agent limit prevented a read-only sidecar, so local TDD is the critical path."
+    },
+    {
+      "cycle": "exact-head-correction-3-red",
+      "decision": "local_critical_path",
+      "reason": "A tests-only run produced the expected 40/41 pass result and proved getters execute twice at root, nested-record, and array-element depths."
+    },
+    {
+      "cycle": "exact-head-correction-3-green",
+      "decision": "local_critical_path",
+      "reason": "Descriptor-first exact validation prevents accessor and Proxy execution; focused tests pass 41/41 and strict production TypeScript passes."
+    },
+    {
+      "cycle": "exact-head-correction-3-verify",
+      "decision": "local_critical_path",
+      "reason": "Final scoped gates pass: 41 focused tests, 178 full Shepherd tests, strict Pi 0.80.6 TypeScript, offline RPC, and diff/ownership."
+    }
+  ],
+  "gates": {
+    "red": "passed_expected_failure_1_of_41",
+    "green": "passed_41_of_41",
+    "refactor": "passed_41_of_41_after_descriptor_boundary_refactor",
+    "focusedTests": "passed_41_of_41",
+    "fullShepherdTests": "passed_178_of_178",
+    "strictTypeScript": "passed_third_correction_against_pi_0_80_6",
+    "piExtensionDiscovery": "offline_rpc_pm_shepherd_discovered",
+    "goVet": "supplemental_passed",
+    "goTest": "supplemental_passed_after_contention_timeout_retry",
+    "goBuild": "supplemental_passed",
+    "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
+    "phaseEquivalentChildGate": "passed_after_third_exact_head_correction",
+    "correctionRed": "passed_expected_failure_15_of_36",
+    "correctionGreen": "passed_36_of_36",
+    "correctionAuditGap": "red_2_of_2_then_green_36_of_36",
+    "correctionRefactor": "precomputed_conflict_index_passed_36_of_36",
+    "correctionFullShepherd": "passed_173_of_173",
+    "correctionStrictTypeScript": "passed_against_pi_0_80_6",
+    "correctionOfflineRpc": "pm_shepherd_discovered",
+    "correctionOwnership": "passed",
+    "secondCorrectionRed": "passed_expected_failure_5_of_40",
+    "secondCorrectionGreen": "passed_40_of_40",
+    "secondCorrectionStrictTypeScript": "passed_after_discriminated_union_narrowing",
+    "secondCorrectionRefactor": "passed_40_of_40",
+    "secondCorrectionFullShepherd": "passed_177_of_177",
+    "secondCorrectionOfflineRpc": "pm_shepherd_discovered",
+    "secondCorrectionOwnership": "passed",
+    "thirdCorrectionRed": "passed_expected_failure_1_of_41",
+    "thirdCorrectionGreen": "passed_41_of_41",
+    "thirdCorrectionFullShepherd": "passed_178_of_178",
+    "thirdCorrectionStrictTypeScript": "passed_against_pi_0_80_6",
+    "thirdCorrectionOfflineRpc": "pm_shepherd_discovered",
+    "thirdCorrectionOwnership": "passed",
+    "thirdCorrectionVerification": "passed"
+  }
+}
