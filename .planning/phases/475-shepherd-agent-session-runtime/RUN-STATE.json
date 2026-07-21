@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_3_plan",
+  "currentCycle": "correction_cycle_3_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -63,10 +63,15 @@
       "cycle": "correction_cycle_3_plan",
       "decision": "local_critical_path",
       "reason": "Both findings overlap issue-owned Shepherd modules and the runtime thread cap rejected a read-only design sidecar; proceed locally without widening scope."
+    },
+    {
+      "cycle": "correction_cycle_3_red",
+      "decision": "local_critical_path",
+      "reason": "Focused test-only regressions produced seven expected failures with production unchanged; proceed to the smallest structured-redaction and bounded-cleanup fixes."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_3",
+    "focusedTests": "red_captured_20_passed_7_expected_failures",
     "fullShepherdTests": "pending_cycle_3",
     "strictTypeScriptPi0806": "pending_cycle_3",
     "offlineRpcSmoke": "pending_cycle_3",

@@ -78,23 +78,35 @@ function policyInput(readOnly: boolean) {
 	};
 }
 
-test("redaction covers quoted JSON/YAML assignments and quoted Bearer values without changing ordinary prose", () => {
-	const secret = ["synthetic", "credential", "issue-475"].join("-");
+test("redaction covers single-line and multiline structured secret forms", () => {
 	const probes = [
-		`"token": "${secret}"`,
-		`password: '${secret}'`,
-		`"Authorization": "Bearer ${secret}"`,
-		`Authorization: 'Bearer ${secret}'`,
+		{ secret: "single-json", value: (secret: string) => `"token": "${secret}"` },
+		{ secret: "single-yaml", value: (secret: string) => `password: '${secret}'` },
+		{ secret: "quoted-yaml", value: (secret: string) => `client_secret: "${secret}\n  continuation"` },
+		{ secret: "block-yaml", value: (secret: string) => `client_secret: |-\n  ${secret}\n  continuation\nsafe: retained` },
+		{ secret: "client-assignment", value: (secret: string) => `clientSecret=${secret}` },
+		{ secret: "quoted-bearer", value: (secret: string) => `Authorization: "Bearer ${secret}\n  continuation"` },
 	];
 
 	for (const probe of probes) {
-		const redacted = redactSensitiveText(probe);
-		assert.equal(redacted.includes(secret), false, probe);
-		assert.match(redacted, /\[REDACTED\]/, probe);
+		const secret = ["synthetic", probe.secret, "issue-475"].join("-");
+		const value = probe.value(secret);
+		const redacted = redactSensitiveText(value);
+		assert.equal(redacted.includes(secret), false, value);
+		assert.match(redacted, /\[REDACTED\]/, value);
 	}
+});
 
-	const ordinary = "The token bucket algorithm uses bearer capabilities, and authorization is described here.";
-	assert.equal(redactSensitiveText(ordinary), ordinary);
+test("redaction preserves harmless assignment-like prose byte-identically", () => {
+	const controls = [
+		"The token bucket algorithm uses bearer capabilities, and authorization is described here.",
+		"token: describes a lexical unit in parser documentation.",
+		"password = number of characters accepted by this form.",
+		"secret: a surprising detail in a story.",
+		"Authorization: Bearer is the HTTP authentication scheme discussed here.",
+		"client_secret: explains the OAuth field name in this documentation.",
+	];
+	for (const control of controls) assert.equal(redactSensitiveText(control), control);
 });
 
 test("read-only policy exposes workspace reads and non-mutating typed capabilities only", async () => {
@@ -236,7 +248,7 @@ test("tool inputs and outputs are bounded and host summaries are redacted", asyn
 	const secret = ["synthetic", "tool-output", "issue-475"].join("-");
 	const input = policyInput(false);
 	input.capabilities = [
-		capability("host_inspect", { output: `{"Authorization": "Bearer ${secret}"}` }),
+		capability("host_inspect", { output: `client_secret: |-\n  ${secret}\n  continuation` }),
 		capability("host_verify", { mutates: true }),
 	];
 	const policy = createToolPolicy(input, { maxToolOutputBytes: 256 });

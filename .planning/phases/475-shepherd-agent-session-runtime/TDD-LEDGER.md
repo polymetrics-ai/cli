@@ -166,17 +166,32 @@
 
 ### RED
 
-- Status: pending; production changes are blocked.
+- Status: captured; production source remained unchanged.
 - Redaction tests will prove multiline quoted scalars, YAML block scalars, `client_secret`, and
   multiline quoted Bearer credentials at direct, prompt, tool-output, handoff-summary, and
   handoff-finding boundaries, plus byte-identical ambiguous prose controls.
 - Lifecycle tests will separately hang late-session `abort()` and `waitForIdle()` after creation
   abandonment, then require bounded single disposal, quarantine rejection on subsequent dispatch,
   zero prompt calls, no duplicate cleanup, and no unhandled rejection.
+- Command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+- Observed result: exit 1, 20 passed / 7 expected failures:
+  - prompt multiline secret boundary leaked a marker;
+  - handoff summary/finding multiline boundary leaked a marker;
+  - abandoned cleanup with never-settling `abort()` never disposed;
+  - abandoned cleanup with never-settling `waitForIdle()` never disposed;
+  - direct multiline structured secret matrix leaked its quoted YAML marker;
+  - harmless assignment-like prose was modified;
+  - typed tool-output YAML block scalar leaked its marker.
 
 ### GREEN
 
-- Status: blocked on committed RED evidence.
+- Status: ready; RED evidence precedes all production edits.
 
 ### REFACTOR / VERIFY
 
