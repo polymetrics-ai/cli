@@ -19,7 +19,7 @@ export interface LaneBinding {
 	readOnly: boolean;
 	provider: string;
 	model: string;
-	thinking: string;
+	thinking: "high" | "xhigh";
 }
 
 export interface LaneEvidence extends LaneBinding {

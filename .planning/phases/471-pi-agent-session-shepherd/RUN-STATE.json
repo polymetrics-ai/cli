@@ -3,7 +3,7 @@
   "phase": "471-pi-agent-session-shepherd",
   "issue": 471,
   "status": "in_progress",
-  "reason": "Strict RED evidence is captured and GREEN implementation is active.",
+  "reason": "GREEN and reviewer-hardening focused gates pass; live read-only canary and root verification remain.",
   "details": {
     "branch": "feat/471-pi-agent-session-shepherd",
     "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
@@ -28,6 +28,11 @@
         "cycle": "tdd-gate",
         "decision": "local_critical_path",
         "reason": "Six focused test entries and offline Pi command discovery failed on absent production modules before implementation, satisfying the manual RED gate."
+      },
+      {
+        "cycle": "green-refactor",
+        "decision": "parallel_workers_integrated",
+        "reason": "Independent core and SDK workers were integrated, then reviewer findings became fail-closed regression tests; 38 focused tests, strict TypeScript, and offline Pi registration pass."
       }
     ],
     "humanGates": [
@@ -39,5 +44,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T08:24:00Z"
+  "updatedAt": "2026-07-21T12:15:00Z"
 }

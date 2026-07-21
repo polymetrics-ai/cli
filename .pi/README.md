@@ -79,6 +79,46 @@ Useful prompt templates:
   Export `SEARXNG_BASE` (and its token if proxied) first so research can query the audited `searxng`
   connector via `pm`.
 
+### Experimental in-process Shepherd
+
+`/pm-shepherd` is a deterministic Pi extension that creates independent Pi `AgentSession`
+contexts inside the current Pi process. The first release is intentionally read-only: it runs a
+scout and an independent validator at an exact clean PR head, validates run/generation/lane/head/
+nonce bindings, applies hard gates, and records only bounded redacted summaries plus diagnostic
+scores. Child sessions receive a bounded host-verified PR/check snapshot and no filesystem, shell,
+extension, custom, connector, or GitHub tools.
+
+From the exact target PR worktree:
+
+~~~text
+/pm-shepherd status --issue 397
+/pm-shepherd canary --issue 397 --pr 438 --read-only --backend sdk-inproc --experimental
+/pm-shepherd stop --issue 397
+~~~
+
+`start` and `resume` use the same explicit `--read-only --backend sdk-inproc --experimental`
+contract. Omission of `--read-only` fails closed; this extension does not yet dispatch mutating
+workers, push, comment, review, merge, call connectors, or execute reverse ETL. Its state lives
+outside the repository under Pi's agent directory, partitioned by a one-way repository
+fingerprint. Raw prompts, reasoning, credentials, and unrestricted tool output are not persisted.
+
+This mode is interactive, not durable supervision. Embedded sessions share the parent Pi process,
+event loop, heap, environment, credentials boundary, and crash domain. Cancellation is
+cooperative. If Pi or the host stops, reopen Pi in the same target worktree and run `resume`; the
+controller reconciles any persisted running lane as interrupted and starts a fresh generation.
+The standalone Go Shepherd remains the durable option until a later human-approved consolidation.
+
+Registration can be checked without a model, auth, or network call:
+
+~~~bash
+printf '{"id":"commands","type":"get_commands"}\n' |
+  PI_OFFLINE=1 pi --mode rpc --no-session --approve \
+    --no-extensions --no-skills --no-prompt-templates --no-context-files \
+    -e .pi/extensions/shepherd/index.ts |
+  jq -e 'select(.id=="commands") |
+    any(.data.commands[]; .name=="pm-shepherd" and .source=="extension")'
+~~~
+
 ### Autonomous driver (unattended, resumable)
 
 Run the loop unattended until it reaches a human gate; it resumes after any interruption
