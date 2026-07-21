@@ -33,3 +33,14 @@
 - Verification result: complete — focused 24/24; full Shepherd 161/161; owned and all-production
   strict TypeScript against pinned Pi 0.80.6; offline RPC; diff, immutable-base, and owned-scope
   checks pass. No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.
+
+## Exact-Head Correction Cycle 3 Snapshot
+
+- Reviewed head: `526dfec4282b442c4b32138ab036d4cc7e97b475` on PR #486.
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: make secret redaction structured and multiline-safe without assignment-prose false
+  positives; bound abandoned-session hook cleanup and force exactly-once disposal/quarantine.
+- Method: recorded manual-GSD PLAN → RED → GREEN → REFACTOR with separate pushed checkpoints.
+- Execution decision: `local_critical_path`; the runtime rejected the attempted read-only sidecar at
+  its thread cap, and the changes overlap the same issue-owned modules.
+- Verification status: pending Cycle 3 evidence; Cycle 2 terminal evidence is superseded.

@@ -1,5 +1,10 @@
 # Verification — Issue #475
 
+> Superseded pending Cycle 3 revalidation. Exact-head review at
+> `526dfec4282b442c4b32138ab036d4cc7e97b475` found multiline redaction and unbounded abandoned-hook
+> cleanup gaps. Earlier results remain historical evidence until every declared Cycle 3 gate exits
+> successfully.
+
 PR #486 exact-head correction revalidation is complete. The review findings against
 `4e41c2ec1175a109c10f125203dc54d381b982bd` are covered by committed RED tests and pass at the
 corrected implementation head `f788cf160e61760ebd80b54d2f9939b6f7f8d753`.

@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_summary",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_3_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -58,15 +58,20 @@
       "cycle": "correction_summary",
       "decision": "local_critical_path",
       "reason": "Exact-head correction evidence is terminal; parent orchestration owns the next independent PR review and all integration gates."
+    },
+    {
+      "cycle": "correction_cycle_3_plan",
+      "decision": "local_critical_path",
+      "reason": "Both findings overlap issue-owned Shepherd modules and the runtime thread cap rejected a read-only design sidecar; proceed locally without widening scope."
     }
   ],
   "gates": {
-    "focusedTests": "passed_24_of_24",
-    "fullShepherdTests": "passed_161_of_161",
-    "strictTypeScriptPi0806": "passed_owned_and_all_production",
-    "offlineRpcSmoke": "passed_pm_shepherd_registered",
-    "diffCheck": "passed",
-    "ownedScope": "passed",
+    "focusedTests": "pending_cycle_3",
+    "fullShepherdTests": "pending_cycle_3",
+    "strictTypeScriptPi0806": "pending_cycle_3",
+    "offlineRpcSmoke": "pending_cycle_3",
+    "diffCheck": "pending_cycle_3",
+    "ownedScope": "pending_cycle_3",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

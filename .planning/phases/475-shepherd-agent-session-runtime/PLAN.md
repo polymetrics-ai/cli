@@ -152,3 +152,24 @@ Correction result: RED was captured at `93b9eca9`; the minimal GREEN implementat
 at `f788cf16`. Focused 24/24 and complete Shepherd 161/161 tests, both strict TypeScript scopes,
 pinned offline Pi 0.80.6 RPC, diff, immutable-base, and changed-path checks pass. Repository-wide
 Go, connector, and `make verify` gates remain outside this lane by explicit instruction.
+
+## Exact-Head Correction Cycle 3 — `526dfec4282b442c4b32138ab036d4cc7e97b475`
+
+Final `codex_independent` re-review found two remaining P1 boundaries. This cycle stays inside the
+same issue-owned runtime, tool-policy, tests, and phase artifacts.
+
+1. Replace line-limited whole-value redaction regexes with a bounded linear scanner over recognized
+   structured assignments. It must cover multiline quoted YAML values, YAML literal/folded block
+   scalars, common `client_secret` spellings, and multiline quoted Authorization Bearer values at
+   direct, prompt, tool-result, and handoff boundaries. Unquoted ambiguous prose must remain
+   byte-identical; only strong structured or single-token credential forms are redacted.
+2. Bound abandoned-session abort and wait-for-idle against one cleanup deadline. Whether either
+   hook never settles, force a coalesced unsubscribe/dispose exactly once, quarantine future
+   dispatch, consume all rejections, and leave no ref'ed background timer or duplicate cleanup
+   continuation.
+
+The strict sequence remains PLAN → test-only RED → smallest GREEN → REFACTOR/verify, with a pushed
+commit at each checkpoint. Execution decision is `local_critical_path`: both findings collide in
+the issue-owned source/tests and the runtime thread cap rejected a read-only design sidecar. The
+declared phase equivalent remains focused tests, complete Shepherd tests, strict pinned Pi 0.80.6
+TypeScript, offline Pi RPC, and diff/changed-path checks only.

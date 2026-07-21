@@ -149,3 +149,37 @@
 | Strict TypeScript | pass | owned source/tests and all Shepherd production source against explicit Pi 0.80.6 types |
 | Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
 | Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
+
+## Cycle 3 — Multiline Redaction And Bounded Abandoned Cleanup
+
+### PLAN
+
+- Status: captured against reviewed head `526dfec4282b442c4b32138ab036d4cc7e97b475`.
+- GSD: `scripts/gsd doctor` passes; the 69-command registry still rejects `programming-loop`, so
+  the already-recorded `manual_gsd_fallback` continues without weakening TDD.
+- Skills/policy: `gsd-programming-loop`, `javascript-testing-patterns` (including async/timer
+  reference), `typescript-advanced-types`, `architecture-patterns`,
+  `github-issue-first-delivery`, required-skills routing, issue-agent contract, universal runtime
+  loop, Pi adapter, and runtime/RLM/Pi integration guidance.
+- Orchestration: `local_critical_path`; a read-only design sidecar was attempted but rejected by the
+  runtime thread cap, while both production findings share the same issue-owned modules.
+
+### RED
+
+- Status: pending; production changes are blocked.
+- Redaction tests will prove multiline quoted scalars, YAML block scalars, `client_secret`, and
+  multiline quoted Bearer credentials at direct, prompt, tool-output, handoff-summary, and
+  handoff-finding boundaries, plus byte-identical ambiguous prose controls.
+- Lifecycle tests will separately hang late-session `abort()` and `waitForIdle()` after creation
+  abandonment, then require bounded single disposal, quarantine rejection on subsequent dispatch,
+  zero prompt calls, no duplicate cleanup, and no unhandled rejection.
+
+### GREEN
+
+- Status: blocked on committed RED evidence.
+
+### REFACTOR / VERIFY
+
+- Status: blocked on GREEN.
+- No Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, or review-bot
+  command is permitted in this lane.
