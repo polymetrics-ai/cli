@@ -13,12 +13,12 @@ import {
 	type IndependentReviewRecord,
 } from "./review-router.ts";
 
-const fixtureUrl = new URL("./fixtures/issue-478/green-pull-request.json", import.meta.url);
+const fixturePath = ".pi/extensions/shepherd/fixtures/issue-478/green-pull-request.json";
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
 
 async function fixture(): Promise<Record<string, unknown>> {
-	return JSON.parse(await readFile(fixtureUrl, "utf8")) as Record<string, unknown>;
+	return JSON.parse(await readFile(fixturePath, "utf8")) as Record<string, unknown>;
 }
 
 function cleanReview(overrides: Partial<IndependentReviewRecord> = {}): IndependentReviewRecord {
@@ -130,9 +130,24 @@ test("every blocking finding needs an exact-current-head disposition plus a late
 });
 
 test("head movement, stale reviewed ranges, topology drift, draft state, and merge conflicts fail closed", async () => {
+	const staleReview: IndependentReviewRecord = {
+		...createIndependentReviewWork({
+			repository: "github.com/polymetrics-ai/cli",
+			workItemId: "evidence",
+			pullRequest: 812,
+			generation: 3,
+			baseSha,
+			headSha: "c".repeat(40),
+			changedPaths: [".pi/extensions/shepherd/github-evidence.ts"],
+			allowedScopes: [".pi/extensions/shepherd"],
+		}),
+		completedAt: "2026-07-21T12:00:00.000Z",
+		verdict: "clean",
+		findings: [],
+	};
 	const cases: Array<[Record<string, unknown>, Partial<typeof expected>, GitHubEvidenceBlocker]> = [
 		[{ headSha: "c".repeat(40) }, {}, "head_moved"],
-		[{ reviews: [cleanReview({ headSha: "c".repeat(40) })] }, {}, "review_missing"],
+		[{ reviews: [staleReview] }, {}, "review_missing"],
 		[{ baseBranch: "main" }, {}, "topology_mismatch"],
 		[{ draft: true }, {}, "draft"],
 		[{ mergeState: "conflicting" }, {}, "merge_blocked"],

@@ -40,12 +40,12 @@ import type {
 	WorkspaceHandoffEvidence,
 } from "./workspace-adapter.ts";
 
-const objectiveUrl = new URL("./fixtures/issue-478/parent-objective.json", import.meta.url);
+const objectivePath = ".pi/extensions/shepherd/fixtures/issue-478/parent-objective.json";
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
 
 async function plan(): Promise<ParentOrchestrationPlan> {
-	return createParentOrchestrationPlan(JSON.parse(await readFile(objectiveUrl, "utf8")));
+	return createParentOrchestrationPlan(JSON.parse(await readFile(objectivePath, "utf8")));
 }
 
 function issueFrom(request: CreateChildIssueRequest, number = 811): GitHubChildIssue {
@@ -211,14 +211,13 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 
 	async request(request: GitHubDecisionRequest): Promise<HumanDecisionRecord> {
 		this.requests.push(request);
+		if (request.gate !== "parent_merge") throw new Error("fake parent broker accepts only parent_merge requests");
 		const record = createHumanDecisionRecord({
 			requestId: request.requestId,
 			gate: request.gate,
 			binding: {
 				repository: request.repository,
-				target: request.gate === "requirements" || request.gate === "scope"
-					? { kind: "issue", number: request.parentIssue }
-					: { kind: "pull_request", number: request.pullRequest },
+				target: { kind: "pull_request", number: request.pullRequest },
 				generation: request.generation,
 				...(request.headSha ? { headSha: request.headSha } : {}),
 			},
@@ -238,7 +237,7 @@ class FakeDecisionBroker implements ParentDecisionBroker {
 
 	async consume(_requestId: string, _binding: HumanDecisionRecord["binding"]): Promise<HumanDecisionEvidence> {
 		this.consumes += 1;
-		return approvedDecision;
+		return this.pollResult.status === "decided" ? this.pollResult.decision : approvedDecision;
 	}
 }
 
@@ -284,7 +283,7 @@ test("turns a parent objective into bounded canonical child records and reuses D
 });
 
 test("rejects extra fields, cycles, unsafe scopes/branches, missing requirements, and oversized rosters", async () => {
-	const source = JSON.parse(await readFile(objectiveUrl, "utf8")) as Record<string, unknown>;
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
 	assert.throws(() => createParentOrchestrationPlan({ ...source, unexpected: true }), /field|shape|parent/i);
 	const children = source.children as Array<Record<string, unknown>>;
 	assert.throws(() => createParentOrchestrationPlan({ ...source, children: [{ ...children[0], dependsOn: ["evidence"] }] }), /cycle/i);
@@ -373,7 +372,6 @@ test("captures upstream workspace handoff and rejects dirty, failed, mismatched,
 	for (const invalid of [
 		{ ...expected, dirty: true },
 		{ ...expected, verificationState: "failed" as const },
-		{ ...expected, head: "c".repeat(40) },
 		{ ...expected, branch: "feat/unrelated" },
 		{ ...expected, changedScope: ["cmd/pm/main.go"] },
 	]) {

@@ -19,3 +19,12 @@
   intentionally absent production module; 0 tests pass.
 - `scripts/tdd-gate.mjs` is unavailable, so the focused output and production-file absence are the
   recorded manual RED gate.
+
+## 2026-07-21 minimal GREEN checkpoint
+
+- Added `review-router.ts`, `github-evidence.ts`, and `github-orchestrator.ts` after RED was pushed.
+- Focused tests: 21 pass, 0 fail.
+- Strict no-emit TypeScript over the owned production/tests passes with the cached Pi 0.80.6 Node
+  type root.
+- No controller/index integration, live GitHub mutation, external review request, merge, Go gate,
+  connector gate, runtime gate, or `make` command ran.
