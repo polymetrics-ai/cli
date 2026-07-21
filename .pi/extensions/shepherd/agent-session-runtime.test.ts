@@ -93,6 +93,53 @@ function handoffFor(req: RoleRunRequest, overrides: Record<string, unknown> = {}
 	});
 }
 
+function cycle7SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		outerFlow: `synthetic-${prefix}-outer-flow-475`,
+		indented: `synthetic-${prefix}-indented-475`,
+		keyOnly: `synthetic-${prefix}-key-only-475`,
+		continued: `synthetic-${prefix}-continued-475`,
+		numeric: `9475475475${String(prefix.length).padStart(2, "0")}`,
+		basic: `synthetic-${prefix}-basic-475`,
+		nonBearer: `synthetic-${prefix}-non-bearer-475`,
+		awsAlias: `synthetic-${prefix}-aws-alias-475`,
+		databaseAlias: `synthetic-${prefix}-database-alias-475`,
+		githubAlias: `synthetic-${prefix}-github-alias-475`,
+		pkcs8: `synthetic-${prefix}-pkcs8-475`,
+		unmatched: `synthetic-${prefix}-unmatched-quote-475`,
+		afterUnmatched: `synthetic-${prefix}-after-unmatched-475`,
+	};
+	return {
+		value: [
+			"{",
+			`  safe: retained, client_secret: ${markers.outerFlow} with spaces, enabled: true`,
+			"}",
+			`  token: ${markers.indented} with spaces`,
+			"client_secret:",
+			`  ${markers.keyOnly}`,
+			"  continuation",
+			"client_secret: first-segment",
+			`  ${markers.continued} with spaces`,
+			`access_token: ${markers.numeric}`,
+			`Authorization: Basic ${markers.basic}`,
+			`Authorization: ApiKey ${markers.nonBearer}`,
+			`AWS_SECRET_ACCESS_KEY=${markers.awsAlias}`,
+			`DATABASE_URL=${markers.databaseAlias}`,
+			`GITHUB_TOKEN=${markers.githubAlias}`,
+			"-----BEGIN PRIVATE KEY-----",
+			markers.pkcs8,
+			"-----END PRIVATE KEY-----",
+			`Authorization: "Basic ${markers.unmatched}`,
+			`client_secret: ${markers.afterUnmatched} with spaces`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function leakedMarkers(value: string, markers: readonly string[]): string[] {
+	return markers.filter((marker) => value.includes(marker));
+}
+
 type EventListener = (event: AgentSessionEvent) => void;
 
 class FakeSession implements RuntimeAgentSession {
@@ -250,6 +297,195 @@ async function assertRejectsWithin(
 	} finally {
 		if (timer) clearTimeout(timer);
 	}
+}
+
+type PromiseOutcome =
+	| { status: "resolved" }
+	| { status: "rejected"; reason: unknown }
+	| { status: "pending" };
+
+type RuntimeCreationResult = Awaited<ReturnType<AgentSessionRuntimeSdk["createAgentSession"]>>;
+
+function deferredValue<T>(): {
+	promise: Promise<T>;
+	resolve(value: T): void;
+	reject(reason: unknown): void;
+} {
+	let resolvePromise: ((value: T) => void) | undefined;
+	let rejectPromise: ((reason: unknown) => void) | undefined;
+	const promise = new Promise<T>((resolve, reject) => {
+		resolvePromise = resolve;
+		rejectPromise = reject;
+	});
+	return {
+		promise,
+		resolve(value) { resolvePromise?.(value); },
+		reject(reason) { rejectPromise?.(reason); },
+	};
+}
+
+async function observeSettlement(operation: Promise<unknown>, timeoutMs: number): Promise<PromiseOutcome> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const pending = new Promise<PromiseOutcome>((resolve) => {
+		timer = setTimeout(() => resolve({ status: "pending" }), timeoutMs);
+	});
+	try {
+		return await Promise.race([
+			operation.then<PromiseOutcome>(
+				() => ({ status: "resolved" }),
+				(reason: unknown) => ({ status: "rejected", reason }),
+			),
+			pending,
+		]);
+	} finally {
+		if (timer) clearTimeout(timer);
+	}
+}
+
+function rejectionMessage(outcome: PromiseOutcome): string {
+	if (outcome.status !== "rejected") return "";
+	return outcome.reason instanceof Error ? outcome.reason.message : String(outcome.reason);
+}
+
+function installDeferredCreation(
+	sdk: FakeSdk,
+	creation: ReturnType<typeof deferredValue<RuntimeCreationResult>>,
+): void {
+	sdk.createAgentSession = async (options) => {
+		sdk.options = options as unknown as Record<string, unknown>;
+		const route = options.thinkingLevel;
+		assert.ok(route === "high" || route === "xhigh");
+		sdk.session.thinkingLevel = route;
+		sdk.session.activeTools = [...(options.tools as string[])];
+		return await creation.promise;
+	};
+}
+
+async function beginAbandonedCreation(laneId: string): Promise<{
+	creation: ReturnType<typeof deferredValue<RuntimeCreationResult>>;
+	h: ReturnType<typeof runtime>;
+	req: RoleRunRequest;
+	validResult: RuntimeCreationResult;
+}> {
+	const sdk = new FakeSdk();
+	const creation = deferredValue<RuntimeCreationResult>();
+	installDeferredCreation(sdk, creation);
+	const h = runtime(sdk, { cleanupTimeoutMs: 20 });
+	const req = request({
+		timeoutMs: 8,
+		binding: { ...request().binding, laneId },
+	});
+	const runPromise = h.runtime.run(req);
+	await waitUntil(() => sdk.options !== undefined);
+	await assert.rejects(runPromise, /timed out|deadline|cleanup|settlement/i);
+	return {
+		creation,
+		h,
+		req,
+		validResult: {
+			session: sdk.session,
+			extensionsResult: { extensions: [], errors: [] },
+		},
+	};
+}
+
+function captureLongTimers(minimumDelayMs = 30_000): {
+	referenced(): number;
+	restoreAndClear(): void;
+} {
+	const originalSetTimeout = globalThis.setTimeout;
+	const originalClearTimeout = globalThis.clearTimeout;
+	const captured = new Set<ReturnType<typeof setTimeout>>();
+	const cleared = new Set<ReturnType<typeof setTimeout>>();
+	globalThis.setTimeout = ((...args: Parameters<typeof setTimeout>) => {
+		const handle = originalSetTimeout(...args);
+		if (typeof args[1] === "number" && args[1] >= minimumDelayMs) captured.add(handle);
+		return handle;
+	}) as typeof setTimeout;
+	globalThis.clearTimeout = ((...args: Parameters<typeof clearTimeout>) => {
+		const handle = args[0] as ReturnType<typeof setTimeout> | undefined;
+		if (handle && captured.has(handle)) cleared.add(handle);
+		return originalClearTimeout(...args);
+	}) as typeof clearTimeout;
+	return {
+		referenced() {
+			return [...captured].filter((handle) => {
+				if (cleared.has(handle)) return false;
+				const timer = handle as ReturnType<typeof setTimeout> & { hasRef?: () => boolean };
+				return typeof timer.hasRef !== "function" || timer.hasRef();
+			}).length;
+		},
+		restoreAndClear() {
+			globalThis.setTimeout = originalSetTimeout;
+			globalThis.clearTimeout = originalClearTimeout;
+			for (const handle of captured) originalClearTimeout(handle);
+		},
+	};
+}
+
+async function assertThrowingRequestSignalIsExceptionSafe(hook: "add" | "remove"): Promise<void> {
+	const sdk = new FakeSdk();
+	const h = runtime(sdk);
+	const req = request({ timeoutMs: 60_000 });
+	sdk.session.output = handoffFor(req);
+	const firstSession = sdk.session;
+	const signal = new AbortController().signal;
+	const listenerError = new Error(`synthetic signal ${hook} failure`);
+	Object.defineProperty(signal, hook === "add" ? "addEventListener" : "removeEventListener", {
+		configurable: true,
+		value() { throw listenerError; },
+	});
+	const timers = captureLongTimers();
+	const unhandled: unknown[] = [];
+	const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+	process.on("unhandledRejection", onUnhandled);
+	let runOutcome: PromiseOutcome = { status: "pending" };
+	let retryOutcome: PromiseOutcome = { status: "pending" };
+	let closeOutcome: PromiseOutcome = { status: "pending" };
+	let referencedTimers = -1;
+	try {
+		runOutcome = await observeSettlement(h.runtime.run(request({ ...req, signal })), 100);
+		const retry = request({
+			binding: {
+				...req.binding,
+				runId: `retry-${hook}`,
+				laneId: `retry-${hook}`,
+			},
+		});
+		sdk.session = new FakeSession();
+		sdk.session.output = handoffFor(retry);
+		retryOutcome = await observeSettlement(h.runtime.run(retry), 100);
+		closeOutcome = await observeSettlement(h.runtime.close(), 50);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+		referencedTimers = timers.referenced();
+	} finally {
+		process.off("unhandledRejection", onUnhandled);
+		timers.restoreAndClear();
+	}
+
+	assert.deepEqual({
+		runStatus: runOutcome.status,
+		runHasListenerError: rejectionMessage(runOutcome).includes(listenerError.message),
+		retryStatus: retryOutcome.status,
+		closeStatus: closeOutcome.status,
+		referencedTimers,
+		firstPromptCalls: firstSession.promptCalls,
+		firstAbortCalls: firstSession.abortCalls,
+		firstWaitCalls: firstSession.waitCalls,
+		firstDisposeCalls: firstSession.disposeCalls,
+		unhandled: unhandled.length,
+	}, {
+		runStatus: "rejected",
+		runHasListenerError: true,
+		retryStatus: "resolved",
+		closeStatus: "resolved",
+		referencedTimers: 0,
+		firstPromptCalls: hook === "add" ? 0 : 1,
+		firstAbortCalls: 0,
+		firstWaitCalls: hook === "add" ? 0 : 1,
+		firstDisposeCalls: hook === "add" ? 0 : 1,
+		unhandled: 0,
+	});
 }
 
 type ForegroundCleanupTiming = "cleanup-grace" | "claimed-before-cancel";
@@ -487,6 +723,18 @@ test("prompt injection remains untrusted data and cannot expand issue, branch, w
 	assert.equal(JSON.stringify(h.sdk.options).includes("gpt-5.5"), false);
 });
 
+test("cycle 7 serialized prompts apply the complete structured secret vocabulary", async () => {
+	const payload = cycle7SecretPayload("prompt");
+	const h = runtime();
+	const req = request({ task: payload.value, context: [payload.value] });
+	h.sdk.session.output = handoffFor(req);
+	await h.runtime.run(req);
+
+	const serializedPrompts = `${String(h.sdk.loaderOptions?.systemPrompt)}\n${h.sdk.session.lastPrompt}`;
+	assert.deepEqual(leakedMarkers(serializedPrompts, payload.markers), []);
+	assert.match(serializedPrompts, /\[REDACTED\]/);
+});
+
 test("runtime rejects caller route/tool/authority drift and unavailable or fallback models", async () => {
 	for (const injected of [
 		{ provider: "openai", model: "gpt-5.5", thinking: "low" },
@@ -592,6 +840,25 @@ test("handoff is closed, bounded, redacted, and bound to run/generation/lane/hea
 	assert.match(serialized, /\[REDACTED\]/);
 });
 
+test("cycle 7 handoff summary and findings apply the complete structured secret vocabulary", async () => {
+	const summaryPayload = cycle7SecretPayload("handoff-summary");
+	const findingPayload = cycle7SecretPayload("handoff-finding");
+	const h = runtime();
+	const req = request();
+	h.sdk.session.output = handoffFor(req, {
+		summary: summaryPayload.value,
+		findings: [findingPayload.value],
+	});
+
+	const result = await h.runtime.run(req);
+	const serialized = JSON.stringify(result);
+	assert.deepEqual(leakedMarkers(serialized, [
+		...summaryPayload.markers,
+		...findingPayload.markers,
+	]), []);
+	assert.match(serialized, /\[REDACTED\]/);
+});
+
 test("explicit abort, close, and parent shutdown race but abort and join each session exactly once", async () => {
 	for (const terminate of [
 		async (runtime: ShepherdAgentSessionRuntime, runId: string) => {
@@ -627,6 +894,167 @@ test("explicit abort, close, and parent shutdown race but abort and join each se
 	assert.equal(h.sdk.session.abortCalls, 1);
 	assert.equal(h.sdk.session.waitCalls, 1);
 	assert.equal(h.sdk.session.disposeCalls, 1);
+});
+
+test("cycle 7 signal-listener attachment failure releases the admitted run and deadline timer", async () => {
+	await assertThrowingRequestSignalIsExceptionSafe("add");
+});
+
+test("cycle 7 signal-listener removal failure cannot skip finalization or close settlement", async () => {
+	await assertThrowingRequestSignalIsExceptionSafe("remove");
+});
+
+test("cycle 7 close waits for an abandoned creation to resolve and finish owned cleanup", async () => {
+	const unhandled: unknown[] = [];
+	const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+	process.on("unhandledRejection", onUnhandled);
+	try {
+		const { creation, h, validResult } = await beginAbandonedCreation("cycle-7-close-late-resolve");
+		const closePromise = h.runtime.close();
+		const beforeResolution = await observeSettlement(closePromise, 5);
+		creation.resolve(validResult);
+		const terminal = await observeSettlement(closePromise, 100);
+		await waitUntil(() => h.sdk.session.disposeCalls === 1);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+
+		assert.deepEqual({
+			beforeResolution: beforeResolution.status,
+			terminal: terminal.status,
+			promptCalls: h.sdk.session.promptCalls,
+			abortCalls: h.sdk.session.abortCalls,
+			waitCalls: h.sdk.session.waitCalls,
+			disposeCalls: h.sdk.session.disposeCalls,
+			unhandled: unhandled.length,
+		}, {
+			beforeResolution: "pending",
+			terminal: "resolved",
+			promptCalls: 0,
+			abortCalls: 1,
+			waitCalls: 1,
+			disposeCalls: 1,
+			unhandled: 0,
+		});
+	} finally {
+		process.off("unhandledRejection", onUnhandled);
+	}
+});
+
+test("cycle 7 close waits for an abandoned creation to reject before succeeding", async () => {
+	const unhandled: unknown[] = [];
+	const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+	process.on("unhandledRejection", onUnhandled);
+	try {
+		const { creation, h } = await beginAbandonedCreation("cycle-7-close-late-reject");
+		const closePromise = h.runtime.close();
+		const beforeRejection = await observeSettlement(closePromise, 5);
+		creation.reject(new Error("synthetic late creation rejection"));
+		const terminal = await observeSettlement(closePromise, 100);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+
+		assert.deepEqual({
+			beforeRejection: beforeRejection.status,
+			terminal: terminal.status,
+			promptCalls: h.sdk.session.promptCalls,
+			abortCalls: h.sdk.session.abortCalls,
+			waitCalls: h.sdk.session.waitCalls,
+			disposeCalls: h.sdk.session.disposeCalls,
+			unhandled: unhandled.length,
+		}, {
+			beforeRejection: "pending",
+			terminal: "resolved",
+			promptCalls: 0,
+			abortCalls: 0,
+			waitCalls: 0,
+			disposeCalls: 0,
+			unhandled: 0,
+		});
+	} finally {
+		process.off("unhandledRejection", onUnhandled);
+	}
+});
+
+test("cycle 7 close bounds and quarantines an abandoned creation that never settles", async () => {
+	const unhandled: unknown[] = [];
+	const onUnhandled = (reason: unknown) => { unhandled.push(reason); };
+	process.on("unhandledRejection", onUnhandled);
+	try {
+		const { h, req } = await beginAbandonedCreation("cycle-7-close-hung-create");
+		const closeOutcome = await observeSettlement(h.runtime.close(), 100);
+		const laterDispatch = await observeSettlement(h.runtime.run(request({
+			binding: {
+				...req.binding,
+				runId: "after-hung-create",
+				laneId: "after-hung-create",
+			},
+		})), 50);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+
+		assert.deepEqual({
+			closeStatus: closeOutcome.status,
+			closeQuarantined: /creation|pending|cleanup|quarantined/i.test(rejectionMessage(closeOutcome)),
+			dispatchStatus: laterDispatch.status,
+			dispatchQuarantined: /quarantined/i.test(rejectionMessage(laterDispatch)),
+			promptCalls: h.sdk.session.promptCalls,
+			abortCalls: h.sdk.session.abortCalls,
+			waitCalls: h.sdk.session.waitCalls,
+			disposeCalls: h.sdk.session.disposeCalls,
+			unhandled: unhandled.length,
+		}, {
+			closeStatus: "rejected",
+			closeQuarantined: true,
+			dispatchStatus: "rejected",
+			dispatchQuarantined: true,
+			promptCalls: 0,
+			abortCalls: 0,
+			waitCalls: 0,
+			disposeCalls: 0,
+			unhandled: 0,
+		});
+	} finally {
+		process.off("unhandledRejection", onUnhandled);
+	}
+});
+
+test("cycle 7 malformed late creation fulfillment is consumed and quarantines close", async () => {
+	const unhandled: unknown[] = [];
+	const originalEmit = process.emit;
+	process.emit = ((event: string | symbol, ...args: unknown[]) => {
+		if (event === "unhandledRejection") {
+			unhandled.push(args[0]);
+			return true;
+		}
+		return Reflect.apply(originalEmit, process, [event, ...args]);
+	}) as typeof process.emit;
+	try {
+		const { creation, h } = await beginAbandonedCreation("cycle-7-malformed-late-create");
+		const closePromise = h.runtime.close();
+		const beforeFulfillment = await observeSettlement(closePromise, 5);
+		creation.resolve(undefined as unknown as RuntimeCreationResult);
+		const terminal = await observeSettlement(closePromise, 100);
+		await new Promise<void>((resolve) => setImmediate(resolve));
+
+		assert.deepEqual({
+			beforeFulfillment: beforeFulfillment.status,
+			terminal: terminal.status,
+			closeQuarantined: /invalid|creation|cleanup|quarantined/i.test(rejectionMessage(terminal)),
+			promptCalls: h.sdk.session.promptCalls,
+			abortCalls: h.sdk.session.abortCalls,
+			waitCalls: h.sdk.session.waitCalls,
+			disposeCalls: h.sdk.session.disposeCalls,
+			unhandled: unhandled.length,
+		}, {
+			beforeFulfillment: "pending",
+			terminal: "rejected",
+			closeQuarantined: true,
+			promptCalls: 0,
+			abortCalls: 0,
+			waitCalls: 0,
+			disposeCalls: 0,
+			unhandled: 0,
+		});
+	} finally {
+		process.emit = originalEmit;
+	}
 });
 
 test("close during child settlement rejects already-valid late evidence and coalesces join", async () => {

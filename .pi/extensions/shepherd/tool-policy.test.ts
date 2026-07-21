@@ -78,6 +78,53 @@ function policyInput(readOnly: boolean, readOutput?: string) {
 	};
 }
 
+function cycle7SecretPayload(prefix: string): { value: string; markers: string[] } {
+	const markers = {
+		outerFlow: `synthetic-${prefix}-outer-flow-475`,
+		indented: `synthetic-${prefix}-indented-475`,
+		keyOnly: `synthetic-${prefix}-key-only-475`,
+		continued: `synthetic-${prefix}-continued-475`,
+		numeric: `9475475475${String(prefix.length).padStart(2, "0")}`,
+		basic: `synthetic-${prefix}-basic-475`,
+		nonBearer: `synthetic-${prefix}-non-bearer-475`,
+		awsAlias: `synthetic-${prefix}-aws-alias-475`,
+		databaseAlias: `synthetic-${prefix}-database-alias-475`,
+		githubAlias: `synthetic-${prefix}-github-alias-475`,
+		pkcs8: `synthetic-${prefix}-pkcs8-475`,
+		unmatched: `synthetic-${prefix}-unmatched-quote-475`,
+		afterUnmatched: `synthetic-${prefix}-after-unmatched-475`,
+	};
+	return {
+		value: [
+			"{",
+			`  safe: retained, client_secret: ${markers.outerFlow} with spaces, enabled: true`,
+			"}",
+			`  token: ${markers.indented} with spaces`,
+			"client_secret:",
+			`  ${markers.keyOnly}`,
+			"  continuation",
+			"client_secret: first-segment",
+			`  ${markers.continued} with spaces`,
+			`access_token: ${markers.numeric}`,
+			`Authorization: Basic ${markers.basic}`,
+			`Authorization: ApiKey ${markers.nonBearer}`,
+			`AWS_SECRET_ACCESS_KEY=${markers.awsAlias}`,
+			`DATABASE_URL=${markers.databaseAlias}`,
+			`GITHUB_TOKEN=${markers.githubAlias}`,
+			"-----BEGIN PRIVATE KEY-----",
+			markers.pkcs8,
+			"-----END PRIVATE KEY-----",
+			`Authorization: "Basic ${markers.unmatched}`,
+			`client_secret: ${markers.afterUnmatched} with spaces`,
+		].join("\n"),
+		markers: Object.values(markers),
+	};
+}
+
+function leakedMarkers(value: string, markers: readonly string[]): string[] {
+	return markers.filter((marker) => value.includes(marker));
+}
+
 test("redaction covers single-line and multiline structured secret forms", () => {
 	const probes = [
 		{ secret: "single-json", value: (secret: string) => `"token": "${secret}"` },
@@ -187,6 +234,68 @@ test("redaction line-boundary discovery remains near-linear for dense single-lin
 	}
 });
 
+test("cycle 7 direct redaction covers multiline flow, YAML continuation, aliases, authorization, and PKCS8", () => {
+	const payload = cycle7SecretPayload("direct");
+	const redacted = redactSensitiveText(payload.value);
+
+	assert.deepEqual(leakedMarkers(redacted, payload.markers), []);
+	assert.match(redacted, /\[REDACTED\]/);
+});
+
+test("cycle 7 preserves a harmless structurally quoted multiline scalar byte-identically", () => {
+	const control = [
+		"message: \"The following lines document configuration vocabulary:",
+		"  client_secret: names an OAuth field without carrying a value.",
+		"  Authorization: Basic names an authentication scheme.\"",
+		"safe: retained",
+	].join("\n");
+
+	assert.equal(redactSensitiveText(control), control);
+});
+
+test("cycle 7 padded-flow diagnostics account for all scanner work near-linearly", () => {
+	type ScanMetrics = {
+		lineBoundaryVisits: number;
+		keyStartVisits: number;
+		totalCharacterVisits: number;
+	};
+	type InstrumentedRedactor = (value: string, metrics: ScanMetrics) => string;
+	const instrumentedRedactor = redactSensitiveText as unknown as InstrumentedRedactor;
+	const paddedFlow = (minimumBytes: number): string => {
+		const padding = " ".repeat(Math.floor(minimumBytes / 3));
+		const assignment = "token: synthetic-padded-flow-secret, ";
+		const assignmentCount = Math.ceil((minimumBytes - padding.length) / assignment.length);
+		return `${padding}{ ${assignment.repeat(assignmentCount)}safe: retained }`;
+	};
+	const samples = [25, 50, 100].map((kibibytes) => paddedFlow(kibibytes * 1024));
+	const observations = samples.map((value) => {
+		const metrics: ScanMetrics = {
+			lineBoundaryVisits: 0,
+			keyStartVisits: 0,
+			totalCharacterVisits: 0,
+		};
+		const redacted = instrumentedRedactor(value, metrics);
+		return { value, redacted, metrics };
+	});
+	const work = observations.map(({ metrics }) => metrics.totalCharacterVisits);
+
+	assert.deepEqual({
+		redacted: observations.every(({ redacted }) => !redacted.includes("synthetic-padded-flow-secret")),
+		metricsPresent: observations.every(({ metrics }) =>
+			metrics.lineBoundaryVisits > 0 && metrics.keyStartVisits > 0 && metrics.totalCharacterVisits > 0),
+		bounded: observations.every(({ value, metrics }) => metrics.totalCharacterVisits <= value.length * 8),
+		nearDoubling: work.slice(1).every((count, index) => {
+			const inputRatio = samples[index + 1].length / samples[index].length;
+			return count / work[index] <= inputRatio * 1.25;
+		}),
+	}, {
+		redacted: true,
+		metricsPresent: true,
+		bounded: true,
+		nearDoubling: true,
+	});
+});
+
 test("read-only policy exposes workspace reads and non-mutating typed capabilities only", async () => {
 	const input = policyInput(true);
 	const policy = createToolPolicy(input);
@@ -227,6 +336,22 @@ test("workspace reads redact multiline nested and punctuation-apostrophe sibling
 	));
 	assert.equal(result.includes(multilineSecret), false);
 	assert.equal(result.includes(apostropheSecret), false);
+	assert.match(result, /\[REDACTED\]/);
+});
+
+test("cycle 7 workspace reads apply the complete structured secret vocabulary", async () => {
+	const payload = cycle7SecretPayload("workspace");
+	const input = policyInput(true, payload.value);
+	const policy = createToolPolicy(input);
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+
+	const result = text(await read.execute(
+		"read-cycle-7",
+		{ path: ".pi/extensions/shepherd/controller.ts", offset: 0, limit: 4096 },
+		undefined,
+	));
+	assert.deepEqual(leakedMarkers(result, payload.markers), []);
 	assert.match(result, /\[REDACTED\]/);
 });
 
@@ -419,4 +544,20 @@ test("typed tool output redacts nested-flow and apostrophe-boundary siblings", a
 
 	assert.deepEqual(rendered.map((value, index) => value.includes(probes[index].secret)), [false, false, false, false]);
 	assert.deepEqual(rendered.map((value) => /\[REDACTED\]/.test(value)), [true, true, true, true]);
+});
+
+test("cycle 7 typed capability output applies the complete structured secret vocabulary", async () => {
+	const payload = cycle7SecretPayload("typed-tool");
+	const input = policyInput(false);
+	input.capabilities = [
+		capability("host_inspect", { output: payload.value }),
+		capability("host_verify", { mutates: true }),
+	];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 8 * 1024 });
+	const inspect = policy.tools.find((tool) => tool.name === "host_inspect");
+	assert.ok(inspect);
+
+	const result = text(await inspect.execute("inspect-cycle-7", { target: "owned" }, undefined));
+	assert.deepEqual(leakedMarkers(result, payload.markers), []);
+	assert.match(result, /\[REDACTED\]/);
 });
