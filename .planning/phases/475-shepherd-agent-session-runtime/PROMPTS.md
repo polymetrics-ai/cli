@@ -80,3 +80,21 @@
   all-production strict TypeScript against pinned Pi 0.80.6; explicit offline RPC; diff,
   immutable-base, and issue-owned scope checks all pass. Cycle 3 terminal evidence is superseded.
   No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.
+
+## Exact-Head Correction Cycle 5 Snapshot
+
+- Reviewed head: `e41f075a9b3bfb01d410296712740b54f943ba71` on PR #486.
+- Role/route: correction, `openai-codex/gpt-5.6-sol` with `high` reasoning.
+- Objective: eliminate rejected-reservation deadline timers and replace accumulated assignment
+  traversal exceptions with an explicit deterministic line/flow lexical state machine.
+- Required RED: duplicate long-timeout rejection must leave no referenced scope timer; nested flow
+  values and leading-apostrophe prose must not hide later secrets at direct, prompt, tool, or
+  handoff boundaries; ordinary braces/comments must remain byte-identical.
+- Architecture: reserve before scope creation; scan with monotonic line state, newline quote reset,
+  validated flow openers, comment/prose discrimination, and balanced nested delimiters.
+- Method: manual-GSD PLAN → test-only RED → smallest GREEN → REFACTOR, production locked until the
+  RED checkpoint is committed and pushed.
+- Execution decision: `local_critical_path`; a read-only architecture sidecar was attempted but the
+  runtime thread cap rejected it, and both production findings overlap this issue-owned scope.
+- Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
+- Verification status: pending Cycle 5 RED/GREEN and the declared Shepherd-only gates.

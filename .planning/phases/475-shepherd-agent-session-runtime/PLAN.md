@@ -220,3 +220,41 @@ both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-b
 issue-owned path gates pass. Two adversarial refactor probes each captured their own targeted RED
 before production support. Fresh independent exact-head review and integration remain
 parent-owned.
+
+## Exact-Head Correction Cycle 5 — `e41f075a9b3bfb01d410296712740b54f943ba71`
+
+Fresh `codex_independent` xhigh review found one lifecycle leak and three related lexical-state
+failures. Cycle 5 remains inside the same issue-owned runtime, tool-policy, tests, and phase
+artifacts; production is locked at the reviewed head until a committed test-only RED exists.
+
+1. `run()` constructs `CancellationScope` before `#reserve()`. Duplicate-key, mutating-concurrency,
+   and capacity rejection can therefore return without `finish()`, leaving a referenced deadline
+   timer. Reservation must reject before scope construction, or every rejected path must prove the
+   timer cleared/unref'ed.
+2. A sensitive flow value that is itself a mapping can skip its opening delimiter, consume the
+   nested close as the outer close, and hide a later unquoted `client_secret` sibling.
+3. A leading unmatched apostrophe in ordinary prose can carry quote state across a newline and hide
+   the next structured `client_secret` assignment.
+4. Ordinary unmatched braces and flow-shaped comments can enter flow state and change later
+   harmless assignment-like prose that must remain byte-identical.
+
+The redactor correction is an architectural replacement of the assignment traversal, not another
+global-regex or quote exception. Implement one explicit deterministic line/flow lexical state
+machine with monotonic cursors, per-line YAML quote reset, comment/prose discrimination, and a
+balanced delimiter stack when consuming nested flow values. Existing quoted, multiline, block,
+Bearer, flow, spaced-scalar, and harmless-prose tests remain mandatory. RED covers nested-flow and
+leading-apostrophe markers through direct, serialized-prompt, typed-tool-output, and handoff
+summary/finding consumers, plus byte-identical brace/comment controls. A deterministic large-input
+guard may be added only if it avoids timing-sensitive assertions.
+
+Strict sequence remains PLAN → test-only RED → smallest GREEN → REFACTOR/verify, with a pushed
+checkpoint at each stage. The declared phase equivalent remains focused tests, complete Shepherd
+tests, pinned Pi 0.80.6 strict TypeScript, offline Pi RPC, and diff/immutable-base/owned-scope only.
+No Go, connector, `make verify`, runtime-backed, live-GitHub, merge, or review-bot command is
+permitted. GSD adapter health passes while its 69-command registry still rejects
+`programming-loop`, so `manual_gsd_fallback` remains recorded. Required skills reloaded:
+`gsd-programming-loop`, `javascript-testing-patterns` and its advanced timer guidance,
+`typescript-advanced-types`, `architecture-patterns`, and `github-issue-first-delivery`, plus the
+repo routing, issue contract, universal loop, Pi-adapter, and runtime/Pi references. Execution is
+`local_critical_path`: both source findings overlap this worker's exclusive modules, and the
+attempted read-only architecture sidecar was rejected by the runtime thread cap.

@@ -1,5 +1,9 @@
 # Verification — Issue #475
 
+> Superseded pending Cycle 5 revalidation. Exact-head review at
+> `e41f075a9b3bfb01d410296712740b54f943ba71` found rejected-reservation timer ownership and
+> line/flow lexical-state failures. Cycle 4 results below remain historical evidence only.
+
 PR #486 correction Cycle 4 revalidation is complete. The independent-review findings against
 `b4061d4e1a1545b0c8810b14b510cf048385a567` are covered by PLAN checkpoint `190b0ec7`, committed
 test-only RED checkpoint `21535513`, and pass at implementation head

@@ -1,7 +1,7 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 4 complete; every declared Shepherd-only gate passes and Cycle
-3 evidence is superseded.
+Status: exact-head correction Cycle 5 planned; Cycle 4 evidence is superseded pending a fresh
+test-only RED and architectural correction.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -56,3 +56,11 @@ complete Shepherd suite passes 168/168; both strict TypeScript scopes, pinned of
 immutable-base, and issue-owned path checks pass. Parent orchestration owns fresh independent
 exact-head review and integration; this lane did not invoke Go/connectors, `make verify`, live
 GitHub, merge, or review bots.
+
+Review at `e41f075a9b3bfb01d410296712740b54f943ba71` found a referenced deadline timer can survive an
+immediate duplicate/concurrency rejection because `CancellationScope` is constructed before
+reservation. It also found that accumulated redactor traversal state mishandles nested flow values,
+leading apostrophe prose, and ordinary braces/comments. Cycle 5 replaces that traversal with an
+explicit deterministic line/flow lexical state machine and moves reservation ahead of scope
+creation. Production remains unchanged until the timer, all four redaction consumers, and
+byte-identical prose controls produce the expected committed RED.

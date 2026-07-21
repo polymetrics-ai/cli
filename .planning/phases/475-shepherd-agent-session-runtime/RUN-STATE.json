@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_4_complete",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_5_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -108,15 +108,20 @@
       "cycle": "correction_cycle_4_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 4 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_5_plan",
+      "decision": "local_critical_path",
+      "reason": "The timer and lexical-state findings overlap the issue-owned runtime/tool-policy modules; a read-only architecture sidecar was rejected by the thread cap, so record the architectural correction locally before tests."
     }
   ],
   "gates": {
-    "focusedTests": "green_31_passed_0_failed",
-    "fullShepherdTests": "green_168_passed_0_failed",
-    "strictTypeScriptPi0806": "green_focused_and_all_production",
-    "offlineRpcSmoke": "green_pm_shepherd_registered",
-    "diffCheck": "green",
-    "ownedScope": "green_immutable_base_and_issue_owned_paths",
+    "focusedTests": "pending_cycle_5_red",
+    "fullShepherdTests": "pending_cycle_5",
+    "strictTypeScriptPi0806": "pending_cycle_5",
+    "offlineRpcSmoke": "pending_cycle_5",
+    "diffCheck": "pending_cycle_5",
+    "ownedScope": "pending_cycle_5",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

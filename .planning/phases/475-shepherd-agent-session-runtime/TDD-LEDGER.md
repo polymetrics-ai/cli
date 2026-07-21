@@ -150,6 +150,50 @@
 | Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
 | Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |
 
+## Cycle 5 — Reservation Timer Ownership And Lexical State Machine
+
+### PLAN
+
+- Status: captured against reviewed head
+  `e41f075a9b3bfb01d410296712740b54f943ba71`; production remains locked until the pushed test-only
+  RED checkpoint.
+- GSD: `scripts/gsd doctor` passes; the 69-command registry still rejects `programming-loop`, so
+  the existing `manual_gsd_fallback` remains active.
+- Skills/policy reloaded: `gsd-programming-loop`, `javascript-testing-patterns` plus advanced timer
+  guidance, `typescript-advanced-types`, `architecture-patterns`,
+  `github-issue-first-delivery`, required routing, issue-agent contract, universal runtime loop,
+  Pi adapter, and runtime/Pi integration reference.
+- Orchestration: `local_critical_path`; a read-only architecture sidecar was attempted but rejected
+  by the four-thread runtime cap, while both source findings overlap this worker's owned modules.
+- Lifecycle RED instruments an immediate duplicate long-timeout rejection and requires every scope
+  timer created on that rejected path to be cleared or unref'ed. The preferred implementation
+  creates no scope until reservation succeeds.
+- Redaction RED adds nested sensitive mapping plus later unquoted sibling and leading unmatched
+  apostrophe cases at direct, serialized-prompt, typed-tool-output, and handoff summary/finding
+  boundaries. Ordinary unmatched-brace and flow-shaped-comment controls must remain byte-identical.
+- Refactor contract: replace the accumulated traversal exceptions with one explicit deterministic
+  line/flow lexical state machine using monotonic cursors, newline YAML-quote reset, balanced nested
+  delimiter consumption, and comment/prose discrimination. Preserve every earlier structured,
+  multiline, block, Bearer, flow, spaced-scalar, and harmless-prose test.
+- Expected focused command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+### RED
+
+- Status: pending test-only changes; production remains unchanged.
+
+### GREEN / REFACTOR / VERIFY
+
+- Status: blocked on committed RED evidence.
+- Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
+  pinned offline RPC, diff check, immutable base, and issue-owned paths only.
+- Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot
+  commands remain forbidden.
+
 ## Cycle 4 — Foreground Forced Disposal And Unquoted YAML Context
 
 ### PLAN
