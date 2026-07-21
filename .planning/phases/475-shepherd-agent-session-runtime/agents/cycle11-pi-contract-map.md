@@ -1,6 +1,6 @@
 # Cycle 11 Pi Contract Map — Prompt Snapshot
 
-Status: running at PLAN checkpoint.
+Status: completed read-only after PLAN checkpoint; no repository changes made by the explorer.
 
 Read-only reconnaissance in `/tmp/shepherd-475-cycle8`. Do not edit, commit, or revert anything.
 Inspect the explicit installed Pi 0.80.6 package and issue-owned runtime/test files. Map:
@@ -13,3 +13,5 @@ Inspect the explicit installed Pi 0.80.6 package and issue-owned runtime/test fi
    shapes required for stateful update accounting and complete terminal DTO capture.
 
 Return implementation-ready source paths and pitfalls. No writes, secrets, or external actions.
+
+Structured result: `../traces/cycle11-pi-contract-map-trace.md`.
