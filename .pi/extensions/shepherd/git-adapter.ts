@@ -489,6 +489,12 @@ function parseStatus(raw: Buffer): GitStatusEvidence {
 	return { clean: false, entries };
 }
 
+function statusPaths(status: GitStatusEvidence): string[] {
+	return [...new Set(status.entries.flatMap(
+		(entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])],
+	))].sort();
+}
+
 function parseWorktrees(raw: string): GitWorktreeEvidence[] {
 	const records: GitWorktreeEvidence[] = [];
 	let current: GitWorktreeEvidence | undefined;
@@ -1070,8 +1076,7 @@ export class GitAdapter {
 			if (previousHead !== request.expectedHead) throw new GitAdapterError("stale expected head; commit was not attempted");
 			await this.#assertHistoryWithinScopes(actual, state.baseHead, previousHead, state.allowedScopes);
 			const status = await this.status(actual);
-			const outside = status.entries.flatMap((entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])])
-				.filter((path) => !pathWithinScope(path, scopes));
+			const outside = statusPaths(status).filter((path) => !pathWithinScope(path, scopes));
 			if (outside.length > 0) throw new GitAdapterError(`dirty or staged state exists outside declared scopes: ${outside.sort().join(", ")}`);
 			if (status.clean) return { committed: false, previousHead, head: previousHead };
 			await this.#assertLeaseOwnedForMutation(state);
@@ -1129,7 +1134,7 @@ export class GitAdapter {
 			const status = await this.status(actual);
 			const changedPaths = [...new Set([
 				...committedPaths,
-				...status.entries.flatMap((entry) => [entry.path, ...(entry.originalPath ? [entry.originalPath] : [])]),
+				...statusPaths(status),
 			])].sort();
 			const outside = changedPaths.filter((path) => !pathWithinScope(path, state.allowedScopes));
 			if (outside.length > 0) {
