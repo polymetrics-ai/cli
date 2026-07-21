@@ -2,12 +2,37 @@ import { randomUUID } from "node:crypto";
 import { chmod, mkdir, open, readFile, rename, rm, stat } from "node:fs/promises";
 import { isAbsolute, join } from "node:path";
 
-import type { ShepherdRunState } from "./domain.ts";
+import type { ShepherdLaneState, ShepherdRunState } from "./domain.ts";
 
 const MAX_STATE_BYTES = 1_048_576;
 const DEFAULT_SUMMARY_LENGTH = 2_048;
 const allowedRunStatuses = new Set(["pending", "running", "completed", "failed", "interrupted", "stopped", "halted"]);
 const allowedLaneStatuses = new Set(["pending", "running", "succeeded", "failed", "interrupted", "stopped", "halted"]);
+const allowedRunFields = new Set([
+	"schemaVersion",
+	"issue",
+	"pr",
+	"runId",
+	"generation",
+	"status",
+	"candidateHead",
+	"validationNonce",
+	"createdAt",
+	"updatedAt",
+	"lanes",
+	"score",
+	"hardGates",
+]);
+const allowedLaneFields = new Set([
+	"id",
+	"mutating",
+	"dependsOn",
+	"role",
+	"status",
+	"summary",
+	"score",
+	"hardGates",
+]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -18,11 +43,28 @@ function validIssue(issue: unknown): issue is number {
 }
 
 function validBoundedText(value: unknown, maximum: number): value is string {
-	return typeof value === "string" && value.length > 0 && value.length <= maximum && !/[\u0000-\u001f\u007f]/.test(value);
+	return typeof value === "string" && value.length > 0 && value.length <= maximum && !/[\u0000-\u001f\u007f-\u009f]/.test(value);
 }
 
-function validateState(value: unknown, expectedIssue: number): asserts value is ShepherdRunState {
+function assertOnlyAllowedFields(value: Record<string, unknown>, allowed: ReadonlySet<string>, description: string): void {
+	for (const key of Object.keys(value)) {
+		if (!allowed.has(key)) throw new Error(`invalid Shepherd state: unknown ${description} field ${JSON.stringify(key)}`);
+	}
+}
+
+function validScore(value: unknown): value is number {
+	return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 1;
+}
+
+function validateHardGates(value: unknown, description: string): void {
+	if (!Array.isArray(value) || value.length > 64 || value.some((gate) => !validBoundedText(gate, 128))) {
+		throw new Error(`invalid Shepherd state: invalid ${description} hard gates`);
+	}
+}
+
+function validateState(value: unknown, expectedIssue: number, allowUnknownFields = false): asserts value is ShepherdRunState {
 	if (!isRecord(value)) throw new Error("invalid Shepherd state: expected an object");
+	if (!allowUnknownFields) assertOnlyAllowedFields(value, allowedRunFields, "state");
 	if (value.issue !== expectedIssue) throw new Error("Shepherd state issue identity mismatch");
 	if (value.schemaVersion !== 1) throw new Error("invalid Shepherd state: unsupported schema version");
 	if (!validIssue(value.issue)) throw new Error("invalid Shepherd state: invalid issue");
@@ -41,20 +83,39 @@ function validateState(value: unknown, expectedIssue: number): asserts value is 
 	if (!validBoundedText(value.createdAt, 128) || !validBoundedText(value.updatedAt, 128)) {
 		throw new Error("invalid Shepherd state: invalid timestamps");
 	}
+	if (value.score !== undefined && !validScore(value.score)) {
+		throw new Error("invalid Shepherd state: invalid score");
+	}
+	if (value.hardGates !== undefined) validateHardGates(value.hardGates, "run");
 	if (!Array.isArray(value.lanes) || value.lanes.length > 64) throw new Error("invalid Shepherd state: invalid lanes");
 
 	const laneIds = new Set<string>();
 	for (const lane of value.lanes) {
-		if (!isRecord(lane) || !validBoundedText(lane.id, 128) || laneIds.has(lane.id)) {
+		if (!isRecord(lane)) throw new Error("invalid Shepherd state: invalid lane");
+		if (!allowUnknownFields) assertOnlyAllowedFields(lane, allowedLaneFields, "lane");
+		if (!validBoundedText(lane.id, 128) || laneIds.has(lane.id)) {
 			throw new Error("invalid Shepherd state: invalid lane identity");
 		}
 		laneIds.add(lane.id);
+		if (typeof lane.mutating !== "boolean") throw new Error("invalid Shepherd state: invalid lane mutation flag");
+		if (!validBoundedText(lane.role, 256)) throw new Error("invalid Shepherd state: invalid lane role");
 		if (typeof lane.status !== "string" || !allowedLaneStatuses.has(lane.status)) {
 			throw new Error("invalid Shepherd state: invalid lane status");
 		}
-		if (lane.dependsOn !== undefined && (!Array.isArray(lane.dependsOn) || lane.dependsOn.some((item) => typeof item !== "string"))) {
+		if (!Array.isArray(lane.dependsOn) || lane.dependsOn.length > 64 || lane.dependsOn.some((item) => !validBoundedText(item, 128))) {
 			throw new Error("invalid Shepherd state: invalid lane dependencies");
 		}
+		if (lane.summary !== undefined && (
+			typeof lane.summary !== "string" ||
+			lane.summary.length > (allowUnknownFields ? MAX_STATE_BYTES : DEFAULT_SUMMARY_LENGTH) ||
+			(!allowUnknownFields && /[\u0000-\u001f\u007f-\u009f]/.test(lane.summary))
+		)) {
+			throw new Error("invalid Shepherd state: invalid lane summary");
+		}
+		if (lane.score !== undefined && !validScore(lane.score)) {
+			throw new Error("invalid Shepherd state: invalid lane score");
+		}
+		if (lane.hardGates !== undefined) validateHardGates(lane.hardGates, "lane");
 	}
 }
 
@@ -74,15 +135,46 @@ export function sanitizeSummary(input: string, maximumLength = DEFAULT_SUMMARY_L
 	}
 	const safe = redactSecrets(input)
 		.replace(/\u001b\[[0-?]*[ -/]*[@-~]/g, "")
-		.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, " ");
+		.replace(/(?:\r\n|[\r\n\t\u2028\u2029])+/g, " ")
+		.replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/g, " ");
 	return safe.slice(0, maximumLength);
 }
 
+function projectLane(lane: ShepherdLaneState): ShepherdLaneState {
+	const persisted: ShepherdLaneState = {
+		id: lane.id,
+		mutating: lane.mutating,
+		dependsOn: [...lane.dependsOn],
+		role: lane.role,
+		status: lane.status,
+	};
+	if (lane.summary !== undefined) persisted.summary = sanitizeSummary(lane.summary);
+	if (lane.score !== undefined) persisted.score = lane.score;
+	if (lane.hardGates !== undefined) persisted.hardGates = [...lane.hardGates];
+	return persisted;
+}
+
+function projectState(state: ShepherdRunState): ShepherdRunState {
+	const persisted: ShepherdRunState = {
+		schemaVersion: state.schemaVersion,
+		issue: state.issue,
+		runId: state.runId,
+		generation: state.generation,
+		status: state.status,
+		candidateHead: state.candidateHead,
+		validationNonce: state.validationNonce,
+		createdAt: state.createdAt,
+		updatedAt: state.updatedAt,
+		lanes: state.lanes.map(projectLane),
+	};
+	if (state.pr !== undefined) persisted.pr = state.pr;
+	if (state.score !== undefined) persisted.score = state.score;
+	if (state.hardGates !== undefined) persisted.hardGates = [...state.hardGates];
+	return persisted;
+}
+
 function serializedState(state: ShepherdRunState): string {
-	return `${JSON.stringify(state, (key, value) => {
-		if (key === "summary" && typeof value === "string") return sanitizeSummary(value);
-		return value;
-	}, 2)}\n`;
+	return `${JSON.stringify(state, null, 2)}\n`;
 }
 
 export class FileStateStore {
@@ -125,13 +217,15 @@ export class FileStateStore {
 
 	async save(state: ShepherdRunState): Promise<void> {
 		if (!validIssue(state?.issue)) throw new Error("invalid Shepherd state: invalid issue");
-		validateState(state, state.issue);
+		validateState(state, state.issue, true);
+		const persisted = projectState(state);
+		validateState(persisted, persisted.issue);
 		await mkdir(this.root, { recursive: true, mode: 0o700 });
 		await chmod(this.root, 0o700);
 
 		const destination = this.pathFor(state.issue);
 		const temporary = join(this.root, `.issue-${state.issue}.${process.pid}.${randomUUID()}.tmp`);
-		const payload = serializedState(state);
+		const payload = serializedState(persisted);
 		if (Buffer.byteLength(payload, "utf8") > MAX_STATE_BYTES) {
 			throw new Error("invalid Shepherd state: serialized state is too large");
 		}
