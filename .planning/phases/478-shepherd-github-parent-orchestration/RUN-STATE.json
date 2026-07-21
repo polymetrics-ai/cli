@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "2.0",
+  "phase": "478-shepherd-github-parent-orchestration",
+  "issue": 478,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "status": "in_progress",
+  "reason": "Plan-first checkpoint prepared; test-only RED is next.",
+  "details": {
+    "branch": "feat/478-shepherd-github-parent-orchestration",
+    "baseBranch": "feat/471-pi-agent-session-shepherd",
+    "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
+    "adapter": "manual_gsd_fallback",
+    "modelPolicy": "openai-codex/gpt-5.6-sol:high",
+    "verificationPassed": false,
+    "reviewCoveragePassed": false,
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "The runtime agent-thread limit rejected read-only delegation; this isolated issue worker owns one ordered RED-before-GREEN contract across the assigned modules."
+      }
+    ],
+    "humanGates": [
+      "new_dependency",
+      "auth_scope_or_secret_access",
+      "live_github_mutation",
+      "policy_exception",
+      "quality_gate_reduction",
+      "parent_ready",
+      "exact_head_parent_merge",
+      "main_branch_merge"
+    ]
+  },
+  "updatedAt": "2026-07-21T16:41:38.000Z"
+}
