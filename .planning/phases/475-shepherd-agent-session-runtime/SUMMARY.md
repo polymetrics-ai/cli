@@ -1,7 +1,6 @@
 # Summary — Issue #475
 
-Status: exact-head correction Cycle 3 GREEN; full revalidation pending and Cycle 2 verification is
-superseded.
+Status: exact-head correction Cycle 3 complete; ready for fresh independent parent review.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -37,5 +36,8 @@ found that abandoned-session cleanup can wait forever on abort or idle, preventi
 and quarantine. The Cycle 3 focused suite now passes 27/27: structured multiline forms are redacted,
 ambiguous multiword prose is byte-identical, and independently hung abort/wait hooks reach one
 forced disposal plus quarantine within the shared cleanup bound without unhandled rejection. The
-complete Shepherd, strict production TypeScript, pinned offline RPC, and diff/scope gates remain
-pending under the same narrow verification boundary.
+complete Shepherd suite passes 164/164; focused and all-production strict TypeScript pass against
+the explicit Pi 0.80.6 installation; pinned offline RPC registers `pm-shepherd`; and diff,
+immutable-base, and issue-owned scope checks pass. Parent orchestration owns fresh exact-head review
+and integration; this lane did not invoke Go/connectors, `make verify`, live GitHub, merge, or review
+bots.

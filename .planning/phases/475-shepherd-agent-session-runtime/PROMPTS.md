@@ -50,5 +50,7 @@
   covers multiline credential forms without changing ambiguous multiword prose; detached late
   cleanup shares one deadline, forces coalesced disposal, consumes rejections, and quarantines on
   timeout/failure. Focused strict TypeScript also passes against explicit Pi 0.80.6 types.
-- Verification status: REFACTOR and the complete Cycle 3 gate set remain pending; Cycle 2 terminal
-  evidence is superseded.
+- Verification result: complete at implementation head `d499e721a85abbe1a1d1be7fb0069649927c923c`
+  — focused 27/27; full Shepherd 164/164; focused and all-production strict TypeScript against
+  pinned Pi 0.80.6; explicit offline RPC; diff, immutable-base, and owned-scope checks all pass.
+  No Go, connector, `make verify`, live-GitHub, merge, or review-bot gate was run.

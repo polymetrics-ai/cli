@@ -173,3 +173,9 @@ commit at each checkpoint. Execution decision is `local_critical_path`: both fin
 the issue-owned source/tests and the runtime thread cap rejected a read-only design sidecar. The
 declared phase equivalent remains focused tests, complete Shepherd tests, strict pinned Pi 0.80.6
 TypeScript, offline Pi RPC, and diff/changed-path checks only.
+
+Cycle 3 result: PLAN was pushed at `896b30ae`; test-only RED was pushed at `9c4ed5fd` with 20 passes
+and 7 expected failures; GREEN/refactor was pushed at
+`d499e721a85abbe1a1d1be7fb0069649927c923c`. Focused 27/27 and complete Shepherd 164/164 tests,
+both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, and issue-owned
+path gates pass. Fresh independent exact-head review and integration remain parent-owned.

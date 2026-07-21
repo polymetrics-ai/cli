@@ -204,7 +204,17 @@
 
 ### REFACTOR / VERIFY
 
-- Status: pending the complete declared gate set.
+- Status: captured at implementation head `d499e721a85abbe1a1d1be7fb0069649927c923c`.
+- Refactor notes: structured-key discovery now advances linearly without repeatedly slicing line
+  prefixes; private-key header recognition is bounded and unmatched recognized blocks fail closed;
+  detached cleanup timers are explicitly unref'ed while foreground cleanup remains awaited.
+- Results:
+  - focused tests: 27 passed / 0 failed;
+  - complete Shepherd tests: 164 passed / 0 failed;
+  - strict owned production/tests plus role prompt inputs: pass;
+  - strict all-Shepherd production inputs: pass;
+  - explicit Pi 0.80.6 offline RPC `get_commands`: pass, `pm-shepherd` registered;
+  - immutable-base diff check and issue-owned changed-path assertion: pass.
 - No Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, or review-bot
   command is permitted in this lane.
 
@@ -216,4 +226,7 @@
 | RED | expected fail | exit 1; 20 passed / 7 expected failures; production unchanged |
 | GREEN | pass | exit 0; 27 passed / 0 failed |
 | Focused strict TypeScript | pass | owned source/tests plus role prompt inputs against explicit Pi 0.80.6 types |
-| Complete Shepherd / final gates | pending | runs after the GREEN checkpoint |
+| Complete Shepherd | pass | 164 passed / 0 failed |
+| Strict TypeScript | pass | focused owned inputs and all Shepherd production source against explicit Pi 0.80.6 types |
+| Offline RPC | pass | explicit Pi 0.80.6 binary returned successful `get_commands` with `pm-shepherd` |
+| Diff / scope | pass | immutable base retained; all changed paths remain issue #475-owned |

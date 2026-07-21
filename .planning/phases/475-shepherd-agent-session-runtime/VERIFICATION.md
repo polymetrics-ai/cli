@@ -1,13 +1,8 @@
 # Verification — Issue #475
 
-> Superseded pending Cycle 3 revalidation. Exact-head review at
-> `526dfec4282b442c4b32138ab036d4cc7e97b475` found multiline redaction and unbounded abandoned-hook
-> cleanup gaps. Earlier results remain historical evidence until every declared Cycle 3 gate exits
-> successfully.
-
-PR #486 exact-head correction revalidation is complete. The review findings against
-`4e41c2ec1175a109c10f125203dc54d381b982bd` are covered by committed RED tests and pass at the
-corrected implementation head `f788cf160e61760ebd80b54d2f9939b6f7f8d753`.
+PR #486 correction Cycle 3 revalidation is complete. The final-review findings against
+`526dfec4282b442c4b32138ab036d4cc7e97b475` are covered by the committed test-only RED checkpoint
+`9c4ed5fd` and pass at implementation head `d499e721a85abbe1a1d1be7fb0069649927c923c`.
 
 ## Declared Phase Equivalent
 
@@ -17,8 +12,8 @@ means every declared command here passed; it does not claim parent-level Go/conn
 
 | Gate | Status | Evidence |
 |---|---|---|
-| Focused AgentSession/tool-policy tests | pass | 24 passed, 0 failed, exit 0 |
-| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 161 passed, 0 failed, exit 0 |
+| Focused AgentSession/tool-policy tests | pass | 27 passed, 0 failed, exit 0 |
+| Complete `.pi/extensions/shepherd/*.test.ts` suite | pass | 164 passed, 0 failed, exit 0 |
 | Strict no-emit TypeScript against installed Pi 0.80.6 types | pass | owned production/tests plus all Shepherd production `.ts`; exit 0 |
 | Supported offline Pi extension/RPC smoke | pass | explicit 0.80.6 binary, `PI_OFFLINE=1`, RPC `get_commands`; `pm-shepherd` registered, exit 0 |
 | `git diff --check` | pass | exit 0 |
@@ -44,10 +39,10 @@ skip, pass, or failure.
 ```bash
 node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
   .pi/extensions/shepherd/tool-policy.test.ts
-# 24 passed, 0 failed
+# 27 passed, 0 failed
 
 node --test .pi/extensions/shepherd/*.test.ts
-# 161 passed, 0 failed
+# 164 passed, 0 failed
 ```
 
 TypeScript used the already-installed TypeScript 5.9.3 compiler and explicit Pi 0.80.6 package/type
@@ -77,11 +72,19 @@ printf '%s\n' '{"type":"get_commands"}' |
 The explicit binary reports `0.80.6`; RPC `get_commands` returned success with the `pm-shepherd`
 command registered.
 
-Cycle 2 additionally proved that a session resolving only after both request deadline and cleanup
-bound is never prompted and eventually receives exactly one abort, wait-for-idle, and dispose.
-Synthetic quoted JSON/YAML secret assignments and quoted Bearer credentials are absent and
-`[REDACTED]` is present in direct probes, serialized role prompts, typed tool output, and handoff
-summary/finding fields; an ordinary-prose control is byte-for-byte unchanged.
+Cycle 3 proves both never-settling abandoned-session hook cases independently. A late session is
+never prompted; abort and wait-for-idle are each invoked once against one cleanup deadline; forced
+unsubscribe/dispose occurs exactly once; the runtime quarantines and rejects the next dispatch; no
+unhandled rejection is observed; and detached deadline timers are unref'ed. The scanner proves
+multiline YAML quoted values, literal/folded block scalars, normalized `client_secret` assignments,
+and multiline quoted Bearer credentials through direct probes, serialized role prompts, typed tool
+output, and handoff summary/finding fields. Synthetic markers are absent, `[REDACTED]` is present,
+and ambiguous multiword assignment prose remains byte-for-byte unchanged.
+
+The immutable-base check retained
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; every changed path is an issue-owned Shepherd
+production/test file or one of the phase's durable planning artifacts. Local HEAD and the local
+remote-tracking branch were identical after the GREEN push.
 
 ## Deviations
 
