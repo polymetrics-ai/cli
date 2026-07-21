@@ -34,6 +34,7 @@ export interface AgentRunRequest {
 	systemPrompt: string;
 	prompt: string;
 	timeoutMs: number;
+	signal?: AbortSignal;
 	binding: AgentBinding;
 }
 

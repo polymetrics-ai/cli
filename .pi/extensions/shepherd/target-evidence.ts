@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import { isAbsolute } from "node:path";
 
 const MAX_GITHUB_NUMBER = 2_147_483_647;
+const EVIDENCE_COMMAND_TIMEOUT_MS = 15_000;
 
 export interface TargetEvidenceRequest {
 	cwd: string;
@@ -86,12 +87,22 @@ function parseStatusChecks(value: unknown): StatusCheckEvidence[] {
 			status,
 			...(typeof check.conclusion === "string" ? { conclusion: check.conclusion } : {}),
 		};
-	});
+	}).sort((left, right) =>
+		`${left.name}\u0000${left.status}\u0000${left.conclusion ?? ""}`.localeCompare(
+			`${right.name}\u0000${right.status}\u0000${right.conclusion ?? ""}`,
+		),
+	);
 }
 
 function defaultExec(file: string, args: string[], cwd: string): Promise<string> {
 	return new Promise((resolve, reject) => {
-		execFile(file, args, { cwd, encoding: "utf8", maxBuffer: 1024 * 1024 }, (error, stdout) => {
+		execFile(file, args, {
+			cwd,
+			encoding: "utf8",
+			maxBuffer: 1024 * 1024,
+			timeout: EVIDENCE_COMMAND_TIMEOUT_MS,
+			killSignal: "SIGTERM",
+		}, (error, stdout) => {
 			if (error) {
 				reject(new TargetEvidenceError(`${file} command failed while capturing target evidence`, { cause: error }));
 				return;

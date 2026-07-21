@@ -9,6 +9,9 @@ recorded. Six focused test entries plus offline Pi RPC discovery have expected p
 evidence. The deterministic core, strict command surface, allowlisted atomic state, zero-tool
 AgentSession runner, exact target evidence, controller, and extension wiring are implemented.
 Independent review findings became regression tests for crash resume, stop races, post-run target
-changes, global concurrency, shutdown, output bounds, and persisted DTO safety. The focused suite
-is 38/38 green, strict TypeScript passes, and Pi 0.80.6 discovers `/pm-shepherd` offline. The live
-read-only PR #438 canary, root gates, final exact-head review, and human-gated main merge remain.
+changes, cross-process leasing, early cancellation, bounded shutdown, output bounds, and persisted
+DTO safety. The focused suite is 49/49 green, strict TypeScript passes, and Pi 0.80.6 discovers
+`/pm-shepherd` offline. The initial live
+read-only PR #438 canary also passed: two zero-tool xhigh sessions completed at the exact clean head
+with both lanes successful, score 0.9819, no hard gates, and no local or GitHub target mutation.
+Root gates, final exact-head review, and the human-gated main merge remain.

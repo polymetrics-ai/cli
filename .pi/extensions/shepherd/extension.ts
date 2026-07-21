@@ -49,6 +49,19 @@ const HELP = [
 	"Embedded sessions share this Pi process, memory, environment, and crash domain.",
 	"They stop if Pi exits; reopen Pi and use resume. No main merge or GitHub mutation is authorized.",
 ].join("\n");
+const SHUTDOWN_TIMEOUT_MS = 45_000;
+
+async function settleBeforeShutdown(promise: Promise<unknown>): Promise<void> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const timeout = new Promise<never>((_resolve, reject) => {
+		timer = setTimeout(() => reject(new Error("Shepherd shutdown deadline exceeded")), SHUTDOWN_TIMEOUT_MS);
+	});
+	try {
+		await Promise.race([promise, timeout]);
+	} finally {
+		if (timer) clearTimeout(timer);
+	}
+}
 
 function renderState(state: ShepherdRunState | undefined): string {
 	if (!state) return "No persisted Shepherd run exists for this issue.";
@@ -172,8 +185,10 @@ export function registerShepherdExtension(
 	host.on("session_shutdown", async () => {
 		shuttingDown = true;
 		const pending = activeRun?.promise;
-		await Promise.allSettled([...controllers.values()].map((controller) => controller.shutdown()));
-		if (pending) await Promise.allSettled([pending]);
+		await settleBeforeShutdown((async () => {
+			await Promise.allSettled([...controllers.values()].map((controller) => controller.shutdown()));
+			if (pending) await Promise.allSettled([pending]);
+		})()).catch(() => undefined);
 		controllers.clear();
 		activeRun = undefined;
 	});

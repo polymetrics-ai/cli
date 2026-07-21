@@ -218,3 +218,55 @@ test("abort addresses only children owned by the exact run", async () => {
 	release();
 	await pending;
 });
+
+test("abort during session creation prevents every later prompt and disposes the child", async () => {
+	let releaseCreation;
+	const creationGate = new Promise((resolve) => { releaseCreation = resolve; });
+	let creationStarted;
+	const creationStartedGate = new Promise((resolve) => { creationStarted = resolve; });
+	const harness = makeSdk();
+	const originalCreate = harness.sdk.createSession;
+	harness.sdk.createSession = async (options) => {
+		creationStarted();
+		await creationGate;
+		return originalCreate(options);
+	};
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry);
+	const pending = runner.run(request());
+	await creationStartedGate;
+	await runner.abort("run-1");
+	releaseCreation();
+	await assert.rejects(pending, /abort|cancel/i);
+	assert.equal(harness.calls.prompt, 0);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("hung abort and idle hooks are bounded and disposal still runs", async () => {
+	const harness = makeSdk();
+	harness.session.abort = () => new Promise(() => undefined);
+	harness.session.waitForIdle = () => new Promise(() => undefined);
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 10 });
+	const bounded = Promise.race([
+		runner.run(request()),
+		new Promise((_, reject) => setTimeout(() => reject(new Error("runner cleanup did not settle")), 200)),
+	]);
+	await assert.rejects(bounded, /cleanup.*timed out/i);
+	assert.equal(harness.calls.dispose, 1);
+});
+
+test("close settles within its cleanup deadline and disposes a hung active child", async () => {
+	let releasePrompt;
+	const promptGate = new Promise((resolve) => { releasePrompt = resolve; });
+	let promptStarted;
+	const promptStartedGate = new Promise((resolve) => { promptStarted = resolve; });
+	const harness = makeSdk();
+	harness.session.prompt = async () => { promptStarted(); await promptGate; };
+	harness.session.waitForIdle = () => new Promise(() => undefined);
+	const runner = new SdkAgentRunner(harness.sdk, harness.modelRegistry, { cleanupTimeoutMs: 10 });
+	const pending = runner.run(request());
+	await promptStartedGate;
+	await assert.rejects(runner.close(), /close timed out|failed to close/i);
+	assert.equal(harness.calls.dispose, 1);
+	releasePrompt();
+	await assert.rejects(pending, /cleanup.*timed out|cancel/i);
+});

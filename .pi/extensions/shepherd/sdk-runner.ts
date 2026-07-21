@@ -66,6 +66,7 @@ export interface SdkAgentRunnerOptions {
 	maxSummaryCharacters?: number;
 	maxEvents?: number;
 	maxEventBytes?: number;
+	cleanupTimeoutMs?: number;
 }
 
 export class AgentRunnerError extends Error {
@@ -83,11 +84,13 @@ class OwnedChild {
 
 	#abortPromise: Promise<void> | undefined;
 	#cleanupPromise: Promise<void> | undefined;
+	readonly #cleanupTimeoutMs: number;
 
-	constructor(runId: string, laneKey: string, session: EmbeddedSession) {
+	constructor(runId: string, laneKey: string, session: EmbeddedSession, cleanupTimeoutMs: number) {
 		this.runId = runId;
 		this.laneKey = laneKey;
 		this.session = session;
+		this.#cleanupTimeoutMs = cleanupTimeoutMs;
 	}
 
 	abortOnce(): Promise<void> {
@@ -106,15 +109,18 @@ class OwnedChild {
 
 	async #cleanup(): Promise<void> {
 		let firstError: unknown;
+		let timedOut = false;
 		try {
-			await this.abortOnce();
+			await boundedCleanup(this.abortOnce(), this.#cleanupTimeoutMs, "abort");
 		} catch (error) {
 			firstError = error;
+			timedOut ||= isCleanupTimeout(error);
 		}
 		try {
-			await this.session.waitForIdle();
+			await boundedCleanup(this.session.waitForIdle(), this.#cleanupTimeoutMs, "wait-for-idle");
 		} catch (error) {
 			firstError ??= error;
+			timedOut ||= isCleanupTimeout(error);
 		}
 		try {
 			this.unsubscribe?.();
@@ -129,6 +135,7 @@ class OwnedChild {
 			firstError ??= error;
 		}
 		if (firstError) {
+			if (timedOut) throw new AgentRunnerError("AgentSession cleanup timed out", { cause: firstError });
 			throw new AgentRunnerError("AgentSession cleanup failed", { cause: firstError });
 		}
 	}
@@ -146,6 +153,9 @@ export class SdkAgentRunner implements AgentRunner {
 	#options: Required<SdkAgentRunnerOptions>;
 	#children = new Map<string, Set<OwnedChild>>();
 	#activeLaneKeys = new Set<string>();
+	#activeRunCounts = new Map<string, number>();
+	#cancelledRuns = new Set<string>();
+	#idleWaiters = new Set<() => void>();
 	#activeCount = 0;
 	#activeMutator = false;
 	#closed = false;
@@ -163,6 +173,7 @@ export class SdkAgentRunner implements AgentRunner {
 			maxSummaryCharacters: options.maxSummaryCharacters ?? 4 * 1024,
 			maxEvents: options.maxEvents ?? 4_096,
 			maxEventBytes: options.maxEventBytes ?? 4 * 1024 * 1024,
+			cleanupTimeoutMs: options.cleanupTimeoutMs ?? 5_000,
 		};
 		if (!Number.isInteger(this.#options.maxConcurrency) || this.#options.maxConcurrency < 1 || this.#options.maxConcurrency > 2) {
 			throw new AgentRunnerError("embedded AgentSession concurrency must be between 1 and 2");
@@ -189,10 +200,13 @@ export class SdkAgentRunner implements AgentRunner {
 
 		const laneKey = `${request.runId}:${request.binding.generation}:${request.laneId}`;
 		this.#reserve(request, laneKey);
+		const onAbort = () => { void this.abort(request.runId).catch(() => undefined); };
+		request.signal?.addEventListener("abort", onAbort, { once: true });
 		let child: OwnedChild | undefined;
 		let primaryFailed = false;
 
 		try {
+			this.#assertRunActive(request);
 			const settingsManager = this.#sdk.createSettingsManager(
 				{
 					defaultProvider: request.provider,
@@ -221,7 +235,7 @@ export class SdkAgentRunner implements AgentRunner {
 				systemPrompt: request.systemPrompt,
 			});
 			await resourceLoader.reload();
-			this.#assertOpen();
+			this.#assertRunActive(request);
 
 			const created = await this.#sdk.createSession({
 				cwd: request.cwd,
@@ -237,9 +251,9 @@ export class SdkAgentRunner implements AgentRunner {
 				sessionManager,
 				settingsManager,
 			});
-			child = new OwnedChild(request.runId, laneKey, created.session);
+			child = new OwnedChild(request.runId, laneKey, created.session, this.#options.cleanupTimeoutMs);
 			this.#register(child);
-			this.#assertOpen();
+			this.#assertRunActive(request);
 			validateCreatedSession(created, request);
 
 			let eventCount = 0;
@@ -259,6 +273,7 @@ export class SdkAgentRunner implements AgentRunner {
 				if (eventFailure) void child?.abortOnce().catch(() => undefined);
 			});
 
+			this.#assertRunActive(request);
 			await withTimeout(
 				created.session.prompt(request.prompt, {
 					expandPromptTemplates: false,
@@ -266,6 +281,7 @@ export class SdkAgentRunner implements AgentRunner {
 				}),
 				request.timeoutMs,
 				() => child?.abortOnce(),
+				request.signal,
 			);
 			if (eventFailure) throw eventFailure;
 
@@ -280,6 +296,7 @@ export class SdkAgentRunner implements AgentRunner {
 			} catch (error) {
 				if (!primaryFailed) throw error;
 			} finally {
+				request.signal?.removeEventListener("abort", onAbort);
 				if (child) this.#unregister(child);
 				this.#release(request, laneKey);
 			}
@@ -287,16 +304,29 @@ export class SdkAgentRunner implements AgentRunner {
 	}
 
 	async abort(runId: string): Promise<void> {
+		if ((this.#activeRunCounts.get(runId) ?? 0) > 0) this.#cancelledRuns.add(runId);
 		const children = [...(this.#children.get(runId) ?? [])];
-		await Promise.all(children.map((child) => child.abortOnce()));
+		await Promise.all(children.map((child) =>
+			boundedCleanup(child.abortOnce(), this.#options.cleanupTimeoutMs, "abort"),
+		));
 	}
 
 	async close(): Promise<void> {
 		if (this.#closed) return;
 		this.#closed = true;
+		for (const runId of this.#activeRunCounts.keys()) this.#cancelledRuns.add(runId);
 		const children = [...this.#children.values()].flatMap((entries) => [...entries]);
 		const results = await Promise.allSettled(children.map((child) => child.cleanup()));
+		let idleFailure: unknown;
+		try {
+			await boundedCleanup(this.#waitForIdle(), this.#options.cleanupTimeoutMs, "runner-close");
+		} catch (error) {
+			idleFailure = error;
+		}
 		const failure = results.find((result) => result.status === "rejected");
+		if (idleFailure) {
+			throw new AgentRunnerError("AgentSession runner close timed out", { cause: idleFailure });
+		}
 		if (failure?.status === "rejected") {
 			throw new AgentRunnerError("one or more AgentSessions failed to close", { cause: failure.reason });
 		}
@@ -327,6 +357,13 @@ export class SdkAgentRunner implements AgentRunner {
 		if (this.#closed) throw new AgentRunnerError("AgentSession runner is closed");
 	}
 
+	#assertRunActive(request: AgentRunRequest): void {
+		this.#assertOpen();
+		if (request.signal?.aborted || this.#cancelledRuns.has(request.runId)) {
+			throw new AgentRunnerError(`AgentSession run ${request.runId} was cancelled`);
+		}
+	}
+
 	#reserve(request: AgentRunRequest, laneKey: string): void {
 		if (this.#activeLaneKeys.has(laneKey)) {
 			throw new AgentRunnerError(`lane ${request.laneId} is already active for this run generation`);
@@ -338,6 +375,7 @@ export class SdkAgentRunner implements AgentRunner {
 			throw new AgentRunnerError("only one mutating AgentSession may run at a time");
 		}
 		this.#activeCount += 1;
+		this.#activeRunCounts.set(request.runId, (this.#activeRunCounts.get(request.runId) ?? 0) + 1);
 		this.#activeMutator ||= !request.readOnly;
 		this.#activeLaneKeys.add(laneKey);
 	}
@@ -345,7 +383,18 @@ export class SdkAgentRunner implements AgentRunner {
 	#release(request: AgentRunRequest, laneKey: string): void {
 		if (!this.#activeLaneKeys.delete(laneKey)) return;
 		this.#activeCount -= 1;
+		const remaining = (this.#activeRunCounts.get(request.runId) ?? 1) - 1;
+		if (remaining <= 0) {
+			this.#activeRunCounts.delete(request.runId);
+			this.#cancelledRuns.delete(request.runId);
+		} else {
+			this.#activeRunCounts.set(request.runId, remaining);
+		}
 		if (!request.readOnly) this.#activeMutator = false;
+		if (this.#activeCount === 0) {
+			for (const resolve of this.#idleWaiters) resolve();
+			this.#idleWaiters.clear();
+		}
 	}
 
 	#register(child: OwnedChild): void {
@@ -359,6 +408,11 @@ export class SdkAgentRunner implements AgentRunner {
 		if (!children) return;
 		children.delete(child);
 		if (children.size === 0) this.#children.delete(child.runId);
+	}
+
+	#waitForIdle(): Promise<void> {
+		if (this.#activeCount === 0) return Promise.resolve();
+		return new Promise((resolve) => this.#idleWaiters.add(resolve));
 	}
 }
 
@@ -520,19 +574,54 @@ async function withTimeout<T>(
 	operation: Promise<T>,
 	timeoutMs: number,
 	onTimeout: () => Promise<void> | undefined,
+	signal?: AbortSignal,
 ): Promise<T> {
 	let timer: ReturnType<typeof setTimeout> | undefined;
+	let rejectAborted: ((reason?: unknown) => void) | undefined;
 	const timeout = new Promise<never>((_resolve, reject) => {
 		timer = setTimeout(() => {
 			void onTimeout()?.catch(() => undefined);
 			reject(new AgentRunnerError(`AgentSession timed out after ${timeoutMs}ms`));
 		}, timeoutMs);
 	});
+	const aborted = new Promise<never>((_resolve, reject) => {
+		rejectAborted = reject;
+	});
+	const onAbort = () => {
+		void onTimeout()?.catch(() => undefined);
+		rejectAborted?.(new AgentRunnerError("AgentSession run was cancelled"));
+	};
+	if (signal?.aborted) onAbort();
+	else signal?.addEventListener("abort", onAbort, { once: true });
+	try {
+		return await Promise.race([operation, timeout, aborted]);
+	} finally {
+		if (timer) clearTimeout(timer);
+		signal?.removeEventListener("abort", onAbort);
+	}
+}
+
+class CleanupTimeoutError extends Error {
+	constructor(step: string, timeoutMs: number) {
+		super(`AgentSession cleanup ${step} timed out after ${timeoutMs}ms`);
+		this.name = "CleanupTimeoutError";
+	}
+}
+
+async function boundedCleanup<T>(operation: Promise<T>, timeoutMs: number, step: string): Promise<T> {
+	let timer: ReturnType<typeof setTimeout> | undefined;
+	const timeout = new Promise<never>((_resolve, reject) => {
+		timer = setTimeout(() => reject(new CleanupTimeoutError(step, timeoutMs)), timeoutMs);
+	});
 	try {
 		return await Promise.race([operation, timeout]);
 	} finally {
 		if (timer) clearTimeout(timer);
 	}
+}
+
+function isCleanupTimeout(error: unknown): boolean {
+	return error instanceof CleanupTimeoutError;
 }
 
 function byteLength(value: string): number {

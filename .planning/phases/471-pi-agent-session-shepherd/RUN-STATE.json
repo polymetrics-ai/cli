@@ -3,7 +3,7 @@
   "phase": "471-pi-agent-session-shepherd",
   "issue": 471,
   "status": "in_progress",
-  "reason": "GREEN and reviewer-hardening focused gates pass; live read-only canary and root verification remain.",
+  "reason": "Ownership/shutdown audit corrections are green; final canary rerun, root verification, and exact-head review remain.",
   "details": {
     "branch": "feat/471-pi-agent-session-shepherd",
     "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
@@ -33,6 +33,16 @@
         "cycle": "green-refactor",
         "decision": "parallel_workers_integrated",
         "reason": "Independent core and SDK workers were integrated, then reviewer findings became fail-closed regression tests; 38 focused tests, strict TypeScript, and offline Pi registration pass."
+      },
+      {
+        "cycle": "canary",
+        "decision": "read_only_completed",
+        "reason": "Two zero-tool openai-codex/gpt-5.6-sol xhigh AgentSessions independently assessed PR #438 at exact clean head 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f; both succeeded, score was 0.9819, hard gates were empty, and post-run target state was unchanged."
+      },
+      {
+        "cycle": "ownership-shutdown-review",
+        "decision": "blocking_findings_corrected",
+        "reason": "Cross-process double dispatch, early-stop, delayed-create abort, hung cleanup, and graceful-shutdown state reproductions were added and corrected with a global fenced lease, lifecycle cancellation, and bounded unconditional cleanup; 49 focused tests and strict TypeScript pass."
       }
     ],
     "humanGates": [
@@ -44,5 +54,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T12:15:00Z"
+  "updatedAt": "2026-07-21T13:25:00Z"
 }

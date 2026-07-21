@@ -101,6 +101,8 @@ contract. Omission of `--read-only` fails closed; this extension does not yet di
 workers, push, comment, review, merge, call connectors, or execute reverse ETL. Its state lives
 outside the repository under Pi's agent directory, partitioned by a one-way repository
 fingerprint. Raw prompts, reasoning, credentials, and unrestricted tool output are not persisted.
+One mode-0600 repository/worktree lease fences the run across Pi processes and issues. A live owner
+fails closed; only `resume` may take over a dead owner's stale lease for the same issue.
 
 This mode is interactive, not durable supervision. Embedded sessions share the parent Pi process,
 event loop, heap, environment, credentials boundary, and crash domain. Cancellation is

@@ -9,3 +9,6 @@ Every P0 finding and the applicable P1 findings became a failing regression befo
 resulting design supplies host-verified bounded PR evidence to zero-tool child sessions, recaptures
 it after both lanes, serializes only explicit state DTO fields, and owns one active run in the Pi
 process. A fresh exact-head review remains required after the live canary and root gates.
+
+A second ownership/shutdown audit subsequently found cross-process and pre-registration races;
+those findings and their corrections are recorded in `ownership-shutdown-review-trace.md`.

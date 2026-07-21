@@ -177,6 +177,42 @@ test("a stop request cannot be overwritten by a finishing lane", async () => {
 	assert.equal((await harness.store.load(397)).status, "stopped");
 });
 
+test("stop during initial target capture prevents every lane from starting", async () => {
+	let releaseCapture;
+	const captureGate = new Promise((resolve) => { releaseCapture = resolve; });
+	let captureStarted;
+	const captureStartedGate = new Promise((resolve) => { captureStarted = resolve; });
+	let runs = 0;
+	const harness = makeHarness({
+		targetEvidence: {
+			async capture() {
+				captureStarted();
+				await captureGate;
+				return {
+					cwd: "/tmp/read-only-pr",
+					branch: "feat/cli-architecture-v2",
+					candidateHead: head,
+					clean: true,
+				};
+			},
+		},
+		runner: {
+			async run() { runs += 1; throw new Error("must not run"); },
+			async abort() {},
+			async close() {},
+		},
+	});
+	const pending = harness.controller.start(command());
+	await captureStartedGate;
+	const stopping = harness.controller.stop(397);
+	releaseCapture();
+	const [result, stopped] = await Promise.all([pending, stopping]);
+	assert.equal(result.status, "stopped");
+	assert.equal(stopped.status, "stopped");
+	assert.equal(runs, 0);
+	assert.equal((await harness.store.load(397)).status, "stopped");
+});
+
 test("rejects duplicate active ownership before dispatch", async () => {
 	const harness = makeHarness();
 	await harness.store.save({
@@ -238,25 +274,61 @@ test("resume creates a fresh generation, head binding, and nonce", async () => {
 	assert.equal(result.validationNonce, "nonce-fresh-12345");
 });
 
-test("stop and parent shutdown only address owned runner handles", async () => {
+test("stop refuses to rewrite an unowned persisted run", async () => {
 	const harness = makeHarness();
 	await harness.store.save({
 		schemaVersion: 1,
 		issue: 397,
 		runId: "run-owned",
 		generation: 1,
-		status: "running",
+		status: "completed",
 		candidateHead: head,
 		validationNonce: "nonce-old",
 		createdAt: "2026-07-21T08:00:00Z",
 		updatedAt: "2026-07-21T08:00:00Z",
 		lanes: [],
 	});
-	const stopped = await harness.controller.stop(397);
-	assert.equal(stopped.status, "stopped");
-	assert.deepEqual(harness.aborted, ["run-owned"]);
+	await assert.rejects(harness.controller.stop(397), /not owned.*Pi session/i);
+	assert.equal((await harness.store.load(397)).status, "completed");
+	assert.deepEqual(harness.aborted, []);
 	await harness.controller.shutdown();
 	assert.equal(harness.closed, true);
+});
+
+test("parent shutdown cancels owned work and persists interrupted", async () => {
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	const store = new MemoryStore();
+	const aborted = [];
+	const controller = new ShepherdController({
+		store,
+		targetEvidence: {
+			async capture() {
+				return { cwd: "/tmp/read-only-pr", branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
+			},
+		},
+		runner: {
+			async run(request) {
+				started();
+				await gate;
+				return { ...request.binding, summary: "late", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort(runId) { aborted.push(runId); release(); },
+			async close() { release(); },
+		},
+		clock: () => "2026-07-21T08:30:00Z",
+		createRunId: () => "run-shutdown",
+		createNonce: () => "nonce-shutdown-123",
+	});
+	const pending = controller.start(command());
+	await startedGate;
+	await controller.shutdown();
+	const result = await pending;
+	assert.equal(result.status, "interrupted");
+	assert.equal((await store.load(397)).status, "interrupted");
+	assert.deepEqual(aborted, ["run-shutdown"]);
 });
 
 test("hard-gate and stop states round-trip through the validating file store", async (t) => {
@@ -281,22 +353,29 @@ test("hard-gate and stop states round-trip through the validating file store", a
 	assert.equal(halted.status, "halted");
 	assert.equal((await store.load(397)).lanes.every((lane) => lane.status === "halted"), true);
 
-	await store.save({
-		schemaVersion: 1,
-		issue: 397,
-		pr: 438,
-		runId: "run-owned",
-		generation: 2,
-		status: "running",
-		candidateHead: head,
-		validationNonce: "nonce-old",
-		createdAt: "2026-07-21T08:00:00Z",
-		updatedAt: "2026-07-21T08:00:00Z",
-		lanes: [
-			{ id: "scout", role: "scout", mutating: false, dependsOn: [], status: "running" },
-		],
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	const runningHarness = makeHarness({
+		store,
+		createRunId: () => "run-owned",
+		runner: {
+			async run(request) {
+				started();
+				await gate;
+				return { ...request.binding, summary: "late", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
 	});
-	const stopped = await haltedHarness.controller.stop(397);
+	const pending = runningHarness.controller.start(command());
+	await startedGate;
+	const stopping = runningHarness.controller.stop(397);
+	release();
+	const [result, stopped] = await Promise.all([pending, stopping]);
+	assert.equal(result.status, "stopped");
 	assert.equal(stopped.status, "stopped");
 	assert.equal((await store.load(397)).lanes[0].status, "stopped");
 });
@@ -322,4 +401,58 @@ test("resume treats a persisted running state as interrupted after process resta
 	assert.equal(resumed.generation, 5);
 	assert.equal(resumed.runId, "run-after-restart");
 	assert.equal(resumed.status, "completed");
+});
+
+test("a global file lease prevents two controllers from dispatching the same repository", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-lease-controller-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	let started;
+	const startedGate = new Promise((resolve) => { started = resolve; });
+	let firstRuns = 0;
+	let secondRuns = 0;
+	const targetEvidence = {
+		async capture() {
+			return { cwd: "/tmp/read-only-pr", branch: "feat/cli-architecture-v2", candidateHead: head, clean: true };
+		},
+	};
+	const first = new ShepherdController({
+		store: new FileStateStore(root),
+		targetEvidence,
+		runner: {
+			async run(request) {
+				firstRuns += 1;
+				started();
+				await gate;
+				return { ...request.binding, summary: "first", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
+		createRunId: () => "run-first",
+		createNonce: () => "nonce-first-12345",
+	});
+	const second = new ShepherdController({
+		store: new FileStateStore(root),
+		targetEvidence,
+		runner: {
+			async run(request) {
+				secondRuns += 1;
+				return { ...request.binding, summary: "second", dimensions: perfectDimensions, observedMutation: false };
+			},
+			async abort() {},
+			async close() {},
+		},
+		createRunId: () => "run-second",
+		createNonce: () => "nonce-second-1234",
+	});
+	const pending = first.start(command());
+	await startedGate;
+	await assert.rejects(second.start({ ...command(), issue: 471 }), /lease|active|another Pi/i);
+	assert.equal(secondRuns, 0);
+	release();
+	const result = await pending;
+	assert.equal(result.status, "completed");
+	assert.equal(firstRuns, 2);
 });

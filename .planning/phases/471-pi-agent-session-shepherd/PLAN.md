@@ -24,11 +24,12 @@ Use ports and adapters so the deterministic core has no Pi SDK dependency:
 1. `domain.ts`: run/lane types, invariant validation, stale-evidence rejection, hard-gate
    classification, geometric-mean rating, and restart reconciliation.
 2. `arguments.ts`: strict slash-command parser with bounded identifiers and fail-closed flags.
-3. `state-store.ts`: atomic mode-0600 JSON persistence outside the repository under the Pi agent
-   directory; injectable temporary roots for tests.
+3. `state-store.ts`: atomic mode-0600 JSON persistence plus one PID/token/inode-fenced global run
+   lease outside the repository under the Pi agent directory; injectable roots and liveness for tests.
 4. `runner.ts`: AgentRunner port plus a bounded child registry and concurrency governor.
 5. `sdk-runner.ts`: Pi 0.80.6 adapter with exact model/thinking/tool checks, in-memory child
-   sessions/settings, recursion prevention, timeouts, and idempotent cleanup.
+   sessions/settings, recursion prevention, pre-registration cancellation tombstones, and bounded
+   cleanup that always reaches dispose.
 6. `controller.ts`: read-only scout and validator orchestration, exact run/generation/head/nonce
    binding, deterministic gating, rating, persistence, stop, and resume.
 7. `index.ts`: auto-discovered `/pm-shepherd` registration, concise status/help, lifecycle

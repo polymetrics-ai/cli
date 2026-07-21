@@ -77,6 +77,22 @@ be added only after the focused suite passes.
 
 ## Current focused gate
 
-- `node --test .pi/extensions/shepherd/*.test.ts`: 38/38 pass.
+- `node --test .pi/extensions/shepherd/*.test.ts`: 49/49 pass.
 - Strict TypeScript no-emit over all production files including `index.ts`: pass.
 - Offline Pi 0.80.6 RPC command registration: pass (`pm-shepherd`, source `extension`).
+
+## RED to GREEN: ownership and shutdown audit
+
+- Audit RED reproduced two controllers sharing one FileStateStore: both completed and dispatched
+  four total lanes. GREEN: a root-global mode-0600 O_EXCL lease with PID/token/inode fencing allows
+  one owner; live owners fail closed and only same-issue `resume` can recover a dead owner.
+- Audit RED stopped during initial target capture: stop returned no-state while lanes later ran.
+  GREEN: lifecycle ownership exists before the first await, stop marks it cancelled, waits its
+  terminal persistence, and the regression records zero AgentRunner dispatches.
+- Audit RED aborted during delayed `createSession`: the eventual child still prompted. GREEN:
+  run-level cancellation tombstones and AbortSignal checks reject after creation, clean up, and
+  prove zero prompts plus dispose.
+- Audit RED hung `abort`/`waitForIdle`: close never settled and dispose was skipped. GREEN: cleanup
+  steps and runner close are bounded, unsubscribe/dispose remain unconditional, and both run/close
+  hang probes settle with dispose observed.
+- Graceful shutdown now cancels owned lifecycles as `interrupted`; unowned stop cannot rewrite disk.

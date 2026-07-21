@@ -53,8 +53,8 @@ test("binds a clean local checkout to the exact open PR head", async () => {
 		mergeStateStatus: "CLEAN",
 		reviewDecision: "",
 		statusChecks: [
-			{ name: "verify", status: "COMPLETED", conclusion: "SUCCESS" },
 			{ name: "security/snyk", status: "SUCCESS" },
+			{ name: "verify", status: "COMPLETED", conclusion: "SUCCESS" },
 		],
 	});
 	assert.ok(harness.calls.every((call) => Array.isArray(call.args)), "commands must use argv arrays");
