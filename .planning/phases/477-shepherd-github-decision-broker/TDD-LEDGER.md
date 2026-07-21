@@ -1,0 +1,169 @@
+# TDD Ledger: #477
+
+Status: RED captured; no production edit had been made when the failure below was recorded.
+
+## Slice 1: durable decision aggregate
+
+Planned RED cases:
+
+- gate routing: requirements/scope to the parent issue; review/head/merge/parent-merge to the PR;
+- PR gates require exact 40-hex head, while issue gates reject head binding;
+- parent merge is a distinct gate and cannot be reconstructed from generic merge approval;
+- request ID, marker, repository, generation, allowed options, actor allowlist, expiry, target, and
+  head are validated and durably round-trip after repository restart;
+- changed retry specifications conflict with persisted state;
+- secrets/credential-shaped question content are rejected before comments/state;
+- expired/stale bindings fail closed;
+- a persisted decision is consumed exactly once across concurrent repository instances/restart.
+
+## Slice 2: GitHub broker and typed adapter
+
+Planned RED cases against issue-namespaced fake fixtures:
+
+- one exact marker-owned request comment across retry and restart;
+- duplicate/colliding markers fail closed;
+- bounded paginated listing, command timeout, maximum attempts, and capped exponential backoff;
+- only an exact `/shepherd decide <request-id> <option>` command is accepted;
+- bot/app, edited, disallowed actor, unknown option, malformed, multiline, duplicate, ambiguous,
+  hostile, stale generation/head/target, and expired responses never authorize a decision;
+- silence, emoji/reactions, review text, CI/check state, and request-comment text are not approval;
+- accepted evidence persists actor, URL, timestamp, and option, with no raw response body;
+- issue and PR routes use the exact bound repository/number;
+- typed `gh api` adapter uses argv execution and ambient host auth only, with bounded output and
+  schema validation;
+- live-comment coverage is skipped absent an explicitly designated sandbox.
+
+## RED / GREEN / refactor evidence
+
+Initial RED command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result: exit 1; 0 passed, 2 failed test-file entries. Both failed with
+`ERR_MODULE_NOT_FOUND` for `.pi/extensions/shepherd/human-decision.ts`, proving the contract tests
+precede both production modules. Duration: 66.299917 ms.
+
+GREEN/refactor command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Initial GREEN after the aggregate, file repository, broker, fake transport, and typed `gh api`
+adapter: 25 passed, 0 failed, 1 skipped (the live sandbox mutation), duration 794.79625 ms.
+
+Refactor additions remained green while adding strict persisted-schema validation, no-follow state
+reads, fsync+atomic replacement, dead-process lock recovery, concurrent request serialization,
+bounded ten-page GitHub reads, duplicate-marker checks during polling, future-timestamp rejection,
+and a request-specific transport write method rather than a generic comment-write surface.
+
+Strict no-emit TypeScript for both production modules passed against the TypeScript/Node types
+bundled with installed Pi 0.80.6.
+
+Final-review hardening added support for a bot-authenticated host and ordinary `name[bot]` comments
+without ever admitting them to the human actor allowlist. Final focused result: 27 tests total,
+26 passed, 0 failed, 1 sandbox-only skip, duration 305.387208 ms.
+
+Final full Shepherd result: 164 tests total, 163 passed, 0 failed, 1 sandbox-only skip, duration
+48877.375042 ms. Strict no-emit TypeScript then passed over all 11 production Shepherd modules.
+
+## Exact-head review correction cycle
+
+Reviewed head: `87eb80f561d416da245e753a5dbc887a3384a05d`.
+
+RED cases to add before correction production edits:
+
+- GitHub timestamps such as `2026-07-21T12:30:12Z` normalize to canonical milliseconds and remain
+  valid when a local creation time is within the bounded sub-second truncation window;
+- request comment ID `5034006493`, repository `owner2/repo3`, and actor `maintainer2` are valid;
+- a published transaction lock is a complete atomic owner record, dead owners are reclaimed, and
+  release with an obsolete token cannot delete a replacement lock;
+- `parent_merge` rejects `approve` and accepts only the exact affirmative `approve-merge` contract;
+- credential-like `token=...`, JSON key/value, environment, URL-userinfo/query, private-key, and
+  vendor-token forms are rejected without echoing their value;
+- control/bidi/format characters and untrusted mentions cannot enter the durable question or alter
+  the rendered Markdown structure; configured validated humans are explicitly mentioned;
+- transient transport failures receive bounded backoff and retry, while permanent failures fail
+  immediately without sleeping or exposing raw transport text.
+
+Correction RED command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result before any correction production edit: exit 1; 39 tests total, 23 passed, 15 failed, and
+1 designated-sandbox test skipped. The expected failures independently exposed the reviewed gaps:
+second-resolution expiry/comment timestamps; safe-integer comment IDs; numeric repository/login
+validation; generic parent-merge approval; unescaped Markdown/missing allowlist mentions;
+credential/bidi/mention acceptance; directory-before-owner lock publication; unfenced replacement
+deletion; regular-file dead-lock reclaim; unclassified transient/permanent transport errors; and
+raw adapter error propagation. Duration: 282.318708 ms.
+
+Initial correction GREEN command reused the focused RED command. Result: exit 0; 42 tests total,
+41 passed, 0 failed, and 1 designated-sandbox test skipped; duration 796.597167 ms. Strict no-emit
+TypeScript for the two owned modules and their tests also exited 0 using TypeScript 5.9.3 with the
+explicit Pi 0.80.6 Node type root.
+
+Correction refactor kept each lock owner in an atomically published, UUID-token-named candidate or
+active file. Deterministic election prevents overlapping owners; acquisition, dead-owner reclaim,
+transition, and release all verify the exact token/PID path, so an obsolete owner cannot unlink a
+replacement. The focused consume-once regression exercises concurrent repository instances, while
+the added lock tests inspect complete publication and fenced reclaim/release behavior.
+
+Final correction focused result: exit 0; 42 tests total, 41 passed, 0 failed, and 1 designated-
+sandbox test skipped; duration 830.242542 ms. The complete Shepherd suite then passed with 179
+tests total, 178 passed, 0 failed, and 1 designated-sandbox skip; duration 52526.971417 ms. Strict
+no-emit TypeScript passed over all 11 production Shepherd modules using TypeScript 5.9.3, the
+installed Pi 0.80.6 package, and its Node type root.
+
+## Remaining lock-snapshot review correction
+
+Reviewed head: `f5a4dc68a7b76f708858542a7190ca3d1f375044`.
+
+Planned RED: start many transactions through independent `FileHumanDecisionRepository` instances
+against one request and one private root. The regression must assert that all transactions finish
+within the configured acquisition bound and that at most one callback occupies the critical
+section. The current implementation is expected to reject benign candidate-to-active and
+active-to-released snapshot races with `ENOENT` or `human decision lock owner record is invalid`.
+
+Stable malformed-lock coverage remains required so retrying vanished entries cannot turn malformed
+live state into an availability bypass.
+
+RED command, before any lock implementation edit:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts
+```
+
+Result: exit 1; 19 tests total, 18 passed, 1 failed, 0 skipped; duration 889.260542 ms.
+The three-round, 32-independent-repository contention case failed in round 0 with both expected
+failure kinds: `ENOENT` from a vanished candidate path and `invalid-owner` when transition/release
+occurred between metadata and owner reads. The stable malformed live-lock test passed, preserving
+the fail-closed baseline that the implementation must retain.
+
+GREEN/refactor made lock-owner inspection discriminate `valid`, `missing`, and `invalid`, and made
+directory scanning return either a stable lock set or `changed`. A changed snapshot consumes the
+next iteration of the existing slept, attempt-bounded acquisition loop; it never spins. Stable
+malformed files still fail closed after device/inode confirmation, and concurrent dead-owner
+reclaim treats only an actually missing exact-token path as a rescan.
+
+Focused GREEN command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result: exit 0; 44 tests total, 43 passed, 0 failed, and 1 designated-sandbox skip; duration
+8794.958958 ms. Strict no-emit TypeScript over both owned modules and tests then exited 0 using
+TypeScript 5.9.3 and the explicit Pi 0.80.6 Node type root.
+
+Complete Shepherd verification then exited 0 with 181 tests total, 180 passed, 0 failed, and 1
+designated-sandbox skip; duration 45835.6605 ms. Strict no-emit TypeScript passed over all 11
+production Shepherd modules using the installed Pi 0.80.6 package resolver and Node type root.

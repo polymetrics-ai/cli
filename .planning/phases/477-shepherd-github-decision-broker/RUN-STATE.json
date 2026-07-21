@@ -1,0 +1,110 @@
+{
+  "schemaVersion": "2.0",
+  "phase": "477-shepherd-github-decision-broker",
+  "issue": 477,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "status": "completed",
+  "reason": "The final lock-snapshot correction and coordinator-declared child verification equivalent passed; fresh parent-owned exact-head xhigh review remains pending.",
+  "details": {
+    "branch": "feat/477-shepherd-github-decision-broker",
+    "baseBranch": "feat/471-pi-agent-session-shepherd",
+    "exactBase": "e659d6f1b666f58748e2d8c86599ceb4bbc62ff8",
+    "adapter": "manual_gsd_fallback",
+    "modelPolicy": "openai-codex/gpt-5.6-sol:high",
+    "verificationPassed": true,
+    "reviewCoveragePassed": false,
+    "orchestrationDecisions": [
+      {
+        "cycle": "plan",
+        "decision": "local_critical_path",
+        "reason": "This is the assigned isolated issue worker; planning artifacts and threat/TDD matrix are the current critical path."
+      },
+      {
+        "cycle": "tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "The worker authored and ran fake-transport and durable-state contract tests before either production module existed."
+      },
+      {
+        "cycle": "execute",
+        "decision": "local_critical_path",
+        "reason": "Implemented the two-file typed aggregate/adapter slice and completed focused GREEN plus adversarial refactor locally."
+      },
+      {
+        "cycle": "verify",
+        "decision": "local_critical_path",
+        "reason": "Focused tests, full Shepherd tests, strict Pi 0.80.6 TypeScript, offline Pi RPC discovery, and diff check passed; parent superseded and cancelled make verify."
+      },
+      {
+        "cycle": "summary",
+        "decision": "local_critical_path",
+        "reason": "Updated terminal phase evidence and prepared the ready stacked PR handoff."
+      },
+      {
+        "cycle": "review-correction-plan",
+        "decision": "local_critical_path",
+        "reason": "The exact-head correction owns both affected modules, so another mutating worker would collide; planned all review findings as RED regression slices before production edits."
+      },
+      {
+        "cycle": "review-correction-tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Captured genuine RED evidence at 23 pass, 15 expected failures, and 1 sandbox skip before changing either production module."
+      },
+      {
+        "cycle": "review-correction-execute",
+        "decision": "local_critical_path",
+        "reason": "Implemented the reviewed boundary fixes and reached focused GREEN at 41 pass, 0 fail, and 1 sandbox skip with strict owned TypeScript green."
+      },
+      {
+        "cycle": "review-correction-refactor",
+        "decision": "local_critical_path",
+        "reason": "Refactored repository locking to atomically published unique token paths with deterministic election and token-fenced transition, reclaim, and release."
+      },
+      {
+        "cycle": "review-correction-verify",
+        "decision": "local_critical_path",
+        "reason": "Focused and complete Shepherd tests, strict pinned TypeScript, offline Pi RPC, diff, scope, and immutable-base checks passed; prohibited broad gates were not run."
+      },
+      {
+        "cycle": "review-correction-summary",
+        "decision": "local_critical_path",
+        "reason": "Recorded terminal correction evidence and prepared the new exact head for parent-owned xhigh review."
+      },
+      {
+        "cycle": "lock-snapshot-correction-plan",
+        "decision": "local_critical_path",
+        "reason": "The remaining race shares the owned lock implementation/test scope and requires one ordered high-contention RED-before-GREEN history."
+      },
+      {
+        "cycle": "lock-snapshot-correction-tdd-gate",
+        "decision": "local_critical_path",
+        "reason": "Captured genuine high-contention RED at 18 pass and 1 failure, reproducing both ENOENT and invalid-owner snapshot races while stable malformed-lock coverage remained green."
+      },
+      {
+        "cycle": "lock-snapshot-correction-execute",
+        "decision": "local_critical_path",
+        "reason": "Implemented discriminated lock-owner inspection and attempt-bounded snapshot rescans; focused tests are green at 43 pass, 0 fail, 1 sandbox skip with strict owned TypeScript passing."
+      },
+      {
+        "cycle": "lock-snapshot-correction-verify",
+        "decision": "local_critical_path",
+        "reason": "Complete Shepherd tests, strict all-production TypeScript, offline Pi RPC, and full-range diff/base/scope checks passed under the coordinator-declared bounded gate."
+      },
+      {
+        "cycle": "lock-snapshot-correction-summary",
+        "decision": "local_critical_path",
+        "reason": "Recorded terminal lock-snapshot evidence and prepared a new exact head for parent-owned xhigh review."
+      }
+    ],
+    "humanGates": [
+      "new_dependency",
+      "auth_scope_or_secret_access",
+      "live_non_sandbox_comment",
+      "production_or_destructive_action",
+      "quality_gate_reduction",
+      "exact_head_parent_merge",
+      "main_branch_merge"
+    ]
+  },
+  "updatedAt": "2026-07-21T14:38:42.000Z"
+}

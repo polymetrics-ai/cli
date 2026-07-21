@@ -1,0 +1,61 @@
+# Verification: #477
+
+| Gate | Status | Evidence |
+|---|---|---|
+| Manual GSD fallback | pass | `scripts/gsd doctor` passed; programming-loop adapter command is unavailable and recorded. |
+| Plan-before-code | pass | PLAN, TDD ledger, verification checklist, summary, prompt trace, and run state created before production edits. |
+| Focused RED/GREEN | pass | Initial RED: 0 pass/2 file failures (`ERR_MODULE_NOT_FOUND`). Final: 27 total, 26 pass, 0 fail, 1 sandbox skip. |
+| Full Shepherd tests | pass | 164 total, 163 pass, 0 fail, 1 sandbox skip; 48877.375042 ms. |
+| Strict TypeScript / Pi 0.80.6 | pass | Strict no-emit check passed over all 11 production modules using installed Pi 0.80.6 package/types. |
+| Pi extension discovery | pass with documented CLI incompatibility | Required `pi --list-extensions` reports `Unknown option`; offline RPC `get_commands` exits 0 and finds `pm-shepherd` from the explicit extension. |
+| Diff whitespace | pass | `git diff --check`. |
+| Root Go/static/build | supplemental pass | `go vet ./...`, `go test ./...` (certify 556.599s), and `go build ./cmd/pm` exited 0 before the parent policy change. |
+| Full repository verification | superseded/cancelled_by_parent_policy | `make verify` reached its full test step and was intentionally SIGTERM'd by the parent orchestrator (exit 143); parent explicitly replaced this child gate and prohibited retry. This is neither a functional failure nor a claimed pass. |
+| Declared child verification equivalent | pass | Focused tests + full Shepherd suite + strict TypeScript + offline Pi RPC smoke + diff check all pass. |
+| Live GitHub comments | skipped | No explicitly designated sandbox was supplied; fake transport is the required test boundary. |
+| Automated review | not requested | Coordinator explicitly prohibited Claude/Copilot requests for this worker PR. |
+
+No auth-scope change, secret access, new dependency, production mutation, reverse ETL, destructive
+action, or default-branch merge occurred. Automated review remains the parent orchestrator's exact
+head/range `codex_independent` route and is not represented as Claude, Copilot, or a human decision.
+
+## Exact-head correction verification
+
+Status: passed for corrected implementation checkpoint
+`d277d4d58d57eb08c03a3dbbc4b6ea4f2677ec0a`; fresh exact-head xhigh review remains parent-owned.
+
+| Correction gate | Status | Evidence |
+|---|---|---|
+| Review RED | pass | 39 total, 23 pass, 15 expected failures, 1 sandbox skip; 282.318708 ms, before correction production edits. |
+| Final focused tests | pass | 42 total, 41 pass, 0 fail, 1 sandbox skip; 830.242542 ms. |
+| Complete Shepherd tests | pass | 179 total, 178 pass, 0 fail, 1 sandbox skip; 52526.971417 ms. |
+| Strict owned TypeScript | pass | Both owned modules and tests passed strict no-emit TypeScript 5.9.3 with the Pi 0.80.6 Node type root. |
+| Strict production TypeScript | pass | All 11 production Shepherd modules passed after resolving `@earendil-works/pi-coding-agent` from the enclosing global `node_modules`. A preliminary invocation used the package itself as `baseUrl` and produced only the expected TS2307 resolver errors; the corrected pinned invocation exited 0. |
+| Offline Pi registration | pass | Pi 0.80.6 RPC `get_commands` exited 0 and returned `pm-shepherd` from the explicit Shepherd extension, with offline mode and discovery disabled. |
+| Diff/base/scope | pass | `git diff --check` exited 0; merge-base is immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; changed files are only the two owned modules, matching tests/fixture, and issue-local planning artifacts. |
+| Live GitHub comments | skipped | No explicitly designated sandbox was supplied. |
+| Go/connectors/full repo | not run by policy | Coordinator explicitly limited this correction lane and prohibited Go, connector, and `make verify` gates. |
+| Automated review | pending parent route | No Claude/Copilot request was made; the parent orchestrator owns the required fresh exact-head xhigh review. |
+
+The correction introduced no auth-scope change, secret access, dependency, live GitHub mutation,
+production/destructive action, merge, or default-branch write.
+
+## Lock-snapshot correction verification
+
+Status: passed for corrected implementation checkpoint
+`31d4eef6b4286f9acad511e4ea2b140ea16346bb`; fresh exact-head xhigh review remains parent-owned.
+
+| Lock-snapshot gate | Status | Evidence |
+|---|---|---|
+| Genuine high-contention RED | pass | Before production edits: 19 total, 18 pass, 1 fail, 0 skip; 889.260542 ms. The 32-independent-repository regression exposed both `ENOENT` and `invalid-owner`; stable malformed-lock coverage passed. |
+| Focused #477 GREEN | pass | 44 total, 43 pass, 0 fail, 1 sandbox skip; 8794.958958 ms. Three rounds/96 transactions completed with maximum critical-section occupancy of one. |
+| Complete Shepherd tests | pass | 181 total, 180 pass, 0 fail, 1 sandbox skip; 45835.6605 ms. |
+| Strict owned TypeScript | pass | Both owned modules and tests passed TypeScript 5.9.3 strict no-emit with the explicit Pi 0.80.6 Node type root. |
+| Strict production TypeScript | pass | All 11 production Shepherd modules passed with the installed Pi 0.80.6 package resolver/type root. |
+| Offline Pi registration | pass | Pi 0.80.6 RPC `get_commands` exited 0 and returned `pm-shepherd` from the explicit extension in offline mode with automatic discovery disabled. |
+| Diff/base/scope | pass | Full-range `git diff --check` exited 0; merge-base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; changed files remain within the two owned modules, matching tests/fixture, and issue-local planning artifacts. |
+| Broad/live/review-bot gates | not run by policy | No Go, connector, `make verify`, live GitHub comment, Claude/Copilot, or merge action was run. |
+
+Snapshot-change retries use the existing acquisition sleep and attempt budget. Stable malformed
+owners still fail closed, the existing live-owner low-attempt test still reaches its bounded timeout,
+and no lock remains after successful high-contention rounds.
