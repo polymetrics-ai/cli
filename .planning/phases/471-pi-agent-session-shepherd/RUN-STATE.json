@@ -3,10 +3,11 @@
   "phase": "471-pi-agent-session-shepherd",
   "issue": 471,
   "status": "in_progress",
-  "reason": "Ownership/shutdown corrections and corrected-checkpoint canary pass; root verification and exact-head review remain.",
+  "reason": "All deep-review findings are corrected at dcc3829d with 82 focused tests; final root gates, fresh canary, and repeat exact-head review remain.",
   "details": {
     "branch": "feat/471-pi-agent-session-shepherd",
     "baseHead": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+    "currentHead": "dcc3829d26df72a2a28171d08326be62cf5378ec",
     "agentMode": "auto",
     "adapter": "manual_fallback",
     "adapterReason": "The current main branch GSD registry does not expose programming-loop and has no programming-loop or tdd-gate helper scripts.",
@@ -48,6 +49,11 @@
         "cycle": "corrected-canary",
         "decision": "read_only_completed",
         "reason": "Checkpoint ccf0daf3 completed generation 2 against exact clean PR #438 head with both zero-tool lanes successful, score 0.9794, no hard gates, the global lease released, and target state unchanged."
+      },
+      {
+        "cycle": "deep-review-remediation",
+        "decision": "blocking_findings_corrected",
+        "reason": "Ten critical and six warning findings were reproduced and corrected in three parallel test-first lanes; root integration added a strict-TypeScript buffer correction and a launch-resolution race regression. The complete focused suite is 82/82 green, strict TypeScript and offline Pi registration pass, and the earlier canary is marked historical pending a hardened-head rerun."
       }
     ],
     "humanGates": [
@@ -59,5 +65,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T13:45:00Z"
+  "updatedAt": "2026-07-21T10:00:43Z"
 }

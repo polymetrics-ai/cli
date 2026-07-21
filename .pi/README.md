@@ -84,8 +84,9 @@ Useful prompt templates:
 `/pm-shepherd` is a deterministic Pi extension that creates independent Pi `AgentSession`
 contexts inside the current Pi process. The first release is intentionally read-only: it runs a
 scout and an independent validator at an exact clean PR head, validates run/generation/lane/head/
-nonce bindings, applies hard gates, and records only bounded redacted summaries plus diagnostic
-scores. Child sessions receive a bounded host-verified PR/check snapshot and no filesystem, shell,
+nonce bindings, applies hard gates, and keeps bounded redacted summaries in memory while persisting
+only fixed lane-status categories plus diagnostic scores. Child sessions receive a bounded
+host-verified PR/check snapshot and no filesystem, shell,
 extension, custom, connector, or GitHub tools.
 
 From the exact target PR worktree:
@@ -101,8 +102,9 @@ contract. Omission of `--read-only` fails closed; this extension does not yet di
 workers, push, comment, review, merge, call connectors, or execute reverse ETL. Its state lives
 outside the repository under Pi's agent directory, partitioned by a one-way repository
 fingerprint. Raw prompts, reasoning, credentials, and unrestricted tool output are not persisted.
-One mode-0600 repository/worktree lease fences the run across Pi processes and issues. A live owner
-fails closed; only `resume` may take over a dead owner's stale lease for the same issue.
+A mode-0600, atomically published repository/worktree lease journal fences the run across Pi
+processes and issues. A live owner fails closed; only `resume` may append a takeover after proving
+that the same issue's prior owner is stale.
 
 This mode is interactive, not durable supervision. Embedded sessions share the parent Pi process,
 event loop, heap, environment, credentials boundary, and crash domain. Cancellation is

@@ -96,3 +96,36 @@ be added only after the focused suite passes.
   steps and runner close are bounded, unsubscribe/dispose remain unconditional, and both run/close
   hang probes settle with dispose observed.
 - Graceful shutdown now cancels owned lifecycles as `interrupted`; unowned stop cannot rewrite disk.
+
+## RED to GREEN: final deep-review remediation
+
+- Exact-head GSD deep review at `7f745427d38995940b8f57517d0241d1e10d3f64` reported ten
+  critical findings and six warnings. The report is preserved in `471-REVIEW.md`; no finding was
+  waived.
+- SDK RED: 10/18 focused cases failed for non-success Pi terminals, post-prompt abort, hanging or
+  late setup, end-to-end deadlines, shared close settlement, and Windows path forms. GREEN:
+  23/23 pass; only a verified `stop` terminal is parsed, one deadline owns setup through teardown,
+  and every late child is cleaned without prompting.
+- State/lease RED: eight adversarial cases failed for secret-bearing persistence, crash-partial
+  publication, PID reuse, symlink roots/files, trusted-root escape, and contradictory state.
+  GREEN: 20/20 state-store tests pass with a CAS-style append-only lease journal, atomic hard-link
+  publication, process identity, descriptor-bounded no-follow reads, trusted-root checks, fixed
+  persisted summary categories, and run/lane/dependency invariants.
+- Controller RED: 6/24 focused cases failed for dropped/mismatched resume PRs, early lease release,
+  terminal stop races, shutdown suppression, and lexical worktree identity. GREEN: 30/30 pass with
+  effective persisted target identity, canonical worktree caching, structured cancellation/join,
+  mandatory leases, terminal linearization, and propagated cleanup failures.
+- Integration RED: the root strict-TypeScript command rejected the descriptor buffer type, and an
+  added concurrency test reproduced two launches racing during asynchronous worktree resolution.
+  GREEN: a typed `Uint8Array<ArrayBuffer>` descriptor buffer and a synchronous launch reservation
+  make the complete suite 82/82 green.
+- Manual-GSD fallback remained necessary because the repository adapter still did not expose
+  `programming-loop`. All three implementation lanes used `gpt-5.6-sol` at high reasoning and
+  recorded their RED/GREEN evidence before integration.
+
+## Current focused gate after deep-review fixes
+
+- `node --test .pi/extensions/shepherd/*.test.ts`: 82/82 pass.
+- Strict TypeScript no-emit over every production Shepherd module: pass.
+- Offline Pi 0.80.6 RPC registration: pass (`pm-shepherd`, source `extension`).
+- `git diff --check`: pass.
