@@ -47,6 +47,7 @@ const sensitivePathPatterns = [
 	/(?:^|\/)\.config\/containers\/auth\.json$/i,
 	/(?:^|\/)\.aws\/credentials$/i,
 	/(?:^|\/)\.aws\/config$/i,
+	/(?:^|\/)\.aws\/(?:sso|cli)\/cache(?:\/|$)/i,
 	/(?:^|\/)\.azure\/accesstokens\.json$/i,
 	/(?:^|\/)\.azure\/(?:msal[_-]?token[_-]?cache|token[_-]?cache)(?:[._/-]|$)/i,
 	/(?:^|\/)\.config\/gcloud\/application_default_credentials\.json$/i,
@@ -315,11 +316,26 @@ function snapshotJsonData(
 			if (value.length > MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS) {
 				throw new ToolPolicyError(`${description} array exceeded its bound`);
 			}
-			const keys = Reflect.ownKeys(value);
-			budget.keys += keys.length;
-			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS || keys.length !== value.length + 1 || !keys.includes("length")) {
+			const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+			if (!lengthDescriptor || !("value" in lengthDescriptor) || lengthDescriptor.value !== value.length ||
+				lengthDescriptor.enumerable || lengthDescriptor.get || lengthDescriptor.set) {
 				throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
 			}
+			let enumerableItems = 0;
+			for (const key in value) {
+				if (!Object.hasOwn(value, key) || !/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length) {
+					throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
+				}
+				enumerableItems += 1;
+				if (enumerableItems > value.length) {
+					throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
+				}
+			}
+			if (enumerableItems !== value.length) {
+				throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
+			}
+			budget.keys += value.length;
+			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) throw new ToolPolicyError(`${description} exceeded its key bound`);
 			const result: JsonData[] = [];
 			for (let index = 0; index < value.length; index += 1) {
 				const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
@@ -335,28 +351,22 @@ function snapshotJsonData(
 		if (prototype !== Object.prototype && prototype !== null) {
 			throw new ToolPolicyError(`${description} must contain plain JSON objects only`);
 		}
-		// Reject ordinary enumerable breadth incrementally. Calling Reflect.ownKeys on a
-		// hostile 10k-field schema first would itself materialize the attacker-sized list.
-		let enumerableKeyCount = 0;
+		// JavaScript has no incremental API for hidden or symbol keys. Capture only bounded
+		// enumerable JSON data, descriptor by descriptor, and deliberately discard all other
+		// source authority instead of materializing an attacker-sized own-key array.
+		const result = Object.create(null) as { [key: string]: JsonData };
 		for (const key in value) {
 			if (!Object.hasOwn(value, key)) {
 				throw new ToolPolicyError(`${description} must contain own JSON fields only`);
 			}
-			enumerableKeyCount += 1;
-			if (budget.keys + enumerableKeyCount > MAX_CAPABILITY_SCHEMA_KEYS) {
+			budget.keys += 1;
+			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) {
 				throw new ToolPolicyError(`${description} exceeded its key bound`);
 			}
-		}
-		const keys = Reflect.ownKeys(value);
-		budget.keys += keys.length;
-		if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) throw new ToolPolicyError(`${description} exceeded its key bound`);
-		const result = Object.create(null) as { [key: string]: JsonData };
-		for (const key of keys) {
-			if (typeof key !== "string") throw new ToolPolicyError(`${description} contains a symbol key`);
 			addSchemaBytes(budget, byteLength(key) + 3, description);
 			const descriptor = Object.getOwnPropertyDescriptor(value, key);
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
-				throw new ToolPolicyError(`${description} contains an accessor or non-enumerable field`);
+				throw new ToolPolicyError(`${description} contains an accessor field`);
 			}
 			Object.defineProperty(result, key, {
 				value: snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description),
@@ -698,7 +708,7 @@ function sensitiveAssignmentAt(
 
 	const kind = sensitiveAssignmentKind(key);
 	if (!kind) return undefined;
-	const normalizedKey = key.toLowerCase().replace(/[-_]/g, "");
+	const normalizedKey = (key.toLowerCase().split(".").at(-1) ?? key).replace(/[-_]/g, "");
 	while (isHorizontalWhitespace(value[cursor])) {
 		cursor += 1;
 		recordTotalVisits(metrics, 1);
@@ -1064,6 +1074,7 @@ function redactPrivateKeyBlocks(value: string): string {
 
 function redactStrongCredentialSyntax(value: string): string {
 	return value
+		.replace(/^(\s*(?:set-cookie|cookie)\s*:\s*)([^\r\n]*)/gim, `$1${REDACTED_TEXT}`)
 		.replace(/\b([a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:)([^@\s/]+)(@)/gi, `$1${REDACTED_TEXT}$3`)
 		.replace(/([?&#](?:access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret)=)([^&#\s]+)/gi,
 			`$1${REDACTED_TEXT}`)
@@ -1072,7 +1083,8 @@ function redactStrongCredentialSyntax(value: string): string {
 }
 
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
-	const normalized = key.toLowerCase().replace(/[-_]/g, "");
+	const finalSegment = key.toLowerCase().split(".").at(-1) ?? key;
+	const normalized = finalSegment.replace(/[-_]/g, "");
 	if (normalized.endsWith("authorization")) return "authorization";
 	if (secretAssignmentKeys.has(normalized) || normalized === "awssecretaccesskey" ||
 		normalized.endsWith("token") || normalized.endsWith("password") ||
@@ -1297,11 +1309,15 @@ function isAssignmentKeyCharacter(character: string | undefined): boolean {
 	if (character === undefined) return false;
 	const code = character.charCodeAt(0);
 	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
-		(code >= 97 && code <= 122) || character === "_" || character === "-";
+		(code >= 97 && code <= 122) || character === "_" || character === "-" || character === ".";
 }
 
 function isPotentialAssignmentKeyStart(character: string | undefined): boolean {
-	return isAssignmentKeyCharacter(character) || character === '"' || character === "'";
+	if (character === undefined) return false;
+	const code = character.charCodeAt(0);
+	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
+		(code >= 97 && code <= 122) || character === "_" || character === "-" ||
+		character === '"' || character === "'";
 }
 
 function isHorizontalWhitespace(character: string | undefined): boolean {
@@ -1483,6 +1499,7 @@ function validateCapabilityName(name: string): void {
 	}
 	const tokens = name.slice("host_".length).split("_");
 	const normalizedTokens = tokens.map((token) => token.endsWith("s") ? token.slice(0, -1) : token);
+	const compact = name.slice("host_".length).replaceAll("_", "");
 	const sensitiveNouns = new Set([
 		"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
 	]);
@@ -1493,8 +1510,14 @@ function validateCapabilityName(name: string): void {
 		(token === "access" && normalizedTokens[index + 1] === "token") ||
 		(token === "refresh" && normalizedTokens[index + 1] === "token"));
 	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => sensitiveNouns.has(token));
+	const hasForbiddenCompact =
+		/(?:bash|shell|exec|command)/.test(compact) ||
+		/(?:subagent|spawnagent|delegate|orchestrat|agentcreate|agentrunner|recursiveagent)/.test(compact) ||
+		/(?:http(?:request|write|post|put|patch|delete)|webrequest(?:write|post|put|patch|delete))/.test(compact) ||
+		/sql(?:request|query|queries|write|insert|update|delete|execute)/.test(compact) ||
+		/(?:secret|credential|token|password|passwd|auth|authorization|apikey|privatekey)/.test(compact);
 	if (forbiddenCapabilityPatterns.some((pattern) => pattern.test(name)) ||
-		hasSensitiveNoun) {
+		hasSensitiveNoun || hasForbiddenCompact) {
 		throw new ToolPolicyError(`capability ${name} requests forbidden generic, secret, or recursive authority`);
 	}
 }
@@ -1574,14 +1597,20 @@ function captureOwnResultFields(
 	description: string,
 ): ReadonlyMap<string, unknown> {
 	const allowedSet = new Set(allowed);
-	const keys = Reflect.ownKeys(value);
-	if (keys.length > allowed.length) throw new ToolPolicyError(`${description} contains unknown fields`);
 	const fields = new Map<string, unknown>();
-	for (const key of keys) {
-		if (typeof key !== "string" || !allowedSet.has(key)) {
+	let enumerableFields = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
 			throw new ToolPolicyError(`${description} contains an unknown field`);
 		}
+		enumerableFields += 1;
+		if (enumerableFields > allowed.length) throw new ToolPolicyError(`${description} contains unknown fields`);
+	}
+	// Fixed host envelopes are projected through allowlisted descriptors. Hidden and
+	// symbol peers are deliberately discarded without materializing the source key set.
+	for (const key of allowed) {
 		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		if (!descriptor) continue;
 		if (!descriptor?.enumerable || descriptor.set) {
 			throw new ToolPolicyError(`${description} contains an invalid field`);
 		}
@@ -1628,8 +1657,13 @@ function closedObject(properties: Record<string, unknown>, required: string[]): 
 function assertOnlyKeys(value: Readonly<Record<string, unknown>>, allowed: readonly string[], description: string): void {
 	if (!isRecord(value)) throw new ToolPolicyError(`${description} input must be an object`);
 	const allowedSet = new Set(allowed);
-	for (const key of Object.keys(value)) {
-		if (!allowedSet.has(key)) throw new ToolPolicyError(`${description} input contains unknown field ${JSON.stringify(key)}`);
+	let count = 0;
+	for (const key in value) {
+		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
+			throw new ToolPolicyError(`${description} input contains unknown field ${JSON.stringify(key)}`);
+		}
+		count += 1;
+		if (count > allowed.length) throw new ToolPolicyError(`${description} input contains too many fields`);
 	}
 }
 

@@ -836,7 +836,7 @@ test("cycle 9 capability schemas are bounded accessor-free deep immutable snapsh
 	}, {
 		retainedEnum: ["read"],
 		deepFrozen: true,
-		accepted: [],
+		accepted: ["symbol"],
 		accessorReads: 0,
 		proxyOwnKeys: 0,
 		policyNamesFrozen: true,

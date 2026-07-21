@@ -322,14 +322,10 @@ class FakeSession implements RuntimeAgentSession {
 		this.lastPrompt = prompt;
 		assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
 		if (this.promptGate) await this.promptGate;
-		const message = {
-			role: "assistant",
+		const message = assistantMessage(this.output, {
 			provider: this.terminalProvider,
 			model: this.terminalModel,
-			stopReason: "stop",
-			timestamp: 475,
-			content: [{ type: "text", text: this.output }],
-		};
+		});
 		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
 		for (const listener of this.listeners) listener({
 			type: "agent_end",
@@ -644,15 +640,15 @@ async function assertThrowingRequestSignalIsExceptionSafe(hook: "add" | "remove"
 		firstDisposeCalls: firstSession.disposeCalls,
 		unhandled: unhandled.length,
 	}, {
-		runStatus: "rejected",
-		runHasListenerError: true,
+		runStatus: "resolved",
+		runHasListenerError: false,
 		retryStatus: "resolved",
 		closeStatus: "resolved",
 		referencedTimers: 0,
-		firstPromptCalls: hook === "add" ? 0 : 1,
+		firstPromptCalls: 1,
 		firstAbortCalls: 0,
-		firstWaitCalls: hook === "add" ? 0 : 1,
-		firstDisposeCalls: hook === "add" ? 0 : 1,
+		firstWaitCalls: 1,
+		firstDisposeCalls: 1,
 		unhandled: 0,
 	});
 }
@@ -1060,11 +1056,11 @@ test("explicit abort, close, and parent shutdown race but abort and join each se
 	assert.equal(h.sdk.session.disposeCalls, 1);
 });
 
-test("cycle 7 signal-listener attachment failure releases the admitted run and deadline timer", async () => {
+test("cycle 7 shadow signal-listener attachment hooks are ignored without timer leaks", async () => {
 	await assertThrowingRequestSignalIsExceptionSafe("add");
 });
 
-test("cycle 7 signal-listener removal failure cannot skip finalization or close settlement", async () => {
+test("cycle 7 shadow signal-listener removal hooks are ignored through finalization", async () => {
 	await assertThrowingRequestSignalIsExceptionSafe("remove");
 });
 
@@ -1452,7 +1448,7 @@ test("duplicate long-timeout rejection leaves no referenced cancellation-scope t
 	assert.equal(referencedAfterRejection, 0);
 });
 
-test("cycle 8 signal listener leases own attach-then-throw, remove-throw, parent, and mutated targets", async () => {
+test("cycle 8 native signal listener leases ignore shadow hooks and mutated targets", async () => {
 	type SignalProbe = {
 		signal: AbortSignal;
 		listeners: Set<unknown>;
@@ -1533,10 +1529,10 @@ test("cycle 8 signal listener leases own attach-then-throw, remove-throw, parent
 		mutation: [mutationOutcome.status, mutationClose.status, signalReads, original.removeCalls, original.listeners.size, replacement.removeCalls],
 		parent: [parentClose.status, parent.addCalls, parent.removeCalls, parent.listeners.size],
 	}, {
-		attach: ["rejected", "resolved", 1, 1, 0],
-		remove: ["rejected", "resolved", 1, 1, 0],
-		mutation: ["resolved", "resolved", 1, 1, 0, 0],
-		parent: ["resolved", 1, 1, 0],
+		attach: ["resolved", "resolved", 0, 0, 0],
+		remove: ["resolved", "resolved", 0, 0, 0],
+		mutation: ["resolved", "resolved", 1, 0, 0, 0],
+		parent: ["resolved", 0, 0, 0],
 	});
 });
 
@@ -2438,7 +2434,7 @@ test("cycle 9 late-session disposal has its own bounded phase and reports the ex
 	});
 });
 
-test("cycle 9 listener leases capture exact operations and native fallback-detach request and parent signals", async () => {
+test("cycle 9 listener leases use only canonical native request and parent operations", async () => {
 	const installProbe = (throwBeforeDetach = false) => {
 		const controller = new AbortController();
 		const signal = controller.signal;
@@ -2514,10 +2510,10 @@ test("cycle 9 listener leases capture exact operations and native fallback-detac
 		parentMutation: [parentMutationOutcome.status, parentMutation.observed()],
 		parentThrow: [parentThrowOutcome.status, isTypedOwnCause(parentThrowOutcome), parentThrow.observed()],
 	}, {
-		requestMutation: ["resolved", { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
-		requestThrow: ["rejected", true, { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
-		parentMutation: ["resolved", { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
-		parentThrow: ["rejected", true, { originalRemoveCalls: 1, replacementRemoveCalls: 0, listeners: 0 }],
+		requestMutation: ["resolved", { originalRemoveCalls: 0, replacementRemoveCalls: 0, listeners: 0 }],
+		requestThrow: ["resolved", false, { originalRemoveCalls: 0, replacementRemoveCalls: 0, listeners: 0 }],
+		parentMutation: ["resolved", { originalRemoveCalls: 0, replacementRemoveCalls: 0, listeners: 0 }],
+		parentThrow: ["resolved", false, { originalRemoveCalls: 0, replacementRemoveCalls: 0, listeners: 0 }],
 	});
 });
 
@@ -2591,7 +2587,10 @@ test("cycle 9 every public asynchronous boundary returns typed own-cause errors 
 				.filter((message) => /synthetic (?:primary|cleanup) failure/.test(message)).sort(),
 		},
 	}, {
-		boundaries: outcomes.map(([name]) => [name, "rejected", true]),
+		boundaries: outcomes.map(([name]) => [name,
+			name === "signal-remove" || name === "parent-release" ? "resolved" : "rejected",
+			name === "signal-remove" || name === "parent-release" ? false : true,
+		]),
 		dual: {
 			status: "rejected",
 			typed: true,
@@ -2610,17 +2609,11 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	const mutatedHandoff = handoffFor(mutationRequest, { summary: "mutated terminal summary" });
 	mutationHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
-		const message = {
-			role: "assistant",
-			provider: "openai-codex",
-			model: "gpt-5.6-sol",
-			stopReason: "stop",
-			timestamp: 475,
-			content: [{ type: "text", text: originalHandoff }],
-		};
+		const message = assistantMessage(originalHandoff);
 		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
 		for (const listener of this.listeners) listener({ type: "agent_end", messages: [message], willRetry: false } as AgentSessionEvent);
-		message.content[0].text = mutatedHandoff;
+		const textPart = message.content[0];
+		if (textPart?.type === "text") textPart.text = mutatedHandoff;
 	};
 	const mutationOutcome = await mutationHarness.runtime.run(mutationRequest);
 
@@ -2651,14 +2644,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	});
 	sparseHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
-		const message = {
-			role: "assistant",
-			provider: "openai-codex",
-			model: "gpt-5.6-sol",
-			stopReason: "stop",
-			timestamp: 475,
-			content: [{ type: "text", text: handoffFor(sparseRequest) }],
-		};
+		const message = assistantMessage(handoffFor(sparseRequest));
 		const messages = new Array<typeof message>(1_000);
 		messages[999] = message;
 		for (const listener of this.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
@@ -2673,14 +2659,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	});
 	hiddenHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
-		const message = {
-			role: "assistant",
-			provider: "openai-codex",
-			model: "gpt-5.6-sol",
-			stopReason: "stop",
-			timestamp: 475,
-			content: [{ type: "text", text: handoffFor(hiddenRequest) }],
-		};
+		const message = assistantMessage(handoffFor(hiddenRequest));
 		const event = { type: "message_end", message } as Record<string, unknown>;
 		Object.defineProperty(event, "hidden", { get() { hiddenReads += 1; return "hidden"; } });
 		for (const listener of this.listeners) listener(event as AgentSessionEvent);
@@ -2697,7 +2676,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 		mutationSummary: "original terminal summary",
 		proxy: ["rejected", true, 0],
 		sparse: ["rejected", true],
-		hidden: ["rejected", true, 0],
+		hidden: ["resolved", false, 0],
 	});
 });
 
@@ -3171,7 +3150,10 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 		const req = request({ binding: { ...request().binding, runId: `cycle10-${spec.name}`, laneId: `cycle10-${spec.name}` } });
 		sdk.session.output = handoffFor(req);
 		const outcome = await observeSettlement(harness.runtime.run(req), 100);
-		if (outcome.status !== "rejected") problems.push(`${spec.name}:accepted`);
+		const discardedHiddenPeer = spec.name === "hidden-array-field" || spec.name === "symbol-array-field";
+		if (discardedHiddenPeer ? outcome.status !== "resolved" : outcome.status !== "rejected") {
+			problems.push(`${spec.name}:${outcome.status}`);
+		}
 		if (sdk.session.disposeCalls !== 1) problems.push(`${spec.name}:dispose-${sdk.session.disposeCalls}`);
 		if (built.observed() !== 0) problems.push(`${spec.name}:host-read-${built.observed()}`);
 		const retry = request({
@@ -3223,28 +3205,14 @@ test("cycle 10 Pi 0.80.6 cumulative message updates are delta-accounted once", a
 			harness.sdk.session.lastPrompt = prompt;
 			assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
 			for (let end = 4; end < output.length; end += 4) {
-				const partial = {
-					role: "assistant",
-					provider: "openai-codex",
-					model: "gpt-5.6-sol",
-					stopReason: "stop",
-					timestamp: 475,
-					content: [{ type: "text", text: output.slice(0, end) }],
-				};
+				const partial = assistantMessage(output.slice(0, end));
 				for (const listener of harness.sdk.session.listeners) listener({
 					type: "message_update",
 					message: partial,
 					assistantMessageEvent: { type: "text_delta", contentIndex: 0, delta: output.slice(end - 4, end), partial },
 				} as AgentSessionEvent);
 			}
-			const message = {
-				role: "assistant",
-				provider: "openai-codex",
-				model: "gpt-5.6-sol",
-				stopReason: "stop",
-				timestamp: 475,
-				content: [{ type: "text", text: output }],
-			};
+			const message = assistantMessage(output);
 			for (const listener of harness.sdk.session.listeners) listener({ type: "message_end", message } as AgentSessionEvent);
 			for (const listener of harness.sdk.session.listeners) listener({
 				type: "agent_end", messages: [message], willRetry: false,
@@ -3291,10 +3259,7 @@ test("cycle 10 event breadth is rejected before whole-key materialization and te
 	Object.defineProperty(closedHarness.sdk.session, "prompt", {
 		configurable: true,
 		async value() {
-			const message = {
-				role: "assistant", provider: "openai-codex", model: "gpt-5.6-sol", stopReason: "stop", timestamp: 475,
-				content: [{ type: "text", text: closedOutput }],
-			};
+			const message = assistantMessage(closedOutput);
 			for (const listener of closedHarness.sdk.session.listeners) listener({
 				type: "message_end", message, unexpected: "forbidden",
 			} as unknown as AgentSessionEvent);
@@ -3331,9 +3296,10 @@ test("cycle 10 runtime boundary failures are typed bounded redacted snapshots wi
 	const listenerMarker = "synthetic-cycle10-listener-secret-475";
 	const listenerRaw = new Error(`password=${listenerMarker}`);
 	const listenerController = new AbortController();
+	let listenerHookCalls = 0;
 	Object.defineProperty(listenerController.signal, "removeEventListener", {
 		configurable: true,
-		value() { throw listenerRaw; },
+		value() { listenerHookCalls += 1; throw listenerRaw; },
 	});
 	const listenerHarness = runtime();
 	const listenerRequest = request({
@@ -3341,10 +3307,7 @@ test("cycle 10 runtime boundary failures are typed bounded redacted snapshots wi
 		binding: { ...request().binding, runId: "cycle10-error-listener", laneId: "cycle10-error-listener" },
 	});
 	listenerHarness.sdk.session.output = handoffFor(listenerRequest);
-	records.push({
-		name: "listener", marker: listenerMarker, raw: listenerRaw,
-		outcome: await observeSettlement(listenerHarness.runtime.run(listenerRequest), 100),
-	});
+	const listenerOutcome = await observeSettlement(listenerHarness.runtime.run(listenerRequest), 100);
 
 	const cleanupMarker = "synthetic-cycle10-cleanup-secret-475";
 	const cleanupRaw = new Error(`client_secret=${cleanupMarker}`);
@@ -3372,7 +3335,9 @@ test("cycle 10 runtime boundary failures are typed bounded redacted snapshots wi
 			problems.push(`${record.name}:raw-cause`);
 		}
 	}
-	assert.deepEqual(problems, []);
+	assert.deepEqual({ problems, listener: [listenerOutcome.status, listenerHookCalls] }, {
+		problems: [], listener: ["resolved", 0],
+	});
 });
 
 test("cycle 10 prompts and handoffs close documentary equals, proxy auth, quoted flow, and OAuth fragments", async () => {
