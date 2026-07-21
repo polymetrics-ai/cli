@@ -13,9 +13,9 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction: state identity parity | Focused run: adapter identity differed from `target-evidence.ts` for the same checkout | v1 repository/worktree identity parity passes for coordinator and linked worktree | Local/HTTPS/SSH/SCP/file/no-origin parity; strict TypeScript and full suite pass | green/refactored |
 | Correction: immutable handoff claim | Focused run: all three mutable handoff variants were accepted and persisted claim lacked `allowedScopes` | atomic claim/binding records reject workspace and persisted-field tampering | Direct live-object and on-disk mutation cases; full suite passes | green/refactored |
 | Correction: exclusive writable lease | Focused run: both same-owner contenders fulfilled; returned workspace had no lease capability | same-owner race yields one lease; release/retry and dead-owner resume pass | Existing append-only `FileStateStore` fencing reused; full suite passes | green/refactored |
-| Correction 2: mutation capability fencing | Focused run: released claim committed through a replacement lease; workspace had no capability-bound mutation API | pending | pending | red |
-| Correction 2: complete handoff scope | Focused run: a passed handoff omitted a clean committed path outside immutable scopes | pending | pending | red |
-| Correction 2: effective push endpoint | Focused run: alternate local bare `pushurl` received the issue ref and object before the eventual verification error | pending | pending | red |
+| Correction 2: mutation capability fencing | Focused run: released claim committed through a replacement lease; workspace had no capability-bound mutation API | Workspace-held nonforgeable issuer plus adapter WeakMap capability fence fetch/worktree/commit/push; release drains accepted mutations | Alternate-root issuer forgery, forged capability, replacement success, recovery, and in-flight release cases pass | green/refactored |
+| Correction 2: complete handoff scope | Focused run: a passed handoff omitted a clean committed path outside immutable scopes | Unfiltered `--no-renames` diff audits the complete canonical set before scope validation | Mixed committed scope, exact returned scope, and committed/dirty literal-backslash alias cases pass | green/refactored |
+| Correction 2: effective push endpoint | Focused run: alternate local bare `pushurl` received the issue ref and object before the eventual verification error | Inspection binds effective fetch/push endpoint identities; push revalidates and uses the exact stable endpoint | Late `pushurl` and chained `insteadOf` bare remotes remain ref- and object-free | green/refactored |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -36,6 +36,13 @@ Production remained unchanged for the RED command: `node --test
 released claim retained commit authority; no adapter-minted workspace mutation API existed for
 release serialization; and handoff passed after omitting a committed out-of-scope path.
 
+Correction 2 GREEN/refactor checkpoint `6a22aa789095da67c5b10f51476de41d3f5643ca`:
+focused 29/29; serialized full Shepherd 166/166 in 95.9s; strict no-emit TypeScript passed using
+the cached Pi 0.80.6 Node type surface; offline Pi RPC returned `true`; exact diff/scope hygiene
+passed. Read-only adversarial probes found alternate-root issuer, literal-backslash path alias, and
+chained URL-rewrite variants during refactor; each received a deterministic regression before the
+final gate.
+
 ## Required safety cases
 
 - canonical repository identity is stable across linked worktrees and rejects a mismatched binding
@@ -47,6 +54,9 @@ release serialization; and handoff passed after omitting a committed out-of-scop
 - exact existing workspace reconciliation is idempotent after crash/retry
 - alias or duplicate branch/worktree ownership fails closed
 - concurrent create attempts cannot yield two active mutators
+- every Git mutation requires the exact active capability and release drains accepted operations
+- effective fetch/push endpoints remain bound and URL-rewrite-stable before external mutation
+- handoff audits every canonical committed and dirty path without separator aliasing
 
 ## GSD gate
 
@@ -66,3 +76,6 @@ release serialization; and handoff passed after omitting a committed out-of-scop
   finalized without automated-review or merge authority.
 - Execution decision, correction cycles: `local_critical_path` — the identity, claim, and lease
   fixes share one owned adapter boundary; focused RED preceded GREEN, then refactor and broad gates.
+- Execution decision, correction 2: `local_critical_path` — the remaining lease, handoff, and
+  endpoint findings share the owned adapter boundary; RED preceded capability/endpoint GREEN,
+  adversarial refactor probes, and the parent-authorized Shepherd-only verification campaign.

@@ -9,6 +9,11 @@ Refs #471
   and worktree bindings, and reject mutable handoff evidence
 - fence the one writable mutator with Shepherd's append-only file lease, idempotent workspace
   release, explicit stale-start guidance, and dead-owner same-request resume
+- require a WorkspaceAdapter-held nonforgeable capability for every Git mutation and serialize
+  release behind every accepted in-flight operation
+- audit the complete canonical committed/dirty handoff path set before immutable-scope validation
+- bind effective fetch/push endpoints, reject late pushurl or rewrite drift, and push/verify against
+  the exact validated endpoint
 - preserve dirty, untracked, conflicted, stale, and unique state without exposing worktree removal,
   reset, clean, prune, force push, default-branch push, or arbitrary refspec capability
 
@@ -19,17 +24,20 @@ Refs #471
 - correction RED: `36860ec5` — 21 tests, 16 passed and 5 failed on the exact review contracts
 - correction GREEN: `e3669fc4` — focused 21/21 and strict TypeScript passed
 - correction refactor: `d91b41a8` — expanded identity, tamper, release, and crash-recovery evidence
+- correction 2 RED: `e8d1a3d7` — 25 tests, 21 passed and 4 failed on the re-review contracts
+- correction 2 GREEN/refactor: `6a22aa78` — capability, scope, endpoint, and adversarial cases pass
 - skills: `gsd-programming-loop`, `gsd-workstreams`, `gsd-plan-phase`,
   `github-issue-first-delivery`, `architecture-patterns`, `javascript-testing-patterns`
 
 ## Verification
 
-- focused issue tests — 21 passed, 0 failed
-- full Shepherd suite with `--test-concurrency=1` — 158 passed, 0 failed
+- focused issue tests — 29 passed, 0 failed
+- full Shepherd suite with `--test-concurrency=1` — 166 passed, 0 failed
 - strict no-emit TypeScript against cached Pi 0.80.6 Node types — pass
 - documented offline Pi 0.80.6 RPC `get_commands` discovery — `true` for `pm-shepherd`
 - exact-range diff, scope, and pushed implementation-ref equality — pass
-- no Go/connectors/`make verify` run during correction, per parent policy
+- no Go, connector, certification, runtime-service, or `make verify` gate run during correction,
+  per parent policy
 
 The serialized full-suite command prevents real Git subprocess load from perturbing the SDK
 runner's intentional wall-clock assertions; no timeout was widened.
@@ -43,6 +51,6 @@ runner's intentional wall-clock assertions; no timeout was widened.
 
 ## Review route
 
-Independent xhigh review of `906a45c5` produced the correction addressed here. A fresh independent
-xhigh review must bind to the newly pushed exact candidate head. Claude and Copilot are not
-requested, and this worker must not merge the sub-PR or parent PR.
+Independent xhigh reviews of `906a45c5` and `d5181cd2` produced the corrections addressed here. A
+fresh independent xhigh review must bind to the newly pushed exact candidate head. Claude and
+Copilot are not requested, and this worker must not merge the sub-PR or parent PR.

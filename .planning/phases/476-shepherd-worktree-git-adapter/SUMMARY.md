@@ -3,10 +3,10 @@
 Status: `completed`
 
 Issue #476 now provides a typed Git adapter and isolated-worktree policy with identities compatible
-with existing Shepherd state, immutable handoff claims, and a real exclusive writable lease. The
-Git boundary still exposes only bounded status/fetch/branch/commit/push/diff/worktree operations;
-it does not expose destructive cleanup, force push, default-branch mutation, arbitrary refspec, or
-unrestricted path capabilities.
+with existing Shepherd state, immutable complete-scope handoff claims, endpoint-bound remote
+operations, and a nonforgeable exclusive writable capability. The Git boundary still exposes only
+bounded status/fetch/branch/commit/push/diff/worktree operations; it does not expose destructive
+cleanup, force push, default-branch mutation, arbitrary refspec, or unrestricted path capabilities.
 
 The correction cycle addressed every finding from independent xhigh review of `906a45c5`:
 
@@ -19,7 +19,17 @@ The correction cycle addressed every finding from independent xhigh review of `9
   tests, without widening any timeout;
 - PR and reviewed-head evidence is concrete in `WORKER-HANDOFF.md` and `VERIFICATION.md`.
 
-Focused tests pass 21/21 and the serialized full Shepherd suite passes 158/158. Strict TypeScript,
+The second correction cycle addresses independent xhigh re-review of `d5181cd2`:
+
+- every Git mutation requires the exact active WorkspaceAdapter-issued capability; release stops
+  admission and waits for accepted mutations before releasing the underlying fenced lease;
+- handoff audits the complete unfiltered `baseHead..head` path set before immutable-scope checks;
+- effective fetch and push endpoints are bound, revalidated, rewrite-stability checked, and the
+  exact validated endpoint is used for push and exact-head verification;
+- alternate lease-root issuance, separator aliasing, and chained URL rewrites are covered by
+  deterministic adversarial regressions.
+
+Focused tests pass 29/29 and the serialized full Shepherd suite passes 166/166. Strict TypeScript,
 offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 
 ## Files delivered
@@ -40,6 +50,8 @@ offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 - `36860ec5`: correction RED checkpoint.
 - `e3669fc4`: correction GREEN checkpoint.
 - `d91b41a8`: correction refactor/test-hardening checkpoint.
+- `e8d1a3d7`: correction 2 genuine RED checkpoint.
+- `6a22aa78`: correction 2 GREEN/refactor checkpoint.
 
 ## Deviations
 
@@ -47,5 +59,5 @@ offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 - The repo GSD adapter lacks `programming-loop`; the complete lifecycle ran as
   `manual_gsd_fallback`.
 - Pi 0.80.6 has no `--list-extensions`; the repository-documented offline RPC discovery passed.
-- Parent policy limits this worker to Shepherd/TypeScript/Pi/diff gates; no Go/connectors gate ran
-  during correction.
+- Parent policy limits this worker to Shepherd/TypeScript/Pi/diff gates; no Go, connector,
+  certification, runtime-service, or `make verify` gate ran during correction.

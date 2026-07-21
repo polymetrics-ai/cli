@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "phase": "476-shepherd-worktree-git-adapter",
   "issue": 476,
-  "status": "running",
+  "status": "completed",
   "gsdMode": "manual_gsd_fallback",
-  "verificationPassed": false,
-  "verificationBlocker": "Independent xhigh re-review of d5181cd2 found mutation-capability fencing, complete handoff scope auditing, and effective push-endpoint binding blockers.",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -76,6 +76,26 @@
       "cycle": "correction2-red",
       "decision": "local_critical_path",
       "reason": "Focused 25-test run produced four deterministic failures: alternate pushurl contamination, post-release mutation through a replacement lease, missing capability-bound mutation API/release serialization, and omitted committed out-of-scope handoff paths."
+    },
+    {
+      "cycle": "correction2-green",
+      "decision": "local_critical_path",
+      "reason": "All Git mutations now require a workspace-issued WeakMap capability, release drains accepted operations, handoff audits the unfiltered canonical path set, and push binds the effective endpoint."
+    },
+    {
+      "cycle": "correction2-refactor",
+      "decision": "local_critical_path",
+      "reason": "Read-only adversarial probes reproduced alternate-root issuer, literal-backslash path alias, and chained URL rewrite bypasses; deterministic regressions now pass for each."
+    },
+    {
+      "cycle": "correction2-verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 29/29, serialized Shepherd 166/166, strict cached Pi 0.80.6 TypeScript, offline Pi RPC, and exact diff/scope gates pass; no Go, connector, certification, runtime, or make gate ran."
+    },
+    {
+      "cycle": "correction2-summary",
+      "decision": "local_critical_path",
+      "reason": "Correction checkpoints and exact gate evidence are durable for PR #484; fresh exact-head independent review remains parent-owned."
     }
   ]
 }

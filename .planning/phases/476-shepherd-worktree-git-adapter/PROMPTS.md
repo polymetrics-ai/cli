@@ -39,3 +39,8 @@
   capability-bound mutation API was absent, and handoff omitted the out-of-scope committed path.
 - Authorized gates remain focused TypeScript/Shepherd/Pi/diff-only; no Go, connector, or
   `make verify` run.
+- Result: correction 2 RED `e8d1a3d7`, GREEN/refactor `6a22aa78`; focused 29/29, serialized full
+  Shepherd 166/166, strict cached-Pi TypeScript, offline Pi RPC `true`, and exact diff/scope pass.
+- Refactor probes additionally reproduced and closed alternate-root issuer forgery, literal
+  backslash scope aliasing, and chained Git URL rewrite redirection; their alternate bare remotes
+  remain ref- and object-free.

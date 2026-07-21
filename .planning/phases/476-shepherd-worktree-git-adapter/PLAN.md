@@ -125,3 +125,9 @@ file boundary:
 4. Checkpoint and push RED before production edits, then checkpoint GREEN/refactor/evidence. Run
    only focused #476 tests, serialized Shepherd tests, strict cached Pi 0.80.6 TypeScript, offline
    Pi RPC, and exact diff/scope gates; do not run Go, connector, or `make` gates.
+
+Correction 2 result: RED `e8d1a3d7f0d463ea6ea3acfd928ea17e2acdf026`; GREEN/refactor
+`6a22aa789095da67c5b10f51476de41d3f5643ca`. Focused 29/29, serialized Shepherd
+166/166, strict cached-Pi TypeScript, offline Pi RPC, and exact diff/scope gates pass. Refactor
+also closes reproduced alternate-root issuer, literal-backslash path, and chained URL-rewrite
+bypasses without widening the owned file boundary.
