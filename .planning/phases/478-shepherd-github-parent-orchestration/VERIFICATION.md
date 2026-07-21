@@ -152,3 +152,22 @@ parent-owned exact-head reviews remain pending.
 | Post-RED test edits | support-fixture alignment only in `github-orchestrator.test.ts`; no RED assertion was removed or weakened |
 | Prohibited/live actions | not run |
 | Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
+
+## Cycle 6 verification contract
+
+Status: planned against frozen candidate `63ac436fdac5fc46be7004f8109c4f068aa5749c`.
+Both Cycle 5 reviews are blocking historical input until this consolidated correction completes.
+
+- [x] Both review ledgers read completely and mapped to one finding-to-RED matrix.
+- [x] Narrow scope expansion records exactly one added production path,
+      `.pi/extensions/shepherd/human-decision.ts`, for the single credential grammar and record
+      chronology correction.
+- [ ] Artifact-only PLAN checkpoint precedes every Cycle 6 test and production edit.
+- [ ] One test/fixture-only RED retains 109/109 and fails every new behavior row while actual
+      `GitHubDecisionBroker` composition is exercised and production blobs remain frozen.
+- [ ] One coherent architectural GREEN passes the focused three-file suite and real broker route.
+- [ ] Strict owned/all-production TypeScript, offline RPC, serialized classification, immutable
+      base/ancestry, expanded exact scope, diff, JSON, and synthetic-marker scans are recorded.
+- [ ] RUN-STATE uses the non-self-referential exact-current candidate contract.
+- [ ] No Go, connector, certification, runtime, `make`, network, live GitHub, #479 implementation,
+      reviewer, integration, or merge action runs.

@@ -201,3 +201,16 @@ session-attestation contract and fixtures required to verify independent-review 
   reviewer, integration, or merge action ran. Parent next runs two fresh exact-head
   `openai-codex/gpt-5.6-sol:xhigh` reviews and owns disposition, publication, integration, and all
   human gates.
+
+## Cycle 6 correction in progress
+
+- Frozen candidate `63ac436f`; immutable base `3addb1f4`; initial worktree clean.
+- Both Cycle 5 review ledgers were read completely and consolidated before test/production edits.
+- Narrow review-proven scope expansion: prior 17 paths plus only `human-decision.ts`, enabling one
+  authoritative credential grammar and coherent canonical decision chronology.
+- Real `GitHubDecisionBroker` composition remains in the owned orchestrator/test files through an
+  explicit adapter and canonical repository rereads; production broker code remains frozen unless
+  RED proves its public contract insufficient.
+- Adapter command unavailable after healthy doctor, so `manual_gsd_fallback` remains recorded.
+  One read-only explorer maps coupled symbols; isolated worker owns implementation. No push,
+  network, live GitHub, Go, connector, runtime, `make`, reviewer, integration, or merge action.

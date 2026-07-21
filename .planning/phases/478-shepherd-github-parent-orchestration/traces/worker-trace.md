@@ -179,3 +179,17 @@
   assert the exact RED RUN-STATE checkpoint. No RED expectation was removed or weakened.
 - No Go, connector, certification, runtime, `make`, network, live GitHub, controller/#479,
   reviewer, integration, or merge action ran. Parent owns two fresh exact-head `xhigh` reviews.
+
+## 2026-07-22 Cycle 6 plan
+
+- Verified clean exact frozen head `63ac436f`, immutable merge base `3addb1f4`, and all five
+  relevant production blob IDs before edits.
+- Read both Cycle 5 review ledgers completely and mapped their blocker union plus receipt/run-state
+  warnings into one retained-109 RED matrix.
+- Loaded GSD programming-loop, compact handoff, architecture/testing, routing, adapter/runtime,
+  issue-contract, and project references. Doctor passes; missing adapter command records
+  `manual_gsd_fallback`.
+- Spawn decision: `read_only_spawned` for broker/shared-boundary mapping plus
+  `local_critical_path` for the ordered implementation in this isolated checkout.
+- Scope decision: exact prior 17 paths plus only `human-decision.ts`; any further path requires
+  stop-and-replan. No test, production, push, network, GitHub, reviewer, or prohibited gate ran.

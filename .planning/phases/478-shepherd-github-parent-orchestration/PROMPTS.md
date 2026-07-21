@@ -94,3 +94,20 @@
   atomic Cycle 5 run state; complete Cycle 4 retention.
 - Exclusions: push/network/GitHub, #479 implementation, parent artifacts, Go/connectors/
   certification/runtime/`make`, reviewer, integration, or merge.
+
+## Cycle 6 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE5-1.md` and `/tmp/478-REVIEW-CYCLE5-2.md`, read completely.
+- Frozen candidate/base: `63ac436fdac5fc46be7004f8109c4f068aa5749c` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Strict sequence: artifact-only PLAN/scope/finding matrix; one comprehensive test/fixture-only RED
+  retaining 109 and all frozen production blobs; one coherent GREEN/refactor; authorized evidence.
+- Batch: real `GitHubDecisionBroker` adapter/composition; hostile-safe broker provenance;
+  conditional parent-ready authorization plus rollback; intrinsic signal ownership; ordered review
+  attempts with stable semantic authority; intrinsic raw/proxy totality; one complete credential
+  grammar; receipt chronology; non-self-referential exact-current RUN-STATE; Cycle 5 retention.
+- Scope: prior exact 17 paths plus only `.pi/extensions/shepherd/human-decision.ts`; any further
+  path requires stop-and-replan. One read-only explorer is spawned; implementation remains local
+  critical path.
+- Exclusions: push/network/live GitHub, #479, Go/connectors/certification/runtime/`make`, reviewer,
+  integration, or merge.

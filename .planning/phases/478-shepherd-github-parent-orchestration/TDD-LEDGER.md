@@ -254,3 +254,34 @@ production blob IDs must be recorded before any Cycle 5 production edit.
   emits the newly required full canonical records, seeded receipts carry authoritative provenance,
   lifecycle recovery observes the created resource, and RUN-STATE asserts the exact RED SHA. These
   edits align fixtures with the stronger contract and do not remove or weaken any RED assertion.
+
+## Cycle 6 consolidated-review RED matrix
+
+Frozen candidate: `63ac436fdac5fc46be7004f8109c4f068aa5749c`.
+
+Frozen production blobs:
+
+- `github-orchestrator.ts`: `dfa8c189bc116c212f5623df508ef918e4d17943`
+- `github-evidence.ts`: `ee3cd46f663c6a4cd15db137fb5a8f2cc539f773`
+- `review-router.ts`: `611aa0679a84c4a470d19c102b540ea5b3fc103d`
+- narrow scope expansion `human-decision.ts`: `0c26e61808a577b3197f9373b659d95739ab20b3`
+- production broker compatibility control `github-decision-broker.ts`:
+  `a04d331443e6ffda4b66996766a6d4111d664931`
+
+| Contract | Behavior-level RED requirement | State |
+| --- | --- | --- |
+| real broker composition | strict TypeScript and runtime test instantiate actual `GitHubDecisionBroker`; adapter drives real request record, pending/decided poll result, consumed evidence, and canonical repository reload without invented fields | planned RED |
+| bounded broker DTO/provenance | request/poll/consume/reload reject wide, accessor, normal/revoked proxy, unknown-field, missing request comment, and impossible updated/decision/consume chronology with typed sanitized errors before ready | planned RED |
+| conditional parent-ready authorization | token digest binds complete policies, exact consumed decision, current parent review/path authority, child receipt+ancestry roster, plan, head, and PR revision; movement inside effect leaves draft true; after-effect drift rolls back idempotently | planned RED |
+| intrinsic signal lease | pre-aborted/live genuine signals with own shadows never start/escape calls; signal proxies/incompatible receivers reject; attach/recheck closes races; early/duplicate/late abort acknowledgement reports accurately for ordinary and real-broker calls | planned RED |
+| ordered reviews/stable semantic authority | later findings blocks earlier clean, findings-then-clean recovers, equivalent later clean keeps stable authorization/mutation intent, and timeout/restart/receipt reuse remains deterministic | planned RED |
+| intrinsic raw/proxy totality | shadowed `Uint8Array.byteLength` cannot bypass predecode bounds; incompatible/subclass/revoked proxies and revoked array/object inputs reject with normalized bounded errors before traps/materialization | planned RED |
+| complete shared credential grammar | synthetic npm `_authToken`, netrc whitespace password, lowercase cloud credential keys, and credential-file forms reject/redact in plan/outbound/review/human-decision fields through one exported helper | planned RED |
+| receipt chronology | integration before snapshot/path/review/policy/controller observations or in the future rejects; repaired happy fixtures integrate after every authority observation | planned RED |
+| non-self-referential RUN-STATE | current cycle 6 uses `candidateRef: "HEAD"`, exact completed checkpoint commits, explicit Cycle 5 blocked review truth, no Cycle 4-as-current state, and no null Cycle 5/6 evidence field | planned RED |
+| Cycle 5 retention | all existing 109 focused tests pass unchanged at RED and after GREEN; policy, reauthorization, eligibility, CAS, lifecycle, bounds, and no-merge guarantees remain intact | planned RED |
+
+The next commit after the Cycle 6 plan checkpoint may modify only the three matching tests and the
+two issue-478 fixtures. Existing fake behavior remains untouched until RED evidence is captured;
+the new real-broker composition row uses the actual production class. Before GREEN, retained
+109/109, every intended new failure, and all frozen production blob IDs above must be recorded.

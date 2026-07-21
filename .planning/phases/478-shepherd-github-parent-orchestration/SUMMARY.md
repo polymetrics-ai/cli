@@ -95,3 +95,13 @@ unrelated managed-sandbox `spawn EPERM` failures, and 1 intentional skip across 
 #478 test passes. Post-RED test edits only align support fixtures with the strengthened production
 contract and do not weaken expectations. No prohibited, network, GitHub, reviewer, integration,
 or merge action ran; two fresh exact-head `xhigh` reviews remain parent-owned.
+
+## Cycle 6 correction status
+
+Both Cycle 5 reviews block exact candidate `63ac436f`. Cycle 6 consolidates their unique union and
+both warnings: real production broker composition; bounded canonical decision provenance;
+conditional ready authorization and rollback; intrinsic signal/raw ownership; ordered review
+attempts with stable semantic authority; one complete credential grammar; receipt chronology; and
+non-self-referential current RUN-STATE. The exact scope expands from 17 to 18 paths only for
+`.pi/extensions/shepherd/human-decision.ts`; test and production files remain frozen at this plan
+checkpoint. No prohibited or external action ran.

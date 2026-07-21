@@ -453,3 +453,106 @@ orchestrator symbols while this isolated worker owns the ordered production crit
 - [x] Authorized local evidence commit and clean candidate (this commit; exact SHA is reported by
       the worker after commit because a commit cannot contain its own identity).
 - [ ] Two fresh exact-head independent reviews remain parent-owned.
+
+## Cycle 6 consolidated stable-head correction: 2026-07-22
+
+Two independent Cycle 5 ledgers reviewed exact frozen candidate
+`63ac436fdac5fc46be7004f8109c4f068aa5749c` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Their unique blocker union and both run-state/
+receipt warnings are accepted as one architecture batch. Cycle 6 retains all 109 focused Cycle 5
+contracts.
+
+Required routing loaded: `gsd-programming-loop`, `caveman`, `architecture-patterns`,
+`javascript-testing-patterns`, required-skills routing, the issue-agent contract, Pi adapter and
+runtime/Pi references, and required GSD project artifacts. `scripts/gsd doctor` passes; the adapter
+still does not expose `programming-loop`, so `manual_gsd_fallback` remains explicit. One read-only
+explorer maps real broker/shared-boundary symbols while this isolated worker owns the ordered
+PLAN/RED/GREEN/evidence critical path (`read_only_spawned` plus `local_critical_path`).
+
+### Cycle 6 narrow scope expansion
+
+The reviewed 17-path range is expanded by exactly one production path:
+`.pi/extensions/shepherd/human-decision.ts`. Review finding 6 proves that file contains a separate,
+narrower credential grammar, while finding 2/3 proves its canonical record chronology is incomplete.
+The non-duplicative correction makes `human-decision.ts` export the single shared grammar and makes
+`review-router.ts` reuse/re-export it; orchestrator-level RED rows exercise the hardened record
+chronology. No `human-decision.test.ts` expansion is needed. The explicit production adapter and
+strict/runtime real-`GitHubDecisionBroker` composition test stay in the already-owned
+`github-orchestrator.ts` and `github-orchestrator.test.ts`; `github-decision-broker.ts` remains
+byte-identical unless RED proves an adapter cannot be expressed against its public contract.
+
+Expected exact base-to-candidate allowlist: the prior 17 paths plus
+`.pi/extensions/shepherd/human-decision.ts` (18 total). Any additional path is a stop-and-replan
+event, never a silent scope expansion.
+
+### Cycle 6 correction contract
+
+1. Preserve the real `GitHubDecisionBroker` request/full-record, poll/result, and
+   consume/evidence shapes through one explicit production adapter backed by canonical repository
+   rereads. The adapter owns context linkage, bounded validation, and exact request/result/reload
+   coherence; it cannot synthesize decision evidence. Strict compile and runtime composition use
+   an actual `GitHubDecisionBroker` through pending -> decided -> consumed. Test fakes expose the
+   same production shapes.
+2. Capture every request, poll, consume, and reload value through byte/descriptor-bounded,
+   proxy/accessor-safe closed DTOs before canonical human-decision validation. All failures become
+   stable typed/sanitized boundary errors. Decided/consumed records require persisted request-comment
+   provenance and ordered create/comment/decision/consume/update timestamps.
+3. Represent parent readiness as one controller-authorized conditional effect. A canonical token
+   binds the complete current policy set, exact consumed decision record, current parent review and
+   path authority, complete child receipt plus ancestry roster, canonical plan, PR head, and PR
+   resource revision. The transport compares/consumes that token atomically with clearing draft;
+   authorization movement yields no visible ready effect. Any post-effect drift invokes a typed,
+   idempotent rollback-to-draft effect and verifies rollback before return.
+4. Lease caller/stop signals only through the intrinsic `AbortSignal.aborted` getter and native
+   `EventTarget` add/remove methods. Reject proxies/incompatible receivers, attach then recheck,
+   never execute own shadows, and accept abort acknowledgement only after local abort. The real
+   broker adapter remains inside tracked settlement/key/stop accounting.
+5. Order all attested exact-head review attempts by authoritative completion before verdict. A
+   later findings attempt invalidates earlier clean; a later clean resolves findings. Keep full
+   attempt digest/timestamp for attestation but use one stable semantic clean-authorization digest
+   for child mutation/receipt identity, so equivalent later clean does not fork one key+intent and
+   timeout/restart recovery remains deterministic.
+6. Read raw `Uint8Array` size with the intrinsic byte-length getter after exact compatible-receiver
+   validation and before decode. Reject normal/revoked proxies before `Array.isArray`; normalize
+   host errors across record/array readers while retaining dense/accessor/cardinality bounds.
+7. Make one exported credential grammar authoritative for orchestration, evidence, review, and
+   human decisions. Add npm `_authToken`, netrc whitespace assignment, lowercase cloud credential
+   keys, and well-known credential-file forms; table-test every #478/human-decision durable or
+   outbound text boundary using synthetic markers only.
+8. Require receipt `integratedAt` no earlier than its PR snapshot, observation, path evidence,
+   review completion, policy observation, or controller observation and never impossibly in the
+   future. Repair fixture chronology and add each failure row.
+9. Replace self-referential durable candidate state with exact non-circular semantics:
+   `candidateRef: "HEAD"`, current cycle/state, and exact prior checkpoint commits; parent handoff
+   binds the resulting evidence commit SHA externally. Cycle 4 is historical, Cycle 5 review truth
+   is explicit, and no current Cycle 5/6 evidence field is null.
+10. Retain all Cycle 5 policy refresh, receipt reauthorization, child eligibility, CAS identity,
+    caller/key retention, bounded stop/raw envelopes, topology/path/scope checks, and no-parent-main-
+    merge guarantees.
+
+### Cycle 6 strict lifecycle
+
+1. Commit this PLAN/scope decision/finding matrix before any test or production edit. Record all
+   five relevant production blob IDs at frozen `63ac436f`.
+2. Make one comprehensive test/fixture-only RED commit. Run retained Cycle 5 tests separately and
+   require 109/109 pass; every new row must fail intentionally. The real broker composition test
+   must instantiate `GitHubDecisionBroker` itself, not a stronger fake. Prove all relevant
+   production blobs still equal frozen `63ac436f` before GREEN.
+3. Implement one coherent architectural GREEN/refactor. Any post-RED fixture edit must preserve
+   production shapes, must not weaken/remove expectations, and must be enumerated in evidence.
+4. Run the focused three files including the real broker composition test, strict owned and all 20
+   production Shepherd modules against pinned Pi 0.80.6, pinned offline RPC, serialized Shepherd
+   classification, immutable-base/ancestry/diff/exact-expanded-scope, JSON, and synthetic-marker
+   scans. Do not run Go, connectors, certification, runtime services, `make`, network/live GitHub,
+   #479 implementation, reviewer, integration, or merge actions.
+5. Commit evidence and report exact PLAN/RED/GREEN/evidence SHAs plus the clean candidate for two
+   fresh parent-owned exact-head `xhigh` reviews.
+
+### Cycle 6 checkpoints
+
+- [ ] Artifact-only PLAN/scope/finding-matrix commit (this checkpoint; exact SHA reported after
+      commit).
+- [ ] One comprehensive test/fixture-only RED with retained 109/109 and frozen production proof.
+- [ ] One coherent architectural GREEN/refactor.
+- [ ] Authorized local verification/evidence commit and clean candidate.
+- [ ] Two fresh exact-head independent reviews remain parent-owned.
