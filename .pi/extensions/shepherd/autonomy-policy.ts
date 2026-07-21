@@ -137,8 +137,16 @@ const transitionRules: Readonly<Record<Exclude<ParentLifecycleStage, "COMPLETE" 
 	],
 };
 
+export function isParentLifecycleStage(value: unknown): value is ParentLifecycleStage {
+	return typeof value === "string" && (PARENT_LIFECYCLE_STAGES as readonly string[]).includes(value);
+}
+
 export function evaluateLifecycleTransition(request: LifecycleTransitionRequest): LifecycleTransitionDecision {
 	const { from, to } = request;
+	if (!isParentLifecycleStage(from) || !isParentLifecycleStage(to)
+		|| typeof request.facts !== "object" || request.facts === null || Array.isArray(request.facts)) {
+		return { allowed: false, reason: "invalid lifecycle stage" };
+	}
 	const facts = request.facts as LifecycleFacts;
 	if (from === "COMPLETE" || from === "BLOCKED") {
 		return { allowed: false, reason: `${from} is a terminal lifecycle stage` };
@@ -179,6 +187,11 @@ function assertNonNegativeSafeInteger(value: number, description: string): void 
 }
 
 export function decideFailurePolicy(request: FailurePolicyRequest): FailurePolicyDecision {
+	if (request.failure !== "transient_verification"
+		&& request.failure !== "transient_review"
+		&& request.failure !== "hard_human_gate") {
+		throw new TypeError("invalid failure class");
+	}
 	assertNonNegativeSafeInteger(request.retryAttempts, "retry attempts");
 	assertNonNegativeSafeInteger(request.maxRetries, "maximum retries");
 	assertNonNegativeSafeInteger(request.correctionRounds, "correction rounds");

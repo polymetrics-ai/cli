@@ -208,6 +208,43 @@ test("complete and at-capacity snapshots are distinct from no-spawn blockers", (
 	} })), { kind: "at_capacity" });
 });
 
+test("completion is not masked by capabilities needed only for future spawns", () => {
+	const candidate = input({
+		persisted: { stage: "COMPLETE", retryAttempts: 0, correctionRounds: 0 },
+		canonical: {
+			...input().canonical,
+			observedStage: "COMPLETE",
+			workItems: [item({ id: "done", status: "succeeded" })],
+			constraints: {
+				...input().canonical.constraints,
+				runtimeCapabilityAvailable: false,
+				isolationAvailable: false,
+			},
+		},
+	});
+	assert.deepEqual(reconcileAutonomy(candidate), { kind: "complete" });
+});
+
+test("runtime-invalid stages and concurrency facts fail closed without throwing", () => {
+	const invalidStage = input({
+		canonical: { ...input().canonical, observedStage: "UNKNOWN" as "SCHEDULE" },
+	});
+	assert.deepEqual(reconcileAutonomy(invalidStage), {
+		kind: "no_spawn",
+		blocker: "not_spawned_human_gate",
+		reason: "invalid lifecycle stage",
+	});
+
+	const invalidConcurrency = input({
+		canonical: { ...input().canonical, maxConcurrency: 0 },
+	});
+	assert.deepEqual(reconcileAutonomy(invalidConcurrency), {
+		kind: "no_spawn",
+		blocker: "not_spawned_runtime_capability_missing",
+		reason: "invalid concurrency policy",
+	});
+});
+
 test("reconciliation is pure and idempotent for the same persisted and canonical snapshot", () => {
 	const candidate = input();
 	const before = structuredClone(candidate);

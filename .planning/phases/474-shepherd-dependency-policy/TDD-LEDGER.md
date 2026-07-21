@@ -48,3 +48,16 @@ The existing TypeScript 5.9.3 compiler available in the environment then ran wit
 --allowImportingTsExtensions --skipLibCheck` over the three production modules. It first found one
 implicit-any callback introduced by runtime `Array.isArray` narrowing; after the minimal annotation,
 the same strict command exited 0. The focused 23/23 suite and `git diff --check` also exited 0.
+
+## Refactor gap loop
+
+An adversarial pass added four fail-closed expectations before editing production code:
+
+- runtime-invalid lifecycle/failure vocabulary;
+- empty DAG completion;
+- terminal completion independent of capabilities used only for future spawns; and
+- invalid concurrency data returning a typed repository blocker instead of throwing.
+
+Gap RED: 26 tests, 22 pass, 4 fail with the expected uncaught/incorrect decisions. Gap GREEN after
+the minimal validation and decision-order changes: 26/26 pass. Strict production TypeScript and
+`git diff --check` pass. The compact full Shepherd suite then passed 163/163.

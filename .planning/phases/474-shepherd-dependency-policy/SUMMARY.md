@@ -1,7 +1,17 @@
 # Issue #474 Summary
 
-Status: implementation not started.
+Status: implementation and refactor complete; repository-wide verification in progress.
 
-Planned delivery is a three-module, I/O-free policy core covering the Shepherd lifecycle, dependency
-and write-scope arbitration, retry/correction budgets, and deterministic reconciliation. Evidence
-will be completed after RED/GREEN/refactor and repository verification.
+Delivered a three-module, I/O-free policy core covering:
+
+- the complete Shepherd parent lifecycle, guarded transition evidence, correction, durable human
+  wait, and terminal states;
+- closed-world dependency DAG validation and fail-closed canonical write scopes;
+- bounded maximum-cardinality ready selection with running-scope arbitration and read-only
+  coexistence;
+- transient retry/correction budgets distinct from hard human gates; and
+- deterministic reconciliation with one typed repository blocker per `no_spawn` decision.
+
+TDD evidence so far: initial 3/3 file-level RED, 23/23 minimum GREEN, 4-expectation gap RED, 26/26
+refactor GREEN, and 163/163 full Shepherd tests. Strict no-emit TypeScript passes over all 12
+production Shepherd modules against installed Pi 0.80.6 types.

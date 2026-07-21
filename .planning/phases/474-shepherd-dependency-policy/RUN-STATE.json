@@ -24,16 +24,26 @@
       "cycle": "execute",
       "decision": "local_critical_path",
       "reason": "The minimum three-module implementation passes 23 focused tests and strict no-emit TypeScript; broader verification follows."
+    },
+    {
+      "cycle": "gap-loop",
+      "decision": "local_critical_path",
+      "reason": "Adversarial runtime-boundary tests produced 4 expected failures, then passed 26/26 after minimal fail-closed refactoring."
+    },
+    {
+      "cycle": "refactor",
+      "decision": "local_critical_path",
+      "reason": "The refactored pure policy passes 26 focused tests, strict production TypeScript, and the full 163-test Shepherd suite."
     }
   ],
   "gates": {
     "red": "passed_expected_failure_3_of_3",
-    "green": "passed_23_of_23",
-    "refactor": "in_progress",
-    "focusedTests": "passed_23_of_23",
-    "fullShepherdTests": "pending",
-    "strictTypeScript": "focused_production_passed",
-    "piExtensionDiscovery": "pending",
+    "green": "passed_26_of_26",
+    "refactor": "passed_gap_red_4_then_green_26_of_26",
+    "focusedTests": "passed_26_of_26",
+    "fullShepherdTests": "passed_163_of_163",
+    "strictTypeScript": "all_12_production_modules_passed_against_pi_0_80_6",
+    "piExtensionDiscovery": "unsupported_flag_but_offline_rpc_passed",
     "goVet": "pending",
     "goTest": "pending",
     "goBuild": "pending",

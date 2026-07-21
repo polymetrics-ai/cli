@@ -1,6 +1,7 @@
 import {
 	decideFailurePolicy,
 	evaluateLifecycleTransition,
+	isParentLifecycleStage,
 	type FailureClass,
 	type LifecycleFacts,
 	type ParentLifecycleStage,
@@ -11,6 +12,7 @@ import {
 	selectReadyWork,
 	validateDependencyGraph,
 	type DependencyWorkItem,
+	type ReadyQueueSelection,
 } from "./dependency-graph.ts";
 
 export interface PersistedAutonomyState {
@@ -76,11 +78,20 @@ function invalidGraphDecision(error: DependencyGraphError): ReconcileDecision {
 	return noSpawn(blocker, `invalid dependency graph: ${error.code}`);
 }
 
-function constraintDecision(input: ReconcileInput): ReconcileDecision | undefined {
+function qualityConstraintDecision(input: ReconcileInput): ReconcileDecision | undefined {
 	const constraints = input.canonical.constraints;
 	if (constraints.hardHumanGate) {
 		return noSpawn("not_spawned_human_gate", "hard human gate requires an authenticated decision");
 	}
+	if (constraints.verificationBlocked) {
+		return noSpawn("not_spawned_verification_blocked", "verification is blocked");
+	}
+	if (constraints.reviewBlocked) return noSpawn("not_spawned_review_blocked", "review is blocked");
+	return undefined;
+}
+
+function spawnCapabilityDecision(input: ReconcileInput): ReconcileDecision | undefined {
+	const constraints = input.canonical.constraints;
 	if (!constraints.runtimeCapabilityAvailable) {
 		return noSpawn("not_spawned_runtime_capability_missing", "required runtime capability is unavailable");
 	}
@@ -90,14 +101,15 @@ function constraintDecision(input: ReconcileInput): ReconcileDecision | undefine
 	if (!constraints.isolationAvailable && mutatingWorkRemains) {
 		return noSpawn("not_spawned_isolation_missing", "mutating work lacks an isolated worktree");
 	}
-	if (constraints.verificationBlocked) {
-		return noSpawn("not_spawned_verification_blocked", "verification is blocked");
-	}
-	if (constraints.reviewBlocked) return noSpawn("not_spawned_review_blocked", "review is blocked");
 	return undefined;
 }
 
 export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
+	if (!isParentLifecycleStage(input.persisted.stage)
+		|| !isParentLifecycleStage(input.canonical.observedStage)
+		|| (input.canonical.proposedStage !== undefined && !isParentLifecycleStage(input.canonical.proposedStage))) {
+		return noSpawn("not_spawned_human_gate", "invalid lifecycle stage");
+	}
 	if (input.persisted.stage !== input.canonical.observedStage) {
 		return { kind: "reconcile_stage", stage: input.canonical.observedStage, reason: "canonical_stage_differs" };
 	}
@@ -109,7 +121,9 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 		throw error;
 	}
 
-	const constrained = constraintDecision(input);
+	if (input.canonical.observedStage === "COMPLETE") return { kind: "complete" };
+
+	const constrained = qualityConstraintDecision(input);
 	if (constrained !== undefined) return constrained;
 
 	if (input.failure !== undefined) {
@@ -162,13 +176,25 @@ export function reconcileAutonomy(input: ReconcileInput): ReconcileDecision {
 		};
 	}
 
-	if (input.canonical.observedStage === "COMPLETE") return { kind: "complete" };
 	if (input.canonical.observedStage !== "SCHEDULE") {
 		return { kind: "await_stage_evidence", stage: input.canonical.observedStage };
 	}
-	const selection = selectReadyWork(input.canonical.workItems, { maxConcurrency: input.canonical.maxConcurrency });
+	let selection: ReadyQueueSelection;
+	try {
+		selection = selectReadyWork(input.canonical.workItems, { maxConcurrency: input.canonical.maxConcurrency });
+	} catch (error) {
+		if (error instanceof RangeError) {
+			return noSpawn("not_spawned_runtime_capability_missing", "invalid concurrency policy");
+		}
+		throw error;
+	}
+	if (selection.kind === "complete") {
+		return { kind: "transition", from: "SCHEDULE", to: "FINAL_VERIFY", reason: "all_tasks_integrated" };
+	}
+	if (selection.kind === "at_capacity") return { kind: "at_capacity" };
+	const spawnConstrained = spawnCapabilityDecision(input);
+	if (spawnConstrained !== undefined) return spawnConstrained;
 	if (selection.kind === "selected") return { kind: "spawn", itemIds: selection.itemIds };
 	if (selection.kind === "blocked") return noSpawn(selection.blocker, selection.blocker);
-	if (selection.kind === "at_capacity") return { kind: "at_capacity" };
-	return { kind: "transition", from: "SCHEDULE", to: "FINAL_VERIFY", reason: "all_tasks_integrated" };
+	return { kind: "at_capacity" };
 }

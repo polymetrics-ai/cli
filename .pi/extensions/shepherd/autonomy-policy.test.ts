@@ -85,6 +85,21 @@ test("only an explicit hard gate can enter BLOCKED and BLOCKED is terminal", () 
 	);
 });
 
+test("runtime-invalid lifecycle and failure vocabulary fails closed", () => {
+	assert.deepEqual(evaluateLifecycleTransition({
+		from: "UNKNOWN" as ParentLifecycleStage,
+		to: "SCHEDULE",
+		facts: {},
+	}), { allowed: false, reason: "invalid lifecycle stage" });
+	assert.throws(() => decideFailurePolicy({
+		failure: "unknown" as "hard_human_gate",
+		retryAttempts: 0,
+		maxRetries: 1,
+		correctionRounds: 0,
+		maxCorrectionRounds: 1,
+	}), /invalid failure class/);
+});
+
 test("transient verification and review failures consume bounded retry then correction budgets", () => {
 	for (const failure of ["transient_verification", "transient_review"] as const) {
 		assert.deepEqual(decideFailurePolicy({

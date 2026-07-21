@@ -108,6 +108,7 @@ test("read-only research and review coexist with mutators while mutating collisi
 });
 
 test("selection reports capacity, completion, or exactly one repository blocker", () => {
+	assert.deepEqual(selectReadyWork([], { maxConcurrency: 1 }), { kind: "complete" });
 	assert.deepEqual(selectReadyWork([item({ id: "running", status: "running" })], { maxConcurrency: 1 }), {
 		kind: "at_capacity",
 	});

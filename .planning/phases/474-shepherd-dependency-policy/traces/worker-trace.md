@@ -12,6 +12,19 @@
   `manual_gsd_fallback`.
 - Execution decision: `local_critical_path`.
 
+## Gap/refactor cycle
+
+- Adversarial test-first gap pass found invalid runtime stage handling, empty-DAG completion,
+  terminal completion ordering, and invalid-concurrency fail-closed behavior.
+- Gap RED: 22 pass / 4 fail. Gap GREEN: 26/26 pass.
+- Full Shepherd suite with compact TAP tail: 163/163 pass.
+- Strict no-emit TypeScript over all 12 production Shepherd modules resolved the installed Pi
+  0.80.6 declaration entry and Node types: pass.
+- Required `pi --list-extensions`: exit 1 because Pi 0.80.6 reports `Unknown option`.
+- Supported offline RPC `get_commands` substitute with explicit Shepherd extension: pass;
+  `pm-shepherd` discovered from the project extension without model/auth/network use.
+- Execution decisions: `local_critical_path` for gap-loop and refactor.
+
 ## Execute cycle
 
 - Implemented lifecycle transition guards, retry/correction budget policy, closed-world dependency

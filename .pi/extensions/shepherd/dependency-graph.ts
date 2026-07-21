@@ -213,12 +213,12 @@ function maximumSafeSet(candidates: readonly DependencyWorkItem[], limit: number
 }
 
 export function selectReadyWork(input: readonly DependencyWorkItem[], options: ReadyQueueOptions): ReadyQueueSelection {
+	const graph = validateDependencyGraph(input);
+	const items = graph.items;
+	if (items.every((candidate) => candidate.status === "succeeded")) return { kind: "complete" };
 	if (!Number.isSafeInteger(options.maxConcurrency) || options.maxConcurrency < 1 || options.maxConcurrency > MAX_WORK_ITEMS) {
 		throw new RangeError(`maxConcurrency must be a positive safe integer no greater than ${MAX_WORK_ITEMS}`);
 	}
-	const graph = validateDependencyGraph(input);
-	const items = graph.items;
-	if (items.length > 0 && items.every((candidate) => candidate.status === "succeeded")) return { kind: "complete" };
 	const running = items.filter((candidate) => candidate.status === "running");
 	const available = options.maxConcurrency - running.length;
 	if (available <= 0 && running.length > 0) return { kind: "at_capacity" };
