@@ -336,9 +336,16 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 	return normalized;
 }
 
-export function redactSensitiveText(value: string): string {
+export interface RedactionScanMetrics {
+	lineBoundaryVisits: number;
+}
+
+export function redactSensitiveText(value: string): string;
+export function redactSensitiveText(value: string, metrics: RedactionScanMetrics): string;
+export function redactSensitiveText(value: string, metrics?: RedactionScanMetrics | number): string {
 	if (typeof value !== "string") return "[REDACTED]";
-	return redactStructuredAssignments(redactPrivateKeyBlocks(value));
+	const scanMetrics = typeof metrics === "object" && metrics !== null ? metrics : undefined;
+	return redactStructuredAssignments(redactPrivateKeyBlocks(value), scanMetrics);
 }
 
 type SensitiveAssignmentKind = "authorization" | "secret";
@@ -390,7 +397,7 @@ const secretAssignmentKeys = new Set([
 	"clientsecret",
 ]);
 
-function redactStructuredAssignments(value: string): string {
+function redactStructuredAssignments(value: string, metrics?: RedactionScanMetrics): string {
 	const ranges: RedactionRange[] = [];
 	// One monotonic cursor owns line, quote, comment, and balanced flow transitions. Value parsers
 	// consume their complete span before the cursor resumes, so skipped nested delimiters cannot
@@ -398,14 +405,14 @@ function redactStructuredAssignments(value: string): string {
 	const state: StructuredScannerState = {
 		index: 0,
 		lineStart: 0,
-		lineEnd: findLineEnd(value, 0),
+		lineEnd: findLineEnd(value, 0, metrics),
 		structuredKeyStart: findStructuredKeyStart(value, 0),
 		mode: { kind: "plain" },
 		flowClosers: [],
 	};
 	while (state.index < value.length) {
 		if (state.index >= state.lineEnd) {
-			advanceScannerLine(value, state);
+			advanceScannerLine(value, state, metrics);
 			continue;
 		}
 
@@ -444,9 +451,9 @@ function redactStructuredAssignments(value: string): string {
 			state.index += 1;
 			continue;
 		}
-		const decision = redactionForAssignment(value, assignment);
+		const decision = redactionForAssignment(value, assignment, state.lineEnd, metrics);
 		if (decision.range) ranges.push(decision.range);
-		advanceScannerTo(value, state, Math.max(state.index + 1, decision.resumeAt));
+		advanceScannerTo(value, state, Math.max(state.index + 1, decision.resumeAt), metrics);
 	}
 	if (ranges.length === 0) return value;
 	let output = "";
@@ -493,16 +500,20 @@ function sensitiveAssignmentAt(
 	return { kind, context, keyColumn: index - lineStart, normalizedKey, valueStart: cursor };
 }
 
-function redactionForAssignment(value: string, assignment: SensitiveAssignment): RedactionDecision {
-	const lineEnd = findLineEnd(value, assignment.valueStart);
+function redactionForAssignment(
+	value: string,
+	assignment: SensitiveAssignment,
+	lineEnd: number,
+	metrics?: RedactionScanMetrics,
+): RedactionDecision {
 	const quote = value[assignment.valueStart];
 	if (quote === '"' || quote === "'") {
 		return quotedValueRedaction(value, assignment, quote);
 	}
 	if (assignment.kind === "secret" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
-		return yamlBlockRedaction(value, assignment, lineEnd);
+		return yamlBlockRedaction(value, assignment, lineEnd, metrics);
 	}
-	return unquotedValueRedaction(value, assignment, lineEnd);
+	return unquotedValueRedaction(value, assignment, lineEnd, metrics);
 }
 
 function quotedValueRedaction(
@@ -534,6 +545,7 @@ function yamlBlockRedaction(
 	value: string,
 	assignment: SensitiveAssignment,
 	headerEnd: number,
+	metrics?: RedactionScanMetrics,
 ): RedactionDecision {
 	const contentStart = afterLineEnding(value, headerEnd);
 	if (contentStart === headerEnd) return { resumeAt: headerEnd };
@@ -541,7 +553,7 @@ function yamlBlockRedaction(
 	let blockEnd = contentStart;
 	let contentIndent: string | undefined;
 	while (cursor < value.length) {
-		const lineEnd = findLineEnd(value, cursor);
+		const lineEnd = findLineEnd(value, cursor, metrics);
 		const line = value.slice(cursor, lineEnd);
 		const indentLength = leadingIndentLength(line);
 		const blank = line.slice(indentLength).length === 0;
@@ -568,10 +580,11 @@ function unquotedValueRedaction(
 	value: string,
 	assignment: SensitiveAssignment,
 	lineEnd: number,
+	metrics?: RedactionScanMetrics,
 ): RedactionDecision {
-	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd);
+	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, metrics);
 	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
-	const resumeAt = assignment.context === "flow" ? scalarEnd : lineEnd;
+	const resumeAt = assignment.context === "flow" ? scalarEnd : Math.max(lineEnd, scalarEnd);
 	const unredactedResumeAt = assignment.context === "flow" ? scalarEnd : assignment.valueStart;
 	if (scalarEnd <= assignment.valueStart) return { resumeAt };
 	if (assignment.kind === "authorization") {
@@ -653,7 +666,11 @@ function findStructuredKeyStart(value: string, lineStart: number): number | unde
 	return isPotentialAssignmentKeyStart(value[cursor]) ? cursor : undefined;
 }
 
-function advanceScannerLine(value: string, state: StructuredScannerState): void {
+function advanceScannerLine(
+	value: string,
+	state: StructuredScannerState,
+	metrics?: RedactionScanMetrics,
+): void {
 	const nextLineStart = afterLineEnding(value, state.lineEnd);
 	state.mode = { kind: "plain" };
 	if (nextLineStart <= state.lineEnd) {
@@ -663,17 +680,22 @@ function advanceScannerLine(value: string, state: StructuredScannerState): void 
 	}
 	state.index = nextLineStart;
 	state.lineStart = nextLineStart;
-	state.lineEnd = findLineEnd(value, nextLineStart);
+	state.lineEnd = findLineEnd(value, nextLineStart, metrics);
 	state.structuredKeyStart = findStructuredKeyStart(value, nextLineStart);
 }
 
-function advanceScannerTo(value: string, state: StructuredScannerState, resumeAt: number): void {
+function advanceScannerTo(
+	value: string,
+	state: StructuredScannerState,
+	resumeAt: number,
+	metrics?: RedactionScanMetrics,
+): void {
 	const target = Math.min(value.length, resumeAt);
 	while (state.lineEnd < target) {
 		const nextLineStart = afterLineEnding(value, state.lineEnd);
 		if (nextLineStart <= state.lineEnd) break;
 		state.lineStart = nextLineStart;
-		state.lineEnd = findLineEnd(value, nextLineStart);
+		state.lineEnd = findLineEnd(value, nextLineStart, metrics);
 	}
 	state.index = target;
 	state.mode = { kind: "plain" };
@@ -752,8 +774,13 @@ function isQuotedSegmentStart(value: string, index: number, lineStart: number): 
 	if (value[index - 1] === "\\") return false;
 	let cursor = index - 1;
 	while (cursor >= lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
-	return cursor < lineStart || value[cursor] === "{" || value[cursor] === "[" ||
-		value[cursor] === "," || value[cursor] === ":" || value[cursor] === "=" || value[cursor] === "-";
+	if (cursor < lineStart) return true;
+	if (value[cursor] === "{" || value[cursor] === "[" || value[cursor] === "," ||
+		value[cursor] === ":" || value[cursor] === "=") return true;
+	if (value[cursor] !== "-") return false;
+	let beforeHyphen = cursor - 1;
+	while (beforeHyphen >= lineStart && isHorizontalWhitespace(value[beforeHyphen])) beforeHyphen -= 1;
+	return beforeHyphen < lineStart;
 }
 
 function isAssignmentKeyCharacter(character: string | undefined): boolean {
@@ -795,9 +822,12 @@ function findQuotedValueEnd(value: string, start: number, quote: string): number
 	return undefined;
 }
 
-function findLineEnd(value: string, start: number): number {
+function findLineEnd(value: string, start: number, metrics?: RedactionScanMetrics): number {
 	let index = start;
-	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") index += 1;
+	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") {
+		if (metrics) metrics.lineBoundaryVisits += 1;
+		index += 1;
+	}
 	return index;
 }
 
@@ -824,45 +854,73 @@ function isYamlBlockHeader(value: string): boolean {
 	return /^[|>](?:(?:[1-9][+-]?)|(?:[+-][1-9]?))?[ \t]*(?:#.*)?$/.test(value);
 }
 
-function findUnquotedValueEnd(value: string, start: number, lineEnd: number): number {
+function findUnquotedValueEnd(
+	value: string,
+	start: number,
+	lineEnd: number,
+	metrics?: RedactionScanMetrics,
+): number {
 	const nestedClosers: FlowCloser[] = [];
 	let quote: LexicalQuote | undefined;
-	for (let index = start; index < lineEnd; index += 1) {
+	let index = start;
+	let currentLineStart = start;
+	let currentLineEnd = lineEnd;
+	while (index < value.length) {
+		if (index >= currentLineEnd) {
+			if (nestedClosers.length === 0) return currentLineEnd;
+			const nextLineStart = afterLineEnding(value, currentLineEnd);
+			if (nextLineStart <= currentLineEnd) return currentLineEnd;
+			index = nextLineStart;
+			currentLineStart = nextLineStart;
+			currentLineEnd = findLineEnd(value, nextLineStart, metrics);
+			quote = undefined;
+			continue;
+		}
 		const character = value[index];
 		if (quote) {
 			if (quote === '"' && character === "\\") {
-				index += 1;
+				index += 2;
 				continue;
 			}
 			if (quote === "'" && character === "'" && value[index + 1] === "'") {
-				index += 1;
+				index += 2;
 				continue;
 			}
 			if (character === quote) quote = undefined;
+			index += 1;
 			continue;
 		}
-		if (isCommentStart(value, index, start)) return index;
-		if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, start)) {
+		if (isCommentStart(value, index, currentLineStart)) {
+			if (nestedClosers.length === 0) return index;
+			index = currentLineEnd;
+			continue;
+		}
+		if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, currentLineStart)) {
 			quote = character;
+			index += 1;
 			continue;
 		}
 		if (character === "{") {
 			nestedClosers.push("}");
+			index += 1;
 			continue;
 		}
 		if (character === "[") {
 			nestedClosers.push("]");
+			index += 1;
 			continue;
 		}
 		if (character === "}" || character === "]") {
 			if (nestedClosers.length === 0) return index;
 			if (nestedClosers[nestedClosers.length - 1] !== character) return index;
 			nestedClosers.pop();
+			index += 1;
 			continue;
 		}
 		if (nestedClosers.length === 0 && (character === "," || character === ";")) return index;
+		index += 1;
 	}
-	return lineEnd;
+	return currentLineEnd;
 }
 
 function trimHorizontalEnd(value: string, start: number, end: number): number {

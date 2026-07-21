@@ -129,4 +129,8 @@
 - RED result: focused command exits 1 with 33 passed / 7 expected failures across prompt, handoff,
   `workspace_read`, typed capability, two direct lexical cases, and deterministic scan metrics.
   The safe apostrophe control and focused strict TypeScript pass; production is unchanged.
-- Verification status: RED captured; GREEN/refactor and declared Shepherd-only gates pending.
+- GREEN result: focused command exits 0 with 40 passed / 0 failed and focused strict Pi 0.80.6
+  TypeScript passes. Nested value-local closers span lines, hyphen quote boundaries require a YAML
+  sequence marker, and assignment decisions reuse the current line end. Deterministic visits equal
+  input bytes at 25,618 / 51,218 / 102,418.
+- Verification status: GREEN captured; full declared Shepherd-only gates pending.

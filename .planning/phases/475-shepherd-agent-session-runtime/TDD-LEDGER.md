@@ -202,7 +202,20 @@
 
 ### GREEN / REFACTOR / VERIFY
 
-- Status: blocked on committing and pushing this captured RED evidence.
+- GREEN status: captured after pushed test-only RED commit `e8422d53`.
+- Minimal multiline implementation: the value-local closer stack advances across CR/LF line
+  endings while nested, resets value quote context per line, and returns only at the exact outer
+  sibling boundary. The global flow stack therefore never consumes a nested value close.
+- Minimal quote implementation: `-` opens quote state only when it is a line-local YAML sequence
+  marker; the hyphen inside `rock-'n-roll` remains unquoted scalar text.
+- Minimal complexity implementation: assignment decisions receive the scanner-owned line end.
+  Optional typed metrics count line-boundary byte visits; 25,618 / 51,218 / 102,418-byte dense
+  flows report exactly 25,618 / 51,218 / 102,418 visits.
+- Compatibility refactor: overloads preserve the one-argument `Array.map(redactSensitiveText)`
+  callback contract and ignore its numeric index instead of treating it as diagnostics.
+- Focused command result: exit 0, 40 passed / 0 failed.
+- Focused strict TypeScript result: exit 0 against explicit Pi 0.80.6 package/type roots.
+- REFACTOR/VERIFY status: pending implementation commit and declared full gates.
 - Declared gates: focused issue tests, complete Shepherd suite, pinned Pi 0.80.6 strict TypeScript,
   pinned offline RPC, diff check, immutable base, and issue-owned paths only.
 - Go, connector, certification, runtime-backed, `make verify`, live-GitHub, merge, and review-bot

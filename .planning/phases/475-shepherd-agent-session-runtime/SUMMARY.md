@@ -89,3 +89,9 @@ The Cycle 6 focused RED exits 1 with 33 passes and 7 expected failures, while th
 control and focused strict TypeScript pass and production remains unchanged. The failures expose
 prompt, handoff, `workspace_read`, typed-capability, direct multiline-nested, direct punctuation-
 apostrophe, and deterministic scan-metric boundaries.
+
+Cycle 6 GREEN now passes 40/40 focused tests and focused strict Pi 0.80.6 TypeScript. The same typed
+scanner carries a value-local closer stack across lines, distinguishes a YAML sequence marker from
+a word-internal hyphen, and reuses the current line end for assignment decisions. Deterministic
+line-boundary visits equal the 25,618 / 51,218 / 102,418-byte input sizes. Full declared
+verification remains pending.

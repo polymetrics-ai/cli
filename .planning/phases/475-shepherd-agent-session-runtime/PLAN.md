@@ -326,3 +326,10 @@ punctuation-apostrophe marker; two direct tests isolate those lexical failures; 
 reports the absent deterministic line-boundary metric. The safe apostrophe control and all prior
 cases pass. Focused strict TypeScript passes, and production remains unchanged at the reviewed
 head.
+
+Cycle 6 GREEN result: the value-local closer stack now advances across line endings while nested,
+quote opening accepts `-` only as a line-local YAML sequence marker, and assignment decisions reuse
+the scanner-owned line end. A typed optional diagnostics sink reports exact line-boundary visits of
+25,618 / 51,218 / 102,418 for inputs of the same sizes. The overloaded redaction entry point ignores
+`Array.map`'s numeric callback index, preserving every existing callback consumer. Focused tests
+pass 40/40 and focused strict TypeScript passes; full declared verification remains pending.
