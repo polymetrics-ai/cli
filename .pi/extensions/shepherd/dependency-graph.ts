@@ -5,6 +5,7 @@ const MAX_DEPENDENCIES = 64;
 const MAX_SCOPES = 64;
 const MAX_TEXT_LENGTH = 512;
 const MAX_CONFLICT_COMPONENT_SIZE = 12;
+const MAX_SCOPE_ALIASES = 16;
 
 export type WorkItemStatus = "pending" | "running" | "succeeded" | "failed" | "blocked";
 export type WorkAccess = "read_only" | "mutating";
@@ -70,8 +71,20 @@ function compareText(left: string, right: string): number {
 	return left < right ? -1 : left > right ? 1 : 0;
 }
 
-function canonicalScope(scope: string): string {
-	return scope.normalize("NFKC").toUpperCase().toLowerCase().normalize("NFC");
+function scopeAliases(scope: string): string[] {
+	// A bounded conservative alias closure for filesystem/Git collision safety. This intentionally
+	// does not claim Unicode Default Caseless Matching or complete filesystem equivalence.
+	const aliases = new Set<string>();
+	const queue = [scope.normalize("NFKC")];
+	while (queue.length > 0 && aliases.size < MAX_SCOPE_ALIASES) {
+		const current = queue.shift();
+		if (current === undefined) break;
+		const normalized = current.normalize("NFKC").normalize("NFC");
+		if (aliases.has(normalized)) continue;
+		aliases.add(normalized);
+		queue.push(normalized.toLowerCase(), normalized.toUpperCase());
+	}
+	return [...aliases].sort(compareText);
 }
 
 function validateScope(scope: unknown): asserts scope is string {
@@ -93,14 +106,16 @@ function scopeContainsCanonical(left: string, right: string): boolean {
 	return left === right || right.startsWith(`${left}/`);
 }
 
-function canonicalScopesCollide(left: readonly string[], right: readonly string[]): boolean {
-	return left.some((leftScope) => right.some((rightScope) =>
-		scopeContainsCanonical(leftScope, rightScope) || scopeContainsCanonical(rightScope, leftScope),
+function canonicalScopesCollide(left: readonly (readonly string[])[], right: readonly (readonly string[])[]): boolean {
+	return left.some((leftAliases) => right.some((rightAliases) =>
+		leftAliases.some((leftScope) => rightAliases.some((rightScope) =>
+			scopeContainsCanonical(leftScope, rightScope) || scopeContainsCanonical(rightScope, leftScope),
+		)),
 	));
 }
 
 function scopeContains(left: string, right: string): boolean {
-	return scopeContainsCanonical(canonicalScope(left), canonicalScope(right));
+	return canonicalScopesCollide([scopeAliases(left)], [scopeAliases(right)]);
 }
 
 function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<DependencyWorkItem, "id">): number {
@@ -110,7 +125,7 @@ function compareIds(left: Pick<DependencyWorkItem, "id">, right: Pick<Dependency
 export function scopesCollide(left: readonly string[], right: readonly string[]): boolean {
 	for (const scope of left) validateScope(scope);
 	for (const scope of right) validateScope(scope);
-	return canonicalScopesCollide(left.map(canonicalScope), right.map(canonicalScope));
+	return canonicalScopesCollide(left.map(scopeAliases), right.map(scopeAliases));
 }
 
 export function validateDependencyGraph(input: unknown): ValidatedDependencyGraph {
@@ -156,7 +171,7 @@ export function validateDependencyGraph(input: unknown): ValidatedDependencyGrap
 			throw new DependencyGraphError("invalid_item", `duplicate dependency for ${id}`);
 		}
 		const scopes = [...rawScopes].sort(compareText);
-		if (new Set(scopes.map(canonicalScope)).size !== scopes.length) {
+		if (new Set(scopes).size !== scopes.length) {
 			throw new DependencyGraphError("ambiguous_scope", `duplicate write scope for ${id}`);
 		}
 		for (let index = 0; index < scopes.length; index += 1) {
@@ -271,7 +286,7 @@ function buildConflictGraph(candidates: readonly DependencyWorkItem[]): Conflict
 	const byId = new Map(candidates.map((candidate) => [candidate.id, candidate]));
 	const canonicalScopes = new Map(candidates.map((candidate) => [
 		candidate.id,
-		candidate.writeScopes.map(canonicalScope),
+		candidate.writeScopes.map(scopeAliases),
 	]));
 	const conflicts = new Map(candidates.map((candidate) => [candidate.id, new Set<string>()]));
 	for (let index = 0; index < candidates.length; index += 1) {

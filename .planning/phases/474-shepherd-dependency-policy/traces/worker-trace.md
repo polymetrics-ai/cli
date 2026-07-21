@@ -137,6 +137,18 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   failed/blocked dependency ready-work bypass, Proxy iterator mutation, and terminal BLOCKED.
 - Execution decision: `local_critical_path`; RED gate satisfied without full-repository commands.
 
+## Exact-head correction 2 GREEN cycle
+
+- Added a finite conservative scope-alias closure over NFKC and ECMAScript upper/lower mappings;
+  capital sharp-S now intersects both small sharp-S and `ss` aliases.
+- Cloned the complete caller DTO before validation, froze the valid private snapshot, and used only
+  that snapshot for graph/lifecycle decisions. Proxy iterators are rejected without execution.
+- Calculated the authoritative SCHEDULE queue before lifecycle facts, with dependency/collision
+  blockers first and explicit readiness/completion agreement required.
+- Added terminal `blocked` reconciliation alongside `complete` and `aborted`.
+- Focused GREEN: 40/40. Strict production TypeScript: pass after type-only helper narrowing.
+- Execution decision: `local_critical_path`; proceed to behavior-preserving refactor.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

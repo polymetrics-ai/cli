@@ -116,3 +116,10 @@ production remained untouched.
 Focused RED command: 40 tests, 35 pass, **5 expected failures**, exit 1. The failures separately
 prove sharp-S alias incompleteness, pending-work completion bypass, dependency-blocked ready-work
 bypass, caller iterator mutation, and non-terminal BLOCKED reconciliation.
+
+Minimum GREEN: 40/40 pass. The implementation uses a bounded NFKC + ECMAScript case-mapping alias
+closure, clone/validate/freeze DTO isolation, one authoritative SCHEDULE selection before lifecycle
+advancement, dependency/collision precedence, and an explicit terminal BLOCKED result. The first
+strict production TypeScript run exposed only an overly broad helper return type; narrowing
+`noSpawn`/`invalidGraphDecision` to their discriminated union members produced a clean strict pass
+without changing runtime behavior.
