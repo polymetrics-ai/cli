@@ -16,9 +16,11 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-476-shepherd-worktree-git-adapter`
 
-Reviewed predecessor: `d5181cd25d108e7748309216b14d91313f112fcd`
+Reviewed predecessor: `9728f9ed12e8e545eabd8b9b1b8028af80150427`
 
-Correction 2 implementation/refactor head: `6a22aa789095da67c5b10f51476de41d3f5643ca`
+Correction 3 GREEN head: `db6bdd675aaced17f0d709b08a647258dfb87f15`
+
+Correction 3 refactor head: `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`
 
 ## Scope delivered
 
@@ -26,9 +28,12 @@ Correction 2 implementation/refactor head: `6a22aa789095da67c5b10f51476de41d3f56
 - Immutable exact-base, PR-base, allowed-scope, repository, remote, and worktree claim bindings.
 - One append-only fenced writable lease per issue workspace, with idempotent release and explicit
   dead-owner resume.
-- A WorkspaceAdapter-private issuer and GitAdapter WeakMap capability required by every mutation,
-  with release serialized behind accepted in-flight work.
-- Complete unfiltered canonical handoff scope auditing and endpoint-bound, rewrite-stable push.
+- A private one-way GitAdapter lease-acquisition closure plus WeakMap mutation capability, with
+  release serialized behind accepted in-flight work and no issuer exposed to caller overrides.
+- Complete historical canonical handoff/push scope auditing, immutable-base ancestry, exact-SHA
+  transfer, endpoint binding, and default-branch symbolic-HEAD revalidation.
+- Deterministic safe Git configuration for worktree/add/push; executable repository configuration
+  is rejected before its marker can run.
 - Non-destructive branch/path reconciliation that preserves dirty, untracked, and unique state.
 
 ## GSD / TDD / skill evidence
@@ -46,11 +51,14 @@ Correction 2 implementation/refactor head: `6a22aa789095da67c5b10f51476de41d3f56
   contamination, post-release mutation, missing capability-bound release, and omitted scope.
 - Correction 2 GREEN/refactor checkpoint `6a22aa78`: focused 29/29 and strict TypeScript pass;
   alternate issuer root, backslash path, and chained URL rewrite regressions also pass.
+- Correction 3 RED checkpoint `fa607d31`: focused 36 tests, 26 passed and ten failed while
+  production remained at correction-2 head `6a22aa78`.
+- Correction 3 GREEN `db6bdd67` and refactor `f7cb0cab`: all five exact-head contracts pass.
 
 ## Verification
 
-- Focused issue tests: 29/29 pass.
-- Serialized complete Shepherd suite: 166/166 pass in 95.9s.
+- Focused issue tests: 36/36 pass in 58.2s.
+- Serialized complete Shepherd suite: 173/173 pass in 107.5s.
 - Strict no-emit TypeScript against cached Pi 0.80.6 Node types: pass.
 - Offline Pi 0.80.6 RPC command discovery: `true` for `pm-shepherd` from `extension`.
 - Exact-range diff and scope hygiene: pass.
@@ -58,8 +66,8 @@ Correction 2 implementation/refactor head: `6a22aa789095da67c5b10f51476de41d3f56
 
 ## Review and merge state
 
-- Independent xhigh re-review of `d5181cd2` produced three blockers; correction 2 addresses each
-  plus three reproduced adversarial variants locally.
+- Independent xhigh review of `9728f9ed` produced five blockers; correction 3 addresses each with
+  deterministic local repository regressions and exact pre-transfer evidence.
 - A fresh independent xhigh review must bind to the newly pushed exact candidate head.
 - Claude and Copilot were intentionally not requested.
 - Do not merge PR #484 or parent PR #472 from this worker; the human gate remains active.

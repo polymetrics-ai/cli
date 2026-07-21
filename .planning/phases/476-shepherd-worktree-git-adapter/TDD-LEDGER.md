@@ -16,10 +16,10 @@ Tests use bounded temporary local Git repositories and no credentials or network
 | Correction 2: mutation capability fencing | Focused run: released claim committed through a replacement lease; workspace had no capability-bound mutation API | Workspace-held nonforgeable issuer plus adapter WeakMap capability fence fetch/worktree/commit/push; release drains accepted mutations | Alternate-root issuer forgery, forged capability, replacement success, recovery, and in-flight release cases pass | green/refactored |
 | Correction 2: complete handoff scope | Focused run: a passed handoff omitted a clean committed path outside immutable scopes | Unfiltered `--no-renames` diff audits the complete canonical set before scope validation | Mixed committed scope, exact returned scope, and committed/dirty literal-backslash alias cases pass | green/refactored |
 | Correction 2: effective push endpoint | Focused run: alternate local bare `pushurl` received the issue ref and object before the eventual verification error | Inspection binds effective fetch/push endpoint identities; push revalidates and uses the exact stable endpoint | Late `pushurl` and chained `insteadOf` bare remotes remain ref- and object-free | green/refactored |
-| Correction 3: private lease acquisition | Focused run: wrapper captured the workspace issuer and used it to acquire/release a lease under an alternate state root | pending | pending | red |
-| Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | pending | pending | red |
-| Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | pending | pending | red |
-| Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | pending | pending | red |
+| Correction 3: private lease acquisition | Focused run: wrapper captured the workspace issuer and used it to acquire/release a lease under an alternate state root | GitAdapter privately registers a one-way acquisition closure; no issuer or public acquisition method crosses the caller adapter | Wrapper method remains unused, alternate root stays absent, and forged mutation capabilities fail | green/refactored |
+| Correction 3: ancestry and history scope | Focused run: commit/push accepted unrelated or historically out-of-scope heads; handoff accepted an add-then-remove path | Commit/push revalidate immutable-base ancestry; history audit unions every touched commit path; push transfers an exact SHA refspec | Unrelated and add/remove heads reject before remote refs/objects change; handoff rejects erased net diffs | green/refactored |
+| Correction 3: sanitized Git mutations | Focused run: worktree/add/push accepted executable hook/filter/helper/transport configuration and marker paths were reachable | Mutations use a deterministic config environment and reject executable/local transport configuration before Git mutation | Worktree, clean-filter, pre-push hook, credential-helper, and SSH-command markers remain absent | green/refactored |
+| Correction 3: bound default branch | Focused run: binding omitted `defaultBranch`, caller/live remote mismatch was accepted, and push used the mutable branch ref | Inspection and schema-v4 claims bind local origin symbolic HEAD; pre-push `ls-remote --symref` revalidates live HEAD | Caller and live-remote mismatch both reject before the issue ref exists remotely | green/refactored |
 
 Correction RED command: `node --test .pi/extensions/shepherd/workspace-adapter.test.ts
 .pi/extensions/shepherd/git-adapter.test.ts` → 21 tests, 16 passed, 5 failed. The five failures map
@@ -52,6 +52,11 @@ expected failures while both production adapters remained at `6a22aa78`. Failure
 bound default evidence, mutable branch-ref push, commit/push ancestry gaps, pre-transfer history
 scope gaps, executable worktree/add/push Git configuration, caller/live default mismatch, captured
 issuer alternate-root authority, and add-then-remove handoff omission.
+
+Correction 3 GREEN checkpoint `db6bdd675aaced17f0d709b08a647258dfb87f15` and refactor
+checkpoint `f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113`: focused 36/36; serialized full
+Shepherd 173/173 in 107.5s; strict no-emit TypeScript passed against cached Pi 0.80.6 types;
+offline Pi RPC returned `true`; exact immutable-base diff and owned-path checks passed.
 
 ## Required safety cases
 
@@ -94,3 +99,11 @@ issuer alternate-root authority, and add-then-remove handoff omission.
   was already occupied; local planning continues without widening the write scope.
 - Execution decision, correction 3 RED: `local_critical_path` — test-only checkpoint `fa607d31`
   produced ten deterministic failures across all five reviewed contracts before production edits.
+- Execution decision, correction 3 GREEN: `local_critical_path` — private acquisition, immutable
+  ancestry/history scope, sanitized Git mutation, and bound default-branch contracts pass 36/36.
+- Execution decision, correction 3 refactor: `local_critical_path` — safe Git config is centralized,
+  worktree config errors fail closed, and duplicate commit flags were removed with focused/strict gates green.
+- Execution decision, correction 3 verify: `local_critical_path` — focused 36/36, Shepherd 173/173,
+  strict Pi 0.80.6 TypeScript, offline RPC, and exact diff/scope gates pass.
+- Execution decision, correction 3 summary: `local_critical_path` — exact checkpoint and gate
+  evidence is durable; the parent owns the fresh exact-head xhigh review and merge decisions.

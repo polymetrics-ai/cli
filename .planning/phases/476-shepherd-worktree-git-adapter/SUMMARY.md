@@ -29,7 +29,16 @@ The second correction cycle addresses independent xhigh re-review of `d5181cd2`:
 - alternate lease-root issuance, separator aliasing, and chained URL rewrites are covered by
   deterministic adversarial regressions.
 
-Focused tests pass 29/29 and the serialized full Shepherd suite passes 166/166. Strict TypeScript,
+The third correction cycle addresses independent xhigh review of `9728f9ed`:
+
+- lease acquisition is a private registered closure, so caller overrides never receive reusable
+  issuer authority;
+- commit/push revalidate immutable-base ancestry, and history scope includes add-then-remove paths;
+- worktree/add/push run behind deterministic safe Git config/environment fencing;
+- the origin default branch is bound in schema-v4 claims and revalidated from live symbolic HEAD;
+- push transfers the exact audited SHA instead of resolving a mutable local branch during transfer.
+
+Focused tests pass 36/36 and the serialized full Shepherd suite passes 173/173. Strict TypeScript,
 offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 
 ## Files delivered
@@ -52,6 +61,10 @@ offline Pi 0.80.6 RPC command discovery, and exact diff/scope checks pass.
 - `d91b41a8`: correction refactor/test-hardening checkpoint.
 - `e8d1a3d7`: correction 2 genuine RED checkpoint.
 - `6a22aa78`: correction 2 GREEN/refactor checkpoint.
+- `2e255372`: correction 3 plan checkpoint.
+- `fa607d31`: correction 3 genuine test-only RED checkpoint.
+- `db6bdd67`: correction 3 GREEN checkpoint.
+- `f7cb0cab`: correction 3 safe-config refactor checkpoint.
 
 ## Deviations
 

@@ -1,14 +1,24 @@
 # Issue 476 Verification
 
-Status: `in_progress`
+Status: `pass`
 
-Correction 3 is active from reviewed head
-`9728f9ed12e8e545eabd8b9b1b8028af80150427`. Its authorized verification campaign is pending a
-genuine test-only RED and the smallest GREEN implementation. Historical correction-2 results below
-remain valid evidence for their exact head but do not satisfy correction 3.
+Correction 3 supersedes reviewed head `9728f9ed12e8e545eabd8b9b1b8028af80150427` with GREEN
+checkpoint `db6bdd675aaced17f0d709b08a647258dfb87f15` and refactor checkpoint
+`f7cb0cab0d2fb0c2ef01edc516bd3cdf950b5113` on ready stacked PR
+https://github.com/polymetrics-ai/cli/pull/484.
 
 The genuine correction-3 RED is `fa607d31`: focused 36 tests yielded 26 passes and ten expected
 failures, with no production-adapter changes relative to the correction-2 implementation.
+
+| Correction 3 gate | Result | Evidence |
+|---|---|---|
+| focused adapter tests | pass | 36 passed, 0 failed in 58.2s with serialized test files |
+| complete Shepherd tests | pass | 173 passed, 0 failed in 107.5s with `--test-concurrency=1` |
+| strict TypeScript / Pi 0.80.6 | pass | adapters and matching tests passed strict no-emit TypeScript against cached Pi 0.80.6 Node types |
+| offline Pi discovery | pass | pinned Pi 0.80.6 RPC `get_commands` returned `true` for `pm-shepherd` |
+| immutable-base diff | pass | `git diff --check e659d6f1...HEAD` exited 0 |
+| owned path scope | pass | only issue-owned adapters, matching tests/fixture, and phase 476 artifacts changed |
+| forbidden gates | not run | no Go, connector, certification, runtime-backed, or `make` command ran |
 
 Correction 2 verification covers implementation/refactor checkpoint
 `6a22aa789095da67c5b10f51476de41d3f5643ca` on ready stacked PR
@@ -27,6 +37,15 @@ https://github.com/polymetrics-ai/cli/pull/484. The reviewed predecessor
 | stacked ready PR | pass | PR #484 is open against `feat/471-pi-agent-session-shepherd` |
 
 ## Correction contract evidence
+
+- WorkspaceAdapter no longer passes an issuer through caller-overridable `acquireMutationLease`;
+  GitAdapter privately registers a one-way acquisition closure and exposes no public lease issuer.
+- Commit and push revalidate the immutable base as an ancestor. Handoff and push audit the union of
+  every touched path across commit history, so add-then-remove paths cannot disappear from evidence.
+- Mutating Git subprocesses receive deterministic safe config/environment overrides and reject
+  executable hook, filter, credential-helper, SSH-command, include, and transport configuration.
+- Schema-v4 workspace claims bind the inspected origin default branch. Push revalidates live remote
+  symbolic HEAD, audits immediately before transfer, and sends the exact expected SHA refspec.
 
 - `GitAdapter.inspect` now emits exactly the v1 repository/worktree identities used by
   `resolveCanonicalGitWorktree`. Tests cover coordinator and linked worktrees plus local, HTTPS,
@@ -58,4 +77,4 @@ pass and no production or test timeout was widened.
 
 Per parent direction, issue #476 runs only focused tests, the full Shepherd suite, strict
 TypeScript, offline Pi RPC, and diff/scope checks. No Go, connector, certification,
-runtime-service, or `make verify` gate was run during this correction cycle.
+runtime-service, or `make verify` gate was run during correction 3.

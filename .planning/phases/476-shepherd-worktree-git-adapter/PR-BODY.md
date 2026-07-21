@@ -14,6 +14,10 @@ Refs #471
 - audit the complete canonical committed/dirty handoff path set before immutable-scope validation
 - bind effective fetch/push endpoints, reject late pushurl or rewrite drift, and push/verify against
   the exact validated endpoint
+- keep lease acquisition off caller-overridable methods, bind/revalidate the remote default branch,
+  audit every historically touched path, and push an exact audited SHA refspec
+- fence worktree/add/push from executable repository hooks, filters, credential helpers, includes,
+  and transport configuration through deterministic sanitized Git config/environment
 - preserve dirty, untracked, conflicted, stale, and unique state without exposing worktree removal,
   reset, clean, prune, force push, default-branch push, or arbitrary refspec capability
 
@@ -26,13 +30,16 @@ Refs #471
 - correction refactor: `d91b41a8` — expanded identity, tamper, release, and crash-recovery evidence
 - correction 2 RED: `e8d1a3d7` — 25 tests, 21 passed and 4 failed on the re-review contracts
 - correction 2 GREEN/refactor: `6a22aa78` — capability, scope, endpoint, and adversarial cases pass
+- correction 3 RED: `fa607d31` — 36 tests, 26 passed and 10 failed on all five exact-head findings
+- correction 3 GREEN: `db6bdd67` — authority, ancestry/history, Git config, and default binding pass
+- correction 3 refactor: `f7cb0cab` — safe config centralized; focused and strict gates pass
 - skills: `gsd-programming-loop`, `gsd-workstreams`, `gsd-plan-phase`,
   `github-issue-first-delivery`, `architecture-patterns`, `javascript-testing-patterns`
 
 ## Verification
 
-- focused issue tests — 29 passed, 0 failed
-- full Shepherd suite with `--test-concurrency=1` — 166 passed, 0 failed
+- focused issue tests — 36 passed, 0 failed
+- full Shepherd suite with `--test-concurrency=1` — 173 passed, 0 failed in 107.5s
 - strict no-emit TypeScript against cached Pi 0.80.6 Node types — pass
 - documented offline Pi 0.80.6 RPC `get_commands` discovery — `true` for `pm-shepherd`
 - exact-range diff, scope, and pushed implementation-ref equality — pass
@@ -51,6 +58,6 @@ runner's intentional wall-clock assertions; no timeout was widened.
 
 ## Review route
 
-Independent xhigh reviews of `906a45c5` and `d5181cd2` produced the corrections addressed here. A
+Independent xhigh reviews of `906a45c5`, `d5181cd2`, and `9728f9ed` produced the corrections addressed here. A
 fresh independent xhigh review must bind to the newly pushed exact candidate head. Claude and
 Copilot are not requested, and this worker must not merge the sub-PR or parent PR.

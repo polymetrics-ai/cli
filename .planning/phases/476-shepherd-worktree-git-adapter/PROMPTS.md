@@ -61,3 +61,6 @@
   unavailable (`unknown GSD command`), so the recorded manual strict-TDD lifecycle continues.
 - Authorized gates remain focused adapter tests, serialized Shepherd tests, strict cached Pi 0.80.6
   TypeScript, offline Pi RPC, and exact diff/scope checks only.
+- Result: plan `2e255372`, RED `fa607d31`, GREEN `db6bdd67`, refactor `f7cb0cab`; focused
+  36/36, serialized Shepherd 173/173 in 107.5s, strict Pi 0.80.6 TypeScript, offline RPC `true`,
+  and immutable-base diff/path-scope gates pass.
