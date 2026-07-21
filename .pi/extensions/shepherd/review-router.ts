@@ -6,6 +6,7 @@ const MAX_TEXT_BYTES = 512;
 const MAX_PATH_BYTES = 4_096;
 const SHA = /^[0-9a-f]{40}$/;
 const REPOSITORY = /^(?:[a-z0-9.-]+(?::[0-9]{1,5})?\/)?[A-Za-z0-9][A-Za-z0-9._-]{0,99}\/[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
+const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
 const UNSAFE_TEXT = /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
 
 export interface IndependentReviewTarget {
@@ -86,7 +87,7 @@ function exactRecord(value: unknown, required: readonly string[], optional: read
 }
 
 function safeText(value: unknown, description: string, maximum = MAX_TEXT_BYTES): string {
-	if (typeof value !== "string" || value.length === 0 || Buffer.byteLength(value) > maximum
+	if (typeof value !== "string" || value.length === 0 || value.length > maximum || Buffer.byteLength(value) > maximum
 		|| value.trim() !== value || UNSAFE_TEXT.test(value)) {
 		throw new Error(`invalid ${description}`);
 	}
@@ -114,9 +115,12 @@ function sha(value: unknown, description: string): string {
 
 function canonicalTimestamp(value: unknown, description: string): string {
 	if (typeof value !== "string" || value.length > 64) throw new Error(`invalid ${description}`);
-	const parsed = new Date(value);
-	if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== value) throw new Error(`invalid ${description}`);
-	return value;
+	const match = RFC3339_UTC.exec(value);
+	if (match === null) throw new Error(`invalid ${description}`);
+	const canonical = `${match[1]}.${(match[2] ?? "").padEnd(3, "0")}Z`;
+	const parsed = new Date(canonical);
+	if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== canonical) throw new Error(`invalid ${description}`);
+	return canonical;
 }
 
 function pathValue(value: unknown, description: string): string {
@@ -129,11 +133,38 @@ function pathValue(value: unknown, description: string): string {
 	return path;
 }
 
-function stringArray(value: unknown, description: string, pathLike = false, allowEmpty = false): string[] {
-	if (!Array.isArray(value) || (!allowEmpty && value.length === 0) || value.length > MAX_ARRAY_ITEMS) {
+function exactArrayValues(value: unknown, description: string, allowEmpty: boolean, maximum: number): unknown[] {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+		throw new Error(`${description} must be a canonical array`);
+	}
+	const descriptors = Object.getOwnPropertyDescriptors(value);
+	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
+		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0
+		|| (!allowEmpty && lengthDescriptor.value === 0) || lengthDescriptor.value > maximum) {
 		throw new Error(`${description} must be a bounded array of at most ${MAX_ARRAY_ITEMS} values`);
 	}
-	const values = value.map((entry) => pathLike ? pathValue(entry, description) : safeText(entry, description));
+	const length = lengthDescriptor.value as number;
+	const values: unknown[] = [];
+	for (const key of Reflect.ownKeys(descriptors)) {
+		if (key === "length") continue;
+		if (typeof key !== "string" || !/^(?:0|[1-9]\d*)$/u.test(key)) throw new Error(`${description} has an invalid array field`);
+		const index = Number(key);
+		const descriptor = descriptors[key];
+		if (index >= length || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+			throw new Error(`${description} must contain only dense data values`);
+		}
+		values[index] = descriptor.value;
+	}
+	for (let index = 0; index < length; index += 1) {
+		if (!Object.hasOwn(values, index)) throw new Error(`${description} must be a dense canonical array`);
+	}
+	return values;
+}
+
+function stringArray(value: unknown, description: string, pathLike = false, allowEmpty = false): string[] {
+	const values = exactArrayValues(value, description, allowEmpty, MAX_ARRAY_ITEMS)
+		.map((entry) => pathLike ? pathValue(entry, description) : safeText(entry, description));
 	if (new Set(values).size !== values.length) throw new Error(`duplicate ${description}`);
 	return [...values].sort();
 }
@@ -153,7 +184,7 @@ function normalizeTarget(value: unknown): IndependentReviewTarget {
 		"changedPaths",
 		"allowedScopes",
 	]);
-	const repository = safeText(candidate.repository, "repository");
+	const repository = safeText(candidate.repository, "repository").toLowerCase();
 	if (!REPOSITORY.test(repository)) throw new Error("invalid review repository");
 	const changedPaths = stringArray(candidate.changedPaths, "changed paths", true, true);
 	const allowedScopes = stringArray(candidate.allowedScopes, "allowed scopes", true);
@@ -249,10 +280,8 @@ export function validateIndependentReviewRecord(value: unknown): IndependentRevi
 	if (candidate.verdict !== "clean" && candidate.verdict !== "findings") {
 		throw new Error("invalid independent review verdict");
 	}
-	if (!Array.isArray(candidate.findings) || candidate.findings.length > MAX_ARRAY_ITEMS) {
-		throw new Error("independent review findings must be bounded");
-	}
-	const findings = candidate.findings.map(validateFinding);
+	const findings = exactArrayValues(candidate.findings, "independent review findings", true, MAX_ARRAY_ITEMS)
+		.map(validateFinding);
 	if (new Set(findings.map((finding) => finding.id)).size !== findings.length) {
 		throw new Error("duplicate independent review finding ID");
 	}
@@ -280,15 +309,14 @@ export function reviewCoversExactRange(review: IndependentReviewRecord, base: st
 
 export function reconcileIndependentReview(request: IndependentReviewReconcileRequest): IndependentReviewDecision {
 	const work = createIndependentReviewWork(request.target);
-	if (!Array.isArray(request.reviews) || request.reviews.length > MAX_ARRAY_ITEMS) {
-		throw new Error("review records must be a bounded array");
-	}
-	const reviews = request.reviews.map(validateIndependentReviewRecord);
+	const reviews = exactArrayValues(request.reviews, "review records", true, MAX_ARRAY_ITEMS)
+		.map(validateIndependentReviewRecord);
 	const exact = reviews.filter((review) => reviewCoversExactRange(review, work.baseSha, work.headSha)
 		&& review.pullRequest === work.pullRequest
 		&& review.generation === work.generation
 		&& review.repository === work.repository
-		&& review.workItemId === work.workItemId);
+		&& review.workItemId === work.workItemId
+		&& review.idempotencyMarker === work.idempotencyMarker);
 	if (exact.length > 1) throw new Error("duplicate exact-head independent review records are ambiguous");
 	return exact.length === 1 ? { kind: "satisfied", review: exact[0] } : { kind: "dispatch", work };
 }

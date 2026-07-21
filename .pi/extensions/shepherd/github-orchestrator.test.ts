@@ -59,12 +59,16 @@ function issueFrom(request: CreateChildIssueRequest, number = 811): GitHubChildI
 	};
 }
 
-function cleanPullRequest(request: CreatePullRequestRequest, overrides: Partial<GitHubPullRequestEvidence> = {}): GitHubPullRequestEvidence {
+function cleanPullRequest(
+	request: CreatePullRequestRequest,
+	overrides: Partial<GitHubPullRequestEvidence> = {},
+	number = 812,
+): GitHubPullRequestEvidence {
 	const review = {
 		...createIndependentReviewWork({
 			repository: request.repository,
 			workItemId: request.workItemId,
-			pullRequest: request.numberHint ?? 812,
+			pullRequest: number,
 			generation: request.generation,
 			baseSha: request.baseSha,
 			headSha: request.headSha,
@@ -77,7 +81,7 @@ function cleanPullRequest(request: CreatePullRequestRequest, overrides: Partial<
 	};
 	return {
 		schemaVersion: 1,
-		number: request.numberHint ?? 812,
+		number,
 		marker: request.marker,
 		title: request.title,
 		body: request.body,
@@ -136,11 +140,11 @@ class FakeTransport implements GitHubOrchestrationTransport {
 
 	async createPullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence> {
 		this.createPullRequestCalls += 1;
-		const created = cleanPullRequest({ ...request, numberHint: request.numberHint ?? 900 + this.createPullRequestCalls }, {
+		const created = cleanPullRequest(request, {
 			draft: request.draft,
 			checks: [],
 			reviews: [],
-		});
+		}, 900 + this.createPullRequestCalls);
 		this.pullRequests.push(created);
 		return created;
 	}
@@ -445,7 +449,6 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 		headSha: handoff.head,
 		changedPaths: handoff.changedScope,
 		allowedScopes: child.writeScopes,
-		numberHint: 812,
 	};
 	transport.pullRequests.push(cleanPullRequest(request));
 	const integrated = await orchestrator.integrateChild(candidate, child, handoff);
@@ -491,7 +494,6 @@ test("review coverage must bind the planned repository, child, generation, paths
 		headSha: handoff.head,
 		changedPaths: handoff.changedScope,
 		allowedScopes: child.writeScopes,
-		numberHint: 812,
 	};
 	for (const targetChanges of [
 		{ repository: "other/cli" },
@@ -550,7 +552,6 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 		headSha: handoff.head,
 		changedPaths: handoff.changedScope,
 		allowedScopes: child.writeScopes,
-		numberHint: 812,
 	};
 	const transport = new FakeTransport();
 	transport.pullRequests.push(cleanPullRequest(request, { state: "merged" }));
@@ -588,10 +589,12 @@ test("keeps the parent draft until all children and an exact-generation/head con
 		baseSha,
 		headSha: parentHead,
 		changedPaths: [".pi/extensions/shepherd/github-orchestrator.ts"],
-		allowedScopes: [".pi/extensions/shepherd"],
-		numberHint: 900,
+		allowedScopes: [
+			".pi/extensions/shepherd/github-evidence.ts",
+			".pi/extensions/shepherd/github-orchestrator.ts",
+		],
 	};
-	transport.pullRequests.push(cleanPullRequest(parentRequest, { draft: true }));
+	transport.pullRequests.push(cleanPullRequest(parentRequest, { draft: true }, 900));
 	const receipts: ChildIntegrationReceipt[] = candidate.children.map((child, index) => ({
 		childId: child.id,
 		pullRequest: 812 + index,
@@ -661,9 +664,11 @@ test("pending/rejected decisions and parent head movement never mark ready", asy
 			baseSha,
 			headSha: "e".repeat(40),
 			changedPaths: [".pi/extensions/shepherd/github-orchestrator.ts"],
-			allowedScopes: [".pi/extensions/shepherd"],
-			numberHint: 900,
-		}, { draft: true }));
+			allowedScopes: [
+				".pi/extensions/shepherd/github-evidence.ts",
+				".pi/extensions/shepherd/github-orchestrator.ts",
+			],
+		}, { draft: true }, 900));
 		return transport;
 	};
 

@@ -12,6 +12,7 @@ const MAX_REVIEWS = 64;
 const MAX_BODY_BYTES = 65_536;
 const SHA = /^[0-9a-f]{40}$/;
 const MARKER = /^<!-- shepherd-(?:child|parent)-pr:v1:[A-Za-z0-9:._-]{1,300} -->$/;
+const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
 const UNSAFE_INLINE = /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
 const UNSAFE_BODY = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
 
@@ -120,7 +121,7 @@ function exactRecord(value: unknown, required: readonly string[]): ExactRecord {
 }
 
 function inlineText(value: unknown, description: string, maximum = 1_024): string {
-	if (typeof value !== "string" || value.length === 0 || Buffer.byteLength(value) > maximum
+	if (typeof value !== "string" || value.length === 0 || value.length > maximum || Buffer.byteLength(value) > maximum
 		|| value.trim() !== value || UNSAFE_INLINE.test(value)) {
 		throw new Error(`invalid ${description}`);
 	}
@@ -128,7 +129,8 @@ function inlineText(value: unknown, description: string, maximum = 1_024): strin
 }
 
 function bodyText(value: unknown): string {
-	if (typeof value !== "string" || value.length === 0 || Buffer.byteLength(value) > MAX_BODY_BYTES || UNSAFE_BODY.test(value)) {
+	if (typeof value !== "string" || value.length === 0 || value.length > MAX_BODY_BYTES
+		|| Buffer.byteLength(value) > MAX_BODY_BYTES || UNSAFE_BODY.test(value)) {
 		throw new Error("pull request body must be bounded safe text");
 	}
 	return value.replace(/\r\n?/gu, "\n");
@@ -148,9 +150,12 @@ function sha(value: unknown, description: string): string {
 
 function timestamp(value: unknown, description: string): string {
 	if (typeof value !== "string" || value.length > 64) throw new Error(`invalid ${description}`);
-	const date = new Date(value);
-	if (!Number.isFinite(date.valueOf()) || date.toISOString() !== value) throw new Error(`invalid ${description}`);
-	return value;
+	const match = RFC3339_UTC.exec(value);
+	if (match === null) throw new Error(`invalid ${description}`);
+	const canonical = `${match[1]}.${(match[2] ?? "").padEnd(3, "0")}Z`;
+	const date = new Date(canonical);
+	if (!Number.isFinite(date.valueOf()) || date.toISOString() !== canonical) throw new Error(`invalid ${description}`);
+	return canonical;
 }
 
 function branch(value: unknown, description: string): string {
@@ -164,10 +169,32 @@ function branch(value: unknown, description: string): string {
 }
 
 function boundedArray(value: unknown, description: string, maximum = MAX_COLLECTION): unknown[] {
-	if (!Array.isArray(value) || value.length > maximum) {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+		throw new Error(`${description} must be a canonical array`);
+	}
+	const descriptors = Object.getOwnPropertyDescriptors(value);
+	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+	if (lengthDescriptor === undefined || !Object.hasOwn(lengthDescriptor, "value")
+		|| !Number.isSafeInteger(lengthDescriptor.value) || lengthDescriptor.value < 0
+		|| lengthDescriptor.value > maximum) {
 		throw new Error(`${description} must be a bounded array of at most ${maximum} values`);
 	}
-	return value;
+	const length = lengthDescriptor.value as number;
+	const values: unknown[] = [];
+	for (const key of Reflect.ownKeys(descriptors)) {
+		if (key === "length") continue;
+		if (typeof key !== "string" || !/^(?:0|[1-9]\d*)$/u.test(key)) throw new Error(`${description} has an invalid array field`);
+		const index = Number(key);
+		const descriptor = descriptors[key];
+		if (index >= length || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+			throw new Error(`${description} must contain only dense data values`);
+		}
+		values[index] = descriptor.value;
+	}
+	for (let index = 0; index < length; index += 1) {
+		if (!Object.hasOwn(values, index)) throw new Error(`${description} must be a dense canonical array`);
+	}
+	return values;
 }
 
 function unique<T>(values: readonly T[], key: (value: T) => string, description: string): void {
@@ -271,7 +298,9 @@ export function validateGitHubPullRequestEvidence(value: unknown): GitHubPullReq
 	unique(threads, (thread) => thread.id, "review-thread ID");
 	unique(reviews, (review) => review.idempotencyMarker, "independent review marker");
 	unique(dispositions, (disposition) => disposition.findingId, "finding disposition");
-	const findingIds = new Set(reviews.flatMap((review) => review.findings.map((finding) => finding.id)));
+	const findings = reviews.flatMap((review) => review.findings);
+	unique(findings, (finding) => finding.id, "review finding ID");
+	const findingIds = new Set(findings.map((finding) => finding.id));
 	for (const disposition of dispositions) {
 		if (!findingIds.has(disposition.findingId)) throw new Error("finding disposition does not reference authoritative review evidence");
 	}
@@ -336,19 +365,26 @@ export function evaluateGitHubPullRequestEvidence(
 	const dispositions = new Map(evidence.dispositions.map((disposition) => [disposition.findingId, disposition]));
 	const blockingFindings = evidence.reviews.flatMap((review) => review.findings)
 		.filter((finding) => finding.severity === "blocking");
-	if (blockingFindings.some((finding) => dispositions.get(finding.id)?.headSha !== expected.headSha)) {
+	if (blockingFindings.some((finding) => {
+		const disposition = dispositions.get(finding.id);
+		return disposition?.kind !== "fixed" || disposition.headSha !== expected.headSha;
+	})) {
 		blockers.add("undispositioned_finding");
 	}
+	const reviewTarget = [...evidence.reviews]
+		.filter((review) => review.pullRequest === expected.number
+			&& review.baseSha === expected.baseSha && review.headSha === expected.headSha)
+		.sort((left, right) => right.generation - left.generation)[0] ?? evidence.reviews[0];
 	const reviewDecision = reconcileIndependentReview({
 		target: {
-			repository: evidence.reviews[0]?.repository ?? "github.com/invalid/missing-review",
-			workItemId: evidence.reviews[0]?.workItemId ?? "missing-review",
+			repository: reviewTarget?.repository ?? "invalid/missing-review",
+			workItemId: reviewTarget?.workItemId ?? "missing-review",
 			pullRequest: expected.number,
-			generation: evidence.reviews.reduce((maximum, review) => Math.max(maximum, review.generation), 0),
+			generation: reviewTarget?.generation ?? 0,
 			baseSha: expected.baseSha,
 			headSha: expected.headSha,
-			changedPaths: evidence.reviews[0]?.changedPaths ?? ["missing-review"],
-			allowedScopes: evidence.reviews[0]?.allowedScopes ?? ["missing-review"],
+			changedPaths: reviewTarget?.changedPaths ?? [],
+			allowedScopes: reviewTarget?.allowedScopes ?? ["missing-review"],
 		},
 		reviews: evidence.reviews,
 	});
