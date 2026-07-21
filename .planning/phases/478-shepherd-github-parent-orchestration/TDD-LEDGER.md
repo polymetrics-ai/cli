@@ -203,3 +203,25 @@ Production blob identity and the focused expected-failure matrix must be recorde
 - Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`; only expected global
   settings lock warnings are emitted. Immutable base/ancestry, full-range diff, 17-path scope,
   `git diff --check`, and credential-literal scan pass.
+
+## Cycle 5 consolidated-review RED matrix
+
+Frozen candidate: `ca6f6873d168db707bbe58291b5ee1b582e9404f`.
+
+| Contract | Behavior-level RED requirement | State |
+| --- | --- | --- |
+| exact broker runtime records | malformed/extra request records and request/poll/consume records with wrong ID, gate, marker, options, allowlist, binding, generation, head, question, lifetime, status, actor, source, or chronology never reach `markParentReady` | planned RED |
+| complete policy-set refresh | movement/missing/incomplete/stale evidence for either plan-bound coordinate blocks receipt reuse, readiness before/after decision, and ready-effect recovery; every stage queries the complete exact set | planned RED |
+| authoritative initial policy topology | a #479-shaped caller constructs a plan through the authoritative full-bundle/config source and public async port only; wrong/ambiguous bundle coordinates fail | planned RED |
+| non-self-auth controller authorization | forged/re-digested controller revision/time, changed paths, review result, missing attestation/review, or transport-only receipt blocks both reuse and readiness after independent evidence re-evaluation | planned RED |
+| centralized child PR eligibility | open/non-draft and documented open-to-merged/merged transitions pass; draft open, draft merged, closed, and regressed transitions fail identically at reuse/readiness | planned RED |
+| CAS-conditioned stable mutation identity | same logical coordinates with different expected revisions produce different authenticated identities; PR observation refresh preserves child integration identity; timeout-before/after-effect recovery remains single-effect | planned RED |
+| cookie/session grammar | synthetic `Cookie`, `Set-Cookie`, session ID/token, and response-header values are rejected/redacted in every durable/outbound text field without storing real credentials | planned RED |
+| caller lifecycle and join ownership | caller abort/deadline propagates to ports; a timed-out uncooperative keyed call remains excluded; bounded stop reports incomplete/unacknowledged until underlying settlement and clean only after join | planned RED |
+| pre-materialization envelopes | oversized raw UTF-8 JSON rejects before parse; oversized object envelopes reject after bounded schema-directed inspection and before generic descriptors/effects; proxy/accessor/closed/dense cases remain fail-closed | planned RED |
+| current durable run state | JSON names Cycle 5 frozen candidate, blocked Cycle 4 reviews, exact available checkpoints, verification/review truth, and no stale Cycle 3 current head | planned RED |
+| Cycle 4 retention | the existing focused 68 tests pass unchanged at RED and after GREEN | planned RED |
+
+The next commit after the Cycle 5 plan checkpoint may modify only the three matching tests and the
+two issue-478 fixtures. The retained 68 tests, each new expected failure row, and exact frozen
+production blob IDs must be recorded before any Cycle 5 production edit.

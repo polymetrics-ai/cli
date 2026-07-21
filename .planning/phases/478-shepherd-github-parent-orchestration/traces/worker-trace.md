@@ -137,3 +137,18 @@
   `git diff --check`, and credential-literal scans pass.
 - No network, live GitHub, Go, connector, certification, runtime, `make`, #479, reviewer, or merge
   action ran. Parent owns the two fresh exact-head `xhigh` reviews and every human/integration gate.
+
+## 2026-07-22 Cycle 5 plan
+
+- Verified clean exact frozen head `ca6f6873`, branch, immutable base, and 17-path range before edits.
+- Read both Cycle 4 review ledgers completely and mapped their unique union plus run-state warning
+  into one RED matrix retaining all 68 focused contracts.
+- Loaded `gsd-programming-loop`, `caveman`, required routing, Pi adapter/runtime references, and
+  required project artifacts. Adapter doctor passes; missing command/helper records
+  `manual_gsd_fallback`.
+- Chosen envelope boundary: byte-bounded raw JSON decoder plus shared schema-directed capped record
+  reads before generic descriptor materialization.
+- Chosen lifecycle boundary: linked caller/local cancellation, tracked settlement and abort
+  acknowledgement, ensure-scope key retention until live calls settle, bounded incomplete-aware
+  stop/join.
+- No test, production, push, network, GitHub, reviewer, #479 implementation, or prohibited gate ran.

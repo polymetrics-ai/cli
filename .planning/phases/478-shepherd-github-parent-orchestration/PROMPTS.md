@@ -79,3 +79,18 @@
   invariants and #479-facing typed ports.
 - Exclusions: #479/controller, parent artifacts, Go/connectors/certification/runtime/`make`,
   network/live GitHub, reviewer, integration, or merge.
+
+## Cycle 5 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE4-1.md` and `/tmp/478-REVIEW-CYCLE4-2.md`, read completely.
+- Frozen candidate/base: `ca6f6873d168db707bbe58291b5ee1b582e9404f` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Strict sequence: artifact-only PLAN/finding matrix; one comprehensive test/fixture-only RED with
+  retained 68 and frozen production proof; one coherent GREEN/refactor; authorized local evidence.
+- Batch: exact broker records; complete policy-set refresh and authoritative initial bundle source;
+  re-evaluated controller receipt authorization; centralized child eligibility; CAS-conditioned
+  stable mutation identity; cookie/session grammar; caller-linked lifecycle with live-call keyed
+  ownership and bounded stop/join; byte-bounded raw decoder plus schema-directed object envelopes;
+  atomic Cycle 5 run state; complete Cycle 4 retention.
+- Exclusions: push/network/GitHub, #479 implementation, parent artifacts, Go/connectors/
+  certification/runtime/`make`, reviewer, integration, or merge.

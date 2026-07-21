@@ -363,3 +363,88 @@ pinned Pi 0.80.6; pinned offline RPC discovers `pm-shepherd`; immutable-base, an
 17-path ownership, and credential-literal scans pass. The serialized suite ran 332 tests: 266 pass,
 65 unrelated managed-sandbox `spawn EPERM` failures, and one intentional skip; every #478 test
 passes. No prohibited, network, reviewer, controller/#479, or merge action ran.
+
+## Cycle 5 consolidated stable-head correction: 2026-07-22
+
+Two independent Cycle 4 ledgers reviewed exact frozen candidate
+`ca6f6873d168db707bbe58291b5ee1b582e9404f` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Their unique union plus the stale run-state warning
+is accepted as one architecture correction. Cycle 5 retains all 68 focused Cycle 4 contracts.
+
+Required routing loaded: `gsd-programming-loop`, `caveman`, required-skills routing, the Pi adapter
+reference, the runtime/Pi integration reference, and required GSD project artifacts. `scripts/gsd
+doctor` passes. The adapter does not expose `programming-loop` and `scripts/programming-loop.mjs`
+is absent, so the recorded route remains `manual_gsd_fallback`. One read-only explorer maps coupled
+orchestrator symbols while this isolated worker owns the ordered production critical path.
+
+### Cycle 5 correction contract
+
+1. Runtime-validate each broker request, poll, and consume result as an exact canonical human
+   decision record. Exact-match request ID, `parent_merge` gate, idempotency marker, options,
+   actor allowlist, target/binding/generation/head, question, expiry/lifetime, timestamps,
+   status/decision/consumption coherence, allowlisted actor, and exact GitHub source before any
+   decision branch or ready effect. TypeScript interface claims are never runtime evidence.
+2. Refresh the complete set of plan-bound policy coordinates before fresh or reused child
+   authorization, initial readiness, post-decision revalidation, and ready-effect recovery.
+   Missing, incomplete, stale, ambiguous, moved, or wrong-coordinate observations block. Extend
+   the typed policy source with one authoritative full initial bundle/config read and expose an
+   async plan-construction boundary so #479 can wire only ports and never invent policy authority.
+3. Replace self-authenticating receipt provenance with controller authorization bound to the
+   stable PR identity, exact changed-path observation digest, attested Codex xhigh review-result
+   digest, current policy observation, canonical plan, and integration intent/result. Until a
+   durable #479 authorization store exists, reuse and readiness independently re-evaluate current
+   controller evidence and require exact authorization equality; loose revision/time inequalities
+   and transport-only recomputation fail.
+4. Centralize current child PR eligibility across integration reuse and readiness. Reject draft,
+   closed, and malformed draft+merged evidence consistently; document and allow only unchanged
+   open, open-to-merged, and unchanged merged post-integration transitions.
+5. Bind `expectedResourceRevision` into both durable mutation key and intent digest. Build child
+   integration mutation identity from stable logical authorization/PR identity while keeping
+   volatile read revision/time outside it. Same coordinates with a different CAS precondition
+   receive a different authenticated identity; observation refresh and timeout-before/after-effect
+   recovery remain deterministic.
+6. Extend the one shared sensitive-text grammar for `Cookie`, `Set-Cookie`, session identifiers,
+   and session/auth/CSRF response-header forms. Table-test every durable/outbound title, objective,
+   verification, question, issue/PR/roster body, review finding, and disposition field with
+   synthetic values only.
+7. Add optional caller lifecycle context to every public async orchestration entry point. Link
+   caller abort/deadline with the local deadline; pass explicit abort acknowledgement to ports;
+   track every invocation through settlement. An `AsyncLocalStorage` ensure scope retains the keyed
+   gate while a timed-out invocation is live. A bounded `stop` aborts and joins active calls, and
+   reports incomplete/unacknowledged work rather than claiming a clean join for an uncooperative
+   never-settling port.
+8. Replace bulk object descriptor expansion with one shared schema-directed bounded reader: inspect
+   only declared data descriptors and stop unknown-key enumeration after schema cardinality plus
+   one. Add a byte-bounded UTF-8 JSON decoder that rejects oversized raw envelopes before parsing;
+   raw or schema-directed representations are the only external boundary forms. Preserve proxy,
+   accessor, closed-shape, dense-array, cycle, and exact comparison rejection, with oversized raw
+   and oversized object regressions before effects.
+9. Rewrite `RUN-STATE.json` atomically to name Cycle 5, exact frozen candidate, exact checkpoints,
+   blocked Cycle 4 review state, current local verification truth, and pending parent-owned review.
+   No Cycle 3 or superseded Cycle 4 checkpoint may remain the current durable status.
+10. Retain all Cycle 4 behavior and the 17-path issue-owned boundary. Do not run Go, connectors,
+    certification, runtime services, `make`, network/live GitHub, #479 implementation, reviewer,
+    integration, or merge actions.
+
+### Cycle 5 strict lifecycle
+
+1. Commit this artifact-only plan/finding-to-RED matrix while all three production modules and all
+   focused tests remain byte-identical to `ca6f6873`.
+2. Make one comprehensive test/fixture-only RED commit. Run the retained 68 tests separately and
+   require 68/68 green; run every new matrix row and require its intended failure. Prove the three
+   production blob IDs still exactly equal frozen `ca6f6873` before GREEN.
+3. Implement one coherent GREEN/refactor only in the three #478 production modules plus matching
+   tests/fixtures. Report the first focused GREEN immediately.
+4. Run focused three-file tests, strict owned/all-production TypeScript against pinned Pi 0.80.6,
+   pinned offline RPC, serialized Shepherd classification, immutable-base/ancestry/diff/17-path
+   scope, `git diff --check`, and synthetic credential scans.
+5. Commit evidence with exact PLAN/RED/GREEN/evidence SHAs and a clean candidate for two fresh
+   parent-owned exact-head `xhigh` reviews. No push, network, or GitHub mutation runs.
+
+### Cycle 5 checkpoints
+
+- [ ] Artifact-only PLAN/finding-to-RED commit (record after commit).
+- [ ] One comprehensive test/fixture-only RED with retained-68 and production-blob proofs.
+- [ ] One coherent architectural GREEN/refactor commit.
+- [ ] Authorized local evidence commit and clean candidate.
+- [ ] Two fresh exact-head independent reviews remain parent-owned.

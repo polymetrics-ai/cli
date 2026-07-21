@@ -5,74 +5,56 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 3 accepts two corrected review ledgers as one fourteen-invariant TDD batch against frozen candidate 3f285722; artifact-only planning is in progress and GitHub DNS publication remains deferred.",
+  "reason": "Cycle 5 consolidates two blocking reviews of frozen candidate ca6f6873 into one plan-first RED-to-GREEN architecture correction; production and tests remain frozen at the plan checkpoint.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
-    "implementationHead": "3f285722a505ea426d53a34f95716781d1aca7c2",
-    "verificationEvidenceHead": "3f285722a505ea426d53a34f95716781d1aca7c2",
+    "frozenCandidate": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
+    "implementationHead": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
+    "verificationEvidenceHead": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
+    "adapterHealth": "doctor_passed_programming_loop_unavailable",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
     "verificationPassed": false,
     "reviewCoveragePassed": false,
+    "reviewState": {
+      "cycle": 4,
+      "candidate": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
+      "review1": "blocked",
+      "review2": "blocked",
+      "findingsConsolidatedIntoCycle": 5
+    },
+    "checkpoints": {
+      "cycle4Plan": "607e203ef1f76ff112c130ccff5d155973d984f6",
+      "cycle4Red": "abbf388b8a852836e0dd10a55b9f17720b9fde22",
+      "cycle4Green": "b92b5ff7dd3738dc3b3350ebb4d2f2b42074f954",
+      "cycle4Evidence": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
+      "cycle5Plan": null,
+      "cycle5Red": null,
+      "cycle5Green": null,
+      "cycle5Evidence": null
+    },
+    "verification": {
+      "cycle4Focused": "68/68 pass",
+      "cycle4StrictOwnedTypeScript": "pass",
+      "cycle4StrictProductionTypeScript": "pass",
+      "cycle4OfflineRpc": "pass",
+      "cycle4Serialized": "332 total; 266 pass; 65 unrelated managed-sandbox spawn EPERM failures; 1 intentional skip",
+      "cycle5": "not_started"
+    },
     "orchestrationDecisions": [
       {
-        "cycle": "plan",
-        "decision": "local_critical_path",
-        "reason": "The runtime agent-thread limit rejected read-only delegation; this isolated issue worker owns one ordered RED-before-GREEN contract across the assigned modules."
+        "cycle": "cycle-5-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One explorer maps coupled orchestrator symbols read-only; this isolated worker owns the ordered plan, RED, GREEN, and evidence path."
       },
       {
-        "cycle": "tdd-gate",
-        "decision": "local_critical_path",
-        "reason": "Three matching fake-only test files fail on their intentionally absent production modules; no production file exists at the RED checkpoint."
-      },
-      {
-        "cycle": "execute",
-        "decision": "local_critical_path",
-        "reason": "Implemented the three-file typed boundary; 21 focused tests and strict owned TypeScript now pass."
-      },
-      {
-        "cycle": "adversarial-correction-tdd-gate",
-        "decision": "local_critical_path",
-        "reason": "Review-agent capacity remained unavailable; test-only receipt, review-binding, restart, proxy, and disposition regressions produce 17 passes and 10 expected failures against unchanged GREEN production."
-      },
-      {
-        "cycle": "adversarial-correction-green",
-        "decision": "local_critical_path",
-        "reason": "Receipt generation/marker/range binding, exact planned review targets, merged-PR restart, parent handoff capture, descriptor-safe arrays, and disposition policy now pass 27 focused tests and strict owned TypeScript."
-      },
-      {
-        "cycle": "verify",
-        "decision": "local_critical_path",
-        "reason": "Focused 27/27, serialized Shepherd 290 pass with one intentional skip, strict pinned Pi 0.80.6 TypeScript, pinned offline RPC, and immutable-base/diff/owned-scope gates pass; no prohibited broad gate or reviewer ran."
-      },
-      {
-        "cycle": "publish-pr",
-        "decision": "local_critical_path",
-        "reason": "Ready stacked PR #487 targets feat/471-pi-agent-session-shepherd with the required title and Refs linkage; no reviewer or merge was requested."
-      },
-      {
-        "cycle": "stable-head-functional-review-plan",
-        "decision": "local_critical_path",
-        "reason": "Eleven accepted findings are mapped to one artifact-first, test-only RED, coherent GREEN correction slice in the isolated #478 clone; fresh review remains parent-owned."
-      },
-      {
-        "cycle": "stable-head-functional-review-red-green",
-        "decision": "local_critical_path",
-        "reason": "Test-only RED 4e02d059 produced 9 passes and 29 expected failures with frozen production blobs; GREEN 8e32896a passes all 38 focused tests and strict owned/all-production TypeScript."
-      },
-      {
-        "cycle": "stable-head-functional-review-verify",
-        "decision": "not_spawned_verification_blocked",
-        "reason": "Serialized Shepherd ran 302 tests but 65 unrelated process-identity/filesystem/git tests fail with managed-sandbox spawn EPERM; GitHub DNS also blocks push and PR #487 update."
-      },
-      {
-        "cycle": "cycle-3-corrected-review-plan",
-        "decision": "local_critical_path",
-        "reason": "Two corrected ledgers are synthesized into one fourteen-invariant artifact-first, single-RED, architectural-GREEN correction while controller/#479 and parent planning remain excluded."
+        "cycle": "cycle-5-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 5 explicitly excludes push, network, and GitHub mutation; parent owns publication and exact-head review."
       }
     ],
     "humanGates": [

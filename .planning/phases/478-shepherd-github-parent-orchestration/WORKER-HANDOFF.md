@@ -166,3 +166,15 @@ session-attestation contract and fixtures required to verify independent-review 
 - No unresolved local design blocker remains. Parent next runs two fresh independent exact-head
   `openai-codex/gpt-5.6-sol:xhigh` reviews, then owns disposition, publication, integration, and
   human gates.
+
+## Cycle 5 correction in progress
+
+- Frozen candidate `ca6f6873`; immutable base `3addb1f4`; initial worktree clean.
+- Both Cycle 4 review ledgers were read completely and consolidated before test/production edits.
+- Envelope solution: byte-bound raw JSON before parse plus shared schema-directed capped record
+  reads; no bulk descriptor expansion of untrusted objects.
+- Lifecycle solution: caller-linked abort/deadline, tracked port settlement/acknowledgement,
+  `AsyncLocalStorage` ensure scopes retaining keyed ownership while live, and bounded stop/join that
+  reports uncooperative work incomplete.
+- Adapter doctor passes; missing command/helper activates `manual_gsd_fallback`. One read-only
+  explorer maps coupled symbols; isolated worker owns implementation. No push/network/GitHub.

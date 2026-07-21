@@ -75,3 +75,13 @@ base/ancestry/diff/17-path/data scans pass. The serialized suite records 266 pas
 sandbox `spawn EPERM` failures, and one intentional skip across 332 tests; all #478 tests pass.
 No live/network/prohibited action ran. The evidence commit and clean candidate are handed to the
 parent for two fresh exact-head `xhigh` reviews.
+
+## Cycle 5 correction status
+
+Two independent reviews block frozen Cycle 4 candidate `ca6f6873`. Their unique union is one
+artifact-first correction: exact broker records; generation-wide policy authority; independently
+re-evaluated controller receipt authorization; consistent child eligibility; CAS-bound stable
+mutation identity; cookie/session redaction; caller-linked lifecycle with live-call key ownership
+and bounded stop/join; pre-materialization raw/schema-directed envelope bounds; and atomic current
+run state. This plan checkpoint precedes the one comprehensive test-only RED; production and tests
+remain frozen. Push/network/GitHub and parent-owned review remain excluded.
