@@ -109,6 +109,15 @@ interface HumanDecisionLockLease extends HumanDecisionLockOwner {
 	state: "candidate" | "active";
 }
 
+type HumanDecisionLockScan =
+	| { status: "stable"; locks: HumanDecisionLockLease[] }
+	| { status: "changed" };
+
+type HumanDecisionLockOwnerInspection =
+	| { status: "valid"; owner: HumanDecisionLockOwner }
+	| { status: "missing" }
+	| { status: "invalid" };
+
 function compareLocks(left: HumanDecisionLockLease, right: HumanDecisionLockLease): number {
 	return new Date(left.createdAt).valueOf() - new Date(right.createdAt).valueOf()
 		|| left.token.localeCompare(right.token);
@@ -680,7 +689,9 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		try {
 			for (let attempt = 0; attempt <= this.lockMaxAttempts; attempt += 1) {
 				await new Promise((resolve) => setTimeout(resolve, this.lockRetryMs));
-				const locks = await this.liveLocks(requestId);
+				const scan = await this.liveLocks(requestId);
+				if (scan.status === "changed") continue;
+				const locks = scan.locks;
 				const own = locks.find((lock) => lock.token === lease.token);
 				if (!own) throw new Error("human decision lock candidate disappeared before acquisition");
 				lease = own;
@@ -705,32 +716,48 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		}
 	}
 
-	private async readLockOwner(lockPath: string): Promise<HumanDecisionLockOwner | null> {
-		let handle: Awaited<ReturnType<typeof open>>;
+	private async lockMetadata(lockPath: string) {
 		try {
-			handle = await open(lockPath, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+			return await lstat(lockPath);
 		} catch (error) {
 			if (isRecord(error) && error.code === "ENOENT") return null;
 			throw error;
 		}
+	}
+
+	private async inspectLockOwner(lockPath: string): Promise<HumanDecisionLockOwnerInspection> {
+		let handle: Awaited<ReturnType<typeof open>>;
+		try {
+			handle = await open(lockPath, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));
+		} catch (error) {
+			if (isRecord(error) && error.code === "ENOENT") return { status: "missing" };
+			throw error;
+		}
 		try {
 			const metadata = await handle.stat();
-			if (!metadata.isFile() || metadata.size > 4_096) return null;
+			if (!metadata.isFile() || metadata.size > 4_096) return { status: "invalid" };
 			let value: unknown;
-			try { value = JSON.parse(await handle.readFile("utf8")); } catch { return null; }
+			try { value = JSON.parse(await handle.readFile("utf8")); } catch { return { status: "invalid" }; }
 			if (!isRecord(value)
 				|| value.schemaVersion !== 1
 				|| !Number.isSafeInteger(value.pid)
 				|| (value.pid as number) < 1
 				|| typeof value.token !== "string"
 				|| !/^[0-9a-f-]{36}$/.test(value.token)
-				|| typeof value.createdAt !== "string") return null;
+				|| typeof value.createdAt !== "string") return { status: "invalid" };
 			let createdAt: string;
-			try { createdAt = canonicalTimestamp(value.createdAt, "lock creation timestamp"); } catch { return null; }
-			return { pid: value.pid as number, token: value.token, createdAt };
+			try { createdAt = canonicalTimestamp(value.createdAt, "lock creation timestamp"); } catch {
+				return { status: "invalid" };
+			}
+			return { status: "valid", owner: { pid: value.pid as number, token: value.token, createdAt } };
 		} finally {
 			await handle.close();
 		}
+	}
+
+	private async readLockOwner(lockPath: string): Promise<HumanDecisionLockOwner | null> {
+		const inspection = await this.inspectLockOwner(lockPath);
+		return inspection.status === "valid" ? inspection.owner : null;
 	}
 
 	private processIsAlive(pid: number): boolean {
@@ -756,20 +783,30 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 		return { ...lease, path, state };
 	}
 
-	private async removeOwnedLock(lease: HumanDecisionLockLease, allowMissing = false): Promise<void> {
-		const owner = await this.readLockOwner(lease.path);
-		if (!owner) {
-			if (allowMissing) return;
+	private async removeOwnedLock(lease: HumanDecisionLockLease, allowMissing = false): Promise<boolean> {
+		const inspection = await this.inspectLockOwner(lease.path);
+		if (inspection.status !== "valid") {
+			if (inspection.status === "invalid") {
+				throw new Error("human decision lock owner record is invalid before release");
+			}
+			if (allowMissing) return false;
 			throw new Error("human decision lock ownership disappeared before release");
 		}
+		const owner = inspection.owner;
 		if (owner.token !== lease.token || owner.pid !== lease.pid) {
 			throw new Error("human decision lock ownership changed before release; replacement lock preserved");
 		}
-		await unlink(lease.path);
+		try {
+			await unlink(lease.path);
+		} catch (error) {
+			if (!(allowMissing && isRecord(error) && error.code === "ENOENT")) throw error;
+			return false;
+		}
 		await this.syncRoot();
+		return true;
 	}
 
-	private async liveLocks(requestId: string): Promise<HumanDecisionLockLease[]> {
+	private async liveLocks(requestId: string): Promise<HumanDecisionLockScan> {
 		const expression = new RegExp(`^${requestId}\\.lock\\.([0-9a-f-]{36})\\.(candidate|active)$`);
 		const locks: HumanDecisionLockLease[] = [];
 		for (const entry of await readdir(this.root, { withFileTypes: true })) {
@@ -777,9 +814,16 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 			if (!match) continue;
 			const path = join(this.root, entry.name);
 			if (!entry.isFile() || entry.isSymbolicLink()) throw new Error("human decision lock is not a trusted regular file");
-			const metadata = await lstat(path);
-			const owner = await this.readLockOwner(path);
+			const metadata = await this.lockMetadata(path);
+			if (!metadata) return { status: "changed" };
+			const inspection = await this.inspectLockOwner(path);
+			if (inspection.status === "missing") return { status: "changed" };
+			const owner = inspection.status === "valid" ? inspection.owner : null;
 			if (!owner || owner.token !== match[1]) {
+				const current = await this.lockMetadata(path);
+				if (!current || current.dev !== metadata.dev || current.ino !== metadata.ino) {
+					return { status: "changed" };
+				}
 				if (Date.now() - metadata.mtimeMs <= this.lockStaleMs) {
 					throw new Error("human decision lock owner record is invalid");
 				}
@@ -793,12 +837,12 @@ export class FileHumanDecisionRepository implements HumanDecisionRepository {
 				state: match[2] as HumanDecisionLockLease["state"],
 			};
 			if (!this.processIsAlive(owner.pid)) {
-				await this.removeOwnedLock(lock);
+				if (!await this.removeOwnedLock(lock, true)) return { status: "changed" };
 				continue;
 			}
 			locks.push(lock);
 		}
-		return locks;
+		return { status: "stable", locks };
 	}
 
 	private async releaseLock(lease: HumanDecisionLockLease): Promise<void> {

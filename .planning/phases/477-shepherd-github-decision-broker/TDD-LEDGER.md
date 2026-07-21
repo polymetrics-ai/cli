@@ -146,3 +146,21 @@ The three-round, 32-independent-repository contention case failed in round 0 wit
 failure kinds: `ENOENT` from a vanished candidate path and `invalid-owner` when transition/release
 occurred between metadata and owner reads. The stable malformed live-lock test passed, preserving
 the fail-closed baseline that the implementation must retain.
+
+GREEN/refactor made lock-owner inspection discriminate `valid`, `missing`, and `invalid`, and made
+directory scanning return either a stable lock set or `changed`. A changed snapshot consumes the
+next iteration of the existing slept, attempt-bounded acquisition loop; it never spins. Stable
+malformed files still fail closed after device/inode confirmation, and concurrent dead-owner
+reclaim treats only an actually missing exact-token path as a rescan.
+
+Focused GREEN command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result: exit 0; 44 tests total, 43 passed, 0 failed, and 1 designated-sandbox skip; duration
+8794.958958 ms. Strict no-emit TypeScript over both owned modules and tests then exited 0 using
+TypeScript 5.9.3 and the explicit Pi 0.80.6 Node type root. Complete-lane verification remains
+pending.

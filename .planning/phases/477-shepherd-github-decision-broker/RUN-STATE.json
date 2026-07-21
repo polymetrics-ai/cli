@@ -79,6 +79,11 @@
         "cycle": "lock-snapshot-correction-tdd-gate",
         "decision": "local_critical_path",
         "reason": "Captured genuine high-contention RED at 18 pass and 1 failure, reproducing both ENOENT and invalid-owner snapshot races while stable malformed-lock coverage remained green."
+      },
+      {
+        "cycle": "lock-snapshot-correction-execute",
+        "decision": "local_critical_path",
+        "reason": "Implemented discriminated lock-owner inspection and attempt-bounded snapshot rescans; focused tests are green at 43 pass, 0 fail, 1 sandbox skip with strict owned TypeScript passing."
       }
     ],
     "humanGates": [
@@ -91,5 +96,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T14:32:28.000Z"
+  "updatedAt": "2026-07-21T14:36:41.000Z"
 }
