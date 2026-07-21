@@ -11,6 +11,7 @@ import {
 } from "./github-evidence.ts";
 import {
 	createIndependentReviewWork,
+	type AgentSessionAttestation,
 	type IndependentReviewRecord,
 } from "./review-router.ts";
 
@@ -58,7 +59,7 @@ function reviewDigest(review: IndependentReviewRecord): string {
 	})).digest("hex");
 }
 
-function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}) {
+function attestation(review: IndependentReviewRecord, overrides: Record<string, unknown> = {}): AgentSessionAttestation {
 	return {
 		schemaVersion: 1,
 		authority: "controller",
@@ -80,7 +81,7 @@ function attestation(review: IndependentReviewRecord, overrides: Record<string, 
 		resultDigest: reviewDigest(review),
 		completedAt: review.completedAt,
 		...overrides,
-	};
+	} as AgentSessionAttestation;
 }
 
 async function evidence(overrides: Record<string, unknown> = {}): Promise<GitHubPullRequestEvidence> {
@@ -186,7 +187,7 @@ test("authoritative changed paths require exact set equality independent of orde
 		changedPaths: [secondPath, ...expected.changedPaths],
 		reviews: [review],
 	}), exactExpected as never).kind, "eligible");
-	for (const claimed of [[], expected.changedPaths, [...exactExpected.changedPaths, "extra.ts"]]) {
+	for (const claimed of [[], expected.changedPaths, [...exactExpected.changedPaths, ".pi/extensions/shepherd/extra.ts"]]) {
 		const mismatched = cleanReview({
 			...createIndependentReviewWork({ ...exactExpected.reviewTarget, changedPaths: claimed }),
 		});
@@ -207,7 +208,7 @@ test("expected target makes equal-generation selection independent of review and
 	for (const reviews of [[correct, unrelated], [unrelated, correct]]) {
 		const result = evaluateGitHubPullRequestEvidence(await evidence({ reviews }), {
 			...expected,
-			attestations: [attestation(correct), attestation(unrelated)],
+			attestations: [attestation(correct), attestation(unrelated, { sessionId: "session-478-unrelated" })],
 		} as never);
 		assert.equal(result.kind, "eligible");
 		if (result.kind === "eligible") assert.equal(result.review.workItemId, "evidence");

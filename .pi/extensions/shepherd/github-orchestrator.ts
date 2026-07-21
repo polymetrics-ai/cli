@@ -12,10 +12,12 @@ import {
 } from "./dependency-graph.ts";
 import { canonicalIssueBranch } from "./git-adapter.ts";
 import {
+	canonicalGitRef,
 	evaluateGitHubPullRequestEvidence,
 	validateGitHubPullRequestEvidence,
 	type GitHubEvidenceBlocker,
 	type GitHubPullRequestEvidence,
+	type RequiredGitHubCheck,
 } from "./github-evidence.ts";
 import type {
 	GitHubDecisionBroker,
@@ -27,7 +29,7 @@ import {
 	type HumanDecisionGate,
 } from "./human-decision.ts";
 import { reconcileAutonomy } from "./reconciler.ts";
-import type { IndependentReviewRecord } from "./review-router.ts";
+import type { AgentSessionAttestation, IndependentReviewRecord, IndependentReviewTarget } from "./review-router.ts";
 import type {
 	ClaimedWorkspace,
 	WorkspaceHandoffEvidence,
@@ -162,6 +164,23 @@ export interface GitHubPullRequestQuery {
 	pullRequest: number;
 }
 
+export interface AuthoritativeLookup<T> {
+	items: T[];
+	complete: boolean;
+}
+
+export interface ChildIntegrationQuery {
+	repository: string;
+	childId: string;
+	marker: string;
+}
+
+export interface GitAncestryQuery {
+	repository: string;
+	ancestorSha: string;
+	descendantSha: string;
+}
+
 export interface ChildIntegrationReceipt {
 	childId: string;
 	pullRequest: number;
@@ -189,15 +208,20 @@ export interface MarkParentReadyRequest extends GitHubPullRequestQuery {
 }
 
 export interface GitHubOrchestrationTransport {
-	findChildIssues(query: ChildIssueMarkerQuery): Promise<GitHubChildIssue[]>;
+	findChildIssues(query: ChildIssueMarkerQuery): Promise<AuthoritativeLookup<GitHubChildIssue>>;
 	createChildIssue(request: CreateChildIssueRequest): Promise<GitHubChildIssue>;
-	findPullRequests(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence[]>;
+	findPullRequests(query: PullRequestMarkerQuery): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>>;
 	createPullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence>;
-	findParentRosters(query: GitHubRosterQuery): Promise<GitHubRosterSnapshot[]>;
+	findParentRosters(query: GitHubRosterQuery): Promise<AuthoritativeLookup<GitHubRosterSnapshot>>;
 	publishParentRoster(request: PublishRosterRequest): Promise<GitHubRosterSnapshot>;
-	findChildIntegration(query: GitHubPullRequestQuery): Promise<ChildIntegrationReceipt | null>;
+	findChildIntegration(query: ChildIntegrationQuery): Promise<AuthoritativeLookup<ChildIntegrationReceipt>>;
 	integrateChild(request: IntegrateChildRequest): Promise<ChildIntegrationReceipt>;
 	markParentReady(request: MarkParentReadyRequest): Promise<GitHubPullRequestEvidence>;
+	isAncestor(query: GitAncestryQuery): Promise<boolean>;
+}
+
+export interface AgentSessionAttestationSource {
+	findAttestations(target: IndependentReviewTarget): Promise<AuthoritativeLookup<AgentSessionAttestation>>;
 }
 
 export type ParentDecisionBroker = Pick<GitHubDecisionBroker, "request" | "poll" | "consume">;
@@ -273,7 +297,7 @@ function githubNumber(value: unknown, description: string): number {
 }
 
 function generation(value: unknown): number {
-	if (!Number.isSafeInteger(value) || (value as number) < 0 || (value as number) > MAX_GITHUB_NUMBER) {
+	if (!Number.isSafeInteger(value) || (value as number) < 1 || (value as number) > MAX_GITHUB_NUMBER) {
 		throw new Error("invalid orchestration generation");
 	}
 	return value as number;
@@ -297,16 +321,6 @@ function timestamp(value: unknown, description: string): string {
 function repository(value: unknown): string {
 	const result = inlineText(value, "repository", 512).toLowerCase();
 	if (!REPOSITORY.test(result)) throw new Error("invalid GitHub repository");
-	return result;
-}
-
-function branch(value: unknown, description: string): string {
-	const result = inlineText(value, description, 240);
-	if (result.startsWith("-") || result.startsWith("/") || result.endsWith("/") || result.includes("\\")
-		|| result.includes("..") || result.includes("//") || /[~^:?*\[\]{}]/u.test(result)
-		|| result.split("/").some((segment) => segment === "" || segment === "." || segment === ".." || segment.endsWith("."))) {
-		throw new Error(`invalid ${description}`);
-	}
 	return result;
 }
 
@@ -337,6 +351,12 @@ function boundedArray(value: unknown, description: string, maximum = MAX_LIST, a
 		if (!Object.hasOwn(values, index)) throw new Error(`${description} must be a dense canonical array`);
 	}
 	return values;
+}
+
+function authoritativeItems(value: unknown, description: string, maximum = MAX_LIST): unknown[] {
+	const snapshot = exactRecord(value, ["items", "complete"]);
+	if (snapshot.complete !== true) throw new Error(`${description} is incomplete; bounded pagination must be exhausted`);
+	return boundedArray(snapshot.items, `${description} items`, maximum, true);
 }
 
 function unique<T>(values: readonly T[], key: (value: T) => string, description: string): void {
@@ -467,8 +487,8 @@ export function createParentOrchestrationPlan(value: unknown): ParentOrchestrati
 	const canonicalGeneration = generation(candidate.generation);
 	const title = inlineText(candidate.title, "parent title", 256);
 	const objective = inlineText(candidate.objective, "parent objective", 4_096);
-	const parentBranch = branch(candidate.parentBranch, "parent branch");
-	const parentBaseBranch = branch(candidate.parentBaseBranch, "parent base branch");
+	const parentBranch = canonicalGitRef(candidate.parentBranch, "parent branch");
+	const parentBaseBranch = canonicalGitRef(candidate.parentBaseBranch, "parent base branch");
 	if (parentBranch === parentBaseBranch) throw new Error("parent branch and base branch must differ");
 	const intents = boundedArray(candidate.children, "children", MAX_CHILDREN).map(validateChildIntent);
 	unique(intents, (child) => child.id, "child ID");
@@ -632,7 +652,7 @@ function validateReceipt(value: unknown): ChildIntegrationReceipt {
 		marker: inlineText(candidate.marker, "integrated pull request marker", 512),
 		baseSha: sha(candidate.baseSha, "integrated base SHA"),
 		headSha: sha(candidate.headSha, "integrated head SHA"),
-		parentBranch: branch(candidate.parentBranch, "integration parent branch"),
+		parentBranch: canonicalGitRef(candidate.parentBranch, "integration parent branch"),
 		integratedAt: timestamp(candidate.integratedAt, "integration timestamp"),
 	};
 }
@@ -705,6 +725,57 @@ function sameStrings(left: readonly string[], right: readonly string[]): boolean
 	return left.length === right.length && left.every((value, index) => value === right[index]);
 }
 
+function canonicalDataEqual(left: unknown, right: unknown): boolean {
+	if (Object.is(left, right)) return true;
+	if (typeof left !== "object" || left === null || typeof right !== "object" || right === null
+		|| nodeTypes.isProxy(left) || nodeTypes.isProxy(right)
+		|| Array.isArray(left) !== Array.isArray(right)
+		|| Object.getPrototypeOf(left) !== Object.getPrototypeOf(right)) return false;
+	const leftDescriptors = Object.getOwnPropertyDescriptors(left);
+	const rightDescriptors = Object.getOwnPropertyDescriptors(right);
+	const leftKeys = Reflect.ownKeys(leftDescriptors).filter((key) => key !== "length");
+	const rightKeys = Reflect.ownKeys(rightDescriptors).filter((key) => key !== "length");
+	if (leftKeys.length !== rightKeys.length) return false;
+	for (const key of leftKeys) {
+		if (!rightKeys.includes(key)) return false;
+		const leftDescriptor = leftDescriptors[key as keyof typeof leftDescriptors];
+		const rightDescriptor = rightDescriptors[key as keyof typeof rightDescriptors];
+		if (!Object.hasOwn(leftDescriptor, "value") || !Object.hasOwn(rightDescriptor, "value")
+			|| leftDescriptor.enumerable !== rightDescriptor.enumerable
+			|| !canonicalDataEqual(leftDescriptor.value, rightDescriptor.value)) return false;
+	}
+	return true;
+}
+
+function validateMaterializedChild(plan: ParentOrchestrationPlan, value: unknown): MaterializedChildRecord {
+	const candidate = exactRecord(value, [
+		"id", "dependsOn", "status", "access", "writeScopes", "title", "objective", "issue", "branch", "prBase",
+		"requiredSkills", "verification", "humanGates", "markers", "issueBody",
+	]);
+	const planned = childFor(plan, inlineText(candidate.id, "materialized child ID", 64));
+	const issue = githubNumber(candidate.issue, "materialized child issue");
+	const expectedBranch = canonicalIssueBranch(issue, planned.branch.slug);
+	const comparisons: Array<[unknown, unknown]> = [
+		[candidate.dependsOn, planned.dependsOn], [candidate.status, planned.status], [candidate.access, planned.access],
+		[candidate.writeScopes, planned.writeScopes], [candidate.title, planned.title], [candidate.objective, planned.objective],
+		[candidate.branch, expectedBranch], [candidate.prBase, planned.prBase], [candidate.requiredSkills, planned.requiredSkills],
+		[candidate.verification, planned.verification], [candidate.humanGates, planned.humanGates],
+		[candidate.markers, planned.markers], [candidate.issueBody, planned.issueBody],
+	];
+	if (comparisons.some(([actual, expected]) => !canonicalDataEqual(actual, expected))) {
+		throw new Error("materialized child immutable topology does not match its parent orchestration plan");
+	}
+	return {
+		...planned,
+		issue,
+		branch: expectedBranch,
+	};
+}
+
+const REQUIRED_CHECKS: readonly RequiredGitHubCheck[] = [
+	{ name: "verify", producerId: "github-actions:workflow-verify" },
+];
+
 function childPullRequestBody(plan: ParentOrchestrationPlan, child: MaterializedChildRecord): string {
 	return `Refs #${child.issue}\nRefs #${plan.parentIssue}\n\n${child.markers.pullRequest}`;
 }
@@ -730,7 +801,7 @@ function reviewMatchesChild(
 	pullRequest: number,
 	handoff: WorkspaceHandoffEvidence,
 ): boolean {
-	return review.repository === plan.repository
+		return review.repository === plan.repository
 		&& review.workItemId === child.id
 		&& review.pullRequest === pullRequest
 		&& review.generation === plan.generation
@@ -782,9 +853,10 @@ function reviewMatchesParent(
 		&& review.pullRequest === pullRequest.number
 		&& review.generation === plan.generation
 		&& review.baseSha === pullRequest.baseSha
-		&& review.headSha === pullRequest.headSha
-		&& sameStrings(review.allowedScopes, scopes)
-		&& review.changedPaths.every((path) => scopes.some((scope) => pathWithinScope(path, scope)));
+			&& review.headSha === pullRequest.headSha
+			&& sameStrings(review.allowedScopes, scopes)
+			&& sameStrings(review.changedPaths, pullRequest.changedPaths)
+			&& review.changedPaths.every((path) => scopes.some((scope) => pathWithinScope(path, scope)));
 }
 
 function statusesForPlan(plan: ParentOrchestrationPlan, value: Readonly<Record<string, WorkItemStatus>>): Record<string, WorkItemStatus> {
@@ -815,15 +887,33 @@ function validateDecisionPolicy(value: ParentDecisionPolicy): ParentDecisionPoli
 export class GitHubParentOrchestrator {
 	readonly #transport: GitHubOrchestrationTransport;
 	readonly #broker?: ParentDecisionBroker;
+	readonly #attestations?: AgentSessionAttestationSource;
+	readonly #ensureLocks = new Map<string, Promise<void>>();
 
-	constructor(transport: GitHubOrchestrationTransport, broker?: ParentDecisionBroker) {
+	constructor(transport: GitHubOrchestrationTransport, broker?: ParentDecisionBroker, attestations?: AgentSessionAttestationSource) {
 		this.#transport = transport;
 		this.#broker = broker;
+		this.#attestations = attestations;
+	}
+
+	private async serializeEnsure<T>(key: string, operation: () => Promise<T>): Promise<T> {
+		const previous = this.#ensureLocks.get(key) ?? Promise.resolve();
+		let release = (): void => {};
+		const gate = new Promise<void>((resolve) => { release = resolve; });
+		const tail = previous.catch(() => {}).then(() => gate);
+		this.#ensureLocks.set(key, tail);
+		await previous.catch(() => {});
+		try {
+			return await operation();
+		} finally {
+			release();
+			if (this.#ensureLocks.get(key) === tail) this.#ensureLocks.delete(key);
+		}
 	}
 
 	private async matchingIssues(plan: ParentOrchestrationPlan, child: BoundedChildRecord): Promise<GitHubChildIssue[]> {
 		const raw = await this.#transport.findChildIssues({ repository: plan.repository, marker: child.markers.issue });
-		return boundedArray(raw, "child issue lookup", MAX_LIST, true).map(validateChildIssue);
+		return authoritativeItems(raw, "child issue lookup").map(validateChildIssue);
 	}
 
 	private resolveIssueMatches(
@@ -839,29 +929,32 @@ export class GitHubParentOrchestrator {
 
 	async ensureChildIssue(plan: ParentOrchestrationPlan, childId: string): Promise<GitHubChildIssue> {
 		const child = childFor(plan, childId);
-		const existing = this.resolveIssueMatches(await this.matchingIssues(plan, child), plan, child);
-		if (existing !== null) return existing;
-		const request: CreateChildIssueRequest = {
-			repository: plan.repository,
-			parentIssue: plan.parentIssue,
-			marker: child.markers.issue,
-			title: child.title,
-			body: child.issueBody,
-		};
-		try {
-			const created = validateChildIssue(await this.#transport.createChildIssue(request));
-			assertChildIssueMatches(created, plan, child);
-			return created;
-		} catch (error) {
+		return this.serializeEnsure(`${plan.repository}:issue:${child.markers.issue}`, async () => {
+			const existing = this.resolveIssueMatches(await this.matchingIssues(plan, child), plan, child);
+			if (existing !== null) return existing;
+			const request: CreateChildIssueRequest = {
+				repository: plan.repository,
+				parentIssue: plan.parentIssue,
+				marker: child.markers.issue,
+				title: child.title,
+				body: child.issueBody,
+			};
+			let mutationError: unknown;
+			try {
+				validateChildIssue(await this.#transport.createChildIssue(request));
+			} catch (error) {
+				mutationError = error;
+			}
 			const recovered = this.resolveIssueMatches(await this.matchingIssues(plan, child), plan, child);
 			if (recovered !== null) return recovered;
-			throw error;
-		}
+			if (mutationError !== undefined) throw mutationError;
+			throw new Error("child issue create did not produce one authoritative canonical resource");
+		});
 	}
 
 	private async matchingPullRequests(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence[]> {
 		const raw = await this.#transport.findPullRequests(query);
-		return boundedArray(raw, "pull request lookup", MAX_LIST, true).map(validateGitHubPullRequestEvidence);
+		return authoritativeItems(raw, "pull request lookup").map(validateGitHubPullRequestEvidence);
 	}
 
 	private async singlePullRequest(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence | null> {
@@ -877,26 +970,42 @@ export class GitHubParentOrchestrator {
 		if (value.marker !== request.marker || value.title !== request.title || value.body !== request.body
 			|| value.state !== "open" || value.draft !== request.draft
 			|| value.baseBranch !== request.baseBranch || value.headBranch !== request.headBranch
-			|| value.baseSha !== request.baseSha || value.headSha !== request.headSha) {
+			|| value.baseSha !== request.baseSha || value.headSha !== request.headSha
+			|| !sameStrings(value.changedPaths, [...request.changedPaths].sort())) {
 			throw new Error("pull request marker collision or canonical resource mismatch");
 		}
 		return value;
 	}
 
 	private async ensurePullRequest(request: CreatePullRequestRequest): Promise<GitHubPullRequestEvidence> {
-		const query = { repository: request.repository, marker: request.marker };
-		const existing = await this.singlePullRequest(query);
-		if (existing !== null) return this.assertPublishedPullRequest(existing, request);
-		try {
-			return this.assertPublishedPullRequest(
-				validateGitHubPullRequestEvidence(await this.#transport.createPullRequest(request)),
-				request,
-			);
-		} catch (error) {
+		return this.serializeEnsure(`${request.repository}:pr:${request.marker}`, async () => {
+			const query = { repository: request.repository, marker: request.marker };
+			const existing = await this.singlePullRequest(query);
+			if (existing !== null) return this.assertPublishedPullRequest(existing, request);
+			let mutationError: unknown;
+			try {
+				validateGitHubPullRequestEvidence(await this.#transport.createPullRequest(request));
+			} catch (error) {
+				mutationError = error;
+			}
 			const recovered = await this.singlePullRequest(query);
 			if (recovered !== null) return this.assertPublishedPullRequest(recovered, request);
-			throw error;
+			if (mutationError !== undefined) throw mutationError;
+			throw new Error("pull request create did not produce one authoritative canonical resource");
+		});
+	}
+
+	private async canonicalMaterializedChild(
+		plan: ParentOrchestrationPlan,
+		value: MaterializedChildRecord,
+	): Promise<MaterializedChildRecord> {
+		const child = validateMaterializedChild(plan, value);
+		const planned = childFor(plan, child.id);
+		const issue = this.resolveIssueMatches(await this.matchingIssues(plan, planned), plan, planned);
+		if (issue === null || issue.number !== child.issue) {
+			throw new Error("materialized child issue is not the authoritative canonical issue");
 		}
+		return child;
 	}
 
 	async captureChildHandoff(
@@ -905,9 +1014,9 @@ export class GitHubParentOrchestrator {
 		workspace: ClaimedWorkspace,
 		source: WorkspaceHandoffSource,
 	): Promise<WorkspaceHandoffEvidence> {
-		childFor(plan, child.id);
+		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
 		const handoff = await source.captureHandoff(workspace, "passed");
-		return validateHandoff(handoff, child.issue, child.branch, child.prBase, child.writeScopes);
+		return validateHandoff(handoff, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
 	}
 
 	async captureParentHandoff(
@@ -930,22 +1039,22 @@ export class GitHubParentOrchestrator {
 		child: MaterializedChildRecord,
 		handoffValue: WorkspaceHandoffEvidence,
 	): Promise<GitHubPullRequestEvidence> {
-		childFor(plan, child.id);
-		const handoff = validateHandoff(handoffValue, child.issue, child.branch, child.prBase, child.writeScopes);
+		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
+		const handoff = validateHandoff(handoffValue, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
 		return this.ensurePullRequest({
 			repository: plan.repository,
-			workItemId: child.id,
+			workItemId: canonicalChild.id,
 			generation: plan.generation,
-			marker: child.markers.pullRequest,
-			title: child.title,
-			body: childPullRequestBody(plan, child),
+			marker: canonicalChild.markers.pullRequest,
+			title: canonicalChild.title,
+			body: childPullRequestBody(plan, canonicalChild),
 			draft: false,
-			baseBranch: child.prBase,
-			headBranch: child.branch,
+			baseBranch: canonicalChild.prBase,
+			headBranch: canonicalChild.branch,
 			baseSha: handoff.baseHead,
 			headSha: handoff.head,
 			changedPaths: handoff.changedScope,
-			allowedScopes: child.writeScopes,
+			allowedScopes: canonicalChild.writeScopes,
 		});
 	}
 
@@ -979,7 +1088,7 @@ export class GitHubParentOrchestrator {
 
 	private async rosterMatches(plan: ParentOrchestrationPlan): Promise<GitHubRosterSnapshot[]> {
 		const raw = await this.#transport.findParentRosters({ repository: plan.repository, marker: plan.markers.roster });
-		return boundedArray(raw, "roster lookup", MAX_LIST, true).map(validateRoster);
+		return authoritativeItems(raw, "roster lookup").map(validateRoster);
 	}
 
 	private resolveRoster(matches: GitHubRosterSnapshot[], plan: ParentOrchestrationPlan): GitHubRosterSnapshot | null {
@@ -1022,44 +1131,67 @@ export class GitHubParentOrchestrator {
 		}
 	}
 
+	private async evaluateEvidence(
+		evidence: GitHubPullRequestEvidence,
+		expected: {
+			number: number;
+			marker: string;
+			baseBranch: string;
+			headBranch: string;
+			baseSha: string;
+			headSha: string;
+			changedPaths: readonly string[];
+		},
+		target: IndependentReviewTarget,
+		allowDraft = false,
+	) {
+		let attestations: unknown[] = [];
+		if (this.#attestations !== undefined) {
+			attestations = authoritativeItems(await this.#attestations.findAttestations(target), "AgentSession attestation lookup");
+		}
+		return evaluateGitHubPullRequestEvidence(evidence, {
+			...expected,
+			changedPaths: [...expected.changedPaths].sort(),
+			requiredChecks: REQUIRED_CHECKS,
+			reviewTarget: target,
+			attestations: attestations as AgentSessionAttestation[],
+		}, { allowDraft });
+	}
+
 	async integrateChild(
 		plan: ParentOrchestrationPlan,
 		child: MaterializedChildRecord,
 		handoffValue: WorkspaceHandoffEvidence,
 	): Promise<ChildIntegrationDecision> {
-		const planned = childFor(plan, child.id);
-		if (child.issue < 1 || !Number.isSafeInteger(child.issue)
-			|| child.branch !== canonicalIssueBranch(child.issue, planned.branch.slug)
-			|| child.prBase !== planned.prBase
-			|| child.title !== planned.title
-			|| child.markers.pullRequest !== planned.markers.pullRequest
-			|| !sameStrings(child.writeScopes, planned.writeScopes)) {
-			throw new Error("materialized child does not match its parent orchestration plan");
-		}
+		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
 		let handoff: WorkspaceHandoffEvidence;
 		try {
-			handoff = validateHandoff(handoffValue, child.issue, child.branch, child.prBase, child.writeScopes);
+			handoff = validateHandoff(handoffValue, canonicalChild.issue, canonicalChild.branch, canonicalChild.prBase, canonicalChild.writeScopes);
 		} catch {
 			return { kind: "blocked", blockers: ["handoff_invalid"] };
 		}
-		const query = { repository: plan.repository, marker: child.markers.pullRequest };
+		const query = { repository: plan.repository, marker: canonicalChild.markers.pullRequest };
 		const first = await this.singlePullRequest(query);
 		if (first === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
-		if (!childPullRequestMatches(first, plan, child, handoff)) {
+		if (!childPullRequestMatches(first, plan, canonicalChild, handoff)
+			|| !sameStrings(first.changedPaths, handoff.changedScope)) {
 			return { kind: "blocked", blockers: ["resource_mismatch"] };
 		}
 		const expected = {
 			number: first.number,
-			marker: child.markers.pullRequest,
-			baseBranch: child.prBase,
-			headBranch: child.branch,
+			marker: canonicalChild.markers.pullRequest,
+			baseBranch: canonicalChild.prBase,
+			headBranch: canonicalChild.branch,
 			baseSha: handoff.baseHead,
 			headSha: handoff.head,
+			changedPaths: handoff.changedScope,
 		};
-		const existing = await this.#transport.findChildIntegration({ repository: plan.repository, pullRequest: first.number });
-		if (existing !== null) {
-			const receipt = validateReceipt(existing);
-			if (!receiptMatchesChild(receipt, plan, child, first.number, handoff)) {
+		const integrationQuery = { repository: plan.repository, childId: canonicalChild.id, marker: canonicalChild.markers.pullRequest };
+		const existingItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration lookup");
+		if (existingItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
+		if (existingItems.length === 1) {
+			const receipt = validateReceipt(existingItems[0]);
+			if (!receiptMatchesChild(receipt, plan, canonicalChild, first.number, handoff)) {
 				throw new Error("existing child integration receipt is stale or mismatched");
 			}
 			if (first.headSha !== handoff.head) return { kind: "blocked", blockers: ["head_moved"] };
@@ -1067,42 +1199,54 @@ export class GitHubParentOrchestrator {
 			if (first.draft) return { kind: "blocked", blockers: ["draft"] };
 			return { kind: "integrated", receipt, reused: true };
 		}
-		const assessed = evaluateGitHubPullRequestEvidence(first, expected);
+		const reviewTarget: IndependentReviewTarget = {
+			repository: plan.repository,
+			workItemId: canonicalChild.id,
+			pullRequest: first.number,
+			generation: plan.generation,
+			baseSha: handoff.baseHead,
+			headSha: handoff.head,
+			changedPaths: handoff.changedScope,
+			allowedScopes: canonicalChild.writeScopes,
+		};
+		const assessed = await this.evaluateEvidence(first, expected, reviewTarget);
 		if (assessed.kind === "blocked") return assessed;
-		if (!reviewMatchesChild(assessed.review, plan, child, first.number, handoff)) {
+		if (!reviewMatchesChild(assessed.review, plan, canonicalChild, first.number, handoff)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
 		const second = await this.singlePullRequest(query);
 		if (second === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
-		if (!childPullRequestMatches(second, plan, child, handoff)) {
+		if (!childPullRequestMatches(second, plan, canonicalChild, handoff)
+			|| !sameStrings(second.changedPaths, handoff.changedScope)) {
 			return { kind: "blocked", blockers: ["resource_mismatch"] };
 		}
-		const revalidated = evaluateGitHubPullRequestEvidence(second, expected);
+		const revalidated = await this.evaluateEvidence(second, expected, reviewTarget);
 		if (revalidated.kind === "blocked") return revalidated;
-		if (!reviewMatchesChild(revalidated.review, plan, child, second.number, handoff)) {
+		if (!reviewMatchesChild(revalidated.review, plan, canonicalChild, second.number, handoff)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
 		}
 		const request: IntegrateChildRequest = {
 			repository: plan.repository,
-			childId: child.id,
+			childId: canonicalChild.id,
 			pullRequest: second.number,
 			generation: plan.generation,
-			marker: child.markers.pullRequest,
+			marker: canonicalChild.markers.pullRequest,
 			baseSha: handoff.baseHead,
 			headSha: handoff.head,
 			parentBranch: plan.parentBranch,
 		};
 		try {
 			const receipt = validateReceipt(await this.#transport.integrateChild(request));
-			if (!receiptMatchesChild(receipt, plan, child, request.pullRequest, handoff)) {
+			if (!receiptMatchesChild(receipt, plan, canonicalChild, request.pullRequest, handoff)) {
 				throw new Error("child integration receipt does not match requested exact head");
 			}
 			return { kind: "integrated", receipt, reused: false };
 		} catch (error) {
-			const recovered = await this.#transport.findChildIntegration({ repository: plan.repository, pullRequest: second.number });
-			if (recovered !== null) {
-				const receipt = validateReceipt(recovered);
-				if (receiptMatchesChild(receipt, plan, child, request.pullRequest, handoff)) {
+			const recoveredItems = authoritativeItems(await this.#transport.findChildIntegration(integrationQuery), "child integration recovery lookup");
+			if (recoveredItems.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
+			if (recoveredItems.length === 1) {
+				const receipt = validateReceipt(recoveredItems[0]);
+				if (receiptMatchesChild(receipt, plan, canonicalChild, request.pullRequest, handoff)) {
 					return { kind: "integrated", receipt, reused: true };
 				}
 			}
@@ -1110,10 +1254,11 @@ export class GitHubParentOrchestrator {
 		}
 	}
 
-	private completeIntegrationRoster(
+	private async completeIntegrationRoster(
 		plan: ParentOrchestrationPlan,
 		values: readonly ChildIntegrationReceipt[],
-	): ChildIntegrationReceipt[] | null {
+		parentHead: string,
+	): Promise<ChildIntegrationReceipt[] | null> {
 		let receipts: ChildIntegrationReceipt[];
 		try {
 			const snapshot = boundedArray(values, "child integration roster", MAX_CHILDREN, true);
@@ -1132,7 +1277,38 @@ export class GitHubParentOrchestrator {
 				|| receipt.marker !== child.markers.pullRequest
 				|| receipt.parentBranch !== plan.parentBranch;
 		})) return null;
-		return receipts;
+		const callerByChild = new Map(receipts.map((receipt) => [receipt.childId, receipt]));
+		const authoritative: ChildIntegrationReceipt[] = [];
+		for (const child of plan.children) {
+			let items: unknown[];
+			try {
+				items = authoritativeItems(await this.#transport.findChildIntegration({
+					repository: plan.repository,
+					childId: child.id,
+					marker: child.markers.pullRequest,
+				}), "child integration roster lookup");
+			} catch {
+				return null;
+			}
+			if (items.length !== 1) return null;
+			let receipt: ChildIntegrationReceipt;
+			try {
+				receipt = validateReceipt(items[0]);
+			} catch {
+				return null;
+			}
+			const supplied = callerByChild.get(child.id);
+			if (supplied === undefined || !canonicalDataEqual(receipt, supplied)
+				|| receipt.childId !== child.id || receipt.marker !== child.markers.pullRequest
+				|| receipt.generation !== plan.generation || receipt.parentBranch !== plan.parentBranch) return null;
+			if (!await this.#transport.isAncestor({
+				repository: plan.repository,
+				ancestorSha: receipt.headSha,
+				descendantSha: parentHead,
+			})) return null;
+			authoritative.push(receipt);
+		}
+		return authoritative;
 	}
 
 	private humanDecisionLifecycle(plan: ParentOrchestrationPlan, decision: "pending" | "approve_merge" | "reject") {
@@ -1171,14 +1347,14 @@ export class GitHubParentOrchestrator {
 		integrationValues: readonly ChildIntegrationReceipt[],
 		policyValue: ParentDecisionPolicy,
 	): Promise<ParentReadinessDecision> {
-		if (this.completeIntegrationRoster(plan, integrationValues) === null) {
-			return { kind: "blocked", blockers: ["children_incomplete"] };
-		}
 		const query = { repository: plan.repository, marker: plan.markers.parentPullRequest };
 		const first = await this.singlePullRequest(query);
 		if (first === null) return { kind: "blocked", blockers: ["parent_pull_request_missing"] };
 		if (!parentPullRequestMatches(first, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
+		}
+		if (await this.completeIntegrationRoster(plan, integrationValues, first.headSha) === null) {
+			return { kind: "blocked", blockers: ["children_incomplete"] };
 		}
 		const expected = {
 			number: first.number,
@@ -1187,8 +1363,19 @@ export class GitHubParentOrchestrator {
 			headBranch: plan.parentBranch,
 			baseSha: first.baseSha,
 			headSha: first.headSha,
+			changedPaths: first.changedPaths,
 		};
-		const assessed = evaluateGitHubPullRequestEvidence(first, expected, { allowDraft: true });
+		const reviewTarget: IndependentReviewTarget = {
+			repository: plan.repository,
+			workItemId: `parent-${plan.parentIssue}`,
+			pullRequest: first.number,
+			generation: plan.generation,
+			baseSha: first.baseSha,
+			headSha: first.headSha,
+			changedPaths: first.changedPaths,
+			allowedScopes: aggregateScopes(plan),
+		};
+		const assessed = await this.evaluateEvidence(first, expected, reviewTarget, true);
 		if (assessed.kind === "blocked") return assessed;
 		if (!reviewMatchesParent(assessed.review, plan, first)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
@@ -1239,7 +1426,10 @@ export class GitHubParentOrchestrator {
 		if (!parentPullRequestMatches(second, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
 		}
-		const revalidated = evaluateGitHubPullRequestEvidence(second, expected, { allowDraft: true });
+		if (await this.completeIntegrationRoster(plan, integrationValues, second.headSha) === null) {
+			return { kind: "blocked", blockers: ["children_incomplete"] };
+		}
+		const revalidated = await this.evaluateEvidence(second, expected, reviewTarget, true);
 		if (revalidated.kind === "blocked") return revalidated;
 		if (!reviewMatchesParent(revalidated.review, plan, second)) {
 			return { kind: "blocked", blockers: ["review_missing"] };
@@ -1258,7 +1448,7 @@ export class GitHubParentOrchestrator {
 		if (!second.draft) return { kind: "ready", pullRequest: second, reused: true };
 		try {
 			const ready = validateGitHubPullRequestEvidence(await this.#transport.markParentReady(markRequest));
-			const readyDecision = evaluateGitHubPullRequestEvidence(ready, expected);
+			const readyDecision = await this.evaluateEvidence(ready, expected, reviewTarget);
 			if (!parentPullRequestMatches(ready, plan) || readyDecision.kind !== "eligible"
 				|| !reviewMatchesParent(readyDecision.review, plan, ready)) {
 				throw new Error("parent ready result does not match approved exact head");
@@ -1267,7 +1457,7 @@ export class GitHubParentOrchestrator {
 		} catch (error) {
 			const recovered = await this.singlePullRequest(query);
 			if (recovered !== null && parentPullRequestMatches(recovered, plan)) {
-				const recoveredDecision = evaluateGitHubPullRequestEvidence(recovered, expected);
+				const recoveredDecision = await this.evaluateEvidence(recovered, expected, reviewTarget);
 				if (recoveredDecision.kind === "eligible" && reviewMatchesParent(recoveredDecision.review, plan, recovered)) {
 					return { kind: "ready", pullRequest: recovered, reused: true };
 				}

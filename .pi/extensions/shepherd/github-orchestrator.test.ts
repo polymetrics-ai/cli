@@ -196,7 +196,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return created;
 	}
 
-	async findPullRequests(query: PullRequestMarkerQuery): Promise<GitHubPullRequestEvidence[]> {
+	async findPullRequests(query: PullRequestMarkerQuery): Promise<any> {
 		this.#pullRequestReads += 1;
 		const matches = this.pullRequests.filter((candidate) => candidate.marker === query.marker);
 		return { items: this.onPullRequestRead?.(query, matches, this.#pullRequestReads) ?? matches, complete: !this.incompletePullRequestLookup } as never;
@@ -242,7 +242,7 @@ class FakeTransport implements GitHubOrchestrationTransport {
 		return published;
 	}
 
-	async findChildIntegration(query: GitHubPullRequestQuery & { childId?: string; marker?: string }): Promise<any> {
+	async findChildIntegration(query: any): Promise<any> {
 		return {
 			items: this.integrations.filter((candidate) => query.pullRequest !== undefined
 				? candidate.pullRequest === query.pullRequest
@@ -549,7 +549,9 @@ test("captures upstream workspace handoff and rejects dirty, failed, mismatched,
 			return expected;
 		},
 	};
-	const orchestrator = orchestratorFor(new FakeTransport());
+	const transport = new FakeTransport();
+	transport.issues.push(issue);
+	const orchestrator = orchestratorFor(transport);
 	assert.deepEqual(await orchestrator.captureChildHandoff(candidate, child, {} as ClaimedWorkspace, source), expected);
 	assert.equal(requestedState, "passed");
 	for (const invalid of [
@@ -652,6 +654,7 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 		body: candidate.children[0].issueBody,
 	}, 811);
 	const child = materializeChildRecord(candidate, "evidence", issue);
+	transport.issues.push(issue);
 	const handoff = childHandoff(issue.number, child.branch, child.prBase);
 	const request: CreatePullRequestRequest = {
 		repository: candidate.repository,
@@ -674,6 +677,7 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 	assert.equal(transport.integrateCalls, 1);
 
 	const movedTransport = new FakeTransport();
+	movedTransport.issues.push(issue);
 	movedTransport.pullRequests.push(cleanPullRequest(request));
 	movedTransport.onPullRequestRead = (_query, matches, read) => read < 2
 		? matches
@@ -768,6 +772,7 @@ test("review coverage must bind the planned repository, child, generation, paths
 		{ allowedScopes: [".pi/extensions/shepherd"] },
 	]) {
 		const transport = new FakeTransport();
+		transport.issues.push(issue);
 		const pr = cleanPullRequest(request);
 		pr.reviews = [{
 			...createIndependentReviewWork({
@@ -819,6 +824,7 @@ test("restart reuses an exact bound integration receipt after GitHub closes the 
 		allowedScopes: child.writeScopes,
 	};
 	const transport = new FakeTransport();
+	transport.issues.push(issue);
 	transport.pullRequests.push(cleanPullRequest(request, { state: "merged" }));
 	transport.integrations.push({
 		childId: child.id,

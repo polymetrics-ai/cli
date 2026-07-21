@@ -58,6 +58,29 @@ export type IndependentReviewDecision =
 export interface IndependentReviewReconcileRequest {
 	target: IndependentReviewTarget;
 	reviews: readonly unknown[];
+	attestations?: readonly unknown[];
+}
+
+export interface AgentSessionAttestation {
+	schemaVersion: 1;
+	authority: "controller";
+	sessionId: string;
+	runId: string;
+	provider: "openai-codex";
+	model: "gpt-5.6-sol";
+	reasoningEffort: "xhigh";
+	readOnly: true;
+	repository: string;
+	workItemId: string;
+	pullRequest: number;
+	generation: number;
+	baseSha: string;
+	headSha: string;
+	changedPaths: string[];
+	allowedScopes: string[];
+	reviewMarker: string;
+	resultDigest: string;
+	completedAt: string;
 }
 
 type ExactRecord = Record<string, unknown>;
@@ -96,13 +119,6 @@ function safeText(value: unknown, description: string, maximum = MAX_TEXT_BYTES)
 
 function positiveNumber(value: unknown, description: string): number {
 	if (!Number.isSafeInteger(value) || (value as number) < 1 || (value as number) > 2_147_483_647) {
-		throw new Error(`invalid ${description}`);
-	}
-	return value as number;
-}
-
-function nonNegativeNumber(value: unknown, description: string): number {
-	if (!Number.isSafeInteger(value) || (value as number) < 0 || (value as number) > 2_147_483_647) {
 		throw new Error(`invalid ${description}`);
 	}
 	return value as number;
@@ -195,7 +211,7 @@ function normalizeTarget(value: unknown): IndependentReviewTarget {
 		repository,
 		workItemId: safeText(candidate.workItemId, "work item ID"),
 		pullRequest: positiveNumber(candidate.pullRequest, "pull request"),
-		generation: nonNegativeNumber(candidate.generation, "review generation"),
+		generation: positiveNumber(candidate.generation, "review generation"),
 		baseSha: sha(candidate.baseSha, "review base SHA"),
 		headSha: sha(candidate.headSha, "review head SHA"),
 		changedPaths,
@@ -307,16 +323,108 @@ export function reviewCoversExactRange(review: IndependentReviewRecord, base: st
 	}
 }
 
+function resultDigest(review: IndependentReviewRecord): string {
+	return createHash("sha256").update(JSON.stringify({
+		idempotencyMarker: review.idempotencyMarker,
+		repository: review.repository,
+		workItemId: review.workItemId,
+		pullRequest: review.pullRequest,
+		generation: review.generation,
+		baseSha: review.baseSha,
+		headSha: review.headSha,
+		changedPaths: review.changedPaths,
+		allowedScopes: review.allowedScopes,
+		completedAt: review.completedAt,
+		verdict: review.verdict,
+		findings: review.findings,
+	})).digest("hex");
+}
+
+function validateAgentSessionAttestation(value: unknown): AgentSessionAttestation {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "authority", "sessionId", "runId", "provider", "model", "reasoningEffort",
+		"readOnly", "repository", "workItemId", "pullRequest", "generation", "baseSha", "headSha",
+		"changedPaths", "allowedScopes", "reviewMarker", "resultDigest", "completedAt",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.authority !== "controller"
+		|| candidate.provider !== "openai-codex" || candidate.model !== "gpt-5.6-sol"
+		|| candidate.reasoningEffort !== "xhigh" || candidate.readOnly !== true) {
+		throw new Error("invalid controller AgentSession attestation route");
+	}
+	const target = normalizeTarget({
+		repository: candidate.repository,
+		workItemId: candidate.workItemId,
+		pullRequest: candidate.pullRequest,
+		generation: candidate.generation,
+		baseSha: candidate.baseSha,
+		headSha: candidate.headSha,
+		changedPaths: candidate.changedPaths,
+		allowedScopes: candidate.allowedScopes,
+	});
+	if (typeof candidate.resultDigest !== "string" || !/^[0-9a-f]{64}$/u.test(candidate.resultDigest)) {
+		throw new Error("invalid AgentSession result digest");
+	}
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		sessionId: safeText(candidate.sessionId, "AgentSession ID", 256),
+		runId: safeText(candidate.runId, "AgentSession run ID", 256),
+		provider: "openai-codex",
+		model: "gpt-5.6-sol",
+		reasoningEffort: "xhigh",
+		readOnly: true,
+		...target,
+		changedPaths: [...target.changedPaths],
+		allowedScopes: [...target.allowedScopes],
+		reviewMarker: safeText(candidate.reviewMarker, "review marker", 512),
+		resultDigest: candidate.resultDigest,
+		completedAt: canonicalTimestamp(candidate.completedAt, "AgentSession completion timestamp"),
+	};
+}
+
+function sameStrings(left: readonly string[], right: readonly string[]): boolean {
+	return left.length === right.length && left.every((entry, index) => entry === right[index]);
+}
+
+function attestsReview(attestation: AgentSessionAttestation, review: IndependentReviewRecord): boolean {
+	return attestation.repository === review.repository
+		&& attestation.workItemId === review.workItemId
+		&& attestation.pullRequest === review.pullRequest
+		&& attestation.generation === review.generation
+		&& attestation.baseSha === review.baseSha
+		&& attestation.headSha === review.headSha
+		&& sameStrings(attestation.changedPaths, review.changedPaths)
+		&& sameStrings(attestation.allowedScopes, review.allowedScopes)
+		&& attestation.reviewMarker === review.idempotencyMarker
+		&& attestation.resultDigest === resultDigest(review)
+		&& attestation.completedAt === review.completedAt;
+}
+
 export function reconcileIndependentReview(request: IndependentReviewReconcileRequest): IndependentReviewDecision {
 	const work = createIndependentReviewWork(request.target);
 	const reviews = exactArrayValues(request.reviews, "review records", true, MAX_ARRAY_ITEMS)
 		.map(validateIndependentReviewRecord);
+	const attestations = exactArrayValues(request.attestations ?? [], "AgentSession attestations", true, MAX_ARRAY_ITEMS)
+		.map(validateAgentSessionAttestation);
+	if (new Set(attestations.map((entry) => `${entry.sessionId}:${entry.runId}`)).size !== attestations.length) {
+		throw new Error("duplicate AgentSession attestation");
+	}
+	for (const attestation of attestations) {
+		const review = reviews.find((candidate) => candidate.idempotencyMarker === attestation.reviewMarker);
+		if (review !== undefined && !attestsReview(attestation, review)) {
+			throw new Error("AgentSession attestation does not bind the review result digest and target");
+		}
+	}
 	const exact = reviews.filter((review) => reviewCoversExactRange(review, work.baseSha, work.headSha)
 		&& review.pullRequest === work.pullRequest
 		&& review.generation === work.generation
 		&& review.repository === work.repository
 		&& review.workItemId === work.workItemId
-		&& review.idempotencyMarker === work.idempotencyMarker);
-	if (exact.length > 1) throw new Error("duplicate exact-head independent review records are ambiguous");
-	return exact.length === 1 ? { kind: "satisfied", review: exact[0] } : { kind: "dispatch", work };
+		&& review.idempotencyMarker === work.idempotencyMarker
+		&& sameStrings(review.changedPaths, work.changedPaths)
+		&& sameStrings(review.allowedScopes, work.allowedScopes)
+		&& attestations.some((attestation) => attestsReview(attestation, review)))
+		.sort((left, right) => right.completedAt.localeCompare(left.completedAt)
+			|| resultDigest(left).localeCompare(resultDigest(right)));
+	return exact.length > 0 ? { kind: "satisfied", review: exact[0] } : { kind: "dispatch", work };
 }
