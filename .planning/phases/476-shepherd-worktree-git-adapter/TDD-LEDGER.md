@@ -7,9 +7,9 @@ Tests use bounded temporary local Git repositories and no credentials or network
 
 | Slice | RED command/evidence | GREEN command/evidence | Refactor/broad evidence | Status |
 |---|---|---|---|---|
-| Typed Git adapter | `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts` → exit 1, `ERR_MODULE_NOT_FOUND` for absent `git-adapter.ts` | Pending | Pending | red |
-| Isolated workspace ownership | Same command → exit 1 before collection because the required adapter modules do not exist | Pending | Pending | red |
-| Crash/retry and collision safety | Deterministic genuine-repository cases are present but cannot collect until the missing adapters exist | Pending | Pending | red |
+| Typed Git adapter | `node --test .pi/extensions/shepherd/workspace-adapter.test.ts .pi/extensions/shepherd/git-adapter.test.ts` → exit 1, `ERR_MODULE_NOT_FOUND` for absent `git-adapter.ts` | Same command → 16/16 pass | Strict no-emit TypeScript passed; raw Git errors reduced to bounded exit evidence | green/refactored |
+| Isolated workspace ownership | Same command → exit 1 before collection because the required adapter modules do not exist | Genuine temporary bare-remote/worktree cases pass | Full Shepherd suite 153/153 pass | green/refactored |
+| Crash/retry and collision safety | Deterministic genuine-repository cases were present but could not collect until the missing adapters existed | Exact retry, owner collision, concurrent owners, alias branch, path collision, stale base, dirty preservation, and unrelated-head cases pass | Canonical claim metadata stores owner hashes rather than caller text; no release/cleanup API | green/refactored |
 
 ## Required safety cases
 
@@ -31,3 +31,7 @@ Tests use bounded temporary local Git repositories and no credentials or network
   sub-issue worktree and no further delegation is authorized or needed.
 - Execution decision, TDD gate cycle: `local_critical_path` — RED evidence captured before either
   production adapter file exists.
+- Execution decision, execute cycle: `local_critical_path` — minimal typed Git and workspace
+  adapters implemented inside the assigned files.
+- Execution decision, refactor cycle: `local_critical_path` — validation, canonical scope handling,
+  root pinning, and secret-safe Git failure reduction completed; focused and full suites pass.

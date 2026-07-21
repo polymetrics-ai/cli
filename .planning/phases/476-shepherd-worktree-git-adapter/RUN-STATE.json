@@ -16,6 +16,16 @@
       "cycle": "tdd-gate",
       "decision": "local_critical_path",
       "reason": "Deterministic RED tests fail because the two production adapter modules are absent; implementation may now begin."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "The minimal typed Git and workspace adapter implementation is confined to the assigned production files."
+    },
+    {
+      "cycle": "refactor",
+      "decision": "local_critical_path",
+      "reason": "Focused tests pass 16/16, the Shepherd suite passes 153/153, and strict production TypeScript passes after safety refactoring."
     }
   ]
 }

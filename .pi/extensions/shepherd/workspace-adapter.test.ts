@@ -21,6 +21,7 @@ async function requestFor(
 		parentSlug: "pi-agent-session-shepherd",
 		parentHead: fixture.parentHead,
 		ownershipId: "run-471-generation-1-lane-476",
+		allowedScopes: [".pi/extensions/shepherd", ".planning/phases/476-shepherd-worktree-git-adapter"],
 		...overrides,
 	};
 }
@@ -157,4 +158,3 @@ test("fails handoff exact-head verification when the parent base is not an ances
 	await git(workspace.cwd, "commit", "-m", "test: unrelated head");
 	await assert.rejects(adapter.captureHandoff({ ...workspace, branch: "unrelated" }, "failed"), /canonical branch|base is not an ancestor/);
 });
-

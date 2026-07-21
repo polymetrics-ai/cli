@@ -7,9 +7,9 @@ successful `make verify`; focused checks alone do not set `verificationPassed`.
 
 | Gate | Result | Evidence |
 |---|---|---|
-| focused issue tests | pending | — |
-| full Shepherd tests | pending | — |
-| strict TypeScript / Pi 0.80.6 | pending | — |
+| focused issue tests | pass | 16 tests passed, 0 failed; genuine temporary local repositories |
+| full Shepherd tests | pass | 153 tests passed, 0 failed |
+| strict TypeScript / Pi 0.80.6 | pass | production adapters passed strict no-emit TypeScript; installed `pi --version` is `0.80.6` |
 | Pi extension discovery | pending | — |
 | diff hygiene | pending | — |
 | `go vet ./...` | pending | — |
@@ -20,4 +20,3 @@ successful `make verify`; focused checks alone do not set `verificationPassed`.
 | stacked ready PR | pending | — |
 
 Runtime-backed services are not part of this issue and will not be started.
-
