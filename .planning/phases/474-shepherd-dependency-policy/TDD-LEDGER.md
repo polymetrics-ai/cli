@@ -128,3 +128,7 @@ Refactor renamed canonical-looking helpers to explicit alias-set/overlap vocabul
 the SCHEDULE-stage agreement predicate. This removes any implication of complete case folding and
 makes lifecycle cross-validation auditable without changing behavior: focused 40/40 and strict
 production TypeScript remain green.
+
+Final review-2 verification: focused 40/40, full Shepherd 177/177, strict production TypeScript
+pass, offline Pi RPC pass, and diff/ownership pass. Verified implementation head before the final
+evidence-only commit: `55a8f8a5482311e9aa7a38a2bd2382ba4d9393b7`.

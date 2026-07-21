@@ -19,9 +19,13 @@ component scheduler, locale-independent ordering, Darwin/Git conservative scope 
 dependency statuses, selected-only mutator isolation, exact hostile-safe DTO validation, correction
 advancement guards, and explicit evidence/blocker precedence.
 
-Correction TDD evidence: 15/36 expected RED failures, 36/36 GREEN, a 2/2 audit gap RED, 36/36 final
-focused pass, and 173/173 full Shepherd pass. Strict no-emit TypeScript passes over all production
-Shepherd modules against installed Pi 0.80.6 types; offline RPC discovers `pm-shepherd`.
+The second correction closes capital sharp-S alias gaps with an explicitly bounded conservative
+alias set, cross-validates lifecycle claims against the authoritative queue, snapshots and freezes
+caller DTOs before graph traversal, and gives legacy BLOCKED a terminal reconciliation result.
+
+Latest TDD evidence: review-2 RED 35/40 pass with 5 expected failures, final focused 40/40, and full
+Shepherd 177/177. Strict no-emit TypeScript passes over all production Shepherd modules against
+installed Pi 0.80.6 types; offline RPC discovers `pm-shepherd`.
 
 The parent orchestrator superseded the child-lane full-repository gate while final verification was
 running. The attempted `make verify` was intentionally terminated and is recorded as

@@ -159,6 +159,20 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - Focused suite remains 40/40 and strict production TypeScript remains clean.
 - Execution decision: `local_critical_path`; proceed to final scoped verification.
 
+## Exact-head correction 2 verification cycle
+
+- Post-refactor focused suite: 40/40 pass.
+- Post-refactor full Shepherd suite: 177/177 pass in 47.5 seconds.
+- Strict production-only TypeScript against installed Pi 0.80.6 declarations: pass.
+- Offline Pi RPC `get_commands`: pass; `pm-shepherd` discovered.
+- `git diff --check`, assigned-path ownership, clean branch, and PR base/head checks: pass.
+- Verified implementation head before the evidence-only commit:
+  `55a8f8a5482311e9aa7a38a2bd2382ba4d9393b7`.
+- Primary RUN-STATE fields now report current 40/177 truth; historical counts remain only in named
+  historical ledger/trace entries.
+- No Go/connectors/root `make verify`, review bot, or merge action was performed.
+- Execution decision: `local_critical_path`; second correction gate complete.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,

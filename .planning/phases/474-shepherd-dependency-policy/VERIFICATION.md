@@ -1,6 +1,6 @@
 # Issue #474 Verification
 
-Overall: **passed**, including the independent exact-head correction loop. The parent-declared
+Overall: **passed**, including both independent exact-head correction loops. The parent-declared
 phase-equivalent child gate excludes Go and root `make verify` for this TypeScript-only correction.
 
 Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/483
@@ -9,8 +9,9 @@ Ready stacked PR: https://github.com/polymetrics-ai/cli/pull/483
 |---|---|---|
 | Correction RED | pass | reviewed head: 36 tests, 21 pass, 15 expected fail; 64-item child killed at one-second deadline |
 | Audit gap RED | pass | composed case aliases and failed-status coherence: 2 tests, 0 pass, 2 expected fail |
-| Focused policy tests | pass | 36 tests, 36 pass, 0 fail; hostile component typed-rejected in bounded time |
-| Full Shepherd tests | pass | 173 tests, 173 pass, 0 fail after refactor |
+| Review-2 RED | pass | reviewed head: 40 tests, 35 pass, 5 expected fail across all new blockers/warnings |
+| Focused policy tests | pass | 40 tests, 40 pass, 0 fail; hostile component remains typed-rejected in bounded time |
+| Full Shepherd tests | pass | 177 tests, 177 pass, 0 fail after review-2 refactor |
 | Strict TypeScript / Pi 0.80.6 | pass | `tsc` 5.9.3 `--noEmit --strict` over all 12 production Shepherd modules, resolving installed Pi 0.80.6 declarations |
 | Pi extension discovery | pass with tooling deviation | `pi --list-extensions` is unsupported (exit 1); supported offline RPC `get_commands` passed and returned `pm-shepherd` from the explicit project extension |
 | Diff/ownership | pass | `git diff --check`; changed paths restricted to the three owned modules, matching tests, and issue #474 phase directory |
@@ -55,4 +56,4 @@ invoke any review adapter. Claude and Copilot must not be requested for this sub
 
 No automated review route was exposed or wired in this pure slice. No Claude, Copilot, human, or
 mislabelled review request was made. No merge action was taken. Verified implementation head before
-the final evidence-only commit: `ef2fd1e280128ccb2a0e46b749f9638472fad865`.
+the latest evidence-only commit: `55a8f8a5482311e9aa7a38a2bd2382ba4d9393b7`.

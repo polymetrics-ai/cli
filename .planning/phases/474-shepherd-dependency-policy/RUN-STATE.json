@@ -3,8 +3,8 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "second_correction_green",
-  "verificationPassed": false,
+  "status": "completed",
+  "verificationPassed": true,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
@@ -37,9 +37,9 @@
       "reason": "Alias-set naming and lifecycle agreement refactoring preserve 40 focused passes and strict production TypeScript."
     },
     {
-      "cycle": "second-correction-verify-pending",
+      "cycle": "second-correction-verify",
       "decision": "local_critical_path",
-      "reason": "Final scoped Shepherd, Pi, RPC, and ownership gates are pending after the behavior-preserving refactor."
+      "reason": "Final scoped gates pass: 40 focused tests, 177 full Shepherd tests, strict Pi 0.80.6 TypeScript, offline RPC, and diff/ownership."
     },
     {
       "cycle": "summary",
@@ -58,18 +58,18 @@
     }
   ],
   "gates": {
-    "red": "passed_expected_failure_3_of_3",
+    "red": "passed_expected_failure_5_of_40",
     "green": "passed_40_of_40",
     "refactor": "passed_40_of_40_after_second_correction_refactor",
     "focusedTests": "passed_40_of_40",
-    "fullShepherdTests": "pending_second_correction_verification",
+    "fullShepherdTests": "passed_177_of_177",
     "strictTypeScript": "passed_second_correction_against_pi_0_80_6",
-    "piExtensionDiscovery": "pending_second_correction_verification",
+    "piExtensionDiscovery": "offline_rpc_pm_shepherd_discovered",
     "goVet": "supplemental_passed",
     "goTest": "supplemental_passed_after_contention_timeout_retry",
     "goBuild": "supplemental_passed",
     "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
-    "phaseEquivalentChildGate": "reopened_for_second_exact_head_corrections",
+    "phaseEquivalentChildGate": "passed_after_second_exact_head_corrections",
     "correctionRed": "passed_expected_failure_15_of_36",
     "correctionGreen": "passed_36_of_36",
     "correctionAuditGap": "red_2_of_2_then_green_36_of_36",
@@ -81,6 +81,9 @@
     "secondCorrectionRed": "passed_expected_failure_5_of_40",
     "secondCorrectionGreen": "passed_40_of_40",
     "secondCorrectionStrictTypeScript": "passed_after_discriminated_union_narrowing",
-    "secondCorrectionRefactor": "passed_40_of_40"
+    "secondCorrectionRefactor": "passed_40_of_40",
+    "secondCorrectionFullShepherd": "passed_177_of_177",
+    "secondCorrectionOfflineRpc": "pm_shepherd_discovered",
+    "secondCorrectionOwnership": "passed"
   }
 }

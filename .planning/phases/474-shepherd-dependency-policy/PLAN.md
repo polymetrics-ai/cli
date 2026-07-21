@@ -202,3 +202,14 @@ and two consistency warnings. This reopens the same owned slice without broadeni
 3. minimal fixes;
 4. behavior-preserving refactor and final phase-equivalent evidence;
 5. push exact PR #483 head for another independent xhigh review.
+
+### Verification checklist
+
+- [x] Review-2 RED captured: 40 tests, 35 pass, 5 expected failures.
+- [x] Focused tests pass 40/40 after refactor.
+- [x] Full Shepherd suite passes 177/177 after refactor.
+- [x] Strict production TypeScript passes against installed Pi 0.80.6 declarations.
+- [x] Offline Pi RPC discovers `pm-shepherd`.
+- [x] Diff/ownership and clean branch/PR head checks pass.
+- [x] Primary RUN-STATE cycles/gates report 40/177 rather than historical 26/163.
+- [x] No Go, connectors, root `make verify`, review bot, or merge action was run.
