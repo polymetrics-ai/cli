@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_12_red",
+  "currentCycle": "correction_cycle_12_summary",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -283,15 +283,40 @@
       "cycle": "correction_cycle_12_red",
       "decision": "local_critical_path",
       "reason": "Test-only RED 58af21f1 executed 124 focused tests with all 114 retained passes and exactly 10 intended Cycle 12 behavior failures; strict focused TypeScript passed and every production blob remained exact to frozen start 7882cd70."
+    },
+    {
+      "cycle": "correction_cycle_12_no_tool_green",
+      "decision": "local_critical_path",
+      "reason": "Checkpoint 11008da1 owns the real pinned Pi whole-session no-tool prompt through the complete non-retrying agent_end and agent_settled boundary; the targeted row and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_12_tool_green",
+      "decision": "local_critical_path",
+      "reason": "Checkpoint b3a99d79 closes shared one-tool multi-turn lifecycle and per-content phase ownership; the targeted rows and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_12_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor 3dc4de71 removes the legacy assistant-only success bypass and closes admission, freeze, diagnostic, dense-array, native-signal, tool-input, and Cookie-redaction boundaries; focused tests pass 124/124."
+    },
+    {
+      "cycle": "correction_cycle_12_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 124/124, both strict TypeScript scopes, actual pinned Pi no-tool/one-tool sessions, explicit offline RPC, diff, ancestry, JSON, credential-pattern, and scope gates pass. Complete Shepherd executes 261 with 230 passes and only the unchanged 31 controller/state-store spawn EPERM failures; isolation passes 187/187."
+    },
+    {
+      "cycle": "correction_cycle_12_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 12 issue-owned implementation and evidence are terminal locally; no external mutation or disallowed gate was attempted, and parent orchestration owns the process-capable rerun, fresh exact-head review, integration, and delivery."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_12_red_124_executed_114_retained_passed_exactly_10_intended_behavior_failures_0_skipped_cancelled_todo",
-    "fullShepherdTests": "cycle_11_environment_blocked_251_executed_220_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_177_passed_0_failed",
-    "strictTypeScriptPi0806": "cycle_11_passed_focused_and_all_12_production_files_typescript_5_9_3",
-    "offlineRpcSmoke": "cycle_11_passed_explicit_pi_0_80_6_rpc_registration_and_actual_no_model_factory_result_cleanup",
-    "diffCheck": "cycle_12_red_passed_test_only_commit_58af21f1_production_blobs_frozen",
-    "ownedScope": "cycle_12_frozen_start_7882cd70_and_immutable_base_e659d6f1_issue_owned_paths_only; no_push_network_github_live_model_go_connectors_or_make",
+    "focusedTests": "cycle_12_green_124_passed_0_failed_0_skipped_cancelled_todo",
+    "fullShepherdTests": "cycle_12_environment_blocked_261_executed_230_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_187_passed_0_failed",
+    "strictTypeScriptPi0806": "cycle_12_passed_focused_and_all_12_production_files_typescript_5_9_3",
+    "offlineRpcSmoke": "cycle_12_passed_explicit_pi_0_80_6_rpc_registration_and_actual_no_tool_one_tool_whole_session_cleanup_zero_fetch",
+    "diffCheck": "cycle_12_passed_at_implementation_3dc4de71_and_terminal_artifact_freeze",
+    "ownedScope": "cycle_12_frozen_start_7882cd70_implementation_3dc4de71_and_immutable_base_e659d6f1_issue_owned_paths_only; no_push_network_github_live_model_go_connectors_or_make",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -303,6 +328,9 @@
     "cycle_10 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM; issue-focused isolation passes 165/165",
     "cycle_10 external mutation intentionally not attempted by explicit lane policy; parent owns push, review, and integration",
     "cycle_11 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM; issue-focused isolation passes 177/177",
-    "cycle_11 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, push, review, and integration"
+    "cycle_11 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, push, review, and integration",
+    "cycle_12 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing process-identity child with spawn EPERM; safe isolation passes 187/187",
+    "cycle_12 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_12 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, push, review, and integration"
   ]
 }

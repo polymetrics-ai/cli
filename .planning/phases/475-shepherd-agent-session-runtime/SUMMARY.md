@@ -1,8 +1,26 @@
 # Summary — Issue #475
 
-Status: Cycle 11 is locally complete at refactor `d9b4eaee` against frozen reviewed candidate
-`1571dc4d`; parent orchestration owns the process-capable full-suite rerun, fresh exact-head review,
-integration, and delivery.
+Status: Cycle 12 is locally complete at refactor `3dc4de71` against frozen start `7882cd70` and
+immutable base `e659d6f1`; parent orchestration owns the process-capable full-suite rerun, fresh
+exact-head review, integration, and delivery.
+
+Cycle 12 replaces every assistant-only terminal shortcut with the complete known Pi lifecycle and
+settled ownership boundary. Run identity is abort-owned before caller/SDK callbacks; assistant
+content has explicit per-index phases; settled capture freezes and unsubscribes before cleanup;
+diagnostics, request arrays, abort state, and tool inputs use bounded descriptor/native adapters;
+and Cookie/Set-Cookie redaction crosses every shared consumer. No permissive legacy success path
+remains.
+
+The ordered Cycle 12 chain is PLAN `3a6b9299`, test-only RED `58af21f1`, RED evidence `bc099a76`,
+real no-tool GREEN `11008da1`, shared one-tool/phase GREEN `b3a99d79`, and cohesive refactor
+`3dc4de71`. RED retained all 114 prior passes and produced exactly ten intended behavior failures
+with production frozen. GREEN passes 124/124 focused and both strict Pi 0.80.6 TypeScript scopes.
+The actual pinned test owns two whole sessions, performs one genuine scoped tool turn, observes
+both through `agent_end`/`agent_settled`, asserts zero fetches, and disposes both exactly once. The
+offline RPC registers `pm-shepherd`. Complete Shepherd executes 261 tests with 230 passes and the
+unchanged 31 managed-sandbox `spawn EPERM` failures only in controller/state-store; safe isolation
+passes 187/187. No push, network, GitHub, Go, connector, service, credential, live model, or `make`
+action was attempted.
 
 Cycle 11 accepts both complete Cycle 10 review ledgers as one correction. The runtime now consumes
 the real Pi 0.80.6 creation/result shape without granting extension-runtime authority; invokes only

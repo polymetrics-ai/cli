@@ -989,3 +989,48 @@ Go/connectors, `make`, credentials, services, or parent-owned integration gate i
   `734927712eaadc9bb8eca383621740d59c5bb7b6`, and role prompts
   `cfc2d253c323ad01f34b8c9688b3bad0acd16171`; all remain exact to frozen start `7882cd70`.
 - `git diff --check`: pass. The RED commit contains only the two issue-owned test files.
+
+### GREEN / REFACTOR result
+
+- Real pinned-Pi no-tool ownership checkpoint:
+  `11008da118f34c91c11fa0f3b61fb9e4e8e53ae3`.
+- Shared one-tool/multi-turn and per-content phase checkpoint:
+  `b3a99d79cfe1b990a81d38c133100d745c0feaf4`.
+- Remaining authority, signal, freeze, diagnostic, tool-input, redaction, and strict lifecycle
+  refactor checkpoint: `3dc4de7114d5ee501fdc4ecfb4364244a58a3ab9`.
+- C12-01 through C12-10 pass through one complete Pi lifecycle machine, descriptor-owned run
+  admission, explicit per-index assistant phases, settled freeze/unsubscribe, SDK-aware diagnostic
+  projection, fresh dense request arrays, native abort-state leases, bounded tool-input DTOs, and
+  the shared Cookie/Set-Cookie redaction grammar. The legacy assistant-only acceptance path was
+  removed rather than retained as a compatibility bypass.
+- The actual pinned Pi row owns two public `createAgentSession` results. The no-tool run performs
+  one offline provider turn; the one-tool run performs an intermediate tool-use turn with three
+  content updates, one real scoped `workspace_read`, the emitted tool result, and a subsequent final
+  turn. The row asserts two prompts, three provider calls, one workspace callback, complete
+  `agent_end`/`agent_settled` traces, zero `fetch` calls, and two disposals after settlement.
+- Retained-fixture alignments add the complete Pi prefix/suffix to formerly assistant-only success
+  fixtures, preserve hidden-field and sparse-array assertions at their intended boundary, and raise
+  the Cycle 11 stream test's aggregate event allowance from 4,096 to 8,192 bytes to account for the
+  newly required user/turn/agent lifecycle envelopes. Every dishonest stream case still rejects.
+- Focused GREEN: 124 passed, 0 failed, 0 skipped/cancelled/todo; strict focused TypeScript passed.
+
+### VERIFY result
+
+- Verified implementation checkpoint: `3dc4de7114d5ee501fdc4ecfb4364244a58a3ab9`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Focused runtime/tool-policy: 124 passed, 0 failed, 0 skipped/cancelled/todo.
+- Strict no-emit TypeScript: focused production/tests and all 12 non-test Shepherd production
+  files pass against explicit Pi 0.80.6 roots with TypeScript 5.9.3.
+- Complete serialized Shepherd classification: 261 executed, 230 passed, and 31 failures remain
+  confined to the pre-existing controller/state-store process-identity paths where this managed
+  sandbox rejects child process creation with `spawn EPERM`. Every reported failure has that same
+  environmental cause; the result is not represented as a green suite.
+- Safe isolation excluding only `controller.test.ts` and `state-store.test.ts`: 187 passed,
+  0 failed, 0 skipped/cancelled/todo.
+- Explicit pinned Pi 0.80.6 offline RPC `get_commands` exits 0 and registers `pm-shepherd`. Its only
+  warnings are the managed filesystem denial for the global settings lock. No model, credential,
+  service, or network path is used.
+- `git diff --check`, immutable-base ancestry, exact issue-owned changed paths, RUN-STATE JSON, and
+  credential-pattern/no-dependency scans pass. No Go, connector, `make`, service, push, GitHub,
+  live-model, or credential action was attempted. Parent orchestration owns the process-capable
+  full rerun and independent exact-head review.

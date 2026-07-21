@@ -1059,3 +1059,20 @@ safe isolation, `git diff --check`, immutable-base/frozen-head ancestry, JSON an
 scans, exact issue-owned path scope, and a clean head. The known `/bin/ps` `spawn EPERM` family is
 classified, never called green. No push, network, GitHub, live model/auth, Go/connectors, `make`, or
 runtime-service action is authorized.
+
+### Cycle 12 execution result
+
+The required order completed as PLAN `3a6b9299`, test-only RED `58af21f1`, RED evidence
+`bc099a76`, real no-tool GREEN `11008da1`, shared one-tool/phase GREEN `b3a99d79`, and cohesive
+authority/security/lifecycle refactor `3dc4de71`. The final runtime has no assistant-only success
+bypass: accepted evidence must traverse the complete known Pi lifecycle through non-retrying
+`agent_end` and `agent_settled`, then freeze and unsubscribe before idle/disposal cleanup.
+
+All ten C12 behavior rows and all 114 retained rows pass, for 124/124 focused. The actual pinned
+Pi exercise owns and cleans both no-tool and one-tool sessions with an intermediate tool-use
+assistant, real scoped tool execution/result, subsequent final turn, settled trace, zero network,
+and exact disposal. Both strict TypeScript scopes and the explicit pinned offline RPC pass. The
+complete serialized suite remains honestly classified as 230/261 pass with exactly the unchanged
+31 managed-sandbox `spawn EPERM` controller/state-store failures; safe isolation passes 187/187.
+All local integrity gates remain issue-owned. Parent orchestration owns only the permitted-process
+rerun and fresh independent exact-head review.

@@ -1,5 +1,10 @@
 # Verification — Issue #475
 
+Current result: Cycle 12 issue-owned verification is complete at implementation checkpoint
+`3dc4de7114d5ee501fdc4ecfb4364244a58a3ab9`; see **Cycle 12 Exact-Head Verification** below. The
+complete-suite status remains environment-blocked, not green, because the managed sandbox denies
+the unchanged controller/state-store process-identity children with `spawn EPERM`.
+
 ## Cycle 11 Verification Result
 
 Cycle 11 was executed against exact clean reviewed candidate
@@ -280,3 +285,53 @@ local remote-tracking branch were identical after the GREEN push.
   All authoritative pinned checks use the unchanged explicit 0.80.6 binary/package/types.
 - No Shepherd prompt asset file was needed beyond the owned typed `role-prompts.ts` builder; it
   generates the trusted role prompt and schema envelope without widening the allowed scope.
+
+## Cycle 12 Exact-Head Verification
+
+Cycle 12 closes all ten accepted Pi lifecycle and boundary findings at implementation checkpoint
+`3dc4de7114d5ee501fdc4ecfb4364244a58a3ab9`, descended from frozen start
+`7882cd70c25971e889ec04f63b98c936d605003e` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+
+| Gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 124 executed; all 114 retained tests passed; exactly 10 intended C12 behavior rows failed; strict focused TS passed; production blobs stayed frozen |
+| Focused AgentSession/tool-policy | pass | 124 passed, 0 failed, 0 skipped/cancelled/todo |
+| Actual pinned Pi sessions | pass | real no-tool and one-tool `createAgentSession` runs; 2 prompts, 3 offline provider turns, 1 scoped tool callback, complete settled traces, 0 fetches, 2 post-settlement disposals |
+| Focused strict TypeScript | pass | TypeScript 5.9.3, explicit Pi 0.80.6 package/type roots, exit 0 |
+| All-production strict TypeScript | pass | all 12 non-test Shepherd `.ts` files, same compiler/type roots, exit 0 |
+| Explicit Pi 0.80.6 offline RPC | pass | `get_commands` returned success and registered `pm-shepherd`; only sandbox settings-lock warnings, exit 0 |
+| Safe complete-suite isolation | pass | all test files except the process-identity-dependent controller/state-store pair: 187 passed, 0 failed |
+| Complete serialized Shepherd suite | environment-blocked | 261 executed: 230 passed; all 31 failures are the unchanged controller/state-store `spawn EPERM` process-creation family |
+| Repository integrity | pass | diff check, base ancestry, JSON, credential patterns, exact issue-owned path scope, no dependency/Go/connector paths |
+
+The focused command was:
+
+```bash
+node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+  .pi/extensions/shepherd/tool-policy.test.ts
+```
+
+Both strict TypeScript scopes used the already-installed TypeScript 5.9.3 compiler with:
+
+```text
+--noEmit --strict --target ES2024 --module NodeNext --moduleResolution NodeNext
+--allowImportingTsExtensions --skipLibCheck
+--baseUrl <Node 24.13.1 global module root> --typeRoots <pinned Pi 0.80.6 @types root>
+```
+
+The authoritative offline smoke used the explicit pinned binary and no session, extensions,
+skills, prompt templates, or context files beyond the issue-owned extension:
+
+```bash
+printf '{"id":"commands","type":"get_commands"}\n' |
+  PI_OFFLINE=1 /Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi \
+    --mode rpc --no-session --approve --no-extensions --no-skills \
+    --no-prompt-templates --no-context-files -e .pi/extensions/shepherd/index.ts
+```
+
+The actual-session focused row additionally installs a temporary throwing `fetch` sentinel around
+the two in-memory provider runs and asserts zero calls. It does not use a live credential, model,
+service, or network. No push, GitHub, Go, connector, `make`, runtime-service, or parent integration
+gate was attempted. The complete-suite classification is deliberately not called green; parent
+orchestration owns its rerun where child process creation is permitted.
