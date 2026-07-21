@@ -3,8 +3,9 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "in_progress",
-  "verificationPassed": false,
+  "status": "completed",
+  "verificationPassed": true,
+  "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
     "result": "unknown GSD command: programming-loop"
@@ -34,6 +35,16 @@
       "cycle": "refactor",
       "decision": "local_critical_path",
       "reason": "The refactored pure policy passes 26 focused tests, strict production TypeScript, and the full 163-test Shepherd suite."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "The parent-declared phase-equivalent child gate passed: 26 focused tests, 163 full Shepherd tests, strict TypeScript against Pi 0.80.6, offline RPC extension discovery, and diff/ownership checks."
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "Artifacts record exact RED/GREEN/refactor evidence, supplemental Go results, unsupported Pi flag deviation, and make verify cancellation by superseding parent policy."
     }
   ],
   "gates": {
@@ -44,9 +55,10 @@
     "fullShepherdTests": "passed_163_of_163",
     "strictTypeScript": "all_12_production_modules_passed_against_pi_0_80_6",
     "piExtensionDiscovery": "unsupported_flag_but_offline_rpc_passed",
-    "goVet": "pending",
-    "goTest": "pending",
-    "goBuild": "pending",
-    "makeVerify": "pending"
+    "goVet": "supplemental_passed",
+    "goTest": "supplemental_passed_after_contention_timeout_retry",
+    "goBuild": "supplemental_passed",
+    "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
+    "phaseEquivalentChildGate": "passed"
   }
 }

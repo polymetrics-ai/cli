@@ -65,16 +65,18 @@
 ## Verification checklist
 
 - [ ] Genuine focused RED test failures captured before production files exist.
-- [ ] Focused three-file test command passes.
-- [ ] Full `.pi/extensions/shepherd/*.test.ts` suite passes with exact test count.
-- [ ] Strict `tsc --noEmit` passes against pinned Pi 0.80.6 types.
-- [ ] `pi --list-extensions` passes.
-- [ ] `git diff --check` passes.
-- [ ] `go vet ./...` passes.
-- [ ] `go test ./...` passes.
-- [ ] `go build ./cmd/pm` passes.
-- [ ] `make verify` passes; only then may `verificationPassed` be true.
-- [ ] Diff remains inside owned files.
+- [x] Focused three-file test command passes.
+- [x] Full `.pi/extensions/shepherd/*.test.ts` suite passes with exact test count.
+- [x] Strict `tsc --noEmit` passes against pinned Pi 0.80.6 types.
+- [x] Pi 0.80.6 offline RPC extension discovery passes. The requested
+  `pi --list-extensions` spelling is unsupported by that version and is recorded as a tooling
+  deviation, not silently skipped.
+- [x] `git diff --check` passes.
+- [x] Parent policy declared the phase-equivalent child verification gate to be the focused tests,
+  full Shepherd suite, strict TypeScript, offline Pi RPC smoke, and diff check. The attempted full
+  `make verify` was intentionally cancelled by the parent under that superseding policy, not failed.
+- [x] Supplemental `go vet ./...`, `go test ./...`, and `go build ./cmd/pm` pass.
+- [x] Diff remains inside owned files.
 - [ ] Ready stacked PR targets `feat/471-pi-agent-session-shepherd`, includes `Refs #474` and
   `Refs #471`, and does not request Claude or Copilot.
 
@@ -85,6 +87,15 @@
 3. GREEN implementation and focused suite;
 4. refactor/full verification/final artifacts;
 5. push and ready stacked PR.
+
+## Verification policy update
+
+During final verification, the parent orchestrator relayed a new explicit user policy: full-repo
+`make verify` is no longer a required child-lane gate. It intentionally terminated that run and
+declared the phase-equivalent child gate listed above. Artifacts therefore record
+`cancelled_by_parent_policy`, not a functional failure. `verificationPassed` refers to the declared
+phase-equivalent child gate, consistent with the universal loop's “full make verify (or declared
+phase equivalent)” rule.
 
 ## Execution decisions
 

@@ -25,6 +25,22 @@
   `pm-shepherd` discovered from the project extension without model/auth/network use.
 - Execution decisions: `local_critical_path` for gap-loop and refactor.
 
+## Verification and summary cycles
+
+- `gofmt -l cmd internal`: pass (no files listed).
+- `go vet ./...`: supplemental pass.
+- First `go test ./...`: all packages except `internal/connectors/certify` passed; certify timed out
+  at 10 minutes while two identical CPU-heavy runs competed. No TypeScript/issue-owned frame was
+  involved.
+- Exact `go test ./...` retry: pass, including certify in 526.804s.
+- `go build ./cmd/pm`: supplemental pass.
+- `make verify`: intentionally terminated by the parent after it relayed a superseding explicit
+  child-lane verification policy. A retry was stopped immediately when instructed. Recorded as
+  `cancelled_by_parent_policy`, never as pass or functional failure.
+- Parent-declared phase-equivalent child gate: pass (26/26 focused, 163/163 full Shepherd, strict
+  all-production TypeScript against Pi 0.80.6, supported offline Pi RPC discovery, diff/ownership).
+- Execution decisions: `local_critical_path` for verify and summary.
+
 ## Execute cycle
 
 - Implemented lifecycle transition guards, retry/correction budget policy, closed-world dependency
