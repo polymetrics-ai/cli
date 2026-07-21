@@ -633,4 +633,22 @@
   canonical prefix set, use a bounded canonical authority/scope lease map for mutator admission, and
   enforce safe handoff text.
 - Preserve every prior 53 focused regression and add no dependency.
-- Terminal verification is pending the required RED and GREEN checkpoints.
+- Test-only RED is committed at `11aa221231a52fab91f41dfce9742b7dfe180c02`: all 70 tests
+  executed, 53 retained tests passed, and exactly 17 Cycle 8 assertions failed; strict focused
+  TypeScript passed and production remained byte-identical to `f219b730`.
+- GREEN/refactor is committed at `c4d34c377532c903238400c986a6b488fab3646d`: immutable request
+  ownership, listener/cleanup ownership, explicit failure presence, bounded disjoint mutation
+  leases, hard maxima, bounded event accounting, canonical scopes, terminal-safe handoffs, and the
+  parser closure make all 70 focused tests pass.
+
+### VERIFY
+
+- Pass: focused 70/70; focused and all-production strict TypeScript 5.9.3 against explicit Pi
+  0.80.6 roots; explicit Pi 0.80.6 offline RPC registration; diff, ancestry, and owned-scope gates.
+- Environment-blocked: the complete suite executes 207 tests but reports 176 passes / 31 failures
+  because the managed sandbox rejects the existing `state-store.ts` `/bin/ps` child process with
+  `spawn EPERM`. Per-file isolation limits the impact to controller/state-store tests.
+- Environment-blocked: push cannot reach the remote because DNS returns
+  `ssh: Could not resolve hostname github.com: -65563`.
+- Disposition: keep the local ordered commits intact; parent reruns the complete suite in a process-
+  capable environment, pushes, verifies remote-head equality, and requests fresh exact-head review.

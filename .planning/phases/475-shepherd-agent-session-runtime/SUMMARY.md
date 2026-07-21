@@ -1,6 +1,7 @@
 # Summary — Issue #475
 
-Status: stable-head correction Cycle 8 planned against `f219b730`; behavior RED and GREEN pending.
+Status: Cycle 8 GREEN is complete locally at `c4d34c37`; focused/strict/RPC/scope gates pass, while
+the complete-suite `/bin/ps` probe and remote push are environment-blocked.
 
 Cycle 8 batches the final lifecycle and security/parser findings into one strict test-first
 correction. It will normalize and freeze request authority once, own signal listeners and async
@@ -154,3 +155,17 @@ workers. The same test-only checkpoint will therefore prove two canonical disjoi
 leases run concurrently up to the configured bound, overlapping authority is denied, and one
 cleanup cannot release another run's fence. GREEN will replace the singleton with a bounded lease
 map without changing scheduler or parent-owned files.
+
+Cycle 8 followed the ordered checkpoints: PLAN `9dd71a81`, pre-RED amendment `04dc72f3`, test-only
+RED `11aa2212`, and GREEN/refactor `c4d34c37`. RED executed all 70 focused tests with 53 retained
+passes and 17 intended assertion failures while strict focused TypeScript passed and production
+matched frozen `f219b730`. GREEN passes 70/70 focused tests, focused and all-production strict
+TypeScript against explicit Pi 0.80.6 roots, the explicit offline Pi RPC registration, and local
+diff/ancestry/scope checks.
+
+The managed sandbox prevents a terminal full-suite claim: 207 tests execute, 176 pass, and 31 fail
+only through the pre-existing Darwin `state-store.ts` process-identity path because `/bin/ps`
+returns `spawn EPERM`. Only controller/state-store test files are affected in per-file isolation.
+The post-GREEN push also cannot reach GitHub because DNS returns
+`ssh: Could not resolve hostname github.com: -65563`. The local commit chain is ready for the parent
+to rerun in a process-capable environment, push, and submit for fresh exact-head review.

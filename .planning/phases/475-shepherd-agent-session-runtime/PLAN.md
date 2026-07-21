@@ -513,3 +513,25 @@ GSD adapter health passes while its 69-command registry still rejects `programmi
 adapter, and runtime/Pi guidance. The Cycle 8 plan decision is `read_only_spawned`: a read-only
 lifecycle sidecar maps the exact code/test seams while this isolated worker retains the single
 mutating critical path.
+
+### Cycle 8 execution result
+
+PLAN `9dd71a812795b7ac74b07db06c4fae03a3004871` and its pre-RED mutator-lease amendment
+`04dc72f31a3bdd461045a4ef12d92c260f8ffd3f` preceded test-only RED
+`11aa221231a52fab91f41dfce9742b7dfe180c02`. All 70 focused tests loaded and executed: the 53
+retained tests passed and exactly 17 Cycle 8 behavior assertions failed. Focused strict TypeScript
+passed, and the three production blobs remained byte-identical to frozen head `f219b730`.
+
+The cohesive GREEN/refactor is `c4d34c377532c903238400c986a6b488fab3646d`. All 70 focused tests
+pass. Focused and all-production strict TypeScript 5.9.3 pass against the explicit Pi 0.80.6
+package/type roots, and the explicit Pi 0.80.6 offline RPC registers `pm-shepherd`. Diff,
+immutable-base/frozen-head ancestry, and issue-owned path checks pass.
+
+Two external terminal gates remain blocked rather than passed. The complete 207-test Shepherd run
+reports 176 passes and 31 failures because this managed sandbox denies the pre-existing Darwin
+process-identity probe at `state-store.ts` with `spawn EPERM`; per-file isolation identifies only
+`controller.test.ts` and `state-store.test.ts` as affected, while every other Shepherd test file
+passes. The required push was attempted after GREEN and failed before remote contact with
+`ssh: Could not resolve hostname github.com: -65563`. Parent orchestration must rerun the complete
+suite in an environment that permits `/bin/ps` and push the local commit chain before requesting
+fresh exact-head review.

@@ -1,14 +1,34 @@
 # Verification — Issue #475
 
-## Cycle 8 Pending Verification
+## Cycle 8 Verification Result
 
-Cycle 8 is planned against frozen reviewed head `f219b730c63adc9188c93093a40511433a3d0110`
-and immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Verification is intentionally pending:
-the artifact-only PLAN checkpoint precedes one behavior-level test-only RED and one architectural
-GREEN/refactor. Required terminal gates remain focused tests, the complete serialized Shepherd
-suite, both strict TypeScript scopes against explicit Pi 0.80.6 package/type roots, explicit Pi
-0.80.6 offline RPC registration, and diff/base/head/issue-owned-scope checks. No Cycle 7 result is
-being represented as Cycle 8 evidence.
+Cycle 8 was executed against frozen reviewed head `f219b730c63adc9188c93093a40511433a3d0110`
+and immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. PLAN
+`9dd71a812795b7ac74b07db06c4fae03a3004871`, pre-RED amendment
+`04dc72f31a3bdd461045a4ef12d92c260f8ffd3f`, test-only RED
+`11aa221231a52fab91f41dfce9742b7dfe180c02`, and cohesive GREEN/refactor
+`c4d34c377532c903238400c986a6b488fab3646d` preserve the required order.
+
+The RED ran all 70 focused tests with 53 retained passes and exactly 17 intended assertion-level
+failures; strict focused TypeScript passed and production stayed byte-identical to `f219b730`.
+GREEN passes all 70 focused tests, both strict TypeScript scopes, the pinned Pi 0.80.6 offline RPC,
+`git diff --check`, immutable-base/frozen-head ancestry, and issue-owned path checks.
+
+| Cycle 8 gate | Status | Evidence |
+|---|---|---|
+| Focused AgentSession/tool-policy tests | pass | 70 passed, 0 failed, exit 0 |
+| Focused strict TypeScript | pass | TypeScript 5.9.3, explicit Pi 0.80.6 package/type roots, exit 0 |
+| All-production strict TypeScript | pass | every non-test Shepherd `.ts`, same compiler/type roots, exit 0 |
+| Explicit Pi 0.80.6 offline RPC | pass | `get_commands` returned success and registered `pm-shepherd`, exit 0 |
+| Diff/base/frozen-head/owned-scope | pass | clean diff check; both ancestors present; only issue #475 paths changed |
+| Complete Shepherd suite | environment-blocked | 207 executed: 176 passed, 31 failed only where the managed sandbox denied the pre-existing `/bin/ps` identity probe with `spawn EPERM`; only controller/state-store test files are affected |
+| Push / remote-head equality | environment-blocked | `ssh: Could not resolve hostname github.com: -65563` |
+
+The complete-suite result is not represented as a product failure or a pass. Per-file isolation
+shows every Shepherd test file except `controller.test.ts` and `state-store.test.ts` passes; those
+two use the default Darwin process-identity probe in `state-store.ts`. Parent orchestration must
+rerun the complete suite where `/bin/ps` child execution is permitted, push this local chain, and
+then obtain fresh exact-head review.
 
 Before RED, local #471 contract evidence and the #479 consumer audit added one acceptance seam:
 bounded concurrent mutator leases for canonically disjoint isolated authorities, with overlap and

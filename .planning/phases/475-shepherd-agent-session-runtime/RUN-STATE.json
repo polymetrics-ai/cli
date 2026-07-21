@@ -193,20 +193,37 @@
       "cycle": "correction_cycle_8_plan_amendment",
       "decision": "local_critical_path",
       "reason": "The #479 consumer audit and local #471 contract confirm bounded parallel dispatch for disjoint isolated mutators; add a canonical authority/scope lease matrix before the one RED without editing scheduler-owned files."
+    },
+    {
+      "cycle": "correction_cycle_8_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 11aa2212 executed all 70 focused tests with 53 retained passes and exactly 17 intended Cycle 8 assertion failures; strict focused TypeScript passed and production matched frozen f219b730."
+    },
+    {
+      "cycle": "correction_cycle_8_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN c4d34c37 closes immutable request ownership, cleanup/listener totality, bounded mutator leases, hard maxima, bounded events, canonical scopes, terminal safety, and the remaining redaction parser matrix; focused 70/70 and both strict TypeScript scopes pass."
+    },
+    {
+      "cycle": "correction_cycle_8_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused, strict TypeScript, pinned offline Pi RPC, diff, ancestry, and owned-scope gates pass; the managed sandbox denies the pre-existing /bin/ps process-identity probe and DNS prevents pushing the local ordered commits."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_8_red_and_green; retained_cycle_7_green_53_passed_0_failed",
-    "fullShepherdTests": "pending_cycle_8; retained_cycle_7_green_190_passed_0_failed",
-    "strictTypeScriptPi0806": "pending_cycle_8; retained_cycle_7_green_focused_and_all_production",
-    "offlineRpcSmoke": "pending_cycle_8; retained_cycle_7_green_pm_shepherd_registered",
-    "diffCheck": "pending_cycle_8",
-    "ownedScope": "pending_cycle_8; immutable_base_e659d6f1_and_frozen_head_f219b730",
+    "focusedTests": "cycle_8_green_70_passed_0_failed",
+    "fullShepherdTests": "environment_blocked_207_executed_176_passed_31_spawn_eperm_failures_only_controller_and_state_store",
+    "strictTypeScriptPi0806": "cycle_8_passed_focused_and_all_production",
+    "offlineRpcSmoke": "cycle_8_passed_explicit_pi_0_80_6_pm_shepherd_registered",
+    "diffCheck": "cycle_8_passed",
+    "ownedScope": "cycle_8_passed_immutable_base_e659d6f1_frozen_head_f219b730_issue_paths_only; remote_head_equality_blocked_by_dns",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
     "manual_gsd_fallback: healthy adapter registry does not expose programming-loop",
     "repository-wide Go/connector gates intentionally deferred to parent integration and GitHub CI by explicit policy",
-    "ambient PATH resolved Pi 0.80.10 at final verification; authoritative smoke and type checks used the explicit unchanged Pi 0.80.6 installation"
+    "ambient PATH resolved Pi 0.80.10 at final verification; authoritative smoke and type checks used the explicit unchanged Pi 0.80.6 installation",
+    "cycle_8 full Shepherd suite blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM",
+    "cycle_8 push blocked before remote contact: ssh: Could not resolve hostname github.com: -65563"
   ]
 }

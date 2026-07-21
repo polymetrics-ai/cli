@@ -202,6 +202,8 @@
 - Execution decision: `read_only_spawned`; a read-only lifecycle sidecar supports the plan while the
   issue worker retains the isolated mutating critical path.
 - Downstream artifact: `.planning/phases/475-shepherd-agent-session-runtime/PLAN.md`.
-- Verification result: pending one compiled assertion-level RED and subsequent GREEN; only focused/
-  full Shepherd, pinned Pi 0.80.6 strict TypeScript, offline RPC, and diff/base/head/scope gates are
-  authorized.
+- Verification result: GREEN `c4d34c37` passes focused 70/70, both pinned Pi 0.80.6 strict
+  TypeScript scopes, explicit offline RPC, and local diff/base/scope gates. The managed sandbox
+  blocks only the complete controller/state-store paths at the existing `/bin/ps` probe
+  (`spawn EPERM`), and DNS blocks push with
+  `ssh: Could not resolve hostname github.com: -65563`; parent rerun/push/review remain required.
