@@ -36,6 +36,8 @@ initial-base workspace API cannot represent the autonomous lifecycle. See
       collisions explain deterministic waiting.
 - [ ] Workers plan, implement red-green-refactor, verify, open/update PRs, review, correct, and
       integrate through authoritative adapters with bounded retry budgets.
+- [ ] Read-only research/review sessions remain internal roles. Every top-level child issue is a
+      scoped mutating issue-to-PR lane, matching #478's integration-roster contract.
 - [ ] `status`, `stop`, and `resume` expose durable stage/lane/dependency/review/gate truth and join
       all child work correctly across stop/shutdown races.
 - [ ] A validated v2 autonomous state persists plan identity, child stages, exact Git/GitHub facts,

@@ -23,7 +23,7 @@ and integrated and the RED matrix below executes at behavior level.
 | #478 defines ports but not production intake/GitHub/review implementations | #479 constructs and injects concrete typed adapters; orchestration policy stays in #478. |
 | Human consume and resulting external effect are not atomic | #479 adds prepared/observed/consumed/applied effect journaling and restart reconciliation by exact idempotency key. |
 | Review docs still named Claude/Copilot | Program-specific docs now record controller-owned independent Codex 5.6-sol/xhigh coverage only; exact-head human parent merge remains separate. |
-| Top-level `read_only` child versus mandatory integration roster | Resolve during #478 exact-head review: either reject such child records or add a typed non-integration completion receipt. Do not invent integration evidence in #479. |
+| Top-level `read_only` child versus mandatory integration roster | Exact-head review reproduced the impossible lifecycle. #478 must reject top-level read-only child records. #479 keeps read-only research/review as internal roles and never invents integration evidence. |
 
 Child Git mutation leases are already per issue, not globally serialized. #479 holds one outer
 parent coordinator lease, uses existing per-child issue leases, and serializes only shared parent
@@ -92,8 +92,8 @@ truth, and only then schedules. Late results from older generations are discarde
 15. Path traversal, symlink escape, terminal controls, proxy/accessor/cycle/oversize payloads,
     bounded verification argv/output/timeout, and cancellation propagation.
 16. Bare/help/invalid/status behavior and stop during unresolved extension initialization.
-17. Top-level read-only child handling matches the exact #478 contract decision without fabricated
-    integration receipts.
+17. Top-level read-only child records fail during plan validation; internal read-only roles never
+    enter the integration roster or fabricate receipts.
 
 ## Checkpoint sequence
 

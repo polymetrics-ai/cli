@@ -26,6 +26,9 @@ Controller/command integration remains reserved for the integration issue.
 - [ ] Parent branch/draft PR setup, sub-issue creation, sub-PR creation, and roster/status updates are
       retry-safe and reconcile existing GitHub state before mutation.
 - [ ] Child PRs target the parent branch and use `Refs`; only the parent PR closes the parent issue.
+- [ ] Top-level parent child records are mutating issue-to-PR work and require non-empty canonical
+      write scopes. Read-only research, planning, verification, and review are internal controller
+      roles, not child records that would require fabricated integration receipts.
 - [ ] CI, requested changes, unresolved threads, exact reviewed commit ranges, and finding
       dispositions are represented as authoritative evidence.
 - [ ] This program's automated quality gate is a controller-owned, in-process independent Codex
