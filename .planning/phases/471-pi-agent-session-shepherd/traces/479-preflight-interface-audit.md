@@ -106,5 +106,27 @@ truth, and only then schedules. Late results from older generations are discarde
 7. Cancellation, resume reconciliation, and exactly-once human gate.
 8. Exact-head readiness, observed human merge, docs, registration, and proportional Shepherd gates.
 
+## Collision-safe internal workstreams
+
+#479 remains one issue and one eventual child PR, but its GREEN implementation may use temporary
+internal branches with disjoint ownership. The integrator creates the behavior-level RED scaffold
+and frozen port contracts first; workers do not independently redefine cross-workstream DTOs.
+
+| Workstream | Exclusive production ownership | Consumes | Must not edit |
+|---|---|---|---|
+| A: durable autonomy | new autonomous-state/effect-journal modules plus the narrow `state-store.ts` v2 extension and `arguments.ts` autonomous command parsing | frozen parent/child/effect DTO contract | controller, Git/workspace adapters, host adapters |
+| B: scoped Git/workspace | new scoped-workspace facade plus narrow `workspace-adapter.ts` and `git-adapter.ts` refresh/rebase/reclaim extensions | lease/ownership DTOs and effect keys | state/parser, controller, GitHub/review adapters |
+| C: authoritative host adapters | new intake, verification, GitHub transport, and Codex-review adapter modules | #478 ports, effect journal API, abort/deadline contract | state/parser, Git/workspace internals, controller |
+| D: integrator | `autonomous-controller.ts`, `extension.ts`, `index.ts`, any necessary `domain.ts` bridge, command help/docs, and trajectory tests | A-C public ports after their focused gates | A-C internals except a test-first integration correction |
+
+Temporary workstreams start from the same assembled dependency head, publish one coherent GREEN
+commit each, and are integrated A/B/C before D. If a shared contract must change, pause dependent
+work, update the frozen contract plus RED scaffold in the integrator branch, then rebase all
+affected workstreams. Parallel workers never resolve a collision by editing one another's files.
+
+Each A-C handoff includes focused RED/GREEN evidence, strict TypeScript for its production closure,
+changed-path scope proof, and an explicit list of exported ports. D owns the full Shepherd suite,
+offline Pi registration/RPC smoke, end-to-end fake-port trajectories, and exact-head review.
+
 Broad Go/connector/certification gates remain parent-only after integration. #479 runs focused and
 full Shepherd tests, strict TypeScript against Pi 0.80.6, offline Pi RPC, and scope/diff checks.

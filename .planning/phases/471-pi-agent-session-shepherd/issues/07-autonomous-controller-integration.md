@@ -58,6 +58,9 @@ initial-base workspace API cannot represent the autonomous lifecycle. See
 Use the complete fake-port RED matrix in `../traces/479-preflight-interface-audit.md` before wiring.
 It includes disjoint mutator concurrency, parent refresh/rebase, fault injection at every external
 effect boundary, cancellation/join ordering, stale-generation fencing, and exact-head re-review.
+The same trace defines four collision-safe internal workstreams. They are temporary implementation
+lanes inside this single issue/PR, share one frozen contract and RED scaffold, and must not create
+additional top-level issues or competing controller implementations.
 Required skills: `gsd-programming-loop`, `gsd-workstreams`, `javascript-testing-patterns`,
 `architecture-patterns`, CLI help/docs parity.
 
