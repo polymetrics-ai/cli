@@ -46,4 +46,20 @@ Result: exit 1; 0 passed, 2 failed test-file entries. Both failed with
 `ERR_MODULE_NOT_FOUND` for `.pi/extensions/shepherd/human-decision.ts`, proving the contract tests
 precede both production modules. Duration: 66.299917 ms.
 
-GREEN/refactor evidence remains pending.
+GREEN/refactor command:
+
+```bash
+node --test .pi/extensions/shepherd/human-decision.test.ts \
+  .pi/extensions/shepherd/github-decision-broker.test.ts
+```
+
+Result after the aggregate, file repository, broker, fake transport, and typed `gh api` adapter:
+25 passed, 0 failed, 1 skipped (the live sandbox mutation), duration 794.79625 ms.
+
+Refactor additions remained green while adding strict persisted-schema validation, no-follow state
+reads, fsync+atomic replacement, dead-process lock recovery, concurrent request serialization,
+bounded ten-page GitHub reads, duplicate-marker checks during polling, future-timestamp rejection,
+and a request-specific transport write method rather than a generic comment-write surface.
+
+Strict no-emit TypeScript for both production modules passed against the TypeScript/Node types
+bundled with installed Pi 0.80.6.

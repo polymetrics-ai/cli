@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -142,4 +142,34 @@ test("fails closed when generation, repository, target, or head differs at decis
 			decidedAt: "2026-07-21T10:01:00.000Z",
 		}), /binding|stale|target/i);
 	}
+});
+
+test("rejects unknown persisted fields and symbolic-link state after restart", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-tamper-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	await persistHumanDecisionRequest(repository, spec(), new Date("2026-07-21T10:00:00.000Z"));
+	const path = join(root, "req-477.json");
+	const persisted = JSON.parse(await readFile(path, "utf8"));
+	persisted.untrusted = "must-not-load";
+	await writeFile(path, JSON.stringify(persisted), { mode: 0o600 });
+	await assert.rejects(repository.load("req-477"), /unknown|field/i);
+	await symlink(path, join(root, "req-link.json"));
+	await assert.rejects(repository.load("req-link"), /ELOOP|symbolic|link/i);
+});
+
+test("reclaims a dead-process transaction lock immediately after restart", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-orphan-lock-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const lock = join(root, "req-477.lock");
+	await mkdir(lock, { mode: 0o700 });
+	await writeFile(join(lock, "owner.json"), JSON.stringify({
+		schemaVersion: 1,
+		pid: 2_147_483_647,
+		token: "00000000-0000-4000-8000-000000000000",
+		createdAt: "2026-07-21T10:00:00.000Z",
+	}), { mode: 0o600 });
+	const repository = new FileHumanDecisionRepository(root, { lockRetryMs: 1, lockMaxAttempts: 3 });
+	const persisted = await persistHumanDecisionRequest(repository, spec(), new Date("2026-07-21T10:00:00.000Z"));
+	assert.equal(persisted.requestId, "req-477");
 });

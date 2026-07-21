@@ -4,8 +4,8 @@
   "issue": 477,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "red",
-  "reason": "Issue tests fail because both owned production modules are absent; implementation may begin.",
+  "status": "implemented",
+  "reason": "Focused aggregate/broker tests and strict production TypeScript are green; broader verification remains.",
   "details": {
     "branch": "feat/477-shepherd-github-decision-broker",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -24,6 +24,11 @@
         "cycle": "tdd-gate",
         "decision": "local_critical_path",
         "reason": "The worker authored and ran fake-transport and durable-state contract tests before either production module existed."
+      },
+      {
+        "cycle": "execute",
+        "decision": "local_critical_path",
+        "reason": "Implemented the two-file typed aggregate/adapter slice and completed focused GREEN plus adversarial refactor locally."
       }
     ],
     "humanGates": [
@@ -36,5 +41,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T12:38:00.000Z"
+  "updatedAt": "2026-07-21T12:43:10.000Z"
 }
