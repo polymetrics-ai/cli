@@ -32,3 +32,16 @@
 - Authorized broader verification only: serialized Shepherd TypeScript tests, strict pinned Pi
   0.80.6 TypeScript, pinned offline Pi RPC, and immutable-base/diff/owned-scope checks. No Go,
   connector, certification, runtime-service, or `make` command is permitted.
+
+## Functional review correction kickoff
+
+- Frozen reviewed head: `093b3c90409cedc6b7008b7510f53937eb1ebbc1`; frozen base:
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`.
+- Review input: `/tmp/478-REVIEW-FUNCTIONAL.md`, 7 critical and 4 warning findings, all accepted
+  for one strict correction slice.
+- Sequence: artifact-only plan commit, one behavior-level test-only RED commit covering all eleven
+  findings with production byte identity proof, coherent GREEN, authorized Shepherd verification,
+  push/update PR #487, then parent-owned fresh xhigh review.
+- Scope exclusion: no #475/#479/controller/top-level wiring; the session provenance addition is a
+  scoped interface and fixture only.
+- GSD: `manual_gsd_fallback`; cycle decision `local_critical_path` in the isolated #478 clone.

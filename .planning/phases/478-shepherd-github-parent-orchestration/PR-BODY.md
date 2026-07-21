@@ -38,3 +38,12 @@
 Refs #478
 
 Refs #471
+
+## Stable-head review correction (in progress)
+
+- accepted 11 functional findings from the deep review of `093b3c90`
+- planned one strict artifact-only → test-only RED → architectural GREEN sequence
+- correction scope covers authoritative path/integration/CI/session evidence, deterministic review
+  selection, keyed idempotency, canonical generations/refs, complete lookups, and partial failures
+- no controller/#479 wiring, live GitHub mutation, secret access, Go gate, or merge is included
+- fresh exact-head xhigh review remains parent-owned after corrected local verification

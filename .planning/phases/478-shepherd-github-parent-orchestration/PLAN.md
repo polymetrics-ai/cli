@@ -150,3 +150,57 @@ tests pass 27/27; the serialized Shepherd suite passes 290 with one intentional 
 strict owned and all-production TypeScript pass with TypeScript 5.9.3 against the cached Pi 0.80.6
 package/type surface; pinned offline Pi RPC discovers `pm-shepherd`; and immutable-base, diff, and
 owned-path checks pass. Review dispatch remains parent-owned under the later stable-head policy.
+
+## Stable-head functional review correction slice: 2026-07-21
+
+The deep functional review froze base `3addb1f48be1afe8b1e2b59b54247679d7293805` and reviewed
+head `093b3c90409cedc6b7008b7510f53937eb1ebbc1`. Its eleven accepted findings are one strict
+RED-before-GREEN correction slice. Manual GSD remains the recorded fallback because the repository
+adapter does not expose `programming-loop`; this isolated worker takes the `local_critical_path`
+without editing #475, #479, controller, extension, or top-level integration files.
+
+### Correction contract
+
+1. Carry one authoritative expected changed-path set through pull-request evidence, review target,
+   session attestation, integration, and parent readiness. Require exact set equality; empty,
+   subset, and superset claims fail while reordered equality passes.
+2. Reconcile every child integration through complete authoritative transport lookup, canonical
+   materialized child topology, the current parent PR head, and a typed ancestry proof. Reject
+   forged, stale, mismatched, or force-push-orphaned receipts.
+3. Validate every immutable `MaterializedChildRecord` field against plan plus canonical issue before
+   capture, publication, and integration. No unchecked DTO field reaches transport.
+4. Bind CI to a required context set and trusted producer identifiers. Require one deterministic
+   successful terminal rollup per required context; absent, pending, duplicate-ambiguous,
+   unsuccessful, untrusted, or incomplete results fail closed.
+5. Separate reviewer output from controller-owned execution evidence through an issue-local scoped
+   `AgentSession` attestation interface/fixture. The attestation binds session/run identity, launch
+   provider/model/effort/read-only policy, repository, PR, generation, base/head, exact paths, and
+   result digest. Self-asserted reviewer execution metadata cannot satisfy the gate.
+6. Pass the expected independent-review target directly into evidence evaluation and select equal
+   generations deterministically, independent of transport and pagination ordering.
+7. Serialize issue and PR ensure operations by stable marker within the process, always reconcile
+   authoritatively after create, and fail closed when post-create state is absent or ambiguous.
+8. Enforce positive generation at every correction boundary.
+9. Centralize a pure canonical Git ref validator with check-ref-format-equivalent restrictions; no
+   subprocess is introduced.
+10. Make every marker/integration lookup return bounded `{ items, complete }` evidence. An
+    incomplete lookup is never treated as absence or uniqueness.
+11. Add deterministic partial-failure regressions for PR creation, integration, ready transition,
+    malformed mutation recovery, concurrent ensures, and incomplete pagination while preserving
+    broker semantics and secret safety.
+
+### Strict checkpoint sequence
+
+1. Commit and push this plan/TDD/verification/review-artifact update with production and tests
+   byte-identical to reviewed head `093b3c90`.
+2. Add one behavior-level test-only RED commit covering all eleven findings. Run the focused suite
+   and prove every production file under `.pi/extensions/shepherd/*.ts` is byte-identical to
+   `093b3c90` before the RED commit.
+3. Implement a coherent architectural GREEN only in the three #478 production modules, matching
+   tests/fixtures, and this phase directory.
+4. Run focused #478 tests, then the full serialized Shepherd test suite, strict TypeScript over
+   owned and all Shepherd production modules against pinned Pi 0.80.6, offline Pi RPC registration,
+   immutable-base/head/diff/scope checks, and `git diff --check`. Do not run Go, connector,
+   certification, runtime-service, or `make` gates.
+5. Commit/push GREEN and final evidence checkpoints and update PR #487. Fresh stable-head xhigh
+   review remains parent-owned.

@@ -27,3 +27,12 @@ started; stable-head independent review remains parent-owned.
 Ready PR https://github.com/polymetrics-ai/cli/pull/487 targets
 `feat/471-pi-agent-session-shepherd` with the required Conventional Commit title and `Refs #478` /
 `Refs #471` linkage. The worker requested no reviewer and performed no integration or merge.
+
+## Functional review correction in progress
+
+The deep stable-head review at `093b3c90` supersedes the earlier clean-local-gates statement. Eleven
+accepted correctness findings now require a fresh strict TDD slice covering authoritative changed
+paths and integrations, trusted CI/session provenance, deterministic review selection, keyed
+idempotency, positive generations, canonical Git refs, complete pagination evidence, and mutation
+recovery. This artifact checkpoint precedes the required single test-only RED commit; no correction
+production code has been edited yet. Manual GSD fallback and `local_critical_path` remain recorded.

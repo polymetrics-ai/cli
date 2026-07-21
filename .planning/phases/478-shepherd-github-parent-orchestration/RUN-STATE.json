@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Ready stacked PR #487 is open on the required parent base after all authorized local gates passed; parent-owned exact-head review remains.",
+  "reason": "Deep functional review of frozen head 093b3c90 found eleven accepted corrections; the artifact-first strict TDD correction slice is in progress.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -16,7 +16,7 @@
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": true,
+    "verificationPassed": false,
     "reviewCoveragePassed": false,
     "orchestrationDecisions": [
       {
@@ -53,6 +53,11 @@
         "cycle": "publish-pr",
         "decision": "local_critical_path",
         "reason": "Ready stacked PR #487 targets feat/471-pi-agent-session-shepherd with the required title and Refs linkage; no reviewer or merge was requested."
+      },
+      {
+        "cycle": "stable-head-functional-review-plan",
+        "decision": "local_critical_path",
+        "reason": "Eleven accepted findings are mapped to one artifact-first, test-only RED, coherent GREEN correction slice in the isolated #478 clone; fresh review remains parent-owned."
       }
     ],
     "humanGates": [
@@ -66,5 +71,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-21T17:44:56.000Z"
+  "updatedAt": "2026-07-21T19:00:00.000Z"
 }

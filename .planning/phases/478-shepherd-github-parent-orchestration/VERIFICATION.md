@@ -36,3 +36,21 @@ that host status is not treated as local verification or review coverage.
 
 Review coverage is intentionally pending after local verification. Fresh exact-head
 `codex_independent` review and human parent ready/merge decisions are parent-orchestrator gates.
+
+## Stable-head functional review correction status
+
+Status: planned at reviewed head `093b3c90409cedc6b7008b7510f53937eb1ebbc1`; prior local-pass
+evidence above is historical and does not satisfy the accepted correction findings.
+
+- [ ] Plan/TDD/verification/review artifact checkpoint committed and pushed before test or
+      production edits.
+- [ ] One test-only RED commit covers all eleven findings and proves production byte identity with
+      `093b3c90`.
+- [ ] Focused #478 tests pass after coherent GREEN.
+- [ ] Full `.pi/extensions/shepherd/*.test.ts` passes serialized.
+- [ ] Strict owned and all-Shepherd-production TypeScript pass against pinned Pi 0.80.6.
+- [ ] Offline pinned Pi RPC discovers `pm-shepherd`.
+- [ ] Frozen base/head ancestry, diff check, and #478 owned-path scope pass.
+- [ ] PR #487 reflects the correction commits and verification evidence.
+- [ ] No Go, connector, certification, runtime-service, `make`, live GitHub mutation, secret,
+      controller/#479 wiring, or merge action runs.

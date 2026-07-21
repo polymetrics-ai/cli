@@ -98,3 +98,11 @@ and all-production TypeScript pass; pinned offline RPC returns `true`; diff/base
   still open.
 - Human gates: parent ready, exact-head parent merge, and default-branch merge remain active.
 - Follow-up issues: #479 owns controller/session integration; this worker must not add it.
+
+## Superseding correction note
+
+The deep functional review of `093b3c90` found eleven accepted issues, so the earlier merge
+recommendation and local verification are historical. The correction is now executing as a strict
+artifact-only plan checkpoint, one behavior-level test-only RED commit, coherent GREEN, and fresh
+authorized verification. Controller wiring remains #479-owned; #478 may add only the scoped
+session-attestation contract and fixtures required to verify independent-review provenance.
