@@ -21,3 +21,8 @@ artifacts unless explicitly assigned.
 The controller is the only session spawner. Child sessions never receive recursive spawning,
 unrestricted external-write tools, secrets, or authority beyond their issue/worktree/scope. Every
 turn records `spawned` or one exact `not_spawned_*` reason.
+
+Shepherd child sessions run only focused issue tests, the full Shepherd TypeScript suite, strict
+typechecking against pinned Pi `0.80.6`, offline Pi RPC, and diff/write-scope checks. They must not
+run Go, connector, certification, or root `make verify` gates. The parent orchestrator owns those
+broad gates and runs them once on the integrated parent head; GitHub CI may run them independently.

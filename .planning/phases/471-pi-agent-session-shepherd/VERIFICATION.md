@@ -15,7 +15,7 @@ Phase: `471-pi-agent-session-shepherd`
 | #480 recovery/cutover | pending dependency | Requires #479. |
 | #481 CLI Architecture canary | pending dependency | Requires #480; must not bypass #397/#438 gates. |
 | Full TypeScript/Pi smoke | pending final | All Shepherd tests, strict typecheck, and offline extension discovery on exact parent head. |
-| Root Go/build/verify | pending final | `go vet`, `go test`, build, and `make verify` on exact parent head. |
+| Root Go/build/verify | pending final, parent-only | `go vet`, `go test`, build, and `make verify` run once on the exact integrated parent head, not in child lanes. |
 | Automated review coverage | pending | Per-child exact ranges plus final parent coverage/dispositions. |
 | Human merge decision | pending by design | One fresh allowlisted `approve-merge` response on #472 exact verified head. |
 

@@ -39,6 +39,24 @@ Every in-process implementation/correction session receives all of the following
 Planning, research, issue proposal, verification, review, disposition, and orchestration sessions
 use `openai-codex/gpt-5.6-sol`/`xhigh` and cannot mutate outside their explicit role.
 
+## Shepherd sub-worker verification boundary
+
+Every Shepherd implementation, correction, and independent-review prompt must keep local
+verification proportional to that TypeScript lane:
+
+1. run the child issue's focused RED/GREEN tests;
+2. run the complete `.pi/extensions/shepherd/*.test.ts` suite;
+3. run strict no-emit TypeScript against the repository-pinned Pi `0.80.6` declarations;
+4. run the Shepherd extension through offline Pi RPC; and
+5. run `git diff --check` plus changed-path/write-scope checks.
+
+Do **not** run `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, connector build/certification,
+or `make verify` in a Shepherd sub-worker. Those repository-wide gates run once on the integrated
+parent head and independently in GitHub CI. A broad gate already started by a child is recorded as
+`superseded/cancelled_by_parent_policy`; it is neither a functional pass nor failure. This boundary
+does not weaken the final parent gate and must be copied verbatim into every dispatched child or
+correction prompt.
+
 ## Human decision request template
 
 ```text
