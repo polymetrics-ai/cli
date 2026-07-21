@@ -6,22 +6,22 @@ Frozen candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`. Immutable base:
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The accepted issue contract and both complete Cycle 8
 review ledgers form the phase-equivalent requirement source.
 
-| Required outcome | RED boundary | Status before Cycle 9 execution |
+| Required outcome | RED boundary | Cycle 9 result |
 |---|---|---|
-| One closed SDK creation-result/session owner | alternating/throwing foreground and late accessors; exact same-session calls | pending RED |
-| Private expected-tool authority cannot be mutated by Pi | names/custom-tools push, reorder, replace and forbidden active tool probes | pending RED |
-| Capability schemas and results are bounded deep immutable DTOs | nested mutation, accessor/symbol/proxy/cycle/wide/deep/byte and one-read result rows | pending RED |
-| Settled setup rejection is retryable, unresolved/malformed ownership quarantines | reload/create immediate/grace/late settlement plus second dispatch | pending RED |
-| Unsubscribe and dispose are independently once-owned and bounded | hanging/rejecting hooks across success/cancel/close/parent/late paths | pending RED |
-| Listener cleanup owns exact operations and fallback detach | method mutation, pre-detach throw, request and parent variants | pending RED |
-| Every public async failure is typed with own cause | undefined getters/SDK/signal errors and primary+cleanup aggregation | pending RED |
-| Terminal events become bounded immutable known-kind DTOs during delivery | wide/proxy/sparse/accessor/non-enumerable/mutation probes with early-exit counters | pending RED |
-| Shared redactor closes the final strong syntax forms without prose damage | equals/opaque Auth/URL/implicit-flow/malformed escapes/63-65 keys through all consumers | pending RED |
-| Credential-bearing workspace paths never reach reads | package/registry/netrc/Git/Kubernetes/cloud/container nested/case table | pending RED |
-| Sensitive-data host capability aliases are structurally absent | noun/verb permutations, plurals, aliases, read-only exposure | pending RED |
-| Handoff text contains no raw terminal controls | every text field with HT/LF/CR/CRLF/C0/C1/Unicode separators/bidi | pending RED |
-| Pi custom tools satisfy the real 0.80.6 contract | strict direct types, TypeBox schema, required details, offline no-model execution | pending RED |
-| Cycle 8 mutator/lifecycle/parser guarantees remain intact | retained focused suite, timers, rejections, alias/capacity/per-lease cleanup | mandatory |
+| One closed SDK creation-result/session owner | alternating/throwing foreground and late accessors; exact same-session calls | focused GREEN |
+| Private expected-tool authority cannot be mutated by Pi | names/custom-tools push, reorder, replace and forbidden active tool probes | focused GREEN |
+| Capability schemas and results are bounded deep immutable DTOs | nested mutation, accessor/symbol/proxy/cycle/wide/deep/byte and one-read result rows | focused GREEN |
+| Settled setup rejection is retryable, unresolved/malformed ownership quarantines | reload/create immediate/grace/late settlement plus second dispatch | focused GREEN |
+| Unsubscribe and dispose are independently once-owned and bounded | hanging/rejecting hooks across success/cancel/close/parent/late paths | focused GREEN |
+| Listener cleanup owns exact operations and fallback detach | method mutation, pre-detach throw, request and parent variants | focused GREEN |
+| Every public async failure is typed with own cause | undefined getters/SDK/signal errors and primary+cleanup aggregation | focused GREEN |
+| Terminal events become bounded immutable known-kind DTOs during delivery | wide/proxy/sparse/accessor/non-enumerable/mutation probes with early-exit counters | focused GREEN |
+| Shared redactor closes the final strong syntax forms without prose damage | equals/opaque Auth/URL/implicit-flow/malformed escapes/63-65 keys through all consumers | focused GREEN |
+| Credential-bearing workspace paths never reach reads | package/registry/netrc/Git/Kubernetes/cloud/container nested/case table | focused GREEN |
+| Sensitive-data host capability aliases are structurally absent | noun/verb permutations, plurals, aliases, read-only exposure | focused GREEN |
+| Handoff text contains no raw terminal controls | every text field with HT/LF/CR/CRLF/C0/C1/Unicode separators/bidi | focused GREEN |
+| Pi custom tools satisfy the real 0.80.6 contract | strict direct types, TypeBox schema, required details, offline no-model execution | focused GREEN |
+| Cycle 8 mutator/lifecycle/parser guarantees remain intact | retained focused suite, timers, rejections, alias/capacity/per-lease cleanup | 70 retained focused passes |
 
 No parent/#478/#479, Go, connector, CLI/help/docs/website, certification, `make`, runtime service,
 live GitHub, review-bot, dependency, or merge work is required or authorized.

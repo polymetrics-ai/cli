@@ -1,6 +1,6 @@
 # Verification — Issue #475
 
-## Cycle 9 Pending Verification
+## Cycle 9 Verification Result
 
 Cycle 9 is planned against exact clean reviewed candidate
 `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8` and immutable base
@@ -8,21 +8,24 @@ Cycle 9 is planned against exact clean reviewed candidate
 `REVIEW.md`; all deduplicated lifecycle, typed-boundary, data-snapshot, event, parser, path,
 capability, and terminal-safety findings are accepted into one correction.
 
-Verification is intentionally pending the required test-only RED and architectural GREEN. No
-Cycle 8 result is represented as Cycle 9 evidence. Required terminal gates are:
+The ordered checkpoints are PLAN `b175cc4a`, read-only delegation trace `7047a8f4`, test-only RED
+`dbf796b3`, and cohesive GREEN/refactor `94918f4e`. RED executed all 86 focused tests: all 70
+retained assertions passed and exactly 16 Cycle 9 assertions failed, strict focused TypeScript
+passed, and all three production blobs matched `0cdcda7e`. GREEN passes all 86 focused tests.
 
-| Cycle 9 gate | Required evidence |
-|---|---|
-| RED integrity | all focused tests execute; only new assertions fail; focused strict TS passes; three production blobs equal `0cdcda7e` |
-| Focused GREEN | every retained and Cycle 9 runtime/tool-policy test passes |
-| Complete Shepherd | serialized `.pi/extensions/shepherd/*.test.ts`; known managed-sandbox `/bin/ps` `spawn EPERM` recorded separately if reproduced |
-| Strict TypeScript | focused inputs and all non-test Shepherd production under TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
-| Pi offline boundary | explicit Pi 0.80.6 RPC registration plus no-model custom-tool argument/result exercise |
-| Repository integrity | `git diff --check`, base/frozen-head ancestry, issue-owned paths, clean exact head |
+| Cycle 9 gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 86 executed; 70 retained pass; exactly 16 intended assertion failures; strict TS pass; production blobs unchanged |
+| Focused GREEN | pass | 86 passed, 0 failed |
+| Complete Shepherd | environment-blocked | 223 executed: 192 passed; the unchanged 31 controller/state-store failures all originate from managed-sandbox `/bin/ps` `spawn EPERM` |
+| Strict TypeScript | pass | focused production/tests and every non-test Shepherd `.ts`, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit binary `0.80.6`; temporary writable agent directory; RPC `get_commands` registered `pm-shepherd`; focused real-validator/no-model tool exercise passed |
+| Repository integrity | pass | `git diff --check`, immutable-base/frozen-head ancestry, and issue-owned path scope |
 
 The healthy 69-command GSD adapter registry still rejects `programming-loop`; Cycle 9 uses the
-recorded manual-GSD fallback. DNS push failure remains an external environment condition, not
-permission to alter commit order or omit local evidence.
+recorded manual-GSD fallback. The complete-suite result is neither claimed as a product failure nor
+as a pass; it reproduces the same parent-owned sandbox limitation as Cycle 8. DNS-deferred push and
+fresh exact-head review remain parent-owned.
 
 ## Cycle 8 Verification Result
 

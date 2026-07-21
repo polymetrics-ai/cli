@@ -180,3 +180,15 @@ The strict lifecycle is artifact-only PLAN, one test-only RED with production bl
 `0cdcda7e`, one cohesive GREEN/refactor, then declared evidence. A read-only seam mapper supports
 the plan while this isolated worker retains all writes. Cycle 8 disjoint mutator leases and every
 prior lifecycle/parser regression remain mandatory. DNS-deferred push does not pause local TDD.
+
+Cycle 9 completed the ordered local chain at GREEN `94918f4e`. The runtime now owns one captured
+session and exact lifecycle operations, validates a private frozen tool oracle, distinguishes
+fulfilled/rejected/pending setup settlement, bounds every teardown phase independently, aggregates
+typed public failures, and snapshots terminal evidence into immutable bounded DTOs. Tool policy
+uses Pi 0.80.6 public tool/result types, deep bounded schema snapshots, one-read result DTOs, and
+the closed redaction/path/capability grammar. All 86 focused tests and both strict TypeScript scopes
+pass; the explicit 0.80.6 offline RPC registers `pm-shepherd`. The complete suite executes 223
+tests with 192 passes and the same 31 `/bin/ps` `spawn EPERM` sandbox-only failures in parent-owned
+controller/state-store coverage. Parent orchestration owns process-capable rerun, push, and fresh
+exact-head review; this lane made no Go/connector, dependency, service, GitHub, review-bot, or merge
+change.

@@ -711,3 +711,31 @@ add dependencies, change scheduler/parent files, or widen tools.
 - pinned offline RPC registration and offline no-model custom-tool exercise;
 - diff check, immutable-base/frozen-head ancestry, issue-owned paths, exact clean head;
 - no Go/connectors/certification/`make`/runtime services/live GitHub/review bot/merge.
+
+### GREEN / REFACTOR result
+
+- Cohesive implementation commit: `94918f4e` (`fix(shepherd): harden agent session ownership`).
+- The correction uses a one-read SDK creation claim, captured session operations, a private frozen
+  active-tool oracle, explicit `fulfilled | rejected | pending` settlement, independent bounded
+  teardown phases, captured signal operations with native fallback detach, typed own-cause public
+  errors with deterministic aggregation, and immutable known-terminal DTOs.
+- Tool policy now snapshots capability schemas deeply with node/key/depth/array/incremental-byte
+  ceilings, captures results once, exposes actual Pi 0.80.6 tool/result types with required
+  `details`, and closes the shared redaction/path/capability-name grammar.
+- Focused GREEN: 86/86 passed (70 retained plus 16 Cycle 9 rows); strict focused TypeScript passed.
+
+### VERIFY result
+
+- Focused runtime/tool-policy suite: 86 passed, 0 failed.
+- Strict no-emit TypeScript: focused production/tests and every Shepherd production `.ts` passed
+  against the explicit Pi 0.80.6 package/type roots.
+- Complete Shepherd serialization: 223 tests executed, 192 passed, and the same 31 parent-owned
+  controller/state-store tests failed because the managed sandbox denies `/bin/ps` with
+  `spawn EPERM`; focused issue-owned files remain fully green.
+- Pinned offline Pi: explicit binary reports `0.80.6`; with `PI_CODING_AGENT_DIR` redirected to a
+  temporary writable directory, RPC `get_commands` succeeded and registered `pm-shepherd`.
+  The focused tool test separately invokes Pi's real `validateToolArguments` and executes a tool
+  without a model or credentials.
+- `git diff --check`, immutable-base/frozen-candidate ancestry, and exact issue-owned path checks
+  pass. No dependency, Go/connector/certification, `make`, service, live GitHub, review-bot, merge,
+  credential, or model call was made. Push remains parent/DNS-deferred.

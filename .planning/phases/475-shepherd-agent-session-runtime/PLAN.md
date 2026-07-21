@@ -639,3 +639,9 @@ The completed read-only delegation is recorded in `AGENTS.md`, `agents/cycle9-se
 known terminal DTOs must avoid generic hostile-Proxy enumeration, and Pi tools must use public Pi
 0.80.6 types plus supported plain-JSON-schema compatibility without a transitive TypeBox import or
 new dependency.
+
+Cycle 9 execution followed the required checkpoints: PLAN `b175cc4a`, read-only seam trace
+`7047a8f4`, one test-only RED `dbf796b3`, and cohesive GREEN/refactor `94918f4e`. GREEN preserves
+all 70 Cycle 8 focused regressions and passes all 16 new behavior rows. Verification is recorded in
+`TDD-LEDGER.md` and `VERIFICATION.md`; the only complete-suite failures are the unchanged managed-
+sandbox denial of `/bin/ps` in parent-owned state-store/controller tests.

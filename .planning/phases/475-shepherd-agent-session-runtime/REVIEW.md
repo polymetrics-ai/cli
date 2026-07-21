@@ -1,7 +1,7 @@
 # Review Disposition — Issue #475 Cycle 9
 
-Frozen reviewed candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`  
-Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`  
+Frozen reviewed candidate: `0cdcda7e049b7ecfa2fdc52027c66c5de161f2c8`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
 Sources: `/tmp/475-REVIEW-CYCLE8-1.md`, `/tmp/475-REVIEW-CYCLE8-2.md`
 
 Both independent reviews are accepted as one blocking correction batch. Their overlapping findings
@@ -28,5 +28,7 @@ Cycle 8's bounded disjoint-mutator lease contract remains mandatory. The runtime
 the coordinator-supplied stable `workspace.id` as its physical collision key; proving symlink/case
 identity belongs to #479 and requires no #475 scheduler or workspace edit.
 
-Status before RED: accepted, planned, and unimplemented. Fresh stable-head review remains
-parent-owned after the complete PLAN -> RED -> GREEN -> evidence chain.
+Status after GREEN: all accepted groups are implemented at `94918f4e` and the consolidated focused
+suite passes 86/86. Strict focused and all-production TypeScript pass against pinned Pi 0.80.6;
+the no-model tool row exercises Pi's real argument validator and required result `details`.
+Fresh stable-head review remains parent-owned after the evidence commit.
