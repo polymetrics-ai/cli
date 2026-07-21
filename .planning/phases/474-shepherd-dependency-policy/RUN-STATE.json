@@ -3,7 +3,7 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "third_correction_planned",
+  "status": "third_correction_red",
   "verificationPassed": false,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
@@ -60,6 +60,11 @@
       "cycle": "exact-head-correction-3-plan",
       "decision": "local_critical_path",
       "reason": "The remaining accessor-boundary blocker is one cohesive owned reconciliation slice; the runtime agent limit prevented a read-only sidecar, so local TDD is the critical path."
+    },
+    {
+      "cycle": "exact-head-correction-3-red",
+      "decision": "local_critical_path",
+      "reason": "A tests-only run produced the expected 40/41 pass result and proved getters execute twice at root, nested-record, and array-element depths."
     }
   ],
   "gates": {
@@ -90,7 +95,7 @@
     "secondCorrectionFullShepherd": "passed_177_of_177",
     "secondCorrectionOfflineRpc": "pm_shepherd_discovered",
     "secondCorrectionOwnership": "passed",
-    "thirdCorrectionRed": "pending",
+    "thirdCorrectionRed": "passed_expected_failure_1_of_41",
     "thirdCorrectionGreen": "pending",
     "thirdCorrectionVerification": "pending"
   }

@@ -247,7 +247,7 @@ and can produce different decisions from the same object.
 
 ### Verification checklist
 
-- [ ] Accessor RED captured before production edits.
+- [x] Accessor RED captured before production edits: 41 tests, 40 pass, 1 expected failure.
 - [ ] Focused tests pass after the descriptor-first fix.
 - [ ] Full Shepherd suite passes.
 - [ ] Strict production TypeScript passes against installed Pi 0.80.6 declarations.

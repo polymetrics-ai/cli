@@ -467,6 +467,60 @@ test("caller-owned Proxy iterators are rejected before they can mutate or escape
 	assert.deepEqual(reconcileAutonomy(throwing), expected);
 });
 
+test("accessor-bearing DTOs are rejected without executing caller code", () => {
+	const expected = { kind: "invalid_snapshot", reason: "invalid autonomy snapshot" } as const;
+	let rootGetterCalls = 0;
+	const rootAccessor = input();
+	const pendingCanonical = rootAccessor.canonical;
+	const completeCanonical = {
+		...pendingCanonical,
+		workItems: [item({ id: "worker", status: "succeeded" })],
+	};
+	Object.defineProperty(rootAccessor, "canonical", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			rootGetterCalls += 1;
+			return rootGetterCalls % 2 === 1 ? pendingCanonical : completeCanonical;
+		},
+	});
+
+	let nestedGetterCalls = 0;
+	const nestedAccessor = input();
+	Object.defineProperty(nestedAccessor.canonical.workItems[0], "status", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			nestedGetterCalls += 1;
+			return nestedGetterCalls % 2 === 1 ? "pending" : "succeeded";
+		},
+	});
+
+	let arrayGetterCalls = 0;
+	const arrayAccessor = input();
+	const pendingItem = arrayAccessor.canonical.workItems[0];
+	const completeItem = item({ id: "worker", status: "succeeded" });
+	Object.defineProperty(arrayAccessor.canonical.workItems, "0", {
+		configurable: true,
+		enumerable: true,
+		get() {
+			arrayGetterCalls += 1;
+			return arrayGetterCalls % 2 === 1 ? pendingItem : completeItem;
+		},
+	});
+
+	const decisions = [rootAccessor, nestedAccessor, arrayAccessor].map((candidate) => [
+		reconcileAutonomy(candidate),
+		reconcileAutonomy(candidate),
+	]);
+	assert.deepEqual(
+		{ rootGetterCalls, nestedGetterCalls, arrayGetterCalls },
+		{ rootGetterCalls: 0, nestedGetterCalls: 0, arrayGetterCalls: 0 },
+		"descriptor validation must not execute caller accessors",
+	);
+	for (const pair of decisions) assert.deepEqual(pair, [expected, expected]);
+});
+
 test("reconciliation is pure and idempotent for the same persisted and canonical snapshot", () => {
 	const candidate = input();
 	const before = structuredClone(candidate);

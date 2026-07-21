@@ -183,6 +183,14 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
 - A read-only recon sidecar could not start because the runtime agent limit was occupied.
 - Execution decision: `local_critical_path`; write an accessor-specific RED before production edits.
 
+## Exact-head correction 3 RED cycle
+
+- Added only the root/nested/array accessor regression; production remained byte-identical.
+- Focused RED: 41 tests, 40 pass, 1 expected failure, exit 1.
+- The root, nested record, and array-element getters each ran twice, and their alternating values
+  reached the clone boundary before validation.
+- Execution decision: `local_critical_path`; RED gate satisfied, proceed to the minimum boundary fix.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,
