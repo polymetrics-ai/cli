@@ -151,3 +151,16 @@ gaps. This loop reopens the phase under the same ownership and verification poli
 3. minimal GREEN fixes;
 4. refactor plus phase-equivalent verification and evidence;
 5. push exact head to existing PR #483 for a fresh independent review.
+
+### Correction verification checklist
+
+- [x] Adversarial RED captured: 36 tests, 21 pass, 15 expected failures.
+- [x] Audit gap RED captured: 2 tests, 0 pass, 2 expected failures.
+- [x] Focused correction suite passes 36/36.
+- [x] Hostile 64-item conflict component is typed-rejected below the one-second subprocess bound.
+- [x] Full Shepherd suite passes 173/173 after refactor.
+- [x] Strict production TypeScript passes against installed Pi 0.80.6 declarations.
+- [x] Offline Pi RPC discovers `pm-shepherd`.
+- [x] Diff and ownership checks pass; only assigned modules/tests and phase artifacts changed.
+- [x] PR #483 remains open, ready, and stacked on `feat/471-pi-agent-session-shepherd`.
+- [x] No Go, root `make verify`, Claude, Copilot, or merge action was run.

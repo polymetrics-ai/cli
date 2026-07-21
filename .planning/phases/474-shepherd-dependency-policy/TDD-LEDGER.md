@@ -95,3 +95,7 @@ Correction refactor precomputes one canonical collision index per ready queue, t
 component discovery and bounded exact selection. This removes repeated scope normalization and
 pairwise collision evaluation from recursive search without changing decisions. Focused tests
 remain 36/36 and strict production TypeScript remains clean.
+
+Final correction verification: focused 36/36, full Shepherd 173/173, strict production TypeScript
+pass, offline Pi 0.80.6 RPC pass, and diff/ownership pass. The implementation head verified before
+this evidence-only checkpoint was `ef2fd1e280128ccb2a0e46b749f9638472fad865`.

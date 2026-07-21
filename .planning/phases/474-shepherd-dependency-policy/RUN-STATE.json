@@ -3,8 +3,8 @@
   "issue": 474,
   "phase": "474-shepherd-dependency-policy",
   "mode": "manual_gsd_fallback",
-  "status": "correction_refactored",
-  "verificationPassed": false,
+  "status": "completed",
+  "verificationPassed": true,
   "verificationPolicy": "parent_declared_phase_equivalent_child_gate",
   "adapterEvidence": {
     "command": "scripts/gsd prompt programming-loop init --phase 474-shepherd-dependency-policy --dry-run",
@@ -64,10 +64,14 @@
     "goTest": "supplemental_passed_after_contention_timeout_retry",
     "goBuild": "supplemental_passed",
     "makeVerify": "cancelled_by_parent_policy_not_a_functional_failure",
-    "phaseEquivalentChildGate": "reopened_for_exact_head_corrections",
+    "phaseEquivalentChildGate": "passed_after_exact_head_corrections",
     "correctionRed": "passed_expected_failure_15_of_36",
     "correctionGreen": "passed_36_of_36",
     "correctionAuditGap": "red_2_of_2_then_green_36_of_36",
-    "correctionRefactor": "precomputed_conflict_index_passed_36_of_36"
+    "correctionRefactor": "precomputed_conflict_index_passed_36_of_36",
+    "correctionFullShepherd": "passed_173_of_173",
+    "correctionStrictTypeScript": "passed_against_pi_0_80_6",
+    "correctionOfflineRpc": "pm_shepherd_discovered",
+    "correctionOwnership": "passed"
   }
 }

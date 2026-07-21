@@ -105,6 +105,18 @@ Further RED/GREEN/refactor/verification evidence will be appended after each gen
   discovered `pm-shepherd`; these gates are rerun/frozen after the refactor commit.
 - Execution decision: `local_critical_path`; refactor is behavior-preserving.
 
+## Exact-head correction verification cycle
+
+- Post-refactor focused suite: 36/36 pass.
+- Post-refactor full Shepherd suite: 173/173 pass in 53.5 seconds.
+- Strict production-only TypeScript against installed Pi 0.80.6 declarations: pass.
+- Offline Pi RPC `get_commands`: pass; project extension reports `pm-shepherd`.
+- `git diff --check`, assigned-path ownership, clean branch, and PR base/head checks: pass.
+- PR #483 remained open and ready on `feat/471-pi-agent-session-shepherd`; verified implementation
+  head was `ef2fd1e280128ccb2a0e46b749f9638472fad865` before this evidence-only commit.
+- No Go/root `make verify`, Claude/Copilot request, or merge action was performed.
+- Execution decision: `local_critical_path`; correction gate complete.
+
 ## TDD gate cycle
 
 - Added table/property-style tests for lifecycle safety, retry/correction budgets, graph validation,
