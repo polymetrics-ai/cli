@@ -137,7 +137,14 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 
 ## Verification
 
-Use local gates before handing off code:
+Use local gates before handing off code. For TypeScript-only Shepherd child issues under parent
+#471, follow `.planning/phases/471-pi-agent-session-shepherd/PROMPTS.md`: run only the focused
+child tests, full Shepherd TypeScript suite, strict pinned-Pi typecheck, offline Pi RPC, and
+diff/write-scope checks. Do not run the Go, connector, certification, or root `make verify` gates
+in those child worktrees; the parent orchestrator runs them once on the exact integrated parent
+head, and GitHub CI may run them independently.
+
+For Go and repository-wide work, use:
 
 ```bash
 gofmt -w cmd internal
