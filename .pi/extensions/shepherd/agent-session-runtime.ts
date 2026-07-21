@@ -14,6 +14,7 @@ import {
 } from "./role-prompts.ts";
 import {
 	createToolPolicy,
+	normalizeScopedPrefixes,
 	redactSensitiveText,
 	validateScopedPath,
 	type HostCapability,
@@ -31,6 +32,13 @@ const DEFAULT_MAX_EVENT_BYTES = 4 * 1024 * 1024;
 const DEFAULT_MAX_ASSISTANT_BYTES = 64 * 1024;
 const DEFAULT_CLEANUP_TIMEOUT_MS = 5_000;
 const MAX_TIMEOUT_MS = 24 * 60 * 60 * 1_000;
+const MAX_CONCURRENCY = 32;
+const MAX_EVENTS = 65_536;
+const MAX_EVENT_BYTES = 16 * 1024 * 1024;
+const MAX_ASSISTANT_BYTES = 1024 * 1024;
+const MAX_CLEANUP_TIMEOUT_MS = MAX_TIMEOUT_MS;
+const MAX_EVENT_DEPTH = 64;
+const MAX_EVENT_NODES = 65_536;
 const MAX_HANDOFF_SUMMARY_CHARACTERS = 4 * 1024;
 const MAX_HANDOFF_ARRAY_ITEMS = 32;
 const MAX_HANDOFF_ITEM_CHARACTERS = 2 * 1024;
@@ -49,11 +57,11 @@ export interface RuntimeAgentSession {
 	thinkingLevel: ShepherdAgentThinking | string;
 	sessionFile: string | undefined;
 	getActiveToolNames(): string[];
-	subscribe(listener: (event: AgentSessionEvent) => void): () => void;
+	subscribe(listener: (event: AgentSessionEvent) => void): () => void | PromiseLike<void>;
 	prompt(prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void>;
 	abort(): Promise<void>;
 	waitForIdle(): Promise<void>;
-	dispose(): void;
+	dispose(): void | PromiseLike<void>;
 }
 
 interface RuntimeSessionResult {
@@ -185,7 +193,7 @@ class CancellationScope {
 
 class OwnedSession {
 	readonly session: RuntimeAgentSession;
-	unsubscribe: (() => void) | undefined;
+	unsubscribe: (() => void | PromiseLike<void>) | undefined;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
 	#waitPromise: Promise<void> | undefined;
@@ -209,21 +217,26 @@ class OwnedSession {
 
 	disposeOnce(): Promise<void> {
 		if (!this.#disposePromise) {
-			this.#disposePromise = Promise.resolve().then(() => {
+			this.#disposePromise = Promise.resolve().then(async () => {
+				let failurePresent = false;
 				let firstError: unknown;
+				const unsubscribe = this.unsubscribe;
+				this.unsubscribe = undefined;
 				try {
-					this.unsubscribe?.();
+					if (unsubscribe) await Promise.resolve(unsubscribe());
 				} catch (error) {
+					failurePresent = true;
 					firstError = error;
-				} finally {
-					this.unsubscribe = undefined;
 				}
 				try {
-					this.session.dispose();
+					await Promise.resolve(this.session.dispose());
 				} catch (error) {
-					firstError ??= error;
+					if (!failurePresent) {
+						failurePresent = true;
+						firstError = error;
+					}
 				}
-				if (firstError !== undefined) throw firstError;
+				if (failurePresent) throw firstError;
 			});
 			this.#disposePromise.catch(() => undefined);
 		}
@@ -236,26 +249,34 @@ async function cleanupOwnedSession(
 	abort: boolean,
 	timeoutMs: number,
 ): Promise<void> {
+	let failurePresent = false;
 	let firstError: unknown;
 	if (abort) {
 		try {
 			await bounded(owned.abortOnce(), timeoutMs, "session abort");
 		} catch (error) {
+			failurePresent = true;
 			firstError = error;
 		}
 	}
 	try {
 		await bounded(owned.waitOnce(), timeoutMs, "session idle wait");
 	} catch (error) {
-		firstError ??= error;
+		if (!failurePresent) {
+			failurePresent = true;
+			firstError = error;
+		}
 	}
-	// Disposal is synchronous at the Pi port and must remain reachable after either bounded phase.
+	// Teardown must remain reachable after either bounded phase, including for thenable adapters.
 	try {
 		await owned.disposeOnce();
 	} catch (error) {
-		firstError ??= error;
+		if (!failurePresent) {
+			failurePresent = true;
+			firstError = error;
+		}
 	}
-	if (firstError !== undefined) throw firstError;
+	if (failurePresent) throw firstError;
 }
 
 class SessionCreationOwnership {
@@ -333,30 +354,39 @@ class SessionCreationOwnership {
 
 	async #finishLateCreation(created: RuntimeSessionResult): Promise<void> {
 		let owned: OwnedSession | undefined;
+		let failurePresent = false;
 		let firstError: unknown;
 		try {
 			owned = ownedSessionFromResult(created);
 		} catch (error) {
+			failurePresent = true;
 			firstError = error;
 		}
 		if (owned) {
 			try {
 				this.#validateCreated(created);
 			} catch (error) {
-				firstError ??= error;
+				if (!failurePresent) {
+					failurePresent = true;
+					firstError = error;
+				}
 			}
 			try {
 				await this.#cleanup(owned);
 			} catch (error) {
-				firstError ??= error;
+				if (!failurePresent) {
+					failurePresent = true;
+					firstError = error;
+				}
 			}
 		}
-		if (firstError !== undefined) this.#reportFailure(firstError);
+		if (failurePresent) this.#reportFailure(firstError);
 		this.#settleTerminal();
 	}
 
 	async #cleanup(owned: OwnedSession): Promise<void> {
 		const deadlineAt = Date.now() + this.#cleanupTimeoutMs;
+		let failurePresent = false;
 		let firstError: unknown;
 		const abort = boundedUntil(
 			owned.abortOnce(),
@@ -373,14 +403,20 @@ class SessionCreationOwnership {
 			true,
 		);
 		for (const settlement of await Promise.allSettled([abort, idle])) {
-			if (settlement.status === "rejected") firstError ??= settlement.reason;
+			if (settlement.status === "rejected" && !failurePresent) {
+				failurePresent = true;
+				firstError = settlement.reason;
+			}
 		}
 		try {
 			await owned.disposeOnce();
 		} catch (error) {
-			firstError ??= error;
+			if (!failurePresent) {
+				failurePresent = true;
+				firstError = error;
+			}
 		}
-		if (firstError !== undefined) throw firstError;
+		if (failurePresent) throw firstError;
 	}
 
 	#reportFailure(error: unknown): void {
@@ -398,10 +434,44 @@ class SessionCreationOwnership {
 	}
 }
 
+class AbortListenerLease {
+	readonly #signal: AbortSignal;
+	readonly #listener: () => void;
+	#mayBeAttached = false;
+	#released = false;
+
+	constructor(signal: AbortSignal, listener: () => void) {
+		this.#signal = signal;
+		this.#listener = listener;
+	}
+
+	attach(): void {
+		if (this.#mayBeAttached) return;
+		// EventTarget may mutate before a hostile wrapper throws. Own the possible lease first.
+		this.#mayBeAttached = true;
+		this.#signal.addEventListener("abort", this.#listener, { once: true });
+	}
+
+	release(): void {
+		if (this.#released || !this.#mayBeAttached) return;
+		this.#released = true;
+		this.#signal.removeEventListener("abort", this.#listener);
+	}
+}
+
+interface MutationLease {
+	issue: number;
+	branch: string;
+	workspaceId: string;
+	workspaceCwd: string;
+	writePrefixes: readonly string[];
+}
+
 interface ActiveRun {
 	key: string;
 	runId: string;
 	readOnly: boolean;
+	mutationLease?: MutationLease;
 	scope: CancellationScope;
 	owned?: OwnedSession;
 	done: Promise<void>;
@@ -431,38 +501,55 @@ export class ShepherdAgentSessionRuntime {
 	readonly #sdk: AgentSessionRuntimeSdk;
 	readonly #options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>;
 	readonly #active = new Map<string, ActiveRun>();
+	readonly #mutatorLeases = new Map<string, MutationLease>();
 	readonly #creations = new Set<SessionCreationOwnership>();
-	readonly #parentSignal: AbortSignal | undefined;
-	readonly #parentAbortListener: (() => void) | undefined;
-	#activeMutator = false;
+	readonly #parentListenerLease: AbortListenerLease | undefined = undefined;
 	#closing = false;
 	#closed = false;
 	#closePromise: Promise<void> | undefined;
+	#quarantineFailurePresent = false;
 	#quarantineFailure: unknown;
 
 	constructor(sdk: AgentSessionRuntimeSdk, options: AgentSessionRuntimeOptions = {}) {
 		this.#sdk = sdk;
 		this.#options = {
-			maxConcurrency: positiveInteger(options.maxConcurrency ?? DEFAULT_MAX_CONCURRENCY, "maxConcurrency"),
-			maxEvents: positiveInteger(options.maxEvents ?? DEFAULT_MAX_EVENTS, "maxEvents"),
-			maxEventBytes: positiveInteger(options.maxEventBytes ?? DEFAULT_MAX_EVENT_BYTES, "maxEventBytes"),
-			maxAssistantBytes: positiveInteger(options.maxAssistantBytes ?? DEFAULT_MAX_ASSISTANT_BYTES, "maxAssistantBytes"),
-			cleanupTimeoutMs: positiveInteger(options.cleanupTimeoutMs ?? DEFAULT_CLEANUP_TIMEOUT_MS, "cleanupTimeoutMs"),
+			maxConcurrency: boundedPositiveInteger(options.maxConcurrency ?? DEFAULT_MAX_CONCURRENCY, "maxConcurrency", MAX_CONCURRENCY),
+			maxEvents: boundedPositiveInteger(options.maxEvents ?? DEFAULT_MAX_EVENTS, "maxEvents", MAX_EVENTS),
+			maxEventBytes: boundedPositiveInteger(options.maxEventBytes ?? DEFAULT_MAX_EVENT_BYTES, "maxEventBytes", MAX_EVENT_BYTES),
+			maxAssistantBytes: boundedPositiveInteger(
+				options.maxAssistantBytes ?? DEFAULT_MAX_ASSISTANT_BYTES,
+				"maxAssistantBytes",
+				MAX_ASSISTANT_BYTES,
+			),
+			cleanupTimeoutMs: boundedPositiveInteger(
+				options.cleanupTimeoutMs ?? DEFAULT_CLEANUP_TIMEOUT_MS,
+				"cleanupTimeoutMs",
+				MAX_CLEANUP_TIMEOUT_MS,
+			),
 		};
-		if (this.#options.maxConcurrency > 32) throw new AgentSessionRuntimeError("maxConcurrency exceeds the embedded runtime bound");
-		this.#parentSignal = options.parentSignal;
-		if (options.parentSignal) {
-			this.#parentAbortListener = () => { void this.#close("parent shutdown requested").catch(() => undefined); };
-			options.parentSignal.addEventListener("abort", this.#parentAbortListener, { once: true });
-			if (options.parentSignal.aborted) this.#parentAbortListener();
+		const parentSignal = options.parentSignal;
+		if (parentSignal !== undefined && !(parentSignal instanceof AbortSignal)) {
+			throw new AgentSessionRuntimeError("parentSignal is invalid");
+		}
+		if (parentSignal) {
+			const parentAbortListener = () => { void this.#close("parent shutdown requested").catch(() => undefined); };
+			const lease = new AbortListenerLease(parentSignal, parentAbortListener);
+			this.#parentListenerLease = lease;
+			try {
+				lease.attach();
+			} catch (error) {
+				try { lease.release(); } catch { /* Preserve the attachment failure. */ }
+				throw error;
+			}
+			if (parentSignal.aborted) parentAbortListener();
 		}
 	}
 
 	async run(request: RoleRunRequest): Promise<AgentSessionHandoff> {
-		validateRunRequest(request);
+		const normalizedRequest = normalizeRunRequest(request);
 		this.#assertSdk();
 		this.#assertOpen();
-		const route = routeForRole(request.role);
+		const route = routeForRole(normalizedRequest.role);
 		const model = this.#sdk.findModel(route.provider, route.model);
 		if (!isRecord(model) || model.provider !== REQUIRED_PROVIDER || model.id !== REQUIRED_MODEL) {
 			throw new AgentSessionRuntimeError(`required model ${REQUIRED_PROVIDER}/${REQUIRED_MODEL} is unavailable; fallback is forbidden`);
@@ -471,29 +558,32 @@ export class ShepherdAgentSessionRuntime {
 			throw new AgentSessionRuntimeError(`required model ${REQUIRED_PROVIDER}/${REQUIRED_MODEL} has no configured auth`);
 		}
 
-		const effectiveDeadline = computeDeadline(request.timeoutMs, request.deadlineAt);
+		const effectiveDeadline = computeDeadline(normalizedRequest.timeoutMs, normalizedRequest.deadlineAt);
 		const active = this.#reserve(
-			request,
+			normalizedRequest,
 			effectiveDeadline,
-			request.deadlineAt !== undefined && effectiveDeadline === request.deadlineAt
+			normalizedRequest.deadlineAt !== undefined && effectiveDeadline === normalizedRequest.deadlineAt
 				? "AgentSession deadline expired"
-				: `AgentSession timed out after ${request.timeoutMs}ms`,
+				: `AgentSession timed out after ${normalizedRequest.timeoutMs}ms`,
 		);
 		const scope = active.scope;
 		const externalAbort = () => scope.cancel(new AgentSessionRuntimeError("AgentSession run was cancelled by its parent signal"));
-		let listenerAttached = false;
+		const listenerLease = normalizedRequest.signal
+			? new AbortListenerLease(normalizedRequest.signal, externalAbort)
+			: undefined;
+		let listenerFailurePresent = false;
 		let listenerFailure: unknown;
 		try {
-			if (request.signal) {
-				request.signal.addEventListener("abort", externalAbort, { once: true });
-				listenerAttached = true;
-				if (request.signal.aborted) externalAbort();
+			if (normalizedRequest.signal) {
+				listenerLease?.attach();
+				if (normalizedRequest.signal.aborted) externalAbort();
 			}
-			return await this.#execute(request, route.thinking, model, active);
+			return await this.#execute(normalizedRequest, route.thinking, model, active);
 		} finally {
 			try {
-				if (listenerAttached) request.signal?.removeEventListener("abort", externalAbort);
+				listenerLease?.release();
 			} catch (error) {
+				listenerFailurePresent = true;
 				listenerFailure = error;
 			} finally {
 				try {
@@ -502,7 +592,7 @@ export class ShepherdAgentSessionRuntime {
 					this.#release(active);
 				}
 			}
-			if (listenerFailure !== undefined) throw listenerFailure;
+			if (listenerFailurePresent) throw listenerFailure;
 		}
 	}
 
@@ -538,16 +628,14 @@ export class ShepherdAgentSessionRuntime {
 			const terminal = Promise.all(creationOwners.map((creation) => creation.terminal)).then(() => undefined);
 			const settlement = await settleWithin(terminal, this.#options.cleanupTimeoutMs);
 			if (!settlement.settled) {
-				this.#quarantineFailure ??= new AgentSessionRuntimeError(
+				this.#setQuarantine(new AgentSessionRuntimeError(
 					"AgentSession creation remained pending during bounded close",
-				);
+				));
 			}
 		}
 		this.#closed = true;
-		if (this.#parentSignal && this.#parentAbortListener) {
-			this.#parentSignal.removeEventListener("abort", this.#parentAbortListener);
-		}
-		if (this.#quarantineFailure !== undefined) {
+		this.#parentListenerLease?.release();
+		if (this.#quarantineFailurePresent) {
 			throw new AgentSessionRuntimeError("AgentSession runtime closed while quarantined after cleanup failure", {
 				cause: this.#quarantineFailure,
 			});
@@ -571,12 +659,14 @@ export class ShepherdAgentSessionRuntime {
 			role: request.role,
 			task: request.task,
 			context: request.context,
-			authority: {
-				issue: request.authority.issue,
-				branch: request.authority.branch,
-				workspaceId: request.authority.workspaceId,
-				readOnly: request.authority.readOnly,
-				toolNames: toolPolicy.names,
+				authority: {
+					issue: request.authority.issue,
+					branch: request.authority.branch,
+					workspaceId: request.authority.workspaceId,
+					readOnly: request.authority.readOnly,
+					readPrefixes: request.authority.readPrefixes,
+					writePrefixes: request.authority.writePrefixes,
+					toolNames: toolPolicy.names,
 				binding: request.binding,
 			},
 		});
@@ -584,6 +674,7 @@ export class ShepherdAgentSessionRuntime {
 		let creation: SessionCreationOwnership | undefined;
 		let reloadPromise: Promise<void> | undefined;
 		let owned: OwnedSession | undefined;
+		let primaryFailurePresent = false;
 		let primaryFailure: unknown;
 		let result: AgentSessionHandoff | undefined;
 		try {
@@ -635,7 +726,7 @@ export class ShepherdAgentSessionRuntime {
 				this.#options.cleanupTimeoutMs,
 				(created) => validateCreatedSession(created, thinking, toolPolicy.names),
 				(error) => {
-					this.#quarantineFailure ??= error;
+					this.#setQuarantine(error);
 				},
 			);
 			creation = owner;
@@ -665,15 +756,18 @@ export class ShepherdAgentSessionRuntime {
 			}
 			result = parseHandoff(assistantText(terminal), request, this.#options.maxAssistantBytes);
 		} catch (error) {
+			primaryFailurePresent = true;
 			primaryFailure = error;
 		}
 
+		let cleanupFailurePresent = false;
 		let cleanupFailure: unknown;
 		if (reloadPromise) {
 			try {
 				await bounded(reloadPromise, this.#options.cleanupTimeoutMs, "resource loader settlement");
 			} catch (error) {
-				cleanupFailure ??= error;
+				cleanupFailurePresent = true;
+				cleanupFailure = error;
 			}
 		}
 		if (!owned && creation?.pending) {
@@ -687,29 +781,38 @@ export class ShepherdAgentSessionRuntime {
 					try {
 						validateCreatedSession(settlement.value, thinking, toolPolicy.names);
 					} catch (error) {
-						cleanupFailure ??= error;
+						if (!cleanupFailurePresent) {
+							cleanupFailurePresent = true;
+							cleanupFailure = error;
+						}
 					}
 				}
 			} catch (error) {
 				creation.abandon();
-				cleanupFailure ??= error;
+				if (!cleanupFailurePresent) {
+					cleanupFailurePresent = true;
+					cleanupFailure = error;
+				}
 			}
 		}
 		if (owned) {
 			try {
 				await cleanupOwnedSession(owned, scope.failure !== undefined, this.#options.cleanupTimeoutMs);
 			} catch (error) {
-				cleanupFailure ??= error;
+				if (!cleanupFailurePresent) {
+					cleanupFailurePresent = true;
+					cleanupFailure = error;
+				}
 			}
 		}
-		if (cleanupFailure !== undefined) {
-			this.#quarantineFailure ??= cleanupFailure;
+		if (cleanupFailurePresent) {
+			this.#setQuarantine(cleanupFailure);
 		}
 
-		if (cleanupFailure !== undefined) {
+		if (cleanupFailurePresent) {
 			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", { cause: cleanupFailure });
 		}
-		if (primaryFailure !== undefined) throw normalizeRuntimeError(primaryFailure);
+		if (primaryFailurePresent) throw normalizeRuntimeError(primaryFailure);
 		// Cancellation may win after terminal evidence is parsed but before child settlement completes.
 		// Never return otherwise-valid late evidence after close, shutdown, abort, or deadline.
 		if (scope.failure) throw scope.failure;
@@ -720,11 +823,12 @@ export class ShepherdAgentSessionRuntime {
 	#reserve(request: RoleRunRequest, deadlineAt: number, timeoutDescription: string): ActiveRun {
 		const key = `${request.binding.runId}:${request.binding.generation}:${request.binding.laneId}`;
 		if (this.#active.has(key)) throw new AgentSessionRuntimeError("run/lane/generation is already active");
+		const mutationLease = request.authority.readOnly ? undefined : mutationLeaseFor(request);
+		if (mutationLease && [...this.#mutatorLeases.values()].some((activeLease) => mutationLeasesCollide(activeLease, mutationLease))) {
+			throw new AgentSessionRuntimeError("mutating AgentSession authority overlaps an active mutator lease");
+		}
 		if (this.#active.size >= this.#options.maxConcurrency) {
 			throw new AgentSessionRuntimeError(`AgentSession concurrency limit ${this.#options.maxConcurrency} reached`);
-		}
-		if (!request.authority.readOnly && this.#activeMutator) {
-			throw new AgentSessionRuntimeError("only one mutating AgentSession may run at a time");
 		}
 		const scope = new CancellationScope(deadlineAt, timeoutDescription);
 		const completion = deferred();
@@ -732,18 +836,19 @@ export class ShepherdAgentSessionRuntime {
 			key,
 			runId: request.binding.runId,
 			readOnly: request.authority.readOnly,
+			mutationLease,
 			scope,
 			done: completion.promise,
 			resolveDone: completion.resolve,
 		};
 		this.#active.set(key, active);
-		this.#activeMutator ||= !request.authority.readOnly;
+		if (mutationLease) this.#mutatorLeases.set(key, mutationLease);
 		return active;
 	}
 
 	#release(active: ActiveRun): void {
 		if (!this.#active.delete(active.key)) return;
-		if (!active.readOnly) this.#activeMutator = false;
+		this.#mutatorLeases.delete(active.key);
 		active.resolveDone();
 	}
 
@@ -766,68 +871,200 @@ export class ShepherdAgentSessionRuntime {
 	}
 
 	#assertOpen(): void {
-		if (this.#quarantineFailure !== undefined) {
+		if (this.#quarantineFailurePresent) {
 			throw new AgentSessionRuntimeError("AgentSession runtime is quarantined after failed cleanup", {
 				cause: this.#quarantineFailure,
 			});
 		}
 		if (this.#closing || this.#closed) throw new AgentSessionRuntimeError("AgentSession runtime is closed");
 	}
+
+	#setQuarantine(error: unknown): void {
+		if (this.#quarantineFailurePresent) return;
+		this.#quarantineFailurePresent = true;
+		this.#quarantineFailure = error;
+	}
 }
 
-function validateRunRequest(request: RoleRunRequest): void {
+function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	if (!isRecord(request)) throw new AgentSessionRuntimeError("AgentSession request must be an object");
 	assertOnlyKeys(request, [
 		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
 	], "request");
-	routeForRole(request.role);
-	if (!Number.isSafeInteger(request.timeoutMs) || request.timeoutMs <= 0 || request.timeoutMs > MAX_TIMEOUT_MS) {
+	// Read every caller-owned top-level field exactly once, then use only the frozen snapshot.
+	const role = request.role;
+	const task = request.task;
+	const contextSource = request.context;
+	const timeoutMs = request.timeoutMs;
+	const deadlineAt = request.deadlineAt;
+	const signal = request.signal;
+	const workspaceSource = request.workspace;
+	const capabilitiesSource = request.capabilities;
+	const authoritySource = request.authority;
+	const bindingSource = request.binding;
+
+	routeForRole(role);
+	if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMEOUT_MS) {
 		throw new AgentSessionRuntimeError("timeoutMs must be a positive bounded safe integer");
 	}
-	if (request.deadlineAt !== undefined && (!Number.isSafeInteger(request.deadlineAt) || request.deadlineAt <= Date.now())) {
+	if (deadlineAt !== undefined && (!Number.isSafeInteger(deadlineAt) || deadlineAt <= Date.now())) {
 		throw new AgentSessionRuntimeError("deadlineAt must be a future epoch-millisecond safe integer");
 	}
-	if (request.signal !== undefined && !(request.signal instanceof AbortSignal)) {
+	if (signal !== undefined && !(signal instanceof AbortSignal)) {
 		throw new AgentSessionRuntimeError("request signal is invalid");
 	}
-	if (!request.workspace || request.workspace.id !== request.authority?.workspaceId || !isAbsoluteNonTraversingPath(request.workspace.cwd)) {
-		throw new AgentSessionRuntimeError("workspace identity or cwd does not match the immutable authority envelope");
-	}
-	if (!isRecord(request.authority)) throw new AgentSessionRuntimeError("request authority is required");
-	assertOnlyKeys(request.authority, [
+
+	if (!isRecord(authoritySource)) throw new AgentSessionRuntimeError("request authority is required");
+	assertOnlyKeys(authoritySource, [
 		"issue", "branch", "workspaceId", "readOnly", "readPrefixes", "writePrefixes", "capabilityNames",
 	], "authority");
-	if (!Number.isSafeInteger(request.authority.issue) || request.authority.issue < 1) {
-		throw new AgentSessionRuntimeError("authority issue is invalid");
-	}
-	if (typeof request.authority.branch !== "string" || request.authority.branch.length < 1 ||
-		request.authority.branch.length > 255 || /[\u0000-\u001f\u007f]/.test(request.authority.branch) ||
-		request.authority.branch === "main") {
+	const issue = authoritySource.issue;
+	const branch = authoritySource.branch;
+	const authorityWorkspaceId = authoritySource.workspaceId;
+	const readOnly = authoritySource.readOnly;
+	const readPrefixesSource = authoritySource.readPrefixes;
+	const writePrefixesSource = authoritySource.writePrefixes;
+	const capabilityNamesSource = authoritySource.capabilityNames;
+	if (!Number.isSafeInteger(issue) || issue < 1) throw new AgentSessionRuntimeError("authority issue is invalid");
+	if (typeof branch !== "string" || branch.length < 1 || branch.length > 255 ||
+		/[\u0000-\u001f\u007f]/.test(branch) || branch === "main") {
 		throw new AgentSessionRuntimeError("authority branch is invalid or targets main");
 	}
-	if (typeof request.authority.readOnly !== "boolean") throw new AgentSessionRuntimeError("authority readOnly is invalid");
-	if (!request.binding || !isRecord(request.binding)) throw new AgentSessionRuntimeError("request binding is required");
-	assertOnlyKeys(request.binding, ["runId", "generation", "laneId", "candidateHead", "validationNonce"], "binding");
-	if (!validIdentifier(request.binding.runId) || !validIdentifier(request.binding.laneId) ||
-		!Number.isSafeInteger(request.binding.generation) || request.binding.generation < 1 ||
-		!/^[0-9a-f]{40}$/.test(request.binding.candidateHead) ||
-		!validIdentifier(request.binding.validationNonce) || request.binding.validationNonce.length < 12) {
+	if (!validIdentifier(authorityWorkspaceId)) throw new AgentSessionRuntimeError("authority workspace identity is invalid");
+	if (typeof readOnly !== "boolean") throw new AgentSessionRuntimeError("authority readOnly is invalid");
+	const readPrefixes = frozenArray(normalizeScopedPrefixes(readPrefixesSource, "read"));
+	const writePrefixes = readOnly && Array.isArray(writePrefixesSource) && writePrefixesSource.length === 0
+		? frozenArray<string>([])
+		: frozenArray(normalizeScopedPrefixes(writePrefixesSource, "write"));
+	if (!Array.isArray(capabilityNamesSource) || capabilityNamesSource.length > 32) {
+		throw new AgentSessionRuntimeError("authority capability names must be a bounded array");
+	}
+	const capabilityNames = frozenArray(capabilityNamesSource.map((name) => {
+		if (typeof name !== "string") throw new AgentSessionRuntimeError("authority capability name is invalid");
+		return name;
+	}));
+	const authority = Object.freeze({
+		issue: Number(issue),
+		branch,
+		workspaceId: authorityWorkspaceId,
+		readOnly,
+		readPrefixes,
+		writePrefixes,
+		capabilityNames,
+	}) as RoleAuthority;
+
+	if (!isRecord(bindingSource)) throw new AgentSessionRuntimeError("request binding is required");
+	assertOnlyKeys(bindingSource, ["runId", "generation", "laneId", "candidateHead", "validationNonce"], "binding");
+	const runId = bindingSource.runId;
+	const generation = bindingSource.generation;
+	const laneId = bindingSource.laneId;
+	const candidateHead = bindingSource.candidateHead;
+	const validationNonce = bindingSource.validationNonce;
+	if (!validIdentifier(runId) || !validIdentifier(laneId) ||
+		!Number.isSafeInteger(generation) || generation < 1 ||
+		typeof candidateHead !== "string" || !/^[0-9a-f]{40}$/.test(candidateHead) ||
+		!validIdentifier(validationNonce) || validationNonce.length < 12) {
 		throw new AgentSessionRuntimeError("request binding is invalid");
 	}
-	// Prompt construction performs the byte-level task/context bounds before any SDK call.
+	const binding = Object.freeze({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
+
+	if (!workspaceSource || typeof workspaceSource !== "object") {
+		throw new AgentSessionRuntimeError("workspace capability is required");
+	}
+	const workspaceId = workspaceSource.id;
+	const workspaceCwd = workspaceSource.cwd;
+	const readText = workspaceSource.readText;
+	const editText = workspaceSource.editText;
+	const writeText = workspaceSource.writeText;
+	if (workspaceId !== authorityWorkspaceId || !isAbsoluteNonTraversingPath(workspaceCwd) ||
+		typeof readText !== "function" || typeof editText !== "function" || typeof writeText !== "function") {
+		throw new AgentSessionRuntimeError("workspace identity, cwd, or capability does not match the immutable authority envelope");
+	}
+	const canonicalCwd = canonicalWorkspacePath(workspaceCwd);
+	const workspace = Object.freeze({
+		id: workspaceId,
+		cwd: canonicalCwd,
+		readText(path: string, options: { offset?: number; limit?: number; signal?: AbortSignal }) {
+			return Reflect.apply(readText, workspaceSource, [path, options]);
+		},
+		editText(path: string, oldText: string, newText: string, operationSignal?: AbortSignal) {
+			return Reflect.apply(editText, workspaceSource, [path, oldText, newText, operationSignal]);
+		},
+		writeText(path: string, content: string, operationSignal?: AbortSignal) {
+			return Reflect.apply(writeText, workspaceSource, [path, content, operationSignal]);
+		},
+	}) satisfies ScopedWorkspace;
+
+	if (!Array.isArray(capabilitiesSource) || capabilitiesSource.length > 32) {
+		throw new AgentSessionRuntimeError("typed host capabilities must be a bounded array");
+	}
+	const capabilities = frozenArray(capabilitiesSource.map((capability) => normalizeCapability(capability)));
+	if (!Array.isArray(contextSource)) throw new AgentSessionRuntimeError("role context must be a bounded array");
+	const context = frozenArray(contextSource.map((item) => item));
+	const normalized = Object.freeze({
+		role,
+		task,
+		context,
+		timeoutMs,
+		deadlineAt,
+		signal,
+		workspace,
+		capabilities,
+		authority,
+		binding,
+	}) as RoleRunRequest;
+
+	// Prompt construction performs byte-level task/context and authority bounds before any SDK call.
 	buildRolePrompts({
-		role: request.role,
-		task: request.task,
-		context: request.context,
+		role,
+		task,
+		context,
 		authority: {
-			issue: request.authority.issue,
-			branch: request.authority.branch,
-			workspaceId: request.authority.workspaceId,
-			readOnly: request.authority.readOnly,
+			issue: authority.issue,
+			branch: authority.branch,
+			workspaceId: authority.workspaceId,
+			readOnly: authority.readOnly,
+			readPrefixes: authority.readPrefixes,
+			writePrefixes: authority.writePrefixes,
 			toolNames: [],
-			binding: request.binding,
+			binding,
 		},
 	});
+	return normalized;
+}
+
+function normalizeCapability(capability: HostCapability): HostCapability {
+	if (!capability || typeof capability !== "object") throw new AgentSessionRuntimeError("capability must be an object");
+	const name = capability.name;
+	const description = capability.description;
+	const mutates = capability.mutates;
+	const parameters = capability.parameters;
+	const execute = capability.execute;
+	if (typeof execute !== "function") throw new AgentSessionRuntimeError("capability execute must be a function");
+	return Object.freeze({
+		name,
+		description,
+		mutates,
+		parameters: isRecord(parameters) ? Object.freeze({ ...parameters }) : parameters,
+		execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
+			return Reflect.apply(execute, capability, [input, signal]);
+		},
+	});
+}
+
+function mutationLeaseFor(request: RoleRunRequest): MutationLease {
+	return Object.freeze({
+		issue: request.authority.issue,
+		branch: request.authority.branch,
+		workspaceId: request.authority.workspaceId,
+		workspaceCwd: request.workspace.cwd,
+		writePrefixes: request.authority.writePrefixes,
+	});
+}
+
+function mutationLeasesCollide(left: MutationLease, right: MutationLease): boolean {
+	return left.issue === right.issue || left.branch === right.branch ||
+		left.workspaceId === right.workspaceId || left.workspaceCwd === right.workspaceCwd;
 }
 
 function validateCreatedSession(
@@ -881,13 +1118,19 @@ function captureEvent(
 ): void {
 	if (capture.failure) return;
 	capture.eventCount += 1;
-	try {
-		capture.eventBytes += byteLength(JSON.stringify(event));
-	} catch (error) {
-		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an unserializable event", { cause: error });
+	if (capture.eventCount > options.maxEvents) {
+		capture.failure = new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
 		return;
 	}
-	if (capture.eventCount > options.maxEvents || capture.eventBytes > options.maxEventBytes) {
+	try {
+		capture.eventBytes += boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
+	} catch (error) {
+		capture.failure = new AgentSessionRuntimeError("AgentSession emitted an event that exceeded bounded safe accounting", {
+			cause: error,
+		});
+		return;
+	}
+	if (capture.eventBytes > options.maxEventBytes) {
 		capture.failure = new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
 		return;
 	}
@@ -900,6 +1143,52 @@ function captureEvent(
 			capture.agentEnd = [...event.messages].reverse().find(isAssistantTerminal);
 		}
 	}
+}
+
+function boundedEventBytes(root: unknown, maximum: number): number {
+	if (maximum < 0) throw new AgentSessionRuntimeError("AgentSession event byte bound was exhausted");
+	const stack: Array<{ value: unknown; depth: number }> = [{ value: root, depth: 0 }];
+	const seen = new WeakSet<object>();
+	let bytes = 0;
+	let nodes = 0;
+	const add = (count: number) => {
+		bytes += count;
+		if (bytes > maximum) throw new AgentSessionRuntimeError("AgentSession event exceeded its byte bound");
+	};
+	while (stack.length > 0) {
+		const current = stack.pop();
+		if (!current) break;
+		nodes += 1;
+		if (nodes > MAX_EVENT_NODES || current.depth > MAX_EVENT_DEPTH) {
+			throw new AgentSessionRuntimeError("AgentSession event exceeded its depth or node bound");
+		}
+		const value = current.value;
+		if (value === null) { add(4); continue; }
+		switch (typeof value) {
+			case "string": add(byteLength(value) + 2); continue;
+			case "number": add(24); continue;
+			case "boolean": add(5); continue;
+			case "undefined": add(4); continue;
+			case "object": break;
+			default: throw new AgentSessionRuntimeError("AgentSession event contains an unsupported value");
+		}
+		const object = value as object;
+		if (seen.has(object)) throw new AgentSessionRuntimeError("AgentSession event contains a cycle");
+		seen.add(object);
+		const descriptors = Object.getOwnPropertyDescriptors(object);
+		add(Array.isArray(value) ? 2 : 2);
+		for (const key of Reflect.ownKeys(descriptors)) {
+			if (typeof key !== "string") throw new AgentSessionRuntimeError("AgentSession event contains a symbol key");
+			const descriptor = descriptors[key];
+			if (!descriptor?.enumerable) continue;
+			if (descriptor.get || descriptor.set || !("value" in descriptor)) {
+				throw new AgentSessionRuntimeError("AgentSession event contains an accessor");
+			}
+			add(byteLength(key) + 3);
+			stack.push({ value: descriptor.value, depth: current.depth + 1 });
+		}
+	}
+	return bytes;
 }
 
 function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
@@ -1000,7 +1289,8 @@ function boundedArray(value: unknown, description: string): unknown[] {
 }
 
 function redactedBoundedString(value: unknown, description: string, max: number, allowEmpty: boolean): string {
-	if (typeof value !== "string" || (!allowEmpty && value.length < 1) || value.length > max || /[\u0000\u007f]/.test(value)) {
+	if (typeof value !== "string" || (!allowEmpty && value.length < 1) || value.length > max ||
+		/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/.test(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be ${allowEmpty ? "a" : "a non-empty"} bounded string`);
 	}
 	return redactSensitiveText(value);
@@ -1025,6 +1315,10 @@ function isAbsoluteNonTraversingPath(value: unknown): value is string {
 	return !segments.includes("..");
 }
 
+function canonicalWorkspacePath(value: string): string {
+	return /^(?:[A-Za-z]:[\\/]|\\\\)/.test(value) ? win32.normalize(value) : posix.normalize(value);
+}
+
 function assertOnlyKeys(value: Record<string, unknown>, allowed: readonly string[], description: string): void {
 	const allowedSet = new Set(allowed);
 	for (const key of Object.keys(value)) {
@@ -1040,9 +1334,17 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 	return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function positiveInteger(value: number, description: string): number {
-	if (!Number.isSafeInteger(value) || value <= 0) throw new AgentSessionRuntimeError(`${description} must be a positive safe integer`);
+function boundedPositiveInteger(value: number, description: string, maximum: number): number {
+	if (!Number.isSafeInteger(value) || value <= 0 || value > maximum) {
+		throw new AgentSessionRuntimeError(
+			`${description} must be a positive safe integer within the embedded maximum ${maximum}`,
+		);
+	}
 	return value;
+}
+
+function frozenArray<T>(values: T[]): T[] {
+	return Object.freeze(values) as unknown as T[];
 }
 
 function byteLength(value: string): number { return new TextEncoder().encode(value).byteLength; }

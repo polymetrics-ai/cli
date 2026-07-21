@@ -3,6 +3,9 @@ import { posix } from "node:path";
 const DEFAULT_MAX_TOOL_OUTPUT_BYTES = 64 * 1024;
 const DEFAULT_MAX_READ_CHARACTERS = 64 * 1024;
 const DEFAULT_MAX_WRITE_CHARACTERS = 256 * 1024;
+const MAX_TOOL_OUTPUT_BYTES = 256 * 1024;
+const MAX_READ_CHARACTERS = 256 * 1024;
+const MAX_WRITE_CHARACTERS = 1024 * 1024;
 const MAX_PATH_CHARACTERS = 512;
 const MAX_CAPABILITIES = 32;
 const MAX_REFERENCES = 32;
@@ -112,16 +115,28 @@ export class ToolPolicyError extends Error {
 
 export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOptions = {}): ToolPolicy {
 	const limits = {
-		maxToolOutputBytes: positiveInteger(options.maxToolOutputBytes ?? DEFAULT_MAX_TOOL_OUTPUT_BYTES, "maxToolOutputBytes"),
-		maxReadCharacters: positiveInteger(options.maxReadCharacters ?? DEFAULT_MAX_READ_CHARACTERS, "maxReadCharacters"),
-		maxWriteCharacters: positiveInteger(options.maxWriteCharacters ?? DEFAULT_MAX_WRITE_CHARACTERS, "maxWriteCharacters"),
+		maxToolOutputBytes: boundedPositiveInteger(
+			options.maxToolOutputBytes ?? DEFAULT_MAX_TOOL_OUTPUT_BYTES,
+			"maxToolOutputBytes",
+			MAX_TOOL_OUTPUT_BYTES,
+		),
+		maxReadCharacters: boundedPositiveInteger(
+			options.maxReadCharacters ?? DEFAULT_MAX_READ_CHARACTERS,
+			"maxReadCharacters",
+			MAX_READ_CHARACTERS,
+		),
+		maxWriteCharacters: boundedPositiveInteger(
+			options.maxWriteCharacters ?? DEFAULT_MAX_WRITE_CHARACTERS,
+			"maxWriteCharacters",
+			MAX_WRITE_CHARACTERS,
+		),
 	};
 	validatePolicyInput(input);
 
-	const readPrefixes = normalizePrefixes(input.authority.readPrefixes, "read");
+	const readPrefixes = normalizeScopedPrefixes(input.authority.readPrefixes, "read");
 	const writePrefixes = input.readOnly && input.authority.writePrefixes.length === 0
-		? []
-		: normalizePrefixes(input.authority.writePrefixes, "write");
+		? input.authority.writePrefixes
+		: normalizeScopedPrefixes(input.authority.writePrefixes, "write");
 	const tools: SessionTool[] = [workspaceReadTool(input.workspace, readPrefixes, limits)];
 	if (!input.readOnly) {
 		tools.push(
@@ -387,6 +402,11 @@ interface RedactionDecision {
 	resumeAt: number;
 }
 
+interface QuotedAssignmentKey {
+	key: string;
+	next: number;
+}
+
 const REDACTED_TEXT = "[REDACTED]";
 const secretAssignmentKeys = new Set([
 	"apikey",
@@ -484,16 +504,10 @@ function sensitiveAssignmentAt(
 	let key: string;
 	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
 	if (quote) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-		const keyStart = cursor;
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (cursor === keyStart || value[cursor] !== quote) return undefined;
-		key = value.slice(keyStart, cursor);
-		cursor += 1;
+		const decoded = decodeQuotedAssignmentKey(value, cursor, quote as LexicalQuote, metrics);
+		if (!decoded) return undefined;
+		key = decoded.key;
+		cursor = decoded.next;
 	} else {
 		const keyStart = cursor;
 		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
@@ -519,6 +533,86 @@ function sensitiveAssignmentAt(
 		recordTotalVisits(metrics, 1);
 	}
 	return { kind, context, keyColumn: index - lineStart, normalizedKey, valueStart: cursor };
+}
+
+function decodeQuotedAssignmentKey(
+	value: string,
+	start: number,
+	quote: LexicalQuote,
+	metrics?: RedactionScanMetrics,
+): QuotedAssignmentKey | undefined {
+	const MAX_DECODED_KEY_CHARACTERS = 64;
+	const MAX_ENCODED_KEY_CHARACTERS = 384;
+	let cursor = start + 1;
+	let decoded = "";
+	let malformed = false;
+	let sensitivePrefix = false;
+	while (cursor < value.length && cursor - start <= MAX_ENCODED_KEY_CHARACTERS) {
+		const character = value[cursor];
+		recordTotalVisits(metrics, 1);
+		if (character === quote) {
+			if (quote === "'" && value[cursor + 1] === "'") {
+				decoded += "'";
+				cursor += 2;
+				recordTotalVisits(metrics, 1);
+				continue;
+			}
+			if (decoded.length === 0 || decoded.length > MAX_DECODED_KEY_CHARACTERS) return undefined;
+			const valid = [...decoded].every(isAssignmentKeyCharacter);
+			if (!valid && !(malformed && sensitivePrefix)) return undefined;
+			return { key: malformed && sensitivePrefix ? sensitiveKeyPrefix(decoded) : decoded, next: cursor + 1 };
+		}
+		if (character === "\n" || character === "\r") return undefined;
+		if (quote === '"' && character === "\\") {
+			const escaped = value[cursor + 1];
+			if (escaped === "u") {
+				const hex = value.slice(cursor + 2, cursor + 6);
+				if (/^[0-9a-fA-F]{4}$/.test(hex)) {
+					decoded += String.fromCharCode(Number.parseInt(hex, 16));
+					cursor += 6;
+					recordTotalVisits(metrics, 5);
+					continue;
+				}
+				malformed = true;
+				sensitivePrefix ||= sensitiveAssignmentKind(decoded) !== undefined;
+				cursor += 2;
+				recordTotalVisits(metrics, 1);
+				continue;
+			}
+			const simpleEscapes: Record<string, string> = {
+				'"': '"', "\\": "\\", "/": "/", b: "\b", f: "\f", n: "\n", r: "\r", t: "\t",
+			};
+			if (escaped !== undefined && Object.hasOwn(simpleEscapes, escaped)) {
+				decoded += simpleEscapes[escaped];
+				cursor += 2;
+				recordTotalVisits(metrics, 1);
+				continue;
+			}
+			malformed = true;
+			sensitivePrefix ||= sensitiveAssignmentKind(decoded) !== undefined;
+			cursor += Math.min(2, value.length - cursor);
+			continue;
+		}
+		decoded += character;
+		if (!isAssignmentKeyCharacter(character)) {
+			malformed = true;
+			sensitivePrefix ||= sensitiveAssignmentKind(decoded.slice(0, -1)) !== undefined;
+		}
+		if (decoded.length > MAX_DECODED_KEY_CHARACTERS) {
+			malformed = true;
+			sensitivePrefix ||= sensitiveAssignmentKind(decoded.slice(0, MAX_DECODED_KEY_CHARACTERS)) !== undefined;
+		}
+		cursor += 1;
+	}
+	return undefined;
+}
+
+function sensitiveKeyPrefix(value: string): string {
+	for (let end = Math.min(value.length, 64); end > 0; end -= 1) {
+		const prefix = value.slice(0, end);
+		if (sensitiveAssignmentKind(prefix)) return prefix;
+	}
+	return value;
 }
 
 function redactionForAssignment(
@@ -605,7 +699,7 @@ function unquotedValueRedaction(
 	lineEnd: number,
 	metrics?: RedactionScanMetrics,
 ): RedactionDecision {
-	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, metrics);
+	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, assignment.context, metrics);
 	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
 	const continuation = assignment.context === "line"
 		? yamlPlainContinuation(value, lineEnd, assignment.keyColumn, metrics)
@@ -711,11 +805,14 @@ function authorizationCredentialStart(
 ): number | undefined {
 	let cursor = start;
 	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
+	const schemeStart = cursor;
 	while (cursor < end && !isWhitespace(value[cursor])) cursor += 1;
+	const scheme = value.slice(schemeStart, cursor).toLowerCase();
 	if (cursor >= end) return undefined;
 	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
 	if (cursor >= end) return undefined;
-	if (!allowCredentialWhitespace && containsWhitespace(value.slice(cursor, end))) return undefined;
+	const parameterized = scheme === "digest" || scheme === "signature" || scheme.startsWith("aws4-");
+	if (!allowCredentialWhitespace && !parameterized && containsWhitespace(value.slice(cursor, end))) return undefined;
 	return cursor;
 }
 
@@ -1070,6 +1167,7 @@ function findUnquotedValueEnd(
 	value: string,
 	start: number,
 	lineEnd: number,
+	context: SensitiveAssignmentContext,
 	metrics?: RedactionScanMetrics,
 ): number {
 	const nestedClosers: FlowCloser[] = [];
@@ -1079,7 +1177,7 @@ function findUnquotedValueEnd(
 	let currentLineEnd = lineEnd;
 	while (index < value.length) {
 		if (index >= currentLineEnd) {
-			if (nestedClosers.length === 0) return currentLineEnd;
+			if (nestedClosers.length === 0 && context === "line") return currentLineEnd;
 			const nextLineStart = afterLineEnding(value, currentLineEnd);
 			if (nextLineStart <= currentLineEnd) return currentLineEnd;
 			index = nextLineStart;
@@ -1132,7 +1230,7 @@ function findUnquotedValueEnd(
 			index += 1;
 			continue;
 		}
-		if (nestedClosers.length === 0 && (character === "," || character === ";")) return index;
+		if (context === "flow" && nestedClosers.length === 0 && (character === "," || character === ";")) return index;
 		index += 1;
 	}
 	return currentLineEnd;
@@ -1176,7 +1274,7 @@ function validateCapabilityName(name: string): void {
 	}
 }
 
-function normalizePrefixes(prefixes: unknown, description: string): string[] {
+export function normalizeScopedPrefixes(prefixes: unknown, description: string): string[] {
 	if (!Array.isArray(prefixes) || prefixes.length < 1 || prefixes.length > 64) {
 		throw new ToolPolicyError(`${description} prefixes must be a non-empty bounded array`);
 	}
@@ -1197,6 +1295,9 @@ function normalizePrefixes(prefixes: unknown, description: string): string[] {
 		normalized.push(value);
 	}
 	if (new Set(normalized).size !== normalized.length) throw new ToolPolicyError(`duplicate ${description} prefix`);
+	if (Object.isFrozen(prefixes) && normalized.every((value, index) => value === prefixes[index])) {
+		return prefixes as string[];
+	}
 	return normalized;
 }
 
@@ -1258,8 +1359,10 @@ function optionalBoundedInteger(value: unknown, name: string, min: number, max: 
 	return Number(value);
 }
 
-function positiveInteger(value: number, name: string): number {
-	if (!Number.isSafeInteger(value) || value <= 0) throw new ToolPolicyError(`${name} must be a positive safe integer`);
+function boundedPositiveInteger(value: number, name: string, maximum: number): number {
+	if (!Number.isSafeInteger(value) || value <= 0 || value > maximum) {
+		throw new ToolPolicyError(`${name} must be a positive safe integer within the embedded maximum ${maximum}`);
+	}
 	return value;
 }
 

@@ -34,6 +34,8 @@ export interface PromptAuthority {
 	branch: string;
 	workspaceId: string;
 	readOnly: boolean;
+	readPrefixes: string[];
+	writePrefixes: string[];
 	toolNames: string[];
 	binding: PromptBinding;
 }
@@ -112,6 +114,8 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 		`- branch ${authority.branch}`,
 		`- workspace ${authority.workspaceId}`,
 		`- access ${authority.readOnly ? "read-only" : "scoped mutation"}`,
+		`- read scope ${authority.readPrefixes.join(", ")}`,
+		`- write scope ${authority.writePrefixes.length === 0 ? "none" : authority.writePrefixes.join(", ")}`,
 		`- tools ${authority.toolNames.length === 0 ? "none" : authority.toolNames.join(", ")}`,
 		`- route ${route.provider}/${route.model}/${route.thinking}`,
 		`- binding run=${authority.binding.runId} generation=${authority.binding.generation} lane=${authority.binding.laneId}`,
@@ -161,6 +165,16 @@ function validateAuthority(authority: PromptAuthority): void {
 	}
 	if (!validIdentifier(authority.workspaceId)) throw new RolePromptError("prompt workspace identity is invalid");
 	if (typeof authority.readOnly !== "boolean") throw new RolePromptError("prompt access mode is invalid");
+	for (const [name, prefixes, allowEmpty] of [
+		["read", authority.readPrefixes, false],
+		["write", authority.writePrefixes, authority.readOnly],
+	] as const) {
+		if (!Array.isArray(prefixes) || (!allowEmpty && prefixes.length === 0) || prefixes.length > 64 ||
+			prefixes.some((prefix) => typeof prefix !== "string" || prefix.length < 1 || prefix.length > 512 ||
+				/[\u0000-\u001f\u007f\\]/.test(prefix) || prefix.startsWith("/") || prefix.endsWith("/") || prefix.includes("//"))) {
+			throw new RolePromptError(`prompt ${name} scope is invalid`);
+		}
+	}
 	if (!Array.isArray(authority.toolNames) || authority.toolNames.length > 40 ||
 		new Set(authority.toolNames).size !== authority.toolNames.length ||
 		authority.toolNames.some((name) => !/^[a-z][a-z0-9_]{1,63}$/.test(name))) {
