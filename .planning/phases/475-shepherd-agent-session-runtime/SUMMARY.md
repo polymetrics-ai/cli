@@ -1,8 +1,7 @@
 # Summary — Issue #475
 
-Status: stable-head correction Cycle 7 PLAN captured against
-`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`; production and tests remain frozen pending the one
-complete behavior RED. Cycle 6 is the last green baseline.
+Status: stable-head correction Cycle 7 GREEN/refactor complete; focused 53/53 and focused strict
+Pi 0.80.6 TypeScript pass. Terminal full-suite/RPC/diff/base/head/scope evidence is pending.
 
 The scoped in-process runtime, least-authority tool policy, trusted role prompt envelopes, and
 bounded redacted handoffs are implemented behind injected ports. Implementation/correction route
@@ -120,3 +119,17 @@ Parent forensics/policy at `2a89142e` is read-only; the immutable base remains
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. This lane will push PLAN, RED, GREEN, and evidence but
 will not run Go/connectors, `make verify`, runtime-backed or live-GitHub checks, review bots, merge,
 or change shared parent artifacts.
+
+PLAN `f40a08f1` preceded the exact test-only RED `3b7e886a`: all 53 focused tests executed, 40
+retained cases passed, and 13 behavior assertions failed with production byte-identical to frozen
+`a3cd85a5`. The correction now makes signal listener cleanup exception-safe, tracks every creation
+owner through a close-visible terminal promise, waits for valid late resolve/reject outcomes, and
+boundedly quarantines hung or malformed creation without detached rejection.
+
+The single structured redactor now persists only structural multiline flow/quote state, consumes
+indented/key-only/continued YAML ownership, redacts numeric and repository-alias secrets, handles
+Basic and other credential-bearing Authorization schemes, accepts generic PKCS#8, recovers after an
+unmatched sensitive quote, and preserves harmless multiline quoted prose exactly. Padded-flow
+diagnostics report 76,465 / 152,774 / 305,505 total visits for 25,645 / 51,235 / 102,453-byte
+inputs, including 8,533 / 17,066 / 34,133 key-start visits. Focused 53/53 and focused strict pinned
+TypeScript pass; the terminal declared gates remain for the evidence checkpoint.

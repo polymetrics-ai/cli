@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_7_plan",
+  "currentCycle": "correction_cycle_7_green",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -163,14 +163,24 @@
       "cycle": "correction_cycle_7_plan",
       "decision": "local_critical_path",
       "reason": "The 11 stable-head findings overlap the two issue-owned runtime/redaction modules and consumer tests; a read-only lifecycle sidecar was rejected by the runtime thread cap, so record the complete behavior matrix locally before the single test-only RED."
+    },
+    {
+      "cycle": "correction_cycle_7_red",
+      "decision": "local_critical_path",
+      "reason": "The one test-only checkpoint executed 53 focused tests with 40 retained passes and 13 intended behavior failures while both production blobs remained byte-identical to the frozen candidate."
+    },
+    {
+      "cycle": "correction_cycle_7_green",
+      "decision": "local_critical_path",
+      "reason": "Exception-safe listener and creation ownership plus the multiline/indent-aware monotonic redactor make all 53 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to declared terminal gates."
     }
   ],
   "gates": {
-    "focusedTests": "pending_cycle_7_red_green",
+    "focusedTests": "green_53_passed_0_failed",
     "fullShepherdTests": "pending_cycle_7_green",
-    "strictTypeScriptPi0806": "pending_cycle_7_green",
+    "strictTypeScriptPi0806": "green_focused_pending_all_production",
     "offlineRpcSmoke": "pending_cycle_7_green",
-    "diffCheck": "pending_cycle_7",
+    "diffCheck": "green_current_worktree",
     "ownedScope": "pending_cycle_7_immutable_base_head_and_issue_owned_paths",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },

@@ -524,11 +524,12 @@
   the four-thread runtime cap, while every finding overlaps the issue-owned runtime/redactor and
   their tests.
 
-### Required behavior RED
+### Behavior RED
 
-- Status: pending after the PLAN push. Exactly one test-only commit will contain every row; a
-  compile, module, or file-load failure is invalid, and production must remain byte-identical.
-- Expected focused result: 40 retained passes / 13 expected behavior failures.
+- Status: captured and pushed at `3b7e886a`. Exactly one test-only commit contains every row;
+  all 53 tests execute and the command exits 1 with 40 retained passes / 13 intended assertion
+  failures. Both production blobs are byte-identical to frozen `a3cd85a5`; no compile, module, or
+  file-load failure contributes.
 - Lifecycle rows (six separate tests):
   1. throwing external-signal attachment cannot strand the admitted reservation or deadline timer;
   2. throwing external-signal removal cannot skip scope finish, run release, or close settlement;
@@ -551,9 +552,10 @@
   character work, including key-start discovery, within a constant per byte and near-doubling as
   size doubles; no timing threshold is allowed.
 
-### GREEN / REFACTOR contract
+### GREEN / REFACTOR
 
-- Status: blocked on the committed/pushed behavior RED.
+- Status: captured after the committed/pushed behavior RED; focused tests pass 53/53 and focused
+  strict TypeScript passes against explicit Pi 0.80.6 package/type roots.
 - Runtime architecture: exception-safe listener lease; runtime-owned session-creation terminal
   records; bounded close join; quarantine on pending/malformed ownership; validation before late
   session construction; total rejection-consumed continuations.
@@ -576,9 +578,9 @@
 
 | Checkpoint | Result | Evidence |
 |---|---|---|
-| PLAN | pending push | frozen candidate/base and full 11-finding matrix recorded before tests |
-| RED | pending | one test-only commit; expected 40 passed / 13 behavior failures; production identical |
-| GREEN / REFACTOR | pending | one architectural correction after RED |
-| Focused / full Shepherd | pending | declared phase-equivalent tests only |
-| Strict TypeScript / offline RPC | pending | explicit Pi 0.80.6 inputs and binary |
+| PLAN | pass | frozen candidate/base and full 11-finding matrix pushed at `f40a08f1` before tests |
+| RED | expected fail | pushed `3b7e886a`; 40 passed / 13 assertion failures; production identical |
+| GREEN / REFACTOR | pass | 53 passed / 0 failed; one lifecycle/redactor architectural correction |
+| Focused / full Shepherd | partial | focused 53/53; complete suite pending evidence checkpoint |
+| Strict TypeScript / offline RPC | partial | focused strict explicit Pi 0.80.6 pass; all-production/RPC pending |
 | Diff / base / head / scope | pending | immutable base and issue-owned paths only |

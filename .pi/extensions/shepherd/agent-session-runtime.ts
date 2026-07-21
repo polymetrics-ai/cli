@@ -260,48 +260,99 @@ async function cleanupOwnedSession(
 
 class SessionCreationOwnership {
 	readonly promise: Promise<RuntimeSessionResult>;
+	readonly terminal: Promise<void>;
 	readonly #cleanupTimeoutMs: number;
 	readonly #onCleanupFailure: (error: unknown) => void;
-	#state: "pending" | "claimed" | "abandoned" = "pending";
-	#created: RuntimeSessionResult | undefined;
+	readonly #validateCreated: (created: RuntimeSessionResult) => void;
+	readonly #resolveTerminal: () => void;
+	#state: "pending" | "claimed" | "abandoned" | "failed" = "pending";
+	#settlement:
+		| { status: "fulfilled"; value: RuntimeSessionResult }
+		| { status: "rejected" }
+		| undefined;
 	#lateCleanupStarted = false;
+	#terminalSettled = false;
 
 	constructor(
 		promise: Promise<RuntimeSessionResult>,
 		cleanupTimeoutMs: number,
+		validateCreated: (created: RuntimeSessionResult) => void,
 		onCleanupFailure: (error: unknown) => void,
 	) {
 		this.promise = promise;
 		this.#cleanupTimeoutMs = cleanupTimeoutMs;
+		this.#validateCreated = validateCreated;
 		this.#onCleanupFailure = onCleanupFailure;
+		const completion = deferred();
+		this.terminal = completion.promise;
+		this.#resolveTerminal = completion.resolve;
 		void promise.then(
 			(created) => {
-				this.#created = created;
+				this.#settlement = { status: "fulfilled", value: created };
 				if (this.#state === "abandoned") this.#startLateCleanup(created);
 			},
-			() => undefined,
+			() => {
+				this.#settlement = { status: "rejected" };
+				if (this.#state === "abandoned") this.#settleTerminal();
+			},
 		);
 	}
+
+	get pending(): boolean { return this.#state === "pending"; }
 
 	claim(created: RuntimeSessionResult): OwnedSession {
 		if (this.#state !== "pending") {
 			throw new AgentSessionRuntimeError("AgentSession creation ownership was already settled");
 		}
+		let owned: OwnedSession;
+		try {
+			owned = ownedSessionFromResult(created);
+		} catch (error) {
+			this.#state = "failed";
+			this.#reportFailure(error);
+			this.#settleTerminal();
+			throw error;
+		}
 		this.#state = "claimed";
-		return new OwnedSession(created.session);
+		this.#settleTerminal();
+		return owned;
 	}
 
 	abandon(): void {
 		if (this.#state !== "pending") return;
 		this.#state = "abandoned";
-		if (this.#created) this.#startLateCleanup(this.#created);
+		if (this.#settlement?.status === "fulfilled") this.#startLateCleanup(this.#settlement.value);
+		else if (this.#settlement?.status === "rejected") this.#settleTerminal();
 	}
 
 	#startLateCleanup(created: RuntimeSessionResult): void {
 		if (this.#lateCleanupStarted) return;
 		this.#lateCleanupStarted = true;
-		const owned = new OwnedSession(created.session);
-		void this.#cleanup(owned);
+		void this.#finishLateCreation(created);
+	}
+
+	async #finishLateCreation(created: RuntimeSessionResult): Promise<void> {
+		let owned: OwnedSession | undefined;
+		let firstError: unknown;
+		try {
+			owned = ownedSessionFromResult(created);
+		} catch (error) {
+			firstError = error;
+		}
+		if (owned) {
+			try {
+				this.#validateCreated(created);
+			} catch (error) {
+				firstError ??= error;
+			}
+			try {
+				await this.#cleanup(owned);
+			} catch (error) {
+				firstError ??= error;
+			}
+		}
+		if (firstError !== undefined) this.#reportFailure(firstError);
+		this.#settleTerminal();
 	}
 
 	async #cleanup(owned: OwnedSession): Promise<void> {
@@ -329,7 +380,21 @@ class SessionCreationOwnership {
 		} catch (error) {
 			firstError ??= error;
 		}
-		if (firstError !== undefined) this.#onCleanupFailure(firstError);
+		if (firstError !== undefined) throw firstError;
+	}
+
+	#reportFailure(error: unknown): void {
+		try {
+			this.#onCleanupFailure(error);
+		} catch {
+			// Ownership continuations are total: an observer cannot create a detached rejection.
+		}
+	}
+
+	#settleTerminal(): void {
+		if (this.#terminalSettled) return;
+		this.#terminalSettled = true;
+		this.#resolveTerminal();
 	}
 }
 
@@ -366,6 +431,7 @@ export class ShepherdAgentSessionRuntime {
 	readonly #sdk: AgentSessionRuntimeSdk;
 	readonly #options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>;
 	readonly #active = new Map<string, ActiveRun>();
+	readonly #creations = new Set<SessionCreationOwnership>();
 	readonly #parentSignal: AbortSignal | undefined;
 	readonly #parentAbortListener: (() => void) | undefined;
 	#activeMutator = false;
@@ -415,15 +481,28 @@ export class ShepherdAgentSessionRuntime {
 		);
 		const scope = active.scope;
 		const externalAbort = () => scope.cancel(new AgentSessionRuntimeError("AgentSession run was cancelled by its parent signal"));
-		request.signal?.addEventListener("abort", externalAbort, { once: true });
-		if (request.signal?.aborted) externalAbort();
-
+		let listenerAttached = false;
+		let listenerFailure: unknown;
 		try {
+			if (request.signal) {
+				request.signal.addEventListener("abort", externalAbort, { once: true });
+				listenerAttached = true;
+				if (request.signal.aborted) externalAbort();
+			}
 			return await this.#execute(request, route.thinking, model, active);
 		} finally {
-			request.signal?.removeEventListener("abort", externalAbort);
-			scope.finish();
-			this.#release(active);
+			try {
+				if (listenerAttached) request.signal?.removeEventListener("abort", externalAbort);
+			} catch (error) {
+				listenerFailure = error;
+			} finally {
+				try {
+					scope.finish();
+				} finally {
+					this.#release(active);
+				}
+			}
+			if (listenerFailure !== undefined) throw listenerFailure;
 		}
 	}
 
@@ -454,6 +533,16 @@ export class ShepherdAgentSessionRuntime {
 			void active.owned?.abortOnce().catch(() => undefined);
 		}
 		await Promise.all([...this.#active.values()].map((active) => active.done));
+		const creationOwners = [...this.#creations];
+		if (creationOwners.length > 0) {
+			const terminal = Promise.all(creationOwners.map((creation) => creation.terminal)).then(() => undefined);
+			const settlement = await settleWithin(terminal, this.#options.cleanupTimeoutMs);
+			if (!settlement.settled) {
+				this.#quarantineFailure ??= new AgentSessionRuntimeError(
+					"AgentSession creation remained pending during bounded close",
+				);
+			}
+		}
 		this.#closed = true;
 		if (this.#parentSignal && this.#parentAbortListener) {
 			this.#parentSignal.removeEventListener("abort", this.#parentAbortListener);
@@ -541,9 +630,17 @@ export class ShepherdAgentSessionRuntime {
 				sessionManager,
 				settingsManager,
 			} as unknown as CreateAgentSessionOptions));
-			creation = new SessionCreationOwnership(createPromise, this.#options.cleanupTimeoutMs, (error) => {
-				this.#quarantineFailure ??= error;
-			});
+			const owner = new SessionCreationOwnership(
+				createPromise,
+				this.#options.cleanupTimeoutMs,
+				(created) => validateCreatedSession(created, thinking, toolPolicy.names),
+				(error) => {
+					this.#quarantineFailure ??= error;
+				},
+			);
+			creation = owner;
+			this.#creations.add(owner);
+			void owner.terminal.then(() => { this.#creations.delete(owner); });
 			const created = await scope.race(createPromise);
 			owned = creation.claim(created);
 			active.owned = owned;
@@ -572,31 +669,47 @@ export class ShepherdAgentSessionRuntime {
 		}
 
 		let cleanupFailure: unknown;
-		try {
-			if (reloadPromise) {
+		if (reloadPromise) {
+			try {
 				await bounded(reloadPromise, this.#options.cleanupTimeoutMs, "resource loader settlement");
+			} catch (error) {
+				cleanupFailure ??= error;
 			}
-			if (!owned && creation) {
+		}
+		if (!owned && creation?.pending) {
+			try {
 				const settlement = await settleWithin(creation.promise, this.#options.cleanupTimeoutMs);
-				if (settlement.settled) {
+				if (!settlement.settled) {
+					creation.abandon();
+				} else {
 					owned = creation.claim(settlement.value);
 					active.owned = owned;
-				} else {
-					creation.abandon();
+					try {
+						validateCreatedSession(settlement.value, thinking, toolPolicy.names);
+					} catch (error) {
+						cleanupFailure ??= error;
+					}
 				}
+			} catch (error) {
+				creation.abandon();
+				cleanupFailure ??= error;
 			}
-			if (owned) {
+		}
+		if (owned) {
+			try {
 				await cleanupOwnedSession(owned, scope.failure !== undefined, this.#options.cleanupTimeoutMs);
+			} catch (error) {
+				cleanupFailure ??= error;
 			}
-		} catch (error) {
-			cleanupFailure = error;
-			this.#quarantineFailure ??= error;
+		}
+		if (cleanupFailure !== undefined) {
+			this.#quarantineFailure ??= cleanupFailure;
 		}
 
-		if (cleanupFailure) {
+		if (cleanupFailure !== undefined) {
 			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", { cause: cleanupFailure });
 		}
-		if (primaryFailure) throw normalizeRuntimeError(primaryFailure);
+		if (primaryFailure !== undefined) throw normalizeRuntimeError(primaryFailure);
 		// Cancellation may win after terminal evidence is parsed but before child settlement completes.
 		// Never return otherwise-valid late evidence after close, shutdown, abort, or deadline.
 		if (scope.failure) throw scope.failure;
@@ -746,6 +859,15 @@ function validateCreatedSession(
 		activeTools.some((name, index) => name !== expectedTools[index])) {
 		throw new AgentSessionRuntimeError("embedded AgentSession active tool authority drifted");
 	}
+}
+
+function ownedSessionFromResult(created: RuntimeSessionResult): OwnedSession {
+	const session = created?.session;
+	if (!session || typeof session.abort !== "function" || typeof session.waitForIdle !== "function" ||
+		typeof session.dispose !== "function") {
+		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result without a cleanable session");
+	}
+	return new OwnedSession(session);
 }
 
 function newTerminalCapture(): TerminalCapture {

@@ -338,6 +338,8 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 
 export interface RedactionScanMetrics {
 	lineBoundaryVisits: number;
+	keyStartVisits?: number;
+	totalCharacterVisits?: number;
 }
 
 export function redactSensitiveText(value: string): string;
@@ -355,7 +357,7 @@ type FlowCloser = "}" | "]";
 
 type LexicalMode =
 	| { kind: "plain" }
-	| { kind: "quoted"; quote: LexicalQuote };
+	| { kind: "quoted"; quote: LexicalQuote; multiline: boolean };
 
 interface StructuredScannerState {
 	index: number;
@@ -406,7 +408,7 @@ function redactStructuredAssignments(value: string, metrics?: RedactionScanMetri
 		index: 0,
 		lineStart: 0,
 		lineEnd: findLineEnd(value, 0, metrics),
-		structuredKeyStart: findStructuredKeyStart(value, 0),
+		structuredKeyStart: findStructuredKeyStart(value, 0, metrics),
 		mode: { kind: "plain" },
 		flowClosers: [],
 	};
@@ -419,36 +421,40 @@ function redactStructuredAssignments(value: string, metrics?: RedactionScanMetri
 		const character = value[state.index];
 		if (state.mode.kind === "quoted") {
 			if (state.mode.quote === '"' && character === "\\") {
-				state.index = Math.min(state.lineEnd, state.index + 2);
+				advanceScannerIndex(state, Math.min(state.lineEnd, state.index + 2), metrics);
 				continue;
 			}
 			if (state.mode.quote === "'" && character === "'" && value[state.index + 1] === "'") {
-				state.index = Math.min(state.lineEnd, state.index + 2);
+				advanceScannerIndex(state, Math.min(state.lineEnd, state.index + 2), metrics);
 				continue;
 			}
 			if (character === state.mode.quote) state.mode = { kind: "plain" };
-			state.index += 1;
+			advanceScannerIndex(state, state.index + 1, metrics);
 			continue;
 		}
 
 		const context: SensitiveAssignmentContext = state.flowClosers.length > 0 ? "flow" : "line";
 		const allowKey = state.index === state.structuredKeyStart ||
 			(context === "flow" && isFlowMappingKeyStart(value, state.index, state));
-		const assignment = sensitiveAssignmentAt(value, state.index, state.lineStart, allowKey, context);
+		const assignment = sensitiveAssignmentAt(value, state.index, state.lineStart, allowKey, context, metrics);
 		if (!assignment) {
 			if (isCommentStart(value, state.index, state.lineStart)) {
-				state.index = state.lineEnd;
+				advanceScannerIndex(state, state.lineEnd, metrics);
 				continue;
 			}
 			if ((character === '"' || character === "'") && isQuotedSegmentStart(value, state.index, state.lineStart)) {
-				state.mode = { kind: "quoted", quote: character };
-				state.index += 1;
+				state.mode = {
+					kind: "quoted",
+					quote: character,
+					multiline: state.flowClosers.length > 0 || isStructuredValueQuote(value, state.index, state, metrics),
+				};
+				advanceScannerIndex(state, state.index + 1, metrics);
 				continue;
 			}
-			const closer = flowCloserForOpener(value, state.index, state);
+			const closer = flowCloserForOpener(value, state.index, state, metrics);
 			if (closer) state.flowClosers.push(closer);
 			else if (character === state.flowClosers[state.flowClosers.length - 1]) state.flowClosers.pop();
-			state.index += 1;
+			advanceScannerIndex(state, state.index + 1, metrics);
 			continue;
 		}
 		const decision = redactionForAssignment(value, assignment, state.lineEnd, metrics);
@@ -471,6 +477,7 @@ function sensitiveAssignmentAt(
 	lineStart: number,
 	allowKey: boolean,
 	context: SensitiveAssignmentContext,
+	metrics?: RedactionScanMetrics,
 ): SensitiveAssignment | undefined {
 	if (!allowKey) return undefined;
 	let cursor = index;
@@ -478,14 +485,21 @@ function sensitiveAssignmentAt(
 	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
 	if (quote) {
 		cursor += 1;
+		recordTotalVisits(metrics, 1);
 		const keyStart = cursor;
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
 		if (cursor === keyStart || value[cursor] !== quote) return undefined;
 		key = value.slice(keyStart, cursor);
 		cursor += 1;
 	} else {
 		const keyStart = cursor;
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
 		if (cursor === keyStart) return undefined;
 		key = value.slice(keyStart, cursor);
 	}
@@ -493,10 +507,17 @@ function sensitiveAssignmentAt(
 	const kind = sensitiveAssignmentKind(key);
 	if (!kind) return undefined;
 	const normalizedKey = key.toLowerCase().replace(/[-_]/g, "");
-	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	while (isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
 	if (value[cursor] !== ":" && value[cursor] !== "=") return undefined;
 	cursor += 1;
-	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	recordTotalVisits(metrics, 1);
+	while (isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
 	return { kind, context, keyColumn: index - lineStart, normalizedKey, valueStart: cursor };
 }
 
@@ -508,7 +529,7 @@ function redactionForAssignment(
 ): RedactionDecision {
 	const quote = value[assignment.valueStart];
 	if (quote === '"' || quote === "'") {
-		return quotedValueRedaction(value, assignment, quote);
+		return quotedValueRedaction(value, assignment, quote, lineEnd, metrics);
 	}
 	if (assignment.kind === "secret" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
 		return yamlBlockRedaction(value, assignment, lineEnd, metrics);
@@ -520,25 +541,27 @@ function quotedValueRedaction(
 	value: string,
 	assignment: SensitiveAssignment,
 	quote: string,
+	lineEnd: number,
+	metrics?: RedactionScanMetrics,
 ): RedactionDecision {
 	const contentStart = assignment.valueStart + 1;
-	const quoteEnd = findQuotedValueEnd(value, contentStart, quote);
-	const contentEnd = quoteEnd ?? value.length;
-	const resumeAt = quoteEnd === undefined ? value.length : quoteEnd + 1;
+	const quoteEnd = findQuotedValueEnd(value, contentStart, quote, metrics);
+	const contentEnd = quoteEnd ?? lineEnd;
+	const resumeAt = quoteEnd === undefined ? afterLineEnding(value, lineEnd) : quoteEnd + 1;
 	if (assignment.kind === "secret") {
 		if (value.slice(contentStart, contentEnd).trim().length === 0) return { resumeAt };
 		return { range: { start: contentStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
 	}
 
-	let cursor = contentStart;
-	while (cursor < contentEnd && isWhitespace(value[cursor])) cursor += 1;
-	if (value.slice(cursor, cursor + 6).toLowerCase() !== "bearer" || !isWhitespace(value[cursor + 6])) {
-		return { resumeAt };
-	}
-	cursor += 6;
-	while (cursor < contentEnd && isWhitespace(value[cursor])) cursor += 1;
-	if (cursor >= contentEnd) return { resumeAt };
-	return { range: { start: cursor, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
+	const credentialStart = authorizationCredentialStart(
+		value,
+		contentStart,
+		contentEnd,
+		quoteEnd !== undefined && quoteEnd > lineEnd,
+	);
+	return credentialStart === undefined
+		? { resumeAt }
+		: { range: { start: credentialStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
 }
 
 function yamlBlockRedaction(
@@ -584,30 +607,116 @@ function unquotedValueRedaction(
 ): RedactionDecision {
 	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, metrics);
 	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
-	const resumeAt = assignment.context === "flow" ? scalarEnd : Math.max(lineEnd, scalarEnd);
+	const continuation = assignment.context === "line"
+		? yamlPlainContinuation(value, lineEnd, assignment.keyColumn, metrics)
+		: undefined;
+	const resumeAt = assignment.context === "flow" ? scalarEnd : continuation?.end ?? Math.max(lineEnd, scalarEnd);
 	const unredactedResumeAt = assignment.context === "flow" ? scalarEnd : assignment.valueStart;
-	if (scalarEnd <= assignment.valueStart) return { resumeAt };
+	if (scalarEnd <= assignment.valueStart) {
+		if (!continuation) return { resumeAt };
+		return {
+			range: {
+				start: continuation.start,
+				end: continuation.end,
+				replacement: `${continuation.indent}${REDACTED_TEXT}${trailingLineEnding(continuation.value)}`,
+			},
+			resumeAt,
+		};
+	}
 	if (assignment.kind === "authorization") {
-		let cursor = assignment.valueStart;
-		if (value.slice(cursor, cursor + 6).toLowerCase() !== "bearer" || !isHorizontalWhitespace(value[cursor + 6])) {
-			return { resumeAt: unredactedResumeAt };
-		}
-		cursor += 6;
-		while (cursor < scalarEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
-		const credential = value.slice(cursor, scalarEnd);
-		if (credential.length === 0 || containsWhitespace(credential)) return { resumeAt: unredactedResumeAt };
-		return { range: { start: cursor, end: scalarEnd, replacement: REDACTED_TEXT }, resumeAt };
+		const authorizationEnd = continuation?.end ?? scalarEnd;
+		const credentialStart = authorizationCredentialStart(
+			value,
+			assignment.valueStart,
+			authorizationEnd,
+			continuation !== undefined,
+		);
+		return credentialStart === undefined
+			? { resumeAt: unredactedResumeAt }
+			: {
+				range: {
+					start: credentialStart,
+					end: authorizationEnd,
+					replacement: `${REDACTED_TEXT}${trailingLineEnding(value.slice(credentialStart, authorizationEnd))}`,
+				},
+				resumeAt,
+			};
 	}
 
 	const scalar = value.slice(assignment.valueStart, scalarEnd);
 	const ambiguousLineProse = assignment.context === "line" &&
-		assignment.normalizedKey !== "clientsecret" && containsWhitespace(scalar);
+		assignment.keyColumn === 0 && continuation === undefined &&
+		["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
+		containsWhitespace(scalar);
 	if (ambiguousLineProse) return { resumeAt: unredactedResumeAt };
 	if (isPublicScalar(scalar)) return { resumeAt };
+	const redactionEnd = continuation?.end ?? scalarEnd;
 	return {
-		range: { start: assignment.valueStart, end: scalarEnd, replacement: REDACTED_TEXT },
+		range: {
+			start: assignment.valueStart,
+			end: redactionEnd,
+			replacement: `${REDACTED_TEXT}${trailingLineEnding(value.slice(assignment.valueStart, redactionEnd))}`,
+		},
 		resumeAt,
 	};
+}
+
+interface YamlPlainContinuation {
+	start: number;
+	end: number;
+	indent: string;
+	value: string;
+}
+
+function yamlPlainContinuation(
+	value: string,
+	lineEnd: number,
+	keyColumn: number,
+	metrics?: RedactionScanMetrics,
+): YamlPlainContinuation | undefined {
+	const start = afterLineEnding(value, lineEnd);
+	if (start === lineEnd) return undefined;
+	let cursor = start;
+	let end = start;
+	let indent: string | undefined;
+	let hasContent = false;
+	while (cursor < value.length) {
+		const continuationLineEnd = findLineEnd(value, cursor, metrics);
+		const line = value.slice(cursor, continuationLineEnd);
+		const indentLength = leadingIndentLength(line);
+		const blank = line.slice(indentLength).length === 0;
+		if (!blank && indentLength <= keyColumn) break;
+		if (!blank) {
+			hasContent = true;
+			indent ??= line.slice(0, indentLength);
+		}
+		end = afterLineEnding(value, continuationLineEnd);
+		if (end === continuationLineEnd) break;
+		cursor = end;
+	}
+	if (!hasContent) return undefined;
+	return {
+		start,
+		end,
+		indent: indent ?? " ".repeat(keyColumn + 2),
+		value: value.slice(start, end),
+	};
+}
+
+function authorizationCredentialStart(
+	value: string,
+	start: number,
+	end: number,
+	allowCredentialWhitespace: boolean,
+): number | undefined {
+	let cursor = start;
+	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
+	while (cursor < end && !isWhitespace(value[cursor])) cursor += 1;
+	if (cursor >= end) return undefined;
+	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
+	if (cursor >= end) return undefined;
+	if (!allowCredentialWhitespace && containsWhitespace(value.slice(cursor, end))) return undefined;
+	return cursor;
 }
 
 function redactPrivateKeyBlocks(value: string): string {
@@ -621,20 +730,31 @@ function redactPrivateKeyBlocks(value: string): string {
 		const begin = lower.indexOf(beginPrefix, searchAt);
 		if (begin < 0) break;
 		const labelStart = begin + beginPrefix.length;
-		const headerWindow = lower.slice(labelStart, labelStart + 64 + headerSuffix.length);
-		const relativeHeaderEnd = headerWindow.indexOf(headerSuffix);
-		if (relativeHeaderEnd <= 0 || relativeHeaderEnd > 64) {
-			searchAt = labelStart;
-			continue;
+		let label = "";
+		let headerEnd: number;
+		let headerLength: number;
+		if (lower.startsWith("private key-----", labelStart)) {
+			headerEnd = labelStart;
+			headerLength = "private key-----".length;
+		} else {
+			const headerWindow = lower.slice(labelStart, labelStart + 64 + headerSuffix.length);
+			const relativeHeaderEnd = headerWindow.indexOf(headerSuffix);
+			if (relativeHeaderEnd <= 0 || relativeHeaderEnd > 64) {
+				searchAt = labelStart;
+				continue;
+			}
+			headerEnd = labelStart + relativeHeaderEnd;
+			headerLength = headerSuffix.length;
+			label = lower.slice(labelStart, headerEnd);
+			if (!/^[a-z0-9 ]+$/.test(label)) {
+				searchAt = labelStart;
+				continue;
+			}
 		}
-		const headerEnd = labelStart + relativeHeaderEnd;
-		const label = lower.slice(labelStart, headerEnd);
-		if (!/^[a-z0-9 ]+$/.test(label)) {
-			searchAt = labelStart;
-			continue;
-		}
-		const endMarker = `-----end ${label} private key-----`;
-		const end = lower.indexOf(endMarker, headerEnd + headerSuffix.length);
+		const endMarker = label.length > 0
+			? `-----end ${label} private key-----`
+			: "-----end private key-----";
+		const end = lower.indexOf(endMarker, headerEnd + headerLength);
 		if (end < 0) {
 			output += value.slice(cursor, begin) + "[REDACTED PRIVATE KEY]";
 			return output;
@@ -649,19 +769,40 @@ function redactPrivateKeyBlocks(value: string): string {
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
 	const normalized = key.toLowerCase().replace(/[-_]/g, "");
 	if (normalized === "authorization") return "authorization";
-	return secretAssignmentKeys.has(normalized) ? "secret" : undefined;
+	if (secretAssignmentKeys.has(normalized) || normalized === "awssecretaccesskey" ||
+		normalized.endsWith("token") || normalized.endsWith("password") ||
+		normalized.endsWith("secret") || normalized.endsWith("apikey") ||
+		normalized.endsWith("privatekey") || normalized.endsWith("databaseurl")) {
+		return "secret";
+	}
+	return undefined;
 }
 
-function findStructuredKeyStart(value: string, lineStart: number): number | undefined {
+function findStructuredKeyStart(
+	value: string,
+	lineStart: number,
+	metrics?: RedactionScanMetrics,
+): number | undefined {
 	let cursor = lineStart;
-	while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+	while (isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordKeyStartVisit(metrics);
+	}
 	if (value[cursor] === "-") {
 		cursor += 1;
+		recordKeyStartVisit(metrics);
 		if (!isHorizontalWhitespace(value[cursor])) return undefined;
-		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+		while (isHorizontalWhitespace(value[cursor])) {
+			cursor += 1;
+			recordKeyStartVisit(metrics);
+		}
 	} else if (value.slice(cursor, cursor + 6).toLowerCase() === "export" && isHorizontalWhitespace(value[cursor + 6])) {
 		cursor += 6;
-		while (isHorizontalWhitespace(value[cursor])) cursor += 1;
+		recordKeyStartVisit(metrics, 6);
+		while (isHorizontalWhitespace(value[cursor])) {
+			cursor += 1;
+			recordKeyStartVisit(metrics);
+		}
 	}
 	return isPotentialAssignmentKeyStart(value[cursor]) ? cursor : undefined;
 }
@@ -672,16 +813,16 @@ function advanceScannerLine(
 	metrics?: RedactionScanMetrics,
 ): void {
 	const nextLineStart = afterLineEnding(value, state.lineEnd);
-	state.mode = { kind: "plain" };
+	if (state.mode.kind !== "quoted" || !state.mode.multiline) state.mode = { kind: "plain" };
 	if (nextLineStart <= state.lineEnd) {
-		state.index = value.length;
+		advanceScannerIndex(state, value.length, metrics);
 		state.structuredKeyStart = undefined;
 		return;
 	}
-	state.index = nextLineStart;
+	advanceScannerIndex(state, nextLineStart, metrics);
 	state.lineStart = nextLineStart;
 	state.lineEnd = findLineEnd(value, nextLineStart, metrics);
-	state.structuredKeyStart = findStructuredKeyStart(value, nextLineStart);
+	state.structuredKeyStart = findStructuredKeyStart(value, nextLineStart, metrics);
 }
 
 function advanceScannerTo(
@@ -691,18 +832,20 @@ function advanceScannerTo(
 	metrics?: RedactionScanMetrics,
 ): void {
 	const target = Math.min(value.length, resumeAt);
+	let movedLine = false;
 	while (state.lineEnd < target) {
 		const nextLineStart = afterLineEnding(value, state.lineEnd);
 		if (nextLineStart <= state.lineEnd) break;
 		state.lineStart = nextLineStart;
 		state.lineEnd = findLineEnd(value, nextLineStart, metrics);
+		movedLine = true;
 	}
-	state.index = target;
+	advanceScannerIndex(state, target, metrics);
 	state.mode = { kind: "plain" };
-	const structuredKeyStart = findStructuredKeyStart(value, state.lineStart);
-	state.structuredKeyStart = structuredKeyStart !== undefined && structuredKeyStart >= target
-		? structuredKeyStart
-		: undefined;
+	if (movedLine) state.structuredKeyStart = findStructuredKeyStart(value, state.lineStart, metrics);
+	if (state.structuredKeyStart !== undefined && state.structuredKeyStart < target) {
+		state.structuredKeyStart = undefined;
+	}
 }
 
 function isFlowMappingKeyStart(value: string, index: number, state: StructuredScannerState): boolean {
@@ -718,52 +861,110 @@ function flowCloserForOpener(
 	value: string,
 	index: number,
 	state: StructuredScannerState,
+	metrics?: RedactionScanMetrics,
 ): FlowCloser | undefined {
 	if (value[index] === "{") {
-		return state.flowClosers.length > 0 || looksLikeFlowMapping(value, index, state.lineEnd)
+		return state.flowClosers.length > 0 || looksLikeFlowMapping(value, index, metrics)
 			? "}"
 			: undefined;
 	}
 	if (value[index] === "[") {
-		return state.flowClosers.length > 0 || looksLikeFlowSequence(value, index, state.lineEnd)
+		return state.flowClosers.length > 0 || looksLikeFlowSequence(value, index, metrics)
 			? "]"
 			: undefined;
 	}
 	return undefined;
 }
 
-function looksLikeFlowMapping(value: string, index: number, lineEnd: number): boolean {
+function looksLikeFlowMapping(value: string, index: number, metrics?: RedactionScanMetrics): boolean {
 	let cursor = index + 1;
-	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	while (cursor < value.length && isWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
 	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] as LexicalQuote : undefined;
 	if (quote) {
 		cursor += 1;
+		recordTotalVisits(metrics, 1);
 		let keyLength = 0;
-		while (cursor < lineEnd && keyLength <= 64) {
+		while (cursor < value.length && keyLength <= 64) {
 			if (quote === '"' && value[cursor] === "\\") {
 				cursor += 2;
 				keyLength += 1;
+				recordTotalVisits(metrics, 2);
 				continue;
 			}
 			if (value[cursor] === quote) break;
 			cursor += 1;
 			keyLength += 1;
+			recordTotalVisits(metrics, 1);
 		}
 		if (keyLength === 0 || keyLength > 64 || value[cursor] !== quote) return false;
 		cursor += 1;
 	} else {
 		const keyStart = cursor;
-		while (cursor < lineEnd && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) cursor += 1;
+		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
 		if (cursor === keyStart || cursor - keyStart > 64) return false;
 	}
-	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	while (cursor < value.length && isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
 	return value[cursor] === ":";
 }
 
-function looksLikeFlowSequence(value: string, index: number, lineEnd: number): boolean {
+function looksLikeFlowSequence(value: string, index: number, metrics?: RedactionScanMetrics): boolean {
 	let cursor = index + 1;
-	while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) cursor += 1;
+	while (cursor < value.length && isWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
 	return value[cursor] === "{" || value[cursor] === "[";
+}
+
+function isStructuredValueQuote(
+	value: string,
+	index: number,
+	state: StructuredScannerState,
+	metrics?: RedactionScanMetrics,
+): boolean {
+	const keyStart = state.structuredKeyStart;
+	if (keyStart === undefined || keyStart >= index) return false;
+	let cursor = keyStart;
+	const keyQuote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
+	if (keyQuote) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+		while (cursor < index && value[cursor] !== keyQuote) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
+		if (value[cursor] !== keyQuote) return false;
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	} else {
+		const unquotedKeyStart = cursor;
+		while (cursor < index && isAssignmentKeyCharacter(value[cursor])) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
+		if (cursor === unquotedKeyStart) return false;
+	}
+	while (cursor < index && isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
+	if (value[cursor] !== ":" && value[cursor] !== "=") return false;
+	cursor += 1;
+	recordTotalVisits(metrics, 1);
+	while (cursor < index && isHorizontalWhitespace(value[cursor])) {
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
+	return cursor === index;
 }
 
 function isCommentStart(value: string, index: number, lineStart: number): boolean {
@@ -807,14 +1008,22 @@ function containsWhitespace(value: string): boolean {
 	return false;
 }
 
-function findQuotedValueEnd(value: string, start: number, quote: string): number | undefined {
+function findQuotedValueEnd(
+	value: string,
+	start: number,
+	quote: string,
+	metrics?: RedactionScanMetrics,
+): number | undefined {
 	for (let index = start; index < value.length; index += 1) {
+		recordTotalVisits(metrics, 1);
 		if (quote === '"' && value[index] === "\\") {
 			index += 1;
+			recordTotalVisits(metrics, 1);
 			continue;
 		}
 		if (quote === "'" && value[index] === "'" && value[index + 1] === "'") {
 			index += 1;
+			recordTotalVisits(metrics, 1);
 			continue;
 		}
 		if (value[index] === quote) return index;
@@ -825,7 +1034,10 @@ function findQuotedValueEnd(value: string, start: number, quote: string): number
 function findLineEnd(value: string, start: number, metrics?: RedactionScanMetrics): number {
 	let index = start;
 	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") {
-		if (metrics) metrics.lineBoundaryVisits += 1;
+		if (metrics) {
+			metrics.lineBoundaryVisits += 1;
+			recordTotalVisits(metrics, 1);
+		}
 		index += 1;
 	}
 	return index;
@@ -877,13 +1089,16 @@ function findUnquotedValueEnd(
 			continue;
 		}
 		const character = value[index];
+		recordTotalVisits(metrics, 1);
 		if (quote) {
 			if (quote === '"' && character === "\\") {
 				index += 2;
+				recordTotalVisits(metrics, 1);
 				continue;
 			}
 			if (quote === "'" && character === "'" && value[index + 1] === "'") {
 				index += 2;
+				recordTotalVisits(metrics, 1);
 				continue;
 			}
 			if (character === quote) quote = undefined;
@@ -929,7 +1144,27 @@ function trimHorizontalEnd(value: string, start: number, end: number): number {
 }
 
 function isPublicScalar(value: string): boolean {
-	return /^(?:true|false|null|~|[-+]?\d[\d._-]*)$/i.test(value);
+	return /^(?:true|false|null|~)$/i.test(value);
+}
+
+function advanceScannerIndex(
+	state: StructuredScannerState,
+	nextIndex: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	recordTotalVisits(metrics, Math.max(0, nextIndex - state.index));
+	state.index = nextIndex;
+}
+
+function recordKeyStartVisit(metrics: RedactionScanMetrics | undefined, count = 1): void {
+	if (!metrics || count <= 0) return;
+	metrics.keyStartVisits = (metrics.keyStartVisits ?? 0) + count;
+	recordTotalVisits(metrics, count);
+}
+
+function recordTotalVisits(metrics: RedactionScanMetrics | undefined, count: number): void {
+	if (!metrics || count <= 0) return;
+	metrics.totalCharacterVisits = (metrics.totalCharacterVisits ?? 0) + count;
 }
 
 function validateCapabilityName(name: string): void {

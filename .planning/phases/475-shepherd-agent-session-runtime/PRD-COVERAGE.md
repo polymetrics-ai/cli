@@ -11,18 +11,18 @@ findings, and existing PLAN define the phase-equivalent coverage gate. The froze
 
 | Required outcome | Artifact / test boundary | Status before Cycle 7 execution |
 |---|---|---|
-| Throwing external-signal attach/remove cannot strand an admitted run | two independent lifecycle rows with close, timer, reservation, and hook accounting | planned behavior RED |
-| Successful close never precedes owned late creation work | abandoned create resolves or rejects after close begins | planned behavior RED |
-| An uncancellable create cannot hang or falsely satisfy close | pending create at bounded close; quarantine and later-dispatch assertions | planned behavior RED |
-| Malformed late fulfillment is consumed and fails closed | abandoned create resolves malformed; close and `unhandledRejection` assertions | planned behavior RED |
-| Multiline outer flow and indented/key-only/continued YAML cannot hide sensitive values | shared direct and consumer payloads | planned behavior RED |
-| Numeric secrets and all Authorization schemes redact; unmatched quotes recover | direct and serialized consumer payloads | planned behavior RED |
-| Shepherd repository aliases and generic PKCS#8 are recognized | environment/path vocabulary plus `BEGIN PRIVATE KEY` payloads | planned behavior RED |
-| Safe multiline quoted assignment prose remains byte-identical | direct preservation control | planned behavior RED |
-| Total scanner work is near-linear with leading padding and dense flow assignments | deterministic 25/50/100 KiB diagnostics, including key-start work | planned behavior RED |
-| Every redaction form reaches every relevant trust boundary | direct, prompt, `workspace_read`, typed capability, handoff summary/finding | planned behavior RED |
+| Throwing external-signal attach/remove cannot strand an admitted run | two independent lifecycle rows with close, timer, reservation, and hook accounting | focused GREEN |
+| Successful close never precedes owned late creation work | abandoned create resolves or rejects after close begins | focused GREEN |
+| An uncancellable create cannot hang or falsely satisfy close | pending create at bounded close; quarantine and later-dispatch assertions | focused GREEN |
+| Malformed late fulfillment is consumed and fails closed | abandoned create resolves malformed; close and `unhandledRejection` assertions | focused GREEN |
+| Multiline outer flow and indented/key-only/continued YAML cannot hide sensitive values | shared direct and consumer payloads | focused GREEN |
+| Numeric secrets and all Authorization schemes redact; unmatched quotes recover | direct and serialized consumer payloads | focused GREEN |
+| Shepherd repository aliases and generic PKCS#8 are recognized | environment/path vocabulary plus `BEGIN PRIVATE KEY` payloads | focused GREEN |
+| Safe multiline quoted assignment prose remains byte-identical | direct preservation control | pass |
+| Total scanner work is near-linear with leading padding and dense flow assignments | deterministic 25/50/100 KiB diagnostics, including key-start work | focused GREEN |
+| Every redaction form reaches every relevant trust boundary | direct, prompt, `workspace_read`, typed capability, handoff summary/finding | focused GREEN |
 | Prior lifecycle and redaction invariants remain intact | existing 40 focused regressions | mandatory retained passes |
-| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/head/scope | pending after GREEN |
+| Declared phase verification | focused/full Shepherd tests, pinned Pi 0.80.6 strict TypeScript, offline RPC, diff/base/head/scope | focused + focused strict pass; terminal gates pending |
 
 No dependency, CLI/help/docs/website, Go, connector, runtime-backed service, live credential, or
 external mutation work is required. Parent orchestration owns the stable-head review campaign and

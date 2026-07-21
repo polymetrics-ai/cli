@@ -304,7 +304,7 @@ type PromiseOutcome =
 	| { status: "rejected"; reason: unknown }
 	| { status: "pending" };
 
-type RuntimeCreationResult = Awaited<ReturnType<AgentSessionRuntimeSdk["createAgentSession"]>>;
+type RuntimeCreationResult = Awaited<ReturnType<FakeSdk["createAgentSession"]>>;
 
 function deferredValue<T>(): {
 	promise: Promise<T>;
@@ -331,7 +331,7 @@ async function observeSettlement(operation: Promise<unknown>, timeoutMs: number)
 	});
 	try {
 		return await Promise.race([
-			operation.then<PromiseOutcome>(
+			operation.then<PromiseOutcome, PromiseOutcome>(
 				() => ({ status: "resolved" }),
 				(reason: unknown) => ({ status: "rejected", reason }),
 			),

@@ -169,3 +169,10 @@
 - Verification boundary: focused/full Shepherd, both pinned Pi 0.80.6 strict TypeScript scopes,
   offline RPC, diff/base/head/scope only. Go/connectors, `make verify`, runtime services,
   live-GitHub, review bots, parent-artifact changes, and merge remain forbidden.
+- RED result: pushed at `3b7e886a`; focused exit 1 with 40 passed / 13 intended assertion
+  failures. All 53 tests executed, both production files matched frozen `a3cd85a5`, and no
+  compile/module/file-load failure contributed.
+- GREEN/refactor result: focused 53/53 and focused strict TypeScript against explicit Pi 0.80.6
+  pass. Exception-safe listener leases and close-visible creation terminal records close every
+  lifecycle row; the structured indentation/multiline scanner closes every secret, preservation,
+  consumer, and work-accounting row. Terminal verification is pending.

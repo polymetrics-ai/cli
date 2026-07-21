@@ -417,3 +417,19 @@ contract, universal runtime loop, Pi adapter, and runtime/Pi integration guidanc
 `local_critical_path`: the attempted read-only lifecycle sidecar was rejected by the four-thread
 runtime cap, and all findings collide in the two issue-owned runtime/redaction modules and their
 consumer tests.
+
+Cycle 7 RED result: PLAN was pushed at `f40a08f1`; the one test-only RED was pushed at
+`3b7e886a`. The focused command executed all 53 tests and exited 1 with 40 retained passes and 13
+intended assertion failures. Both production blobs remained byte-identical to frozen candidate
+`a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`; there was no compile, module, file-load, or
+unrelated failure.
+
+Cycle 7 GREEN/refactor result: the runtime now gives admitted runs an exception-safe external-
+signal lease and registers each creation owner's terminal promise until rejection, validated late
+cleanup, or bounded close quarantine. Detached fulfillment is total and rejection-consumed. The
+redactor carries structural multiline quote/flow state, owns YAML continuation by indentation,
+recognizes the repository alias vocabulary and generic PKCS#8, treats all credential-bearing
+Authorization schemes and numeric sensitive values safely, and recovers after unmatched sensitive
+quotes. Scanner line/key state advances monotonically with complete deterministic metrics. Focused
+tests pass 53/53 and focused strict TypeScript passes against explicit Pi 0.80.6 types. Terminal
+full-suite/RPC/diff/base/head/scope evidence remains pending.

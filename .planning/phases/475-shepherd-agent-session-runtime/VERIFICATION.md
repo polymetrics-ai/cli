@@ -1,6 +1,6 @@
 # Verification — Issue #475
 
-Cycle 7 verification is pending. Planning is frozen against candidate
+Cycle 7 terminal verification is pending after a green architectural correction. Planning is frozen against candidate
 `a3cd85a5d0871dd1c4c99dd8b30bcd609a228c45`, immutable base
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`, and the combined 11-finding stable-head campaign at
 <https://github.com/polymetrics-ai/cli/pull/486#issuecomment-5037079867>. Production and tests remain
@@ -8,7 +8,13 @@ unchanged until the PLAN checkpoint is pushed, then one complete behavior RED mu
 architectural correction. The required terminal gates are focused/full Shepherd tests, both pinned
 Pi 0.80.6 strict TypeScript scopes, offline RPC, diff, base/head equality, and issue-owned scope.
 
-The planned lifecycle verification accounts for throwing signal attachment/removal and abandoned
+Focused verification currently passes 53/53, and focused strict TypeScript passes against the
+explicit Pi 0.80.6 package/type roots. Deterministic padded-flow diagnostics report 76,465 /
+152,774 / 305,505 total visits for 25,645 / 51,235 / 102,453-byte inputs, including 8,533 /
+17,066 / 34,133 key-start visits. Complete Shepherd, all-production strict TypeScript, pinned
+offline RPC, final diff, immutable-base/head, and owned-scope checks remain pending.
+
+The lifecycle verification accounts for throwing signal attachment/removal and abandoned
 creation across late resolve, reject, hang, and malformed fulfillment. A successful close cannot
 precede owned late work; an uncancellable create must instead reject/quarantine close within a
 bound. Each row records timers, reservations, cleanup hooks, close outcome, and unhandled
