@@ -778,3 +778,132 @@ passes 165/165. This result is not called green. Diff, immutable-base/frozen-hea
 issue-owned scope, and clean-head checks pass; no push, GitHub, service, credential, model, Go, or
 connector action was attempted. Parent orchestration owns the permitted-environment rerun, fresh
 exact-head review, integration, and external mutation.
+
+## Consolidated Stable-Head Correction Cycle 11 — `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`
+
+Cycle 11 treats the complete `/tmp/475-REVIEW-CYCLE10-1.md` and
+`/tmp/475-REVIEW-CYCLE10-2.md` reports as one binding contract. Their unique union is the twelve
+new behavior families below plus mandatory retention of every Cycle 10 closure. The immutable
+comparison base remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Production is frozen at the
+exact clean Cycle 10 evidence head until one comprehensive test-only RED commit exists:
+
+| Production path | Frozen Git blob |
+|---|---|
+| `.pi/extensions/shepherd/agent-session-runtime.ts` | `134697a62252f500b3c58082bf766a5c84766a91` |
+| `.pi/extensions/shepherd/tool-policy.ts` | `539d061903549a764567cd1d7fad95d7d624edfe` |
+| `.pi/extensions/shepherd/role-prompts.ts` | `cfc2d253c323ad01f34b8c9688b3bad0acd16171` |
+
+### Cycle 11 binding invariants
+
+1. The public Pi adapter accepts the actual 0.80.6 `LoadExtensionsResult` data shape
+   `{extensions, errors, runtime}` through one-read own descriptors. `runtime` is required
+   compatibility evidence only: Shepherd never stores, grants, invokes, or derives authority from
+   it. A pinned no-model integration must traverse the actual `createAgentSession` factory/result
+   path, not merely RPC registration or tool validation; fake results match the real shape.
+2. Canonical native `EventTarget.prototype.addEventListener/removeEventListener` calls are the only
+   signal operations invoked. Shadowed hooks are never executed, so they cannot create alternate
+   capture tuples; request, parent, attach failure, and constructor rollback leave no listener.
+3. Creation ownership remains associated with its run ID. A successful `abort(runId)` is terminal:
+   no later session acquisition, prompt, or cleanup is possible. Resolve, reject, and late cleanup
+   are joined; a still-pending uncancellable creation returns a typed non-terminal join failure,
+   remains observably owned/quarantined, and repeated abort has a deterministic result.
+4. Admission and close share one linearization point. Admission starts before caller/SDK-controlled
+   callbacks, close observes pending admission, and reservation atomically rechecks closing state.
+   When re-entrant close from request/capability access, model lookup, auth lookup, or setup wins,
+   no subsequent create or prompt work starts.
+5. Each run owns bounded per-content-index Pi stream state. Outer message and inner partial agree;
+   text/thinking/tool-call deltas equal the actual novel suffix; start/delta/end/done/error payloads,
+   usage, and diagnostics are validated and charged exactly once. Honest cumulative streams remain
+   linear; shrink, replacement, skip, replay, mismatch, and one-above inputs fail closed.
+6. Terminal capture is an explicit state machine: exactly one ordered `message_end`, then exactly
+   one non-retrying `agent_end`, with no duplicate, out-of-order, or post-terminal event. Both sides
+   compare the complete bounded assistant DTO: required api/usage; response, diagnostic, and error
+   fields; text/thinking signatures and bodies; and tool IDs, names, arguments, and signatures.
+7. Fixed SDK/event/result envelopes use allowlisted own-descriptor reads into closed DTOs and
+   discard source extras without any whole-key enumeration. Arbitrary schema/JSON crosses a
+   byte/key/node/depth-bounded serialized or trusted-data adapter before construction. Hidden and
+   symbol breadth cannot trigger attacker-sized key arrays for schemas, events, creation/extension
+   records and arrays, tool arrays, or workspace/capability/mutation results.
+8. Failure normalization is total. Proxy/prototype/`instanceof` traps cannot escape; sanitizer
+   failure collapses to a constant typed safe error. Aggregate members are pulled manually with a
+   16-plus-one ceiling, iterator close is guarded, and long/infinite/throwing shapes settle without
+   raw causes across primary, dual, quarantine, and close graphs.
+9. Capability admission closes concatenated and separated compounds for every forbidden family:
+   generic shell/exec, recursive agents, generic HTTP writes, generic SQL, and credential/token/
+   private-key stores. Every role sees only reviewed typed capability semantics.
+10. Root-scoped paths reject AWS SSO and CLI cache directory families before any workspace callback,
+    including root, nested, and case variants with opaque content.
+11. The shared redactor classifies `Cookie` and `Set-Cookie` session/auth header values through
+    direct, prompt, workspace, capability/mutation, handoff, and public-error consumers while
+    preserving explicit harmless header prose.
+12. The shared scanner boundedly parses qualified/dotted assignment keys and classifies the final
+    or compound sensitive segment for equals and colon forms. Only the reviewed colon documentary
+    prose carveout remains byte-identical.
+13. All 102 Cycle 10 focused tests remain mandatory, including staged malformed cleanup,
+    independent phase bounds/unreferenced timers, one-read/prototype-safe snapshots, prior path/
+    redaction/capability forms, controls-before-redaction, direct Pi tool types, disjoint mutator
+    reservations, and transient retry.
+
+### Comprehensive test-only RED matrix
+
+| ID | Finding source | Independent behavior row required to fail at frozen head |
+|---|---|---|
+| C11-01 | R1-1 | A real pinned Pi 0.80.6 factory result with required `runtime` passes the adapter without using runtime authority; fake fixtures expose the same shape and an actual no-model factory/cancellation path cleans the returned session. |
+| C11-02 | R1-2 | Own request/parent add/remove hooks that register capture listeners, throw, mutate, or no-op are never called; native cancellation and constructor rollback leave zero listener tuples. |
+| C11-03 | R2 BL-01 | Run-ID abort joins resolve-before/after-bound, reject, hung late-cleanup, and never-settle ownership; only a terminal join resolves, pending returns typed deterministic failure and remains quarantined/observable. |
+| C11-04 | R2 BL-02 | Re-entrant close from request, capability, model, auth, resource/setup, and reservation seams wins linearly and prevents every later create/prompt callback. |
+| C11-05 | R1-3 / R2 BL-03 | Pi 0.80.6 text/thinking/tool-call start/delta/end plus done/error streams maintain per-index cumulative state; honest growth charges linearly while shrink/replacement/skip/replay/message-partial/delta mismatch and every one-above payload reject. |
+| C11-06 | R1-4 / R2 BL-04 | Exactly one ordered message_end/agent_end pair is required; duplicate/out-of-order/post-terminal rows and single-field mismatches across routing/api/usage/response/diagnostics/error/text/thinking/tool evidence reject. |
+| C11-07 | R1-5 / R2 BL-06 | Hidden/symbol-heavy schemas, SDK/event envelopes, result/extension/tool arrays, and workspace/capability/mutation results stay below instrumentation ceilings without `Reflect.ownKeys`-style whole-source materialization. |
+| C11-08 | R1-7 / R2 BL-05 | Proxy/prototype traps and AggregateError 17/5000/infinite/throwing iterators normalize to bounded typed redacted causes, pull at most 17, close iterators, and settle across primary/dual/quarantine/close. |
+| C11-09 | R1-6 / R2 BL-07 | Concatenated/separated/plural/mixed compounds for shell/exec, recursive agent, HTTP write, SQL, credential, access/refresh token, API/client secret, private key, and token cache are absent for every role. |
+| C11-10 | R1-8 | `.aws/sso/cache/**` and `.aws/cli/cache/**` root/nested/case variants reject before workspace callbacks with opaque content. |
+| C11-11 | R2 BL-08 | Cookie and Set-Cookie session/auth headers redact through direct, prompt, workspace, mutation/capability, handoff, and public-error consumers; harmless controls remain exact. |
+| C11-12 | R1-9 | Qualified/dotted keys such as `github.token` and `oauth.client_secret` redact for equals/colon through every consumer while only reviewed colon documentary prose remains exact. |
+| C11-13 | retention | The complete 102-test Cycle 10 baseline, strict public Pi tool types, timers/rejections, and mutator-lane ownership remain green throughout RED and GREEN. |
+
+RED acceptance is one test-only commit. The preexisting focused files must first pass 102/102. The
+augmented suite then executes all retained tests plus every C11-01 through C11-12 row; retained tests
+stay green and each new top-level behavior row fails its intended production assertion without
+skip/cancel/todo. Focused strict TypeScript must compile, and all three production blobs above must
+remain exact. No production edit may be amended into RED.
+
+### Architectural GREEN / REFACTOR target
+
+- Put a Pi-0.80.6 anti-corruption adapter around creation results and streamed assistant DTOs; copy
+  only reviewed fields, consume no extension-runtime authority, and exercise the real factory in a
+  cancellation-only no-model integration.
+- Replace run admission/creation bookkeeping with an explicit admission token plus per-run creation
+  terminal registry shared by `run`, `abort`, `close`, and shutdown. Close waits admissions; reserve
+  rechecks close atomically; abort distinguishes terminal success from typed pending ownership.
+- Make signal leasing a native-only port with one canonical tuple and rollback-safe release.
+- Use discriminated stream/terminal state machines with bounded per-index projections, actual-growth
+  accounting, exact transition rules, and complete immutable assistant evidence.
+- Replace whole-source key enumeration with allowlisted descriptor adapters for fixed envelopes and
+  bounded trusted/serialized construction for arbitrary JSON. Hidden/symbol extras are inert and
+  never materialized as a complete attacker-controlled key array.
+- Centralize a total boundary failure sanitizer with constant fallback and manually capped aggregate
+  iteration; centralize reviewed capability/path/redaction classifiers for the remaining grammar.
+
+No dependency, tool authority, scheduler/controller, #478/#479 file, Go/connector, GitHub, service,
+credential, or model scope is added.
+
+### Ordered checkpoints and declared gates
+
+The mandatory order is artifact-only PLAN -> one comprehensive test-only RED -> first cohesive
+runtime/policy GREEN -> refactor -> terminal evidence. GREEN requires focused runtime/tool-policy,
+focused and all-production strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots, pinned offline
+RPC plus the actual no-model create-result/factory exercise, serialized complete Shepherd
+classification, the established 165-test safe isolation, `git diff --check`, immutable-base and
+frozen-head ancestry, JSON and credential-pattern scans, exact issue-owned path scope, and a clean
+head. The known `/bin/ps` `spawn EPERM` family is classified, never called green. No push, network,
+GitHub, Go/connectors, `make`, service, credential, or model call is authorized.
+
+`scripts/gsd doctor` passes, but `scripts/gsd prompt programming-loop ...` returns
+`unknown GSD command: programming-loop`; Cycle 11 therefore records the permitted
+`manual_gsd_fallback` without weakening TDD. Skills loaded completely are `gsd-programming-loop`,
+`javascript-testing-patterns`, `typescript-advanced-types`, `architecture-patterns`, and
+`github-issue-first-delivery`, plus required routing, Pi/runtime, issue-contract, universal-loop,
+project, PRD, prompt, and workflow references. Execution decision is `read_only_spawned`: one
+read-only explorer maps the installed Pi 0.80.6 factory/result/event contract while this isolated
+worker retains the only mutating path.

@@ -257,3 +257,26 @@
   head pass. The complete suite is environment-blocked at 239 executed / 208 passed / 31 unchanged
   `/bin/ps` `spawn EPERM` failures in controller/state-store; isolation passes 165/165. No external
   mutation was attempted. Parent owns permitted-environment rerun, exact-head review, and delivery.
+
+## Consolidated Stable-Head Correction Cycle 11 Snapshot
+
+- Frozen candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE10-1.md` and `/tmp/475-REVIEW-CYCLE10-2.md`; their unique
+  union is accepted as one correction batch with no row deferred.
+- Objective: make the runtime compatible with the actual Pi 0.80.6 factory/result and event shapes,
+  make abort/close ownership terminal and linearizable, enforce pre-materialization and total-error
+  bounds, and close the remaining capability/path/redaction grammar while preserving Cycle 10.
+- Method: manual-GSD artifact-only PLAN -> one comprehensive test-only RED -> first cohesive
+  runtime/policy GREEN -> refactor -> declared terminal verification. Production remains frozen
+  through RED.
+- Skills: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, and `github-issue-first-delivery`, plus
+  required repo GSD/Pi/runtime/issue references.
+- Execution decision: `read_only_spawned`; a no-write explorer maps the explicit installed Pi
+  0.80.6 contract while the issue worker owns the isolated mutating critical path.
+- Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, `RUN-STATE.json`, `AGENTS.md`,
+  `agents/cycle11-pi-contract-map.md`, and `traces/cycle11-pi-contract-map-trace.md`.
+- Verification result: pending Cycle 11 RED and GREEN. Required evidence is retained/new focused
+  counts, both strict Pi scopes, pinned RPC plus actual no-model factory/result exercise, serialized
+  full-suite and 165-test isolation, and exact diff/base/scope/JSON/credential checks.

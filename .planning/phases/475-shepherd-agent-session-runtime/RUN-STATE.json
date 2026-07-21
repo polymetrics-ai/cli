@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "ready_for_parent_verification",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_10_summary",
+  "currentCycle": "correction_cycle_11_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -243,15 +243,20 @@
       "cycle": "correction_cycle_10_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 10 issue-owned implementation and evidence are terminal locally; no external mutation was attempted, and parent orchestration owns permitted-environment rerun, fresh exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_11_plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only explorer maps the explicit installed Pi 0.80.6 factory/result/event contract while this isolated issue worker owns the only mutating path for the complete Cycle 11 PLAN, RED, GREEN, verification, and handoff sequence."
     }
   ],
   "gates": {
-    "focusedTests": "passed_cycle_10_102_passed_0_failed_0_skipped_cancelled_todo; red_86_retained_passed_16_intended_failed",
-    "fullShepherdTests": "environment_blocked_cycle_10_239_executed_208_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_165_passed_0_failed",
-    "strictTypeScriptPi0806": "passed_cycle_10_focused_and_all_12_production_files_typescript_5_9_3",
-    "offlineRpcSmoke": "passed_cycle_10_explicit_pi_0_80_6_pm_shepherd_registered_and_real_validator_no_model_tool_exercise_passed",
-    "diffCheck": "passed_cycle_10",
-    "ownedScope": "passed_cycle_10; immutable_base_e659d6f1_and_frozen_head_f63957ae_ancestors; no_push_or_github_attempted",
+    "focusedTests": "pending_cycle_11_red_and_green; baseline_cycle_10_102_passed_0_failed_0_skipped_cancelled_todo",
+    "fullShepherdTests": "pending_cycle_11; retained_cycle_10_environment_blocked_239_executed_208_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_165_passed_0_failed",
+    "strictTypeScriptPi0806": "pending_cycle_11; retained_cycle_10_passed_focused_and_all_12_production_files_typescript_5_9_3",
+    "offlineRpcSmoke": "pending_cycle_11_rpc_and_actual_no_model_factory_result_exercise; retained_cycle_10_registration_and_real_tool_validator_passed",
+    "diffCheck": "pending_cycle_11",
+    "ownedScope": "pending_cycle_11; immutable_base_e659d6f1_and_frozen_head_1571dc4d; no_push_network_or_github_authorized",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

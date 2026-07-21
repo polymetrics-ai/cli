@@ -833,3 +833,54 @@ three production files against `f63957ae`; any production difference invalidates
 - `git diff --check`, immutable-base and frozen-head ancestry, exact issue-owned paths, and clean
   worktree pass. No push or GitHub mutation was authorized or attempted; parent orchestration owns
   the permitted-environment rerun and fresh exact-head review.
+
+## Cycle 11 — Real Pi Compatibility, Linearizable Ownership, And Bounded Evidence
+
+### PLAN
+
+- Frozen candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; initial worktree clean.
+- Review sources read completely: `/tmp/475-REVIEW-CYCLE10-1.md` and
+  `/tmp/475-REVIEW-CYCLE10-2.md`; all unique rows are accepted into C11-01 through C11-12, with
+  C11-13 retaining the full Cycle 10 baseline.
+- Baseline focused run: 102 passed, 0 failed/skipped/cancelled/todo.
+- GSD: doctor passed; the 69-command adapter still lacks `programming-loop`, so the explicit
+  manual-GSD PLAN -> RED -> GREEN/refactor -> verify fallback remains active.
+- Skills: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, `github-issue-first-delivery`, and all
+  repository-required GSD/Pi/runtime/issue references.
+- Orchestration: `read_only_spawned`; the `cycle11-pi-contract-map` explorer has no write authority,
+  while this issue worker owns all PLAN, RED, GREEN, verification, commit, and handoff actions.
+- Production lock: runtime `134697a62252f500b3c58082bf766a5c84766a91`, policy
+  `539d061903549a764567cd1d7fad95d7d624edfe`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+
+### One comprehensive test-only RED contract
+
+One test-only commit will add twelve independent top-level behavior rows exactly matching
+C11-01 through C11-12 in `PLAN.md`; C11-13 is proved by all 102 retained tests. Each new row may
+contain a bounded table of subcases, but its failure must identify the named behavior family rather
+than a fixture/load/type error. The RED evidence must record exact executed/pass/fail counts, zero
+skip/cancel/todo, strict focused TypeScript success, and exact frozen production blobs.
+
+No production, prompt, or role behavior changes before that commit. Post-RED test edits may only be
+additive or align an older fixture with a newly accepted interface; every Cycle 11 assertion must
+remain intact and every alignment must be named in the GREEN checkpoint.
+
+### GREEN / REFACTOR contract
+
+Implement one cohesive correction around the Pi adapter, native signal lease, admission/per-run
+creation state machines, stateful stream/terminal DTOs, fixed-envelope descriptor adapters,
+bounded JSON/result construction, total failure sanitizer, and shared capability/path/redaction
+classifiers. Do not add dependencies, widen tools, edit scheduler/controller/#478/#479 scope, or
+weaken prior lifecycle, timer, parser, Pi typing, and disjoint-mutator guarantees.
+
+### VERIFY contract
+
+- focused runtime/tool-policy tests;
+- complete serialized Shepherd classification and the established 165-test safe isolation;
+- focused and all-production strict TypeScript with explicit Pi 0.80.6 roots;
+- pinned offline RPC plus an actual no-model create-result/factory exercise;
+- diff, immutable-base/frozen-head ancestry, JSON, credential-pattern, exact issue-owned scope, and
+  clean-head checks;
+- no Go/connectors/`make`, runtime services, credentials, model calls, network, push, or GitHub.
