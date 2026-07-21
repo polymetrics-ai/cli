@@ -1,10 +1,10 @@
 # Plan: #477 Durable GitHub Human-Decision Broker
 
-Issue: https://github.com/polymetrics-ai/cli/issues/477  
-Parent: #471  
-Parent PR: #472  
-Branch: `feat/477-shepherd-github-decision-broker`  
-Exact base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`  
+Issue: https://github.com/polymetrics-ai/cli/issues/477
+Parent: #471
+Parent PR: #472
+Branch: `feat/477-shepherd-github-decision-broker`
+Exact base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
 PR base: `feat/471-pi-agent-session-shepherd`
 
 ## Objective
