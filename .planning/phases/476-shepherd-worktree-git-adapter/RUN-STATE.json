@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "phase": "476-shepherd-worktree-git-adapter",
+  "issue": 476,
+  "status": "running",
+  "gsdMode": "manual_gsd_fallback",
+  "verificationPassed": false,
+  "verificationBlocker": "implementation and full verification are pending",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The assigned worker owns one isolated sub-issue worktree and bounded files; no further delegation is authorized or required."
+    }
+  ]
+}
+
