@@ -91,6 +91,10 @@ export interface GitHubDecisionPollOptions {
 	signal?: AbortSignal;
 }
 
+export interface GitHubDecisionRequestOptions {
+	signal?: AbortSignal;
+}
+
 export type GhDecisionExecutor = (file: string, args: string[]) => Promise<string>;
 
 interface ClassifiedTransportFailure extends Error {
@@ -380,19 +384,22 @@ export class GitHubDecisionBroker {
 	private async ensureRequestComment(
 		record: HumanDecisionRecord,
 		authenticatedActor: string,
+		signal?: AbortSignal,
 	): Promise<GitHubComment> {
 		for (let attempt = 1; attempt <= this.transportRetry.maxAttempts; attempt += 1) {
-			const comments = await this.callTransport(() => this.transport.listComments(record.binding));
+			if (signal?.aborted) throw signal.reason ?? new Error("human decision request aborted");
+			const comments = await this.callTransport(() => this.transport.listComments(record.binding), signal);
 			const markers = markerComments(record, comments);
 			if (markers.length > 1) throw new Error("duplicate human decision marker comments are ambiguous");
 			if (markers.length === 1) return assertOwnedRequestComment(record, markers[0], authenticatedActor);
 			let created: GitHubComment;
 			try {
+				if (signal?.aborted) throw signal.reason ?? new Error("human decision request aborted");
 				created = await this.transport.createDecisionRequestComment(record);
 			} catch (error) {
 				const failure = classifyTransportFailure(error);
 				if (!failure.retryable || attempt === this.transportRetry.maxAttempts) throw failure;
-				await this.sleep(this.retryDelay(attempt));
+				await this.sleep(this.retryDelay(attempt), signal);
 				continue;
 			}
 			return assertOwnedRequestComment(record, created, authenticatedActor);
@@ -408,13 +415,15 @@ export class GitHubDecisionBroker {
 		return record;
 	}
 
-	async request(request: GitHubDecisionRequest): Promise<HumanDecisionRecord> {
+	async request(request: GitHubDecisionRequest, options: GitHubDecisionRequestOptions = {}): Promise<HumanDecisionRecord> {
+		if (options.signal?.aborted) throw options.signal.reason ?? new Error("human decision request aborted");
 		const proposedAt = this.now();
 		const persisted = validateHumanDecisionRecord(
 			await persistHumanDecisionRequest(this.repository, requestSpec(request), proposedAt),
 			proposedAt,
 		);
 		return this.repository.transact(persisted.requestId, async (existing) => {
+			if (options.signal?.aborted) throw options.signal.reason ?? new Error("human decision request aborted");
 			if (existing === null) throw new Error("human decision request disappeared during marker creation");
 			const observedAt = this.now();
 			const record = validateHumanDecisionRecord(existing, observedAt);
@@ -426,10 +435,11 @@ export class GitHubDecisionBroker {
 				return { state: expired, value: expired };
 			}
 			const authenticatedActor = normalizedActorLogin(
-				await this.callTransport(() => this.transport.getAuthenticatedActor()),
+				await this.callTransport(() => this.transport.getAuthenticatedActor(), options.signal),
 				"authenticated actor",
 			);
-			const comment = await this.ensureRequestComment(record, authenticatedActor);
+			const comment = await this.ensureRequestComment(record, authenticatedActor, options.signal);
+			if (options.signal?.aborted) throw options.signal.reason ?? new Error("human decision request aborted");
 			const updated = {
 				...record,
 				requestComment: requestCommentEvidence(record, comment),

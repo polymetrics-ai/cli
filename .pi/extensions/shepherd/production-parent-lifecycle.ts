@@ -129,11 +129,21 @@ class BoundedParentCalls {
 			this.#active.delete(key);
 		});
 		this.#active.set(key, { controller, settlement });
-		return Promise.race([operationPromise, abortPromise]).finally(() => {
-			clearTimeout(timer);
-			signal.removeEventListener("abort", onCallerAbort);
-			this.#closing.signal.removeEventListener("abort", onClose);
-		});
+		return (async () => {
+			try {
+				return await Promise.race([operationPromise, abortPromise]);
+			} catch (error) {
+				// A timeout, caller stop, or close revokes authority immediately, but the public
+				// operation does not settle until the already-accepted adapter call has joined.
+				// This prevents a late external effect from escaping after stop() resolves.
+				if (abortKind !== undefined) await settlement;
+				throw error;
+			} finally {
+				clearTimeout(timer);
+				signal.removeEventListener("abort", onCallerAbort);
+				this.#closing.signal.removeEventListener("abort", onClose);
+			}
+		})();
 	}
 
 	close(): Promise<void> {
@@ -635,8 +645,11 @@ function assertExactMergeState(
 	request: ProductionParentMergeRequest,
 	allowMerged: boolean,
 ): AuthoritativeParentMergeState {
-	if (value.repository !== request.repository || value.pullRequest !== request.pullRequest
-		|| value.headSha !== request.headSha) {
+	if (value.repository !== request.repository || value.pullRequest !== request.pullRequest) {
+		throw new Error("authoritative parent merge coordinates moved from the exact durable gate");
+	}
+	if (!SHA.test(value.headSha)) throw new Error("authoritative parent merge observation has an invalid head");
+	if (value.headSha !== request.headSha) {
 		throw new Error("authoritative parent merge head moved from the exact durable gate");
 	}
 	if (!Number.isSafeInteger(value.revision) || value.revision < 1) {
@@ -657,6 +670,29 @@ function assertExactMergeState(
 		return value;
 	}
 	throw new Error("authoritative parent pull request is closed without the exact approved merge");
+}
+
+function parentHeadInvalidation(
+	value: AuthoritativeParentMergeState,
+	request: ProductionParentMergeRequest,
+): Extract<ProductionParentGateObservation, { status: "invalidated" }> | undefined {
+	if (value.repository !== request.repository || value.pullRequest !== request.pullRequest) {
+		throw new Error("authoritative parent merge coordinates moved from the exact durable gate");
+	}
+	if (!SHA.test(value.headSha) || !Number.isSafeInteger(value.revision) || value.revision < 1) {
+		throw new Error("authoritative parent merge observation is malformed");
+	}
+	const observedAt = exactTimestamp(value.observedAt, "parent merge observation");
+	if (value.headSha === request.headSha) return undefined;
+	return {
+		status: "invalidated",
+		repository: value.repository,
+		pullRequest: value.pullRequest,
+		previousHead: request.headSha,
+		currentHead: value.headSha,
+		revision: value.revision,
+		observedAt,
+	};
 }
 
 export class ProductionParentGateAdapter implements ProductionParentGatePort {
@@ -685,6 +721,22 @@ export class ProductionParentGateAdapter implements ProductionParentGatePort {
 		);
 	}
 
+	prepare(
+		planValue: ProductionParentPlanDocument,
+		stateValue: ProductionAutonomousState,
+		finalization: ProductionParentFinalization,
+	): { requestId: string } {
+		const plan = validateProductionParentPlan(planValue, planValue.parentIssue);
+		const state = validateProductionAutonomousState(stateValue);
+		assertProductionPlanBinding(state, plan);
+		if (state.humanGate !== undefined) throw new Error("parent merge gate is already durably prepared or requested");
+		if (typeof finalization.summary !== "string" || finalization.summary.length === 0
+			|| Buffer.byteLength(finalization.summary) > 4_096 || /[\u0000-\u001f\u007f-\u009f]/u.test(finalization.summary)) {
+			throw new Error("parent finalization summary must be bounded safe text");
+		}
+		return { requestId: parentMergeRequestId(plan, state, finalization.pullRequest, finalization.head) };
+	}
+
 	request(
 		planValue: ProductionParentPlanDocument,
 		stateValue: ProductionAutonomousState,
@@ -695,12 +747,20 @@ export class ProductionParentGateAdapter implements ProductionParentGatePort {
 			const plan = validateProductionParentPlan(planValue, planValue.parentIssue);
 			const state = validateProductionAutonomousState(stateValue);
 			assertProductionPlanBinding(state, plan);
-			if (state.humanGate !== undefined) throw new Error("parent merge gate is already durably requested");
+			const durable = state.humanGate;
+			if (durable === undefined || durable.status !== "prepared") {
+				throw new Error("parent merge gate requires a durable prepared request");
+			}
 			if (typeof finalization.summary !== "string" || finalization.summary.length === 0
 				|| Buffer.byteLength(finalization.summary) > 4_096 || /[\u0000-\u001f\u007f-\u009f]/u.test(finalization.summary)) {
 				throw new Error("parent finalization summary must be bounded safe text");
 			}
-			const request = mergeRequest(plan, state, finalization.pullRequest, finalization.head);
+			const request = mergeRequest(plan, state, finalization.pullRequest, finalization.head, durable.requestId);
+			if (durable.repository !== request.repository || durable.pullRequest !== request.pullRequest
+				|| durable.generation !== request.generation || durable.head !== request.headSha
+				|| durable.requestId !== parentMergeRequestId(plan, state, request.pullRequest, request.headSha)) {
+				throw new Error("durable prepared parent merge request changed its exact binding");
+			}
 			assertExactMergeState(await this.#lookup.observeExactPullRequest({
 				repository: request.repository,
 				pullRequest: request.pullRequest,
@@ -729,12 +789,26 @@ export class ProductionParentGateAdapter implements ProductionParentGatePort {
 			if (durable.requestId !== parentMergeRequestId(plan, state, durable.pullRequest, durable.head)) {
 				throw new Error("durable parent merge gate request ID does not match the exact binding");
 			}
-			const before = assertExactMergeState(await this.#lookup.observeExactPullRequest({
+			const beforeValue = await this.#lookup.observeExactPullRequest({
 				repository: request.repository,
 				pullRequest: request.pullRequest,
 				headSha: request.headSha,
-			}, context), request, true);
+			}, context);
+			const invalidated = parentHeadInvalidation(beforeValue, request);
+			if (invalidated !== undefined) return invalidated;
+			const before = assertExactMergeState(beforeValue, request, true);
 			const observation = await this.#gate.observe(request, context);
+			if (observation.status === "invalidated") {
+				return {
+					status: "invalidated",
+					repository: observation.repository,
+					pullRequest: observation.pullRequest,
+					previousHead: observation.previousHead,
+					currentHead: observation.currentHead,
+					revision: observation.revision,
+					observedAt: observation.observedAt,
+				};
+			}
 			if (observation.status !== "merged") return { status: observation.status };
 			if (observation.repository !== request.repository || observation.pullRequest !== request.pullRequest
 				|| observation.headSha !== request.headSha || observation.revision < before.revision

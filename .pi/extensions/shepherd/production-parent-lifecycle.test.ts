@@ -60,6 +60,13 @@ const OBSERVED = "2026-07-20T00:00:05.000Z";
 const REVIEWED = "2026-07-20T00:00:06.000Z";
 const REOBSERVED = "2026-07-20T00:00:07.000Z";
 
+function deferred<T>() {
+	let resolve!: (value: T | PromiseLike<T>) => void;
+	let reject!: (reason?: unknown) => void;
+	const promise = new Promise<T>((accept, decline) => { resolve = accept; reject = decline; });
+	return { promise, resolve, reject };
+}
+
 function plan(): ProductionParentPlanDocument {
 	return {
 		schemaVersion: 2,
@@ -638,16 +645,33 @@ function waitingState(state: ProductionAutonomousState, requestId: string): Prod
 	return validateProductionAutonomousState(value);
 }
 
+function preparedState(state: ProductionAutonomousState, requestId: string): ProductionAutonomousState {
+	const value = structuredClone(state);
+	value.status = "running";
+	value.stage = "human_decision";
+	value.humanGate = {
+		repository: "acme/widgets",
+		pullRequest: 472,
+		generation: 1,
+		head: PARENT_HEAD,
+		requestId,
+		status: "prepared",
+	};
+	return validateProductionAutonomousState(value);
+}
+
 test("the controller gate binds the exact durable request and approval only waits until an authoritative human merge", async () => {
 	const harness = finalizationHarness();
 	const broker = new GateBroker();
 	const lookup = new MergeLookup();
 	const gate = new ProductionParentGateAdapter(broker, lookup);
-	const requested = await gate.request(harness.value, harness.state, {
+	const finalization = {
 		pullRequest: 472,
 		head: PARENT_HEAD,
 		summary: "Exact finalization.",
-	}, new AbortController().signal);
+	};
+	const prepared = gate.prepare(harness.value, harness.state, finalization);
+	const requested = await gate.request(harness.value, preparedState(harness.state, prepared.requestId), finalization, new AbortController().signal);
 	assert.match(requested.requestId, /^parent-merge-479-1-[0-9a-f]{24}$/u);
 	assert.deepEqual(broker.requestValue, {
 		requestId: requested.requestId,
@@ -688,16 +712,29 @@ test("the controller gate binds the exact durable request and approval only wait
 	assert.equal("mergeParent" in gate, false);
 });
 
-test("the controller gate rejects an exact-head move even while the durable decision is pending", async () => {
+test("the controller gate returns a typed exact-head invalidation before polling stale approval", async () => {
 	const harness = finalizationHarness();
 	const broker = new GateBroker();
 	const lookup = new MergeLookup();
 	const gate = new ProductionParentGateAdapter(broker, lookup);
-	const request = await gate.request(harness.value, harness.state, {
+	const finalization = {
 		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, new AbortController().signal);
+	};
+	const prepared = gate.prepare(harness.value, harness.state, finalization);
+	const request = await gate.request(harness.value, preparedState(harness.state, prepared.requestId), finalization, new AbortController().signal);
 	lookup.state.headSha = MOVED_HEAD;
-	await assert.rejects(gate.observe(harness.value, waitingState(harness.state, request.requestId), new AbortController().signal), /head.*moved|exact.*head/i);
+	assert.deepEqual(
+		await gate.observe(harness.value, waitingState(harness.state, request.requestId), new AbortController().signal),
+		{
+			status: "invalidated",
+			repository: "acme/widgets",
+			pullRequest: 472,
+			previousHead: PARENT_HEAD,
+			currentHead: MOVED_HEAD,
+			revision: 20,
+			observedAt: REOBSERVED,
+		},
+	);
 });
 
 test("request/poll calls are bounded, caller cancellation propagates, and close aborts and joins active work", async () => {
@@ -706,23 +743,23 @@ test("request/poll calls are bounded, caller cancellation propagates, and close 
 	const timedBroker = new GateBroker();
 	timedBroker.blockRequest = true;
 	const timed = new ProductionParentGateAdapter(timedBroker, lookup, { requestTimeoutMs: 10, closeTimeoutMs: 100 });
-	await assert.rejects(timed.request(harness.value, harness.state, {
+	const finalization = {
 		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, new AbortController().signal), /request.*timed out|timed out.*request/i);
+	};
+	const timedPrepared = timed.prepare(harness.value, harness.state, finalization);
+	await assert.rejects(timed.request(harness.value, preparedState(harness.state, timedPrepared.requestId), finalization, new AbortController().signal), /request.*timed out|timed out.*request/i);
 	await timed.close();
 
 	const cancelled = new ProductionParentGateAdapter(new GateBroker(), lookup);
 	const caller = new AbortController();
 	caller.abort(new Error("caller cancelled"));
-	await assert.rejects(cancelled.request(harness.value, harness.state, {
-		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, caller.signal), /cancelled/i);
+	const cancelledPrepared = cancelled.prepare(harness.value, harness.state, finalization);
+	await assert.rejects(cancelled.request(harness.value, preparedState(harness.state, cancelledPrepared.requestId), finalization, caller.signal), /cancelled/i);
 
 	const pollBroker = new GateBroker();
 	const polling = new ProductionParentGateAdapter(pollBroker, lookup, { pollTimeoutMs: 10, closeTimeoutMs: 100 });
-	const requested = await polling.request(harness.value, harness.state, {
-		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, new AbortController().signal);
+	const pollingPrepared = polling.prepare(harness.value, harness.state, finalization);
+	const requested = await polling.request(harness.value, preparedState(harness.state, pollingPrepared.requestId), finalization, new AbortController().signal);
 	pollBroker.blockPoll = true;
 	await assert.rejects(polling.observe(
 		harness.value,
@@ -734,16 +771,13 @@ test("request/poll calls are bounded, caller cancellation propagates, and close 
 	const closingBroker = new GateBroker();
 	closingBroker.blockRequest = true;
 	const closing = new ProductionParentGateAdapter(closingBroker, lookup, { requestTimeoutMs: 10_000, closeTimeoutMs: 100 });
-	const active = closing.request(harness.value, harness.state, {
-		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, new AbortController().signal);
+	const closingPrepared = closing.prepare(harness.value, harness.state, finalization);
+	const active = closing.request(harness.value, preparedState(harness.state, closingPrepared.requestId), finalization, new AbortController().signal);
 	const activeAssertion = assert.rejects(active, /closed|cancelled/i);
 	await new Promise((resolve) => setImmediate(resolve));
 	await closing.close();
 	await activeAssertion;
-	await assert.rejects(closing.request(harness.value, harness.state, {
-		pullRequest: 472, head: PARENT_HEAD, summary: "Exact finalization.",
-	}, new AbortController().signal), /closed/i);
+	await assert.rejects(closing.request(harness.value, preparedState(harness.state, closingPrepared.requestId), finalization, new AbortController().signal), /closed/i);
 });
 
 test("finalizer cancellation and close fence authority work", async () => {
@@ -763,4 +797,40 @@ test("finalizer cancellation and close fence authority work", async () => {
 	await finalizer.close();
 	await activeAssertion;
 	await assert.rejects(finalizer.finalize(harness.value, harness.state, new AbortController().signal), /closed/i);
+});
+
+test("caller cancellation does not settle until the accepted parent operation acknowledges and joins", async () => {
+	const harness = finalizationHarness();
+	const release = deferred<void>();
+	let underlyingSettled = false;
+	const policies: ProductionParentCheckPolicyAuthority = {
+		async findRequiredCheckPolicies(_query, context) {
+			return new Promise((resolve, reject) => context.signal.addEventListener("abort", () => {
+				void release.promise.then(() => {
+					underlyingSettled = true;
+					reject(new Error("accepted policy operation joined after abort"));
+				});
+			}, { once: true }));
+		},
+	};
+	const finalizer = new ProductionParentFinalizer({
+		transport: harness.transport,
+		policies,
+		reviews: harness.reviews,
+		timeoutMs: 10_000,
+	});
+	const caller = new AbortController();
+	let settled = false;
+	const active = finalizer.finalize(harness.value, harness.state, caller.signal)
+		.finally(() => { settled = true; });
+	void active.catch(() => undefined);
+	await new Promise((resolve) => setImmediate(resolve));
+	caller.abort(new Error("stop requested"));
+	await new Promise((resolve) => setImmediate(resolve));
+	assert.equal(settled, false, "adapter promise must remain live while accepted work is joining");
+	assert.equal(underlyingSettled, false);
+	release.resolve();
+	await assert.rejects(active, /cancelled|joined|abort/i);
+	assert.equal(underlyingSettled, true);
+	await finalizer.close();
 });

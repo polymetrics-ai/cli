@@ -822,7 +822,11 @@ export class GhCliOrchestrationTransport implements GitHubOrchestrationTransport
 	}
 
 	async integrateChild(request: IntegrateChildRequest, context: ExternalCallContext): Promise<DurableMutationResult<ChildIntegrationReceipt>> {
-		if (/^(?:main|master)$/iu.test(request.parentBranch)) {
+		if (typeof request.parentBaseBranch !== "string" || request.parentBaseBranch.length === 0
+			|| typeof request.parentBranch !== "string" || request.parentBranch.length === 0) {
+			throw new Error("child integration transport requires authoritative parent/default branch evidence");
+		}
+		if (request.parentBranch === request.parentBaseBranch) {
 			throw new Error("child integration transport refuses default-branch and parent-to-main merges");
 		}
 		const existing = await this.findChildIntegration(request, context);

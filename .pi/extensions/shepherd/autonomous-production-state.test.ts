@@ -307,6 +307,51 @@ test("generation advance durably preserves and enforces the exact interrupted ch
 	assert.equal(continued.children[0].stage, "publication");
 });
 
+test("archives an invalidated exact-head parent gate before a new generation can request another", () => {
+	const initial = createProductionAutonomousState(plan(), {
+		runId: "run-parent-head-1",
+		now: new Date("2026-07-22T10:00:00.000Z"),
+	});
+	const waiting = evolveProductionState(initial, fence(initial), (draft) => {
+		draft.status = "waiting_human";
+		draft.stage = "human_decision";
+		draft.humanGate = {
+			repository: draft.repository,
+			pullRequest: 438,
+			generation: draft.generation,
+			head: "a".repeat(40),
+			requestId: "parent-merge-old-head",
+			status: "pending",
+		};
+	});
+	const invalidated = evolveProductionState(waiting, fence(waiting), (draft) => {
+		const previous = draft.humanGate!;
+		draft.invalidatedParentGates = [{
+			...previous,
+			status: "invalidated",
+			invalidationEvidence: {
+				currentHead: "b".repeat(40),
+				revision: 22,
+				observedAt: "2026-07-22T10:01:00.000Z",
+			},
+		}];
+		delete draft.humanGate;
+		draft.status = "running";
+		draft.stage = "schedule";
+	});
+	assert.equal(invalidated.humanGate, undefined);
+	assert.equal(invalidated.invalidatedParentGates?.[0].requestId, "parent-merge-old-head");
+	assert.equal(invalidated.invalidatedParentGates?.[0].status, "invalidated");
+	const resumed = advanceProductionGeneration(
+		invalidated,
+		fence(invalidated),
+		"run-parent-head-2",
+		new Date("2026-07-22T10:02:00.000Z"),
+	);
+	assert.equal(resumed.generation, 2);
+	assert.deepEqual(resumed.invalidatedParentGates, invalidated.invalidatedParentGates);
+});
+
 test("restart reclaims a complete orphan lock owned by a dead process", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "shepherd-production-orphan-lock-"));
 	t.after(() => rm(root, { recursive: true, force: true }));

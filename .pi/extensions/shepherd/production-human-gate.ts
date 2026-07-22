@@ -62,6 +62,15 @@ export interface ParentPullRequestMergeLookup {
 export type ProductionParentMergeObservation =
 	| { status: "pending" }
 	| { status: "rejected"; record: HumanDecisionRecord }
+	| {
+		status: "invalidated";
+		repository: string;
+		pullRequest: number;
+		previousHead: string;
+		currentHead: string;
+		revision: number;
+		observedAt: string;
+	}
 	| { status: "approved_waiting_for_merge"; record: HumanDecisionRecord; observation: AuthoritativeParentMergeState }
 	| {
 		status: "merged";
@@ -211,9 +220,23 @@ export class ProductionHumanParentMergeGate {
 			pullRequest: request.pullRequest,
 			headSha: request.headSha,
 		}, context);
-		if (observation.repository !== request.repository || observation.pullRequest !== request.pullRequest
-			|| observation.headSha !== request.headSha) {
-			throw new Error("authoritative parent pull request moved from the approved exact head");
+		if (observation.repository !== request.repository || observation.pullRequest !== request.pullRequest) {
+			throw new Error("authoritative parent pull request moved from the approved repository or pull request");
+		}
+		if (!SHA.test(observation.headSha) || !Number.isSafeInteger(observation.revision) || observation.revision < 1) {
+			throw new Error("authoritative parent pull request observation is malformed");
+		}
+		const observedAt = canonicalTimestamp(observation.observedAt, "parent pull request observation");
+		if (observation.headSha !== request.headSha) {
+			return {
+				status: "invalidated",
+				repository: observation.repository,
+				pullRequest: observation.pullRequest,
+				previousHead: request.headSha,
+				currentHead: observation.headSha,
+				revision: observation.revision,
+				observedAt,
+			};
 		}
 		if (observation.state !== "merged") {
 			if (observation.mergedAt !== null || observation.mergeCommitSha !== null) {
@@ -275,8 +298,8 @@ export class GhParentPullRequestMergeLookup implements ParentPullRequestMergeLoo
 		}
 		const raw = parseRecord(output);
 		const head = typeof raw.head === "object" && raw.head !== null ? raw.head as Record<string, unknown> : {};
-		const headSha = head.sha;
-		if (headSha !== query.headSha) throw new Error("authoritative parent pull request head moved");
+		const headSha = String(head.sha);
+		if (!SHA.test(headSha)) throw new Error("authoritative parent pull request has an invalid head");
 		const mergedAt = raw.merged_at === null ? null : canonicalTimestamp(String(raw.merged_at), "parent merge time");
 		const merged = raw.merged === true || mergedAt !== null;
 		const state = merged ? "merged" : raw.state === "open" ? "open" : "closed";

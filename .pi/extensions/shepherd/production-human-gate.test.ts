@@ -141,14 +141,26 @@ test("approval is not completion until GitHub authoritatively reports the exact 
 	}
 });
 
-test("rejects stale head, unauthorized broker shape, and ambiguous authoritative observations", async () => {
+test("returns a typed invalidation when the approved parent head moves", async () => {
 	const broker = new Broker();
 	broker.record = decisionRecord("decided", "approve-merge");
 	const lookup = new Lookup();
 	const gate = new ProductionHumanParentMergeGate(broker, lookup);
-	lookup.state = { ...lookup.state, headSha: "c".repeat(40) };
-	await assert.rejects(gate.observe(request(), context()), /head/i);
+	const currentHead = "c".repeat(40);
+	lookup.state = { ...lookup.state, headSha: currentHead, revision: 9 };
+	assert.deepEqual(await gate.observe(request(), context()), {
+		status: "invalidated",
+		repository: "acme/widgets",
+		pullRequest: 472,
+		previousHead: HEAD,
+		currentHead,
+		revision: 9,
+		observedAt: "2026-07-22T00:00:03.000Z",
+	});
+});
 
+test("rejects unauthorized broker shape and ambiguous authoritative observations", async () => {
+	const broker = new Broker();
 	broker.record = { ...decisionRecord("decided", "approve-merge"), binding: {
 		...decisionRecord("decided", "approve-merge").binding,
 		generation: 8,

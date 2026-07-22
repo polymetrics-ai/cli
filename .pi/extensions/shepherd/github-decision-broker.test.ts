@@ -284,10 +284,11 @@ test("accepts a real safe-integer comment ID and second-resolution GitHub timest
 
 test("serializes concurrent request creation to one external comment", async () => {
 	const harness = brokerHarness();
+	const restartOptions = { now: () => new Date("2026-07-21T10:00:00.000Z") };
 	const results = await Promise.all([
 		harness.broker.request(harness.request),
 		harness.broker.request(harness.request),
-		new GitHubDecisionBroker(harness.repository, harness.transport).request(harness.request),
+		new GitHubDecisionBroker(harness.repository, harness.transport, restartOptions).request(harness.request),
 	]);
 	assert.equal(harness.transport.created.length, 1);
 	assert.equal(new Set(results.map((result) => result.requestComment?.id)).size, 1);
@@ -299,7 +300,9 @@ test("recovers an exact owned marker after a crash before local comment persiste
 	const state = harness.repository.states.get("req-477")!;
 	delete state.requestComment;
 	harness.repository.states.set("req-477", state);
-	const recovered = await new GitHubDecisionBroker(harness.repository, harness.transport).request(harness.request);
+	const recovered = await new GitHubDecisionBroker(harness.repository, harness.transport, {
+		now: () => new Date("2026-07-21T10:00:00.000Z"),
+	}).request(harness.request);
 	assert.equal(recovered.requestComment?.id, original.requestComment?.id);
 	assert.equal(harness.transport.created.length, 1);
 });
@@ -315,7 +318,9 @@ test("fails closed on duplicate, foreign-owner, or body-colliding markers", asyn
 		const state = harness.repository.states.get("req-477")!;
 		delete state.requestComment;
 		harness.repository.states.set("req-477", state);
-		await assert.rejects(new GitHubDecisionBroker(harness.repository, harness.transport).request(harness.request), /marker|owner|collision|duplicate/i, variant);
+		await assert.rejects(new GitHubDecisionBroker(harness.repository, harness.transport, {
+			now: () => new Date("2026-07-21T10:00:00.000Z"),
+		}).request(harness.request), /marker|owner|collision|duplicate/i, variant);
 	}
 });
 
@@ -503,6 +508,45 @@ test("caps transient transport retries and backoff", async () => {
 		return true;
 	});
 	assert.deepEqual(harness.sleeps, [2, 4]);
+});
+
+test("request cancellation propagates through transient retry backoff", async () => {
+	const repository = new MemoryRepository();
+	const transport = new FakeTransport();
+	transport.listFailures.push(classifiedTransportFailure(true, "request-backoff"));
+	let entered!: () => void;
+	const backoffEntered = new Promise<void>((resolve) => { entered = resolve; });
+	let release!: () => void;
+	const released = new Promise<void>((resolve) => { release = resolve; });
+	let receivedSignal: AbortSignal | undefined;
+	const broker = new GitHubDecisionBroker(repository, transport, {
+		now: () => new Date("2026-07-21T10:00:00.000Z"),
+		transportRetry: { maxAttempts: 2, initialDelayMs: 10, maxDelayMs: 10 },
+		sleep: async (_delayMs, signal) => {
+			receivedSignal = signal;
+			entered();
+			await Promise.race([
+				released,
+				new Promise<never>((_resolve, reject) => signal?.addEventListener("abort", () => {
+					reject(signal.reason ?? new Error("request retry aborted"));
+				}, { once: true })),
+			]);
+		},
+	});
+	const caller = new AbortController();
+	const active = broker.request(brokerHarness().request, { signal: caller.signal });
+	void active.catch(() => undefined);
+	await Promise.race([
+		backoffEntered,
+		new Promise<never>((_resolve, reject) => setTimeout(() => reject(new Error("request retry backoff was not entered")), 500)),
+	]);
+	caller.abort(new Error("request stop requested"));
+	await new Promise((resolve) => setImmediate(resolve));
+	const propagated = receivedSignal === caller.signal;
+	release();
+	await assert.rejects(active, /stop requested|abort/i);
+	assert.equal(propagated, true);
+	assert.equal(transport.created.length, 0, "cancelled request must not publish after its backoff is revoked");
 });
 
 test("fails permanent transport errors immediately with a redacted classification", async () => {

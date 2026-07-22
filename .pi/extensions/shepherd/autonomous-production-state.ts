@@ -60,6 +60,13 @@ export interface ProductionOwnershipRefreshRecord {
 	refreshedAt: string;
 }
 
+export interface ProductionChildHeadReconciliationRecord {
+	previousHead: string;
+	head: string;
+	effectKey: string;
+	reconciledAt: string;
+}
+
 export interface ProductionOwnershipRefreshInput {
 	childId: string;
 	outcome: "rebased" | "reclaimed";
@@ -68,6 +75,14 @@ export interface ProductionOwnershipRefreshInput {
 	newBinding: ProductionWorkspaceBinding;
 	effectKey: string;
 	summary?: string;
+	now?: Date;
+}
+
+export interface ProductionChildHeadReconciliationInput {
+	childId: string;
+	previousHead: string;
+	head: string;
+	checkpoint: ProductionStageCheckpoint;
 	now?: Date;
 }
 
@@ -90,6 +105,7 @@ export interface ProductionChildRuntimeState {
 	ownership?: ProductionWorkspaceBinding;
 	checkpoint?: ProductionStageCheckpoint;
 	ownershipRefresh?: ProductionOwnershipRefreshRecord;
+	childHeadReconciliation?: ProductionChildHeadReconciliationRecord;
 	retryAuthorization?: ProductionRetryAuthorizationRecord;
 	lastFailure?: ProductionChildFailure;
 }
@@ -100,10 +116,15 @@ export interface ProductionParentHumanGate {
 	generation: number;
 	head: string;
 	requestId: string;
-	status: "pending" | "merged" | "rejected";
+	status: "prepared" | "pending" | "merged" | "rejected" | "invalidated";
 	mergeEvidence?: {
 		mergedAt: string;
 		mergeCommitSha: string;
+		revision: number;
+		observedAt: string;
+	};
+	invalidationEvidence?: {
+		currentHead: string;
 		revision: number;
 		observedAt: string;
 	};
@@ -165,6 +186,7 @@ export interface ProductionAutonomousState {
 	idleReason?: string;
 	terminalBlocker?: string;
 	humanGate?: ProductionParentHumanGate;
+	invalidatedParentGates?: ProductionParentHumanGate[];
 	childGate?: ProductionChildHumanGate;
 	children: ProductionChildRuntimeState[];
 }
@@ -387,6 +409,26 @@ function validateOwnershipRefresh(value: unknown): ProductionOwnershipRefreshRec
 	};
 }
 
+function validateChildHeadReconciliation(value: unknown): ProductionChildHeadReconciliationRecord {
+	const candidate = exact(
+		value,
+		["previousHead", "head", "effectKey", "reconciledAt"],
+		[],
+		"production child head reconciliation",
+	);
+	const previousHead = safeText(candidate.previousHead, "previous child head", 40);
+	const head = safeText(candidate.head, "reconciled child head", 40);
+	if (!SHA.test(previousHead) || !SHA.test(head) || previousHead === head) {
+		throw new Error("child head reconciliation requires two distinct exact heads");
+	}
+	return {
+		previousHead,
+		head,
+		effectKey: safeText(candidate.effectKey, "child head reconciliation effect key", 256),
+		reconciledAt: timestamp(candidate.reconciledAt, "child head reconciliation time"),
+	};
+}
+
 function validateRetryAuthorization(value: unknown): ProductionRetryAuthorizationRecord {
 	const candidate = exact(
 		value,
@@ -405,7 +447,7 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 	const candidate = exact(value, [
 		"id", "issue", "slug", "specDigest", "dependsOn", "writeScopes", "maxAttempts", "maxCorrections",
 		"attempts", "authorizedAttempts", "corrections", "status", "stage",
-	], ["resumeStage", "ownership", "checkpoint", "ownershipRefresh", "retryAuthorization", "lastFailure"], "production child state");
+	], ["resumeStage", "ownership", "checkpoint", "ownershipRefresh", "childHeadReconciliation", "retryAuthorization", "lastFailure"], "production child state");
 	const id = safeText(candidate.id, "child ID", 128);
 	if (!SAFE_ID.test(id)) throw new Error("invalid child ID");
 	const statuses: ProductionChildStatus[] = ["pending", "running", "blocked", "succeeded", "failed", "cancelled"];
@@ -448,6 +490,8 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 	const ownership = candidate.ownership === undefined ? undefined : validateWorkspace(candidate.ownership);
 	const checkpoint = candidate.checkpoint === undefined ? undefined : validateCheckpoint(candidate.checkpoint);
 	const ownershipRefresh = candidate.ownershipRefresh === undefined ? undefined : validateOwnershipRefresh(candidate.ownershipRefresh);
+	const childHeadReconciliation = candidate.childHeadReconciliation === undefined
+		? undefined : validateChildHeadReconciliation(candidate.childHeadReconciliation);
 	const retryAuthorization = candidate.retryAuthorization === undefined ? undefined : validateRetryAuthorization(candidate.retryAuthorization);
 	if ((authorizedAttempts > 0) !== (retryAuthorization !== undefined)) {
 		throw new Error("authorized child attempts require exact consumed gate evidence");
@@ -480,6 +524,7 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 		...(ownership === undefined ? {} : { ownership }),
 		...(checkpoint === undefined ? {} : { checkpoint }),
 		...(ownershipRefresh === undefined ? {} : { ownershipRefresh }),
+		...(childHeadReconciliation === undefined ? {} : { childHeadReconciliation }),
 		...(retryAuthorization === undefined ? {} : { retryAuthorization }),
 		...(candidate.lastFailure === undefined ? {} : { lastFailure: validateFailure(candidate.lastFailure) }),
 	};
@@ -489,10 +534,11 @@ function validateHumanGate(value: unknown): ProductionParentHumanGate {
 	const candidate = exact(
 		value,
 		["repository", "pullRequest", "generation", "head", "requestId", "status"],
-		["mergeEvidence"],
+		["mergeEvidence", "invalidationEvidence"],
 		"production parent human gate",
 	);
-	if (candidate.status !== "pending" && candidate.status !== "merged" && candidate.status !== "rejected") {
+	if (candidate.status !== "prepared" && candidate.status !== "pending" && candidate.status !== "merged" && candidate.status !== "rejected"
+		&& candidate.status !== "invalidated") {
 		throw new Error("invalid production parent human gate status");
 	}
 	let mergeEvidence: ProductionParentHumanGate["mergeEvidence"];
@@ -515,6 +561,27 @@ function validateHumanGate(value: unknown): ProductionParentHumanGate {
 	if ((candidate.status === "merged") !== (mergeEvidence !== undefined)) {
 		throw new Error("only a merged parent gate may contain authoritative merge evidence");
 	}
+	let invalidationEvidence: ProductionParentHumanGate["invalidationEvidence"];
+	if (candidate.invalidationEvidence !== undefined) {
+		const evidence = exact(
+			candidate.invalidationEvidence,
+			["currentHead", "revision", "observedAt"],
+			[],
+			"production parent gate invalidation evidence",
+		);
+		const currentHead = safeText(evidence.currentHead, "invalidated parent head", 40);
+		if (!SHA.test(currentHead) || currentHead === candidate.head) {
+			throw new Error("parent gate invalidation requires a distinct exact current head");
+		}
+		invalidationEvidence = {
+			currentHead,
+			revision: positive(evidence.revision, "parent gate invalidation revision"),
+			observedAt: timestamp(evidence.observedAt, "parent gate invalidation observation time"),
+		};
+	}
+	if ((candidate.status === "invalidated") !== (invalidationEvidence !== undefined)) {
+		throw new Error("only an invalidated parent gate may contain invalidation evidence");
+	}
 	return {
 		repository: safeText(candidate.repository, "human gate repository", 256),
 		pullRequest: positive(candidate.pullRequest, "human gate pull request"),
@@ -523,6 +590,7 @@ function validateHumanGate(value: unknown): ProductionParentHumanGate {
 		requestId: safeText(candidate.requestId, "human gate request ID", 256),
 		status: candidate.status,
 		...(mergeEvidence === undefined ? {} : { mergeEvidence }),
+		...(invalidationEvidence === undefined ? {} : { invalidationEvidence }),
 	};
 }
 
@@ -557,7 +625,7 @@ export function validateProductionAutonomousState(value: unknown): ProductionAut
 		"schemaVersion", "kind", "parentIssue", "repository", "planId", "planDigest", "parentBranch",
 		"parentBaseBranch", "runId", "resourceGeneration", "generation", "revision", "maxConcurrency", "timeoutMs", "status", "stage",
 		"createdAt", "updatedAt", "children",
-	], ["idleReason", "terminalBlocker", "humanGate", "childGate"]);
+	], ["idleReason", "terminalBlocker", "humanGate", "invalidatedParentGates", "childGate"]);
 	if (candidate.schemaVersion !== 1 || candidate.kind !== "production_autonomous") throw new Error("unsupported production state schema");
 	const statuses: ProductionRunStatus[] = ["running", "stopping", "stopped", "waiting_human", "failed", "completed"];
 	const stages: ProductionRunStage[] = ["recovery", "schedule", "child_lifecycle", "human_decision", "blocked", "completed"];
@@ -577,6 +645,17 @@ export function validateProductionAutonomousState(value: unknown): ProductionAut
 		throw new Error("completed production run requires every child to be succeeded");
 	}
 	const humanGate = candidate.humanGate === undefined ? undefined : validateHumanGate(candidate.humanGate);
+	const invalidatedParentGates = candidate.invalidatedParentGates === undefined
+		? undefined
+		: denseArray(candidate.invalidatedParentGates, "invalidated parent gates").map(validateHumanGate);
+	if (invalidatedParentGates?.some((gate) => gate.status !== "invalidated"
+		|| gate.repository !== candidate.repository || gate.generation > (candidate.generation as number))) {
+		throw new Error("invalidated parent gate history is stale or malformed");
+	}
+	if (invalidatedParentGates !== undefined
+		&& new Set(invalidatedParentGates.map((gate) => gate.requestId)).size !== invalidatedParentGates.length) {
+		throw new Error("invalidated parent gate history contains duplicate requests");
+	}
 	const childGate = candidate.childGate === undefined ? undefined : validateChildGate(candidate.childGate);
 	if (humanGate && (humanGate.repository !== candidate.repository || humanGate.generation !== candidate.generation)) {
 		throw new Error("parent human gate is stale or bound to another repository");
@@ -618,6 +697,7 @@ export function validateProductionAutonomousState(value: unknown): ProductionAut
 			terminalBlocker: safeText(candidate.terminalBlocker, "terminal blocker", 4_096),
 		}),
 		...(humanGate === undefined ? {} : { humanGate }),
+		...(invalidatedParentGates === undefined ? {} : { invalidatedParentGates }),
 		...(childGate === undefined ? {} : { childGate }),
 		children,
 	};
@@ -798,8 +878,27 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 			const exactReclaim = refresh?.outcome === "reclaimed" && after.ownership
 				&& after.ownership.claimId !== before.ownership.claimId
 				&& after.ownership.worktreeIdentity !== before.ownership.worktreeIdentity;
-			if (!after.ownership || !refresh
-				|| !commonRefreshTruth || (!exactRebase && !exactReclaim)) {
+			const reconciliation = after.childHeadReconciliation;
+			const exactChildHeadReconciliation = after.ownership && reconciliation
+				&& reconciliation.previousHead === before.ownership.head
+				&& reconciliation.head === after.ownership.head
+				&& reconciliation.effectKey === after.checkpoint?.effectKey
+				&& before.ownership.claimId === after.ownership.claimId
+				&& before.ownership.ownershipId === after.ownership.ownershipId
+				&& before.ownership.repositoryIdentity === after.ownership.repositoryIdentity
+				&& before.ownership.worktreeIdentity === after.ownership.worktreeIdentity
+				&& before.ownership.cwd === after.ownership.cwd
+				&& before.ownership.branch === after.ownership.branch
+				&& before.ownership.baseBranch === after.ownership.baseBranch
+				&& before.ownership.baseHead === after.ownership.baseHead
+				&& JSON.stringify(before.ownership.writeScopes) === JSON.stringify(after.ownership.writeScopes)
+				&& JSON.stringify(after.ownership) === JSON.stringify(after.checkpoint?.workspace)
+				&& after.stage === "verification"
+				&& after.checkpoint?.verification === undefined
+				&& after.checkpoint?.review === undefined
+				&& after.checkpoint?.integrationReceiptDigest === undefined;
+			if (!after.ownership || ((!refresh || !commonRefreshTruth || (!exactRebase && !exactReclaim))
+				&& !exactChildHeadReconciliation)) {
 				throw new ProductionStateConflictError("immutable child ownership binding changed without an exact refresh receipt");
 			}
 			refreshedOwnership = true;
@@ -810,15 +909,56 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 			throw new ProductionStateConflictError("integration checkpoint truth regressed");
 		}
 	}
+	const previousInvalidated = previous.invalidatedParentGates ?? [];
+	const nextInvalidated = next.invalidatedParentGates ?? [];
+	if (nextInvalidated.length < previousInvalidated.length
+		|| JSON.stringify(nextInvalidated.slice(0, previousInvalidated.length)) !== JSON.stringify(previousInvalidated)) {
+		throw new ProductionStateConflictError("invalidated parent gate history changed");
+	}
+	const appendedInvalidations = nextInvalidated.slice(previousInvalidated.length);
 	if (previous.humanGate && next.generation === previous.generation) {
-		const { status: _beforeStatus, mergeEvidence: _beforeEvidence, ...beforeBinding } = previous.humanGate;
-		const { status: _afterStatus, mergeEvidence: _afterEvidence, ...afterBinding } = next.humanGate ?? previous.humanGate;
-		if (!next.humanGate || JSON.stringify(beforeBinding) !== JSON.stringify(afterBinding)) {
-			throw new ProductionStateConflictError("immutable parent human gate binding changed");
+		const {
+			status: _beforeStatus,
+			mergeEvidence: _beforeEvidence,
+			invalidationEvidence: _beforeInvalidation,
+			...beforeBinding
+		} = previous.humanGate;
+		if (next.humanGate) {
+			const {
+				status: _afterStatus,
+				mergeEvidence: _afterEvidence,
+				invalidationEvidence: _afterInvalidation,
+				...afterBinding
+			} = next.humanGate;
+			if (JSON.stringify(beforeBinding) !== JSON.stringify(afterBinding)) {
+				throw new ProductionStateConflictError("immutable parent human gate binding changed");
+			}
+			const validStatusAdvance = previous.humanGate.status === "prepared"
+				? next.humanGate.status === "prepared" || next.humanGate.status === "pending"
+				: previous.humanGate.status === "pending"
+					? next.humanGate.status === "pending" || next.humanGate.status === "merged" || next.humanGate.status === "rejected"
+					: next.humanGate.status === previous.humanGate.status;
+			if (!validStatusAdvance) {
+				throw new ProductionStateConflictError("terminal parent human gate status changed");
+			}
+			if (appendedInvalidations.length !== 0) {
+				throw new ProductionStateConflictError("parent gate cannot remain active while archiving an invalidation");
+			}
+		} else {
+			const archived = appendedInvalidations[0];
+			const {
+				status: _archivedStatus,
+				mergeEvidence: _archivedMerge,
+				invalidationEvidence: _archivedInvalidation,
+				...archivedBinding
+			} = archived ?? previous.humanGate;
+			if (previous.humanGate.status !== "pending" || appendedInvalidations.length !== 1
+				|| archived?.status !== "invalidated" || JSON.stringify(beforeBinding) !== JSON.stringify(archivedBinding)) {
+				throw new ProductionStateConflictError("pending parent gate may be removed only by exact durable invalidation");
+			}
 		}
-		if (previous.humanGate.status !== "pending" && next.humanGate.status !== previous.humanGate.status) {
-			throw new ProductionStateConflictError("terminal parent human gate status changed");
-		}
+	} else if (appendedInvalidations.length !== 0) {
+		throw new ProductionStateConflictError("invalidated parent gate history lacks its exact active predecessor");
 	}
 	if (previous.childGate && next.generation === previous.generation) {
 		const { status: _beforeStatus, ...beforeBinding } = previous.childGate;
@@ -950,6 +1090,63 @@ export function refreshProductionChildOwnership(
 			summary: safeText(input.summary ?? "workspace ownership refreshed; verification required", "ownership refresh summary", 4_096),
 			effectKey,
 			workspace: newBinding,
+		};
+	}, now);
+}
+
+export function reconcileProductionChildHead(
+	currentValue: ProductionAutonomousState,
+	fence: ProductionStateFence,
+	input: ProductionChildHeadReconciliationInput,
+): ProductionAutonomousState {
+	const current = validateProductionAutonomousState(currentValue);
+	const child = current.children.find((candidate) => candidate.id === input.childId);
+	if (!child?.ownership || !child.checkpoint?.pullRequest) {
+		throw new ProductionStateConflictError("child-head reconciliation requires durable ownership and pull request truth");
+	}
+	const nextBinding = input.checkpoint.workspace === undefined ? undefined : validateWorkspace(input.checkpoint.workspace);
+	const effectKey = input.checkpoint.effectKey === undefined
+		? undefined : safeText(input.checkpoint.effectKey, "child head reconciliation effect key", 256);
+	if (!nextBinding || !effectKey || child.ownership.head !== input.previousHead
+		|| nextBinding.head !== input.head || input.previousHead === input.head
+		|| child.ownership.claimId !== nextBinding.claimId
+		|| child.ownership.ownershipId !== nextBinding.ownershipId
+		|| child.ownership.repositoryIdentity !== nextBinding.repositoryIdentity
+		|| child.ownership.worktreeIdentity !== nextBinding.worktreeIdentity
+		|| child.ownership.cwd !== nextBinding.cwd
+		|| child.ownership.branch !== nextBinding.branch
+		|| child.ownership.baseBranch !== nextBinding.baseBranch
+		|| child.ownership.baseHead !== nextBinding.baseHead
+		|| JSON.stringify(child.ownership.writeScopes) !== JSON.stringify(nextBinding.writeScopes)) {
+		throw new ProductionStateConflictError("child-head reconciliation moved outside its exact durable workspace binding");
+	}
+	const now = input.now ?? new Date();
+	return evolveProductionState(current, fence, (draft) => {
+		const target = draft.children.find((candidate) => candidate.id === input.childId)!;
+		const prior = target.checkpoint!;
+		const effectKeys = [...new Set([
+			...(prior.effectKey === undefined ? [] : [prior.effectKey]),
+			...(prior.effectKeys ?? []),
+			...(input.checkpoint.effectKey === undefined ? [] : [input.checkpoint.effectKey]),
+			...(input.checkpoint.effectKeys ?? []),
+		])];
+		target.ownership = nextBinding;
+		target.status = "running";
+		target.stage = "verification";
+		target.checkpoint = {
+			...prior,
+			...input.checkpoint,
+			workspace: nextBinding,
+			...(effectKeys.length === 0 ? {} : { effectKeys }),
+		};
+		delete target.checkpoint.verification;
+		delete target.checkpoint.review;
+		delete target.checkpoint.integrationReceiptDigest;
+		target.childHeadReconciliation = {
+			previousHead: input.previousHead,
+			head: input.head,
+			effectKey,
+			reconciledAt: now.toISOString(),
 		};
 	}, now);
 }

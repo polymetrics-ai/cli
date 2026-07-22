@@ -194,7 +194,8 @@ test("refuses child integration into a default branch before any GitHub mutation
 		marker: "<!-- shepherd-pr:v1:471:child-a:abc -->",
 		baseSha: "1".repeat(40),
 		headSha: "2".repeat(40),
-		parentBranch: "main",
+		parentBranch: "release",
+		parentBaseBranch: "release",
 		mutation,
 	} as unknown as IntegrateChildRequest;
 	await assert.rejects(transport.integrateChild(request, context()), /refuses default-branch/i);

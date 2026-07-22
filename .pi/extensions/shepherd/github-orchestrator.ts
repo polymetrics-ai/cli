@@ -362,6 +362,8 @@ export interface IntegrateChildRequest extends GitHubPullRequestQuery {
 	baseSha: string;
 	headSha: string;
 	parentBranch: string;
+	/** Plan-bound authoritative default/base branch that child integration must never target. */
+	parentBaseBranch: string;
 	pullRequestSnapshot: CanonicalPullRequestSnapshot;
 	observation: PullRequestObservation;
 	controllerProvenance: ControllerIntegrationProvenance;
@@ -699,7 +701,7 @@ export function adaptGitHubDecisionBroker(broker: GitHubDecisionBroker): ParentD
 		async request(request, context) {
 			return withActualBrokerContext(context, async () => {
 				const binding = brokerBinding(request);
-				const requested = validateHumanDecisionRecord(await broker.request(request));
+				const requested = validateHumanDecisionRecord(await broker.request(request, { signal: context.signal }));
 				const canonical = await broker.readRecord(request.requestId, binding);
 				if (!canonicalDataEqual(requested, canonical)) {
 					throw new Error("GitHub decision request result disagrees with canonical state");
@@ -4085,7 +4087,11 @@ export class GitHubParentOrchestrator {
 				childIntegrationMutationProjection(requestIntent),
 				null,
 			);
-			const request: IntegrateChildRequest = { ...requestIntent, mutation };
+			const request: IntegrateChildRequest = {
+				...requestIntent,
+				parentBaseBranch: plan.parentBaseBranch,
+				mutation,
+			};
 			let mutationError: unknown;
 			let mutationApplied: boolean | undefined;
 			try {

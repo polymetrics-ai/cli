@@ -11,6 +11,7 @@ import {
 	assertProductionPlanBinding,
 	evolveProductionState,
 	refreshProductionChildOwnership,
+	reconcileProductionChildHead,
 	waitForProductionChildIntervention,
 	type ProductionAutonomousState,
 	type ProductionChildRuntimeState,
@@ -53,6 +54,12 @@ export interface ProductionChildPipelinePort {
 	publish(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint>;
 	review(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint>;
 	correct(context: ProductionChildPipelineContext, findings: readonly string[]): Promise<ProductionStageCheckpoint>;
+	reconcileChildHead(context: ProductionChildPipelineContext): Promise<{
+		checkpoint: ProductionStageCheckpoint;
+		previousHead: string;
+		head: string;
+		invalidated: { verification: true; review: true; integration: true };
+	}>;
 	refresh(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint>;
 	integrate(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint>;
 	requestIntervention(
@@ -85,6 +92,15 @@ export interface ProductionParentFinalizerPort {
 export type ProductionParentGateObservation =
 	| { status: "pending" | "approved_waiting_for_merge" | "rejected" }
 	| {
+		status: "invalidated";
+		repository: string;
+		pullRequest: number;
+		previousHead: string;
+		currentHead: string;
+		revision: number;
+		observedAt: string;
+	}
+	| {
 		status: "merged";
 		repository: string;
 		pullRequest: number;
@@ -96,12 +112,20 @@ export type ProductionParentGateObservation =
 	};
 
 export interface ProductionParentGatePort {
+	/** Purely prepares the deterministic external request identity for durable pre-effect persistence. */
+	prepare(
+		plan: ProductionParentPlanDocument,
+		state: ProductionAutonomousState,
+		finalization: ProductionParentFinalization,
+	): { requestId: string };
+	/** Idempotently applies or reconciles the exact prepared request. */
 	request(
 		plan: ProductionParentPlanDocument,
 		state: ProductionAutonomousState,
 		finalization: ProductionParentFinalization,
 		signal: AbortSignal,
 	): Promise<{ requestId: string }>;
+	/** Replay-safe durable decision and authoritative merge reconciliation. */
 	observe(
 		plan: ProductionParentPlanDocument,
 		state: ProductionAutonomousState,
@@ -233,9 +257,33 @@ export class ProductionShepherdController {
 			active.controller.abort(new Error("production Shepherd stop requested"));
 			let abortFailure: unknown;
 			try { await this.#pipeline.abort(active.runId); } catch (error) { abortFailure = error; }
-			const state = await active.promise;
+			let runState: ProductionAutonomousState | undefined;
+			let runFailure: unknown;
+			try { runState = await active.promise; } catch (error) { runFailure = error; }
+			let joinFailure: unknown;
+			try { await this.#pipeline.join(active.runId); } catch (error) { joinFailure = error; }
+			const durable = await this.#store.load(issue);
+			if (durable !== undefined && durable.status !== "completed" && durable.status !== "failed") {
+				this.#current = durable;
+				const stopped = durable.status === "stopped" ? durable : await this.#evolve(durable.runId, durable.generation, (draft) => {
+					draft.status = "stopped";
+					draft.stage = draft.humanGate || draft.childGate ? "human_decision" : "schedule";
+					for (const child of draft.children) {
+						if (child.status === "running") {
+							child.resumeStage = child.stage;
+							child.status = "cancelled";
+							child.stage = "cancelled";
+						}
+					}
+				});
+				if (abortFailure !== undefined) throw abortFailure;
+				if (joinFailure !== undefined) throw joinFailure;
+				return stopped;
+			}
 			if (abortFailure !== undefined) throw abortFailure;
-			return state;
+			if (joinFailure !== undefined) throw joinFailure;
+			if (runState !== undefined) return runState;
+			throw new Error("production Shepherd stopped before durable initialization completed", { cause: runFailure });
 		}
 		if (active) throw new Error(`a production Shepherd run is active for issue #${active.issue}`);
 		const state = await this.#store.load(issue);
@@ -297,6 +345,7 @@ export class ProductionShepherdController {
 			timeoutMs: command.timeoutMs,
 		}));
 		await this.#recovery.open({ runId, generation: 1, signal });
+		this.#current = await this.#reloadRecovered(command.issue, runId, 1, snapshot.plan);
 		await this.#evolve(runId, 1, (draft) => { draft.stage = "schedule"; });
 		return this.#drive(snapshot.plan, runId, 1, signal);
 	}
@@ -307,7 +356,15 @@ export class ProductionShepherdController {
 		const snapshot = await this.#intake.load(command.issue, signal);
 		assertProductionPlanBinding(state, snapshot.plan);
 		this.#current = state;
-		if (state.humanGate) return this.#observeParentGate(snapshot.plan, state, signal);
+		if (state.humanGate?.status === "prepared") {
+			this.#current = state;
+			return this.#ensurePreparedParentGate(snapshot.plan, state, signal);
+		}
+		if (state.humanGate) {
+			const observed = await this.#observeParentGate(snapshot.plan, state, signal);
+			if (!observed.invalidated) return observed.state;
+			state = observed.state;
+		}
 		if (state.childGate) {
 			const observation = await this.#pipeline.observeIntervention(state, signal);
 			if (observation.status === "pending") return state;
@@ -335,6 +392,8 @@ export class ProductionShepherdController {
 			await this.#acknowledge(observation.effectKey, state);
 		}
 		await this.#recovery.open({ runId: state.runId, generation: state.generation, signal });
+		state = await this.#reloadRecovered(command.issue, state.runId, state.generation, snapshot.plan);
+		this.#current = state;
 		if (command.maxConcurrency !== state.maxConcurrency || command.timeoutMs !== state.timeoutMs) {
 			throw new Error("resume concurrency/timeout differs from the durable production run policy");
 		}
@@ -349,10 +408,38 @@ export class ProductionShepherdController {
 		plan: ProductionParentPlanDocument,
 		state: ProductionAutonomousState,
 		signal: AbortSignal,
-	): Promise<ProductionAutonomousState> {
+	): Promise<{ state: ProductionAutonomousState; invalidated: boolean }> {
 		const observation = await this.#parentGate.observe(plan, state, signal);
-		if (observation.status === "pending" || observation.status === "approved_waiting_for_merge") return state;
-		return this.#evolve(state.runId, state.generation, (draft) => {
+		if (observation.status === "pending" || observation.status === "approved_waiting_for_merge") {
+			return { state, invalidated: false };
+		}
+		if (observation.status === "invalidated") {
+			if (observation.repository !== state.humanGate?.repository
+				|| observation.pullRequest !== state.humanGate.pullRequest
+				|| observation.previousHead !== state.humanGate.head) {
+				throw new Error("authoritative parent invalidation moved from the durable exact-head gate");
+			}
+			const invalidated = await this.#evolve(state.runId, state.generation, (draft) => {
+				if (!draft.humanGate) throw new Error("parent gate disappeared during invalidation");
+				draft.invalidatedParentGates = [
+					...(draft.invalidatedParentGates ?? []),
+					{
+						...draft.humanGate,
+						status: "invalidated",
+						invalidationEvidence: {
+							currentHead: observation.currentHead,
+							revision: observation.revision,
+							observedAt: observation.observedAt,
+						},
+					},
+				];
+				delete draft.humanGate;
+				draft.status = "running";
+				draft.stage = "schedule";
+			});
+			return { state: invalidated, invalidated: true };
+		}
+		const settled = await this.#evolve(state.runId, state.generation, (draft) => {
 			if (!draft.humanGate) throw new Error("parent gate disappeared during observation");
 			if (observation.status === "merged") {
 				if (observation.repository !== draft.humanGate.repository
@@ -376,6 +463,50 @@ export class ProductionShepherdController {
 				draft.terminalBlocker = "human rejected the exact parent merge";
 			}
 		});
+		return { state: settled, invalidated: false };
+	}
+
+	async #ensurePreparedParentGate(
+		plan: ProductionParentPlanDocument,
+		state: ProductionAutonomousState,
+		signal: AbortSignal,
+	): Promise<ProductionAutonomousState> {
+		const prepared = state.humanGate;
+		if (!prepared || prepared.status !== "prepared") {
+			throw new Error("durable parent gate request is not prepared");
+		}
+		const request = await this.#parentGate.request(plan, structuredClone(state), {
+			pullRequest: prepared.pullRequest,
+			head: prepared.head,
+			summary: "Reconcile the durable exact-head parent merge request.",
+		}, signal);
+		if (signal.aborted) throw signal.reason ?? new Error("parent gate request cancelled");
+		if (request.requestId !== prepared.requestId) {
+			throw new Error("reconciled parent gate request changed its durable exact identity");
+		}
+		return this.#evolve(state.runId, state.generation, (draft) => {
+			if (!draft.humanGate || draft.humanGate.status !== "prepared"
+				|| draft.humanGate.requestId !== request.requestId) {
+				throw new Error("durable prepared parent gate disappeared during reconciliation");
+			}
+			draft.humanGate.status = "pending";
+			draft.status = "waiting_human";
+			draft.stage = "human_decision";
+		});
+	}
+
+	async #reloadRecovered(
+		issue: number,
+		runId: string,
+		generation: number,
+		plan: ProductionParentPlanDocument,
+	): Promise<ProductionAutonomousState> {
+		const recovered = await this.#store.load(issue);
+		if (!recovered || recovered.runId !== runId || recovered.generation !== generation) {
+			throw new StaleProductionGenerationError();
+		}
+		assertProductionPlanBinding(recovered, plan);
+		return recovered;
 	}
 
 	#context(
@@ -482,19 +613,20 @@ export class ProductionShepherdController {
 		await this.#pipeline.join(runId);
 		const finalization = await this.#finalizer.finalize(plan, structuredClone(this.#current!), signal);
 		if (signal.aborted) return this.#evolve(runId, generation, (draft) => { draft.status = "stopped"; draft.stage = "schedule"; });
-		const request = await this.#parentGate.request(plan, structuredClone(this.#current!), finalization, signal);
-		return this.#evolve(runId, generation, (draft) => {
-			draft.status = "waiting_human";
+		const prepared = this.#parentGate.prepare(plan, structuredClone(this.#current!), finalization);
+		const preparedState = await this.#evolve(runId, generation, (draft) => {
+			draft.status = "running";
 			draft.stage = "human_decision";
 			draft.humanGate = {
 				repository: plan.repository,
 				pullRequest: finalization.pullRequest,
 				generation,
 				head: finalization.head,
-				requestId: request.requestId,
-				status: "pending",
+				requestId: prepared.requestId,
+				status: "prepared",
 			};
 		});
+		return this.#ensurePreparedParentGate(plan, preparedState, signal);
 	}
 
 	async #runChild(
@@ -528,7 +660,8 @@ export class ProductionShepherdController {
 					if (verified.verification.status === "failed") {
 						throw new ProductionLifecycleError("correction_required", "bounded verification requires correction", ["verification_failed"]);
 					}
-					stage = "publication";
+					stage = this.#context(plan, childId, runId, generation, signal).runtime.checkpoint?.pullRequest === undefined
+						? "publication" : "review";
 				}
 				if (stage === "publication") {
 					await this.#stage(plan, childId, runId, generation, signal, "publication", (context) => this.#pipeline.publish(context));
@@ -545,6 +678,7 @@ export class ProductionShepherdController {
 					const current = this.#context(plan, childId, runId, generation, signal).runtime;
 					const findings = correctionFindings(current);
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
+					if (signal.aborted) return "succeeded";
 					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
@@ -574,6 +708,27 @@ export class ProductionShepherdController {
 					child.lastFailure = { kind: failure.kind, summary: safeFailureSummary(failure.kind, stage), at: this.#now().toISOString() };
 				});
 				const current = this.#context(plan, childId, runId, generation, signal).runtime;
+				if (failure.kind === "correction_required" && failure.blockers.includes("child_head_moved")) {
+					const reconciled = await this.#pipeline.reconcileChildHead(
+						this.#context(plan, childId, runId, generation, signal),
+					);
+					if (signal.aborted) return "succeeded";
+					if (reconciled.invalidated.verification !== true || reconciled.invalidated.review !== true
+						|| reconciled.invalidated.integration !== true) {
+						throw new ProductionLifecycleError("terminal", "child-head reconciliation did not invalidate downstream evidence");
+					}
+					const persisted = await this.#custom(runId, generation, (state, stateFence) =>
+						reconcileProductionChildHead(state, stateFence, {
+							childId,
+							previousHead: reconciled.previousHead,
+							head: reconciled.head,
+							checkpoint: reconciled.checkpoint,
+							now: this.#now(),
+						}));
+					await this.#acknowledgeCheckpoint(reconciled.checkpoint, persisted);
+					stage = "verification";
+					continue;
+				}
 				if (failure.kind === "stale_parent") {
 					if (current.attempts >= current.maxAttempts) return this.#waitForChild(plan, childId, runId, generation, signal, "retry_budget_exhausted");
 					await this.#evolve(runId, generation, (draft) => { draft.children.find((candidate) => candidate.id === childId)!.attempts += 1; });
@@ -604,6 +759,7 @@ export class ProductionShepherdController {
 					});
 					const findings = correctionFindings(current);
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
+					if (signal.aborted) return "succeeded";
 					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
