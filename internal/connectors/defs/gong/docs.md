@@ -1,39 +1,28 @@
 # Overview
 
-Reads Gong users, calls, and scorecards through the Gong REST API (read-only).
+Reads Gong users, calls, scorecards, settings, flows, and related API resources through the Gong REST API.
 
-Readable streams: `users`, `calls`, `scorecards`.
+Executable ETL streams: `users`, `calls`, `scorecards`, `crm_integrations`, `workspaces`, `trackers`, `briefs`, `library_folders`, `flows`, `flow_folders`, `call_outcomes`, `permission_profiles`.
 
-This connector is read-only; no write actions are declared.
+Bounded direct-read commands cover the official GET detail/query endpoints and all 13 POST read-query endpoints with the `json_redacted` output policy. POST reads execute through typed operation metadata with connector-authored flags and schema-gated JSON bodies; no raw body flag exists. Call transcripts are available through `pm gong calls transcript` with call ID, time range, workspace, and cursor filters and a 16 MiB response cap. JSON mutations, typed multipart uploads, and top-level array CRM schema uploads are modeled as reverse-ETL write actions where the engine supports the request shape.
 
-Service API documentation: https://us-66463.app.gong.io/settings/api/documentation.
+Service API documentation: https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=.
 
 ## Auth setup
 
 Connection fields:
 
-- `access_key` (required, secret, string); Gong generated access key. Used for HTTP Basic auth;
-  never logged.
-- `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP
-  Basic auth; never logged.
-- `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL
-  override for tests or proxies.
-- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust
-  the stream.
-- `mode` (optional, string).
-- `page_size` (optional, string); default `100`; Records per page (1-100).
-- `start_date` (optional, string); format `date-time`; RFC3339 lower bound; only objects
-  created/started at or after this time are read.
+- `access_key` (required, secret, string); Gong generated access key. Used for HTTP Basic auth; never logged.
+- `access_key_secret` (required, secret, string); Gong generated access key secret. Used for HTTP Basic auth; never logged.
+- `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL override for tests or proxies.
+- `max_pages` (optional, string); default `0`; maximum pages; use 0, all, or unlimited to exhaust a paginated stream.
+- `mode` (optional, string); fixture mode is used by credential-free conformance.
+- `page_size` (optional, string); default `100`; records per page (1-100).
+- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for supported incremental streams.
 
 Secret fields are redacted in logs and write previews: `access_key`, `access_key_secret`.
 
-Default configuration values: `base_url=https://api.gong.io/v2`, `max_pages=0`, `page_size=100`.
-
-Authentication behavior:
-
-- HTTP Basic authentication using `secrets.access_key`, `secrets.access_key_secret`.
-
-Requests use the configured `base_url` value after applying defaults.
+Authentication behavior: HTTP Basic authentication using `secrets.access_key`, `secrets.access_key_secret`.
 
 Connection checks call GET `/users` with query `limit`=`1`.
 
@@ -41,30 +30,30 @@ Connection checks call GET `/users` with query `limit`=`1`.
 
 Default pagination: cursor pagination; cursor parameter `cursor`; next token from `records.cursor`.
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `users`: GET `/users` - records path `users`; query `limit`=`{{ config.page_size }}`; cursor
-  pagination; cursor parameter `cursor`; next token from `records.cursor`; incremental cursor
-  `created`; sent as `fromDateTime`; formatted as `rfc3339`; initial lower bound from `start_date`;
-  computed output fields `email_address`, `first_name`, `last_name`, `manager_id`, `phone_number`.
-- `calls`: GET `/calls` - records path `calls`; query `limit`=`{{ config.page_size }}`; cursor
-  pagination; cursor parameter `cursor`; next token from `records.cursor`; incremental cursor
-  `started`; sent as `fromDateTime`; formatted as `rfc3339`; initial lower bound from `start_date`;
-  computed output fields `is_private`.
-- `scorecards`: GET `/settings/scorecards` - records path `scorecards`; query `limit`=`{{
-  config.page_size }}`; cursor pagination; cursor parameter `cursor`; next token from
-  `records.cursor`; incremental cursor `updated`; sent as `fromDateTime`; formatted as `rfc3339`;
-  initial lower bound from `start_date`.
+The original incremental streams remain `users`, `calls`, and `scorecards`; additional list streams are full-refresh stream runners over public Gong list endpoints. Commands such as `pm gong workspaces list --json` use the same credential and bounded `--limit` behavior as other connector stream commands.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Gong API read of call, user, and scorecard
-data.
+Write actions are declared in `writes.json` for JSON Gong mutations, including calls, meetings, CRM integration registration/deletion, permission profiles, calls user access, flows assignments, engagement events, digital interactions, tasks, integration settings, data privacy erasure, bounded multipart media/CRM uploads, and the top-level JSON array CRM entity-schema upload.
+
+Safety gates:
+
+- Use reverse ETL plan -> preview -> approval -> execute.
+- Destructive/admin actions declare `confirm: destructive`.
+- No generic raw HTTP write, raw JSON body, arbitrary GraphQL mutation, shell write, or SQL write is exposed.
+- Multipart upload commands accept only declared project-local file path fields, bind approvals to a SHA-256 content digest, snapshot and verify the approved bytes before any HTTP request, and enforce byte limits during preflight, snapshotting, and streaming; file/path/content-like fields are redacted in command plans.
+- Top-level JSON array writes use a declared `body_field` and `body_schema`; no raw JSON CLI flag is exposed.
+
+Read risk: external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted.
+
+Write risk: typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, and data privacy erasure.
+
+Approval: reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  out_of_scope=7.
+- API coverage is inventoried from the public Gong OpenAPI 3.0.1 spec fetched on 2026-07-10: 57 paths and 67 operations.
+- Executable coverage: 12 stream endpoints, 29 bounded direct reads (16 GET plus all 13 typed POST read-query commands), and 26 typed reverse-ETL write actions.
+- All 67 official operations have executable stream, direct-read, or typed reverse-ETL coverage; no API-ledger operation blockers remain.
+- POST read-query filters are allow-listed as typed command flags. Arbitrary/raw request bodies remain intentionally unavailable.

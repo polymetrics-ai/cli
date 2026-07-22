@@ -1,0 +1,41 @@
+{
+  "issue": 147,
+  "parent_issue": 133,
+  "phase": "issue-147-gong-sensitive-admin-policy",
+  "status": "green_local_integrated",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "gsd": {
+    "doctor": "passed",
+    "programming_loop": "manual_fallback_unavailable",
+    "prompt": "scripts/gsd prompt plan-phase 133 --skip-research"
+  },
+  "skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-documentation"
+  ],
+  "human_gates": [
+    "credentialed Gong checks",
+    "reverse ETL execution",
+    "destructive external actions",
+    "new dependencies",
+    "parent PR merge to main"
+  ],
+  "verification": [
+    "go test ./internal/connectors/engine -run DirectRead -count=1",
+    "go test ./internal/connectors/commandrunner -count=1",
+    "go test ./cmd/connectorgen -run Gong -count=1",
+    "go test ./cmd/connectorgen -count=1",
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
+    "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs"
+  ],
+  "docs_parity": "pm help docs reviewed; pm docs validate passed; docs/connectors/gong and website generated catalog updated"
+}

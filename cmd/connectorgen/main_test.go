@@ -1170,6 +1170,15 @@ none
 
 func operationCLISurfaceBundleFS(cliSurface, operations string) fstest.MapFS {
 	fsys := cliSurfaceBundleFS(cliSurface)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "GET", "path": "/widgets/{id}", "operation": { "model": "direct_read", "status": "blocked", "risk": "low", "blocked_by_default": true, "reason": "typed operation metadata" } }
+		]
+	}`)}
 	fsys["cli-surface/operations.json"] = &fstest.MapFile{Data: []byte(operations)}
 	return fsys
 }
@@ -1183,10 +1192,11 @@ func validOperationsJSON() string {
 				"summary": "Read widget metadata",
 				"risk": "low",
 				"approval": "none",
-				"output_policy": "json",
+				"output_policy": "json_redacted",
 				"rest": {
 					"method": "GET",
-					"path": "/widgets/{id}"
+					"path": "/widgets/{id}",
+					"max_bytes": 1024
 				}
 			}
 		]
@@ -1204,6 +1214,10 @@ func validOperationCLISurfaceJSON() string {
 				"intent": "direct_read",
 				"availability": "implemented",
 				"operation": "cli-surface.widgets.get",
+				"api_surface": [
+					{ "method": "GET", "path": "/widgets/{id}" }
+				],
+				"output_policy": "json_redacted",
 				"source_cli_path": "clis widget view",
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
 			}

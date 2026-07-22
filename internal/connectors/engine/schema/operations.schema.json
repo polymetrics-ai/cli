@@ -84,10 +84,17 @@
             "properties": {
               "method": { "type": "string" },
               "path": { "type": "string" },
+              "content_type": { "type": "string" },
+              "max_bytes": { "type": "integer" },
               "query": {
                 "type": "object",
                 "additionalProperties": true
-              }
+              },
+              "body": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "body_schema": { "type": "object" }
             }
           },
           "graphql": {

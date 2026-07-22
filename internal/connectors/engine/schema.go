@@ -3,6 +3,7 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
+	"reflect"
 	"regexp"
 	"sort"
 	"strings"
@@ -281,12 +282,11 @@ func (n *schemaNode) validate(v any, path string) error {
 		if err := n.validateObject(val, path); err != nil {
 			return err
 		}
-	case []any:
-		if n.items != nil {
-			for i, elem := range val {
-				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
-					return err
-				}
+	}
+	if elems, ok := arrayElements(v); ok && n.items != nil {
+		for i, elem := range elems {
+			if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+				return err
 			}
 		}
 	}
@@ -355,6 +355,24 @@ func typeMatches(v any, types []string) bool {
 	return false
 }
 
+func arrayElements(v any) ([]any, bool) {
+	if v == nil {
+		return nil, false
+	}
+	if elems, ok := v.([]any); ok {
+		return elems, true
+	}
+	rv := reflect.ValueOf(v)
+	if rv.Kind() != reflect.Slice && rv.Kind() != reflect.Array {
+		return nil, false
+	}
+	elems := make([]any, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		elems[i] = rv.Index(i).Interface()
+	}
+	return elems, true
+}
+
 func valueIsType(v any, t string) bool {
 	switch t {
 	case "null":
@@ -369,7 +387,7 @@ func valueIsType(v any, t string) bool {
 		_, ok := v.(map[string]any)
 		return ok
 	case "array":
-		_, ok := v.([]any)
+		_, ok := arrayElements(v)
 		return ok
 	case "integer":
 		return isIntegerNumber(v)
