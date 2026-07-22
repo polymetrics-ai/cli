@@ -1,8 +1,8 @@
 # Verification: #478
 
 Status: both Cycle 11 reviews block exact candidate
-`4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`. Cycle 12 is at the artifact-only PLAN checkpoint;
-no Cycle 12 test or production edit has run. `verificationPassed` and `reviewCoveragePassed` remain
+`4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`. Cycle 12 is at executable RED after artifact PLAN
+`7f96718c06409c078d773ddae05d69ede3996af5`; no production edit has run. `verificationPassed` and `reviewCoveragePassed` remain
 false. Earlier cycle gate sections below are historical evidence and do not supersede the current
 Cycle 12 contract.
 
@@ -14,8 +14,9 @@ Cycle 12 contract.
       total restart-role consumption, recovery-claimed windows, assignment tails, and evidence.
 - [x] Required skill/contracts/runtime/project artifacts are read; doctor passes and unavailable
       adapter/helper records `manual_gsd_fallback`; TypeScript-only scope makes Go skills N/A.
-- [ ] Artifact-only Cycle 12 PLAN commit precedes every Cycle 12 test and production edit.
-- [ ] One executable RED records exact failures/controls with all five production blobs unchanged.
+- [x] Artifact-only Cycle 12 PLAN `7f96718c` precedes every Cycle 12 test and production edit.
+- [x] One executable RED records 942 total / 885 pass / 56 intended failures / 1 skip with all five
+      production blobs unchanged; strict owned TypeScript passes.
 - [ ] PLAN/RED SHAs, counts, and blobs are reported before GREEN.
 - [ ] Focused, strict owned/all-production TypeScript, offline RPC, broad serialized
       classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
@@ -26,6 +27,11 @@ Planned RED rows are BEGIN 6, orphan-role 7, global-sequence 5, recovery-claimed
 108, and artifact 4. Canonical claim-window controls are counted separately from expected
 failures. Cycle 11 focused and broad counts remain historical; they do not close Cycle 12. Machine
 verification and review coverage remain false.
+
+Cycle 12 RED failure ledger: BEGIN 6 leaves; orphan-role 7; global-sequence 5; recovery-claimed 15;
+direct assignment 18; five parent containers. The 90 new consumer rows and ordinary newline
+control pass. There are no setup or retained failures. Frozen blobs are orchestrator `158749ba`,
+broker `7be67851`, evidence `058ad162`, human decision `fc1c6230`, and router `4eadd5d9`.
 
 ## Cycle 11 verification contract
 

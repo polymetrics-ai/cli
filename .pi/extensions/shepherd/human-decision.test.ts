@@ -682,6 +682,40 @@ test("cycle 11 keeps assignment-tail rejection generic before durable decision s
 	}
 });
 
+function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["multiline double quote", `"prefix\n${marker}"`],
+		["multiline single quote", `'prefix\n${marker}'`],
+		["multiline backtick", `\`prefix\n${marker}\``],
+		["multiline command substitution", `$(printf prefix\n${marker})`],
+		["multiline parameter expansion", `\${UNSAFE:-prefix\n${marker}}`],
+		["array composite", `(prefix ${marker})`],
+		["input process substitution", `<(printf ${marker})`],
+		["output process substitution", `>(printf ${marker})`],
+		["brace composite", `{prefix,${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 12 keeps multiline and composite assignment rejection generic before durable decision state", async (t) => {
+	const marker = "CYCLE12_HUMAN_DECISION_MARKER";
+	for (const [name, question] of cycle12SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
 	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
 	const requestComment = {

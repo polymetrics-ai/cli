@@ -261,7 +261,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   non-zero and no fresh exact-head review has run. Parent owns publication, reviews, integration,
   ready, merge, and human gates; this worker performs no network or external mutation
 
-## Cycle 12 consolidated-review correction (PLAN only; verification/review false)
+## Cycle 12 consolidated-review correction (executable RED; verification/review false)
 
 - both Cycle 11 reviews block exact `4f0e17df`; their complete union is planned without deferral
 - valid request-mismatched begin success requires separate requested reconciliation and observed-
@@ -271,7 +271,9 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   globally unique; legitimate recovery-claim-before-effect without rollback receipt remains valid
 - `=`/`+=` multiline and composite shell values require complete direct redaction plus generic
   no-marker rejection through all five consumers
-- Cycle 11 evidence claims are narrowed to their named rows. At this checkpoint no Cycle 12 test
-  or production edit has run; all five production blobs are frozen and both machine gates are false
+- Cycle 11 evidence claims are narrowed to their named rows. PLAN `7f96718c` precedes a 942 total /
+  885 pass / 56 intended fail / 1 skip RED: 51 named leaves plus five parent containers. All 90
+  assignment consumers pass generically; no production edit has run, all five production blobs
+  are frozen, and both machine gates are false
 - exact 21-path scope is unchanged; no network, push, review, integration, ready, merge, or human
   gate action is worker-owned

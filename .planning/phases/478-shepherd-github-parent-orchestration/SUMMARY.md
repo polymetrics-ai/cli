@@ -1,9 +1,10 @@
 # Summary: #478
 
 Status: Cycle 11 exact evidence candidate `4f0e17df` is blocked by both independent reviews. Cycle
-12 is at its artifact-only PLAN checkpoint: both reports are consolidated into dual durable-begin
+12 is at its executable RED checkpoint after artifact PLAN `7f96718c`: both reports are consolidated into dual durable-begin
 ownership, a total restart-role graph, multiline/composite assignment redaction, and narrowly
-scoped evidence claims. No Cycle 12 test or production edit has run. Verification and review
+scoped evidence claims. RED is 942 total / 885 pass / 56 intended fail / 1 skip with production
+frozen. No Cycle 12 production edit has run. Verification and review
 coverage remain false; earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -279,3 +280,9 @@ top-level array/input-process/output-process/brace composites: 18 direct redacti
 generic/no-marker checks in the five consumers. Cycle 11 counts remain historical and are not
 evidence that these adjacent invariants pass. `verificationPassed` and `reviewCoveragePassed`
 remain false. No external or human gate is worker-owned.
+
+Executable RED contains 51 named failing leaves: six dual-owner begin rows, seven orphan-role rows,
+five global-sequence rows, fifteen recovery-claimed rows, and eighteen direct assignment rows.
+Five parent containers account for the other failures. All ninety five-consumer assignment rows
+and the ordinary unquoted-newline control pass generically. Strict TypeScript passes; the five
+production blobs remain byte-exact.

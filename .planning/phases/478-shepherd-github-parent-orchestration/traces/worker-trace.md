@@ -529,3 +529,16 @@
   The same planned RED covers multiline/composite assignment tails and narrow evidence. No Cycle
   12 test, production, network/GitHub, push, reviewer, ready, integration, merge, or human-gate
   action ran. Verification and review coverage remain false.
+
+## 2026-07-22 Cycle 12 executable RED
+
+- Artifact PLAN `7f96718c06409c078d773ddae05d69ede3996af5` preceded every test edit. Five existing test files
+  now contain the complete review union; production remains byte-exact.
+- Combined focused RED: 942 total / 885 pass / 56 intended failures / 1 intentional skip. The 51
+  failing leaves are BEGIN 6, GRAPH-ORPHAN 7, GRAPH-SEQUENCE 5, GRAPH-CLAIM 15, and direct
+  assignment redaction 18. Five parent containers fail only because those leaves fail.
+- All 90 new assignment consumer rows and the ordinary unquoted-newline control pass with generic
+  text containing neither marker nor credential suffix. There are no setup or retained failures.
+- Strict no-emit TypeScript passes for all five owned production/test pairs. Frozen blobs remain
+  orchestrator `158749ba`, broker `7be67851`, evidence `058ad162`, human `fc1c6230`, and router
+  `4eadd5d9`. No production, dependency, external, review, integration, merge, or human gate ran.

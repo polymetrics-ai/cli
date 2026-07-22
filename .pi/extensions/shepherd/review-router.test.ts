@@ -652,3 +652,50 @@ test("cycle 11 consumes complete shell-like assignment values at the review-rout
 		}
 	}
 });
+
+function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["multiline double quote", `"prefix\n${marker}"`],
+		["multiline single quote", `'prefix\n${marker}'`],
+		["multiline backtick", `\`prefix\n${marker}\``],
+		["multiline command substitution", `$(printf prefix\n${marker})`],
+		["multiline parameter expansion", `\${UNSAFE:-prefix\n${marker}}`],
+		["array composite", `(prefix ${marker})`],
+		["input process substitution", `<(printf ${marker})`],
+		["output process substitution", `>(printf ${marker})`],
+		["brace composite", `{prefix,${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 12 consumes multiline and composite assignment tails completely", async (t) => {
+	const marker = "CYCLE12_REVIEW_ROUTER_MARKER";
+	const publicBoundary = "PUBLIC_NOTE=retained";
+	for (const [name, assignment] of cycle12SensitiveAssignmentTails(marker)) {
+		await t.test(`${name} fully redacts through the closing syntax`, () => {
+			const redacted = reviewRouterApi.redactSensitiveText(`${assignment}\n${publicBoundary}`);
+			const operator = assignment.startsWith("ACME_API_KEY+=") ? "+=" : "=";
+			assert.equal(redacted, `ACME_API_KEY${operator}[REDACTED]\n${publicBoundary}`);
+			assert.doesNotMatch(redacted, new RegExp(marker, "u"));
+		});
+		await t.test(`${name} rejects generically before durable review work`, () => {
+			let rejection: unknown;
+			try {
+				createIndependentReviewWork(target({ workItemId: assignment }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+	await t.test("ordinary unquoted newline remains a public field boundary", () => {
+		assert.equal(
+			reviewRouterApi.redactSensitiveText("ACME_API_KEY=prefix\nPUBLIC_NOTE=retained"),
+			"ACME_API_KEY=[REDACTED]\nPUBLIC_NOTE=retained",
+		);
+	});
+});

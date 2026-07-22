@@ -1217,3 +1217,38 @@ test("cycle 11 keeps assignment-tail rejection generic before GitHub evidence ac
 		});
 	}
 });
+
+function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["multiline double quote", `"prefix\n${marker}"`],
+		["multiline single quote", `'prefix\n${marker}'`],
+		["multiline backtick", `\`prefix\n${marker}\``],
+		["multiline command substitution", `$(printf prefix\n${marker})`],
+		["multiline parameter expansion", `\${UNSAFE:-prefix\n${marker}}`],
+		["array composite", `(prefix ${marker})`],
+		["input process substitution", `<(printf ${marker})`],
+		["output process substitution", `>(printf ${marker})`],
+		["brace composite", `{prefix,${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 12 keeps multiline and composite assignment rejection generic before GitHub evidence acceptance", async (t) => {
+	const candidate = await evidence();
+	const marker = "CYCLE12_GITHUB_EVIDENCE_MARKER";
+	for (const [name, assignment] of cycle12SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				validateGitHubPullRequestEvidence({ ...candidate, body: `${candidate.body}\n${assignment}` });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});

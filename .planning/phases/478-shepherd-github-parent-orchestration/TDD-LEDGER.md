@@ -558,12 +558,12 @@ lines). The retained 791 focused tests and one intentional live-sandbox skip rem
 
 | ID | Minimum rows | RED contract | PLAN state |
 | --- | ---: | --- | --- |
-| C12-BEGIN | 6 | three valid foreign unsettled phases x two release orders retain separate requested/observed owners through terminal proof; zero requested effect, no foreign corruption, truthful key/stop join | planned |
-| C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | planned |
-| C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | planned |
-| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | planned |
-| C12-ASSIGN | 108 | 18 direct `=`/`+=` multiline/composite redactions plus 90 generic/no-marker checks through five consumers | planned |
-| C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | planned |
+| C12-BEGIN | 6 | three valid foreign unsettled phases x two release orders retain separate requested/observed owners through terminal proof; zero requested effect, no foreign corruption, truthful key/stop join | RED: 6/6 leaves fail; parent fails |
+| C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | RED: 7/7 leaves fail; parent fails |
+| C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | RED: 5/5 leaves fail; parent fails |
+| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | RED: 15/15 leaves fail; parent fails |
+| C12-ASSIGN | 108 | 18 direct `=`/`+=` multiline/composite redactions plus 90 generic/no-marker checks through five consumers | RED: direct 18/18 fail plus parent; consumers 90/90 pass generically |
+| C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | RED checkpoint coherent |
 
 Frozen production blobs before RED: orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
@@ -572,3 +572,11 @@ broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
 `4eadd5d96347950edcf51626a9d7069c1297a96d`. At this PLAN checkpoint no Cycle 12 test or
 production edit has run. One executable RED will record exact TAP failures and controls before any
 production blob may move.
+
+Cycle 12 executable RED follows PLAN `7f96718c06409c078d773ddae05d69ede3996af5` and changes only
+the five existing tests plus phase artifacts. The combined route is 942 total / 885 pass / 56
+intended TAP failures / 1 intentional live-sandbox skip. Exact failing leaves are BEGIN 6,
+GRAPH-ORPHAN 7, GRAPH-SEQUENCE 5, GRAPH-CLAIM 15, and direct assignment redaction 18; five parent
+containers fail only because those 51 leaves fail. All 90 new consumer rows and the ordinary
+unquoted-newline control pass generically. Strict no-emit TypeScript passes over the five owned
+production/test pairs. All five production blobs remain exactly frozen; no production edit began.

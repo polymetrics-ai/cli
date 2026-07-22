@@ -1449,13 +1449,18 @@ through the RED commit.
 - [x] Both complete Cycle 11 reports read; candidate/tree/base/scope and frozen blobs confirmed.
 - [x] Required skill/contracts/runtime/project references read; doctor passed, unavailable adapter
       and helper recorded as `manual_gsd_fallback`; read-only sidecar recorded.
-- [ ] Artifact-only Cycle 12 PLAN commit precedes all Cycle 12 tests and production edits.
-- [ ] One complete executable RED is committed with exact failures and frozen blobs.
+- [x] Artifact-only Cycle 12 PLAN `7f96718c06409c078d773ddae05d69ede3996af5`
+      precedes all Cycle 12 tests and production edits.
+- [x] One complete executable RED at this checkpoint records 942 total / 885 pass / 56 intended
+      failures / 1 intentional skip with all five production blobs frozen.
 - [ ] PLAN/RED SHAs, counts, and frozen blobs are reported before GREEN.
 - [ ] Coherent GREEN/refactor and truthful local verification are recorded.
 - [ ] Fresh exact-head review and every publication/integration/human gate remain parent-owned.
 
-Current PLAN-checkpoint machine truth is `verificationPassed: false` and
-`reviewCoveragePassed: false`. No Cycle 12 test or production edit has run. No Go, connector,
-`make`, service, dependency, parent/main/#475, credential, network/GitHub, push, reviewer, ready,
-integration, merge, or human-gate action is in scope.
+Current RED-checkpoint machine truth is `verificationPassed: false` and
+`reviewCoveragePassed: false`. The complete five-file RED is 942 total / 885 pass / 56 intended
+failures / 1 intentional skip: 51 named behavior leaves plus five parent containers. Strict
+TypeScript passes for the five owned production/test pairs. Every production blob remains exactly
+frozen, and no production edit has run. No Go, connector, `make`, service, dependency,
+parent/main/#475, credential, network/GitHub, push, reviewer, ready, integration, merge, or
+human-gate action is in scope.

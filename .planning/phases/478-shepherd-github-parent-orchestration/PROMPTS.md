@@ -298,4 +298,7 @@ and human gate.
   non-zero. Exclude Go/connectors/`make`, services, dependencies, parent/main/#475, network/GitHub,
   push, reviewers, ready, integration, merge, and human gates. Adapter is `manual_gsd_fallback`.
 
-Execution status: PLAN only. No Cycle 12 test or production edit has run.
+Execution status: PLAN `7f96718c` precedes one executable RED. The combined five-file route is 942
+total / 885 pass / 56 intended fail / 1 skip: 51 named behavior leaves plus five parent containers.
+All 90 new consumer rows and the ordinary newline control pass; strict TypeScript passes. All five
+production blobs remain frozen and no production edit has run.

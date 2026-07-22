@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Both Cycle 11 reviews block exact candidate 4f0e17df. Cycle 12 is at the artifact-only PLAN checkpoint for dual begin ownership, a total restart-role graph, multiline/composite assignment redaction, and narrow evidence; no Cycle 12 test or production edit has run, and verification/review remain false.",
+  "reason": "Cycle 12 executable RED follows artifact PLAN 7f96718c: 942 total / 885 pass / 56 intended failures / 1 skip with all five production blobs frozen; no production edit has run, and verification/review remain false.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -108,7 +108,8 @@
       "cycle11Red": "1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21",
       "cycle11Green": "e765e0d31c426ecf201162509519fa03d460d871",
       "cycle11Evidence": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
-      "cycle12PlanRef": "HEAD"
+      "cycle12Plan": "7f96718c06409c078d773ddae05d69ede3996af5",
+      "cycle12RedRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -123,7 +124,7 @@
       "cycle9": "PLAN 7ad23ed4; RED 442 total, 398 pass, 43 intended fail, 1 skip with all 5 production blobs frozen; GREEN 593ba1cf; focused five-file 450 total, 449 pass, 0 fail, 1 intentional live-sandbox skip; serialized 670 total, 604 pass, 65 unchanged managed-sandbox process-identity spawn EPERM failures, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; immutable base and exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, Cycle 9 marker confinement, and both Cycle 8 report replays pass",
       "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip at local evidence head, but independent review later reproduced C10-CONFIRM flakiness; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false",
       "cycle11": "PLAN 863bf94a; RED 1b4aa6f1 with 791 total, 743 pass, 47 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN e765e0d3; focused 791 total, 790 pass, 0 fail, 1 intentional skip; strict and bounded gates pass, but both independent Cycle 11 reviews block exact evidence 4f0e17df on adjacent dual-owner, total-graph, and redaction gaps; broad remains non-zero and both machine gates false",
-      "cycle12": "PLAN checkpoint only: both Cycle 11 reviews read completely; exact candidate/tree/base/merge-base/21 paths and all five production blobs frozen; dual begin ownership 6, orphan graph 7, global sequence 5, recovery-claimed 15, assignment 108, and artifact 4 rows planned; no Cycle 12 test or production edit has run; verificationPassed and reviewCoveragePassed remain false"
+      "cycle12": "PLAN 7f96718c; executable RED 942 total / 885 pass / 56 intended failures / 1 skip; exact 51 failing leaves are BEGIN 6, GRAPH-ORPHAN 7, GRAPH-SEQUENCE 5, GRAPH-CLAIM 15, and direct assignment 18 plus five parent containers; all 90 consumers and ordinary newline control pass; strict owned TypeScript passes; all five production blobs frozen; no production edit; both machine gates false"
     },
     "orchestrationDecisions": [
       {
@@ -247,6 +248,11 @@
         "reason": "Both Cycle 11 reviews are blocked, Cycle 12 behavior is unimplemented at PLAN, and the declared broad route remains non-zero."
       },
       {
+        "cycle": "cycle-12-red",
+        "decision": "complete_executable_red_production_frozen",
+        "reason": "Focused RED executes 942 tests with 51 intended failing leaves plus five parent containers and one skip; all 90 new consumers pass generically, strict TypeScript passes, and all five production blobs remain exact."
+      },
+      {
         "cycle": "cycle-12-publish",
         "decision": "not_authorized",
         "reason": "Cycle 12 excludes network, GitHub mutation, push, reviewer dispatch, ready, integration, merge, and every human gate; the parent owns all external actions."
@@ -288,5 +294,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T07:30:00.000Z"
+  "updatedAt": "2026-07-22T08:15:00.000Z"
 }

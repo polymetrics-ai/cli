@@ -18,8 +18,9 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`
 
-Cycle 12 status: both Cycle 11 reviews block the exact candidate and are consolidated in the
-artifact-only PLAN. No Cycle 12 test or production edit has run. Verification/review remain false,
+Cycle 12 status: both Cycle 11 reviews block the exact candidate and are consolidated in artifact
+PLAN `7f96718c` plus one executable RED: 942 total / 885 pass / 56 intended fail / 1 skip. No Cycle
+12 production edit has run. Verification/review remain false,
 the broad route remains historically non-zero, and this is not a review-clean candidate.
 
 ## Scope Delivered
@@ -445,3 +446,6 @@ session-attestation contract and fixtures required to verify independent-review 
 - Evidence claims are narrowed to named test rows. Cycle 11 counts are historical. Machine
   verification/review stay false; publication, review, integration, ready, merge, and every human
   gate remain parent-owned.
+- RED exactness: 51 named missing-behavior leaves plus five parent containers fail; 90 assignment
+  consumers and the ordinary newline control pass generically. Strict TypeScript passes and all
+  five production blobs remain frozen.
