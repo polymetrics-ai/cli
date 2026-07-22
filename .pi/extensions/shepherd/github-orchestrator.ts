@@ -1366,16 +1366,6 @@ export function canonicalizeParentReadyAuthorization(value: unknown): ParentRead
 	if (digestFields.some((entry) => typeof entry !== "string" || !IDENTITY.test(entry))) {
 		throw new Error("invalid parent-ready authorization digest coordinate");
 	}
-	const decisionCandidate = exactRecord(candidate.decision, [
-		"schemaVersion", "requestId", "gate", "binding", "allowedOptions", "actorAllowlist", "expiresAt",
-		"question", "idempotencyMarker", "status", "createdAt", "updatedAt",
-	], ["requestComment", "decision", "consumedAt"]);
-	if (decisionCandidate.status === "consumed"
-		&& typeof decisionCandidate.consumedAt === "string"
-		&& typeof decisionCandidate.updatedAt === "string"
-		&& decisionCandidate.consumedAt > decisionCandidate.updatedAt) {
-		decisionCandidate.updatedAt = decisionCandidate.consumedAt;
-	}
 	const payload = {
 		schemaVersion: 1 as const,
 		repository: repository(candidate.repository),
@@ -1392,7 +1382,7 @@ export function canonicalizeParentReadyAuthorization(value: unknown): ParentRead
 		reviewAuthorizationDigest: candidate.reviewAuthorizationDigest as string,
 		exactPaths: validateStringList(candidate.exactPaths, "parent-ready exact paths", undefined, true),
 		children,
-		decision: validateHumanDecisionRecord(decisionCandidate),
+		decision: validateHumanDecisionRecord(candidate.decision),
 		planDigest: candidate.planDigest as string,
 		headSha: sha(candidate.headSha, "parent-ready head SHA"),
 		pullRequestRevision: generation(candidate.pullRequestRevision),

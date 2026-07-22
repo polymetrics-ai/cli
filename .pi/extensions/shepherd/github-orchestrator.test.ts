@@ -3444,24 +3444,44 @@ class DelayedParentReadyAuthority implements ParentReadyDurableAuthorityBoundary
 
 test("cycle 7 joins and quarantines every uncertain late parent-ready effect", async (t) => {
 	for (const mode of ["before_effect", "after_effect"] as const) {
-		await t.test(`timeout ${mode.replace("_", " ")}`, async () => {
+		await t.test(`500 ms ${mode.replace("_", " ")} after 100 ms timeout`, async () => {
 			const { candidate, transport, receipts } = await cycle5ReadinessScenario();
-			const authority = new DelayedParentReadyAuthority(transport, mode);
-			const orchestrator = orchestratorFor(transport, new FakeDecisionBroker(), defaultPolicySource(transport), 20, authority);
+			const authority = new DelayedParentReadyAuthority(transport, mode, 500);
+			const orchestrator = orchestratorFor(transport, new FakeDecisionBroker(), defaultPolicySource(transport), 100, authority);
 			await assert.rejects(
 				orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy),
 				/timeout|cancel|external|ready/i,
 			);
 			const second = await settleWithin(orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy)
-				.then(() => "resolved", () => "rejected"), 40);
+				.then(() => "resolved", () => "rejected"), 150);
 			assert.notEqual(second, "resolved");
 			assert.equal(authority.compareCalls, 1, "same key stays owned while the first effect is live");
-			await new Promise<void>((resolve) => setTimeout(resolve, 140));
+			await new Promise<void>((resolve) => setTimeout(resolve, 650));
 			assert.equal(transport.pullRequests.find((entry) => entry.number === 900)?.draft, true);
 			assert.ok(authority.quarantineCalls >= 1);
 			assert.equal((await orchestrator.stop()).kind, "joined");
 		});
 	}
+
+	await t.test("caller cancellation before a 500 ms late effect is quarantined and joined", async () => {
+		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+		const authority = new DelayedParentReadyAuthority(transport, "before_effect", 500);
+		const orchestrator = orchestratorFor(transport, new FakeDecisionBroker(), defaultPolicySource(transport), 1_000, authority);
+		const controller = new AbortController();
+		const cancelled = orchestrator.reconcileParentReadiness(
+			candidate,
+			receipts,
+			decisionPolicy,
+			{ signal: controller.signal },
+		);
+		setTimeout(() => controller.abort(), 30);
+		await assert.rejects(cancelled, /cancel|abort|external|ready/i);
+		await new Promise<void>((resolve) => setTimeout(resolve, 650));
+		assert.equal(authority.compareCalls, 1);
+		assert.ok(authority.quarantineCalls >= 1);
+		assert.equal(transport.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+		assert.equal((await orchestrator.stop()).kind, "joined");
+	});
 
 	await t.test("restart before ready visibility observes durable quarantine", async () => {
 		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
@@ -3683,7 +3703,10 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 		["exact paths", (value) => { value.exactPaths = [...value.exactPaths, "cycle-7/moved.ts"]; }],
 		["child receipt", (value) => { value.children[0].receipt.integratedAt = "2026-07-21T12:11:00.000Z"; }],
 		["ancestry", (value) => { value.children[0].ancestry.descendantSha = "f".repeat(40); }],
-		["decision", (value) => { value.decision.consumedAt = "2026-07-21T12:00:41.000Z"; }],
+		["decision", (value) => {
+			value.decision.consumedAt = "2026-07-21T12:00:41.000Z";
+			value.decision.updatedAt = "2026-07-21T12:00:41.000Z";
+		}],
 		["plan", (value) => { value.planDigest = "f".repeat(64); }],
 		["head", (value) => { value.headSha = "f".repeat(40); }],
 		["PR revision", (value) => { value.pullRequestRevision += 1; }],
