@@ -7,6 +7,7 @@ import type {
 	ParentDecisionBroker,
 } from "./github-orchestrator.ts";
 import {
+	GhParentPullRequestMergeLookup,
 	ProductionHumanParentMergeGate,
 	buildProductionChildInterventionDecisionRequest,
 	type AuthoritativeParentMergeState,
@@ -156,6 +157,30 @@ test("returns a typed invalidation when the approved parent head moves", async (
 		currentHead,
 		revision: 9,
 		observedAt: "2026-07-22T00:00:03.000Z",
+	});
+});
+
+test("uses the authoritative GitHub PR head so a moved approved head invalidates the gate", async () => {
+	const broker = new Broker();
+	broker.record = decisionRecord("decided", "approve-merge");
+	const currentHead = "c".repeat(40);
+	const lookup = new GhParentPullRequestMergeLookup(async () => JSON.stringify({
+		head: { sha: currentHead },
+		merged: false,
+		merged_at: null,
+		state: "open",
+		updated_at: "2026-07-22T00:00:09.000Z",
+	}), () => new Date("2026-07-22T00:00:10.000Z"));
+	const gate = new ProductionHumanParentMergeGate(broker, lookup);
+
+	assert.deepEqual(await gate.observe(request(), context()), {
+		status: "invalidated",
+		repository: "acme/widgets",
+		pullRequest: 472,
+		previousHead: HEAD,
+		currentHead,
+		revision: 1_784_678_409,
+		observedAt: "2026-07-22T00:00:10.000Z",
 	});
 });
 

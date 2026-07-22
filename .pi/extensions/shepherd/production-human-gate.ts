@@ -307,7 +307,7 @@ export class GhParentPullRequestMergeLookup implements ParentPullRequestMergeLoo
 		return {
 			repository: query.repository,
 			pullRequest: query.pullRequest,
-			headSha: query.headSha,
+			headSha,
 			state,
 			mergedAt,
 			mergeCommitSha: merged ? boundedText(String(raw.merge_commit_sha), "merge commit SHA", 40) : null,
