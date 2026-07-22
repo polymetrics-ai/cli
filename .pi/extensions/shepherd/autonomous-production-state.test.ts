@@ -234,6 +234,7 @@ test("budget exhaustion persists an exact child intervention wait instead of ter
 		draft.children[0].attempts = draft.children[0].maxAttempts;
 		draft.children[0].corrections = draft.children[0].maxCorrections;
 		draft.children[0].status = "blocked";
+		draft.children[0].stage = "verification";
 		draft.children[0].lastFailure = {
 			kind: "human_required",
 			summary: "retry and correction budgets exhausted",
@@ -262,12 +263,20 @@ test("budget exhaustion persists an exact child intervention wait instead of ter
 	});
 	assert.equal(authorized.children[0].authorizedAttempts, 1);
 	assert.equal(authorized.childGate?.status, "authorized");
-	const retrying = evolveProductionState(authorized, fence(authorized), (draft) => {
-		draft.children[0].attempts += 1;
+	assert.equal(authorized.children[0].attempts, 3, "authorization consumes exactly one granted attempt");
+	assert.equal(authorized.children[0].resumeStage, "verification");
+	assert.throws(() => evolveProductionState(authorized, fence(authorized), (draft) => {
 		draft.children[0].status = "running";
 		draft.children[0].stage = "implementation";
+		delete draft.children[0].resumeStage;
+	}), /resume|exact-stage/i);
+	const retrying = evolveProductionState(authorized, fence(authorized), (draft) => {
+		draft.children[0].status = "running";
+		draft.children[0].stage = "verification";
+		delete draft.children[0].resumeStage;
 	});
 	assert.equal(retrying.children[0].attempts, 3);
+	assert.equal(retrying.children[0].stage, "verification");
 	assert.throws(() => authorizeProductionChildRetry(authorized, fence(authorized), {
 		childId: "state",
 		requestId: "intervention-501-1",

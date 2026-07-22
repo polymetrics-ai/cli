@@ -677,7 +677,10 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 			throw new ProductionStateConflictError("authorized child attempt count regressed");
 		}
 		if (after.authorizedAttempts > before.authorizedAttempts) {
+			const expectedResumeStage = before.resumeStage ?? before.stage;
 			if (after.authorizedAttempts !== before.authorizedAttempts + 1
+				|| after.attempts !== before.attempts + 1
+				|| after.resumeStage !== expectedResumeStage
 				|| previous.childGate?.childId !== before.id
 				|| previous.childGate.status !== "pending"
 				|| next.childGate?.status !== "authorized"
@@ -808,6 +811,10 @@ export function authorizeProductionChildRetry(
 	if (child.attempts < child.maxAttempts + child.authorizedAttempts) {
 		throw new ProductionStateConflictError("child retry budget is not exhausted");
 	}
+	const resumeStage = child.resumeStage ?? child.stage;
+	if (resumeStage === "pending" || resumeStage === "succeeded" || resumeStage === "failed" || resumeStage === "cancelled") {
+		throw new ProductionStateConflictError("child retry authorization requires an exact interrupted lifecycle stage");
+	}
 	const now = input.now ?? new Date();
 	return evolveProductionState(current, fence, (draft) => {
 		draft.status = "running";
@@ -815,6 +822,8 @@ export function authorizeProductionChildRetry(
 		draft.childGate!.status = "authorized";
 		const target = draft.children.find((candidate) => candidate.id === input.childId)!;
 		target.authorizedAttempts += 1;
+		target.attempts += 1;
+		target.resumeStage = resumeStage;
 		target.retryAuthorization = {
 			requestId: input.requestId,
 			generation: draft.generation,
