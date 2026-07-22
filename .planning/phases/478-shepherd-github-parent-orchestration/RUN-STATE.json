@@ -5,13 +5,13 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 10 is planned against blocked exact candidate a49e4df2; both Cycle 9 reviews are consolidated into one strict TDD correction, so implementation, verification, fresh review coverage, and integration remain pending.",
+  "reason": "Cycle 10 is locally implemented and verified at HEAD; focused and strict gates pass, the declared broad sandbox route remains non-zero, and fresh review coverage plus parent-owned integration remain pending.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "candidateRef": "HEAD",
-    "priorCycleImplementationHead": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
+    "priorCycleImplementationHead": "8946b67be2e42659baf267f2adbaec31d88c856c",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -85,7 +85,11 @@
       "cycle9Red": "9278e97e0ef1b318bfd794dc0e52e4f31f58c542",
       "cycle9Green": "593ba1cf977bdfd9f193b3d7883882b96f99a189",
       "cycle9Evidence": "a49e4df2798281d1e64c722ccbcab5f4a678c3e1",
-      "cycle10PlanRef": "HEAD"
+      "cycle10Plan": "470a8a85cf1ca747ac092e16c9cf2fbac4eac3a9",
+      "cycle10Red": "2256971a8612cfaba407834a6831d2ec5abfba07",
+      "cycle10Green": "5f46206ea4ecc0e12e5804c4e14baf4e49fa6e53",
+      "cycle10Refactor": "8946b67be2e42659baf267f2adbaec31d88c856c",
+      "cycle10EvidenceRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -98,7 +102,7 @@
       "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
       "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass",
       "cycle9": "PLAN 7ad23ed4; RED 442 total, 398 pass, 43 intended fail, 1 skip with all 5 production blobs frozen; GREEN 593ba1cf; focused five-file 450 total, 449 pass, 0 fail, 1 intentional live-sandbox skip; serialized 670 total, 604 pass, 65 unchanged managed-sandbox process-identity spawn EPERM failures, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; immutable base and exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, Cycle 9 marker confinement, and both Cycle 8 report replays pass",
-      "cycle10": "planned from a49e4df2; both Cycle 9 reviews fully consolidated; exact 21 paths and five production blobs frozen; verification false because Cycle 10 is unimplemented and the declared broad route exits non-zero"
+      "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false because the declared broad route exits non-zero"
     },
     "orchestrationDecisions": [
       {
@@ -172,6 +176,16 @@
         "reason": "Cycle 10 is unimplemented and the declared broad serialized route exited non-zero; focused or strict subset passes cannot set machine verification true."
       },
       {
+        "cycle": "cycle-10-verification",
+        "decision": "locally_green_broad_route_nonzero_awaiting_parent_reviews",
+        "reason": "Focused, authority-target, strict TypeScript, base, scope, diff, and JSON gates pass; 65 unchanged managed-sandbox failures keep verification false and fresh exact-head review remains parent-owned."
+      },
+      {
+        "cycle": "cycle-10-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 10 excludes push, network, GitHub mutation, reviewer dispatch, integration, merge, and human gates; the parent owns every external action."
+      },
+      {
         "cycle": "cycle-8-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
@@ -208,5 +222,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T04:08:00.000Z"
+  "updatedAt": "2026-07-22T04:40:21.000Z"
 }

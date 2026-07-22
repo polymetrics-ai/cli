@@ -479,14 +479,14 @@ intentional live-sandbox skip, remain mandatory.
 
 | ID | Rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C10-ORDER | 42 | prepare/reconcile query and recover each unsettled phase before independently broken roster, review, policy, broker, pending/expired request, or rejected decision gates | planned_red |
-| C10-CAS | 6 | settlement-wins lost responses terminate recovery without rollback; recovery-wins conflicts settlement, blocks, restores draft once, and joins | planned_red |
-| C10-REVISION | 15 | prepare/commit/reconcile require exact stored applied revision and provenance, rejecting original/lower/higher mismatch | planned_red |
-| C10-CONFIRM | 4 | bounded post-rollback confirmation failure/hang is superseded by a newer fence and cannot freeze key/stop ownership | planned_red |
-| C10-NOT-STARTED | 4 | pre-application effect rejection/timeout/cancel/malformed paths have durable invoking state and terminal no-op draft restoration | planned_red |
-| C10-ASSIGN | 135 | all suffixes with `+=` cross five consumers; case/index policy is fail-closed; exact unindexed `FEATURE_TOKEN` controls remain public without marker reflection | planned_red |
-| C10-WARNING | 6 | warning findings require exact-current-head later fixed disposition and a later clean review | planned_red |
-| C10-SNAPSHOT | 17 | decoded JSON rejects duplicate, orphan, missing reciprocal, revision/fence/settlement-incoherent, oversized, and extra-field state while reordered equivalents remain canonical | planned_red |
+| C10-ORDER | 42 | prepare/reconcile query and recover each unsettled phase before independently broken roster, review, policy, broker, pending/expired request, or rejected decision gates | green |
+| C10-CAS | 6 | settlement-wins lost responses terminate recovery without rollback; recovery-wins conflicts settlement, blocks, restores draft once, and joins | green |
+| C10-REVISION | 15 | prepare/commit/reconcile require exact stored applied revision and provenance, rejecting original/lower/higher mismatch | green |
+| C10-CONFIRM | 4 | bounded post-rollback confirmation failure/hang is superseded by a newer fence and cannot freeze key/stop ownership | green |
+| C10-NOT-STARTED | 4 | pre-application effect rejection/timeout/cancel/malformed paths have durable invoking state and terminal no-op draft restoration | green |
+| C10-ASSIGN | 135 | all suffixes with `+=` cross five consumers; case/index policy is fail-closed; exact unindexed `FEATURE_TOKEN` controls remain public without marker reflection | green |
+| C10-WARNING | 6 | warning findings require exact-current-head later fixed disposition and a later clean review | green |
+| C10-SNAPSHOT | 17 | decoded JSON rejects duplicate, orphan, missing reciprocal, revision/fence/settlement-incoherent, oversized, and extra-field state while reordered equivalents remain canonical | green |
 
 Frozen production blobs before RED: orchestrator `538962e4e30410dea6e714d565018639e23d1efa`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
@@ -495,3 +495,8 @@ broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
 `8b14fb1fd54938d9e49a880d75b2089c978766c0`. RED may change only the five matching test files and
 must remain executable. Exact failing row groups and counts are recorded after the RED run; no
 production blob may move before that evidence exists.
+
+Cycle 10 checkpoints are PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, and refactor
+`8946b67b`. RED was 687 total / 470 pass / 216 intended TAP failures / 1 skip (204 failing leaf
+rows plus 12 parent containers). GREEN is 687 total / 686 pass / 0 fail / 1 skip; the exact
+authority subset is 89/89 and strict owned/all-production TypeScript passes.

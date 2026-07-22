@@ -176,6 +176,20 @@ parent-owned exact-head reviews remain pending.
 | Prohibited/live actions | not run |
 | Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
 
+## Cycle 10 local verification
+
+| Gate | Result |
+| --- | --- |
+| Checkpoints | PLAN `470a8a85`; RED `2256971a`; GREEN `5f46206e`; refactor `8946b67b` |
+| RED | 687 total; 470 pass; 216 intended TAP failures; 1 intentional skip; five production blobs frozen |
+| Authority target | 89/89 pass after GREEN and after refactor |
+| Focused five-file | 687 total; 686 pass; 0 fail; 1 intentional live-GitHub skip |
+| Strict TypeScript | pass for five production/test pairs and all 20 production modules; TypeScript 5.9.3 / Pi 0.80.6 declarations |
+| Serialized Shepherd | non-zero: 907 total; 841 pass; 65 unchanged managed-sandbox process/lease failures; 1 skip |
+| Integrity | immutable/exact merge base `3addb1f4`; `git diff --check`; exact 21 paths; three JSON parses pass |
+| Machine truth | `verificationPassed: false` because the declared serialized route exits non-zero |
+| External/prohibited actions | not run; publication, reviews, integration, merge, and human gates remain parent-owned |
+
 ## Cycle 9 verification contract
 
 - [x] Both complete Cycle 8 reports are read and mapped to one 69-row, four-family correction.

@@ -415,3 +415,15 @@
   `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
   `8b14fb1fd54938d9e49a880d75b2089c978766c0`. No Cycle 10 test, production, prohibited, or external
   action ran before the artifact checkpoint.
+
+## 2026-07-22 Cycle 10 RED through evidence
+
+- PLAN `470a8a85` -> RED `2256971a` -> GREEN `5f46206e` -> refactor `8946b67b`.
+- RED: 687 total / 470 pass / 216 intended TAP failures / 1 skip; exact leaf groups were ASSIGN 125,
+  WARNING 6, ORDER 42, REVISION 10, CAS 4, NOT-STARTED 4, CONFIRM 2, SNAPSHOT 11, plus 12 parent
+  containers. All five production blobs remained frozen.
+- GREEN/refactor: 687 total / 686 pass / 0 fail / 1 intentional skip; authority target 89/89;
+  strict TypeScript passes for five owned pairs and all 20 production modules.
+- Serialized route: 907 total / 841 pass / 65 unchanged managed-sandbox process/lease failures /
+  1 skip. Exact base/merge-base, diff, 21 paths, and three JSON parses pass; machine verification
+  remains false and every external/human gate remains parent-owned.

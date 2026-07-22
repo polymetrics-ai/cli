@@ -1122,11 +1122,16 @@ decoded only through public production validators.
       integration reference read. Doctor passes; absent adapter command records
       `manual_gsd_fallback`. Agent capacity rejected the read-only sidecar, so execution records
       `local_critical_path`.
-- [ ] Artifact-only Cycle 10 PLAN commit precedes all test and production edits.
-- [ ] One complete executable RED matrix fails only the named Cycle 10 row groups with frozen
+- [x] Artifact-only Cycle 10 PLAN commit `470a8a85` precedes all test and production edits.
+- [x] One complete executable RED matrix `2256971a` fails only the named Cycle 10 row groups with frozen
       production blobs.
-- [ ] Coherent GREEN/refactor closes the union and preserves all retained behavior.
-- [ ] Exact local evidence is recorded truthfully; fresh review remains parent-owned.
+- [x] Coherent GREEN `5f46206e` and refactor `8946b67b` close the union and preserve all retained behavior.
+- [x] Exact local evidence is recorded truthfully; fresh review remains parent-owned.
+
+Cycle 10 local result: focused 687 total / 686 pass / 0 fail / 1 intentional skip; authority target
+89/89; strict TypeScript passes for all five owned production/test pairs and all 20 production
+modules. The serialized route is honestly non-zero at 907 total / 841 pass / 65 unchanged managed-
+sandbox failures / 1 skip, so machine `verificationPassed` remains false.
 
 Excluded: Go, connectors, `make`, runtime services, dependencies, parent/main/#475, credentials,
 network/GitHub, push, reviewer dispatch, self-review, integration, merge, and human-gate actions.

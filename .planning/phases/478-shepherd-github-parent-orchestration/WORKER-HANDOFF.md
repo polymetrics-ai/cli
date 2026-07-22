@@ -372,3 +372,13 @@ session-attestation contract and fixtures required to verify independent-review 
 - `verificationPassed` is false while the complete broad route exits non-zero. Doctor passes;
   unavailable command records `manual_gsd_fallback`; agent-capacity rejection records
   `local_critical_path`. Parent retains publication/review/integration/human-gate ownership.
+
+## Cycle 10 completion handoff
+
+- Checkpoints: PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, refactor `8946b67b`.
+- Focused five-file route is 687 total / 686 pass / 0 fail / 1 intentional skip; authority target
+  is 89/89; strict owned and all-20-production TypeScript pass.
+- Serialized Shepherd is 907 total / 841 pass / 65 unchanged managed-sandbox process/lease
+  failures / 1 skip. This non-zero route keeps `verificationPassed` false.
+- Exact base/merge-base, full-range diff, exact 21 paths, and all three JSON parses pass. No network,
+  push, GitHub, reviewer, integration, merge, parent-ready, or other human-gate action ran.

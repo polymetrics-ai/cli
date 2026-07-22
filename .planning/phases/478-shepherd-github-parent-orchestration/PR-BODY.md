@@ -223,3 +223,6 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - `verificationPassed` is false while the declared broad suite exits non-zero. PLAN -> one complete
   executable five-test-file RED -> coherent GREEN/refactor -> exact evidence is mandatory; parent
   owns publication, fresh reviews, integration, merge, and human gates
+- local checkpoints: PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, refactor `8946b67b`;
+  focused 686 pass / 0 fail / 1 skip; strict TypeScript pass; broad 841 pass / 65 managed-sandbox
+  failures / 1 skip, therefore machine verification remains false
