@@ -16,7 +16,10 @@ export interface ProductionRecoveryFence extends ProductionEffectFence {
 }
 
 export interface ProductionEffectRecoveryPort {
-	/** Authoritatively reconcile a prepared intent; never infer success from a timeout. */
+	/**
+	 * Authoritatively reconcile a prepared intent from its durable recoveryDescriptor;
+	 * never infer success from a timeout or replay a mutation merely because no receipt was found.
+	 */
 	observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<{ resultDigest: string }>;
 	/** Idempotently project observed truth into durable controller state under the record's fence. */
 	apply(record: ProductionEffectRecord, signal: AbortSignal): Promise<void>;
@@ -93,14 +96,14 @@ export class ProductionRecoveryBarrier {
 				let record = await this.#journal.load(snapshot.key);
 				if (!record || record.phase === "applied") continue;
 				assertFence(record, fence);
+				if (record.recoveryDescriptor === undefined) {
+					throw new ProductionLifecycleError(
+						"terminal",
+						"non-applied production effect lacks durable recovery coordinates",
+						["recovery_descriptor_missing"],
+					);
+				}
 				if (record.phase === "prepared") {
-					if (record.recoveryDescriptor === undefined) {
-						throw new ProductionLifecycleError(
-							"terminal",
-							"prepared production effect lacks durable recovery coordinates",
-							["recovery_descriptor_missing"],
-						);
-					}
 					const observed = await this.#recovery.observe(structuredClone(record), signal);
 					throwIfCancelled(signal);
 					record = await this.#journal.observe(

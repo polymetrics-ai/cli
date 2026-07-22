@@ -181,6 +181,7 @@ test("composition reconciles an already-checkpointed crash effect once before sc
 		generation: checkpointed.generation,
 		childId: "runtime",
 		intentDigest: DIGEST_B,
+		recoveryDescriptor: { kind: "child_pull_request", marker: "runtime-crash-effect" },
 		preparedAt: "2026-07-22T10:00:30.000Z",
 		observedAt: "2026-07-22T10:00:31.000Z",
 		resultDigest: DIGEST_B,

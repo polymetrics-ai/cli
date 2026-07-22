@@ -652,7 +652,7 @@ export function createExactHeadReviewRoleRequestFactory(
 	};
 }
 
-// Keep the recovery dependency visible to generated API/docs without pretending sparse journal
-// records are self-sufficient. The parent recovery contract supplies the concrete projector.
+// Recovery records now carry bounded canonical coordinates. The required authority uses those
+// coordinates to re-observe external truth and project it; it must never infer success from timeout.
 export type ProductionRuntimeRecoveryAuthority = ProductionEffectRecoveryPort;
 export type ProductionRuntimeRecoveryRecord = ProductionEffectRecord;
