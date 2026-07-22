@@ -997,3 +997,136 @@ the journal and recovery truth from serialized authority values; no object ident
   three JSON parses, Cycle 9 marker confinement, and both complete Cycle 8 report replays pass.
 - No Go, connector, `make`, runtime-service, dependency, parent/main/#475, network/GitHub, push,
   self-review, reviewer-dispatch, integration, or merge action ran.
+
+## Cycle 10 consolidated-review correction
+
+Frozen reviewed candidate: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1` (tree
+`9167ebaf82f92c1229e56b1b8334262a356dcd3c`). Immutable base and exact merge base remain
+`3addb1f48be1afe8b1e2b59b54247679d7293805`; the worktree starts clean and the immutable-base range
+is exactly the same 21 owned paths. Both complete Cycle 9 reports, `/tmp/478-REVIEW-CYCLE9-1.md`
+and `/tmp/478-REVIEW-CYCLE9-2.md`, were read before this plan. Their union is one correction: seven
+blocking behavior families, canonical restart-snapshot consistency, and truthful verification
+state. No finding is deferred or treated as an isolated patch.
+
+All five production blobs are frozen before RED:
+
+- orchestrator `538962e4e30410dea6e714d565018639e23d1efa`
+- decision broker `7be6785190176a8c15660fb180fc95c207b76d5b`
+- GitHub evidence `23efd2c51280ba83836feef4fcb459e7da4571c0`
+- human decision `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`
+- review router `8b14fb1fd54938d9e49a880d75b2089c978766c0`
+
+### Cycle 10 authority model
+
+The authority contract is split so a durable begin/CAS establishes exact `ready_invoking` before
+the uncertain PR effect is invoked. Therefore an effect rejection before its own state update still
+has recoverable authority; a begin rejection never invokes the effect and the keyed lifecycle waits
+for that begin invocation to settle before reentry. `ParentReadyAuthorityState` additionally
+persists `appliedRevision`: it is `null` before a validated effect and the exact PR resource
+revision (`> originalRevision`) in `ready_effect_applied` and `ready_settled`. Every settled-ready
+shortcut must observe exactly that revision and route through the same current-authorization check.
+
+Settlement and recovery are competing CAS operations over one exact phase/fence. Settlement may
+change only `ready_effect_applied`/fence 0 to `ready_settled`. Recovery first performs a bounded
+authority read, treats `ready_settled` and `draft_restored` as terminal no-op outcomes, and may
+claim only `ready_invoking` or `ready_effect_applied`. If recovery claims first, settlement returns
+a typed conflict and the public result stays blocked until exact draft restoration. If settlement
+wins, recovery performs no rollback and joins. No terminal phase can retain a live key or stop
+token.
+
+Prepare and reconcile may read the parent PR once to obtain exact authority coordinates, but their
+next external operation must be the authority read. They may not touch roster, evidence, policy, or
+broker first. The same ordering repeats after the second PR observation. Authority read failure
+fails closed. Every matching unsettled phase immediately starts keyed recovery and returns
+`parent_ready_quarantined`; unrelated readiness gates cannot suppress recovery.
+
+### Cycle 10 interruption and transition table
+
+| Interruption point / observed state | Required atomic or bounded action | Authoritative next state | Public result and lifecycle invariant |
+| --- | --- | --- | --- |
+| first matching PR coordinates, authority read fails | fail the bounded read closed; invoke no unrelated gate | unchanged/unknown | blocked/error; never infer ready from visibility |
+| first or second coordinates, authority absent and PR draft | continue current authorization in declared order | absent until durable begin | normal preparation only; no ready shortcut |
+| first or second coordinates, authority absent and PR non-draft | invoke no roster/evidence/policy/broker work | absent/inconsistent | blocked `parent_ready_authority_missing` |
+| restart at `ready_invoking` | start same-key recovery before every unrelated gate | `recovery_claimed` then `draft_restored` | quarantined; reentry held and stop incomplete until terminal |
+| restart at `ready_effect_applied` | validate stored exact applied revision, then claim recovery before every unrelated gate | `recovery_claimed` then `draft_restored` | quarantined even when PR is visibly ready |
+| restart at `recovery_claimed` | resume with a newer monotonic fence before every unrelated gate | same/newer `recovery_claimed` then `draft_restored` | quarantined; stale writer/attempt cannot settle |
+| restart at `ready_settled` | require current PR revision exactly equals stored applied revision and reauthorize all current gates | remains `ready_settled` | ready only after exact current authorization; otherwise blocked, no rollback |
+| restart at `draft_restored` | require exact draft visibility before one fresh authorization | remains `draft_restored` until a distinct begin | one fresh prepare allowed; non-draft is inconsistent |
+| durable begin/CAS returns `ready_invoking` | validate exact query/authorization/mutation/fence before effect | `ready_invoking` | effect may now be invoked; begin response loss retains key until settled |
+| durable begin rejects/times out/cancels before applying | do not invoke ready effect; wait for begin invocation settlement | absent | blocked; safe reentry after join |
+| durable begin applies but response is lost | next ordered read discovers authority; recover before new work | `ready_invoking` -> recovery terminal | blocked/quarantined; no duplicate effect |
+| ready effect rejects before state update or PR change | bounded recovery reads the pre-established state and CAS-claims | `ready_invoking` -> `recovery_claimed` -> `draft_restored` | blocked; no-op draft restoration is terminal and joinable |
+| ready effect applies and returns a valid response | persist/validate exact result revision and mutation provenance | `ready_effect_applied` | still not ready until exact visibility and settlement CAS |
+| ready effect applies but response rejects/times out/cancels/is malformed | start recovery; visibility alone cannot settle | `ready_effect_applied` -> recovery path | blocked/quarantined; exact draft restored once |
+| post-effect authority read or visible-ready authorization fails | start same-key recovery | unsettled -> recovery path | blocked/quarantined; key/stop retained |
+| settlement CAS wins and response is delivered | validate exact phase/fence/applied revision | `ready_settled` | ready; key reusable and stop joinable |
+| settlement CAS wins but response rejects/times out/cancels/is malformed | recovery rereads before claim and sees terminal settlement | remains `ready_settled` | ready after exact reread; zero rollback; all finalizers join |
+| recovery claim CAS wins before settlement | settlement returns typed conflict; continue only claimed fence | `recovery_claimed` | blocked; exact draft restoration must finish once |
+| recovery reread sees `ready_settled` | terminate recovery without rollback | remains `ready_settled` | finalizer resolves and releases key/stop |
+| recovery reread sees `draft_restored` | terminate recovery without another rollback | remains `draft_restored` | finalizer resolves and releases key/stop |
+| rollback call rejects/times out/cancels/is malformed | abandon response wait, increment fence, and retry | newer `recovery_claimed` | stale/lower results cannot release ownership |
+| rollback returns exact draft but confirmation read rejects/times out/cancels/hangs | bound/abort confirmation, retain it only until a newer fence settles, then retry | newer `recovery_claimed` -> `draft_restored` | later exact confirmation releases key/stop; ignored read cannot freeze join |
+| rollback and confirmation both prove exact owned draft/fence | validate rollback mutation, PR/head/revision, phase, and fence | `draft_restored` | recovery joins exactly once; fresh preparation may resume |
+| original effect writer or older recovery resumes after claim | authority CAS rejects stale fence/phase | unchanged claimed/terminal state | blocked/conflict; no effect or settlement |
+
+### Cycle 10 executable RED matrix
+
+| ID | Rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| C10-ORDER | 42 | for prepare and reconcile, each of `ready_invoking`, `ready_effect_applied`, and `recovery_claimed` is queried/recovered before independently broken roster, review, policy, broker, pending/expired request, or rejected-decision gates; reentry and stop remain owned through exact restoration |
+| C10-CAS | 6 | settlement apply-then-reject/timeout/cancel/malformed returns ready with zero rollback and joined lifecycle; converse recovery-first CAS returns blocked, restores draft once, and joins |
+| C10-REVISION | 15 | prepare, commit, and reconcile reject original, lower, higher-but-not-exact, or provenance-mismatched settled revisions and accept only the exact stored applied revision |
+| C10-CONFIRM | 4 | rollback success followed by rejecting, timed-out, malformed, or signal-ignoring confirmation cannot freeze recovery; a newer fence reaches exact `draft_restored` and joins |
+| C10-NOT-STARTED | 4 | ready effect rejection, timeout, cancellation, or malformed pre-application outcome always has durable `ready_invoking`, reaches a terminal no-op draft restoration, releases the key, and joins stop |
+| C10-ASSIGN | 135 | all 20 credential suffixes with `+=` traverse five durable/outbound consumers; lowercase/mixed-case and numeric/associative-index forms follow an explicit fail-closed base-name policy; only exact unindexed `FEATURE_TOKEN` with `=` or `+=` is public, and no rejected marker is reflected |
+| C10-WARNING | 6 | warning-only missing, stale-head, pre-finding/equal-time, or unauthorized `not_actionable` dispositions block; only an exact-current-head later fixed disposition followed by a later clean review passes |
+| C10-SNAPSHOT | 17 | canonical `unknown` restart decoding rejects duplicate prepared/settlement/map keys, missing or extra reciprocal state/mutation/recovery links, stale fences, mutation-revision regression, incoherent settlements, oversized values, and extra fields while reordered equivalent values decode identically |
+
+The matrix is committed as one executable five-test-file RED before any production edit. Passing
+legacy/control rows remain passing; every new failure must identify a missing Cycle 10 contract,
+not a weakened expectation or fixture-only shortcut.
+
+### Cycle 10 assignment and snapshot policies
+
+The shared lexer recognizes the complete shell identifier grammar `[A-Za-z_][A-Za-z0-9_]*`, an
+optional bounded index, and exactly `=` or `+=`. Suffix classification is case-insensitive over the
+complete base identifier. Indexed credential-shaped bases remain sensitive regardless of index.
+The public exception is case-sensitive and only exact, unindexed `FEATURE_TOKEN`; it permits both
+declared operators. Malformed/partial indexed assignments fail closed, and matching remains bounded
+by the already-bounded containing field rather than a truncating name limit.
+
+The restart decoder must reject duplicates before constructing `Map`s; require a reciprocal ready
+mutation for every applied/settled state, a reciprocal rollback mutation and exact recovery fence
+for every recovery state, no orphan mutation or recovery entry, a global mutation revision at least
+every stored mutation revision, unique journal query/settlement identity, coherent settlement
+references, and all existing exact-shape/size bounds. JSON is still assigned to `unknown` and
+decoded only through public production validators.
+
+### Cycle 10 lifecycle and checkpoints
+
+1. Commit these nine artifact-only PLAN updates before tests or production. `verificationPassed`
+   is false because the declared broad route exits non-zero and Cycle 10 is unimplemented.
+2. Commit the complete executable RED matrix in the five existing test files. Run the full focused
+   route, capture exact failing groups/counts, and prove all five production blobs remain exact.
+3. Implement the smallest coherent authority, assignment, evidence, and canonical-decoder GREEN.
+   Refactor only after focused GREEN; never weaken, skip, or delete a Cycle 10 expectation.
+4. Run focused five-file tests, strict owned and all-20-production TypeScript, pinned offline Pi
+   RPC, broad serialized classification, immutable-base/ancestry/merge-base/diff/exact-21-path,
+   three JSON parses, marker confinement, and both Cycle 9 report replays. A non-zero broad route
+   keeps `verificationPassed: false` even when failures are environmental.
+5. Evidence remains non-self-referential `HEAD`. Parent owns publication, two fresh exact-head
+   reviews, dispositions, integration, merge, and every human gate.
+
+- [x] Both complete Cycle 9 reports read; exact candidate/tree/base/scope and frozen blobs proved.
+- [x] Required routing, issue contract, GSD skill/runtime references, project artifacts, and runtime
+      integration reference read. Doctor passes; absent adapter command records
+      `manual_gsd_fallback`. Agent capacity rejected the read-only sidecar, so execution records
+      `local_critical_path`.
+- [ ] Artifact-only Cycle 10 PLAN commit precedes all test and production edits.
+- [ ] One complete executable RED matrix fails only the named Cycle 10 row groups with frozen
+      production blobs.
+- [ ] Coherent GREEN/refactor closes the union and preserves all retained behavior.
+- [ ] Exact local evidence is recorded truthfully; fresh review remains parent-owned.
+
+Excluded: Go, connectors, `make`, runtime services, dependencies, parent/main/#475, credentials,
+network/GitHub, push, reviewer dispatch, self-review, integration, merge, and human-gate actions.

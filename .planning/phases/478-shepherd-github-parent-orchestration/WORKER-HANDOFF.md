@@ -16,10 +16,10 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Prior frozen reviewed candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`
+Prior frozen reviewed candidate: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1`
 
-Cycle 9 status: locally verified at GREEN `593ba1cf977bdfd9f193b3d7883882b96f99a189`;
-final candidate is non-self-referential `HEAD`, awaiting parent-owned exact-head reviews
+Cycle 10 status: artifact PLAN in progress; both Cycle 9 reviews are blocked and consolidated;
+no Cycle 10 test or production edit has occurred
 
 ## Scope Delivered
 
@@ -357,3 +357,18 @@ session-attestation contract and fixtures required to verify independent-review 
   Immutable base, exact merge base, full-range diff, exact 21 paths, three JSON parses, Cycle 9
   marker confinement, and both complete Cycle 8 report replays pass. No post-GREEN production edit
   or standalone refactor ran.
+
+## Cycle 10 plan handoff
+
+- Frozen candidate/tree/base: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1` /
+  `9167ebaf82f92c1229e56b1b8334262a356dcd3c` / `3addb1f4`; clean exact 21 paths; both Cycle 9
+  reports read completely; all five production blobs frozen.
+- One transition table owns every ordering, begin, effect, settlement, recovery claim, rollback,
+  confirmation, restart, and stale-writer interruption. Durable begin precedes effect; exact applied
+  revision is mandatory; settlement-wins and recovery-wins are exclusive terminal CAS outcomes.
+- One planned executable RED matrix covers authority-first broken gates, settlement races, revision
+  mismatches, bounded confirmation, pre-application rejection, `+=`/case/index assignments across
+  five consumers, warning disposition chronology, and canonical snapshot consistency.
+- `verificationPassed` is false while the complete broad route exits non-zero. Doctor passes;
+  unavailable command records `manual_gsd_fallback`; agent-capacity rejection records
+  `local_critical_path`. Parent retains publication/review/integration/human-gate ownership.

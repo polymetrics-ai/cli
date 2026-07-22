@@ -396,3 +396,22 @@
   three JSON parses, Cycle 9 production-marker confinement, and both complete Cycle 8 report
   replays pass. No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub,
   push, self-review, reviewer, integration, merge, or human-gate action ran.
+
+## 2026-07-22 Cycle 10 plan
+
+- Started clean at exact blocked Cycle 9 candidate
+  `a49e4df2798281d1e64c722ccbcab5f4a678c3e1` (tree `9167ebaf82f92c1229e56b1b8334262a356dcd3c`),
+  immutable/exact merge base `3addb1f4`, and exact 21 paths. Read both complete Cycle 9 reports.
+- Reloaded required routing, issue contract, GSD programming-loop skill and workflows, adapter,
+  runtime integration, project/config/roadmap/state, PRD, prompts, and repo profile. Doctor passes;
+  `scripts/gsd prompt programming-loop ...` is unavailable, so this is `manual_gsd_fallback`.
+  Read-only sidecar spawn was rejected at the agent limit, so Cycle 10 is `local_critical_path`.
+- Froze one interruption table and eight RED groups before code: authority ordering, settlement CAS,
+  applied revision, bounded confirmation, pre-application terminal recovery, assignment grammar,
+  warning dispositions, and canonical snapshot consistency. Machine verification is reset false.
+- Frozen production blobs: orchestrator `538962e4e30410dea6e714d565018639e23d1efa`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+  `23efd2c51280ba83836feef4fcb459e7da4571c0`, human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+  `8b14fb1fd54938d9e49a880d75b2089c978766c0`. No Cycle 10 test, production, prohibited, or external
+  action ran before the artifact checkpoint.

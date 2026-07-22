@@ -1,10 +1,32 @@
 # Verification: #478
 
-Status: Cycle 9 consolidated correction is locally verified at coherent GREEN
-`593ba1cf977bdfd9f193b3d7883882b96f99a189`; final evidence remains non-self-referential `HEAD`.
-Two fresh exact-head reviews remain parent-owned.
+Status: Cycle 10 is planned against blocked exact candidate
+`a49e4df2798281d1e64c722ccbcab5f4a678c3e1`. Both Cycle 9 reviews are consolidated; no Cycle 10
+test or production edit has run. `verificationPassed` is false because Cycle 10 is unimplemented
+and the declared broad route exits non-zero. Fresh exact-head reviews remain parent-owned.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 9 contract.
+current Cycle 10 contract.
+
+## Cycle 10 verification contract
+
+- [x] Exact candidate/tree, immutable base/merge base/ancestry, clean worktree, exact 21 paths, and
+      five frozen production blobs are recorded before RED.
+- [x] Both complete Cycle 9 reports are read and mapped to one transition table plus eight
+      executable RED families.
+- [x] Required skills/contracts/project artifacts are loaded; doctor passes and unavailable adapter
+      command records `manual_gsd_fallback`; unavailable agent capacity records
+      `local_critical_path`.
+- [ ] Artifact-only PLAN commit precedes every Cycle 10 test and production edit.
+- [ ] One five-test-file executable RED captures all named groups with production blobs unchanged.
+- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
+      classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
+- [ ] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
+      review, integration, merge, or human-gate action runs.
+
+The phase-equivalent complete route remains the broad serialized Shepherd suite. Its recorded Cycle
+9 result was 670 total / 604 pass / 65 fail / 1 skip, so machine-readable verification is false
+until a complete declared route exits zero or an explicitly approved narrower route exists. Focused
+and strict passes remain valuable evidence but cannot override that state.
 
 ## Initial delivery authorized gate checklist (historical)
 

@@ -1,7 +1,8 @@
 # Summary: #478
 
-Status: Cycle 9 correction is locally verified at coherent GREEN `593ba1cf`; its final evidence
-candidate remains non-self-referential `HEAD`. Fresh exact-head review remains parent-owned.
+Status: Cycle 10 is planned against blocked exact candidate `a49e4df2`. Both Cycle 9 reports are
+consolidated into one strict TDD correction; verification and fresh exact-head review remain false
+and parent-owned respectively.
 Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -204,3 +205,18 @@ base/ancestry/merge-base/diff/21-path ownership, three JSON parses, marker confi
 Cycle 8 report replays pass. Serialized Shepherd is 670 total / 604 pass / 65 unchanged
 managed-sandbox process-identity `spawn EPERM` failures / 1 skip. No standalone production
 refactor was necessary and no prohibited or external action ran.
+
+## Cycle 10 correction status
+
+Both Cycle 9 reviews block `a49e4df2` and are consolidated into one plan-first correction. The
+seven blockers are authority-first recovery ordering, settlement/recovery CAS arbitration, exact
+applied-revision proof, bounded post-rollback confirmation, terminal pre-application rejection,
+complete assignment operator/case/index policy, and warning-finding disposition chronology. The
+same slice hardens the value-serialized restart snapshot and corrects verification truth.
+
+The frozen design separates durable begin from the uncertain ready effect, stores exact applied
+revision, queries authority before unrelated readiness gates, and makes terminal settlement versus
+fenced recovery mutually exclusive. `+=`, mixed/lowercase identifiers, and indexed assignments are
+classified by complete base name; only exact unindexed `FEATURE_TOKEN` is public. Snapshot maps and
+journal entries require unique reciprocal canonical state. No Cycle 10 test or production edit has
+run at this artifact checkpoint.

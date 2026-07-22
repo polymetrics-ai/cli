@@ -218,3 +218,20 @@
   pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip. A separate production
   refactor was not needed; final artifact edits record evidence only. Parent retains fresh-review
   ownership.
+
+## Cycle 10 consolidated-review prompt
+
+- Start from exact clean candidate `a49e4df2798281d1e64c722ccbcab5f4a678c3e1`, immutable base
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`, and exact 21-path ownership. Read both complete Cycle
+  9 reports and treat the union as indivisible.
+- Before production, commit the explicit interruption/transition table and truthful false
+  verification state, then commit one executable RED matrix across the five existing test files.
+- Establish durable invoking authority before the uncertain effect; query authority before every
+  unrelated gate; persist exact applied revision; arbitrate settlement/recovery by CAS; bound and
+  supersede post-rollback confirmation; terminate pre-application rejection safely.
+- Parse complete assignment identifier/index/operator grammar with `=` and `+=`, close mixed/lower
+  case and indexed forms across five consumers, enforce warning disposition chronology, and harden
+  canonical value-snapshot reciprocal consistency.
+- Preserve all retained tests and exact scope. Exclude Go/connectors/`make`, services, dependencies,
+  parent/main/#475, network/GitHub, push, reviews, integration, merge, and human gates. Adapter is
+  `manual_gsd_fallback`; unavailable agent capacity records `local_critical_path`.

@@ -469,3 +469,29 @@ pass. Serialized Shepherd is 670 total / 604 pass / 65 unchanged managed-sandbox
 `spawn EPERM` failures / 1 skip. Post-RED test edits align retained uncertain-result expectations
 with the stronger typed blocked contract and teach only public fake/port implementations the
 canonical authority state; no Cycle 9 assertion was removed, skipped, or weakened.
+
+## Cycle 10 consolidated-review RED ledger
+
+Frozen exact candidate: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1`; immutable base and merge base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 9 reports were read completely and their
+union is one strict RED→GREEN correction. The retained 450 focused cases, including the one
+intentional live-sandbox skip, remain mandatory.
+
+| ID | Rows | RED contract | State |
+| --- | ---: | --- | --- |
+| C10-ORDER | 42 | prepare/reconcile query and recover each unsettled phase before independently broken roster, review, policy, broker, pending/expired request, or rejected decision gates | planned_red |
+| C10-CAS | 6 | settlement-wins lost responses terminate recovery without rollback; recovery-wins conflicts settlement, blocks, restores draft once, and joins | planned_red |
+| C10-REVISION | 15 | prepare/commit/reconcile require exact stored applied revision and provenance, rejecting original/lower/higher mismatch | planned_red |
+| C10-CONFIRM | 4 | bounded post-rollback confirmation failure/hang is superseded by a newer fence and cannot freeze key/stop ownership | planned_red |
+| C10-NOT-STARTED | 4 | pre-application effect rejection/timeout/cancel/malformed paths have durable invoking state and terminal no-op draft restoration | planned_red |
+| C10-ASSIGN | 135 | all suffixes with `+=` cross five consumers; case/index policy is fail-closed; exact unindexed `FEATURE_TOKEN` controls remain public without marker reflection | planned_red |
+| C10-WARNING | 6 | warning findings require exact-current-head later fixed disposition and a later clean review | planned_red |
+| C10-SNAPSHOT | 17 | decoded JSON rejects duplicate, orphan, missing reciprocal, revision/fence/settlement-incoherent, oversized, and extra-field state while reordered equivalents remain canonical | planned_red |
+
+Frozen production blobs before RED: orchestrator `538962e4e30410dea6e714d565018639e23d1efa`,
+broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
+`23efd2c51280ba83836feef4fcb459e7da4571c0`, human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, and review router
+`8b14fb1fd54938d9e49a880d75b2089c978766c0`. RED may change only the five matching test files and
+must remain executable. Exact failing row groups and counts are recorded after the RED run; no
+production blob may move before that evidence exists.

@@ -203,3 +203,23 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   all 20 production modules, pinned offline RPC, immutable-base/diff/exact-21-path/JSON/marker
   gates, and both report replays pass. No prohibited or external action ran; fresh review is
   parent-owned.
+
+## Cycle 10 consolidated-review correction (planned)
+
+- frozen reviewed candidate/tree/base: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1` /
+  `9167ebaf82f92c1229e56b1b8334262a356dcd3c` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; exact scope remains 21 paths
+- both complete Cycle 9 reports are one correction: authority-first recovery, settlement/recovery
+  CAS, exact applied revision, bounded confirmation, terminal pre-application rejection, complete
+  assignment operator/case/index policy, warning disposition chronology, canonical restart state,
+  and truthful verification
+- a durable begin establishes `ready_invoking` before the uncertain effect; applied/settled state
+  stores exact applied revision; settlement and recovery are mutually exclusive CAS outcomes; all
+  post-rollback reads are bounded and supersedable
+- shared assignment parsing covers `=`/`+=`, complete mixed-case identifiers, and optional indexes;
+  only exact unindexed `FEATURE_TOKEN` remains public after case-insensitive suffix classification
+- canonical snapshot decoding rejects duplicates, orphan/missing reciprocal entries, stale fences,
+  mutation-revision regression, and incoherent settlements before constructing runtime maps
+- `verificationPassed` is false while the declared broad suite exits non-zero. PLAN -> one complete
+  executable five-test-file RED -> coherent GREEN/refactor -> exact evidence is mandatory; parent
+  owns publication, fresh reviews, integration, merge, and human gates
