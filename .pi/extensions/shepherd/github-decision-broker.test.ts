@@ -780,3 +780,47 @@ test("cycle 8 provider-neutral credential suffixes close the real broker request
 		}
 	});
 });
+
+function cycle9BrokerAssignment(nameLength: number, marker = "CYCLE9_DECISION_BROKER_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before broker persistence or publication", async (t) => {
+	const marker = "CYCLE9_DECISION_BROKER_MARKER";
+	const largestName = 4_096 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9BrokerAssignment(127, marker), true],
+		["128 characters", cycle9BrokerAssignment(128, marker), true],
+		["129 characters", cycle9BrokerAssignment(129, marker), true],
+		["256 characters", cycle9BrokerAssignment(256, marker), true],
+		["largest in-field name", cycle9BrokerAssignment(largestName, marker), true],
+		["over-field name", cycle9BrokerAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			if (!rejects) {
+				const record = await harness.broker.request({ ...harness.request, question });
+				assert.equal(record.question, question);
+				assert.equal(harness.repository.states.size, 1);
+				assert.equal(harness.transport.created.length, 1);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});

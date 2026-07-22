@@ -576,6 +576,44 @@ test("cycle 8 provider-neutral credential suffixes close the native human-decisi
 	});
 });
 
+function cycle9DecisionAssignment(nameLength: number, marker = "CYCLE9_HUMAN_DECISION_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before durable human-decision state", async (t) => {
+	const marker = "CYCLE9_HUMAN_DECISION_MARKER";
+	const largestName = 4_096 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9DecisionAssignment(127, marker), true],
+		["128 characters", cycle9DecisionAssignment(128, marker), true],
+		["129 characters", cycle9DecisionAssignment(129, marker), true],
+		["256 characters", cycle9DecisionAssignment(256, marker), true],
+		["largest in-field name", cycle9DecisionAssignment(largestName, marker), true],
+		["over-field name", cycle9DecisionAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createHumanDecisionRecord(spec({ question })).question, question);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
 	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
 	const requestComment = {

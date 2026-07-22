@@ -1053,3 +1053,44 @@ test("cycle 8 provider-neutral credential suffixes close every PR evidence text 
 		}
 	});
 });
+
+function cycle9EvidenceAssignment(nameLength: number, marker = "CYCLE9_GITHUB_EVIDENCE_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before GitHub evidence acceptance", async (t) => {
+	const candidate = await evidence();
+	const marker = "CYCLE9_GITHUB_EVIDENCE_MARKER";
+	const bodyPrefix = `${candidate.body}\n`;
+	const largestName = 65_536 - Buffer.byteLength(bodyPrefix) - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9EvidenceAssignment(127, marker), true],
+		["128 characters", cycle9EvidenceAssignment(128, marker), true],
+		["129 characters", cycle9EvidenceAssignment(129, marker), true],
+		["256 characters", cycle9EvidenceAssignment(256, marker), true],
+		["largest in-field name", cycle9EvidenceAssignment(largestName, marker), true],
+		["over-field name", cycle9EvidenceAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, assignment, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(validateGitHubPullRequestEvidence({ ...candidate, body: `${bodyPrefix}${assignment}` }).body,
+					`${bodyPrefix}${assignment}`);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				validateGitHubPullRequestEvidence({ ...candidate, body: `${bodyPrefix}${assignment}` });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});

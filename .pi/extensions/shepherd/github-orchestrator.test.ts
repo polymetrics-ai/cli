@@ -3344,6 +3344,45 @@ test("cycle 8 rejects every provider-neutral credential suffix through orchestra
 	assert.equal(safeDecision.kind, "ready");
 });
 
+function cycle9OrchestratorAssignment(nameLength: number, marker = "CYCLE9_ORCHESTRATOR_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before orchestration effects", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const marker = "CYCLE9_ORCHESTRATOR_MARKER";
+	const largestName = 4_096 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9OrchestratorAssignment(127, marker), true],
+		["128 characters", cycle9OrchestratorAssignment(128, marker), true],
+		["129 characters", cycle9OrchestratorAssignment(129, marker), true],
+		["256 characters", cycle9OrchestratorAssignment(256, marker), true],
+		["largest in-field name", cycle9OrchestratorAssignment(largestName, marker), true],
+		["over-field name", cycle9OrchestratorAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, objective, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createPlanFromSource({ ...source, objective }).objective, objective);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createPlanFromSource({ ...source, objective });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
 function cycle7FutureParentDecision(
 	request: GitHubDecisionRequest,
 	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
@@ -3782,6 +3821,66 @@ test("cycle 8 quarantines every immediate uncertain non-value outcome", async (t
 		scenario.authority.releaseRecovery();
 		await new Promise<void>((resolve) => setTimeout(resolve, 30));
 		assert.equal((await scenario.orchestrator.stop()).kind, "joined");
+	});
+});
+
+test("cycle 9 keeps an immediate uncertain visible-ready result consistent with held recovery", async (t) => {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	const authority = new ImmediateApplyThenRejectAuthority(transport);
+	const orchestrator = orchestratorFor(
+		transport,
+		new FakeDecisionBroker(),
+		defaultPolicySource(transport),
+		25,
+		authority,
+	);
+	const first = orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy)
+		.then((value) => ({ kind: "value" as const, value }), (error: unknown) => ({ kind: "error" as const, error }));
+	assert.notEqual(await settleWithin(authority.recoveryStarted, 100), "hung");
+	const publicOutcome = await settleWithin(first, 100);
+	const visibleWhileHeld = transport.pullRequests.find((entry) => entry.number === 900);
+	const earlyStop = await orchestrator.stop({ deadlineAt: new Date(Date.now() + 10).toISOString() });
+	const reentry = await settleWithin(
+		orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy)
+			.then((value) => value.kind, () => "error"),
+		50,
+	);
+	authority.releaseRecovery();
+	await new Promise<void>((resolve) => setTimeout(resolve, 80));
+	const finalParent = transport.pullRequests.find((entry) => entry.number === 900);
+	const finalStop = await orchestrator.stop();
+	const resumed = await orchestrator.prepareParentReadiness(candidate, receipts, decisionPolicy);
+
+	await t.test("public outcome is typed blocked rather than ready or rejection", () => {
+		assert.notEqual(publicOutcome, "hung");
+		assert.deepEqual(publicOutcome, {
+			kind: "value",
+			value: { kind: "blocked", blockers: ["parent_ready_quarantined"] },
+		});
+	});
+	await t.test("healthy visibility can observe ready while authority remains unsettled", () => {
+		assert.ok(visibleWhileHeld);
+		assert.equal(visibleWhileHeld.draft, false);
+	});
+	await t.test("the keyed lifecycle prevents reentry during held recovery", () => {
+		assert.equal(reentry, "hung");
+		assert.equal(authority.compareCalls, 1);
+	});
+	await t.test("stop truthfully reports incomplete while recovery is held", () => {
+		assert.equal(earlyStop.kind, "incomplete");
+	});
+	await t.test("the exact rollback path runs once", () => {
+		assert.equal(authority.rollbackCalls, 1);
+	});
+	await t.test("terminal recovery restores the exact draft", () => {
+		assert.ok(finalParent);
+		assert.equal(finalParent.draft, true);
+	});
+	await t.test("stop joins only after terminal recovery", () => {
+		assert.equal(finalStop.kind, "joined");
+	});
+	await t.test("one fresh preparation can resume after draft settlement", () => {
+		assert.equal(resumed.kind, "prepared");
 	});
 });
 
@@ -5155,6 +5254,164 @@ test("cycle 8 reconstructs every readiness role from serialized durable state", 
 	assert.equal((await originalController.stop()).kind, "joined");
 });
 
+class Cycle9AuthorityReadProbe implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	state: unknown = null;
+	readCalls = 0;
+	settleCalls = 0;
+
+	constructor(delegate: ParentReadyDurableAuthorityBoundary) {
+		this.#delegate = delegate;
+	}
+
+	async readParentReadyState(_query: unknown, _context: ExternalCallContext): Promise<unknown> {
+		this.readCalls += 1;
+		return structuredClone(this.state);
+	}
+
+	async settleParentReady(_request: unknown, _context: ExternalCallContext): Promise<unknown> {
+		this.settleCalls += 1;
+		return structuredClone(this.state);
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		return this.#delegate.compareConsumeAndMarkParentReady(request, context);
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		return this.#delegate.quarantineAndRollbackParentReady(request, context);
+	}
+}
+
+function cycle9UnsettledAuthorityState(operation: PreparedParentReadyOperation, marker: string): unknown {
+	return {
+		schemaVersion: 1,
+		invocationId: "1".repeat(64),
+		recoveryId: "2".repeat(64),
+		repository: operation.authorization.repository,
+		pullRequest: operation.authorization.pullRequest,
+		marker,
+		generation: operation.authorization.generation,
+		headSha: operation.authorization.headSha,
+		originalRevision: operation.authorization.pullRequestRevision,
+		authorization: operation.authorization,
+		readyMutation: operation.mutation,
+		rollbackMutation: null,
+		phase: "recovery_claimed",
+		status: "unsettled",
+		fence: 1,
+	};
+}
+
+async function cycle9UnsettledShortcutScenario(
+	path: "prepare" | "commit" | "reconcile",
+): Promise<{ result: unknown; readCalls: number; visibleDraft: boolean | undefined }> {
+	let probe: Cycle9AuthorityReadProbe | undefined;
+	const scenario = await cycle8PortOnlyPreparedScenario((authority) => {
+		probe = new Cycle9AuthorityReadProbe(authority);
+		return probe;
+	});
+	assert.ok(probe);
+	probe.state = cycle9UnsettledAuthorityState(scenario.operation, scenario.candidate.markers.parentPullRequest);
+	const index = scenario.backing.pullRequests.findIndex((entry) => entry.number === scenario.operation.authorization.pullRequest);
+	const current = scenario.backing.pullRequests[index];
+	if (index < 0 || current === undefined) throw new Error("cycle 9 parent PR is missing");
+	scenario.backing.pullRequests.splice(index, 1, { ...current, draft: false, revision: current.revision + 1 });
+	const result = path === "prepare"
+		? await scenario.orchestrator.prepareParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy)
+		: path === "commit"
+			? await scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+			)
+			: await scenario.orchestrator.reconcileParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy);
+	return {
+		result,
+		readCalls: probe.readCalls,
+		visibleDraft: scenario.backing.pullRequests.find((entry) => entry.number === current.number)?.draft,
+	};
+}
+
+test("cycle 9 consults durable authority before every already-ready shortcut", async (t) => {
+	for (const path of ["prepare", "commit", "reconcile"] as const) {
+		await t.test(path, async () => {
+			const observed = await cycle9UnsettledShortcutScenario(path);
+			assert.equal(observed.visibleDraft, false, "dangerous-point fixture must begin visibly ready");
+			assert.ok(observed.readCalls >= 1, `${path} must query durable authority before reuse`);
+			assert.deepEqual(observed.result, {
+				kind: "blocked",
+				blockers: ["parent_ready_quarantined"],
+			});
+		});
+	}
+});
+
+test("cycle 9 exposes the canonical authority recovery and settlement surface", async (t) => {
+	for (const exportName of [
+		"validateParentReadyAuthorityQuery",
+		"validateParentReadyAuthorityState",
+		"validateSettleParentReadyAuthorityRequest",
+		"validateParentReadyRecoveryFence",
+		"validateDurableMutationIntent",
+		"validateDurableMutationResult",
+	] as const) {
+		await t.test(exportName, () => {
+			assert.equal(typeof Reflect.get(githubOrchestratorApi, exportName), "function");
+		});
+	}
+	await t.test("public authority contract declares a durable state query", async () => {
+		const production = await readFile(".pi/extensions/shepherd/github-orchestrator.ts", "utf8");
+		assert.match(production, /readParentReadyState\s*\(/u);
+	});
+	await t.test("public authority contract declares explicit ready settlement", async () => {
+		const production = await readFile(".pi/extensions/shepherd/github-orchestrator.ts", "utf8");
+		assert.match(production, /settleParentReady\s*\(/u);
+	});
+});
+
+test("cycle 9 exact issue 479 fixture is value-serialized and contains no fake or unchecked decode", async (t) => {
+	const source = await readFile(".pi/extensions/shepherd/github-orchestrator.test.ts", "utf8");
+	const start = source.indexOf("class PortOnlyReadinessBacking");
+	const end = source.indexOf('test("cycle 7 atomic authority boundary', start);
+	assert.ok(start >= 0 && end > start);
+	const fixture = source.slice(start, end);
+	await t.test("uses the public typed decision broker", () => {
+		assert.doesNotMatch(fixture, /new FakeDecisionBroker\s*\(/u);
+	});
+	await t.test("assigns serialized JSON decoding to unknown", () => {
+		assert.match(fixture, /const decoded\s*:\s*unknown\s*=\s*JSON\.parse\s*\(/u);
+	});
+	await t.test("contains no explicit any", () => {
+		assert.doesNotMatch(fixture, /\bany\b/u);
+	});
+	await t.test("contains no type assertion or fake projection", () => {
+		assert.doesNotMatch(fixture, /\s+as\s+(?:const|unknown|never|[A-Za-z_{])/u);
+	});
+	await t.test("serializes journal settlements", () => {
+		assert.match(fixture, /settlements/u);
+	});
+	await t.test("serializes authority recovery state", () => {
+		assert.match(fixture, /authority[\s\S]*recovery/u);
+	});
+	await t.test("reconstructs all five public roles", () => {
+		for (const role of ["Controller", "Broker", "Journal", "Transport", "Authority"]) {
+			assert.match(fixture, new RegExp(`restarted${role}`, "u"));
+		}
+	});
+	await t.test("exercises explicit conflict uncertainty restart stop join and settlement", () => {
+		for (const word of ["conflict", "uncertain", "restart", "incomplete", "joined", "settlement"]) {
+			assert.match(fixture, new RegExp(word, "iu"));
+		}
+	});
+});
+
 test("cycle 7 atomic authority boundary rejects every moved coordinate without recovery", async (t) => {
 	const mutations: Array<[string, ParentReadyAuthorityCoordinate, (authorization: Record<string, any>) => void]> = [
 		["policy", "policy", (value) => { value.policies[0].revision += 1; }],
@@ -5242,8 +5499,8 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.equal(details.candidateRef, "HEAD");
 	assert.equal(Object.hasOwn(details, "frozenCandidate"), false);
 	assert.equal((details.priorReviewState as Record<string, unknown>).priorReviewedCandidate,
-		"b90037df1fff38c755ebc8025579120d17031330");
-	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 8);
+		"f97a698df90010ae072554e04563a8134a8e5f6e");
+	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 9);
 	const validate = githubOrchestratorApi.validateRunStateCandidateSemantics;
 	assert.doesNotThrow(() => validate(state));
 	const invalid = structuredClone(state);

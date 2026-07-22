@@ -540,3 +540,41 @@ test("cycle 8 provider-neutral credential suffixes close every shared review-rou
 		}
 	});
 });
+
+function cycle9CredentialAssignment(nameLength: number, marker = "CYCLE9_REVIEW_ROUTER_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name at the review-router boundary", async (t) => {
+	const marker = "CYCLE9_REVIEW_ROUTER_MARKER";
+	const largestName = 512 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9CredentialAssignment(127, marker), true],
+		["128 characters", cycle9CredentialAssignment(128, marker), true],
+		["129 characters", cycle9CredentialAssignment(129, marker), true],
+		["256 characters", cycle9CredentialAssignment(256, marker), true],
+		["largest in-field name", cycle9CredentialAssignment(largestName, marker), true],
+		["over-field name", cycle9CredentialAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, assignment, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.doesNotThrow(() => createIndependentReviewWork(target({ workItemId: assignment })));
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createIndependentReviewWork(target({ workItemId: assignment }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
