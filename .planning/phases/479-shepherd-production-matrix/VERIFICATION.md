@@ -4,31 +4,32 @@
 
 **FUNCTIONAL PASS — 17/17 production-matrix rows.**
 
-Production code was frozen at `9169241531dc0f88710bcfc637a272dd379dec99`. The later
-future-safe test fixture and this documentation freeze do not change production code. One
-consolidated Codex 5.6 Sol xhigh review returned three release blockers; one bounded correction
-pass supplied behavior RED → GREEN evidence, and the same reviewer marked every finding **CLOSED**
-with final disposition **VERIFIED** at the production code head.
+The original 17-row implementation was frozen at `9169241531dc0f88710bcfc637a272dd379dec99`.
+The 2026-07-22 release-blocker correction is frozen at
+`78708cbef64b33e54ed32078bf2a107d81126236`; this later documentation checkpoint does not change
+production code. A bounded independent audit returned **PASS** for the four requested release paths
+after one correction pass and targeted cross-layer closure.
 
 The historical GSD/TDD process gap remains recorded separately: the original implementation did
-not preserve behavior-level RED evidence for every row. The final correction blockers do have
-genuine RED → GREEN commits. Functional verification must not be misreported as retroactive proof
-of the missing original RED checkpoints.
+not preserve behavior-level RED evidence for every row. The release-blocker correction has genuine
+behavior RED → GREEN checkpoints recorded in `TDD-LEDGER.md`. Functional verification must not be
+misreported as retroactive proof of the missing original RED checkpoints.
 
 ## Final machine gates
 
 | Gate | Result |
 |---|---|
 | Combined production release suite | **PASS — 808/808**, sequential, 0 failed, 0 skipped |
+| Release-blocker affected suite | **PASS — 767/767**, sequential, 0 failed, 0 skipped, at code head `78708cbe` |
 | Exact Git integration CAS | **PASS — 3/3**, including parent race, default alias, deterministic retry |
 | Generation-2 recovery | **PASS** — runtime 10/10, recovery 83/83, controller 34/34 |
-| Complete Shepherd inventory | Final-head rerun at test head `7e02778e`: 1,685 total, **1,620 pass, 64 fail, 1 skipped**, 108.1s. All 64 local failures enter the file/Git/worktree lease path and terminate at the managed sandbox's `spawn EPERM`; the nine expired test-fixture failures from the prior run were corrected and now pass. Fresh CI must rerun this gate outside the managed sandbox. |
-| Strict production TypeScript | **PASS** — 46 non-test Shepherd modules, TS 5.9.3, strict/no-emit, ES2024 + NodeNext, pinned Pi type roots |
+| Complete Shepherd inventory | Final correction-head rerun: 1,712 total, **1,647 pass, 64 fail, 1 skipped**, 117.8s. The same 64 baseline failures enter the file/Git/worktree lease path under the managed sandbox; 61 report `spawn EPERM` directly and three concurrency assertions observe zero successful leases after that blocked process-identity path. Fresh CI must rerun this gate outside the managed sandbox. |
+| Strict production TypeScript | **PASS** — 49 non-test Shepherd modules, TS 5.9.3, strict/no-emit, ES2024 + NodeNext, pinned Pi type roots |
 | Offline Pi registration | **PASS** — pinned Pi 0.80.6 RPC exposes `pm-shepherd` from the production extension |
 | Real command RPC | **PASS** — bare/help, invalid action, and read-only `status --issue 479`; no model, auth, or network call |
-| Plan/intake/docs | **PASS — 4/4** production plan/intake tests; README schema-2 sample remains valid |
+| Plan/intake/docs | **PASS** — 4/4 bootstrap tests, including real `host_inspect` tool-policy compilation and real GitHub orchestration-plan construction; README matches generated-plan and parent-draft behavior |
 | Diff/worktree hygiene | **PASS** — `git diff --check`; worktree clean before the docs freeze |
-| Independent blocker disposition | **VERIFIED** — all three review findings closed at `91692415` |
+| Independent release-blocker disposition | **PASS** — bounded final audit confirmed all four requested paths and their cross-layer contracts at `78708cbe` |
 
 The broad Go/connector gates are intentionally not part of this TypeScript/Pi sub-issue. They
 remain parent-head gates and do not substitute for Shepherd verification.
@@ -37,7 +38,7 @@ remain parent-head gates and do not substitute for Shepherd verification.
 
 | # | Verdict | Direct final-head evidence |
 |---:|:---:|---|
-| 1 | **PASS** | Genuine `index.ts` composition reaches reviewed schema-2 intake, parallel children, isolated workspaces, bounded verification, stacked PRs, exact-head review/correction, CAS integration, parent finalization, and exact human wait. Controller trajectory and host/runtime tests execute the path. |
+| 1 | **PASS** | Genuine `index.ts` composition reuses a valid schema-2 plan or bootstraps one from authoritative issue facts through an xhigh planning AgentSession and host-materialized child issues, then reaches parallel children, isolated workspaces, bounded verification, stacked PRs, exact-head review/correction, CAS integration, parent finalization, and exact human wait. |
 | 2 | **PASS** | Scheduler/controller tests prove dependency ordering, deterministic disjoint selection, canonical write-scope collisions, concurrency capacity, and persisted idle reasons. |
 | 3 | **PASS** | Workspace and AgentSession tests prove disjoint mutators coexist, overlapping scopes wait, and join/abort releases exactly the accepted child's lease. |
 | 4 | **PASS** | Stale siblings refresh/rebase/reclaim and invalidate verification/review. Exact parent-base CAS preserves an unrelated parent advance and routes the child through refresh/reverify/rereview. |
@@ -64,12 +65,26 @@ remain parent-head gates and do not substitute for Shepherd verification.
 | Child merge lacked atomic exact parent-base CAS | `5ef7ba15` | `37dbc42c` | **CLOSED** |
 | Correction-discovered crash after CAS before receipt | `32a0d50e` | `91692415` | **CLOSED** |
 
+## 2026-07-22 release-blocker disposition
+
+| Requested blocker | Final behavior | Disposition |
+|---|---|---|
+| Missing issue plan | `start --issue N` observes authoritative issue/repository facts, runs one xhigh planning AgentSession, validates the semantic proposal, creates/reconciles marker-bound child issues, inserts only returned issue numbers, and atomically publishes the ignored schema-2 plan. Existing invalid/conflicting plans are never overwritten. | **CLOSED** |
+| Agent-run test feedback | Implementation/correction sessions can call ID-only `host_verify` for RED→GREEN; independent verification requests every immutable ID in exact order; the host executes closed command tuples and returns bounded redacted diagnostics that drive correction. | **CLOSED** |
+| Useful autonomous authority | Mutating agents keep scoped read/edit/write authority inside their child worktree. They do not receive generic shell, raw argv/environment, secrets, GitHub mutation, or parent/default-branch merge authority. | **CLOSED** |
+| Same-second ready transition | Exact `draft:false` evidence with `revision >= expectedRevision` is accepted; equal revision while still draft and every moved-head observation remain rejected and restart-safe. | **CLOSED** |
+
+The bounded review also closed command-recipe injection, descendant process escape, AgentSession
+exception bypass, plan/verifier bounds, real GitHub orchestration parity, topology/scope parity, and
+real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `TDD-LEDGER.md`.
+
 ## Security and authority result
 
 - The model receives bounded scoped workspace capabilities, not generic shell, Git, GitHub, or
   merge-main tools.
-- Verification uses configured executable/argv with `shell: false`, bounded cwd/environment,
-  output, timeout, and cancellation.
+- Verification uses closed Node/Go/Make quality-gate recipes, canonical host-owned executables,
+  `shell: false`, bounded cwd/environment/output/time, cancellation, POSIX process-group termination,
+  and a hard post-kill settlement bound.
 - Child integration constructs a deterministic exact reviewed merge and updates only the
   non-default parent ref under `--force-with-lease=<parent>:<baseSha>`. GitHub never performs the
   merge; it observes exact evidence and publishes the receipt.

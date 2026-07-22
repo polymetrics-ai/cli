@@ -2,28 +2,28 @@
   "schemaVersion": 1,
   "phase": "479-shepherd-production-matrix",
   "status": "verified_waiting_external_gates",
-  "checkpoint": "17-of-17-functional-pass",
-  "productionCodeHead": "9169241531dc0f88710bcfc637a272dd379dec99",
-  "verificationTestHead": "7e02778e3552c4efe83567e990e099b18dce8eac",
+  "checkpoint": "release-blockers-corrected-17-of-17-functional-pass",
+  "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
+  "verificationTestHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "matrix": {
     "pass": 17,
     "open": 0
   },
   "verification": {
     "focused": {
-      "pass": 808,
+      "pass": 767,
       "fail": 0
     },
     "completeInventory": {
-      "total": 1685,
-      "pass": 1620,
+      "total": 1712,
+      "pass": 1647,
       "fail": 64,
       "skipped": 1,
       "localFailureClass": "managed_sandbox_spawn_eperm"
     },
     "strictProductionTypeScript": "pass",
     "offlinePiRpc": "pass",
-    "reviewDisposition": "verified"
+    "reviewDisposition": "bounded_correction_pass"
   },
   "manualGsdFallback": true,
   "reviewRoundsAllowed": 1,
