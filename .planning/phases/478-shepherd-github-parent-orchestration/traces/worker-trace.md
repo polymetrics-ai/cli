@@ -353,3 +353,27 @@
 - No Go, connector, `make`, dependency, parent/main/#475, network/GitHub, push, reviewer/self-review,
   integration, or merge action ran. Evidence uses current non-self-referential `HEAD`; parent owns
   publication and two fresh exact-head reviews.
+
+## 2026-07-22 Cycle 9 plan
+
+- Started clean at frozen Cycle 8 reviewed candidate
+  `f97a698df90010ae072554e04563a8134a8e5f6e`; immutable base remains `3addb1f4`; exact range is 21
+  paths. Read `/tmp/478-REVIEW-CYCLE8-1.md` and `-2.md` completely.
+- Reloaded required routing, GSD loop/runtime, architecture, JavaScript testing, issue delivery,
+  compact handoff, runtime integration, and project artifacts. Doctor passes; unavailable adapter
+  command records `manual_gsd_fallback`. All four agent slots are occupied, so no sidecar was
+  available and execution records `local_critical_path`.
+- Consolidated four families into 69 planned RED rows: 8 result consistency, 13 authority-owned
+  dangerous-point restart/fencing, 40 complete-name assignment boundaries across five consumers,
+  and 8 exact typed/value-serialized #479 fixture rows.
+- Froze the authority state machine before RED. Fence-0 `ready_invoking` must be durably present
+  before and immediately revalidated by the original writer; applied state remains unsettled until
+  an explicit settlement CAS reaches `ready_settled`. A monotonic `recovery_claimed` transition
+  invalidates that writer and all older attempts before rollback; only matching exact draft proof
+  reaches `draft_restored` and releases key/stop ownership.
+- Frozen production blobs: orchestrator `ab9b2c0ed254ecdbffa10c4ca2b13420de01268a`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+  `31234c70ade7341a2af01aeac2d81a015b696e6b`, evidence
+  `23efd2c51280ba83836feef4fcb459e7da4571c0`. No Cycle 9 test, production, external, or prohibited
+  action ran before the artifact checkpoint.

@@ -188,3 +188,27 @@
   is environmentally failing only in the unchanged 65 sandbox `spawn EPERM` cases (594 total /
   528 pass / 1 skip). Both input reports were re-read after REFACTOR; parent owns fresh exact-head
   review and every external action.
+
+## Cycle 9 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE8-1.md` and `/tmp/478-REVIEW-CYCLE8-2.md`, both read completely;
+  frozen candidate `f97a698df90010ae072554e04563a8134a8e5f6e`, exact base `3addb1f4`, exact 21 paths.
+- Execute one indivisible 69-row PLAN -> five-file RED -> coherent GREEN -> bounded REFACTOR ->
+  evidence correction. Preserve all 374 focused cases and frozen production before RED.
+- Replace local quarantine truth with a canonically queryable authority record carrying invocation
+  and recovery IDs, exact target/revision/head, stable mutation identity, phase/status, and monotonic
+  fence. Only explicit `ready_settled` may report ready; `recovery_claimed` fences the original
+  writer before rollback; only exact `draft_restored` releases key/stop ownership.
+- Treat immediate applied-then-rejected and every uncertain `ExternalPortError` uniformly as
+  blocked/quarantined, even under healthy visible-ready reads. Consult authority before every
+  prepare/commit/reconcile ready shortcut and reconstruct at the visible-ready/pre-rollback point.
+- Parse the complete uppercase shell assignment name, including leading underscore, to the
+  delimiter. Exercise leading underscore, 127/128/129/256, largest accepted field, over-field, and
+  exact `FEATURE_TOKEN` control through all five consumers without reflecting markers.
+- Rebuild the #479 proof with a public typed decision broker and `JSON.parse` assigned to `unknown`;
+  canonically validate decision/prepared/journal/authority/recovery/fence/mutation/settlement
+  snapshots before constructing new roles. No `any`, casts, fake projection, private shortcut, or
+  object identity.
+- Adapter remains `manual_gsd_fallback`; all slots are occupied so execution is
+  `local_critical_path`. Exclude Go/connectors/`make`, runtime/services, dependencies, parent/main/
+  #475, network/GitHub, push, reviewers, integration, merge, and human-gate actions.

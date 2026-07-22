@@ -176,3 +176,25 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - GSD doctor passes and unavailable command records `manual_gsd_fallback`; no Go, connector,
   `make`, dependency, parent/main worktree, #475, push/network/GitHub, reviewer, integration, or
   merge action is authorized
+
+## Cycle 9 consolidated-review correction (planned)
+
+- frozen reviewed candidate/base: `f97a698df90010ae072554e04563a8134a8e5f6e` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; both blocked Cycle 8 reports were read completely
+- one 69-row correction binds four families: 8 uncertain result-consistency rows, 13 durable
+  dangerous-point restart/fence rows, 40 assignment-boundary rows, and 8 exact #479 typed-fixture
+  rows; exact 21-path ownership is unchanged
+- durable authority state is a canonical five-phase record: `ready_invoking`,
+  `ready_effect_applied`, explicit `ready_settled`, fenced `recovery_claimed`, and exact
+  `draft_restored`; a recovery claim invalidates the original ready writer and every older attempt
+- all uncertain external outcomes return blocked/quarantined until terminal recovery; visible ready
+  state cannot outrank unsettled authority, and prepare/commit/reconcile consult authority before
+  reuse while key/stop ownership remains joined to recovery settlement
+- uppercase shell assignment names are parsed completely, including leading underscore, before
+  provider-neutral suffix classification; 127/128/129/256/in-field/over-field boundaries traverse
+  every shared consumer with no marker reflection and the exact safe exception retained
+- the #479 trajectory uses a public typed decision broker and canonical `unknown` decoding for
+  decision, prepared, journal, authority, recovery, fence, mutation, and settlement snapshots;
+  `any`, casts, fake projection, private shortcuts, and same-object restart are forbidden
+- PLAN -> comprehensive five-file RED -> coherent GREEN -> bounded REFACTOR -> exact evidence is
+  mandatory; at this checkpoint no Cycle 9 test/production edit or prohibited/external action ran

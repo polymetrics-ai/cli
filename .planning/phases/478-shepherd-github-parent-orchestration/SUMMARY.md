@@ -1,9 +1,8 @@
 # Summary: #478
 
-Status: Cycle 8 correction is locally verified at current candidate `HEAD`. Frozen reviewed
-candidate `b90037df` remains historical input from two blocked independent Cycle 7 reports; fresh
-exact-head review remains parent-owned. Earlier delivery status below is retained as historical
-context.
+Status: Cycle 9 correction is planned against frozen candidate `f97a698d`, which received two
+blocked Cycle 8 reports. No Cycle 9 test or production edit has occurred; fresh exact-head review
+remains parent-owned. Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -177,3 +176,23 @@ Required skills/contracts and `manual_gsd_fallback` are recorded. The evidence c
 non-self-referential `HEAD`; its exact SHA is reported after commit. No Go, connector, parent/main
 worktree, #475, network/GitHub, push, reviewer, integration, or merge action ran. Parent owns
 publication, two fresh exact-head reviews, dispositions, integration, and every human gate.
+
+## Cycle 9 correction status
+
+Both Cycle 8 reports against `f97a698d` are consolidated into one planned 69-row correction. The
+four families are uncertain-result consistency (8), durable dangerous-point restart and
+original-writer fencing (13), total assignment parsing across five consumers (40), and the exact
+typed/value-serialized #479 production-role fixture (8).
+
+The central architecture is authority-owned. A canonical durable record progresses from
+`ready_invoking` to `ready_effect_applied` and only then, through an explicit response settlement,
+to `ready_settled`. Uncertainty instead claims a monotonic recovery fence before rollback, making
+the original writer and older attempts stale, and ends only at exact `draft_restored`. Prepare,
+commit, and reconcile consult this truth before ready reuse; visible non-draft state cannot override
+an unsettled record. Stop/key ownership lasts through terminal draft settlement.
+
+The provider-neutral parser consumes the complete uppercase shell assignment name, including a
+leading underscore, before suffix classification; 127/128/129/256/largest-in-field/over-field
+boundaries and the exact safe exception are planned through every shared durable/outbound consumer.
+The #479 fixture will decode serialized values into `unknown` and apply exported production
+validators without `any`, casts, fake projection, private shortcuts, or object-identity restart.

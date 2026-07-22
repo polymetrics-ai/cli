@@ -5,13 +5,13 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 8 locally completes the 48-row seven-family PLAN -> RED -> GREEN -> REFACTOR correction and local gates; frozen candidate b90037df remains historical blocked-review input, HEAD is the only current-candidate semantic, serialized broad verification remains environmentally failing in 65 unrelated sandbox spawn EPERM cases, and two fresh exact-head reviews remain parent-owned.",
+  "reason": "Cycle 9 is planned as one 69-row four-family correction against frozen blocked-review candidate f97a698d; authority-owned dangerous-point recovery, result consistency, total assignment parsing, and exact typed value-serialized #479 proof remain unimplemented, so verification and review coverage remain false.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "candidateRef": "HEAD",
-    "priorCycleImplementationHead": "915882c219f52da2c1edebce84d2bf90c61a4592",
+    "priorCycleImplementationHead": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -20,13 +20,20 @@
     "verificationPassed": false,
     "reviewCoveragePassed": false,
     "priorReviewState": {
-      "cycle": 7,
-      "priorReviewedCandidate": "b90037df1fff38c755ebc8025579120d17031330",
+      "cycle": 8,
+      "priorReviewedCandidate": "f97a698df90010ae072554e04563a8134a8e5f6e",
       "review1": "blocked",
       "review2": "blocked",
-      "findingsConsolidatedIntoCycle": 8
+      "findingsConsolidatedIntoCycle": 9
     },
     "reviewHistory": [
+      {
+        "cycle": 7,
+        "priorReviewedCandidate": "b90037df1fff38c755ebc8025579120d17031330",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 8
+      },
       {
         "cycle": 6,
         "priorReviewedCandidate": "dbce5b7d0c698bc802594211072fed77eff23c1c",
@@ -66,7 +73,8 @@
       "cycle8Red": "851bb3bfa3e23042211a8b37f3a97253cc6fedf5",
       "cycle8Green": "013bdc8b264e1ce8808d4af2558e2ec40b85ee49",
       "cycle8Refactor": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
-      "cycle8EvidenceRef": "HEAD"
+      "cycle8Evidence": "f97a698df90010ae072554e04563a8134a8e5f6e",
+      "cycle9PlanRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -126,6 +134,11 @@
         "reason": "Independent mapping found an optional legacy ready-mutation route and fake-shaped role projection; audit RED/GREEN made authority mandatory, removed ready mutation from public transport, typed atomic conflicts, and separated production transport, authority, and journal roles."
       },
       {
+        "cycle": "cycle-9-plan",
+        "decision": "local_critical_path_authority_owned_recovery",
+        "reason": "All four agent slots are occupied. This isolated worker owns one 69-row PLAN, RED, GREEN/refactor, and evidence path with a five-state durable authority record and monotonic fence; exact scope remains 21 paths."
+      },
+      {
         "cycle": "cycle-8-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
@@ -162,5 +175,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T02:08:50.000Z"
+  "updatedAt": "2026-07-22T02:40:31.000Z"
 }

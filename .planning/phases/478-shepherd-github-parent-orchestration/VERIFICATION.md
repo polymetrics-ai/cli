@@ -1,10 +1,10 @@
 # Verification: #478
 
-Status: Cycle 8 correction locally verified at current non-self-referential candidate `HEAD`.
-Frozen candidate `b90037df1fff38c755ebc8025579120d17031330` is historical blocked-review input;
-two fresh exact-head reviews remain parent-owned.
+Status: Cycle 9 consolidated correction is planned against frozen blocked-review candidate
+`f97a698df90010ae072554e04563a8134a8e5f6e`; no Cycle 9 test, production, or verification action
+has run. Two fresh exact-head reviews remain parent-owned.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 8 contract.
+current Cycle 9 contract.
 
 ## Initial delivery authorized gate checklist (historical)
 
@@ -153,6 +153,24 @@ parent-owned exact-head reviews remain pending.
 | Post-RED test edits | support-fixture alignment only in `github-orchestrator.test.ts`; no RED assertion was removed or weakened |
 | Prohibited/live actions | not run |
 | Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
+
+## Cycle 9 verification contract
+
+- [x] Both complete Cycle 8 reports are read and mapped to one 69-row, four-family correction.
+- [x] Frozen candidate/base, exact 21 paths, clean start, and five production blob IDs are recorded.
+- [x] The five-state authority-owned protocol and original-writer fence are frozen before RED.
+- [ ] Artifact-only PLAN commit precedes all Cycle 9 test and production changes.
+- [ ] Test-only RED fails every new row while retaining 374 focused cases and frozen production.
+- [ ] GREEN/REFACTOR pass result consistency, dangerous-point restart, total assignment parsing,
+      and the exact typed value-serialized #479 fixture as one indivisible architecture.
+- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, exact scope/base/data,
+      report replay, serialized classification, and integrity gates are recorded truthfully.
+- [ ] No Go, connector, `make`, runtime service, dependency, parent/main/#475, network/GitHub, push,
+      reviewer, integration, merge, or human-gate action runs.
+
+Cycle 9 is intentionally not verified at plan time. `verificationPassed` and
+`reviewCoveragePassed` remain false until implementation evidence and two parent-owned fresh
+exact-head reviews respectively exist.
 
 ## Cycle 8 verification contract
 

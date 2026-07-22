@@ -435,3 +435,28 @@ REFACTOR -> exact evidence. PLAN is `bccee8e6cdbcb6e38419114f264222b1f5616f66`; 
   21-path scope, three JSON parses, marker confinement, and clean pre-evidence status pass.
   Serialized Shepherd is environmental failure: 594 total / 528 pass / 65 unchanged unrelated
   sandbox `spawn EPERM` failures / 1 intentional skip; all Cycle 8/focused tests pass.
+
+## Cycle 9 consolidated-review RED ledger
+
+Frozen exact candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`; immutable base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 8 reports were read completely. The retained
+374 focused cases plus one intentional live skip remain mandatory.
+
+| ID | Rows | RED contract | State |
+| --- | ---: | --- | --- |
+| C9-RESULT | 8 | an applied-then-rejected uncertain result can only be blocked/quarantined; visibility cannot report ready; keyed recovery, reentry, stop/join, draft restoration, and blocked settlement stay consistent | planned |
+| C9-DURABLE | 13 | one canonically queryable authority record implements `ready_invoking -> ready_effect_applied -> ready_settled` or fenced `recovery_claimed -> draft_restored`; restart occurs at visible-ready/unsettled state and fences the original writer | planned |
+| C9-ASSIGN | 40 | eight boundary/control shapes run through each of five shared consumers: leading underscore, 127, 128, 129, 256, largest in-field, over-field, and exact safe exception; full-name suffix classification fails closed without marker reflection | planned |
+| C9-479 | 8 | a public typed broker and canonical unknown decoders reconstruct all five roles and validate decision/prepared/journal/authority/recovery/fence/mutation/settlement values across the exact #479 lifecycle | planned |
+
+Frozen production blobs before RED: orchestrator `ab9b2c0ed254ecdbffa10c4ca2b13420de01268a`,
+broker `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+`31234c70ade7341a2af01aeac2d81a015b696e6b`, and evidence
+`23efd2c51280ba83836feef4fcb459e7da4571c0`. RED may modify only the five matching test files.
+
+The authority record is the test oracle, not visible PR state: fence 0 original writes require an
+exact `ready_invoking` CAS; a recovery claim moves to fence >=1 before rollback and makes every
+fence-0/older writer stale. Only explicit applied-result settlement can produce `ready_settled`;
+only exact fenced draft proof can produce `draft_restored`. Any other state forces a public blocked
+outcome and retains lifecycle ownership.

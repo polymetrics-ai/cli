@@ -901,3 +901,83 @@ Production blobs frozen at candidate `b90037df` before RED are:
 - Immutable base and reviewed candidate ancestry, exact merge base, full-range diff check, exact
   21-path ownership, three JSON parses, synthetic-marker confinement, and clean pre-evidence status
   pass. No prohibited or external action ran.
+
+## Cycle 9 consolidated-review correction
+
+Frozen reviewed candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`; immutable base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both complete Cycle 8 reports were read before this
+plan. Their two blocker sets and typed-fixture warning are accepted as one indivisible four-family
+architecture correction. The exact 21-path boundary is unchanged. All five production blobs are
+frozen before RED: orchestrator `ab9b2c0ed254ecdbffa10c4ca2b13420de01268a`, broker
+`7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+`31234c70ade7341a2af01aeac2d81a015b696e6b`, and evidence
+`23efd2c51280ba83836feef4fcb459e7da4571c0`.
+
+### Cycle 9 authority-owned recovery protocol
+
+The durable authority, never a controller-local `Set`, owns one exact record for a parent-ready
+invocation. The record persists `invocationId`, `recoveryId`, repository/PR/marker/generation/head,
+the original PR revision, stable ready mutation key and intent, optional rollback mutation, phase,
+status, and a monotonic fence. It is canonically validated at every read/write boundary.
+
+The only valid state transitions are:
+
+1. `ready_invoking` (`unsettled`, fence 0): persisted before the ready effect. The original writer
+   must re-read/CAS this exact state immediately before writing.
+2. `ready_effect_applied` (`unsettled`, fence 0): the effect is durable, but the caller has not yet
+   validated and durably settled its response. Visible non-draft state is not reusable here.
+3. `ready_settled` (`settled`, fence 0): reached only through a separate exact settlement CAS after
+   the applied result is validated. This is the only authority state that may authorize a ready
+   result or already-ready reuse.
+4. `recovery_claimed` (`unsettled`, fence >= 1): an atomic recovery claim increments the fence and
+   thereby invalidates every lower rollback attempt plus the original fence-0 writer/replay before
+   any draft effect. It may be entered from either unsettled ready state, including reconstructed
+   state after response loss.
+5. `draft_restored` (`settled`, fence >= 1): reached only after the matching fenced rollback
+   mutation proves the exact authorized PR/head is draft. Stale writers and stale rollback results
+   cannot transition or settle it; a later public call may then prepare one fresh invocation.
+
+The authority exposes typed read and settlement operations in addition to compare/effect and
+rollback. Prepare, commit, and reconcile query it before any already-ready shortcut. Every uncertain
+`ExternalPortError`, including immediate promise rejection after an applied effect, returns only a
+typed blocked/quarantined outcome while recovery remains owned by the keyed lifecycle. Healthy
+visibility never overrides unsettled authority. `stop()` remains incomplete until matching
+`draft_restored` settlement joins. A reconstructed controller obtains prepared operation data from
+the journal and recovery truth from serialized authority values; no object identity is evidence.
+
+### Cycle 9 RED matrix (69 behavior rows)
+
+| Family | Rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| uncertain result consistency | 8 | immediate apply-then-reject with healthy ready visibility returns blocked, never ready; recovery remains keyed, prevents reentry, holds stop incomplete, restores exact draft, joins stop, records blocked settlement, and treats every uncertain `ExternalPortError` alike |
+| durable dangerous-point restart and original-writer fence | 13 | queryable invocation/recovery IDs, target/revision/head, stable mutation identity, five phases, monotonic fence, pre-shortcut prepare/commit/reconcile checks, serialization while ready is visible before rollback, reconstructed five-role recovery, stale original writer suppression, exact one-time draft restoration, truthful stop/join, and one fresh resume |
+| total provider-neutral assignment parsing | 40 | leading underscore, lengths 127/128/129/256, each consumer's largest in-field assignment, over-field assignment, and exact `FEATURE_TOKEN` control are tabled through each of five shared durable/outbound consumers; the complete name is parsed to its delimiter and failures never reflect the marker |
+| exact #479 value-serialized production fixture | 8 | public typed broker plus `JSON.parse` into `unknown` canonically decode decision, prepared operation, journal, authority recovery, fence, mutation, and settlement snapshots across success, conflict, uncertainty, restart, incomplete/joined stop, and final settlement without `any`, casts, fake projection, or private shortcuts |
+
+### Cycle 9 lifecycle and verification
+
+1. Commit these nine artifact-only updates before every Cycle 9 test or production edit.
+2. Commit one complete five-test-file RED. Retain all 374 focused cases and the intentional live
+   skip; prove all 69 rows fail for the intended missing contracts while all five production blobs
+   remain byte-exact.
+3. Implement one coherent GREEN followed by a bounded structural REFACTOR if needed. The durable
+   record and state transitions are one architecture slice; no partial family may be frozen.
+4. Run targeted Cycle 9, the complete focused five-file route, strict owned and all-production
+   TypeScript against pinned Pi 0.80.6, pinned offline RPC, exact base/ancestry/merge-base/diff/
+   21-path checks, three JSON parses, marker-confinement scans, report replay, and clean status.
+   Serialized Shepherd is run only after focused GREEN and classified truthfully. Go, connectors,
+   `make`, runtime services, parent/main/#475, dependencies, network/GitHub, push, reviewers,
+   integration, and merge remain prohibited.
+5. Evidence remains non-self-referential `HEAD`; parent owns publication, two fresh exact-head
+   independent reviews, dispositions, integration, and every human gate.
+
+### Cycle 9 checkpoints
+
+- [x] Both Cycle 8 reports read completely and frozen candidate/base/scope/blobs confirmed clean.
+- [x] Required skills/contracts loaded; doctor passes, unavailable programming-loop command records
+      `manual_gsd_fallback`; all agent slots are occupied so execution records `local_critical_path`.
+- [ ] Artifact-only Cycle 9 PLAN commit precedes tests and production.
+- [ ] Comprehensive five-file RED preserves all prior behavior and freezes production blobs.
+- [ ] Coherent GREEN and bounded REFACTOR close all 69 rows.
+- [ ] Exact local evidence and both-report replay are recorded; fresh reviews remain parent-owned.

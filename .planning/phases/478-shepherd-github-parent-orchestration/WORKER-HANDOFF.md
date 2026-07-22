@@ -16,10 +16,9 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Frozen reviewed candidate: `b90037df1fff38c755ebc8025579120d17031330`
+Frozen reviewed candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`
 
-Cycle 8 evidence head: current non-self-referential `HEAD`; final exact SHA is reported externally
-after commit
+Cycle 9 status: artifact PLAN in progress; no Cycle 9 test or production edit has occurred
 
 ## Scope Delivered
 
@@ -329,3 +328,24 @@ session-attestation contract and fixtures required to verify independent-review 
   pass. No Go, connector, `make`, dependency, parent/main/#475, network/GitHub, push, reviewer,
   integration, or merge action ran. Parent owns publication, two fresh exact-head reviews,
   dispositions, integration, and all human gates.
+
+## Cycle 9 plan handoff
+
+- Frozen reviewed candidate `f97a698df90010ae072554e04563a8134a8e5f6e`; exact base `3addb1f4`;
+  clean exact 21-path scope; both Cycle 8 reports read completely; all five production blobs frozen.
+- One indivisible 69-row correction: uncertain-result consistency 8, durable dangerous-point
+  restart/original-writer fence 13, total assignment parsing 40, exact typed serialized #479 proof
+  8. Prior focused 374 cases and the intentional live skip remain mandatory.
+- Authority-owned record states are `ready_invoking` -> `ready_effect_applied` -> explicit
+  `ready_settled`, or monotonic `recovery_claimed` -> exact `draft_restored`. Recovery claims fence
+  the original writer and older rollback attempts before effects. Unsettled authority always blocks
+  ready reuse and retains key/stop ownership across reconstructed controllers.
+- Complete shell-style uppercase names, including leading underscore, are parsed to their delimiter
+  before suffix classification. Exact boundary/control rows traverse each of the five shared
+  durable/outbound consumers without marker reflection.
+- The #479 fixture must use public typed roles and canonical unknown decoders for all serialized
+  decision/prepared/journal/authority/recovery/fence/mutation/settlement state; no cast, `any`, fake
+  projection, private shortcut, or identity-dependent restart.
+- Doctor passes; missing programming-loop command records `manual_gsd_fallback`. All runtime slots
+  are occupied, so the isolated worker owns `local_critical_path`. Parent owns publication/reviews/
+  integration/human gates; every prohibited or external action remains excluded.
