@@ -23,6 +23,7 @@ import {
 	redactSensitiveText,
 	ToolPolicyError,
 	type HostCapability,
+	type RedactionScanMetrics,
 	type SessionToolName,
 	type ScopedWorkspace,
 	type ToolPolicyInput,
@@ -30,6 +31,18 @@ import {
 
 const HEAD = "a".repeat(40);
 const NONCE = "nonce-issue-475-abcdef";
+
+function emptyRedactionScanMetrics(): RedactionScanMetrics {
+	return {
+		sourceLength: 0,
+		cursorAdvances: 0,
+		cursorRegressions: 0,
+		maxMainCursorVisits: 0,
+		keyCharacterVisits: 0,
+		boundaryCharacterVisits: 0,
+		totalWork: 0,
+	};
+}
 
 async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-coding-agent")> {
 	const prefix = dirname(dirname(process.execPath));
@@ -6264,19 +6277,13 @@ test("cycle 14 structured field grammar fails closed while public metadata stays
 			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
 		}
 	}
-	type ScanMetrics = {
-		lineBoundaryVisits: number;
-		keyStartVisits: number;
-		totalCharacterVisits: number;
-	};
-	const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
-	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
-	const measured = instrumented(payload, metrics);
+	const metrics = emptyRedactionScanMetrics();
+	const measured = redactSensitiveText(payload, metrics);
 	assert.deepEqual({
 		problems,
 		hasRedaction: Object.values(outputs).every((rendered) => rendered.includes("[REDACTED]")),
 		measuredLeaks: leakedMarkers(measured, secretMarkers),
-		bounded: metrics.totalCharacterVisits > 0 && metrics.totalCharacterVisits <= payload.length * 12,
+		bounded: metrics.totalWork > 0 && metrics.totalWork <= payload.length * 12,
 	}, {
 		problems: [],
 		hasRedaction: true,
@@ -6317,19 +6324,13 @@ test("cycle 15 quoted unknown assignments redact whole values through every shar
 			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
 		}
 	}
-	type ScanMetrics = {
-		lineBoundaryVisits: number;
-		keyStartVisits: number;
-		totalCharacterVisits: number;
-	};
-	const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
-	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
-	const measured = instrumented(payload, metrics);
+	const metrics = emptyRedactionScanMetrics();
+	const measured = redactSensitiveText(payload, metrics);
 	assert.deepEqual({
 		problems,
 		hasRedaction: Object.values(outputs).every((rendered) => rendered.includes("[REDACTED]")),
 		measuredLeaks: leakedMarkers(measured, secretMarkers),
-		bounded: metrics.totalCharacterVisits > 0 && metrics.totalCharacterVisits <= payload.length * 16,
+		bounded: metrics.totalWork > 0 && metrics.totalWork <= payload.length * 16,
 	}, {
 		problems: [],
 		hasRedaction: true,
@@ -6440,21 +6441,15 @@ test("cycle 15 uncertain assignment keys fail closed across cutoffs flows and la
 		}
 	}
 
-	type ScanMetrics = {
-		lineBoundaryVisits: number;
-		keyStartVisits: number;
-		totalCharacterVisits: number;
-	};
-	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
 	const sizes = [25, 50, 100].map((kib) => kib * 1024);
 	const visits: number[] = [];
 	const workLeaks: string[][] = [];
 	for (const size of sizes) {
 		const unit = `{ ${"w".repeat(66)}: C15_WORK_UNKNOWN, client_secret: C15_WORK_LATER, safe: retained }\n`;
 		const sample = unit.repeat(Math.ceil(size / unit.length)).slice(0, size);
-		const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
-		const rendered = instrumented(sample, metrics);
-		visits.push(metrics.totalCharacterVisits);
+		const metrics = emptyRedactionScanMetrics();
+		const rendered = redactSensitiveText(sample, metrics);
+		visits.push(metrics.totalWork);
 		workLeaks.push(leakedMarkers(rendered, ["C15_WORK_UNKNOWN", "C15_WORK_LATER"]));
 	}
 	assert.deepEqual({
@@ -6672,22 +6667,6 @@ test("cycle 16 malformed quoted values resynchronize quoted siblings across line
 });
 
 test("cycle 16 assignment lexer is one-pass monotonic across dense openers malformed flows and terminal siblings", () => {
-	type Cycle16ScanMetrics = {
-		sourceLength: number;
-		cursorAdvances: number;
-		cursorRegressions: number;
-		maxMainCursorVisits: number;
-		keyCharacterVisits: number;
-		boundaryCharacterVisits: number;
-		totalWork: number;
-		lineBoundaryVisits: number;
-		keyStartVisits: number;
-		totalCharacterVisits: number;
-	};
-	const instrumented = redactSensitiveText as unknown as (
-		value: string,
-		metrics: Cycle16ScanMetrics,
-	) => string;
 	const sizes = [25, 50, 100].map((kib) => kib * 1024);
 	const problems: string[] = [];
 	for (const size of sizes) {
@@ -6695,44 +6674,33 @@ test("cycle 16 assignment lexer is one-pass monotonic across dense openers malfo
 		const sibling = `C16_MONOTONIC_LATER_${size}`;
 		const suffix = ` opaque#alias: ${marker}, "client_secret": ${sibling} }\nsafe: retained`;
 		const sample = `${"{".repeat(Math.max(1, size - suffix.length))}${suffix}`;
-		let legacyVisits = 0;
-		const metrics = {
-			sourceLength: 0,
-			cursorAdvances: 0,
-			cursorRegressions: 0,
-			maxMainCursorVisits: 0,
-			keyCharacterVisits: 0,
-			boundaryCharacterVisits: 0,
-			totalWork: 0,
-			lineBoundaryVisits: 0,
-			keyStartVisits: 0,
-		} as Omit<Cycle16ScanMetrics, "totalCharacterVisits"> & Partial<Pick<Cycle16ScanMetrics, "totalCharacterVisits">>;
-		Object.defineProperty(metrics, "totalCharacterVisits", {
+		let measuredWork = 0;
+		const metrics = emptyRedactionScanMetrics();
+		Object.defineProperty(metrics, "totalWork", {
 			configurable: true,
 			enumerable: true,
-			get() { return legacyVisits; },
+			get() { return measuredWork; },
 			set(value: number) {
-				legacyVisits = value;
+				measuredWork = value;
 				if (value > (8 * sample.length) + 64) throw new Error("cycle 16 scanner work ceiling exceeded");
 			},
 		});
 		let rendered = "";
 		try {
-			rendered = instrumented(sample, metrics as Cycle16ScanMetrics);
+			rendered = redactSensitiveText(sample, metrics);
 		} catch (error) {
 			problems.push(`${size}:threw-${error instanceof Error ? error.message : String(error)}`);
 		}
-		const exact = metrics as Cycle16ScanMetrics;
-		if (exact.sourceLength !== sample.length) problems.push(`${size}:source-length-${exact.sourceLength}`);
-		if (exact.cursorRegressions !== 0) problems.push(`${size}:regressions-${exact.cursorRegressions}`);
-		if (exact.maxMainCursorVisits > 1 || exact.maxMainCursorVisits < 1) {
-			problems.push(`${size}:main-visits-${exact.maxMainCursorVisits}`);
+		if (metrics.sourceLength !== sample.length) problems.push(`${size}:source-length-${metrics.sourceLength}`);
+		if (metrics.cursorRegressions !== 0) problems.push(`${size}:regressions-${metrics.cursorRegressions}`);
+		if (metrics.maxMainCursorVisits > 1 || metrics.maxMainCursorVisits < 1) {
+			problems.push(`${size}:main-visits-${metrics.maxMainCursorVisits}`);
 		}
-		if (exact.cursorAdvances < 1 || exact.cursorAdvances > sample.length) {
-			problems.push(`${size}:advances-${exact.cursorAdvances}`);
+		if (metrics.cursorAdvances < 1 || metrics.cursorAdvances > sample.length) {
+			problems.push(`${size}:advances-${metrics.cursorAdvances}`);
 		}
-		if (exact.totalWork < 1 || exact.totalWork > (8 * sample.length) + 64) {
-			problems.push(`${size}:work-${exact.totalWork}`);
+		if (metrics.totalWork < 1 || metrics.totalWork > (8 * sample.length) + 64) {
+			problems.push(`${size}:work-${metrics.totalWork}`);
 		}
 		if (leakedMarkers(rendered, [marker, sibling]).length > 0) problems.push(`${size}:marker-leak`);
 		if (rendered && !rendered.includes("safe: retained")) problems.push(`${size}:public-control-changed`);

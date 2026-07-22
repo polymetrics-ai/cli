@@ -606,12 +606,6 @@ export interface RedactionScanMetrics {
 	keyCharacterVisits: number;
 	boundaryCharacterVisits: number;
 	totalWork: number;
-	/** @deprecated Cycle 16 removes this compatibility counter after retained tests migrate. */
-	lineBoundaryVisits: number;
-	/** @deprecated Cycle 16 removes this compatibility counter after retained tests migrate. */
-	keyStartVisits?: number;
-	/** @deprecated Cycle 16 removes this compatibility counter after retained tests migrate. */
-	totalCharacterVisits?: number;
 }
 
 export function redactSensitiveText(value: string): string;
@@ -1268,22 +1262,22 @@ function findStructuredKeyStart(
 	let cursor = lineStart;
 	while (isHorizontalWhitespace(value[cursor])) {
 		cursor += 1;
-		recordKeyStartVisit(metrics);
+		recordTotalVisits(metrics, 1);
 	}
 	if (value[cursor] === "-") {
 		cursor += 1;
-		recordKeyStartVisit(metrics);
+		recordTotalVisits(metrics, 1);
 		if (!isHorizontalWhitespace(value[cursor])) return undefined;
 		while (isHorizontalWhitespace(value[cursor])) {
 			cursor += 1;
-			recordKeyStartVisit(metrics);
+			recordTotalVisits(metrics, 1);
 		}
 	} else if (value.slice(cursor, cursor + 6).toLowerCase() === "export" && isHorizontalWhitespace(value[cursor + 6])) {
 		cursor += 6;
-		recordKeyStartVisit(metrics, 6);
+		recordTotalVisits(metrics, 6);
 		while (isHorizontalWhitespace(value[cursor])) {
 			cursor += 1;
-			recordKeyStartVisit(metrics);
+			recordTotalVisits(metrics, 1);
 		}
 	}
 	return isPotentialAssignmentCandidateStart(value[cursor]) ? cursor : undefined;
@@ -1496,7 +1490,6 @@ function findLineEnd(value: string, start: number, metrics?: RedactionScanMetric
 	let index = start;
 	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") {
 		if (metrics) {
-			metrics.lineBoundaryVisits += 1;
 			metrics.boundaryCharacterVisits += 1;
 			recordTotalVisits(metrics, 1);
 		}
@@ -1632,9 +1625,6 @@ function initializeRedactionMetrics(metrics: RedactionScanMetrics, sourceLength:
 	metrics.keyCharacterVisits = 0;
 	metrics.boundaryCharacterVisits = 0;
 	metrics.totalWork = 0;
-	metrics.lineBoundaryVisits = 0;
-	metrics.keyStartVisits = 0;
-	metrics.totalCharacterVisits = 0;
 }
 
 function recordKeyCharacterVisit(metrics: RedactionScanMetrics | undefined, count = 1): void {
@@ -1642,16 +1632,9 @@ function recordKeyCharacterVisit(metrics: RedactionScanMetrics | undefined, coun
 	metrics.keyCharacterVisits += count;
 }
 
-function recordKeyStartVisit(metrics: RedactionScanMetrics | undefined, count = 1): void {
-	if (!metrics || count <= 0) return;
-	metrics.keyStartVisits = (metrics.keyStartVisits ?? 0) + count;
-	recordTotalVisits(metrics, count);
-}
-
 function recordTotalVisits(metrics: RedactionScanMetrics | undefined, count: number): void {
 	if (!metrics || count <= 0) return;
 	metrics.totalWork += count;
-	metrics.totalCharacterVisits = (metrics.totalCharacterVisits ?? 0) + count;
 }
 
 export function normalizeScopedPrefixes(prefixes: unknown, description: string): string[] {

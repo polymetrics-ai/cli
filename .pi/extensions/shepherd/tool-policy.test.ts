@@ -10,10 +10,23 @@ import {
 	redactSensitiveText,
 	type HostCapability,
 	type HostCapabilityName,
+	type RedactionScanMetrics,
 	type ScopedWorkspace,
 	type SessionTool,
 	type ToolPolicyInput,
 } from "./tool-policy.ts";
+
+function emptyRedactionScanMetrics(): RedactionScanMetrics {
+	return {
+		sourceLength: 0,
+		cursorAdvances: 0,
+		cursorRegressions: 0,
+		maxMainCursorVisits: 0,
+		keyCharacterVisits: 0,
+		boundaryCharacterVisits: 0,
+		totalWork: 0,
+	};
+}
 
 function text(result: Awaited<ReturnType<SessionTool["execute"]>>): string {
 	return result.content.map((part) => part.text).join("");
@@ -301,9 +314,6 @@ test("redaction leaves ordinary braces and flow-shaped comments byte-identical",
 });
 
 test("redaction line-boundary discovery remains near-linear for dense single-line flows", () => {
-	type ScanMetrics = { lineBoundaryVisits: number };
-	type InstrumentedRedactor = (value: string, metrics: ScanMetrics) => string;
-	const instrumentedRedactor = redactSensitiveText as InstrumentedRedactor;
 	const denseFlow = (minimumBytes: number): string => {
 		const assignment = "token: synthetic-linear-secret, ";
 		const count = Math.ceil(minimumBytes / assignment.length);
@@ -311,10 +321,10 @@ test("redaction line-boundary discovery remains near-linear for dense single-lin
 	};
 	const samples = [25, 50, 100].map((kibibytes) => denseFlow(kibibytes * 1024));
 	const visits = samples.map((value) => {
-		const metrics: ScanMetrics = { lineBoundaryVisits: 0 };
-		const redacted = instrumentedRedactor(value, metrics);
+		const metrics = emptyRedactionScanMetrics();
+		const redacted = redactSensitiveText(value, metrics);
 		assert.equal(redacted.includes("synthetic-linear-secret"), false);
-		return metrics.lineBoundaryVisits;
+		return metrics.boundaryCharacterVisits;
 	});
 
 	for (const [index, count] of visits.entries()) {
@@ -348,13 +358,6 @@ test("cycle 7 preserves a harmless structurally quoted multiline scalar byte-ide
 });
 
 test("cycle 7 padded-flow diagnostics account for all scanner work near-linearly", () => {
-	type ScanMetrics = {
-		lineBoundaryVisits: number;
-		keyStartVisits: number;
-		totalCharacterVisits: number;
-	};
-	type InstrumentedRedactor = (value: string, metrics: ScanMetrics) => string;
-	const instrumentedRedactor = redactSensitiveText as unknown as InstrumentedRedactor;
 	const paddedFlow = (minimumBytes: number): string => {
 		const padding = " ".repeat(Math.floor(minimumBytes / 3));
 		const assignment = "token: synthetic-padded-flow-secret, ";
@@ -363,21 +366,17 @@ test("cycle 7 padded-flow diagnostics account for all scanner work near-linearly
 	};
 	const samples = [25, 50, 100].map((kibibytes) => paddedFlow(kibibytes * 1024));
 	const observations = samples.map((value) => {
-		const metrics: ScanMetrics = {
-			lineBoundaryVisits: 0,
-			keyStartVisits: 0,
-			totalCharacterVisits: 0,
-		};
-		const redacted = instrumentedRedactor(value, metrics);
+		const metrics = emptyRedactionScanMetrics();
+		const redacted = redactSensitiveText(value, metrics);
 		return { value, redacted, metrics };
 	});
-	const work = observations.map(({ metrics }) => metrics.totalCharacterVisits);
+	const work = observations.map(({ metrics }) => metrics.totalWork);
 
 	assert.deepEqual({
 		redacted: observations.every(({ redacted }) => !redacted.includes("synthetic-padded-flow-secret")),
 		metricsPresent: observations.every(({ metrics }) =>
-			metrics.lineBoundaryVisits > 0 && metrics.keyStartVisits > 0 && metrics.totalCharacterVisits > 0),
-		bounded: observations.every(({ value, metrics }) => metrics.totalCharacterVisits <= value.length * 8),
+			metrics.boundaryCharacterVisits > 0 && metrics.cursorAdvances > 0 && metrics.totalWork > 0),
+		bounded: observations.every(({ value, metrics }) => metrics.totalWork <= value.length * 8),
 		nearDoubling: work.slice(1).every((count, index) => {
 			const inputRatio = samples[index + 1].length / samples[index].length;
 			return count / work[index] <= inputRatio * 1.25;
