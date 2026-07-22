@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -44,6 +44,48 @@ function delegate(issue: number, calls: string[]) {
 		async stop() { calls.push("stop"); persisted = productionState(issue, "stopped"); return persisted; },
 		async shutdown() { calls.push("shutdown"); },
 	};
+}
+
+async function writeProductionPlan(
+	root: string,
+	options: { parentBranch?: string; parentBaseBranch?: string } = {},
+): Promise<void> {
+	const directory = join(root, ".planning", "shepherd");
+	await mkdir(directory, { recursive: true });
+	await writeFile(join(directory, "issue-479.json"), JSON.stringify({
+		schemaVersion: 2,
+		planId: "production-plan",
+		parentIssue: 479,
+		repository: "acme/widgets",
+		title: "Production plan",
+		objective: "Prove the production launch authority boundary.",
+		parentBranch: options.parentBranch ?? "feat/471-parent",
+		parentBaseBranch: options.parentBaseBranch ?? "main",
+		actorAllowlist: ["maintainer"],
+		decisionExpiresAt: "2099-07-22T00:00:00.000Z",
+		children: [{
+			id: "child-a",
+			issue: 480,
+			title: "Child A",
+			task: "Implement child A.",
+			slug: "child-a",
+			dependsOn: [],
+			access: "mutating",
+			writeScopes: [".pi/extensions/shepherd"],
+			requiredSkills: ["javascript-testing-patterns"],
+			verification: [{
+				id: "focused",
+				executable: "node",
+				args: ["--test"],
+				cwd: ".",
+				timeoutMs: 30_000,
+				maxOutputBytes: 65_536,
+			}],
+			humanGates: [],
+			maxAttempts: 2,
+			maxCorrections: 1,
+		}],
+	}), { mode: 0o600 });
 }
 
 test("entrypoint ensures one exact marker-bound parent draft before starting production work", async () => {
@@ -97,6 +139,105 @@ test("entrypoint fails closed before production state when parent draft preparat
 	}), /parent draft evidence is ambiguous/);
 	assert.deepEqual(calls, ["status"]);
 	assert.equal(await controller.status(479), undefined);
+});
+
+test("production host revalidates the live remote default on resume before delegate mutation", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "production-pi-host-default-move-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeProductionPlan(root);
+	const calls: string[] = [];
+	let inspections = 0;
+	const binding = (defaultBranch: string): GitBinding => ({
+		cwd: root,
+		repositoryIdentity: "1".repeat(64),
+		worktreeIdentity: "2".repeat(64),
+		remoteName: "origin",
+		remoteIdentity: "3".repeat(64),
+		fetchEndpointIdentity: "4".repeat(64),
+		pushEndpointIdentity: "4".repeat(64),
+		defaultBranch,
+	});
+	const controller = await createProductionPiHostController({
+		issue: 479,
+		repositoryRoot: root,
+		stateRoot: join(root, "state"),
+		trustedWorktreeRoot: join(root, "worktrees"),
+		runtimeSdk: {} as never,
+		dependencies: {
+			git: new GitAdapter({ execute: async () => Buffer.from("") }),
+			async inspectCoordinator() {
+				inspections += 1;
+				return binding(inspections < 3 ? "main" : "trunk");
+			},
+			createAgentRuntime: () => ({ async run() { throw new Error("not dispatched"); }, async abort() {}, async close() {} }) as never,
+			createReviewSession: () => ({ async run() { throw new Error("not dispatched"); } }),
+			createController: () => delegate(479, calls) as never,
+			createParentReadyAuthority: () => ({
+				async readParentReadyState() { return null; },
+				async beginParentReady() { throw new Error("not dispatched"); },
+				async compareConsumeAndMarkParentReady() { throw new Error("not dispatched"); },
+				async settleParentReady() { throw new Error("not dispatched"); },
+				async quarantineAndRollbackParentReady() { throw new Error("not dispatched"); },
+			}),
+			createParentReadiness: () => ({ async markExistingDraftReady() { throw new Error("not dispatched"); } }),
+			createParentDraftEnsurer: () => async () => { calls.push("ensure-parent-draft"); },
+		},
+	});
+	await controller.start({ action: "start", issue: 479, backend: "sdk-inproc", maxConcurrency: 2, timeoutMs: 30_000 });
+	await assert.rejects(
+		controller.resume({ action: "resume", issue: 479, backend: "sdk-inproc", maxConcurrency: 2, timeoutMs: 30_000 }),
+		/default branch/i,
+	);
+	assert.equal(calls.filter((entry) => entry === "resume").length, 0);
+	assert.equal(inspections, 3);
+	await controller.shutdown();
+});
+
+test("production host rejects a conventional default alias as the parent integration target", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "production-pi-host-main-target-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeProductionPlan(root, { parentBaseBranch: "trunk", parentBranch: "main" });
+	const calls: string[] = [];
+	const coordinator: GitBinding = {
+		cwd: root,
+		repositoryIdentity: "1".repeat(64),
+		worktreeIdentity: "2".repeat(64),
+		remoteName: "origin",
+		remoteIdentity: "3".repeat(64),
+		fetchEndpointIdentity: "4".repeat(64),
+		pushEndpointIdentity: "4".repeat(64),
+		defaultBranch: "trunk",
+	};
+	const controller = await createProductionPiHostController({
+		issue: 479,
+		repositoryRoot: root,
+		stateRoot: join(root, "state"),
+		trustedWorktreeRoot: join(root, "worktrees"),
+		runtimeSdk: {} as never,
+		dependencies: {
+			git: new GitAdapter({ execute: async () => Buffer.from("") }),
+			async inspectCoordinator() { return coordinator; },
+			createAgentRuntime: () => ({ async run() { throw new Error("not dispatched"); }, async abort() {}, async close() {} }) as never,
+			createReviewSession: () => ({ async run() { throw new Error("not dispatched"); } }),
+			createController: () => delegate(479, calls) as never,
+			createParentReadyAuthority: () => ({
+				async readParentReadyState() { return null; },
+				async beginParentReady() { throw new Error("not dispatched"); },
+				async compareConsumeAndMarkParentReady() { throw new Error("not dispatched"); },
+				async settleParentReady() { throw new Error("not dispatched"); },
+				async quarantineAndRollbackParentReady() { throw new Error("not dispatched"); },
+			}),
+			createParentReadiness: () => ({ async markExistingDraftReady() { throw new Error("not dispatched"); } }),
+			createParentDraftEnsurer: () => async () => { calls.push("ensure-parent-draft"); },
+		},
+	});
+	await assert.rejects(
+		controller.start({ action: "start", issue: 479, backend: "sdk-inproc", maxConcurrency: 2, timeoutMs: 30_000 }),
+		/default branch|parent integration target/i,
+	);
+	assert.equal(calls.includes("start"), false);
+	assert.equal(calls.includes("ensure-parent-draft"), false);
+	await controller.shutdown();
 });
 
 test("production Pi host composes separate implementation and review AgentSession runtimes at the issue boundary", async (t) => {
