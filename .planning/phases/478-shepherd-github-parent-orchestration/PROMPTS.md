@@ -133,3 +133,22 @@
 - Exact scope remains the existing 21 owned paths; no new artifact is necessary. No Go, connector,
   parent/main worktree, dependency, push/network/live GitHub, #479 implementation, reviewer,
   integration, or merge action is authorized.
+
+## Cycle 7 correction outcome
+
+- Checkpoints: PLAN `2c64979829048d3de0d1ff1575c2a4f43cb699ba`; test-only RED
+  `10033bc532d06967ce960e408c2bc9725020478a`; architectural GREEN
+  `5bab0bc7e56292171eb28618cc2f37488ed1b7a4`; REFACTOR proof
+  `87e704010f3e2226d8393d12e1a1bdf72df212a0`; audit RED
+  `b1560e76a3abbac5efcd33b2740b7275b6acc137`; audit GREEN
+  `915882c219f52da2c1edebce84d2bf90c61a4592`; current evidence candidate `HEAD`.
+- Both input reports were replayed after REFACTOR. All consolidated families and the #479 public
+  prepare/journal/commit seam have named passing tests, including exact 500 ms late effects after a
+  100 ms timeout, cancellation, durable keyed quarantine, rollback retry, harmless-refresh stable
+  identity, semantic movement, full authoritative attempt provenance, future chronology, and
+  production-port-only wiring. The required authority has no legacy transport fallback, and the
+  #479 proof uses separate production-typed transport, authority, and journal roles.
+- Focused result: 297 total, 296 pass, 0 fail, 1 intentional live skip. Broad serialized result:
+  environmental failure, 517 total, 451 pass, 65 unrelated managed-sandbox `spawn EPERM`
+  failures, 1 skip. Strict TypeScript, pinned offline RPC, base/ancestry/diff/exact-scope/JSON, and
+  explicit synthetic-marker gates pass.

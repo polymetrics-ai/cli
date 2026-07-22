@@ -244,3 +244,48 @@
   identity, attested attempt provenance, owned-clock chronology, finite credential forms,
   RUN-STATE schema, port-only wiring, and Cycle 6 retention. No test, production, network, GitHub,
   reviewer, #479 implementation, or prohibited action ran before this plan checkpoint.
+
+## 2026-07-22 Cycle 7 RED
+
+- Artifact PLAN `2c64979829048d3de0d1ff1575c2a4f43cb699ba` preceded every edit.
+- Test-only RED `10033bc532d06967ce960e408c2bc9725020478a` records 290 total, 217 pass,
+  72 intentional failures, and 1 intentional live-GitHub skip. Strict TypeScript reports only 14
+  absent new contracts, and all five production blobs remained frozen.
+
+## 2026-07-22 Cycle 7 GREEN and REFACTOR
+
+- Architectural GREEN `5bab0bc7e56292171eb28618cc2f37488ed1b7a4` adds one public durable
+  authority boundary, stable authorization/freshness split, public prepare/commit operations,
+  complete uncertain-effect quarantine/rollback, authoritative attempt provenance, owned-clock
+  broker validation, finite credential schemas, and current-HEAD schema validation.
+- REFACTOR proof `87e704010f3e2226d8393d12e1a1bdf72df212a0` proves exact 500 ms late
+  before/after effects following a 100 ms timeout and caller cancellation; it preserves strict
+  decision chronology and removes a temporary silent repair. No RED assertion was weakened.
+- Both reports were replayed line by line after REFACTOR. Every consolidated family plus the public
+  #479 prepare/journal/commit seam maps to named passing tests; no fake-only validator remains.
+
+## 2026-07-22 Cycle 7 independent architecture audit
+
+- Before freezing evidence, an independent mapping pass found that authority was still optional,
+  public transport retained legacy ready mutation/rollback, and the #479 test projected a
+  structurally rich fake instead of separate production roles.
+- Audit RED `b1560e76a3abbac5efcd33b2740b7275b6acc137` records 297 total, 294 pass,
+  2 intentional failures, and 1 skip. It proves the mandatory-authority and production-role gaps.
+- Audit GREEN `915882c219f52da2c1edebce84d2bf90c61a4592` removes the legacy transport
+  mutation route, requires the authority boundary, returns typed compare conflicts, exports the
+  journal contract and validators, and proves separate production-typed transport, authority, and
+  journal roles. Focused result is 297 total, 296 pass, 0 fail, and 1 skip.
+
+## 2026-07-22 Cycle 7 local verification
+
+- Focused: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip. Strict owned and all-20-
+  production TypeScript pass. Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from the explicit
+  extension.
+- Serialized Shepherd is an environmental failure: 517 total, 451 pass, 65 unchanged unrelated
+  managed-sandbox process-identity `spawn EPERM` failures, 1 intentional skip. All Cycle 7 tests
+  pass.
+- Immutable base and reviewed candidate ancestry, exact merge base, full-range `git diff --check`,
+  exact 21-path scope, three JSON parses, and an explicit five-test-file synthetic AWS marker
+  allowlist pass with zero unexpected or production/artifact candidates.
+- No prohibited, external, review, integration, or merge action ran. Parent owns publication and
+  two fresh exact-head reviews.

@@ -1,6 +1,7 @@
 # Summary: #478
 
-Status: Cycle 6 locally complete at GREEN `2c6371e7`; two fresh parent-owned exact-head reviews
+Status: Cycle 7 locally verified at current candidate `HEAD` after audit GREEN `915882c2`; two
+fresh parent-owned exact-head reviews
 pending. Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -117,3 +118,28 @@ broad serialized suite records 361 pass, 65 unrelated managed-sandbox `spawn EPE
 one intentional skip across 427 tests. RUN-STATE now uses non-circular `HEAD` evidence semantics
 with exact completed checkpoints. No push, network, live GitHub, Go, connector, `make`, #479,
 reviewer, integration, or merge action ran; two fresh exact-head reviews remain parent-owned.
+
+## Cycle 7 correction status
+
+Both Cycle 6 exact-head reports against historical candidate `dbce5b7d` were consolidated into one
+46-row correction. PLAN `2c649798`, test-only RED `10033bc5`, architectural GREEN `5bab0bc7`,
+REFACTOR proof `87e70401`, audit RED `b1560e76`, and audit GREEN `915882c2` implement one mandatory
+durable parent-ready authority boundary, stable semantic
+authorization separate from freshness, complete uncertain-effect quarantine/settlement/rollback,
+authoritative review-attempt provenance, owned-clock broker chronology, finite credential schemas,
+one current `HEAD` run-state semantic, and a public production-port-only #479 prepare/commit seam.
+
+The reports were replayed line by line after REFACTOR, and named passing tests represent every
+consolidated family. Exact 500 ms before/after effects following a 100 ms timeout, cancellation,
+restart quarantine, read failure, transient rollback retry, harmless refresh, real semantic
+movement, forged/full-attempt provenance, future timestamps, public-port-only wiring, and the
+absence of a legacy transport mutation fallback are explicit. The #479 proof separates
+production-typed transport, authority, and journal roles instead of projecting the test fake.
+
+Cycle 7 is locally verified: the focused five-file suite records 297 total, 296 pass, 0 fail, and 1
+intentional live-GitHub skip; strict owned/all-production TypeScript and pinned Pi 0.80.6 offline
+discovery pass. The serialized suite is an environmental failure with 517 total, 451 pass, 65
+unchanged unrelated managed-sandbox `spawn EPERM` failures, and 1 intentional skip. Immutable base
+and reviewed-candidate ancestry, full-range diff, exact 21-path scope, JSON, and explicit
+test-synthetic marker scans pass. No external/prohibited action ran; fresh exact-head review remains
+parent-owned.

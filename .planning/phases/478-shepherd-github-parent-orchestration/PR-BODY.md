@@ -1,13 +1,14 @@
 ## Summary
 
 - add a bounded, typed GitHub parent/child orchestration transport with reconcile-before-mutate
-  issue, stacked-PR, roster, integration, and parent-ready operations
+  issue, stacked-PR, roster, and integration operations, plus separate mandatory durable authority
+  and journal ports for parent-ready transitions
 - validate authoritative CI, review-thread, requested-change, finding-disposition, and exact-range
   independent Codex review evidence
 - reuse dependency scheduling, autonomy reconciliation, workspace handoffs, and the existing human
   decision broker while keeping review execution and parent merge outside this slice
 
-## GSD / TDD
+## Initial delivery GSD / TDD (historical)
 
 - mode: `manual_gsd_fallback` because the healthy repo adapter does not expose
   `programming-loop`
@@ -18,10 +19,11 @@
 - adversarial test-only RED: 17 pass / 10 expected failures against unchanged production
 - corrected GREEN: 27/27 focused tests at `40ce66d4b5010b92089895a05709687143d15a05`
 
-## Verification
+## Current verification
 
-- focused #478 tests: 27/27 pass
-- serialized Shepherd tests: 290 pass, 0 fail, 1 intentional sandbox skip
+- focused #478 tests: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip
+- serialized Shepherd tests: environmental failure, 517 total, 451 pass, 65 unchanged unrelated
+  managed-sandbox `spawn EPERM` failures, 1 intentional skip
 - strict TypeScript 5.9.3 over owned tests/modules and all 20 production modules against cached Pi
   0.80.6: pass
 - pinned Pi 0.80.6 offline RPC: `pm-shepherd` discovered from `extension`
@@ -121,3 +123,29 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - RUN-STATE uses non-circular `HEAD` evidence semantics with exact completed checkpoints; no push,
   network, live GitHub, reviewer, Go, connector, `make`, #479, integration, or merge action ran;
   two fresh exact-head `xhigh` reviews remain parent-owned
+
+## Cycle 7 consolidated-review correction
+
+- PLAN `2c649798`, comprehensive test-only RED `10033bc5`, architectural GREEN `5bab0bc7`,
+  timing/chronology REFACTOR proof `87e70401`, audit RED `b1560e76`, and audit GREEN `915882c2`
+  close the union of both Cycle 6 exact-head reviews without expanding the exact 21-path boundary
+- parent readiness now exposes a public prepare/commit split over one durable authority boundary;
+  stable semantic authorization and a separate freshness envelope cover policy, review, paths,
+  receipts, ancestry, decision, plan, head, and PR revision; authority is mandatory and the public
+  transport has no optional or deprecated ready-mutation route
+- uncertain before/after effects remain durably quarantined and keyed until original settlement,
+  verified rollback, and retry completion; exact 500 ms effects after 100 ms timeout plus caller
+  cancellation are covered
+- receipts bind authoritative full review-attempt digest/time provenance; actual broker rereads use
+  a controller-owned clock; finite Kubernetes, Docker, and AWS credential forms fail closed; current
+  RUN-STATE uses only `HEAD`
+- focused five-file route records 297 total / 296 pass / 0 fail / 1 intentional skip; strict owned
+  and all-production TypeScript and pinned Pi 0.80.6 offline discovery pass
+- the #479 proof composes separate production-typed transport, authority, and journal roles with
+  typed compare conflicts; it does not structurally project the test fake as a production role
+- serialized Shepherd is honestly classified as environmental failure: 517 total / 451 pass / 65
+  unchanged unrelated sandbox `spawn EPERM` failures / 1 skip; base/ancestry, diff, exact 21-path
+  scope, JSON, and explicit test-synthetic marker scans pass
+- no push, network, live GitHub, reviewer, self-review, Go, connector, `make`, controller/#479
+  implementation, integration, or merge action ran; two fresh exact-head `xhigh` reviews remain
+  parent-owned

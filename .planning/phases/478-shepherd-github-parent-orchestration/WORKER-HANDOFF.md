@@ -16,14 +16,15 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Implementation head: `2c6371e725d58b2dc05902d68f9e6812904664d6`
+Implementation head: audit GREEN `915882c219f52da2c1edebce84d2bf90c61a4592`
 
 Verification evidence head: this evidence commit; exact SHA reported externally after commit
 
 ## Scope Delivered
 
-- Typed, bounded, fakeable GitHub orchestration port for parent objectives, child issues, stacked
-  PRs, rosters, exact child integration receipts, and parent ready transitions.
+- Typed, bounded, fakeable GitHub orchestration transport for parent objectives, child issues,
+  stacked PRs, rosters, and exact child integration receipts, plus separate mandatory durable
+  authority and journal ports for parent-ready transitions.
 - Exact-shape authoritative checks, requested changes, review threads, review findings,
   dispositions, and exact-range independent Codex review evidence.
 - Reuse of dependency graph scheduling, autonomy reconciliation, workspace handoff evidence, and
@@ -84,8 +85,8 @@ node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 ```
 
-Current Cycle 6 result: focused 207 total / 206 pass / 0 fail / 1 intentional live-GitHub skip;
-serialized Shepherd 427 total / 361 pass / 65 unchanged unrelated sandbox `spawn EPERM` failures /
+Current Cycle 7 result: focused 297 total / 296 pass / 0 fail / 1 intentional live-GitHub skip;
+serialized Shepherd 517 total / 451 pass / 65 unchanged unrelated sandbox `spawn EPERM` failures /
 1 intentional skip; strict owned and all-production TypeScript pass; pinned offline RPC returns
 `true`; immutable-base, exact-21-path scope, diff, JSON, and credential scans pass.
 
@@ -253,3 +254,31 @@ session-attestation contract and fixtures required to verify independent-review 
   reviewer, integration, or merge action ran. Parent next publishes the exact evidence candidate,
   runs two fresh exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews, and owns disposition,
   integration, and all human gates.
+
+## Cycle 7 completed local handoff
+
+- Checkpoints: PLAN `2c64979829048d3de0d1ff1575c2a4f43cb699ba`; comprehensive test-only
+  RED `10033bc532d06967ce960e408c2bc9725020478a`; architectural GREEN
+  `5bab0bc7e56292171eb28618cc2f37488ed1b7a4`; REFACTOR proof
+  `87e704010f3e2226d8393d12e1a1bdf72df212a0`; architecture-audit RED
+  `b1560e76a3abbac5efcd33b2740b7275b6acc137`; audit GREEN
+  `915882c219f52da2c1edebce84d2bf90c61a4592`; evidence candidate is the deliberate
+  non-circular `HEAD` and the exact evidence SHA is reported after commit.
+- Focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip. Strict
+  TypeScript passes for the five owned production/test pairs and all 20 production modules. Pinned
+  Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`.
+- Serialized Shepherd: environmental failure, 517 total, 451 pass, 65 unchanged unrelated
+  managed-sandbox process-identity `spawn EPERM` failures, 1 intentional skip. This is not reported
+  as a broad pass; all issue #478 Cycle 7 assertions pass.
+- Both Cycle 6 reports were replayed after REFACTOR. Passing named cases cover ten atomic movement
+  coordinates, exact 500/100 before/after timing, cancellation, keyed/durable restart quarantine,
+  read failure, rollback retry, stable harmless refresh versus semantic movement, authoritative
+  full-attempt provenance, future broker chronology, all finite credential schemas, current-HEAD
+  state, and the public production-port-only #479 prepare/journal/commit seam. The public transport
+  has no ready mutation, authority is mandatory, compare conflicts are typed, and the proof uses
+  separate production-typed transport, authority, and journal roles rather than the test fake.
+- Immutable base and reviewed candidate are ancestors; exact merge base, full diff check, exact
+  21-path ownership, JSON parsing, and explicit test-synthetic marker classification pass.
+- No Go, connector, certification, runtime, `make`, dependency, network, push, live GitHub,
+  controller/#479 implementation, reviewer/self-review, integration, or merge ran. Parent owns
+  publication, two fresh exact-head reviews, dispositions, integration, and human gates.

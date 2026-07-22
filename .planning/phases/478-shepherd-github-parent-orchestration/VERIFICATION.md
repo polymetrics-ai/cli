@@ -1,9 +1,9 @@
 # Verification: #478
 
-Status: Cycle 6 locally verified at architectural GREEN
-`2c6371e725d58b2dc05902d68f9e6812904664d6`; two fresh parent-owned exact-head reviews pending.
+Status: Cycle 7 locally verified at current candidate `HEAD` after audit GREEN
+`915882c219f52da2c1edebce84d2bf90c61a4592`; two fresh parent-owned exact-head reviews pending.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 6 contract.
+current Cycle 7 contract.
 
 ## Initial delivery authorized gate checklist (historical)
 
@@ -155,28 +155,52 @@ parent-owned exact-head reviews remain pending.
 
 ## Cycle 7 verification contract
 
-Status: planned from two blocking exact-head Cycle 6 reports at
-`dbce5b7d0c698bc802594211072fed77eff23c1c`; no Cycle 7 test or production edit has occurred.
+Status: locally verified at current non-self-referential candidate `HEAD`. The exact Cycle 7
+checkpoint commits are PLAN `2c64979829048d3de0d1ff1575c2a4f43cb699ba`, RED
+`10033bc532d06967ce960e408c2bc9725020478a`, GREEN
+`5bab0bc7e56292171eb28618cc2f37488ed1b7a4`, and REFACTOR
+`87e704010f3e2226d8393d12e1a1bdf72df212a0`, followed by architecture-audit RED
+`b1560e76a3abbac5efcd33b2740b7275b6acc137` and audit GREEN
+`915882c219f52da2c1edebce84d2bf90c61a4592`.
 
-- [x] Read both Cycle 6 reports completely and consolidate every unique finding.
-- [x] Confirm immutable base, exact reviewed head, clean worktree, 21-path owned range, and frozen
-      production blob IDs.
-- [x] Load required skills/contracts; `scripts/gsd doctor` passes and the unavailable adapter
-      command is recorded as `manual_gsd_fallback`.
-- [x] Freeze the public prepare/commit journal seam and durable atomic authority/quarantine boundary
-      before RED.
-- [ ] Commit 46-row comprehensive RED while all five production blobs remain frozen.
-- [ ] Pass retained and complete focused tests after one coherent GREEN/refactor.
-- [ ] Pass strict owned and all-production Shepherd TypeScript against pinned Pi 0.80.6.
-- [ ] Pass pinned offline RPC and immutable-base/ancestry/diff/exact-21-path/JSON/secret-marker gates.
-- [ ] If serialized broad Shepherd runs, classify known `/bin/ps`/spawn `EPERM` separately and never
-      claim it as a pass.
-- [ ] Make RUN-STATE and all evidence artifacts describe exact HEAD with no current historical SHA.
-- [ ] Finish with clean worktree; parent owns exact-head review, publication, and integration.
+- [x] Both Cycle 6 reports were read completely before PLAN and replayed line by line after
+      REFACTOR.
+- [x] All ten atomic authority coordinates fail closed inside one production durable compare/effect
+      boundary without relying on ordinary reread recovery.
+- [x] Exact 500 ms before/after effects following a 100 ms timeout, caller cancellation, restart
+      quarantine, read failure, and transient rollback failure/retry retain keyed/join ownership
+      until verified settlement.
+- [x] Harmless policy/ancestry/equivalent-clean freshness refresh preserves stable key and mutation
+      intent; semantic policy/review/path and all other authority movement blocks.
+- [x] Receipt result digest and completion time match an authoritative attested attempt while later
+      equivalent clean history remains compatible.
+- [x] The real broker adapter rejects future creation, request-comment, decision, consumption, and
+      update chronology under a controller-owned clock.
+- [x] All eight finite Kubernetes, Docker, and AWS forms reject across native and orchestration
+      durable/outbound text boundaries.
+- [x] RUN-STATE admits one current `HEAD` semantic and keeps reviewed SHAs historical only.
+- [x] Parent-ready authority is mandatory; public transport exposes no ready mutation or rollback;
+      atomic compare conflicts are typed and cause no ordinary recovery reads or rollback.
+- [x] #479-shaped wiring uses public production prepare/journal/commit ports with separate
+      production-typed transport, authority, and journal roles; no `FakeTransport` projection,
+      private-helper duplication, or cast seam remains.
+- [x] No Go, connector, certification, runtime service, `make`, dependency, network, live GitHub,
+      controller/#479 implementation, reviewer, integration, or merge action ran.
 
-Prohibited for Cycle 7: Go, connectors, `make`, runtime services, dependencies, parent/main
-worktrees, controller/#479 implementation, network/live GitHub, self-review, reviewer dispatch,
-integration, or merge.
+### Cycle 7 gate results
+
+| Gate | Result |
+| --- | --- |
+| Focused #478 | pass; 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip |
+| RED evidence | 290 total, 217 pass, 72 intentional failures, 1 skip; 14 intended absent-contract TypeScript diagnostics; five frozen production blobs |
+| Architecture audit | RED 297 total / 294 pass / 2 intentional fail / 1 skip; GREEN 297 total / 296 pass / 0 fail / 1 skip |
+| Strict owned TypeScript | pass; five production modules plus five matching tests |
+| Strict production TypeScript | pass; all 20 Shepherd production modules against cached Pi 0.80.6 |
+| Offline extension discovery | pass; pinned Pi 0.80.6 RPC discovers `pm-shepherd` from explicit `extension` |
+| Serialized Shepherd | environmental failure; 517 total, 451 pass, 65 unchanged unrelated managed-sandbox process-identity `spawn EPERM` failures, 1 intentional skip |
+| Base/head/diff/scope/data | pass; exact base `3addb1f4`, reviewed candidate ancestry, full-range `git diff --check`, exact 21 paths, 3 JSON parses, explicit 5-test-file synthetic marker allowlist with 0 unexpected or production/artifact candidates |
+| Post-RED test support | exact late timing/cancellation and coherent decision chronology only; no RED assertion removed or weakened |
+| Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
 
 ## Cycle 6 verification contract
 

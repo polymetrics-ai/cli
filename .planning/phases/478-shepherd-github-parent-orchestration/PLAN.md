@@ -635,8 +635,9 @@ as part of the typed-wiring finding below.
 
 ### Cycle 7 architectural contract
 
-1. Replace `GitHubOrchestrationTransport.markParentReady` plus its fake-only callback with one
-   explicit production `ParentReadyDurableAuthorityBoundary`. Its conditional method owns the
+1. Remove parent-ready mutation and rollback from `GitHubOrchestrationTransport`; construction
+   requires one explicit production `ParentReadyDurableAuthorityBoundary` with no optional or
+   legacy fallback. Its conditional method owns the
    authoritative compare, durable authorization consumption, exact PR draft/revision CAS, and
    ready effect as one indivisible port operation. Its recovery method durably quarantines that
    authorization before performing an idempotent rollback-to-draft. Export closed canonical
@@ -644,7 +645,8 @@ as part of the typed-wiring finding below.
    canonical child receipts and literal ancestry, consumed decision, plan/head, and PR CAS without
    reproducing private controller logic. Every coordinate movement inside the boundary conflicts
    before draft is cleared; controller rereads and rollback are exceptional recovery only.
-2. Expose a production-typed prepare/commit split. `prepareParentReadiness` returns a canonical
+2. Expose a production-typed prepare/commit split and public `ParentReadyOperationJournal`.
+   `prepareParentReadiness` returns a canonical
    prepared operation containing the authoritative consumed decision and durable mutation intent;
    `commitPreparedParentReadiness` revalidates and submits it to the durable authority boundary.
    This lets #479 durably journal prepare/decision-consume before the conditional effect and record
@@ -725,8 +727,44 @@ as part of the typed-wiring finding below.
 
 ### Cycle 7 checkpoints
 
-- [ ] Artifact-only PLAN/finding matrix commit (this checkpoint; exact SHA reported after commit).
-- [ ] Comprehensive test/fixture-only RED with retained Cycle 6 and frozen production proof.
-- [ ] One coherent atomic-authority/lifecycle GREEN/refactor.
-- [ ] Exact-head local verification/evidence commit and clean candidate.
+- [x] Artifact-only PLAN/finding matrix commit
+      `2c64979829048d3de0d1ff1575c2a4f43cb699ba`.
+- [x] Comprehensive test-only RED `10033bc532d06967ce960e408c2bc9725020478a`:
+      290 total, 217 pass, 72 intentional failures, 1 intentional live-GitHub skip; strict
+      TypeScript reports only the 14 absent Cycle 7 contracts and all five production blobs remain
+      frozen.
+- [x] Coherent architectural GREEN `5bab0bc7e56292171eb28618cc2f37488ed1b7a4`.
+- [x] REFACTOR proof `87e704010f3e2226d8393d12e1a1bdf72df212a0` fixes the timeout
+      contract at a 500 ms late effect after a 100 ms timeout, adds caller cancellation before the
+      same late effect, keeps semantic chronology strict, and weakens no RED assertion.
+- [x] Independent pre-freeze architecture audit RED
+      `b1560e76a3abbac5efcd33b2740b7275b6acc137`: 297 total, 294 pass, 2 intentional
+      failures, and 1 intentional skip expose the remaining optional legacy ready-mutation route
+      and fake-shaped #479 role projection.
+- [x] Audit GREEN `915882c219f52da2c1edebce84d2bf90c61a4592`: 297 total, 296 pass,
+      0 fail, and 1 intentional skip; authority is mandatory, transport has no ready mutation,
+      compare conflicts are typed, and transport/authority/journal are separate production roles.
+- [x] Exact-head local verification/evidence uses the non-self-referential `HEAD` candidate and is
+      committed only after the evidence below is complete.
 - [ ] Fresh exact-head review remains parent-owned.
+
+### Cycle 7 local result
+
+Both Cycle 6 reports were replayed line by line after REFACTOR. Named passing tests cover all ten
+atomic movement coordinates; before- and after-effect 500/100 timing; caller cancellation;
+keyed/durable quarantine across restart; read failure; rollback retry before key/join release;
+stable key and mutation intent under harmless policy, ancestry, and equivalent-clean refresh;
+semantic movement; authoritative full-attempt digest/time provenance; owned-clock future event
+coordinates through the real broker adapter; all eight finite Kubernetes, Docker, and AWS forms;
+one current `HEAD` run-state semantic; and the public production-port-only #479-shaped
+prepare/journal/commit seam. The public transport has no parent-ready mutation fallback, the
+authority boundary is mandatory, and the #479 proof uses separate production-typed transport,
+authority, and journal roles rather than a structural `FakeTransport` projection.
+
+The five-file focused suite records 297 total, 296 pass, 0 fail, and 1 intentional live-GitHub
+skip. Strict owned and all-20-production TypeScript pass, and pinned Pi 0.80.6 offline RPC discovers
+`pm-shepherd` from `extension`. The serialized Shepherd suite is an environmental failure, not a
+pass: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox process-identity `spawn EPERM`
+failures, and 1 intentional skip. Immutable base and reviewed-candidate ancestry, exact merge base,
+full-range `git diff --check`, exact 21-path scope, three JSON documents, and the explicit
+test-synthetic credential-marker allowlist pass. No prohibited or external action ran.

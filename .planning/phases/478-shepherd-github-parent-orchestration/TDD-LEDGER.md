@@ -322,15 +322,15 @@ planned matrix contains 46 behavior rows and retains the complete Cycle 6 focuse
 
 | ID | Rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C7-AUTH | 10 | production durable authority boundary atomically rejects movement of policy, review, paths, receipt, ancestry, decision, plan, head, PR revision, or authorization state without clearing draft or relying on recovery | planned |
-| C7-LATE | 6 | uncertain mark settlement is quarantined and joined across before/after-effect timeout, restart-before-visibility, read failure, rollback retry, and stop/key ownership | planned |
-| C7-STABLE | 7 | semantic authorization and mutation identity survive harmless policy/ancestry/review refresh and restart; actual semantic movement blocks | planned |
-| C7-REVIEW | 5 | receipt full-attempt digest/time must occur in exact authoritative attestation history; equivalent clean remains compatible and later findings blocks | planned |
-| C7-CLOCK | 6 | each broker event timestamp and the combined future chronology reject under broker/controller owned clocks through the actual adapter and readiness path | planned |
-| C7-SECRET | 8 | finite Kubernetes, Docker, AWS assignment/prefix families reject across persistence, comments, plans, titles/bodies, findings, and dispositions without marker reflection | planned |
-| C7-STATE | 2 | HEAD is the only current candidate semantic; historical SHA in a current slot fails schema invariant | planned |
-| C7-479 | 1 | production-port-only public prepare/journal/commit/settle trajectory composes real broker, policy, authority/readiness, rollback, stop, and join | planned |
-| C7-RET | 1 | all Cycle 6 focused assertions and intentional skip classification remain unchanged | planned |
+| C7-AUTH | 10 | mandatory production durable authority boundary atomically rejects movement of policy, review, paths, receipt, ancestry, decision, plan, head, PR revision, or authorization state without clearing draft, an optional transport fallback, or ordinary recovery | green |
+| C7-LATE | 6 | uncertain mark settlement is quarantined and joined across before/after-effect timeout, restart-before-visibility, read failure, rollback retry, and stop/key ownership | green |
+| C7-STABLE | 7 | semantic authorization and mutation identity survive harmless policy/ancestry/review refresh and restart; actual semantic movement blocks | green |
+| C7-REVIEW | 5 | receipt full-attempt digest/time must occur in exact authoritative attestation history; equivalent clean remains compatible and later findings blocks | green |
+| C7-CLOCK | 6 | each broker event timestamp and the combined future chronology reject under broker/controller owned clocks through the actual adapter and readiness path | green |
+| C7-SECRET | 8 | finite Kubernetes, Docker, AWS assignment/prefix families reject across persistence, comments, plans, titles/bodies, findings, and dispositions without marker reflection | green |
+| C7-STATE | 2 | HEAD is the only current candidate semantic; historical SHA in a current slot fails schema invariant | green |
+| C7-479 | 1 | production-port-only public prepare/journal/commit/settle trajectory composes real broker, policy, and separate transport/authority/journal roles with rollback, stop, and join | green |
+| C7-RET | 1 | all Cycle 6 focused assertions and intentional skip classification remain unchanged | green |
 
 Frozen production blobs before RED: orchestrator `b3515a94e932a6206f2c32f083c1188882a01dfe`,
 broker `25c98a3c224d660c7fe6b5de16a30fdf73f95621`, human decision
@@ -343,3 +343,40 @@ The public prepare/commit split is a testable product contract, not a fake seam:
 the prepared intent and exact consumed decision before invoking the conditional effect, then record
 settlement afterward. The atomic effect and durable quarantine/rollback share one production
 authority-boundary interface. `reconcileParentReadiness` remains the convenience composition.
+
+## Cycle 7 RED, GREEN, REFACTOR, and verification evidence
+
+- PLAN `2c64979829048d3de0d1ff1575c2a4f43cb699ba` precedes every Cycle 7 test and
+  production edit.
+- Test-only RED `10033bc532d06967ce960e408c2bc9725020478a` records 290 total: 217 pass,
+  72 intentional failures, and 1 intentional live-GitHub skip. Strict owned TypeScript reports only
+  the 14 intentionally absent contracts. The five production blob IDs above remain unchanged.
+- Architectural GREEN `5bab0bc7e56292171eb28618cc2f37488ed1b7a4` implements the public
+  authority/prepare/commit contracts, stable authorization and freshness split, late-effect
+  quarantine/recovery, review-attempt provenance, broker clock, and finite credential schemas.
+- REFACTOR proof `87e704010f3e2226d8393d12e1a1bdf72df212a0` changes the late-effect
+  proof to exact 500 ms effects after a 100 ms timeout, adds caller cancellation, updates both
+  decision chronology fields in the semantic-movement fixture, and removes a temporary
+  canonicalizer repair. No assertion is removed or weakened.
+- Independent architecture-audit RED `b1560e76a3abbac5efcd33b2740b7275b6acc137`
+  records 297 total, 294 pass, 2 intentional failures, and 1 skip. The failures prove the remaining
+  optional legacy ready-mutation path and structural fake projection before the audit GREEN.
+- Audit GREEN `915882c219f52da2c1edebce84d2bf90c61a4592` requires the production
+  authority, removes ready mutation/rollback from the transport, returns typed atomic conflicts,
+  and proves separate production-typed transport, authority, and journal roles: 297 total,
+  296 pass, 0 fail, and 1 skip.
+- Final focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip.
+  Strict TypeScript passes for the 10 owned production/test files and all 20 Shepherd production
+  modules. Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd` from `extension`.
+- Serialized Shepherd is an environmental failure: 517 total, 451 pass, 65 unchanged unrelated
+  managed-sandbox process-identity `spawn EPERM` failures, and 1 intentional skip. Every Cycle 7
+  assertion passes.
+- Both reports were replayed after REFACTOR. Named tests cover all atomic coordinates, exact
+  before/after timing and cancellation, durable/keyed quarantine, restart/read/rollback failure,
+  stable harmless refresh versus semantic movement, authoritative full-attempt provenance,
+  owned-clock future chronology, all eight finite credential forms, current-HEAD schema, and the
+  public production-port-only #479 prepare/journal/commit seam. No optional authority route,
+  deprecated transport ready mutation, or fake-only authorization validator exists.
+- Immutable base and reviewed candidate are ancestors; exact merge base, full-range diff check,
+  exact 21-path ownership, three JSON parses, and the five-path explicit synthetic AWS marker
+  allowlist pass with zero production/artifact or unexpected candidates.
