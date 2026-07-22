@@ -184,3 +184,8 @@ must add per-role message/tool lifecycles, select the last assistant from the fi
   close the complete union without synonym/parser growth.
 - Ownership: advisory map only. The issue worker owns all planning edits, the single comprehensive
   RED, cohesive production change, refactor, report replay, gates, commits, and handoff.
+- Terminal replay: PLAN `6e3b05c8`, test-only RED `7ec93fcd`, cohesive GREEN `c30cfe88`, and
+  REFACTOR `af9222b1` preserve the mapped architecture. Focused 143/143 and safe isolation 206/206
+  pass; broad classification is 249/280 with only the unchanged 31 controller/state-store
+  `spawn EPERM` rows. Both strict Pi 0.80.6 TypeScript scopes and explicit offline RPC pass, and
+  both Cycle 15 reports were re-read after refactor. No mapper or external mutation occurred.

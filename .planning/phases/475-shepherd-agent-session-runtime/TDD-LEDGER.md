@@ -1252,16 +1252,49 @@ capability summary/reference, handoff summary/finding/verification, policy error
 
 | Checkpoint | Status | Required evidence |
 |---|---|---|
-| PLAN | in progress | artifact-only architecture and six-row ledger before test edits |
-| RED | pending | one test-only commit; 137 retained passes plus exactly six failures; frozen production |
-| GREEN | pending | one lexer + fixed projectors + owned prompt settlement; 143/143 |
-| REFACTOR | pending | delete rescans, whole-key helpers, generic walkers, and obsolete metric compatibility without weakening rows |
-| Report replay | pending | both Cycle 15 reports re-read in full after GREEN/refactor |
-| Local verification | pending | focused/safe isolation/strict TS/offline RPC/integrity/exact-scope gates and honest complete-suite classification |
+| PLAN | pass | artifact-only `6e3b05c8`; architecture and six-row ledger preceded test edits |
+| RED | expected fail | test-only `7ec93fcd`; 137 retained pass plus exactly six failures; frozen production |
+| GREEN | pass | cohesive `c30cfe88`; one lexer + fixed projectors + owned prompt settlement; 143/143 |
+| REFACTOR | pass | `af9222b1`; exact metric only, no legacy counters/rescans/whole-key helper; 143/143 |
+| Report replay | pass | both Cycle 15 reports re-read in full after GREEN/refactor |
+| Local verification | pass with environment classification | focused 143/143; isolation 206/206; strict/RPC/integrity pass; broad 249/280 plus unchanged 31 EPERM |
 
 No family may freeze separately. Production remains locked through RED. No synonym expansion,
 generic-record enumeration, self-review/integration, external mutation, or scope widening is
 permitted.
+
+### RED evidence
+
+- Exactly six new top-level tests were committed in `agent-session-runtime.test.ts`; production,
+  prompts, and retained tool-policy tests stayed frozen.
+- Focused RED: 143 executed, 137 retained pass, exactly C16-01 through C16-06 fail, zero
+  skipped/cancelled/todo. Focused strict TypeScript passes.
+- Observed boundaries: punctuation and malformed-quote markers leaked through all shared
+  consumers; dense opener work violated the exact metric; public scalars changed; 54 whole-name
+  captures crossed creation/request/event/handoff; and six native/thenable prompt rejections were
+  unhandled after synchronous lifecycle transitions.
+
+### GREEN / REFACTOR / VERIFY
+
+- GREEN `c30cfe88` installs one forward scanner with conservative quote/member recovery, fixed
+  schema projectors/dense indexes with opaque arbitrary records, and pre-barrier prompt settlement
+  ownership. Inert unknown creation/extension/diagnostic peers are ignored without discovery;
+  retained fixtures were aligned only after RED while known schema violations remain closed.
+- REFACTOR `af9222b1` removes `lineBoundaryVisits`, `keyStartVisits`, and
+  `totalCharacterVisits`; the exported metric is exactly source length, cursor
+  advances/regressions, maximum main visits, key/boundary visits, and total work. The C16 fail-fast
+  ceiling observes `totalWork` directly.
+- Focused: 143 passed. Safe isolation excluding only controller/state-store: 206 passed. Both have
+  zero failed/skipped/cancelled/todo. Focused and all 12 production strict TypeScript scopes pass
+  with TypeScript 5.9.3 and explicit Pi 0.80.6 roots.
+- Explicit Pi 0.80.6 offline RPC returns `get_commands` success and registers `pm-shepherd`; only
+  expected managed-filesystem settings-lock warnings appear.
+- Complete Shepherd: 280 executed, 249 passed, 31 failed only in controller/state-store where the
+  managed sandbox denies the unchanged process-identity `spawn`; zero skipped/cancelled/todo. It
+  remains environment-blocked, not green.
+- Both Cycle 15 reports were re-read in full after refactor. Diff/ancestry/JSON, source guards,
+  exact same 20 paths, and credential/dependency/Go/connector checks pass at artifact freeze. No
+  review, integration, push, network, external, parent, #478, or #479 mutation was attempted.
 
 ## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
 

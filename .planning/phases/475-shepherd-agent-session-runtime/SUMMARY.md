@@ -1,17 +1,28 @@
 # Summary — Issue #475
 
-Status: Cycle 16 PLAN is active against blocked start `df930d62` and immutable base `e659d6f1`;
-production and focused tests remain frozen. Both Cycle 15 reports were read in full and consolidate
-to six accepted families: punctuation/default-deny assignment admission, malformed quote bounds,
-one-pass work, finite public-scalar fidelity, zero whole-key untrusted capture, and prompt
-settlement ownership before the lifecycle barrier.
+Status: Cycle 16 is locally complete through PLAN `6e3b05c8`, test-only RED `7ec93fcd`, cohesive
+GREEN `c30cfe88`, and exact-metric REFACTOR `af9222b1`, descended from blocked start `df930d62`
+and immutable base `e659d6f1`. Both Cycle 15 reports were accepted in full and re-read after
+refactor. Their six-family union is closed: punctuation/default-deny assignment admission,
+malformed quote bounds, one-pass work, finite public-scalar fidelity, zero whole-key untrusted
+capture, and prompt settlement ownership before the lifecycle barrier.
 
-The planned comprehensive RED adds exactly six named top-level rows: 143 executed, all 137 retained
-rows passing, exactly six intended failures, zero skip/cancel/todo, focused strict TypeScript green,
-and exact frozen production. One cohesive GREEN will replace suffix rescans with a forward lexer,
-generic record enumeration with fixed schema projectors/opaque summaries, and orphanable prompt
-awaiting with an immediately observed settlement record. No external or parent-owned mutation is
-authorized.
+RED executed 143 rows with all 137 retained rows passing and exactly the six named behavior rows
+failing, zero skip/cancel/todo, focused strict TypeScript green, and production frozen. GREEN and
+REFACTOR pass 143/143 focused and 206/206 safe isolation. Both strict TypeScript scopes pass
+against TypeScript 5.9.3 and explicit Pi 0.80.6 roots; explicit offline RPC registers
+`pm-shepherd`. Complete Shepherd executes 280 tests with 249 passes and only the unchanged 31
+controller/state-store `spawn EPERM` environment failures. No external or parent-owned mutation
+was attempted.
+
+The scanner now has one monotonic cursor, default-deny uncertain keys, line/container/EOF malformed
+quote recovery, finite public scalar forms, and an exact seven-field work metric guarded at
+`8n + 64`. Runtime capture projects fixed schema descriptors and dense indexes only, never calls a
+whole-key primitive, and makes arbitrary details opaque. Prompt return/throw is converted to an
+owned always-fulfilled settlement before any abort/close/shutdown barrier and is joined during
+cleanup. Final production blobs are runtime `cd754a1e9b5baddf738c163cbba4d9fd1f279527`, policy
+`b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`, and unchanged prompts
+`b762787b2a63b5b02f9591c7bf3fff46394738cc`.
 
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full

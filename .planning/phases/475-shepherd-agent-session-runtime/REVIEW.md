@@ -8,7 +8,7 @@ Both reports are accepted completely. Duplicate punctuation, monotonic-work, and
 findings are represented once; the exact union is six architecture families and none is declined,
 deferred, or answered with a larger synonym parser.
 
-| Cycle 16 group | Review findings | Planned architectural disposition / proof boundary |
+| Cycle 16 group | Review findings | Implemented disposition / proof boundary |
 |---|---|---|
 | Default-deny admission | R1-01, R2-B1 | one total member/key state machine retains uncertainty through delimiter/container and routes every consumer through closed classification; C16-01 |
 | Malformed quote bounds | R1-02 | close only at a proven scalar boundary, otherwise redact line/container/EOF and resume at a proven outer sibling; C16-02 |
@@ -17,9 +17,21 @@ deferred, or answered with a larger synonym parser.
 | Zero whole-key capture | R1-04, R2-B3 | fixed descriptor projectors and dense length/index capture; arbitrary records opaque; instrumentation of all seven primitives stays zero; C16-05 |
 | Prompt settlement ownership | R2-B4 | store an always-fulfilled fulfillment/rejection settlement before the first post-prompt barrier; abort/close/shutdown matrix proves cleanup and zero unhandled; C16-06 |
 
-All 137 Cycle 15 focused rows are retained. Planned RED is exactly 143 executed with those 137
-passes and exactly six intended failures while production is frozen. GREEN is cohesive across the
-lexer, DTO capture, and prompt ownership; both complete reports will be re-read after refactor.
+All 137 Cycle 15 focused rows were retained. Test-only RED `7ec93fcd` executed 143 rows with those
+137 passing and exactly six intended failures while production stayed frozen. Cohesive GREEN
+`c30cfe88` closed all six families, and exact-metric REFACTOR `af9222b1` removed legacy counters
+without weakening a RED row. Focused 143/143 and safe isolation 206/206 pass; both strict
+TypeScript scopes and explicit Pi 0.80.6 RPC pass. The complete suite remains environment-blocked
+at 249/280 only by the unchanged 31 controller/state-store `spawn EPERM` rows.
+
+Both source reports were re-read in full after refactor. Runtime source has zero whole-key
+primitive references; hidden peers are never discovered, fixed schema fields/indexes remain
+authoritative, and arbitrary records are opaque. Scanner source has no flow/quote suffix lookahead
+and exports only the exact seven-field metric with its fixed `8n + 64` test ceiling. Prompt native
+and foreign thenable rejection is observed before abort/close/shutdown can cross the barrier, with
+exact cleanup and zero unhandled rejection. No finding is declined, deferred, or narrowed. This is
+the worker's report disposition and local evidence, not an independent exact-head self-review;
+parent orchestration owns that gate.
 
 # Review Disposition — Issue #475 Cycle 15
 

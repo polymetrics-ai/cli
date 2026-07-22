@@ -110,3 +110,12 @@ parent, #478, or #479 authority.
 Its findings are advisory. The issue worker retains the sole artifact-only PLAN, comprehensive RED,
 cohesive GREEN, REFACTOR, report replay, verification, commit, and handoff path. No production or
 test edit is authorized before the PLAN checkpoint; no family may freeze independently.
+
+Cycle 16 completed through PLAN `6e3b05c8`, comprehensive test-only RED `7ec93fcd`, cohesive GREEN
+`c30cfe88`, and exact-metric REFACTOR `af9222b1`. The runtime worker owned only
+`agent-session-runtime.ts`; the issue worker retained the scanner, tests, artifacts, gate, and
+commit path and reconciled the shared result after the worker stopped. Focused 143/143 and safe
+isolation 206/206 pass; both strict Pi 0.80.6 TypeScript scopes and the explicit offline RPC pass.
+The complete suite remains environment-blocked only by the unchanged 31 controller/state-store
+`spawn EPERM` rows. Both Cycle 15 reports were re-read in full after refactor, and no external or
+parent-owned mutation was attempted.

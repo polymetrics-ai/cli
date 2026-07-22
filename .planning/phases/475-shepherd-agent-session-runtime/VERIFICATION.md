@@ -1,8 +1,9 @@
 # Verification — Issue #475
 
-Current result: Cycle 16 is at artifact-only PLAN against frozen start `df930d62` and immutable
-base `e659d6f1`. Production and tests are locked until the plan checkpoint; parent orchestration
-retains independent review, integration, and delivery.
+Current result: Cycle 16 is locally complete through cohesive GREEN `c30cfe88` and exact-metric
+REFACTOR `af9222b1` against frozen start `df930d62` and immutable base `e659d6f1`. Parent
+orchestration retains independent exact-head review, process-capable replay, integration, and
+delivery.
 
 ## Cycle 16 Verification Contract
 
@@ -20,12 +21,26 @@ unhandled rejection. Both reports must be re-read after GREEN/refactor.
 | Cycle 16 gate | Status | Required evidence |
 |---|---|---|
 | PLAN / frozen baseline | pass | exact start/base, focused 137/137, strict focused TS, frozen source/test blobs, six-family matrix |
-| RED integrity | pending | 143 executed; 137 retained pass; exactly 6 intended failures; production frozen |
-| Focused GREEN | pending | 143/143 including actual pinned no-tool/one-tool sessions |
-| Safe isolation / complete classification | pending | isolation green; unchanged managed-sandbox family classified honestly |
-| Strict TypeScript / offline Pi | pending | focused plus all 12 production files at TS 5.9.3/Pi 0.80.6; explicit RPC registration |
-| Integrity / report replay | pending | both reports re-read; diff/ancestry/JSON/scans/exact 20 paths/clean head |
-| External mutation | not authorized | no self-review/integration, push, network, GitHub, live model/auth, service, Go/connector, `make`, main, parent, #478, or #479 mutation |
+| RED integrity | pass | test-only `7ec93fcd`; 143 executed; 137 retained pass; exactly 6 intended failures; production frozen; strict TS pass |
+| Focused GREEN | pass | `c30cfe88` / `af9222b1`; 143 passed, 0 failed/skipped/cancelled/todo; actual pinned sessions retained |
+| Environment isolation | pass | excluding only controller/state-store, 206 passed, 0 failed/skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 280 executed; 249 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Strict TypeScript | pass | focused plus all 12 production files, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit Pi 0.80.6 RPC `get_commands` registers `pm-shepherd`; expected settings-lock warnings only |
+| Integrity / report replay | pass | both reports re-read; diff/ancestry/JSON/source/scans/exact 20 paths pass at artifact freeze |
+| External mutation | not attempted | no self-review/integration, push, network, GitHub, live model/auth, service, Go/connector, `make`, main, parent, #478, or #479 mutation |
+
+RED observed all six intended architecture gaps with retained behavior intact. GREEN replaces the
+scanner rescans with one monotonic cursor, projects untrusted records by fixed own descriptors and
+dense indexes, keeps arbitrary records opaque, and installs prompt settlement before the first
+post-call barrier. REFACTOR removes the legacy work aliases, leaving exactly seven exported metric
+fields and no generic whole-key capture or flow/quote suffix lookahead.
+
+Final production blobs are runtime `cd754a1e9b5baddf738c163cbba4d9fd1f279527`, policy
+`b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`, and unchanged prompts
+`b762787b2a63b5b02f9591c7bf3fff46394738cc`. The complete-suite result is deliberately not called
+green; every failure is the previously classified sandbox process-identity family outside this
+issue's files.
 
 Current result: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR
 `ee4943f4` against frozen start `f41cde91` and immutable base `e659d6f1`. Parent orchestration owns

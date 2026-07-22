@@ -6,7 +6,7 @@ Frozen candidate: `df930d62adbf85af88cebbdf66e5eefaab587f4b`. Immutable base:
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 15 reports and the retained issue
 contract form the phase-equivalent source.
 
-| Required outcome | Comprehensive RED boundary | Planned proof |
+| Required outcome | Comprehensive RED boundary | Terminal proof |
 |---|---|---|
 | One monotonic assignment lexer | dense flow openers, malformed flows, terminal siblings, exact exported visit/work metric | C16-03; zero regressions, one main visit/offset, `totalWork <= 8n + 64` |
 | Default-deny assignment admission | punctuation, spaces, extended/overlong/quoted keys, ambiguous whole-line/container recovery, all 13 consumers | C16-01 |
@@ -21,6 +21,14 @@ classification, only explicit public field/scalar pairs pass, untrusted records 
 known schema or made opaque, and prompt rejection observation is installed synchronously. The
 ordered chain is artifact-only PLAN, exactly six-row test-only RED, one cohesive GREEN, REFACTOR,
 report replay, and exact verification. Production remains frozen through RED.
+
+Ordered evidence is PLAN `6e3b05c8`, test-only RED `7ec93fcd`, cohesive GREEN `c30cfe88`, and
+exact-metric REFACTOR `af9222b1`. RED retained 137/137 prior rows and failed exactly the six named
+Cycle 16 rows; GREEN/refactor passes 143/143 focused and 206/206 safe isolation. Both strict
+TypeScript scopes and explicit pinned Pi 0.80.6 RPC pass. The complete suite is honestly
+environment-blocked at 249/280 only by the unchanged 31 controller/state-store `spawn EPERM`
+rows. Both Cycle 15 reports were re-read after refactor; every accepted family is closed with no
+declined, deferred, or narrowed condition.
 
 ## Cycle 15 Consolidated Review Coverage
 

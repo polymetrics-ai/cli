@@ -136,3 +136,12 @@ file, test, network, credential, service, model, or external state was modified.
    thenables against abort/close/shutdown and exact cleanup/unhandled accounting.
 7. Retain 137 rows and add exactly the six named Cycle 16 aggregate rows. Frozen-head acceptance is
    143 executed, 137 retained passes, exactly six intended failures, and frozen production.
+
+### Cycle 16 implementation disposition
+
+The advisory map was followed without widening its boundary. PLAN `6e3b05c8` and test-only RED
+`7ec93fcd` preceded production changes; cohesive GREEN `c30cfe88` and exact-metric REFACTOR
+`af9222b1` close all six rows at 143/143. Fixed descriptor projectors/dense indexes replace every
+whole-key capture, arbitrary records are opaque, prompt settlement is installed before the
+lifecycle barrier, and the scanner exposes only the exact seven-field monotonic work record. Both
+Cycle 15 reports were re-read after refactor. The mapper remained read-only throughout.

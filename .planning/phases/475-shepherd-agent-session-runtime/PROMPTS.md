@@ -443,3 +443,18 @@
   owns every write, test, gate, and commit.
 - No self-review/integration, push, network, GitHub, model/auth, credential, service, Go/connector,
   `make`, main, parent, #478, or #479 mutation.
+
+Terminal execution snapshot:
+
+- Ordered checkpoints: PLAN `6e3b05c8`, test-only RED `7ec93fcd`, cohesive GREEN `c30cfe88`,
+  exact-metric REFACTOR `af9222b1`.
+- RED: 143 executed, 137 retained pass, exactly six intended failures, zero skip/cancel/todo, strict
+  focused TypeScript pass, production frozen. GREEN/refactor: 143/143 focused and 206/206 safe
+  isolation.
+- Runtime uses fixed descriptor DTO projections/dense indexes and an owned prompt settlement;
+  scanner uses one forward cursor, finite public scalars, and the exact seven-field work record.
+  Unknown peers are inert and arbitrary diagnostic/details records are opaque.
+- Complete Shepherd: 280 executed, 249 pass, unchanged 31 controller/state-store `spawn EPERM`
+  environment failures. Both strict TypeScript scopes and explicit Pi 0.80.6 RPC pass.
+- Both Cycle 15 reports were re-read in full after refactor. No external, parent, #478, #479, Go,
+  connector, service, credential, model, review, integration, push, or network action occurred.
