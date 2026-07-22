@@ -1076,3 +1076,83 @@ complete serialized suite remains honestly classified as 230/261 pass with exact
 31 managed-sandbox `spawn EPERM` controller/state-store failures; safe isolation passes 187/187.
 All local integrity gates remain issue-owned. Parent orchestration owns only the permitted-process
 rerun and fresh independent exact-head review.
+
+## Cycle 13 — Bounded Public Authority And Tool-Lifecycle Correlation
+
+### PLAN
+
+- Immutable comparison base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; frozen Cycle 13
+  start: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`; initial worktree clean.
+- Review sources read completely: `/tmp/475-REVIEW-CYCLE12-1.md` and
+  `/tmp/475-REVIEW-CYCLE12-2.md`. Their seven non-overlapping blockers are accepted together as
+  C13-01 through C13-07; C13-08 retains all 124 Cycle 12 focused behaviors.
+- Baseline focused run: 124 passed, 0 failed/skipped/cancelled/todo.
+- Production lock at `5dafc572`: runtime Git blob
+  `62851ca6bb4b4a7bd0b65d4d1415f992b1455603`, policy Git blob
+  `fd6a0e8db7f06ade82b852141eb2a497614aea79`, and role-prompts Git blob
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+- GSD: `scripts/gsd doctor` passes, but
+  `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run`
+  still returns `unknown GSD command: programming-loop`; the permitted manual-GSD
+  PLAN -> comprehensive behavior RED -> GREEN -> REFACTOR -> verify fallback remains active.
+- Skills loaded completely: `gsd-programming-loop`, `javascript-testing-patterns`,
+  `typescript-advanced-types`, `architecture-patterns`, and `github-issue-first-delivery`, plus
+  all required repo GSD/Pi/runtime/issue references.
+- Orchestration decision: `read_only_spawned`; one bounded no-write explorer maps exact seams and
+  installed Pi tool-call/result DTOs while this issue worker owns the only artifact, test,
+  production, verification, and commit path.
+
+### Comprehensive test-only RED matrix
+
+| ID | Review source | Independent behavior row required to fail at frozen head |
+|---|---|---|
+| C13-01 | R1-F1 | A short declared-length request array with many enumerable, hidden, and symbol extras is rejected with deterministic capped indexed/descriptor work; no `Reflect.ownKeys`, `Object.keys`, or equivalent whole-source key materialization is allowed. |
+| C13-02 | R1-F2 | Abort, close, and parent shutdown triggered from each re-entrant SDK setup seam, including both `getAgentDir` callbacks, leave zero creation, prompt, reservation, listener, timer, or session leaks and one truthful terminal outcome. |
+| C13-03 | R2-F1 | Exported `createToolPolicy` and prefix normalization intrinsically snapshot every authority array before iteration; custom iterators and caller `some`/`map`/`join`/constructor/prototype hooks remain unused, alias mutation cannot expand scope, and length 65 rejects. |
+| C13-04 | R2-F2 | Table-driven capability names using equivalent word orders, compounds, and synonyms for generic execution/terminal/process and protected data/export operations are absent for read-only and mutating roles, while reviewed legitimate host capabilities remain available. |
+| C13-05 | R2-F3 | Dotted and qualified keys whose sensitive compound is split across segments redact through direct text, both prompts, workspace output, capability/mutation results, handoff summary/finding, and every public-error graph; no synthetic marker survives. |
+| C13-06 | R2-F4 | Exported `buildRolePrompts` and authority validation intrinsically snapshot context and authority arrays; caller iterator/accessor/array methods/prototype/constructor behavior stays unused, post-call alias mutation cannot alter either immutable prompt, and one-above arrays reject. |
+| C13-07 | R2-F5 | One authorized Pi tool call is correlated across assistant call ID/name/arguments, active tool authority, execution start/end, tool-result message ID/name/result/error, turn results, next turn, and final handoff. Mismatch, duplicate, replacement, result-without-active, missing result, or early handoff rejects; the real pinned no-tool and one-tool paths remain accepted. |
+| C13-08 | retention | All 124 Cycle 12 focused tests, actual pinned offline whole-session exercises, strict public Pi types, lifecycle/ownership/timer/parser/path/capability closures, and disjoint mutator authority remain green throughout RED and GREEN. |
+
+RED acceptance is one test-only commit. The preexisting focused files must first pass 124/124.
+The augmented suite must then execute all retained tests plus exactly seven named C13-01 through
+C13-07 top-level behavior rows: all 124 retained rows remain green and every new row fails its
+intended production assertion, with no load/fixture failure and zero skip/cancel/todo. Focused
+strict TypeScript must pass, all three production blobs above must remain exact, and no production
+edit may enter RED.
+
+### Architectural GREEN / REFACTOR target
+
+- Replace `captureFreshDenseArray` whole-key collection with bounded indexed own-descriptor capture
+  and a fail-closed, capped extra-field proof. The proof must never build an attacker-sized key
+  array and must reject enumerable, non-enumerable, and symbol extras.
+- Put an active-scope assertion immediately after every re-entrant SDK callback and immediately
+  before the microtask that invokes `createAgentSession`; cancellation/close observed at any seam
+  must win before child creation.
+- Share one intrinsic dense-array projector at the public policy and role-prompt boundaries. Every
+  downstream validator/formatter receives only fresh immutable snapshots and never invokes
+  caller-owned iteration, array methods, accessors, constructors, or prototypes.
+- Centralize semantic capability-name classification around normalized word components and closed
+  forbidden authority families; centralize dotted/qualified sensitive-key classification around
+  all bounded segments and compounds.
+- Extend the Pi lifecycle machine with one per-call correlation record. Assistant tool-call
+  evidence creates the only authorized identity; execution start/end and tool-result messages must
+  match it exactly; `turn_end.toolResults` must match the closed result set before a subsequent turn
+  or final handoff is accepted. The active-name allowlist is the existing frozen policy tool set;
+  scoped argument enforcement remains in the matching real custom-tool execution path.
+
+No dependency, public authority, scheduler/controller/#478/#479 file, Go/connector, GitHub,
+service, credential, model, network, or parent-artifact scope is added.
+
+### Ordered checkpoints and declared gates
+
+The mandatory order is artifact-only PLAN -> one comprehensive test-only RED -> cohesive boundary
+and lifecycle GREEN -> no-contract-widening REFACTOR -> terminal evidence/freeze. GREEN requires
+focused runtime/tool-policy/role-prompt behavior, focused and all-production strict TypeScript
+5.9.3 against explicit Pi 0.80.6 roots, actual pinned no-tool and one-tool whole-session rows,
+pinned offline RPC, serialized complete Shepherd classification, safe isolation, `git diff
+--check`, immutable-base/frozen-head ancestry, JSON and credential-pattern scans, exact same
+20-path issue scope, and a clean head. The known 31 controller/state-store `/bin/ps` `spawn EPERM`
+rows remain an honest environment classification, never a green complete suite. No push, network,
+GitHub, live model/auth, Go/connectors, `make`, runtime service, or credential action is authorized.

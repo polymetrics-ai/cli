@@ -1,3 +1,29 @@
+# Review Disposition — Issue #475 Cycle 13
+
+Frozen reviewed candidate: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+Sources: `/tmp/475-REVIEW-CYCLE12-1.md`, `/tmp/475-REVIEW-CYCLE12-2.md`
+
+Both complete reports are accepted as one blocking correction batch. Their seven unique findings
+are mapped below; no row is declined, weakened, or deferred.
+
+| Cycle 13 group | Review finding | Disposition / proof boundary |
+|---|---|---|
+| Bounded dense-array ingress | R1-F1 | remove whole-key materialization; bounded indexed descriptors plus capped fail-closed extra-field proof |
+| SDK-seam terminality | R1-F2 | recheck active scope after every re-entrant SDK callback and immediately before scheduling creation |
+| Public policy snapshots | R2-F1 | intrinsically dense-capture authority arrays before all validation, normalization, or formatting |
+| Semantic capability grammar | R2-F2 | deny equivalent generic execution/process and protected-data/export authority regardless of order or synonym |
+| Qualified sensitive keys | R2-F3 | classify split dotted/qualified sensitive compounds through the shared scanner and every consumer |
+| Public prompt snapshots | R2-F4 | intrinsically dense-capture context/authority arrays before validation and serialization; return immutable prompts |
+| Cross-event tool identity | R2-F5 | correlate authorized assistant call, execution, result message, turn results, next turn, and final handoff exactly |
+
+Prior-family disposition is explicit: Cycle 7 and 9–10 remain retained; R1-F1 and R2-F1/F4 reopen
+the direct-boundary extension of Cycle 8/12 immutable snapshot coverage; R2-F2/F3 reopen the Cycle
+11 capability and qualified-key grammar at semantically equivalent forms; R2-F5 extends Cycle
+11/12 ordered lifecycle evidence to one complete tool identity. All 124 Cycle 12 rows remain
+mandatory. Status is PLAN: production stays frozen until exactly seven compiled behavior rows fail
+at their intended boundaries.
+
 # Review Disposition — Issue #475 Cycle 11
 
 Frozen reviewed candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`

@@ -36,3 +36,17 @@ start `7882cd70`.
 The explorer has no edit, commit, network, model, credential, or gate authority. Its result is
 advisory; the issue worker retains PLAN, RED, every GREEN checkpoint, verification, commit, and
 handoff ownership.
+
+## Cycle 13 Agent Delegation
+
+The issue worker owns every write in Cycle 13. One read-only explorer maps the seven exact-head
+blockers to implementation/test seams and the installed Pi 0.80.6 tool lifecycle against frozen
+start `5dafc572`.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle13-seam-map` | read-only | capped array proof, SDK re-entry checks, public policy/prompt snapshots, capability/redaction classifiers, exact tool-call/result/turn correlation | Cycle 13 appendices in the existing Cycle 12 agent map and trace |
+
+The explorer has no edit, commit, network, model, credential, service, or gate authority. Its
+advice may amend the artifact plan without granting it production ownership; the issue worker
+retains the complete PLAN, RED, GREEN, REFACTOR, verification, commit, and handoff path.

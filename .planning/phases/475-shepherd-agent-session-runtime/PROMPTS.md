@@ -313,3 +313,22 @@
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PROMPTS.md`, `RUN-STATE.json`, `AGENTS.md`,
   `agents/cycle12-pi-lifecycle-map.md`, and `traces/cycle12-pi-lifecycle-map-trace.md`.
 - No push, network, GitHub, live model/auth, Go/connectors, `make`, services, or credentials.
+
+## Consolidated Stable-Head Correction Cycle 13 Snapshot
+
+- Frozen start: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20-path issue allowlist.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE12-1.md` and
+  `/tmp/475-REVIEW-CYCLE12-2.md`; all seven unique blockers are accepted together.
+- Objective: cap dense-array ingress without whole-key materialization; make every re-entrant SDK
+  seam cancellation-terminal; intrinsically snapshot public policy/prompt arrays; close semantic
+  capability and split-qualified secret grammars; and correlate each Pi tool call across assistant,
+  execution, result message, turn result, subsequent turn, and handoff.
+- Method: recorded manual-GSD artifact-only PLAN -> exactly seven behavior-level test-only RED rows
+  -> cohesive GREEN -> REFACTOR -> terminal evidence. Production is frozen through RED.
+- Baseline: focused 124/124. Planned RED: 124 retained passes plus exactly seven intended C13
+  failures, strict focused TypeScript green, and exact production blobs frozen.
+- Execution decision: `read_only_spawned`; a bounded no-write seam mapper assists while the issue
+  worker owns the sole mutating path.
+- No push, network, GitHub, live model/auth, Go/connectors, `make`, services, credentials, or
+  parent/#478/#479 edits.

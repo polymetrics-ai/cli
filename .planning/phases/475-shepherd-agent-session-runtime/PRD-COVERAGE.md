@@ -1,5 +1,28 @@
 # PRD Coverage — Issue #475
 
+## Cycle 13 Consolidated Review Coverage
+
+Frozen candidate: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The issue contract and both complete Cycle 12 review
+reports form the phase-equivalent requirement source.
+
+| Required outcome | RED boundary | Cycle 13 status |
+|---|---|---|
+| Request-array work is capped before extra-field rejection | short length with many enumerable/hidden/symbol extras and trap counters | planned C13-01 |
+| Cancellation/close wins at every SDK seam before creation | abort/close/shutdown callback matrix with zero create/prompt/leaks | planned C13-02 |
+| Public policy authority is intrinsically snapshotted | hostile iterator/method/prototype/alias/length matrix | planned C13-03 |
+| Equivalent generic and protected-data capability names fail closed | role x order x compound x synonym table plus legitimate controls | planned C13-04 |
+| Split qualified sensitive assignments redact everywhere | direct/prompt/workspace/result/handoff/error marker matrix | planned C13-05 |
+| Public role-prompt arrays are intrinsically snapshotted | hostile context/authority arrays, immutable prompt, and length bounds | planned C13-06 |
+| Tool evidence has one authorized cross-event identity | assistant/execution/result/turn/next-turn/handoff mismatch matrix plus real Pi controls | planned C13-07 |
+| Cycle 12 behavior remains intact | all retained runtime, policy, prompt, Pi, ownership, parser, and mutator rows | 124 retained baseline passes |
+
+The strict checkpoint order is artifact PLAN, exactly seven-row test-only RED, cohesive GREEN,
+REFACTOR, and terminal evidence. Complete Shepherd remains honestly classified if the same 31
+managed-sandbox process-identity rows fail with `spawn EPERM`; safe isolation is the local green
+gate. No parent, #478/#479, Go, connector, dependency, service, credential, live model, GitHub,
+review-bot, push, `make`, or merge work is authorized.
+
 ## Cycle 11 Consolidated Review Coverage
 
 Frozen candidate: `1571dc4d4f45ad4285107d04f2d7c489a7f357ab`. Immutable base:

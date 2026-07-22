@@ -1034,3 +1034,52 @@ Go/connectors, `make`, credentials, services, or parent-owned integration gate i
   credential-pattern/no-dependency scans pass. No Go, connector, `make`, service, push, GitHub,
   live-model, or credential action was attempted. Parent orchestration owns the process-capable
   full rerun and independent exact-head review.
+
+## Cycle 13 — Bounded Public Authority And Tool-Lifecycle Correlation
+
+### PLAN / baseline
+
+- Frozen start: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; worktree clean.
+- Complete review union: `/tmp/475-REVIEW-CYCLE12-1.md` and
+  `/tmp/475-REVIEW-CYCLE12-2.md`; seven independent RED rows C13-01 through C13-07, with C13-08
+  retaining all prior behavior.
+- Focused baseline command:
+
+  ```bash
+  node --test .pi/extensions/shepherd/agent-session-runtime.test.ts \
+    .pi/extensions/shepherd/tool-policy.test.ts
+  ```
+
+  Result: 124 passed, 0 failed, 0 skipped/cancelled/todo.
+- Frozen production Git blobs: runtime `62851ca6bb4b4a7bd0b65d4d1415f992b1455603`, policy
+  `fd6a0e8db7f06ade82b852141eb2a497614aea79`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+- GSD adapter result: doctor passes; `programming-loop` remains absent, so
+  `manual_gsd_fallback` is recorded. All required testing/type/architecture/issue-delivery skills
+  and repo Pi/runtime/GSD contracts were reloaded before edits.
+- Execution decision: `read_only_spawned`; one seam mapper is read-only, and the issue worker alone
+  owns artifacts, tests, production, commits, verification, and handoff.
+
+### RED contract
+
+One comprehensive test-only checkpoint adds exactly seven named top-level behavior rows. Acceptance
+is 131 executed: all 124 retained assertions pass and exactly C13-01 through C13-07 fail at their
+intended behavior boundaries, with strict focused TypeScript green, no skip/cancel/todo, and all
+frozen production blobs unchanged. The rows cover capped dense-array ingress, SDK-seam lifecycle
+rechecks, public policy array capture, semantic capability denial, split qualified sensitive keys,
+public role-prompt array capture, and complete authorized tool-call/result/turn correlation.
+
+### Ordered GREEN / REFACTOR checkpoints
+
+1. Intrinsic dense-array capture shared by runtime, public tool policy, and public role prompts,
+   including capped extra-field proof and post-callback scope assertions.
+2. Closed capability and split-qualified sensitive-key classifiers shared by all current consumers.
+3. Per-tool-call Pi lifecycle correlation through assistant call, execution, result message,
+   `turn_end`, next turn, and final handoff, retaining real pinned no-tool and one-tool behavior.
+4. Refactor/evidence freeze with focused/all-production strict TypeScript and the declared
+   Shepherd-only gates.
+
+No RED assertion may be weakened. Production remains locked until the compiled seven-row RED is
+captured. No push/network/GitHub/live model, Go/connectors, `make`, credentials, services, or
+parent-owned integration gate is permitted.
