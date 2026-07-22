@@ -651,11 +651,6 @@ interface RedactionDecision {
 	resumeAt: number;
 }
 
-interface QuotedAssignmentKey {
-	key: string;
-	next: number;
-}
-
 interface AssignmentKeyCandidate {
 	exactKey?: string;
 	delimiter: ":" | "=";
@@ -933,94 +928,6 @@ function scanQuotedAssignmentKeyCandidate(
 		};
 	}
 	return undefined;
-}
-
-function decodeQuotedAssignmentKey(
-	value: string,
-	start: number,
-	quote: LexicalQuote,
-	metrics?: RedactionScanMetrics,
-): QuotedAssignmentKey | undefined {
-	const MAX_DECODED_KEY_CHARACTERS = 64;
-	const MAX_ENCODED_KEY_CHARACTERS = (MAX_DECODED_KEY_CHARACTERS + 1) * 6 + 1;
-	let cursor = start + 1;
-	let decoded = "";
-	let malformed = false;
-	let sensitivePrefix = false;
-	while (cursor < value.length && cursor - start <= MAX_ENCODED_KEY_CHARACTERS) {
-		const character = value[cursor];
-		recordTotalVisits(metrics, 1);
-		if (character === quote) {
-			if (quote === "'" && value[cursor + 1] === "'") {
-				decoded += "'";
-				cursor += 2;
-				recordTotalVisits(metrics, 1);
-				continue;
-			}
-			if (decoded.length === 0) return undefined;
-			if (decoded.length > MAX_DECODED_KEY_CHARACTERS) {
-				return sensitiveAssignmentKind(decoded) === undefined
-					? undefined
-					: { key: decoded, next: cursor + 1 };
-			}
-			const valid = [...decoded].every(isAssignmentKeyCharacter);
-			const sensitiveMalformed = malformed &&
-				(sensitivePrefix || sensitiveAssignmentKind(decoded) !== undefined);
-			if (!valid && !sensitiveMalformed) return undefined;
-			return { key: sensitiveMalformed ? sensitiveKeyPrefix(decoded) : decoded, next: cursor + 1 };
-		}
-		if (character === "\n" || character === "\r") return undefined;
-		if (quote === '"' && character === "\\") {
-			const escaped = value[cursor + 1];
-			if (escaped === "u") {
-				const hex = value.slice(cursor + 2, cursor + 6);
-				if (/^[0-9a-fA-F]{4}$/.test(hex)) {
-					decoded += String.fromCharCode(Number.parseInt(hex, 16));
-					cursor += 6;
-					recordTotalVisits(metrics, 5);
-					continue;
-				}
-				malformed = true;
-				sensitivePrefix ||= sensitiveAssignmentKind(decoded) !== undefined;
-				const consumed = Math.min(6, value.length - cursor);
-				cursor += consumed;
-				recordTotalVisits(metrics, Math.max(0, consumed - 1));
-				continue;
-			}
-			const simpleEscapes: Record<string, string> = {
-				'"': '"', "\\": "\\", "/": "/", b: "\b", f: "\f", n: "\n", r: "\r", t: "\t",
-			};
-			if (escaped !== undefined && Object.hasOwn(simpleEscapes, escaped)) {
-				decoded += simpleEscapes[escaped];
-				cursor += 2;
-				recordTotalVisits(metrics, 1);
-				continue;
-			}
-			malformed = true;
-			sensitivePrefix ||= sensitiveAssignmentKind(decoded) !== undefined;
-			cursor += Math.min(2, value.length - cursor);
-			continue;
-		}
-		decoded += character;
-		if (!isAssignmentKeyCharacter(character)) {
-			malformed = true;
-			sensitivePrefix ||= sensitiveAssignmentKind(decoded.slice(0, -1)) !== undefined;
-		}
-		if (decoded.length > MAX_DECODED_KEY_CHARACTERS) {
-			malformed = true;
-			sensitivePrefix ||= sensitiveAssignmentKind(decoded.slice(0, MAX_DECODED_KEY_CHARACTERS)) !== undefined;
-		}
-		cursor += 1;
-	}
-	return undefined;
-}
-
-function sensitiveKeyPrefix(value: string): string {
-	for (let end = Math.min(value.length, 64); end > 0; end -= 1) {
-		const prefix = value.slice(0, end);
-		if (sensitiveAssignmentKind(prefix)) return prefix;
-	}
-	return value;
 }
 
 function redactionForAssignment(
@@ -1307,11 +1214,6 @@ function assignmentKeyClassification(key: string): AssignmentKeyClassification {
 	return "unknown-sensitive";
 }
 
-function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
-	const classification = assignmentKeyClassification(key);
-	return classification === "public" ? undefined : classification;
-}
-
 function canonicalAssignmentKey(key: string): {
 	segments: string[];
 	path: string;
@@ -1505,14 +1407,6 @@ function isAssignmentKeyCharacter(character: string | undefined): boolean {
 	const code = character.charCodeAt(0);
 	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
 		(code >= 97 && code <= 122) || character === "_" || character === "-" || character === ".";
-}
-
-function isPotentialAssignmentKeyStart(character: string | undefined): boolean {
-	if (character === undefined) return false;
-	const code = character.charCodeAt(0);
-	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
-		(code >= 97 && code <= 122) || character === "_" || character === "-" ||
-		character === '"' || character === "'";
 }
 
 function isPotentialAssignmentCandidateStart(character: string | undefined): boolean {

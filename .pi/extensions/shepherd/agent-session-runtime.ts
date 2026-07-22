@@ -2334,30 +2334,37 @@ function boundedEventBytes(root: unknown, maximum: number): number {
 		if (seen.has(object)) throw new AgentSessionRuntimeError("AgentSession event contains a cycle");
 		seen.add(object);
 		const array = Array.isArray(value);
+		let arrayLength = 0;
 		if (array) {
-			if (value.length > MAX_EVENT_ARRAY_ITEMS) {
+			assertApprovedArrayPrototype(value, "AgentSession event array");
+			const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+			arrayLength = lengthDescriptor && "value" in lengthDescriptor &&
+				typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
+			if (!Number.isSafeInteger(arrayLength) || arrayLength < 0 || arrayLength > MAX_EVENT_ARRAY_ITEMS) {
 				throw new AgentSessionRuntimeError("AgentSession event contains a sparse or oversized array");
 			}
+		} else {
+			assertApprovedRecordPrototype(object, "AgentSession event record");
 		}
 		add(2);
 		let enumerableKeys = 0;
-		for (const key in value) {
-			if (!Object.hasOwn(value, key)) throw new AgentSessionRuntimeError("AgentSession event contains inherited fields");
+		for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(object)) {
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(object, key);
+			if (!descriptor?.enumerable) continue;
 			enumerableKeys += 1;
-			if (enumerableKeys > (array ? value.length : MAX_EVENT_RECORD_KEYS)) {
+			if (enumerableKeys > (array ? arrayLength : MAX_EVENT_RECORD_KEYS)) {
 				throw new AgentSessionRuntimeError("AgentSession event record is too wide or sparse");
 			}
-			if (array && (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length)) {
+			if (array && (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= arrayLength)) {
 				throw new AgentSessionRuntimeError("AgentSession event array contains an extra field");
 			}
-			const descriptor = Object.getOwnPropertyDescriptor(object, key);
-			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			if (descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new AgentSessionRuntimeError("AgentSession event contains an accessor or invalid field");
 			}
 			add(byteLength(key) + 3);
 			stack.push({ value: descriptor.value, depth: current.depth + 1 });
 		}
-		if (array && enumerableKeys !== value.length) {
+		if (array && enumerableKeys !== arrayLength) {
 			throw new AgentSessionRuntimeError("AgentSession event contains a sparse array");
 		}
 	}
@@ -2372,16 +2379,12 @@ function captureClosedRecordFields(
 	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy record`);
 	}
-	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) {
-		throw new AgentSessionRuntimeError(`${description} must have a plain prototype`);
-	}
+	assertApprovedRecordPrototype(value, description);
 	const fields = new Map<string, unknown>();
-	for (const key in value) {
-		if (!Object.hasOwn(value, key)) throw new AgentSessionRuntimeError(`${description} contains inherited fields`);
+	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+		if (!descriptor?.enumerable) continue;
 		if (fields.size >= maximumKeys) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
-		const descriptor = Reflect.getOwnPropertyDescriptor(value, key);
-		if (!descriptor?.enumerable) throw new AgentSessionRuntimeError(`${description} contains an invalid field`);
 		if (descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains an accessor field`);
 		}
@@ -2401,25 +2404,34 @@ function assertExactCapturedFields(
 }
 
 function captureDenseArray(value: unknown, description: string): readonly unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value) || value.length > MAX_EVENT_ARRAY_ITEMS) {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
+	}
+	assertApprovedArrayPrototype(value, description);
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+	const length = lengthDescriptor && "value" in lengthDescriptor &&
+		typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
+	if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
 	}
 	let enumerableItems = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length) {
+	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+		if (!descriptor?.enumerable) continue;
+		if (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= length) {
 			throw new AgentSessionRuntimeError(`${description} contains an inherited or extra field`);
 		}
 		enumerableItems += 1;
-		if (enumerableItems > value.length) {
+		if (enumerableItems > length) {
 			throw new AgentSessionRuntimeError(`${description} must not be sparse or contain extra fields`);
 		}
 	}
-	if (enumerableItems !== value.length) {
+	if (enumerableItems !== length) {
 		throw new AgentSessionRuntimeError(`${description} must not be sparse or contain extra fields`);
 	}
 	const captured: unknown[] = [];
-	for (let index = 0; index < value.length; index += 1) {
-		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains an invalid array element`);
 		}
@@ -2479,21 +2491,29 @@ function snapshotEventJsonValue(
 	add(2);
 	try {
 		if (Array.isArray(value)) {
-			if (value.length > MAX_EVENT_ARRAY_ITEMS) throw new AgentSessionRuntimeError(`${description} array is oversized`);
+			assertApprovedArrayPrototype(value, `${description} array`);
+			const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+			const length = lengthDescriptor && "value" in lengthDescriptor &&
+				typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
+			if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
+				throw new AgentSessionRuntimeError(`${description} array is oversized`);
+			}
 			let enumerableItems = 0;
-			for (const key in value) {
-				if (!Object.hasOwn(value, key) || !/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length) {
+			for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+				if (!descriptor?.enumerable) continue;
+				if (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= length) {
 					throw new AgentSessionRuntimeError(`${description} array contains an inherited or extra field`);
 				}
 				enumerableItems += 1;
-				if (enumerableItems > value.length) throw new AgentSessionRuntimeError(`${description} array is invalid`);
+				if (enumerableItems > length) throw new AgentSessionRuntimeError(`${description} array is invalid`);
 			}
-			if (enumerableItems !== value.length) throw new AgentSessionRuntimeError(`${description} array is sparse`);
-			budget.keys += value.length;
+			if (enumerableItems !== length) throw new AgentSessionRuntimeError(`${description} array is sparse`);
+			budget.keys += length;
 			if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError(`${description} exceeded its key bound`);
 			const snapshot: JsonEventValue[] = [];
-			for (let index = 0; index < value.length; index += 1) {
-				const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+			for (let index = 0; index < length; index += 1) {
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new AgentSessionRuntimeError(`${description} array contains an invalid item`);
 				}
@@ -2501,13 +2521,11 @@ function snapshotEventJsonValue(
 			}
 			return Object.freeze(snapshot);
 		}
-		const prototype = Object.getPrototypeOf(value);
-		if (prototype !== Object.prototype && prototype !== null) {
-			throw new AgentSessionRuntimeError(`${description} contains a non-plain object`);
-		}
+		assertApprovedRecordPrototype(value, description);
 		const keys: string[] = [];
-		for (const key in value) {
-			if (!Object.hasOwn(value, key)) throw new AgentSessionRuntimeError(`${description} contains inherited data`);
+		for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+			if (!descriptor?.enumerable) continue;
 			keys.push(key);
 			budget.keys += 1;
 			if (keys.length > MAX_EVENT_RECORD_KEYS || budget.keys > MAX_EVENT_NODES) {
@@ -2517,7 +2535,7 @@ function snapshotEventJsonValue(
 		keys.sort();
 		const snapshot = Object.create(null) as Record<string, JsonEventValue>;
 		for (const key of keys) {
-			const descriptor = Object.getOwnPropertyDescriptor(value, key);
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new AgentSessionRuntimeError(`${description} contains an invalid field`);
 			}
@@ -2961,8 +2979,10 @@ function canonicalWorkspacePath(value: string): string {
 function assertOnlyKeys(value: Record<string, unknown>, allowed: readonly string[], description: string): void {
 	const allowedSet = new Set(allowed);
 	let count = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
+	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+		if (!descriptor?.enumerable) continue;
+		if (!allowedSet.has(key)) {
 			throw new AgentSessionRuntimeError(`${description} contains unknown field ${JSON.stringify(key)}`);
 		}
 		count += 1;
