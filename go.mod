@@ -9,8 +9,8 @@ require (
 	github.com/marcboeker/go-duckdb v1.8.5
 	github.com/redis/go-redis/v9 v9.21.0
 	github.com/stretchr/testify v1.11.1
-	go.temporal.io/api v1.63.1
-	go.temporal.io/sdk v1.45.0
+	go.temporal.io/api v1.63.3
+	go.temporal.io/sdk v1.46.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
