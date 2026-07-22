@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -48,6 +49,45 @@ test("durably advances prepared -> observed -> applied and replays each exact ph
 	assert.equal(applied.phase, "applied");
 	assert.deepEqual(await restarted.apply(prepared.key, { runId: prepared.runId, generation: 1 }), applied);
 	assert.deepEqual(await restarted.listNonApplied(), []);
+});
+
+test("persists exact bounded recovery coordinates while rejecting descriptor drift and secret-shaped fields", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-effect-descriptor-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const journal = new ProductionEffectJournal(root);
+	const recoveryDescriptor = {
+		repository: "acme/polymetrics",
+		branch: "feat/479-runtime",
+		head: "a".repeat(40),
+		pullRequest: 480,
+	};
+	const intentDigest = createHash("sha256").update(JSON.stringify({
+		branch: recoveryDescriptor.branch,
+		head: recoveryDescriptor.head,
+		pullRequest: recoveryDescriptor.pullRequest,
+		repository: recoveryDescriptor.repository,
+	})).digest("hex");
+	const coordinates = { kind: "child_pull_request" as const, runId: "run-479-1", generation: 1, childId: "state", intentDigest };
+	const exact = { key: productionEffectKey(coordinates), ...coordinates, recoveryDescriptor };
+	const prepared = await journal.prepare(exact);
+	assert.deepEqual(prepared.recoveryDescriptor, {
+		branch: recoveryDescriptor.branch,
+		head: recoveryDescriptor.head,
+		pullRequest: recoveryDescriptor.pullRequest,
+		repository: recoveryDescriptor.repository,
+	});
+	assert.deepEqual((await new ProductionEffectJournal(root).load(prepared.key))?.recoveryDescriptor, prepared.recoveryDescriptor);
+	await assert.rejects(
+		journal.prepare({ ...exact, recoveryDescriptor: { ...recoveryDescriptor, head: "b".repeat(40) } }),
+		/conflict|descriptor|intent/i,
+	);
+	const secretDescriptor = { ...recoveryDescriptor, token: "never-store-this" };
+	const secretDigest = createHash("sha256").update(JSON.stringify(secretDescriptor)).digest("hex");
+	const secretCoordinates = { ...coordinates, intentDigest: secretDigest };
+	await assert.rejects(
+		journal.prepare({ key: productionEffectKey(secretCoordinates), ...secretCoordinates, recoveryDescriptor: secretDescriptor }),
+		/secret-shaped/i,
+	);
 });
 
 test("rejects key conflicts, changed observations, skipped phases, stale fences, and malformed digests", async (t) => {

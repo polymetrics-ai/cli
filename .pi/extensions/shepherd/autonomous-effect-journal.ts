@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
 import { lstat, mkdir, open, readFile, rename, rm } from "node:fs/promises";
 import { join } from "node:path";
+import { types as nodeTypes } from "node:util";
 
 import type {
 	ProductionEffectKind,
@@ -13,6 +14,9 @@ const DIGEST = /^[0-9a-f]{64}$/;
 const SAFE_ID = /^[a-z0-9][a-z0-9_.:-]{0,255}$/;
 const MAX_JOURNAL_BYTES = 4 * 1024 * 1024;
 const MAX_EFFECTS = 4_096;
+const MAX_DESCRIPTOR_BYTES = 64 * 1024;
+const MAX_DESCRIPTOR_DEPTH = 16;
+const MAX_DESCRIPTOR_NODES = 4_096;
 const LOCK_ATTEMPTS = 2_000;
 const LOCK_RETRY_MS = 5;
 
@@ -26,6 +30,7 @@ export interface ProductionEffectIntentCoordinates {
 
 export interface ProductionEffectIntent extends ProductionEffectIntentCoordinates {
 	key: string;
+	recoveryDescriptor?: unknown;
 }
 
 export interface ProductionEffectFence {
@@ -72,6 +77,65 @@ function timestamp(value: unknown, description: string): string {
 	return value;
 }
 
+function canonicalRecoveryDescriptor(value: unknown): unknown {
+	let nodes = 0;
+	const visit = (candidate: unknown, depth: number): unknown => {
+		nodes += 1;
+		if (nodes > MAX_DESCRIPTOR_NODES || depth > MAX_DESCRIPTOR_DEPTH) {
+			throw new Error("production effect recovery descriptor exceeds its structural bound");
+		}
+		if (candidate === null || typeof candidate === "boolean") return candidate;
+		if (typeof candidate === "number") {
+			if (!Number.isFinite(candidate)) throw new Error("production effect recovery descriptor contains a non-finite number");
+			return candidate;
+		}
+		if (typeof candidate === "string") {
+			if (Buffer.byteLength(candidate) > MAX_DESCRIPTOR_BYTES || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/u.test(candidate)) {
+				throw new Error("production effect recovery descriptor contains unsafe text");
+			}
+			return candidate;
+		}
+		if (typeof candidate === "object" && candidate !== null && nodeTypes.isProxy(candidate)) {
+			throw new Error("production effect recovery descriptor cannot be a proxy");
+		}
+		if (Array.isArray(candidate)) {
+			const output: unknown[] = [];
+			for (let index = 0; index < candidate.length; index += 1) {
+				const descriptor = Object.getOwnPropertyDescriptor(candidate, index);
+				if (!descriptor || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+					throw new Error("production effect recovery descriptor arrays must be dense data");
+				}
+				output.push(visit(descriptor.value, depth + 1));
+			}
+			return output;
+		}
+		if (typeof candidate !== "object" || Object.getPrototypeOf(candidate) !== Object.prototype) {
+			throw new Error("production effect recovery descriptor must contain only plain data");
+		}
+		const output: Record<string, unknown> = {};
+		for (const key of Object.keys(candidate as Record<string, unknown>).sort()) {
+			if (/^(?:token|secret|password|credentials?|authorization|cookie|api_?key|private_?key)$/iu.test(key)) {
+				throw new Error("production effect recovery descriptor contains a secret-shaped field");
+			}
+			const descriptor = Object.getOwnPropertyDescriptor(candidate, key);
+			if (!descriptor || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+				throw new Error("production effect recovery descriptor objects must contain only data fields");
+			}
+			if (descriptor.value !== undefined) output[key] = visit(descriptor.value, depth + 1);
+		}
+		return output;
+	};
+	const result = visit(value, 0);
+	if (Buffer.byteLength(JSON.stringify(result)) > MAX_DESCRIPTOR_BYTES) {
+		throw new Error("production effect recovery descriptor exceeds its byte bound");
+	}
+	return result;
+}
+
+function descriptorDigest(value: unknown): string {
+	return createHash("sha256").update(JSON.stringify(canonicalRecoveryDescriptor(value))).digest("hex");
+}
+
 function kind(value: unknown): ProductionEffectKind {
 	const kinds: ProductionEffectKind[] = [
 		"workspace_claim", "agent_implementation", "agent_correction", "shell_verification", "git_commit", "git_push",
@@ -106,7 +170,7 @@ function validateIntent(value: unknown): ProductionEffectIntent {
 	const candidate = exact(
 		value,
 		["key", "kind", "runId", "generation", "intentDigest"],
-		["childId"],
+		["childId", "recoveryDescriptor"],
 		"production effect intent",
 	);
 	const coordinates = canonicalIntent({
@@ -118,14 +182,20 @@ function validateIntent(value: unknown): ProductionEffectIntent {
 	});
 	const key = digest(candidate.key, "effect key");
 	if (key !== productionEffectKey(coordinates)) throw new Error("effect key conflicts with its exact intent");
-	return { key, ...coordinates };
+	const recoveryDescriptor = candidate.recoveryDescriptor === undefined
+		? undefined
+		: canonicalRecoveryDescriptor(candidate.recoveryDescriptor);
+	if (recoveryDescriptor !== undefined && descriptorDigest(recoveryDescriptor) !== coordinates.intentDigest) {
+		throw new Error("production effect recovery descriptor conflicts with its intent digest");
+	}
+	return { key, ...coordinates, ...(recoveryDescriptor === undefined ? {} : { recoveryDescriptor }) };
 }
 
 export function validateProductionEffectRecord(value: unknown): ProductionEffectRecord {
 	const candidate = exact(
 		value,
 		["schemaVersion", "key", "kind", "phase", "runId", "generation", "intentDigest", "preparedAt"],
-		["childId", "observedAt", "appliedAt", "resultDigest"],
+		["childId", "recoveryDescriptor", "observedAt", "appliedAt", "resultDigest"],
 		"production effect record",
 	);
 	if (candidate.schemaVersion !== 1) throw new Error("unsupported production effect schema");
@@ -139,6 +209,7 @@ export function validateProductionEffectRecord(value: unknown): ProductionEffect
 		generation: candidate.generation,
 		...(candidate.childId === undefined ? {} : { childId: candidate.childId }),
 		intentDigest: candidate.intentDigest,
+		...(candidate.recoveryDescriptor === undefined ? {} : { recoveryDescriptor: candidate.recoveryDescriptor }),
 	});
 	const preparedAt = timestamp(candidate.preparedAt, "effect preparation time");
 	const observedAt = candidate.observedAt === undefined ? undefined : timestamp(candidate.observedAt, "effect observation time");
@@ -343,8 +414,9 @@ export class ProductionEffectJournal implements ProductionEffectJournalPort {
 			}
 			const existing = records.find((record) => record.key === intent.key);
 			if (existing) {
-				const identity = ({ key, kind: effectKind, runId, generation, childId, intentDigest }: ProductionEffectRecord) =>
-					({ key, kind: effectKind, runId, generation, ...(childId === undefined ? {} : { childId }), intentDigest });
+				const identity = ({ key, kind: effectKind, runId, generation, childId, intentDigest, recoveryDescriptor }: ProductionEffectRecord) =>
+					({ key, kind: effectKind, runId, generation, ...(childId === undefined ? {} : { childId }), intentDigest,
+						...(recoveryDescriptor === undefined ? {} : { recoveryDescriptor }) });
 				if (JSON.stringify(identity(existing)) !== JSON.stringify(intent)) {
 					throw new Error("production effect key conflicts with a different exact intent");
 				}

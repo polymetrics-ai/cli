@@ -94,6 +94,13 @@ export class ProductionRecoveryBarrier {
 				if (!record || record.phase === "applied") continue;
 				assertFence(record, fence);
 				if (record.phase === "prepared") {
+					if (record.recoveryDescriptor === undefined) {
+						throw new ProductionLifecycleError(
+							"terminal",
+							"prepared production effect lacks durable recovery coordinates",
+							["recovery_descriptor_missing"],
+						);
+					}
 					const observed = await this.#recovery.observe(structuredClone(record), signal);
 					throwIfCancelled(signal);
 					record = await this.#journal.observe(

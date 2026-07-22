@@ -39,6 +39,11 @@ export interface ProductionEffectRecord {
 	generation: number;
 	childId?: string;
 	intentDigest: string;
+	/**
+	 * Bounded, secret-free canonical coordinates used by the recovery authority to
+	 * re-observe an uncertain external effect after a fresh-process restart.
+	 */
+	recoveryDescriptor?: unknown;
 	preparedAt: string;
 	observedAt?: string;
 	appliedAt?: string;
