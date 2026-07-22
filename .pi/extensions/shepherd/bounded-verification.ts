@@ -1,6 +1,7 @@
-import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
+import { spawn, type ChildProcessByStdio } from "node:child_process";
 import { lstatSync, realpathSync, statSync } from "node:fs";
 import { isAbsolute, relative, resolve, sep } from "node:path";
+import type { Readable } from "node:stream";
 
 import type { ProductionVerificationCommand } from "./autonomous-production-contract.ts";
 
@@ -98,7 +99,7 @@ export class BoundedVerificationRunner {
 		if (signal?.aborted) return failedBeforeSpawn(command.id, "aborted");
 		return new Promise<ProductionVerificationResult>((resolveResult) => {
 			const startedAt = Date.now();
-			let child: ChildProcessWithoutNullStreams;
+				let child: ChildProcessByStdio<null, Readable, Readable>;
 			try {
 				child = spawn(executable, [...command.args], {
 					cwd,
