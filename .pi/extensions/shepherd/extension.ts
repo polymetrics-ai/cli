@@ -1,4 +1,5 @@
 import { parseShepherdCommand, ShepherdArgumentError, type ShepherdCommand } from "./arguments.ts";
+import type { ProductionAutonomousState } from "./autonomous-production-state.ts";
 import type { AutonomousShepherdRunState } from "./autonomous-state.ts";
 import type { ShepherdRunState } from "./domain.ts";
 import {
@@ -48,14 +49,15 @@ export interface ShepherdControllerPort {
 }
 
 export interface AutonomousShepherdControllerPort {
-	status(issue: number): Promise<AutonomousShepherdRunState | undefined>;
-	start(command: Extract<ShepherdCommand, { action: "start" }>): Promise<AutonomousShepherdRunState>;
-	resume(command: Extract<ShepherdCommand, { action: "resume" }>): Promise<AutonomousShepherdRunState>;
-	stop(issue: number): Promise<AutonomousShepherdRunState>;
+	status(issue: number): Promise<AutonomousDisplayState | undefined>;
+	start(command: Extract<ShepherdCommand, { action: "start" }>): Promise<AutonomousDisplayState>;
+	resume(command: Extract<ShepherdCommand, { action: "resume" }>): Promise<AutonomousDisplayState>;
+	stop(issue: number): Promise<AutonomousDisplayState>;
 	shutdown(): Promise<void>;
 }
 
-type DisplayState = ShepherdRunState | AutonomousShepherdRunState;
+type AutonomousDisplayState = AutonomousShepherdRunState | ProductionAutonomousState;
+type DisplayState = ShepherdRunState | AutonomousDisplayState;
 type ControllerEntry = ShepherdControllerPort | AutonomousShepherdControllerPort;
 
 interface LaunchSetup {
@@ -109,8 +111,33 @@ function isAutonomousState(state: DisplayState): state is AutonomousShepherdRunS
 	return "kind" in state && state.kind === "autonomous";
 }
 
+function isProductionAutonomousState(state: DisplayState): state is ProductionAutonomousState {
+	return "kind" in state && state.kind === "production_autonomous";
+}
+
 function renderState(state: DisplayState | undefined): string {
 	if (!state) return "No persisted Shepherd run exists for this issue.";
+	if (isProductionAutonomousState(state)) {
+		const lines = [
+			`Issue #${state.parentIssue}`,
+			`run=${state.runId} generation=${state.generation} status=${state.status} stage=${state.stage}`,
+		];
+		for (const child of state.children) {
+			lines.push(
+				`${child.id}: ${child.status}/${child.stage} attempts=${child.attempts}/${child.maxAttempts}`
+				+ ` corrections=${child.corrections}/${child.maxCorrections}`,
+			);
+		}
+		if (state.idleReason) lines.push(`idle_reason=${state.idleReason}`);
+		if (state.childGate) lines.push(`child_gate=${state.childGate.childId}:${state.childGate.status}`);
+		if (state.humanGate) {
+			lines.push(
+				`human_gate=parent_merge:${state.humanGate.status}`
+				+ ` pr=#${state.humanGate.pullRequest} head=${state.humanGate.head.slice(0, 12)}`,
+			);
+		}
+		return lines.join("\n");
+	}
 	if (isAutonomousState(state)) {
 		const lines = [
 			`Issue #${state.issue}${state.pr ? ` / PR #${state.pr}` : ""}`,

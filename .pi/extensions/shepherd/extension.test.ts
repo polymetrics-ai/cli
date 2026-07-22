@@ -128,6 +128,75 @@ test("routes autonomous control separately from the retained read-only canary an
 	assert.doesNotMatch(h.notifications.find((entry) => /Commands:/.test(entry.message))?.message ?? "", /merge-main/);
 });
 
+test("renders durable production scheduler, budget, and exact parent-gate status", async () => {
+	const h = harness();
+	const productionState = {
+		schemaVersion: 1,
+		kind: "production_autonomous",
+		parentIssue: 479,
+		repository: "owner/repo",
+		planId: "production-plan",
+		planDigest: "d".repeat(64),
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
+		runId: "run-production",
+		generation: 2,
+		revision: 9,
+		maxConcurrency: 2,
+		timeoutMs: 900_000,
+		status: "waiting_human",
+		stage: "human_decision",
+		createdAt: "2026-07-22T08:00:00.000Z",
+		updatedAt: "2026-07-22T08:01:00.000Z",
+		idleReason: "capacity_exhausted",
+		humanGate: {
+			repository: "owner/repo",
+			pullRequest: 438,
+			generation: 2,
+			head: "a".repeat(40),
+			requestId: "parent-gate-479-2",
+			status: "pending",
+		},
+		children: [{
+			id: "lane-a",
+			issue: 501,
+			slug: "lane-a",
+			specDigest: "e".repeat(64),
+			dependsOn: [],
+			writeScopes: ["owned/a"],
+			maxAttempts: 2,
+			maxCorrections: 1,
+			attempts: 1,
+			authorizedAttempts: 0,
+			corrections: 0,
+			status: "succeeded",
+			stage: "succeeded",
+		}],
+	};
+	h.register(
+		() => ({
+			async status() { return undefined; },
+			async start(command) { return state(command.issue); },
+			async stop(issue) { return state(issue, "stopped"); },
+			async shutdown() {},
+		}),
+		undefined,
+		() => ({
+			async status() { return productionState; },
+			async start() { return productionState; },
+			async resume() { return productionState; },
+			async stop() { return productionState; },
+			async shutdown() {},
+		}),
+	);
+	await h.command.handler("status --issue 479", h.context);
+	const rendered = h.notifications.at(-1).message;
+	assert.match(rendered, /status=waiting_human stage=human_decision/);
+	assert.match(rendered, /lane-a: succeeded\/succeeded attempts=1\/2 corrections=0\/1/);
+	assert.match(rendered, /idle_reason=capacity_exhausted/);
+	assert.match(rendered, /human_gate=parent_merge:pending pr=#438 head=aaaaaaaaaaaa/);
+});
+
 test("status follows an active canary instead of stale autonomous state for the same issue", async () => {
 	const h = harness();
 	const calls = [];
