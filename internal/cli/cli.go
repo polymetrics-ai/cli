@@ -657,8 +657,11 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 		for _, flag := range surface.GlobalFlags {
 			declared[flag.Name] = true
 		}
+		actionFlags := map[string]bool{
+			"plan": true, "preview": true, "approve": true, "confirm": true,
+		}
 		for name := range flags.values {
-			if name != "_" && !declared[name] {
+			if name != "_" && (!declared[name] || actionFlags[name]) {
 				return false
 			}
 		}

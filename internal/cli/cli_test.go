@@ -77,11 +77,18 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
-func TestDynamicConnectorUnknownFlagWithoutActionIsUsageError(t *testing.T) {
-	var stdout, stderr bytes.Buffer
-	code := cli.Run([]string{"gong", "--bogus"}, &stdout, &stderr)
-	if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
-		t.Fatalf("Run(gong --bogus) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) {
+	for _, args := range [][]string{
+		{"gong", "--bogus"},
+		{"gong", "--plan", "rplan_fixture", "--preview"},
+	} {
+		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
+				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+			}
+		})
 	}
 }
 
