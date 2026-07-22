@@ -16,7 +16,11 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/private/tmp/shepherd-479-production-matrix`
 
-Evidence head: `a594be98b9722a8d183584a27832cd88af8702f9`
+CI correction head: `a594be98b9722a8d183584a27832cd88af8702f9`
+
+Parent reconciliation head: `45c27b9d`
+
+Parent reconciliation merge head: `766709b3`
 
 ## Scope Delivered
 
@@ -36,8 +40,8 @@ Evidence head: `a594be98b9722a8d183584a27832cd88af8702f9`
 - `.github/scripts/verify-shepherd-pi-runtime.mjs`: exact shrinkwrap/runtime-family assertion.
 - `.planning/phases/479-shepherd-production-matrix/**`: GSD, TDD, verification, review, and
   handoff evidence.
-- `.planning/phases/471-pi-agent-session-shepherd/{PARENT-ROADMAP,SUMMARY,TDD-LEDGER,VERIFICATION}.md`:
-  parent-owned updates awaiting explicit parent-orchestrator adoption.
+- `.planning/phases/471-pi-agent-session-shepherd/**`: parent-owned reconciliation adopted at
+  `45c27b9d` and merged into the child at `766709b3`.
 
 ## GSD / TDD / Skill Evidence
 
@@ -76,7 +80,7 @@ node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 # strict no-emit TypeScript for all 49 non-test Shepherd modules
 # pinned Pi 0.80.6 offline RPC get_commands
 scripts/verify-gsd-workflow origin/main
-git diff --check 69a1a9884325d227652afdc8632bbce8c019ed1b..HEAD
+git diff --check 45c27b9d...HEAD
 ```
 
 Result: proportional static gates pass. Complete local inventory is 1,712 total / 1,647 pass / 64
@@ -85,22 +89,23 @@ managed-sandbox `/bin/ps` `spawn EPERM` blocked / 1 skip. Remote CI remains requ
 ## Automated Review
 
 - Requested internal review: Codex `gpt-5.6-sol` / xhigh at `ca3f6c6f`.
-- Internal result: BLOCKED; exact Pi-family assertion is corrected at `a594be98`; parent
-  publication remains external.
+- Internal result: BLOCKED; exact Pi-family assertion is corrected at `a594be98`; the local
+  parent range is reconciled at `45c27b9d`/`766709b3`; authoritative publication remains
+  external.
 - Primary schema route: blocked pending `claude_auto` or an allowed recorded fallback.
 - Fallback route: human.
 - Coverage route: blocked.
 - Coverage status: blocked.
 - Review URL: pending child PR.
-- Disposition summary: internal finding 1 corrected; finding 2 requires parent-first publication
-  and authoritative remote-range verification.
+- Disposition summary: internal finding 1 corrected; finding 2 is locally reconciled and now
+  requires parent-first publication plus authoritative remote-range verification.
 - Unresolved findings: remote parent base, remote CI, and policy review coverage.
 
 ## Merge Recommendation
 
 - Recommended state: blocked.
-- Reason: local implementation/evidence is ready for final exact-head follow-up, but the parent
-  branch is 175 commits ahead of cached origin and GitHub DNS/auth are unavailable.
+- Reason: local implementation/evidence is ready for final exact-head follow-up, but the reconciled
+  parent branch is 176 commits ahead of cached origin and GitHub DNS/auth are unavailable.
 - Human gates: parent PR #472 merge to `main`, auth changes, new dependencies, destructive actions,
   and quality-gate reductions.
 - Follow-up issues: #480 after #479 parent integration; #481 after #480.

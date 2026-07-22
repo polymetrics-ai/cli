@@ -152,9 +152,11 @@ reopening implementation hardening:
 16. [x] Obtain one bounded Codex 5.6 Sol xhigh review at `ca3f6c6f`. It confirmed the local
     64-failure class and returned two release blockers: assert the complete shrinkwrap-pinned Pi
     family in CI, and publish/reconcile the parent base before opening the child PR.
-17. [ ] Add a deterministic post-install Pi-family assertion, reconcile the parent-owned ledger and
-    child handoff/PR artifacts, then run an exact-head review follow-up.
-18. [ ] Push the reconciled parent before the child and open the child PR against
+17. [x] Add a deterministic post-install Pi-family assertion, reconcile the parent-owned ledger at
+    `45c27b9d`, and merge that reconciliation into the child at `766709b3` without rewriting
+    history.
+18. [ ] Run one bounded exact-head review follow-up over the frozen handoff commit.
+19. [ ] Push the reconciled parent before the child and open the child PR against
     `feat/471-pi-agent-session-shepherd` when GitHub DNS/auth permit.
 
 This cycle uses `local_critical_path`: the files are a tightly coupled issue-#479 CI/evidence slice,
@@ -164,9 +166,10 @@ still did not expose `programming-loop`; the manual-GSD fallback therefore remai
 
 At implementation checkpoint `307ea409648e2f293c8a48cc957ffc312cc44542`, workflow structure,
 strict production TypeScript, pinned offline Pi registration, GSD/TDD evidence validation, and
-branch-range/worktree diff hygiene pass. The complete local inventory remains 1,647 pass, 64 blocked
-at the managed sandbox's `/bin/ps` spawn boundary, and one skipped; the workflow's first remote run
-is therefore still a required external GREEN gate.
+branch-range/worktree diff hygiene pass. Exact Pi-family verification is `a594be98`; parent
+reconciliation is `45c27b9d` and its child merge is `766709b3`. The complete local inventory
+remains 1,647 pass, 64 blocked at the managed sandbox's `/bin/ps` spawn boundary, and one skipped;
+the workflow's first remote run is therefore still a required external GREEN gate.
 
 ## Proportional verification commands
 

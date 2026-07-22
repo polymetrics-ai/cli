@@ -59,9 +59,11 @@ passes offline RPC. `docs/cli/**`, website docs, and generated `pm` manuals are 
 ## Review / Deferred Gates
 
 - Internal Codex 5.6 Sol xhigh review at `ca3f6c6f` found two blockers. The deterministic Pi-family
-  assertion is corrected; the parent-first publication/range blocker remains external.
+  assertion is corrected at `a594be98`; the parent ledger is reconciled at `45c27b9d` and merged
+  into the child at `766709b3`. Authoritative parent-first publication/range verification remains
+  external.
 - Repository policy still requires `claude_auto` coverage or an allowed recorded fallback. Codex
   review is retained as an additional internal exact-head gate and is not mislabeled as Claude.
-- Before opening this PR: publish/fetch the parent branch, verify its authoritative head, then push
-  this child and confirm the GitHub range.
+- Before opening this PR: publish/fetch parent `45c27b9d`, verify its authoritative head, then
+  push this child and confirm the GitHub range.
 - Before parent integration: remote complete-suite CI and policy review coverage must be clean.

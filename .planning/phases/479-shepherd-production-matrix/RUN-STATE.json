@@ -6,13 +6,16 @@
   "parentPr": 472,
   "branch": "feat/479-shepherd-production-matrix",
   "baseBranch": "feat/471-pi-agent-session-shepherd",
-  "artifactHead": "a594be98b9722a8d183584a27832cd88af8702f9",
+  "artifactHead": "766709b3",
+  "ciCorrectionHead": "a594be98b9722a8d183584a27832cd88af8702f9",
+  "parentReconciliationHead": "45c27b9d",
+  "parentReconciliationMergeHead": "766709b3",
   "worker": "codex-gpt-5.6-sol",
   "workerDirectory": "/private/tmp/shepherd-479-production-matrix",
   "subPrUrl": null,
-  "status": "exact_head_review_correction_in_progress",
-  "checkpoint": "review_blockers_recorded",
-  "reason": "Pi-family determinism is corrected locally; parent-first publication, remote CI, and policy review coverage remain blocked.",
+  "status": "local_ready_remote_publication_blocked",
+  "checkpoint": "parent_reconciliation_merged_pin_corrected",
+  "reason": "Pi-family determinism and local parent reconciliation are complete; authoritative parent publication, exact-head follow-up, remote CI, and policy review coverage remain blocked.",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
   "matrix": {
@@ -33,7 +36,7 @@
     },
     "strictProductionTypeScript": "pass",
     "offlinePiRpc": "pass",
-    "reviewDisposition": "blocked_correction_in_progress",
+    "reviewDisposition": "exact_head_followup_pending",
     "ciCompleteInventory": "configured_remote_run_pending"
   },
   "manualGsdFallback": true,
@@ -55,6 +58,11 @@
       "reason": "Parent orchestrator audited topology, parent-owned scope, review policy, and publication order without mutation."
     },
     {
+      "cycle": "parent-reconciliation",
+      "decision": "local_critical_path",
+      "reason": "The parent ledger was reconciled at 45c27b9d and merged into the child at 766709b3 without rewriting the child history."
+    },
+    {
       "cycle": "remote-publication",
       "decision": "not_spawned_human_gate",
       "reason": "GitHub DNS is unavailable and the configured gh token is invalid; no auth mutation was authorized."
@@ -69,11 +77,11 @@
   "automatedReview": {
     "primary_route": "blocked",
     "status": "blocked",
-    "head_sha": "a594be98b9722a8d183584a27832cd88af8702f9",
+    "head_sha": "ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
     "reviewed_range": "79e51f5629a93d212c5a5e8f578475cc02481a1c..ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
     "coverage_route": "blocked",
     "fallback_route": "human",
-    "disposition_summary": "Codex xhigh internal review finding 1 corrected; parent-first publication and policy coverage remain blocked.",
+    "disposition_summary": "Codex xhigh finding 1 is corrected at a594be98. The local half of finding 2 is reconciled at parent 45c27b9d and child merge 766709b3; authoritative parent-first publication, exact-head follow-up, and policy coverage remain.",
     "disposition_url": null,
     "internal_codex": {
       "model": "openai-codex/gpt-5.6-sol",
@@ -90,5 +98,5 @@
     "parent_orchestrator_child_integration",
     "human_parent_pr_merge"
   ],
-  "updatedAt": "2026-07-23T02:30:00+05:30"
+  "updatedAt": "2026-07-23T02:36:09+05:30"
 }

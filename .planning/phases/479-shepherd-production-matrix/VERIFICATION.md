@@ -7,8 +7,10 @@
 The original 17-row implementation was frozen at `9169241531dc0f88710bcfc637a272dd379dec99`.
 The 2026-07-22 release-blocker correction is frozen at
 `78708cbef64b33e54ed32078bf2a107d81126236`. The 2026-07-23 merge-readiness implementation
-checkpoint is `307ea409648e2f293c8a48cc957ffc312cc44542`; it adds CI and evidence only and does not
-change production code. A bounded independent audit returned **PASS** for the four requested release
+checkpoint is `307ea409648e2f293c8a48cc957ffc312cc44542`; deterministic Pi-family verification is
+`a594be98`; parent reconciliation is `45c27b9d` and its child merge is `766709b3`. These
+checkpoints add CI and evidence only and do not change production code. A bounded independent audit
+returned **PASS** for the four requested release
 paths after one correction pass and targeted cross-layer closure.
 
 The historical GSD/TDD process gap remains recorded separately: the original implementation did
@@ -46,7 +48,10 @@ remain parent-head gates and do not substitute for Shepherd verification.
 - Local exact-head checks pass for workflow structure, strict TypeScript, offline Pi registration,
   GSD/TDD evidence, and diff hygiene. The full local suite reproduces only the known managed-sandbox
   `/bin/ps` block.
-- One bounded Codex 5.6 Sol xhigh exact-head review and the first remote CI result remain pending.
+- Codex 5.6 Sol xhigh review at `ca3f6c6f` confirmed the local failure classification and found two
+  release blockers. The exact Pi-family blocker is closed at `a594be98`; the local parent-range
+  reconciliation is closed at `45c27b9d`/`766709b3`. Exact-head follow-up, authoritative
+  parent-first publication, policy review coverage, and the first remote CI result remain pending.
 
 ## 17-row production matrix
 
@@ -109,12 +114,15 @@ real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `T
 
 ## Remaining external gates
 
-1. Push the non-default child branch and run the new complete-suite CI gate where
+1. Publish/fetch parent `45c27b9d` first, verify the authoritative remote head, then push the
+   non-default child branch and run the new complete-suite CI gate where
    process-identity/Git/worktree commands are permitted; the managed Codex sandbox blocks those 64
    tests at `spawn EPERM` before their assertions execute.
-2. Obtain and record one bounded Codex 5.6 Sol xhigh review of the exact child head.
-3. Live GitHub mutation was not run because no designated sandbox repository was authorized. The
+2. Obtain one bounded Codex 5.6 Sol xhigh follow-up review of the exact child handoff head.
+3. Obtain repository-policy `claude_auto` coverage or an allowed recorded fallback on the
+   authoritative PR range.
+4. Live GitHub mutation was not run because no designated sandbox repository was authorized. The
    typed transport and bare-remote CAS fixtures provide local evidence; a live sandbox smoke remains
    optional before parent integration.
-4. No parent/default-branch merge was performed. Parent integration stays
+5. No parent/default-branch merge was performed. Parent integration stays
    behind the repository's human gate.
