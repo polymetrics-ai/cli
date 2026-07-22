@@ -285,3 +285,147 @@ test("exhausted retries wait for an exact child decision and authorized resume c
 	assert.equal(pipeline.calls.filter((entry) => entry === "review:alpha").length, 1);
 	void base;
 });
+
+test("stop cancels and joins accepted work at every external child lifecycle stage", async (t) => {
+	for (const stage of ["workspace", "implementation", "verification", "publication", "review", "integration"] as const) {
+		await t.test(stage, async () => {
+			const root = await mkdtemp(join(tmpdir(), `shepherd-production-stop-${stage}-`));
+			t.after(() => rm(root, { recursive: true, force: true }));
+			const manifest = plan([spec("alpha", 501, [], "owned/alpha")]);
+			const entered = deferred<void>();
+			const release = deferred<ProductionStageCheckpoint>();
+			const pipeline = greenPipeline();
+			const block = async (context: ProductionChildPipelineContext) => {
+				pipeline.calls.push(`${stage}:${context.child.id}`);
+				entered.resolve();
+				return release.promise;
+			};
+			switch (stage) {
+				case "workspace": pipeline.workspace = block; break;
+				case "implementation": pipeline.implement = block; break;
+				case "verification": pipeline.verify = block; break;
+				case "publication": pipeline.publish = block; break;
+				case "review": pipeline.review = block; break;
+				case "integration": pipeline.integrate = block; break;
+			}
+			pipeline.abort = async (runId) => {
+				pipeline.calls.push(`abort:${runId}`);
+				release.resolve(checkpoint("cancelled stage settled"));
+			};
+			const controller = new ProductionShepherdController({
+				stateStore: new ProductionFileStateStore(root),
+				intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+				recovery: { async open() { return { reconciled: 0 }; } },
+				pipeline,
+				finalizer: { async finalize() { throw new Error("stopped run must not finalize"); }, async close() {} },
+				parentGate: { async request() { throw new Error("stopped run must not request parent gate"); }, async observe() { return "pending" as const; }, async close() {} },
+				newRunId: () => `run-stop-${stage}`,
+			});
+			const running = controller.start(command("start"));
+			await entered.promise;
+			const stopped = await controller.stop(479);
+			assert.deepEqual(await running, stopped);
+			assert.equal(stopped.status, "stopped");
+			assert.equal(stopped.children[0].status, "cancelled");
+			assert.equal(stopped.children[0].resumeStage, stage);
+			const abortIndex = pipeline.calls.indexOf(`abort:run-stop-${stage}`);
+			const joinIndex = pipeline.calls.indexOf(`join:run-stop-${stage}`);
+			assert.ok(abortIndex >= 0 && joinIndex > abortIndex, "accepted work must join after abort");
+		});
+	}
+});
+
+test("one child failure aborts and joins its running sibling before durable failure", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-sibling-abort-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const manifest = plan([
+		spec("alpha", 501, [], "owned/alpha"),
+		spec("beta", 502, [], "owned/beta"),
+	]);
+	const betaEntered = deferred<void>();
+	const betaRelease = deferred<ProductionStageCheckpoint>();
+	const pipeline = greenPipeline({
+		async implement(context) {
+			pipeline.calls.push(`implement:${context.child.id}`);
+			if (context.child.id === "alpha") {
+				await betaEntered.promise;
+				throw new ProductionLifecycleError("terminal", "bounded terminal failure");
+			}
+			betaEntered.resolve();
+			return betaRelease.promise;
+		},
+		async abort(runId) {
+			pipeline.calls.push(`abort:${runId}`);
+			betaRelease.resolve(checkpoint("sibling abort settled"));
+		},
+	});
+	const controller = new ProductionShepherdController({
+		stateStore: new ProductionFileStateStore(root),
+		intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { throw new Error("failed siblings must not finalize"); }, async close() {} },
+		parentGate: { async request() { throw new Error("failed siblings must not request a gate"); }, async observe() { return "pending" as const; }, async close() {} },
+		newRunId: () => "run-sibling-abort",
+	});
+	const state = await controller.start(command("start"));
+	assert.equal(state.status, "failed");
+	assert.equal(state.terminalBlocker, "production child lifecycle failed closed");
+	assert.ok(pipeline.calls.includes("abort:run-sibling-abort"));
+	assert.ok(pipeline.calls.indexOf("join:run-sibling-abort") > pipeline.calls.indexOf("abort:run-sibling-abort"));
+	assert.notEqual(state.children.find((child) => child.id === "beta")?.status, "running");
+});
+
+test("resume rejects changed plan identity and run policy before recovery or mutation", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-resume-binding-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const original = plan([spec("alpha", 501, [], "owned/alpha")]);
+	let currentPlan = original;
+	const entered = deferred<void>();
+	const release = deferred<ProductionStageCheckpoint>();
+	const pipeline = greenPipeline({
+		async workspace(context) {
+			pipeline.calls.push(`workspace:${context.child.id}`);
+			entered.resolve();
+			return release.promise;
+		},
+		async abort(runId) {
+			pipeline.calls.push(`abort:${runId}`);
+			release.resolve(checkpoint("cancelled"));
+		},
+	});
+	let recoveries = 0;
+	let runNumber = 0;
+	const options = {
+		stateStore: new ProductionFileStateStore(root),
+		intake: { async load() { return { plan: currentPlan, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { recoveries += 1; return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { throw new Error("stopped run must not finalize"); }, async close() {} },
+		parentGate: { async request() { throw new Error("stopped run must not request a gate"); }, async observe() { return "pending" as const; }, async close() {} },
+		newRunId: () => `run-binding-${++runNumber}`,
+	};
+	const firstController = new ProductionShepherdController(options);
+	const running = firstController.start(command("start"));
+	await entered.promise;
+	await firstController.stop(479);
+	await running;
+	assert.equal(recoveries, 1);
+
+	const changed = structuredClone(original);
+	changed.children[0].writeScopes = ["owned/escaped"];
+	currentPlan = changed;
+	await assert.rejects(
+		new ProductionShepherdController(options).resume(command("resume")),
+		/plan binding changed/i,
+	);
+	assert.equal(recoveries, 1);
+	assert.equal(pipeline.calls.filter((entry) => entry.startsWith("workspace:")).length, 1);
+
+	currentPlan = original;
+	await assert.rejects(
+		new ProductionShepherdController(options).resume({ ...command("resume"), timeoutMs: 60_000 }),
+		/resume concurrency\/timeout differs/i,
+	);
+	assert.equal(pipeline.calls.filter((entry) => entry.startsWith("workspace:")).length, 1);
+});
