@@ -1,8 +1,9 @@
 # Summary: #478
 
-Status: Cycle 8 correction planned against frozen reviewed candidate `b90037df`; two independent
-Cycle 7 reports are blocked and consolidated into one seven-family TDD cycle. No Cycle 8 test or
-production edit has occurred. Earlier delivery status below is retained as historical context.
+Status: Cycle 8 correction is locally verified at current candidate `HEAD`. Frozen reviewed
+candidate `b90037df` remains historical input from two blocked independent Cycle 7 reports; fresh
+exact-head review remains parent-owned. Earlier delivery status below is retained as historical
+context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -158,8 +159,21 @@ only restore draft; the controller aborts each response wait, ignores superseded
 and stop ownership, and releases quarantine only on the matching fenced durable draft result.
 Durable backing—not `WeakMap` or adapter identity—owns cross-instance truth.
 
-Required skills and contracts are loaded. GSD doctor passes while the adapter command remains
-unavailable, so manual GSD fallback is recorded. One read-only mapping sidecar is active; the
-isolated worker owns PLAN -> comprehensive test-only RED -> coherent GREEN -> bounded REFACTOR ->
-exact evidence. Scope remains the exact 21 paths. No Go, connector, parent/main worktree, #475,
-network/GitHub, push, reviewer, integration, or merge action is authorized.
+PLAN `bccee8e6`, comprehensive five-test-file RED `851bb3bf`, coherent GREEN `013bdc8b`, and
+bounded REFACTOR `26a7d476` complete that architecture. RED records 374 total / 314 pass / 59
+intended failures / 1 skip with four intended strict diagnostics and all production blobs frozen.
+After REFACTOR, targeted Cycle 8 is 46/46 and the complete focused route is 374 total / 373 pass /
+0 fail / 1 intentional live-sandbox skip. Both Cycle 7 reports were re-read completely after
+REFACTOR and every family maps to named passing evidence.
+
+Strict TypeScript passes for all five owned production/test pairs and all 20 production modules.
+Pinned Pi 0.80.6 offline RPC discovers `pm-shepherd`. Serialized Shepherd is an environmental
+failure at 594 total / 528 pass / 65 unchanged unrelated sandbox `spawn EPERM` failures / 1 skip;
+all Cycle 8 and focused tests pass. Immutable-base and reviewed-candidate ancestry, exact merge
+base, full diff, exact 21-path scope, three JSON parses, synthetic-marker confinement, and clean
+pre-evidence status pass.
+
+Required skills/contracts and `manual_gsd_fallback` are recorded. The evidence candidate remains
+non-self-referential `HEAD`; its exact SHA is reported after commit. No Go, connector, parent/main
+worktree, #475, network/GitHub, push, reviewer, integration, or merge action ran. Parent owns
+publication, two fresh exact-head reviews, dispositions, integration, and every human gate.

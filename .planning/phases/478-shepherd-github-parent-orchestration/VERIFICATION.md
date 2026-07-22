@@ -1,9 +1,8 @@
 # Verification: #478
 
-Status: Cycle 8 correction planned against frozen candidate
-`b90037df1fff38c755ebc8025579120d17031330`; both independent Cycle 7 reviews are blocked and
-consolidated into one artifact-first seven-family cycle. No Cycle 8 test or production edit has
-occurred.
+Status: Cycle 8 correction locally verified at current non-self-referential candidate `HEAD`.
+Frozen candidate `b90037df1fff38c755ebc8025579120d17031330` is historical blocked-review input;
+two fresh exact-head reviews remain parent-owned.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
 current Cycle 8 contract.
 
@@ -165,27 +164,44 @@ parent-owned exact-head reviews remain pending.
       `programming-loop` adapter command as `manual_gsd_fallback`.
 - [x] Consolidate all seven families into one 48-row RED matrix and freeze the durable rollback
       ownership/fencing contract before tests.
-- [ ] Commit artifact-only PLAN before every Cycle 8 test and production edit.
-- [ ] Commit one complete test-only RED with all five production blobs unchanged and retained
+- [x] Commit artifact-only PLAN before every Cycle 8 test and production edit.
+- [x] Commit one complete test-only RED with all five production blobs unchanged and retained
       Cycle 7 cases still green.
-- [ ] Make provider-neutral credential suffixes fail closed through all durable/outbound consumers,
+- [x] Make provider-neutral credential suffixes fail closed through all durable/outbound consumers,
       with only narrow exact safe-name exceptions after classification and no marker reflection.
-- [ ] Compile and execute the #479-shaped success/conflict/uncertain/rollback/stop/journal path with
+- [x] Compile and execute the #479-shaped success/conflict/uncertain/rollback/stop/journal path with
       exact production types, separate roles, and no `any`, casts, fake projection, or private seam.
-- [ ] Start durable recovery for immediate uncertain rejection as well as timeout/cancellation;
+- [x] Start durable recovery for immediate uncertain rejection as well as timeout/cancellation;
       ordinary read failure cannot prevent draft restoration, keyed exclusion, or truthful join.
-- [ ] Resume an exact consumed real-broker request after expiry and reject genuinely new expired
+- [x] Resume an exact consumed real-broker request after expiry and reject genuinely new expired
       request/decision events.
-- [ ] Enforce bounded rollback response waits, abort signals, durable ordered attempt fencing,
+- [x] Enforce bounded rollback response waits, abort signals, durable ordered attempt fencing,
       superseded-result isolation, exact draft observation, and eventual stop join.
-- [ ] Reconstruct controller, broker, journal, transport, and authority adapter instances from
+- [x] Reconstruct controller, broker, journal, transport, and authority adapter instances from
       serialized state over shared durable backing without `WeakMap`/object identity.
-- [ ] Send refreshed policy/ancestry/equivalent-clean freshness after commit revalidation while
+- [x] Send refreshed policy/ancestry/equivalent-clean freshness after commit revalidation while
       preserving original authorization, key, and intent.
-- [ ] Pass focused, strict owned/all-production TypeScript, pinned offline RPC,
+- [x] Pass focused, strict owned/all-production TypeScript, pinned offline RPC,
       base/ancestry/diff/exact-scope/JSON/marker/clean gates; classify serialized broad honestly.
-- [ ] Replay both reports after REFACTOR and freeze one exact clean evidence candidate. Parent owns
+- [x] Replay both reports after REFACTOR and freeze one exact clean evidence candidate. Parent owns
       fresh review, publication, integration, and all human gates.
+
+### Cycle 8 gate results
+
+| Gate | Result |
+| --- | --- |
+| Checkpoints | PLAN `bccee8e6cdbcb6e38419114f264222b1f5616f66`; RED `851bb3bfa3e23042211a8b37f3a97253cc6fedf5`; GREEN `013bdc8b264e1ce8808d4af2558e2ec40b85ee49`; REFACTOR `26a7d476bdfaa4e263196fb76f7f43b5a3ad799e`; evidence is current `HEAD` and exact SHA is reported after commit |
+| RED | 374 total; 314 pass; 59 intended fail; 1 intentional skip; strict reports only 4 intended missing-contract diagnostics; all 5 production blobs frozen |
+| Targeted Cycle 8 | pass; 46/46 orchestrator cases |
+| Focused five-file | pass; 374 total; 373 pass; 0 fail; 1 intentional live-sandbox skip; 11849 ms final evidence run |
+| Strict owned TypeScript | pass; 5 production modules plus 5 matching tests, TypeScript 5.9.3 |
+| Strict production TypeScript | pass; all 20 Shepherd production modules against pinned Pi 0.80.6 declarations in isolated `/tmp` resolver mirror |
+| Serialized Shepherd | environmental failure; 594 total; 528 pass; 65 unchanged unrelated managed-sandbox process-identity `spawn EPERM` failures; 1 intentional skip; every Cycle 8/focused assertion passes |
+| Offline extension discovery | pass; pinned Pi 0.80.6 RPC discovers `pm-shepherd` from explicit `index.ts` extension with offline startup and isolated agent settings |
+| Base/head/diff/scope/data | pass; immutable base and `b90037df` are ancestors; exact merge base `3addb1f4`; full-range `git diff --check`; exact 21 paths; 3 JSON parses; synthetic markers confined to tests; clean pre-evidence status |
+| Review replay | pass; both complete Cycle 7 reports re-read after REFACTOR and all 7 families mapped to passing evidence |
+| Prohibited/live actions | not run |
+| Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
 
 Prohibited: Go, connectors, `make`, runtime services, dependencies, parent/main worktrees, #475,
 network/live GitHub, push, self-review, reviewer dispatch, integration, or merge.

@@ -839,7 +839,7 @@ Production blobs frozen at candidate `b90037df` before RED are:
    authority. Harmless policy, ancestry, and equivalent-clean review refresh must be visible in
    that request while stable identity remains byte-equivalent.
 
-### Cycle 8 RED matrix (48 planned behavior rows)
+### Cycle 8 RED matrix (48 behavior rows)
 
 | Family | Rows | Required failing behavior before GREEN |
 | --- | ---: | --- |
@@ -875,7 +875,29 @@ Production blobs frozen at candidate `b90037df` before RED are:
       confirmed before edits.
 - [x] Required skills/contracts loaded; healthy adapter plus missing command records
       `manual_gsd_fallback`; one read-only contract mapper records `read_only_spawned`.
-- [ ] Artifact-only PLAN commit precedes all test and production edits.
-- [ ] One comprehensive test-only RED proves all 48 rows with frozen production.
-- [ ] One coherent GREEN/refactor passes retained and new contracts.
-- [ ] Exact evidence commit freezes a clean `HEAD`; two fresh reviews remain parent-owned.
+- [x] Artifact-only PLAN `bccee8e6cdbcb6e38419114f264222b1f5616f66` precedes all test and
+      production edits.
+- [x] Comprehensive test-only RED `851bb3bfa3e23042211a8b37f3a97253cc6fedf5` proves all 48 rows with
+      frozen production.
+- [x] Coherent GREEN `013bdc8b264e1ce8808d4af2558e2ec40b85ee49` and bounded REFACTOR
+      `26a7d476bdfaa4e263196fb76f7f43b5a3ad799e` pass retained and new contracts.
+- [x] Exact evidence uses the non-self-referential current candidate `HEAD`; its commit SHA is
+      reported externally after commit. Two fresh reviews remain parent-owned.
+
+### Cycle 8 local evidence
+
+- RED: 374 total, 314 pass, 59 intended failures, 1 intentional live-sandbox skip. Strict
+  TypeScript reported only four intended missing-contract diagnostics. All five production blob
+  IDs remained frozen.
+- GREEN/REFACTOR: 46/46 targeted Cycle 8 orchestrator cases and the complete focused five-file
+  route pass at 374 total / 373 pass / 0 fail / 1 intentional skip. Both complete Cycle 7 reports
+  were replayed after REFACTOR; all seven families map to named passing cases.
+- Strict TypeScript passes for the five owned production/test pairs and all 20 Shepherd production
+  modules against pinned Pi 0.80.6 declarations. Offline pinned Pi RPC discovers `pm-shepherd`
+  from the explicit `index.ts` extension.
+- Serialized Shepherd is honestly classified as an environmental failure: 594 total / 528 pass /
+  65 unchanged unrelated managed-sandbox process-identity `spawn EPERM` failures / 1 intentional
+  skip. Every Cycle 8 and focused assertion passes.
+- Immutable base and reviewed candidate ancestry, exact merge base, full-range diff check, exact
+  21-path ownership, three JSON parses, synthetic-marker confinement, and clean pre-evidence status
+  pass. No prohibited or external action ran.

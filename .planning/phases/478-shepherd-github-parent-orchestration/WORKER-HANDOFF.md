@@ -18,7 +18,8 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Frozen reviewed candidate: `b90037df1fff38c755ebc8025579120d17031330`
 
-Cycle 8 evidence head: pending; final exact SHA will be reported externally after commit
+Cycle 8 evidence head: current non-self-referential `HEAD`; final exact SHA is reported externally
+after commit
 
 ## Scope Delivered
 
@@ -98,14 +99,14 @@ serialized Shepherd 517 total / 451 pass / 65 unchanged unrelated sandbox `spawn
 - Coverage status: pending.
 - Review URL: pending.
 - Disposition summary: no review was started by this worker.
-- Unresolved findings: seven accepted Cycle 8 families are planned; exact-head independent coverage
-  remains required after correction.
+- Unresolved findings: none locally known across the seven accepted Cycle 8 families; exact-head
+  independent coverage remains required after correction.
 
 ## Merge Recommendation
 
-- Recommended state: `blocked_cycle_8_correction`.
-- Reason: both frozen-candidate reviews are blocked until the one-batch Cycle 8 correction and fresh
-  exact-head review complete.
+- Recommended state: `locally_verified_awaiting_exact_head_review`.
+- Reason: the one-batch Cycle 8 correction and local gates are complete; both frozen-candidate
+  reviews remain historical blockers until two fresh exact-head reviews cover current `HEAD`.
 - Human gates: parent ready, exact-head parent merge, and default-branch merge remain active.
 - Follow-up issues: #479 owns controller/session integration; this worker must not add it.
 
@@ -284,7 +285,7 @@ session-attestation contract and fixtures required to verify independent-review 
   controller/#479 implementation, reviewer/self-review, integration, or merge ran. Parent owns
   publication, two fresh exact-head reviews, dispositions, integration, and human gates.
 
-## Cycle 8 plan handoff
+## Cycle 8 plan handoff (historical checkpoint)
 
 - Frozen candidate `b90037df1fff38c755ebc8025579120d17031330`; immutable base
   `3addb1f48be1afe8b1e2b59b54247679d7293805`; exact 21 paths; clean start.
@@ -299,6 +300,32 @@ session-attestation contract and fixtures required to verify independent-review 
   `WeakMap`/adapter identity.
 - GSD doctor passes; missing adapter command records `manual_gsd_fallback`. Required skills and
   contracts loaded. One read-only explorer maps the contracts; worker owns the local critical path.
-- Next checkpoints: artifact-only PLAN commit; complete five-test-file RED with all five production
-  blobs frozen; coherent GREEN/refactor; focused/strict/offline/scope/data/serialized
-  classification; exact evidence. Parent owns publication, fresh reviews, integration, and gates.
+- Planned checkpoints, completed below: artifact-only PLAN commit; complete five-test-file RED with
+  all five production blobs frozen; coherent GREEN/refactor; focused/strict/offline/scope/data/
+  serialized classification; exact evidence. Parent owns publication, fresh reviews, integration,
+  and gates.
+
+## Cycle 8 completed local handoff
+
+- Checkpoints: PLAN `bccee8e6cdbcb6e38419114f264222b1f5616f66`; comprehensive five-test-file
+  RED `851bb3bfa3e23042211a8b37f3a97253cc6fedf5`; coherent GREEN
+  `013bdc8b264e1ce8808d4af2558e2ec40b85ee49`; bounded REFACTOR
+  `26a7d476bdfaa4e263196fb76f7f43b5a3ad799e`; evidence is current `HEAD` and its exact SHA is
+  reported after commit.
+- RED records 374 total / 314 pass / 59 intended failures / 1 skip and only four intended strict
+  diagnostics, with all five production blobs frozen. Targeted Cycle 8 is 46/46 after REFACTOR.
+- Focused five-file route: 374 total / 373 pass / 0 fail / 1 intentional live-sandbox skip. Strict
+  TypeScript passes for all five production/test pairs and all 20 production modules. Pinned Pi
+  0.80.6 offline RPC discovers `pm-shepherd` from the explicit extension.
+- Serialized Shepherd is environmental failure: 594 total / 528 pass / 65 unchanged unrelated
+  managed-sandbox `spawn EPERM` failures / 1 intentional skip. Every Cycle 8/focused assertion
+  passes; no broad-pass claim is made.
+- Both Cycle 7 reports were re-read completely after REFACTOR. Exact provider-neutral suffixes,
+  real-broker expiry replay, uncertain immediate rejection, fenced deadlines/supersession,
+  refreshed freshness, exact typed #479 recovery, and serialized cross-instance role
+  reconstruction all have named passing evidence.
+- Immutable base/reviewed-candidate ancestry, exact merge base, full-range diff check, exact
+  21-path ownership, three JSON parses, synthetic-marker confinement, and clean pre-evidence status
+  pass. No Go, connector, `make`, dependency, parent/main/#475, network/GitHub, push, reviewer,
+  integration, or merge action ran. Parent owns publication, two fresh exact-head reviews,
+  dispositions, integration, and all human gates.

@@ -317,3 +317,39 @@
   `a586405153e2e666a57b832e7d4b48df80e3265c`, evidence
   `23efd2c51280ba83836feef4fcb459e7da4571c0`. No Cycle 8 test, production, external, or prohibited
   action ran before this artifact checkpoint.
+
+## 2026-07-22 Cycle 8 RED
+
+- Artifact-only PLAN `bccee8e6cdbcb6e38419114f264222b1f5616f66` preceded every test and
+  production edit. Comprehensive five-test-file RED
+  `851bb3bfa3e23042211a8b37f3a97253cc6fedf5` records 374 total / 314 pass / 59 intended fail /
+  1 intentional live-sandbox skip.
+- Strict owned TypeScript reported only four intended missing recovery-fence/validator diagnostics.
+  The five production blob IDs remained byte-exact. No expectation was skipped or weakened.
+
+## 2026-07-22 Cycle 8 GREEN and REFACTOR
+
+- Coherent GREEN `013bdc8b264e1ce8808d4af2558e2ec40b85ee49` closes all seven families:
+  provider-neutral credential suffix classification; exact expired replay; all uncertain non-value
+  recovery; stable ordered rollback fences with real deadlines; refreshed freshness; exact typed
+  #479 recovery; and serialized role reconstruction.
+- Bounded REFACTOR `26a7d476bdfaa4e263196fb76f7f43b5a3ad799e` hoists the closed credential
+  policy and clarifies timed-out recovery ownership. Targeted Cycle 8 is 46/46; focused is 374 total
+  / 373 pass / 0 fail / 1 skip; strict owned TypeScript passes.
+- Both complete Cycle 7 reports were re-read after REFACTOR. All seven families map to named passing
+  cases. No expectation was removed or converted into a fake-only proof.
+
+## 2026-07-22 Cycle 8 local verification
+
+- Strict TypeScript passes for the five owned production/test pairs and all 20 production modules
+  against pinned Pi 0.80.6 declarations. Pinned offline Pi RPC discovers `pm-shepherd` from the
+  explicit `index.ts` extension.
+- Serialized Shepherd is environmental failure: 594 total / 528 pass / 65 unchanged unrelated
+  managed-sandbox process-identity `spawn EPERM` failures / 1 intentional skip; every Cycle 8 and
+  focused assertion passes.
+- Immutable base and reviewed candidate are ancestors; exact merge base is `3addb1f4`; full-range
+  diff check, exact 21-path ownership, three JSON parses, synthetic-marker confinement, and clean
+  pre-evidence status pass.
+- No Go, connector, `make`, dependency, parent/main/#475, network/GitHub, push, reviewer/self-review,
+  integration, or merge action ran. Evidence uses current non-self-referential `HEAD`; parent owns
+  publication and two fresh exact-head reviews.

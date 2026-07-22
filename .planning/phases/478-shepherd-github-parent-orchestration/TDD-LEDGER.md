@@ -389,13 +389,13 @@ seven unique families map to 48 planned behavior rows and retain all 297 Cycle 7
 
 | ID | Rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C8-SECRET | 20 | every recognized credential-assignment suffix rejects under an unknown provider prefix across all durable/outbound consumers; exact safe-name exception is applied only after classification and finite kube/docker/AWS forms remain | planned |
-| C8-479 | 6 | separate production-typed transport/authority/journal roles prove success, typed conflict, uncertainty, rollback, stop incomplete/joined, and settlement without `any`, casts, fake projection, or private shortcuts | planned |
-| C8-UNCERTAIN | 4 | immediate apply-then-reject starts durable recovery despite failed reads, restores draft, blocks reentry, and retains stop/key ownership | planned |
-| C8-BROKER | 4 | actual broker rereads exact consumed state before new-request expiry validation, resumes prepared commit once after expiry, and rejects truly new expired request/decision | planned |
-| C8-FENCE | 5 | per-attempt deadline abort, durable predecessor fencing, successful later retry, ignored superseded result, authoritative draft observation, and eventual join are enforced | planned |
-| C8-RESTART | 4 | serialized prepared/journal state recreates controller/broker/journal/transport/authority over shared durable backing and resumes without `WeakMap` or object identity | planned |
-| C8-FRESH | 5 | revalidation forwards refreshed policy/ancestry/equivalent-clean freshness while original authorization, key, and intent remain exact | planned |
+| C8-SECRET | 20 | every recognized credential-assignment suffix rejects under an unknown provider prefix across all durable/outbound consumers; exact safe-name exception is applied only after classification and finite kube/docker/AWS forms remain | red_then_green |
+| C8-479 | 6 | separate production-typed transport/authority/journal roles prove success, typed conflict, uncertainty, rollback, stop incomplete/joined, and settlement without `any`, casts, fake projection, or private shortcuts | red_then_green |
+| C8-UNCERTAIN | 4 | immediate apply-then-reject starts durable recovery despite failed reads, restores draft, blocks reentry, and retains stop/key ownership | red_then_green |
+| C8-BROKER | 4 | actual broker rereads exact consumed state before new-request expiry validation, resumes prepared commit once after expiry, and rejects truly new expired request/decision | red_then_green |
+| C8-FENCE | 5 | per-attempt deadline abort, durable predecessor fencing, successful later retry, ignored superseded result, authoritative draft observation, and eventual join are enforced | red_then_green |
+| C8-RESTART | 4 | serialized prepared/journal state recreates controller/broker/journal/transport/authority over shared durable backing and resumes without `WeakMap` or object identity | red_then_green |
+| C8-FRESH | 5 | revalidation forwards refreshed policy/ancestry/equivalent-clean freshness while original authorization, key, and intent remain exact | red_then_green |
 
 Frozen production blobs before RED: orchestrator `668a55af55413c1cc595424e87ce352c355eec88`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
@@ -414,6 +414,24 @@ matching fenced durable result carrying the exact draft is the authoritative obs
 releases the key. Reconstructed adapters rely on shared durable backing, never module object
 identity.
 
-Cycle 8 follows strict artifact PLAN -> comprehensive test-only RED -> coherent GREEN -> bounded
-REFACTOR -> exact evidence. Expected RED counts and strict TypeScript diagnostics will be recorded
-from actual commands; no result is predeclared.
+Cycle 8 followed strict artifact PLAN -> comprehensive test-only RED -> coherent GREEN -> bounded
+REFACTOR -> exact evidence. PLAN is `bccee8e6cdbcb6e38419114f264222b1f5616f66`; RED is
+`851bb3bfa3e23042211a8b37f3a97253cc6fedf5`; GREEN is
+`013bdc8b264e1ce8808d4af2558e2ec40b85ee49`; REFACTOR is
+`26a7d476bdfaa4e263196fb76f7f43b5a3ad799e`.
+
+- RED: 374 total / 314 pass / 59 intended fail / 1 intentional live-sandbox skip. Strict owned
+  TypeScript reported only four intended diagnostics for the missing recovery fence/validator.
+  All five production blob IDs remained exact.
+- GREEN/REFACTOR: targeted Cycle 8 orchestrator 46/46; complete focused five-file route 374 total /
+  373 pass / 0 fail / 1 skip. Strict owned and all-20-production TypeScript pass against pinned Pi
+  0.80.6. The exact #479 fixture uses typed public ports in success, conflict, uncertainty,
+  rollback, stop/join, journal settlement, and serialized reconstruction paths.
+- Both complete Cycle 7 reports were replayed after REFACTOR. No expectation was removed, weakened,
+  skipped, or converted to fake-only proof. The only post-RED test support changes teach fakes the
+  public recovery fence/durable backing and update two historical immediate-rejection expectations
+  to the newly required rollback semantics.
+- Offline RPC, immutable base/reviewed-candidate ancestry, exact merge base, full diff, exact
+  21-path scope, three JSON parses, marker confinement, and clean pre-evidence status pass.
+  Serialized Shepherd is environmental failure: 594 total / 528 pass / 65 unchanged unrelated
+  sandbox `spawn EPERM` failures / 1 intentional skip; all Cycle 8/focused tests pass.

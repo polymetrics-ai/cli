@@ -150,23 +150,29 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   implementation, integration, or merge action ran; two fresh exact-head `xhigh` reviews remain
   parent-owned
 
-## Cycle 8 consolidated-review correction (planned)
+## Cycle 8 consolidated-review correction
 
 - frozen reviewed candidate/base: `b90037df1fff38c755ebc8025579120d17031330` /
   `3addb1f48be1afe8b1e2b59b54247679d7293805`; both blocked reports were read completely
-- one 48-row PLAN -> comprehensive five-test-file RED -> coherent GREEN -> bounded REFACTOR batch
-  covers all seven unique families inside the unchanged exact 21-path boundary
-- provider-neutral assignment suffixes will reject before all durable/outbound consumers, with
-  finite kube/docker/AWS forms retained and only exact post-classification safe-name exceptions
-- every uncertain non-value authority result will start durable recovery; rollback attempts receive
-  real response deadlines and ordered fences, may only restore draft, cannot let superseded results
-  settle, and retain key/stop ownership until a matching durable draft observation
-- #479 proof will reconstruct separate production-typed transport, authority, journal, broker, and
-  controller adapters over shared durable state and exercise success, conflict, uncertainty,
-  rollback, incomplete/joined stop, and settlement without `any`, casts, fake projection, private
-  shortcuts, same-object reuse, or module `WeakMap` identity
-- actual broker will resume exact pre-expiry consumed evidence after restart/expiry while rejecting
-  new expired events; commit will send refreshed freshness with the original authorization/key/intent
+- PLAN `bccee8e6`, comprehensive five-test-file RED `851bb3bf`, coherent GREEN `013bdc8b`, and
+  bounded REFACTOR `26a7d476` cover all 48 rows and seven unique families inside the unchanged
+  exact 21-path boundary
+- provider-neutral assignment suffixes reject before all durable/outbound consumers; finite
+  kube/docker/AWS forms remain, and only exact `FEATURE_TOKEN` is allowed after classification
+- every uncertain non-value authority result starts durable recovery; rollback attempts use real
+  response deadlines and ordered durable fences, may only restore the exact draft, and cannot let
+  superseded results settle or release key/stop ownership
+- the #479 proof uses exact production return types and reconstructs separate transport, authority,
+  journal, broker, and controller adapters over serialized durable state; success, conflict,
+  uncertainty, rollback, incomplete/joined stop, and settlement run without `any`, unchecked casts,
+  fake projection, private shortcuts, same-object reuse, or module `WeakMap` identity
+- the actual broker resumes exact pre-expiry consumed evidence after restart/expiry while rejecting
+  new expired events; commit sends refreshed freshness with the original authorization/key/intent
+- focused five-file result is 374 total / 373 pass / 0 fail / 1 intentional skip; strict owned and
+  all-20-production TypeScript plus pinned Pi 0.80.6 offline discovery pass
+- serialized Shepherd is an environmental failure at 594 total / 528 pass / 65 unchanged unrelated
+  managed-sandbox `spawn EPERM` failures / 1 intentional skip; exact base/ancestry/diff/21-path/
+  JSON/marker gates pass
 - GSD doctor passes and unavailable command records `manual_gsd_fallback`; no Go, connector,
   `make`, dependency, parent/main worktree, #475, push/network/GitHub, reviewer, integration, or
   merge action is authorized

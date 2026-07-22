@@ -182,3 +182,9 @@
   explorer maps contracts; worker owns local critical path. Exclude Go/connectors/`make`, parent or
   main worktrees, #475, dependencies, runtime services, network/GitHub, push, reviewers,
   integration, and merge.
+- Outcome: PLAN `bccee8e6`, test-only RED `851bb3bf`, GREEN `013bdc8b`, and REFACTOR `26a7d476`
+  complete the prompt without scope expansion. Targeted Cycle 8 is 46/46; focused is 374 total /
+  373 pass / 0 fail / 1 skip; strict owned/all-production and offline RPC pass. Serialized Shepherd
+  is environmentally failing only in the unchanged 65 sandbox `spawn EPERM` cases (594 total /
+  528 pass / 1 skip). Both input reports were re-read after REFACTOR; parent owns fresh exact-head
+  review and every external action.

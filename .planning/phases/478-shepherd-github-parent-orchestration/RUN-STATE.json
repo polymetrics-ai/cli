@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 8 consolidates both blocking exact-head Cycle 7 reviews into one 48-row seven-family PLAN -> RED -> GREEN -> REFACTOR correction; frozen candidate b90037df is historical review input, HEAD is the only current-candidate semantic, and no Cycle 8 test or production edit has occurred.",
+  "reason": "Cycle 8 locally completes the 48-row seven-family PLAN -> RED -> GREEN -> REFACTOR correction and local gates; frozen candidate b90037df remains historical blocked-review input, HEAD is the only current-candidate semantic, serialized broad verification remains environmentally failing in 65 unrelated sandbox spawn EPERM cases, and two fresh exact-head reviews remain parent-owned.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -62,7 +62,11 @@
       "cycle7AuditRed": "b1560e76a3abbac5efcd33b2740b7275b6acc137",
       "cycle7AuditGreen": "915882c219f52da2c1edebce84d2bf90c61a4592",
       "cycle7Evidence": "b90037df1fff38c755ebc8025579120d17031330",
-      "cycle8PlanRef": "HEAD"
+      "cycle8Plan": "bccee8e6cdbcb6e38419114f264222b1f5616f66",
+      "cycle8Red": "851bb3bfa3e23042211a8b37f3a97253cc6fedf5",
+      "cycle8Green": "013bdc8b264e1ce8808d4af2558e2ec40b85ee49",
+      "cycle8Refactor": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
+      "cycle8EvidenceRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -73,7 +77,7 @@
       "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass",
       "cycle6": "focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip; retained Cycle 5 109/109; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized 427 total, 361 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base, ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass",
       "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
-      "cycle8": "planned: 48 behavior rows across seven accepted review families; production frozen at b90037df; focused, strict TypeScript, offline RPC, serialized classification, immutable-base, exact-scope, JSON, marker, and clean gates pending"
+      "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass"
     },
     "orchestrationDecisions": [
       {
@@ -127,6 +131,16 @@
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
       },
       {
+        "cycle": "cycle-8-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All Cycle 8 focused, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, marker, report-replay, and integrity gates pass; the serialized suite is honestly classified as environmentally failing only in 65 unchanged unrelated process-identity spawn EPERM tests."
+      },
+      {
+        "cycle": "cycle-8-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 8 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
         "cycle": "cycle-7-publish",
         "decision": "not_authorized",
         "reason": "Cycle 7 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns all external and review actions."
@@ -148,5 +162,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T01:25:12.000Z"
+  "updatedAt": "2026-07-22T02:08:50.000Z"
 }
