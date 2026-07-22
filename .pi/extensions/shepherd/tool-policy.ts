@@ -1278,7 +1278,7 @@ function scanRedactionPlan(source: string, metrics?: RedactionScanMetrics): Plan
 
 		if (state.recovery) {
 			state.recovery.range.end = position + 1;
-			if (isPhysicalLineEnding(character)) finishRecoveryAtLine(state, position);
+			if (isPhysicalLineEnding(character)) finishRecoveryAtLine(state, position, metrics);
 			continue;
 		}
 
@@ -1529,7 +1529,7 @@ function advanceStreamingCandidate(
 		return true;
 	}
 
-	if ((character === "," || character === ";") && candidate.context === "flow" ||
+	if (((character === "," || character === ";") && candidate.context === "flow") ||
 		character === "}" || character === "]") {
 		state.candidate = undefined;
 		reprocessStreamingBoundary(state, character, position, metrics);
@@ -1685,12 +1685,12 @@ function advanceStreamingQuotedValue(
 	if (assignment.mode === "quoted-closed") {
 		if (isHorizontalWhitespace(character)) return true;
 		if (character === "," || character === ";" || character === "}" || character === "]") {
-			finishOneStreamingAssignment(state, assignment, position, false);
+			finishOneStreamingAssignment(state, assignment, position, false, metrics);
 			reprocessStreamingBoundary(state, character, position, metrics);
 			return true;
 		}
 		if (character === "#" && isHorizontalWhitespace(source[position - 1])) {
-			finishOneStreamingAssignment(state, assignment, position, false);
+			finishOneStreamingAssignment(state, assignment, position, false, metrics);
 			state.comment = true;
 			return true;
 		}
@@ -1754,7 +1754,7 @@ function resolvePendingLineAssignments(
 			state.flowCandidateSlot = false;
 			return;
 		}
-		finishOneStreamingAssignment(state, assignment, assignment.valueEnd, false);
+		finishOneStreamingAssignment(state, assignment, assignment.valueEnd, false, metrics);
 	}
 }
 
@@ -1793,7 +1793,7 @@ function finishPhysicalLine(
 	}
 	const top = state.assignments.at(-1);
 	if (top?.mode === "quoted") {
-		finishOneStreamingAssignment(state, top, position, true);
+		finishOneStreamingAssignment(state, top, position, true, metrics);
 	} else if (top && top.compositeDepth === undefined) {
 		top.pendingLineBoundary = true;
 		top.valueEnd = position;
@@ -1810,23 +1810,23 @@ function finishAssignmentsAtBoundary(
 	state: RedactionStreamingState,
 	position: number,
 	malformedQuote: boolean,
-	_metrics?: RedactionScanMetrics,
+	metrics?: RedactionScanMetrics,
 ): void {
 	const assignment = state.assignments.at(-1);
 	if (assignment && assignment.compositeDepth === undefined) {
-		finishOneStreamingAssignment(state, assignment, position, malformedQuote);
+		finishOneStreamingAssignment(state, assignment, position, malformedQuote, metrics);
 	}
 }
 
 function finishAssignmentsAtMemberBoundary(
 	state: RedactionStreamingState,
 	position: number,
-	_metrics?: RedactionScanMetrics,
+	metrics?: RedactionScanMetrics,
 ): void {
 	while (true) {
 		const assignment = state.assignments.at(-1);
 		if (!assignment || assignment.baseDepth !== state.frames.length || assignment.compositeDepth !== undefined) return;
-		finishOneStreamingAssignment(state, assignment, position, false);
+		finishOneStreamingAssignment(state, assignment, position, false, metrics);
 	}
 }
 
@@ -1835,7 +1835,9 @@ function finishOneStreamingAssignment(
 	assignment: StreamingAssignment,
 	end: number,
 	malformed: boolean,
+	metrics?: RedactionScanMetrics,
 ): void {
+	chargeWork(metrics);
 	assignment.valueEnd = Math.max(assignment.valueStart ?? end, end);
 	if (assignment.range) assignment.range.end = assignment.valueEnd;
 	const prefix = assignment.valuePrefix.trim();
@@ -1921,6 +1923,7 @@ function pushStreamingFrameOrRecover(
 			? assignment
 			: undefined,
 	});
+	chargeWork(metrics);
 	state.flowCandidateSlot = true;
 	state.lineCandidateSlot = false;
 }
@@ -1934,22 +1937,27 @@ function closeStreamingFrameOrRecover(
 	finishAssignmentsAtMemberBoundary(state, position, metrics);
 	const frame = state.frames.at(-1);
 	if (!frame || frame.closer !== character) {
-		const publicRange = latestPublicRecoveryRange(state);
+		const publicRange = latestPublicRecoveryRange(state, metrics);
 		beginStreamingRecovery(state, publicRange?.start ?? position, publicRange, "recovery", metrics);
 		return;
 	}
 	const closingDepth = state.frames.length;
 	state.frames.pop();
+	chargeWork(metrics);
 	while (true) {
 		const assignment = state.assignments.at(-1);
 		if (!assignment || assignment.compositeDepth !== closingDepth) break;
-		finishOneStreamingAssignment(state, assignment, position + 1, false);
+		finishOneStreamingAssignment(state, assignment, position + 1, false, metrics);
 	}
 	state.flowCandidateSlot = false;
 }
 
-function latestPublicRecoveryRange(state: RedactionStreamingState): PlannedRedactionRange | undefined {
+function latestPublicRecoveryRange(
+	state: RedactionStreamingState,
+	metrics?: RedactionScanMetrics,
+): PlannedRedactionRange | undefined {
 	for (let index = state.assignments.length - 1; index >= 0; index -= 1) {
+		chargeWork(metrics);
 		const assignment = state.assignments[index]!;
 		if (assignment.kind === "public" && assignment.range) return assignment.range;
 	}
@@ -1968,12 +1976,18 @@ function beginStreamingRecovery(
 	range.priority = priority;
 	range.end = Math.max(range.end, state.i);
 	state.recovery = { range };
+	chargeWork(metrics);
 	state.candidate = undefined;
 	state.assignments.length = 0;
 }
 
-function finishRecoveryAtLine(state: RedactionStreamingState, position: number): void {
+function finishRecoveryAtLine(
+	state: RedactionStreamingState,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
 	if (state.recovery) state.recovery.range.end = position;
+	chargeWork(metrics);
 	state.recovery = undefined;
 	state.frames.length = 0;
 	state.assignments.length = 0;
@@ -2006,7 +2020,10 @@ function finishStreamingEof(
 	end: number,
 	metrics?: RedactionScanMetrics,
 ): void {
-	if (state.recovery) state.recovery.range.end = end;
+	if (state.recovery) {
+		state.recovery.range.end = end;
+		chargeWork(metrics);
+	}
 	if (state.candidate?.quoted && !state.candidate.quoteClosed) {
 		// The delimiter-adjacent span has already been consumed and is bounded by EOF.
 		const candidate = state.candidate;
@@ -2026,9 +2043,10 @@ function finishStreamingEof(
 		const assignment = state.assignments.at(-1)!;
 		const malformed = assignment.kind === "public" &&
 			(assignment.mode === "quoted" || assignment.mode === "composite");
-		finishOneStreamingAssignment(state, assignment, end, malformed);
+		finishOneStreamingAssignment(state, assignment, end, malformed, metrics);
 	}
 	for (const frame of state.frames) {
+		chargeWork(metrics);
 		if (frame.publicOwner?.range) {
 			frame.publicOwner.range.active = true;
 			frame.publicOwner.range.end = end;
