@@ -23,8 +23,8 @@ func TestPayloadIdentitiesBindFileSizeAndMTimeWithoutPathDisclosure(t *testing.T
 	if len(before) != 1 {
 		t.Fatalf("identities = %+v, want one", before)
 	}
-	if before[0].Field != "data_file_path" || before[0].SizeBytes != 3 || before[0].PathHash == "" {
-		t.Fatalf("identity = %+v, want field, size, and path hash", before[0])
+	if before[0].Field != "data_file_path" || before[0].SizeBytes != 3 || before[0].PathHash == "" || before[0].ContentSHA256 == "" {
+		t.Fatalf("identity = %+v, want field, size, path hash, and content digest", before[0])
 	}
 	if before[0].PathHash == path || before[0].PathHash == "payload.csv" {
 		t.Fatalf("identity leaked raw path: %+v", before[0])
@@ -54,6 +54,39 @@ func TestPayloadIdentitiesBindFileSizeAndMTimeWithoutPathDisclosure(t *testing.T
 	}
 	if beforeHash == afterHash {
 		t.Fatalf("plan hash did not change after payload identity changed")
+	}
+}
+
+func TestPayloadIdentitiesBindSameSizeContentWhenMTimeIsRestored(t *testing.T) {
+	dir := t.TempDir()
+	path := dir + "/payload.csv"
+	if err := os.WriteFile(path, []byte("one"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	info, err := os.Stat(path)
+	if err != nil {
+		t.Fatalf("Stat: %v", err)
+	}
+	records := []connectors.Record{{"data_file_path": "payload.csv"}}
+	before, err := payloadIdentitiesForRecords(dir, records)
+	if err != nil {
+		t.Fatalf("payloadIdentitiesForRecords: %v", err)
+	}
+	if err := os.WriteFile(path, []byte("two"), 0o600); err != nil {
+		t.Fatalf("WriteFile replacement: %v", err)
+	}
+	if err := os.Chtimes(path, info.ModTime(), info.ModTime()); err != nil {
+		t.Fatalf("Chtimes: %v", err)
+	}
+	after, err := payloadIdentitiesForRecords(dir, records)
+	if err != nil {
+		t.Fatalf("payloadIdentitiesForRecords replacement: %v", err)
+	}
+	if before[0].SizeBytes != after[0].SizeBytes || before[0].ModTimeUnixNano != after[0].ModTimeUnixNano {
+		t.Skipf("filesystem did not preserve same size/mtime for probe: before=%+v after=%+v", before[0], after[0])
+	}
+	if before[0].ContentSHA256 == after[0].ContentSHA256 {
+		t.Fatalf("content digest unchanged after same-size payload replacement: before=%+v after=%+v", before[0], after[0])
 	}
 }
 

@@ -301,6 +301,36 @@ func TestRequesterDoMultipartRetriesWithReopenedFile(t *testing.T) {
 	}
 }
 
+func TestRequesterDoMultipartRejectsGrowthAfterPreflightValidation(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/payload.txt"
+	if err := os.WriteFile(filePath, []byte("1234"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = io.Copy(io.Discard, r.Body)
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer srv.Close()
+
+	r := &Requester{
+		BaseURL: srv.URL,
+		Sleep:   noSleep,
+		Auth: AuthFunc(func(context.Context, *http.Request) error {
+			return os.WriteFile(filePath, []byte("1234567890"), 0o600)
+		}),
+	}
+	_, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{FieldName: "mediaFile", Path: filePath, MaxBytes: 4}},
+	})
+	if err == nil {
+		t.Fatal("DoMultipart error = nil, want stream-time max-bytes rejection")
+	}
+	if !strings.Contains(err.Error(), "too large") {
+		t.Fatalf("DoMultipart error = %q, want too large", err.Error())
+	}
+}
+
 func TestRequesterDoMultipartRejectsTooLargeFileBeforeSend(t *testing.T) {
 	dir := t.TempDir()
 	filePath := dir + "/payload.txt"

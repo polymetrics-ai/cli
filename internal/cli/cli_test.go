@@ -49,6 +49,33 @@ func TestRootHelpAliasesShowManual(t *testing.T) {
 	}
 }
 
+func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "help topic", args: []string{"help", "gong"}},
+		{name: "bare connector", args: []string{"gong"}},
+		{name: "connector help flag", args: []string{"gong", "--help"}},
+		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"pm gong", "calls transcript", "Gong"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Run(%v) help missing %q:\n%s", tt.args, want, out)
+				}
+			}
+		})
+	}
+}
+
 func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"--json", "--help"}, &stdout, &stderr)

@@ -83,3 +83,10 @@ Green targets:
 - Payload identity includes a content digest; multipart copies at most `MaxBytes+1` and fails closed before accepting an oversized body.
 - All 10 POST read-query commands have typed connector-authored flags, bounded `json_redacted` output, and `availability: implemented`; no raw JSON body flag exists.
 - Gong API ledger reports 67 executable classifications and zero blocked operation rows.
+
+Red captured 2026-07-22:
+
+- `go test ./internal/cli -run TestDynamicConnectorHelpAndBareNamespace -count=1` — failed: `help topic "gong" not found`, bare namespace `missing connector command path`, transcript command still `availability=planned`.
+- `go test ./internal/app -run TestPayloadIdentitiesBindSameSizeContentWhenMTimeIsRestored -count=1` — build failed because `PayloadIdentity.ContentSHA256` does not exist.
+- `go test ./internal/connectors/connsdk -run TestRequesterDoMultipartRejectsGrowthAfterPreflightValidation -count=1` — failed: `DoMultipart error = nil, want stream-time max-bytes rejection`.
+- `go test ./cmd/connectorgen -run 'TestGongAPISurfaceOperationLedger|TestGongFullSurfaceCommandAndOperationCoverage' -count=1` — failed: 57/67 covered and 19/29 direct reads; 10 operation blockers remain.

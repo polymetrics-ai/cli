@@ -24,6 +24,10 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			Write        string `json:"write"`
 			Operation    string `json:"operation"`
 			OutputPolicy string `json:"output_policy"`
+			Flags        []struct {
+				Name   string `json:"name"`
+				MapsTo string `json:"maps_to"`
+			} `json:"flags"`
 		} `json:"commands"`
 	}](t, "../../internal/connectors/defs/gong/cli_surface.json")
 	writes := loadGongJSON[struct {
@@ -68,7 +72,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			coverage["operation"]++
 		}
 	}
-	wantCoverage := map[string]int{"stream": 12, "direct_read": 19, "write": 26, "operation": 10}
+	wantCoverage := map[string]int{"stream": 12, "direct_read": 29, "write": 26}
 	for key, want := range wantCoverage {
 		if got := coverage[key]; got != want {
 			t.Fatalf("coverage[%s] = %d, want %d (all coverage: %+v)", key, got, want, coverage)
@@ -78,10 +82,18 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	commandsByPath := map[string]struct {
 		intent, availability, stream, write, operation, outputPolicy string
 	}{}
+	flagsByPath := map[string]map[string]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
 		}{cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, cmd.OutputPolicy}
+		flagsByPath[cmd.Path] = map[string]string{}
+		for _, flag := range cmd.Flags {
+			flagsByPath[cmd.Path][flag.Name] = flag.MapsTo
+		}
+		if cmd.Intent == "direct_read" && cmd.Availability != "implemented" {
+			t.Fatalf("direct read command %q availability = %q, want implemented", cmd.Path, cmd.Availability)
+		}
 	}
 	for _, tc := range []struct {
 		path, intent, availability, target string
@@ -92,7 +104,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "users get", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "calls create", intent: "reverse_etl", availability: "partial", target: "add_call"},
 		{path: "privacy erase-phone", intent: "reverse_etl", availability: "partial", target: "purge_phone_number"},
-		{path: "calls extensive", intent: "direct_read", availability: "planned", target: "gong.calls_extensive"},
+		{path: "calls extensive", intent: "direct_read", availability: "implemented", target: "json_redacted"},
+		{path: "calls transcript", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "crm upload-entities", intent: "reverse_etl", availability: "implemented", target: "upload_crm_entities"},
 	} {
@@ -129,6 +142,13 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	for _, action := range writes.Actions {
 		writesByName[action.Name] = struct{ kind, method, path, risk, confirm string }{action.Kind, action.Method, action.Path, action.Risk, action.Confirm}
 	}
+	if got := flagsByPath["calls transcript"]["call-id"]; got != "body.filter.callIds" {
+		t.Fatalf("calls transcript --call-id maps_to = %q, want body.filter.callIds", got)
+	}
+	if _, exists := flagsByPath["calls transcript"]["body"]; exists {
+		t.Fatal("calls transcript must not expose a raw body flag")
+	}
+
 	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task", "upload_call_media", "upload_crm_entities", "upload_crm_entity_schema"} {
 		if _, ok := writesByName[name]; !ok {
 			t.Fatalf("missing write action %q", name)
