@@ -16,6 +16,7 @@ import {
 	type GitMutationLeaseRequest,
 	type GitPushEvidence,
 	type GitPushRequest,
+	type GitRefreshIssueEvidence,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
 import type { FileStateStoreOptions } from "./state-store.ts";
@@ -97,6 +98,17 @@ export interface WorkspaceHandoffEvidence {
 	dirty: boolean;
 }
 
+export interface WorkspaceParentRefreshRequest {
+	previousParentHead: string;
+	newParentHead: string;
+	effectKey: string;
+}
+
+export interface WorkspaceParentRefreshEvidence extends GitRefreshIssueEvidence {
+	verificationInvalidated: true;
+	reviewInvalidated: true;
+}
+
 export interface WorkspaceAdapterOptions {
 	leaseOptions?: Omit<FileStateStoreOptions, "trustedRoot">;
 }
@@ -133,6 +145,7 @@ interface ActiveClaimContext {
 	binding: WorkspaceBindingRecord;
 	coordinator: GitBinding;
 	lease: GitMutationLease;
+	effectiveBaseHead: string;
 }
 
 export class WorkspaceAdapterError extends Error {
@@ -623,6 +636,7 @@ export class WorkspaceAdapter {
 				binding: persistedBinding,
 				coordinator,
 				lease,
+				effectiveBaseHead: persistedClaim.baseHead,
 			});
 			return workspace;
 		} catch (error) {
@@ -643,7 +657,7 @@ export class WorkspaceAdapter {
 			|| workspace.cwd !== context.claim.path
 			|| workspace.trustedWorktreeRoot !== context.claim.trustedWorktreeRoot
 			|| workspace.prBase !== context.claim.prBase
-			|| workspace.baseHead !== context.claim.baseHead
+			|| workspace.baseHead !== context.effectiveBaseHead
 			|| !equalStrings(workspace.allowedScopes, context.claim.allowedScopes)
 			|| workspace.repositoryIdentity !== context.claim.repositoryIdentity
 			|| workspace.remoteIdentity !== context.claim.remoteIdentity
@@ -684,6 +698,38 @@ export class WorkspaceAdapter {
 		return this.#git.pushIssueBranch(context.lease, this.#worktreeBinding(context), request);
 	}
 
+	async refreshParent(
+		workspace: ClaimedWorkspace,
+		request: WorkspaceParentRefreshRequest,
+	): Promise<WorkspaceParentRefreshEvidence> {
+		const context = this.#mutationContext(workspace);
+		if (typeof request !== "object" || request === null
+			|| typeof request.previousParentHead !== "string" || !SHA_PATTERN.test(request.previousParentHead)
+			|| typeof request.newParentHead !== "string" || !SHA_PATTERN.test(request.newParentHead)
+			|| !safeText(request.effectKey, MAX_OWNERSHIP_BYTES) || !SAFE_OWNERSHIP.test(request.effectKey)
+			|| request.previousParentHead !== context.effectiveBaseHead) {
+			throw new WorkspaceAdapterError("parent refresh request does not match the active exact workspace base");
+		}
+		const parentHead = await this.#git.resolveBranchHead(context.coordinator, context.claim.prBase);
+		if (parentHead !== request.newParentHead) {
+			throw new WorkspaceAdapterError("new parent head is not the authoritative local parent branch head");
+		}
+		const evidence = await this.#git.refreshIssueBranch(context.lease, this.#worktreeBinding(context), {
+			issue: context.claim.issue,
+			slug: context.claim.slug,
+			branch: context.claim.branch,
+			previousBaseHead: request.previousParentHead,
+			newBaseHead: request.newParentHead,
+			expectedHead: workspace.head,
+		});
+		context.effectiveBaseHead = evidence.baseHead;
+		workspace.baseHead = evidence.baseHead;
+		workspace.head = evidence.head;
+		workspace.status = await this.#git.status(this.#worktreeBinding(context));
+		workspace.changedScope = changedPaths(workspace.status);
+		return { ...evidence, verificationInvalidated: true, reviewInvalidated: true };
+	}
+
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: VerificationState): Promise<WorkspaceHandoffEvidence> {
 		assertVerificationState(verificationState);
 		const context = this.#activeClaims.get(workspace);
@@ -705,7 +751,7 @@ export class WorkspaceAdapter {
 			|| workspace.cwd !== persistedClaim.path
 			|| workspace.trustedWorktreeRoot !== persistedClaim.trustedWorktreeRoot
 			|| workspace.prBase !== persistedClaim.prBase
-			|| workspace.baseHead !== persistedClaim.baseHead
+			|| workspace.baseHead !== context.effectiveBaseHead
 			|| !equalStrings(workspace.allowedScopes, persistedClaim.allowedScopes)
 			|| workspace.repositoryIdentity !== persistedClaim.repositoryIdentity
 			|| workspace.remoteIdentity !== persistedClaim.remoteIdentity
@@ -733,13 +779,13 @@ export class WorkspaceAdapter {
 			throw new WorkspaceAdapterError("handoff current branch is not canonical");
 		}
 		const head = await this.#git.resolveBranchHead(binding, canonicalBranch);
-		if (!(await this.#git.isAncestor(binding, persistedClaim.baseHead, head))) {
+		if (!(await this.#git.isAncestor(binding, context.effectiveBaseHead, head))) {
 			throw new WorkspaceAdapterError("handoff exact base is not an ancestor of exact head");
 		}
 		const [status, diff] = await Promise.all([
 			this.#git.status(binding),
 			this.#git.diff(binding, {
-				baseHead: persistedClaim.baseHead,
+				baseHead: context.effectiveBaseHead,
 				head,
 				scopes: persistedClaim.allowedScopes,
 			}),
@@ -756,7 +802,7 @@ export class WorkspaceAdapter {
 			issue: persistedClaim.issue,
 			branch: canonicalBranch,
 			prBase: persistedClaim.prBase,
-			baseHead: persistedClaim.baseHead,
+			baseHead: context.effectiveBaseHead,
 			head,
 			changedScope,
 			verificationState,
