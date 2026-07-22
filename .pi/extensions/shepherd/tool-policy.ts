@@ -156,26 +156,50 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 			MAX_WRITE_CHARACTERS,
 		),
 	};
-	const capabilities = validatePolicyInput(input);
+	if (!input || typeof input !== "object" || !input.authority || typeof input.authority !== "object") {
+		throw new ToolPolicyError("tool policy input and authority are required");
+	}
+	const capturedInput: ToolPolicyInput = Object.freeze({
+		readOnly: input.readOnly,
+		workspace: input.workspace,
+		authority: Object.freeze({
+			workspaceId: input.authority.workspaceId,
+			readPrefixes: capturePolicyArray<string>(input.authority.readPrefixes, "read prefixes", 64, false),
+			writePrefixes: capturePolicyArray<string>(input.authority.writePrefixes, "write prefixes", 64, input.readOnly),
+			capabilityNames: capturePolicyArray<string>(
+				input.authority.capabilityNames,
+				"capability authority",
+				MAX_CAPABILITIES,
+				true,
+			),
+		}),
+		capabilities: capturePolicyArray<HostCapability>(
+			input.capabilities,
+			"typed host capabilities",
+			MAX_CAPABILITIES,
+			true,
+		),
+	});
+	const capabilities = validatePolicyInput(capturedInput);
 
-	const readPrefixes = normalizeScopedPrefixes(input.authority.readPrefixes, "read");
-	const writePrefixes = input.readOnly && input.authority.writePrefixes.length === 0
-		? input.authority.writePrefixes
-		: normalizeScopedPrefixes(input.authority.writePrefixes, "write");
-	const tools: SessionTool[] = [workspaceReadTool(input.workspace, readPrefixes, limits)];
-	if (!input.readOnly) {
+	const readPrefixes = normalizeScopedPrefixes(capturedInput.authority.readPrefixes, "read");
+	const writePrefixes = capturedInput.readOnly && capturedInput.authority.writePrefixes.length === 0
+		? capturedInput.authority.writePrefixes
+		: normalizeScopedPrefixes(capturedInput.authority.writePrefixes, "write");
+	const tools: SessionTool[] = [workspaceReadTool(capturedInput.workspace, readPrefixes, limits)];
+	if (!capturedInput.readOnly) {
 		tools.push(
-			workspaceEditTool(input.workspace, writePrefixes, limits),
-			workspaceWriteTool(input.workspace, writePrefixes, limits),
+			workspaceEditTool(capturedInput.workspace, writePrefixes, limits),
+			workspaceWriteTool(capturedInput.workspace, writePrefixes, limits),
 		);
 	}
 
-	const declared = new Set(input.authority.capabilityNames);
+	const declared = new Set(capturedInput.authority.capabilityNames);
 	for (const capability of capabilities) {
 		if (!declared.has(capability.name)) {
 			throw new ToolPolicyError(`undeclared capability ${JSON.stringify(capability.name)} cannot expand authority`);
 		}
-		if (input.readOnly && capability.mutates) continue;
+		if (capturedInput.readOnly && capability.mutates) continue;
 		tools.push(hostCapabilityTool(capability, limits));
 	}
 
@@ -1088,8 +1112,19 @@ function redactStrongCredentialSyntax(value: string): string {
 }
 
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
-	const finalSegment = key.toLowerCase().split(".").at(-1) ?? key;
-	const normalized = finalSegment.replace(/[-_]/g, "");
+	const segments = key.toLowerCase().split(".").map((segment) => segment.replace(/[-_]/g, ""));
+	for (let start = 0; start < segments.length; start += 1) {
+		let compound = "";
+		for (let end = start; end < segments.length; end += 1) {
+			compound += segments[end];
+			const kind = normalizedSensitiveAssignmentKind(compound);
+			if (kind) return kind;
+		}
+	}
+	return undefined;
+}
+
+function normalizedSensitiveAssignmentKind(normalized: string): SensitiveAssignmentKind | undefined {
 	if (normalized.endsWith("authorization")) return "authorization";
 	if (secretAssignmentKeys.has(normalized) || normalized === "awssecretaccesskey" ||
 		normalized.endsWith("token") || normalized.endsWith("password") ||
@@ -1503,7 +1538,8 @@ function validateCapabilityName(name: string): void {
 		throw new ToolPolicyError(`capability name ${JSON.stringify(name)} must use the bounded host_ namespace`);
 	}
 	const tokens = name.slice("host_".length).split("_");
-	const normalizedTokens = tokens.map((token) => token.endsWith("s") ? token.slice(0, -1) : token);
+	const normalizedTokens = tokens.map(normalizeCapabilityToken);
+	const tokenSet = new Set(normalizedTokens);
 	const compact = name.slice("host_".length).replaceAll("_", "");
 	const sensitiveNouns = new Set([
 		"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
@@ -1515,6 +1551,25 @@ function validateCapabilityName(name: string): void {
 		(token === "access" && normalizedTokens[index + 1] === "token") ||
 		(token === "refresh" && normalizedTokens[index + 1] === "token"));
 	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => sensitiveNouns.has(token));
+	const hasAnyToken = (values: ReadonlySet<string>): boolean => normalizedTokens.some((token) => values.has(token));
+	const executionResources = new Set(["process", "program", "subprocess", "terminal"]);
+	const executionActions = new Set(["run", "launch", "start", "execute", "open", "invoke"]);
+	const transportResources = new Set(["http", "web"]);
+	const transportActions = new Set(["request", "write", "post", "put", "patch", "delete", "send"]);
+	const databaseResources = new Set(["sql", "database", "db"]);
+	const databaseActions = new Set(["request", "query", "write", "insert", "update", "delete", "execute", "modify"]);
+	const recursiveActions = new Set(["create", "spawn", "delegate", "orchestrate", "run", "launch"]);
+	const protectedData = new Set(["vault", "keychain", "keystore", "environment", "cookie", "session"]);
+	const exposureActions = new Set([
+		"read", "get", "list", "view", "show", "dump", "export", "copy", "download", "obtain", "reveal",
+		"lookup", "print", "inspect",
+	]);
+	const hasForbiddenSemanticPair =
+		(hasAnyToken(executionResources) && hasAnyToken(executionActions)) ||
+		(hasAnyToken(transportResources) && hasAnyToken(transportActions)) ||
+		(hasAnyToken(databaseResources) && hasAnyToken(databaseActions)) ||
+		(tokenSet.has("agent") && hasAnyToken(recursiveActions)) ||
+		(hasAnyToken(protectedData) && hasAnyToken(exposureActions));
 	const hasForbiddenCompact =
 		/(?:bash|shell|exec|command)/.test(compact) ||
 		/(?:subagent|spawnagent|delegate|orchestrat|agentcreate|agentrunner|recursiveagent)/.test(compact) ||
@@ -1522,17 +1577,25 @@ function validateCapabilityName(name: string): void {
 		/sql(?:request|query|queries|write|insert|update|delete|execute)/.test(compact) ||
 		/(?:secret|credential|token|password|passwd|auth|authorization|apikey|privatekey)/.test(compact);
 	if (forbiddenCapabilityPatterns.some((pattern) => pattern.test(name)) ||
-		hasSensitiveNoun || hasForbiddenCompact) {
+		hasSensitiveNoun || hasForbiddenCompact || hasForbiddenSemanticPair) {
 		throw new ToolPolicyError(`capability ${name} requests forbidden generic, secret, or recursive authority`);
 	}
 }
 
+function normalizeCapabilityToken(token: string): string {
+	if (token === "process") return token;
+	if (token === "queries") return "query";
+	if (token === "processes") return "process";
+	if (token === "cookies") return "cookie";
+	if (token.endsWith("ies") && token.length > 3) return `${token.slice(0, -3)}y`;
+	if (token.endsWith("s") && token.length > 1) return token.slice(0, -1);
+	return token;
+}
+
 export function normalizeScopedPrefixes(prefixes: unknown, description: string): string[] {
-	if (!Array.isArray(prefixes) || prefixes.length < 1 || prefixes.length > 64) {
-		throw new ToolPolicyError(`${description} prefixes must be a non-empty bounded array`);
-	}
+	const capturedPrefixes = capturePolicyArray(prefixes, `${description} prefixes`, 64, false);
 	const normalized: string[] = [];
-	for (const prefix of prefixes) {
+	for (const prefix of capturedPrefixes) {
 		if (prefix === ".") {
 			normalized.push(prefix);
 			continue;
@@ -1548,7 +1611,36 @@ export function normalizeScopedPrefixes(prefixes: unknown, description: string):
 		normalized.push(value);
 	}
 	if (new Set(normalized).size !== normalized.length) throw new ToolPolicyError(`duplicate ${description} prefix`);
+	Object.freeze(normalized);
 	return normalized;
+}
+
+function capturePolicyArray<T>(
+	value: unknown,
+	description: string,
+	maximum: number,
+	allowEmpty: boolean,
+): T[] {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new ToolPolicyError(`${description} must be a bounded non-proxy array`);
+	}
+	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
+		typeof length !== "number" || !Number.isSafeInteger(length) || length < (allowEmpty ? 0 : 1) ||
+		length > maximum) {
+		throw new ToolPolicyError(`${description} has an invalid authoritative length`);
+	}
+	const captured: T[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new ToolPolicyError(`${description} contains a sparse or accessor element`);
+		}
+		captured[index] = descriptor.value as T;
+	}
+	Object.freeze(captured);
+	return captured;
 }
 
 function captureCapabilityResult(name: string, result: CapabilityResult): Readonly<Required<CapabilityResult>> {

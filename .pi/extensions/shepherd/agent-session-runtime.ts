@@ -631,15 +631,36 @@ interface TerminalCapture {
 	agentEndWillRetry: boolean;
 	piPhase: "initial" | "agent" | "turn" | "turn-ended" | "agent-ended" | "settled";
 	piOpenMessageRole?: "user" | "assistant" | "toolResult";
+	piOpenToolResult?: CapturedToolResult;
 	piTurnAssistant?: AssistantTerminal;
 	piSettled: boolean;
 	frozen: boolean;
 	contentPhases: Map<number, { kind: "text" | "thinking" | "toolCall"; phase: "open" | "ended" }>;
-	toolExecutions: Map<string, { toolName: string; argsIdentity: string; phase: "started" | "ended" }>;
+	authorizedToolNames: ReadonlySet<string>;
+	toolCalls: Map<string, CapturedToolCall>;
 	stream?: AssistantTerminal;
 	failure?: AgentSessionRuntimeError;
 	eventCount: number;
 	eventBytes: number;
+}
+
+interface CapturedToolCall {
+	id: string;
+	name: string;
+	argsIdentity: string;
+	phase: "announced" | "started" | "ended" | "result" | "closed";
+	resultIdentity?: string;
+	isError?: boolean;
+	messageIdentity?: string;
+}
+
+interface CapturedToolResult {
+	toolCallId: string;
+	toolName: string;
+	resultIdentity: string;
+	isError: boolean;
+	timestamp: number;
+	identity: string;
 }
 
 interface CapturedAssistantContent {
@@ -923,8 +944,14 @@ export class ShepherdAgentSessionRuntime {
 		let primaryFailurePresent = false;
 		let primaryFailure: unknown;
 		let result: AgentSessionHandoff | undefined;
-		try {
+		const assertExecutionActive = (): void => {
+			if (this.#closing || this.#closed) {
+				scope.cancel(new AgentSessionRuntimeError("AgentSession runtime closed before child creation"));
+			}
 			scope.assertActive();
+		};
+		try {
+			assertExecutionActive();
 			const settingsManager = this.#sdk.createSettingsManager({
 				defaultProvider: REQUIRED_PROVIDER,
 				defaultModel: REQUIRED_MODEL,
@@ -937,10 +964,14 @@ export class ShepherdAgentSessionRuntime {
 				prompts: [],
 				themes: [],
 			}, { projectTrusted: false });
+			assertExecutionActive();
 			const sessionManager = this.#sdk.createSessionManager(request.workspace.cwd);
+			assertExecutionActive();
+			const resourceAgentDir = this.#sdk.getAgentDir();
+			assertExecutionActive();
 			const resourceLoader = this.#sdk.createResourceLoader({
 				cwd: request.workspace.cwd,
-				agentDir: this.#sdk.getAgentDir(),
+				agentDir: resourceAgentDir,
 				settingsManager,
 				noExtensions: true,
 				noSkills: true,
@@ -949,13 +980,17 @@ export class ShepherdAgentSessionRuntime {
 				noContextFiles: true,
 				systemPrompt: prompts.systemPrompt,
 			});
+			assertExecutionActive();
 			reloadPromise = Promise.resolve().then(() => resourceLoader.reload());
 			await scope.race(reloadPromise);
-			scope.assertActive();
+			assertExecutionActive();
+
+			const sessionAgentDir = this.#sdk.getAgentDir();
+			assertExecutionActive();
 
 			const createOptions: CreateAgentSessionOptions = {
 				cwd: request.workspace.cwd,
-				agentDir: this.#sdk.getAgentDir(),
+				agentDir: sessionAgentDir,
 				model,
 				thinkingLevel: thinking,
 				scopedModels: [{ model, thinkingLevel: thinking }],
@@ -967,6 +1002,7 @@ export class ShepherdAgentSessionRuntime {
 				sessionManager,
 				settingsManager,
 			};
+			assertExecutionActive();
 			const createPromise = Promise.resolve().then(() => this.#sdk.createAgentSession(createOptions));
 			const owner = new SessionCreationOwnership(
 				createPromise,
@@ -999,7 +1035,7 @@ export class ShepherdAgentSessionRuntime {
 				throw error;
 			}
 
-			const capture = newTerminalCapture();
+			const capture = newTerminalCapture(expectedToolNames);
 			owned.subscribe((event) => {
 				captureEvent(capture, event, this.#options);
 				if (capture.failure) void owned?.abortOnce().catch(() => undefined);
@@ -1400,8 +1436,8 @@ function captureFreshDenseArray(
 	maximum: number,
 	allowEmpty: boolean,
 ): unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
-		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy array`);
+	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError(`${description} must be a non-proxy array`);
 	}
 	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
 	const lengthValue = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
@@ -1411,19 +1447,15 @@ function captureFreshDenseArray(
 		throw new AgentSessionRuntimeError(`${description} has an invalid authoritative length`);
 	}
 	const length = lengthValue;
-	const ownKeys = Reflect.ownKeys(value);
-	if (ownKeys.length !== length + 1 || ownKeys.some((key) =>
-		typeof key !== "string" || (key !== "length" && !/^(?:0|[1-9][0-9]*)$/.test(key)))) {
-		throw new AgentSessionRuntimeError(`${description} contains hidden, symbol, sparse, or extra behavior`);
-	}
 	const captured: unknown[] = [];
 	for (let index = 0; index < length; index += 1) {
 		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains a sparse or accessor element`);
 		}
-		captured.push(descriptor.value);
+		captured[index] = descriptor.value;
 	}
+	Object.freeze(captured);
 	return captured;
 }
 
@@ -1613,7 +1645,7 @@ function captureToolNameArray(value: unknown): readonly string[] | undefined {
 	return Object.freeze(names);
 }
 
-function newTerminalCapture(): TerminalCapture {
+function newTerminalCapture(expectedToolNames: readonly string[]): TerminalCapture {
 	return {
 		messageEndCount: 0,
 		agentEndCount: 0,
@@ -1622,7 +1654,8 @@ function newTerminalCapture(): TerminalCapture {
 		piSettled: false,
 		frozen: false,
 		contentPhases: new Map(),
-		toolExecutions: new Map(),
+		authorizedToolNames: new Set(expectedToolNames),
+		toolCalls: new Map(),
 		eventCount: 0,
 		eventBytes: 0,
 	};
@@ -1680,10 +1713,12 @@ function capturePiLifecycleEvent(
 			capture.piPhase = "turn";
 			capture.piTurnAssistant = undefined;
 			capture.stream = undefined;
-			if ([...capture.toolExecutions.values()].some((execution) => execution.phase !== "ended")) {
-				throw new AgentSessionRuntimeError("turn_start preceded completion of tool execution");
+			for (const call of capture.toolCalls.values()) {
+				if (call.phase !== "closed") {
+					throw new AgentSessionRuntimeError("turn_start preceded completion of an authorized tool call");
+				}
 			}
-			capture.toolExecutions.clear();
+			capture.toolCalls.clear();
 			return undefined;
 		case "message_start": {
 			assertExactCapturedFields(fields, ["type", "message"], "message_start event");
@@ -1693,10 +1728,21 @@ function capturePiLifecycleEvent(
 			const role = capturePiMessageRole(fields.get("message"));
 			capture.piOpenMessageRole = role;
 			if (role === "assistant") {
+				if (capture.piTurnAssistant) {
+					throw new AgentSessionRuntimeError("multiple assistant messages cannot replace one tool-bearing turn");
+				}
 				const initial = captureAssistantTerminal(fields.get("message"), true, options.maxEventBytes);
 				if (!initial) throw new AgentSessionRuntimeError("assistant message_start is invalid");
 				capture.stream = initial;
 				capture.contentPhases.clear();
+			} else if (role === "toolResult") {
+				const toolResult = captureToolResultMessage(fields.get("message"), options.maxEventBytes);
+				const call = capture.toolCalls.get(toolResult.toolCallId);
+				if (!call || call.phase !== "ended" || call.name !== toolResult.toolName ||
+					call.resultIdentity !== toolResult.resultIdentity || call.isError !== toolResult.isError) {
+					throw new AgentSessionRuntimeError("tool result message does not match an ended authorized call");
+				}
+				capture.piOpenToolResult = toolResult;
 			}
 			return undefined;
 		}
@@ -1727,8 +1773,21 @@ function capturePiLifecycleEvent(
 				capture.messageEndCount += 1;
 				capture.messageEnd = terminal;
 				capture.piTurnAssistant = terminal;
+				registerAssistantToolCalls(capture, terminal);
+			} else if (role === "toolResult") {
+				const toolResult = captureToolResultMessage(fields.get("message"), options.maxEventBytes);
+				const open = capture.piOpenToolResult;
+				const call = capture.toolCalls.get(toolResult.toolCallId);
+				if (!open || open.identity !== toolResult.identity || !call || call.phase !== "ended" ||
+					call.name !== toolResult.toolName || call.resultIdentity !== toolResult.resultIdentity ||
+					call.isError !== toolResult.isError) {
+					throw new AgentSessionRuntimeError("tool result message end does not match its authorized call");
+				}
+				call.phase = "result";
+				call.messageIdentity = toolResult.identity;
 			}
 			capture.piOpenMessageRole = undefined;
+			capture.piOpenToolResult = undefined;
 			return undefined;
 		}
 		case "turn_end": {
@@ -1740,10 +1799,7 @@ function capturePiLifecycleEvent(
 			if (!terminal || !sameTerminal(terminal, capture.piTurnAssistant)) {
 				throw new AgentSessionRuntimeError("turn_end assistant does not match message_end");
 			}
-			captureDenseArray(fields.get("toolResults"), "turn_end tool results");
-			if ([...capture.toolExecutions.values()].some((execution) => execution.phase !== "ended")) {
-				throw new AgentSessionRuntimeError("turn_end preceded completion of tool execution");
-			}
+			captureTurnToolResults(capture, fields.get("toolResults"), options.maxEventBytes);
 			capture.piPhase = "turn-ended";
 			return undefined;
 		}
@@ -1785,11 +1841,13 @@ function capturePiLifecycleEvent(
 			}
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
-			if (capture.toolExecutions.has(toolCallId)) {
-				throw new AgentSessionRuntimeError("tool execution ID is duplicated");
-			}
 			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
-			capture.toolExecutions.set(toolCallId, { toolName, argsIdentity: canonicalJson(args), phase: "started" });
+			const call = capture.toolCalls.get(toolCallId);
+			if (!call || call.phase !== "announced" || call.name !== toolName ||
+				call.argsIdentity !== canonicalJson(args)) {
+				throw new AgentSessionRuntimeError("tool execution start does not match one authorized assistant call");
+			}
+			call.phase = "started";
 			return undefined;
 		}
 		case "tool_execution_update": {
@@ -1803,9 +1861,9 @@ function capturePiLifecycleEvent(
 			}
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
-			const execution = capture.toolExecutions.get(toolCallId);
+			const execution = capture.toolCalls.get(toolCallId);
 			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
-			if (!execution || execution.phase !== "started" || execution.toolName !== toolName ||
+			if (!execution || execution.phase !== "started" || execution.name !== toolName ||
 				execution.argsIdentity !== canonicalJson(args)) {
 				throw new AgentSessionRuntimeError("tool execution update does not match its start");
 			}
@@ -1823,17 +1881,140 @@ function capturePiLifecycleEvent(
 			}
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
-			const execution = capture.toolExecutions.get(toolCallId);
-			if (!execution || execution.phase !== "started" || execution.toolName !== toolName ||
+			const execution = capture.toolCalls.get(toolCallId);
+			if (!execution || execution.phase !== "started" || execution.name !== toolName ||
 				typeof fields.get("isError") !== "boolean") {
 				throw new AgentSessionRuntimeError("tool execution end does not match its start");
 			}
-			snapshotEventJson(fields.get("result"), "tool execution result", options.maxEventBytes);
+			const resultIdentity = captureToolExecutionResultIdentity(fields.get("result"), options.maxEventBytes);
 			execution.phase = "ended";
+			execution.resultIdentity = resultIdentity;
+			execution.isError = fields.get("isError") as boolean;
 			return undefined;
 		}
 		default:
 			throw new AgentSessionRuntimeError(`unsupported Pi AgentSession event ${JSON.stringify(type)}`);
+	}
+}
+
+function registerAssistantToolCalls(capture: TerminalCapture, terminal: AssistantTerminal): void {
+	const calls = terminal.content.filter((part) => part.type === "toolCall");
+	if (terminal.stopReason !== "toolUse") {
+		if (calls.length > 0) {
+			throw new AgentSessionRuntimeError("non-tool assistant terminal contains a tool call");
+		}
+		return;
+	}
+	if (calls.length === 0 || capture.toolCalls.size !== 0) {
+		throw new AgentSessionRuntimeError("tool-use assistant must originate a fresh authorized call set");
+	}
+	for (const part of calls) {
+		if (!part.id || !part.name || part.arguments === undefined ||
+			!capture.authorizedToolNames.has(part.name) || capture.toolCalls.has(part.id)) {
+			throw new AgentSessionRuntimeError("assistant originated an invalid or unauthorized tool call");
+		}
+		capture.toolCalls.set(part.id, {
+			id: part.id,
+			name: part.name,
+			argsIdentity: canonicalJson(part.arguments),
+			phase: "announced",
+		});
+	}
+}
+
+function captureToolExecutionResultIdentity(value: unknown, maximum: number): string {
+	const fields = captureClosedRecordFields(value, "tool execution result", 3);
+	assertAllowedCapturedFields(
+		fields,
+		["content", "details", "terminate"],
+		["content", "details"],
+		"tool execution result",
+	);
+	const terminate = fields.get("terminate");
+	if (terminate !== undefined && typeof terminate !== "boolean") {
+		throw new AgentSessionRuntimeError("tool execution terminate flag is invalid");
+	}
+	return captureToolResultPayloadIdentity(
+		fields.get("content"),
+		fields.has("details"),
+		fields.get("details"),
+		maximum,
+	);
+}
+
+function captureToolResultMessage(value: unknown, maximum: number): CapturedToolResult {
+	const fields = captureClosedRecordFields(value, "Pi tool result message", 8);
+	assertAllowedCapturedFields(
+		fields,
+		["role", "toolCallId", "toolName", "content", "details", "isError", "timestamp"],
+		["role", "toolCallId", "toolName", "content", "isError", "timestamp"],
+		"Pi tool result message",
+	);
+	if (fields.get("role") !== "toolResult") {
+		throw new AgentSessionRuntimeError("Pi tool result role is invalid");
+	}
+	const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool result ID");
+	const toolName = requiredLifecycleString(fields, "toolName", "tool result name");
+	const isError = fields.get("isError");
+	const timestamp = fields.get("timestamp");
+	if (typeof isError !== "boolean" || typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+		throw new AgentSessionRuntimeError("Pi tool result status or timestamp is invalid");
+	}
+	const resultIdentity = captureToolResultPayloadIdentity(
+		fields.get("content"),
+		fields.has("details"),
+		fields.get("details"),
+		maximum,
+	);
+	const identity = canonicalJson(snapshotEventJson({
+		toolCallId,
+		toolName,
+		resultIdentity,
+		isError,
+		timestamp,
+	}, "Pi tool result message identity", maximum));
+	return Object.freeze({ toolCallId, toolName, resultIdentity, isError, timestamp, identity });
+}
+
+function captureToolResultPayloadIdentity(
+	contentSource: unknown,
+	hasDetails: boolean,
+	detailsSource: unknown,
+	maximum: number,
+): string {
+	const content = snapshotEventJson(contentSource, "tool result content", maximum);
+	const details = hasDetails && detailsSource !== undefined
+		? snapshotEventJson(detailsSource, "tool result details", maximum)
+		: undefined;
+	return canonicalJson(snapshotEventJson({
+		content,
+		...(details === undefined ? {} : { details }),
+	}, "tool result payload identity", maximum));
+}
+
+function captureTurnToolResults(capture: TerminalCapture, value: unknown, maximum: number): void {
+	const results = captureDenseArray(value, "turn_end tool results");
+	const seen = new Set<string>();
+	for (const source of results) {
+		const result = captureToolResultMessage(source, maximum);
+		const call = capture.toolCalls.get(result.toolCallId);
+		if (seen.has(result.toolCallId) || !call || call.phase !== "result" || call.name !== result.toolName ||
+			call.messageIdentity !== result.identity || call.resultIdentity !== result.resultIdentity ||
+			call.isError !== result.isError) {
+			throw new AgentSessionRuntimeError("turn_end tool result does not match one completed authorized call");
+		}
+		seen.add(result.toolCallId);
+		call.phase = "closed";
+	}
+	const toolTurn = capture.piTurnAssistant?.stopReason === "toolUse";
+	if ((toolTurn && capture.toolCalls.size === 0) || (!toolTurn && capture.toolCalls.size !== 0) ||
+		seen.size !== capture.toolCalls.size) {
+		throw new AgentSessionRuntimeError("turn_end does not close the assistant tool-call set exactly once");
+	}
+	for (const call of capture.toolCalls.values()) {
+		if (call.phase !== "closed") {
+			throw new AgentSessionRuntimeError("turn_end preceded complete tool-call correlation");
+		}
 	}
 }
 

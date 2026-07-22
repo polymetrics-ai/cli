@@ -5608,9 +5608,10 @@ test("cycle 13 public role prompts use intrinsic immutable array snapshots only"
 		originalPrompts,
 		containsOriginal: prompts.systemPrompt.includes(".pi/extensions/shepherd") &&
 			prompts.userPrompt.includes("bounded original context"),
-		containsAttacker: `${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("attacker") ||
-			`${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("outside") ||
-			`${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("bash"),
+		containsAttacker: prompts.userPrompt.includes("attacker context") ||
+			prompts.systemPrompt.includes("- read scope outside") ||
+			prompts.systemPrompt.includes("- write scope outside") ||
+			prompts.systemPrompt.includes("- tools bash"),
 	}, {
 		callerBehaviorCalls: 0,
 		accessorReads: 0,

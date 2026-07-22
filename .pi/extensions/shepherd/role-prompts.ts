@@ -1,3 +1,5 @@
+import { types as nodeTypes } from "node:util";
+
 import { redactSensitiveText } from "./tool-policy.ts";
 
 export const SHEPHERD_AGENT_PROVIDER = "openai-codex";
@@ -89,15 +91,31 @@ export function routeForRole(role: ShepherdAgentRole): RoleRoute {
 
 export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	const route = routeForRole(input.role);
-	validateAuthority(input.authority);
+	if (!input.authority || typeof input.authority !== "object") {
+		throw new RolePromptError("prompt authority is required");
+	}
+	const context = capturePromptArray<string>(input.context, "role context", MAX_CONTEXT_ITEMS, true);
+	const authority: PromptAuthority = Object.freeze({
+		issue: input.authority.issue,
+		branch: input.authority.branch,
+		workspaceId: input.authority.workspaceId,
+		readOnly: input.authority.readOnly,
+		readPrefixes: capturePromptArray<string>(input.authority.readPrefixes, "prompt read scope", 64, false),
+		writePrefixes: capturePromptArray<string>(
+			input.authority.writePrefixes,
+			"prompt write scope",
+			64,
+			input.authority.readOnly,
+		),
+		toolNames: capturePromptArray<string>(input.authority.toolNames, "prompt tool authority", 40, true),
+		binding: input.authority.binding,
+	});
+	validateAuthority(authority);
 	if (typeof input.task !== "string" || input.task.trim().length === 0 || byteLength(input.task) > MAX_TASK_BYTES) {
 		throw new RolePromptError("role task must be non-empty and bounded");
 	}
-	if (!Array.isArray(input.context) || input.context.length > MAX_CONTEXT_ITEMS) {
-		throw new RolePromptError("role context must be a bounded array");
-	}
 	let contextBytes = 0;
-	for (const item of input.context) {
+	for (const item of context) {
 		if (typeof item !== "string" || byteLength(item) > MAX_CONTEXT_ITEM_BYTES) {
 			throw new RolePromptError("role context item exceeded its bound");
 		}
@@ -105,7 +123,6 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	}
 	if (contextBytes > MAX_CONTEXT_BYTES) throw new RolePromptError("role context exceeded its total bound");
 
-	const { authority } = input;
 	const systemPrompt = [
 		"You are a bounded Polymetrics Shepherd AgentSession role.",
 		roleDescriptions[input.role],
@@ -132,7 +149,7 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 		role: input.role,
 		binding: authority.binding,
 		untrustedTask: redactSensitiveText(input.task),
-		untrustedContext: input.context.map(redactSensitiveText),
+		untrustedContext: context.map(redactSensitiveText),
 		handoffSchema: {
 			schemaVersion: 1,
 			runId: authority.binding.runId,
@@ -153,7 +170,35 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	if (byteLength(systemPrompt) > MAX_SYSTEM_PROMPT_BYTES || byteLength(userPrompt) > MAX_USER_PROMPT_BYTES) {
 		throw new RolePromptError("constructed role prompts exceeded their bounds");
 	}
-	return { systemPrompt, userPrompt };
+	return Object.freeze({ systemPrompt, userPrompt });
+}
+
+function capturePromptArray<T>(
+	value: unknown,
+	description: string,
+	maximum: number,
+	allowEmpty: boolean,
+): T[] {
+	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+		throw new RolePromptError(`${description} must be a bounded non-proxy array`);
+	}
+	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
+		typeof length !== "number" || !Number.isSafeInteger(length) || length < (allowEmpty ? 0 : 1) ||
+		length > maximum) {
+		throw new RolePromptError(`${description} has an invalid authoritative length`);
+	}
+	const captured: T[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new RolePromptError(`${description} contains a sparse or accessor element`);
+		}
+		captured[index] = descriptor.value as T;
+	}
+	Object.freeze(captured);
+	return captured;
 }
 
 function validateAuthority(authority: PromptAuthority): void {
