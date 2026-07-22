@@ -1186,3 +1186,34 @@ test("cycle 10 closes assignment operator case and index policy before GitHub ev
 		});
 	}
 });
+
+function cycle11SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["escaped double quote", `"alpha\\"${marker}"`],
+		["escaped whitespace", `alpha\\ ${marker}`],
+		["line continuation", `alpha\\\n${marker}`],
+		["command substitution", `$(printf ${marker})`],
+		["parameter expansion", `\${UNSAFE:-${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 11 keeps assignment-tail rejection generic before GitHub evidence acceptance", async (t) => {
+	const candidate = await evidence();
+	const marker = "CYCLE11_GITHUB_EVIDENCE_MARKER";
+	for (const [name, assignment] of cycle11SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				validateGitHubPullRequestEvidence({ ...candidate, body: `${candidate.body}\n${assignment}` });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});

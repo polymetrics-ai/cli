@@ -1221,7 +1221,9 @@ broker, or controller:
 3. A `blocked` settlement may accompany an absent authority after a terminal non-applied conflict,
    or a retained `ready_invoking`, `ready_effect_applied`, `recovery_claimed`, or `draft_restored`
    crash window; it can never accompany `ready_settled`. Visibility and receipts must match that
-   exact phase. `draft_restored` requires its exact ready/rollback ownership as applicable, a
+   exact phase. An absent non-applied tombstone is valid only with no owned mutations/recovery and
+   the current exact PR still draft at the prepared original revision. `draft_restored` requires
+   its exact ready/rollback ownership as applicable, a
    current draft PR whose revision equals the rollback value revision, and the latest recovery
    fence. A retained `ready` settlement cannot outlive its authority proof; terminal pruning must
    remove a history as one closure or leave a digest-bound tombstone.
@@ -1286,12 +1288,18 @@ remain byte-exact through the RED commit.
 - [x] Both complete Cycle 10 reports read; candidate/tree/base/scope and frozen blobs confirmed.
 - [x] Required skills/contracts/runtime/project references read; doctor passed and unavailable
       adapter recorded as `manual_gsd_fallback`; read-only sidecar reuse recorded.
-- [ ] Artifact-only Cycle 11 PLAN commit precedes all Cycle 11 tests and production edits.
-- [ ] Complete executable RED commit fails only the named new behavior groups with production frozen.
+- [x] Artifact-only Cycle 11 PLAN `863bf94ac6115fd0342db064555bd95f239f8854`
+      precedes all Cycle 11 tests and production edits.
+- [x] Complete executable RED at this checkpoint fails only the named new behavior groups with all
+      five production blobs frozen.
 - [ ] PLAN/RED SHAs and exact failures reported before GREEN.
 - [ ] Coherent GREEN/refactor and repeatable local evidence recorded truthfully.
 - [ ] Fresh exact-head reviews and all publication/integration/human gates remain parent-owned.
 
 Current machine truth at this plan checkpoint: `verificationPassed: false` and
 `reviewCoveragePassed: false`. Cycle 10's focused route was observed flaky by independent review,
-and the declared broad route remains non-zero; no Cycle 11 test or production edit has run.
+and the declared broad route remains non-zero. Cycle 11 RED executes 791 tests: 743 pass, 42
+intended failing leaves plus five parent containers, and one intentional skip. The leaf failures
+are BEGIN 6, SNAPSHOT 13, conflict-proof 10, persistent-conflict 3, and direct-redaction 10. All 50
+generic consumer rows pass. C10-CONFIRM repeats five times at 5/5 with causal latches. No production
+edit has run and the five frozen blobs remain exact.

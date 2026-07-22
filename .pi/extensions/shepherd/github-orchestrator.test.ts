@@ -3566,6 +3566,37 @@ test("cycle 10 closes assignment operator case and index policy before orchestra
 	}
 });
 
+function cycle11SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["escaped double quote", `"alpha\\"${marker}"`],
+		["escaped whitespace", `alpha\\ ${marker}`],
+		["line continuation", `alpha\\\n${marker}`],
+		["command substitution", `$(printf ${marker})`],
+		["parameter expansion", `\${UNSAFE:-${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 11 keeps assignment-tail rejection generic before orchestration effects", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const marker = "CYCLE11_ORCHESTRATOR_MARKER";
+	for (const [name, objective] of cycle11SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				createPlanFromSource({ ...source, objective });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
 function cycle7FutureParentDecision(
 	request: GitHubDecisionRequest,
 	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
@@ -6538,6 +6569,221 @@ test("cycle 10 pre-application failures have durable invoking state and terminal
 	}
 });
 
+type Cycle11BeginMode =
+	| "reject_before_write"
+	| "apply_then_reject"
+	| "malformed_after_write"
+	| "cancel_after_write"
+	| "timeout_before_write"
+	| "signal_ignoring_late_apply";
+
+class Cycle11BeginOutcomeAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	readonly #mode: Cycle11BeginMode;
+	readonly #cancelCaller: () => void;
+	#beginSettled = false;
+	#announceBegin = (): void => {};
+	readonly beginEntered = new Promise<void>((resolve) => { this.#announceBegin = resolve; });
+	#allowBegin = (): void => {};
+	readonly #beginGate = new Promise<void>((resolve) => { this.#allowBegin = resolve; });
+	#announcePostBeginRead = (): void => {};
+	readonly postBeginRead = new Promise<void>((resolve) => { this.#announcePostBeginRead = resolve; });
+	#announceRecovery = (): void => {};
+	readonly recoveryEntered = new Promise<void>((resolve) => { this.#announceRecovery = resolve; });
+	#allowRecovery = (): void => {};
+	readonly #recoveryGate = new Promise<void>((resolve) => { this.#allowRecovery = resolve; });
+	readyEffectCalls = 0;
+
+	constructor(
+		delegate: ParentReadyDurableAuthorityBoundary,
+		mode: Cycle11BeginMode,
+		cancelCaller: () => void,
+	) {
+		this.#delegate = delegate;
+		this.#mode = mode;
+		this.#cancelCaller = cancelCaller;
+	}
+
+	releaseBegin(): void {
+		this.#allowBegin();
+	}
+
+	releaseRecovery(): void {
+		this.#allowRecovery();
+	}
+
+	async readParentReadyState(
+		query: ParentReadyAuthorityQuery,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState | null> {
+		if (this.#beginSettled) this.#announcePostBeginRead();
+		return this.#delegate.readParentReadyState(query, context);
+	}
+
+	async beginParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState> {
+		this.#announceBegin();
+		try {
+			if (this.#mode === "reject_before_write") throw new Error("cycle 11 begin rejected before write");
+			if (this.#mode === "timeout_before_write" || this.#mode === "signal_ignoring_late_apply") {
+				await this.#beginGate;
+				if (this.#mode === "timeout_before_write") throw new Error("cycle 11 begin settled without write");
+			}
+			const state = await this.#delegate.beginParentReady(request, context);
+			if (this.#mode === "apply_then_reject") throw new Error("cycle 11 begin response lost after write");
+			if (this.#mode === "malformed_after_write") return JSON.parse("{}");
+			if (this.#mode === "cancel_after_write") {
+				this.#cancelCaller();
+				await this.#beginGate;
+			}
+			return state;
+		} finally {
+			this.#beginSettled = true;
+		}
+	}
+
+	settleParentReady(
+		request: SettleParentReadyAuthorityRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState> {
+		return this.#delegate.settleParentReady(request, context);
+	}
+
+	compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		this.readyEffectCalls += 1;
+		return this.#delegate.compareConsumeAndMarkParentReady(request, context);
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.#announceRecovery();
+		await this.#recoveryGate;
+		return this.#delegate.quarantineAndRollbackParentReady(request, context);
+	}
+}
+
+function cycle11AuthorityQuery(
+	planValue: ParentOrchestrationPlan,
+	operation: PreparedParentReadyOperation,
+): ParentReadyAuthorityQuery {
+	return {
+		repository: operation.authorization.repository,
+		pullRequest: operation.authorization.pullRequest,
+		marker: planValue.markers.parentPullRequest,
+		headSha: operation.authorization.headSha,
+		generation: operation.authorization.generation,
+	};
+}
+
+function cycle11MarkReadyRequest(
+	planValue: ParentOrchestrationPlan,
+	operation: PreparedParentReadyOperation,
+): MarkParentReadyRequest {
+	return githubOrchestratorApi.validateMarkParentReadyRequest({
+		repository: operation.authorization.repository,
+		pullRequest: operation.authorization.pullRequest,
+		marker: planValue.markers.parentPullRequest,
+		headSha: operation.authorization.headSha,
+		generation: operation.authorization.generation,
+		decisionRequestId: operation.authorization.decisionRequestId,
+		authorization: operation.authorization,
+		freshness: operation.freshness,
+		mutation: operation.mutation,
+	});
+}
+
+function cycle11ConflictTombstone(
+	request: MarkParentReadyRequest,
+	invocationId: string,
+): Record<string, unknown> {
+	return {
+		schemaVersion: 1,
+		kind: "tombstoned",
+		repository: request.repository,
+		pullRequest: request.pullRequest,
+		marker: request.marker,
+		headSha: request.headSha,
+		generation: request.generation,
+		invocationId,
+		authorizationDigest: request.authorization.digest,
+		mutationIdempotencyKey: request.mutation.idempotencyKey,
+		mutationIntentDigest: request.mutation.intentDigest,
+	};
+}
+
+test("cycle 11 durable begin owns invocation settlement before terminal reconciliation", async (t) => {
+	for (const mode of [
+		"reject_before_write",
+		"apply_then_reject",
+		"malformed_after_write",
+		"cancel_after_write",
+		"timeout_before_write",
+		"signal_ignoring_late_apply",
+	] as const) {
+		await t.test(mode, async () => {
+			const caller = new AbortController();
+			let authority: Cycle11BeginOutcomeAuthority | undefined;
+			const scenario = await cycle8PortOnlyPreparedScenario((delegate) => {
+				authority = new Cycle11BeginOutcomeAuthority(delegate, mode, () => caller.abort());
+				return authority;
+			});
+			assert.ok(authority);
+			await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+			const commit = scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+				mode === "cancel_after_write" ? { signal: caller.signal } : undefined,
+			);
+			await authority.beginEntered;
+			const result = await commit;
+			let pendingStop: Awaited<ReturnType<GitHubParentOrchestrator["stop"]>> | null = null;
+			if (["cancel_after_write", "timeout_before_write", "signal_ignoring_late_apply"].includes(mode)) {
+				const stopSignal = new AbortController();
+				stopSignal.abort();
+				pendingStop = await scenario.orchestrator.stop({ signal: stopSignal.signal });
+			}
+			authority.releaseBegin();
+			const postBeginRead = await settleWithin(authority.postBeginRead, 100);
+			const wroteInvoking = !["reject_before_write", "timeout_before_write"].includes(mode);
+			const recoveryEntered = wroteInvoking
+				? await settleWithin(authority.recoveryEntered, 100)
+				: "not_required";
+			let recoveringStop: Awaited<ReturnType<GitHubParentOrchestrator["stop"]>> | null = null;
+			if (wroteInvoking) {
+				const stopSignal = new AbortController();
+				stopSignal.abort();
+				recoveringStop = await scenario.orchestrator.stop({ signal: stopSignal.signal });
+			}
+			authority.releaseRecovery();
+			const finalStop = await scenario.orchestrator.stop();
+			const finalState = await authority.readParentReadyState(
+				cycle11AuthorityQuery(scenario.candidate, scenario.operation),
+				portOnlyContext(),
+			);
+			assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
+			assert.notEqual(postBeginRead, "hung", "begin settlement must precede one authoritative terminal read");
+			assert.equal(authority.readyEffectCalls, 0, "a failed begin must never invoke the ready effect");
+			if (pendingStop !== null) assert.equal(pendingStop.kind, "incomplete");
+			if (wroteInvoking) {
+				assert.notEqual(recoveryEntered, "hung", "persisted invoking state must have a recovery owner");
+				assert.equal(recoveringStop?.kind, "incomplete");
+				assert.equal(finalState?.phase, "draft_restored");
+			} else {
+				assert.equal(finalState, null);
+			}
+			assert.equal(finalStop.kind, "joined");
+		});
+	}
+});
+
 class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuthorityBoundary {
 	readonly #delegate: ParentReadyDurableAuthorityBoundary;
 	readonly #backing: PortOnlyReadinessBacking;
@@ -6547,6 +6793,12 @@ class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuth
 	#perturbedConfirmation = false;
 	#releaseConfirmation = (): void => {};
 	readonly #confirmationGate = new Promise<void>((resolve) => { this.#releaseConfirmation = resolve; });
+	#announceConfirmation = (): void => {};
+	readonly confirmationEntered = new Promise<void>((resolve) => { this.#announceConfirmation = resolve; });
+	#releaseSecondFence = (): void => {};
+	readonly #secondFenceGate = new Promise<void>((resolve) => { this.#releaseSecondFence = resolve; });
+	#announceSecondFence = (): void => {};
+	readonly secondFenceEntered = new Promise<void>((resolve) => { this.#announceSecondFence = resolve; });
 	rollbackCalls = 0;
 
 	constructor(
@@ -6563,6 +6815,10 @@ class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuth
 		this.#releaseConfirmation();
 	}
 
+	allowSecondFenceToSettle(): void {
+		this.#releaseSecondFence();
+	}
+
 	async readParentReadyState(
 		query: ParentReadyAuthorityQuery,
 		context: ExternalCallContext,
@@ -6571,17 +6827,11 @@ class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuth
 			this.#awaitingConfirmation = false;
 			if (!this.#perturbedConfirmation) {
 				this.#perturbedConfirmation = true;
+				this.#announceConfirmation();
 				if (this.#mode === "reject") throw new Error("cycle 10 confirmation rejected");
 				if (this.#mode === "malformed") return JSON.parse("{}");
 				const stale = structuredClone(this.#state);
-				if (this.#mode === "late") {
-					await Promise.race([
-						this.#confirmationGate,
-						new Promise<void>((resolve) => setTimeout(resolve, 160)),
-					]);
-				} else {
-					await this.#confirmationGate;
-				}
+				await this.#confirmationGate;
 				return stale;
 			}
 		}
@@ -6622,6 +6872,10 @@ class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuth
 		_context: ExternalCallContext,
 	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
 		this.rollbackCalls += 1;
+		if (request.recovery.attempt > 1) {
+			this.#announceSecondFence();
+			await this.#secondFenceGate;
+		}
 		const prior = this.#state;
 		if (prior === null) throw new Error("cycle 10 confirmation authority state is absent");
 		const claimed = githubOrchestratorApi.validateParentReadyAuthorityState({
@@ -6670,20 +6924,19 @@ test("cycle 10 post-rollback confirmation is bounded and superseded by a later f
 				scenario.receipts,
 				scenario.operation,
 			);
-			await new Promise<void>((resolve) => setTimeout(resolve, 10));
-			const initiallyStopped = await scenario.orchestrator.stop();
-			await new Promise<void>((resolve) => setTimeout(resolve, 60));
+			await authority.confirmationEntered;
+			await authority.secondFenceEntered;
+			const stopSignal = new AbortController();
+			stopSignal.abort();
+			const initiallyStopped = await scenario.orchestrator.stop({ signal: stopSignal.signal });
+			if (mode === "late") authority.releaseConfirmation();
+			authority.allowSecondFenceToSettle();
 			const supersededStop = await scenario.orchestrator.stop();
 			const rollbackCalls = authority.rollbackCalls;
 			authority.releaseConfirmation();
-			await new Promise<void>((resolve) => setTimeout(resolve, 100));
 			const cleanupStop = await scenario.orchestrator.stop();
 			assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
-			assert.equal(
-				initiallyStopped.kind,
-				mode === "hang" || mode === "late" ? "incomplete" : "joined",
-				"only an unsettled confirmation remains recovery-owned",
-			);
+			assert.equal(initiallyStopped.kind, "incomplete", "held newer fence remains recovery-owned");
 			assert.ok(rollbackCalls >= 2, "a newer durable fence must supersede the abandoned confirmation");
 			assert.equal(supersededStop.kind, "joined", "the successful newer fence must release lifecycle ownership");
 			assert.equal(cleanupStop.kind, "joined");
@@ -6751,17 +7004,24 @@ test("cycle 9 exact issue 479 fixture is value-serialized and contains no fake o
 });
 
 interface Cycle10MutableRestartSnapshot extends Record<string, unknown> {
+	readiness: {
+		issues: GitHubChildIssue[];
+		pullRequests: GitHubPullRequestEvidence[];
+		rosters: GitHubRosterSnapshot[];
+		integrations: ChildIntegrationReceipt[];
+	};
 	journal: {
-		prepared: unknown[];
+		prepared: PreparedParentReadyOperation[];
 		settlements: Array<Record<string, unknown> & { mutationIdempotencyKey: string }>;
 	};
 	authority: Record<string, unknown> & {
 		mutationRevision: number;
-		readyMutations: unknown[];
-		rollbackMutations: unknown[];
-		recoveryAttempts: unknown[];
+		readyMutations: Array<[string, PortOnlyParentReadyMutationSnapshot]>;
+		rollbackMutations: Array<[string, PortOnlyParentReadyMutationSnapshot]>;
+		recoveryAttempts: Array<[string, number]>;
 		states: Array<[string, ParentReadyAuthorityState]>;
 	};
+	decision: HumanDecisionRecord;
 }
 
 async function cycle10RestartSnapshotSeed(): Promise<{
@@ -6917,6 +7177,190 @@ test("cycle 10 restart decoding rejects ambiguous and internally incomplete snap
 	});
 });
 
+function cycle11ReadySettledSnapshot(
+	seed: Awaited<ReturnType<typeof cycle10RestartSnapshotSeed>>,
+): Cycle10MutableRestartSnapshot {
+	const snapshot = structuredClone(seed.snapshot);
+	const readyMutation = snapshot.authority.readyMutations[0][1];
+	const state = snapshot.authority.states[0][1];
+	snapshot.authority.states[0][1] = githubOrchestratorApi.validateParentReadyAuthorityState({
+		...state,
+		rollbackMutation: null,
+		phase: "ready_settled",
+		status: "settled",
+		fence: 0,
+	});
+	snapshot.authority.rollbackMutations = [];
+	snapshot.authority.recoveryAttempts = [];
+	snapshot.readiness.pullRequests = [structuredClone(readyMutation.value)];
+	snapshot.journal.settlements[0].outcome = "ready";
+	return snapshot;
+}
+
+function cycle11BlockedAbsentSnapshot(
+	seed: Awaited<ReturnType<typeof cycle10RestartSnapshotSeed>>,
+): Cycle10MutableRestartSnapshot {
+	const snapshot = structuredClone(seed.snapshot);
+	const current = snapshot.readiness.pullRequests[0];
+	snapshot.readiness.pullRequests = [{ ...current, draft: true, revision: seed.state.originalRevision }];
+	snapshot.authority.readyMutations = [];
+	snapshot.authority.rollbackMutations = [];
+	snapshot.authority.recoveryAttempts = [];
+	snapshot.authority.states = [];
+	return snapshot;
+}
+
+test("cycle 11 restart decoding rejects cross-component impossible histories", async (t) => {
+	const seed = await cycle10RestartSnapshotSeed();
+	const decode = (snapshot: unknown): Cycle9RestartSnapshot => {
+		const decoded: unknown = JSON.parse(JSON.stringify(snapshot));
+		return decodeCycle9RestartSnapshot(decoded, seed.plan);
+	};
+	const mutate = (
+		base: Cycle10MutableRestartSnapshot,
+		change: (snapshot: Cycle10MutableRestartSnapshot) => void,
+	): Cycle10MutableRestartSnapshot => {
+		const snapshot = structuredClone(base);
+		change(snapshot);
+		return snapshot;
+	};
+	const ready = cycle11ReadySettledSnapshot(seed);
+	const rejects: Array<[string, Cycle10MutableRestartSnapshot]> = [
+		["ready settlement over restored authority", mutate(seed.snapshot, (value) => {
+			value.journal.settlements[0].outcome = "ready";
+		})],
+		["blocked settlement over ready authority", mutate(ready, (value) => {
+			value.journal.settlements[0].outcome = "blocked";
+		})],
+		["restored authority with non-draft current PR", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests[0].draft = false;
+		})],
+		["restored authority with divergent current revision", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests[0].revision += 1;
+		})],
+		["restored authority with divergent current head", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests[0].headSha = "f".repeat(40);
+		})],
+		["restored authority with divergent current marker", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests[0].marker = "<!-- cycle-11-foreign-parent -->";
+		})],
+		["ready authority with draft current PR", mutate(ready, (value) => {
+			value.readiness.pullRequests[0].draft = true;
+		})],
+		["ready authority with divergent current revision", mutate(ready, (value) => {
+			value.readiness.pullRequests[0].revision += 1;
+		})],
+		["ready authority with divergent current head", mutate(ready, (value) => {
+			value.readiness.pullRequests[0].headSha = "f".repeat(40);
+		})],
+		["restored evidence with authority closure omitted", mutate(seed.snapshot, (value) => {
+			value.authority.readyMutations = [];
+			value.authority.rollbackMutations = [];
+			value.authority.recoveryAttempts = [];
+			value.authority.states = [];
+		})],
+		["top-level decision diverges from prepared operation", mutate(seed.snapshot, (value) => {
+			value.decision = {
+				...value.decision,
+				consumedAt: "2026-07-21T12:00:41.000Z",
+				updatedAt: "2026-07-21T12:00:41.000Z",
+			};
+		})],
+		["ready and rollback mutations share a sequence revision", mutate(seed.snapshot, (value) => {
+			value.authority.rollbackMutations[0][1].revision = value.authority.readyMutations[0][1].revision;
+		})],
+		["rollback mutation precedes ready mutation", mutate(seed.snapshot, (value) => {
+			value.authority.readyMutations[0][1].revision = 2;
+			value.authority.rollbackMutations[0][1].revision = 1;
+		})],
+		["current parent PR is absent", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests = [];
+		})],
+		["current parent PR is duplicated", mutate(seed.snapshot, (value) => {
+			value.readiness.pullRequests.push(structuredClone(value.readiness.pullRequests[0]));
+		})],
+		["settlement predates consumed decision", mutate(seed.snapshot, (value) => {
+			value.journal.settlements[0].settledAt = "2026-07-21T11:59:00.000Z";
+		})],
+	];
+	assert.doesNotThrow(() => decode(seed.snapshot), "blocked restored history is canonical");
+	assert.doesNotThrow(() => decode(ready), "ready-settled history is canonical");
+	assert.doesNotThrow(() => decode(cycle11BlockedAbsentSnapshot(seed)),
+		"blocked non-applied tombstone may prune authority only at the original draft revision");
+	for (const [name, snapshot] of rejects) {
+		await t.test(name, () => assert.throws(
+			() => decode(snapshot),
+			/snapshot|history|settlement|authority|decision|mutation|revision|visibility|pull.request|current|causal|duplicate|owned/i,
+		));
+	}
+});
+
+test("cycle 11 typed non-applied conflicts require exact atomic tombstone proof", async (t) => {
+	const scenario = await cycle8PortOnlyPreparedScenario();
+	const request = cycle11MarkReadyRequest(scenario.candidate, scenario.operation);
+	const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(request);
+	for (const coordinate of [
+		"policy",
+		"review",
+		"exact_paths",
+		"child_receipt",
+		"ancestry",
+		"decision",
+		"plan",
+		"head",
+		"pull_request_revision",
+		"authorization_state",
+	] as const) {
+		await t.test(coordinate, () => {
+			assert.throws(
+				() => githubOrchestratorApi.validateParentReadyCompareEffectResult({
+					schemaVersion: 1,
+					kind: "conflict",
+					coordinate,
+				}, request),
+				/terminal|tombstone|invocation|non-applied/i,
+			);
+			assert.doesNotThrow(() => githubOrchestratorApi.validateParentReadyCompareEffectResult({
+				schemaVersion: 1,
+				kind: "conflict",
+				coordinate,
+				terminal: cycle11ConflictTombstone(request, invoking.invocationId),
+			}, request));
+		});
+	}
+});
+
+test("cycle 11 persistent compare conflicts tombstone only their exact invoking reservation", async (t) => {
+	for (const mode of ["moved_head", "moved_draft_revision", "foreign_non_draft"] as const) {
+		await t.test(mode, async () => {
+			const scenario = await cycle8PortOnlyPreparedScenario();
+			await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+			const request = cycle11MarkReadyRequest(scenario.candidate, scenario.operation);
+			const begun = await scenario.authority.beginParentReady(request, portOnlyContext());
+			const index = scenario.backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+			const current = scenario.backing.pullRequests[index];
+			assert.ok(current);
+			const moved = mode === "moved_head"
+				? { ...current, headSha: "f".repeat(40) }
+				: { ...current, draft: mode !== "foreign_non_draft", revision: current.revision + 1 };
+			scenario.backing.pullRequests.splice(index, 1, moved);
+			const result = await scenario.authority.compareConsumeAndMarkParentReady(request, portOnlyContext());
+			assert.equal(result.kind, "conflict");
+			assert.equal(
+				result.kind === "conflict" ? result.coordinate : null,
+				mode === "moved_head" ? "head" : "pull_request_revision",
+			);
+			assert.deepEqual(Reflect.get(result, "terminal"), cycle11ConflictTombstone(request, begun.invocationId));
+			assert.equal(
+				await scenario.authority.readParentReadyState(cycle11AuthorityQuery(scenario.candidate, scenario.operation), portOnlyContext()),
+				null,
+				"the exact invoking reservation must be atomically terminal before conflict returns",
+			);
+			assert.deepEqual(scenario.backing.pullRequests[index], moved, "conflict terminalization must preserve foreign PR state");
+		});
+	}
+});
+
 test("cycle 7 atomic authority boundary rejects every moved coordinate without recovery", async (t) => {
 	const mutations: Array<[string, ParentReadyAuthorityCoordinate, (authorization: Record<string, any>) => void]> = [
 		["policy", "policy", (value) => { value.policies[0].revision += 1; }],
@@ -7013,8 +7457,8 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.equal(details.candidateRef, "HEAD");
 	assert.equal(Object.hasOwn(details, "frozenCandidate"), false);
 	assert.equal((details.priorReviewState as Record<string, unknown>).priorReviewedCandidate,
-		"a49e4df2798281d1e64c722ccbcab5f4a678c3e1");
-	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 10);
+		"3b39cfce9b4a99940b0451302df6bf5c17b49c02");
+	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 11);
 	assert.equal(details.verificationPassed, false);
 	const validate = githubOrchestratorApi.validateRunStateCandidateSemantics;
 	assert.doesNotThrow(() => validate(state));

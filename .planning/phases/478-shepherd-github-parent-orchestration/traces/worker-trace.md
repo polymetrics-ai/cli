@@ -451,3 +451,27 @@
   substitution assignment redaction, and truthful leading artifacts. No Cycle 11 test,
   production, network/GitHub, push, review, ready, integration, merge, or human-gate action ran
   before this checkpoint. Verification and review coverage remain false.
+
+## 2026-07-22 Cycle 11 executable RED
+
+- Artifact PLAN `863bf94ac6115fd0342db064555bd95f239f8854` preceded every RED edit. Five existing test files
+  now cover the complete review union; all five production blobs remain exact.
+- Focused RED: 791 total / 743 pass / 47 intended TAP failures / 1 intentional skip. The exact 42
+  failing leaves are durable begin 6, unified restart snapshot 13, typed coordinate terminal proof
+  10, persistent moved/foreign tombstone 3, and direct assignment redaction 10. Five parent
+  containers fail only because those leaves fail; no retained behavior fails.
+- All 50 assignment consumer rows already pass generic failure text with no synthetic marker or
+  `API_KEY` reflection. Three snapshot rows already rejected by component-local validation and all
+  legitimate canonical/absent-tombstone controls pass.
+- C10-CONFIRM no longer infers phases from fixed sleeps. Confirmation-entry, second-fence-entry,
+  and release latches drive all four modes. Five consecutive isolated executions each report
+  5 tests / 5 pass / 0 fail; no retry wrapper, timeout increase, or assertion relaxation was used.
+- Strict no-emit TypeScript 5.9.3 passes over the five changed test files and their transitive
+  production modules against cached Pi 0.80.6 Node declarations. The generic `tdd-gate.mjs`
+  helper interpreted retained historical PLAN checkboxes as current behavior tasks, emitted a
+  false-negative out-of-scope `TDD-GATE.json`, and that generated file was removed immediately.
+  Exact TAP plus strict-TypeScript evidence is retained here as the explicit
+  `manual_gsd_fallback`; no production edit began.
+- No production, dependency, network/GitHub, push, reviewer, ready, integration, merge, or human-
+  gate action ran. `verificationPassed` and `reviewCoveragePassed` remain false. The RED checkpoint
+  is represented non-self-referentially as `HEAD` until its SHA is reported to the parent.

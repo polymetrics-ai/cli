@@ -227,7 +227,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   focused 686 pass / 0 fail / 1 skip; strict TypeScript pass; broad 841 pass / 65 managed-sandbox
   failures / 1 skip, therefore machine verification remains false
 
-## Cycle 11 consolidated-review correction (planned)
+## Cycle 11 consolidated-review correction (executable RED; production frozen)
 
 - frozen reviewed candidate/tree/base: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` /
   `962160e1ccae2e52f6f645185edb96819bd4a9f5` /
@@ -250,3 +250,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - `verificationPassed` and `reviewCoveragePassed` remain false during PLAN/RED and while the broad
   route is non-zero. Parent owns publication, fresh reviews, integration, ready, merge, and human
   gates; this worker performs no network or external mutation
+- artifact PLAN is `863bf94a`; RED executes 791 total / 743 pass / 47 intended TAP failures / 1
+  skip with all five production blobs frozen. Exact failing leaves are BEGIN 6, cross-history 13,
+  terminal-proof 10, persistent-tombstone 3, and direct-redaction 10; all 50 generic validators
+  pass. C10-CONFIRM is causally synchronized and passes five consecutive 5/5 runs

@@ -265,3 +265,9 @@ verification false. Publication and fresh exact-head review remain parent-owned.
   non-zero and reviews are blocked. Exclude Go/connectors/`make`, services, dependencies,
   parent/main/#475, network/GitHub, push, reviewers, ready, integration, merge, and human gates.
   Adapter remains `manual_gsd_fallback`; the worker owns only local PLAN/RED/GREEN/evidence.
+
+Execution status: artifact PLAN `863bf94a` precedes a complete executable RED. Focused RED is 791
+total / 743 pass / 47 intended TAP failures / 1 intentional skip; all five production blobs remain
+frozen. The 42 failing leaves are BEGIN 6, SNAPSHOT 13, conflict proof 10, persistent tombstone 3,
+and direct redaction 10, plus five parent containers. Fifty generic consumer rows pass. The
+latch-based C10-CONFIRM family passes five consecutive 5/5 runs. GREEN has not started.

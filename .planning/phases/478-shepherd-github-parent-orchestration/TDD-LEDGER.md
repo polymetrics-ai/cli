@@ -511,12 +511,12 @@ C10-CONFIRM family is made causally deterministic before repeat evidence.
 
 | ID | Minimum rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C11-BEGIN | 6 | begin rejection/malformed/cancellation/deadline/late-apply paths retain invocation, key, and stop ownership through invocation settlement plus terminal authority reconciliation; zero ready effects | planned RED |
-| C11-CONFLICT | 13 | all ten typed coordinates and three persistent moved/foreign PR cases atomically tombstone the requested invoking reservation, preserve PR state, and leave truthful stop/reentry/restart evidence | planned RED |
-| C11-SNAPSHOT | 12 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed retained mutation histories reject before role construction; canonical reorder passes | planned RED |
-| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation uses entry/deadline/new-fence/release latches and repeats without fixed-delay phase inference | planned fixture synchronization |
-| C11-ASSIGN | 60 | `=`/`+=` escaped quote/space/continuation and command/parameter substitution values redact their complete marker directly and reject generically through five consumers | planned RED |
-| C11-ARTIFACT | 4 | leading status, checklist, PR/handoff prose, and machine truth agree at every checkpoint | plan-first docs |
+| C11-BEGIN | 6 | begin rejection/malformed/cancellation/deadline/late-apply paths retain invocation, key, and stop ownership through invocation settlement plus terminal authority reconciliation; zero ready effects | red: 6/6 intended leaves fail on missing post-settlement read/recovery |
+| C11-CONFLICT | 13 | all ten typed coordinates and three persistent moved/foreign PR cases atomically tombstone the requested invoking reservation, preserve PR state, and leave truthful stop/reentry/restart evidence | red: 10/10 proof-contract plus 3/3 persistent leaves fail |
+| C11-SNAPSHOT | 16 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed retained mutation histories reject before role construction; canonical and legitimate absent-tombstone controls pass | red: 13 missing cross-history leaves fail; 3 already-closed local-shape rows pass |
+| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation uses entry/deadline/new-fence/release latches and repeats without fixed-delay phase inference | deterministic fixture green at RED: five consecutive 5/5 runs |
+| C11-ASSIGN | 60 | `=`/`+=` escaped quote/space/continuation and command/parameter substitution values redact their complete marker directly and reject generically through five consumers | red: 10/10 direct leaves fail; 50/50 generic consumer rows pass |
+| C11-ARTIFACT | 4 | leading status, checklist, PR/handoff prose, and machine truth agree at every checkpoint | plan/RED artifact checks green; verification/review false |
 
 Frozen production blobs before RED: orchestrator `1ef3a4ead93ce8572e121256564b7ecb8a6454a9`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
@@ -524,3 +524,15 @@ broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
 `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, and review router
 `ba0800f12f5c0bb99fdc2109221b7553daac7fb3`. RED may modify only existing test files and phase
 artifacts. Exact failure counts, repeat distribution, and blob identity are recorded before GREEN.
+
+Cycle 11 RED result: 791 total / 743 pass / 47 intended TAP failures / 1 intentional skip. There
+are 42 intended failing leaves (BEGIN 6, SNAPSHOT 13, conflict proof 10, persistent tombstone 3,
+direct redaction 10) and five failing parent containers. No retained behavior fails. C10-CONFIRM
+was run five consecutive times using causal latches; every run reports 5 tests / 5 pass / 0 fail.
+Strict no-emit TypeScript 5.9.3 passes over the five changed tests and their transitive production
+modules against cached Pi 0.80.6 Node declarations. The standalone `tdd-gate.mjs` helper cannot
+distinguish the current Cycle 11 ledger from historical checklist rows in this long-running phase;
+its generated out-of-scope `TDD-GATE.json` was removed immediately, so the exact executable TAP
+and strict-TypeScript evidence above is the recorded `manual_gsd_fallback`. Production blobs remain
+exactly frozen. PLAN `863bf94ac6115fd0342db064555bd95f239f8854` precedes every RED edit; the RED
+checkpoint is this commit (`HEAD`).

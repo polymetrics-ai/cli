@@ -616,3 +616,39 @@ test("cycle 10 closes assignment operator case and index policy at the review-ro
 		});
 	}
 });
+
+test("cycle 11 consumes complete shell-like assignment values at the review-router boundary", async (t) => {
+	const marker = "CYCLE11_REVIEW_ROUTER_MARKER";
+	const credentialSuffix = "API_KEY";
+	type AssignmentOperator = "=" | "+=";
+	const forms: ReadonlyArray<readonly [string, (operator: AssignmentOperator) => string]> = [
+		["escaped double quote", (operator) => `ACME_API_KEY${operator}"prefix\\"${marker}"`],
+		["escaped whitespace", (operator) => `ACME_API_KEY${operator}prefix\\ ${marker}`],
+		["line continuation", (operator) => `ACME_API_KEY${operator}prefix\\\n${marker}`],
+		["command substitution", (operator) => `ACME_API_KEY${operator}$(printf ${marker})`],
+		["parameter expansion", (operator) => `ACME_API_KEY${operator}\${CYCLE11_FALLBACK:-prefix ${marker}}`],
+	];
+
+	for (const operator of ["=", "+="] as const) {
+		for (const [name, assignmentFor] of forms) {
+			const assignment = assignmentFor(operator);
+			await t.test(`${name} with ${operator} fully redacts the marker`, () => {
+				const redacted = reviewRouterApi.redactSensitiveText(assignment);
+				assert.notEqual(redacted, assignment);
+				assert.doesNotMatch(redacted, new RegExp(marker, "u"));
+			});
+			await t.test(`${name} with ${operator} rejects generically before durable review work`, () => {
+				let rejection: unknown;
+				try {
+					createIndependentReviewWork(target({ workItemId: assignment }));
+				} catch (error) {
+					rejection = error;
+				}
+				assert.ok(rejection instanceof Error, name);
+				assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+				assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+				assert.doesNotMatch(rejection.message, new RegExp(credentialSuffix, "u"));
+			});
+		}
+	}
+});

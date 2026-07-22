@@ -652,6 +652,36 @@ test("cycle 10 closes assignment operator case and index policy before durable d
 	}
 });
 
+function cycle11SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["escaped double quote", `"alpha\\"${marker}"`],
+		["escaped whitespace", `alpha\\ ${marker}`],
+		["line continuation", `alpha\\\n${marker}`],
+		["command substitution", `$(printf ${marker})`],
+		["parameter expansion", `\${UNSAFE:-${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 11 keeps assignment-tail rejection generic before durable decision state", async (t) => {
+	const marker = "CYCLE11_HUMAN_DECISION_MARKER";
+	for (const [name, question] of cycle11SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
 	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
 	const requestComment = {

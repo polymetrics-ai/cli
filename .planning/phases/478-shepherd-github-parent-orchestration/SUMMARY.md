@@ -1,8 +1,8 @@
 # Summary: #478
 
-Status: Cycle 11 is planned against blocked exact candidate `3b39cfce`. Both Cycle 10 reports are
-consolidated into one strict TDD correction. No Cycle 11 test or production edit has run;
-verification and fresh exact-head review coverage remain false and parent-owned respectively.
+Status: Cycle 11 executable RED follows artifact PLAN `863bf94a` against blocked candidate
+`3b39cfce`. Both Cycle 10 reports are consolidated into one strict TDD correction. All five
+production blobs remain frozen; verification and fresh exact-head review coverage remain false.
 Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -242,3 +242,11 @@ focused gate nondeterministically and the declared broad route remains non-zero,
 `verificationPassed` and `reviewCoveragePassed` are both false. The exact 21-path scope is
 unchanged. This Cycle 11 artifact checkpoint precedes every new test and production edit; parent
 ownership of publication, reviews, integration, merge, ready, and human gates is unchanged.
+
+The complete Cycle 11 RED now executes 791 focused tests: 743 pass, 42 intended failing leaves plus
+five failing parent containers, and one intentional live-sandbox skip. Failures isolate all six
+begin settlement trajectories, thirteen cross-history snapshot gaps, ten missing typed-coordinate
+terminal proofs, three persistent moved/foreign tombstones, and ten incomplete direct redactions.
+All fifty durable/outbound consumer rows already reject generically without marker or `API_KEY`
+reflection. The causally latched C10-CONFIRM family passes five consecutive 5/5 runs. No production,
+network, publication, review, integration, ready, merge, or human-gate action has run.

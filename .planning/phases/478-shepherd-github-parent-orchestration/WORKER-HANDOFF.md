@@ -18,9 +18,9 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `3b39cfce9b4a99940b0451302df6bf5c17b49c02`
 
-Cycle 11 status: artifact PLAN in progress; both Cycle 10 reviews are blocked and consolidated;
-no Cycle 11 test or production edit has occurred. Cycle 10 is historical local evidence, not a
-review-clean or verification-passing candidate.
+Cycle 11 status: artifact PLAN `863bf94a` and complete executable RED are captured; both Cycle 10
+reviews are blocked and consolidated. No Cycle 11 production edit has occurred. Cycle 10 is
+historical local evidence, not a review-clean or verification-passing candidate.
 
 ## Scope Delivered
 
@@ -407,3 +407,7 @@ session-attestation contract and fixtures required to verify independent-review 
 - `verificationPassed` and `reviewCoveragePassed` remain false. The broad route is non-zero and the
   focused Cycle 10 route was observed flaky. Parent retains publication, review, integration,
   ready, merge, and every human gate.
+- RED evidence: 791 total / 743 pass / 47 intended TAP failures / 1 intentional skip. The exact 42
+  failing leaves are BEGIN 6, SNAPSHOT 13, terminal-proof 10, persistent-tombstone 3, and direct
+  redaction 10; five parent containers account for the remaining failures. All five production
+  blobs remain exact. C10-CONFIRM passes five consecutive causally latched 5/5 runs.

@@ -1,9 +1,9 @@
 # Verification: #478
 
-Status: Cycle 11 is planned against blocked exact candidate
-`3b39cfce9b4a99940b0451302df6bf5c17b49c02`. Both Cycle 10 reviews are consolidated; no Cycle 11
-test or production edit has run. `verificationPassed` is false because the focused Cycle 10 gate
-was independently observed flaky and the declared broad route exits non-zero.
+Status: Cycle 11 executable RED is captured after artifact PLAN
+`863bf94ac6115fd0342db064555bd95f239f8854`; all five production blobs remain frozen. Both Cycle 10
+reviews are consolidated. `verificationPassed` is false because Cycle 11 is intentionally red, the
+focused Cycle 10 gate was independently observed flaky, and the declared broad route exits non-zero.
 `reviewCoveragePassed` is false because both exact-head reviews are blocked. Earlier cycle gate
 sections below are historical evidence and do not supersede the current Cycle 11 contract.
 
@@ -15,8 +15,9 @@ sections below are historical evidence and do not supersede the current Cycle 11
       conflict, unified restart, causal confirmation, assignment-tail, and artifact contracts.
 - [x] Required routing/contracts/skills/runtime/project artifacts are read; doctor passes and the
       unavailable adapter records `manual_gsd_fallback`.
-- [ ] Artifact-only Cycle 11 PLAN commit precedes every Cycle 11 test and production edit.
-- [ ] One executable RED captures the complete union with all five production blobs unchanged.
+- [x] Artifact-only Cycle 11 PLAN `863bf94a` precedes every Cycle 11 test and production edit.
+- [x] One executable RED captures the complete union with all five production blobs unchanged:
+      791 total / 743 pass / 47 intended TAP failures / 1 intentional skip.
 - [ ] The causally synchronized C10-CONFIRM family repeats deterministically at RED and GREEN; the
       complete focused route repeats at GREEN without retries, longer deadlines, or relaxed checks.
 - [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
@@ -26,6 +27,16 @@ sections below are historical evidence and do not supersede the current Cycle 11
 
 Machine verification and review coverage remain false throughout PLAN and RED. A focused pass
 cannot override the declared broad non-zero route, and no new exact-head review is worker-owned.
+
+Cycle 11 RED failure ledger: BEGIN 6 leaves; unified snapshot 13 leaves; mandatory terminal proof
+10 coordinate leaves; persistent tombstone 3 leaves; complete direct redaction 10 leaves; five
+parent containers fail because their children fail. The 50 validator rows already pass generic
+no-marker/no-`API_KEY` checks. The latch-based C10-CONFIRM family passes five consecutive runs at
+5/5 each with zero retry wrapper, deadline increase, assertion relaxation, or phase sleep. Strict
+no-emit TypeScript 5.9.3 passes over the five changed tests and their transitive production modules
+against cached Pi 0.80.6 Node declarations. The generic TDD helper cannot parse the phase's retained
+multi-cycle ledger; its out-of-scope generated report was removed and executable RED evidence is
+recorded manually under the declared `manual_gsd_fallback`.
 
 ## Cycle 10 verification contract
 
