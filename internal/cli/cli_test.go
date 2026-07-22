@@ -77,6 +77,14 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
+func TestDynamicConnectorUnknownFlagWithoutActionIsUsageError(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"gong", "--bogus"}, &stdout, &stderr)
+	if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
+		t.Fatalf("Run(gong --bogus) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
 func TestDynamicConnectorHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"help", "gong", "--json"}, &stdout, &stderr)

@@ -620,7 +620,8 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
-	if len(args) == 0 || connectorHelpRequested(args) {
+	surface := surfaceProvider.CommandSurface()
+	if len(args) == 0 || connectorHelpRequested(args, surface) {
 		manual := connectors.RenderConnectorManual(connector)
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName, "manual": manual})
@@ -645,13 +646,22 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	})
 }
 
-func connectorHelpRequested(args []string) bool {
+func connectorHelpRequested(args []string, surface *connectors.CommandSurface) bool {
 	flags := parseFlags(args)
 	if _, ok := flags.values["help"]; ok {
 		return true
 	}
 	path := flags.values["_"]
 	if len(path) == 0 {
+		declared := make(map[string]bool, len(surface.GlobalFlags))
+		for _, flag := range surface.GlobalFlags {
+			declared[flag.Name] = true
+		}
+		for name := range flags.values {
+			if name != "_" && !declared[name] {
+				return false
+			}
+		}
 		return true
 	}
 	if len(path) == 1 && path[0] == "help" {
