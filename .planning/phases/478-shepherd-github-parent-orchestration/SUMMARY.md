@@ -1,11 +1,12 @@
 # Summary: #478
 
-Status: Cycle 11 exact evidence candidate `4f0e17df` is blocked by both independent reviews. Cycle
-12 is at its executable RED checkpoint after artifact PLAN `7f96718c`: both reports are consolidated into dual durable-begin
-ownership, a total restart-role graph, multiline/composite assignment redaction, and narrowly
-scoped evidence claims. RED is 942 total / 885 pass / 56 intended fail / 1 skip with production
-frozen. No Cycle 12 production edit has run. Verification and review
-coverage remain false; earlier delivery status below is retained as historical context.
+Status: Cycle 12 is locally GREEN at implementation checkpoint
+`723fdc122cea75a5d6f146fb8b39383e9e5795e3` after artifact PLAN `7f96718c` and executable
+RED `2649cf6d`. The focused route is 978 total / 977 pass / 0 fail / 1 intentional skip; strict
+owned/all-production TypeScript, pinned offline RPC, and exact integrity gates pass. The declared
+broad route remains non-zero at 1198 / 1132 / 65 / 1 because of the managed-sandbox
+process-spawn/lease family, and no fresh exact-head review ran. Verification and review coverage
+therefore remain false; earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -261,28 +262,40 @@ review. No network, publication, review, integration, ready, merge, or human-gat
 
 ## Cycle 12 correction status
 
-Both Cycle 11 reviews block exact candidate `4f0e17df`. Their 399-line union is frozen in an
-artifact-first plan against the unchanged base, merge base, 21 paths, and five production blobs.
-A valid request-mismatched begin now requires two independent owners in the RED contract: the
-requested invocation must be authoritatively reconciled, while the observed foreign unsettled
-state must be adopted from its own durable record or closed by exact terminal proof. Neither the
-key nor stop may join until both settle; requested effects remain zero and foreign PR state may be
-changed only by its exact owned recovery.
+Both Cycle 11 reviews block exact historical candidate `4f0e17df`. Their 399-line union was frozen
+in an artifact-first plan against the unchanged base, merge base, 21 paths, and five production
+blobs. Original executable RED `2649cf6d` is 942 total / 885 pass / 56 intended fail / 1 skip:
+six BEGIN, seven orphan-role, five global-sequence, fifteen recovery-claimed, and eighteen direct
+assignment leaves plus five parent containers. All ninety initial consumers and the ordinary
+newline control passed while all production blobs remained frozen.
 
-Restart validation is planned as a total reverse-consumed graph rather than a loop over prepared
-entries. Every authority, settlement, ready receipt, rollback receipt, recovery attempt, and
-current PR must belong to exactly one prepared/decision/PR history. Retained mutation revisions
-must be globally unique and causal. Four legitimate `recovery_claimed` pre/post-effect receipt/
-visibility windows remain explicit, including claim-before-effect without a rollback receipt.
+Independent implementation review strengthened each BEGIN permutation to use a distinct foreign
+repository, marker, generation, PR, and head, and added ANSI-C escaped-quote, case-pattern, and
+heredoc command-substitution assignment forms. The resulting reviewer-gap RED is 978 total / 963
+pass / 14 intended fail / 1 skip: twelve leaves plus two parent containers. Its thirty new consumer
+rows already rejected generically.
 
-The assignment matrix covers both operators across multiline quotes/backticks/substitutions and
-top-level array/input-process/output-process/brace composites: 18 direct redactions plus 90
-generic/no-marker checks in the five consumers. Cycle 11 counts remain historical and are not
-evidence that these adjacent invariants pass. `verificationPassed` and `reviewCoveragePassed`
-remain false. No external or human gate is worker-owned.
+Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` now retains separate requested and
+observed durable owners after valid mismatched begin, performs foreign recovery only against the
+returned state's exact repository/marker/generation coordinate, and keeps keyed/stop ownership
+until both terminal proofs join. Requested effects remain zero. The restart decoder reverse-
+consumes every retained role into exactly one prepared/decision/PR history, validates all
+recovery-claimed visibility windows, and enforces one globally unique causal mutation sequence.
+The scanner consumes all twelve bounded multiline/composite forms for both `=` and `+=`.
 
-Executable RED contains 51 named failing leaves: six dual-owner begin rows, seven orphan-role rows,
-five global-sequence rows, fifteen recovery-claimed rows, and eighteen direct assignment rows.
-Five parent containers account for the other failures. All ninety five-consumer assignment rows
-and the ordinary unquoted-newline control pass generically. Strict TypeScript passes; the five
-production blobs remain byte-exact.
+Focused GREEN is 978 total / 977 pass / 0 fail / 1 intentional skip. C12-BEGIN is 6/6, graph
+orphan/sequence/claim are 7/7, 5/5, and 15/15, and C12-ASSIGN is 144/144: 24 direct redactions plus
+120 generic/no-marker consumer checks. Strict five-pair and all-20-production TypeScript pass with
+TypeScript 5.9.3 against cached Pi 0.80.6; pinned offline RPC discovers `pm-shepherd` from
+`extension`. The broad route is an honest environmental non-zero result at 1198 total / 1132 pass
+/ 65 managed-sandbox process-spawn/lease failures / 1 skip.
+
+Immutable base and reviewed-candidate ancestry, exact merge base `3addb1f4`, full-range diff,
+exact 21 paths, three JSON parses, and Cycle 12 marker confinement pass. The two Cycle 11 reports
+remain exactly 399 lines with SHA-256
+`f2aa1e4a89686c6ae1748252c994d18a602167c56f61f28583ff52162b0d5d27` and
+`d8e0fdfca0696f6446c0e85af43fd2471e8112a693688f053cccd547c1e430a1`. Final production blobs
+are orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+`2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, and
+human decision `fc1c6230`. `verificationPassed` and `reviewCoveragePassed` remain false. No
+network, publication, reviewer dispatch, integration, ready, merge, or human gate ran.

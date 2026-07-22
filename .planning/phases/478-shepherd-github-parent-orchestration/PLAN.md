@@ -1338,7 +1338,8 @@ TypeScript-only Shepherd correction, so no Go skill applies. `scripts/gsd doctor
 --dry-run` reports `unknown GSD command: programming-loop`, and the skill helper
 `scripts/programming-loop.mjs` is absent. Cycle 12 therefore records `manual_gsd_fallback`. One
 read-only explorer maps test/helper reuse while this worker alone owns the ordered artifact PLAN,
-one executable RED, coherent GREEN/refactor, and local evidence within the unchanged path set.
+initial executable RED, any review-triggered gap RED, coherent GREEN/refactor, and local evidence
+within the unchanged path set.
 
 ### Cycle 12 dual begin-ownership matrix
 
@@ -1403,13 +1404,14 @@ independent histories, and reversed ready/rollback causality reject before role 
 
 ### Cycle 12 assignment and evidence policies
 
-The bounded assignment scanner consumes CR/LF while a quoted, backtick, command/parameter
-substitution, array, process-substitution, or brace-composite value remains open. Top-level array
-`(...)`, input/output process substitution `<(...)`/`>(...)`, and brace composite `{...,...}` cannot expose a
-suffix after whitespace or comma. Unsupported or unterminated composite syntax conservatively
-redacts through its bounded line/field closure. For both `=` and `+=`, direct redactor assertions
-must remove the complete marker and each of the five owned consumers must reject with generic text
-containing neither marker nor credential name.
+The bounded assignment scanner consumes CR/LF while a quoted, ANSI-C quoted, backtick,
+command/parameter substitution, array, process-substitution, or brace-composite value remains
+open. Top-level array `(...)`, input/output process substitution `<(...)`/`>(...)`, and brace
+composite `{...,...}` cannot expose a suffix after whitespace or comma. Case-pattern and heredoc
+closers embedded inside command substitutions cannot end the assignment early. Unsupported or
+unterminated composite syntax conservatively redacts through its bounded line/field closure. For
+both `=` and `+=`, direct redactor assertions must remove the complete marker and each of the five
+owned consumers must reject with generic text containing neither marker nor credential name.
 
 Cycle 12 evidence names only demonstrated rows. It does not equate typed-conflict shape tests with
 all persistence proofs, does not call the Cycle 11 BEGIN or SNAPSHOT families complete, and does
@@ -1424,10 +1426,10 @@ advance only after the exact Cycle 12 RED/GREEN rows and declared gates run.
 | C12-GRAPH-ORPHAN | 7 | authority, settlement, ready receipt, rollback receipt, recovery attempt, current PR, and a disconnected role bundle with no exactly-one prepared/decision/PR owner reject before construction |
 | C12-GRAPH-SEQUENCE | 5 | ready/ready, ready/rollback, and rollback/rollback revisions cannot be reused across independent histories; owned rollback cannot precede ready; high-water cannot trail a retained receipt |
 | C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed pre/post-effect controls survive JSON round-trip; ten named receipt/visibility/fence/settlement variants reject; one production-shaped claim-before-effect restart resumes the exact fence and joins idempotently |
-| C12-ASSIGN | 108 | two operators x nine multiline/composite forms prove 18 direct complete redactions plus 90 generic/no-marker consumer rejections across five validators |
+| C12-ASSIGN | 144 | two operators x twelve multiline/composite forms prove 24 direct complete redactions plus 120 generic/no-marker consumer rejections across five validators |
 | C12-ARTIFACT | 4 | leading summary, verification, PR/handoff prose, and machine state describe Cycle 11 as review-blocked and Cycle 12 only at its actual PLAN/RED/GREEN checkpoint |
 
-The one executable RED changes only existing test files and these phase artifacts. All retained
+The initial executable RED changes only existing test files and these phase artifacts. All retained
 controls stay green, every new behavior leaf either fails for the named missing production
 contract or is a deliberate canonical control, and all five production blobs remain byte-exact
 through the RED commit.
@@ -1435,7 +1437,7 @@ through the RED commit.
 ### Cycle 12 lifecycle and checkpoints
 
 1. Commit these nine artifact-only PLAN updates before any Cycle 12 test or production edit.
-2. Commit one complete executable RED for the full review union. Record exact TAP leaf/container
+2. Commit the initial executable RED for the mapped review union. Record exact TAP leaf/container
    failures, canonical controls, strict TypeScript result, and all five frozen production blobs.
 3. Report PLAN and RED SHAs, exact counts, and frozen blobs to the parent before GREEN.
 4. Implement the smallest coherent dual-owner begin reconciliation, total restart graph, and
@@ -1449,18 +1451,38 @@ through the RED commit.
 - [x] Both complete Cycle 11 reports read; candidate/tree/base/scope and frozen blobs confirmed.
 - [x] Required skill/contracts/runtime/project references read; doctor passed, unavailable adapter
       and helper recorded as `manual_gsd_fallback`; read-only sidecar recorded.
-- [x] Artifact-only Cycle 12 PLAN `7f96718c06409c078d773ddae05d69ede3996af5`
+- [x] Artifact-only Cycle 12 PLAN `7f96718c4d8c692cd618ff220ab0d53d2e6546a2`
       precedes all Cycle 12 tests and production edits.
-- [x] One complete executable RED at this checkpoint records 942 total / 885 pass / 56 intended
+- [x] Initial committed executable RED `2649cf6dcad1fcc943261c0838bbca8e56c5c595` records
+      942 total / 885 pass / 56 intended
       failures / 1 intentional skip with all five production blobs frozen.
-- [ ] PLAN/RED SHAs, counts, and frozen blobs are reported before GREEN.
-- [ ] Coherent GREEN/refactor and truthful local verification are recorded.
-- [ ] Fresh exact-head review and every publication/integration/human gate remain parent-owned.
+- [x] PLAN `7f96718c` and RED `2649cf6d` SHAs, counts, and frozen blobs were reported before GREEN.
+- [x] Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` and truthful local verification are recorded.
+- [x] Fresh exact-head review and every publication/integration/human gate remain parent-owned.
 
-Current RED-checkpoint machine truth is `verificationPassed: false` and
-`reviewCoveragePassed: false`. The complete five-file RED is 942 total / 885 pass / 56 intended
-failures / 1 intentional skip: 51 named behavior leaves plus five parent containers. Strict
-TypeScript passes for the five owned production/test pairs. Every production blob remains exactly
-frozen, and no production edit has run. No Go, connector, `make`, service, dependency,
-parent/main/#475, credential, network/GitHub, push, reviewer, ready, integration, merge, or
-human-gate action is in scope.
+Terminal local machine truth remains `verificationPassed: false` and
+`reviewCoveragePassed: false`. The original five-file RED is 942 total / 885 pass / 56 intended
+failures / 1 intentional skip: 51 named behavior leaves plus five parent containers, with all five
+production blobs frozen. A reviewer-gap RED over the expanded 978-case route is 978 total / 963
+pass / 14 intended failures / 1 skip: six strengthened exact-coordinate BEGIN leaves and six new
+direct assignment leaves plus their two parent containers; all 30 new consumer rows pass
+generically.
+
+Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` closes the named rows. Focused is
+978 total / 977 pass / 0 fail / 1 intentional skip; C12-BEGIN is 6/6 with distinct foreign
+repository, marker, generation, PR, and head coordinates; graph orphan/sequence/claim rows are
+7/7, 5/5, and 15/15; and C12-ASSIGN is 144/144 (24 direct plus 120 consumer checks). Strict
+TypeScript passes for the five owned pairs and all 20 production modules with TypeScript 5.9.3
+against cached Pi 0.80.6. Pinned offline RPC returns `true`. The declared broad route remains an
+environmental non-zero result at 1198 total / 1132 pass / 65 managed-sandbox process-spawn/lease
+failures / 1 skip, so machine verification cannot advance.
+
+Immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path
+scope, three JSON parses, Cycle 12 marker confinement, and both 399-line Cycle 11 report identities
+pass. Final production blobs are orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`,
+review router `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
+`7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. No Go, connector, `make`, service,
+dependency, parent/main/#475, credential, network/GitHub, push, reviewer, ready, integration,
+merge, or human-gate action ran.

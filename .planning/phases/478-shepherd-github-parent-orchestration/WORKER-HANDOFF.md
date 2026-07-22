@@ -18,10 +18,11 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`
 
-Cycle 12 status: both Cycle 11 reviews block the exact candidate and are consolidated in artifact
-PLAN `7f96718c` plus one executable RED: 942 total / 885 pass / 56 intended fail / 1 skip. No Cycle
-12 production edit has run. Verification/review remain false,
-the broad route remains historically non-zero, and this is not a review-clean candidate.
+Cycle 12 status: locally GREEN at `723fdc122cea75a5d6f146fb8b39383e9e5795e3` after artifact
+PLAN `7f96718c` and executable RED `2649cf6d`. Focused is 978 / 977 / 0 / 1; strict
+owned/all-production TypeScript, pinned offline RPC, and exact integrity gates pass. Verification
+remains false because broad is 1198 / 1132 / 65 / 1, and review coverage remains false because no
+fresh exact-head review ran. This is a local evidence candidate, not a review-clean candidate.
 
 ## Scope Delivered
 
@@ -101,14 +102,15 @@ serialized Shepherd 517 total / 451 pass / 65 unchanged unrelated sandbox `spawn
 - Coverage status: pending.
 - Review URL: pending.
 - Disposition summary: no review was started by this worker.
-- Unresolved findings: none locally known across the seven accepted Cycle 8 families; exact-head
-  independent coverage remains required after correction.
+- Unresolved findings: all accepted Cycle 11 findings have local executable coverage and GREEN;
+  exact-head independent validation remains required after this terminal evidence commit.
 
 ## Merge Recommendation
 
-- Recommended state: `locally_verified_awaiting_exact_head_review`.
-- Reason: the one-batch Cycle 8 correction and local gates are complete; both frozen-candidate
-  reviews remain historical blockers until two fresh exact-head reviews cover current `HEAD`.
+- Recommended state: `local_green_broad_nonzero_awaiting_exact_head_review`.
+- Reason: Cycle 12 focused/strict/offline/integrity gates pass, but the declared broad route exits
+  non-zero with 65 managed-sandbox process-spawn/lease failures and both frozen-candidate reviews
+  remain historical blockers until fresh exact-head review covers current `HEAD`.
 - Human gates: parent ready, exact-head parent merge, and default-branch merge remain active.
 - Follow-up issues: #479 owns controller/session integration; this worker must not add it.
 
@@ -432,20 +434,26 @@ session-attestation contract and fixtures required to verify independent-review 
 
 - Frozen candidate/tree/base: `4f0e17df` / `4f9797b2` / `3addb1f4`; exact 21 paths, clean start,
   both Cycle 11 reports read completely, all five production blobs frozen.
-- A valid request-mismatched begin must retain two owners: reconcile the requested invocation from
-  its authoritative durable coordinate and independently adopt/close the observed foreign state.
-  Stop/key join only after both terminal proofs; requested effect stays zero and foreign PR state
-  is not corrupted.
-- Restart input is one total graph. Every settlement, authority, ready receipt, rollback receipt,
-  recovery attempt, and current PR is reverse-consumed by exactly one prepared/decision/PR
-  history. Mutation sequence revisions are globally unique and causal. Recovery-claimed before
-  effect without a rollback receipt remains a valid reconstructible state.
-- Both `=` and `+=` multiline quote/backtick/substitution and array/input-process/output-process/
-  brace composite values must redact their full marker directly and reject generically through all
-  five consumers.
-- Evidence claims are narrowed to named test rows. Cycle 11 counts are historical. Machine
-  verification/review stay false; publication, review, integration, ready, merge, and every human
-  gate remain parent-owned.
-- RED exactness: 51 named missing-behavior leaves plus five parent containers fail; 90 assignment
-  consumers and the ordinary newline control pass generically. Strict TypeScript passes and all
-  five production blobs remain frozen.
+- PLAN `7f96718c4d8c692cd618ff220ab0d53d2e6546a2` precedes executable RED
+  `2649cf6dcad1fcc943261c0838bbca8e56c5c595`. Original RED is 942 / 885 / 56 / 1: 51 named
+  leaves plus five parents with all production frozen. Reviewer-gap RED is 978 / 963 / 14 / 1:
+  twelve strengthened leaves plus two parents; thirty new consumers already pass.
+- Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` retains two exact-coordinate
+  requested/foreign begin owners, reverse-consumes the total restart graph, validates every
+  recovery-claimed window and global mutation sequence, and completely consumes all twelve
+  multiline/composite assignment forms for both operators.
+- Focused is 978 / 977 / 0 / 1. BEGIN 6/6, graph orphan 7/7, sequence 5/5, claim 15/15, and
+  assignment 144/144 (24 direct + 120 consumer) pass.
+- Strict five-pair and all-20-production TypeScript pass with TypeScript 5.9.3 / cached Pi 0.80.6.
+  Pinned offline RPC returns `true` for `pm-shepherd` from `extension`.
+- Serialized Shepherd is honestly environmental at 1198 total / 1132 pass / 65 managed-sandbox
+  process-spawn/lease failures / 1 skip. This keeps `verificationPassed` false.
+- Immutable base/reviewed-candidate ancestry, exact merge base, full diff, exact 21 paths, JSON3,
+  and five-test Cycle 12 marker confinement pass. Both Cycle 11 reports total 399 lines with
+  SHA-256 `f2aa1e4a89686c6ae1748252c994d18a602167c56f61f28583ff52162b0d5d27` and
+  `d8e0fdfca0696f6446c0e85af43fd2471e8112a693688f053cccd547c1e430a1`.
+- Final production blobs are orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+  `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, and
+  human decision `fc1c6230`.
+- `verificationPassed` and `reviewCoveragePassed` remain false; publication, review dispatch,
+  integration, ready, merge, and every human gate remain parent-owned and did not run.

@@ -261,7 +261,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   non-zero and no fresh exact-head review has run. Parent owns publication, reviews, integration,
   ready, merge, and human gates; this worker performs no network or external mutation
 
-## Cycle 12 consolidated-review correction (executable RED; verification/review false)
+## Cycle 12 consolidated-review correction (local GREEN; verification/review false)
 
 - both Cycle 11 reviews block exact `4f0e17df`; their complete union is planned without deferral
 - valid request-mismatched begin success requires separate requested reconciliation and observed-
@@ -269,11 +269,21 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - restart validation becomes a total causal role graph: every authority/settlement/ready/rollback/
   recovery/current-PR entry has exactly one prepared/decision/PR owner; mutation sequences are
   globally unique; legitimate recovery-claim-before-effect without rollback receipt remains valid
-- `=`/`+=` multiline and composite shell values require complete direct redaction plus generic
-  no-marker rejection through all five consumers
-- Cycle 11 evidence claims are narrowed to their named rows. PLAN `7f96718c` precedes a 942 total /
-  885 pass / 56 intended fail / 1 skip RED: 51 named leaves plus five parent containers. All 90
-  assignment consumers pass generically; no production edit has run, all five production blobs
-  are frozen, and both machine gates are false
-- exact 21-path scope is unchanged; no network, push, review, integration, ready, merge, or human
-  gate action is worker-owned
+- `=`/`+=` multiline and composite shell values, including ANSI-C escaped quotes, case patterns,
+  and heredoc command substitutions, receive complete direct redaction plus generic no-marker
+  rejection through all five consumers
+- PLAN `7f96718c` precedes executable RED `2649cf6d`: 942 total / 885 pass / 56 intended fail /
+  1 skip, comprising 51 named leaves plus five parent containers with all production frozen. A
+  reviewer-gap RED over the expanded route is 978 / 963 / 14 / 1: twelve leaves plus two parents.
+- coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` passes focused
+  978 total / 977 pass / 0 fail / 1 intentional skip. BEGIN 6/6, graph orphan 7/7, sequence 5/5,
+  claim 15/15, and assignment 144/144 (24 direct + 120 consumers) all pass.
+- strict TypeScript passes for five owned pairs and all 20 production modules with TypeScript
+  5.9.3 / cached Pi 0.80.6; pinned offline RPC discovers `pm-shepherd` from `extension`
+- the broad route is honestly non-zero at 1198 total / 1132 pass / 65 managed-sandbox
+  process-spawn/lease failures / 1 skip, so `verificationPassed` stays false; no fresh exact-head
+  review ran, so `reviewCoveragePassed` stays false
+- immutable-base and reviewed-candidate ancestry, exact merge base, full diff, exact 21 paths,
+  three JSON parses, Cycle 12 marker confinement, and both Cycle 11 report identities pass
+- no network, push, review dispatch, integration, ready, merge, or human gate action is
+  worker-owned or ran

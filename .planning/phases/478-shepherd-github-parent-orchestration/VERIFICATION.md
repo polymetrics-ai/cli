@@ -1,10 +1,11 @@
 # Verification: #478
 
-Status: both Cycle 11 reviews block exact candidate
-`4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`. Cycle 12 is at executable RED after artifact PLAN
-`7f96718c06409c078d773ddae05d69ede3996af5`; no production edit has run. `verificationPassed` and `reviewCoveragePassed` remain
-false. Earlier cycle gate sections below are historical evidence and do not supersede the current
-Cycle 12 contract.
+Status: Cycle 12 is locally GREEN at `723fdc122cea75a5d6f146fb8b39383e9e5795e3` after
+artifact PLAN `7f96718c4d8c692cd618ff220ab0d53d2e6546a2` and executable RED
+`2649cf6dcad1fcc943261c0838bbca8e56c5c595` plus the later reviewer-gap RED. Focused, strict TypeScript, offline RPC, and
+integrity gates pass. The declared broad route remains non-zero and no fresh exact-head review
+ran, so `verificationPassed` and `reviewCoveragePassed` remain false. Earlier cycle gate sections
+below are historical evidence and do not supersede the current Cycle 12 contract.
 
 ## Cycle 12 verification contract
 
@@ -15,23 +16,49 @@ Cycle 12 contract.
 - [x] Required skill/contracts/runtime/project artifacts are read; doctor passes and unavailable
       adapter/helper records `manual_gsd_fallback`; TypeScript-only scope makes Go skills N/A.
 - [x] Artifact-only Cycle 12 PLAN `7f96718c` precedes every Cycle 12 test and production edit.
-- [x] One executable RED records 942 total / 885 pass / 56 intended failures / 1 skip with all five
+- [x] Initial committed executable RED records 942 total / 885 pass / 56 intended failures / 1 skip with all five
       production blobs unchanged; strict owned TypeScript passes.
-- [ ] PLAN/RED SHAs, counts, and blobs are reported before GREEN.
-- [ ] Focused, strict owned/all-production TypeScript, offline RPC, broad serialized
+- [x] PLAN/RED SHAs, counts, and blobs were reported before GREEN.
+- [x] Focused, strict owned/all-production TypeScript, offline RPC, broad serialized
       classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
 - [x] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
       reviewer, integration, merge, ready, or human-gate action is authorized.
 
-Planned RED rows are BEGIN 6, orphan-role 7, global-sequence 5, recovery-claimed 15, assignment
-108, and artifact 4. Canonical claim-window controls are counted separately from expected
-failures. Cycle 11 focused and broad counts remain historical; they do not close Cycle 12. Machine
-verification and review coverage remain false.
+Executed rows are BEGIN 6, orphan-role 7, global-sequence 5, recovery-claimed 15, assignment 144
+(24 direct plus 120 consumer checks), and artifact 4. The assignment matrix expanded from the
+planned 108 rows after independent review added six direct and thirty consumer checks for ANSI-C,
+case-pattern, and heredoc forms. Canonical claim-window controls are counted separately from
+expected failures. Cycle 11 focused and broad counts remain historical; they do not close Cycle
+12. Machine verification and review coverage remain false.
 
 Cycle 12 RED failure ledger: BEGIN 6 leaves; orphan-role 7; global-sequence 5; recovery-claimed 15;
 direct assignment 18; five parent containers. The 90 new consumer rows and ordinary newline
 control pass. There are no setup or retained failures. Frozen blobs are orchestrator `158749ba`,
 broker `7be67851`, evidence `058ad162`, human decision `fc1c6230`, and router `4eadd5d9`.
+
+### Cycle 12 reviewer-gap RED, GREEN, and local evidence
+
+Independent read-only review strengthened all six BEGIN cases with distinct foreign
+repository/marker/generation/PR/head coordinates and added three assignment forms for both
+operators. Before the bounded fixes, the expanded route was 978 total / 963 pass / 14 intended
+failures / 1 skip: six BEGIN leaves and six direct assignment leaves plus their two parent
+containers. All thirty added consumer rows passed generically.
+
+| Gate | Result |
+| --- | --- |
+| Checkpoints | PLAN `7f96718c`; executable RED `2649cf6d`; coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3`; terminal evidence is non-self-referential `HEAD` |
+| Focused five-file route | 978 total; 977 pass; 0 fail; 1 intentional live-sandbox skip |
+| Cycle 12 behavior rows | BEGIN 6/6; orphan 7/7; global sequence 5/5; recovery-claimed 15/15; assignment 144/144 (24 direct + 120 consumer) |
+| Strict owned TypeScript | pass; five production/test pairs; TypeScript 5.9.3; cached Pi 0.80.6 Node declarations |
+| Strict production TypeScript | pass; all 20 Shepherd production modules; TypeScript 5.9.3; cached Pi 0.80.6 package/type resolver |
+| Offline extension discovery | pass; pinned Pi 0.80.6 RPC returned `true` for `pm-shepherd` from `extension` with isolated settings and offline startup |
+| Serialized Shepherd | environmental failure; 1198 total; 1132 pass; 65 managed-sandbox process-spawn/lease failures; 1 skip; exit 1 |
+| Base and scope | immutable base and reviewed candidate are ancestors; exact merge base `3addb1f4`; full-range diff and exact 21 paths pass |
+| Data and markers | all three changed JSON files parse; all five Cycle 12 synthetic assignment markers are confined to matching test files |
+| Review report replay | 399 lines; SHA-256 `f2aa1e4a89686c6ae1748252c994d18a602167c56f61f28583ff52162b0d5d27` and `d8e0fdfca0696f6446c0e85af43fd2471e8112a693688f053cccd547c1e430a1` |
+| Production blobs | orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`; router `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`; broker `7be67851`; evidence `058ad162`; human decision `fc1c6230` |
+| Machine truth | `verificationPassed: false`; `reviewCoveragePassed: false` |
+| Prohibited/external actions | no Go, connector, `make`, services, dependencies, network/GitHub, push, review dispatch, ready, integration, merge, or human gate ran |
 
 ## Cycle 11 verification contract
 

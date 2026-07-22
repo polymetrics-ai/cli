@@ -298,7 +298,18 @@ and human gate.
   non-zero. Exclude Go/connectors/`make`, services, dependencies, parent/main/#475, network/GitHub,
   push, reviewers, ready, integration, merge, and human gates. Adapter is `manual_gsd_fallback`.
 
-Execution status: PLAN `7f96718c` precedes one executable RED. The combined five-file route is 942
-total / 885 pass / 56 intended fail / 1 skip: 51 named behavior leaves plus five parent containers.
-All 90 new consumer rows and the ordinary newline control pass; strict TypeScript passes. All five
-production blobs remain frozen and no production edit has run.
+Execution status: PLAN `7f96718c` precedes executable RED `2649cf6d`. The original combined route
+is 942 total / 885 pass / 56 intended fail / 1 skip: 51 named behavior leaves plus five parent
+containers, with all production frozen. A reviewer-gap RED over 978 cases is 978 / 963 / 14 / 1:
+six strengthened BEGIN leaves and six new direct scanner leaves plus two parents; all 30 added
+consumer rows already pass generically.
+
+Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` passes the five-file route at
+978 total / 977 pass / 0 fail / 1 intentional skip. Exact-coordinate BEGIN is 6/6, total-graph
+orphan/sequence/claim families are 7/7, 5/5, and 15/15, and the expanded assignment family is
+144/144 (24 direct + 120 consumers). Strict five-pair and all-20-production TypeScript pass with
+TypeScript 5.9.3 / cached Pi 0.80.6; pinned offline RPC returns `true`. Base, ancestry, merge-base,
+full diff, exact 21 paths, three JSON parses, Cycle 12 marker confinement, and both 399-line report
+identities pass. The broad route remains non-zero at 1198 / 1132 / 65 / 1 because of the same
+managed-sandbox process-spawn/lease family, so verification/review remain false and all external
+or human gates stay parent-owned.

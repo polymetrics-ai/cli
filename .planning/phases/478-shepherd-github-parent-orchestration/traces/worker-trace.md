@@ -530,10 +530,10 @@
   12 test, production, network/GitHub, push, reviewer, ready, integration, merge, or human-gate
   action ran. Verification and review coverage remain false.
 
-## 2026-07-22 Cycle 12 executable RED
+## 2026-07-22 Cycle 12 initial executable RED
 
-- Artifact PLAN `7f96718c06409c078d773ddae05d69ede3996af5` preceded every test edit. Five existing test files
-  now contain the complete review union; production remains byte-exact.
+- Artifact PLAN `7f96718c4d8c692cd618ff220ab0d53d2e6546a2` preceded every test edit. Five existing test files
+  contain the initial mapped review union; production remains byte-exact.
 - Combined focused RED: 942 total / 885 pass / 56 intended failures / 1 intentional skip. The 51
   failing leaves are BEGIN 6, GRAPH-ORPHAN 7, GRAPH-SEQUENCE 5, GRAPH-CLAIM 15, and direct
   assignment redaction 18. Five parent containers fail only because those leaves fail.
@@ -542,3 +542,32 @@
 - Strict no-emit TypeScript passes for all five owned production/test pairs. Frozen blobs remain
   orchestrator `158749ba`, broker `7be67851`, evidence `058ad162`, human `fc1c6230`, and router
   `4eadd5d9`. No production, dependency, external, review, integration, merge, or human gate ran.
+
+## 2026-07-22 Cycle 12 reviewer-gap RED, GREEN, and terminal local evidence
+
+- Independent read-only review strengthened all six begin permutations with distinct foreign
+  repository/marker/generation/PR/head coordinates and added ANSI-C escaped-quote, case-pattern,
+  and heredoc command-substitution forms for both assignment operators.
+- Reviewer-gap RED: 978 total / 963 pass / 14 intended failures / 1 intentional skip. The twelve
+  failing leaves are six strengthened BEGIN and six new direct assignment cases; two parent
+  containers fail with them. All thirty new consumer rows pass generically.
+- Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` closes both gaps. Focused:
+  978 total / 977 pass / 0 fail / 1 intentional skip. BEGIN is 6/6, graph orphan/sequence/claim
+  are 7/7, 5/5, 15/15, and assignment is 144/144 (24 direct + 120 consumer).
+- Strict TypeScript 5.9.3 passes for the five owned production/test pairs and all 20 production
+  modules against cached Pi 0.80.6. Pinned offline Pi 0.80.6 RPC returns `true` for
+  `pm-shepherd` from the explicit extension.
+- The single terminal broad route is environmental: 1198 total / 1132 pass / 65 managed-sandbox
+  process-spawn/exclusive-lease failures / 1 skip, exit 1. No Cycle 12/focused assertion fails.
+- Immutable base and reviewed candidate ancestry, exact merge base `3addb1f4`, full-range diff,
+  exact 21 paths, three JSON parses, and five-test marker confinement pass. The two Cycle 11
+  reports total 399 lines and replay at SHA-256
+  `f2aa1e4a89686c6ae1748252c994d18a602167c56f61f28583ff52162b0d5d27` and
+  `d8e0fdfca0696f6446c0e85af43fd2471e8112a693688f053cccd547c1e430a1`.
+- Final production blobs: orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+  `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+  `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.
+- `verificationPassed` and `reviewCoveragePassed` remain false. No network/GitHub, push,
+  review dispatch, ready, integration, merge, or human gate ran.

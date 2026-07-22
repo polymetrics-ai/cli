@@ -562,7 +562,7 @@ lines). The retained 791 focused tests and one intentional live-sandbox skip rem
 | C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | RED: 7/7 leaves fail; parent fails |
 | C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | RED: 5/5 leaves fail; parent fails |
 | C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | RED: 15/15 leaves fail; parent fails |
-| C12-ASSIGN | 108 | 18 direct `=`/`+=` multiline/composite redactions plus 90 generic/no-marker checks through five consumers | RED: direct 18/18 fail plus parent; consumers 90/90 pass generically |
+| C12-ASSIGN | 144 | planned 18 direct + 90 consumer rows, then independent review adds 6 direct + 30 consumer ANSI-C/case/heredoc rows | Original RED: direct 18/18 fail plus parent, consumers 90/90 pass; reviewer-gap RED: added direct 6/6 fail plus parent, added consumers 30/30 pass |
 | C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | RED checkpoint coherent |
 
 Frozen production blobs before RED: orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`,
@@ -570,13 +570,52 @@ broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
 `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
 `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, and review router
 `4eadd5d96347950edcf51626a9d7069c1297a96d`. At this PLAN checkpoint no Cycle 12 test or
-production edit has run. One executable RED will record exact TAP failures and controls before any
+production edit has run. The initial executable RED will record exact TAP failures and controls before any
 production blob may move.
 
-Cycle 12 executable RED follows PLAN `7f96718c06409c078d773ddae05d69ede3996af5` and changes only
+Cycle 12 initial executable RED follows PLAN `7f96718c4d8c692cd618ff220ab0d53d2e6546a2` and changes only
 the five existing tests plus phase artifacts. The combined route is 942 total / 885 pass / 56
 intended TAP failures / 1 intentional live-sandbox skip. Exact failing leaves are BEGIN 6,
 GRAPH-ORPHAN 7, GRAPH-SEQUENCE 5, GRAPH-CLAIM 15, and direct assignment redaction 18; five parent
 containers fail only because those 51 leaves fail. All 90 new consumer rows and the ordinary
 unquoted-newline control pass generically. Strict no-emit TypeScript passes over the five owned
 production/test pairs. All five production blobs remain exactly frozen; no production edit began.
+
+## Cycle 12 reviewer-gap RED and coherent GREEN
+
+Independent read-only implementation review found two adjacent omissions after the first GREEN:
+foreign returned begin recovery had to use the returned state's exact repository, marker,
+generation, PR, and head coordinates, and the assignment scanner had to consume ANSI-C
+escaped-quote, case-pattern, and heredoc command-substitution forms. Existing tests were
+strengthened before the bounded fixes. Reviewer-gap RED ran 978 total / 963 pass / 14 intended
+failures / 1 intentional skip: six BEGIN leaves and six direct assignment leaves plus two parent
+containers; all thirty new consumer rows passed generically.
+
+Coherent GREEN `723fdc122cea75a5d6f146fb8b39383e9e5795e3` changes the orchestrator
+production/test pair, review-router production/test pair, and the three other matching consumer
+tests. The final focused route is 978 total / 977 pass / 0 fail / 1 intentional skip:
+
+- C12-BEGIN: 6/6, including exact foreign coordinate and rollback-target assertions in both
+  release orders for `ready_invoking`, `ready_effect_applied`, and `recovery_claimed`.
+- C12-GRAPH-ORPHAN: 7/7; C12-GRAPH-SEQUENCE: 5/5; C12-GRAPH-CLAIM: 15/15.
+- C12-ASSIGN: 144/144, comprising 24 complete direct redactions and 120 generic/no-marker consumer
+  checks across five validators; the ordinary unquoted-newline control remains green.
+
+Strict no-emit TypeScript 5.9.3 passes for five owned production/test pairs and all 20 production
+modules against cached Pi 0.80.6. Pinned offline RPC returns `true` for `pm-shepherd` from the
+explicit extension. The single declared broad run is an environmental failure at 1198 total /
+1132 pass / 65 managed-sandbox process-spawn/lease failures / 1 skip.
+
+Immutable base and reviewed candidate are ancestors, exact merge base is `3addb1f4`, full-range
+diff and exact 21 paths pass, three JSON files parse, and Cycle 12 markers are confined to five
+matching test files. The 399-line Cycle 11 reports replay with SHA-256
+`f2aa1e4a89686c6ae1748252c994d18a602167c56f61f28583ff52162b0d5d27` and
+`d8e0fdfca0696f6446c0e85af43fd2471e8112a693688f053cccd547c1e430a1`. Final production
+blobs are orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+`2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be6785190176a8c15660fb180fc95c207b76d5b`,
+evidence `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.
+
+The broad non-zero route and absent fresh exact-head review keep `verificationPassed: false` and
+`reviewCoveragePassed: false`. No network/GitHub, push, review dispatch, ready, integration,
+merge, or human gate ran.
