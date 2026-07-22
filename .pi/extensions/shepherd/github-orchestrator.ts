@@ -2757,9 +2757,18 @@ export function validatePreparedParentReadyOperation(
 		|| authorization.planDigest !== plan.canonical.digest
 		|| authorization.decisionRequestId !== policy.requestId
 		|| !canonicalDataEqual(authorization.decision, decision)
+		|| decision.status !== "consumed"
+		|| decision.gate !== "parent_merge"
+		|| decision.decision?.option !== "approve-merge"
+		|| decision.binding.repository !== authorization.repository
+		|| decision.binding.target.kind !== "pull_request"
+		|| decision.binding.target.number !== authorization.pullRequest
+		|| decision.binding.generation !== authorization.generation
+		|| decision.binding.headSha !== authorization.headSha
+		|| authorization.decisionDigest !== canonicalDigest(decision)
 		|| mutation.operation !== "parent_ready"
 		|| mutation.expectedResourceRevision !== authorization.pullRequestRevision) {
-		throw new Error("prepared parent-ready operation authority coordinates do not match");
+		throw new Error("prepared parent-ready operation decision/authorization coordinates do not match");
 	}
 	const expected = createDurableMutationIntent(
 		"parent_ready",
@@ -2846,7 +2855,14 @@ interface ParentReadyRestartGraphNode {
 	recovery?: ParentReadyRestartRecoveryAttempt;
 }
 
-function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrchestrationPlan): void {
+export interface ParentReadyRestartValidationResult {
+	settlementRepairs: ParentReadySettlementRecord[];
+}
+
+function assertParentReadyRestartHistory(
+	value: unknown,
+	planValue: ParentOrchestrationPlan,
+): ParentReadyRestartValidationResult {
 	const plan = validateParentOrchestrationPlan(planValue);
 	const record = exactRecord(value, [
 		"schemaVersion", "pullRequests", "prepared", "settlements", "readyMutations", "rollbackMutations",
@@ -2855,6 +2871,13 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 	if (record.schemaVersion !== 1) throw new Error("restart history schema is invalid");
 	const pullRequests = boundedArray(record.pullRequests, "restart pull requests", MAX_LIST, true)
 		.map(validateGitHubPullRequestEvidence);
+	const canonicalParentOwners = pullRequests.filter((pullRequest) =>
+		pullRequest.repository === plan.repository
+		&& pullRequest.marker === plan.markers.parentPullRequest
+		&& pullRequest.generation === plan.generation);
+	if (canonicalParentOwners.length !== 1) {
+		throw new Error("restart history requires one unique current canonical parent marker owner");
+	}
 	const prepared = boundedArray(record.prepared, "restart prepared operations", 16, true)
 		.map((entry) => validatePreparedParentReadyOperation(entry, plan));
 	const settlements = boundedArray(record.settlements, "restart settlements", 16, true)
@@ -3010,6 +3033,7 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 		throw new Error("mutation high-water regresses behind the causal mutation sequence");
 	}
 
+	const settlementRepairs: ParentReadySettlementRecord[] = [];
 	for (const node of nodes) {
 		const operation = node.operation;
 		const current = node.current!;
@@ -3078,8 +3102,18 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 		if (state.phase === "ready_effect_applied" || state.phase === "ready_settled") {
 			if (readyMutation === undefined || rollbackMutation !== undefined || recoveryAttempt !== undefined
 				|| !canonicalDataEqual(current, readyMutation.value)
-				|| (state.phase === "ready_settled" && settlement?.outcome !== "ready")) {
+				|| (state.phase === "ready_settled" && settlement !== undefined && settlement.outcome !== "ready")) {
 				throw new Error("applied unsettled authority has incoherent mutation visibility");
+			}
+			if (state.phase === "ready_settled" && settlement === undefined) {
+				settlementRepairs.push({
+					schemaVersion: 1,
+					planDigest: operation.planDigest,
+					authorizationDigest: operation.authorization.digest,
+					mutationIdempotencyKey: operation.mutation.idempotencyKey,
+					outcome: "ready",
+					settledAt: operation.decision.consumedAt!,
+				});
 			}
 			continue;
 		}
@@ -3099,16 +3133,34 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 			}
 			continue;
 		}
-		if (state.phase === "draft_restored" && settlement?.outcome !== "blocked") {
+		if (state.phase === "draft_restored" && settlement !== undefined && settlement.outcome !== "blocked") {
 			throw new Error("restored recovery authority is missing its blocked settlement");
 		}
+		if (state.phase === "draft_restored" && settlement === undefined) {
+			settlementRepairs.push({
+				schemaVersion: 1,
+				planDigest: operation.planDigest,
+				authorizationDigest: operation.authorization.digest,
+				mutationIdempotencyKey: operation.mutation.idempotencyKey,
+				outcome: "blocked",
+				settledAt: operation.decision.consumedAt!,
+			});
+		}
 	}
+	settlementRepairs.sort((left, right) =>
+		`${left.planDigest}\u0000${left.authorizationDigest}\u0000${left.mutationIdempotencyKey}`.localeCompare(
+			`${right.planDigest}\u0000${right.authorizationDigest}\u0000${right.mutationIdempotencyKey}`,
+		));
+	return { settlementRepairs };
 }
 
 /** Validate causal consistency across decoded restart-store roles before any role is reconstructed. */
-export function validateParentReadyRestartHistory(value: unknown, planValue: ParentOrchestrationPlan): void {
+export function validateParentReadyRestartHistory(
+	value: unknown,
+	planValue: ParentOrchestrationPlan,
+): ParentReadyRestartValidationResult {
 	try {
-		assertParentReadyRestartHistory(value, planValue);
+		return assertParentReadyRestartHistory(value, planValue);
 	} catch (error) {
 		const detail = error instanceof Error ? error.message : "unknown inconsistency";
 		throw new Error(`invalid parent-ready restart history: ${detail}`);
@@ -4584,6 +4636,44 @@ export class GitHubParentOrchestrator {
 		this.trackBackgroundSettlement("parent-ready recovery", this.parentReadyRecovery(plan, operation, query));
 	}
 
+	private trackParentReadyProof<T>(description: string, proof: Promise<T>): Promise<T> {
+		this.trackBackgroundSettlement(description, proof.then(() => {}));
+		return proof;
+	}
+
+	private async readExactParentReadyProof(query: ParentReadyAuthorityQuery): Promise<ParentReadyAuthorityState | null> {
+		for (let attempt = 1; ; attempt += 1) {
+			const outcome = await this.boundedParentReadyRecoveryCall((context) =>
+				this.#parentReadyAuthority.readParentReadyState(query, context));
+			if (outcome.kind === "value") {
+				try {
+					if (outcome.value === null) return null;
+					const state = validateParentReadyAuthorityState(outcome.value);
+					if (!canonicalDataEqual(query, this.parentReadyAuthorityQueryFromState(state))) {
+						throw new Error("returned-coordinate authority reread moved to another coordinate");
+					}
+					return state;
+				} catch {
+					// A malformed or cross-coordinate reread is not terminal proof; retain ownership and retry.
+				}
+			}
+			await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
+		}
+	}
+
+	private async reconcileMismatchedParentReadyCoordinate(
+		plan: ParentOrchestrationPlan,
+		returned: ParentReadyAuthorityState,
+	): Promise<"moved" | "quarantined"> {
+		const query = this.parentReadyAuthorityQueryFromState(returned);
+		const observed = await this.readExactParentReadyProof(query);
+		if (observed === null || observed.phase === "ready_settled" || observed.phase === "draft_restored") {
+			return "moved";
+		}
+		await this.parentReadyRecovery(plan, this.parentReadyOperationFromState(observed), query);
+		return "quarantined";
+	}
+
 	private parentReadyRollbackRequest(
 		query: ParentReadyAuthorityQuery,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
@@ -4898,16 +4988,18 @@ export class GitHubParentOrchestrator {
 			throw error;
 		}
 		if (!sameOperation(begun)) {
-			this.startTrackedParentReadyRecovery(plan, operation);
-			if (["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(begun.phase)) {
-				this.startTrackedParentReadyRecovery(
-					plan,
-					this.parentReadyOperationFromState(begun),
-					this.parentReadyAuthorityQueryFromState(begun),
-				);
-				return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
-			}
-			return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
+			const requestedProof = this.trackParentReadyProof(
+				"requested parent-ready reconciliation",
+				this.parentReadyRecovery(plan, operation),
+			);
+			const observedProof = this.trackParentReadyProof(
+				"returned-coordinate parent-ready reconciliation",
+				this.reconcileMismatchedParentReadyCoordinate(plan, begun),
+			);
+			const [, observedOutcome] = await Promise.all([requestedProof, observedProof]);
+			return observedOutcome === "quarantined"
+				? { kind: "blocked", blockers: ["parent_ready_quarantined"] }
+				: { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
 		}
 		if (["ready_effect_applied", "recovery_claimed"].includes(begun.phase)) {
 			this.startTrackedParentReadyRecovery(

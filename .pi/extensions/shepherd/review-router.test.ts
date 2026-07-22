@@ -757,12 +757,22 @@ test("cycle 13 assignment scanner is bounded forward and preserves later public 
 		const scanner = source.slice(source.indexOf("function assignmentValueEnd"),
 			source.indexOf("function redactCredentialAssignments"));
 		assert.doesNotMatch(scanner, /\.lastIndexOf\s*\(/u);
+		assert.doesNotMatch(scanner, /(?:frames\.find|\.reverse)\s*\(/u);
+		assert.doesNotMatch(scanner, /\[\.\.\.frames\]/u);
 	});
 	await t.test("maximum-bound unmatched opener redacts its field and preserves adjacent public text", () => {
+		assert.equal(
+			reviewRouterApi.redactSensitiveText(`ACME_API_KEY="literal(paren-and-{brace" ${publicBoundary}`),
+			`ACME_API_KEY=[REDACTED] ${publicBoundary}`,
+			"literal grouping characters inside a quote must not capture the adjacent public field",
+		);
 		const input = `ACME_API_KEY=${"(".repeat(60_000)}\n${publicBoundary}`;
+		const startedAt = performance.now();
 		assert.equal(
 			reviewRouterApi.redactSensitiveText(input),
 			`ACME_API_KEY=[REDACTED]\n${publicBoundary}`,
 		);
+		const elapsedMs = performance.now() - startedAt;
+		assert.ok(elapsedMs < 2_000, `dense maximum-bound scan took ${elapsedMs.toFixed(1)}ms`);
 	});
 });

@@ -220,95 +220,189 @@ function isCredentialAssignmentBase(name: string): boolean {
 	return CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => canonical === suffix || canonical.endsWith(`_${suffix}`));
 }
 
-type AssignmentValueTerminator = "\"" | "'" | "ansi-single" | "`" | ")" | "}";
+type AssignmentValueFrame = {
+	kind: "double" | "single" | "ansi-single" | "backtick" | "paren" | "brace";
+	caseMode?: boolean;
+	caseEnded?: boolean;
+	firstLineBoundary?: number;
+	malformedBoundary?: number;
+	heredoc?: { delimiter: string; stripTabs: boolean; body: boolean };
+};
 
 function assignmentValueEnd(input: string, start: number): number {
-	const terminators: AssignmentValueTerminator[] = [];
-	let minimumCompositeEnd = start;
-	const retainThroughLast = (closing: ")" | "}"): void => {
-		const lastClosing = input.lastIndexOf(closing);
-		minimumCompositeEnd = lastClosing < start ? input.length : Math.max(minimumCompositeEnd, lastClosing + 1);
+	const frames: AssignmentValueFrame[] = [];
+	let rootComposite: AssignmentValueFrame | undefined;
+	let heredocFrame: AssignmentValueFrame | undefined;
+	const isWordPart = (value: string | undefined): boolean =>
+		value !== undefined && isAssignmentIdentifierPart(value);
+	const hasWord = (cursor: number, word: string): boolean => input.startsWith(word, cursor)
+		&& !isWordPart(input[cursor - 1]) && !isWordPart(input[cursor + word.length]);
+	const pushFrame = (frame: AssignmentValueFrame): void => {
+		frames.push(frame);
+		if (rootComposite === undefined && (frame.kind === "paren" || frame.kind === "brace")) {
+			rootComposite = frame;
+		}
+	};
+	const popFrame = (): AssignmentValueFrame | undefined => {
+		const frame = frames.pop();
+		if (frame === rootComposite) rootComposite = undefined;
+		if (frame === heredocFrame) heredocFrame = undefined;
+		return frame;
+	};
+	const parseHeredoc = (cursor: number): { delimiter: string; stripTabs: boolean; end: number } | null => {
+		if (!input.startsWith("<<", cursor)) return null;
+		let scan = cursor + 2;
+		let stripTabs = false;
+		if (input[scan] === "-") {
+			stripTabs = true;
+			scan += 1;
+		}
+		while (input[scan] === " " || input[scan] === "\t") scan += 1;
+		const quote = input[scan] === "'" || input[scan] === "\"" ? input[scan++] : undefined;
+		const delimiterStart = scan;
+		while (isWordPart(input[scan])) scan += 1;
+		if (scan === delimiterStart || (quote !== undefined && input[scan] !== quote)) return null;
+		const delimiter = input.slice(delimiterStart, scan);
+		if (quote !== undefined) scan += 1;
+		return { delimiter, stripTabs, end: scan };
 	};
 	let cursor = start;
 	while (cursor < input.length) {
-		const value = input[cursor];
-		const terminator = terminators[terminators.length - 1];
-		if (terminator === "'") {
-			cursor += 1;
-			if (value === terminator) terminators.pop();
+		const top = frames[frames.length - 1];
+		if (heredocFrame?.heredoc?.body === true) {
+			const lineStart = cursor;
+			while (cursor < input.length && input[cursor] !== "\r" && input[cursor] !== "\n") cursor += 1;
+			let comparableStart = lineStart;
+			if (heredocFrame.heredoc.stripTabs) {
+				while (input[comparableStart] === "\t") comparableStart += 1;
+			}
+			const delimiter = heredocFrame.heredoc.delimiter;
+			if (cursor - comparableStart === delimiter.length && input.startsWith(delimiter, comparableStart)) {
+				if (rootComposite !== undefined) rootComposite.malformedBoundary = cursor;
+				heredocFrame.heredoc = undefined;
+				heredocFrame = undefined;
+			}
+			if (input[cursor] === "\r" && input[cursor + 1] === "\n") cursor += 2;
+			else if (input[cursor] === "\r" || input[cursor] === "\n") cursor += 1;
 			continue;
 		}
-		if (terminator === "ansi-single") {
-			if (value === "\\") {
-				cursor += Math.min(2, input.length - cursor);
-			} else {
+		const value = input[cursor];
+		if (top?.kind === "single") {
+			cursor += 1;
+			if (value === "'") popFrame();
+			continue;
+		}
+		if (top?.kind === "ansi-single") {
+			if (value === "\\") cursor += Math.min(2, input.length - cursor);
+			else {
 				cursor += 1;
-				if (value === "'") terminators.pop();
+				if (value === "'") popFrame();
 			}
 			continue;
 		}
 		if (value === "\\") {
-			if (input[cursor + 1] === "\r" && input[cursor + 2] === "\n") {
-				cursor += 3;
-			} else {
-				cursor += Math.min(2, input.length - cursor);
-			}
+			if (input[cursor + 1] === "\r" && input[cursor + 2] === "\n") cursor += 3;
+			else cursor += Math.min(2, input.length - cursor);
 			continue;
 		}
-		if (value === "\r" || value === "\n") {
-			if (terminator === undefined && cursor >= minimumCompositeEnd) break;
+		if (top?.kind === "double" && value === "\"") {
+			popFrame();
 			cursor += 1;
 			continue;
 		}
-		if (terminator !== undefined && value === terminator) {
-			terminators.pop();
+		if (top?.kind === "backtick" && value === "`") {
+			popFrame();
+			cursor += 1;
+			continue;
+		}
+		if (value === "\r" || value === "\n") {
+			if (heredocFrame?.heredoc?.body === false) heredocFrame.heredoc.body = true;
+			else {
+				if (rootComposite === undefined && top === undefined) break;
+				if (rootComposite !== undefined && rootComposite.firstLineBoundary === undefined) {
+					rootComposite.firstLineBoundary = cursor;
+				}
+			}
+			if (value === "\r" && input[cursor + 1] === "\n") cursor += 2;
+			else cursor += 1;
+			continue;
+		}
+		if (top?.kind === "paren") {
+			const heredoc = parseHeredoc(cursor);
+			if (heredoc !== null) {
+				top.heredoc = { delimiter: heredoc.delimiter, stripTabs: heredoc.stripTabs, body: false };
+				heredocFrame = top;
+				cursor = heredoc.end;
+				continue;
+			}
+			if (top.caseMode === true && top.caseEnded !== true && hasWord(cursor, "esac")) {
+				top.caseEnded = true;
+				if (rootComposite !== undefined) rootComposite.malformedBoundary = cursor + 4;
+				cursor += 4;
+				continue;
+			}
+			if (value === ")" && (top.caseMode !== true || top.caseEnded === true)) {
+				popFrame();
+				cursor += 1;
+				continue;
+			}
+		}
+		if (top?.kind === "brace" && value === "}") {
+			popFrame();
 			cursor += 1;
 			continue;
 		}
 		if (input.startsWith("$(", cursor)) {
-			retainThroughLast(")");
-			terminators.push(")");
+			let wordStart = cursor + 2;
+			while (input[wordStart] === " " || input[wordStart] === "\t") wordStart += 1;
+			pushFrame({ kind: "paren", caseMode: hasWord(wordStart, "case"), caseEnded: false });
 			cursor += 2;
 			continue;
 		}
 		if (input.startsWith("${", cursor)) {
-			retainThroughLast("}");
-			terminators.push("}");
+			pushFrame({ kind: "brace" });
 			cursor += 2;
 			continue;
 		}
 		if (input.startsWith("<(", cursor) || input.startsWith(">(", cursor)) {
-			retainThroughLast(")");
-			terminators.push(")");
+			pushFrame({ kind: "paren" });
 			cursor += 2;
 			continue;
 		}
 		if (input.startsWith("$'", cursor)) {
-			terminators.push("ansi-single");
+			pushFrame({ kind: "ansi-single" });
 			cursor += 2;
 			continue;
 		}
-		if ((terminator !== "\"" && (value === "\"" || value === "'")) || value === "`") {
-			terminators.push(value);
+		if (value === "\"" && top?.kind !== "double") {
+			pushFrame({ kind: "double" });
 			cursor += 1;
 			continue;
 		}
-		if ((terminator === undefined || terminator === ")") && value === "(") {
-			retainThroughLast(")");
-			terminators.push(")");
+		if (value === "'" && top?.kind !== "double") {
+			pushFrame({ kind: "single" });
 			cursor += 1;
 			continue;
 		}
-		if ((terminator === undefined || terminator === "}") && value === "{") {
-			retainThroughLast("}");
-			terminators.push("}");
+		if (value === "`") {
+			pushFrame({ kind: "backtick" });
 			cursor += 1;
 			continue;
 		}
-		if (terminator === undefined && cursor >= minimumCompositeEnd && /[\s,;]/u.test(value)) break;
+		if (value === "(" && (top === undefined || top.kind === "paren")) {
+			pushFrame({ kind: "paren" });
+			cursor += 1;
+			continue;
+		}
+		if (value === "{" && (top === undefined || top.kind === "brace")) {
+			pushFrame({ kind: "brace" });
+			cursor += 1;
+			continue;
+		}
+		if (top === undefined && /[\s,;]/u.test(value)) break;
 		cursor += 1;
 	}
-	return cursor;
+	return rootComposite?.malformedBoundary ?? rootComposite?.firstLineBoundary ?? cursor;
 }
 
 function redactCredentialAssignments(input: string): string {

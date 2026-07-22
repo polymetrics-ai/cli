@@ -7432,8 +7432,8 @@ test("cycle 13 mismatched begin joins requested and exact returned-coordinate pr
 					assert.notEqual(await settleWithin(firstProof, 100), "hung");
 					assert.equal(await settleWithin(publicResult, 5), "hung",
 						"one exact proof cannot release the public result");
-					assert.equal(await settleWithin(queued, 5), "hung",
-						"one exact proof cannot release the key");
+					assert.equal(await settleWithin(queued, 100), "rejected",
+						"explicit stop cancels the excluded waiter without granting reentry");
 					const secondStop = new AbortController();
 					secondStop.abort();
 					assert.equal((await scenario.orchestrator.stop({ signal: secondStop.signal })).kind, "incomplete");
@@ -8181,14 +8181,15 @@ test("cycle 12 restart validation reverse-consumes every retained role", async (
 			Object.assign(value, disconnected);
 		}],
 	];
+	assert.doesNotThrow(() => cycle12ValidateRestartHistory(seed.snapshot, seed.plan),
+		"single-owner canonical history remains valid");
 	for (const [name, mutate] of rows) {
 		await t.test(name, () => {
-			assert.doesNotThrow(() => cycle12ValidateRestartHistory(two, seed.plan), "canonical two-history graph");
 			const invalid = structuredClone(seed.snapshot);
 			mutate(invalid);
 			assert.throws(
 				() => cycle12ValidateRestartHistory(invalid, seed.plan),
-				/orphan|exactly one prepared/i,
+				/orphan|exactly one prepared|canonical parent marker|unique current/i,
 			);
 		});
 	}
@@ -8196,25 +8197,38 @@ test("cycle 12 restart validation reverse-consumes every retained role", async (
 
 test("cycle 12 restart validation enforces one global causal mutation sequence", async (t) => {
 	const seed = await cycle10RestartSnapshotSeed();
-	const canonical = cycle12TwoHistorySnapshot(seed);
-	const rows: ReadonlyArray<readonly [string, (value: Cycle10MutableRestartSnapshot) => void]> = [
-		["ready ready revision reuse", (value) => { value.authority.readyMutations[1][1].revision = value.authority.readyMutations[0][1].revision; }],
-		["ready rollback revision reuse", (value) => { value.authority.rollbackMutations[1][1].revision = value.authority.readyMutations[0][1].revision; }],
-		["rollback rollback revision reuse", (value) => { value.authority.rollbackMutations[1][1].revision = value.authority.rollbackMutations[0][1].revision; }],
-		["high water regression", (value) => { value.authority.mutationRevision = 3; }],
-		["same history reverse order", (value) => {
+	const crossBound = cycle12TwoHistorySnapshot(seed);
+	const rows: ReadonlyArray<readonly [
+		string,
+		"single_owner" | "cross_bound",
+		(value: Cycle10MutableRestartSnapshot) => void,
+		RegExp,
+	]> = [
+		["ready ready revision reuse", "cross_bound", (value) => {
+			value.authority.readyMutations[1][1].revision = value.authority.readyMutations[0][1].revision;
+		}, /canonical parent marker|unique current/i],
+		["ready rollback revision reuse", "single_owner", (value) => {
+			value.authority.rollbackMutations[0][1].revision = value.authority.readyMutations[0][1].revision;
+		}, /globally unique|causal mutation/i],
+		["rollback rollback revision reuse", "cross_bound", (value) => {
+			value.authority.rollbackMutations[1][1].revision = value.authority.rollbackMutations[0][1].revision;
+		}, /canonical parent marker|unique current/i],
+		["high water regression", "single_owner", (value) => { value.authority.mutationRevision = 1; },
+			/high.water/i],
+		["same history reverse order", "single_owner", (value) => {
 			value.authority.readyMutations[0][1].revision = 2;
 			value.authority.rollbackMutations[0][1].revision = 1;
-		}],
+		}, /causal mutation/i],
 	];
-	for (const [name, mutate] of rows) {
+	assert.doesNotThrow(() => cycle12ValidateRestartHistory(seed.snapshot, seed.plan),
+		"single-owner canonical history reaches causal-sequence validation");
+	for (const [name, fixture, mutate, expected] of rows) {
 		await t.test(name, () => {
-			assert.doesNotThrow(() => cycle12ValidateRestartHistory(canonical, seed.plan));
-			const invalid = structuredClone(canonical);
+			const invalid = structuredClone(fixture === "single_owner" ? seed.snapshot : crossBound);
 			mutate(invalid);
 			assert.throws(
 				() => cycle12ValidateRestartHistory(invalid, seed.plan),
-				/globally unique|causal mutation|high.water/i,
+				expected,
 			);
 		});
 	}
@@ -8491,7 +8505,8 @@ test("cycle 13 prepared authorization is bound to the exact consumed affirmative
 			binding.generation = Number(binding.generation) + 1;
 		}],
 		["binding head diverges", (value) => {
-			(value.binding as Record<string, unknown>).headSha = "e".repeat(40);
+			const binding = value.binding as Record<string, unknown>;
+			binding.headSha = binding.headSha === "e".repeat(40) ? "f".repeat(40) : "e".repeat(40);
 		}],
 		["decision digest diverges", () => {}, "f".repeat(64)],
 	];
