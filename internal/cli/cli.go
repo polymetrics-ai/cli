@@ -665,7 +665,12 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 				return false
 			}
 		}
-		if flags.first("plan") != "" || flags.first("approve") != "" || flags.first("confirm") != "" || truthyFlag(flags.first("preview")) {
+		for _, name := range []string{"plan", "approve", "confirm"} {
+			if _, ok := flags.values[name]; ok {
+				return false
+			}
+		}
+		if truthyFlag(flags.first("preview")) {
 			return false
 		}
 		return true

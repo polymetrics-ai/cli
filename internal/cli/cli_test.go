@@ -90,6 +90,9 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 	for _, args := range [][]string{
 		{"gong", "--bogus"},
 		{"gong", "--plan", "rplan_fixture", "--preview"},
+		{"gong", "--plan="},
+		{"gong", "--approve="},
+		{"gong", "--confirm="},
 	} {
 		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
