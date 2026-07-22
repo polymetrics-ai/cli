@@ -23,7 +23,15 @@ const MAX_CAPABILITY_SCHEMA_NODES = 4_096;
 const MAX_CAPABILITY_SCHEMA_KEYS = 4_096;
 const MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS = 512;
 const MAX_TOOL_INPUT_BYTES = MAX_WRITE_CHARACTERS + 64 * 1024;
+const INTRINSIC_OBJECT_PROTOTYPE = Object.prototype;
+const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
 const INTRINSIC_OBJECT_KEYS = Object.keys;
+const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
+const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
+const INTRINSIC_DEFINE_PROPERTY = Object.defineProperty;
+const INTRINSIC_IS_ARRAY = Array.isArray;
+const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
+const INTRINSIC_REFLECT_APPLY = Reflect.apply;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 /** The complete reviewed host-tool domain. Unknown strings have no extension path. */
@@ -172,48 +180,154 @@ export class ToolPolicyError extends Error {
 	}
 }
 
+function captureFixedOwnDataFields(
+	value: unknown,
+	fields: readonly string[],
+	description: string,
+	optional: ReadonlySet<string> = new Set<string>(),
+): Readonly<Record<string, unknown>> {
+	if (!value || typeof value !== "object" || INTRINSIC_IS_PROXY(value)) {
+		throw new ToolPolicyError(`${description} must be a non-proxy record`);
+	}
+	const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+	if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
+		throw new ToolPolicyError(`${description} must use an exact approved prototype`);
+	}
+	const captured = Object.create(null) as Record<string, unknown>;
+	for (const field of fields) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, field);
+		if (!descriptor) {
+			if (optional.has(field)) continue;
+			throw new ToolPolicyError(`${description} requires own field ${field}`);
+		}
+		if (!descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new ToolPolicyError(`${description}.${field} must be an own enumerable data field`);
+		}
+		INTRINSIC_DEFINE_PROPERTY(captured, field, {
+			value: descriptor.value,
+			enumerable: true,
+			writable: false,
+			configurable: false,
+		});
+	}
+	return Object.freeze(captured);
+}
+
+function captureToolPolicyOptions(options: ToolPolicyOptions): ToolPolicyOptions {
+	const fields = ["maxToolOutputBytes", "maxReadCharacters", "maxWriteCharacters"] as const;
+	return captureFixedOwnDataFields(
+		options,
+		fields,
+		"tool policy options",
+		new Set(fields),
+	) as ToolPolicyOptions;
+}
+
+function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
+	const root = captureFixedOwnDataFields(
+		input,
+		["readOnly", "workspace", "authority", "capabilities"],
+		"tool policy input",
+	);
+	const readOnly = root.readOnly;
+	if (typeof readOnly !== "boolean") throw new ToolPolicyError("readOnly must be boolean");
+
+	const authoritySource = captureFixedOwnDataFields(
+		root.authority,
+		["workspaceId", "readPrefixes", "writePrefixes", "capabilityNames"],
+		"tool authority",
+	);
+	const authority = Object.freeze({
+		workspaceId: authoritySource.workspaceId,
+		readPrefixes: capturePolicyArray<string>(authoritySource.readPrefixes, "read prefixes", 64, false),
+		writePrefixes: capturePolicyArray<string>(authoritySource.writePrefixes, "write prefixes", 64, readOnly),
+		capabilityNames: capturePolicyArray<HostCapabilityName>(
+			authoritySource.capabilityNames,
+			"capability authority",
+			MAX_CAPABILITIES,
+			true,
+		),
+	}) as ToolAuthority;
+
+	const workspaceSource = root.workspace;
+	const workspaceFields = captureFixedOwnDataFields(
+		workspaceSource,
+		["id", "cwd", "readText", "editText", "writeText"],
+		"workspace capability",
+	);
+	const readText = workspaceFields.readText;
+	const editText = workspaceFields.editText;
+	const writeText = workspaceFields.writeText;
+	if (typeof readText !== "function" || typeof editText !== "function" || typeof writeText !== "function") {
+		throw new ToolPolicyError("workspace capability has an invalid method contract");
+	}
+	const workspace = {
+		id: workspaceFields.id as string,
+		cwd: workspaceFields.cwd as string,
+		readText(path: string, methodOptions: { offset?: number; limit?: number; signal?: AbortSignal }) {
+			return INTRINSIC_REFLECT_APPLY(readText, workspaceSource, [path, methodOptions]) as Promise<string>;
+		},
+		editText(path: string, oldText: string, newText: string, signal?: AbortSignal) {
+			return INTRINSIC_REFLECT_APPLY(editText, workspaceSource, [path, oldText, newText, signal]) as
+				Promise<WorkspaceMutationResult>;
+		},
+		writeText(path: string, content: string, signal?: AbortSignal) {
+			return INTRINSIC_REFLECT_APPLY(writeText, workspaceSource, [path, content, signal]) as
+				Promise<WorkspaceMutationResult>;
+		},
+	} satisfies ScopedWorkspace;
+	Object.freeze(workspace);
+
+	const capabilitySources = capturePolicyArray<HostCapability>(
+		root.capabilities,
+		"typed host capabilities",
+		MAX_CAPABILITIES,
+		true,
+	);
+	const capabilities = capabilitySources.map((capabilitySource) => {
+		const fields = captureFixedOwnDataFields(
+			capabilitySource,
+			["name", "description", "mutates", "parameters", "execute"],
+			"typed host capability",
+		);
+		const execute = fields.execute;
+		if (typeof execute !== "function") throw new ToolPolicyError("typed host capability has an invalid execute method");
+		const capturedCapability = {
+			name: fields.name,
+			description: fields.description,
+			mutates: fields.mutates,
+			parameters: fields.parameters,
+			execute(arguments_: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
+				return INTRINSIC_REFLECT_APPLY(execute, capabilitySource, [arguments_, signal]);
+			},
+		} as unknown as HostCapability;
+		return Object.freeze(capturedCapability);
+	});
+	Object.freeze(capabilities);
+
+	return Object.freeze({ readOnly, workspace, authority, capabilities });
+}
+
 export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOptions = {}): ToolPolicy {
+	const capturedOptions = captureToolPolicyOptions(options);
 	const limits = {
 		maxToolOutputBytes: boundedPositiveInteger(
-			options.maxToolOutputBytes ?? DEFAULT_MAX_TOOL_OUTPUT_BYTES,
+			capturedOptions.maxToolOutputBytes ?? DEFAULT_MAX_TOOL_OUTPUT_BYTES,
 			"maxToolOutputBytes",
 			MAX_TOOL_OUTPUT_BYTES,
 		),
 		maxReadCharacters: boundedPositiveInteger(
-			options.maxReadCharacters ?? DEFAULT_MAX_READ_CHARACTERS,
+			capturedOptions.maxReadCharacters ?? DEFAULT_MAX_READ_CHARACTERS,
 			"maxReadCharacters",
 			MAX_READ_CHARACTERS,
 		),
 		maxWriteCharacters: boundedPositiveInteger(
-			options.maxWriteCharacters ?? DEFAULT_MAX_WRITE_CHARACTERS,
+			capturedOptions.maxWriteCharacters ?? DEFAULT_MAX_WRITE_CHARACTERS,
 			"maxWriteCharacters",
 			MAX_WRITE_CHARACTERS,
 		),
 	};
-	if (!input || typeof input !== "object" || !input.authority || typeof input.authority !== "object") {
-		throw new ToolPolicyError("tool policy input and authority are required");
-	}
-	const capturedInput: ToolPolicyInput = Object.freeze({
-		readOnly: input.readOnly,
-		workspace: input.workspace,
-		authority: Object.freeze({
-			workspaceId: input.authority.workspaceId,
-			readPrefixes: capturePolicyArray<string>(input.authority.readPrefixes, "read prefixes", 64, false),
-			writePrefixes: capturePolicyArray<string>(input.authority.writePrefixes, "write prefixes", 64, input.readOnly),
-			capabilityNames: capturePolicyArray<HostCapabilityName>(
-				input.authority.capabilityNames,
-				"capability authority",
-				MAX_CAPABILITIES,
-				true,
-			),
-		}),
-		capabilities: capturePolicyArray<HostCapability>(
-			input.capabilities,
-			"typed host capabilities",
-			MAX_CAPABILITIES,
-			true,
-		),
-	});
+	const capturedInput = captureToolPolicyInput(input);
 	const capabilities = validatePolicyInput(capturedInput);
 
 	const readPrefixes = normalizeScopedPrefixes(capturedInput.authority.readPrefixes, "read");
@@ -321,16 +435,16 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 		if (mutates !== HOST_CAPABILITY_REGISTRY[name].mutates || typeof execute !== "function") {
 			throw new ToolPolicyError(`capability ${name} has an invalid typed contract`);
 		}
-		const parameters = snapshotCapabilitySchema(parameterSource, name);
-		const argumentContract = compileToolArgumentContract(parameters, name);
+		const parameterSnapshot = snapshotCapabilitySchema(parameterSource, name);
+		const argumentContract = compileToolArgumentContract(parameterSnapshot, name);
 		capabilities.push(Object.freeze({
 			name,
 			description,
 			mutates,
-			parameters,
+			parameters: argumentContract.schema,
 			argumentContract,
 			execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
-				return Reflect.apply(execute, capability, [input, signal]);
+				return INTRINSIC_REFLECT_APPLY(execute, capability, [input, signal]);
 			},
 		}) as CompiledHostCapability);
 	}
@@ -342,16 +456,21 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 
 type CompiledSchemaProjector = (value: unknown, description: string, depth: number) => JsonData;
 
+interface CompiledSchemaNode {
+	readonly schema: PlainJsonSchema;
+	readonly project: CompiledSchemaProjector;
+}
+
 function compileToolArgumentContract(schema: PlainJsonSchema, name: string): CompiledToolArgumentContract {
-	const projectValue = compileSchemaProjector(schema, `${name} parameters`, 0);
+	const compiled = compileSchemaNode(schema, `${name} parameters`, 0);
 	return Object.freeze({
-		schema,
+		schema: compiled.schema,
 		project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>> {
 			if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
 				throw new ToolPolicyError(`${name} input has an invalid byte bound`);
 			}
 			const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
-			const projected = projectValue(raw, `${name} input`, 0);
+			const projected = compiled.project(raw, `${name} input`, 0);
 			if (!isRecord(projected)) throw new ToolPolicyError(`${name} input must be an object`);
 			if (byteLength(JSON.stringify(projected)) > effectiveMaximum) {
 				throw new ToolPolicyError(`${name} input exceeded its bound`);
@@ -361,98 +480,137 @@ function compileToolArgumentContract(schema: PlainJsonSchema, name: string): Com
 	});
 }
 
-function compileSchemaProjector(
+function compileSchemaNode(
 	schema: PlainJsonSchema,
 	description: string,
 	depth: number,
-): CompiledSchemaProjector {
+): CompiledSchemaNode {
 	if (depth > MAX_CAPABILITY_SCHEMA_DEPTH) throw new ToolPolicyError(`${description} exceeded its depth bound`);
 	const type = ownSchemaField(schema, "type", description);
-	const enumSource = optionalOwnSchemaField(schema, "enum", description);
-	const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, description);
 	if (type === "string") {
+		assertSchemaVocabulary(schema, ["type"], ["minLength", "maxLength", "enum"], description);
 		const minimum = optionalSchemaInteger(schema, "minLength", 0, MAX_WRITE_CHARACTERS, description);
 		const maximum = optionalSchemaInteger(schema, "maxLength", 0, MAX_WRITE_CHARACTERS, description);
+		const enumSource = optionalOwnSchemaField(schema, "enum", description);
+		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "string", description);
 		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
 			throw new ToolPolicyError(`${description} has inverted string bounds`);
 		}
-		return (value, valueDescription) => {
+		const entries: Array<readonly [string, JsonData]> = [["type", type]];
+		if (minimum !== undefined) entries.push(["minLength", minimum]);
+		if (maximum !== undefined) entries.push(["maxLength", maximum]);
+		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+			value: unknown,
+			valueDescription: string,
+		) => {
 			if (typeof value !== "string" || (minimum !== undefined && value.length < minimum) ||
 				(maximum !== undefined && value.length > maximum) || !enumAccepts(enumValues, value)) {
 				throw new ToolPolicyError(`${valueDescription} violates its string schema`);
 			}
 			return value;
-		};
+		} });
 	}
 	if (type === "integer" || type === "number") {
+		assertSchemaVocabulary(schema, ["type"], ["minimum", "maximum", "enum"], description);
 		const minimum = optionalSchemaFiniteNumber(schema, "minimum", description);
 		const maximum = optionalSchemaFiniteNumber(schema, "maximum", description);
+		const enumSource = optionalOwnSchemaField(schema, "enum", description);
+		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, type, description);
 		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
 			throw new ToolPolicyError(`${description} has inverted numeric bounds`);
 		}
-		return (value, valueDescription) => {
+		const entries: Array<readonly [string, JsonData]> = [["type", type]];
+		if (minimum !== undefined) entries.push(["minimum", minimum]);
+		if (maximum !== undefined) entries.push(["maximum", maximum]);
+		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+			value: unknown,
+			valueDescription: string,
+		) => {
 			if (typeof value !== "number" || !Number.isFinite(value) || (type === "integer" && !Number.isSafeInteger(value)) ||
 				(minimum !== undefined && value < minimum) || (maximum !== undefined && value > maximum) ||
 				!enumAccepts(enumValues, value)) {
 				throw new ToolPolicyError(`${valueDescription} violates its numeric schema`);
 			}
 			return value;
-		};
+		} });
 	}
 	if (type === "boolean") {
-		return (value, valueDescription) => {
+		assertSchemaVocabulary(schema, ["type"], ["enum"], description);
+		const enumSource = optionalOwnSchemaField(schema, "enum", description);
+		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "boolean", description);
+		const entries: Array<readonly [string, JsonData]> = [["type", type]];
+		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+			value: unknown,
+			valueDescription: string,
+		) => {
 			if (typeof value !== "boolean" || !enumAccepts(enumValues, value)) {
 				throw new ToolPolicyError(`${valueDescription} violates its boolean schema`);
 			}
 			return value;
-		};
+		} });
 	}
 	if (type === "array") {
+		assertSchemaVocabulary(schema, ["type", "items"], ["minItems", "maxItems"], description);
 		const items = ownSchemaField(schema, "items", description);
 		if (!isRecord(items)) throw new ToolPolicyError(`${description} requires an array item schema`);
-		const itemProjector = compileSchemaProjector(items, `${description} items`, depth + 1);
+		const item = compileSchemaNode(items, `${description} items`, depth + 1);
 		const minimum = optionalSchemaInteger(schema, "minItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ?? 0;
 		const maximum = optionalSchemaInteger(schema, "maxItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ??
 			MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS;
 		if (minimum > maximum) throw new ToolPolicyError(`${description} has inverted array bounds`);
-		return (value, valueDescription, valueDepth) => {
-			if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+		const entries: Array<readonly [string, JsonData]> = [["type", type], ["items", item.schema as JsonData]];
+		if (optionalOwnSchemaField(schema, "minItems", description) !== undefined) entries.push(["minItems", minimum]);
+		if (optionalOwnSchemaField(schema, "maxItems", description) !== undefined) entries.push(["maxItems", maximum]);
+		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+			value: unknown,
+			valueDescription: string,
+			valueDepth: number,
+		) => {
+			if (!INTRINSIC_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value) ||
+				INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
 				throw new ToolPolicyError(`${valueDescription} must be an exact array`);
 			}
 			const length = ownArrayLength(value, valueDescription);
 			if (length < minimum || length > maximum) throw new ToolPolicyError(`${valueDescription} violates its array bounds`);
 			const projected: JsonData[] = [];
 			for (let index = 0; index < length; index += 1) {
-				const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new ToolPolicyError(`${valueDescription} contains a sparse or accessor item`);
 				}
-				projected.push(itemProjector(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1));
+				projected.push(item.project(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1));
 			}
 			return Object.freeze(projected) as JsonData[];
-		};
+		} });
 	}
-	if (type !== "object" || ownSchemaField(schema, "additionalProperties", description) !== false) {
+	if (type !== "object") {
 		throw new ToolPolicyError(`${description} uses an unsupported schema type`);
 	}
+	assertSchemaVocabulary(schema, ["type", "additionalProperties", "properties", "required"], [], description);
+	if (ownSchemaField(schema, "additionalProperties", description) !== false) {
+		throw new ToolPolicyError(`${description} must be a closed object schema`);
+	}
 	const properties = ownSchemaField(schema, "properties", description);
-	const requiredSource = optionalOwnSchemaField(schema, "required", description);
-	const required = requiredSource === undefined ? Object.freeze([]) : requiredSource;
+	const required = ownSchemaField(schema, "required", description);
 	if (!isRecord(properties)) throw new ToolPolicyError(`${description} requires a properties record`);
-	const propertyPrototype = Object.getPrototypeOf(properties);
-	if (nodeTypes.isProxy(properties) || (propertyPrototype !== Object.prototype && propertyPrototype !== null)) {
+	const propertyPrototype = INTRINSIC_GET_PROTOTYPE_OF(properties);
+	if (INTRINSIC_IS_PROXY(properties) ||
+		(propertyPrototype !== INTRINSIC_OBJECT_PROTOTYPE && propertyPrototype !== null)) {
 		throw new ToolPolicyError(`${description} properties must use an exact approved prototype`);
 	}
-	if (!Array.isArray(required) || nodeTypes.isProxy(required) || Object.getPrototypeOf(required) !== Array.prototype) {
+	if (!INTRINSIC_IS_ARRAY(required) || INTRINSIC_IS_PROXY(required) ||
+		INTRINSIC_GET_PROTOTYPE_OF(required) !== INTRINSIC_ARRAY_PROTOTYPE) {
 		throw new ToolPolicyError(`${description} required fields must be an exact array`);
 	}
 	const requiredLength = ownArrayLength(required, `${description} required fields`);
 	if (requiredLength > 64) throw new ToolPolicyError(`${description} has too many required fields`);
-	const names: string[] = [];
-	const projectors: CompiledSchemaProjector[] = [];
+	const requiredNames: string[] = [];
 	const unique = new Set<string>();
 	for (let index = 0; index < requiredLength; index += 1) {
-		const descriptor = Object.getOwnPropertyDescriptor(required, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(required, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 			typeof descriptor.value !== "string" || descriptor.value.length < 1 || descriptor.value.length > 128 ||
 			unique.has(descriptor.value)) {
@@ -460,20 +618,48 @@ function compileSchemaProjector(
 		}
 		const propertyName = descriptor.value;
 		unique.add(propertyName);
-		const propertyDescriptor = Object.getOwnPropertyDescriptor(properties, propertyName);
+		requiredNames.push(propertyName);
+	}
+	const names = INTRINSIC_OBJECT_KEYS(properties);
+	if (names.length !== requiredNames.length || names.some((field) => !unique.has(field))) {
+		throw new ToolPolicyError(`${description} cannot contain optional or undeclared properties`);
+	}
+	const projectors: CompiledSchemaProjector[] = [];
+	const canonicalProperties = Object.create(null) as Record<string, JsonData>;
+	for (const propertyName of names) {
+		const propertyDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(properties, propertyName);
 		if (!propertyDescriptor?.enumerable || propertyDescriptor.get || propertyDescriptor.set ||
 			!("value" in propertyDescriptor) || !isRecord(propertyDescriptor.value)) {
-			throw new ToolPolicyError(`${description} required property ${JSON.stringify(propertyName)} is invalid`);
+			throw new ToolPolicyError(`${description} property ${JSON.stringify(propertyName)} is invalid`);
 		}
-		names.push(propertyName);
-		projectors.push(compileSchemaProjector(propertyDescriptor.value, `${description}.${propertyName}`, depth + 1));
+		const property = compileSchemaNode(propertyDescriptor.value, `${description}.${propertyName}`, depth + 1);
+		projectors.push(property.project);
+		INTRINSIC_DEFINE_PROPERTY(canonicalProperties, propertyName, {
+			value: property.schema,
+			enumerable: true,
+			writable: false,
+			configurable: false,
+		});
 	}
+	Object.freeze(requiredNames);
 	Object.freeze(names);
 	Object.freeze(projectors);
-	return (value, valueDescription, valueDepth) => {
-		if (!isRecord(value) || nodeTypes.isProxy(value)) throw new ToolPolicyError(`${valueDescription} must be an object`);
-		const prototype = Object.getPrototypeOf(value);
-		if (prototype !== Object.prototype && prototype !== null) {
+	Object.freeze(canonicalProperties);
+	const canonicalRequired = Object.freeze([...requiredNames]);
+	const canonicalSchema = canonicalSchemaRecord([
+		["type", type],
+		["additionalProperties", false],
+		["properties", canonicalProperties],
+		["required", canonicalRequired as JsonData[]],
+	]);
+	return Object.freeze({ schema: canonicalSchema, project: (
+		value: unknown,
+		valueDescription: string,
+		valueDepth: number,
+	) => {
+		if (!isRecord(value) || INTRINSIC_IS_PROXY(value)) throw new ToolPolicyError(`${valueDescription} must be an object`);
+		const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+		if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
 			throw new ToolPolicyError(`${valueDescription} must use an exact approved prototype`);
 		}
 		const suppliedNames = INTRINSIC_OBJECT_KEYS(value);
@@ -483,11 +669,11 @@ function compileSchemaProjector(
 		const projected = Object.create(null) as Record<string, JsonData>;
 		for (let index = 0; index < names.length; index += 1) {
 			const field = names[index]!;
-			const descriptor = Object.getOwnPropertyDescriptor(value, field);
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, field);
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new ToolPolicyError(`${valueDescription}.${field} must be an own data field`);
 			}
-			Object.defineProperty(projected, field, {
+			INTRINSIC_DEFINE_PROPERTY(projected, field, {
 				value: projectors[index]!(descriptor.value, `${valueDescription}.${field}`, valueDepth + 1),
 				enumerable: true,
 				writable: false,
@@ -495,11 +681,38 @@ function compileSchemaProjector(
 			});
 		}
 		return Object.freeze(projected);
-	};
+	} });
+}
+
+function assertSchemaVocabulary(
+	schema: PlainJsonSchema,
+	required: readonly string[],
+	optional: readonly string[],
+	description: string,
+): void {
+	const allowed = new Set([...required, ...optional]);
+	const keys = INTRINSIC_OBJECT_KEYS(schema);
+	if (keys.length < required.length || keys.some((field) => !allowed.has(field))) {
+		throw new ToolPolicyError(`${description} uses unsupported schema keywords`);
+	}
+	for (const field of required) ownSchemaField(schema, field, description);
+}
+
+function canonicalSchemaRecord(entries: readonly (readonly [string, JsonData])[]): PlainJsonSchema {
+	const schema = Object.create(null) as Record<string, JsonData>;
+	for (const [field, value] of entries) {
+		INTRINSIC_DEFINE_PROPERTY(schema, field, {
+			value,
+			enumerable: true,
+			writable: false,
+			configurable: false,
+		});
+	}
+	return Object.freeze(schema);
 }
 
 function ownSchemaField(schema: PlainJsonSchema, field: string, description: string): unknown {
-	const descriptor = Object.getOwnPropertyDescriptor(schema, field);
+	const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(schema, field);
 	if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 		throw new ToolPolicyError(`${description} requires own schema field ${field}`);
 	}
@@ -507,7 +720,7 @@ function ownSchemaField(schema: PlainJsonSchema, field: string, description: str
 }
 
 function optionalOwnSchemaField(schema: PlainJsonSchema, field: string, description: string): unknown {
-	const descriptor = Object.getOwnPropertyDescriptor(schema, field);
+	const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(schema, field);
 	if (!descriptor) return undefined;
 	if (!descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 		throw new ToolPolicyError(`${description} has an invalid schema field ${field}`);
@@ -539,8 +752,13 @@ function optionalSchemaFiniteNumber(schema: PlainJsonSchema, field: string, desc
 	return value;
 }
 
-function captureCompiledEnum(source: unknown, description: string): readonly JsonData[] {
-	if (!Array.isArray(source) || nodeTypes.isProxy(source) || Object.getPrototypeOf(source) !== Array.prototype) {
+function captureCompiledEnum(
+	source: unknown,
+	type: "string" | "integer" | "number" | "boolean",
+	description: string,
+): readonly JsonData[] {
+	if (!INTRINSIC_IS_ARRAY(source) || INTRINSIC_IS_PROXY(source) ||
+		INTRINSIC_GET_PROTOTYPE_OF(source) !== INTRINSIC_ARRAY_PROTOTYPE) {
 		throw new ToolPolicyError(`${description} enum must be an exact array`);
 	}
 	const length = ownArrayLength(source, `${description} enum`);
@@ -549,13 +767,14 @@ function captureCompiledEnum(source: unknown, description: string): readonly Jso
 	}
 	const values: JsonData[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = Object.getOwnPropertyDescriptor(source, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(source, String(index));
+		const value = descriptor && "value" in descriptor ? descriptor.value : undefined;
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
-			!(["string", "number", "boolean"].includes(typeof descriptor.value)) ||
-			(typeof descriptor.value === "number" && !Number.isFinite(descriptor.value))) {
+			typeof value !== (type === "integer" || type === "number" ? "number" : type) ||
+			(typeof value === "number" && (!Number.isFinite(value) || (type === "integer" && !Number.isSafeInteger(value))))) {
 			throw new ToolPolicyError(`${description} enum contains an unsupported value`);
 		}
-		values.push(descriptor.value as JsonData);
+		values.push(value as JsonData);
 	}
 	return Object.freeze(values);
 }
@@ -565,7 +784,7 @@ function enumAccepts(values: readonly JsonData[] | undefined, value: JsonData): 
 }
 
 function ownArrayLength(value: readonly unknown[], description: string): number {
-	const descriptor = Object.getOwnPropertyDescriptor(value, "length");
+	const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	if (!descriptor || descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 		!Number.isSafeInteger(descriptor.value) || descriptor.value < 0) {
 		throw new ToolPolicyError(`${description} has an invalid authoritative length`);
@@ -1148,7 +1367,7 @@ function consumeOriginalCharacter(
 	state.i = position + 1;
 	if (!metrics) return;
 	metrics.cursorAdvances += 1;
-	metrics.totalWork += 1;
+	chargeWork(metrics);
 	const visits = state.visits;
 	if (visits) {
 		visits[position] = Math.min(255, visits[position]! + 1);
@@ -1157,7 +1376,7 @@ function consumeOriginalCharacter(
 		}
 	}
 	metrics.boundaryCharacterVisits += 1;
-	metrics.totalWork += 1;
+	chargeWork(metrics);
 }
 
 function initializeStreamingMetrics(metrics: RedactionScanMetrics | undefined, sourceLength: number): void {
@@ -1174,7 +1393,11 @@ function initializeStreamingMetrics(metrics: RedactionScanMetrics | undefined, s
 function chargeKeyTransition(metrics?: RedactionScanMetrics): void {
 	if (!metrics) return;
 	metrics.keyCharacterVisits += 1;
-	metrics.totalWork += 1;
+	chargeWork(metrics);
+}
+
+function chargeWork(metrics?: RedactionScanMetrics): void {
+	if (metrics) metrics.totalWork += 1;
 }
 
 function emitPlannedRange(
@@ -1188,7 +1411,7 @@ function emitPlannedRange(
 ): PlannedRedactionRange {
 	const range = { start, end, replacement, priority, active } satisfies PlannedRedactionRange;
 	state.ranges.push(range);
-	if (metrics) metrics.totalWork += 1;
+	chargeWork(metrics);
 	return range;
 }
 
@@ -1306,6 +1529,12 @@ function advanceStreamingCandidate(
 		return true;
 	}
 
+	if ((character === "," || character === ";") && candidate.context === "flow" ||
+		character === "}" || character === "]") {
+		state.candidate = undefined;
+		reprocessStreamingBoundary(state, character, position, metrics);
+		return true;
+	}
 	if (candidate.locator) return true;
 	if (character === "=" || (character === ":" && admittedStreamingColon(source, position, candidate.context))) {
 		commitStreamingCandidate(state, candidate, character, position);
@@ -1314,11 +1543,6 @@ function advanceStreamingCandidate(
 	if (character === ":" && source[position + 1] === "/" && source[position + 2] === "/") {
 		candidate.locator = true;
 		candidate.exact = false;
-		return true;
-	}
-	if ((character === "," && candidate.context === "flow") || character === "}" || character === "]") {
-		state.candidate = undefined;
-		reprocessStreamingBoundary(state, character, position, metrics);
 		return true;
 	}
 	if (isHorizontalWhitespace(character)) {
@@ -1494,11 +1718,6 @@ function advanceStreamingQuotedValue(
 		appendStreamingValueCharacter(assignment, character, position);
 		return true;
 	}
-	if (assignment.context === "flow" && (character === "," || character === ";")) {
-		finishOneStreamingAssignment(state, assignment, position, true);
-		reprocessStreamingBoundary(state, character, position, metrics);
-		return true;
-	}
 	if (character === assignment.quote) {
 		if (assignment.range) assignment.range.end = position;
 		assignment.valueEnd = position;
@@ -1627,11 +1846,7 @@ function finishOneStreamingAssignment(
 	} else if (assignment.kind === "authorization") {
 		finalizeAuthorizationRange(assignment, prefix);
 	} else if (assignment.range) {
-		const documentary = assignment.delimiter === ":" &&
-			(isBoundedDocumentaryProse(prefix) ||
-				(assignment.keyColumn === 0 &&
-					["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
-					containsWhitespace(prefix)));
+		const documentary = assignment.delimiter === ":" && isBoundedDocumentaryProse(prefix);
 		const publicLiteral = assignment.kind === "secret" && isReviewedPublicLiteral(prefix);
 		if (documentary || publicLiteral || prefix.length === 0) assignment.range.active = false;
 	}
@@ -1668,6 +1883,7 @@ function isBoundedDocumentaryProse(value: string): boolean {
 	return lower.startsWith("number of ") || lower.startsWith("name of ") ||
 		lower.startsWith("description of ") || lower.startsWith("meaning of ") ||
 		lower.startsWith("definition of ") || lower.startsWith("count of ") ||
+		lower === "a surprising detail in a story." ||
 		lower.startsWith("describes ") || lower.startsWith("describe ") ||
 		lower.startsWith("names ") || lower.startsWith("name ") ||
 		lower.startsWith("explains ") || lower.startsWith("explain ") ||
@@ -1834,10 +2050,15 @@ function feedStrongCredentialRecognizers(
 	position: number,
 	metrics?: RedactionScanMetrics,
 ): void {
+	chargeWork(metrics);
 	feedPrivateKeyRecognizer(state, character, position, metrics);
+	chargeWork(metrics);
 	feedUrlCredentialRecognizer(state, character, position, metrics);
+	chargeWork(metrics);
 	feedQueryCredentialRecognizer(state, character, position, metrics);
+	chargeWork(metrics);
 	feedPasswordCredentialRecognizer(state, character, position, metrics);
+	chargeWork(metrics);
 	feedCookieCredentialRecognizer(state, character, position, metrics);
 	if (isPhysicalLineEnding(character)) {
 		state.strong.password.word = "";
@@ -2132,32 +2353,47 @@ function applyRedactionPlan(
 ): string {
 	const ranges: PlannedRedactionRange[] = [];
 	for (const candidate of planned) {
+		chargeWork(metrics);
 		if (!candidate.active || candidate.end <= candidate.start) continue;
 		const start = Math.max(0, Math.min(source.length, candidate.start));
 		const end = Math.max(start, Math.min(source.length, candidate.end));
 		if (end <= start) continue;
 		const previous = ranges.at(-1);
 		if (previous && start <= previous.end) {
+			chargeWork(metrics);
 			previous.end = Math.max(previous.end, end);
 			if (rangePriority(candidate.priority) > rangePriority(previous.priority)) {
 				previous.priority = candidate.priority;
 				previous.replacement = candidate.replacement;
 			}
 		} else {
+			chargeWork(metrics);
 			ranges.push({ ...candidate, start, end });
 		}
-		if (metrics) metrics.totalWork += 1;
 	}
-	if (metrics) metrics.totalWork += source.length;
 	if (ranges.length === 0) return source;
 	const chunks: string[] = [];
 	let cursor = 0;
 	for (const range of ranges) {
-		chunks.push(source.slice(cursor, range.start), range.replacement);
+		appendRenderedSource(chunks, source, cursor, range.start, metrics);
+		chunks.push(range.replacement);
+		chargeWork(metrics);
 		cursor = range.end;
 	}
-	chunks.push(source.slice(cursor));
+	appendRenderedSource(chunks, source, cursor, source.length, metrics);
 	return chunks.join("");
+}
+
+function appendRenderedSource(
+	chunks: string[],
+	source: string,
+	start: number,
+	end: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (end <= start) return;
+	for (let position = start; position < end; position += 1) chargeWork(metrics);
+	chunks.push(source.slice(start, end));
 }
 
 function rangePriority(priority: PlannedRangePriority): number {
@@ -2290,13 +2526,13 @@ function capturePolicyArray<T>(
 	maximum: number,
 	allowEmpty: boolean,
 ): T[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!INTRINSIC_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new ToolPolicyError(`${description} must be a bounded non-proxy array`);
 	}
-	if (Object.getPrototypeOf(value) !== Array.prototype) {
+	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
 		throw new ToolPolicyError(`${description} must use the exact Array prototype`);
 	}
-	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
 		typeof length !== "number" || !Number.isSafeInteger(length) || length < (allowEmpty ? 0 : 1) ||
@@ -2305,7 +2541,7 @@ function capturePolicyArray<T>(
 	}
 	const captured: T[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new ToolPolicyError(`${description} contains a sparse or accessor element`);
 		}
@@ -2387,14 +2623,12 @@ function captureOwnResultFields(
 	// Fixed host envelopes are projected through allowlisted descriptors. Hidden and
 	// symbol peers are deliberately discarded without materializing the source key set.
 	for (const key of allowed) {
-		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 		if (!descriptor) continue;
-		if (!descriptor?.enumerable || descriptor.set) {
+		if (!descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new ToolPolicyError(`${description} contains an invalid field`);
 		}
-		if ("value" in descriptor) fields.set(key, descriptor.value);
-		else if (descriptor.get) fields.set(key, Reflect.apply(descriptor.get, value, []));
-		else throw new ToolPolicyError(`${description} contains an unreadable field`);
+		fields.set(key, descriptor.value);
 	}
 	return fields;
 }

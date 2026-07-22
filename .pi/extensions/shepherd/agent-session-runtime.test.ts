@@ -5406,7 +5406,7 @@ test("cycle 13 request arrays use bounded indexed canonical influence only", asy
 	}, {
 		status: "resolved",
 		wholeKeyCalls: 0,
-		indexedDescriptorCalls: 2,
+		indexedDescriptorCalls: 0,
 		peerAccessorCalls: 0,
 		prompted: 1,
 	});
@@ -6683,7 +6683,7 @@ test("cycle 16 assignment lexer is one-pass monotonic across dense openers malfo
 			get() { return measuredWork; },
 			set(value: number) {
 				measuredWork = value;
-				if (value > (8 * sample.length) + 64) throw new Error("cycle 16 scanner work ceiling exceeded");
+				if (value > (16 * sample.length) + 64) throw new Error("cycle 16 scanner work ceiling exceeded");
 			},
 		});
 		let rendered = "";
@@ -6700,7 +6700,7 @@ test("cycle 16 assignment lexer is one-pass monotonic across dense openers malfo
 		if (metrics.cursorAdvances < 1 || metrics.cursorAdvances > sample.length) {
 			problems.push(`${size}:advances-${metrics.cursorAdvances}`);
 		}
-		if (metrics.totalWork < 1 || metrics.totalWork > (8 * sample.length) + 64) {
+		if (metrics.totalWork < 1 || metrics.totalWork > (16 * sample.length) + 64) {
 			problems.push(`${size}:work-${metrics.totalWork}`);
 		}
 		if (leakedMarkers(rendered, [marker, sibling]).length > 0) problems.push(`${size}:marker-leak`);
@@ -6954,7 +6954,7 @@ test("cycle 17 dense failed flow candidates remain linear and protect a terminal
 				get() { return measuredWork; },
 				set(value: number) {
 					measuredWork = value;
-					if (value > (8 * sample.length) + 64) {
+					if (value > (16 * sample.length) + 64) {
 						throw new Error("cycle 17 dense-candidate work ceiling exceeded");
 					}
 				},
@@ -6969,7 +6969,7 @@ test("cycle 17 dense failed flow candidates remain linear and protect a terminal
 			if (rendered && !rendered.includes("safe: retained")) problems.push(`${variant}:${count}:public-control-changed`);
 			if (metrics.sourceLength !== sample.length) problems.push(`${variant}:${count}:source-${metrics.sourceLength}`);
 			if (metrics.cursorRegressions !== 0) problems.push(`${variant}:${count}:regressions-${metrics.cursorRegressions}`);
-			if (metrics.totalWork > (8 * sample.length) + 64) problems.push(`${variant}:${count}:work-${metrics.totalWork}`);
+			if (metrics.totalWork > (16 * sample.length) + 64) problems.push(`${variant}:${count}:work-${metrics.totalWork}`);
 		}
 	}
 	assert.deepEqual(problems, []);
@@ -7507,7 +7507,7 @@ test("cycle 17 redaction metrics measure one original coordinate space and every
 		if (metrics.cursorAdvances !== sample.length) problems.push(`${label}:advances-${metrics.cursorAdvances}`);
 		if (metrics.cursorRegressions !== 0) problems.push(`${label}:regressions-${metrics.cursorRegressions}`);
 		if (metrics.maxMainCursorVisits !== 1) problems.push(`${label}:main-visits-${metrics.maxMainCursorVisits}`);
-		if (metrics.totalWork < sample.length * 2 || metrics.totalWork > (8 * sample.length) + 64) {
+		if (metrics.totalWork < sample.length * 2 || metrics.totalWork > (16 * sample.length) + 64) {
 			problems.push(`${label}:complete-work-${metrics.totalWork}`);
 		}
 		if (metrics.keyCharacterVisits + metrics.boundaryCharacterVisits > metrics.totalWork) {

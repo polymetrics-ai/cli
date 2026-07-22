@@ -1583,7 +1583,10 @@ function captureFreshDenseArray(
 	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a non-proxy array`);
 	}
-	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
+		throw new AgentSessionRuntimeError(`${description} must use the exact Array prototype`);
+	}
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const lengthValue = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
 		typeof lengthValue !== "number" || !Number.isSafeInteger(lengthValue) || lengthValue < (allowEmpty ? 0 : 1) ||
@@ -1593,7 +1596,7 @@ function captureFreshDenseArray(
 	const length = lengthValue;
 	const captured: unknown[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains a sparse or accessor element`);
 		}
@@ -2736,23 +2739,30 @@ function captureAssistantTerminal(
 			if (typeof id !== "string" || typeof name !== "string") {
 				throw new AgentSessionRuntimeError("AgentSession assistant tool-call identity is invalid");
 			}
-			const argumentsIdentity = projectToolArguments(
-				projectArguments, name, partFields.get("arguments"), maximum,
-			);
 			const thoughtSignature = optionalCapturedString(partFields, "thoughtSignature", "assistant tool thought signature");
 			const partialJson = optionalCapturedString(partFields, "partialJson", "assistant tool partial JSON");
-			const terminalValue = snapshotEventJson({
+			// Pi publishes `{}` while a tool call is still streaming. That placeholder has no
+			// execution authority: project only the complete terminal arguments after partialJson
+			// disappears. Missing or malformed terminal arguments still fail closed below.
+			const argumentsIdentity = partialJson === undefined
+				? projectToolArguments(projectArguments, name, partFields.get("arguments"), maximum)
+				: undefined;
+			const terminalIdentity = argumentsIdentity === undefined
+				? undefined
+				: canonicalJson(snapshotEventJson({
+					type,
+					id,
+					name,
+					argumentsIdentity,
+					...(thoughtSignature === undefined ? {} : { thoughtSignature }),
+				}, "AgentSession assistant tool identity", maximum));
+			const identity = terminalIdentity ?? canonicalJson(snapshotEventJson({
 				type,
 				id,
 				name,
-				argumentsIdentity,
+				partialJson,
 				...(thoughtSignature === undefined ? {} : { thoughtSignature }),
-			}, "AgentSession assistant tool identity", maximum);
-			const terminalIdentity = canonicalJson(terminalValue);
-			const identity = partialJson === undefined
-				? terminalIdentity
-				: canonicalJson(snapshotEventJson({ terminal: terminalValue, partialJson },
-					"AgentSession assistant streaming tool identity", maximum));
+			}, "AgentSession assistant streaming tool identity", maximum));
 			return Object.freeze({ type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity });
 		}
 		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${JSON.stringify(type)} is invalid`);
