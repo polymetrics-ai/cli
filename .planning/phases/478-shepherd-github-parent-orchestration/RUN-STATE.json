@@ -4,29 +4,36 @@
   "issue": 478,
   "parentIssue": 471,
   "parentPr": 472,
-  "status": "locally_verified",
-  "reason": "Cycle 7 completed one 46-row strict PLAN -> RED -> GREEN -> REFACTOR correction plus a bounded pre-freeze audit RED/GREEN for both blocking Cycle 6 reviews; all local issue gates pass, the broad suite has only the recorded unrelated managed-sandbox failures, HEAD is the single current candidate semantic, and fresh exact-head review remains parent-owned.",
+  "status": "in_progress",
+  "reason": "Cycle 8 consolidates both blocking exact-head Cycle 7 reviews into one 48-row seven-family PLAN -> RED -> GREEN -> REFACTOR correction; frozen candidate b90037df is historical review input, HEAD is the only current-candidate semantic, and no Cycle 8 test or production edit has occurred.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "candidateRef": "HEAD",
-    "priorCycleImplementationHead": "2c6371e725d58b2dc05902d68f9e6812904664d6",
+    "priorCycleImplementationHead": "915882c219f52da2c1edebce84d2bf90c61a4592",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
     "adapterHealth": "doctor_passed_programming_loop_unavailable",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": true,
+    "verificationPassed": false,
     "reviewCoveragePassed": false,
     "priorReviewState": {
-      "cycle": 6,
-      "priorReviewedCandidate": "dbce5b7d0c698bc802594211072fed77eff23c1c",
+      "cycle": 7,
+      "priorReviewedCandidate": "b90037df1fff38c755ebc8025579120d17031330",
       "review1": "blocked",
       "review2": "blocked",
-      "findingsConsolidatedIntoCycle": 7
+      "findingsConsolidatedIntoCycle": 8
     },
     "reviewHistory": [
+      {
+        "cycle": 6,
+        "priorReviewedCandidate": "dbce5b7d0c698bc802594211072fed77eff23c1c",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 7
+      },
       {
         "cycle": 5,
         "priorReviewedCandidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
@@ -54,7 +61,8 @@
       "cycle7Refactor": "87e704010f3e2226d8393d12e1a1bdf72df212a0",
       "cycle7AuditRed": "b1560e76a3abbac5efcd33b2740b7275b6acc137",
       "cycle7AuditGreen": "915882c219f52da2c1edebce84d2bf90c61a4592",
-      "cycle7EvidenceRef": "HEAD"
+      "cycle7Evidence": "b90037df1fff38c755ebc8025579120d17031330",
+      "cycle8PlanRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -64,7 +72,8 @@
       "cycle4Serialized": "332 total; 266 pass; 65 unrelated managed-sandbox spawn EPERM failures; 1 intentional skip",
       "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass",
       "cycle6": "focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip; retained Cycle 5 109/109; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized 427 total, 361 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base, ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass",
-      "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass"
+      "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
+      "cycle8": "planned: 48 behavior rows across seven accepted review families; production frozen at b90037df; focused, strict TypeScript, offline RPC, serialized classification, immutable-base, exact-scope, JSON, marker, and clean gates pending"
     },
     "orchestrationDecisions": [
       {
@@ -113,6 +122,11 @@
         "reason": "Independent mapping found an optional legacy ready-mutation route and fake-shaped role projection; audit RED/GREEN made authority mandatory, removed ready mutation from public transport, typed atomic conflicts, and separated production transport, authority, and journal roles."
       },
       {
+        "cycle": "cycle-8-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
+      },
+      {
         "cycle": "cycle-7-publish",
         "decision": "not_authorized",
         "reason": "Cycle 7 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns all external and review actions."
@@ -134,5 +148,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T00:54:15.000Z"
+  "updatedAt": "2026-07-22T01:25:12.000Z"
 }

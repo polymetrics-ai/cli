@@ -16,9 +16,9 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Implementation head: audit GREEN `915882c219f52da2c1edebce84d2bf90c61a4592`
+Frozen reviewed candidate: `b90037df1fff38c755ebc8025579120d17031330`
 
-Verification evidence head: this evidence commit; exact SHA reported externally after commit
+Cycle 8 evidence head: pending; final exact SHA will be reported externally after commit
 
 ## Scope Delivered
 
@@ -85,7 +85,7 @@ node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 git diff --check 3addb1f48be1afe8b1e2b59b54247679d7293805..HEAD
 ```
 
-Current Cycle 7 result: focused 297 total / 296 pass / 0 fail / 1 intentional live-GitHub skip;
+Historical Cycle 7 result: focused 297 total / 296 pass / 0 fail / 1 intentional live-GitHub skip;
 serialized Shepherd 517 total / 451 pass / 65 unchanged unrelated sandbox `spawn EPERM` failures /
 1 intentional skip; strict owned and all-production TypeScript pass; pinned offline RPC returns
 `true`; immutable-base, exact-21-path scope, diff, JSON, and credential scans pass.
@@ -98,13 +98,14 @@ serialized Shepherd 517 total / 451 pass / 65 unchanged unrelated sandbox `spawn
 - Coverage status: pending.
 - Review URL: pending.
 - Disposition summary: no review was started by this worker.
-- Unresolved findings: none known locally; exact-head independent coverage remains required.
+- Unresolved findings: seven accepted Cycle 8 families are planned; exact-head independent coverage
+  remains required after correction.
 
 ## Merge Recommendation
 
-- Recommended state: `provisional_parent_integration` after parent-owned review coverage.
-- Reason: all authorized local gates pass; the exact-head automated review gate is intentionally
-  still open.
+- Recommended state: `blocked_cycle_8_correction`.
+- Reason: both frozen-candidate reviews are blocked until the one-batch Cycle 8 correction and fresh
+  exact-head review complete.
 - Human gates: parent ready, exact-head parent merge, and default-branch merge remain active.
 - Follow-up issues: #479 owns controller/session integration; this worker must not add it.
 
@@ -282,3 +283,22 @@ session-attestation contract and fixtures required to verify independent-review 
 - No Go, connector, certification, runtime, `make`, dependency, network, push, live GitHub,
   controller/#479 implementation, reviewer/self-review, integration, or merge ran. Parent owns
   publication, two fresh exact-head reviews, dispositions, integration, and human gates.
+
+## Cycle 8 plan handoff
+
+- Frozen candidate `b90037df1fff38c755ebc8025579120d17031330`; immutable base
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; exact 21 paths; clean start.
+- Both Cycle 7 reports were read fully. Seven-family union is one 48-row correction: credential
+  suffix closure, strict #479 typing/recovery, all uncertain non-values, real-broker expiry resume,
+  bounded fenced rollback, reconstructed durable restart, and refreshed freshness.
+- Durable recovery ownership: stable recovery ID plus ordered attempt fence; authority durably
+  supersedes predecessor before returning, identifies the exact original ready mutation without
+  revision guessing, and only restores draft; controller aborts bounded
+  response waits, ignores stale results, blocks reentry, and holds key/stop ownership until the
+  matching fenced durable draft result. Cross-instance state lives in shared durable backing, not
+  `WeakMap`/adapter identity.
+- GSD doctor passes; missing adapter command records `manual_gsd_fallback`. Required skills and
+  contracts loaded. One read-only explorer maps the contracts; worker owns the local critical path.
+- Next checkpoints: artifact-only PLAN commit; complete five-test-file RED with all five production
+  blobs frozen; coherent GREEN/refactor; focused/strict/offline/scope/data/serialized
+  classification; exact evidence. Parent owns publication, fresh reviews, integration, and gates.

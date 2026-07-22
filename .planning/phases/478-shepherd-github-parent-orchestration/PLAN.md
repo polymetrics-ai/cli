@@ -768,3 +768,114 @@ pass: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox process-identi
 failures, and 1 intentional skip. Immutable base and reviewed-candidate ancestry, exact merge base,
 full-range `git diff --check`, exact 21-path scope, three JSON documents, and the explicit
 test-synthetic credential-marker allowlist pass. No prohibited or external action ran.
+
+## Cycle 8 exact-head recovery correction: 2026-07-22
+
+Two independent reviews block frozen Cycle 7 candidate
+`b90037df1fff38c755ebc8025579120d17031330` against immutable base
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both reports were read completely. Their seven
+unique families form one indivisible correction: provider-neutral credential assignments,
+strictly typed #479 composition, every uncertain non-value outcome, real-broker resume after
+expiry, bounded fenced rollback, reconstructed durable restart, and refreshed freshness delivery.
+No family may be frozen or reviewed separately.
+
+Required routing loaded before edits: `gsd-programming-loop`, `architecture-patterns`,
+`javascript-testing-patterns`, `github-issue-first-delivery`, `caveman`, required-skills routing,
+the issue-agent contract, runtime/Pi integration reference, GSD adapter/universal-loop references,
+and project loop artifacts. `scripts/gsd doctor` passes; `scripts/gsd prompt programming-loop init
+--phase 478-shepherd-github-parent-orchestration --dry-run` returns `unknown GSD command:
+programming-loop`, so the recorded route remains `manual_gsd_fallback`. One read-only explorer maps
+the seven coupled contracts; this isolated worker owns the ordered PLAN -> RED -> GREEN -> REFACTOR
+critical path.
+
+### Cycle 8 exact scope and frozen production
+
+The owned immutable-base range remains exactly the existing 21 paths. No new file is needed.
+Production blobs frozen at candidate `b90037df` before RED are:
+
+- `github-orchestrator.ts`: `668a55af55413c1cc595424e87ce352c355eec88`
+- `github-decision-broker.ts`: `7be6785190176a8c15660fb180fc95c207b76d5b`
+- `human-decision.ts`: `b1c0c198c33c95c8fabb0f911a42513d2305cb17`
+- `review-router.ts`: `a586405153e2e666a57b832e7d4b48df80e3265c`
+- `github-evidence.ts`: `23efd2c51280ba83836feef4fcb459e7da4571c0`
+
+### Cycle 8 architecture contract
+
+1. Classify assignment-shaped uppercase names by the complete recognized credential suffix
+   grammar before applying a narrow exact safe-name exception. Unknown provider/vendor prefixes
+   never bypass classification. Preserve the finite Kubernetes, Docker, and AWS forms. Every
+   suffix is table-driven through review routing, native decision persistence/comment creation,
+   broker persistence/outbound comments, PR title/body/findings/dispositions, and orchestration
+   plan/decision text; rejection precedes effects and never reflects the synthetic marker.
+2. Make the #479 fixture compile without `any`, casts, fake projections, or private shortcuts.
+   Separate production-typed transport, authority, and journal adapters return exact
+   `GitAncestryProof`, `ParentReadyCompareEffectResult`, and
+   `DurableMutationResult<GitHubPullRequestEvidence>` values across success, typed conflict,
+   uncertainty, rollback, stop/join, and settlement.
+3. Treat every uncertain non-value result from `callExternal` alike. Timeout, cancellation, and
+   immediate rejection after a possible effect all start the durable quarantine finalizer. The
+   original invocation plus recovery retain keyed and stop/join ownership even when ordinary
+   visibility reads fail.
+4. Split canonical request normalization from new-request lifetime validation. An existing exact
+   broker record is read and compared before creation-time expiry is considered. A decision
+   created/decided before expiry and durably consumed may revalidate after restart; a genuinely
+   new request or decision after expiry remains rejected.
+5. Bind every rollback to a stable recovery ID and an ordered attempt fence. Each authority call
+   must durably claim its attempt and supersede its predecessor before returning; its only permitted
+   effect is idempotent restoration of the exact draft owned by the original ready mutation
+   key/intent. The request carries that original mutation identity; the controller never guesses or
+   alternates resource revisions. The controller enforces a real per-attempt
+   deadline, aborts the response wait, retains timed-out promises until a later fenced result proves
+   durable handoff, and never lets a superseded result release quarantine or settle controller
+   state. A matching fenced `DurableMutationResult` containing the exact draft is the authoritative
+   observation that permits release. Until then reentry is blocked and `stop()` is incomplete.
+6. Remove module `WeakMap`/authority-object identity from restart evidence. Serialize the prepared
+   operation and journal, recreate controller, broker, journal, transport, and authority adapter
+   instances over shared durable backing, reconcile the uncertain settlement, and resume once.
+   Cross-instance fencing belongs to the durable authority backing; in-process maps are only local
+   scheduling aids.
+7. Public prepared commit retains the journaled stable authorization, idempotency key, and intent,
+   but after successful revalidation sends the newly observed freshness envelope to the atomic
+   authority. Harmless policy, ancestry, and equivalent-clean review refresh must be visible in
+   that request while stable identity remains byte-equivalent.
+
+### Cycle 8 RED matrix (48 planned behavior rows)
+
+| Family | Rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| provider-neutral credential closure | 20 | every recognized authorization/token/access-token/refresh-token/API-key/password/secret/client-secret/private-key/database-URL/credential(s)/cookie(s)/set-cookie/session/id/token/cookie/CSRF-token suffix under an unknown prefix rejects through every durable/outbound consumer; exact safe-name control remains allowed only after classification |
+| strict #479 production roles | 6 | exact typed success, non-applied conflict, uncertain late effect, quarantine/rollback, live `stop()` incomplete then joined, and durable settlement without `any`, cast, fake projection, or private shortcut |
+| every uncertain non-value outcome | 4 | apply-then-reject starts recovery with all reads failing, restores draft, blocks keyed reentry, and keeps stop incomplete until joined |
+| real-broker expiry resume | 4 | existing consumed request resumes after expiry, prepared commit applies once, new expired request rejects, and new post-expiry decision rejects through the actual adapter |
+| bounded fenced rollback | 5 | ignored first response receives an abort signal, later attempt succeeds without revision guessing, superseded late result cannot settle, quarantine lasts through authoritative draft observation, and stop eventually joins |
+| reconstructed durable restart | 4 | serialized prepared/journal state recreates all five production roles, shares only durable backing, reconciles uncertainty without `WeakMap` identity, and resumes exactly once |
+| refreshed freshness delivery | 5 | refreshed policy, ancestry, equivalent-clean review, combined envelope, and unchanged authorization/key/intent are asserted at the atomic authority |
+
+### Cycle 8 strict lifecycle and verification
+
+1. Commit this artifact-only PLAN and 48-row ledger before any Cycle 8 test or production edit.
+2. Commit one complete five-test-file RED. Retain all 297 Cycle 7 focused cases and the intentional
+   live skip; prove every new contract fails and all five frozen production blobs remain exact.
+3. Implement one coherent GREEN, then one bounded REFACTOR if structure or lifecycle clarity
+   requires it. No expectation may be removed, weakened, skipped, or converted to a fake-only proof.
+4. Run focused five-file tests, strict owned and all-production TypeScript against pinned Pi 0.80.6,
+   pinned offline RPC, immutable-base/reviewed-candidate ancestry, exact merge base, full-range diff,
+   exact 21-path scope, three JSON parses, explicit synthetic-marker classification, and clean status.
+   Serialized Shepherd runs only after focused GREEN and is reported as pass or environmental
+   failure without reinterpretation. Go, connectors, `make`, runtime services, and live actions stay
+   out of scope.
+5. Replay both reports after REFACTOR. Commit exact evidence only once every seven-family contract
+   and retained gate is truthful. Parent owns publication, fresh exact-head review, integration,
+   and every human gate.
+
+### Cycle 8 checkpoints
+
+- [x] Both Cycle 7 reports read completely and consolidated without dropping warnings.
+- [x] Exact base, frozen candidate, clean worktree, 21-path range, and five frozen production blobs
+      confirmed before edits.
+- [x] Required skills/contracts loaded; healthy adapter plus missing command records
+      `manual_gsd_fallback`; one read-only contract mapper records `read_only_spawned`.
+- [ ] Artifact-only PLAN commit precedes all test and production edits.
+- [ ] One comprehensive test-only RED proves all 48 rows with frozen production.
+- [ ] One coherent GREEN/refactor passes retained and new contracts.
+- [ ] Exact evidence commit freezes a clean `HEAD`; two fresh reviews remain parent-owned.

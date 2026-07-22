@@ -1,9 +1,11 @@
 # Verification: #478
 
-Status: Cycle 7 locally verified at current candidate `HEAD` after audit GREEN
-`915882c219f52da2c1edebce84d2bf90c61a4592`; two fresh parent-owned exact-head reviews pending.
+Status: Cycle 8 correction planned against frozen candidate
+`b90037df1fff38c755ebc8025579120d17031330`; both independent Cycle 7 reviews are blocked and
+consolidated into one artifact-first seven-family cycle. No Cycle 8 test or production edit has
+occurred.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 7 contract.
+current Cycle 8 contract.
 
 ## Initial delivery authorized gate checklist (historical)
 
@@ -152,6 +154,41 @@ parent-owned exact-head reviews remain pending.
 | Post-RED test edits | support-fixture alignment only in `github-orchestrator.test.ts`; no RED assertion was removed or weakened |
 | Prohibited/live actions | not run |
 | Fresh review | pending; two exact-head `openai-codex/gpt-5.6-sol:xhigh` reviews remain parent-owned |
+
+## Cycle 8 verification contract
+
+- [x] Read `/tmp/478-REVIEW-CYCLE7-1.md` and `/tmp/478-REVIEW-CYCLE7-2.md` completely.
+- [x] Confirm exact immutable base `3addb1f48be1afe8b1e2b59b54247679d7293805`, frozen
+      reviewed candidate `b90037df1fff38c755ebc8025579120d17031330`, clean starting status,
+      exact 21-path range, and five production blob identities.
+- [x] Load mandatory skills/contracts and record healthy GSD doctor plus unavailable
+      `programming-loop` adapter command as `manual_gsd_fallback`.
+- [x] Consolidate all seven families into one 48-row RED matrix and freeze the durable rollback
+      ownership/fencing contract before tests.
+- [ ] Commit artifact-only PLAN before every Cycle 8 test and production edit.
+- [ ] Commit one complete test-only RED with all five production blobs unchanged and retained
+      Cycle 7 cases still green.
+- [ ] Make provider-neutral credential suffixes fail closed through all durable/outbound consumers,
+      with only narrow exact safe-name exceptions after classification and no marker reflection.
+- [ ] Compile and execute the #479-shaped success/conflict/uncertain/rollback/stop/journal path with
+      exact production types, separate roles, and no `any`, casts, fake projection, or private seam.
+- [ ] Start durable recovery for immediate uncertain rejection as well as timeout/cancellation;
+      ordinary read failure cannot prevent draft restoration, keyed exclusion, or truthful join.
+- [ ] Resume an exact consumed real-broker request after expiry and reject genuinely new expired
+      request/decision events.
+- [ ] Enforce bounded rollback response waits, abort signals, durable ordered attempt fencing,
+      superseded-result isolation, exact draft observation, and eventual stop join.
+- [ ] Reconstruct controller, broker, journal, transport, and authority adapter instances from
+      serialized state over shared durable backing without `WeakMap`/object identity.
+- [ ] Send refreshed policy/ancestry/equivalent-clean freshness after commit revalidation while
+      preserving original authorization, key, and intent.
+- [ ] Pass focused, strict owned/all-production TypeScript, pinned offline RPC,
+      base/ancestry/diff/exact-scope/JSON/marker/clean gates; classify serialized broad honestly.
+- [ ] Replay both reports after REFACTOR and freeze one exact clean evidence candidate. Parent owns
+      fresh review, publication, integration, and all human gates.
+
+Prohibited: Go, connectors, `make`, runtime services, dependencies, parent/main worktrees, #475,
+network/live GitHub, push, self-review, reviewer dispatch, integration, or merge.
 
 ## Cycle 7 verification contract
 

@@ -152,3 +152,33 @@
   environmental failure, 517 total, 451 pass, 65 unrelated managed-sandbox `spawn EPERM`
   failures, 1 skip. Strict TypeScript, pinned offline RPC, base/ancestry/diff/exact-scope/JSON, and
   explicit synthetic-marker gates pass.
+
+## Cycle 8 consolidated-review prompt
+
+- Inputs: `/tmp/478-REVIEW-CYCLE7-1.md` and `/tmp/478-REVIEW-CYCLE7-2.md`, both read completely.
+- Exact frozen candidate/base: `b90037df1fff38c755ebc8025579120d17031330` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; existing exact scope remains 21 paths.
+- Sequence: artifact-only PLAN with 48-row seven-family matrix; one comprehensive five-test-file
+  RED with frozen production; one coherent GREEN and bounded REFACTOR; complete local gates; exact
+  evidence. Do not freeze, review, or hand off a partial family subset.
+- Credential contract: classify all recognized assignment suffixes under arbitrary provider
+  prefixes, then apply only narrow exact safe-name exceptions; retain kube/docker/AWS forms and
+  table every suffix through every durable/outbound text consumer without marker reflection.
+- Recovery contract: every uncertain non-value result starts quarantine. Rollback requests carry a
+  stable recovery identity, the original ready mutation key/intent, and an ordered attempt fence;
+  resource revisions are never guessed. Each durable authority attempt fences its
+  predecessor and can only restore the exact draft. Controller response waits are deadline-aborted;
+  superseded results never settle state; quarantine releases only on the matching fenced durable
+  draft result. Cross-instance truth lives in shared durable authority/journal backing, never a
+  module `WeakMap` or adapter identity.
+- #479 contract: separate production-typed transport, authority, and journal roles; exact ancestry,
+  compare, and durable mutation return types; success, conflict, uncertainty, rollback,
+  incomplete/joined stop, reconstruction, and settlement; no `any`, casts, fake projection,
+  private shortcuts, or same-object restart.
+- Broker/freshness contract: actual broker rereads existing exact state before new-request expiry
+  validation; pre-expiry consumed evidence can resume after expiry while new expired events fail.
+  Commit sends refreshed freshness but original stable authorization/key/intent.
+- GSD: doctor passes; adapter lacks `programming-loop`, so `manual_gsd_fallback`. One read-only
+  explorer maps contracts; worker owns local critical path. Exclude Go/connectors/`make`, parent or
+  main worktrees, #475, dependencies, runtime services, network/GitHub, push, reviewers,
+  integration, and merge.

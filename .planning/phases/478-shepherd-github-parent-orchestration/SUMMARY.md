@@ -1,8 +1,8 @@
 # Summary: #478
 
-Status: Cycle 7 locally verified at current candidate `HEAD` after audit GREEN `915882c2`; two
-fresh parent-owned exact-head reviews
-pending. Earlier delivery status below is retained as historical context.
+Status: Cycle 8 correction planned against frozen reviewed candidate `b90037df`; two independent
+Cycle 7 reports are blocked and consolidated into one seven-family TDD cycle. No Cycle 8 test or
+production edit has occurred. Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -143,3 +143,23 @@ unchanged unrelated managed-sandbox `spawn EPERM` failures, and 1 intentional sk
 and reviewed-candidate ancestry, full-range diff, exact 21-path scope, JSON, and explicit
 test-synthetic marker scans pass. No external/prohibited action ran; fresh exact-head review remains
 parent-owned.
+
+## Cycle 8 correction status
+
+Both Cycle 7 exact-head reports against `b90037df` are fully accepted as one 48-row correction.
+The seven families are provider-neutral credential suffix closure, strict #479 type/recovery
+composition, uncertain immediate rejection recovery, real-broker prepared resume after expiry,
+bounded fenced rollback attempts, reconstructed durable restart, and refreshed freshness delivery.
+
+The durable ownership decision is frozen before RED: a stable recovery identity plus ordered
+attempt fence and original ready mutation identity bind every rollback request without revision
+guessing; the authority durably supersedes predecessors and may
+only restore draft; the controller aborts each response wait, ignores superseded results, keeps key
+and stop ownership, and releases quarantine only on the matching fenced durable draft result.
+Durable backing—not `WeakMap` or adapter identity—owns cross-instance truth.
+
+Required skills and contracts are loaded. GSD doctor passes while the adapter command remains
+unavailable, so manual GSD fallback is recorded. One read-only mapping sidecar is active; the
+isolated worker owns PLAN -> comprehensive test-only RED -> coherent GREEN -> bounded REFACTOR ->
+exact evidence. Scope remains the exact 21 paths. No Go, connector, parent/main worktree, #475,
+network/GitHub, push, reviewer, integration, or merge action is authorized.

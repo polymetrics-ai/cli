@@ -289,3 +289,31 @@
   allowlist pass with zero unexpected or production/artifact candidates.
 - No prohibited, external, review, integration, or merge action ran. Parent owns publication and
   two fresh exact-head reviews.
+
+## 2026-07-22 Cycle 8 plan
+
+- Started clean at frozen reviewed candidate `b90037df1fff38c755ebc8025579120d17031330`;
+  immutable base/merge base remains `3addb1f48be1afe8b1e2b59b54247679d7293805`; exact owned
+  range remains 21 paths. Read both Cycle 7 reports completely.
+- Loaded `gsd-programming-loop`, architecture/testing, issue delivery, compact handoff, required
+  routing/contracts, runtime/Pi integration, adapter/universal-loop, and project artifacts. Doctor
+  passes; absent `programming-loop` command records `manual_gsd_fallback`.
+- Spawn decision: `read_only_spawned` for one exact contract-map explorer; isolated worker remains
+  `local_critical_path` owner for all writes and will not collide with parent/#475 work.
+- Consolidated exactly seven unique families into one 48-row RED matrix: 20 provider-neutral
+  credential suffixes, 6 strict #479 role trajectories, 4 uncertain immediate-rejection outcomes,
+  4 real-broker expiry/resume cases, 5 bounded fencing cases, 4 reconstructed restart cases, and
+  5 refreshed-freshness cases.
+- Recovery ownership decision: stable recovery ID plus ordered attempt fence is carried by every
+  rollback request together with the original ready mutation identity; resource revision guessing
+  is forbidden. Authority must durably supersede the predecessor before returning and may only
+  restore the exact draft. Controller aborts bounded response waits, never accepts a superseded
+  result, and retains quarantine/key/stop ownership until the matching fenced durable result is an
+  exact draft observation. Durable backing owns cross-instance state; module `WeakMap`/adapter
+  identity is forbidden as restart evidence.
+- Frozen production blobs: orchestrator `668a55af55413c1cc595424e87ce352c355eec88`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
+  `b1c0c198c33c95c8fabb0f911a42513d2305cb17`, review router
+  `a586405153e2e666a57b832e7d4b48df80e3265c`, evidence
+  `23efd2c51280ba83836feef4fcb459e7da4571c0`. No Cycle 8 test, production, external, or prohibited
+  action ran before this artifact checkpoint.

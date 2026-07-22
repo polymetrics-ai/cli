@@ -380,3 +380,40 @@ authority-boundary interface. `reconcileParentReadiness` remains the convenience
 - Immutable base and reviewed candidate are ancestors; exact merge base, full-range diff check,
   exact 21-path ownership, three JSON parses, and the five-path explicit synthetic AWS marker
   allowlist pass with zero production/artifact or unexpected candidates.
+
+## Cycle 8 consolidated-review RED ledger
+
+Frozen exact candidate: `b90037df1fff38c755ebc8025579120d17031330`; immutable base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 7 reports were read completely. Their
+seven unique families map to 48 planned behavior rows and retain all 297 Cycle 7 focused cases.
+
+| ID | Rows | RED contract | State |
+| --- | ---: | --- | --- |
+| C8-SECRET | 20 | every recognized credential-assignment suffix rejects under an unknown provider prefix across all durable/outbound consumers; exact safe-name exception is applied only after classification and finite kube/docker/AWS forms remain | planned |
+| C8-479 | 6 | separate production-typed transport/authority/journal roles prove success, typed conflict, uncertainty, rollback, stop incomplete/joined, and settlement without `any`, casts, fake projection, or private shortcuts | planned |
+| C8-UNCERTAIN | 4 | immediate apply-then-reject starts durable recovery despite failed reads, restores draft, blocks reentry, and retains stop/key ownership | planned |
+| C8-BROKER | 4 | actual broker rereads exact consumed state before new-request expiry validation, resumes prepared commit once after expiry, and rejects truly new expired request/decision | planned |
+| C8-FENCE | 5 | per-attempt deadline abort, durable predecessor fencing, successful later retry, ignored superseded result, authoritative draft observation, and eventual join are enforced | planned |
+| C8-RESTART | 4 | serialized prepared/journal state recreates controller/broker/journal/transport/authority over shared durable backing and resumes without `WeakMap` or object identity | planned |
+| C8-FRESH | 5 | revalidation forwards refreshed policy/ancestry/equivalent-clean freshness while original authorization, key, and intent remain exact | planned |
+
+Frozen production blobs before RED: orchestrator `668a55af55413c1cc595424e87ce352c355eec88`,
+broker `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
+`b1c0c198c33c95c8fabb0f911a42513d2305cb17`, review router
+`a586405153e2e666a57b832e7d4b48df80e3265c`, and GitHub evidence
+`23efd2c51280ba83836feef4fcb459e7da4571c0`. RED may modify only the five matching test files
+inside the existing 21-path range. No fixture change is planned; production must remain byte-exact.
+
+Rollback ownership is explicit before RED: the controller binds stable recovery identity to the
+prepared authorization/key/intent, carries the original ready mutation identity instead of guessing
+resource revisions, and sends an ordered attempt fence in every rollback request.
+The durable authority must claim that fence and supersede its predecessor before returning, while
+every attempt can only idempotently restore the exact draft. Controller deadlines abort response
+waits, not durable cleanup; late/superseded results cannot release quarantine or settle state. A
+matching fenced durable result carrying the exact draft is the authoritative observation that
+releases the key. Reconstructed adapters rely on shared durable backing, never module object
+identity.
+
+Cycle 8 follows strict artifact PLAN -> comprehensive test-only RED -> coherent GREEN -> bounded
+REFACTOR -> exact evidence. Expected RED counts and strict TypeScript diagnostics will be recorded
+from actual commands; no result is predeclared.

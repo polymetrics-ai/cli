@@ -19,7 +19,7 @@
 - adversarial test-only RED: 17 pass / 10 expected failures against unchanged production
 - corrected GREEN: 27/27 focused tests at `40ce66d4b5010b92089895a05709687143d15a05`
 
-## Current verification
+## Cycle 7 verification (historical)
 
 - focused #478 tests: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip
 - serialized Shepherd tests: environmental failure, 517 total, 451 pass, 65 unchanged unrelated
@@ -149,3 +149,24 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - no push, network, live GitHub, reviewer, self-review, Go, connector, `make`, controller/#479
   implementation, integration, or merge action ran; two fresh exact-head `xhigh` reviews remain
   parent-owned
+
+## Cycle 8 consolidated-review correction (planned)
+
+- frozen reviewed candidate/base: `b90037df1fff38c755ebc8025579120d17031330` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; both blocked reports were read completely
+- one 48-row PLAN -> comprehensive five-test-file RED -> coherent GREEN -> bounded REFACTOR batch
+  covers all seven unique families inside the unchanged exact 21-path boundary
+- provider-neutral assignment suffixes will reject before all durable/outbound consumers, with
+  finite kube/docker/AWS forms retained and only exact post-classification safe-name exceptions
+- every uncertain non-value authority result will start durable recovery; rollback attempts receive
+  real response deadlines and ordered fences, may only restore draft, cannot let superseded results
+  settle, and retain key/stop ownership until a matching durable draft observation
+- #479 proof will reconstruct separate production-typed transport, authority, journal, broker, and
+  controller adapters over shared durable state and exercise success, conflict, uncertainty,
+  rollback, incomplete/joined stop, and settlement without `any`, casts, fake projection, private
+  shortcuts, same-object reuse, or module `WeakMap` identity
+- actual broker will resume exact pre-expiry consumed evidence after restart/expiry while rejecting
+  new expired events; commit will send refreshed freshness with the original authorization/key/intent
+- GSD doctor passes and unavailable command records `manual_gsd_fallback`; no Go, connector,
+  `make`, dependency, parent/main worktree, #475, push/network/GitHub, reviewer, integration, or
+  merge action is authorized
