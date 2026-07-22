@@ -141,6 +141,50 @@ function classifiedTransportFailure(retryable: boolean, marker: string): Error &
 	return Object.assign(new Error(`raw transport failure ${marker}`), { retryable });
 }
 
+function consumedRecordAt(
+	request: ReturnType<typeof brokerHarness>["request"],
+	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
+): HumanDecisionRecord {
+	const record = createHumanDecisionRecord({
+		requestId: request.requestId,
+		gate: request.gate,
+		binding: issueBinding,
+		allowedOptions: request.allowedOptions,
+		actorAllowlist: request.actorAllowlist,
+		expiresAt: request.expiresAt,
+		question: request.question,
+	}, new Date("2026-07-21T10:00:00.000Z"));
+	const future = "2026-07-21T10:05:02.000Z";
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: mode === "creation" || mode === "request_comment" || mode === "all"
+			? future
+			: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: ["creation", "request_comment", "decision", "all"].includes(mode)
+			? "2026-07-21T10:05:03.000Z"
+			: "2026-07-21T10:01:00.000Z",
+	};
+	const consumedAt = ["creation", "request_comment", "decision", "consumption", "all"].includes(mode)
+		? "2026-07-21T10:05:04.000Z"
+		: "2026-07-21T10:02:00.000Z";
+	return {
+		...record,
+		createdAt: mode === "creation" || mode === "all" ? future : record.createdAt,
+		requestComment,
+		status: "consumed",
+		decision,
+		consumedAt,
+		updatedAt: mode === "update" ? future : consumedAt,
+	};
+}
+
 test("creates exactly one marker-owned request across retry and broker restart", async () => {
 	const harness = brokerHarness();
 	const first = await harness.broker.request(harness.request);
@@ -526,4 +570,43 @@ test("cycle 6 rereads the broker-owned canonical record across compact poll and 
 		readRecord(harness.request.requestId, { ...issueBinding, generation: issueBinding.generation + 1 }),
 		/binding|stale|generation/i,
 	);
+});
+
+test("cycle 7 real broker rejects every future durable chronology coordinate on owned reread", async (t) => {
+	for (const mode of ["creation", "request_comment", "decision", "consumption", "update", "all"] as const) {
+		await t.test(mode, async () => {
+			const harness = brokerHarness();
+			harness.setNow("2026-07-21T10:05:00.000Z");
+			harness.repository.states.set(harness.request.requestId, consumedRecordAt(harness.request, mode));
+			await assert.rejects(
+				harness.broker.readRecord(harness.request.requestId, issueBinding),
+				/future|observation|clock|chronology|timestamp/i,
+			);
+		});
+	}
+});
+
+test("cycle 7 broker rejects finite schema credentials before persistence or comment publication", async (t) => {
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const [index, question] of samples.entries()) {
+		await t.test(`schema form ${index + 1}`, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try { await harness.broker.request({ ...harness.request, question }); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive/i);
+			assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
 });

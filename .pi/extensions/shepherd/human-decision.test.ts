@@ -15,6 +15,7 @@ import {
 	validateHumanDecisionRecord,
 	validateHumanDecisionRequestComment,
 	type HumanDecisionBinding,
+	type HumanDecisionRecord,
 	type HumanDecisionRequestSpec,
 } from "./human-decision.ts";
 
@@ -416,6 +417,32 @@ test("cycle 6 rejects the shared credential grammar at the native human-decision
 	}
 });
 
+test("cycle 7 rejects finite Kubernetes Docker and AWS schemas before persistence or comment rendering", async (t) => {
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const [index, question] of samples.entries()) {
+		await t.test(`schema form ${index + 1}`, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive/i);
+			assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
+		});
+	}
+});
+
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
 	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
 	const requestComment = {
@@ -502,4 +529,61 @@ test("cycle 6 closes canonical decision records before reading hostile values", 
 		assert.match(String(rejection), /proxy|shape|record|invalid/i);
 		assert.doesNotMatch(String(rejection), /Cannot perform|revoked/i);
 	});
+});
+
+test("cycle 7 bounds every canonical decision event to a controller-owned observation clock", async (t) => {
+	const observedAt = new Date("2026-07-21T10:05:00.000Z");
+	const pending = createHumanDecisionRecord(spec({ expiresAt: "2027-07-22T10:00:00.000Z" }), new Date("2026-07-21T10:00:00.000Z"));
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: "2026-07-21T10:01:00.000Z",
+	};
+	const consumed = {
+		...pending,
+		requestComment,
+		status: "consumed" as const,
+		decision,
+		consumedAt: "2026-07-21T10:02:00.000Z",
+		updatedAt: "2026-07-21T10:02:00.000Z",
+	};
+	const future = "2026-07-21T10:05:02.000Z";
+	const cases: Array<[string, HumanDecisionRecord]> = [
+		["creation", { ...pending, createdAt: future, updatedAt: future }],
+		["request comment", {
+			...pending,
+			requestComment: { ...requestComment, createdAt: future },
+			updatedAt: future,
+		}],
+		["decision", {
+			...consumed,
+			decision: { ...decision, decidedAt: future },
+			consumedAt: future,
+			updatedAt: future,
+		}],
+		["consumption", { ...consumed, consumedAt: future, updatedAt: future }],
+		["update", { ...consumed, updatedAt: future }],
+		["all events", {
+			...consumed,
+			createdAt: "2026-07-21T10:05:02.000Z",
+			requestComment: { ...requestComment, createdAt: "2026-07-21T10:05:03.000Z" },
+			decision: { ...decision, decidedAt: "2026-07-21T10:05:04.000Z" },
+			consumedAt: "2026-07-21T10:05:05.000Z",
+			updatedAt: "2026-07-21T10:05:05.000Z",
+		}],
+	];
+	const validateAt = validateHumanDecisionRecord as unknown as (value: unknown, observedAt: Date) => HumanDecisionRecord;
+	for (const [name, record] of cases) {
+		await t.test(name, () => assert.throws(
+			() => validateAt(record, observedAt),
+			/future|observation|clock|chronology|timestamp/i,
+		));
+	}
 });

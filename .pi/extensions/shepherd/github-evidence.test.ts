@@ -889,3 +889,50 @@ test("cycle 6 applies the complete shared credential grammar to PR review bounda
 		));
 	}
 });
+
+test("cycle 7 applies every finite Kubernetes Docker and AWS form to all PR text boundaries", async (t) => {
+	const candidate = await evidence();
+	const findingReview: IndependentReviewRecord = {
+		...canonicalReview,
+		verdict: "findings",
+		findings: [{ id: "cycle-7-finding", severity: "warning", summary: "Synthetic review finding" }],
+	};
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const [index, sample] of samples.entries()) {
+		await t.test(`schema form ${index + 1}`, () => {
+			const values: Record<string, unknown>[] = [
+				{ ...candidate, title: sample },
+				{ ...candidate, body: `${candidate.body}\n${sample}` },
+				{ ...candidate, reviews: [{ ...findingReview, findings: [{ id: "cycle-7-finding", severity: "warning", summary: sample }] }] },
+				{
+					...candidate,
+					reviews: [findingReview],
+					dispositions: [{
+						findingId: "cycle-7-finding",
+						kind: "fixed",
+						rationale: sample,
+						actor: "maintainer",
+						headSha,
+						recordedAt: "2026-07-21T12:01:00.000Z",
+					}],
+				},
+			];
+			for (const value of values) {
+				let rejection: unknown;
+				try { validateGitHubPullRequestEvidence(value); } catch (error) { rejection = error; }
+				assert.ok(rejection instanceof Error);
+				assert.match(rejection.message, /credential|secret|sensitive/i);
+				assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
+			}
+		});
+	}
+});

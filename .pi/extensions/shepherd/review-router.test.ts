@@ -427,3 +427,30 @@ test("cycle 6 shared credential grammar covers standard credential-file forms", 
 		assert.notEqual(reviewRouterApi.redactSensitiveText(sample), sample, sample);
 	}
 });
+
+test("cycle 7 shared credential grammar covers finite Kubernetes Docker and AWS schemas", () => {
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const sample of samples) {
+		assert.throws(
+			() => reviewRouterApi.assertNoSensitiveText(sample, "cycle 7 schema fixture"),
+			(error: unknown) => error instanceof Error
+				&& /credential|secret|sensitive/i.test(error.message)
+				&& !error.message.includes("SYNTHETIC_"),
+			sample,
+		);
+		assert.notEqual(reviewRouterApi.redactSensitiveText(sample), sample, sample);
+	}
+	assert.doesNotThrow(() => reviewRouterApi.assertNoSensitiveText(
+		"FEATURE_TOKEN=non-sensitive-build-label",
+		"finite grammar non-credential assignment",
+	));
+});
