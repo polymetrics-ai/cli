@@ -9,7 +9,7 @@ are mapped below; no row is declined, weakened, or deferred.
 
 | Cycle 13 group | Review finding | Disposition / proof boundary |
 |---|---|---|
-| Bounded dense-array ingress | R1-F1 | remove whole-key materialization; bounded indexed descriptors plus capped fail-closed extra-field proof |
+| Bounded dense-array ingress | R1-F1 | remove whole-key materialization; capture only bounded length/index own-data descriptors into a fresh frozen DTO; every non-index peer is untouched and inert |
 | SDK-seam terminality | R1-F2 | recheck active scope after every re-entrant SDK callback and immediately before scheduling creation |
 | Public policy snapshots | R2-F1 | intrinsically dense-capture authority arrays before all validation, normalization, or formatting |
 | Semantic capability grammar | R2-F2 | deny equivalent generic execution/process and protected-data/export authority regardless of order or synonym |
@@ -23,6 +23,12 @@ the direct-boundary extension of Cycle 8/12 immutable snapshot coverage; R2-F2/F
 11/12 ordered lifecycle evidence to one complete tool identity. All 124 Cycle 12 rows remain
 mandatory. Status is PLAN: production stays frozen until exactly seven compiled behavior rows fail
 at their intended boundaries.
+
+R1-F1 cannot literally prove absence of arbitrary hidden strings/symbols under a bounded-work
+contract: ECMAScript offers only whole-key materializers for those fields. Cycle 13 therefore
+accepts the stronger authority property that is implementable without breaking the public API:
+only bounded indexed own-data is copied into a fresh immutable array, while every non-index source
+peer is neither read nor preserved and cannot affect policy, prompt, lifecycle, or handoff state.
 
 # Review Disposition — Issue #475 Cycle 11
 

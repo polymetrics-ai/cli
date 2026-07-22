@@ -320,7 +320,7 @@
   `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20-path issue allowlist.
 - Inputs: complete `/tmp/475-REVIEW-CYCLE12-1.md` and
   `/tmp/475-REVIEW-CYCLE12-2.md`; all seven unique blockers are accepted together.
-- Objective: cap dense-array ingress without whole-key materialization; make every re-entrant SDK
+- Objective: canonically capture dense-array influence without whole-key materialization; make every re-entrant SDK
   seam cancellation-terminal; intrinsically snapshot public policy/prompt arrays; close semantic
   capability and split-qualified secret grammars; and correlate each Pi tool call across assistant,
   execution, result message, turn result, subsequent turn, and handoff.

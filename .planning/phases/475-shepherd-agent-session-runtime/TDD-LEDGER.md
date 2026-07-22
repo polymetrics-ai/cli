@@ -1070,10 +1070,16 @@ frozen production blobs unchanged. The rows cover capped dense-array ingress, SD
 rechecks, public policy array capture, semantic capability denial, split qualified sensitive keys,
 public role-prompt array capture, and complete authorized tool-call/result/turn correlation.
 
+For C13-01, bounded canonical influence supersedes literal raw-source shape proof: ECMAScript has
+no streaming own-key API, so proving absence of arbitrary hidden/symbol peers necessarily
+materializes an attacker-sized key set. RED therefore requires exactly one bounded length read,
+bounded indexed own-data descriptor reads, zero enumeration/iterator/peer accessor work, and zero
+extra-field influence. The fresh captured array is the only accepted downstream authority.
+
 ### Ordered GREEN / REFACTOR checkpoints
 
-1. Intrinsic dense-array capture shared by runtime, public tool policy, and public role prompts,
-   including capped extra-field proof and post-callback scope assertions.
+1. Intrinsic dense-array canonical influence capture shared by runtime, public tool policy, and
+   public role prompts, plus post-callback scope assertions.
 2. Closed capability and split-qualified sensitive-key classifiers shared by all current consumers.
 3. Per-tool-call Pi lifecycle correlation through assistant call, execution, result message,
    `turn_end`, next turn, and final handoff, retaining real pinned no-tool and one-tool behavior.

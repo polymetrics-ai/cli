@@ -8,7 +8,7 @@ reports form the phase-equivalent requirement source.
 
 | Required outcome | RED boundary | Cycle 13 status |
 |---|---|---|
-| Request-array work is capped before extra-field rejection | short length with many enumerable/hidden/symbol extras and trap counters | planned C13-01 |
+| Request-array authority is canonically captured with strictly bounded work | short length with many enumerable/hidden/symbol peers, descriptor counters, and zero peer influence | planned C13-01 |
 | Cancellation/close wins at every SDK seam before creation | abort/close/shutdown callback matrix with zero create/prompt/leaks | planned C13-02 |
 | Public policy authority is intrinsically snapshotted | hostile iterator/method/prototype/alias/length matrix | planned C13-03 |
 | Equivalent generic and protected-data capability names fail closed | role x order x compound x synonym table plus legitimate controls | planned C13-04 |
@@ -22,6 +22,12 @@ REFACTOR, and terminal evidence. Complete Shepherd remains honestly classified i
 managed-sandbox process-identity rows fail with `spawn EPERM`; safe isolation is the local green
 gate. No parent, #478/#479, Go, connector, dependency, service, credential, live model, GitHub,
 review-bot, push, `make`, or merge work is authorized.
+
+R1-F1 is dispositioned as canonical influence capture because standard JavaScript provides no
+bounded own-key absence proof for arbitrary hidden strings and symbols. Only length and indexed
+own-data descriptors are authoritative; all non-index peers are untouched and discarded. This is
+strictly bounded and preserves the raw-array public API, unlike an integration-breaking private
+brand requirement.
 
 ## Cycle 11 Consolidated Review Coverage
 

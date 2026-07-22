@@ -115,3 +115,20 @@ assistant end as the only terminal, rejects the tool-result/multiple-assistant t
 exactly one assistant in `agent_end.messages`, and rejects the required `agent_settled`. Cycle 12
 must add per-role message/tool lifecycles, select the last assistant from the final non-retrying
 `agent_end`, and complete/freeze exactly at `agent_settled`.
+
+## Cycle 13 Read-Only Trace
+
+- Agent: `/root/issue_475_agent_session_runtime/cycle13_seam_map`.
+- Input: seven exact-head blockers from both complete Cycle 12 reports; frozen candidate
+  `5dafc572`; same issue-owned source/tests and existing artifact paths only.
+- Actions: inspected runtime normalization/SDK callbacks/terminal capture, policy public-array and
+  classifier seams, prompt public-array seams, existing focused helpers, and installed Pi tool
+  event/result fields. No command mutated files or external state.
+- Key standards result: arbitrary hidden/symbol absence cannot be proven with bounded JavaScript
+  reflection. Parent/root disposition selects canonical influence capture: bounded length/index
+  descriptors only; all non-index peers untouched and discarded.
+- Tool lifecycle result: assistant `{id,name,arguments}` must originate each authorized record;
+  execution start/end, tool-result message, `turn_end.toolResults`, and subsequent turn/final
+  handoff must close the same one-to-one identity.
+- Ownership: advisory map only. The issue worker retains every artifact edit, behavior RED,
+  production edit, gate, commit, and handoff.

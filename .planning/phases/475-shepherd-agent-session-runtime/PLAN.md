@@ -1106,7 +1106,7 @@ rerun and fresh independent exact-head review.
 
 | ID | Review source | Independent behavior row required to fail at frozen head |
 |---|---|---|
-| C13-01 | R1-F1 | A short declared-length request array with many enumerable, hidden, and symbol extras is rejected with deterministic capped indexed/descriptor work; no `Reflect.ownKeys`, `Object.keys`, or equivalent whole-source key materialization is allowed. |
+| C13-01 | R1-F1 | A short declared-length request array with thousands of enumerable, hidden, and symbol peers is captured with deterministic bounded indexed-descriptor work. No whole-key/iterator/prototype operation runs, no peer accessor executes, and no peer can influence canonical authority. |
 | C13-02 | R1-F2 | Abort, close, and parent shutdown triggered from each re-entrant SDK setup seam, including both `getAgentDir` callbacks, leave zero creation, prompt, reservation, listener, timer, or session leaks and one truthful terminal outcome. |
 | C13-03 | R2-F1 | Exported `createToolPolicy` and prefix normalization intrinsically snapshot every authority array before iteration; custom iterators and caller `some`/`map`/`join`/constructor/prototype hooks remain unused, alias mutation cannot expand scope, and length 65 rejects. |
 | C13-04 | R2-F2 | Table-driven capability names using equivalent word orders, compounds, and synonyms for generic execution/terminal/process and protected data/export operations are absent for read-only and mutating roles, while reviewed legitimate host capabilities remain available. |
@@ -1124,9 +1124,10 @@ edit may enter RED.
 
 ### Architectural GREEN / REFACTOR target
 
-- Replace `captureFreshDenseArray` whole-key collection with bounded indexed own-descriptor capture
-  and a fail-closed, capped extra-field proof. The proof must never build an attacker-sized key
-  array and must reject enumerable, non-enumerable, and symbol extras.
+- Replace `captureFreshDenseArray` whole-key collection with canonical influence capture: intrinsic
+  array brand, one own-data length descriptor, exactly `length` indexed own-data descriptors, and a
+  fresh frozen array. Never enumerate, read, or preserve enumerable/non-enumerable/symbol peers;
+  they are inert rather than accepted as authority.
 - Put an active-scope assertion immediately after every re-entrant SDK callback and immediately
   before the microtask that invokes `createAgentSession`; cancellation/close observed at any seam
   must win before child creation.
@@ -1144,6 +1145,15 @@ edit may enter RED.
 
 No dependency, public authority, scheduler/controller/#478/#479 file, Go/connector, GitHub,
 service, credential, model, network, or parent-artifact scope is added.
+
+ECMAScript exposes no bounded/streaming own-key primitive. `Reflect.ownKeys`, `Object.keys`,
+`Object.getOwnPropertyNames`, `Object.getOwnPropertySymbols`, and descriptor-map APIs must first
+materialize the complete key set; `for...in` does not expose hidden strings or symbols and is not a
+bounded proof either. Literal proof-of-absence on an arbitrary raw array is therefore incompatible
+with R1-F1's bounded-work invariant. Rejecting every ordinary unbranded array would break the public
+API without adding authority safety. Cycle 13 adopts the only compatibility-preserving bounded
+contract: copy only the authoritative indexed data into a private immutable DTO and make every
+other source field observably non-influential.
 
 ### Ordered checkpoints and declared gates
 
