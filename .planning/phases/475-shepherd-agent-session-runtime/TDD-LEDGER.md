@@ -1250,6 +1250,39 @@ and all production blobs exact. The historical Cycle 9 result-getter acceptance 
 unchanged through RED to prove the new row is additive; it may be superseded only with the cohesive
 GREEN fixture alignment. No production edit is authorized before the RED checkpoint commits.
 
+### RED result
+
+- PLAN: `aa92f751`; comprehensive test-only RED: `50b04a24`.
+- Focused result: 159 executed, 152 retained passed, exactly C18-01 through C18-07 failed, zero
+  skipped/cancelled/todo. Focused strict TypeScript passed.
+- Production remained frozen at runtime `66c92cf3`, policy `00d8482d`, and prompts `c5b6c27f`.
+
+### GREEN / REFACTOR result
+
+- Cohesive GREEN `ea23780f` closes all seven contracts. Accounting REFACTOR `6354b156` completes
+  the per-operation ledger without widening behavior. Focused result: 159/159.
+- Final blobs: runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+  `efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, unchanged prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+  `d918930205120d6a491a6288a95ee14550a0c567`, and policy test
+  `39fb20e0dc4667b9743c5acc4f87223b01128788`.
+- `16n + 64` charges every actual main consume/boundary, all five strong-recognizer examinations,
+  key/lexical/frame/recovery/finalization transitions, range emission/examination/insertion/
+  coalescence, replacement emission, and actual original-coordinate render. Identity returns with
+  no ranges charge no fictional render; main visits remain at most one per completed non-empty
+  source unit and zero for empty input.
+
+### VERIFY result
+
+- Safe isolation: 222/222, exactly the retained 215 plus seven Cycle 18 rows.
+- Strict TypeScript: all 12 Shepherd production files pass with TypeScript 5.9.3 and explicit Pi
+  0.80.6 base/type roots. Offline boundary: explicit Pi 0.80.6 RPC registers `pm-shepherd`.
+- Broad suite: 296 executed, 265 passed, 31 unchanged controller/state-store `spawn EPERM`
+  failures, zero skipped/cancelled/todo. Status is environment-blocked, not green.
+- Exact diff/ancestry/source/JSON guards pass with the same 20 issue paths and 13 Cycle 18 paths.
+  Two independent exact-head reviews and process-capable broad replay remain pending;
+  `verificationPassed` stays false.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

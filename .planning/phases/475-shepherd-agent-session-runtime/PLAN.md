@@ -1907,3 +1907,31 @@ No production edit precedes the committed RED evidence. No dependency, parent, #
 push, integration, live model/auth, credential, service, Go/connector, `make`, main, prompt-return
 contract, or path-scope change is authorized. GREEN must close all seven contracts together; the
 trusted Pi 0.80.6 prompt adoption/settlement behavior from Cycle 17 is frozen and retained.
+
+### Cycle 18 execution result
+
+The ordered checkpoints are artifact-only PLAN `aa92f751`, comprehensive test-only RED
+`50b04a24`, cohesive GREEN `ea23780f`, and operation-accounting REFACTOR `6354b156`. RED executed
+159 focused rows: all 152 retained rows passed and exactly C18-01 through C18-07 failed, with zero
+skipped/cancelled/todo, focused strict TypeScript passing, and all production blobs frozen.
+GREEN/refactor passes 159/159. Final blobs are runtime
+`e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, unchanged prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+`d918930205120d6a491a6288a95ee14550a0c567`, and policy test
+`39fb20e0dc4667b9743c5acc4f87223b01128788`.
+
+The `16n + 64` ceiling is derived from complete charging rather than a relaxed linearity claim.
+`totalWork` charges the main consume/boundary step; each of five strong recognizers once for each
+UTF-16 source unit it examines; key and lexical transitions; frame push/pop, recovery, and
+finalization; every range emission, examination, insertion, and coalescence; every replacement
+emission; and each original source unit actually rendered. Identity returns with no ranges charge
+no fictional render. The main cursor still visits each completed non-empty source offset at most
+once and zero offsets for empty input.
+
+Terminal local gates pass focused 159/159, safe isolation 222/222 (retained 215 plus seven), strict
+TypeScript 5.9.3 over all 12 Shepherd production files with explicit Pi 0.80.6 roots, and pinned
+offline Pi 0.80.6 RPC registration. The broad serialized suite is honestly environment-blocked at
+265/296 by the unchanged 31 controller/state-store `spawn EPERM` failures. Exact ancestry, JSON,
+diff/source guards, the same 20-path issue scope, and the 13-path Cycle 18 delta pass. Independent
+exact-head reviews and process-capable replay remain pending; `verificationPassed` stays false.

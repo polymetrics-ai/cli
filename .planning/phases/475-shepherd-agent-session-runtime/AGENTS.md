@@ -161,3 +161,17 @@ tool/event/result DTOs, exact runtime dense-array prototypes, and transition-der
 The issue worker retains PLAN, RED, GREEN, REFACTOR, verification, commit, and handoff ownership;
 there is no dependency, parent, #478, network, push, integration, service, credential, model,
 Go/connector, `make`, main, or external delivery authority.
+
+### Cycle 18 execution result
+
+The issue worker completed the ordered local chain at PLAN `aa92f751`, test-only RED `50b04a24`,
+cohesive GREEN `ea23780f`, and accounting REFACTOR `6354b156`. RED executed 159 focused rows with
+all 152 retained rows passing and exactly C18-01 through C18-07 failing; GREEN and REFACTOR pass
+159/159. Production/test ownership did not expand, and the prompt blob remains unchanged.
+
+Terminal local verification passes safe isolation at 222/222 (the retained 215 plus seven Cycle 18
+rows), strict TypeScript over all 12 Shepherd production files, and explicit offline Pi 0.80.6 RPC
+registration. The serialized broad suite executes 296 rows, with 265 passing and only the unchanged
+31 controller/state-store `spawn EPERM` failures; it is environment-blocked, not green. The exact
+20-path issue scope and 13-path Cycle 18 delta pass. Two independent exact-head reviews and a
+process-capable broad replay remain parent-owned and pending, so `verificationPassed` remains false.

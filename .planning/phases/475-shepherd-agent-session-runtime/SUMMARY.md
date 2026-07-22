@@ -1,26 +1,35 @@
 # Summary — Issue #475
 
-Status: both complete Cycle 17 exact-head reports reject candidate
-`687d053df5f7e7d08c4cab7d2a2d8f153850e673`. Cycle 18 is planned against immutable base
-`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; no Cycle 17 terminal claim remains current.
-The accepted union is seven blocking contracts: quote-owned punctuation, candidate reset before
-public exemption, multiword sensitive scalars, one finite compiled host schema, exact descriptor
-DTO capture, exact intrinsic array prototypes, and one charged original-coordinate work ledger.
+Status: Cycle 18 is locally complete at REFACTOR `6354b156` against reviewed start
+`687d053df5f7e7d08c4cab7d2a2d8f153850e673` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The ordered chain is PLAN `aa92f751`, test-only RED
+`50b04a24`, cohesive GREEN `ea23780f`, and REFACTOR `6354b156`. RED executed 159 focused rows with
+all 152 retained rows passing and exactly seven intended failures; GREEN/refactor passes 159/159.
+The seven accepted Cycle 17 review contracts are closed without expanding the finite schema,
+prompt-return contract, or issue-owned surface.
 
-The pre-execution baseline is 152/152 focused with zero skipped/cancelled/todo and focused strict
-TypeScript passing. Cycle 18 requires one artifact-only PLAN checkpoint followed by exactly seven
-top-level test-only RED rows. Expected RED is 159 executed, 152 retained pass, exactly seven named
-failures, zero skipped/cancelled/todo, strict TypeScript passing, and production frozen. The
-finite schema contract rejects optional properties and unsupported JSON Schema keywords at
-registration instead of exposing semantics that execution does not enforce.
+Safe isolation passes 222/222, exactly the retained 215 plus seven Cycle 18 rows. Strict TypeScript
+5.9.3 passes all 12 Shepherd production files against explicit Pi 0.80.6 roots, and explicit Pi
+0.80.6 offline RPC registers `pm-shepherd`. The serialized broad suite executes 296 rows: 265 pass
+and only the unchanged 31 controller/state-store process-identity rows fail with managed-sandbox
+`spawn EPERM`; zero rows are skipped/cancelled/todo. It is environment-blocked, not green.
 
-Frozen production blobs are runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
-`00d8482d4f320fb948abcbef893e87cf0690d1a3`, and prompts
-`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`; pre-RED test blobs are runtime test
-`e9fb05b8d1dd5b438cd66da707c7549f33e754c6` and policy test
-`b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f`. The exact 20-path scope remains fixed and
-`verificationPassed` remains false. No dependency, parent, #478, network, push, integration,
-live model/auth, credential, service, Go/connector, `make`, main, or external mutation is allowed.
+The `16n + 64` work bound charges the full actual ledger: main consume/boundary, each of five
+strong recognizers per examined UTF-16 source unit, key/lexical/frame/recovery/finalization
+transitions, every range operation and coalescence, replacement emission, and every original source
+unit actually rendered. A no-range identity return has no fictional render charge. Main visits
+remain at most one per completed non-empty source unit and zero for empty input; the coefficient is
+complete accounting, not relaxed linearity.
+
+Final blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, unchanged prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+`d918930205120d6a491a6288a95ee14550a0c567`, and policy test
+`39fb20e0dc4667b9743c5acc4f87223b01128788`. Exact ancestry, JSON, source/diff guards, the same
+20-path issue scope, and 13-path Cycle 18 delta pass. Two independent exact-head reviews and the
+process-capable broad replay remain pending and parent-owned, so `verificationPassed` remains false.
+No dependency, parent, #478, network, push, integration, live model/auth, credential, service,
+Go/connector, `make`, main, or external mutation occurred.
 
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full

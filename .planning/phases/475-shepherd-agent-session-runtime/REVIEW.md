@@ -295,7 +295,25 @@ their node type, and Pi receives only the compiler-built schema used by executio
 identity. Lexer recovery is likewise structural: quotes own internal punctuation, candidates reset
 at proven boundaries, and only fully proven finite public scalars survive.
 
-No GREEN disposition is claimed. Acceptance requires the committed artifact PLAN followed by one
-test-only seven-row RED executing 159 rows with all 152 retained passes and exactly seven intended
-failures while the three production blobs remain frozen. Independent review is parent-owned only
-after a later cohesive GREEN/refactor/evidence candidate.
+At this review-input checkpoint, no GREEN disposition was claimed. Acceptance required the
+committed artifact PLAN followed by one test-only seven-row RED executing 159 rows with all 152
+retained passes and exactly seven intended failures while the three production blobs remained
+frozen. Independent review remains parent-owned after the later cohesive GREEN/refactor/evidence
+candidate recorded below.
+
+## Cycle 18 implementation disposition
+
+The accepted seven-contract union is now closed locally by PLAN `aa92f751`, test-only RED
+`50b04a24`, cohesive GREEN `ea23780f`, and REFACTOR `6354b156`. RED retained all 152 prior passes
+and failed exactly the seven named rows with production frozen; GREEN/refactor passes 159/159.
+Fixture alignments are contract-driven: intrinsic descriptor interception now rejects before
+invocation, prior 8x ceilings use the complete 16x ledger, the supported object schema requires
+`required`, and the historical Cycle 9 result-getter acceptance now requires zero invocation.
+
+Safe isolation passes 222/222, strict TypeScript passes all 12 production files against explicit Pi
+0.80.6 roots, and pinned offline Pi 0.80.6 RPC registers `pm-shepherd`. The broad suite is not
+green: it executes 296 rows, passes 265, and has the unchanged 31 controller/state-store
+`spawn EPERM` failures in the managed sandbox. Exact guards retain the same 20 issue paths and 13
+Cycle 18 paths. This is the implementing worker's disposition, not independent review of the final
+evidence head. Two fresh independent exact-head reviews and the process-capable broad replay remain
+pending and parent-owned; `verificationPassed` remains false.

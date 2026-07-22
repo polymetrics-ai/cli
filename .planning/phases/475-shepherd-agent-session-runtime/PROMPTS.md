@@ -33,6 +33,27 @@
 - No dependency, parent, #478, network, push, integration, live auth/model, credential, service,
   Go/connector, `make`, main, or out-of-scope mutation.
 
+### Cycle 18 terminal execution snapshot
+
+- Ordered checkpoints: PLAN `aa92f751`, test-only RED `50b04a24`, cohesive GREEN `ea23780f`, and
+  accounting REFACTOR `6354b156`.
+- RED: 159 executed, all 152 retained rows passed, exactly seven named Cycle 18 rows failed, zero
+  skipped/cancelled/todo, focused strict TypeScript passed, and production stayed frozen.
+- GREEN/refactor: focused 159/159 and safe isolation 222/222, exactly retained 215 plus seven.
+- Accounting: `16n + 64` charges the actual main, five-recognizer, key/lexical, frame/recovery,
+  range emission/examination/insertion/coalescence, replacement, and original-coordinate render
+  operations. No-range identity returns have no fictional render charge; main visits remain at
+  most one per completed non-empty source unit.
+- Terminal gates: strict TypeScript 5.9.3 passes all 12 production files against explicit Pi 0.80.6
+  roots; explicit Pi 0.80.6 offline RPC registers `pm-shepherd`; exact diff, ancestry, source, JSON,
+  20-path issue scope, and 13-path Cycle 18 scope guards pass.
+- Broad classification: 296 executed, 265 passed, and the unchanged 31 controller/state-store
+  process-identity rows fail with managed-sandbox `spawn EPERM`; zero skipped/cancelled/todo. This
+  gate is environment-blocked and not green.
+- Final source/test blobs: runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f`, runtime test
+  `d9189302`, policy test `39fb20e0`. Two independent exact-head reviews and process-capable replay
+  remain pending, so `verificationPassed` is false.
+
 ## Kickoff Snapshot
 
 - Role: isolated sub-issue implementation worker

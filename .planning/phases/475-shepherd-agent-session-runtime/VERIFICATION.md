@@ -1,36 +1,44 @@
 # Verification — Issue #475
 
-Current result: both independent Cycle 17 exact-head reports block candidate
-`687d053df5f7e7d08c4cab7d2a2d8f153850e673`. Cycle 18 is at the artifact-only PLAN gate against
-immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; production and tests remain frozen and
-`verificationPassed` is false.
+Current result: Cycle 18 is locally complete at REFACTOR `6354b156` after PLAN `aa92f751`,
+test-only RED `50b04a24`, and cohesive GREEN `ea23780f`. Local focused, isolation, strict
+TypeScript, pinned offline Pi, ancestry, JSON, source, diff, and scope gates pass. The complete
+serialized suite remains environment-blocked at 265/296 by 31 unchanged controller/state-store
+`spawn EPERM` failures. Two independent exact-head reviews and a process-capable replay remain
+pending; `verificationPassed` is false.
 
-## Cycle 18 Pre-Execution Verification Contract
+## Cycle 18 Terminal Verification
 
-Both complete Cycle 17 reports were read before PLAN and accepted without deferral. Their union
-maps exactly to C18-01 through C18-07: quoted flow ownership, boundary-first candidate reset,
-multiword sensitive scalar denial, one finite compiled host schema, descriptor-only DTO capture,
-exact intrinsic array prototypes, and fully charged original-coordinate redaction work.
+Both complete Cycle 17 reports were read before PLAN and accepted without deferral. Their exact
+seven-contract union maps to C18-01 through C18-07 and is closed locally without widening the
+finite schema vocabulary or issue-owned surface.
 
-| Cycle 18 gate | Status | Required evidence |
+| Cycle 18 gate | Status | Evidence |
 |---|---|---|
-| Exact start / report replay | pass | exact `687d053d`; both complete reports and recorded SHA-256 values |
-| Baseline focused tests | pass | 152 passed, 0 failed/skipped/cancelled/todo |
-| Baseline focused strict TypeScript | pass | TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
-| PLAN / frozen blobs | in progress | artifact-only commit; exact runtime/policy/prompt/runtime-test/policy-test blobs |
-| Comprehensive RED | pending | exactly seven top-level rows; 159 executed; 152 retained pass; exactly 7 named failures; 0 skipped/cancelled/todo |
-| RED strict TypeScript | pending | focused source/tests compile against explicit Pi 0.80.6 roots |
-| Production freeze | pending | runtime `66c92cf3`, policy `00d8482d`, prompts `c5b6c27f` exact after RED |
-| Scope / integrity | pending | exact same 20 paths, clean diff, ancestry and JSON gates |
-| GREEN / REFACTOR / terminal verification | blocked by order | no production edit before committed RED and parent checkpoint report |
-| External mutation | not attempted | no push, network, GitHub, integration, model/auth, service, Go/connector, `make`, parent, or #478 action |
+| Ordered TDD chain | pass | PLAN `aa92f751`; RED `50b04a24`; GREEN `ea23780f`; REFACTOR `6354b156` |
+| RED integrity | pass | 159 executed; 152 retained pass; exactly seven named failures; 0 skipped/cancelled/todo; focused strict TS pass; production frozen |
+| Focused GREEN/refactor | pass | 159 passed, 0 failed/skipped/cancelled/todo |
+| Environment isolation | pass | 222 passed, 0 failed/skipped/cancelled/todo; exactly retained 215 plus seven Cycle 18 rows |
+| Complete Shepherd | environment-blocked | 296 executed; 265 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Strict TypeScript | pass | TypeScript 5.9.3 over all 12 non-test Shepherd production files with explicit Pi 0.80.6 base/type roots |
+| Pi offline boundary | pass | explicit `/Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi` reports 0.80.6; offline RPC `get_commands` registers `pm-shepherd` and exits 0 |
+| Integrity and scope | pass | immutable-base/PLAN/RED/GREEN/REFACTOR ancestry; JSON/diff/source guards; exact same 20 issue paths and 13 Cycle 18 paths |
+| Independent exact-head review | pending | two final-candidate reviews remain parent-owned; no self-review or integration claim |
+| External mutation | not attempted | no push, network, GitHub, live model/auth, credential, service, Go/connector, `make`, main, parent, or #478 action |
 
-The schema surface is a finite required-only vocabulary; unsupported and optional semantics fail
-at registration. The lexer must reset candidate state at proven comma/closer/line/EOF boundaries
-before considering locator or public-scalar proof. Capture uses exact own data descriptors only,
-and every runtime dense array must have direct `Array.prototype`. Work metrics charge recognizers,
-range insertion/coalescing, and render over original coordinates under `totalWork <= 16n + 64`.
-No completion or GREEN claim is made here.
+Final blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, unchanged prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+`d918930205120d6a491a6288a95ee14550a0c567`, and policy test
+`39fb20e0dc4667b9743c5acc4f87223b01128788`.
+
+The derived `totalWork <= 16n + 64` ceiling charges every actual operation: main
+consume/boundary; each of five strong recognizers once per UTF-16 source unit examined; key and
+lexical transitions; frame push/pop, recovery, and finalization; every range emission,
+examination, insertion, and coalescence; every replacement emission; and each original source unit
+actually rendered. A no-range identity return charges no fictional render. The main cursor still
+visits each completed non-empty source offset at most once and zero offsets for empty input. This is
+complete accounting, not a relaxation of the linear-time contract.
 
 ## Cycle 16 Verification Contract
 

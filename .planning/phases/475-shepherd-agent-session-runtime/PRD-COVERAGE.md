@@ -37,6 +37,24 @@ failures, zero skipped/cancelled/todo, strict TypeScript passing, and all produc
 No dependency, parent, #478, network, push, integration, live model/auth, credential, service,
 Go/connector, `make`, main, or scope expansion is authorized.
 
+### Cycle 18 terminal coverage
+
+| Required outcome | Terminal proof | Status |
+|---|---|---|
+| C18-01 through C18-07 | PLAN `aa92f751`; RED `50b04a24` retained 152 passes and exposed exactly seven named failures; GREEN `ea23780f`; REFACTOR `6354b156` | locally closed |
+| Complete original-coordinate accounting | main consume/boundary, five recognizers, lexical/key/frame/recovery/finalization transitions, all range work, replacement emission, and actual original-source render are charged; identity has no fictional render | `totalWork <= 16n + 64`, at most one main visit per completed non-empty offset |
+| Focused and isolation behavior | 159/159 focused; 222/222 safe isolation, exactly retained 215 plus seven Cycle 18 rows | pass |
+| Production compatibility | strict TypeScript 5.9.3 passes all 12 production files against explicit Pi 0.80.6 roots; offline Pi 0.80.6 registers `pm-shepherd` | pass |
+| Broad Shepherd suite | 296 executed, 265 passed, 31 unchanged controller/state-store `spawn EPERM` failures, zero skipped/cancelled/todo | environment-blocked, not green |
+| Scope and delivery | exact 20 issue paths and 13 Cycle 18 paths; no dependency/Go/connector/parent/external mutation | pass locally; review and process-capable replay pending |
+
+The final production blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, and unchanged prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. Final test blobs are runtime test
+`d918930205120d6a491a6288a95ee14550a0c567` and policy test
+`39fb20e0dc4667b9743c5acc4f87223b01128788`. Because the broad gate is nonzero and two independent
+exact-head reviews of the final evidence candidate are pending, `verificationPassed` remains false.
+
 ## Cycle 16 Consolidated Review Coverage
 
 Frozen candidate: `df930d62adbf85af88cebbdf66e5eefaab587f4b`. Immutable base:

@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_18_plan",
+  "currentCycle": "correction_cycle_18_summary",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -463,16 +463,41 @@
       "cycle": "correction_cycle_18_plan",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "Both complete Cycle 17 reports block exact candidate 687d053d with seven consolidated contracts. A bounded read-only mapper was requested but the four-slot runtime was saturated, so no agent output is claimed; this worker owns the artifact-only PLAN and seven-row test-only RED while all production stays frozen."
+    },
+    {
+      "cycle": "correction_cycle_18_red",
+      "decision": "local_critical_path",
+      "reason": "PLAN aa92f751 preceded test-only RED 50b04a24. RED executed 159 focused rows with all 152 retained passes and exactly C18-01 through C18-07 failing, zero skipped/cancelled/todo; focused strict TypeScript passed and all production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_18_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN ea23780f closes all seven accepted contracts through quote-owned lexical transitions, boundary-first candidate reset, finite compiled required-only schemas, descriptor DTOs, exact intrinsic arrays, and original-coordinate accounting; focused 159/159 passes."
+    },
+    {
+      "cycle": "correction_cycle_18_refactor",
+      "decision": "local_critical_path",
+      "reason": "REFACTOR 6354b156 charges the actual five-recognizer, transition, range, replacement, and render work under 16n+64 without changing the one-main-visit invariant; focused 159/159 remains green."
+    },
+    {
+      "cycle": "correction_cycle_18_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Safe isolation passes 222/222, exactly retained 215 plus seven Cycle 18 rows; strict TypeScript passes all 12 production files; pinned offline Pi 0.80.6 RPC and exact guards pass. Complete Shepherd executes 296 with 265 passes and only the unchanged 31 controller/state-store spawn EPERM failures. verificationPassed remains false."
+    },
+    {
+      "cycle": "correction_cycle_18_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 18 local evidence is terminal with the exact 20-path issue scope and 13-path cycle delta. Two independent exact-head reviews and process-capable broad replay remain pending and parent-owned; no self-review, external mutation, integration, or delivery action was attempted."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_18_baseline_152_executed_152_passed_0_failed_cancelled_skipped_todo; red_pending_exactly_7_named_rows_159_executed_152_retained_pass_expected",
-    "fullShepherdTests": "safe_isolation_215_passed_0_failed_cancelled_skipped_todo_retained_206_plus_cycle_17_9; complete_289_executed_258_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
-    "strictTypeScriptPi0806": "cycle_18_baseline_passed_focused_source_tests_typescript_5_9_3_explicit_pi_0_80_6_roots; red_replay_pending",
+    "focusedTests": "cycle_18_red_159_executed_152_retained_passed_exactly_7_named_failures_0_cancelled_skipped_todo; green_refactor_159_passed_0_failed_cancelled_skipped_todo",
+    "fullShepherdTests": "safe_isolation_222_passed_0_failed_cancelled_skipped_todo_exact_retained_215_plus_cycle_18_7; complete_296_executed_265_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
+    "strictTypeScriptPi0806": "passed_typescript_5_9_3_all_12_non_test_shepherd_production_files_explicit_pi_0_80_6_base_and_type_roots; focused_red_and_green_scopes_passed",
     "offlineRpcSmoke": "passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_exit_0_with_writable_temporary_pi_directory",
-    "diffCheck": "cycle_18_exact_start_687d053d_base_e659d6f1_reports_sha256_fb309309_and_4d65a09f_plan_in_progress; frozen_blobs_runtime_66c92cf3_policy_00d8482d_prompts_c5b6c27f_runtime_test_e9fb05b8_policy_test_b7fa0a1c",
-    "ownedScope": "exact_same_20_issue_owned_paths; no_dependency_connector_go_cmd_internal_paths; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
-    "independentExactHeadReviews": "cycle_17_review_1_blocking_accepted; cycle_17_review_2_blocking_accepted; cycle_18_verification_passed_false",
+    "diffCheck": "cycle_18_start_687d053d_base_e659d6f1_plan_aa92f751_red_50b04a24_green_ea23780f_refactor_6354b156_ancestry_and_diff_check_passed; final_blobs_runtime_e952557d_policy_efc7564e_prompts_c5b6c27f_runtime_test_d9189302_policy_test_39fb20e0",
+    "ownedScope": "exact_same_20_issue_owned_paths_and_exact_13_cycle_18_paths; no_dependency_connector_go_cmd_internal_paths; no_runtime_tool_policy_role_prompt_for_in; credential_scan_only_4_intentional_private_key_grammar_test_literals; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
+    "independentExactHeadReviews": "cycle_17_review_1_and_review_2_blockers_accepted_and_closed_locally; two_cycle_18_final_candidate_reviews_pending_parent_owned; verification_passed_false",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -512,7 +537,10 @@
     "cycle_18 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit artifact PLAN then test-only RED remains mandatory",
     "cycle_18 both complete Cycle 17 reports were read and accepted as exactly seven blocking contracts; no Cycle 17 terminal claim remains current",
     "cycle_18 read-only mapper was not spawned because the four-slot runtime was saturated; recorded as not_spawned_runtime_capability_missing without claiming agent output",
-    "cycle_18 production and tests remain frozen through the artifact-only PLAN; RED must add exactly seven top-level rows in agent-session-runtime.test.ts only",
-    "cycle_18 external mutation, dependency, parent, #478, Go/connector/make, network, push, integration, live model/auth, credentials, and services are outside this lane"
+    "cycle_18 production and tests remained frozen through PLAN aa92f751 and test-only RED 50b04a24; RED retained 152 passes and failed exactly seven named rows before GREEN ea23780f and REFACTOR 6354b156",
+    "cycle_18 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 222/222",
+    "cycle_18 16n+64 is the derived complete accounting ceiling: it charges main consumption, five recognizers, transitions, frame/recovery/finalization, every range operation, replacement emission, and actual original-coordinate rendering; identity returns have no fictional render and main visits remain at most one per completed non-empty unit",
+    "cycle_18 local evidence is terminal but verificationPassed remains false until two parent-owned independent exact-head reviews and the process-capable broad replay are recorded",
+    "cycle_18 external mutation, dependency, parent, #478, Go/connector/make, network, push, self-review, integration, live model/auth, credentials, and services are outside this lane"
   ]
 }
