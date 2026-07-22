@@ -159,6 +159,31 @@ reopening implementation hardening:
 19. [ ] Push the reconciled parent before the child and open the child PR against
     `feat/471-pi-agent-session-shepherd` when GitHub DNS/auth permit.
 
+## 2026-07-23 remote CI repair
+
+PR #489 supplied the first ordinary-host result for the complete Shepherd gate. The repair is a
+bounded CI/baseline closure and does not reopen the 17-row implementation or its hardening loop.
+The parent issue orchestrator remains the topology owner; the coordinator takes the tightly coupled
+critical path locally in the two existing isolated worktrees.
+
+20. [x] Capture RED evidence: the complete inventory reported 1,710 pass, one fail, and one skip;
+    the sole failure was an after-test `EACCES` while deleting an auto-downloaded read-only Go
+    toolchain. `govulncheck` separately reported `GO-2026-5970` in inherited
+    `golang.org/x/text v0.36.0`.
+21. [ ] Merge the current `origin/main` baseline into the non-default parent branch so the existing
+    `golang.org/x/text v0.39.0` security correction is inherited once at the correct stack layer.
+22. [ ] Pin `actions/setup-go@v6` to Go `1.25.12` with caching disabled before the complete
+    Shepherd inventory, matching `go.mod` and preventing fixture-local toolchain download.
+23. [ ] Merge the updated parent into the child, run focused verification, the complete inventory,
+    dependency integrity, and `govulncheck`, then update the exact evidence artifacts.
+24. [ ] Commit and publish parent first, then child; reconcile PR #489 CI and obtain one fresh
+    exact-head review. The parent PR #472 merge to `main` remains a human gate.
+
+GSD adapter evidence: `scripts/gsd doctor` passes with 69 registered commands, while
+`scripts/gsd prompt programming-loop init --phase 479-shepherd-production-matrix --dry-run`
+returns `unknown GSD command or prompt: programming-loop`; this bounded cycle therefore continues
+the already-recorded manual-GSD fallback with explicit plan/TDD/verification evidence.
+
 This cycle uses `local_critical_path`: the files are a tightly coupled issue-#479 CI/evidence slice,
 while the parent issue orchestrator remains the read-only topology and integration owner. It does not
 authorize a parent/default-branch merge. The repo-local GSD adapter passed `scripts/gsd doctor`, but

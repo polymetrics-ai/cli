@@ -80,3 +80,14 @@ changes are documentation-only, so a runtime behavior RED is not applicable to t
 |---|---|---|---|
 | Complete Pi-family determinism | The `ca3f6c6f` review found that the top-level Pi package manifest uses caret ranges. File/step checks both exited 1 because no committed post-install assertion existed. | CI verifies the published `npm-shrinkwrap.json` and installed nested `pi-coding-agent`, `pi-ai`, `pi-agent-core`, and `pi-tui` are all exactly 0.80.6 before running tests. | GREEN at `a594be98`; real local installed family and exact tarball resolutions pass. |
 | Published parent base | The review found local parent `69a1a988` 175 commits ahead of cached origin `2a89142e`; a child PR against that cached remote would expose the wrong range. | Reconcile local parent artifacts, publish parent first, fetch/verify authoritative remote head, then publish/open #479 and verify the PR range. | Local GREEN: parent reconciliation `45c27b9d` (now 176 commits ahead of cached origin) is merged into the child at `766709b3` without history rewrite. Remote GREEN remains blocked by DNS/auth. |
+
+## 2026-07-23 remote CI repair ledger
+
+| Slice | RED evidence | GREEN target | Status |
+|---|---|---|---|
+| Deterministic Go fixture environment | PR #489 complete-suite run `29959846371`, job `89057976671`: 1,712 total, 1,710 pass, one fail, one skip. The only failure is the real-Go fixture's cleanup hook attempting to unlink a read-only `go1.25.0` auto-download beneath its isolated `GOPATH`. | Install exact Go `1.25.12` before the suite so the fixture uses the repository toolchain and does not download a toolchain into the disposable root; retain strict cleanup. | RED captured; implementation pending. |
+| Reachable x/text vulnerability | PR #489 security run `29959846280`, job `89057975920`: `govulncheck` reports `GO-2026-5970`, found in `golang.org/x/text v0.36.0`, fixed in `v0.39.0`, reachable through the PostgreSQL connector and `pgxpool.New`. | Merge current `origin/main`, which already carries `v0.39.0`, into the non-default parent; inherit that parent head in the child and rerun `govulncheck`. | RED captured; baseline synchronization pending. |
+
+No new product behavior is introduced. The remote failing gates are the valid RED. The smallest
+GREEN must correct the CI toolchain and stacked-branch baseline; suppressing cleanup, weakening
+`govulncheck`, or adding a duplicate child-only dependency override is out of scope.

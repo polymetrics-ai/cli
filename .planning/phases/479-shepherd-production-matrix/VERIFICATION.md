@@ -126,3 +126,22 @@ real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `T
    optional before parent integration.
 5. No parent/default-branch merge was performed. Parent integration stays
    behind the repository's human gate.
+
+## 2026-07-23 PR #489 CI repair checklist
+
+Current verdict: **REPAIR IN PROGRESS**.
+
+- [x] Diagnose the complete-suite failure as fixture cleanup after an unpinned CI Go toolchain
+  auto-download; no Shepherd assertion failed independently.
+- [x] Diagnose the security failure as inherited `golang.org/x/text v0.36.0`; current `main`
+  already contains the fixed `v0.39.0` baseline.
+- [ ] Parent branch contains the current `main` baseline without conflicts.
+- [ ] Shepherd CI installs exact Go `1.25.12` before the complete inventory.
+- [ ] Focused real-Go AgentSession verification passes.
+- [ ] Complete Shepherd inventory passes outside any known managed-sandbox process restriction.
+- [ ] `go mod verify` and `govulncheck ./...` pass on the synchronized child head.
+- [ ] Parent and child exact heads are published in order; PR #489 CI is green.
+- [ ] Fresh exact-head review is complete before parent integration.
+
+Cleanup policy: do not mask `EACCES`, leave downloaded toolchains behind, weaken the security scan,
+or merge the human-gated parent PR into `main`.

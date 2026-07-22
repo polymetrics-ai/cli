@@ -13,9 +13,9 @@
   "worker": "codex-gpt-5.6-sol",
   "workerDirectory": "/private/tmp/shepherd-479-production-matrix",
   "subPrUrl": null,
-  "status": "local_ready_remote_publication_blocked",
-  "checkpoint": "parent_reconciliation_merged_pin_corrected",
-  "reason": "Pi-family determinism and local parent reconciliation are complete; authoritative parent publication, exact-head follow-up, remote CI, and policy review coverage remain blocked.",
+  "status": "ci_repair_in_progress",
+  "checkpoint": "remote_ci_red_diagnosed",
+  "reason": "PR #489 exposed an unpinned Go fixture environment and an inherited x/text vulnerability; the bounded parent-first CI repair is in progress.",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
   "matrix": {
@@ -66,6 +66,11 @@
       "cycle": "remote-publication",
       "decision": "not_spawned_human_gate",
       "reason": "GitHub DNS is unavailable and the configured gh token is invalid; no auth mutation was authorized."
+    },
+    {
+      "cycle": "remote-ci-repair-plan",
+      "decision": "read_only_spawned",
+      "reason": "A parent orchestrator audits stacked-branch topology while the coordinator owns the tightly coupled parent baseline and child workflow critical path."
     }
   ],
   "blockers": [
