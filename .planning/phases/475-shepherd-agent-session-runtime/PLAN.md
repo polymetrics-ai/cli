@@ -1664,3 +1664,120 @@ service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorize
   policy `b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`, and unchanged prompts
   `b762787b2a63b5b02f9591c7bf3fff46394738cc`. Parent orchestration owns fresh independent review,
   process-capable replay, integration, and delivery.
+
+## Consolidated Exact-Head Correction Cycle 17 Plan
+
+Frozen start is exact reviewed head `5f0bef9cae08dd9e6285dca7b95e089e2fda02ce`; immutable base
+remains `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; the allowlist remains the exact same 20 paths.
+Both `/tmp/475-REVIEW-CYCLE16-1.md` and `/tmp/475-REVIEW-CYCLE16-2.md` were read in full before
+this plan. Their ten reported blockers plus one evidence warning deduplicate to the nine contracts
+below. None is declined, deferred, or treated as a serial patch.
+
+### One architectural correction
+
+Cycle 17 replaces the scanner/capture/adoption boundary as one cohesive change:
+
+1. `redactSensitiveText` scans the immutable original source. It records original-coordinate,
+   half-open redaction ranges and renders only after lexical classification; no pre-redaction may
+   change the coordinate space presented by the metrics.
+2. The lexer owns one monotonic main cursor and explicit typed state: line/member start, key,
+   separator, scalar, quoted scalar, composite, comment, and malformed recovery, plus a typed
+   `}`/`]` closer stack bounded only by source length. The 257th opener retains its type; there is
+   no untyped overflow depth. Failed member candidates terminate at the boundary already reached
+   by the main cursor and can never launch a suffix scan.
+3. A public-field fast path is admitted only after the lexer proves a finite scalar. A public
+   quote must close before its current line/container boundary. `{` and `[` values remain under
+   normal descendant traversal, so protected members are classified; malformed public values
+   conservatively redact the proven remainder while resynchronizing at a typed sibling boundary.
+4. Private-key, URL/basic-auth, structured assignment, range merge, and render work share one
+   original-source ledger. Any retained pass is named and charged; helper ranges are disjoint or
+   amortized, never suffix rescans. Metrics are observations, not initialized conclusions.
+5. Each accepted closed host capability schema is descriptor-captured and compiled once into a
+   bounded validator/projector. Unknown, missing, wrong-type, and out-of-range input fails before
+   host execution. The projected, deeply frozen DTO is the only callback input and the same
+   projector/DTO definition supplies tool-call lifecycle identity; `target` is not a hard-coded
+   generic identity shortcut.
+6. Prompt ownership publishes one always-fulfilled internal settlement before invoking Pi. The
+   entire return adoption and handler installation is inside one fallible owned boundary. Fresh
+   native adoption observes supported native and foreign fulfillment/rejection and converts every
+   assimilation throw into a settled rejection joined by abort, close, and shutdown.
+7. The trusted Pi adapter contract is explicit: Pi must return an exact intrinsic native Promise
+   with direct `Promise.prototype` and no own `constructor` or `then`; a wider adapter must normalize
+   and own its result before exposing the session. Foreign thenables are assimilated through a
+   fresh intrinsic promise whose getter/callback failures are owned. An already-rejected native
+   promise with an unobservable poisoned own `then` cannot be made safe after return in JavaScript;
+   Cycle 17 rejects unsupported native shapes as adapter-contract failures instead of claiming
+   impossible hostile-promise support or manufacturing an unowned rejection in its tests.
+8. `buildRolePrompts` descriptor-captures the complete public input, including `role` and every
+   binding scalar, into a fresh deeply frozen DTO before route selection, validation, rendering,
+   or JSON serialization. Proxies, accessors, inherited authority, and non-approved prototypes are
+   rejected without invoking caller behavior; one snapshot drives route/system/user/schema data.
+9. Every remaining schema/argument/result capture boundary uses fixed own descriptors and requires
+   its exact approved direct prototype before bounded traversal. `for...in` is prohibited; inherited
+   proxy prototypes and enumerable peers have zero influence and zero trap calls.
+
+### Formal lexer state, coordinates, and work accounting
+
+Let the original source be `S`, `n = S.length`, main cursor `i`, typed closer stack `D`, lexical
+mode `q`, pending candidate start `k`, and ordered redaction ranges `R`. The transition relation is
+`(i,q,D,k,R) -> (j,q',D',k',R')` with `j > i` for every consuming transition and no transition to
+an earlier source offset. Every opener pushes its exact closer; only the matching closer pops it.
+A mismatch enters conservative malformed recovery without changing unrelated stack entries.
+Ranges satisfy `0 <= start < end <= n`; merge is ordered and output is assembled from `S` and the
+merged ranges, so expanding replacement text never changes a measured coordinate.
+
+The authoritative work record charges actual events:
+
+- `cursorAdvances`: original-source main-cursor advances, never transformed-output length;
+- `maxMainCursorVisits`: maximum actually observed visits to one original offset (zero for empty,
+  exactly one for a completed non-empty main scan), updated by visit events rather than assigned;
+- `keyCharacterVisits` and `boundaryCharacterVisits`: real bounded helper/token transitions;
+- every named credential/private-block/range-merge/render pass contributes to `totalWork`.
+
+No helper may read from a candidate to an unknown suffix end. Per-offset main visits are at most
+one, each token/helper owns a disjoint or amortized source interval, and the fixed number of named
+passes yields `totalWork <= 8n + 64`. The RED work row installs a fail-fast accessor on
+`totalWork`, uses geometric sizes, and includes dense plain/quoted/whitespace failed members,
+expanding and shrinking credential replacements, later protected siblings, and real main/helper
+counts. A metric constant or omitted pass must fail the row.
+
+### Comprehensive RED matrix
+
+After this artifact-only checkpoint, one test-only commit adds exactly nine top-level rows:
+
+| ID | Contract / executable matrix |
+|---|---|
+| C17-01 | dense plain, quoted, and whitespace failed flow-member candidates at geometric sizes remain within `8n + 64`, fail fast, and redact a later sibling |
+| C17-02 | malformed public single/double quotes cannot cross line or typed container bounds through direct redaction and all 12 indirect shared consumers |
+| C17-03 | registered closed host schemas reject extra/missing/type/range input before callback and project valid non-`target` fields into distinct lifecycle identities |
+| C17-04 | exact-native and foreign fulfill/reject, synchronous throw, throwing then getter/callback, and double settlement join under abort/close/shutdown; unsupported fulfilled native shapes fail the explicit adapter contract without an orphan |
+| C17-05 | exported prompt building rejects accessor/proxy/inherited role/binding input and renders one post-mutation-stable role/binding snapshot everywhere |
+| C17-06 | public fields preserve only proven finite scalars; valid/malformed object/sequence descendants redact through every shared consumer |
+| C17-07 | mixed delimiter nesting at 255/256/257 keeps delimiter identity and protects terminal siblings |
+| C17-08 | expanding/shrinking credentials, dense candidates, and every claimed pass use one original coordinate system with measured visits/work |
+| C17-09 | schema, capability-result, and workspace-result prototype proxies cause zero traps; exact prototypes and no `for...in` influence are required |
+
+Expected RED is 152 executed: all 143 retained rows pass and exactly C17-01 through C17-09 fail
+their behavior assertions, with zero skip/cancel/todo. Focused strict TypeScript must pass. Frozen
+blobs before RED are runtime `cd754a1e9b5baddf738c163cbba4d9fd1f279527`, policy
+`b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`, prompts
+`b762787b2a63b5b02f9591c7bf3fff46394738cc`, runtime test
+`b3df3c5f0bf6c0f02b8576200066cd683a994480`, and policy test
+`b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f`.
+
+### Ordered execution and gates
+
+Manual-GSD fallback remains explicit: `scripts/gsd doctor` passes 69 commands, while
+`scripts/gsd prompt programming-loop ...` reports unknown command. Required skills used are
+`gsd-programming-loop`, `architecture-patterns`, `javascript-testing-patterns`,
+`typescript-advanced-types`, and `github-issue-first-delivery`; the repository routing, issue
+contract, universal runtime loop, GSD adapter, and runtime integration references were also read.
+The order is artifact PLAN -> comprehensive RED -> one cohesive GREEN -> REFACTOR -> both-report
+replay -> VERIFY. No production edit precedes committed RED evidence.
+
+Declared terminal gates remain focused 152/152; focused and all-production strict TypeScript 5.9.3
+against explicit Pi 0.80.6 roots; retained actual pinned sessions and offline RPC; safe isolation;
+serialized complete-suite classification; diff, ancestry, JSON, credential/dependency/Go/connector
+scans; source guards; exact 20 paths; and clean worktree. No dependency, parent, #478, network,
+push, integration, live model/auth, credential, service, Go/connector, `make`, or main mutation is
+authorized.

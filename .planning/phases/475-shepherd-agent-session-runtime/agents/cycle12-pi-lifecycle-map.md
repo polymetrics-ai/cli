@@ -145,3 +145,16 @@ The advisory map was followed without widening its boundary. PLAN `6e3b05c8` and
 whole-key capture, arbitrary records are opaque, prompt settlement is installed before the
 lifecycle barrier, and the scanner exposes only the exact seven-field monotonic work record. Both
 Cycle 15 reports were re-read after refactor. The mapper remained read-only throughout.
+
+## Cycle 17 Architecture-Map Appendix
+
+Assignment: read-only consolidation of both complete Cycle 16 reports against frozen candidate
+`5f0bef9c`. The advisory covers a genuinely single-pass original-source typed lexer with deferred
+ranges and formal work accounting; one compiled closed host-schema projector reused for callback
+and event identity; supported native/foreign prompt adoption under every lifecycle control; a
+descriptor-snapshotted role/binding DTO; and exact-prototype descriptor-only capture.
+
+The issue worker selected exactly nine aggregate RED contracts and retains every repository write,
+test, gate, commit, and handoff. The mapper owns no source, tests, refs, external state, or delivery
+decision. Its full advisory is `/tmp/475-CYCLE17-ARCHITECTURE.md` and will be consumed before
+production implementation.

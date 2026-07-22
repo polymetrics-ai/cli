@@ -189,3 +189,15 @@ must add per-role message/tool lifecycles, select the last assistant from the fi
   pass; broad classification is 249/280 with only the unchanged 31 controller/state-store
   `spawn EPERM` rows. Both strict Pi 0.80.6 TypeScript scopes and explicit offline RPC pass, and
   both Cycle 15 reports were re-read after refactor. No mapper or external mutation occurred.
+
+## Cycle 17 Read-Only Trace
+
+- Agent: `/root/issue_475_cycle17_architecture`.
+- Input: both complete Cycle 16 review reports, exact candidate `5f0bef9c`, immutable base
+  `e659d6f1`, and the exact same 20 issue-owned paths.
+- Scope: original-source typed lexer/ranges/work proof; public quote/scalar/composite recovery;
+  compiled capability schema execution and event DTO; prompt adoption and prompt input snapshot;
+  exact-prototype/no-`for...in` capture; exact nine-row RED seams.
+- Ownership: advisory only. The issue worker owns the only artifact, test, production, ref,
+  verification, and handoff mutation path. No network, credential, model, service, parent, #478,
+  integration, or delivery action is authorized.

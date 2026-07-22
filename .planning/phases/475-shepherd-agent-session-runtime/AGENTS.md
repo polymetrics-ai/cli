@@ -119,3 +119,19 @@ isolation 206/206 pass; both strict Pi 0.80.6 TypeScript scopes and the explicit
 The complete suite remains environment-blocked only by the unchanged 31 controller/state-store
 `spawn EPERM` rows. Both Cycle 15 reports were re-read in full after refactor, and no external or
 parent-owned mutation was attempted.
+
+## Cycle 17 Agent Delegation
+
+The issue worker owns every repository write in Cycle 17. One separately spawned read-only mapper
+consolidates both complete Cycle 16 reports into a single architectural advisory at
+`/tmp/475-CYCLE17-ARCHITECTURE.md`.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `issue_475_cycle17_architecture` | read-only | original-coordinate typed lexer/work proof; closed host-schema projection and event identity; prompt adoption and prompt DTO snapshot; exact-prototype capture | Cycle 17 appendices in the existing Cycle 12 map and trace |
+
+The mapper has no repository edit, ref, test-gate, commit, network, model, credential, service,
+parent, #478, integration, or delivery authority. Its advice may refine the cohesive design, but
+the issue worker retains the sole PLAN, comprehensive nine-row RED, GREEN, REFACTOR, verification,
+commit, and handoff path. Production and tests are frozen until the artifact PLAN commits;
+production remains frozen through the RED checkpoint.

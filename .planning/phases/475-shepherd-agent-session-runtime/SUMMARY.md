@@ -307,3 +307,16 @@ tests with 192 passes and the same 31 `/bin/ps` `spawn EPERM` sandbox-only failu
 controller/state-store coverage. Parent orchestration owns process-capable rerun, push, and fresh
 exact-head review; this lane made no Go/connector, dependency, service, GitHub, review-bot, or merge
 change.
+
+Cycle 17 starts from exact blocked head `5f0bef9c`. Both complete Cycle 16 reports were read and
+their union was consolidated into nine contracts before any production or test edit. The selected
+design is one original-coordinate typed lexer with deferred ranges and truthful amortized work;
+one compiled closed-schema DTO shared by host execution and tool identity; one always-settled
+prompt adoption record; one descriptor-snapshotted deep-frozen role/binding input; and exact-
+prototype descriptor capture with no inherited enumeration.
+
+Baseline focused tests pass 143/143 and strict focused TypeScript exits 0. The next checkpoint is
+one test-only matrix with exactly nine top-level rows and expected 152/143/9 execution. Runtime,
+policy, prompts, and both existing tests are frozen at their recorded blobs through PLAN; all
+production remains frozen through RED. This lane performs no dependency, parent, #478, network,
+push, integration, service, credential, model, Go/connector, `make`, or main mutation.

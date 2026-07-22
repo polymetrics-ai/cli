@@ -240,6 +240,24 @@ phase-equivalent coverage gate.
 No dependency, Go, connector, CLI/help/docs/website, runtime-service, live-GitHub, review-bot,
 merge, or parent-artifact work is required or authorized.
 
+## Cycle 17 Exact-Head Coverage Contract
+
+| Required outcome | Proof boundary | Pre-RED status |
+|---|---|---|
+| Dense failed flow members are amortized linear | plain/quoted/whitespace geometric sizes, fail-fast work setter, later secret | blocked by C16-R1-01 |
+| Public quotes remain inside their line/container | both quotes, every public terminal/path, direct plus 12 indirect consumers | blocked by C16-R1-02 |
+| Host schemas are executable closed authority | direct execute extra/missing/type/range rejection and valid non-target DTO identity | blocked by C16-R1-03 |
+| Prompt outcomes are owned through adoption | exact-native/foreign fulfill/reject and foreign assimilation failures under abort/close/shutdown; unsupported native shapes reject the explicit adapter contract | blocked by C16-R1-04 / C16-R2-B5 |
+| Exported prompts snapshot role and binding once | descriptor/proxy/accessor/inheritance rejection and post-call mutation stability | blocked by C16-R1-05 |
+| Public fast path admits only finite scalars | valid/malformed object/sequence descendants across shared consumers | blocked by C16-R2-B1 |
+| Deep flow retains delimiter types | mixed 255/256/257 nesting and protected terminal sibling | blocked by C16-R2-B2 |
+| Metrics use original coordinates and actual work | expanding/shrinking replacements, actual visit maximum, every named pass | blocked by C16-R1-06 / C16-R2-B3 |
+| Capture has no inherited enumeration influence | exact prototypes; proxy-prototype traps at schema/capability/workspace results | blocked by C16-R1-06 / C16-R2-B4 |
+
+The nine rows are one replacement architecture, not independent synonym/guard patches. Baseline is
+143/143 focused plus strict focused TypeScript. Expected RED is 152 executed, 143 retained pass,
+and exactly nine named failures with every production blob frozen.
+
 ## Cycle 7 Stable-Head Diagnostic
 
 Issue #475 remains a narrow Pi AgentSession runtime slice under parent issue #471. The repository

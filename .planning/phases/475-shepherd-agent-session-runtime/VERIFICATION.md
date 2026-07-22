@@ -475,3 +475,17 @@ the two in-memory provider runs and asserts zero calls. It does not use a live c
 service, or network. No push, GitHub, Go, connector, `make`, runtime-service, or parent integration
 gate was attempted. The complete-suite classification is deliberately not called green; parent
 orchestration owns its rerun where child process creation is permitted.
+
+## Cycle 17 Pre-Execution Verification Contract
+
+No Cycle 17 completion is claimed. At exact start `5f0bef9c`, focused runtime/tool-policy tests
+execute 143/143 green and focused strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots exits 0.
+The worktree is clean, `git diff --check` passes, immutable-base ancestry and the exact 20 paths are
+unchanged, and all five production/test-control blobs match the PLAN ledger.
+
+The next admissible evidence is a test-only RED commit executing 152 rows with 143 retained passes
+and exactly nine named failures, strict focused TypeScript green, production blobs frozen, zero
+skip/cancel/todo, and no out-of-scope path. Only after that checkpoint may cohesive production
+work begin. Terminal verification will additionally require both report replays, focused 152/152,
+both strict scopes, actual/offline Pi, safe isolation, serialized broad classification, integrity,
+source guards, and a clean exact-path head.

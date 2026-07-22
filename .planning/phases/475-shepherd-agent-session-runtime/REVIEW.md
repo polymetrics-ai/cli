@@ -233,3 +233,26 @@ Status after GREEN: all accepted groups are implemented at `94918f4e` and the co
 suite passes 86/86. Strict focused and all-production TypeScript pass against pinned Pi 0.80.6;
 the no-model tool row exercises Pi's real argument validator and required result `details`.
 Fresh stable-head review remains parent-owned after the evidence commit.
+
+# Review Disposition — Issue #475 Cycle 17
+
+Frozen reviewed candidate: `5f0bef9cae08dd9e6285dca7b95e089e2fda02ce`
+
+Sources read in full: `/tmp/475-REVIEW-CYCLE16-1.md` and
+`/tmp/475-REVIEW-CYCLE16-2.md`.
+
+All findings are accepted as one blocking replacement. The union is: dense failed-candidate
+linearity; public-quote bounds; executable closed host schemas plus identical event DTO; total
+prompt adoption ownership; exported prompt input snapshot; public composite traversal; typed deep
+nesting; original-coordinate truthful work metrics; and exact-prototype/no-`for...in` capture.
+Cycle 17 declines and defers none of them.
+
+The correction is intentionally architectural: one original-source typed lexer with deferred
+ranges, one compiled schema projector reused at execution and correlation, one owned adoption
+record joined by all lifecycle controls, one frozen prompt DTO, and one descriptor-only prototype
+policy. The JavaScript-observability limit for an already-rejected native Promise with an
+unobservable poisoned own `then` is recorded explicitly; the trusted adapter must normalize that
+return rather than the runtime claiming impossible support after return.
+
+No GREEN disposition is claimed here. Acceptance requires the committed nine-row RED evidence,
+then 152/152 focused and every declared gate without widening the exact 20-path boundary.

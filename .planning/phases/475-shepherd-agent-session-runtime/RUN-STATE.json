@@ -2,12 +2,12 @@
   "schemaVersion": 1,
   "phase": "475-shepherd-agent-session-runtime",
   "issue": 475,
-  "status": "completed_with_warnings",
+  "status": "in_progress",
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_16_summary",
+  "currentCycle": "correction_cycle_17_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -428,14 +428,19 @@
       "cycle": "correction_cycle_16_summary",
       "decision": "local_critical_path",
       "reason": "Both Cycle 15 reports were re-read after refactor and their complete six-family union is closed locally. No external or parent-owned mutation was attempted; parent orchestration owns independent exact-head review, process-capable replay, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_17_plan",
+      "decision": "read_only_spawned",
+      "reason": "One separately spawned bounded no-write mapper consolidates both complete Cycle 16 reports into a single lexer/schema/prompt/capture architecture while this issue worker retains the sole PLAN, nine-row RED, production, verification, commit, and handoff path."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_16_red_143_executed_137_retained_pass_exactly_6_named_failures; green_refactor_143_passed_0_failed_cancelled_skipped_todo",
+    "focusedTests": "cycle_17_baseline_143_executed_143_passed_0_failed_cancelled_skipped_todo; red_planned_152_executed_143_retained_pass_exactly_9_named_failures",
     "fullShepherdTests": "safe_isolation_206_passed_0_failed_cancelled_skipped_todo; complete_280_executed_249_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked",
-    "strictTypeScriptPi0806": "passed_focused_source_tests_and_all_12_production_files_typescript_5_9_3_explicit_pi_0_80_6_roots",
+    "strictTypeScriptPi0806": "cycle_17_baseline_focused_passed_typescript_5_9_3_explicit_pi_0_80_6_roots; red_must_remain_passed",
     "offlineRpcSmoke": "passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_expected_settings_lock_warnings_only",
-    "diffCheck": "passed_cycle_16_start_df930d62_base_e659d6f1_refactor_af9222b1_blobs_runtime_cd754a1e_policy_b7e22961_prompts_b762787b; exact_metric_and_zero_whole_key_source_guards_pass",
+    "diffCheck": "cycle_17_plan_exact_start_5f0bef9c_base_e659d6f1_blobs_runtime_cd754a1e_policy_b7e22961_prompts_b762787b_runtime_test_b3df3c5f_policy_test_b7fa0a1c; production_frozen_through_red",
     "ownedScope": "exact_same_20_issue_owned_paths; no_dependency_connector_go_cmd_internal_paths; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
@@ -466,6 +471,10 @@
     "cycle_16 comprehensive RED retained all 137 prior rows and failed exactly six named rows with production frozen; GREEN and REFACTOR pass 143/143",
     "cycle_16 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 206/206",
     "cycle_16 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
-    "cycle_16 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable replay, independent exact-head review, integration, and delivery"
+    "cycle_16 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable replay, independent exact-head review, integration, and delivery",
+    "cycle_17 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit PLAN-RED-GREEN-REFACTOR-VERIFY remains mandatory",
+    "cycle_17 both complete Cycle 16 reports were read before planning; their union is nine contracts and production remains frozen through comprehensive RED",
+    "cycle_17 JavaScript cannot retroactively observe an already-rejected native Promise whose own then surface is unobservable; the trusted Pi adapter return shape is constrained/normalized instead of claiming impossible hostile-promise support",
+    "cycle_17 external mutation, dependency, parent, #478, Go/connector/make, network, push, review, and integration actions are outside this lane"
   ]
 }

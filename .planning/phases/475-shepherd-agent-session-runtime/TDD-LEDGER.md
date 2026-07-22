@@ -1145,6 +1145,35 @@ parent-owned integration gate is permitted.
 | Complete Shepherd | environment-blocked | 268 executed; 237 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
 | Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector scans; exact same 20 paths |
 
+## Cycle 17 TDD Ledger
+
+### PLAN / baseline
+
+- Frozen start: `5f0bef9cae08dd9e6285dca7b95e089e2fda02ce`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact 20-path allowlist retained.
+- Both complete Cycle 16 review reports were read before edits. Their complete union is represented
+  by C17-01 through C17-09 in PLAN; no finding is declined or deferred.
+- Baseline focused gate: 143 executed, 143 passed, zero failed/skipped/cancelled/todo. Baseline
+  strict focused TypeScript 5.9.3 against explicit Pi 0.80.6 roots: exit 0.
+- Frozen blobs: runtime `cd754a1e9b5baddf738c163cbba4d9fd1f279527`; policy
+  `b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`; prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`; runtime test
+  `b3df3c5f0bf6c0f02b8576200066cd683a994480`; policy test
+  `b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f`.
+- Manual-GSD fallback is active because doctor passes 69 commands but the adapter rejects
+  `programming-loop`; explicit PLAN-RED-GREEN-REFACTOR-VERIFY and test-first ordering are retained.
+
+### Planned RED
+
+One test-only checkpoint adds exactly nine aggregate rows: dense failed-member linearity; bounded
+public quotes; closed host schema execution/identity; total supported prompt adoption plus exact-
+native adapter-contract ownership; frozen
+prompt role/binding snapshot; public composite descendant traversal; typed 255/256/257 nesting;
+truthful original-coordinate all-pass metrics; exact-prototype/no-`for...in` capture. Expected
+result is 152 executed, all 143 retained rows passed, exactly nine named behavior failures, and
+zero skipped/cancelled/todo. Focused strict TypeScript must remain green and all production blobs
+must remain frozen before GREEN is authorized.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

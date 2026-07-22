@@ -458,3 +458,25 @@ Terminal execution snapshot:
   environment failures. Both strict TypeScript scopes and explicit Pi 0.80.6 RPC pass.
 - Both Cycle 15 reports were re-read in full after refactor. No external, parent, #478, #479, Go,
   connector, service, credential, model, review, integration, push, or network action occurred.
+
+## Consolidated Stable-Head Correction Cycle 17 Snapshot
+
+- Frozen blocked start `5f0bef9cae08dd9e6285dca7b95e089e2fda02ce`; immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 paths.
+- Inputs read completely: `/tmp/475-REVIEW-CYCLE16-1.md` and
+  `/tmp/475-REVIEW-CYCLE16-2.md`. Their union is exactly nine architectural contracts.
+- Objective: replace transformed-string/suffix scanning with one original-coordinate typed lexer
+  and deferred ranges; compile registered closed host schemas into the only execution/event DTO;
+  own all supported prompt adoption outcomes; snapshot public prompt authority once; remove
+  `for...in` and inherited-prototype influence.
+- Formal state: monotonic original cursor, lexical mode, typed closer stack, bounded candidate,
+  ordered ranges. Actual main/helper/pass/render visits are charged under `8n + 64`; no asserted
+  metric constants or untyped overflow depth.
+- Method: manual-GSD artifact PLAN -> exactly nine named test-only RED rows -> cohesive GREEN ->
+  REFACTOR -> both-report replay -> verification. Production remains frozen through RED.
+- Baseline: 143/143 focused and strict focused TypeScript pass. Expected RED: 152 executed,
+  143 retained pass, exactly nine failures, zero skipped/cancelled/todo.
+- Required skills: GSD programming loop, architecture patterns, JavaScript testing, advanced
+  TypeScript, and issue-first delivery. One separate mapper is read-only; this worker owns writes.
+- No dependency, parent, #478, network, push, integration, model/auth, credential, service,
+  Go/connector, `make`, or main mutation.
