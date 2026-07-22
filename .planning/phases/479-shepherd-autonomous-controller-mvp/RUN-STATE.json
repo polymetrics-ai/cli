@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "issue": 479,
+  "status": "planned",
+  "baseHead": "c958d7e608eac4afedceea953408a8fd4cfcb566",
+  "manualGsdFallback": true,
+  "reviewPolicy": "one_blocker_only_pass",
+  "hardeningDeferred": true
+}
