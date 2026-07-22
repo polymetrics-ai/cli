@@ -298,12 +298,14 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 	#binding = binding();
 	#dirty = true;
 	#integrationMutationCount = 0;
+	#rejectIntegration: boolean;
 	#verificationFailures: number;
 	readonly calls: string[];
 
-	constructor(calls: string[], verificationFailures = 0) {
+	constructor(calls: string[], verificationFailures = 0, rejectIntegration = false) {
 		this.calls = calls;
 		this.#verificationFailures = verificationFailures;
+		this.#rejectIntegration = rejectIntegration;
 	}
 
 	get binding(): ProductionWorkspaceBinding { return structuredClone(this.#binding); }
@@ -396,6 +398,7 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 		assert.equal(request.baseSha, this.#binding.baseHead);
 		assert.equal(request.headSha, this.#binding.head);
 		assert.match(request.effectKey, /^[0-9a-f]{64}$/u);
+		if (this.#rejectIntegration) throw new Error("unrelated parent head defeated exact Git CAS");
 		const reused = this.#integrationMutationCount > 0;
 		if (!reused) this.#integrationMutationCount += 1;
 		return {
@@ -470,6 +473,7 @@ interface HarnessOptions {
 	integration?: ChildIntegrationDecision;
 	integrationBlockedOnce?: Extract<ChildIntegrationDecision, { kind: "blocked" }>["blockers"][number];
 	integrationCrashAfterGitOnce?: boolean;
+	integrationRejectsMovedParent?: boolean;
 	childHeadMoveOnce?: boolean;
 	publicationTimeoutOnce?: boolean;
 	verificationFailures?: number;
@@ -480,7 +484,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const effects = new ProductionEffectJournal(root);
 	const calls: string[] = [];
-	const session = new FakeWorkspaceSession(calls, options.verificationFailures);
+	const session = new FakeWorkspaceSession(calls, options.verificationFailures, options.integrationRejectsMovedParent);
 	const lifecycle: ProductionWorkspaceLifecyclePort = {
 		async claim() { calls.push("workspace"); return session; },
 		async abort(runId) { calls.push(`abort:${runId}`); },
@@ -1004,6 +1008,23 @@ test("a fresh process recovers an exact Git CAS after crashing before the integr
 	assert.equal(h.calls.filter((entry) => entry === "git-integrate").length, 2);
 	await persistAndAcknowledge(restarted, h.state, integrated);
 	assert.equal((await h.effects.load(prepared[0].key))?.phase, "applied");
+});
+
+test("an unrelated parent advance still fails closed when exact Git CAS recovery cannot prove ownership", async (t) => {
+	const h = await harness(t, { integrationRejectsMovedParent: true });
+	for (const stage of ["workspace", "implement", "verify", "publish", "review"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	h.setParentHead(SHA_D);
+	await assert.rejects(
+		h.pipeline.integrate(contextFor(h.state)),
+		(error: unknown) => error instanceof ProductionLifecycleError
+			&& error.kind === "stale_parent"
+			&& error.blockers.includes("head_moved"),
+	);
+	assert.equal(h.session.integrationMutationCount, 0);
+	assert.equal(h.receipt(), undefined);
 });
 
 test("reclaims an authoritatively moved child head and requires fresh verification and exact-head review", async (t) => {

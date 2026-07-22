@@ -1013,9 +1013,7 @@ export class ProductionChildPipeline implements
 		const entry = await this.#session(context);
 		const handoff = await entry.session.captureHandoff(context.signal);
 		const currentParent = validateParentHead(await this.#parentHeads.observe(context.plan, context.signal), context.plan);
-		if (currentParent.head !== handoff.baseHead) {
-			throw new ProductionLifecycleError("stale_parent", "parent head moved before child integration", ["head_moved"]);
-		}
+		const parentMovedBeforeIntegration = currentParent.head !== handoff.baseHead;
 		const review = context.runtime.checkpoint?.review;
 		if (review?.status !== "clean" || review.baseHead !== handoff.baseHead || review.head !== handoff.head) {
 			throw new ProductionLifecycleError("correction_required", "child integration requires a clean exact-head review", ["review_missing"]);
@@ -1051,13 +1049,24 @@ export class ProductionChildPipeline implements
 							["integration_authorization_mismatch"],
 						);
 					}
-					return entry.session.integrateReviewedChild({
-						parentBranch: authorization.parentBranch,
-						defaultBranch: authorization.parentBaseBranch,
-						baseSha: authorization.baseSha,
-						headSha: authorization.headSha,
-						effectKey,
-					}, context.signal);
+					try {
+						return await entry.session.integrateReviewedChild({
+							parentBranch: authorization.parentBranch,
+							defaultBranch: authorization.parentBaseBranch,
+							baseSha: authorization.baseSha,
+							headSha: authorization.headSha,
+							effectKey,
+						}, context.signal);
+					} catch (error) {
+						if (parentMovedBeforeIntegration) {
+							throw new ProductionLifecycleError(
+								"stale_parent",
+								"parent head moved and does not contain the exact prior child integration",
+								["head_moved"],
+							);
+						}
+						throw error;
+					}
 				},
 				{
 					signal: context.signal,

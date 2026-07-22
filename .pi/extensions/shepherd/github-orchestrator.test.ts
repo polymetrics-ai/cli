@@ -761,8 +761,9 @@ function orchestratorFor(
 					&& pullRequest.repository === target.repository
 					&& pullRequest.workItemId === target.workItemId
 					&& pullRequest.generation === target.generation
-					&& pullRequest.baseSha === target.baseSha
-					&& pullRequest.headSha === target.headSha)
+					&& pullRequest.headSha === target.headSha
+					&& pullRequest.reviews.some((review) => review.baseSha === target.baseSha
+						&& review.headSha === target.headSha))
 				.map((pullRequest) => ({
 					schemaVersion: 1,
 					authority: "controller",
@@ -1466,6 +1467,46 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 		successfulIntegrationMutation,
 	);
 	assert.equal(outside.kind, "blocked");
+});
+
+test("recovers a receipt-less exact Git CAS after GitHub reports the merged parent base movement", async () => {
+	const candidate = await plan();
+	const transport = new FakeTransport();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	transport.issues.push(issue);
+	transport.pullRequests.push(cleanPullRequest({
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${issue.number}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	}, { state: "merged", baseSha: "d".repeat(40) }));
+	let mutationAttempts = 0;
+	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff, async (authorization) => {
+		mutationAttempts += 1;
+		return { ...(await successfulIntegrationMutation(authorization)), reused: true };
+	});
+	assert.equal(result.kind, "integrated");
+	assert.equal(mutationAttempts, 1);
+	assert.equal(transport.integrateCalls, 1);
+	assert.equal(transport.integrations[0].baseSha, handoff.baseHead);
+	assert.equal(transport.integrations[0].pullRequestSnapshot.baseSha, handoff.baseHead);
 });
 
 test("integration recovers timeout and malformed mutation responses, but incomplete receipt lookup fails closed", async () => {

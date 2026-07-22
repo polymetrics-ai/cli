@@ -2052,6 +2052,7 @@ function childPullRequestMatches(
 	plan: ParentOrchestrationPlan,
 	child: MaterializedChildRecord,
 	handoff: ChildPullRequestTopology,
+	allowIntegratedBaseMovement = false,
 ): boolean {
 	return pullRequest.repository === plan.repository
 		&& pullRequest.workItemId === child.id
@@ -2063,7 +2064,8 @@ function childPullRequestMatches(
 		&& pullRequest.body === childPullRequestBody(plan, child)
 		&& pullRequest.baseBranch === child.prBase
 		&& pullRequest.headBranch === child.branch
-		&& pullRequest.baseSha === handoff.baseHead
+		&& (pullRequest.baseSha === handoff.baseHead
+			|| (allowIntegratedBaseMovement && pullRequest.state === "merged"))
 		&& pullRequest.headSha === handoff.head
 		&& sameStrings(pullRequest.changedPaths, handoff.changedScope)
 		&& pullRequest.changedPaths.every((path) => child.writeScopes.some((scope) => pathWithinScope(path, scope)));
@@ -2086,6 +2088,17 @@ function reviewMatchesChild(
 		&& review.headSha === handoff.head
 		&& sameStrings(review.changedPaths, handoff.changedScope)
 		&& sameStrings(review.allowedScopes, child.writeScopes);
+}
+
+function childIntegrationPullRequestSnapshot(
+	pullRequest: GitHubPullRequestEvidence,
+	handoff: ChildPullRequestTopology,
+): CanonicalPullRequestSnapshot {
+	return createCanonicalPullRequestSnapshot(
+		pullRequest.state === "merged" && pullRequest.baseSha !== handoff.baseHead
+			? { ...pullRequest, baseSha: handoff.baseHead }
+			: pullRequest,
+	);
 }
 
 function childIntegrationMutationProjection(value: {
@@ -2126,7 +2139,9 @@ function receiptMatchesChild(
 	handoff: ChildPullRequestTopology,
 	pullRequestEvidence?: GitHubPullRequestEvidence,
 ): boolean {
-	const expectedSnapshot = pullRequestEvidence === undefined ? undefined : createCanonicalPullRequestSnapshot(pullRequestEvidence);
+	const expectedSnapshot = pullRequestEvidence === undefined
+		? undefined
+		: childIntegrationPullRequestSnapshot(pullRequestEvidence, handoff);
 	const expectedMutation = createDurableMutationIntent(
 		"child_integration",
 		[plan.repository, child.markers.pullRequest],
@@ -3887,6 +3902,7 @@ export class GitHubParentOrchestrator {
 		requiredCheckPolicy: RequiredGitHubCheckPolicy,
 		allowDraft = false,
 		allowIntegrated = false,
+		allowIntegratedBaseMovement = false,
 	) {
 		if (this.#attestations === undefined) throw new Error("controller evidence source is unavailable");
 		const query = {
@@ -3917,7 +3933,7 @@ export class GitHubParentOrchestrator {
 			requiredCheckPolicy,
 			reviewTarget: canonicalTarget,
 			attestations,
-			}, { allowDraft, allowIntegrated });
+			}, { allowDraft, allowIntegrated, allowIntegratedBaseMovement });
 		return { decision, observation, target: canonicalTarget, attestations };
 	}
 
@@ -3967,7 +3983,7 @@ export class GitHubParentOrchestrator {
 		receiptProvenance?: ControllerIntegrationProvenance,
 	): Promise<ControllerIntegrationProvenance | null> {
 		if (!currentChildPullRequestEligible(pullRequest, integratedState)
-			|| !childPullRequestMatches(pullRequest, plan, child, handoff)
+			|| !childPullRequestMatches(pullRequest, plan, child, handoff, integratedState === "merged")
 			|| !sameStrings(pullRequest.changedPaths, handoff.changedScope)) return null;
 		const policies = await this.currentPolicySet(plan, pullRequest.observedAt);
 		const policy = policyFor(plan, child.prBase);
@@ -3995,7 +4011,15 @@ export class GitHubParentOrchestrator {
 			headSha: handoff.head,
 			allowedScopes: child.writeScopes,
 		};
-		const assessed = await this.evaluateEvidence(pullRequest, expected, reviewTarget, policy, false, integratedState !== undefined);
+		const assessed = await this.evaluateEvidence(
+			pullRequest,
+			expected,
+			reviewTarget,
+			policy,
+			false,
+			integratedState !== undefined,
+			integratedState === "merged",
+		);
 		if (assessed.decision.kind === "blocked"
 			|| !sameStrings(assessed.observation.paths, handoff.changedScope)
 			|| !reviewMatchesChild(assessed.decision.review, plan, child, pullRequest.number, handoff)) return null;
@@ -4029,7 +4053,8 @@ export class GitHubParentOrchestrator {
 			const query = { repository: plan.repository, marker: canonicalChild.markers.pullRequest };
 			const first = await this.singlePullRequest(query);
 			if (first === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
-			if (!childPullRequestMatches(first, plan, canonicalChild, handoff)
+			const recoveringIntegrated = first.state === "merged";
+			if (!childPullRequestMatches(first, plan, canonicalChild, handoff, recoveringIntegrated)
 				|| !sameStrings(first.changedPaths, handoff.changedScope)) {
 				return { kind: "blocked", blockers: ["resource_mismatch"] };
 			}
@@ -4069,7 +4094,6 @@ export class GitHubParentOrchestrator {
 				}
 				return { kind: "integrated", receipt, reused: true };
 			}
-			const recoveringIntegrated = first.state === "merged";
 			if (!currentChildPullRequestEligible(first, recoveringIntegrated ? "merged" : undefined)) {
 				return { kind: "blocked", blockers: [first.draft ? "draft" : "pr_not_open"] };
 			}
@@ -4085,7 +4109,9 @@ export class GitHubParentOrchestrator {
 				allowedScopes: canonicalChild.writeScopes,
 			};
 			const policy = policyFor(plan, canonicalChild.prBase);
-			const assessed = await this.evaluateEvidence(first, expected, reviewTarget, policy, false, recoveringIntegrated);
+			const assessed = await this.evaluateEvidence(
+				first, expected, reviewTarget, policy, false, recoveringIntegrated, recoveringIntegrated,
+			);
 			if (assessed.decision.kind === "blocked") return assessed.decision;
 			if (!sameStrings(assessed.observation.paths, handoff.changedScope)
 				|| !reviewMatchesChild(assessed.decision.review, plan, canonicalChild, first.number, handoff)) {
@@ -4094,7 +4120,8 @@ export class GitHubParentOrchestrator {
 			const second = await this.singlePullRequest(query);
 			if (second === null) return { kind: "blocked", blockers: ["pull_request_missing"] };
 			if (second.headSha !== handoff.head) return { kind: "blocked", blockers: ["head_moved"] };
-			if (!childPullRequestMatches(second, plan, canonicalChild, handoff)
+			const recoveringSecond = recoveringIntegrated || second.state === "merged";
+			if (!childPullRequestMatches(second, plan, canonicalChild, handoff, recoveringSecond)
 				|| !sameStrings(second.changedPaths, handoff.changedScope)) {
 				return { kind: "blocked", blockers: ["resource_mismatch"] };
 			}
@@ -4104,7 +4131,8 @@ export class GitHubParentOrchestrator {
 				reviewTarget,
 				policy,
 				false,
-				recoveringIntegrated || second.state === "merged",
+				recoveringSecond,
+				recoveringSecond,
 			);
 			if (revalidated.decision.kind === "blocked") return revalidated.decision;
 			if (!sameStrings(revalidated.observation.paths, handoff.changedScope)
@@ -4115,7 +4143,7 @@ export class GitHubParentOrchestrator {
 			if (policyObservation === null) {
 				return { kind: "blocked", blockers: ["policy_moved"] };
 			}
-			const snapshot = createCanonicalPullRequestSnapshot(second);
+			const snapshot = childIntegrationPullRequestSnapshot(second, handoff);
 			const observation = pullRequestObservation(second);
 			const controllerProvenance = controllerIntegrationProvenance(
 				plan, policy, policyObservation, revalidated.observation, revalidated.decision.review,
