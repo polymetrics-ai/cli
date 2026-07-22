@@ -482,7 +482,7 @@ export class ProductionChildPipeline implements
 				coordinator: this.#coordinator,
 				trustedWorktreeRoot: this.#trustedWorktreeRoot,
 				parentIssue: context.plan.parentIssue,
-				parentSlug: `production-${context.plan.parentIssue}`,
+				parentBranch: context.plan.parentBranch,
 				parentHead,
 				child: context.child,
 				mode: prior === undefined ? "start" : "resume",

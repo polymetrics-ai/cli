@@ -76,7 +76,7 @@ export interface ProductionWorkspaceClaim {
 	coordinator: GitBinding;
 	trustedWorktreeRoot: string;
 	parentIssue: number;
-	parentSlug: string;
+	parentBranch: string;
 	parentHead: string;
 	child: ProductionChildSpec;
 	mode: "start" | "resume";
@@ -150,7 +150,7 @@ export class ProductionWorkspaceLifecycle {
 			issue: request.child.issue,
 			slug: request.child.slug,
 			parentIssue: request.parentIssue,
-			parentSlug: request.parentSlug,
+			parentBranch: request.parentBranch,
 			parentHead: request.parentHead,
 			ownershipId,
 			allowedScopes: request.child.writeScopes,
@@ -447,7 +447,8 @@ function validateClaim(request: ProductionWorkspaceClaim): void {
 	if (typeof request !== "object" || request === null || !SAFE_IDENTIFIER.test(request.runId)
 		|| !Number.isSafeInteger(request.generation) || request.generation < 1
 		|| !Number.isSafeInteger(request.parentIssue) || request.parentIssue < 1
-		|| typeof request.parentSlug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(request.parentSlug)
+		|| typeof request.parentBranch !== "string"
+		|| !/^(?!\/|.*(?:\.\.|\s|[~^:?*\\\[\]])|.*\/$)[A-Za-z0-9][A-Za-z0-9._\/-]{0,239}$/.test(request.parentBranch)
 		|| !SHA_PATTERN.test(request.parentHead) || !isProductionChild(request.child)
 		|| (request.mode !== "start" && request.mode !== "resume")
 		|| (request.ownershipId !== undefined && (typeof request.ownershipId !== "string"

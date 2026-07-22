@@ -50,7 +50,7 @@ async function requestFor(
 		issue: 476,
 		slug: "shepherd-worktree-git-adapter",
 		parentIssue: 471,
-		parentSlug: "pi-agent-session-shepherd",
+		parentBranch: fixture.parentBranch,
 		parentHead: fixture.parentHead,
 		ownershipId: "run-471-generation-1-lane-476",
 		allowedScopes: [".pi/extensions/shepherd", ".planning/phases/476-shepherd-worktree-git-adapter"],
@@ -61,7 +61,12 @@ async function requestFor(
 test("creates one canonical isolated issue worktree from the exact parent base", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);
-	const adapter = new WorkspaceAdapter(new GitAdapter());
+	const adapter = adapterWithLeaseOptions({
+		processId: 22_001,
+		processIdentity: "non-canonical-parent-branch-test",
+		isProcessAlive: () => true,
+		tokenFactory: () => "non-canonical-parent-branch-token",
+	});
 	const workspace = await adapter.claim(await requestFor(fixture));
 	assert.equal(workspace.branch, canonicalIssueBranch(476, "shepherd-worktree-git-adapter"));
 	assert.equal(workspace.prBase, fixture.parentBranch);
@@ -73,6 +78,23 @@ test("creates one canonical isolated issue worktree from the exact parent base",
 	assert.equal(basename(workspace.cwd), "issue-476-shepherd-worktree-git-adapter");
 	assert.notEqual(workspace.cwd, fixture.coordinator);
 	assert.equal((await git(workspace.cwd, "branch", "--show-current")).trim(), workspace.branch);
+	await workspace.release();
+});
+
+test("uses the plan's exact non-canonical parent branch as the stacked PR base", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const parentBranch = "feat/cli-architecture-v2";
+	await git(fixture.coordinator, "branch", parentBranch, fixture.parentHead);
+	const adapter = adapterWithLeaseOptions({
+		processId: 22_002,
+		processIdentity: "non-canonical-parent-branch-test",
+		isProcessAlive: () => true,
+		tokenFactory: () => "non-canonical-parent-branch-token",
+	});
+	const workspace = await adapter.claim(await requestFor(fixture, { parentBranch }));
+	assert.equal(workspace.prBase, parentBranch);
+	assert.equal(workspace.baseHead, fixture.parentHead);
 	await workspace.release();
 });
 

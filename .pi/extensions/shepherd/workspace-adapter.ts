@@ -28,6 +28,7 @@ const MAX_CLAIM_BYTES = 32_768;
 const MAX_PATH_BYTES = 4_096;
 const MAX_OWNERSHIP_BYTES = 256;
 const SAFE_OWNERSHIP = /^[A-Za-z0-9](?:[A-Za-z0-9._:-]*[A-Za-z0-9])?$/;
+const SAFE_PARENT_REF = /^(?!\/|.*(?:\.\.|\s|[~^:?*\\\[\]])|.*\/$)[A-Za-z0-9][A-Za-z0-9._\/-]{0,239}$/;
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
 const IDENTITY_PATTERN = /^[0-9a-f]{64}$/;
 
@@ -61,7 +62,8 @@ export interface WorkspaceClaimRequest {
 	issue: number;
 	slug: string;
 	parentIssue: number;
-	parentSlug: string;
+	/** Exact non-default parent branch from the immutable production plan. */
+	parentBranch: string;
 	parentHead: string;
 	ownershipId: string;
 	allowedScopes: readonly string[];
@@ -530,7 +532,10 @@ export class WorkspaceAdapter {
 	async claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace> {
 		if (typeof request !== "object" || request === null) throw new WorkspaceAdapterError("workspace claim request is required");
 		const branch = canonicalIssueBranch(request.issue, request.slug);
-		const prBase = canonicalIssueBranch(request.parentIssue, request.parentSlug);
+		if (typeof request.parentBranch !== "string" || !SAFE_PARENT_REF.test(request.parentBranch)) {
+			throw new WorkspaceAdapterError("parent branch must be an exact bounded Git ref");
+		}
+		const prBase = request.parentBranch;
 		if (request.issue === request.parentIssue) throw new WorkspaceAdapterError("issue and parent issue must be distinct");
 		if (typeof request.parentHead !== "string" || !SHA_PATTERN.test(request.parentHead)) {
 			throw new WorkspaceAdapterError("parent head must be an exact lowercase commit SHA");

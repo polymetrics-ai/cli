@@ -41,7 +41,7 @@ async function claimedMutationWorkspace(
 		issue: 476,
 		slug: "shepherd-worktree-git-adapter",
 		parentIssue: 471,
-		parentSlug: "pi-agent-session-shepherd",
+		parentBranch: fixture.parentBranch,
 		parentHead: fixture.parentHead,
 		ownershipId: "issue-476-git-adapter-test",
 		allowedScopes,
