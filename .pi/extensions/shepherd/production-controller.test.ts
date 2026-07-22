@@ -440,13 +440,18 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 		effectKey: string;
 		stateRevision: number;
 		stateEffectKey?: string;
+		stateEffectKeys?: string[];
 		durableRevision?: number;
 		durableEffectKey?: string;
+		durableEffectKeys?: string[];
 	}> = [];
 	const pipeline = greenPipeline({
 		async verify(context) {
 			pipeline.calls.push(`verify:${context.child.id}`);
-			return checkpoint("verified exact head", { effectKey: "verification-effect" });
+			return checkpoint("verified exact head", {
+				effectKey: "verification-effect",
+				effectKeys: ["verification-log-effect"],
+			});
 		},
 		async acknowledge(effectKey, state) {
 			pipeline.calls.push(`ack:${effectKey}`);
@@ -456,9 +461,12 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 				effectKey,
 				stateRevision: state.revision,
 				...(child?.checkpoint?.effectKey === undefined ? {} : { stateEffectKey: child.checkpoint.effectKey }),
+				...(child?.checkpoint?.effectKeys === undefined ? {} : { stateEffectKeys: child.checkpoint.effectKeys }),
 				...(durable?.revision === undefined ? {} : { durableRevision: durable.revision }),
 				...(durable?.children[0].checkpoint?.effectKey === undefined
 					? {} : { durableEffectKey: durable.children[0].checkpoint.effectKey }),
+				...(durable?.children[0].checkpoint?.effectKeys === undefined
+					? {} : { durableEffectKeys: durable.children[0].checkpoint.effectKeys }),
 			});
 		},
 	});
@@ -474,11 +482,13 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 	const state = await controller.start(command("start"));
 	assert.equal(state.status, "waiting_human");
 	assert.equal(pipeline.calls.filter((entry) => entry === "ack:verification-effect").length, 1);
-	assert.deepEqual(acknowledgments, [{
-		effectKey: "verification-effect",
-		stateRevision: acknowledgments[0].stateRevision,
-		stateEffectKey: "verification-effect",
-		durableRevision: acknowledgments[0].stateRevision,
-		durableEffectKey: "verification-effect",
-	}]);
+	assert.equal(pipeline.calls.filter((entry) => entry === "ack:verification-log-effect").length, 1);
+	assert.equal(acknowledgments.length, 2);
+	for (const acknowledgment of acknowledgments) {
+		assert.equal(acknowledgment.stateEffectKey, "verification-effect");
+		assert.deepEqual(acknowledgment.stateEffectKeys, ["verification-effect", "verification-log-effect"]);
+		assert.equal(acknowledgment.durableRevision, acknowledgment.stateRevision);
+		assert.equal(acknowledgment.durableEffectKey, "verification-effect");
+		assert.deepEqual(acknowledgment.durableEffectKeys, ["verification-effect", "verification-log-effect"]);
+	}
 });

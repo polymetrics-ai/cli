@@ -142,9 +142,16 @@ function mergeCheckpoint(
 	previous: ProductionStageCheckpoint | undefined,
 	next: ProductionStageCheckpoint,
 ): ProductionStageCheckpoint {
+	const effectKeys = [...new Set([
+		...(previous?.effectKey === undefined ? [] : [previous.effectKey]),
+		...(previous?.effectKeys ?? []),
+		...(next.effectKey === undefined ? [] : [next.effectKey]),
+		...(next.effectKeys ?? []),
+	])];
 	return {
 		...(previous ?? { summary: next.summary }),
 		...next,
+		...(effectKeys.length === 0 ? {} : { effectKeys }),
 		...(next.workspace === undefined && previous?.workspace !== undefined ? { workspace: previous.workspace } : {}),
 		...(next.pullRequest === undefined && previous?.pullRequest !== undefined ? { pullRequest: previous.pullRequest } : {}),
 		...(next.review === undefined && previous?.review !== undefined ? { review: previous.review } : {}),
@@ -502,7 +509,7 @@ export class ProductionShepherdController {
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});
-					await this.#acknowledge(corrected.effectKey, persisted);
+					await this.#acknowledgeCheckpoint(corrected, persisted);
 					stage = "verification";
 				}
 				if (stage === "integration") {
@@ -540,7 +547,7 @@ export class ProductionShepherdController {
 						summary: refreshed.summary,
 						now: this.#now(),
 					}));
-					await this.#acknowledge(refreshed.effectKey, persisted);
+					await this.#acknowledgeCheckpoint(refreshed, persisted);
 					stage = "verification";
 					continue;
 				}
@@ -560,7 +567,7 @@ export class ProductionShepherdController {
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});
-					await this.#acknowledge(corrected.effectKey, persisted);
+					await this.#acknowledgeCheckpoint(corrected, persisted);
 					stage = "verification";
 					continue;
 				}
@@ -602,7 +609,7 @@ export class ProductionShepherdController {
 			child.checkpoint = mergeCheckpoint(child.checkpoint, result);
 			if (!child.ownership && result.workspace) child.ownership = result.workspace;
 		});
-		await this.#acknowledge(result.effectKey, persisted);
+		await this.#acknowledgeCheckpoint(result, persisted);
 		return result;
 	}
 
@@ -629,6 +636,14 @@ export class ProductionShepherdController {
 
 	async #acknowledge(effectKey: string | undefined, state: ProductionAutonomousState): Promise<void> {
 		if (effectKey !== undefined) await this.#pipeline.acknowledge(effectKey, structuredClone(state));
+	}
+
+	async #acknowledgeCheckpoint(checkpoint: ProductionStageCheckpoint, state: ProductionAutonomousState): Promise<void> {
+		const keys = [...new Set([
+			...(checkpoint.effectKeys ?? []),
+			...(checkpoint.effectKey === undefined ? [] : [checkpoint.effectKey]),
+		])];
+		for (const key of keys) await this.#pipeline.acknowledge(key, structuredClone(state));
 	}
 
 	#evolve(

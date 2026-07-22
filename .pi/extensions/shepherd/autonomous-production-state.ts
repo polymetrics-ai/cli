@@ -298,12 +298,13 @@ function validateCheckpoint(value: unknown): ProductionStageCheckpoint {
 	const candidate = exact(
 		value,
 		["summary"],
-		["effectKey", "workspace", "pullRequest", "review", "integrationReceiptDigest", "parentHead"],
+		["effectKey", "effectKeys", "workspace", "pullRequest", "review", "integrationReceiptDigest", "parentHead"],
 		"production stage checkpoint",
 	);
 	return {
 		summary: safeText(candidate.summary, "checkpoint summary", 4_096),
 		...(candidate.effectKey === undefined ? {} : { effectKey: safeText(candidate.effectKey, "checkpoint effect key", 256) }),
+		...(candidate.effectKeys === undefined ? {} : { effectKeys: stringArray(candidate.effectKeys, "checkpoint effect keys") }),
 		...(candidate.workspace === undefined ? {} : { workspace: validateWorkspace(candidate.workspace) }),
 		...(candidate.pullRequest === undefined ? {} : { pullRequest: positive(candidate.pullRequest, "checkpoint pull request") }),
 		...(candidate.review === undefined ? {} : { review: validateReview(candidate.review) }),

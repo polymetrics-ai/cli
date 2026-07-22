@@ -110,6 +110,8 @@ export interface ProductionReviewCheckpoint {
 export interface ProductionStageCheckpoint {
 	summary: string;
 	effectKey?: string;
+	/** Every independently journaled effect represented by this stage result (for example commit, push, and PR). */
+	effectKeys?: string[];
 	workspace?: ProductionWorkspaceBinding;
 	pullRequest?: number;
 	review?: ProductionReviewCheckpoint;
