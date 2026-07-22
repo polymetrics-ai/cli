@@ -134,6 +134,17 @@ export interface ProductionParentGatePort {
 	close(): Promise<void>;
 }
 
+export interface ProductionParentMergeObservationEffectPort {
+	/** Prepare and durably observe one exact parent-gate effect without applying it. */
+	observe(
+		plan: ProductionParentPlanDocument,
+		state: ProductionAutonomousState,
+		signal: AbortSignal,
+	): Promise<{ observation: ProductionParentGateObservation; effectKey: string }>;
+	/** Apply the journal record only after the exact observation projection is durably CAS-persisted. */
+	acknowledge(effectKey: string, state: ProductionAutonomousState): Promise<void>;
+}
+
 export interface ProductionShepherdControllerOptions {
 	stateStore: ProductionStateStore;
 	intake: ProductionPlanIntakePort;
@@ -141,6 +152,7 @@ export interface ProductionShepherdControllerOptions {
 	pipeline: ProductionChildPipelinePort;
 	finalizer: ProductionParentFinalizerPort;
 	parentGate: ProductionParentGatePort;
+	parentMergeEffects: ProductionParentMergeObservationEffectPort;
 	now?: () => Date;
 	newRunId?: () => string;
 }
@@ -220,6 +232,7 @@ export class ProductionShepherdController {
 	readonly #pipeline: ProductionChildPipelinePort;
 	readonly #finalizer: ProductionParentFinalizerPort;
 	readonly #parentGate: ProductionParentGatePort;
+	readonly #parentMergeEffects: ProductionParentMergeObservationEffectPort;
 	readonly #now: () => Date;
 	readonly #newRunId: () => string;
 	#active: ActiveRun | undefined;
@@ -235,6 +248,7 @@ export class ProductionShepherdController {
 		this.#pipeline = options.pipeline;
 		this.#finalizer = options.finalizer;
 		this.#parentGate = options.parentGate;
+		this.#parentMergeEffects = options.parentMergeEffects;
 		this.#now = options.now ?? (() => new Date());
 		this.#newRunId = options.newRunId ?? (() => crypto.randomUUID());
 	}
@@ -355,7 +369,13 @@ export class ProductionShepherdController {
 		if (!state) throw new Error(`no production Shepherd run exists for issue #${command.issue}`);
 		const snapshot = await this.#intake.load(command.issue, signal);
 		assertProductionPlanBinding(state, snapshot.plan);
+		await this.#recovery.open({ runId: state.runId, generation: state.generation, signal });
+		state = await this.#reloadRecovered(command.issue, state.runId, state.generation, snapshot.plan);
 		this.#current = state;
+		if ((state.status === "completed" && state.humanGate?.status === "merged")
+			|| (state.status === "failed" && (state.humanGate?.status === "rejected" || state.childGate?.status === "aborted"))) {
+			return state;
+		}
 		if (state.humanGate?.status === "prepared") {
 			this.#current = state;
 			return this.#ensurePreparedParentGate(snapshot.plan, state, signal);
@@ -391,8 +411,6 @@ export class ProductionShepherdController {
 				}));
 			await this.#acknowledge(observation.effectKey, state);
 		}
-		await this.#recovery.open({ runId: state.runId, generation: state.generation, signal });
-		state = await this.#reloadRecovered(command.issue, state.runId, state.generation, snapshot.plan);
 		this.#current = state;
 		if (command.maxConcurrency !== state.maxConcurrency || command.timeoutMs !== state.timeoutMs) {
 			throw new Error("resume concurrency/timeout differs from the durable production run policy");
@@ -409,9 +427,12 @@ export class ProductionShepherdController {
 		state: ProductionAutonomousState,
 		signal: AbortSignal,
 	): Promise<{ state: ProductionAutonomousState; invalidated: boolean }> {
-		const observation = await this.#parentGate.observe(plan, state, signal);
+		const effect = await this.#parentMergeEffects.observe(plan, state, signal);
+		const observation = effect.observation;
 		if (observation.status === "pending" || observation.status === "approved_waiting_for_merge") {
-			return { state, invalidated: false };
+			const persisted = await this.#evolve(state.runId, state.generation, () => undefined);
+			await this.#parentMergeEffects.acknowledge(effect.effectKey, structuredClone(persisted));
+			return { state: persisted, invalidated: false };
 		}
 		if (observation.status === "invalidated") {
 			if (observation.repository !== state.humanGate?.repository
@@ -437,6 +458,7 @@ export class ProductionShepherdController {
 				draft.status = "running";
 				draft.stage = "schedule";
 			});
+			await this.#parentMergeEffects.acknowledge(effect.effectKey, structuredClone(invalidated));
 			return { state: invalidated, invalidated: true };
 		}
 		const settled = await this.#evolve(state.runId, state.generation, (draft) => {
@@ -463,6 +485,7 @@ export class ProductionShepherdController {
 				draft.terminalBlocker = "human rejected the exact parent merge";
 			}
 		});
+		await this.#parentMergeEffects.acknowledge(effect.effectKey, structuredClone(settled));
 		return { state: settled, invalidated: false };
 	}
 
