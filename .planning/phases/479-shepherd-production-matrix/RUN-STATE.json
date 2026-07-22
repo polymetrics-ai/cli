@@ -1,8 +1,18 @@
 {
   "schemaVersion": 1,
   "phase": "479-shepherd-production-matrix",
+  "issue": 479,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "branch": "feat/479-shepherd-production-matrix",
+  "baseBranch": "feat/471-pi-agent-session-shepherd",
+  "artifactHead": "a594be98b9722a8d183584a27832cd88af8702f9",
+  "worker": "codex-gpt-5.6-sol",
+  "workerDirectory": "/private/tmp/shepherd-479-production-matrix",
+  "subPrUrl": null,
   "status": "exact_head_review_correction_in_progress",
   "checkpoint": "review_blockers_recorded",
+  "reason": "Pi-family determinism is corrected locally; parent-first publication, remote CI, and policy review coverage remain blocked.",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
   "matrix": {
@@ -27,13 +37,58 @@
     "ciCompleteInventory": "configured_remote_run_pending"
   },
   "manualGsdFallback": true,
+  "verificationPassed": false,
+  "reviewCoveragePassed": false,
   "reviewRoundsAllowed": 1,
   "reviewRoundsUsed": 1,
-  "orchestrationDecision": "local_critical_path",
+  "historicalReviewRoundsUsed": 1,
+  "mergeReadinessReviewRoundsUsed": 1,
+  "orchestrationDecisions": [
+    {
+      "cycle": "merge-readiness-implementation",
+      "decision": "local_critical_path",
+      "reason": "Tightly coupled issue-479 CI and evidence closure in the isolated child worktree."
+    },
+    {
+      "cycle": "parent-topology-audit",
+      "decision": "read_only_spawned",
+      "reason": "Parent orchestrator audited topology, parent-owned scope, review policy, and publication order without mutation."
+    },
+    {
+      "cycle": "remote-publication",
+      "decision": "not_spawned_human_gate",
+      "reason": "GitHub DNS is unavailable and the configured gh token is invalid; no auth mutation was authorized."
+    }
+  ],
+  "blockers": [
+    "published_parent_base",
+    "child_push_and_pr",
+    "fresh_ci_outside_managed_sandbox",
+    "automated_review_coverage_or_recorded_fallback"
+  ],
+  "automatedReview": {
+    "primary_route": "blocked",
+    "status": "blocked",
+    "head_sha": "a594be98b9722a8d183584a27832cd88af8702f9",
+    "reviewed_range": "79e51f5629a93d212c5a5e8f578475cc02481a1c..ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
+    "coverage_route": "blocked",
+    "fallback_route": "human",
+    "disposition_summary": "Codex xhigh internal review finding 1 corrected; parent-first publication and policy coverage remain blocked.",
+    "disposition_url": null,
+    "internal_codex": {
+      "model": "openai-codex/gpt-5.6-sol",
+      "reasoning": "xhigh",
+      "reviewed_head": "ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
+      "verdict": "blocked"
+    }
+  },
   "remainingExternalGates": [
     "fresh_ci_outside_managed_sandbox",
     "codex_xhigh_exact_head_review",
     "child_push_and_pr",
-    "human_parent_integration"
-  ]
+    "automated_review_coverage_or_recorded_fallback",
+    "parent_orchestrator_child_integration",
+    "human_parent_pr_merge"
+  ],
+  "updatedAt": "2026-07-23T02:30:00+05:30"
 }
