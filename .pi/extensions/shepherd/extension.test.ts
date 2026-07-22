@@ -128,6 +128,57 @@ test("routes autonomous control separately from the retained read-only canary an
 	assert.doesNotMatch(h.notifications.find((entry) => /Commands:/.test(entry.message))?.message ?? "", /merge-main/);
 });
 
+test("status follows an active canary instead of stale autonomous state for the same issue", async () => {
+	const h = harness();
+	const calls = [];
+	let release;
+	const gate = new Promise((resolve) => { release = resolve; });
+	h.register(
+		() => ({
+			async status(issue) { calls.push("canary:status"); return state(issue, "running"); },
+			async start(command) { calls.push("canary:start"); await gate; return state(command.issue); },
+			async resume(command) { return state(command.issue); },
+			async stop(issue) { return state(issue, "stopped"); },
+			async shutdown() {},
+		}),
+		undefined,
+		() => ({
+			async status(issue) {
+				calls.push("auto:status");
+				return {
+					schemaVersion: 2,
+					kind: "autonomous",
+					issue,
+					planId: "old-plan",
+					runId: "old-run",
+					generation: 1,
+					status: "waiting_human",
+					stage: "HUMAN_DECISION",
+					maxConcurrency: 2,
+					timeoutMs: 900_000,
+					createdAt: "2026-07-22T08:00:00Z",
+					updatedAt: "2026-07-22T08:01:00Z",
+					children: [],
+				};
+			},
+			async start() { throw new Error("not expected"); },
+			async resume() { throw new Error("not expected"); },
+			async stop() { throw new Error("not expected"); },
+			async shutdown() {},
+		}),
+	);
+
+	await h.command.handler(
+		"canary --issue 479 --pr 438 --read-only --backend sdk-inproc --experimental",
+		h.context,
+	);
+	await h.command.handler("status --issue 479", h.context);
+	assert.deepEqual(calls, ["canary:start", "canary:status"]);
+	assert.match(h.notifications.at(-1).message, /status=running/);
+	release();
+	await new Promise((resolve) => setImmediate(resolve));
+});
+
 test("help and status never dispatch an AgentSession run", async () => {
 	const h = harness();
 	let starts = 0;

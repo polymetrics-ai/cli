@@ -21,6 +21,13 @@ function deferred<T>() {
 	return { promise, resolve };
 }
 
+async function eventually(assertion: () => void): Promise<void> {
+	for (let attempt = 0; attempt < 200; attempt += 1) {
+		try { assertion(); return; } catch { await new Promise((resolve) => setTimeout(resolve, 5)); }
+	}
+	assertion();
+}
+
 function childContext(id: string, issue: number): AutonomousChildContext {
 	return {
 		parentIssue: 479,
@@ -103,19 +110,19 @@ test("builds an exact plain workspace capability accepted by the hardened tool p
 	assert.deepEqual(policy.names, ["workspace_read", "workspace_edit", "workspace_write"]);
 });
 
-test("allocates one embedded runtime per child while reusing it across that child's roles", async () => {
+test("allocates one embedded runtime per child while reusing it across that child's roles", { timeout: 3_000 }, async () => {
 	const gates: Array<ReturnType<typeof deferred<void>>> = [];
-	const requests: RoleRunRequest[][] = [];
+	const requests = new Map<string, RoleRunRequest[]>();
 	let active = 0;
 	let maxActive = 0;
 	const lifecycle = new AgentSessionMvpLifecycle(() => {
-		const index = requests.length;
-		requests.push([]);
+		const runtimeRequests: RoleRunRequest[] = [];
 		const gate = deferred<void>();
 		gates.push(gate);
 		const runtime: AgentSessionMvpRuntime = {
 			async run(request) {
-				requests[index].push(request);
+				requests.set(request.workspace.id, runtimeRequests);
+				runtimeRequests.push(request);
 				active += 1;
 				maxActive = Math.max(maxActive, active);
 				await gate.promise;
@@ -140,17 +147,21 @@ test("allocates one embedded runtime per child while reusing it across that chil
 
 	const alpha = lifecycle.execute(childContext("alpha", 501));
 	const beta = lifecycle.execute(childContext("beta", 502));
-	while (active < 2) await new Promise((resolve) => setImmediate(resolve));
-	assert.equal(requests.length, 2);
+	await eventually(() => assert.equal(active, 2));
+	const alphaRequests = requests.get("issue-501-alpha");
+	const betaRequests = requests.get("issue-502-beta");
+	assert.ok(alphaRequests);
+	assert.ok(betaRequests);
+	assert.equal(requests.size, 2);
 	assert.equal(maxActive, 2);
-	assert.notEqual(requests[0][0].workspace.id, requests[1][0].workspace.id);
+	assert.notEqual(alphaRequests[0].workspace.id, betaRequests[0].workspace.id);
 	gates[0].resolve();
 	gates[1].resolve();
 	await Promise.all([alpha, beta]);
 
 	const verification = lifecycle.verify(childContext("alpha", 501));
-	while (requests[0].length < 2) await new Promise((resolve) => setImmediate(resolve));
-	assert.equal(requests.length, 2, "the same child lane must retain its isolated runtime");
+	await eventually(() => assert.equal(alphaRequests.length, 2));
+	assert.equal(requests.size, 2, "the same child lane must retain its isolated runtime");
 	await verification;
 	await lifecycle.close();
 });

@@ -266,13 +266,23 @@ export function registerShepherdExtension(
 
 			const issue = commandIssue(command);
 			if (command.action === "status") {
-				const autonomous = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
-				const autonomousState = await autonomous.status(issue);
-				if (autonomousState || dependencies.createAutonomousController === undefined) {
-					context.ui.notify(renderState(autonomousState), "info");
+				const running = activeRun?.issue === issue ? activeRun : undefined;
+				if (running?.mode === "canary") {
+					context.ui.notify(renderState(await (running.controller as ShepherdControllerPort).status(issue)), "info");
+				} else if (running?.mode === "autonomous") {
+					context.ui.notify(
+						renderState(await (running.controller as AutonomousShepherdControllerPort).status(issue)),
+						"info",
+					);
 				} else {
-					const canary = await controllerFor("canary", issue, context) as ShepherdControllerPort;
-					context.ui.notify(renderState(await canary.status(issue)), "info");
+					const autonomous = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
+					const autonomousState = await autonomous.status(issue);
+					if (autonomousState || dependencies.createAutonomousController === undefined) {
+						context.ui.notify(renderState(autonomousState), "info");
+					} else {
+						const canary = await controllerFor("canary", issue, context) as ShepherdControllerPort;
+						context.ui.notify(renderState(await canary.status(issue)), "info");
+					}
 				}
 				return;
 			}
