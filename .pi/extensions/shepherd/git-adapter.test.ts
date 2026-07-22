@@ -185,6 +185,7 @@ test("creates a bounded commit, returns exact head evidence, and makes no-op ret
 	assert.equal(committed.committed, true);
 	assert.match(committed.head, /^[0-9a-f]{40}$/);
 	assert.notEqual(committed.head, fixture.parentHead);
+	assert.equal(await adapter.readCommitSubject(workspace, committed.head), "test(shepherd): add bounded fixture");
 	const retried = await workspaceAdapter.commitIssueChanges(workspace, {
 		issue: 476,
 		slug: "shepherd-worktree-git-adapter",
@@ -256,6 +257,7 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
 	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["README.md"]);
 	t.after(() => workspace.release().catch(() => undefined));
+	assert.equal(await adapter.resolveRemoteBranchHead(workspace, branch), undefined);
 	const evidence = await workspaceAdapter.pushIssueBranch(workspace, {
 		issue: 476,
 		slug: "shepherd-worktree-git-adapter",
@@ -264,6 +266,7 @@ test("pushes only the canonical branch and verifies the exact remote head", asyn
 		defaultBranch: "main",
 	});
 	assert.deepEqual(evidence, { branch, head: fixture.parentHead, remoteName: "origin" });
+	assert.equal(await adapter.resolveRemoteBranchHead(workspace, branch), fixture.parentHead);
 	assert.equal((await git(fixture.remote, "rev-parse", `refs/heads/${branch}`)).trim(), fixture.parentHead);
 	const flattened = requests.flatMap((request) => request.args);
 	for (const forbidden of ["--force", "--force-with-lease", "reset", "clean", "prune", "remove"]) {

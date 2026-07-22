@@ -10,6 +10,10 @@ import type { ProductionChildSpec } from "./autonomous-production-contract.ts";
 import { GitAdapter, type GitCommandExecutor } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write } from "./issue-476-git-fixture.ts";
 import {
+	ProductionAgentEffectReceiptRepository,
+	productionAgentEffectResultDigest,
+} from "./production-agent-effect-receipts.ts";
+import {
 	ProductionWorkspaceLifecycle,
 	productionWorkspaceOwnershipId,
 	type ProductionAgentSessionPort,
@@ -24,6 +28,8 @@ const SHA_B = "b".repeat(40);
 const SHA_C = "c".repeat(40);
 const ID_A = "1".repeat(64);
 const ID_B = "2".repeat(64);
+const IMPLEMENT_EFFECT = "8".repeat(64);
+const CORRECTION_EFFECT = "9".repeat(64);
 
 function child(id = "lane-b", issue = 502): ProductionChildSpec {
 	return {
@@ -231,7 +237,11 @@ test("claims canonical per-child workspaces with generation-independent stable o
 test("runs implementation in the claimed workspace then verifies, commits, pushes, and captures exact handoff", async (t) => {
 	const f = await fixture(t);
 	const session = await f.claim();
-	const implementation = await session.implement({ timeoutMs: 30_000, context: ["strict RED GREEN refactor"] });
+	const implementation = await session.implement({
+		effectKey: IMPLEMENT_EFFECT,
+		timeoutMs: 30_000,
+		context: ["strict RED GREEN refactor"],
+	});
 	assert.equal(implementation.status, "completed");
 	const request = f.agentSession.requests[0];
 	assert.equal(request.role, "implementation");
@@ -239,6 +249,9 @@ test("runs implementation in the claimed workspace then verifies, commits, pushe
 	assert.equal(request.authority.readOnly, false);
 	assert.deepEqual(request.authority.writePrefixes, session.binding.writeScopes);
 	assert.match(request.context.join("\n"), /javascript-testing-patterns|RED GREEN/);
+	const receipt = await new ProductionAgentEffectReceiptRepository(f.root).find(IMPLEMENT_EFFECT);
+	assert.equal(receipt?.completion?.resultDigest, productionAgentEffectResultDigest(session.binding));
+	assert.deepEqual(receipt?.completion?.completedBinding, session.binding);
 
 	assert.equal((await session.verify()).every((result) => result.status === "passed"), true);
 	const commit = await session.commit("feat(shepherd): complete lane B");
@@ -305,6 +318,7 @@ test("correction runs read-write in the same claimed workspace and invalidates p
 	const session = await f.claim();
 	await session.verify();
 	await session.correct({
+		effectKey: CORRECTION_EFFECT,
 		timeoutMs: 30_000,
 		findings: ["P1: lifecycle must release only its own lease"],
 		context: ["Apply the bounded correction only"],
@@ -327,7 +341,7 @@ test("join waits for accepted AgentSession work and releases exactly that sessio
 	f.agentSession.gate = new Promise<void>((resolve) => unblock = resolve);
 	const first = await f.claim(child("lane-b", 502));
 	const second = await f.claim(child("lane-c", 503));
-	const implementation = first.implement({ timeoutMs: 30_000 });
+	const implementation = first.implement({ effectKey: IMPLEMENT_EFFECT, timeoutMs: 30_000 });
 	let joined = false;
 	const joining = first.join().then(() => joined = true);
 	await new Promise<void>((resolve) => setImmediate(resolve));
@@ -419,15 +433,22 @@ test("real workspace refresh reclaims an untouched child and rebases unique chil
 		await git(fixture.coordinator, "add", "--", "parent-advanced.txt");
 		await git(fixture.coordinator, "commit", "-m", "test: advance parent");
 		const advancedParent = (await git(fixture.coordinator, "rev-parse", "HEAD")).trim();
+		const refreshEffectKey = `refresh:${workspace.issue}:1`;
 		const evidence = await workspaceAdapter.refreshParent(workspace, {
 			previousParentHead: fixture.parentHead,
 			newParentHead: advancedParent,
-			effectKey: `refresh:${workspace.issue}:1`,
+			effectKey: refreshEffectKey,
 		});
 		assert.equal(evidence.outcome, uniqueCommit ? "rebased" : "reclaimed");
 		assert.equal(evidence.baseHead, advancedParent);
 		assert.equal(evidence.verificationInvalidated, true);
 		assert.equal(evidence.reviewInvalidated, true);
+		assert.deepEqual(await new WorkspaceAdapter(new GitAdapter()).findParentRefreshReceipt({
+			trustedWorktreeRoot: fixture.worktreeRoot,
+			issue: workspace.issue,
+			claimId: workspace.claimId,
+			effectKey: refreshEffectKey,
+		}), evidence);
 		assert.equal(await git(workspace.cwd, "merge-base", "--is-ancestor", advancedParent, evidence.head).then(() => true), true);
 		if (uniqueCommit) assert.equal(await import("node:fs/promises").then(({ readFile }) => readFile(join(workspace.cwd, "child.txt"), "utf8")), "unique child change\n");
 		await workspace.release();

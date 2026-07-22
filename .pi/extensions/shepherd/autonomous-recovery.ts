@@ -20,10 +20,14 @@ export interface ProductionEffectRecoveryPort {
 	 * Authoritatively reconcile a prepared intent from its durable recoveryDescriptor;
 	 * never infer success from a timeout or replay a mutation merely because no receipt was found.
 	 */
-	observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<{ resultDigest: string }>;
+	observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<ProductionRecoveryObservation>;
 	/** Idempotently project observed truth into durable controller state under the record's fence. */
 	apply(record: ProductionEffectRecord, signal: AbortSignal): Promise<void>;
 }
+
+export type ProductionRecoveryObservation =
+	| { status: "applied"; resultDigest: string }
+	| { status: "absent" };
 
 export interface ProductionRecoveryResult {
 	reconciled: number;
@@ -49,12 +53,20 @@ function assertFence(record: ProductionEffectRecord, fence: ProductionRecoveryFe
 	}
 }
 
-function resultDigest(value: unknown): string {
-	const candidate = readBoundedExactRecord(value, ["resultDigest"], [], "production recovery observation");
+function observation(value: unknown): ProductionRecoveryObservation {
+	const candidate = readBoundedExactRecord(
+		value,
+		["status"],
+		value !== null && typeof value === "object" && (value as { status?: unknown }).status === "applied"
+			? ["resultDigest"] : [],
+		"production recovery observation",
+	);
+	if (candidate.status === "absent") return { status: "absent" };
+	if (candidate.status !== "applied") throw new Error("production recovery observation has an invalid status");
 	if (typeof candidate.resultDigest !== "string" || !DIGEST.test(candidate.resultDigest)) {
 		throw new Error("production recovery observation requires a SHA-256 result digest");
 	}
-	return candidate.resultDigest;
+	return { status: "applied", resultDigest: candidate.resultDigest };
 }
 
 /**
@@ -104,12 +116,27 @@ export class ProductionRecoveryBarrier {
 					);
 				}
 				if (record.phase === "prepared") {
-					const observed = await this.#recovery.observe(structuredClone(record), signal);
+					const observed = observation(await this.#recovery.observe(structuredClone(record), signal));
 					throwIfCancelled(signal);
+					if (observed.status === "absent") {
+						if (typeof this.#journal.abandon !== "function") {
+							throw new ProductionLifecycleError(
+								"terminal",
+								"authoritatively absent effect cannot be transactionally reset",
+								["recovery_abandon_unsupported"],
+							);
+						}
+						await this.#journal.abandon(record.key, {
+							runId: fence.runId,
+							generation: fence.generation,
+						}, record.preparedAt);
+						reconciled += 1;
+						continue;
+					}
 					record = await this.#journal.observe(
 						record.key,
 						{ runId: fence.runId, generation: fence.generation },
-						resultDigest(observed),
+						observed.resultDigest,
 					);
 				}
 				throwIfCancelled(signal);

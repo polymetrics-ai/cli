@@ -141,9 +141,6 @@ test("production Pi host composes separate implementation and review AgentSessio
 				captured.push(options as unknown as Record<string, unknown>);
 				return delegate(479, calls) as never;
 			},
-			createRecoveryAuthority() {
-				return { async observe() { throw new Error("not dispatched"); }, async apply() {} };
-			},
 			createParentReadyAuthority() {
 				return {
 					async readParentReadyState() { return null; },
@@ -164,8 +161,10 @@ test("production Pi host composes separate implementation and review AgentSessio
 
 	assert.deepEqual(runtimeRoles, ["implementation", "review"]);
 	assert.equal(captured.length, 1);
+	assert.equal(captured[0].parentIssue, 479);
 	assert.equal(captured[0].coordinator, coordinator);
 	assert.equal(captured[0].git, git);
+	assert.equal(Object.hasOwn(captured[0], "effectRecovery"), false);
 	await controller.start({
 		action: "start",
 		issue: 479,

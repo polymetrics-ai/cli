@@ -13,7 +13,7 @@ import {
 	type ProductionEffectJournalPort,
 	type ProductionEffectIntent,
 } from "./autonomous-effect-journal.ts";
-import type { ProductionEffectRecoveryPort } from "./autonomous-recovery.ts";
+import type { ProductionEffectRecoveryPort, ProductionRecoveryObservation } from "./autonomous-recovery.ts";
 import {
 	validateProductionAutonomousState,
 	type ProductionAutonomousState,
@@ -30,7 +30,6 @@ import {
 import {
 	materializeChildRecord,
 	validateChildIntegrationReceipt,
-	type ChildIntegrationDecision,
 	type ChildIntegrationReceipt,
 	type GitHubChildIssue,
 	type GitHubParentOrchestrator,
@@ -410,6 +409,20 @@ export class ProductionChildPipeline implements
 		}, kind, descriptor, operation);
 	}
 
+	#recoveryBinding(context: ProductionChildPipelineContext): Record<string, unknown> {
+		return {
+			childId: context.child.id,
+			childIssue: context.child.issue,
+			childSlug: context.child.slug,
+			generation: context.resourceGeneration,
+			parentBaseBranch: context.plan.parentBaseBranch,
+			parentBranch: context.plan.parentBranch,
+			parentIssue: context.plan.parentIssue,
+			planDigest: context.state.planDigest,
+			repository: context.plan.repository,
+		};
+	}
+
 	async #effectFor<T>(
 		fence: { runId: string; generation: number; childId: string; signal: AbortSignal },
 		kind: ProductionEffectKind,
@@ -457,6 +470,30 @@ export class ProductionChildPipeline implements
 		return this.#pending(context).find((effect) => effect.kind === kind) as EffectExecution<T> | undefined;
 	}
 
+	async #recoveredKind<T>(
+		context: ProductionChildPipelineContext,
+		kind: ProductionEffectKind,
+		project: (record: ProductionEffectRecord, descriptor: Record<string, unknown>) => T,
+	): Promise<EffectExecution<T> | undefined> {
+		const keys = context.runtime.checkpoint?.effectKeys ?? [];
+		for (const key of keys) {
+			const record = await this.#effects.load(key);
+			if (record?.kind !== kind || record.phase !== "applied" || record.childId !== context.child.id
+				|| record.resultDigest === undefined || record.recoveryDescriptor === null
+				|| typeof record.recoveryDescriptor !== "object" || Array.isArray(record.recoveryDescriptor)) continue;
+			const value = project(record, record.recoveryDescriptor as Record<string, unknown>);
+			if (digest(value) !== record.resultDigest) {
+				throw new ProductionLifecycleError(
+					"terminal",
+					`recovered ${kind} value conflicts with its exact journal digest`,
+					["recovery_result_mismatch"],
+				);
+			}
+			return { kind, key: record.key, resultDigest: record.resultDigest, value };
+		}
+		return undefined;
+	}
+
 	#checkpoint(
 		context: ProductionChildPipelineContext,
 		primary: EffectExecution<unknown>,
@@ -496,6 +533,8 @@ export class ProductionChildPipeline implements
 		).head;
 		let claimed: ProductionWorkspaceSession | undefined;
 		const effect = await this.#effect(context, "workspace_claim", {
+			...this.#recoveryBinding(context),
+			operation: "workspace_claim",
 			parentIssue: context.plan.parentIssue,
 			childIssue: context.child.issue,
 			childId: context.child.id,
@@ -503,6 +542,9 @@ export class ProductionChildPipeline implements
 			mode: prior === undefined ? "start" : "resume",
 			ownershipId: prior?.ownershipId,
 			attempt: context.runtime.attempts,
+			coordinator: this.#coordinator,
+			trustedWorktreeRoot: this.#trustedWorktreeRoot,
+			writeScopes: context.child.writeScopes,
 		}, async () => {
 			claimed = await this.#workspaceLifecycle.claim({
 				runId: context.runId,
@@ -577,11 +619,16 @@ export class ProductionChildPipeline implements
 	async implement(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint> {
 		const entry = await this.#session(context);
 		const effect = await this.#effect(context, "agent_implementation", {
+			...this.#recoveryBinding(context),
+			operation: "agent_implementation",
 			workspace: entry.session.binding,
 			attempt: context.runtime.attempts,
 			corrections: context.runtime.corrections,
 			taskDigest: digest(context.child.task),
-		}, async () => entry.session.implement({ timeoutMs: context.timeoutMs, signal: context.signal }));
+		}, async (effectKey) => {
+			await entry.session.implement({ effectKey, timeoutMs: context.timeoutMs, signal: context.signal });
+			return { workspace: entry.session.binding };
+		});
 		return this.#checkpoint(context, effect, {
 			summary: "production implementation AgentSession completed",
 			workspace: entry.session.binding,
@@ -591,6 +638,8 @@ export class ProductionChildPipeline implements
 	async verify(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint> {
 		const entry = await this.#session(context);
 		const effect = await this.#effect(context, "shell_verification", {
+			...this.#recoveryBinding(context),
+			operation: "shell_verification",
 			workspace: entry.session.binding,
 			attempt: context.runtime.attempts,
 			corrections: context.runtime.corrections,
@@ -627,25 +676,60 @@ export class ProductionChildPipeline implements
 	async publish(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint> {
 		const entry = await this.#session(context);
 		const commit = this.#pendingKind<Awaited<ReturnType<ProductionWorkspaceSession["commit"]>>>(context, "git_commit")
+			?? await this.#recoveredKind(context, "git_commit", (_record, descriptor) => {
+				const workspace = descriptor.workspace as Partial<ProductionWorkspaceBinding> | undefined;
+				if (workspace === undefined || !SHA.test(workspace.head ?? "") || !SHA.test(entry.session.binding.head)) {
+					throw new ProductionLifecycleError("terminal", "recovered commit lacks exact head coordinates", ["recovery_commit_mismatch"]);
+				}
+				return {
+					committed: workspace.head !== entry.session.binding.head,
+					previousHead: workspace.head as string,
+					head: entry.session.binding.head,
+				};
+			})
 			?? await this.#effect(context, "git_commit", {
-			workspace: entry.session.binding,
-			issue: context.child.issue,
+				...this.#recoveryBinding(context),
+				operation: "git_commit",
+				workspace: entry.session.binding,
+				issue: context.child.issue,
+				slug: context.child.slug,
+				message: `feat(shepherd): complete #${context.child.issue} ${context.child.slug}`,
 			attempt: context.runtime.attempts,
 			corrections: context.runtime.corrections,
-		}, async () => entry.session.commit(`feat(shepherd): complete #${context.child.issue} ${context.child.slug}`, context.signal));
+			}, async (effectKey) => entry.session.commit(
+				`feat(shepherd): complete #${context.child.issue} ${context.child.slug} [shepherd-effect:${effectKey}]`,
+				context.signal,
+			));
 		if (commit.value.head !== entry.session.binding.head || !SHA.test(commit.value.head)) {
 			throw new ProductionLifecycleError("terminal", "commit evidence does not bind the current child head", ["commit_head_mismatch"]);
 		}
 		const push = this.#pendingKind<Awaited<ReturnType<ProductionWorkspaceSession["push"]>>>(context, "git_push")
+			?? await this.#recoveredKind(context, "git_push", (_record, descriptor) => {
+				if (typeof descriptor.branch !== "string" || typeof descriptor.head !== "string"
+					|| descriptor.branch !== entry.session.binding.branch || descriptor.head !== entry.session.binding.head) {
+					throw new ProductionLifecycleError("terminal", "recovered push lacks exact branch/head coordinates", ["recovery_push_mismatch"]);
+				}
+				return { branch: descriptor.branch, head: descriptor.head, remoteName: "origin" as const };
+			})
 			?? await this.#effect(context, "git_push", {
-			branch: entry.session.binding.branch,
-			head: entry.session.binding.head,
+				...this.#recoveryBinding(context),
+				operation: "git_push",
+				branch: entry.session.binding.branch,
+				head: entry.session.binding.head,
+				workspace: entry.session.binding,
 		}, async () => entry.session.push(context.signal));
 		if (push.value.branch !== entry.session.binding.branch || push.value.head !== entry.session.binding.head) {
 			throw new ProductionLifecycleError("terminal", "push evidence does not bind the current child head", ["push_head_mismatch"]);
 		}
 		const handoff = await entry.session.captureHandoff(context.signal);
+		const publicationParent = await this.#plan(context);
+		const publicationChild = await this.#materialized(context, publicationParent);
+		if (publicationChild.branch !== handoff.branch || publicationChild.prBase !== handoff.prBase) {
+			throw new ProductionLifecycleError("terminal", "workspace branch is not the canonical stacked child branch", ["branch_mismatch"]);
+		}
 		const publication = await this.#effect(context, "child_pull_request", {
+			...this.#recoveryBinding(context),
+			operation: "child_pull_request",
 			repository: context.plan.repository,
 			childId: context.child.id,
 			generation: context.resourceGeneration,
@@ -654,13 +738,9 @@ export class ProductionChildPipeline implements
 			baseHead: handoff.baseHead,
 			head: handoff.head,
 			changedScope: handoff.changedScope,
+			marker: publicationChild.markers.pullRequest,
 		}, async () => {
-			const parent = await this.#plan(context);
-			const child = await this.#materialized(context, parent);
-			if (child.branch !== handoff.branch || child.prBase !== handoff.prBase) {
-				throw new ProductionLifecycleError("terminal", "workspace branch is not the canonical stacked child branch", ["branch_mismatch"]);
-			}
-			return this.#github.ensureChildPullRequest(parent, child, handoff, {
+			return this.#github.ensureChildPullRequest(publicationParent, publicationChild, handoff, {
 				signal: context.signal,
 				deadlineAt: new Date(Date.now() + context.timeoutMs).toISOString(),
 			});
@@ -707,7 +787,11 @@ export class ProductionChildPipeline implements
 		const entry = await this.#session(context);
 		const handoff = await entry.session.captureHandoff(context.signal);
 		const target = this.#target(context, handoff);
-		const effect = await this.#effect(context, "independent_review", target, async () =>
+		const effect = await this.#effect(context, "independent_review", {
+			...this.#recoveryBinding(context),
+			operation: "independent_review",
+			target,
+		}, async () =>
 			this.#reviewer.review(target, externalContext(context.signal, context.timeoutMs)));
 		if (!reviewTargetMatches(effect.value, target)) {
 			throw new ProductionLifecycleError("terminal", "independent review is not bound to the exact PR head", ["review_mismatch"]);
@@ -773,17 +857,21 @@ export class ProductionChildPipeline implements
 			throw new ProductionLifecycleError("terminal", "correction has no exact review or verification authority", ["correction_authority_missing"]);
 		}
 		const effect = await this.#effect(context, "agent_correction", {
+			...this.#recoveryBinding(context),
+			operation: "agent_correction",
+			workspace: entry.session.binding,
 			source,
 			...(target === undefined ? {} : { target }),
 			findings,
 			correction: context.runtime.corrections,
-		}, async () => {
-			const handoffResult = await entry.session.correct({
+		}, async (effectKey) => {
+			await entry.session.correct({
+				effectKey,
 				timeoutMs: context.timeoutMs,
 				signal: context.signal,
 				findings: [...findings],
 			});
-			if (target === undefined || artifact === undefined) return { handoff: handoffResult };
+			if (target === undefined || artifact === undefined) return { workspace: entry.session.binding };
 			const recordedAt = this.#now().toISOString();
 			const disposition = await this.#reviewRepository.recordDispositions(target, artifact.review.findings.map((finding) => ({
 				findingId: finding.id,
@@ -793,7 +881,10 @@ export class ProductionChildPipeline implements
 				headSha: artifact.review.headSha,
 				recordedAt,
 			})), externalContext(context.signal, context.timeoutMs));
-			return { handoff: handoffResult, dispositionRevision: disposition.revision };
+			if (!Number.isSafeInteger(disposition.revision) || disposition.revision < 1) {
+				throw new ProductionLifecycleError("terminal", "review disposition receipt is malformed", ["disposition_mismatch"]);
+			}
+			return { workspace: entry.session.binding };
 		});
 		return this.#checkpoint(context, effect, {
 			summary: "bounded correction completed; verification and independent review invalidated",
@@ -810,6 +901,9 @@ export class ProductionChildPipeline implements
 			throw new ProductionLifecycleError("stale_parent", "parent refresh did not observe a newer exact head", ["parent_head_unchanged"]);
 		}
 		const effect = await this.#effect(context, "parent_refresh", {
+			...this.#recoveryBinding(context),
+			operation: "parent_refresh",
+			workspace: previous,
 			previousBaseHead: previous.baseHead,
 			newParentHead: current.head,
 			previousHead: previous.head,
@@ -875,7 +969,9 @@ export class ProductionChildPipeline implements
 			);
 		}
 		const effect = await this.#effect(context, "child_head_reconciliation", {
+			...this.#recoveryBinding(context),
 			operation: "child_head_reconciliation",
+			workspace: durable,
 			repository: context.plan.repository,
 			childId: context.child.id,
 			pullRequest: pullRequest as number,
@@ -924,7 +1020,11 @@ export class ProductionChildPipeline implements
 		if (review?.status !== "clean" || review.baseHead !== handoff.baseHead || review.head !== handoff.head) {
 			throw new ProductionLifecycleError("correction_required", "child integration requires a clean exact-head review", ["review_missing"]);
 		}
+		const integrationParent = await this.#plan(context);
+		const integrationChild = await this.#materialized(context, integrationParent);
 		const effect = await this.#effect(context, "child_integration", {
+			...this.#recoveryBinding(context),
+			operation: "child_integration",
 			repository: context.plan.repository,
 			childId: context.child.id,
 			generation: context.resourceGeneration,
@@ -932,37 +1032,40 @@ export class ProductionChildPipeline implements
 			baseHead: handoff.baseHead,
 			head: handoff.head,
 			reviewResultDigest: review.resultDigest,
+			marker: integrationChild.markers.pullRequest,
 		}, async () => {
-			const parent = await this.#plan(context);
-			const child = await this.#materialized(context, parent);
-			const decision = await this.#github.integrateChild(parent, child, handoff, {
+			const decision = await this.#github.integrateChild(integrationParent, integrationChild, handoff, {
 				signal: context.signal,
 				deadlineAt: new Date(Date.now() + context.timeoutMs).toISOString(),
 			});
-			if (decision.kind === "blocked") return { decision };
-			const parentHead = validateParentHead(await this.#parentHeads.observe(context.plan, context.signal), context.plan);
-			return { decision, parentHead };
+			// A blocked integration has no external mutation/result to acknowledge. Classify it
+			// while the intent is still prepared so recovery may prove absence and abandon it;
+			// observing a synthetic "blocked" result would poison every later resume.
+			if (decision.kind === "blocked") throw classifyIntegration(decision.blockers);
+			return { kind: "integrated" as const, receipt: decision.receipt };
 		});
-		const decision: ChildIntegrationDecision = effect.value.decision;
-		if (decision.kind === "blocked") throw classifyIntegration(decision.blockers);
-		const receipt = validateChildIntegrationReceipt(decision.receipt);
+		const receipt = validateChildIntegrationReceipt(effect.value.receipt);
 		if (receipt.childId !== context.child.id || receipt.generation !== context.resourceGeneration
 			|| receipt.pullRequest !== context.runtime.checkpoint?.pullRequest
 			|| receipt.baseSha !== handoff.baseHead || receipt.headSha !== handoff.head
 			|| receipt.parentBranch !== context.plan.parentBranch) {
 			throw new ProductionLifecycleError("terminal", "child integration receipt is stale or mismatched", ["integration_receipt_mismatch"]);
 		}
-		if (effect.value.parentHead === undefined || effect.value.parentHead.head === handoff.baseHead) {
+		const resultingParentHead = validateParentHead(
+			await this.#parentHeads.observe(context.plan, context.signal),
+			context.plan,
+		);
+		if (resultingParentHead.head === handoff.baseHead) {
 			throw new ProductionLifecycleError("retryable", "integrated child lacks the resulting authoritative parent head", ["parent_head_not_advanced"]);
 		}
 		const receiptDigest = productionChildIntegrationReceiptDigest(receipt);
 		this.#receipts.set(receiptDigest, receipt);
 		return this.#checkpoint(context, effect, {
-			summary: decision.reused ? "existing exact child integration reconciled" : "child integrated into the non-default parent branch",
+			summary: "exact reviewed child integration reconciled into the non-default parent branch",
 			workspace: entry.session.binding,
 			pullRequest: receipt.pullRequest,
 			integrationReceiptDigest: receiptDigest,
-			parentHead: effect.value.parentHead.head,
+			parentHead: resultingParentHead.head,
 		});
 	}
 
@@ -999,7 +1102,11 @@ export class ProductionChildPipeline implements
 			target: { kind: "issue", number: context.child.issue },
 			generation: request.generation,
 		};
-		const effect = await this.#effect(context, "human_request", request, async () =>
+		const effect = await this.#effect(context, "human_request", {
+			...this.#recoveryBinding(context),
+			operation: "human_request",
+			request,
+		}, async () =>
 			validateInterventionRecord(
 				await this.#decisionBroker.request(request, externalContext(context.signal, context.timeoutMs)),
 				requestId,
@@ -1048,6 +1155,15 @@ export class ProductionChildPipeline implements
 			childId: child.id,
 			signal,
 		}, "human_consume", {
+			childId: child.id,
+			childIssue: child.issue,
+			generation: state.resourceGeneration,
+			operation: "human_consume",
+			parentBaseBranch: state.parentBaseBranch,
+			parentBranch: state.parentBranch,
+			parentIssue: state.parentIssue,
+			planDigest: state.planDigest,
+			repository: state.repository,
 			requestId: gate.requestId,
 			binding,
 			option,
@@ -1089,7 +1205,7 @@ export class ProductionChildPipeline implements
 		this.#pendingEffects.get(laneKey(record.runId, record.generation, record.childId!))?.delete(effectKey);
 	}
 
-	async observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<{ resultDigest: string }> {
+	async observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<ProductionRecoveryObservation> {
 		if (this.#recovery === undefined) {
 			throw new ProductionLifecycleError("terminal", "authoritative production effect recovery is not configured", ["recovery_authority_missing"]);
 		}

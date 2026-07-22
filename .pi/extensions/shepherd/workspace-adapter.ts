@@ -123,6 +123,20 @@ export interface WorkspaceChildHeadReconciliationEvidence extends GitReconcileIs
 	integrationInvalidated: true;
 }
 
+export interface WorkspaceClaimRecoveryEvidence {
+	claimId: string;
+	repositoryIdentity: string;
+	worktreeIdentity: string;
+	cwd: string;
+	branch: string;
+	baseBranch: string;
+	baseHead: string;
+	head: string;
+	writeScopes: string[];
+	clean: boolean;
+	changedScope: string[];
+}
+
 export interface WorkspaceAdapterOptions {
 	leaseOptions?: Omit<FileStateStoreOptions, "trustedRoot">;
 }
@@ -563,6 +577,151 @@ export class WorkspaceAdapter {
 			throw new WorkspaceAdapterError("workspace adapter options are invalid");
 		}
 		this.#leaseOptions = { ...(options.leaseOptions ?? {}) };
+	}
+
+	/** Read-only crash recovery of the exact immutable claim/binding; never acquires a mutation lease. */
+	async findClaim(request: WorkspaceClaimRequest): Promise<WorkspaceClaimRecoveryEvidence | undefined> {
+		if (typeof request !== "object" || request === null || !validIssue(request.issue)
+			|| !safeText(request.slug, 100) || !safeText(request.ownershipId, MAX_OWNERSHIP_BYTES)
+			|| !SAFE_OWNERSHIP.test(request.ownershipId) || !safeText(request.trustedWorktreeRoot, MAX_PATH_BYTES)
+			|| !isAbsolute(request.trustedWorktreeRoot) || !SAFE_PARENT_REF.test(request.parentBranch)
+			|| !SHA_PATTERN.test(request.parentHead)) {
+			throw new WorkspaceAdapterError("workspace recovery claim request is invalid");
+		}
+		let allowedScopes: string[];
+		try { allowedScopes = canonicalGitScopes(request.allowedScopes); }
+		catch (error) { throw new WorkspaceAdapterError("workspace recovery scopes are invalid", { cause: error }); }
+		const coordinator = await this.#git.assertBinding(request.coordinator);
+		if (coordinator.defaultBranch === undefined) throw new WorkspaceAdapterError("workspace recovery requires default branch evidence");
+		let trustedRoot: string;
+		try {
+			const metadata = await lstat(request.trustedWorktreeRoot);
+			if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new WorkspaceAdapterError("workspace recovery root is unsafe");
+			trustedRoot = await realpath(request.trustedWorktreeRoot);
+		} catch (error) {
+			if (fileErrorCode(error) === "ENOENT") return undefined;
+			throw error;
+		}
+		const claimDirectory = join(trustedRoot, CLAIM_DIRECTORY);
+		try {
+			const metadata = await lstat(claimDirectory);
+			if (!metadata.isDirectory() || metadata.isSymbolicLink() || await realpath(claimDirectory) !== claimDirectory
+				|| (metadata.mode & 0o077) !== 0) throw new WorkspaceAdapterError("workspace recovery claim directory is unsafe");
+		} catch (error) {
+			if (fileErrorCode(error) === "ENOENT") return undefined;
+			throw error;
+		}
+		const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
+		const claim = await readExistingClaim(claimPath);
+		if (claim === undefined) return undefined;
+		const branch = canonicalIssueBranch(request.issue, request.slug);
+		const target = resolve(trustedRoot, canonicalIssueWorktreeName(request.issue, request.slug));
+		const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
+		const requestHash = hash([
+			"shepherd-workspace-request-v4", branch, target, request.parentBranch, claim.baseHead,
+			allowedScopes.join("\0"), coordinator.fetchEndpointIdentity, coordinator.pushEndpointIdentity,
+			coordinator.defaultBranch,
+		]);
+		if (claim.issue !== request.issue || claim.slug !== request.slug || claim.branch !== branch
+			|| claim.path !== target || claim.trustedWorktreeRoot !== trustedRoot || claim.prBase !== request.parentBranch
+			|| claim.ownerHash !== ownerHash || claim.requestHash !== requestHash
+			|| claim.repositoryIdentity !== coordinator.repositoryIdentity || claim.remoteIdentity !== coordinator.remoteIdentity
+			|| claim.fetchEndpointIdentity !== coordinator.fetchEndpointIdentity
+			|| claim.pushEndpointIdentity !== coordinator.pushEndpointIdentity
+			|| claim.defaultBranch !== coordinator.defaultBranch || !equalStrings(claim.allowedScopes, allowedScopes)) {
+			throw new WorkspaceAdapterError("workspace recovery claim conflicts with exact requested coordinates");
+		}
+		const claimId = claimIdentity(claim);
+		const bindingPath = join(claimDirectory, `issue-${request.issue}.binding.json`);
+		let bindingRecord: WorkspaceBindingRecord;
+		try { bindingRecord = parseBinding(await readImmutable(bindingPath, "workspace identity binding")); }
+		catch (error) {
+			if (fileErrorCode((error as { cause?: unknown }).cause) === "ENOENT") return undefined;
+			throw error;
+		}
+		if (bindingRecord.claimId !== claimId) throw new WorkspaceAdapterError("workspace recovery binding moved from its claim");
+		const binding = await this.#git.inspect(target);
+		if (binding.repositoryIdentity !== coordinator.repositoryIdentity || binding.worktreeIdentity !== bindingRecord.worktreeIdentity
+			|| binding.remoteIdentity !== coordinator.remoteIdentity
+			|| binding.fetchEndpointIdentity !== coordinator.fetchEndpointIdentity
+			|| binding.pushEndpointIdentity !== coordinator.pushEndpointIdentity
+			|| await this.#git.currentBranch(binding) !== branch) {
+			throw new WorkspaceAdapterError("workspace recovery worktree identity moved");
+		}
+		const baseHead = await loadEffectiveBase(claimDirectory, request.issue, claimId, claim.baseHead);
+		if (baseHead !== request.parentHead) throw new WorkspaceAdapterError("workspace recovery base moved from requested parent head");
+		const head = await this.#git.resolveBranchHead(binding, branch);
+		if (!(await this.#git.isAncestor(binding, baseHead, head))) throw new WorkspaceAdapterError("workspace recovery head is outside its parent ancestry");
+		const status = await this.#git.status(binding);
+		const changedScope = changedPaths(status);
+		if (changedScope.some((path) => !allowedScopes.some((scope) => scope === "." || path === scope || path.startsWith(`${scope}/`)))) {
+			throw new WorkspaceAdapterError("workspace recovery found scope-escaped changes");
+		}
+		return {
+			claimId,
+			repositoryIdentity: binding.repositoryIdentity,
+			worktreeIdentity: binding.worktreeIdentity,
+			cwd: binding.cwd,
+			branch,
+			baseBranch: claim.prBase,
+			baseHead,
+			head,
+			writeScopes: [...allowedScopes],
+			clean: status.clean,
+			changedScope,
+		};
+	}
+
+	async findParentRefreshReceipt(input: {
+		trustedWorktreeRoot: string;
+		issue: number;
+		claimId: string;
+		effectKey: string;
+	}): Promise<WorkspaceParentRefreshEvidence | undefined> {
+		if (!validIssue(input.issue) || !IDENTITY_PATTERN.test(input.claimId) || !SAFE_OWNERSHIP.test(input.effectKey)
+			|| !isAbsolute(input.trustedWorktreeRoot)) throw new WorkspaceAdapterError("workspace refresh recovery query is invalid");
+		const root = await realpath(input.trustedWorktreeRoot);
+		const key = hash(["shepherd-workspace-refresh-effect-v1", input.effectKey]);
+		const path = join(root, CLAIM_DIRECTORY, `issue-${input.issue}.refresh-${key}.json`);
+		try { await lstat(path); } catch (error) { if (fileErrorCode(error) === "ENOENT") return undefined; throw error; }
+		const record = parseRefresh(await readImmutable(path, "workspace parent refresh record"));
+		if (record.claimId !== input.claimId || record.effectKeyHash !== key) throw new WorkspaceAdapterError("workspace refresh recovery receipt conflicts");
+		return {
+			outcome: record.outcome,
+			previousBaseHead: record.previousBaseHead,
+			baseHead: record.baseHead,
+			previousHead: record.previousHead,
+			head: record.head,
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+		};
+	}
+
+	async findChildHeadReceipt(input: {
+		trustedWorktreeRoot: string;
+		issue: number;
+		claimId: string;
+		effectKey: string;
+	}): Promise<WorkspaceChildHeadReconciliationEvidence | undefined> {
+		if (!validIssue(input.issue) || !IDENTITY_PATTERN.test(input.claimId) || !SAFE_OWNERSHIP.test(input.effectKey)
+			|| !isAbsolute(input.trustedWorktreeRoot)) throw new WorkspaceAdapterError("workspace child-head recovery query is invalid");
+		const root = await realpath(input.trustedWorktreeRoot);
+		const key = hash(["shepherd-workspace-child-head-effect-v1", input.effectKey]);
+		const path = join(root, CLAIM_DIRECTORY, `issue-${input.issue}.child-head-${key}.json`);
+		try { await lstat(path); } catch (error) { if (fileErrorCode(error) === "ENOENT") return undefined; throw error; }
+		const record = parseChildHead(await readImmutable(path, "workspace child-head reconciliation record"));
+		if (record.claimId !== input.claimId || record.effectKeyHash !== key) throw new WorkspaceAdapterError("workspace child-head recovery receipt conflicts");
+		return {
+			outcome: record.head === record.previousHead ? "reused" : "reclaimed",
+			branch: record.branch,
+			baseHead: record.baseHead,
+			previousHead: record.previousHead,
+			head: record.head,
+			changedScope: [...record.changedScope],
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+			integrationInvalidated: true,
+		};
 	}
 
 	async #acquireLease(

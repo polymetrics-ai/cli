@@ -706,6 +706,7 @@ export class ProductionShepherdController {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
 						child.checkpoint = mergeCheckpoint(child.checkpoint, corrected);
+						if (corrected.workspace) child.ownership = corrected.workspace;
 						delete child.checkpoint.verification;
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
@@ -831,7 +832,10 @@ export class ProductionShepherdController {
 		const persisted = await this.#evolve(runId, generation, (draft) => {
 			const child = draft.children.find((candidate) => candidate.id === childId)!;
 			child.checkpoint = mergeCheckpoint(child.checkpoint, result);
-			if (!child.ownership && result.workspace) child.ownership = result.workspace;
+			// Ownership is the durable live binding, not merely the original claim. Keep its
+			// exact head synchronized with every accepted workspace checkpoint while the
+			// state contract independently fences claim/worktree/base/scope movement.
+			if (result.workspace) child.ownership = result.workspace;
 		});
 		await this.#acknowledgeCheckpoint(result, persisted);
 		return result;

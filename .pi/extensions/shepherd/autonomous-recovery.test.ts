@@ -27,7 +27,7 @@ test("reconciles every uncertain effect in key order before opening the scheduli
 	const barrier = new ProductionRecoveryBarrier(journal, {
 		async observe(record) {
 			calls.push(`observe:${record.key}`);
-			return { resultDigest: "c".repeat(64) };
+			return { status: "applied" as const, resultDigest: "c".repeat(64) };
 		},
 		async apply(record) { calls.push(`apply:${record.key}`); },
 	});
@@ -50,7 +50,7 @@ test("fails closed on stale generations before invoking recovery adapters", asyn
 	await journal.prepare(intent("git_push", "a".repeat(64)));
 	let called = false;
 	const barrier = new ProductionRecoveryBarrier(journal, {
-		async observe() { called = true; return { resultDigest: "b".repeat(64) }; },
+		async observe() { called = true; return { status: "applied" as const, resultDigest: "b".repeat(64) }; },
 		async apply() { called = true; },
 	});
 	await assert.rejects(barrier.open({ runId: "run-2", generation: 2 }), /stale|generation|fence/i);
@@ -71,7 +71,7 @@ test("fails closed before external reconciliation when a legacy prepared effect 
 	await journal.prepare({ key: productionEffectKey(legacyCoordinates), ...legacyCoordinates });
 	let called = false;
 	const barrier = new ProductionRecoveryBarrier(journal, {
-		async observe() { called = true; return { resultDigest: "b".repeat(64) }; },
+		async observe() { called = true; return { status: "applied" as const, resultDigest: "b".repeat(64) }; },
 		async apply() { called = true; },
 	});
 	await assert.rejects(barrier.open({ runId: "run-1", generation: 1 }), /recovery coordinates|descriptor/i);
@@ -88,13 +88,30 @@ test("cancellation closes the barrier and never applies an observation completed
 	const barrier = new ProductionRecoveryBarrier(journal, {
 		async observe() {
 			controller.abort(new Error("operator stop"));
-			return { resultDigest: "b".repeat(64) };
+			return { status: "applied" as const, resultDigest: "b".repeat(64) };
 		},
 		async apply() { applied = true; },
 	});
 	await assert.rejects(barrier.open({ runId: "run-1", generation: 1, signal: controller.signal }), /cancel|abort|stop/i);
 	assert.equal(applied, false);
 	assert.equal((await journal.listNonApplied())[0].phase, "prepared");
+});
+
+test("authoritative absence transactionally resets a prepared effect for one safe retry", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-recovery-absent-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const journal = new ProductionEffectJournal(root);
+	const exact = intent("git_push", "not-published");
+	await journal.prepare(exact);
+	let applied = false;
+	const barrier = new ProductionRecoveryBarrier(journal, {
+		async observe() { return { status: "absent" as const }; },
+		async apply() { applied = true; },
+	});
+	assert.deepEqual(await barrier.open({ runId: "run-1", generation: 1 }), { reconciled: 1 });
+	assert.equal(applied, false);
+	assert.equal(await journal.load(exact.key), undefined);
+	assert.equal((await journal.prepare(exact)).phase, "prepared");
 });
 
 test("fresh processes reconcile every external-effect kind at prepared and observed crash checkpoints without duplicate replay", async (t) => {
@@ -124,7 +141,7 @@ test("fresh processes reconcile every external-effect kind at prepared and obser
 				marker: `effect-${kinds.indexOf(record.kind)}`,
 			});
 			observed.push(record.key);
-			return { resultDigest: createHash("sha256").update(`reconciled-${record.key}`).digest("hex") };
+			return { status: "applied" as const, resultDigest: createHash("sha256").update(`reconciled-${record.key}`).digest("hex") };
 		},
 		async apply(record) { applied.push(record.key); },
 	});

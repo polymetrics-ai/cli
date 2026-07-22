@@ -947,6 +947,43 @@ export class GitAdapter {
 		return head;
 	}
 
+	/** Read-only exact remote-ref observation used to reconcile a lost push response. */
+	async resolveRemoteBranchHead(binding: GitBinding, branch: string): Promise<string | undefined> {
+		assertSafeBranch(branch);
+		const actual = await this.assertBinding(binding);
+		const endpoints = await this.#effectiveRemote(actual.cwd);
+		if (endpoints.fetch.value === undefined || endpoints.push.value === undefined
+			|| endpoints.fetch.identity !== actual.fetchEndpointIdentity
+			|| endpoints.push.identity !== actual.pushEndpointIdentity
+			|| endpoints.fetch.identity !== endpoints.push.identity) {
+			throw new GitAdapterError("remote observation endpoint moved from the inspected binding");
+		}
+		await this.#assertEndpointRewriteStable(actual.cwd, endpoints.push.value, true);
+		const raw = stripLineEnding((await this.#run(actual.cwd, [
+			"ls-remote", "--heads", "--", endpoints.push.value, `refs/heads/${branch}`,
+		])).toString("utf8"));
+		if (raw === "") return undefined;
+		const lines = raw.split("\n").filter(Boolean);
+		if (lines.length !== 1) throw new GitAdapterError("remote branch evidence is ambiguous");
+		const [head, reference, ...extra] = lines[0].split("\t");
+		if (extra.length > 0 || reference !== `refs/heads/${branch}`) {
+			throw new GitAdapterError("remote branch evidence is malformed");
+		}
+		assertSha(head, "remote branch head");
+		return head;
+	}
+
+	async readCommitSubject(binding: GitBinding, head: string): Promise<string> {
+		assertSha(head, "commit subject head");
+		const actual = await this.assertBinding(binding);
+		await this.#assertCommitObject(actual, head, "commit subject head");
+		const subject = stripLineEnding((await this.#run(actual.cwd, [
+			"show", "--no-patch", "--format=%s", head,
+		])).toString("utf8"));
+		if (!safeText(subject, 512)) throw new GitAdapterError("commit subject is not bounded safe text");
+		return subject;
+	}
+
 	async #assertCommitObject(binding: GitBinding, head: string, description: string): Promise<void> {
 		assertSha(head, description);
 		const actual = await this.assertBinding(binding);

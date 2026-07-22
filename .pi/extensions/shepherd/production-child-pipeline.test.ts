@@ -11,6 +11,7 @@ import {
 } from "./autonomous-production-state.ts";
 import {
 	ProductionEffectJournal,
+	productionEffectKey,
 } from "./autonomous-effect-journal.ts";
 import {
 	ProductionLifecycleError,
@@ -70,6 +71,19 @@ const SHA_B = "b".repeat(40);
 const SHA_C = "c".repeat(40);
 const SHA_D = "d".repeat(40);
 const DIGEST = "e".repeat(64);
+
+function canonical(value: unknown): unknown {
+	if (Array.isArray(value)) return value.map(canonical);
+	if (value === null || typeof value !== "object") return value;
+	return Object.fromEntries(Object.entries(value as Record<string, unknown>)
+		.filter(([, item]) => item !== undefined)
+		.sort(([left], [right]) => left.localeCompare(right))
+		.map(([key, item]) => [key, canonical(item)]));
+}
+
+function stableDigest(value: unknown): string {
+	return createHash("sha256").update(JSON.stringify(canonical(value))).digest("hex");
+}
 
 function plan(): ProductionParentPlanDocument {
 	return {
@@ -292,10 +306,12 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 	}
 
 	get binding(): ProductionWorkspaceBinding { return structuredClone(this.#binding); }
+	setRecoveredHead(head: string): void { this.#binding.head = head; this.#dirty = false; }
 
 	async implement() {
 		this.calls.push("implement");
 		return {
+			schemaVersion: 1 as const,
 			role: "implementation" as const,
 			status: "completed" as const,
 			runId: "run-479",
@@ -304,6 +320,8 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 			candidateHead: this.#binding.head,
 			validationNonce: DIGEST,
 			observedMutation: true,
+			changedPaths: ["owned/child/file.ts"],
+			verification: [],
 			findings: [],
 			summary: "implemented",
 		};
@@ -313,6 +331,7 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 		this.calls.push("correct");
 		this.#dirty = true;
 		return {
+			schemaVersion: 1 as const,
 			role: "correction" as const,
 			status: "completed" as const,
 			runId: "run-479",
@@ -321,6 +340,8 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 			candidateHead: this.#binding.head,
 			validationNonce: DIGEST,
 			observedMutation: true,
+			changedPaths: ["owned/child/file.ts"],
+			verification: [],
 			findings: [],
 			summary: "corrected",
 		};
@@ -418,6 +439,7 @@ interface HarnessOptions {
 	findings?: IndependentReviewFinding[];
 	pullRequest?: Partial<GitHubPullRequestEvidence>;
 	integration?: ChildIntegrationDecision;
+	integrationBlockedOnce?: string;
 	childHeadMoveOnce?: boolean;
 	publicationTimeoutOnce?: boolean;
 	verificationFailures?: number;
@@ -441,6 +463,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	let published: GitHubPullRequestEvidence | undefined;
 	let receipt: ChildIntegrationReceipt | undefined;
 	let childHeadMovePending = options.childHeadMoveOnce === true;
+	let integrationBlockPending = options.integrationBlockedOnce;
 	const github: ProductionChildGitHubPort = {
 		async createPlan(_value: unknown, _context?: OrchestrationCallContext) { calls.push("plan"); return parent; },
 		async ensureChildIssue(value) { calls.push("issue"); return childIssue(value); },
@@ -456,6 +479,11 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 		},
 		async integrateChild(value, child, handoff) {
 			calls.push("integrate");
+			if (integrationBlockPending !== undefined) {
+				const blocker = integrationBlockPending;
+				integrationBlockPending = undefined;
+				return { kind: "blocked", blockers: [blocker] };
+			}
 			if (childHeadMovePending) {
 				childHeadMovePending = false;
 				return { kind: "blocked", blockers: ["head_moved"] };
@@ -567,7 +595,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 		},
 	};
 	const recoveryCalls: string[] = [];
-	const pipeline = new ProductionChildPipeline({
+	const makePipeline = () => new ProductionChildPipeline({
 		workspaceLifecycle: lifecycle,
 		github,
 		reviewer,
@@ -588,11 +616,12 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 		trustedWorktreeRoot: "/trusted/worktrees",
 		dispositionActor: "shepherd-controller",
 		recovery: {
-			async observe(record) { recoveryCalls.push(`observe:${record.kind}`); return { resultDigest: record.intentDigest }; },
+			async observe(record) { recoveryCalls.push(`observe:${record.kind}`); return { status: "applied" as const, resultDigest: record.intentDigest }; },
 			async apply(record) { recoveryCalls.push(`apply:${record.kind}`); },
 		},
 		now: () => new Date(),
 	});
+	const pipeline = makePipeline();
 	const state = createProductionAutonomousState(plan(), {
 		runId: "run-479",
 		maxConcurrency: 1,
@@ -601,6 +630,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	return {
 		root,
 		pipeline,
+		restartPipeline: makePipeline,
 		state,
 		calls,
 		session,
@@ -767,6 +797,80 @@ test("reconciles a timed-out PR publication with one physical PR and stable effe
 	assert.equal(new Set(journal.records.map((record) => record.key)).size, journal.records.length);
 });
 
+test("fresh pipeline hydrates applied commit and push results without republishing either mutation", async (t) => {
+	const h = await harness(t);
+	for (const stage of ["workspace", "implement", "verify"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	const before = binding();
+	const after = binding({ head: SHA_C });
+	const common = {
+		childId: "child",
+		childIssue: 501,
+		childSlug: "production-child",
+		generation: h.state.resourceGeneration,
+		parentBaseBranch: "main",
+		parentBranch: "feat/471-parent",
+		parentIssue: 479,
+		planDigest: h.state.planDigest,
+		repository: "owner/repo",
+	};
+	const recordApplied = async (
+		kind: "git_commit" | "git_push",
+		descriptor: Record<string, unknown>,
+		result: unknown,
+	): Promise<string> => {
+		const coordinates = {
+			kind,
+			runId: h.state.runId,
+			generation: h.state.generation,
+			childId: "child",
+			intentDigest: stableDigest(descriptor),
+		};
+		const key = productionEffectKey(coordinates);
+		await h.effects.prepare({ ...coordinates, key, recoveryDescriptor: descriptor });
+		await h.effects.observe(key, { runId: coordinates.runId, generation: coordinates.generation }, stableDigest(result));
+		await h.effects.apply(key, { runId: coordinates.runId, generation: coordinates.generation });
+		return key;
+	};
+	const commitKey = await recordApplied("git_commit", {
+		...common,
+		operation: "git_commit",
+		workspace: before,
+		issue: 501,
+		slug: "production-child",
+		message: "feat(shepherd): complete #501 production-child",
+		attempt: h.state.children[0].attempts,
+		corrections: h.state.children[0].corrections,
+	}, { committed: true, previousHead: SHA_A, head: SHA_C });
+	const pushKey = await recordApplied("git_push", {
+		...common,
+		operation: "git_push",
+		branch: after.branch,
+		head: after.head,
+		workspace: after,
+	}, { branch: after.branch, head: after.head, remoteName: "origin" });
+	h.session.setRecoveredHead(SHA_C);
+	persist(h.state, {
+		summary: "commit and push recovered before pull request publication",
+		effectKey: pushKey,
+		effectKeys: [commitKey, pushKey],
+		workspace: after,
+	});
+	const mutationsBefore = {
+		commit: h.calls.filter((call) => call === "commit").length,
+		push: h.calls.filter((call) => call === "push").length,
+	};
+	const restarted = h.restartPipeline();
+	const published = await restarted.publish(contextFor(h.state));
+	assert.equal(published.pullRequest, 77);
+	assert.equal(published.workspace?.head, SHA_C);
+	assert.equal(h.calls.filter((call) => call === "commit").length, mutationsBefore.commit);
+	assert.equal(h.calls.filter((call) => call === "push").length, mutationsBefore.push);
+	assert.equal(h.physicalPullRequests(), 1);
+});
+
 test("fails closed on wrong or draft publication evidence", async (t) => {
 	for (const [name, override] of [
 		["wrong PR", { workItemId: "other-child" }],
@@ -803,9 +907,29 @@ test("classifies untrusted CI/review blockers and head movement without integrat
 			);
 			const pending = (await h.effects.listNonApplied()).filter((record) => record.kind === "child_integration");
 			assert.equal(pending.length, 1);
-			assert.equal(pending[0].phase, "observed");
+			assert.equal(pending[0].phase, "prepared");
 		});
 	}
+});
+
+test("a blocked integration stays prepared and an exact retry can integrate without poisoned evidence", async (t) => {
+	const h = await harness(t, { integrationBlockedOnce: "ci_not_green" });
+	for (const stage of ["workspace", "implement", "verify", "publish", "review"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	await assert.rejects(
+		h.pipeline.integrate(contextFor(h.state)),
+		(error: unknown) => error instanceof ProductionLifecycleError && error.kind === "retryable",
+	);
+	const prepared = (await h.effects.listNonApplied()).filter((record) => record.kind === "child_integration");
+	assert.equal(prepared.length, 1);
+	assert.equal(prepared[0].phase, "prepared");
+	const integrated = await h.pipeline.integrate(contextFor(h.state));
+	assert.ok(integrated.integrationReceiptDigest);
+	await persistAndAcknowledge(h.pipeline, h.state, integrated);
+	assert.equal((await h.effects.load(prepared[0].key))?.phase, "applied");
+	assert.equal(h.calls.filter((entry) => entry === "integrate").length, 2);
 });
 
 test("reclaims an authoritatively moved child head and requires fresh verification and exact-head review", async (t) => {
@@ -870,6 +994,8 @@ test("delegates prepared/observed crash recovery and makes close/abort idempoten
 		})).digest("hex"),
 	});
 	const observed = await h.pipeline.observe(prepared, new AbortController().signal);
+	assert.equal(observed.status, "applied");
+	if (observed.status !== "applied") throw new Error("test recovery unexpectedly reported absence");
 	assert.match(observed.resultDigest, /^[0-9a-f]{64}$/u);
 	await h.pipeline.apply({ ...prepared, phase: "observed", observedAt: new Date().toISOString(), resultDigest: observed.resultDigest }, new AbortController().signal);
 	assert.deepEqual(h.recoveryCalls, ["observe:git_push", "apply:git_push"]);

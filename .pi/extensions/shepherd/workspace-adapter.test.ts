@@ -104,6 +104,19 @@ test("reconciles an exact crash retry without creating a duplicate branch or wor
 	const adapter = new WorkspaceAdapter(new GitAdapter());
 	const request = await requestFor(fixture);
 	const first = await adapter.claim(request);
+	assert.deepEqual(await new WorkspaceAdapter(new GitAdapter()).findClaim(request), {
+		claimId: first.claimId,
+		repositoryIdentity: first.repositoryIdentity,
+		worktreeIdentity: first.worktreeIdentity,
+		cwd: first.cwd,
+		branch: first.branch,
+		baseBranch: first.prBase,
+		baseHead: first.baseHead,
+		head: first.head,
+		writeScopes: [...first.allowedScopes],
+		clean: true,
+		changedScope: [],
+	});
 	await first.release();
 	const second = await new WorkspaceAdapter(new GitAdapter()).claim(request);
 	assert.equal(second.reused, true);
@@ -168,6 +181,12 @@ test("reclaims the exact remote child head through the active mutation lease", a
 	assert.equal(evidence.reviewInvalidated, true);
 	assert.equal(evidence.integrationInvalidated, true);
 	assert.deepEqual(evidence.changedScope, ["owned/child/local.ts", "owned/child/remote.ts"]);
+	assert.deepEqual(await new WorkspaceAdapter(new GitAdapter()).findChildHeadReceipt({
+		trustedWorktreeRoot: fixture.worktreeRoot,
+		issue: workspace.issue,
+		claimId: workspace.claimId,
+		effectKey: "child-head:476:1",
+	}), evidence);
 	assert.equal((await git(workspace.cwd, "rev-parse", "HEAD")).trim(), remoteHead);
 	assert.equal(await readFile(join(workspace.cwd, "owned/child/remote.ts"), "utf8"), "export const remote = true;\n");
 	const retried = await adapter.reconcileChildHead(workspace, {

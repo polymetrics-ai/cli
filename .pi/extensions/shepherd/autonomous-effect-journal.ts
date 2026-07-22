@@ -42,6 +42,11 @@ export interface ProductionEffectJournalPort {
 	prepare(intent: ProductionEffectIntent, now?: Date): Promise<ProductionEffectRecord>;
 	load(key: string): Promise<ProductionEffectRecord | undefined>;
 	listNonApplied(): Promise<ProductionEffectRecord[]>;
+	/**
+	 * Remove a prepared intent only after an authoritative recovery probe proves the
+	 * external effect never happened. The fence makes the reset safe across resumes.
+	 */
+	abandon?(key: string, fence: ProductionEffectFence, preparedAt: string): Promise<void>;
 	observe(key: string, fence: ProductionEffectFence, resultDigest: string, now?: Date): Promise<ProductionEffectRecord>;
 	apply(key: string, fence: ProductionEffectFence, now?: Date): Promise<ProductionEffectRecord>;
 }
@@ -395,7 +400,7 @@ export class ProductionEffectJournal implements ProductionEffectJournalPort {
 		}
 	}
 
-	async #transact(operation: (records: ProductionEffectRecord[]) => ProductionEffectRecord): Promise<ProductionEffectRecord> {
+	async #transact<T>(operation: (records: ProductionEffectRecord[]) => T): Promise<T> {
 		const lock = await this.#acquire();
 		try {
 			const document = await this.#read();
@@ -447,6 +452,31 @@ export class ProductionEffectJournal implements ProductionEffectJournalPort {
 		return (await this.#read()).records
 			.filter((record) => record.phase !== "applied")
 			.map((record) => structuredClone(record));
+	}
+
+	async abandon(keyValue: string, fence: ProductionEffectFence, preparedAtValue: string): Promise<void> {
+		const key = digest(keyValue, "effect key");
+		const preparedAt = timestamp(preparedAtValue, "effect preparation time");
+		await this.#transact((records) => {
+			const index = records.findIndex((record) => record.key === key);
+			if (index < 0) {
+				// A concurrent/fresh recovery process may already have completed the same
+				// authoritative reset. Treat that exact absence as idempotent.
+				return;
+			}
+			const current = records[index];
+			if (current.runId !== fence.runId || current.generation !== fence.generation) {
+				throw new Error("stale production effect fence");
+			}
+			if (current.phase !== "prepared") {
+				throw new Error("only an authoritatively absent prepared effect can be abandoned");
+			}
+			if (current.preparedAt !== preparedAt) {
+				throw new Error("stale production effect reset lost its exact preparation fence");
+			}
+			records.splice(index, 1);
+			return;
+		});
 	}
 
 	async observe(

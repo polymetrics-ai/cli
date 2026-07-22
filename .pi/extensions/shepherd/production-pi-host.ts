@@ -3,14 +3,7 @@ import { lstat, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { isAbsolute, join, resolve } from "node:path";
 
 import type { ShepherdResumeCommand, ShepherdStartCommand } from "./arguments.ts";
-import {
-	ProductionFileStateStore,
-	type ProductionAutonomousState,
-} from "./autonomous-production-state.ts";
-import {
-	ProductionLifecycleError,
-	type ProductionEffectRecord,
-} from "./autonomous-production-contract.ts";
+import type { ProductionAutonomousState } from "./autonomous-production-state.ts";
 import type { ProductionEffectRecoveryPort } from "./autonomous-recovery.ts";
 import {
 	ShepherdAgentSessionRuntime,
@@ -165,47 +158,6 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 			if (failures.length > 0) throw new AggregateError(failures, "production Pi entrypoint shutdown failed");
 		})();
 		return this.#closePromise;
-	}
-}
-
-/**
- * Recovery projector for the safe local case: an observed effect whose exact key already appears
- * in the CAS state checkpoint. Prepared effects still require authoritative kind-specific
- * observation and fail closed rather than being replayed speculatively.
- */
-export class LocalProductionEffectRecovery implements ProductionEffectRecoveryPort {
-	readonly #store: ProductionFileStateStore;
-	readonly #issue: number;
-
-	constructor(stateRoot: string, issue: number) {
-		this.#store = new ProductionFileStateStore(stateRoot);
-		this.#issue = issue;
-	}
-
-	async observe(record: ProductionEffectRecord, signal: AbortSignal): Promise<{ resultDigest: string }> {
-		if (signal.aborted) throw signal.reason ?? new Error("production recovery cancelled");
-		throw new ProductionLifecycleError(
-			"terminal",
-			`prepared ${record.kind} effect requires authoritative external reconciliation before resume`,
-			["prepared_effect_requires_authority"],
-		);
-	}
-
-	async apply(record: ProductionEffectRecord, signal: AbortSignal): Promise<void> {
-		if (signal.aborted) throw signal.reason ?? new Error("production recovery cancelled");
-		if (record.phase !== "observed" && record.phase !== "applied") {
-			throw new Error("only an observed production effect can be projected");
-		}
-		const state = await this.#store.load(this.#issue);
-		const child = state?.children.find((candidate) => candidate.id === record.childId);
-		const keys = child?.checkpoint?.effectKeys ?? [];
-		if (child?.checkpoint?.effectKey !== record.key && !keys.includes(record.key)) {
-			throw new ProductionLifecycleError(
-				"terminal",
-				"observed effect has no exact durable state checkpoint projection",
-				["recovery_projection_missing"],
-			);
-		}
 	}
 }
 
@@ -396,7 +348,6 @@ export interface ProductionPiHostDependencies {
 		requestFactory: ProductionReviewRoleRequestFactory,
 	): ProductionReviewSession;
 	createController(options: ProductionShepherdRuntimeOptions): AutonomousShepherdControllerPort;
-	createRecoveryAuthority(stateRoot: string, issue: number): ProductionEffectRecoveryPort;
 	createParentReadyAuthority(stateRoot: string): ParentReadyDurableAuthorityBoundary;
 	createParentReadiness(
 		stateRoot: string,
@@ -419,6 +370,8 @@ export interface ProductionPiHostOptions {
 	runtimeSdk: AgentSessionRuntimeSdk;
 	dispositionActor?: string;
 	github?: GhCliOrchestrationTransportOptions;
+	/** Optional test/advanced override; production composes the exhaustive recovery authority. */
+	effectRecovery?: ProductionEffectRecoveryPort;
 	dependencies?: Partial<ProductionPiHostDependencies> & Pick<ProductionPiHostDependencies, "git">;
 }
 
@@ -490,8 +443,6 @@ function productionDependencies(options: ProductionPiHostOptions): ProductionPiH
 		createReviewSession: supplied?.createReviewSession
 			?? ((runtime, request) => new EmbeddedAgentSessionProductionReviewSession(runtime as ShepherdAgentSessionRuntime, request)),
 		createController: supplied?.createController ?? createProductionShepherdController,
-		createRecoveryAuthority: supplied?.createRecoveryAuthority
-			?? ((stateRoot, issue) => new LocalProductionEffectRecovery(stateRoot, issue)),
 		createParentReadyAuthority: supplied?.createParentReadyAuthority
 			?? (() => new FinalizerOwnedParentReadyAuthority()),
 		createParentReadiness: supplied?.createParentReadiness
@@ -526,10 +477,10 @@ export async function createProductionPiHostController(
 				parentIssue: options.issue,
 			}),
 		);
-		const recovery = dependencies.createRecoveryAuthority(options.stateRoot, options.issue);
 		const readyAuthority = dependencies.createParentReadyAuthority(options.stateRoot);
 		const github = options.github ?? {};
 		const delegate = dependencies.createController({
+			parentIssue: options.issue,
 			repositoryRoot: options.repositoryRoot,
 			stateRoot: options.stateRoot,
 			trustedWorktreeRoot: options.trustedWorktreeRoot,
@@ -537,7 +488,7 @@ export async function createProductionPiHostController(
 			git: dependencies.git,
 			agentSession: implementation,
 			reviewSession,
-			effectRecovery: recovery,
+			...(options.effectRecovery === undefined ? {} : { effectRecovery: options.effectRecovery }),
 			parentReadyAuthority: readyAuthority,
 			parentReadiness: dependencies.createParentReadiness(options.stateRoot, github),
 			dispositionActor: actor,

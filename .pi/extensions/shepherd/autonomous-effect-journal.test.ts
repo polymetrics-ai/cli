@@ -107,6 +107,37 @@ test("rejects key conflicts, changed observations, skipped phases, stale fences,
 	await assert.rejects(journal.prepare({ ...intent(), key: "e".repeat(64), intentDigest: "not-a-digest" }), /digest/i);
 });
 
+test("transactionally abandons only an exact prepared effect and permits the same intent to be retried", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-effect-abandon-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const journal = new ProductionEffectJournal(root);
+	const exact = intent();
+	const first = await journal.prepare(exact);
+	await assert.rejects(
+		journal.abandon(exact.key, { runId: exact.runId, generation: 2 }, first.preparedAt),
+		/stale|fence|generation/i,
+	);
+	await journal.abandon(exact.key, { runId: exact.runId, generation: 1 }, first.preparedAt);
+	assert.equal(await journal.load(exact.key), undefined);
+	const retried = await journal.prepare(exact, new Date("2026-07-22T12:00:00.000Z"));
+	assert.equal(retried.phase, "prepared");
+	await assert.rejects(
+		journal.abandon(exact.key, { runId: exact.runId, generation: 1 }, first.preparedAt),
+		/stale|preparation|fence/i,
+	);
+	assert.equal((await journal.load(exact.key))?.preparedAt, retried.preparedAt);
+	await journal.observe(
+		exact.key,
+		{ runId: exact.runId, generation: 1 },
+		"b".repeat(64),
+		new Date("2099-07-22T12:01:00.000Z"),
+	);
+	await assert.rejects(
+		journal.abandon(exact.key, { runId: exact.runId, generation: 1 }, retried.preparedAt),
+		/prepared|absent/i,
+	);
+});
+
 test("serializes competing phase transitions across repository instances", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "shepherd-effect-concurrency-"));
 	t.after(() => rm(root, { recursive: true, force: true }));

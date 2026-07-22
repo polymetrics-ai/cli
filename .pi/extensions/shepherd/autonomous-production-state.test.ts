@@ -228,6 +228,55 @@ test("only an exact refresh receipt may replace immutable ownership and it clear
 	assert.equal(rebased.children[0].ownershipRefresh?.outcome, "rebased");
 });
 
+test("publication advances only the live ownership head and keeps checkpoint truth synchronized", () => {
+	const initial = createProductionAutonomousState(plan(), { runId: "run-1" });
+	const claimedBinding = {
+		claimId: "claim-1",
+		ownershipId: "owner-1",
+		repositoryIdentity: "repo-identity",
+		worktreeIdentity: "worktree-1",
+		cwd: "/bounded/worktree-1",
+		branch: "child/state",
+		baseBranch: "feat/471-pi-agent-session-shepherd",
+		baseHead: "a".repeat(40),
+		head: "a".repeat(40),
+		writeScopes: [".pi/extensions/shepherd"],
+	};
+	const publishing = evolveProductionState(initial, fence(initial), (draft) => {
+		const child = draft.children[0];
+		child.attempts = 1;
+		child.status = "running";
+		child.stage = "publication";
+		child.ownership = claimedBinding;
+		child.checkpoint = { summary: "verified claim", effectKey: "verification-effect", workspace: claimedBinding };
+	});
+	const publishedBinding = { ...claimedBinding, head: "b".repeat(40) };
+	const published = evolveProductionState(publishing, fence(publishing), (draft) => {
+		const child = draft.children[0];
+		child.ownership = publishedBinding;
+		child.checkpoint = {
+			...child.checkpoint,
+			summary: "published exact child head",
+			effectKey: "pull-request-effect",
+			effectKeys: ["commit-effect", "push-effect", "pull-request-effect"],
+			workspace: publishedBinding,
+			pullRequest: 500,
+		};
+	});
+	assert.equal(published.children[0].ownership?.head, "b".repeat(40));
+	assert.equal(published.children[0].checkpoint?.workspace?.head, "b".repeat(40));
+	assert.throws(() => evolveProductionState(publishing, fence(publishing), (draft) => {
+		const escaped = { ...publishedBinding, branch: "child/other" };
+		draft.children[0].ownership = escaped;
+		draft.children[0].checkpoint = {
+			...draft.children[0].checkpoint,
+			summary: "attempted escaped publication",
+			effectKey: "pull-request-effect",
+			workspace: escaped,
+		};
+	}), /ownership|binding/i);
+});
+
 test("budget exhaustion persists an exact child intervention wait instead of terminal failure", () => {
 	const initial = createProductionAutonomousState(plan(), { runId: "run-1" });
 	const exhausted = evolveProductionState(initial, fence(initial), (draft) => {

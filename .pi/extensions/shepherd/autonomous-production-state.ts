@@ -855,6 +855,27 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 			throw new ProductionStateConflictError("initial ownership requires an exact durable workspace checkpoint");
 		}
 		if (before.ownership && JSON.stringify(before.ownership) !== JSON.stringify(after.ownership)) {
+			const exactPublishedHeadAdvance = after.ownership
+				&& before.ownership.claimId === after.ownership.claimId
+				&& before.ownership.ownershipId === after.ownership.ownershipId
+				&& before.ownership.repositoryIdentity === after.ownership.repositoryIdentity
+				&& before.ownership.worktreeIdentity === after.ownership.worktreeIdentity
+				&& before.ownership.cwd === after.ownership.cwd
+				&& before.ownership.branch === after.ownership.branch
+				&& before.ownership.baseBranch === after.ownership.baseBranch
+				&& before.ownership.baseHead === after.ownership.baseHead
+				&& before.ownership.head !== after.ownership.head
+				&& JSON.stringify(before.ownership.writeScopes) === JSON.stringify(after.ownership.writeScopes)
+				&& JSON.stringify(after.ownership) === JSON.stringify(after.checkpoint?.workspace)
+				&& (after.stage === "publication" || after.stage === "review"
+					|| after.stage === "integration" || after.stage === "succeeded")
+				&& typeof after.checkpoint?.effectKey === "string"
+				&& after.checkpoint.effectKey !== before.checkpoint?.effectKey
+				&& before.checkpoint?.integrationReceiptDigest === undefined
+				&& (after.checkpoint.integrationReceiptDigest === undefined
+					|| after.stage === "integration" || after.stage === "succeeded")
+				&& JSON.stringify(before.ownershipRefresh) === JSON.stringify(after.ownershipRefresh)
+				&& JSON.stringify(before.childHeadReconciliation) === JSON.stringify(after.childHeadReconciliation);
 			const refresh = after.ownershipRefresh;
 			const commonRefreshTruth = after.ownership && refresh
 				&& refresh.previousClaimId === before.ownership.claimId
@@ -897,11 +918,12 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 				&& after.checkpoint?.verification === undefined
 				&& after.checkpoint?.review === undefined
 				&& after.checkpoint?.integrationReceiptDigest === undefined;
-			if (!after.ownership || ((!refresh || !commonRefreshTruth || (!exactRebase && !exactReclaim))
+			if (!after.ownership || (!exactPublishedHeadAdvance
+				&& (!refresh || !commonRefreshTruth || (!exactRebase && !exactReclaim))
 				&& !exactChildHeadReconciliation)) {
 				throw new ProductionStateConflictError("immutable child ownership binding changed without an exact refresh receipt");
 			}
-			refreshedOwnership = true;
+			refreshedOwnership = !exactPublishedHeadAdvance;
 		}
 		if (before.checkpoint?.integrationReceiptDigest
 			&& before.checkpoint.integrationReceiptDigest !== after.checkpoint?.integrationReceiptDigest

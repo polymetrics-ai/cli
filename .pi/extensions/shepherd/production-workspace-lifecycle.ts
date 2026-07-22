@@ -21,6 +21,10 @@ import type {
 	WorkspaceHandoffEvidence,
 } from "./workspace-adapter.ts";
 import type { ProductionVerificationResult } from "./bounded-verification.ts";
+import {
+	ProductionAgentEffectReceiptRepository,
+	productionAgentEffectResultDigest,
+} from "./production-agent-effect-receipts.ts";
 import { validateScopedPath, type ScopedWorkspace, type WorkspaceMutationResult } from "./tool-policy.ts";
 
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
@@ -106,6 +110,8 @@ export interface ProductionWorkspaceClaim {
 }
 
 export interface ProductionImplementationRequest {
+	/** Exact prepared journal key; binds durable AgentSession start/completion evidence. */
+	effectKey: string;
 	timeoutMs: number;
 	context?: readonly string[];
 	signal?: AbortSignal;
@@ -239,6 +245,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 	readonly #workspaceAdapter: ProductionWorkspaceAdapterPort;
 	readonly #verification: ProductionVerificationPort;
 	readonly #agentSession: ProductionAgentSessionPort;
+	readonly #agentEffects: ProductionAgentEffectReceiptRepository;
 	readonly #onJoined: () => void;
 	#verificationState: "pending" | "passed" | "failed" = "pending";
 	#reviewValid = false;
@@ -254,6 +261,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 		this.#workspaceAdapter = options.workspaceAdapter;
 		this.#verification = options.verification;
 		this.#agentSession = options.agentSession;
+		this.#agentEffects = new ProductionAgentEffectReceiptRepository(options.request.trustedWorktreeRoot);
 		this.#onJoined = options.onJoined;
 	}
 
@@ -296,6 +304,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 	): Promise<AgentSessionHandoff> {
 		if (typeof request !== "object" || request === null || !Number.isSafeInteger(request.timeoutMs)
 			|| request.timeoutMs < 1 || request.timeoutMs > 24 * 60 * 60 * 1_000
+			|| typeof request.effectKey !== "string" || !/^[0-9a-f]{64}$/u.test(request.effectKey)
 			|| (request.context !== undefined && (!Array.isArray(request.context)
 				|| request.context.some((item) => typeof item !== "string")))) {
 			return Promise.reject(new Error(`production ${role} request is invalid`));
@@ -304,6 +313,14 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 			assertNotAborted(request.signal);
 			await this.#workspace.assertOwned();
 			const binding = this.binding;
+			const receiptStart = {
+				schemaVersion: 1 as const,
+				effectKey: request.effectKey,
+				claimId: binding.claimId,
+				role,
+				binding,
+			};
+			await this.#agentEffects.begin(receiptStart);
 			const laneId = `${this.#request.child.id}-${role}`;
 			const promptBinding = {
 				runId: this.runId,
@@ -348,6 +365,12 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 				|| handoff.validationNonce !== promptBinding.validationNonce) {
 				throw new LifecycleError("correction_required", `${role} AgentSession returned an invalid or incomplete handoff`);
 			}
+			const completedBinding = this.binding;
+			await this.#agentEffects.complete({
+				...receiptStart,
+				resultDigest: productionAgentEffectResultDigest(completedBinding),
+				completedBinding,
+			});
 			this.#verificationState = "pending";
 			this.#reviewValid = false;
 			return handoff;
