@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { pathToFileURL } from "node:url";
+import { types as testNodeTypes } from "node:util";
 
 import type {
 	AgentSessionEvent,
@@ -41,8 +42,18 @@ function emptyRedactionScanMetrics(): RedactionScanMetrics {
 		maxMainCursorVisits: 0,
 		keyCharacterVisits: 0,
 		boundaryCharacterVisits: 0,
+		recognizerCharacterVisits: 0,
+		lexicalTransitions: 0,
+		frameOperations: 0,
+		recoveryTransitions: 0,
+		rangeEmissions: 0,
+		rangeExaminations: 0,
+		rangeInsertions: 0,
+		rangeCoalescences: 0,
+		replacementEmissions: 0,
+		renderedSourceUnits: 0,
 		totalWork: 0,
-	};
+	} as RedactionScanMetrics;
 }
 
 async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-coding-agent")> {
@@ -8318,6 +8329,765 @@ test("cycle 18 redaction work metrics exactly charge recognizers ranges and rend
 		if (metrics.totalWork !== unitCharges) problems.push(`${label}:ledger-${metrics.totalWork}-${unitCharges}`);
 		if (metrics.totalWork < sample.length * 6) problems.push(`${label}:recognizers-unaccounted-${metrics.totalWork}`);
 		if (metrics.totalWork > (16 * sample.length) + 64) problems.push(`${label}:work-bound-${metrics.totalWork}`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 19 Pi direct callback event and lifecycle share one finite normalized schema", async () => {
+	type PiValidationTool = {
+		name: string;
+		description: string;
+		parameters: Readonly<Record<string, unknown>>;
+	};
+	type PiValidationCall = {
+		type: "toolCall";
+		id: string;
+		name: string;
+		arguments: Record<string, unknown>;
+	};
+	type PiValidationModule = {
+		validateToolArguments(tool: PiValidationTool, call: PiValidationCall): Readonly<Record<string, unknown>>;
+	};
+	const piValidation = await loadPinnedPiAi() as unknown as PiValidationModule;
+	const problems: string[] = [];
+	const schema = {
+		type: "object",
+		additionalProperties: false,
+		properties: {
+			s: { type: "string" },
+			i: { type: "integer" },
+			n: { type: "number" },
+			b: { type: "boolean" },
+			z: { type: "number", enum: [-0] },
+			list: { type: "array", items: { type: "integer" } },
+		},
+		required: ["s", "i", "n", "b", "z", "list"],
+	} as const;
+	const raw = { s: true, i: "2", n: "2.5", b: "false", z: -0, list: ["1", true, null] };
+	const expected = { s: "true", i: 2, n: 2.5, b: false, z: 0, list: [1, 1, 0] };
+	const callbackInputs: Readonly<Record<string, unknown>>[] = [];
+	const capability = {
+		...inspectCapability(),
+		parameters: schema,
+		async execute(arguments_: Readonly<Record<string, unknown>>) {
+			callbackInputs.push(arguments_);
+			return { status: "ok" as const, summary: "cycle 19 normalized", references: [] };
+		},
+	} as unknown as HostCapability;
+	const input = policyInputForRuntime(false);
+	input.capabilities = [capability];
+	const policy = createToolPolicy(input);
+	const hostTool = policy.tools.find((tool) => tool.name === "host_inspect")!;
+	const canonical = hostTool.parameters as {
+		properties?: Record<string, Record<string, unknown>>;
+	};
+	const integerSchema = canonical.properties?.i;
+	const stringSchema = canonical.properties?.s;
+	const arraySchema = canonical.properties?.list;
+	const zeroSchema = canonical.properties?.z;
+	if (integerSchema?.minimum !== Number.MIN_SAFE_INTEGER || integerSchema.maximum !== Number.MAX_SAFE_INTEGER) {
+		problems.push("canonical-safe-integer-bounds");
+	}
+	if (stringSchema?.minLength !== 0 || typeof stringSchema.maxLength !== "number" || stringSchema.maxLength > 1_048_576) {
+		problems.push("canonical-string-bounds");
+	}
+	if (arraySchema?.minItems !== 0 || arraySchema.maxItems !== 512) problems.push("canonical-array-bounds");
+	const zeroEnum = zeroSchema?.enum;
+	if (!Array.isArray(zeroEnum) || zeroEnum.length !== 1 || !Object.is(zeroEnum[0], 0) || Object.is(zeroEnum[0], -0)) {
+		problems.push("canonical-signed-zero-enum");
+	}
+
+	let piProjected: Readonly<Record<string, unknown>> | undefined;
+	try {
+		piProjected = piValidation.validateToolArguments(hostTool, {
+			type: "toolCall", id: "cycle19-pi", name: hostTool.name, arguments: raw,
+		});
+	} catch (error) {
+		problems.push(`pi-coercion-rejected:${error instanceof Error ? error.message : String(error)}`);
+	}
+	let directProjected: Readonly<Record<string, unknown>> | undefined;
+	try {
+		directProjected = policy.projectArguments(hostTool.name, raw);
+	} catch (error) {
+		problems.push(`direct-coercion-rejected:${error instanceof Error ? error.message : String(error)}`);
+	}
+	let piThenDirect: Readonly<Record<string, unknown>> | undefined;
+	if (piProjected) {
+		try {
+			piThenDirect = policy.projectArguments(hostTool.name, piProjected);
+		} catch (error) {
+			problems.push(`pi-direct-rejected:${error instanceof Error ? error.message : String(error)}`);
+		}
+	}
+	if (JSON.stringify(directProjected) !== JSON.stringify(expected) || !directProjected ||
+		!Object.is((directProjected as { z?: unknown }).z, 0)) {
+		problems.push("direct-normalization-drift");
+	}
+	if (JSON.stringify(piThenDirect) !== JSON.stringify(expected) || !piThenDirect ||
+		!Object.is((piThenDirect as { z?: unknown }).z, 0)) {
+		problems.push("pi-normalization-drift");
+	}
+	const executeOutcome = await observeSettlement(hostTool.execute("cycle19-callback", raw, undefined), 150);
+	if (executeOutcome.status !== "resolved") problems.push(`callback-${executeOutcome.status}`);
+	if (callbackInputs.length !== 1 || JSON.stringify(callbackInputs[0]) !== JSON.stringify(expected) ||
+		!callbackInputs[0] || !Object.is(callbackInputs[0].z, 0) || !Object.isFrozen(callbackInputs[0])) {
+		problems.push(`callback-normalization-${callbackInputs.length}`);
+	}
+
+	for (const [label, unsafe] of [
+		["unsafe-integer", { ...raw, i: 2 ** 53 }],
+		["implicit-array-ceiling", { ...raw, list: Array.from({ length: 513 }, () => 1) }],
+	] as const) {
+		let directRejected = false;
+		try { policy.projectArguments(hostTool.name, unsafe); } catch { directRejected = true; }
+		if (!directRejected) problems.push(`${label}:direct-accepted`);
+		let piRejected = false;
+		try {
+			piValidation.validateToolArguments(hostTool, {
+				type: "toolCall", id: `cycle19-${label}`, name: hostTool.name, arguments: unsafe,
+			});
+		} catch {
+			piRejected = true;
+		}
+		if (!piRejected) problems.push(`${label}:pi-accepted`);
+	}
+
+	const duplicateInput = policyInputForRuntime(false);
+	duplicateInput.capabilities = [{
+		...inspectCapability(),
+		parameters: {
+			type: "object", additionalProperties: false,
+			properties: { value: { type: "number", enum: [-0, 0] } }, required: ["value"],
+		},
+	} as unknown as HostCapability];
+	let duplicateRejected = false;
+	try { createToolPolicy(duplicateInput); } catch { duplicateRejected = true; }
+	if (!duplicateRejected) problems.push("same-value-zero-enum-duplicate-registered");
+
+	const sdk = new FakeSdk();
+	const harness = runtime(sdk);
+	const req = request({
+		capabilities: [capability],
+		binding: {
+			...request().binding,
+			runId: "cycle19-normalized-lifecycle",
+			laneId: "cycle19-normalized-lifecycle",
+		},
+	});
+	Object.defineProperty(sdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			sdk.session.promptCalls += 1;
+			const user = piUserMessage("cycle 19 normalized lifecycle");
+			emitSessionEvent(sdk.session, { type: "agent_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+			const intermediate = emitPiToolAssistant(sdk.session, {
+				id: "cycle19-normalized-call", name: "host_inspect", arguments: raw,
+			});
+			const result = { content: [{ type: "text" as const, text: "cycle 19 normalized result" }], details: null };
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_start", toolCallId: "cycle19-normalized-call",
+				toolName: "host_inspect", args: raw,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_end", toolCallId: "cycle19-normalized-call",
+				toolName: "host_inspect", result, isError: false,
+			} as AgentSessionEvent);
+			const toolResult: PiToolResultMessage = {
+				role: "toolResult", toolCallId: "cycle19-normalized-call", toolName: "host_inspect",
+				content: result.content, details: result.details, isError: false, timestamp: 476,
+			};
+			emitSessionEvent(sdk.session, { type: "message_start", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "turn_end", message: intermediate, toolResults: [toolResult],
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			const finalAssistant = emitPiTextAssistant(sdk.session, handoffFor(req));
+			emitSessionEvent(sdk.session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "agent_end", messages: [user, intermediate, toolResult, finalAssistant], willRetry: false,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "agent_settled" } as AgentSessionEvent);
+		},
+	});
+	const lifecycleOutcome = await observeSettlement(harness.runtime.run(req), 300);
+	if (lifecycleOutcome.status !== "resolved") problems.push(`lifecycle-${lifecycleOutcome.status}`);
+	await observeSettlement(harness.runtime.close(), 150);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 19 every schema raw event result reference and error path uses captured reflection", async () => {
+	const moduleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
+	moduleUrl.searchParams.set("cycle19Reflection", `${Date.now()}-${Math.random()}`);
+	const dynamicPolicy = await import(moduleUrl.href) as typeof import("./tool-policy.ts");
+	const nativeApply = Reflect.apply;
+	const nativeDefine = Object.defineProperty;
+	const nativeGetDescriptor = Object.getOwnPropertyDescriptor;
+	const calls = new Map<string, number>();
+	let active = false;
+	type Slot = { owner: object; key: PropertyKey; label: string; descriptor: PropertyDescriptor };
+	const slots: Slot[] = [];
+	const candidates: Array<{ owner: object; key: PropertyKey; label: string }> = [
+		{ owner: Object, key: "keys", label: "Object.keys" },
+		{ owner: Object, key: "getPrototypeOf", label: "Object.getPrototypeOf" },
+		{ owner: Object, key: "getOwnPropertyDescriptor", label: "Object.getOwnPropertyDescriptor" },
+		{ owner: Object, key: "defineProperty", label: "Object.defineProperty" },
+		{ owner: Object, key: "create", label: "Object.create" },
+		{ owner: Object, key: "freeze", label: "Object.freeze" },
+		{ owner: Object, key: "hasOwn", label: "Object.hasOwn" },
+		{ owner: Object, key: "values", label: "Object.values" },
+		{ owner: Array, key: "isArray", label: "Array.isArray" },
+		{ owner: Reflect, key: "apply", label: "Reflect.apply" },
+		{ owner: JSON, key: "stringify", label: "JSON.stringify" },
+		{ owner: testNodeTypes, key: "isProxy", label: "nodeTypes.isProxy" },
+	];
+	for (const candidate of candidates) {
+		const descriptor = nativeGetDescriptor(candidate.owner, candidate.key);
+		if (!descriptor || typeof descriptor.value !== "function" || (!descriptor.configurable && !descriptor.writable)) {
+			continue;
+		}
+		const original = descriptor.value as (...arguments_: unknown[]) => unknown;
+		const replacement = function(this: unknown, ...arguments_: unknown[]): unknown {
+			if (active) calls.set(candidate.label, (calls.get(candidate.label) ?? 0) + 1);
+			return nativeApply(original, this, arguments_);
+		};
+		nativeDefine(candidate.owner, candidate.key, { ...descriptor, value: replacement });
+		slots.push({ ...candidate, descriptor });
+	}
+	const problems: string[] = [];
+	const phaseTotal = (): number => {
+		let total = 0;
+		for (const count of calls.values()) total += count;
+		return total;
+	};
+	const clearCalls = (): void => { calls.clear(); };
+	try {
+		const resultInput = policyInputForRuntime(false);
+		resultInput.capabilities = [{
+			...inspectCapability(),
+			parameters: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", maxLength: 128 } }, required: ["target"],
+			},
+			async execute() {
+				await Promise.resolve();
+				return { status: "ok" as const, summary: "captured result", references: ["captured-reference"] };
+			},
+		} as unknown as HostCapability];
+		active = true;
+		const resultPolicy = dynamicPolicy.createToolPolicy(resultInput);
+		resultPolicy.projectArguments("host_inspect", { target: "owned" });
+		active = false;
+		if (phaseTotal() !== 0) problems.push(`schema-raw-reflection-${phaseTotal()}`);
+		clearCalls();
+
+		const resultTool = resultPolicy.tools.find((tool) => tool.name === "host_inspect")!;
+		active = true;
+		const resultOutcome = await observeSettlement(
+			resultTool.execute("cycle19-reflection-result", { target: "owned" }, new AbortController().signal),
+			150,
+		);
+		active = false;
+		if (resultOutcome.status !== "resolved") problems.push(`result-${resultOutcome.status}`);
+		if (phaseTotal() !== 0) problems.push(`result-reference-reflection-${phaseTotal()}`);
+		clearCalls();
+
+		const mutationInput = policyInputForRuntime(false);
+		mutationInput.workspace.editText = async () => {
+			await Promise.resolve();
+			return { changed: true, summary: "captured mutation" };
+		};
+		const mutationPolicy = dynamicPolicy.createToolPolicy(mutationInput);
+		const mutationTool = mutationPolicy.tools.find((tool) => tool.name === "workspace_edit")!;
+		active = true;
+		const mutationOutcome = await observeSettlement(mutationTool.execute(
+			"cycle19-reflection-mutation",
+			{ path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "a", newText: "b" },
+			new AbortController().signal,
+		), 150);
+		active = false;
+		if (mutationOutcome.status !== "resolved") problems.push(`mutation-${mutationOutcome.status}`);
+		if (phaseTotal() !== 0) problems.push(`mutation-reflection-${phaseTotal()}`);
+		clearCalls();
+
+		let messageGetterCalls = 0;
+		const hostileError = new Error("untrusted");
+		nativeDefine(hostileError, "message", {
+			configurable: true,
+			enumerable: false,
+			get() { messageGetterCalls += 1; return "token: CYCLE19_REFLECTION_SECRET"; },
+		});
+		const errorInput = policyInputForRuntime(false);
+		errorInput.capabilities = [{
+			...inspectCapability(),
+			async execute() {
+				await Promise.resolve();
+				throw hostileError;
+			},
+		}];
+		const errorPolicy = dynamicPolicy.createToolPolicy(errorInput);
+		const errorTool = errorPolicy.tools.find((tool) => tool.name === "host_inspect")!;
+		active = true;
+		const errorOutcome = await observeSettlement(errorTool.execute(
+			"cycle19-reflection-error", { target: "owned" }, new AbortController().signal,
+		), 150);
+		active = false;
+		if (errorOutcome.status !== "rejected") problems.push(`error-${errorOutcome.status}`);
+		if (messageGetterCalls !== 0) problems.push(`error-message-getter-${messageGetterCalls}`);
+		if (phaseTotal() !== 0) problems.push(`error-reflection-${phaseTotal()}`);
+	} finally {
+		active = false;
+		for (let index = slots.length - 1; index >= 0; index -= 1) {
+			const slot = slots[index]!;
+			nativeDefine(slot.owner, slot.key, slot.descriptor);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 19 terminal handoff arrays use exact intrinsic dense snapshots without caller map", async () => {
+	type HandoffField = "changedPaths" | "verification" | "findings";
+	type Injection = {
+		field: HandoffField;
+		expected: "rejected" | "resolved";
+		traps: { value: number };
+		make(base: unknown[]): unknown[];
+	};
+	const intrinsicMap = Array.prototype.map;
+	const nativeParse = JSON.parse;
+	const nativeApply = Reflect.apply;
+	const nativeDefine = Object.defineProperty;
+	const nativeParseDescriptor = Object.getOwnPropertyDescriptor(JSON, "parse")!;
+	const injections = new Map<string, Injection>();
+	const parseReplacement = function(this: unknown, ...arguments_: unknown[]): unknown {
+		const parsed = nativeApply(nativeParse, this, arguments_) as unknown;
+		if (!parsed || typeof parsed !== "object") return parsed;
+		const runDescriptor = Object.getOwnPropertyDescriptor(parsed, "runId");
+		const runId = runDescriptor && "value" in runDescriptor ? runDescriptor.value : undefined;
+		if (typeof runId !== "string") return parsed;
+		const injection = injections.get(runId);
+		if (!injection) return parsed;
+		const fieldDescriptor = Object.getOwnPropertyDescriptor(parsed, injection.field);
+		const base = fieldDescriptor && "value" in fieldDescriptor && Array.isArray(fieldDescriptor.value)
+			? fieldDescriptor.value
+			: [];
+		nativeDefine(parsed, injection.field, {
+			value: injection.make(base), enumerable: true, writable: true, configurable: true,
+		});
+		return parsed;
+	};
+	nativeDefine(JSON, "parse", { ...nativeParseDescriptor, value: parseReplacement });
+	let dynamicRuntime: typeof import("./agent-session-runtime.ts");
+	try {
+		const moduleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"));
+		moduleUrl.searchParams.set("cycle19Handoff", `${Date.now()}-${Math.random()}`);
+		dynamicRuntime = await import(moduleUrl.href) as typeof import("./agent-session-runtime.ts");
+	} finally {
+		nativeDefine(JSON, "parse", nativeParseDescriptor);
+	}
+
+	const problems: string[] = [];
+	const fields: readonly HandoffField[] = ["changedPaths", "verification", "findings"];
+	const factories: Array<{
+		label: string;
+		expected: "rejected" | "resolved";
+		make(base: unknown[], traps: { value: number }): unknown[];
+	}> = [
+		{
+			label: "proxy",
+			expected: "rejected",
+			make(base, traps) {
+				return new Proxy([...base], {
+					get(target, key, receiver) { traps.value += 1; return Reflect.get(target, key, receiver); },
+					getPrototypeOf(target) { traps.value += 1; return Reflect.getPrototypeOf(target); },
+					getOwnPropertyDescriptor(target, key) {
+						traps.value += 1;
+						return Reflect.getOwnPropertyDescriptor(target, key);
+					},
+				});
+			},
+		},
+		{
+			label: "prototype-proxy",
+			expected: "rejected",
+			make(base, traps) {
+				const value = [...base];
+				Object.setPrototypeOf(value, new Proxy(Array.prototype, {
+					get(target, key, receiver) { traps.value += 1; return Reflect.get(target, key, receiver); },
+					ownKeys(target) { traps.value += 1; return Reflect.ownKeys(target); },
+					getOwnPropertyDescriptor(target, key) {
+						traps.value += 1;
+						return Reflect.getOwnPropertyDescriptor(target, key);
+					},
+				}));
+				return value;
+			},
+		},
+		{
+			label: "accessor-index",
+			expected: "rejected",
+			make(base, traps) {
+				const value = [...base];
+				Object.defineProperty(value, "0", {
+					enumerable: true, configurable: true,
+					get() { traps.value += 1; return base[0]; },
+				});
+				return value;
+			},
+		},
+		{
+			label: "sparse",
+			expected: "rejected",
+			make(base) { return new Array(Math.max(1, base.length)); },
+		},
+		{
+			label: "caller-map",
+			expected: "resolved",
+			make(base, traps) {
+				const value = [...base];
+				Object.defineProperty(value, "map", {
+					configurable: true,
+					get() {
+						traps.value += 1;
+						return function(this: unknown[], callback: (...arguments_: unknown[]) => unknown): unknown[] {
+							traps.value += 1;
+							if (this.length > 0) this[0] = this[0];
+							return nativeApply(intrinsicMap, this, [callback]) as unknown[];
+						};
+					},
+				});
+				return value;
+			},
+		},
+	];
+	for (const field of fields) {
+		for (const factory of factories) {
+			const runId = `cycle19-handoff-${field}-${factory.label}`;
+			const traps = { value: 0 };
+			injections.set(runId, {
+				field,
+				expected: factory.expected,
+				traps,
+				make(base) { return factory.make(base, traps); },
+			});
+			const req = request({
+				binding: { ...request().binding, runId, laneId: runId },
+			});
+			const sdk = new FakeSdk();
+			sdk.session.output = handoffFor(req, {
+				changedPaths: [".pi/extensions/shepherd/agent-session-runtime.ts"],
+				verification: [{ name: "cycle19", status: "passed", summary: "captured" }],
+				findings: ["captured finding"],
+			});
+			const harness = new dynamicRuntime.ShepherdAgentSessionRuntime(sdk);
+			let timer: ReturnType<typeof setTimeout> | undefined;
+			const timeout = new Promise<{ status: "pending" }>((resolve) => {
+				timer = setTimeout(() => resolve({ status: "pending" }), 300);
+			});
+			const outcome = await Promise.race([
+				harness.run(req).then(
+					(value) => ({ status: "resolved" as const, value }),
+					(reason: unknown) => ({ status: "rejected" as const, reason }),
+				),
+				timeout,
+			]);
+			if (timer) clearTimeout(timer);
+			if (outcome.status !== factory.expected) problems.push(`${field}:${factory.label}:${outcome.status}`);
+			if (traps.value !== 0) problems.push(`${field}:${factory.label}:traps-${traps.value}`);
+			if (factory.expected === "resolved" && outcome.status === "resolved") {
+				const vector = outcome.value[field] as unknown[];
+				if (!Array.isArray(vector) || !Object.isFrozen(vector) || vector.length !== 1) {
+					problems.push(`${field}:${factory.label}:snapshot`);
+				}
+			}
+			await observeSettlement(harness.close(), 150);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 19 redaction work trace independently accounts for every category", () => {
+	type WorkKey =
+		| "cursorAdvances"
+		| "boundaryCharacterVisits"
+		| "keyCharacterVisits"
+		| "recognizerCharacterVisits"
+		| "lexicalTransitions"
+		| "frameOperations"
+		| "recoveryTransitions"
+		| "rangeEmissions"
+		| "rangeExaminations"
+		| "rangeInsertions"
+		| "rangeCoalescences"
+		| "replacementEmissions"
+		| "renderedSourceUnits";
+	type TraceMetrics = RedactionScanMetrics & Record<Exclude<WorkKey,
+		"cursorAdvances" | "boundaryCharacterVisits" | "keyCharacterVisits">, number>;
+	const workKeys: readonly WorkKey[] = [
+		"cursorAdvances",
+		"boundaryCharacterVisits",
+		"keyCharacterVisits",
+		"recognizerCharacterVisits",
+		"lexicalTransitions",
+		"frameOperations",
+		"recoveryTransitions",
+		"rangeEmissions",
+		"rangeExaminations",
+		"rangeInsertions",
+		"rangeCoalescences",
+		"replacementEmissions",
+		"renderedSourceUnits",
+	];
+	type Fixture = {
+		label: string;
+		value: string;
+		secret?: string;
+		expected: TraceMetrics;
+	};
+	const expected = (
+		sourceLength: number,
+		values: Partial<Record<WorkKey, number>>,
+		totalWork: number,
+	): TraceMetrics => ({
+		...emptyRedactionScanMetrics(),
+		sourceLength,
+		cursorAdvances: values.cursorAdvances ?? 0,
+		cursorRegressions: 0,
+		maxMainCursorVisits: sourceLength === 0 ? 0 : 1,
+		keyCharacterVisits: values.keyCharacterVisits ?? 0,
+		boundaryCharacterVisits: values.boundaryCharacterVisits ?? 0,
+		recognizerCharacterVisits: values.recognizerCharacterVisits ?? 0,
+		lexicalTransitions: values.lexicalTransitions ?? 0,
+		frameOperations: values.frameOperations ?? 0,
+		recoveryTransitions: values.recoveryTransitions ?? 0,
+		rangeEmissions: values.rangeEmissions ?? 0,
+		rangeExaminations: values.rangeExaminations ?? 0,
+		rangeInsertions: values.rangeInsertions ?? 0,
+		rangeCoalescences: values.rangeCoalescences ?? 0,
+		replacementEmissions: values.replacementEmissions ?? 0,
+		renderedSourceUnits: values.renderedSourceUnits ?? 0,
+		totalWork,
+	} as TraceMetrics);
+	const fixtures: readonly Fixture[] = [
+		{ label: "empty", value: "", expected: expected(0, {}, 0) },
+		{
+			label: "space", value: " ",
+			expected: expected(1, {
+				cursorAdvances: 1, boundaryCharacterVisits: 1, recognizerCharacterVisits: 5,
+			}, 7),
+		},
+		{
+			label: "frame", value: "{}",
+			expected: expected(2, {
+				cursorAdvances: 2, boundaryCharacterVisits: 2, recognizerCharacterVisits: 10,
+				frameOperations: 2,
+			}, 16),
+		},
+		{
+			label: "recovery", value: "}",
+			expected: expected(1, {
+				cursorAdvances: 1, boundaryCharacterVisits: 1, recognizerCharacterVisits: 5,
+				recoveryTransitions: 2, rangeEmissions: 1, rangeExaminations: 1,
+				rangeInsertions: 1, replacementEmissions: 1,
+			}, 13),
+		},
+		{
+			label: "assignment", value: "token: x", secret: "x",
+			expected: expected(8, {
+				cursorAdvances: 8, boundaryCharacterVisits: 8, keyCharacterVisits: 6,
+				recognizerCharacterVisits: 40, lexicalTransitions: 1,
+				rangeEmissions: 1, rangeExaminations: 1, rangeInsertions: 1,
+				replacementEmissions: 1, renderedSourceUnits: 7,
+			}, 74),
+		},
+		{
+			label: "private-key",
+			value: "-----BEGIN PRIVATE KEY-----\nx\n-----END PRIVATE KEY-----",
+			secret: "\nx\n",
+			expected: expected(55, {
+				cursorAdvances: 55, boundaryCharacterVisits: 55, keyCharacterVisits: 53,
+				recognizerCharacterVisits: 275, rangeEmissions: 1, rangeExaminations: 1,
+				rangeInsertions: 1, replacementEmissions: 1,
+			}, 442),
+		},
+		{
+			label: "overlap", value: "token: password x", secret: "password x",
+			expected: expected(17, {
+				cursorAdvances: 17, boundaryCharacterVisits: 17, keyCharacterVisits: 6,
+				recognizerCharacterVisits: 85, lexicalTransitions: 1,
+				rangeEmissions: 2, rangeExaminations: 2, rangeInsertions: 1,
+				rangeCoalescences: 1, replacementEmissions: 1, renderedSourceUnits: 7,
+			}, 140),
+		},
+	];
+	const problems: string[] = [];
+	for (const fixture of fixtures) {
+		const metrics = emptyRedactionScanMetrics() as TraceMetrics;
+		const rendered = redactSensitiveText(fixture.value, metrics);
+		if (fixture.secret && rendered.includes(fixture.secret)) problems.push(`${fixture.label}:leak`);
+		for (const key of [
+			"sourceLength", "cursorAdvances", "cursorRegressions", "maxMainCursorVisits",
+			"keyCharacterVisits", "boundaryCharacterVisits", ...workKeys.slice(3), "totalWork",
+		] as const) {
+			if (metrics[key] !== fixture.expected[key]) {
+				problems.push(`${fixture.label}:${key}-${metrics[key]}-expected-${fixture.expected[key]}`);
+			}
+		}
+		let oracleTotal = 0;
+		for (const key of workKeys) oracleTotal += fixture.expected[key];
+		if (oracleTotal !== fixture.expected.totalWork) {
+			problems.push(`${fixture.label}:bad-independent-oracle-${oracleTotal}`);
+		}
+		let actualTotal = 0;
+		for (const key of workKeys) actualTotal += metrics[key];
+		if (actualTotal !== metrics.totalWork) problems.push(`${fixture.label}:actual-sum-${actualTotal}`);
+		for (const key of workKeys) {
+			if (fixture.expected[key] > 0 && oracleTotal - fixture.expected[key] === fixture.expected.totalWork) {
+				problems.push(`${fixture.label}:omission-undetected-${key}`);
+			}
+		}
+		if (metrics.totalWork > (16 * fixture.value.length) + 64) {
+			problems.push(`${fixture.label}:linear-bound-${metrics.totalWork}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 19 one incremental projection budget rejects before multiplicative traversal", async () => {
+	const nativeDescriptor = Object.getOwnPropertyDescriptor;
+	const nativeDefine = Object.defineProperty;
+	const descriptorSlot = nativeDescriptor(Object, "getOwnPropertyDescriptor")!;
+	const watched = new WeakSet<object>();
+	let active = false;
+	let descriptorCalls = 0;
+	const observer = function(target: object, key: PropertyKey): PropertyDescriptor | undefined {
+		if (active && watched.has(target)) descriptorCalls += 1;
+		return nativeDescriptor(target, key);
+	};
+	nativeDefine(Object, "getOwnPropertyDescriptor", { ...descriptorSlot, value: observer });
+	let dynamicPolicy: typeof import("./tool-policy.ts");
+	try {
+		const moduleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
+		moduleUrl.searchParams.set("cycle19Projection", `${Date.now()}-${Math.random()}`);
+		dynamicPolicy = await import(moduleUrl.href) as typeof import("./tool-policy.ts");
+	} catch (error) {
+		nativeDefine(Object, "getOwnPropertyDescriptor", descriptorSlot);
+		throw error;
+	}
+	const problems: string[] = [];
+	const policyFor = (parameters: Readonly<Record<string, unknown>>) => {
+		const input = policyInputForRuntime(false);
+		input.capabilities = [{ ...inspectCapability(), parameters } as unknown as HostCapability];
+		return dynamicPolicy.createToolPolicy(input);
+	};
+	const project = (
+		label: string,
+		policy: ReturnType<typeof dynamicPolicy.createToolPolicy>,
+		value: Record<string, unknown>,
+		expected: "resolved" | "rejected",
+		maximumBytes?: number,
+	): Readonly<Record<string, unknown>> | undefined => {
+		active = true;
+		try {
+			const projected = policy.projectArguments("host_inspect", value, maximumBytes);
+			if (expected === "rejected") problems.push(`${label}:accepted`);
+			return projected;
+		} catch {
+			if (expected === "resolved") problems.push(`${label}:rejected`);
+			return undefined;
+		} finally {
+			active = false;
+		}
+	};
+	try {
+		const leafSchema = {
+			type: "object", additionalProperties: false,
+			properties: { value: { type: "string" } }, required: ["value"],
+		} as const;
+		const matrixSchema = {
+			type: "object", additionalProperties: false,
+			properties: {
+				matrix: { type: "array", items: { type: "array", items: leafSchema } },
+			},
+			required: ["matrix"],
+		} as const;
+		const matrixPolicy = policyFor(matrixSchema);
+		const leaf = { value: "x" };
+		const row = Array.from({ length: 64 }, () => leaf);
+		const matrix = Array.from({ length: 64 }, () => row);
+		const matrixInput = { matrix };
+		for (const target of [leaf, row, matrix, matrixInput]) watched.add(target);
+		descriptorCalls = 0;
+		project("repeated-dag", matrixPolicy, matrixInput, "rejected");
+		if (descriptorCalls > 32) problems.push(`repeated-dag:late-${descriptorCalls}`);
+
+		const stringMatrixSchema = {
+			type: "object", additionalProperties: false,
+			properties: { matrix: { type: "array", items: { type: "array", items: { type: "string" } } } },
+			required: ["matrix"],
+		} as const;
+		const stringMatrixPolicy = policyFor(stringMatrixSchema);
+		const tooManyItems = {
+			matrix: Array.from({ length: 9 }, () => Array.from({ length: 512 }, () => "x")),
+		};
+		project("aggregate-items", stringMatrixPolicy, tooManyItems, "rejected");
+
+		const propertyNames = Array.from({ length: 20 }, (_, index) => `p${index}`);
+		const itemProperties = Object.fromEntries(propertyNames.map((name) => [name, { type: "string" }]));
+		const keySchema = {
+			type: "object", additionalProperties: false,
+			properties: {
+				items: {
+					type: "array",
+					items: {
+						type: "object", additionalProperties: false,
+						properties: itemProperties, required: propertyNames,
+					},
+				},
+			},
+			required: ["items"],
+		} as const;
+		const keyPolicy = policyFor(keySchema);
+		const wideItems = Array.from({ length: 220 }, () =>
+			Object.fromEntries(propertyNames.map((name) => [name, "x"])));
+		project("aggregate-keys", keyPolicy, { items: wideItems }, "rejected");
+
+		const byteSchema = {
+			type: "object", additionalProperties: false,
+			properties: { payload: { type: "array", items: { type: "string", maxLength: 4_096 } } },
+			required: ["payload"],
+		} as const;
+		const bytePolicy = policyFor(byteSchema);
+		const payload = Array.from({ length: 512 }, () => "x".repeat(4_096));
+		const byteInput = { payload };
+		watched.add(byteInput);
+		watched.add(payload);
+		descriptorCalls = 0;
+		project("incremental-bytes", bytePolicy, byteInput, "rejected", 1_024);
+		if (descriptorCalls > 6) problems.push(`incremental-bytes:late-${descriptorCalls}`);
+
+		const control = { matrix: Array.from({ length: 8 }, (_, rowIndex) =>
+			Array.from({ length: 8 }, (_, itemIndex) => ({ value: `${rowIndex}-${itemIndex}` }))) };
+		const projectedControl = project("near-limit-control", matrixPolicy, control, "resolved");
+		if (!projectedControl || !Object.isFrozen(projectedControl) ||
+			!Array.isArray(projectedControl.matrix) || !Object.isFrozen(projectedControl.matrix)) {
+			problems.push("near-limit-control:not-frozen");
+		}
+
+		const parameters = matrixPolicy.tools.find((tool) => tool.name === "host_inspect")!.parameters as {
+			properties?: { matrix?: { minItems?: unknown; maxItems?: unknown; items?: { minItems?: unknown; maxItems?: unknown } } };
+		};
+		const outer = parameters.properties?.matrix;
+		if (outer?.minItems !== 0 || outer.maxItems !== 512 ||
+			outer.items?.minItems !== 0 || outer.items.maxItems !== 512) {
+			problems.push("canonical-admission-limits");
+		}
+	} finally {
+		active = false;
+		nativeDefine(Object, "getOwnPropertyDescriptor", descriptorSlot);
 	}
 	assert.deepEqual(problems, []);
 });
