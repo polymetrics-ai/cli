@@ -8,7 +8,7 @@ Worker agent: Codex `gpt-5.6-sol` / high implementation; xhigh verification/revi
 
 Branch: `feat/479-shepherd-production-matrix`
 
-Sub-PR: pending publication
+Sub-PR: #489
 
 Parent PR: #472
 
@@ -21,6 +21,14 @@ CI correction head: `a594be98b9722a8d183584a27832cd88af8702f9`
 Parent reconciliation head: `45c27b9d`
 
 Parent reconciliation merge head: `766709b3`
+
+Parent main-sync head: `383fcf93f9bc220be89fef1636e84fbecec2485a`
+
+Parent CI-repair ledger head: `387d41fd0e3e0b1d2855d689a25bb151b1fe1880`
+
+Go toolchain correction head: `52866972891c5d794f90f4be8254520434e6b4ef`
+
+Child parent-sync head: `57ca31aeb552946a1c65602e2b2590a3de88b836`
 
 ## Scope Delivered
 
@@ -83,8 +91,10 @@ scripts/verify-gsd-workflow origin/main
 git diff --check 45c27b9d...HEAD
 ```
 
-Result: proportional static gates pass. Complete local inventory is 1,712 total / 1,647 pass / 64
-managed-sandbox `/bin/ps` `spawn EPERM` blocked / 1 skip. Remote CI remains required.
+Result: the focused real-Go fixture passes 1/1 with Go 1.25.12; exact Pi-family verification,
+strict TypeScript, workflow YAML, and `go mod verify` pass. The complete local inventory reproduces
+only the known managed-sandbox `/bin/ps` `spawn EPERM` class. Local `govulncheck` cannot fetch its
+advisory database because sandbox DNS is blocked. Fresh ordinary-host CI remains authoritative.
 
 ## Automated Review
 
@@ -103,9 +113,8 @@ managed-sandbox `/bin/ps` `spawn EPERM` blocked / 1 skip. Remote CI remains requ
 
 ## Merge Recommendation
 
-- Recommended state: blocked.
-- Reason: local implementation/evidence is ready for final exact-head follow-up, but the reconciled
-  parent branch is 176 commits ahead of cached origin and GitHub DNS/auth are unavailable.
+- Recommended state: local repair complete; remote verification blocked.
+- Reason: parent-first publication, fresh CI, and an exact-head review remain before integration.
 - Human gates: parent PR #472 merge to `main`, auth changes, new dependencies, destructive actions,
   and quality-gate reductions.
 - Follow-up issues: #480 after #479 parent integration; #481 after #480.

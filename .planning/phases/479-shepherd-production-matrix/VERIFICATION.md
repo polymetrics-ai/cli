@@ -129,19 +129,27 @@ real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `T
 
 ## 2026-07-23 PR #489 CI repair checklist
 
-Current verdict: **REPAIR IN PROGRESS**.
+Current verdict: **LOCAL REPAIR PASS — REMOTE GREEN PENDING**.
 
 - [x] Diagnose the complete-suite failure as fixture cleanup after an unpinned CI Go toolchain
   auto-download; no Shepherd assertion failed independently.
 - [x] Diagnose the security failure as inherited `golang.org/x/text v0.36.0`; current `main`
   already contains the fixed `v0.39.0` baseline.
-- [ ] Parent branch contains the current `main` baseline without conflicts.
-- [ ] Shepherd CI installs exact Go `1.25.12` before the complete inventory.
-- [ ] Focused real-Go AgentSession verification passes.
+- [x] Parent branch contains the current `main` baseline without conflicts.
+- [x] Shepherd CI installs exact Go `1.25.12` before the complete inventory.
+- [x] Focused real-Go AgentSession verification passes: 1/1.
 - [ ] Complete Shepherd inventory passes outside any known managed-sandbox process restriction.
-- [ ] `go mod verify` and `govulncheck ./...` pass on the synchronized child head.
+- [x] `go mod verify` passes on the synchronized child head.
+- [ ] `govulncheck ./...` passes on the synchronized child head; local advisory fetch is blocked by
+  sandbox DNS and the remote rerun is authoritative.
 - [ ] Parent and child exact heads are published in order; PR #489 CI is green.
 - [ ] Fresh exact-head review is complete before parent integration.
 
 Cleanup policy: do not mask `EACCES`, leave downloaded toolchains behind, weaken the security scan,
 or merge the human-gated parent PR into `main`.
+
+Exact local checkpoints: main baseline `873cd7b2`, parent main-sync `383fcf93`, parent ledger
+`387d41fd`, child workflow GREEN `52866972`, and child parent-sync `57ca31ae`. Exact Pi-family
+verification, strict production TypeScript, YAML parsing, module integrity, and worktree diff
+hygiene pass. The complete local inventory still reaches only the pre-recorded managed-sandbox
+process-identity boundary; no new Shepherd assertion failure appears.

@@ -18,4 +18,4 @@ cycle.
 - Child action: pin Go `1.25.12` in `.github/workflows/shepherd.yml`, then merge the updated parent.
 - RED: run `29959846371` cleanup `EACCES`; run `29959846280` `GO-2026-5970`.
 - Downstream artifact: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, and `RUN-STATE.json`.
-- Verification result: pending implementation and rerun.
+- Verification result: local targeted GREEN; complete ordinary-host inventory and security rerun pending.

@@ -170,9 +170,9 @@ critical path locally in the two existing isolated worktrees.
     the sole failure was an after-test `EACCES` while deleting an auto-downloaded read-only Go
     toolchain. `govulncheck` separately reported `GO-2026-5970` in inherited
     `golang.org/x/text v0.36.0`.
-21. [ ] Merge the current `origin/main` baseline into the non-default parent branch so the existing
+21. [x] Merge the current `origin/main` baseline into the non-default parent branch so the existing
     `golang.org/x/text v0.39.0` security correction is inherited once at the correct stack layer.
-22. [ ] Pin `actions/setup-go@v6` to Go `1.25.12` with caching disabled before the complete
+22. [x] Pin `actions/setup-go@v6` to Go `1.25.12` with caching disabled before the complete
     Shepherd inventory, matching `go.mod` and preventing fixture-local toolchain download.
 23. [ ] Merge the updated parent into the child, run focused verification, the complete inventory,
     dependency integrity, and `govulncheck`, then update the exact evidence artifacts.
@@ -183,6 +183,14 @@ GSD adapter evidence: `scripts/gsd doctor` passes with 69 registered commands, w
 `scripts/gsd prompt programming-loop init --phase 479-shepherd-production-matrix --dry-run`
 returns `unknown GSD command or prompt: programming-loop`; this bounded cycle therefore continues
 the already-recorded manual-GSD fallback with explicit plan/TDD/verification evidence.
+
+Local GREEN: current main `873cd7b2` is merged into the parent at `383fcf93`; the reconciled parent
+ledger is `387d41fd`; the child workflow correction is `52866972`; and the corrected parent is
+merged into the child at `57ca31ae`. The focused real-Go fixture passes 1/1, exact Pi-family
+verification passes, strict production TypeScript passes, workflow YAML parses, and `go mod verify`
+passes. The complete local inventory reproduces only the known managed-sandbox `/bin/ps`
+`spawn EPERM` class. The local `govulncheck` advisory fetch is blocked by sandbox DNS, so step 23
+remains open until ordinary-host CI supplies both authoritative GREEN results.
 
 This cycle uses `local_critical_path`: the files are a tightly coupled issue-#479 CI/evidence slice,
 while the parent issue orchestrator remains the read-only topology and integration owner. It does not

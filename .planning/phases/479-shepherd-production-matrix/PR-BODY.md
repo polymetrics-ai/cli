@@ -20,6 +20,8 @@ Refs #471
 - Complete 17-row production behavior matrix plus focused release-blocker correction.
 - Complete sequential Shepherd GitHub Actions gate.
 - Exact post-install assertion for Pi 0.80.6's published shrinkwrap and installed package family.
+- Exact Go 1.25.12 setup for the real-Go verification fixture.
+- Current-main dependency baseline with `golang.org/x/text v0.39.0` inherited through the parent.
 - GSD/TDD/verification/handoff artifacts.
 
 ## GSD / TDD / Skills
@@ -39,6 +41,9 @@ Refs #471
 - Strict production TypeScript: pass across 49 non-test modules.
 - Pinned offline Pi 0.80.6 RPC: pass.
 - Exact Pi shrinkwrap/runtime-family assertion: pass.
+- Focused real-Go AgentSession fixture: 1/1 pass with Go 1.25.12.
+- Workflow YAML and `go mod verify`: pass.
+- `govulncheck`: remote rerun pending; local advisory-database DNS is blocked.
 - Complete local inventory: 1,712 total; 1,647 pass; 64 blocked before assertions by managed-sandbox
   `/bin/ps` `spawn EPERM`; 1 skip. The new GitHub Actions job is the required ordinary-host gate.
 - Branch-range and worktree `git diff --check`: pass.
@@ -64,6 +69,6 @@ passes offline RPC. `docs/cli/**`, website docs, and generated `pm` manuals are 
   external.
 - Repository policy still requires `claude_auto` coverage or an allowed recorded fallback. Codex
   review is retained as an additional internal exact-head gate and is not mislabeled as Claude.
-- Before opening this PR: publish/fetch parent `45c27b9d`, verify its authoritative head, then
-  push this child and confirm the GitHub range.
+- PR #489 is open. Publish parent repair head `387d41fd` first, then the child repair head and
+  confirm the authoritative GitHub range.
 - Before parent integration: remote complete-suite CI and policy review coverage must be clean.

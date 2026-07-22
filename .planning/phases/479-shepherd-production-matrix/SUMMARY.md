@@ -1,6 +1,6 @@
 # Summary
 
-Status: **17/17 functional matrix complete; locally ready, remote publication blocked.**
+Status: **17/17 functional matrix complete; PR #489 CI repaired locally, remote GREEN pending.**
 
 Issue #479 delivers the production in-process Shepherd path: canonical issue intake and plan
 bootstrap, dependency/collision-aware child scheduling, isolated worktrees, scoped Pi AgentSessions,
@@ -28,8 +28,15 @@ The first bounded review at `ca3f6c6f` found that CI must prove Pi's complete pa
 that the local parent must be published before the child PR. The runtime now asserts Pi's published
 shrinkwrap and all four installed family packages at exactly 0.80.6. The parent ledger was
 reconciled locally at `45c27b9d` and merged into the child at `766709b3` without rewriting
-history. Authoritative parent-first publication remains blocked by GitHub DNS and invalid local
-`gh` authentication.
+history.
+
+PR #489's first ordinary-host run then exposed an unpinned Go fixture toolchain and inherited
+`golang.org/x/text v0.36.0`. Current main `873cd7b2` is synchronized into the parent at
+`383fcf93`, yielding `x/text v0.39.0`; parent repair state is `387d41fd`. The child workflow pins
+Go `1.25.12` at `52866972` and incorporates the repaired parent at `57ca31ae`. The focused real-Go
+fixture, exact Pi runtime family, strict TypeScript, workflow YAML, and `go mod verify` all pass.
+The complete inventory and security scan require their fresh ordinary-host reruns because this
+managed sandbox blocks `/bin/ps` and vulnerability-database DNS.
 
 The parent PR (#472) remains human-gated. No push or merge to `main` is authorized by this phase.
 GitHub authentication is ambient host authority; no secret value is requested, printed, persisted,

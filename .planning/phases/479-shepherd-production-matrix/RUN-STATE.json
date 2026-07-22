@@ -13,9 +13,14 @@
   "worker": "codex-gpt-5.6-sol",
   "workerDirectory": "/private/tmp/shepherd-479-production-matrix",
   "subPrUrl": null,
-  "status": "ci_repair_in_progress",
-  "checkpoint": "remote_ci_red_diagnosed",
-  "reason": "PR #489 exposed an unpinned Go fixture environment and an inherited x/text vulnerability; the bounded parent-first CI repair is in progress.",
+  "status": "local_ci_repair_complete_remote_green_pending",
+  "checkpoint": "parent_baseline_and_go_toolchain_corrected",
+  "reason": "The fixed main dependency baseline and exact Go 1.25.12 workflow are synchronized locally; ordinary-host complete-suite and security reruns remain authoritative.",
+  "mainBaselineHead": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "parentMainSyncHead": "383fcf93f9bc220be89fef1636e84fbecec2485a",
+  "parentCiRepairHead": "387d41fd0e3e0b1d2855d689a25bb151b1fe1880",
+  "ciRepairWorkflowHead": "52866972891c5d794f90f4be8254520434e6b4ef",
+  "childParentSyncHead": "57ca31aeb552946a1c65602e2b2590a3de88b836",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
   "matrix": {
@@ -27,6 +32,11 @@
       "pass": 767,
       "fail": 0
     },
+    "realGoFixture": {
+      "pass": 1,
+      "fail": 0,
+      "toolchain": "go1.25.12"
+    },
     "completeInventory": {
       "total": 1712,
       "pass": 1647,
@@ -36,6 +46,10 @@
     },
     "strictProductionTypeScript": "pass",
     "offlinePiRpc": "pass",
+    "exactPiRuntimeFamily": "pass",
+    "workflowYaml": "pass",
+    "goModVerify": "pass",
+    "govulncheck": "remote_rerun_pending_local_advisory_dns_blocked",
     "reviewDisposition": "exact_head_followup_pending",
     "ciCompleteInventory": "configured_remote_run_pending"
   },
@@ -71,11 +85,21 @@
       "cycle": "remote-ci-repair-plan",
       "decision": "read_only_spawned",
       "reason": "A parent orchestrator audits stacked-branch topology while the coordinator owns the tightly coupled parent baseline and child workflow critical path."
+    },
+    {
+      "cycle": "remote-ci-repair-execute",
+      "decision": "local_critical_path",
+      "reason": "The coordinator synchronized main into the parent, pinned Go 1.25.12 in child CI, and reconciled the parent state without changing Shepherd behavior."
+    },
+    {
+      "cycle": "remote-ci-repair-verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "Targeted local gates pass; the managed sandbox blocks process identity and vulnerability-database DNS, so ordinary-host CI is the authoritative remaining verifier."
     }
   ],
   "blockers": [
-    "published_parent_base",
-    "child_push_and_pr",
+    "parent_first_republication",
+    "child_republication",
     "fresh_ci_outside_managed_sandbox",
     "automated_review_coverage_or_recorded_fallback"
   ],
@@ -103,5 +127,5 @@
     "parent_orchestrator_child_integration",
     "human_parent_pr_merge"
   ],
-  "updatedAt": "2026-07-23T02:36:09+05:30"
+  "updatedAt": "2026-07-23T03:44:06+05:30"
 }
