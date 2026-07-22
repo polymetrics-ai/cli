@@ -511,6 +511,7 @@ export interface ParentReadyAuthorityState extends ParentReadyAuthorityQuery {
 	invocationId: string;
 	recoveryId: string;
 	originalRevision: number;
+	appliedRevision: number | null;
 	authorization: ParentReadyAuthorization;
 	readyMutation: DurableMutationIntent;
 	rollbackMutation: DurableMutationIntent | null;
@@ -565,9 +566,15 @@ export interface ParentReadyDurableAuthorityBoundary {
 		query: ParentReadyAuthorityQuery,
 		context: ExternalCallContext,
 	): Promise<ParentReadyAuthorityState | null>;
+	/** Durably establish the exact invocation before any uncertain pull-request effect is called. */
+	beginParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState>;
 	/**
-	 * Atomically compare every canonical authorization coordinate and the pull-request revision,
-	 * consume the matching authority, and clear draft. A conflict is explicitly non-applied.
+	 * Atomically compare the established invocation and pull-request revision, consume the matching
+	 * authority, clear draft, and persist the exact applied resource revision. A conflict is
+	 * explicitly non-applied.
 	 */
 	compareConsumeAndMarkParentReady(
 		request: MarkParentReadyRequest,
@@ -2413,7 +2420,8 @@ export function validateParentReadyRecoveryFence(value: unknown): ParentReadyRec
 export function validateParentReadyAuthorityState(value: unknown): ParentReadyAuthorityState {
 	const candidate = exactRecord(value, [
 		"schemaVersion", "invocationId", "recoveryId", "repository", "pullRequest", "marker", "generation",
-		"headSha", "originalRevision", "authorization", "readyMutation", "rollbackMutation", "phase", "status", "fence",
+		"headSha", "originalRevision", "appliedRevision", "authorization", "readyMutation", "rollbackMutation", "phase",
+		"status", "fence",
 	]);
 	const query = validateParentReadyAuthorityQuery({
 		repository: candidate.repository,
@@ -2428,6 +2436,7 @@ export function validateParentReadyAuthorityState(value: unknown): ParentReadyAu
 		? null
 		: validateDurableMutationIntent(candidate.rollbackMutation);
 	const originalRevision = generation(candidate.originalRevision);
+	const appliedRevision = candidate.appliedRevision === null ? null : generation(candidate.appliedRevision);
 	const fence = candidate.fence === 0 ? 0 : generation(candidate.fence);
 	if (candidate.schemaVersion !== 1
 		|| typeof candidate.invocationId !== "string" || !IDENTITY.test(candidate.invocationId)
@@ -2449,9 +2458,13 @@ export function validateParentReadyAuthorityState(value: unknown): ParentReadyAu
 	const status = candidate.status as ParentReadyAuthorityState["status"];
 	const recovering = phase === "recovery_claimed" || phase === "draft_restored";
 	const settled = phase === "ready_settled" || phase === "draft_restored";
+	const applied = phase === "ready_effect_applied" || phase === "ready_settled";
 	if (candidate.invocationId !== invocationId
 		|| candidate.recoveryId !== recoveryId
 		|| status !== (settled ? "settled" : "unsettled")
+		|| (phase === "ready_invoking" && appliedRevision !== null)
+		|| (applied && (appliedRevision === null || appliedRevision <= originalRevision))
+		|| (recovering && appliedRevision !== null && appliedRevision <= originalRevision)
 		|| (recovering ? fence < 1 || rollbackMutation === null : fence !== 0 || rollbackMutation !== null)) {
 		throw new Error("incoherent parent-ready durable authority phase");
 	}
@@ -2476,6 +2489,7 @@ export function validateParentReadyAuthorityState(value: unknown): ParentReadyAu
 		invocationId,
 		recoveryId,
 		originalRevision,
+		appliedRevision,
 		authorization,
 		readyMutation,
 		rollbackMutation,
@@ -2503,6 +2517,7 @@ export function createParentReadyInvokingAuthorityState(
 		invocationId,
 		recoveryId: parentReadyRecoveryId(query, invocationId, request.authorization.digest, request.mutation),
 		originalRevision: request.authorization.pullRequestRevision,
+		appliedRevision: null,
 		authorization: request.authorization,
 		readyMutation: request.mutation,
 		rollbackMutation: null,
@@ -3893,6 +3908,25 @@ export class GitHubParentOrchestrator {
 		if (!parentPullRequestMatches(first, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
 		}
+		const firstAuthorityState = await this.readParentReadyAuthorityState(plan, {
+			pullRequest: first.number,
+			headSha: first.headSha,
+		});
+		if (firstAuthorityState !== null
+			&& ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(firstAuthorityState.phase)) {
+			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(firstAuthorityState));
+			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+		}
+		if (firstAuthorityState?.phase === "ready_settled"
+			&& (first.draft || firstAuthorityState.appliedRevision !== first.revision)) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		if (firstAuthorityState?.phase === "draft_restored" && !first.draft) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		if (firstAuthorityState === null && !first.draft) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_missing"] };
+		}
 		if (await this.completeIntegrationRoster(plan, integrationValues, first) === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
 		}
@@ -3995,6 +4029,25 @@ export class GitHubParentOrchestrator {
 		if (!parentPullRequestMatches(second, plan)) {
 			return { kind: "blocked", blockers: ["parent_pull_request_collision"] };
 		}
+		const authorityState = await this.readParentReadyAuthorityState(plan, {
+			pullRequest: second.number,
+			headSha: second.headSha,
+		});
+		if (authorityState !== null
+			&& ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(authorityState.phase)) {
+			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(authorityState));
+			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+		}
+		if (authorityState?.phase === "ready_settled"
+			&& (second.draft || authorityState.appliedRevision !== second.revision)) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		if (authorityState?.phase === "draft_restored" && !second.draft) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		if (authorityState === null && !second.draft) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_missing"] };
+		}
 		const currentRoster = await this.completeIntegrationRoster(plan, integrationValues, second);
 		if (currentRoster === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
@@ -4013,17 +4066,7 @@ export class GitHubParentOrchestrator {
 		if (lifecycle.kind !== "transition" || lifecycle.to !== "MERGE") {
 			return { kind: "blocked", blockers: ["autonomy_policy_blocked_parent_ready"] };
 		}
-		const authorityState = await this.readParentReadyAuthorityState(plan, {
-			pullRequest: second.number,
-			headSha: second.headSha,
-		});
-		if (authorityState !== null
-			&& ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(authorityState.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(authorityState));
-			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
-		}
 		if (authorityState?.phase === "ready_settled") {
-			if (second.draft) return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
 			const semanticPullRequest = { ...second, revision: authorityState.originalRevision };
 			const currentAuthority = createParentReadyAuthority(
 				plan,
@@ -4040,12 +4083,6 @@ export class GitHubParentOrchestrator {
 					authorityState.readyMutation,
 				)) return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
 			return { kind: "ready", pullRequest: second, reused: true };
-		}
-		if (authorityState?.phase === "draft_restored" && !second.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
-		}
-		if (authorityState === null && !second.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_missing"] };
 		}
 		const { authorization, freshness } = createParentReadyAuthority(
 			plan,
@@ -4176,39 +4213,91 @@ export class GitHubParentOrchestrator {
 		return validateRollbackParentReadyRequest({ ...intent, recovery, mutation });
 	}
 
+	private async boundedParentReadyRecoveryCall<T>(
+		invoke: (context: ExternalCallContext) => Promise<T>,
+	): Promise<
+		| { kind: "value"; value: T }
+		| { kind: "failed" }
+		| { kind: "timeout"; settlement: Promise<void> }
+	> {
+		const controller = new AbortController();
+		const deadline = Date.now() + this.#externalCallTimeoutMs;
+		const context: ExternalCallContext = {
+			signal: controller.signal,
+			deadlineAt: new Date(deadline).toISOString(),
+			acknowledgeAbort: () => {},
+		};
+		const invocation = Promise.resolve().then(() => invoke(context));
+		const settlement = invocation.then(() => {}, () => {});
+		const guarded = invocation.then(
+			(value) => ({ kind: "value" as const, value }),
+			() => ({ kind: "failed" as const }),
+		);
+		let timer: ReturnType<typeof setTimeout> | undefined;
+		const timedOut = new Promise<{ kind: "timeout"; settlement: Promise<void> }>((resolve) => {
+			timer = setTimeout(() => {
+				controller.abort();
+				resolve({ kind: "timeout", settlement });
+			}, Math.max(0, deadline - Date.now()));
+		});
+		const outcome = await Promise.race([guarded, timedOut]);
+		if (timer !== undefined) clearTimeout(timer);
+		return outcome;
+	}
+
 	private async quarantineUncertainParentReady(
 		plan: ParentOrchestrationPlan,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
 	): Promise<void> {
-		const timedOutAttempts = new Set<Promise<unknown>>();
+		const abandonedSettlements = new Set<Promise<void>>();
+		const query = this.parentReadyAuthorityQuery(plan, operation.authorization);
+		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
+		const recoveryId = parentReadyRecoveryId(query, invocationId, operation.authorization.digest, operation.mutation);
+		let minimumReleaseFence = 0;
 		for (let attempt = 1; ; attempt += 1) {
-			const request = this.parentReadyRollbackRequest(plan, operation, attempt);
-			const controller = new AbortController();
-			const deadline = Date.now() + this.#externalCallTimeoutMs;
-			const context: ExternalCallContext = {
-				signal: controller.signal,
-				deadlineAt: new Date(deadline).toISOString(),
-				acknowledgeAbort: () => {},
-			};
-			const invocation = Promise.resolve().then(() =>
-				this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context));
-			const guarded = invocation.then(
-				(value) => ({ kind: "value" as const, value }),
-				() => ({ kind: "failed" as const }),
-			);
-			let timer: ReturnType<typeof setTimeout> | undefined;
-			const timedOut = new Promise<{ kind: "timeout" }>((resolve) => {
-				timer = setTimeout(() => {
-					controller.abort();
-					resolve({ kind: "timeout" });
-				}, Math.max(0, deadline - Date.now()));
-			});
-			const outcome = await Promise.race([guarded, timedOut]);
-			if (timer !== undefined) clearTimeout(timer);
-			if (outcome.kind === "timeout") {
-				// Retain ownership of abandoned invocations until a newer durable fence succeeds.
-				timedOutAttempts.add(guarded);
+			const read = await this.boundedParentReadyRecoveryCall((context) =>
+				this.#parentReadyAuthority.readParentReadyState(query, context));
+			if (read.kind === "timeout") abandonedSettlements.add(read.settlement);
+			if (read.kind !== "value") {
+				await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
+				continue;
 			}
+			let authorityState: ParentReadyAuthorityState | null;
+			try {
+				authorityState = read.value === null ? null : validateParentReadyAuthorityState(read.value);
+			} catch {
+				await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
+				continue;
+			}
+			if (authorityState === null) {
+				abandonedSettlements.clear();
+				return;
+			}
+			if (authorityState.invocationId !== invocationId
+				|| authorityState.recoveryId !== recoveryId
+				|| authorityState.authorization.digest !== operation.authorization.digest
+				|| !canonicalDataEqual(authorityState.readyMutation, operation.mutation)) {
+				abandonedSettlements.clear();
+				return;
+			}
+			if (authorityState.phase === "ready_settled") {
+				abandonedSettlements.clear();
+				return;
+			}
+			if (authorityState.phase === "draft_restored" && authorityState.fence >= minimumReleaseFence) {
+				abandonedSettlements.clear();
+				return;
+			}
+			if (!["ready_invoking", "ready_effect_applied", "recovery_claimed", "draft_restored"]
+				.includes(authorityState.phase)) {
+				abandonedSettlements.clear();
+				return;
+			}
+			attempt = Math.max(attempt, authorityState.fence + 1, minimumReleaseFence);
+			const request = this.parentReadyRollbackRequest(plan, operation, attempt);
+			const outcome = await this.boundedParentReadyRecoveryCall((context) =>
+				this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context));
+			if (outcome.kind === "timeout") abandonedSettlements.add(outcome.settlement);
 			if (outcome.kind === "value") {
 				try {
 					const result = validateDurableMutationResult(
@@ -4216,31 +4305,35 @@ export class GitHubParentOrchestrator {
 						request.mutation,
 						validateGitHubPullRequestEvidence,
 					);
+					const minimumDraftRevision = authorityState.appliedRevision ?? operation.authorization.pullRequestRevision;
 					if (!result.value.draft
 						|| result.value.repository !== request.repository
 						|| result.value.number !== request.pullRequest
 						|| result.value.marker !== request.marker
 						|| result.value.generation !== request.generation
 						|| result.value.headSha !== request.headSha
-						|| result.value.revision < operation.authorization.pullRequestRevision) {
+						|| result.value.revision < minimumDraftRevision) {
 						throw new Error("parent-ready quarantine did not restore the exact draft");
 					}
-					const stateValue = await this.#parentReadyAuthority.readParentReadyState(
-						this.parentReadyAuthorityQuery(plan, operation.authorization),
-						context,
-					);
-					const state = validateParentReadyAuthorityState(stateValue);
+					const confirmation = await this.boundedParentReadyRecoveryCall((context) =>
+						this.#parentReadyAuthority.readParentReadyState(query, context));
+					if (confirmation.kind === "timeout") abandonedSettlements.add(confirmation.settlement);
+					if (confirmation.kind !== "value") throw new Error("parent-ready quarantine confirmation failed");
+					const state = validateParentReadyAuthorityState(confirmation.value);
 					if (state.phase !== "draft_restored" || state.status !== "settled"
 						|| state.fence !== request.recovery.attempt
 						|| state.invocationId !== request.recovery.invocationId
 						|| state.recoveryId !== request.recovery.recoveryId
+						|| state.authorization.digest !== operation.authorization.digest
+						|| !canonicalDataEqual(state.readyMutation, operation.mutation)
 						|| !canonicalDataEqual(state.rollbackMutation, request.mutation)) {
 						throw new Error("parent-ready quarantine state is not durably settled");
 					}
-					timedOutAttempts.clear();
+					abandonedSettlements.clear();
 					return;
 				} catch {
 					// A malformed response cannot release the fence; a newer ordered attempt must supersede it.
+					minimumReleaseFence = Math.max(minimumReleaseFence, request.recovery.attempt + 1);
 				}
 			}
 			await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
@@ -4351,7 +4444,12 @@ export class GitHubParentOrchestrator {
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
 		if (initialState?.phase === "ready_settled" && sameOperation(initialState)) {
-			const reused = await this.reconcileVisible(() => this.authorizedVisibleReady(plan, integrationValues, operation));
+			const reused = await this.reconcileVisible(() => this.authorizedVisibleReady(
+				plan,
+				integrationValues,
+				operation,
+				initialState.appliedRevision ?? undefined,
+			));
 			return reused === null
 				? { kind: "blocked", blockers: ["parent_ready_authority_moved"] }
 				: { kind: "ready", pullRequest: reused, reused: true };
@@ -4377,6 +4475,41 @@ export class GitHubParentOrchestrator {
 			freshness,
 			mutation: operation.mutation,
 		});
+		let begun: ParentReadyAuthorityState;
+		try {
+			begun = await this.callExternal(
+				"beginParentReady",
+				async (context) => validateParentReadyAuthorityState(
+					await this.#parentReadyAuthority.beginParentReady(request, context),
+				),
+			);
+		} catch (error) {
+			if (error instanceof ExternalPortError) {
+				return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+			}
+			throw error;
+		}
+		if (!sameOperation(begun)) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
+		}
+		if (["ready_effect_applied", "recovery_claimed"].includes(begun.phase)) {
+			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(begun));
+			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+		}
+		if (begun.phase === "ready_settled") {
+			const reused = await this.reconcileVisible(() => this.authorizedVisibleReady(
+				plan,
+				integrationValues,
+				operation,
+				begun.appliedRevision ?? undefined,
+			));
+			return reused === null
+				? { kind: "blocked", blockers: ["parent_ready_authority_moved"] }
+				: { kind: "ready", pullRequest: reused, reused: true };
+		}
+		if (begun.phase !== "ready_invoking" || begun.fence !== 0) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
+		}
 		let comparison: ParentReadyCompareEffectResult;
 		try {
 			comparison = await this.callExternal(
@@ -4406,7 +4539,8 @@ export class GitHubParentOrchestrator {
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
 		if (authorityState === null || !sameOperation(authorityState)
-			|| !["ready_effect_applied", "ready_settled"].includes(authorityState.phase)) {
+			|| !["ready_effect_applied", "ready_settled"].includes(authorityState.phase)
+			|| authorityState.appliedRevision !== readyRevision) {
 			this.startTrackedParentReadyRecovery(plan, operation);
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
@@ -4442,14 +4576,19 @@ export class GitHubParentOrchestrator {
 			} catch (error) {
 				if (!(error instanceof ExternalPortError) || !error.uncertain) throw error;
 				try {
-					authorityState = await this.readParentReadyAuthorityState(plan, operation.authorization);
+					const query = this.parentReadyAuthorityQuery(plan, operation.authorization);
+					const reread = await this.boundedParentReadyRecoveryCall((context) =>
+						this.#parentReadyAuthority.readParentReadyState(query, context));
+					if (reread.kind !== "value" || reread.value === null) throw new Error("settlement reread failed");
+					authorityState = validateParentReadyAuthorityState(reread.value);
 				} catch {
 					authorityState = null;
 				}
 			}
 		}
 		if (authorityState === null || authorityState.phase !== "ready_settled"
-			|| authorityState.status !== "settled" || authorityState.fence !== 0 || !sameOperation(authorityState)) {
+			|| authorityState.status !== "settled" || authorityState.fence !== 0
+			|| authorityState.appliedRevision !== readyRevision || !sameOperation(authorityState)) {
 			this.startTrackedParentReadyRecovery(plan, operation);
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}

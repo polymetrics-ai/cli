@@ -661,15 +661,14 @@ export function evaluateGitHubPullRequestEvidence(
 	if (evidence.requestedChanges.some((change) => !change.dismissed)) blockers.add("changes_requested");
 	if (evidence.threads.some((thread) => !thread.resolved)) blockers.add("unresolved_thread");
 	const dispositions = new Map(evidence.dispositions.map((disposition) => [disposition.findingId, disposition]));
-	const blockingFindings = evidence.reviews.flatMap((review) => review.findings
-		.filter((finding) => finding.severity === "blocking")
+	const actionableFindings = evidence.reviews.flatMap((review) => review.findings
 		.map((finding) => ({ finding, completedAt: review.completedAt })));
-	let latestBlockingBoundary = "";
-	if (blockingFindings.some(({ finding, completedAt }) => {
+	let latestDispositionBoundary = "";
+	if (actionableFindings.some(({ finding, completedAt }) => {
 		const disposition = dispositions.get(finding.id);
 		if (disposition === undefined || disposition.kind !== "fixed" || disposition.headSha !== expected.headSha
 			|| disposition.recordedAt <= completedAt) return true;
-		latestBlockingBoundary = [latestBlockingBoundary, completedAt, disposition.recordedAt].sort().at(-1) ?? "";
+		latestDispositionBoundary = [latestDispositionBoundary, completedAt, disposition.recordedAt].sort().at(-1) ?? "";
 		return false;
 	})) blockers.add("undispositioned_finding");
 	const reviewDecision = reconcileIndependentReview({
@@ -678,7 +677,7 @@ export function evaluateGitHubPullRequestEvidence(
 		attestations: expected.attestations,
 	});
 	if (!evidence.reviewsComplete || reviewDecision.kind !== "satisfied"
-		|| (reviewDecision.kind === "satisfied" && reviewDecision.review.completedAt <= latestBlockingBoundary)) {
+		|| (reviewDecision.kind === "satisfied" && reviewDecision.review.completedAt <= latestDispositionBoundary)) {
 		blockers.add("review_missing");
 	}
 	if (blockers.size > 0 || reviewDecision.kind !== "satisfied") return { kind: "blocked", blockers: [...blockers] };

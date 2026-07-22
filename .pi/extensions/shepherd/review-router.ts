@@ -5,6 +5,7 @@ const MAX_ARRAY_ITEMS = 64;
 const MAX_TEXT_BYTES = 512;
 const MAX_PATH_BYTES = 4_096;
 const MAX_RAW_JSON_BYTES = 1_048_576;
+const MAX_ASSIGNMENT_INDEX_BYTES = 256;
 const SHA = /^[0-9a-f]{40}$/;
 const REPOSITORY = /^(?:[a-z0-9.-]+(?::[0-9]{1,5})?\/)?[A-Za-z0-9][A-Za-z0-9._-]{0,99}\/[A-Za-z0-9][A-Za-z0-9._-]{0,99}$/;
 const RFC3339_UTC = /^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.(\d{1,3}))?Z$/;
@@ -206,17 +207,105 @@ const CREDENTIAL_ASSIGNMENT_SUFFIXES = [
 
 const PUBLIC_CREDENTIAL_SHAPED_ASSIGNMENT_NAMES: ReadonlySet<string> = new Set(["FEATURE_TOKEN"]);
 
-function redactCredentialAssignment(match: string, prefix: string, name: string, separator: string): string {
-	const classified = CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => name === suffix || name.endsWith(`_${suffix}`));
-	if (!classified || PUBLIC_CREDENTIAL_SHAPED_ASSIGNMENT_NAMES.has(name)) return match;
-	return `${prefix}${name}${separator}[REDACTED]`;
+function isAssignmentIdentifierStart(value: string): boolean {
+	return value === "_" || (value >= "A" && value <= "Z") || (value >= "a" && value <= "z");
+}
+
+function isAssignmentIdentifierPart(value: string): boolean {
+	return isAssignmentIdentifierStart(value) || (value >= "0" && value <= "9");
+}
+
+function isCredentialAssignmentBase(name: string): boolean {
+	const canonical = name.toUpperCase();
+	return CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => canonical === suffix || canonical.endsWith(`_${suffix}`));
+}
+
+function assignmentValueEnd(input: string, start: number): number {
+	const quote = input[start];
+	if (quote === "\"" || quote === "'") {
+		let cursor = start + 1;
+		while (cursor < input.length && input[cursor] !== quote && input[cursor] !== "\r" && input[cursor] !== "\n") {
+			cursor += 1;
+		}
+		return cursor < input.length && input[cursor] === quote ? cursor + 1 : cursor;
+	}
+	let cursor = start;
+	while (cursor < input.length && !/[\s,;]/u.test(input[cursor])) cursor += 1;
+	return cursor;
+}
+
+function redactCredentialAssignments(input: string): string {
+	const replacements: Array<{ start: number; end: number }> = [];
+	let cursor = 0;
+	while (cursor < input.length) {
+		if (!isAssignmentIdentifierStart(input[cursor])
+			|| (cursor > 0 && isAssignmentIdentifierPart(input[cursor - 1]))) {
+			cursor += 1;
+			continue;
+		}
+		const nameStart = cursor;
+		cursor += 1;
+		while (cursor < input.length && isAssignmentIdentifierPart(input[cursor])) cursor += 1;
+		const name = input.slice(nameStart, cursor);
+		if (!isCredentialAssignmentBase(name)) continue;
+
+		let syntaxCursor = cursor;
+		while (input[syntaxCursor] === " " || input[syntaxCursor] === "\t") syntaxCursor += 1;
+		let indexStatus: "none" | "bounded" | "malformed" = "none";
+		let operatorEnd = 0;
+		if (input[syntaxCursor] === "[") {
+			indexStatus = "malformed";
+			const indexStart = syntaxCursor + 1;
+			let indexEnd = -1;
+			let operatorStart = -1;
+			for (syntaxCursor = indexStart; syntaxCursor < input.length
+				&& input[syntaxCursor] !== "\r" && input[syntaxCursor] !== "\n"; syntaxCursor += 1) {
+				if (input[syntaxCursor] === "]" && indexEnd === -1) indexEnd = syntaxCursor;
+				if (input[syntaxCursor] === "=") {
+					operatorStart = input[syntaxCursor - 1] === "+" ? syntaxCursor - 1 : syntaxCursor;
+					operatorEnd = syntaxCursor + 1;
+					break;
+				}
+			}
+			if (indexEnd !== -1 && operatorStart !== -1) {
+				const index = input.slice(indexStart, indexEnd);
+				const separator = input.slice(indexEnd + 1, operatorStart);
+				if (index.length > 0 && Buffer.byteLength(index) <= MAX_ASSIGNMENT_INDEX_BYTES
+					&& /^[ \t]*$/u.test(separator)) {
+					indexStatus = "bounded";
+				}
+			}
+		} else if (input.startsWith("+=", syntaxCursor)) {
+			operatorEnd = syntaxCursor + 2;
+		} else if (input[syntaxCursor] === "=") {
+			operatorEnd = syntaxCursor + 1;
+		}
+
+		if (operatorEnd === 0) continue;
+		const publicAssignment = PUBLIC_CREDENTIAL_SHAPED_ASSIGNMENT_NAMES.has(name) && indexStatus === "none";
+		if (publicAssignment) continue;
+
+		let valueStart = operatorEnd;
+		while (input[valueStart] === " " || input[valueStart] === "\t") valueStart += 1;
+		if (valueStart >= input.length || /[\s,;]/u.test(input[valueStart])) continue;
+		const valueEnd = assignmentValueEnd(input, valueStart);
+		if (valueEnd > valueStart) replacements.push({ start: valueStart, end: valueEnd });
+		cursor = Math.max(cursor, valueEnd);
+	}
+	if (replacements.length === 0) return input;
+	let output = "";
+	let copiedUntil = 0;
+	for (const replacement of replacements) {
+		output += `${input.slice(copiedUntil, replacement.start)}[REDACTED]`;
+		copiedUntil = replacement.end;
+	}
+	return output + input.slice(copiedUntil);
 }
 
 export function redactSensitiveText(input: string): string {
 	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?|cookies?|set[_-]?cookie|session(?:[_ -]?(?:id|token|cookie))?|csrf[_-]?token)";
 	const credentialEnvironmentName = "(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY|GITHUB_TOKEN|GH_TOKEN|NPM_TOKEN|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|AZURE_CLIENT_SECRET|GOOGLE_APPLICATION_CREDENTIALS|DATABASE_URL)";
-	const credentialAssignment = /(^|[^A-Za-z0-9_])([A-Z_][A-Z0-9_]*)([ \t]*=[ \t]*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gmu;
-	return input
+	return redactCredentialAssignments(input)
 		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
 		.replace(/\b((?:Set-Cookie|Cookie|X-(?:Session|Auth|CSRF)(?:-Id|-Token)?))\s*:\s*[^\r\n]+/giu, "$1: [REDACTED]")
 		.replace(/\bAuthorization\s*:\s*[^\r\n,;]+/giu, "Authorization: [REDACTED]")
@@ -224,7 +313,6 @@ export function redactSensitiveText(input: string): string {
 		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "giu"), "$1\"[REDACTED]\"")
 		.replace(/(?:^|[\r\n])([ \t]*(?:(?:machine|default)[ \t]+[^\r\n]+?[ \t]+)?password[ \t]+)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
 		.replace(/((?:^|[^A-Za-z0-9])(?:\/\/[^\s:]+\/)?_(?:authToken|auth|password)\s*=\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
-		.replace(credentialAssignment, redactCredentialAssignment)
 		.replace(new RegExp(`\\b${credentialEnvironmentName}\\s*=\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "giu"), "SECRET=[REDACTED]")
 		.replace(/\b((?:credentials?|credential)[_-](?:file|path)|google_application_credentials)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "$1=[REDACTED]")
 		.replace(/\b((?:client-key-data|token)\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;}]+)/giu, "$1[REDACTED]")
