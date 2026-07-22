@@ -37,6 +37,8 @@ const INTRINSIC_IS_ARRAY = Array.isArray;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 const INTRINSIC_REFLECT_APPLY = Reflect.apply;
 const INTRINSIC_JSON_STRINGIFY = JSON.stringify;
+const INTRINSIC_STRING_CHAR_CODE_AT = String.prototype.charCodeAt;
+const INTRINSIC_STRING_TRIM = String.prototype.trim;
 const NATIVE_ABORTED_GETTER = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(AbortSignal.prototype, "aborted")?.get;
 
 /** The complete reviewed host-tool domain. Unknown strings have no extension path. */
@@ -556,7 +558,8 @@ function compileSchemaNode(
 		) => {
 			chargeProjectionNode(budget, valueDepth, valueDescription);
 			const normalized = normalizeSchemaString(value, valueDescription);
-			if (normalized.length < minimum || normalized.length > maximum || !enumAccepts(enumValues, normalized)) {
+			const normalizedLength = jsonSchemaStringLength(normalized);
+			if (normalizedLength < minimum || normalizedLength > maximum || !enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its string schema`);
 			}
 			chargeProjectedScalarBytes(budget, normalized, valueDescription);
@@ -907,6 +910,20 @@ function normalizeSchemaString(value: unknown, description: string): string {
 	throw new ToolPolicyError(`${description} violates its string schema`);
 }
 
+// JSON Schema counts Unicode code points rather than UTF-16 code units. Keep the
+// projection path allocation-free while matching Pi's Ajv-backed validator.
+function jsonSchemaStringLength(value: string): number {
+	let length = 0;
+	for (let index = 0; index < value.length; index += 1) {
+		length += 1;
+		const first = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
+		if (first < 0xd800 || first > 0xdbff || index + 1 >= value.length) continue;
+		const second = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index + 1]) as number;
+		if (second >= 0xdc00 && second <= 0xdfff) index += 1;
+	}
+	return length;
+}
+
 function normalizeSchemaNumber(
 	value: unknown,
 	type: "integer" | "number",
@@ -916,7 +933,8 @@ function normalizeSchemaNumber(
 	if (value === null) normalized = 0;
 	else if (typeof value === "boolean") normalized = value ? 1 : 0;
 	else if (typeof value === "number") normalized = value;
-	else if (typeof value === "string" && value.length > 0) normalized = Number(value);
+	else if (typeof value === "string" &&
+		(INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TRIM, value, []) as string).length > 0) normalized = Number(value);
 	else throw new ToolPolicyError(`${description} violates its numeric schema`);
 	if (!Number.isFinite(normalized) || (type === "integer" && !Number.isInteger(normalized))) {
 		throw new ToolPolicyError(`${description} violates its numeric schema`);

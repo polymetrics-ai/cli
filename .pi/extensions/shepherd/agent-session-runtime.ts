@@ -52,16 +52,22 @@ const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
 const INTRINSIC_ARRAY_IS_ARRAY = Array.isArray;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
+const INTRINSIC_OBJECT_CREATE = Object.create;
+const INTRINSIC_OBJECT_DEFINE_PROPERTY = Object.defineProperty;
 const INTRINSIC_OBJECT_FREEZE = Object.freeze;
+const INTRINSIC_OBJECT_HAS_OWN = Object.hasOwn;
+const INTRINSIC_NUMBER_IS_FINITE = Number.isFinite;
 const INTRINSIC_NUMBER_IS_SAFE_INTEGER = Number.isSafeInteger;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
+const INTRINSIC_IS_PROMISE = nodeTypes.isPromise;
 const INTRINSIC_REFLECT_APPLY = Reflect.apply;
 const INTRINSIC_JSON = JSON;
 const INTRINSIC_JSON_PARSE = JSON.parse;
+const INTRINSIC_JSON_STRINGIFY = JSON.stringify;
 const INTRINSIC_PROMISE = Promise;
 const INTRINSIC_PROMISE_PROTOTYPE = Promise.prototype;
 const INTRINSIC_PROMISE_THEN = Promise.prototype.then;
-const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
+const NATIVE_ABORTED_GETTER = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(AbortSignal.prototype, "aborted")?.get;
 
 interface RuntimeResourceLoader {
 	reload(): Promise<void>;
@@ -246,7 +252,7 @@ class OwnedSettlementCell {
 		if (this.#settled) return;
 		this.#settled = true;
 		try {
-			this.#resolve(Object.freeze(settlement));
+			this.#resolve(INTRINSIC_OBJECT_FREEZE(settlement));
 		} catch {
 			// The captured intrinsic resolver is non-throwing; preserve totality if the host mutates globals.
 		}
@@ -255,14 +261,14 @@ class OwnedSettlementCell {
 
 function observePromise(promise: Promise<unknown>): void {
 	try {
-		Reflect.apply(INTRINSIC_PROMISE_THEN, promise, [undefined, () => undefined]);
+		INTRINSIC_REFLECT_APPLY(INTRINSIC_PROMISE_THEN, promise, [undefined, () => undefined]);
 	} catch {
 		// Only exact internally-created promises reach this sink.
 	}
 }
 
 function installPromptSettlementHandlers(promise: Promise<unknown>, cell: OwnedSettlementCell): void {
-	const observer = Reflect.apply(INTRINSIC_PROMISE_THEN, promise, [
+	const observer = INTRINSIC_REFLECT_APPLY(INTRINSIC_PROMISE_THEN, promise, [
 		() => { cell.settle({ status: "fulfilled" }); },
 		(reason: unknown) => { cell.settle({ status: "rejected", reason }); },
 	]) as Promise<unknown>;
@@ -270,7 +276,7 @@ function installPromptSettlementHandlers(promise: Promise<unknown>, cell: OwnedS
 }
 
 function adoptPromptReturn(returned: unknown, cell: OwnedSettlementCell): void {
-	if (nodeTypes.isPromise(returned)) {
+	if (INTRINSIC_IS_PROMISE(returned)) {
 		if (INTRINSIC_IS_PROXY(returned) || INTRINSIC_GET_PROTOTYPE_OF(returned) !== INTRINSIC_PROMISE_PROTOTYPE ||
 			INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(returned, "constructor") !== undefined ||
 			INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(returned, "then") !== undefined) {
@@ -283,7 +289,7 @@ function adoptPromptReturn(returned: unknown, cell: OwnedSettlementCell): void {
 	installPromptSettlementHandlers(adopted, cell);
 }
 
-const UNCAPTURED_SESSION_OPERATION: CapturedSessionOperation = Object.freeze({
+const UNCAPTURED_SESSION_OPERATION: CapturedSessionOperation = INTRINSIC_OBJECT_FREEZE({
 	available: false,
 	operation: undefined,
 	failurePresent: false,
@@ -358,7 +364,7 @@ class OwnedSession {
 
 	activeToolNames(): unknown {
 		if (!this.#getActiveToolNames.available) throw this.#getActiveToolNames.failure;
-		return Reflect.apply(this.#getActiveToolNames.operation!, this.#session, []);
+		return INTRINSIC_REFLECT_APPLY(this.#getActiveToolNames.operation!, this.#session, []);
 	}
 
 	startPrompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<PromptSettlement> {
@@ -375,7 +381,7 @@ class OwnedSession {
 			return cell.promise;
 		}
 		try {
-			const returned = Reflect.apply(this.#prompt.operation!, this.#session, [value, options]);
+			const returned = INTRINSIC_REFLECT_APPLY(this.#prompt.operation!, this.#session, [value, options]);
 			adoptPromptReturn(returned, cell);
 		} catch (reason) {
 			cell.settle({ status: "rejected", reason });
@@ -392,7 +398,7 @@ class OwnedSession {
 			throw new AgentSessionRuntimeError("AgentSession subscription ownership was already acquired");
 		}
 		if (!this.#subscribe.available) throw this.#subscribe.failure;
-		const unsubscribe = Reflect.apply(this.#subscribe.operation!, this.#session, [listener]);
+		const unsubscribe = INTRINSIC_REFLECT_APPLY(this.#subscribe.operation!, this.#session, [listener]);
 		if (typeof unsubscribe !== "function") {
 			throw new AgentSessionRuntimeError("AgentSession subscribe returned an invalid cleanup operation");
 		}
@@ -402,7 +408,7 @@ class OwnedSession {
 	abortOnce(): Promise<void> {
 		if (!this.#abortPromise) {
 			this.#abortPromise = this.#abort.available
-				? Promise.resolve().then(() => Reflect.apply(this.#abort.operation!, this.#session, [])).then(() => undefined)
+				? Promise.resolve().then(() => INTRINSIC_REFLECT_APPLY(this.#abort.operation!, this.#session, [])).then(() => undefined)
 				: Promise.resolve();
 			this.#abortPromise.catch(() => undefined);
 		}
@@ -412,7 +418,7 @@ class OwnedSession {
 	waitOnce(): Promise<void> {
 		if (!this.#waitPromise) {
 			this.#waitPromise = this.#waitForIdle.available
-				? Promise.resolve().then(() => Reflect.apply(this.#waitForIdle.operation!, this.#session, [])).then(() => undefined)
+				? Promise.resolve().then(() => INTRINSIC_REFLECT_APPLY(this.#waitForIdle.operation!, this.#session, [])).then(() => undefined)
 				: Promise.resolve();
 			this.#waitPromise.catch(() => undefined);
 		}
@@ -435,7 +441,7 @@ class OwnedSession {
 		if (!this.#disposePromise) {
 			this.#disposePromise = this.#dispose.available
 				? Promise.resolve().then(() =>
-					Promise.resolve(Reflect.apply(this.#dispose.operation!, this.#session, []))).then(() => undefined)
+					Promise.resolve(INTRINSIC_REFLECT_APPLY(this.#dispose.operation!, this.#session, []))).then(() => undefined)
 				: Promise.reject(this.#dispose.failure);
 			this.#disposePromise.catch(() => undefined);
 		}
@@ -695,7 +701,7 @@ function nativeSignalAborted(signal: AbortSignal): boolean {
 	if (typeof NATIVE_ABORTED_GETTER !== "function") {
 		throw new AgentSessionRuntimeError("native AbortSignal state getter is unavailable");
 	}
-	return Boolean(Reflect.apply(NATIVE_ABORTED_GETTER, signal, []));
+	return Boolean(INTRINSIC_REFLECT_APPLY(NATIVE_ABORTED_GETTER, signal, []));
 }
 
 interface MutationLease {
@@ -1373,16 +1379,16 @@ export class ShepherdAgentSessionRuntime {
 }
 
 function captureAdmissionRunId(request: RoleRunRequest): string {
-	if (!request || typeof request !== "object" || Array.isArray(request) || nodeTypes.isProxy(request)) {
+	if (!request || typeof request !== "object" || INTRINSIC_ARRAY_IS_ARRAY(request) || INTRINSIC_IS_PROXY(request)) {
 		throw new AgentSessionRuntimeError("AgentSession request must be an object");
 	}
-	const bindingDescriptor = Reflect.getOwnPropertyDescriptor(request, "binding");
+	const bindingDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(request, "binding");
 	if (!bindingDescriptor?.enumerable || bindingDescriptor.get || bindingDescriptor.set || !("value" in bindingDescriptor) ||
 		!bindingDescriptor.value || typeof bindingDescriptor.value !== "object" ||
-		Array.isArray(bindingDescriptor.value) || nodeTypes.isProxy(bindingDescriptor.value)) {
+		INTRINSIC_ARRAY_IS_ARRAY(bindingDescriptor.value) || INTRINSIC_IS_PROXY(bindingDescriptor.value)) {
 		throw new AgentSessionRuntimeError("request binding must be an own data field");
 	}
-	const runIdDescriptor = Reflect.getOwnPropertyDescriptor(bindingDescriptor.value, "runId");
+	const runIdDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(bindingDescriptor.value, "runId");
 	if (!runIdDescriptor?.enumerable || runIdDescriptor.get || runIdDescriptor.set || !("value" in runIdDescriptor) ||
 		!validIdentifier(runIdDescriptor.value)) {
 		throw new AgentSessionRuntimeError("request runId must be an own data field");
@@ -1411,10 +1417,10 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const bindingSource = requestFields.get("binding");
 
 	routeForRole(role);
-	if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMEOUT_MS) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(timeoutMs) || timeoutMs <= 0 || timeoutMs > MAX_TIMEOUT_MS) {
 		throw new AgentSessionRuntimeError("timeoutMs must be a positive bounded safe integer");
 	}
-	if (deadlineAt !== undefined && (!Number.isSafeInteger(deadlineAt) || deadlineAt <= Date.now())) {
+	if (deadlineAt !== undefined && (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(deadlineAt) || deadlineAt <= Date.now())) {
 		throw new AgentSessionRuntimeError("deadlineAt must be a future epoch-millisecond safe integer");
 	}
 	if (signal !== undefined && !(signal instanceof AbortSignal)) {
@@ -1434,7 +1440,7 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const readPrefixesSource = captureFreshDenseArray(authorityFields.get("readPrefixes"), "authority read prefixes", 64, false);
 	const writePrefixesSource = captureFreshDenseArray(authorityFields.get("writePrefixes"), "authority write prefixes", 64, true);
 	const capabilityNamesSource = captureFreshDenseArray(authorityFields.get("capabilityNames"), "authority capability names", 32, true);
-	if (typeof issue !== "number" || !Number.isSafeInteger(issue) || issue < 1) {
+	if (typeof issue !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(issue) || issue < 1) {
 		throw new AgentSessionRuntimeError("authority issue is invalid");
 	}
 	if (typeof branch !== "string" || branch.length < 1 || branch.length > 255 ||
@@ -1454,8 +1460,8 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		}
 		capabilityNames.push(name);
 	}
-	Object.freeze(capabilityNames);
-	const authority = Object.freeze({
+	INTRINSIC_OBJECT_FREEZE(capabilityNames);
+	const authority = INTRINSIC_OBJECT_FREEZE({
 		issue: Number(issue),
 		branch,
 		workspaceId: authorityWorkspaceId,
@@ -1475,12 +1481,12 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const candidateHead = bindingFields.get("candidateHead");
 	const validationNonce = bindingFields.get("validationNonce");
 	if (!validIdentifier(runId) || !validIdentifier(laneId) ||
-		typeof generation !== "number" || !Number.isSafeInteger(generation) || generation < 1 ||
+		typeof generation !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(generation) || generation < 1 ||
 		typeof candidateHead !== "string" || !/^[0-9a-f]{40}$/.test(candidateHead) ||
 		!validIdentifier(validationNonce) || validationNonce.length < 12) {
 		throw new AgentSessionRuntimeError("request binding is invalid");
 	}
-	const binding = Object.freeze({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
+	const binding = INTRINSIC_OBJECT_FREEZE({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
 
 	const workspaceFields = captureKnownRecordFields(workspaceSource, "workspace capability", [
 		"id", "cwd", "readText", "editText", "writeText",
@@ -1496,17 +1502,17 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		throw new AgentSessionRuntimeError("workspace identity, cwd, or capability does not match the immutable authority envelope");
 	}
 	const canonicalCwd = canonicalWorkspacePath(workspaceCwd);
-	const workspace = Object.freeze({
+	const workspace = INTRINSIC_OBJECT_FREEZE({
 		id: workspaceId,
 		cwd: canonicalCwd,
 		readText(path: string, options: { offset?: number; limit?: number; signal?: AbortSignal }) {
-			return Reflect.apply(readText, workspaceSource as object, [path, options]);
+			return INTRINSIC_REFLECT_APPLY(readText, workspaceSource as object, [path, options]);
 		},
 		editText(path: string, oldText: string, newText: string, operationSignal?: AbortSignal) {
-			return Reflect.apply(editText, workspaceSource as object, [path, oldText, newText, operationSignal]);
+			return INTRINSIC_REFLECT_APPLY(editText, workspaceSource as object, [path, oldText, newText, operationSignal]);
 		},
 		writeText(path: string, content: string, operationSignal?: AbortSignal) {
-			return Reflect.apply(writeText, workspaceSource as object, [path, content, operationSignal]);
+			return INTRINSIC_REFLECT_APPLY(writeText, workspaceSource as object, [path, content, operationSignal]);
 		},
 	}) satisfies ScopedWorkspace;
 
@@ -1515,15 +1521,15 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	for (const capability of capabilityValues) {
 		capabilities.push(normalizeCapability(capability as HostCapability));
 	}
-	Object.freeze(capabilities);
+	INTRINSIC_OBJECT_FREEZE(capabilities);
 	const contextValues = captureFreshDenseArray(contextSource, "role context", 64, true);
 	const context: string[] = [];
 	for (const entry of contextValues) {
 		if (typeof entry !== "string") throw new AgentSessionRuntimeError("role context item is invalid");
 		context.push(entry);
 	}
-	Object.freeze(context);
-	const normalized = Object.freeze({
+	INTRINSIC_OBJECT_FREEZE(context);
+	const normalized = INTRINSIC_OBJECT_FREEZE({
 		role,
 		task,
 		context,
@@ -1569,13 +1575,13 @@ function normalizeCapability(capability: HostCapability): HostCapability {
 		typeof execute !== "function") {
 		throw new AgentSessionRuntimeError("capability identity, mutability, or execute contract is invalid");
 	}
-	return Object.freeze({
+	return INTRINSIC_OBJECT_FREEZE({
 		name,
 		description,
 		mutates,
 		parameters,
 		execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
-			return Reflect.apply(execute, capability, [input, signal]);
+			return INTRINSIC_REFLECT_APPLY(execute, capability, [input, signal]);
 		},
 	}) as HostCapability;
 }
@@ -1586,7 +1592,7 @@ function captureFreshDenseArray(
 	maximum: number,
 	allowEmpty: boolean,
 ): unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a non-proxy array`);
 	}
 	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
@@ -1595,7 +1601,7 @@ function captureFreshDenseArray(
 	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const lengthValue = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
-		typeof lengthValue !== "number" || !Number.isSafeInteger(lengthValue) || lengthValue < (allowEmpty ? 0 : 1) ||
+		typeof lengthValue !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(lengthValue) || lengthValue < (allowEmpty ? 0 : 1) ||
 		lengthValue > maximum) {
 		throw new AgentSessionRuntimeError(`${description} has an invalid authoritative length`);
 	}
@@ -1608,12 +1614,12 @@ function captureFreshDenseArray(
 		}
 		captured[index] = descriptor.value;
 	}
-	Object.freeze(captured);
+	INTRINSIC_OBJECT_FREEZE(captured);
 	return captured;
 }
 
 function mutationLeaseFor(request: RoleRunRequest): MutationLease {
-	return Object.freeze({
+	return INTRINSIC_OBJECT_FREEZE({
 		issue: request.authority.issue,
 		branch: request.authority.branch,
 		workspaceId: request.authority.workspaceId,
@@ -1633,7 +1639,7 @@ function captureCreatedSession(
 	expectedTools: readonly string[],
 	assertActive?: () => void,
 ): CreatedSessionClaim {
-	if (!created || typeof created !== "object" || Array.isArray(created) || nodeTypes.isProxy(created)) {
+	if (!created || typeof created !== "object" || INTRINSIC_ARRAY_IS_ARRAY(created) || INTRINSIC_IS_PROXY(created)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
 	}
 	const captureFailures: unknown[] = [];
@@ -1664,7 +1670,7 @@ function captureCreatedSession(
 	const sessionDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(created, "session");
 	let session: unknown;
 	if (sessionDescriptor && "value" in sessionDescriptor) session = sessionDescriptor.value;
-	else if (sessionDescriptor?.get) session = Reflect.apply(sessionDescriptor.get, created, []);
+	else if (sessionDescriptor?.get) session = INTRINSIC_REFLECT_APPLY(sessionDescriptor.get, created, []);
 	afterReentrantCallback();
 	if (!session || typeof session !== "object") {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result without a cleanable session");
@@ -1729,7 +1735,7 @@ function captureCreatedSession(
 	});
 	captureOptionalStep(() => { activeTools = captureToolNameArray(rawActiveTools); });
 
-	return Object.freeze({
+	return INTRINSIC_OBJECT_FREEZE({
 		owned,
 		validate(): void {
 			if (captureFailures.length > 0) {
@@ -1749,7 +1755,7 @@ function captureCreatedSession(
 }
 
 function captureExtensionsResult(value: unknown): { extensions: unknown; errors: unknown } {
-	if (!value || typeof value !== "object" || Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
+	if (!value || typeof value !== "object" || INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid extensions result");
 	}
 	assertApprovedRecordPrototype(value, "Pi extensions result");
@@ -1770,7 +1776,7 @@ function captureExtensionsResult(value: unknown): { extensions: unknown; errors:
 }
 
 function captureExactEmptyArray(value: unknown, description: string): void {
-	if (!Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be an exact non-proxy empty array`);
 	}
 	assertApprovedArrayPrototype(value, description);
@@ -1782,11 +1788,11 @@ function captureExactEmptyArray(value: unknown, description: string): void {
 }
 
 function captureToolNameArray(value: unknown): readonly string[] | undefined {
-	if (!Array.isArray(value) || INTRINSIC_IS_PROXY(value)) return undefined;
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) return undefined;
 	assertApprovedArrayPrototype(value, "Pi AgentSession active tool names");
 	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
-		typeof lengthDescriptor.value !== "number" || !Number.isSafeInteger(lengthDescriptor.value) ||
+		typeof lengthDescriptor.value !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(lengthDescriptor.value) ||
 		lengthDescriptor.value < 0 || lengthDescriptor.value > 256) {
 		return undefined;
 	}
@@ -1800,7 +1806,7 @@ function captureToolNameArray(value: unknown): readonly string[] | undefined {
 		}
 		names.push(descriptor.value);
 	}
-	return Object.freeze(names);
+	return INTRINSIC_OBJECT_FREEZE(names);
 }
 
 function assertApprovedRecordPrototype(value: object, description: string): void {
@@ -2083,7 +2089,7 @@ function capturePiLifecycleEvent(
 			return undefined;
 		}
 		default:
-			throw new AgentSessionRuntimeError(`unsupported Pi AgentSession event ${JSON.stringify(type)}`);
+			throw new AgentSessionRuntimeError(`unsupported Pi AgentSession event ${INTRINSIC_JSON_STRINGIFY(type)}`);
 	}
 }
 
@@ -2149,7 +2155,7 @@ function captureToolResultMessage(value: unknown, maximum: number): CapturedTool
 	const toolName = requiredLifecycleString(fields, "toolName", "tool result name");
 	const isError = fields.get("isError");
 	const timestamp = fields.get("timestamp");
-	if (typeof isError !== "boolean" || typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+	if (typeof isError !== "boolean" || typeof timestamp !== "number" || !INTRINSIC_NUMBER_IS_FINITE(timestamp)) {
 		throw new AgentSessionRuntimeError("Pi tool result status or timestamp is invalid");
 	}
 	const resultIdentity = captureToolResultPayloadIdentity(
@@ -2165,7 +2171,7 @@ function captureToolResultMessage(value: unknown, maximum: number): CapturedTool
 		isError,
 		timestamp,
 	}, "Pi tool result message identity", maximum));
-	return Object.freeze({ toolCallId, toolName, resultIdentity, isError, timestamp, identity });
+	return INTRINSIC_OBJECT_FREEZE({ toolCallId, toolName, resultIdentity, isError, timestamp, identity });
 }
 
 function captureToolResultPayloadIdentity(
@@ -2265,7 +2271,7 @@ function captureStreamingUpdateCharge(
 		error: ["type", "reason", "error"],
 	};
 	const shape = shapes[type];
-	if (!shape) throw new AgentSessionRuntimeError(`unsupported Pi assistant streaming event ${JSON.stringify(type)}`);
+	if (!shape) throw new AgentSessionRuntimeError(`unsupported Pi assistant streaming event ${INTRINSIC_JSON_STRINGIFY(type)}`);
 	assertExactCapturedFields(fields, shape, `Pi ${type} streaming event`);
 	const message = captureAssistantTerminal(messageValue, true, maximum, capture.projectArguments);
 	if (!message) throw new AgentSessionRuntimeError("message_update did not contain an assistant message");
@@ -2275,7 +2281,7 @@ function captureStreamingUpdateCharge(
 	if (!inner || inner.identity !== message.identity) {
 		throw new AgentSessionRuntimeError(`Pi ${type} message and cumulative snapshot disagree`);
 	}
-	if (fields.has("contentIndex") && (!Number.isSafeInteger(fields.get("contentIndex")) || Number(fields.get("contentIndex")) < 0)) {
+	if (fields.has("contentIndex") && (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(fields.get("contentIndex")) || Number(fields.get("contentIndex")) < 0)) {
 		throw new AgentSessionRuntimeError(`Pi ${type} content index is invalid`);
 	}
 	const variable = fields.has("delta") ? fields.get("delta") : undefined;
@@ -2423,7 +2429,7 @@ function captureKnownRecordFields(
 		if (!descriptor) continue;
 		if (!descriptor.enumerable) continue;
 		if (descriptor.get || descriptor.set || !("value" in descriptor)) {
-			throw new AgentSessionRuntimeError(`${description} contains an accessor field ${JSON.stringify(key)}`);
+			throw new AgentSessionRuntimeError(`${description} contains an accessor field ${INTRINSIC_JSON_STRINGIFY(key)}`);
 		}
 		fields.set(key, descriptor.value);
 	}
@@ -2441,14 +2447,14 @@ function assertExactCapturedFields(
 }
 
 function captureDenseArray(value: unknown, description: string): readonly unknown[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
 	}
 	assertApprovedArrayPrototype(value, description);
 	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const length = lengthDescriptor && "value" in lengthDescriptor &&
 		typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
-	if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
 	}
 	const captured: unknown[] = [];
@@ -2459,7 +2465,7 @@ function captureDenseArray(value: unknown, description: string): readonly unknow
 		}
 		captured.push(descriptor.value);
 	}
-	return Object.freeze(captured);
+	return INTRINSIC_OBJECT_FREEZE(captured);
 }
 
 type JsonEventValue = null | boolean | number | string | JsonEventArray | JsonEventObject;
@@ -2476,7 +2482,7 @@ interface JsonEventBudget {
 // Canonical JSON is deliberately finite. These are the only record fields consumed from Pi
 // message/tool DTOs or runtime-owned identity records; caller-owned peers are never discovered by
 // scanning a record. Keep this vocabulary schema-oriented and project arbitrary details elsewhere.
-const JSON_EVENT_RECORD_FIELDS = Object.freeze([
+const JSON_EVENT_RECORD_FIELDS = INTRINSIC_OBJECT_FREEZE([
 	"api", "argumentsIdentity", "cacheRead", "cacheWrite", "cacheWrite1h", "changed", "code", "content", "cost",
 	"details", "diagnostics", "error", "errorMessage", "id", "input", "isError", "limit", "message", "model",
 	"name", "newText", "offset", "oldText", "output", "partialJson", "path", "provider", "reasoning", "redacted",
@@ -2502,7 +2508,7 @@ function projectToolArguments(
 	maximum: number,
 ): string {
 	const projected = projectArguments(toolName, value, maximum);
-	const identity = JSON.stringify(projected);
+	const identity = INTRINSIC_JSON_STRINGIFY(projected);
 	if (typeof identity !== "string" || byteLength(identity) > maximum) {
 		throw new AgentSessionRuntimeError(`${toolName} projected arguments exceeded their identity bound`);
 	}
@@ -2546,14 +2552,14 @@ function snapshotOpaqueValue(value: unknown, description: string, maximum: numbe
 	if (value === null || typeof value === "string" || typeof value === "boolean" || typeof value === "number") {
 		return snapshotEventJson(value, description, maximum);
 	}
-	if (typeof value !== "object" || nodeTypes.isProxy(value)) {
+	if (typeof value !== "object" || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} contains an unsupported opaque value`);
 	}
-	if (Array.isArray(value)) {
+	if (INTRINSIC_ARRAY_IS_ARRAY(value)) {
 		assertApprovedArrayPrototype(value, `${description} opaque array`);
 		const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 		const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
-		if (typeof length !== "number" || !Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
+		if (typeof length !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 			throw new AgentSessionRuntimeError(`${description} opaque array length is invalid`);
 		}
 		return snapshotEventJson(`[redacted opaque array:${length}]`, description, maximum);
@@ -2599,22 +2605,22 @@ function snapshotEventJsonValue(
 	if (typeof value === "string") { add(byteLength(value) + 2); return value; }
 	if (typeof value === "boolean") { add(5); return value; }
 	if (typeof value === "number") {
-		if (!Number.isFinite(value)) throw new AgentSessionRuntimeError(`${description} contains a non-JSON number`);
+		if (!INTRINSIC_NUMBER_IS_FINITE(value)) throw new AgentSessionRuntimeError(`${description} contains a non-JSON number`);
 		add(24);
 		return value;
 	}
 	if (typeof value !== "object") throw new AgentSessionRuntimeError(`${description} contains a non-JSON value`);
-	if (nodeTypes.isProxy(value)) throw new AgentSessionRuntimeError(`${description} contains a proxy`);
+	if (INTRINSIC_IS_PROXY(value)) throw new AgentSessionRuntimeError(`${description} contains a proxy`);
 	if (ancestors.has(value)) throw new AgentSessionRuntimeError(`${description} contains a cycle`);
 	ancestors.add(value);
 	add(2);
 	try {
-		if (Array.isArray(value)) {
+		if (INTRINSIC_ARRAY_IS_ARRAY(value)) {
 			assertApprovedArrayPrototype(value, `${description} array`);
 			const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 			const length = lengthDescriptor && "value" in lengthDescriptor &&
 				typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
-			if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
+			if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 				throw new AgentSessionRuntimeError(`${description} array is oversized`);
 			}
 			budget.keys += length;
@@ -2627,10 +2633,10 @@ function snapshotEventJsonValue(
 				}
 				snapshot.push(snapshotEventJsonValue(descriptor.value, depth + 1, budget, ancestors, description));
 			}
-			return Object.freeze(snapshot);
+			return INTRINSIC_OBJECT_FREEZE(snapshot);
 		}
 		assertApprovedRecordPrototype(value, description);
-		const snapshot = Object.create(null) as Record<string, JsonEventValue>;
+		const snapshot = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonEventValue>;
 		for (const key of JSON_EVENT_RECORD_FIELDS) {
 			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 			if (!descriptor?.enumerable) continue;
@@ -2642,21 +2648,21 @@ function snapshotEventJsonValue(
 				throw new AgentSessionRuntimeError(`${description} contains an invalid field`);
 			}
 			add(byteLength(key) + 3);
-			Object.defineProperty(snapshot, key, {
+			INTRINSIC_OBJECT_DEFINE_PROPERTY(snapshot, key, {
 				value: snapshotEventJsonValue(descriptor.value, depth + 1, budget, ancestors, description),
 				enumerable: true,
 				writable: false,
 				configurable: false,
 			});
 		}
-		return Object.freeze(snapshot);
+		return INTRINSIC_OBJECT_FREEZE(snapshot);
 	} finally {
 		ancestors.delete(value);
 	}
 }
 
 function canonicalJson(value: JsonEventValue): string {
-	return JSON.stringify(value);
+	return INTRINSIC_JSON_STRINGIFY(value);
 }
 
 function canonicalToolContent(value: CapturedAssistantContent, _terminal: boolean): string {
@@ -2686,7 +2692,7 @@ function captureAssistantTerminal(
 	const stopReason = fields.get("stopReason");
 	const timestamp = fields.get("timestamp");
 	if (typeof api !== "string" || typeof provider !== "string" || typeof model !== "string" || typeof stopReason !== "string" ||
-		typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+		typeof timestamp !== "number" || !INTRINSIC_NUMBER_IS_FINITE(timestamp)) {
 		throw new AgentSessionRuntimeError("AgentSession assistant terminal contains invalid routing fields");
 	}
 	for (const optionalString of ["responseModel", "responseId", "errorMessage"] as const) {
@@ -2715,7 +2721,7 @@ function captureAssistantTerminal(
 			const textSignature = optionalCapturedString(partFields, "textSignature", "assistant text signature");
 			const identity = canonicalJson(snapshotEventJson({ type, text, ...(textSignature === undefined ? {} : { textSignature }) },
 				"AgentSession assistant text identity", maximum));
-			return Object.freeze({ type, text, identity });
+			return INTRINSIC_OBJECT_FREEZE({ type, text, identity });
 		}
 		if (type === "thinking") {
 			assertAllowedCapturedFields(partFields, ["type", "thinking", "thinkingSignature", "redacted"], ["type", "thinking"],
@@ -2735,7 +2741,7 @@ function captureAssistantTerminal(
 				...(thinkingSignature === undefined ? {} : { thinkingSignature }),
 				...(redacted === undefined ? {} : { redacted }),
 			}, "AgentSession assistant thinking identity", maximum));
-			return Object.freeze({ type, thinking, identity });
+			return INTRINSIC_OBJECT_FREEZE({ type, thinking, identity });
 		}
 		if (type === "toolCall") {
 			assertAllowedCapturedFields(partFields, ["type", "id", "name", "arguments", "thoughtSignature", ...(streaming ? ["partialJson"] : [])],
@@ -2769,9 +2775,9 @@ function captureAssistantTerminal(
 				partialJson,
 				...(thoughtSignature === undefined ? {} : { thoughtSignature }),
 			}, "AgentSession assistant streaming tool identity", maximum));
-			return Object.freeze({ type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity });
+			return INTRINSIC_OBJECT_FREEZE({ type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity });
 		}
-		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${JSON.stringify(type)} is invalid`);
+		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${INTRINSIC_JSON_STRINGIFY(type)} is invalid`);
 	});
 	const envelope = {
 		role: "assistant",
@@ -2795,14 +2801,14 @@ function captureAssistantTerminal(
 		...envelope,
 		content: content.map((part) => part.identity),
 	}, "AgentSession assistant identity", maximum));
-	return Object.freeze({
+	return INTRINSIC_OBJECT_FREEZE({
 		role: "assistant",
 		api,
 		provider,
 		model,
 		stopReason,
 		timestamp,
-		content: Object.freeze(content),
+		content: INTRINSIC_OBJECT_FREEZE(content),
 		envelopeIdentity,
 		identity,
 	});
@@ -2820,7 +2826,7 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 		const type = fields.get("type");
 		const timestamp = fields.get("timestamp");
 		if (typeof type !== "string" || type.length === 0 || type.length > 256 ||
-			typeof timestamp !== "number" || !Number.isFinite(timestamp)) {
+			typeof timestamp !== "number" || !INTRINSIC_NUMBER_IS_FINITE(timestamp)) {
 			throw new AgentSessionRuntimeError("AgentSession assistant diagnostic identity is invalid");
 		}
 		const output: Record<string, JsonEventValue> = { type, timestamp };
@@ -2846,7 +2852,7 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 			}
 			const code = errorFields.get("code");
 			if (code !== undefined) {
-				if (typeof code !== "string" && (typeof code !== "number" || !Number.isFinite(code))) {
+				if (typeof code !== "string" && (typeof code !== "number" || !INTRINSIC_NUMBER_IS_FINITE(code))) {
 					throw new AgentSessionRuntimeError("AgentSession assistant diagnostic error code is invalid");
 				}
 				errorOutput.code = code;
@@ -2856,7 +2862,7 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 		const detailsValue = fields.get("details");
 		if (detailsValue !== undefined) {
 			const details = projectDiagnosticJson(detailsValue, 0, { nodes: 0, keys: 0 }, new WeakSet<object>());
-			if (details === undefined || !details || Array.isArray(details) || typeof details !== "object") {
+			if (details === undefined || !details || INTRINSIC_ARRAY_IS_ARRAY(details) || typeof details !== "object") {
 				throw new AgentSessionRuntimeError("AgentSession assistant diagnostic details are invalid");
 			}
 			output.details = details;
@@ -2879,16 +2885,16 @@ function projectDiagnosticJson(
 	if (value === undefined) return undefined;
 	if (value === null || typeof value === "string" || typeof value === "boolean") return value;
 	if (typeof value === "number") {
-		if (!Number.isFinite(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON number");
+		if (!INTRINSIC_NUMBER_IS_FINITE(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON number");
 		return value;
 	}
-	if (typeof value !== "object" || nodeTypes.isProxy(value)) {
+	if (typeof value !== "object" || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON value");
 	}
 	if (ancestors.has(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a cycle");
 	ancestors.add(value);
 	try {
-		if (Array.isArray(value)) {
+		if (INTRINSIC_ARRAY_IS_ARRAY(value)) {
 			const items = captureDenseArray(value, "AgentSession assistant diagnostic array");
 			budget.keys += items.length;
 			if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic is too wide");
@@ -2900,19 +2906,19 @@ function projectDiagnosticJson(
 				}
 				output.push(projected);
 			}
-			return Object.freeze(output);
+			return INTRINSIC_OBJECT_FREEZE(output);
 		}
 		assertApprovedRecordPrototype(value, "AgentSession assistant diagnostic record");
 		budget.keys += 1;
 		if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic is too wide");
-		const output = Object.create(null) as Record<string, JsonEventValue>;
-		Object.defineProperty(output, "summary", {
+		const output = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonEventValue>;
+		INTRINSIC_OBJECT_DEFINE_PROPERTY(output, "summary", {
 			value: "[redacted diagnostic details]",
 			enumerable: true,
 			writable: false,
 			configurable: false,
 		});
-		return Object.freeze(output);
+		return INTRINSIC_OBJECT_FREEZE(output);
 	} finally {
 		ancestors.delete(value);
 	}
@@ -2939,7 +2945,7 @@ function captureAssistantUsage(value: unknown, maximum: number): JsonEventValue 
 	for (const name of ["input", "output", "cacheRead", "cacheWrite", "cacheWrite1h", "reasoning", "totalTokens"] as const) {
 		if (!fields.has(name)) continue;
 		const entry = fields.get(name);
-		if (typeof entry !== "number" || !Number.isFinite(entry) || entry < 0) {
+		if (typeof entry !== "number" || !INTRINSIC_NUMBER_IS_FINITE(entry) || entry < 0) {
 			throw new AgentSessionRuntimeError(`AgentSession assistant usage ${name} is invalid`);
 		}
 	}
@@ -2950,7 +2956,7 @@ function captureAssistantUsage(value: unknown, maximum: number): JsonEventValue 
 		["input", "output", "cacheRead", "cacheWrite", "total"], "AgentSession assistant usage cost");
 	for (const name of ["input", "output", "cacheRead", "cacheWrite", "total"] as const) {
 		const entry = cost.get(name);
-		if (typeof entry !== "number" || !Number.isFinite(entry) || entry < 0) {
+		if (typeof entry !== "number" || !INTRINSIC_NUMBER_IS_FINITE(entry) || entry < 0) {
 			throw new AgentSessionRuntimeError(`AgentSession assistant usage cost ${name} is invalid`);
 		}
 	}
@@ -2965,7 +2971,9 @@ function assertAllowedCapturedFields(
 ): void {
 	const allowedSet = new Set(allowed);
 	for (const key of fields.keys()) {
-		if (!allowedSet.has(key)) throw new AgentSessionRuntimeError(`${description} contains unknown field ${JSON.stringify(key)}`);
+		if (!allowedSet.has(key)) {
+			throw new AgentSessionRuntimeError(`${description} contains unknown field ${INTRINSIC_JSON_STRINGIFY(key)}`);
+		}
 	}
 	if (required.some((key) => !fields.has(key))) {
 		throw new AgentSessionRuntimeError(`${description} is missing a required field`);
@@ -3145,7 +3153,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function boundedPositiveInteger(value: number, description: string, maximum: number): number {
-	if (!Number.isSafeInteger(value) || value <= 0 || value > maximum) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(value) || value <= 0 || value > maximum) {
 		throw new AgentSessionRuntimeError(
 			`${description} must be a positive safe integer within the embedded maximum ${maximum}`,
 		);
@@ -3154,7 +3162,7 @@ function boundedPositiveInteger(value: number, description: string, maximum: num
 }
 
 function frozenArray<T>(values: T[]): T[] {
-	Object.freeze(values);
+	INTRINSIC_OBJECT_FREEZE(values);
 	return values;
 }
 
@@ -3234,7 +3242,7 @@ async function settleWithin<T>(operation: Promise<T>, timeoutMs: number): Promis
 function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
 	try {
 		if ((typeof error === "object" && error !== null) || typeof error === "function") {
-			if (nodeTypes.isProxy(error)) {
+			if (INTRINSIC_IS_PROXY(error)) {
 				return new AgentSessionRuntimeError("AgentSession run failed", {
 					cause: new Error("proxied failure was omitted"),
 				});
@@ -3244,7 +3252,7 @@ function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
 			const message = safeRuntimeMessage(readErrorMessage(error), "AgentSession operation failed");
 			let cause: unknown;
 			try {
-				cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause) : undefined;
+				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause") ? snapshotRuntimeFailure(error.cause) : undefined;
 			} catch {
 				cause = new Error("failure cause was unavailable");
 			}
@@ -3273,7 +3281,7 @@ function snapshotRuntimeFailure(
 	if (typeof error !== "object" && typeof error !== "function") return "unsupported failure";
 	const object = error as object;
 	try {
-		if (nodeTypes.isProxy(object)) return new Error("proxied failure omitted");
+		if (INTRINSIC_IS_PROXY(object)) return new Error("proxied failure omitted");
 	} catch {
 		return new Error("failure shape unavailable");
 	}
@@ -3285,7 +3293,9 @@ function snapshotRuntimeFailure(
 			const nested = snapshotAggregateMembers(error, depth, seen);
 			let cause: unknown;
 			try {
-				cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause, depth + 1, seen) : undefined;
+				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause")
+					? snapshotRuntimeFailure(error.cause, depth + 1, seen)
+					: undefined;
 			} catch {
 				cause = new Error("aggregate cause was unavailable");
 			}
@@ -3294,7 +3304,9 @@ function snapshotRuntimeFailure(
 		if (error instanceof Error) {
 			let cause: unknown;
 			try {
-				cause = Object.hasOwn(error, "cause") ? snapshotRuntimeFailure(error.cause, depth + 1, seen) : undefined;
+				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause")
+					? snapshotRuntimeFailure(error.cause, depth + 1, seen)
+					: undefined;
 			} catch {
 				cause = new Error("failure cause was unavailable");
 			}
@@ -3314,11 +3326,11 @@ function snapshotAggregateMembers(error: AggregateError, depth: number, seen: We
 		const source = error.errors as Iterable<unknown>;
 		const iteratorFactory = source?.[Symbol.iterator];
 		if (typeof iteratorFactory !== "function") throw new Error("aggregate members are not iterable");
-		iterator = Reflect.apply(iteratorFactory, source, []) as Iterator<unknown>;
+		iterator = INTRINSIC_REFLECT_APPLY(iteratorFactory, source, []) as Iterator<unknown>;
 		const next = iterator?.next;
 		if (typeof next !== "function") throw new Error("aggregate iterator is invalid");
 		for (let index = 0; index < 16; index += 1) {
-			const step = Reflect.apply(next, iterator, []) as IteratorResult<unknown>;
+			const step = INTRINSIC_REFLECT_APPLY(next, iterator, []) as IteratorResult<unknown>;
 			if (!step || typeof step !== "object") throw new Error("aggregate iterator step is invalid");
 			if (step.done) {
 				exhausted = true;
@@ -3332,7 +3344,7 @@ function snapshotAggregateMembers(error: AggregateError, depth: number, seen: We
 		if (iterator && !exhausted) {
 			try {
 				const close = iterator.return;
-				if (typeof close === "function") Reflect.apply(close, iterator, []);
+				if (typeof close === "function") INTRINSIC_REFLECT_APPLY(close, iterator, []);
 			} catch {
 				if (nested.length < 16) nested.push(new Error("aggregate iterator close failed"));
 			}
@@ -3343,7 +3355,10 @@ function snapshotAggregateMembers(error: AggregateError, depth: number, seen: We
 
 function readErrorMessage(error: unknown): string {
 	try {
-		return error instanceof Error && typeof error.message === "string" ? error.message : "";
+		if (!(error instanceof Error) || INTRINSIC_IS_PROXY(error)) return "";
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(error, "message");
+		if (!descriptor || descriptor.get || descriptor.set || !("value" in descriptor)) return "";
+		return typeof descriptor.value === "string" ? descriptor.value : "";
 	} catch {
 		return "";
 	}

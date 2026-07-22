@@ -8450,6 +8450,8 @@ test("cycle 19 Pi direct callback event and lifecycle share one finite normalize
 	for (const [label, unsafe] of [
 		["unsafe-integer", { ...raw, i: 2 ** 53 }],
 		["implicit-array-ceiling", { ...raw, list: Array.from({ length: 513 }, () => 1) }],
+		["whitespace-integer", { ...raw, i: " \t" }],
+		["whitespace-number", { ...raw, n: " \t" }],
 	] as const) {
 		let directRejected = false;
 		try { policy.projectArguments(hostTool.name, unsafe); } catch { directRejected = true; }
@@ -8463,6 +8465,30 @@ test("cycle 19 Pi direct callback event and lifecycle share one finite normalize
 			piRejected = true;
 		}
 		if (!piRejected) problems.push(`${label}:pi-accepted`);
+	}
+	const astralInput = policyInputForRuntime(false);
+	astralInput.capabilities = [{
+		...inspectCapability(),
+		parameters: {
+			type: "object", additionalProperties: false,
+			properties: { value: { type: "string", maxLength: 1 } }, required: ["value"],
+		},
+	} as unknown as HostCapability];
+	const astralPolicy = createToolPolicy(astralInput);
+	const astralTool = astralPolicy.tools.find((tool) => tool.name === "host_inspect")!;
+	const astralRaw = { value: "😀" };
+	let astralPiAccepted = true;
+	try {
+		piValidation.validateToolArguments(astralTool, {
+			type: "toolCall", id: "cycle19-astral-pi", name: astralTool.name, arguments: astralRaw,
+		});
+	} catch {
+		astralPiAccepted = false;
+	}
+	let astralDirectAccepted = true;
+	try { astralPolicy.projectArguments(astralTool.name, astralRaw); } catch { astralDirectAccepted = false; }
+	if (!astralPiAccepted || !astralDirectAccepted) {
+		problems.push(`astral-code-point-parity:pi-${astralPiAccepted}:direct-${astralDirectAccepted}`);
 	}
 
 	const duplicateInput = policyInputForRuntime(false);
@@ -8536,11 +8562,15 @@ test("cycle 19 every schema raw event result reference and error path uses captu
 	const moduleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
 	moduleUrl.searchParams.set("cycle19Reflection", `${Date.now()}-${Math.random()}`);
 	const dynamicPolicy = await import(moduleUrl.href) as typeof import("./tool-policy.ts");
+	const runtimeModuleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"));
+	runtimeModuleUrl.searchParams.set("cycle19ReflectionRuntime", `${Date.now()}-${Math.random()}`);
+	const dynamicRuntime = await import(runtimeModuleUrl.href) as typeof import("./agent-session-runtime.ts");
 	const nativeApply = Reflect.apply;
 	const nativeDefine = Object.defineProperty;
 	const nativeGetDescriptor = Object.getOwnPropertyDescriptor;
 	const calls = new Map<string, number>();
 	let active = false;
+	let runtimeOnly = false;
 	type Slot = { owner: object; key: PropertyKey; label: string; descriptor: PropertyDescriptor };
 	const slots: Slot[] = [];
 	const candidates: Array<{ owner: object; key: PropertyKey; label: string }> = [
@@ -8564,7 +8594,11 @@ test("cycle 19 every schema raw event result reference and error path uses captu
 		}
 		const original = descriptor.value as (...arguments_: unknown[]) => unknown;
 		const replacement = function(this: unknown, ...arguments_: unknown[]): unknown {
-			if (active) calls.set(candidate.label, (calls.get(candidate.label) ?? 0) + 1);
+			// The runtime phase owns direct calls made by agent-session-runtime.ts. Nested
+			// modules have their own captured-reflection rows and are not charged here.
+			const directCaller = new Error().stack?.split("\n")[2];
+			const runtimeCall = !runtimeOnly || directCaller?.includes("agent-session-runtime.ts") === true;
+			if (active && runtimeCall) calls.set(candidate.label, (calls.get(candidate.label) ?? 0) + 1);
 			return nativeApply(original, this, arguments_);
 		};
 		nativeDefine(candidate.owner, candidate.key, { ...descriptor, value: replacement });
@@ -8575,6 +8609,11 @@ test("cycle 19 every schema raw event result reference and error path uses captu
 		let total = 0;
 		for (const count of calls.values()) total += count;
 		return total;
+	};
+	const phaseDetail = (): string => {
+		let detail = "";
+		for (const [label, count] of calls) detail += `${detail ? "," : ""}${label}:${count}`;
+		return detail;
 	};
 	const clearCalls = (): void => { calls.clear(); };
 	try {
@@ -8651,8 +8690,65 @@ test("cycle 19 every schema raw event result reference and error path uses captu
 		if (errorOutcome.status !== "rejected") problems.push(`error-${errorOutcome.status}`);
 		if (messageGetterCalls !== 0) problems.push(`error-message-getter-${messageGetterCalls}`);
 		if (phaseTotal() !== 0) problems.push(`error-reflection-${phaseTotal()}`);
+		clearCalls();
+
+		const runtimeSdk = new FakeSdk();
+		const runtimeRequest = request({
+			binding: {
+				...request().binding,
+				runId: "cycle19-reflection-runtime",
+				laneId: "cycle19-reflection-runtime",
+			},
+		});
+		runtimeSdk.session.output = handoffFor(runtimeRequest);
+		runtimeSdk.session.promptGate = Promise.resolve();
+		const runtimeHarness = new dynamicRuntime.ShepherdAgentSessionRuntime(runtimeSdk);
+		runtimeOnly = true;
+		active = true;
+		const runtimeOutcome = await observeSettlement(runtimeHarness.run(runtimeRequest), 300);
+		active = false;
+		if (runtimeOutcome.status !== "resolved") problems.push(`runtime-event-${runtimeOutcome.status}`);
+		if (phaseTotal() !== 0) problems.push(`runtime-event-reflection-${phaseTotal()}-${phaseDetail()}`);
+		clearCalls();
+		await observeSettlement(runtimeHarness.close(), 150);
+
+		let runtimeMessageGetterCalls = 0;
+		const runtimeHostileError = new Error("runtime-untrusted");
+		nativeDefine(runtimeHostileError, "message", {
+			configurable: true,
+			enumerable: false,
+			get() {
+				runtimeMessageGetterCalls += 1;
+				return "token: CYCLE19_RUNTIME_REFLECTION_SECRET";
+			},
+		});
+		const runtimeErrorSdk = new FakeSdk();
+		const runtimeErrorRequest = request({
+			binding: {
+				...request().binding,
+				runId: "cycle19-reflection-runtime-error",
+				laneId: "cycle19-reflection-runtime-error",
+			},
+		});
+		nativeDefine(runtimeErrorSdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				await Promise.resolve();
+				throw runtimeHostileError;
+			},
+		});
+		const runtimeErrorHarness = new dynamicRuntime.ShepherdAgentSessionRuntime(runtimeErrorSdk);
+		active = true;
+		const runtimeErrorOutcome = await observeSettlement(runtimeErrorHarness.run(runtimeErrorRequest), 300);
+		active = false;
+		if (runtimeErrorOutcome.status !== "rejected") problems.push(`runtime-error-${runtimeErrorOutcome.status}`);
+		if (runtimeMessageGetterCalls !== 0) problems.push(`runtime-error-getter-${runtimeMessageGetterCalls}`);
+		if (phaseTotal() !== 0) problems.push(`runtime-error-reflection-${phaseTotal()}-${phaseDetail()}`);
+		await observeSettlement(runtimeErrorHarness.close(), 150);
+		runtimeOnly = false;
 	} finally {
 		active = false;
+		runtimeOnly = false;
 		for (let index = slots.length - 1; index >= 0; index -= 1) {
 			const slot = slots[index]!;
 			nativeDefine(slot.owner, slot.key, slot.descriptor);
@@ -8958,8 +9054,12 @@ test("cycle 19 redaction work trace independently accounts for every category", 
 		for (const key of workKeys) actualTotal += metrics[key];
 		if (actualTotal !== metrics.totalWork) problems.push(`${fixture.label}:actual-sum-${actualTotal}`);
 		for (const key of workKeys) {
-			if (fixture.expected[key] > 0 && oracleTotal - fixture.expected[key] === fixture.expected.totalWork) {
-				problems.push(`${fixture.label}:omission-undetected-${key}`);
+			if (fixture.expected[key] <= 0) continue;
+			const omitted = { ...metrics, [key]: 0 } as TraceMetrics;
+			let omittedTotal = 0;
+			for (const candidate of workKeys) omittedTotal += omitted[candidate];
+			if (omittedTotal === metrics.totalWork || omittedTotal !== actualTotal - metrics[key]) {
+				problems.push(`${fixture.label}:omission-undetected-${key}-${omittedTotal}`);
 			}
 		}
 		if (metrics.totalWork > (16 * fixture.value.length) + 64) {
