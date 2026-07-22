@@ -2110,3 +2110,177 @@ artifact summary commit are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, 
 `d25a8e1b25df3b80058e54f5ad3e7072d1362ad0`, and unchanged policy test
 `c744c7d3d1ea798a30a214d94c9f44165cf25d84`. Parent-owned independent exact-head reviews and the
 process-capable broad replay are still pending, so `verificationPassed` remains false.
+
+## Consolidated Exact-Head Correction Cycle 20 Plan
+
+Frozen start is the exact independently reviewed Cycle 19 evidence candidate
+`427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`; candidate tree is
+`f5057e96454b93bbd9dbe997ce96935a13aec573`; immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; and the allowlist remains exactly 20 paths. Both
+`/tmp/475-REVIEW-CYCLE19-1.md` and `/tmp/475-REVIEW-CYCLE19-2.md` were read completely before this
+plan (211 and 244 lines; SHA-256
+`04c3a1ebf695459a638bcf83b54a8cb3ac305cf8112d44f5e3df08dfab58358d` and
+`8deafaf0e90056e50d3d7b126df949658fe2097f72d26b56112c5586912c51c2`). Their five independently
+reproduced blockers consolidate without deferral into the four contracts below. Cycle 19's exact
+handoff-array snapshots and independent redaction-category oracle remain byte-for-byte retained.
+
+### C20-01 — one captured intrinsic realm across every awaited boundary
+
+The runtime and policy capture or eliminate every mutable numeric, text, UTF-8, error, collection,
+reflection, and classification capability they use after module initialization. The reviewed set
+is `Number` conversion plus `isFinite`, `isInteger`, `isSafeInteger`, `parseInt`, and safe-integer
+constants; `String` conversion plus `charCodeAt`, `codePointAt`, `trim`, and `fromCharCode`; the
+used `Math` operations; JSON receiver plus parse/stringify; any `TextEncoder` constructor/method;
+any `Intl.Segmenter` constructor/segment operation; `Error`/`AggregateError` constructors and
+approved prototypes; the `WeakSet` constructor and used identity-set operations; used `nodeTypes`
+predicates; Array constructor/prototype/static and used
+prototype operations; Object constructor/prototype and used reflection methods; and used Reflect
+operations. Captured methods are invoked only through the captured `Reflect.apply` with their
+captured receiver. Redundant conversions and mutable prototype dispatch are removed rather than
+captured when indexed loops or exact type checks suffice. Projection uses a manual UTF-8 counter,
+so neither `TextEncoder` nor `Intl` is consulted after import.
+
+The executable poison matrix replaces globals and writable properties only after the dynamic
+modules load, activates them before and after awaited workspace/host/session callbacks, and proves
+zero poison calls for accepted and rejected schema, raw argument, result, reference, event,
+lifecycle, handoff, primary-error, cleanup-error, aggregate-error, and quarantine paths. It also
+asserts invariant Pi/direct/callback/event/handoff DTOs and byte enforcement. All substitutions
+are restored by captured test-side descriptors in `finally`.
+
+### C20-02 — exact pinned Pi grapheme constraints and bounded scalar JSON bytes
+
+String `minLength`/`maxLength` mirrors the installed TypeBox 0.80.6 guard, including its fast path,
+instead of claiming generic code-point behavior:
+
+1. The fast scan uses captured `charCodeAt` and falls back to the full cluster algorithm on a high
+   surrogate (`D800-DBFF`), a `0300-036F` combining mark, or ZWJ (`200D`). It otherwise performs
+   TypeBox's exact early min/max comparison over UTF-16 units.
+2. The full `NextGraphemeClusterIndex` uses captured `codePointAt`; consumes one initial code point;
+   consumes combining ranges `0300-036F`, `1AB0-1AFF`, `1DC0-1DFF`, and `FE20-FE2F` plus variation
+   selectors `FE00-FE0F`; consumes every subsequent `ZWJ + code point + modifiers`; and consumes
+   one adjacent regional-indicator partner for an initial `1F1E6-1F1FF` code point.
+3. A valid surrogate pair consumes two UTF-16 units as one point. Lone high and lone low
+   surrogates consume one unit each, exactly matching the pinned guard. No locale, host ICU, or
+   ambient `Intl` decision is admitted.
+
+The real-Pi matrix preserves the pinned fast-path quirks as well as the full cluster behavior:
+base-plus-combining, combining-only, multi-ZWJ emoji, regional-indicator flags, lone high/low
+surrogates, high-surrogate-plus-combining, and high-surrogate-plus-ZWJ-plus-ASCII pass
+`maxLength: 1`; high-surrogate-plus-ASCII, low-surrogate-plus-ASCII, and dangling
+high-surrogate-plus-ZWJ fail. ASCII plus VS16 and ASCII plus a `1AB0-1AFF` mark also follow the
+pinned fast result (two units, rejection at max one), even though the full counter alone would
+group them. This is pinned compatibility rather than a claim of full Unicode segmentation.
+
+Projected JSON byte charging never serializes or encodes a complete untrusted scalar before the
+budget decision. For strings it charges the two quotes first, performs an O(1) source-unit lower-
+bound check, then walks captured UTF-16 code units once and stops at the first over-budget unit.
+It charges escaped quote, escaped backslash, and the five short control escapes as two ASCII bytes,
+other `U+0000-001F` and lone surrogates as six-byte `\\uXXXX`, unescaped ASCII as one byte,
+`0080-07FF` as two, ordinary BMP as three, and valid surrogate pairs as four. JSON punctuation and
+quoted property names use the same counter. `null` and booleans use fixed bounded encodings. Finite
+canonical numbers use only a bounded captured canonical representation after raw numeric-string
+work has been pre-charged; no 100,000-unit source reaches `trim`, numeric conversion, stringify,
+encode, or an observer once its scalar-work or byte budget is exhausted.
+
+One bounded traversal couples the exact pinned length state with JSON/UTF-8 charging so byte
+exhaustion stops further source visits even when the length bound would otherwise continue. The
+one shared projection state therefore adds a scalar-normalization work counter to the retained
+node/key/item/depth/container/DAG/exact-byte counters. A string's authoritative `.length` is read
+in O(1) and charged before grapheme, trim, or numeric conversion; character visits and emitted
+bytes are then incremental. Exact near-bound controls cover quotes, backslashes, every control
+escape family, BMP two/three-byte forms, astral pairs, and malformed surrogates.
+
+### C20-03 — descriptor-only exact runtime failure snapshots
+
+Failure normalization classifies against captured exact native error prototypes/constructors and
+never consults a later ambient `instanceof`, constructor, `Symbol.iterator`, collection method, or
+caller property read. `message`, `name`, `stack`, `cause`, and AggregateError `errors` are read only
+with the captured own-property-descriptor primitive; only own data descriptors are admitted.
+Accessor, inherited, proxy, malformed, or unavailable fields become bounded constant sanitized
+fallbacks.
+
+Aggregate members are accepted only when the own `errors` data descriptor contains an exact
+non-proxy intrinsic dense array: exact captured Array prototype, authoritative non-enumerable own
+length, at most 16 entries, and enumerable own data indexes. Members are copied by indexed
+descriptor reads into a fresh dense snapshot before recursive normalization. No iterable factory,
+`next`, step `done`/`value`, `return`, getter, array iterator, or caller callback is invoked. Cause
+depth remains four, repeated identities remain denied, and every emitted Error/AggregateError has
+bounded own data descriptors for its normalized fields and only normalized nested snapshots.
+
+This explicitly supersedes Cycle 11's former compatibility assertion that a hostile aggregate
+iterator is pulled up to 16 times and closed once. The retained safety intent is strengthened:
+the same row continues to require total bounded typed failures and secret-marker absence, but now
+permits only zero iterator/close callbacks. Primary, aggregate, cleanup, dual-failure, quarantine,
+and close paths all exercise the descriptor rule after an awaited boundary.
+
+### C20-04 — bounded lazy plain-record keys and pre-work rejection
+
+Closed object projection keeps exact Pi `additionalProperties: false` semantics. After the retained
+non-proxy and exact `Object.prototype`/null-prototype checks, one audited helper uses a bounded
+`for...in` cursor without retaining a key vector. It charges every enumerated visit before captured
+has-own and schema-membership checks, rejects immediately when the remaining shared key budget is
+exhausted, rejects an enumerable own unknown key immediately, and then requires the exact compiled
+required-field count. Inherited enumerable pollution is charged and bounded but never treated as
+input. Symbols and non-enumerable peers remain ignored, matching pinned Pi and the previous
+`Object.keys` semantics. Known fields are subsequently captured only by their compiled names and
+own data descriptors.
+
+Standard JavaScript exposes no lazy own-string-key reflection primitive: `Object.keys`,
+`Object.getOwnPropertyNames`, and `Reflect.ownKeys` all allocate the complete vector. Therefore this
+single bounded enumerator explicitly narrows Cycle 17's blanket source-level `for...in` ban. The
+retained Cycle 17 test will allow exactly the named helper and continue to reject every other
+`for...in` occurrence, proxy prototype, accessor, or inherited-authority path. Stripping unknown
+keys is rejected because it would diverge from pinned Pi's closed-object validation.
+
+The proof is intentionally observable rather than an unverifiable engine-allocation claim:
+no whole-vector API is called, no key vector is retained, and descriptor/value reads stop at the
+first unknown key or remaining-budget-plus-one visit. ECMAScript permits an engine to snapshot
+enumeration state internally. If independent review requires proof about that hidden allocation,
+ordinary extensible records cannot satisfy it without narrowing the public record contract; GREEN
+must then stop for contract direction rather than claim an impossible guarantee.
+
+Key visits, scalar source work, grapheme work, numeric normalization, punctuation, and output bytes
+all charge before the corresponding descriptor descent, trim/conversion, allocation, or output
+insertion. A 5,001-key object must reject by visit 4,097 without an `Object.keys`/ownKeys vector;
+a 100,000-unit scalar under a tiny remaining budget must reject before whole-scalar stringify,
+encode, trim, conversion, or scan; repeated DAG aliases still reject before second descent; and
+near-limit closed records and escaped/astral scalars remain exact frozen DTOs.
+
+### Comprehensive four-row RED matrix
+
+After this artifact-only checkpoint, one test-only commit adds exactly four top-level Cycle 20
+rows and narrowly updates the two superseded retained assertions described above:
+
+| ID | Exact executable boundary |
+|---|---|
+| C20-01 | `cycle 20 every mutable normalization text byte error and reflection API is captured once` — post-import and across-await poison matrix with zero ambient calls and invariant DTO/error/byte outcomes |
+| C20-02 | `cycle 20 pinned Pi graphemes and incremental JSON UTF8 bytes are exact` — real Pi/direct/callback/event/lifecycle combining, variation, multi-ZWJ, flag, astral, malformed-surrogate matrix plus escape/UTF-8 near bounds and zero whole-scalar observers |
+| C20-03 | `cycle 20 runtime errors use own data descriptors and exact dense aggregate arrays` — cause/errors/message/name/stack accessors, hostile iterators and post-await primary/cleanup/quarantine graphs with zero caller behavior |
+| C20-04 | `cycle 20 projection rejects keys scalar work and DAGs before full discovery` — 5,001-key, 100,000-unit string/numeric, tiny-byte, repeated-DAG, inherited-pollution and near-limit controls with bounded visit observers |
+
+Expected RED is 168 executed: all 164 retained Cycle 19 rows pass under their current behavior,
+including the unchanged handoff-array and category-oracle rows, and exactly C20-01 through C20-04
+fail their intended assertions with zero skipped/cancelled/todo. The Cycle 11 iterator assertion is
+narrowly changed to accept zero callbacks while C20-03 requires zero; the Cycle 17 source assertion
+is narrowed to allow at most the named bounded enumerator while C20-04 requires it. Those changes
+pass at frozen production and do not hide a RED failure. Focused strict TypeScript must remain
+green.
+
+Frozen blobs through RED are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, policy
+`499f5a0b6cd0730c1279b1d33728604cb06c09c9`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`; pre-RED test blobs are runtime test
+`d25a8e1b25df3b80058e54f5ad3e7072d1362ad0` and policy test
+`c744c7d3d1ea798a30a214d94c9f44165cf25d84`.
+
+Baseline at the exact start is focused 164/164. `scripts/gsd doctor` passes 69 commands while the
+adapter rejects `programming-loop`; explicit manual-GSD PLAN -> RED -> GREEN -> REFACTOR -> VERIFY
+remains active. Skills used are `gsd-programming-loop`, `architecture-patterns`,
+`javascript-testing-patterns`, `typescript-advanced-types`, and
+`github-issue-first-delivery`, plus repository routing, runtime/Pi, issue, adapter, and universal-
+loop guidance. One bounded read-only Cycle 20 source mapper was spawned with no edit, commit,
+network, or gate authority; the issue worker retains every repository write and the complete
+checkpoint path.
+
+No production edit precedes committed RED. No dependency, prompt/lease/route behavior, handoff
+array/category-oracle behavior, parent, #478, network, push, integration, live model/auth,
+credential, service, Go/connector, `make`, main, or path-scope change is authorized.

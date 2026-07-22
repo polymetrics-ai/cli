@@ -1366,6 +1366,50 @@ production edit is authorized before the RED checkpoint commits.
   paths pass. Two parent-owned independent exact-head reviews and the process-capable broad replay
   remain pending, so `verificationPassed` stays false.
 
+## Cycle 20 TDD Ledger
+
+### PLAN / frozen baseline
+
+- Exact start: `427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`; tree `f5057e96454b93b`;
+  immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact 20-path allowlist and
+  clean worktree.
+- Both Cycle 19 reports were read completely: 211 lines / SHA-256 `04c3a1eb...` and 244 lines /
+  SHA-256 `8deafaf0...`. Their full union maps to C20-01 through C20-04; no blocker is deferred.
+- Baseline focused gate: 164 executed, 164 passed, zero failed/skipped/cancelled/todo.
+- Frozen production blobs: runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`; policy
+  `499f5a0b6cd0730c1279b1d33728604cb06c09c9`; prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. Frozen test controls: runtime test
+  `d25a8e1b25df3b80058e54f5ad3e7072d1362ad0`; policy test
+  `c744c7d3d1ea798a30a214d94c9f44165cf25d84`.
+- Manual-GSD fallback remains active: doctor passes 69 commands and the adapter rejects
+  `programming-loop`. One bounded read-only mapper has source-advisory authority only; the issue
+  worker retains every mutation and checkpoint.
+
+### Planned RED
+
+One test-only checkpoint adds exactly four top-level rows:
+
+| ID | Required failing proof at frozen production |
+|---|---|
+| C20-01 | every mutable numeric/text/UTF-8/error/WeakSet/nodeTypes/Array/Object/Reflect boundary API is captured or eliminated across post-import and awaited callbacks |
+| C20-02 | real Pi/direct/callback/event/lifecycle grapheme parity and exact incremental JSON/UTF-8 charging reject before whole-scalar work |
+| C20-03 | error message/name/stack/cause/errors use own data descriptors and AggregateError uses only exact dense own arrays with zero caller behavior |
+| C20-04 | key/scalar/DAG limits reject before whole key discovery, normalization, serialization, encoding, allocation, or second descent |
+
+RED acceptance is 168 executed: all 164 retained rows pass and exactly C20-01 through C20-04 fail,
+zero skipped/cancelled/todo, focused strict TypeScript green, and all production blobs exact. The
+Cycle 11 iterator row is narrowly updated to allow zero callbacks while C20-03 requires zero. The
+Cycle 17 source row allows at most the one named bounded key helper while C20-04 requires it. Both
+narrowing edits pass against frozen production and cannot satisfy a new Cycle 20 row.
+
+The RED observer requirements are: no ambient poison calls; real TypeBox combining/variation/ZWJ/
+flag/astral/malformed-surrogate outcomes; exact JSON quote/escape/UTF-8 near bounds; a 100,000-unit
+scalar never reaching whole stringify/encode/trim/Number/character observers after exhaustion;
+cause/errors/message/name/stack accessors and every iterator callback staying at zero; a 5,001-key
+record stopping by visit 4,097 without whole-key primitives; repeated DAG stopping before second
+descent; and near-limit exact frozen controls. No production edit is authorized before committed
+RED.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

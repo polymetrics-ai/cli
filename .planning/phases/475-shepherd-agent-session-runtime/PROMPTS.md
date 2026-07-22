@@ -1,5 +1,41 @@
 # Prompt Trace — Issue #475
 
+## Consolidated Exact-Head Correction Cycle 20 Snapshot
+
+- Exact frozen start: `427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`; tree `f5057e96454b93b`;
+  immutable base `e659d6f1`; exact same 20 authorized paths.
+- Inputs read completely: `/tmp/475-REVIEW-CYCLE19-1.md` (211 lines, SHA-256 `04c3a1eb...`)
+  and `/tmp/475-REVIEW-CYCLE19-2.md` (244 lines, SHA-256 `8deafaf0...`). Their full union is four
+  contracts; Cycle 19's handoff-array and category-oracle closures remain retained.
+- Intrinsic decision: capture or eliminate every used Number/String/Math/JSON/TextEncoder/Intl/
+  Error/AggregateError/WeakSet/nodeTypes/Array/Object/Reflect capability at module initialization and use
+  captured receivers across every awaited callback. Manual UTF-8 and indexed loops remove mutable
+  encoder/segmenter/prototype dispatch where possible.
+- Grapheme decision: copy pinned TypeBox 0.80.6's exact fast and full cluster algorithm, including
+  combining ranges, variation selectors, repeated ZWJ sequences, regional-indicator pairs,
+  surrogate pairs, and lone-surrogate controls. Do not substitute locale/ICU segmentation.
+- Scalar decision: pre-charge authoritative source units before grapheme/trim/Number work; charge
+  quotes, JSON escapes, punctuation, and UTF-8 incrementally; stop on first exhausted unit; never
+  whole-stringify or whole-encode a rejected 100,000-unit scalar.
+- Error decision: own data descriptors only for message/name/stack/cause/errors; exact non-proxy
+  intrinsic dense aggregate arrays capped at 16 and copied by indexed descriptors; never getters,
+  iterators, step fields, iterator close, or caller callbacks.
+- Key decision: after exact root/prototype/proxy checks, one bounded no-vector `for...in` helper
+  charges every visit before has-own/membership and preserves Pi's unknown-key rejection. This
+  explicitly narrows Cycle 17's blanket source ban; Cycle 11's iterator expectation is likewise
+  superseded by zero callbacks.
+- Method: manual-GSD artifact PLAN -> exactly four named test-only RED rows -> stop and report
+  before GREEN. Doctor passes 69 commands; the adapter rejects `programming-loop`.
+- Baseline: focused 164/164. Expected RED: 168 executed, 164 retained pass, exactly four failures,
+  zero skipped/cancelled/todo, focused strict TypeScript pass.
+- Execution decision: `read_only_spawned`; one bounded source mapper has no edit/commit/gate/
+  network authority, while the issue worker owns every write and checkpoint.
+- Frozen blobs through RED: runtime `e678193e`, policy `499f5a0b`, prompts `c5b6c27f`; pre-RED
+  runtime test `d25a8e1b`, policy test `c744c7d3`.
+- No dependency, prompt/lease/route behavior, handoff-array/category-oracle behavior, parent, #478,
+  network, push, integration, live auth/model, credential, service, Go/connector, `make`, main, or
+  out-of-scope mutation.
+
 ## Consolidated Exact-Head Correction Cycle 19 Snapshot
 
 - Exact frozen start: `a0cd1057a0da642185f10b4ddfe72263602c7513`; tree `d428be42e`; immutable

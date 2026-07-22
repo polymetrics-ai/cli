@@ -1,5 +1,24 @@
 # Summary — Issue #475
 
+Status: Cycle 20 is at artifact PLAN against exact blocked start
+`427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`, tree `f5057e96454b93b`, and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 19 reviews are accepted as four
+contracts: a complete captured intrinsic realm; exact pinned-Pi grapheme and incremental JSON/
+UTF-8 scalar work; descriptor-only exact Error/AggregateError snapshots; and bounded lazy key,
+scalar, and DAG rejection before full work.
+
+Baseline focused replay passes 164/164. Production, prompts, and tests are frozen through this PLAN;
+production remains frozen through the planned four-row RED. Expected RED is 168 executed with all
+164 retained rows passing and exactly C20-01 through C20-04 failing. Runtime/policy/prompt blobs are
+`e678193e` / `499f5a0b` / `c5b6c27f`; pre-RED test blobs are `d25a8e1b` / `c744c7d3`.
+
+The PLAN copies the installed TypeBox 0.80.6 fast/full grapheme algorithm, manually streams exact
+JSON escapes and UTF-8 charges, admits AggregateError members only from exact dense own arrays, and
+uses one bounded no-vector plain-record enumerator after exact proxy/prototype checks. It explicitly
+supersedes Cycle 11 iterator callbacks with zero callbacks and narrows Cycle 17's blanket
+`for...in` ban to the one audited helper. Cycle 19 handoff arrays and category oracle remain
+unchanged. `verificationPassed` remains false; no GREEN, integration, or delivery claim is made.
+
 Status: Cycle 19 is locally implemented at review-fix
 `e9bdddd03e2fee4e4db791eec17a63233698e67a` against exact blocked start
 `a0cd1057a0da642185f10b4ddfe72263602c7513` and immutable base

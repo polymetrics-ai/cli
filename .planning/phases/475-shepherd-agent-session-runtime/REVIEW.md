@@ -355,3 +355,27 @@ re-passed after removal. Final focused evidence is five Cycle 19 rows passing, e
 unchanged controller/state-store `spawn EPERM` failures. This remains the implementing lane's
 review disposition, not either parent-owned independent exact-head review. Those reviews and the
 process-capable broad replay remain pending; `verificationPassed` stays false.
+
+## Review Disposition — Issue #475 Cycle 20 PLAN
+
+Frozen independently reviewed candidate: `427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`, tree
+`f5057e96454b93bbd9dbe997ce96935a13aec573`.
+
+Both Cycle 19 reports were read completely and accepted. Review 1's two blockers require complete
+numeric/text/UTF-8 intrinsic capture and genuinely incremental scalar JSON bytes. Review 2 adds
+exact pinned-Pi grapheme constraints, descriptor-only Error/AggregateError capture, and bounded
+key/scalar discovery. Their overlap is exactly C20-01 through C20-04; no finding is declined,
+deferred, converted into a blacklist, or answered by a whole-vector/whole-scalar final-size check.
+
+Two previous assertions conflict with the stricter accepted contract and are explicitly
+superseded. Cycle 11's hostile AggregateError iterable may no longer be called even a bounded
+number of times; only an exact dense own array is admissible. Cycle 17's blanket `for...in` source
+ban is narrowed to one named bounded plain-record helper because every reflection alternative
+allocates the complete key vector. The retained safety goals—no proxy/prototype/accessor authority,
+bounded work, and exact closed-object unknown-key rejection—become stricter, not weaker.
+
+Cycle 19's exact terminal handoff-array snapshots and independent category-work oracle are not
+reopened. Baseline focused replay is 164/164. The required next checkpoint is a test-only four-row
+RED at 168 executed / 164 retained passes / exactly four intended failures, with production exact
+at runtime `e678193e`, policy `499f5a0b`, and prompts `c5b6c27f`. No GREEN or production claim is
+made by this PLAN disposition, and `verificationPassed` remains false.

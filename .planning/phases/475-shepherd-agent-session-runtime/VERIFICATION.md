@@ -1,5 +1,36 @@
 # Verification — Issue #475
 
+Current result: Cycle 20 artifact PLAN only against exact blocked candidate
+`427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`. No production or test change has been made at this
+checkpoint. Parent-owned independent exact-head review and process-capable broad replay remain
+pending, so `verificationPassed` is false.
+
+## Cycle 20 Planned Verification
+
+Both Cycle 19 reports were read completely and accepted without deferral. Their union maps exactly
+to C20-01 through C20-04 while retaining Cycle 19's handoff-array and category-oracle behavior.
+
+| Cycle 20 gate | Status | Required evidence |
+|---|---|---|
+| Exact start / report replay | pass | exact `427cad08`; tree `f5057e96`; reports 211/244 lines with SHA-256 `04c3a1eb...` / `8deafaf0...` |
+| Baseline focused tests | pass | 164 passed, 0 failed/skipped/cancelled/todo |
+| PLAN / frozen blobs | in progress | artifact-only checkpoint; runtime `e678193e`, policy `499f5a0b`, prompts `c5b6c27f`, tests `d25a8e1b` / `c744c7d3` |
+| Comprehensive RED | pending expected fail | exactly four Cycle 20 rows; 168 executed; 164 retained pass; exactly four named failures; 0 skipped/cancelled/todo |
+| Production freeze through RED | pending | exact runtime/policy/prompt blobs above |
+| Focused strict TypeScript at RED | pending | TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Exact pinned Pi grapheme matrix | pending RED | combining, variation, multi-ZWJ, flags, astral and malformed surrogates agree through direct/callback/event/lifecycle |
+| Pre-work observer matrix | pending RED | zero whole scalar stringify/encode/trim/conversion; key visit stops by 4,097; repeated DAG stops before second descent |
+| Descriptor-only errors | pending RED | own data message/name/stack/cause/errors; exact dense aggregate array; zero getters/iterators/callbacks |
+| Captured intrinsic matrix | pending RED | zero post-import/across-await calls to poisoned Number/String/Math/JSON/TextEncoder/Intl/Error/AggregateError/WeakSet/nodeTypes/Array/Object/Reflect APIs |
+| Scope / integrity | mandatory | exact same 20 paths; JSON/diff/ancestry/source/blob guards; no dependency/Go/connector paths |
+| Independent exact-head review | blocked | two fresh parent-owned reviews only after local GREEN/evidence candidate |
+
+The Cycle 11 hostile-iterator expectation and Cycle 17 blanket `for...in` source ban are explicitly
+superseded only as described by PLAN: zero caller iteration becomes mandatory, and exactly one
+bounded no-vector plain-record enumerator is allowed. All proxy/prototype/descriptor safety,
+closed-object unknown-key rejection, exact handoff arrays, and independent category accounting
+remain mandatory. No external mutation or GREEN claim is made at this checkpoint.
+
 Current result: Cycle 19 is locally implemented at review-fix
 `e9bdddd03e2fee4e4db791eec17a63233698e67a` against exact blocked candidate
 `a0cd1057a0da642185f10b4ddfe72263602c7513`. Focused evidence is green; parent-owned independent

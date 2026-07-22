@@ -210,3 +210,28 @@ diff/JSON/ancestry/source/blob/20-path integrity. The serialized broad suite exe
 270 pass and the unchanged 31 controller/state-store process-identity rows fail with managed-
 sandbox `spawn EPERM`; zero rows are skipped/cancelled/todo. That gate is environment-blocked, not
 green, and is why the process-capable replay remains parent-owned.
+
+## Cycle 20 Agent Delegation
+
+Both complete Cycle 19 reports were read and hashed before planning. Their union consolidates to
+four contracts: a complete captured intrinsic realm; exact pinned-Pi grapheme and incremental
+JSON/UTF-8 scalar accounting; own-data-descriptor Error/AggregateError snapshots with exact dense
+members; and bounded lazy key/scalar/DAG rejection before full work. Cycle 19's exact terminal
+handoff arrays and independent category-work oracle are retained unchanged.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle20-source-map` | read-only | enumerate remaining ambient calls, pinned TypeBox 0.80.6 grapheme semantics, error descriptors, bounded key/scalar seams, and proposed RED assertions | Cycle 20 PLAN/TDD appendices; no repository trace path added |
+
+The mapper has no repository edit, ref, test-gate, commit, network, model, credential, service,
+parent, #478, integration, delivery, or push authority. The issue worker retains every write,
+PLAN/RED/GREEN/REFACTOR/VERIFY checkpoint, commit, and handoff. Production and tests are frozen
+through the artifact PLAN; production remains frozen through committed four-row RED.
+
+Cycle 20 explicitly reconciles two older assertions. Cycle 11's bounded hostile-iterator behavior
+is superseded by zero iterator/caller callbacks, and Cycle 17's blanket `for...in` source ban is
+narrowed to one named, bounded, no-vector plain-record enumerator because JavaScript has no lazy
+own-string-key reflection primitive. The retained proxy/prototype/descriptor safety intent remains
+mandatory. No dependency, prompt/lease/route behavior, handoff-array/category-oracle behavior,
+parent, #478, network, push, integration, live model/auth, credential, service, Go/connector,
+`make`, main, or path-scope expansion is authorized.

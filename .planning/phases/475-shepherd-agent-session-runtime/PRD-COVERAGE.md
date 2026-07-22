@@ -1,5 +1,32 @@
 # PRD Coverage — Issue #475
 
+## Cycle 20 Exact-Head Coverage Contract
+
+Frozen candidate: `427cad088c8cbd5c14bfcb70ff2b3fa165b55e86`; tree `f5057e96454b93b`;
+immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 authorized
+paths. Both complete Cycle 19 reports are accepted as one four-contract correction.
+
+| Required outcome | Executable boundary | Pre-RED status |
+|---|---|---|
+| All mutable boundary APIs are captured or eliminated | post-import and across-await poisoning of Number/String/Math/JSON/TextEncoder/Intl/Error/AggregateError/WeakSet/nodeTypes/Array/Object/Reflect; zero ambient calls with invariant accepted/rejected DTOs, errors, and bytes | C20-01 blocked |
+| Pi 0.80.6 strings and exact JSON/UTF-8 bytes share bounded incremental work | exact TypeBox fast/full grapheme algorithm for combining/variation/ZWJ/flags/astral/malformed surrogates; quote/escape/UTF-8 near bounds; no whole scalar stringify/encode/trim/conversion/scan after exhaustion | C20-02 blocked |
+| Runtime failures are own-descriptor snapshots | own data message/name/stack/cause/errors only; exact dense non-proxy aggregate array; zero getter/iterator/next/step/return/caller callbacks across primary, cleanup, quarantine, and close paths | C20-03 blocked |
+| Projection limits reject before full discovery or normalization | one bounded no-vector plain-record enumerator, key/scalar precharge, incremental bytes, repeated-DAG denial, 5,001-key and 100,000-unit observers, near-limit frozen controls | C20-04 blocked |
+
+The pinned grapheme contract copies TypeBox 0.80.6's exact fast-path fallback set and full
+`NextGraphemeClusterIndex`, not host `Intl` behavior. The byte contract manually charges JSON
+escapes and UTF-8 units before allocation. Closed-object unknown-key rejection remains exact; the
+single audited bounded `for...in` helper replaces whole-vector `Object.keys` and explicitly narrows
+the older blanket source ban. Aggregate iterables are no longer pulled or closed; exact dense own
+arrays are the only admitted member source.
+
+Baseline is focused 164/164. Expected RED is 168 executed, all 164 retained pass, exactly four
+named failures, zero skipped/cancelled/todo, focused strict TypeScript passing, and all production
+blobs frozen. The exact Cycle 19 handoff-array and category-oracle rows remain unchanged.
+`verificationPassed` remains false. No dependency, prompt/lease/route behavior, parent, #478,
+network, push, integration, live model/auth, credential, service, Go/connector, `make`, main, or
+scope expansion is authorized.
+
 ## Cycle 19 Exact-Head Coverage Contract
 
 Frozen candidate: `a0cd1057a0da642185f10b4ddfe72263602c7513`; immutable base:
