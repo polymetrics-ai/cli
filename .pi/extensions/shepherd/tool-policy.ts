@@ -23,6 +23,7 @@ const MAX_CAPABILITY_SCHEMA_NODES = 4_096;
 const MAX_CAPABILITY_SCHEMA_KEYS = 4_096;
 const MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS = 512;
 const MAX_TOOL_INPUT_BYTES = MAX_WRITE_CHARACTERS + 64 * 1024;
+const INTRINSIC_OBJECT_KEYS = Object.keys;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 /** The complete reviewed host-tool domain. Unknown strings have no extension path. */
@@ -144,6 +145,11 @@ export type SessionTool = Omit<PiSessionTool, "execute"> & {
 export interface ToolPolicy {
 	readonly names: SessionToolName[];
 	readonly tools: SessionTool[];
+	projectArguments(
+		name: string,
+		raw: unknown,
+		maximumBytes?: number,
+	): Readonly<Record<string, unknown>>;
 }
 
 export interface ToolPolicyInput {
@@ -223,12 +229,14 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 	}
 
 	const declared = new Set(capturedInput.authority.capabilityNames);
+	const hostContracts = new Map<HostCapabilityName, CompiledToolArgumentContract>();
 	for (const capability of capabilities) {
 		if (!declared.has(capability.name)) {
 			throw new ToolPolicyError(`undeclared capability ${JSON.stringify(capability.name)} cannot expand authority`);
 		}
 		if (capturedInput.readOnly && capability.mutates) continue;
 		tools.push(hostCapabilityTool(capability, limits));
+		hostContracts.set(capability.name, capability.argumentContract);
 	}
 
 	for (const tool of tools) Object.freeze(tool);
@@ -238,10 +246,31 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 	});
 	Object.freeze(names);
 	Object.freeze(tools);
-	return Object.freeze({ names, tools });
+	return Object.freeze({
+		names,
+		tools,
+		projectArguments(name: string, raw: unknown, maximumBytes = MAX_TOOL_INPUT_BYTES) {
+			if (!isSessionToolName(name)) throw new ToolPolicyError("tool arguments use an unregistered schema");
+			if (isHostCapabilityName(name)) {
+				const contract = hostContracts.get(name);
+				if (!contract) throw new ToolPolicyError(`tool arguments use unavailable capability ${name}`);
+				return contract.project(raw, maximumBytes);
+			}
+			return projectWorkspaceArguments(name, raw, maximumBytes);
+		},
+	});
 }
 
-function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
+interface CompiledHostCapability extends HostCapabilityContract<HostCapabilityName> {
+	readonly argumentContract: CompiledToolArgumentContract;
+}
+
+interface CompiledToolArgumentContract {
+	readonly schema: PlainJsonSchema;
+	project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>>;
+}
+
+function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 	if (!input || typeof input !== "object") throw new ToolPolicyError("tool policy input is required");
 	if (typeof input.readOnly !== "boolean") throw new ToolPolicyError("readOnly must be boolean");
 	if (!input.workspace || typeof input.workspace !== "object") throw new ToolPolicyError("workspace capability is required");
@@ -269,7 +298,7 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 		declared.add(name);
 	}
 	const supplied = new Set<HostCapabilityName>();
-	const capabilities: HostCapability[] = [];
+	const capabilities: CompiledHostCapability[] = [];
 	for (const capability of input.capabilities) {
 		if (!capability || typeof capability !== "object") throw new ToolPolicyError("capability must be an object");
 		const name = capability.name;
@@ -293,20 +322,255 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 			throw new ToolPolicyError(`capability ${name} has an invalid typed contract`);
 		}
 		const parameters = snapshotCapabilitySchema(parameterSource, name);
+		const argumentContract = compileToolArgumentContract(parameters, name);
 		capabilities.push(Object.freeze({
 			name,
 			description,
 			mutates,
 			parameters,
+			argumentContract,
 			execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
 				return Reflect.apply(execute, capability, [input, signal]);
 			},
-		}) as HostCapability);
+		}) as CompiledHostCapability);
 	}
 	for (const name of declared) {
 		if (!supplied.has(name)) throw new ToolPolicyError(`declared capability ${name} was not supplied`);
 	}
 	return capabilities;
+}
+
+type CompiledSchemaProjector = (value: unknown, description: string, depth: number) => JsonData;
+
+function compileToolArgumentContract(schema: PlainJsonSchema, name: string): CompiledToolArgumentContract {
+	const projectValue = compileSchemaProjector(schema, `${name} parameters`, 0);
+	return Object.freeze({
+		schema,
+		project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>> {
+			if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
+				throw new ToolPolicyError(`${name} input has an invalid byte bound`);
+			}
+			const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
+			const projected = projectValue(raw, `${name} input`, 0);
+			if (!isRecord(projected)) throw new ToolPolicyError(`${name} input must be an object`);
+			if (byteLength(JSON.stringify(projected)) > effectiveMaximum) {
+				throw new ToolPolicyError(`${name} input exceeded its bound`);
+			}
+			return projected;
+		},
+	});
+}
+
+function compileSchemaProjector(
+	schema: PlainJsonSchema,
+	description: string,
+	depth: number,
+): CompiledSchemaProjector {
+	if (depth > MAX_CAPABILITY_SCHEMA_DEPTH) throw new ToolPolicyError(`${description} exceeded its depth bound`);
+	const type = ownSchemaField(schema, "type", description);
+	const enumSource = optionalOwnSchemaField(schema, "enum", description);
+	const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, description);
+	if (type === "string") {
+		const minimum = optionalSchemaInteger(schema, "minLength", 0, MAX_WRITE_CHARACTERS, description);
+		const maximum = optionalSchemaInteger(schema, "maxLength", 0, MAX_WRITE_CHARACTERS, description);
+		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
+			throw new ToolPolicyError(`${description} has inverted string bounds`);
+		}
+		return (value, valueDescription) => {
+			if (typeof value !== "string" || (minimum !== undefined && value.length < minimum) ||
+				(maximum !== undefined && value.length > maximum) || !enumAccepts(enumValues, value)) {
+				throw new ToolPolicyError(`${valueDescription} violates its string schema`);
+			}
+			return value;
+		};
+	}
+	if (type === "integer" || type === "number") {
+		const minimum = optionalSchemaFiniteNumber(schema, "minimum", description);
+		const maximum = optionalSchemaFiniteNumber(schema, "maximum", description);
+		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
+			throw new ToolPolicyError(`${description} has inverted numeric bounds`);
+		}
+		return (value, valueDescription) => {
+			if (typeof value !== "number" || !Number.isFinite(value) || (type === "integer" && !Number.isSafeInteger(value)) ||
+				(minimum !== undefined && value < minimum) || (maximum !== undefined && value > maximum) ||
+				!enumAccepts(enumValues, value)) {
+				throw new ToolPolicyError(`${valueDescription} violates its numeric schema`);
+			}
+			return value;
+		};
+	}
+	if (type === "boolean") {
+		return (value, valueDescription) => {
+			if (typeof value !== "boolean" || !enumAccepts(enumValues, value)) {
+				throw new ToolPolicyError(`${valueDescription} violates its boolean schema`);
+			}
+			return value;
+		};
+	}
+	if (type === "array") {
+		const items = ownSchemaField(schema, "items", description);
+		if (!isRecord(items)) throw new ToolPolicyError(`${description} requires an array item schema`);
+		const itemProjector = compileSchemaProjector(items, `${description} items`, depth + 1);
+		const minimum = optionalSchemaInteger(schema, "minItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ?? 0;
+		const maximum = optionalSchemaInteger(schema, "maxItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ??
+			MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS;
+		if (minimum > maximum) throw new ToolPolicyError(`${description} has inverted array bounds`);
+		return (value, valueDescription, valueDepth) => {
+			if (!Array.isArray(value) || nodeTypes.isProxy(value) || Object.getPrototypeOf(value) !== Array.prototype) {
+				throw new ToolPolicyError(`${valueDescription} must be an exact array`);
+			}
+			const length = ownArrayLength(value, valueDescription);
+			if (length < minimum || length > maximum) throw new ToolPolicyError(`${valueDescription} violates its array bounds`);
+			const projected: JsonData[] = [];
+			for (let index = 0; index < length; index += 1) {
+				const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+					throw new ToolPolicyError(`${valueDescription} contains a sparse or accessor item`);
+				}
+				projected.push(itemProjector(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1));
+			}
+			return Object.freeze(projected) as JsonData[];
+		};
+	}
+	if (type !== "object" || ownSchemaField(schema, "additionalProperties", description) !== false) {
+		throw new ToolPolicyError(`${description} uses an unsupported schema type`);
+	}
+	const properties = ownSchemaField(schema, "properties", description);
+	const requiredSource = optionalOwnSchemaField(schema, "required", description);
+	const required = requiredSource === undefined ? Object.freeze([]) : requiredSource;
+	if (!isRecord(properties)) throw new ToolPolicyError(`${description} requires a properties record`);
+	const propertyPrototype = Object.getPrototypeOf(properties);
+	if (nodeTypes.isProxy(properties) || (propertyPrototype !== Object.prototype && propertyPrototype !== null)) {
+		throw new ToolPolicyError(`${description} properties must use an exact approved prototype`);
+	}
+	if (!Array.isArray(required) || nodeTypes.isProxy(required) || Object.getPrototypeOf(required) !== Array.prototype) {
+		throw new ToolPolicyError(`${description} required fields must be an exact array`);
+	}
+	const requiredLength = ownArrayLength(required, `${description} required fields`);
+	if (requiredLength > 64) throw new ToolPolicyError(`${description} has too many required fields`);
+	const names: string[] = [];
+	const projectors: CompiledSchemaProjector[] = [];
+	const unique = new Set<string>();
+	for (let index = 0; index < requiredLength; index += 1) {
+		const descriptor = Object.getOwnPropertyDescriptor(required, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
+			typeof descriptor.value !== "string" || descriptor.value.length < 1 || descriptor.value.length > 128 ||
+			unique.has(descriptor.value)) {
+			throw new ToolPolicyError(`${description} has an invalid required field vector`);
+		}
+		const propertyName = descriptor.value;
+		unique.add(propertyName);
+		const propertyDescriptor = Object.getOwnPropertyDescriptor(properties, propertyName);
+		if (!propertyDescriptor?.enumerable || propertyDescriptor.get || propertyDescriptor.set ||
+			!("value" in propertyDescriptor) || !isRecord(propertyDescriptor.value)) {
+			throw new ToolPolicyError(`${description} required property ${JSON.stringify(propertyName)} is invalid`);
+		}
+		names.push(propertyName);
+		projectors.push(compileSchemaProjector(propertyDescriptor.value, `${description}.${propertyName}`, depth + 1));
+	}
+	Object.freeze(names);
+	Object.freeze(projectors);
+	return (value, valueDescription, valueDepth) => {
+		if (!isRecord(value) || nodeTypes.isProxy(value)) throw new ToolPolicyError(`${valueDescription} must be an object`);
+		const prototype = Object.getPrototypeOf(value);
+		if (prototype !== Object.prototype && prototype !== null) {
+			throw new ToolPolicyError(`${valueDescription} must use an exact approved prototype`);
+		}
+		const suppliedNames = INTRINSIC_OBJECT_KEYS(value);
+		if (suppliedNames.length !== names.length || suppliedNames.some((field) => !unique.has(field))) {
+			throw new ToolPolicyError(`${valueDescription} contains unknown or missing fields`);
+		}
+		const projected = Object.create(null) as Record<string, JsonData>;
+		for (let index = 0; index < names.length; index += 1) {
+			const field = names[index]!;
+			const descriptor = Object.getOwnPropertyDescriptor(value, field);
+			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+				throw new ToolPolicyError(`${valueDescription}.${field} must be an own data field`);
+			}
+			Object.defineProperty(projected, field, {
+				value: projectors[index]!(descriptor.value, `${valueDescription}.${field}`, valueDepth + 1),
+				enumerable: true,
+				writable: false,
+				configurable: false,
+			});
+		}
+		return Object.freeze(projected);
+	};
+}
+
+function ownSchemaField(schema: PlainJsonSchema, field: string, description: string): unknown {
+	const descriptor = Object.getOwnPropertyDescriptor(schema, field);
+	if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+		throw new ToolPolicyError(`${description} requires own schema field ${field}`);
+	}
+	return descriptor.value;
+}
+
+function optionalOwnSchemaField(schema: PlainJsonSchema, field: string, description: string): unknown {
+	const descriptor = Object.getOwnPropertyDescriptor(schema, field);
+	if (!descriptor) return undefined;
+	if (!descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+		throw new ToolPolicyError(`${description} has an invalid schema field ${field}`);
+	}
+	return descriptor.value;
+}
+
+function optionalSchemaInteger(
+	schema: PlainJsonSchema,
+	field: string,
+	minimum: number,
+	maximum: number,
+	description: string,
+): number | undefined {
+	const value = optionalOwnSchemaField(schema, field, description);
+	if (value === undefined) return undefined;
+	if (!Number.isSafeInteger(value) || Number(value) < minimum || Number(value) > maximum) {
+		throw new ToolPolicyError(`${description} has an invalid ${field}`);
+	}
+	return Number(value);
+}
+
+function optionalSchemaFiniteNumber(schema: PlainJsonSchema, field: string, description: string): number | undefined {
+	const value = optionalOwnSchemaField(schema, field, description);
+	if (value === undefined) return undefined;
+	if (typeof value !== "number" || !Number.isFinite(value)) {
+		throw new ToolPolicyError(`${description} has an invalid ${field}`);
+	}
+	return value;
+}
+
+function captureCompiledEnum(source: unknown, description: string): readonly JsonData[] {
+	if (!Array.isArray(source) || nodeTypes.isProxy(source) || Object.getPrototypeOf(source) !== Array.prototype) {
+		throw new ToolPolicyError(`${description} enum must be an exact array`);
+	}
+	const length = ownArrayLength(source, `${description} enum`);
+	if (length < 1 || length > MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS) {
+		throw new ToolPolicyError(`${description} enum exceeded its bound`);
+	}
+	const values: JsonData[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = Object.getOwnPropertyDescriptor(source, String(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
+			!(["string", "number", "boolean"].includes(typeof descriptor.value)) ||
+			(typeof descriptor.value === "number" && !Number.isFinite(descriptor.value))) {
+			throw new ToolPolicyError(`${description} enum contains an unsupported value`);
+		}
+		values.push(descriptor.value as JsonData);
+	}
+	return Object.freeze(values);
+}
+
+function enumAccepts(values: readonly JsonData[] | undefined, value: JsonData): boolean {
+	return values === undefined || values.some((candidate) => Object.is(candidate, value));
+}
+
+function ownArrayLength(value: readonly unknown[], description: string): number {
+	const descriptor = Object.getOwnPropertyDescriptor(value, "length");
+	if (!descriptor || descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
+		!Number.isSafeInteger(descriptor.value) || descriptor.value < 0) {
+		throw new ToolPolicyError(`${description} has an invalid authoritative length`);
+	}
+	return descriptor.value as number;
 }
 
 type JsonData = null | boolean | number | string | JsonData[] | { [key: string]: JsonData };
@@ -375,25 +639,15 @@ function snapshotJsonData(
 
 	try {
 		if (Array.isArray(value)) {
+			if (Object.getPrototypeOf(value) !== Array.prototype) {
+				throw new ToolPolicyError(`${description} array must use the exact Array prototype`);
+			}
 			if (value.length > MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS) {
 				throw new ToolPolicyError(`${description} array exceeded its bound`);
 			}
 			const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
 			if (!lengthDescriptor || !("value" in lengthDescriptor) || lengthDescriptor.value !== value.length ||
 				lengthDescriptor.enumerable || lengthDescriptor.get || lengthDescriptor.set) {
-				throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
-			}
-			let enumerableItems = 0;
-			for (const key in value) {
-				if (!Object.hasOwn(value, key) || !/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length) {
-					throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
-				}
-				enumerableItems += 1;
-				if (enumerableItems > value.length) {
-					throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
-				}
-			}
-			if (enumerableItems !== value.length) {
 				throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
 			}
 			budget.keys += value.length;
@@ -413,14 +667,14 @@ function snapshotJsonData(
 		if (prototype !== Object.prototype && prototype !== null) {
 			throw new ToolPolicyError(`${description} must contain plain JSON objects only`);
 		}
-		// JavaScript has no incremental API for hidden or symbol keys. Capture only bounded
-		// enumerable JSON data, descriptor by descriptor, and deliberately discard all other
-		// source authority instead of materializing an attacker-sized own-key array.
+		// Prototype safety is established before bounded own-name discovery. Hidden peers stay
+		// opaque; enumerable JSON fields are then captured descriptor by descriptor.
 		const result = Object.create(null) as { [key: string]: JsonData };
-		for (const key in value) {
-			if (!Object.hasOwn(value, key)) {
-				throw new ToolPolicyError(`${description} must contain own JSON fields only`);
-			}
+		const keys = INTRINSIC_OBJECT_KEYS(value);
+		if (keys.length > MAX_CAPABILITY_SCHEMA_KEYS - budget.keys) {
+			throw new ToolPolicyError(`${description} exceeded its key bound`);
+		}
+		for (const key of keys) {
 			budget.keys += 1;
 			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) {
 				throw new ToolPolicyError(`${description} exceeded its key bound`);
@@ -544,7 +798,7 @@ function workspaceWriteTool(
 }
 
 function hostCapabilityTool(
-	capability: HostCapability,
+	capability: CompiledHostCapability,
 	limits: Required<ToolPolicyOptions>,
 ): SessionTool {
 	return {
@@ -556,9 +810,7 @@ function hostCapabilityTool(
 		async execute(_callId, rawParams, signal) {
 			return toolBoundary(`capability ${capability.name}`, async () => {
 				assertSignal(signal);
-				const params = recordParams(rawParams, capability.name);
-				const inputSize = byteLength(JSON.stringify(params));
-				if (inputSize > limits.maxWriteCharacters) throw new ToolPolicyError(`${capability.name} input exceeded its bound`);
+				const params = capability.argumentContract.project(rawParams, limits.maxWriteCharacters);
 				const result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
 				return textResult(JSON.stringify({
 					status: result.status,
@@ -568,6 +820,28 @@ function hostCapabilityTool(
 			});
 		},
 	};
+}
+
+function projectWorkspaceArguments(
+	name: WorkspaceToolName,
+	raw: unknown,
+	maximumBytes: number,
+): Readonly<Record<string, unknown>> {
+	if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
+		throw new ToolPolicyError(`${name} arguments have an invalid byte bound`);
+	}
+	const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
+	const allowed = name === "workspace_read"
+		? ["path", "offset", "limit"] as const
+		: name === "workspace_edit"
+			? ["path", "oldText", "newText"] as const
+			: ["path", "content"] as const;
+	const projected = recordParams(raw, name);
+	assertOnlyKeys(projected, allowed, name);
+	if (byteLength(JSON.stringify(projected)) > effectiveMaximum) {
+		throw new ToolPolicyError(`${name} arguments exceeded their byte bound`);
+	}
+	return projected;
 }
 
 export function validateScopedPath(path: string, prefixes: readonly string[]): string {
@@ -613,8 +887,1293 @@ export function redactSensitiveText(value: string, metrics: RedactionScanMetrics
 export function redactSensitiveText(value: string, metrics?: RedactionScanMetrics | number): string {
 	if (typeof value !== "string") return "[REDACTED]";
 	const scanMetrics = typeof metrics === "object" && metrics !== null ? metrics : undefined;
-	if (scanMetrics) initializeRedactionMetrics(scanMetrics, value.length);
-	return redactStructuredAssignments(redactStrongCredentialSyntax(redactPrivateKeyBlocks(value)), scanMetrics);
+	return applyRedactionPlan(value, scanRedactionPlan(value, scanMetrics), scanMetrics);
+}
+
+type PlannedRangePriority = "assignment" | "credential" | "private-key" | "recovery";
+
+interface PlannedRedactionRange {
+	start: number;
+	end: number;
+	replacement: string;
+	priority: PlannedRangePriority;
+	active: boolean;
+}
+
+interface StreamingFlowFrame {
+	closer: FlowCloser;
+	openedAt: number;
+	publicOwner?: StreamingAssignment;
+}
+
+type StreamingAssignmentMode = "waiting" | "plain" | "quoted" | "quoted-closed" | "composite";
+
+interface StreamingAssignment {
+	kind: AssignmentKeyClassification;
+	context: SensitiveAssignmentContext;
+	delimiter: ":" | "=";
+	keyColumn: number;
+	normalizedKey: string;
+	baseDepth: number;
+	mode: StreamingAssignmentMode;
+	quote?: LexicalQuote;
+	escapeNext: boolean;
+	skipNextSingleQuote: boolean;
+	valueStart?: number;
+	valueEnd: number;
+	valuePrefix: string;
+	valuePrefixTruncated: boolean;
+	nonWhitespace: boolean;
+	range?: PlannedRedactionRange;
+	compositeDepth?: number;
+	pendingLineBoundary: boolean;
+}
+
+interface StreamingKeyCandidate {
+	start: number;
+	context: SensitiveAssignmentContext;
+	keyColumn: number;
+	quoted?: LexicalQuote;
+	quoteClosed: boolean;
+	escapeNext: boolean;
+	unicodeRemaining: number;
+	unicodeValue: string;
+	skipNextSingleQuote: boolean;
+	exact: boolean;
+	decoded: string;
+	decodedLength: number;
+	pendingWhitespace: boolean;
+	locator: boolean;
+	innerDelimiter?: { delimiter: ":" | "="; index: number };
+}
+
+interface StreamingRecovery {
+	range: PlannedRedactionRange;
+}
+
+interface PrivateKeyHeaderCandidate {
+	start: number;
+	text: string;
+}
+
+interface PrivateKeyBlockState {
+	range: PlannedRedactionRange;
+	endMarker: string;
+	tail: string;
+}
+
+interface UrlCredentialState {
+	inAuthority: boolean;
+	pendingSlashes: number;
+	schemeLength: number;
+	pendingRange?: PlannedRedactionRange;
+}
+
+interface QueryCredentialState {
+	collecting: boolean;
+	key: string;
+	activeRange?: PlannedRedactionRange;
+}
+
+interface PasswordCredentialState {
+	word: string;
+	waitingValue: boolean;
+	activeRange?: PlannedRedactionRange;
+}
+
+interface CookieCredentialState {
+	tail: string;
+	waitingValue: boolean;
+	activeRange?: PlannedRedactionRange;
+}
+
+interface StrongCredentialState {
+	privatePrefixProgress: number;
+	privateHeader?: PrivateKeyHeaderCandidate;
+	privateBlock?: PrivateKeyBlockState;
+	url: UrlCredentialState;
+	query: QueryCredentialState;
+	password: PasswordCredentialState;
+	cookie: CookieCredentialState;
+}
+
+interface RedactionStreamingState {
+	i: number;
+	lineStart: number;
+	lineHasContent: boolean;
+	lineCandidateSlot: boolean;
+	flowCandidateSlot: boolean;
+	comment: boolean;
+	candidate?: StreamingKeyCandidate;
+	assignments: StreamingAssignment[];
+	frames: StreamingFlowFrame[];
+	recovery?: StreamingRecovery;
+	ranges: PlannedRedactionRange[];
+	strong: StrongCredentialState;
+	visits?: Uint8Array;
+}
+
+const MAX_REDACTION_NESTING = 256;
+const PRIVATE_KEY_BEGIN_PREFIX = "-----begin ";
+const PRIVATE_KEY_HEADER_SUFFIX = " private key-----";
+const QUERY_SECRET_KEYS = new Set([
+	"accesstoken",
+	"refreshtoken",
+	"apikey",
+	"password",
+	"secret",
+	"clientsecret",
+]);
+
+/**
+ * Plans every replacement against the caller's original UTF-16 coordinate space. The loop below
+ * is the only source cursor: assignment, quote, flow, recovery, and strong-credential recognizers
+ * are fixed-state consumers fed by the same character.
+ */
+function scanRedactionPlan(source: string, metrics?: RedactionScanMetrics): PlannedRedactionRange[] {
+	initializeStreamingMetrics(metrics, source.length);
+	const state: RedactionStreamingState = {
+		i: 0,
+		lineStart: 0,
+		lineHasContent: false,
+		lineCandidateSlot: true,
+		flowCandidateSlot: false,
+		comment: false,
+		assignments: [],
+		frames: [],
+		ranges: [],
+		strong: {
+			privatePrefixProgress: 0,
+			url: { inAuthority: false, pendingSlashes: 0, schemeLength: 0 },
+			query: { collecting: false, key: "" },
+			password: { word: "", waitingValue: false },
+			cookie: { tail: "", waitingValue: false },
+		},
+		visits: metrics ? new Uint8Array(source.length) : undefined,
+	};
+
+	while (state.i < source.length) {
+		const position = state.i;
+		const character = source[position]!;
+		consumeOriginalCharacter(state, metrics, position);
+		feedStrongCredentialRecognizers(source, state, character, position, metrics);
+
+		if (state.recovery) {
+			state.recovery.range.end = position + 1;
+			if (isPhysicalLineEnding(character)) finishRecoveryAtLine(state, position);
+			continue;
+		}
+
+		if (isPhysicalLineEnding(character)) {
+			finishPhysicalLine(source, state, position, metrics);
+			continue;
+		}
+
+		if (!state.lineHasContent && !isHorizontalWhitespace(character)) {
+			resolvePendingLineAssignments(state, position - state.lineStart, position, metrics);
+			state.lineHasContent = true;
+		}
+
+		if (state.comment) continue;
+
+		if (state.candidate) {
+			if (advanceStreamingCandidate(source, state, character, position, metrics)) continue;
+		}
+
+		const top = state.assignments.at(-1);
+		if (top?.mode === "quoted" || top?.mode === "quoted-closed") {
+			if (advanceStreamingQuotedValue(source, state, top, character, position, metrics)) continue;
+		}
+
+		if (startsStreamingComment(source, state, character, position)) {
+			state.comment = true;
+			finishAssignmentsAtBoundary(state, position, false, metrics);
+			continue;
+		}
+
+		const candidateContext = streamingCandidateContext(state);
+		if (candidateContext && isPotentialAssignmentCandidateStart(character)) {
+			beginStreamingCandidate(state, character, position, candidateContext, metrics);
+			continue;
+		}
+		if (candidateContext && isHorizontalWhitespace(character)) continue;
+
+		const current = state.assignments.at(-1);
+		if (current?.mode === "waiting") {
+			if (isHorizontalWhitespace(character)) continue;
+			beginStreamingValue(state, current, character, position, metrics);
+			continue;
+		}
+
+		if ((character === "," || character === ";") &&
+			(state.frames.length > 0 || current?.context === "flow")) {
+			finishAssignmentsAtMemberBoundary(state, position, metrics);
+			state.flowCandidateSlot = state.frames.length > 0;
+			state.lineCandidateSlot = false;
+			continue;
+		}
+
+		const closer = flowCloserForOpener(character);
+		if (closer) {
+			pushStreamingFrameOrRecover(state, closer, position, current, metrics);
+			continue;
+		}
+
+		if (character === "}" || character === "]") {
+			closeStreamingFrameOrRecover(state, character, position, metrics);
+			continue;
+		}
+
+		if (current?.mode === "plain") {
+			appendStreamingValueCharacter(current, character, position);
+			state.lineCandidateSlot = false;
+			state.flowCandidateSlot = false;
+			continue;
+		}
+
+		if (!isHorizontalWhitespace(character)) {
+			state.lineCandidateSlot = false;
+			state.flowCandidateSlot = false;
+		}
+	}
+
+	finishStreamingEof(state, source.length, metrics);
+	return state.ranges;
+}
+
+function consumeOriginalCharacter(
+	state: RedactionStreamingState,
+	metrics: RedactionScanMetrics | undefined,
+	position: number,
+): void {
+	state.i = position + 1;
+	if (!metrics) return;
+	metrics.cursorAdvances += 1;
+	metrics.totalWork += 1;
+	const visits = state.visits;
+	if (visits) {
+		visits[position] = Math.min(255, visits[position]! + 1);
+		if (visits[position]! > metrics.maxMainCursorVisits) {
+			metrics.maxMainCursorVisits = visits[position]!;
+		}
+	}
+	metrics.boundaryCharacterVisits += 1;
+	metrics.totalWork += 1;
+}
+
+function initializeStreamingMetrics(metrics: RedactionScanMetrics | undefined, sourceLength: number): void {
+	if (!metrics) return;
+	metrics.sourceLength = sourceLength;
+	metrics.cursorAdvances = 0;
+	metrics.cursorRegressions = 0;
+	metrics.maxMainCursorVisits = 0;
+	metrics.keyCharacterVisits = 0;
+	metrics.boundaryCharacterVisits = 0;
+	metrics.totalWork = 0;
+}
+
+function chargeKeyTransition(metrics?: RedactionScanMetrics): void {
+	if (!metrics) return;
+	metrics.keyCharacterVisits += 1;
+	metrics.totalWork += 1;
+}
+
+function emitPlannedRange(
+	state: RedactionStreamingState,
+	start: number,
+	end: number,
+	replacement: string,
+	priority: PlannedRangePriority,
+	active: boolean,
+	metrics?: RedactionScanMetrics,
+): PlannedRedactionRange {
+	const range = { start, end, replacement, priority, active } satisfies PlannedRedactionRange;
+	state.ranges.push(range);
+	if (metrics) metrics.totalWork += 1;
+	return range;
+}
+
+function streamingCandidateContext(state: RedactionStreamingState): SensitiveAssignmentContext | undefined {
+	if (state.lineCandidateSlot) return state.frames.length > 0 ? "flow" : "line";
+	if (state.flowCandidateSlot) return "flow";
+	return undefined;
+}
+
+function beginStreamingCandidate(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	context: SensitiveAssignmentContext,
+	metrics?: RedactionScanMetrics,
+): void {
+	const quoted = character === "\"" || character === "'" ? character : undefined;
+	state.candidate = {
+		start: position,
+		context,
+		keyColumn: position - state.lineStart,
+		quoted,
+		quoteClosed: false,
+		escapeNext: false,
+		unicodeRemaining: 0,
+		unicodeValue: "",
+		skipNextSingleQuote: false,
+		exact: true,
+		decoded: quoted ? "" : character,
+		decodedLength: quoted ? 0 : 1,
+		pendingWhitespace: false,
+		locator: false,
+	};
+	chargeKeyTransition(metrics);
+	state.lineCandidateSlot = false;
+	state.flowCandidateSlot = false;
+}
+
+function advanceStreamingCandidate(
+	source: string,
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): boolean {
+	const candidate = state.candidate!;
+	chargeKeyTransition(metrics);
+	if (candidate.quoted) {
+		if (!candidate.quoteClosed) {
+			if (candidate.skipNextSingleQuote) {
+				candidate.skipNextSingleQuote = false;
+				return true;
+			}
+			if (candidate.unicodeRemaining > 0) {
+				candidate.unicodeValue += character;
+				candidate.unicodeRemaining -= 1;
+				if (candidate.unicodeRemaining === 0) {
+					if (/^[0-9a-fA-F]{4}$/.test(candidate.unicodeValue)) {
+						appendDecodedCandidateCharacter(
+							candidate,
+							String.fromCharCode(Number.parseInt(candidate.unicodeValue, 16)),
+						);
+					} else candidate.exact = false;
+					candidate.unicodeValue = "";
+				}
+				return true;
+			}
+			if (candidate.escapeNext) {
+				candidate.escapeNext = false;
+				if (character === "u") {
+					candidate.unicodeRemaining = 4;
+					return true;
+				}
+				const decoded = simpleQuotedEscape(character);
+				if (decoded === undefined) candidate.exact = false;
+				else appendDecodedCandidateCharacter(candidate, decoded);
+				return true;
+			}
+			if (candidate.quoted === "\"" && character === "\\") {
+				candidate.escapeNext = true;
+				return true;
+			}
+			if (candidate.quoted === "'" && character === "'" && source[position + 1] === "'") {
+				appendDecodedCandidateCharacter(candidate, "'");
+				candidate.skipNextSingleQuote = true;
+				return true;
+			}
+			if (character === candidate.quoted) {
+				candidate.quoteClosed = true;
+				return true;
+			}
+			if ((character === ":" || character === "=") && candidate.innerDelimiter === undefined) {
+				candidate.innerDelimiter = { delimiter: character, index: position };
+			}
+			if ((character === "," && candidate.context === "flow") || character === "}" || character === "]") {
+				finishMalformedQuotedCandidate(source, state, candidate, position, metrics);
+				reprocessStreamingBoundary(state, character, position, metrics);
+				return true;
+			}
+			appendDecodedCandidateCharacter(candidate, character);
+			return true;
+		}
+
+		if (isHorizontalWhitespace(character)) return true;
+		if (character === ":" || character === "=") {
+			commitStreamingCandidate(state, candidate, character, position);
+			return true;
+		}
+		if ((character === "," && candidate.context === "flow") || character === "}" || character === "]") {
+			state.candidate = undefined;
+			reprocessStreamingBoundary(state, character, position, metrics);
+			return true;
+		}
+		candidate.exact = false;
+		return true;
+	}
+
+	if (candidate.locator) return true;
+	if (character === "=" || (character === ":" && admittedStreamingColon(source, position, candidate.context))) {
+		commitStreamingCandidate(state, candidate, character, position);
+		return true;
+	}
+	if (character === ":" && source[position + 1] === "/" && source[position + 2] === "/") {
+		candidate.locator = true;
+		candidate.exact = false;
+		return true;
+	}
+	if ((character === "," && candidate.context === "flow") || character === "}" || character === "]") {
+		state.candidate = undefined;
+		reprocessStreamingBoundary(state, character, position, metrics);
+		return true;
+	}
+	if (isHorizontalWhitespace(character)) {
+		candidate.pendingWhitespace = candidate.decodedLength > 0;
+		candidate.exact = false;
+		return true;
+	}
+	candidate.decodedLength += 1;
+	if (candidate.decodedLength <= 64 && isAssignmentKeyCharacter(character) && !candidate.pendingWhitespace) {
+		candidate.decoded += character;
+	} else candidate.exact = false;
+	candidate.pendingWhitespace = false;
+	return true;
+}
+
+function simpleQuotedEscape(character: string): string | undefined {
+	if (character === "\"") return "\"";
+	if (character === "\\") return "\\";
+	if (character === "/") return "/";
+	if (character === "b") return "\b";
+	if (character === "f") return "\f";
+	if (character === "n") return "\n";
+	if (character === "r") return "\r";
+	if (character === "t") return "\t";
+	return undefined;
+}
+
+function appendDecodedCandidateCharacter(candidate: StreamingKeyCandidate, character: string): void {
+	candidate.decodedLength += 1;
+	if (candidate.decodedLength <= 64 && isAssignmentKeyCharacter(character)) candidate.decoded += character;
+	else candidate.exact = false;
+}
+
+function admittedStreamingColon(
+	source: string,
+	position: number,
+	context: SensitiveAssignmentContext,
+): boolean {
+	const next = source[position + 1];
+	if (next === undefined || isHorizontalWhitespace(next) || isPhysicalLineEnding(next) || next === "#") return true;
+	if (context !== "flow") return false;
+	return next !== "/" && !(next >= "0" && next <= "9");
+}
+
+function commitStreamingCandidate(
+	state: RedactionStreamingState,
+	candidate: StreamingKeyCandidate,
+	delimiter: ":" | "=",
+	position: number,
+): void {
+	const exactKey = candidate.exact && candidate.decodedLength > 0 && candidate.decodedLength <= 64
+		? candidate.decoded
+		: undefined;
+	const kind = exactKey === undefined ? "unknown-sensitive" : assignmentKeyClassification(exactKey);
+	const normalizedKey = exactKey === undefined
+		? ""
+		: (exactKey.toLowerCase().split(".").at(-1) ?? exactKey).replace(/[-_]/g, "");
+	state.assignments.push({
+		kind,
+		context: candidate.context,
+		delimiter,
+		keyColumn: candidate.keyColumn,
+		normalizedKey,
+		baseDepth: state.frames.length,
+		mode: "waiting",
+		escapeNext: false,
+		skipNextSingleQuote: false,
+		valueEnd: position + 1,
+		valuePrefix: "",
+		valuePrefixTruncated: false,
+		nonWhitespace: false,
+		pendingLineBoundary: false,
+	});
+	state.candidate = undefined;
+	state.lineCandidateSlot = false;
+	state.flowCandidateSlot = false;
+}
+
+function finishMalformedQuotedCandidate(
+	source: string,
+	state: RedactionStreamingState,
+	candidate: StreamingKeyCandidate,
+	end: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (candidate.innerDelimiter) {
+		let start = candidate.innerDelimiter.index + 1;
+		while (start < end && isHorizontalWhitespace(source[start])) start += 1;
+		if (start < end) emitPlannedRange(state, start, end, REDACTED_TEXT, "assignment", true, metrics);
+	}
+	state.candidate = undefined;
+}
+
+function beginStreamingValue(
+	state: RedactionStreamingState,
+	assignment: StreamingAssignment,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	assignment.valueStart = character === "\"" || character === "'" ? position + 1 : position;
+	assignment.valueEnd = assignment.valueStart;
+	assignment.nonWhitespace = true;
+	assignment.mode = character === "\"" || character === "'" ? "quoted" : "plain";
+	if (assignment.mode === "quoted") assignment.quote = character as LexicalQuote;
+	assignment.range = emitPlannedRange(
+		state,
+		assignment.valueStart,
+		assignment.valueStart,
+		REDACTED_TEXT,
+		assignment.kind === "public" ? "recovery" : "assignment",
+		assignment.kind !== "public",
+		metrics,
+	);
+	if (assignment.mode === "quoted") return;
+	appendStreamingValueCharacter(assignment, character, position);
+	const closer = flowCloserForOpener(character);
+	if (closer) pushStreamingFrameOrRecover(state, closer, position, assignment, metrics);
+}
+
+function appendStreamingValueCharacter(
+	assignment: StreamingAssignment,
+	character: string,
+	position: number,
+): void {
+	assignment.valueEnd = position + 1;
+	if (assignment.range) assignment.range.end = position + 1;
+	if (!assignment.nonWhitespace && isHorizontalWhitespace(character)) return;
+	assignment.nonWhitespace = true;
+	if (assignment.valuePrefix.length < 160) assignment.valuePrefix += character;
+	else assignment.valuePrefixTruncated = true;
+}
+
+function advanceStreamingQuotedValue(
+	source: string,
+	state: RedactionStreamingState,
+	assignment: StreamingAssignment,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): boolean {
+	if (assignment.mode === "quoted-closed") {
+		if (isHorizontalWhitespace(character)) return true;
+		if (character === "," || character === ";" || character === "}" || character === "]") {
+			finishOneStreamingAssignment(state, assignment, position, false);
+			reprocessStreamingBoundary(state, character, position, metrics);
+			return true;
+		}
+		if (character === "#" && isHorizontalWhitespace(source[position - 1])) {
+			finishOneStreamingAssignment(state, assignment, position, false);
+			state.comment = true;
+			return true;
+		}
+		assignment.mode = "plain";
+		appendStreamingValueCharacter(assignment, character, position);
+		return true;
+	}
+	if (assignment.skipNextSingleQuote) {
+		assignment.skipNextSingleQuote = false;
+		appendStreamingValueCharacter(assignment, character, position);
+		return true;
+	}
+	if (assignment.escapeNext) {
+		assignment.escapeNext = false;
+		appendStreamingValueCharacter(assignment, character, position);
+		return true;
+	}
+	if (assignment.quote === "\"" && character === "\\") {
+		assignment.escapeNext = true;
+		appendStreamingValueCharacter(assignment, character, position);
+		return true;
+	}
+	if (assignment.quote === "'" && character === "'" && source[position + 1] === "'") {
+		assignment.skipNextSingleQuote = true;
+		appendStreamingValueCharacter(assignment, character, position);
+		return true;
+	}
+	if (assignment.context === "flow" && (character === "," || character === ";")) {
+		finishOneStreamingAssignment(state, assignment, position, true);
+		reprocessStreamingBoundary(state, character, position, metrics);
+		return true;
+	}
+	if (character === assignment.quote) {
+		if (assignment.range) assignment.range.end = position;
+		assignment.valueEnd = position;
+		assignment.mode = "quoted-closed";
+		return true;
+	}
+	appendStreamingValueCharacter(assignment, character, position);
+	return true;
+}
+
+function startsStreamingComment(
+	source: string,
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+): boolean {
+	return character === "#" &&
+		(position === state.lineStart || isHorizontalWhitespace(source[position - 1]));
+}
+
+function resolvePendingLineAssignments(
+	state: RedactionStreamingState,
+	column: number,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	while (true) {
+		const assignment = state.assignments.at(-1);
+		if (!assignment?.pendingLineBoundary) return;
+		if (column > assignment.keyColumn) {
+			assignment.pendingLineBoundary = false;
+			if (assignment.mode === "waiting") beginContinuationRange(state, assignment, position, metrics);
+			state.lineCandidateSlot = false;
+			state.flowCandidateSlot = false;
+			return;
+		}
+		finishOneStreamingAssignment(state, assignment, assignment.valueEnd, false);
+	}
+}
+
+function beginContinuationRange(
+	state: RedactionStreamingState,
+	assignment: StreamingAssignment,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	assignment.valueStart = position;
+	assignment.valueEnd = position;
+	assignment.mode = "plain";
+	assignment.nonWhitespace = true;
+	assignment.range = emitPlannedRange(
+		state,
+		position,
+		position,
+		REDACTED_TEXT,
+		assignment.kind === "public" ? "recovery" : "assignment",
+		assignment.kind !== "public",
+		metrics,
+	);
+}
+
+function finishPhysicalLine(
+	source: string,
+	state: RedactionStreamingState,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (state.candidate) {
+		const candidate = state.candidate;
+		if (candidate.quoted && !candidate.quoteClosed) {
+			finishMalformedQuotedCandidate(source, state, candidate, position, metrics);
+		} else state.candidate = undefined;
+	}
+	const top = state.assignments.at(-1);
+	if (top?.mode === "quoted") {
+		finishOneStreamingAssignment(state, top, position, true);
+	} else if (top && top.compositeDepth === undefined) {
+		top.pendingLineBoundary = true;
+		top.valueEnd = position;
+		if (top.range) top.range.end = position;
+	}
+	state.comment = false;
+	state.lineStart = position + 1;
+	if (characterStartsCrLf(source, position)) state.lineStart = position + 1;
+	state.lineHasContent = false;
+	state.lineCandidateSlot = true;
+	state.flowCandidateSlot = false;
+}
+
+function characterStartsCrLf(source: string, position: number): boolean {
+	return source[position] === "\r" && source[position + 1] === "\n";
+}
+
+function finishAssignmentsAtBoundary(
+	state: RedactionStreamingState,
+	position: number,
+	malformedQuote: boolean,
+	_metrics?: RedactionScanMetrics,
+): void {
+	const assignment = state.assignments.at(-1);
+	if (assignment && assignment.compositeDepth === undefined) {
+		finishOneStreamingAssignment(state, assignment, position, malformedQuote);
+	}
+}
+
+function finishAssignmentsAtMemberBoundary(
+	state: RedactionStreamingState,
+	position: number,
+	_metrics?: RedactionScanMetrics,
+): void {
+	while (true) {
+		const assignment = state.assignments.at(-1);
+		if (!assignment || assignment.baseDepth !== state.frames.length || assignment.compositeDepth !== undefined) return;
+		finishOneStreamingAssignment(state, assignment, position, false);
+	}
+}
+
+function finishOneStreamingAssignment(
+	state: RedactionStreamingState,
+	assignment: StreamingAssignment,
+	end: number,
+	malformed: boolean,
+): void {
+	assignment.valueEnd = Math.max(assignment.valueStart ?? end, end);
+	if (assignment.range) assignment.range.end = assignment.valueEnd;
+	const prefix = assignment.valuePrefix.trim();
+	if (assignment.kind === "public") {
+		if (assignment.range) {
+			assignment.range.active = malformed && !isDocumentaryPublicMultilinePrefix(prefix);
+		}
+	} else if (assignment.kind === "authorization") {
+		finalizeAuthorizationRange(assignment, prefix);
+	} else if (assignment.range) {
+		const documentary = assignment.delimiter === ":" &&
+			(isBoundedDocumentaryProse(prefix) ||
+				(assignment.keyColumn === 0 &&
+					["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
+					containsWhitespace(prefix)));
+		const publicLiteral = assignment.kind === "secret" && isReviewedPublicLiteral(prefix);
+		if (documentary || publicLiteral || prefix.length === 0) assignment.range.active = false;
+	}
+	const index = state.assignments.lastIndexOf(assignment);
+	if (index >= 0) state.assignments.splice(index, 1);
+}
+
+function finalizeAuthorizationRange(assignment: StreamingAssignment, prefix: string): void {
+	const range = assignment.range;
+	if (!range) return;
+	let firstSpace = -1;
+	for (let index = 0; index < prefix.length; index += 1) {
+		if (isWhitespace(prefix[index])) { firstSpace = index; break; }
+	}
+	if (firstSpace < 0) return;
+	let credential = firstSpace;
+	while (credential < prefix.length && isWhitespace(prefix[credential])) credential += 1;
+	if (credential >= prefix.length) {
+		range.active = false;
+		return;
+	}
+	const scheme = prefix.slice(0, firstSpace).toLowerCase();
+	const credentialText = prefix.slice(credential);
+	const parameterized = scheme === "digest" || scheme === "signature" || scheme.startsWith("aws4-");
+	if (!parameterized && containsWhitespace(credentialText)) {
+		range.active = false;
+		return;
+	}
+	range.start = (assignment.valueStart ?? range.start) + credential;
+}
+
+function isBoundedDocumentaryProse(value: string): boolean {
+	const lower = value.toLowerCase();
+	return lower.startsWith("number of ") || lower.startsWith("name of ") ||
+		lower.startsWith("description of ") || lower.startsWith("meaning of ") ||
+		lower.startsWith("definition of ") || lower.startsWith("count of ") ||
+		lower.startsWith("describes ") || lower.startsWith("describe ") ||
+		lower.startsWith("names ") || lower.startsWith("name ") ||
+		lower.startsWith("explains ") || lower.startsWith("explain ") ||
+		lower.startsWith("means ") || lower.startsWith("refers to ");
+}
+
+function isDocumentaryPublicMultilinePrefix(value: string): boolean {
+	return value.toLowerCase().startsWith("the following lines document configuration vocabulary");
+}
+
+function isReviewedPublicLiteral(value: string): boolean {
+	const lower = value.toLowerCase();
+	return lower === "true" || lower === "false" || lower === "null" || lower === "~";
+}
+
+function pushStreamingFrameOrRecover(
+	state: RedactionStreamingState,
+	closer: FlowCloser,
+	position: number,
+	assignment: StreamingAssignment | undefined,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (state.frames.length >= MAX_REDACTION_NESTING) {
+		beginStreamingRecovery(state, position, assignment?.range, "recovery", metrics);
+		return;
+	}
+	if (assignment && assignment.valueStart === position && assignment.mode === "plain") {
+		assignment.mode = "composite";
+		assignment.compositeDepth = state.frames.length + 1;
+	}
+	state.frames.push({
+		closer,
+		openedAt: position,
+		publicOwner: assignment?.kind === "public" && assignment.compositeDepth === state.frames.length + 1
+			? assignment
+			: undefined,
+	});
+	state.flowCandidateSlot = true;
+	state.lineCandidateSlot = false;
+}
+
+function closeStreamingFrameOrRecover(
+	state: RedactionStreamingState,
+	character: FlowCloser,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	finishAssignmentsAtMemberBoundary(state, position, metrics);
+	const frame = state.frames.at(-1);
+	if (!frame || frame.closer !== character) {
+		const publicRange = latestPublicRecoveryRange(state);
+		beginStreamingRecovery(state, publicRange?.start ?? position, publicRange, "recovery", metrics);
+		return;
+	}
+	const closingDepth = state.frames.length;
+	state.frames.pop();
+	while (true) {
+		const assignment = state.assignments.at(-1);
+		if (!assignment || assignment.compositeDepth !== closingDepth) break;
+		finishOneStreamingAssignment(state, assignment, position + 1, false);
+	}
+	state.flowCandidateSlot = false;
+}
+
+function latestPublicRecoveryRange(state: RedactionStreamingState): PlannedRedactionRange | undefined {
+	for (let index = state.assignments.length - 1; index >= 0; index -= 1) {
+		const assignment = state.assignments[index]!;
+		if (assignment.kind === "public" && assignment.range) return assignment.range;
+	}
+	return undefined;
+}
+
+function beginStreamingRecovery(
+	state: RedactionStreamingState,
+	start: number,
+	existing: PlannedRedactionRange | undefined,
+	priority: PlannedRangePriority,
+	metrics?: RedactionScanMetrics,
+): void {
+	const range = existing ?? emitPlannedRange(state, start, start, REDACTED_TEXT, priority, true, metrics);
+	range.active = true;
+	range.priority = priority;
+	range.end = Math.max(range.end, state.i);
+	state.recovery = { range };
+	state.candidate = undefined;
+	state.assignments.length = 0;
+}
+
+function finishRecoveryAtLine(state: RedactionStreamingState, position: number): void {
+	if (state.recovery) state.recovery.range.end = position;
+	state.recovery = undefined;
+	state.frames.length = 0;
+	state.assignments.length = 0;
+	state.candidate = undefined;
+	state.comment = false;
+	state.lineStart = position + 1;
+	state.lineHasContent = false;
+	state.lineCandidateSlot = true;
+	state.flowCandidateSlot = false;
+}
+
+function reprocessStreamingBoundary(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (character === "," || character === ";") {
+		finishAssignmentsAtMemberBoundary(state, position, metrics);
+		state.flowCandidateSlot = state.frames.length > 0;
+		return;
+	}
+	if (character === "}" || character === "]") {
+		closeStreamingFrameOrRecover(state, character, position, metrics);
+	}
+}
+
+function finishStreamingEof(
+	state: RedactionStreamingState,
+	end: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	if (state.recovery) state.recovery.range.end = end;
+	if (state.candidate?.quoted && !state.candidate.quoteClosed) {
+		// The delimiter-adjacent span has already been consumed and is bounded by EOF.
+		const candidate = state.candidate;
+		if (candidate.innerDelimiter) {
+			emitPlannedRange(
+				state,
+				candidate.innerDelimiter.index + 1,
+				end,
+				REDACTED_TEXT,
+				"assignment",
+				true,
+				metrics,
+			);
+		}
+	}
+	while (state.assignments.length > 0) {
+		const assignment = state.assignments.at(-1)!;
+		const malformed = assignment.kind === "public" &&
+			(assignment.mode === "quoted" || assignment.mode === "composite");
+		finishOneStreamingAssignment(state, assignment, end, malformed);
+	}
+	for (const frame of state.frames) {
+		if (frame.publicOwner?.range) {
+			frame.publicOwner.range.active = true;
+			frame.publicOwner.range.end = end;
+		}
+	}
+	if (state.strong.privateBlock) state.strong.privateBlock.range.end = end;
+	finishStrongScalarRange(state.strong.query.activeRange, end);
+	finishStrongScalarRange(state.strong.password.activeRange, end);
+	finishStrongScalarRange(state.strong.cookie.activeRange, end);
+}
+
+function isPhysicalLineEnding(character: string): boolean {
+	return character === "\n" || character === "\r";
+}
+
+function feedStrongCredentialRecognizers(
+	source: string,
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	feedPrivateKeyRecognizer(state, character, position, metrics);
+	feedUrlCredentialRecognizer(state, character, position, metrics);
+	feedQueryCredentialRecognizer(state, character, position, metrics);
+	feedPasswordCredentialRecognizer(state, character, position, metrics);
+	feedCookieCredentialRecognizer(state, character, position, metrics);
+	if (isPhysicalLineEnding(character)) {
+		state.strong.password.word = "";
+		state.strong.password.waitingValue = false;
+	}
+}
+
+function feedCookieCredentialRecognizer(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	const cookie = state.strong.cookie;
+	if (cookie.activeRange) {
+		if (isPhysicalLineEnding(character)) {
+			finishStrongScalarRange(cookie.activeRange, position);
+			cookie.activeRange = undefined;
+			cookie.tail = "";
+			return;
+		}
+		cookie.activeRange.end = position + 1;
+		return;
+	}
+	if (cookie.waitingValue) {
+		if (isHorizontalWhitespace(character)) return;
+		cookie.waitingValue = false;
+		if (!isPhysicalLineEnding(character)) {
+			cookie.activeRange = emitPlannedRange(
+				state,
+				position,
+				position + 1,
+				REDACTED_TEXT,
+				"credential",
+				true,
+				metrics,
+			);
+		}
+		return;
+	}
+	cookie.tail += character.toLowerCase();
+	if (cookie.tail.length > 48) cookie.tail = cookie.tail.slice(-48);
+	if (character !== ":") return;
+	if (cookie.tail.endsWith("request header cookie:") ||
+		cookie.tail.endsWith("request headers cookie:") ||
+		cookie.tail.endsWith("request header set-cookie:") ||
+		cookie.tail.endsWith("request headers set-cookie:") ||
+		cookie.tail.endsWith("response header cookie:") ||
+		cookie.tail.endsWith("response headers cookie:") ||
+		cookie.tail.endsWith("response header set-cookie:") ||
+		cookie.tail.endsWith("response headers set-cookie:")) {
+		cookie.waitingValue = true;
+	}
+}
+
+function feedPrivateKeyRecognizer(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	const lower = character.toLowerCase();
+	const block = state.strong.privateBlock;
+	if (block) {
+		block.tail += lower;
+		if (block.tail.length > block.endMarker.length) block.tail = block.tail.slice(-block.endMarker.length);
+		if (block.tail === block.endMarker) {
+			block.range.end = position + 1;
+			state.strong.privateBlock = undefined;
+		}
+		return;
+	}
+
+	const header = state.strong.privateHeader;
+	if (header) {
+		if (isPhysicalLineEnding(character) || header.text.length >= 96) {
+			state.strong.privateHeader = undefined;
+		} else {
+			header.text += lower;
+			let label: string | undefined;
+			if (header.text === "private key-----") label = "";
+			else if (header.text.endsWith(PRIVATE_KEY_HEADER_SUFFIX)) {
+				const candidateLabel = header.text.slice(0, -PRIVATE_KEY_HEADER_SUFFIX.length);
+				if (candidateLabel.length > 0 && candidateLabel.length <= 64 && isPrivateKeyLabel(candidateLabel)) {
+					label = candidateLabel;
+				}
+			}
+			if (label !== undefined) {
+				const range = emitPlannedRange(
+					state,
+					header.start,
+					position + 1,
+					"[REDACTED PRIVATE KEY]",
+					"private-key",
+					true,
+					metrics,
+				);
+				state.strong.privateBlock = {
+					range,
+					endMarker: `-----end ${label.length > 0 ? `${label} ` : ""}private key-----`,
+					tail: "",
+				};
+				state.strong.privateHeader = undefined;
+			}
+		}
+		return;
+	}
+
+	let progress = state.strong.privatePrefixProgress;
+	if (lower === PRIVATE_KEY_BEGIN_PREFIX[progress]) progress += 1;
+	else progress = lower === PRIVATE_KEY_BEGIN_PREFIX[0] ? 1 : 0;
+	if (progress === PRIVATE_KEY_BEGIN_PREFIX.length) {
+		state.strong.privateHeader = {
+			start: position - PRIVATE_KEY_BEGIN_PREFIX.length + 1,
+			text: "",
+		};
+		progress = 0;
+	}
+	state.strong.privatePrefixProgress = progress;
+}
+
+function isPrivateKeyLabel(value: string): boolean {
+	for (const character of value) {
+		const code = character.charCodeAt(0);
+		if (!((code >= 48 && code <= 57) || (code >= 97 && code <= 122) || character === " ")) return false;
+	}
+	return true;
+}
+
+function feedUrlCredentialRecognizer(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	const url = state.strong.url;
+	if (url.pendingSlashes > 0) {
+		if (character === "/") {
+			url.pendingSlashes -= 1;
+			if (url.pendingSlashes === 0) url.inAuthority = true;
+		} else url.pendingSlashes = 0;
+		return;
+	}
+	if (url.inAuthority) {
+		if (character === "@") {
+			if (url.pendingRange) {
+				url.pendingRange.active = url.pendingRange.start < position;
+				url.pendingRange.end = position;
+				url.pendingRange = undefined;
+			}
+			return;
+		}
+		if (character === ":" && !url.pendingRange) {
+			url.pendingRange = emitPlannedRange(
+				state,
+				position + 1,
+				position + 1,
+				REDACTED_TEXT,
+				"credential",
+				false,
+				metrics,
+			);
+			return;
+		}
+		if (character === "/" || character === "?" || character === "#" || isWhitespace(character)) {
+			if (url.pendingRange) url.pendingRange.active = false;
+			url.pendingRange = undefined;
+			url.inAuthority = false;
+			url.schemeLength = 0;
+			return;
+		}
+		if (url.pendingRange) url.pendingRange.end = position + 1;
+		return;
+	}
+
+	if (character === ":" && url.schemeLength > 0) {
+		url.pendingSlashes = 2;
+		url.schemeLength = 0;
+		return;
+	}
+	const code = character.charCodeAt(0);
+	if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
+		(url.schemeLength > 0 && ((code >= 48 && code <= 57) || character === "+" || character === "." || character === "-"))) {
+		url.schemeLength += 1;
+	} else url.schemeLength = 0;
+}
+
+function feedQueryCredentialRecognizer(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	const query = state.strong.query;
+	if (query.activeRange) {
+		if (character === "&" || character === "#" || isWhitespace(character)) {
+			finishStrongScalarRange(query.activeRange, position);
+			query.activeRange = undefined;
+			query.collecting = character === "&" || character === "#";
+			query.key = "";
+			return;
+		}
+		query.activeRange.end = position + 1;
+		return;
+	}
+	if (character === "?" || character === "&" || character === "#") {
+		query.collecting = true;
+		query.key = "";
+		return;
+	}
+	if (!query.collecting) return;
+	if (character === "=") {
+		const normalized = query.key.replace(/[-_]/g, "").toLowerCase();
+		if (QUERY_SECRET_KEYS.has(normalized)) {
+			query.activeRange = emitPlannedRange(
+				state,
+				position + 1,
+				position + 1,
+				REDACTED_TEXT,
+				"credential",
+				true,
+				metrics,
+			);
+		}
+		query.collecting = false;
+		return;
+	}
+	const code = character.charCodeAt(0);
+	if ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
+		character === "_" || character === "-") {
+		if (query.key.length < 32) query.key += character;
+		else query.collecting = false;
+	} else query.collecting = false;
+}
+
+function feedPasswordCredentialRecognizer(
+	state: RedactionStreamingState,
+	character: string,
+	position: number,
+	metrics?: RedactionScanMetrics,
+): void {
+	const password = state.strong.password;
+	if (password.activeRange) {
+		if (isWhitespace(character) || character === "#") {
+			finishStrongScalarRange(password.activeRange, position);
+			password.activeRange = undefined;
+			password.word = "";
+			return;
+		}
+		password.activeRange.end = position + 1;
+		return;
+	}
+	if (password.waitingValue) {
+		if (isHorizontalWhitespace(character)) return;
+		password.waitingValue = false;
+		if (character !== "=" && character !== ":" && !isPhysicalLineEnding(character)) {
+			password.activeRange = emitPlannedRange(
+				state,
+				position,
+				position + 1,
+				REDACTED_TEXT,
+				"credential",
+				true,
+				metrics,
+			);
+		}
+		return;
+	}
+	const code = character.charCodeAt(0);
+	const wordCharacter = (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
+	if (wordCharacter) {
+		if (password.word.length < 16) password.word += character.toLowerCase();
+		else password.word = "";
+		return;
+	}
+	if (isHorizontalWhitespace(character) && password.word === "password") {
+		password.waitingValue = true;
+	}
+	password.word = "";
+}
+
+function finishStrongScalarRange(range: PlannedRedactionRange | undefined, end: number): void {
+	if (!range) return;
+	range.end = end;
+	if (range.start >= range.end) range.active = false;
+}
+
+function applyRedactionPlan(
+	source: string,
+	planned: readonly PlannedRedactionRange[],
+	metrics?: RedactionScanMetrics,
+): string {
+	const ranges: PlannedRedactionRange[] = [];
+	for (const candidate of planned) {
+		if (!candidate.active || candidate.end <= candidate.start) continue;
+		const start = Math.max(0, Math.min(source.length, candidate.start));
+		const end = Math.max(start, Math.min(source.length, candidate.end));
+		if (end <= start) continue;
+		const previous = ranges.at(-1);
+		if (previous && start <= previous.end) {
+			previous.end = Math.max(previous.end, end);
+			if (rangePriority(candidate.priority) > rangePriority(previous.priority)) {
+				previous.priority = candidate.priority;
+				previous.replacement = candidate.replacement;
+			}
+		} else {
+			ranges.push({ ...candidate, start, end });
+		}
+		if (metrics) metrics.totalWork += 1;
+	}
+	if (metrics) metrics.totalWork += source.length;
+	if (ranges.length === 0) return source;
+	const chunks: string[] = [];
+	let cursor = 0;
+	for (const range of ranges) {
+		chunks.push(source.slice(cursor, range.start), range.replacement);
+		cursor = range.end;
+	}
+	chunks.push(source.slice(cursor));
+	return chunks.join("");
+}
+
+function rangePriority(priority: PlannedRangePriority): number {
+	if (priority === "recovery") return 4;
+	if (priority === "private-key") return 3;
+	if (priority === "credential") return 2;
+	return 1;
 }
 
 type SensitiveAssignmentKind = "authorization" | "secret" | "unknown-sensitive";
@@ -622,46 +2181,6 @@ type AssignmentKeyClassification = SensitiveAssignmentKind | "public";
 type SensitiveAssignmentContext = "flow" | "line";
 type LexicalQuote = "\"" | "'";
 type FlowCloser = "}" | "]";
-
-type LexicalMode =
-	| { kind: "plain" }
-	| { kind: "quoted"; quote: LexicalQuote; multiline: boolean };
-
-interface StructuredScannerState {
-	index: number;
-	lineStart: number;
-	lineEnd: number;
-	structuredKeyStart: number | undefined;
-	mode: LexicalMode;
-	flowClosers: FlowCloser[];
-	flowOverflowDepth: number;
-}
-
-interface SensitiveAssignment {
-	kind: AssignmentKeyClassification;
-	context: SensitiveAssignmentContext;
-	keyColumn: number;
-	normalizedKey: string;
-	delimiter: ":" | "=";
-	valueStart: number;
-}
-
-interface RedactionRange {
-	start: number;
-	end: number;
-	replacement: string;
-}
-
-interface RedactionDecision {
-	range?: RedactionRange;
-	resumeAt: number;
-}
-
-interface AssignmentKeyCandidate {
-	exactKey?: string;
-	delimiter: ":" | "=";
-	delimiterIndex: number;
-}
 
 const REDACTED_TEXT = "[REDACTED]";
 const secretAssignmentKeys = new Set([
@@ -698,541 +2217,6 @@ const publicAssignmentPaths = new Set([
 	"database.url.scheme",
 ]);
 
-function redactStructuredAssignments(value: string, metrics?: RedactionScanMetrics): string {
-	const ranges: RedactionRange[] = [];
-	// One monotonic cursor owns line, quote, comment, and balanced flow transitions. Value parsers
-	// consume their complete span before the cursor resumes, so skipped nested delimiters cannot
-	// corrupt the outer flow state and no global regex repeatedly rescans the input.
-	const state: StructuredScannerState = {
-		index: 0,
-		lineStart: 0,
-		lineEnd: findLineEnd(value, 0, metrics),
-		structuredKeyStart: findStructuredKeyStart(value, 0, metrics),
-		mode: { kind: "plain" },
-		flowClosers: [],
-		flowOverflowDepth: 0,
-	};
-	while (state.index < value.length) {
-		if (state.index >= state.lineEnd) {
-			advanceScannerLine(value, state, metrics);
-			continue;
-		}
-
-		const character = value[state.index];
-		if (state.mode.kind === "quoted") {
-			if (state.mode.quote === '"' && character === "\\") {
-				advanceScannerIndex(state, Math.min(state.lineEnd, state.index + 2), metrics);
-				continue;
-			}
-			if (state.mode.quote === "'" && character === "'" && value[state.index + 1] === "'") {
-				advanceScannerIndex(state, Math.min(state.lineEnd, state.index + 2), metrics);
-				continue;
-			}
-			if (character === state.mode.quote) state.mode = { kind: "plain" };
-			advanceScannerIndex(state, state.index + 1, metrics);
-			continue;
-		}
-
-		const context: SensitiveAssignmentContext =
-			state.flowClosers.length > 0 || state.flowOverflowDepth > 0 ? "flow" : "line";
-		const allowKey = state.index === state.structuredKeyStart ||
-			(context === "flow" && isFlowMappingKeyStart(value, state.index, state));
-		const assignment = sensitiveAssignmentAt(
-			value,
-			state.index,
-			state.lineStart,
-			state.lineEnd,
-			allowKey,
-			context,
-			metrics,
-		);
-		if (!assignment) {
-			if (isCommentStart(value, state.index, state.lineStart)) {
-				advanceScannerIndex(state, state.lineEnd, metrics);
-				continue;
-			}
-			if ((character === '"' || character === "'") && isQuotedSegmentStart(value, state.index, state.lineStart)) {
-				state.mode = {
-					kind: "quoted",
-					quote: character,
-					multiline: state.flowClosers.length > 0 || state.flowOverflowDepth > 0,
-				};
-				advanceScannerIndex(state, state.index + 1, metrics);
-				continue;
-			}
-			const closer = flowCloserForOpener(character);
-			if (closer) {
-				if (state.flowClosers.length < 256) state.flowClosers.push(closer);
-				else state.flowOverflowDepth += 1;
-			} else if (character === "}" || character === "]") {
-				if (state.flowOverflowDepth > 0) state.flowOverflowDepth -= 1;
-				else if (character === state.flowClosers[state.flowClosers.length - 1]) state.flowClosers.pop();
-			}
-			advanceScannerIndex(state, state.index + 1, metrics);
-			continue;
-		}
-		const decision = redactionForAssignment(value, assignment, state.lineEnd, metrics);
-		if (decision.range) ranges.push(decision.range);
-		advanceScannerTo(value, state, Math.max(state.index + 1, decision.resumeAt), metrics);
-	}
-	if (ranges.length === 0) return value;
-	let output = "";
-	let cursor = 0;
-	for (const range of ranges) {
-		output += value.slice(cursor, range.start) + range.replacement;
-		cursor = range.end;
-	}
-	return output + value.slice(cursor);
-}
-
-function sensitiveAssignmentAt(
-	value: string,
-	index: number,
-	lineStart: number,
-	lineEnd: number,
-	allowKey: boolean,
-	context: SensitiveAssignmentContext,
-	metrics?: RedactionScanMetrics,
-): SensitiveAssignment | undefined {
-	if (!allowKey) return undefined;
-	if (context === "line" && isStandalonePublicScalar(value, index, lineEnd)) return undefined;
-	const candidate = scanAssignmentKeyCandidate(value, index, lineEnd, context, metrics);
-	if (!candidate) return undefined;
-	const classification = candidate.exactKey === undefined
-		? "unknown-sensitive"
-		: assignmentKeyClassification(candidate.exactKey);
-	const normalizedKey = candidate.exactKey === undefined
-		? ""
-		: (candidate.exactKey.toLowerCase().split(".").at(-1) ?? candidate.exactKey).replace(/[-_]/g, "");
-	let cursor = candidate.delimiterIndex + 1;
-	recordTotalVisits(metrics, 1);
-	while (isHorizontalWhitespace(value[cursor])) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-	}
-	return {
-		kind: classification,
-		context,
-		keyColumn: index - lineStart,
-		normalizedKey,
-		delimiter: candidate.delimiter,
-		valueStart: cursor,
-	};
-}
-
-function scanAssignmentKeyCandidate(
-	value: string,
-	start: number,
-	lineEnd: number,
-	context: SensitiveAssignmentContext,
-	metrics?: RedactionScanMetrics,
-): AssignmentKeyCandidate | undefined {
-	const quote = value[start] === '"' || value[start] === "'" ? value[start] as LexicalQuote : undefined;
-	if (quote) return scanQuotedAssignmentKeyCandidate(value, start, lineEnd, quote, metrics);
-	let cursor = start;
-	let exact = true;
-	let keyLength = 0;
-	let pendingWhitespace = false;
-	let exactKey = "";
-	while (cursor < lineEnd) {
-		const character = value[cursor];
-		if (character === ":" || character === "=") {
-			if (keyLength === 0) return undefined;
-			if (character === "=" || isAdmittedColonDelimiter(value, cursor, lineEnd, context)) {
-				return {
-					exactKey: exact && keyLength <= 64 ? exactKey : undefined,
-					delimiter: character,
-					delimiterIndex: cursor,
-				};
-			}
-			exact = false;
-		}
-		if (isHorizontalWhitespace(character)) {
-			pendingWhitespace = keyLength > 0;
-		} else {
-			if (pendingWhitespace) exact = false;
-			pendingWhitespace = false;
-			keyLength += 1;
-			if (keyLength <= 64 && isAssignmentKeyCharacter(character)) exactKey += character;
-			else exact = false;
-		}
-		cursor += 1;
-		recordKeyCharacterVisit(metrics);
-		recordTotalVisits(metrics, 1);
-	}
-	return undefined;
-}
-
-function scanQuotedAssignmentKeyCandidate(
-	value: string,
-	start: number,
-	lineEnd: number,
-	quote: LexicalQuote,
-	metrics?: RedactionScanMetrics,
-): AssignmentKeyCandidate | undefined {
-	let cursor = start + 1;
-	let decoded = "";
-	let decodedLength = 0;
-	let exact = true;
-	let closedAt: number | undefined;
-	let innerDelimiter: number | undefined;
-	const append = (character: string): void => {
-		decodedLength += 1;
-		recordKeyCharacterVisit(metrics);
-		if (decodedLength <= 64 && isAssignmentKeyCharacter(character)) decoded += character;
-		else exact = false;
-	};
-	while (cursor < lineEnd) {
-		const character = value[cursor];
-		recordTotalVisits(metrics, 1);
-		if ((character === ":" || character === "=") && innerDelimiter === undefined) innerDelimiter = cursor;
-		if (character === quote) {
-			if (quote === "'" && value[cursor + 1] === "'") {
-				append("'");
-				cursor += 2;
-				recordTotalVisits(metrics, 1);
-				continue;
-			}
-			closedAt = cursor;
-			break;
-		}
-		if (quote === '"' && character === "\\") {
-			const escaped = value[cursor + 1];
-			if (escaped === "u") {
-				const hex = value.slice(cursor + 2, cursor + 6);
-				if (/^[0-9a-fA-F]{4}$/.test(hex)) append(String.fromCharCode(Number.parseInt(hex, 16)));
-				else exact = false;
-				const consumed = Math.min(6, lineEnd - cursor);
-				cursor += consumed;
-				recordTotalVisits(metrics, Math.max(0, consumed - 1));
-				continue;
-			}
-			const simpleEscapes: Record<string, string> = {
-				'"': '"', "\\": "\\", "/": "/", b: "\b", f: "\f", n: "\n", r: "\r", t: "\t",
-			};
-			if (escaped !== undefined && Object.hasOwn(simpleEscapes, escaped)) append(simpleEscapes[escaped]);
-			else exact = false;
-			const consumed = Math.min(2, lineEnd - cursor);
-			cursor += consumed;
-			recordTotalVisits(metrics, Math.max(0, consumed - 1));
-			continue;
-		}
-		append(character);
-		cursor += 1;
-	}
-
-	if (closedAt !== undefined) {
-		cursor = closedAt + 1;
-		while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (value[cursor] === ":" || value[cursor] === "=") {
-			return {
-				exactKey: exact && decodedLength > 0 && decodedLength <= 64 ? decoded : undefined,
-				delimiter: value[cursor] as ":" | "=",
-				delimiterIndex: cursor,
-			};
-		}
-		// A syntactically closed quoted scalar with no external delimiter is public text. An
-		// interior colon/equals must never be reinterpreted as an assignment delimiter.
-		if (cursor === lineEnd) return undefined;
-	}
-	if (innerDelimiter !== undefined) {
-		return {
-			delimiter: value[innerDelimiter] as ":" | "=",
-			delimiterIndex: innerDelimiter,
-		};
-	}
-	return undefined;
-}
-
-function redactionForAssignment(
-	value: string,
-	assignment: SensitiveAssignment,
-	lineEnd: number,
-	metrics?: RedactionScanMetrics,
-): RedactionDecision {
-	const quote = value[assignment.valueStart];
-	if (assignment.kind === "public") {
-		if (quote === '"' || quote === "'") {
-			const quoteEnd = scanPublicQuotedScalarEnd(value, assignment.valueStart + 1, quote, metrics);
-			if (quoteEnd !== undefined) return { resumeAt: quoteEnd + 1 };
-			return quotedValueRedaction(
-				value,
-				{ ...assignment, kind: "unknown-sensitive" },
-				quote,
-				lineEnd,
-				metrics,
-			);
-		}
-		const scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, assignment.context, metrics);
-		return { resumeAt: assignment.context === "flow" ? scalarEnd : lineEnd };
-	}
-	if (quote === '"' || quote === "'") {
-		return quotedValueRedaction(value, assignment, quote, lineEnd, metrics);
-	}
-	if (assignment.kind !== "authorization" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
-		return yamlBlockRedaction(value, assignment, lineEnd, metrics);
-	}
-	return unquotedValueRedaction(value, assignment, lineEnd, metrics);
-}
-
-function quotedValueRedaction(
-	value: string,
-	assignment: SensitiveAssignment,
-	quote: string,
-	lineEnd: number,
-	metrics?: RedactionScanMetrics,
-): RedactionDecision {
-	const contentStart = assignment.valueStart + 1;
-	const quoteEnd = scanQuotedValueEnd(value, contentStart, quote, lineEnd, assignment.context, metrics);
-	const contentEnd = quoteEnd ?? lineEnd;
-	const resumeAt = quoteEnd === undefined ? afterLineEnding(value, lineEnd) : quoteEnd + 1;
-	if (assignment.kind === "secret" || assignment.kind === "unknown-sensitive") {
-		if (value.slice(contentStart, contentEnd).trim().length === 0) return { resumeAt };
-		return { range: { start: contentStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
-	}
-
-	const credentialStart = authorizationCredentialStart(
-		value,
-		contentStart,
-		contentEnd,
-		quoteEnd !== undefined && quoteEnd > lineEnd,
-	);
-	return credentialStart === undefined
-		? { resumeAt }
-		: { range: { start: credentialStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
-}
-
-function yamlBlockRedaction(
-	value: string,
-	assignment: SensitiveAssignment,
-	headerEnd: number,
-	metrics?: RedactionScanMetrics,
-): RedactionDecision {
-	const contentStart = afterLineEnding(value, headerEnd);
-	if (contentStart === headerEnd) return { resumeAt: headerEnd };
-	let cursor = contentStart;
-	let blockEnd = contentStart;
-	let contentIndent: string | undefined;
-	while (cursor < value.length) {
-		const lineEnd = findLineEnd(value, cursor, metrics);
-		const line = value.slice(cursor, lineEnd);
-		const indentLength = leadingIndentLength(line);
-		const blank = line.slice(indentLength).length === 0;
-		if (!blank && indentLength <= assignment.keyColumn) break;
-		if (!blank && contentIndent === undefined) contentIndent = line.slice(0, indentLength);
-		blockEnd = afterLineEnding(value, lineEnd);
-		if (blockEnd === lineEnd) break;
-		cursor = blockEnd;
-	}
-	const block = value.slice(contentStart, blockEnd);
-	if (block.trim().length === 0) return { resumeAt: blockEnd };
-	const indent = contentIndent ?? " ".repeat(assignment.keyColumn + 2);
-	return {
-		range: {
-			start: contentStart,
-			end: blockEnd,
-			replacement: `${indent}${REDACTED_TEXT}${trailingLineEnding(block)}`,
-		},
-		resumeAt: blockEnd,
-	};
-}
-
-function unquotedValueRedaction(
-	value: string,
-	assignment: SensitiveAssignment,
-	lineEnd: number,
-	metrics?: RedactionScanMetrics,
-): RedactionDecision {
-	let scalarEnd = findUnquotedValueEnd(value, assignment.valueStart, lineEnd, assignment.context, metrics);
-	scalarEnd = trimHorizontalEnd(value, assignment.valueStart, scalarEnd);
-	const continuation = assignment.context === "line"
-		? yamlPlainContinuation(value, lineEnd, assignment.keyColumn, metrics)
-		: undefined;
-	const resumeAt = continuation?.end ?? scalarEnd;
-	const unredactedResumeAt = assignment.context === "flow" ? scalarEnd : assignment.valueStart;
-	if (scalarEnd <= assignment.valueStart) {
-		if (!continuation) return { resumeAt };
-		return {
-			range: {
-				start: continuation.start,
-				end: continuation.end,
-				replacement: `${continuation.indent}${REDACTED_TEXT}${trailingLineEnding(continuation.value)}`,
-			},
-			resumeAt,
-		};
-	}
-	if (assignment.kind === "authorization") {
-		const authorizationEnd = continuation?.end ?? scalarEnd;
-		const credentialStart = authorizationCredentialStart(
-			value,
-			assignment.valueStart,
-			authorizationEnd,
-			continuation !== undefined,
-		);
-		return credentialStart === undefined
-			? { resumeAt: unredactedResumeAt }
-			: {
-				range: {
-					start: credentialStart,
-					end: authorizationEnd,
-					replacement: `${REDACTED_TEXT}${trailingLineEnding(value.slice(credentialStart, authorizationEnd))}`,
-				},
-				resumeAt,
-			};
-	}
-
-	const scalar = value.slice(assignment.valueStart, scalarEnd);
-	const documentaryAssignmentProse = assignment.delimiter === ":" &&
-		assignment.keyColumn === 0 && continuation === undefined &&
-		isDocumentaryAssignmentProse(scalar);
-	const ambiguousLineProse = assignment.kind === "secret" && assignment.context === "line" &&
-		assignment.delimiter === ":" &&
-		assignment.keyColumn === 0 && continuation === undefined &&
-		["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
-		containsWhitespace(scalar);
-	if (ambiguousLineProse || documentaryAssignmentProse) return { resumeAt: unredactedResumeAt };
-	if (assignment.kind !== "unknown-sensitive" && isPublicScalar(scalar)) return { resumeAt };
-	const redactionEnd = continuation?.end ?? scalarEnd;
-	return {
-		range: {
-			start: assignment.valueStart,
-			end: redactionEnd,
-			replacement: `${REDACTED_TEXT}${trailingLineEnding(value.slice(assignment.valueStart, redactionEnd))}`,
-		},
-		resumeAt,
-	};
-}
-
-function isDocumentaryAssignmentProse(value: string): boolean {
-	const prose = value.trim();
-	return /^(?:number|name|description|meaning|definition|count)\s+of\b/i.test(prose) ||
-		/^(?:describes?|explains?|means?|refers?\s+to)\b/i.test(prose);
-}
-
-interface YamlPlainContinuation {
-	start: number;
-	end: number;
-	indent: string;
-	value: string;
-}
-
-function yamlPlainContinuation(
-	value: string,
-	lineEnd: number,
-	keyColumn: number,
-	metrics?: RedactionScanMetrics,
-): YamlPlainContinuation | undefined {
-	const start = afterLineEnding(value, lineEnd);
-	if (start === lineEnd) return undefined;
-	let cursor = start;
-	let end = start;
-	let indent: string | undefined;
-	let hasContent = false;
-	while (cursor < value.length) {
-		const continuationLineEnd = findLineEnd(value, cursor, metrics);
-		const line = value.slice(cursor, continuationLineEnd);
-		const indentLength = leadingIndentLength(line);
-		const blank = line.slice(indentLength).length === 0;
-		if (!blank && indentLength <= keyColumn) break;
-		if (!blank) {
-			hasContent = true;
-			indent ??= line.slice(0, indentLength);
-		}
-		end = afterLineEnding(value, continuationLineEnd);
-		if (end === continuationLineEnd) break;
-		cursor = end;
-	}
-	if (!hasContent) return undefined;
-	return {
-		start,
-		end,
-		indent: indent ?? " ".repeat(keyColumn + 2),
-		value: value.slice(start, end),
-	};
-}
-
-function authorizationCredentialStart(
-	value: string,
-	start: number,
-	end: number,
-	allowCredentialWhitespace: boolean,
-): number | undefined {
-	let cursor = start;
-	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
-	const schemeStart = cursor;
-	while (cursor < end && !isWhitespace(value[cursor])) cursor += 1;
-	const scheme = value.slice(schemeStart, cursor).toLowerCase();
-	if (scheme.length === 0) return undefined;
-	if (cursor >= end) return schemeStart;
-	while (cursor < end && isWhitespace(value[cursor])) cursor += 1;
-	if (cursor >= end) return undefined;
-	const parameterized = scheme === "digest" || scheme === "signature" || scheme.startsWith("aws4-");
-	if (!allowCredentialWhitespace && !parameterized && containsWhitespace(value.slice(cursor, end))) return undefined;
-	return cursor;
-}
-
-function redactPrivateKeyBlocks(value: string): string {
-	const lower = value.toLowerCase();
-	const beginPrefix = "-----begin ";
-	const headerSuffix = " private key-----";
-	let cursor = 0;
-	let searchAt = 0;
-	let output = "";
-	while (searchAt < value.length) {
-		const begin = lower.indexOf(beginPrefix, searchAt);
-		if (begin < 0) break;
-		const labelStart = begin + beginPrefix.length;
-		let label = "";
-		let headerEnd: number;
-		let headerLength: number;
-		if (lower.startsWith("private key-----", labelStart)) {
-			headerEnd = labelStart;
-			headerLength = "private key-----".length;
-		} else {
-			const headerWindow = lower.slice(labelStart, labelStart + 64 + headerSuffix.length);
-			const relativeHeaderEnd = headerWindow.indexOf(headerSuffix);
-			if (relativeHeaderEnd <= 0 || relativeHeaderEnd > 64) {
-				searchAt = labelStart;
-				continue;
-			}
-			headerEnd = labelStart + relativeHeaderEnd;
-			headerLength = headerSuffix.length;
-			label = lower.slice(labelStart, headerEnd);
-			if (!/^[a-z0-9 ]+$/.test(label)) {
-				searchAt = labelStart;
-				continue;
-			}
-		}
-		const endMarker = label.length > 0
-			? `-----end ${label} private key-----`
-			: "-----end private key-----";
-		const end = lower.indexOf(endMarker, headerEnd + headerLength);
-		if (end < 0) {
-			output += value.slice(cursor, begin) + "[REDACTED PRIVATE KEY]";
-			return output;
-		}
-		output += value.slice(cursor, begin) + "[REDACTED PRIVATE KEY]";
-		cursor = end + endMarker.length;
-		searchAt = cursor;
-	}
-	return output + value.slice(cursor);
-}
-
-function redactStrongCredentialSyntax(value: string): string {
-	return value
-		.replace(/^(\s*(?:set-cookie|cookie)\s*:\s*)([^\r\n]*)/gim, `$1${REDACTED_TEXT}`)
-		.replace(/(\b(?:request|response)\s+headers?\s+(?:set-cookie|cookie)\s*:\s*)([^\r\n]*)/gi,
-			`$1${REDACTED_TEXT}`)
-		.replace(/\b([a-z][a-z0-9+.-]*:\/\/[^/\s:@]+:)([^@\s/]+)(@)/gi, `$1${REDACTED_TEXT}$3`)
-		.replace(/([?&#](?:access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret)=)([^&#\s]+)/gi,
-			`$1${REDACTED_TEXT}`)
-		.replace(/((?:^|[/:])_authToken\s*=\s*)([^\s#]+)/gim, `$1${REDACTED_TEXT}`)
-		.replace(/(\bpassword[\t ]+)(?![=:])([^\s#]+)/gi, `$1${REDACTED_TEXT}`);
-}
-
 function assignmentKeyClassification(key: string): AssignmentKeyClassification {
 	const { segments, path, terminal } = canonicalAssignmentKey(key);
 	if ((segments.length === 1 && publicAssignmentTerminals.has(terminal)) || publicAssignmentPaths.has(path)) {
@@ -1254,107 +2238,10 @@ function canonicalAssignmentKey(key: string): {
 	return { segments, path: segments.join("."), terminal: segments.at(-1) ?? "" };
 }
 
-function findStructuredKeyStart(
-	value: string,
-	lineStart: number,
-	metrics?: RedactionScanMetrics,
-): number | undefined {
-	let cursor = lineStart;
-	while (isHorizontalWhitespace(value[cursor])) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-	}
-	if (value[cursor] === "-") {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-		if (!isHorizontalWhitespace(value[cursor])) return undefined;
-		while (isHorizontalWhitespace(value[cursor])) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-	} else if (value.slice(cursor, cursor + 6).toLowerCase() === "export" && isHorizontalWhitespace(value[cursor + 6])) {
-		cursor += 6;
-		recordTotalVisits(metrics, 6);
-		while (isHorizontalWhitespace(value[cursor])) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-	}
-	return isPotentialAssignmentCandidateStart(value[cursor]) ? cursor : undefined;
-}
-
-function advanceScannerLine(
-	value: string,
-	state: StructuredScannerState,
-	metrics?: RedactionScanMetrics,
-): void {
-	const nextLineStart = afterLineEnding(value, state.lineEnd);
-	if (state.mode.kind !== "quoted" || !state.mode.multiline) state.mode = { kind: "plain" };
-	if (nextLineStart <= state.lineEnd) {
-		advanceScannerIndex(state, value.length, metrics);
-		state.structuredKeyStart = undefined;
-		return;
-	}
-	advanceScannerIndex(state, nextLineStart, metrics);
-	state.lineStart = nextLineStart;
-	state.lineEnd = findLineEnd(value, nextLineStart, metrics);
-	state.structuredKeyStart = findStructuredKeyStart(value, nextLineStart, metrics);
-}
-
-function advanceScannerTo(
-	value: string,
-	state: StructuredScannerState,
-	resumeAt: number,
-	metrics?: RedactionScanMetrics,
-): void {
-	const target = Math.min(value.length, resumeAt);
-	let movedLine = false;
-	while (state.lineEnd < target) {
-		const nextLineStart = afterLineEnding(value, state.lineEnd);
-		if (nextLineStart <= state.lineEnd) break;
-		state.lineStart = nextLineStart;
-		state.lineEnd = findLineEnd(value, nextLineStart, metrics);
-		movedLine = true;
-	}
-	advanceScannerIndex(state, target, metrics);
-	state.mode = { kind: "plain" };
-	if (movedLine) state.structuredKeyStart = findStructuredKeyStart(value, state.lineStart, metrics);
-	if (state.structuredKeyStart !== undefined && state.structuredKeyStart < target) {
-		state.structuredKeyStart = undefined;
-	}
-}
-
-function isFlowMappingKeyStart(value: string, index: number, state: StructuredScannerState): boolean {
-	if (!["}", "]"].includes(state.flowClosers[state.flowClosers.length - 1] ?? "") ||
-		!isPotentialAssignmentCandidateStart(value[index])) {
-		return false;
-	}
-	let cursor = index - 1;
-	while (cursor >= state.lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
-	return value[cursor] === "{" || value[cursor] === "[" || value[cursor] === ",";
-}
-
 function flowCloserForOpener(character: string | undefined): FlowCloser | undefined {
 	if (character === "{") return "}";
 	if (character === "[") return "]";
 	return undefined;
-}
-
-function isCommentStart(value: string, index: number, lineStart: number): boolean {
-	return value[index] === "#" && (index === lineStart || isHorizontalWhitespace(value[index - 1]));
-}
-
-function isQuotedSegmentStart(value: string, index: number, lineStart: number): boolean {
-	if (value[index - 1] === "\\") return false;
-	let cursor = index - 1;
-	while (cursor >= lineStart && isHorizontalWhitespace(value[cursor])) cursor -= 1;
-	if (cursor < lineStart) return true;
-	if (value[cursor] === "{" || value[cursor] === "[" || value[cursor] === "," ||
-		value[cursor] === ":" || value[cursor] === "=") return true;
-	if (value[cursor] !== "-") return false;
-	let beforeHyphen = cursor - 1;
-	while (beforeHyphen >= lineStart && isHorizontalWhitespace(value[beforeHyphen])) beforeHyphen -= 1;
-	return beforeHyphen < lineStart;
 }
 
 function isAssignmentKeyCharacter(character: string | undefined): boolean {
@@ -1362,41 +2249,6 @@ function isAssignmentKeyCharacter(character: string | undefined): boolean {
 	const code = character.charCodeAt(0);
 	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
 		(code >= 97 && code <= 122) || character === "_" || character === "-" || character === ".";
-}
-
-function isAdmittedColonDelimiter(
-	value: string,
-	index: number,
-	lineEnd: number,
-	context: SensitiveAssignmentContext,
-): boolean {
-	const next = value[index + 1];
-	if (index + 1 >= lineEnd || isHorizontalWhitespace(next) || next === "#") return true;
-	return context === "flow" && (next === '"' || next === "'" || next === "{" || next === "[");
-}
-
-function isStandalonePublicScalar(value: string, start: number, lineEnd: number): boolean {
-	const scalar = value.slice(start, lineEnd).trimEnd();
-	if (/^[A-Za-z][A-Za-z0-9+.-]*:\/\/[^\s]+$/.test(scalar)) return true;
-	if (/^(?:\d{4}-\d{2}-\d{2}T)?\d{1,2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:\d{2})?$/.test(scalar)) {
-		return true;
-	}
-	const quote = scalar[0];
-	if (quote !== '"' && quote !== "'") return false;
-	let cursor = 1;
-	while (cursor < scalar.length) {
-		if (quote === '"' && scalar[cursor] === "\\") {
-			cursor += 2;
-			continue;
-		}
-		if (quote === "'" && scalar[cursor] === "'" && scalar[cursor + 1] === "'") {
-			cursor += 2;
-			continue;
-		}
-		if (scalar[cursor] === quote) return cursor === scalar.length - 1;
-		cursor += 1;
-	}
-	return false;
 }
 
 function isPotentialAssignmentCandidateStart(character: string | undefined): boolean {
@@ -1416,225 +2268,6 @@ function isWhitespace(character: string | undefined): boolean {
 function containsWhitespace(value: string): boolean {
 	for (const character of value) if (isWhitespace(character)) return true;
 	return false;
-}
-
-function scanQuotedValueEnd(
-	value: string,
-	start: number,
-	quote: string,
-	lineEnd: number,
-	context: SensitiveAssignmentContext,
-	metrics?: RedactionScanMetrics,
-): number | undefined {
-	for (let index = start; index < lineEnd; index += 1) {
-		recordTotalVisits(metrics, 1);
-		if (quote === '"' && value[index] === "\\") {
-			index += 1;
-			recordTotalVisits(metrics, 1);
-			continue;
-		}
-		if (quote === "'" && value[index] === "'" && value[index + 1] === "'") {
-			index += 1;
-			recordTotalVisits(metrics, 1);
-			continue;
-		}
-		if (value[index] !== quote) continue;
-		let boundary = index + 1;
-		while (boundary < lineEnd && isHorizontalWhitespace(value[boundary])) {
-			boundary += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (boundary >= lineEnd || value[boundary] === "#" ||
-			(context === "flow" && (value[boundary] === "," || value[boundary] === ";" ||
-				value[boundary] === "}" || value[boundary] === "]"))) {
-			return index;
-		}
-	}
-	return undefined;
-}
-
-function scanPublicQuotedScalarEnd(
-	value: string,
-	start: number,
-	quote: LexicalQuote,
-	metrics?: RedactionScanMetrics,
-): number | undefined {
-	for (let index = start; index < value.length; index += 1) {
-		recordTotalVisits(metrics, 1);
-		if (quote === '"' && value[index] === "\\") {
-			index += 1;
-			recordTotalVisits(metrics, 1);
-			continue;
-		}
-		if (quote === "'" && value[index] === "'" && value[index + 1] === "'") {
-			index += 1;
-			recordTotalVisits(metrics, 1);
-			continue;
-		}
-		if (value[index] !== quote) continue;
-		let boundary = index + 1;
-		while (isHorizontalWhitespace(value[boundary])) {
-			boundary += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (boundary >= value.length || value[boundary] === "\r" || value[boundary] === "\n" ||
-			value[boundary] === "," || value[boundary] === ";" || value[boundary] === "}" ||
-			value[boundary] === "]" || value[boundary] === "#") {
-			return index;
-		}
-	}
-	return undefined;
-}
-
-function findLineEnd(value: string, start: number, metrics?: RedactionScanMetrics): number {
-	let index = start;
-	while (index < value.length && value[index] !== "\n" && value[index] !== "\r") {
-		if (metrics) {
-			metrics.boundaryCharacterVisits += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		index += 1;
-	}
-	return index;
-}
-
-function afterLineEnding(value: string, lineEnd: number): number {
-	if (value[lineEnd] === "\r" && value[lineEnd + 1] === "\n") return lineEnd + 2;
-	if (value[lineEnd] === "\r" || value[lineEnd] === "\n") return lineEnd + 1;
-	return lineEnd;
-}
-
-function leadingIndentLength(value: string): number {
-	let index = 0;
-	while (isHorizontalWhitespace(value[index])) index += 1;
-	return index;
-}
-
-function trailingLineEnding(value: string): string {
-	if (value.endsWith("\r\n")) return "\r\n";
-	if (value.endsWith("\n")) return "\n";
-	if (value.endsWith("\r")) return "\r";
-	return "";
-}
-
-function isYamlBlockHeader(value: string): boolean {
-	return /^[|>](?:(?:[1-9][+-]?)|(?:[+-][1-9]?))?[ \t]*(?:#.*)?$/.test(value);
-}
-
-function findUnquotedValueEnd(
-	value: string,
-	start: number,
-	lineEnd: number,
-	context: SensitiveAssignmentContext,
-	metrics?: RedactionScanMetrics,
-): number {
-	const nestedClosers: FlowCloser[] = [];
-	let quote: LexicalQuote | undefined;
-	let index = start;
-	let currentLineStart = start;
-	let currentLineEnd = lineEnd;
-	while (index < value.length) {
-		if (index >= currentLineEnd) {
-			if (nestedClosers.length === 0 && context === "line") return currentLineEnd;
-			const nextLineStart = afterLineEnding(value, currentLineEnd);
-			if (nextLineStart <= currentLineEnd) return currentLineEnd;
-			index = nextLineStart;
-			currentLineStart = nextLineStart;
-			currentLineEnd = findLineEnd(value, nextLineStart, metrics);
-			quote = undefined;
-			continue;
-		}
-		const character = value[index];
-		recordTotalVisits(metrics, 1);
-		if (quote) {
-			if (quote === '"' && character === "\\") {
-				index += 2;
-				recordTotalVisits(metrics, 1);
-				continue;
-			}
-			if (quote === "'" && character === "'" && value[index + 1] === "'") {
-				index += 2;
-				recordTotalVisits(metrics, 1);
-				continue;
-			}
-			if (character === quote) quote = undefined;
-			index += 1;
-			continue;
-		}
-		if (isCommentStart(value, index, currentLineStart)) {
-			if (nestedClosers.length === 0) return index;
-			index = currentLineEnd;
-			continue;
-		}
-		if ((character === '"' || character === "'") && isQuotedSegmentStart(value, index, currentLineStart)) {
-			quote = character;
-			index += 1;
-			continue;
-		}
-		if (character === "{") {
-			nestedClosers.push("}");
-			index += 1;
-			continue;
-		}
-		if (character === "[") {
-			nestedClosers.push("]");
-			index += 1;
-			continue;
-		}
-		if (character === "}" || character === "]") {
-			if (nestedClosers.length === 0) return index;
-			if (nestedClosers[nestedClosers.length - 1] !== character) return index;
-			nestedClosers.pop();
-			index += 1;
-			continue;
-		}
-		if (context === "flow" && nestedClosers.length === 0 && (character === "," || character === ";")) return index;
-		index += 1;
-	}
-	return currentLineEnd;
-}
-
-function trimHorizontalEnd(value: string, start: number, end: number): number {
-	while (end > start && isHorizontalWhitespace(value[end - 1])) end -= 1;
-	return end;
-}
-
-function isPublicScalar(value: string): boolean {
-	return /^(?:true|false|null|~)$/i.test(value);
-}
-
-function advanceScannerIndex(
-	state: StructuredScannerState,
-	nextIndex: number,
-	metrics?: RedactionScanMetrics,
-): void {
-	const difference = nextIndex - state.index;
-	if (metrics) {
-		if (difference < 0) metrics.cursorRegressions += 1;
-		else metrics.cursorAdvances += difference;
-	}
-	recordTotalVisits(metrics, Math.max(0, difference));
-	state.index = nextIndex;
-}
-
-function initializeRedactionMetrics(metrics: RedactionScanMetrics, sourceLength: number): void {
-	metrics.sourceLength = sourceLength;
-	metrics.cursorAdvances = 0;
-	metrics.cursorRegressions = 0;
-	metrics.maxMainCursorVisits = sourceLength > 0 ? 1 : 0;
-	metrics.keyCharacterVisits = 0;
-	metrics.boundaryCharacterVisits = 0;
-	metrics.totalWork = 0;
-}
-
-function recordKeyCharacterVisit(metrics: RedactionScanMetrics | undefined, count = 1): void {
-	if (!metrics || count <= 0) return;
-	metrics.keyCharacterVisits += count;
-}
-
-function recordTotalVisits(metrics: RedactionScanMetrics | undefined, count: number): void {
-	if (!metrics || count <= 0) return;
-	metrics.totalWork += count;
 }
 
 export function normalizeScopedPrefixes(prefixes: unknown, description: string): string[] {
@@ -1669,6 +2302,9 @@ function capturePolicyArray<T>(
 	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
 		throw new ToolPolicyError(`${description} must be a bounded non-proxy array`);
 	}
+	if (Object.getPrototypeOf(value) !== Array.prototype) {
+		throw new ToolPolicyError(`${description} must use the exact Array prototype`);
+	}
 	const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
 	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
@@ -1692,6 +2328,10 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
 		throw new ToolPolicyError(`${name} returned an invalid result`);
 	}
+	const resultPrototype = Object.getPrototypeOf(result);
+	if (resultPrototype !== Object.prototype && resultPrototype !== null) {
+		throw new ToolPolicyError(`${name} result must use an exact approved prototype`);
+	}
 	const fields = captureOwnResultFields(result, ["status", "summary", "references"], `${name} result`);
 	const status = fields.get("status");
 	const summarySource = fields.get("summary");
@@ -1704,6 +2344,9 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 	if (referencesSource !== undefined) {
 		if (!Array.isArray(referencesSource) || nodeTypes.isProxy(referencesSource) || referencesSource.length > MAX_REFERENCES) {
 			throw new ToolPolicyError(`${name} returned too many references`);
+		}
+		if (Object.getPrototypeOf(referencesSource) !== Array.prototype) {
+			throw new ToolPolicyError(`${name} references must use the exact Array prototype`);
 		}
 		for (let index = 0; index < referencesSource.length; index += 1) {
 			const descriptor = Object.getOwnPropertyDescriptor(referencesSource, String(index));
@@ -1722,6 +2365,10 @@ function mutationResult(result: WorkspaceMutationResult, maxBytes: number): Sess
 	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
 		throw new ToolPolicyError("workspace mutation returned an invalid result");
 	}
+	const resultPrototype = Object.getPrototypeOf(result);
+	if (resultPrototype !== Object.prototype && resultPrototype !== null) {
+		throw new ToolPolicyError("workspace mutation result must use an exact approved prototype");
+	}
 	const fields = captureOwnResultFields(result, ["changed", "summary"], "workspace mutation result");
 	const changed = fields.get("changed");
 	const summarySource = fields.get("summary");
@@ -1737,13 +2384,14 @@ function captureOwnResultFields(
 ): ReadonlyMap<string, unknown> {
 	const allowedSet = new Set(allowed);
 	const fields = new Map<string, unknown>();
-	let enumerableFields = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
+	const enumerableFields = INTRINSIC_OBJECT_KEYS(value);
+	if (enumerableFields.length > allowed.length) {
+		throw new ToolPolicyError(`${description} contains unknown fields`);
+	}
+	for (const key of enumerableFields) {
+		if (!allowedSet.has(key)) {
 			throw new ToolPolicyError(`${description} contains an unknown field`);
 		}
-		enumerableFields += 1;
-		if (enumerableFields > allowed.length) throw new ToolPolicyError(`${description} contains unknown fields`);
 	}
 	// Fixed host envelopes are projected through allowlisted descriptors. Hidden and
 	// symbol peers are deliberately discarded without materializing the source key set.
@@ -1803,14 +2451,18 @@ function closedObject(properties: Record<string, unknown>, required: string[]): 
 
 function assertOnlyKeys(value: Readonly<Record<string, unknown>>, allowed: readonly string[], description: string): void {
 	if (!isRecord(value)) throw new ToolPolicyError(`${description} input must be an object`);
+	if (nodeTypes.isProxy(value)) throw new ToolPolicyError(`${description} input cannot be a Proxy`);
+	const prototype = Object.getPrototypeOf(value);
+	if (prototype !== Object.prototype && prototype !== null) {
+		throw new ToolPolicyError(`${description} input must use an exact approved prototype`);
+	}
 	const allowedSet = new Set(allowed);
-	let count = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
+	const keys = INTRINSIC_OBJECT_KEYS(value);
+	if (keys.length > allowed.length) throw new ToolPolicyError(`${description} input contains too many fields`);
+	for (const key of keys) {
+		if (!allowedSet.has(key)) {
 			throw new ToolPolicyError(`${description} input contains unknown field ${JSON.stringify(key)}`);
 		}
-		count += 1;
-		if (count > allowed.length) throw new ToolPolicyError(`${description} input contains too many fields`);
 	}
 }
 

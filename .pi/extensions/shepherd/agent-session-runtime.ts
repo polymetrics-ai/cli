@@ -53,6 +53,9 @@ const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
+const INTRINSIC_PROMISE = Promise;
+const INTRINSIC_PROMISE_PROTOTYPE = Promise.prototype;
+const INTRINSIC_PROMISE_THEN = Promise.prototype.then;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 interface RuntimeResourceLoader {
@@ -68,6 +71,7 @@ type RuntimeModel = NonNullable<CreateAgentSessionOptions["model"]>;
 type RuntimeResourceLoaderOption = NonNullable<CreateAgentSessionOptions["resourceLoader"]>;
 type RuntimeSessionManager = NonNullable<CreateAgentSessionOptions["sessionManager"]>;
 type RuntimeSettingsManager = NonNullable<CreateAgentSessionOptions["settingsManager"]>;
+type ToolArgumentProjector = ToolPolicy["projectArguments"];
 
 export interface RuntimeAgentSession {
 	model: RuntimeSessionModel | undefined;
@@ -221,6 +225,59 @@ type PromptSettlement =
 	| { readonly status: "fulfilled" }
 	| { readonly status: "rejected"; readonly reason: unknown };
 
+class OwnedSettlementCell {
+	readonly promise: Promise<PromptSettlement>;
+	readonly #resolve: (settlement: PromptSettlement) => void;
+	#settled = false;
+
+	constructor() {
+		let resolveCell: ((settlement: PromptSettlement) => void) | undefined;
+		this.promise = new INTRINSIC_PROMISE<PromptSettlement>((resolve) => { resolveCell = resolve; });
+		this.#resolve = resolveCell!;
+		observePromise(this.promise);
+	}
+
+	settle(settlement: PromptSettlement): void {
+		if (this.#settled) return;
+		this.#settled = true;
+		try {
+			this.#resolve(Object.freeze(settlement));
+		} catch {
+			// The captured intrinsic resolver is non-throwing; preserve totality if the host mutates globals.
+		}
+	}
+}
+
+function observePromise(promise: Promise<unknown>): void {
+	try {
+		Reflect.apply(INTRINSIC_PROMISE_THEN, promise, [undefined, () => undefined]);
+	} catch {
+		// Only exact internally-created promises reach this sink.
+	}
+}
+
+function installPromptSettlementHandlers(promise: Promise<unknown>, cell: OwnedSettlementCell): void {
+	const observer = Reflect.apply(INTRINSIC_PROMISE_THEN, promise, [
+		() => { cell.settle({ status: "fulfilled" }); },
+		(reason: unknown) => { cell.settle({ status: "rejected", reason }); },
+	]) as Promise<unknown>;
+	observePromise(observer);
+}
+
+function adoptPromptReturn(returned: unknown, cell: OwnedSettlementCell): void {
+	if (nodeTypes.isPromise(returned)) {
+		if (INTRINSIC_IS_PROXY(returned) || INTRINSIC_GET_PROTOTYPE_OF(returned) !== INTRINSIC_PROMISE_PROTOTYPE ||
+			INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(returned, "constructor") !== undefined ||
+			INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(returned, "then") !== undefined) {
+			throw new AgentSessionRuntimeError("Pi AgentSession prompt returned an unsupported native Promise shape");
+		}
+		installPromptSettlementHandlers(returned, cell);
+		return;
+	}
+	const adopted = new INTRINSIC_PROMISE<unknown>((resolve) => { resolve(returned); });
+	installPromptSettlementHandlers(adopted, cell);
+}
+
 const UNCAPTURED_SESSION_OPERATION: CapturedSessionOperation = Object.freeze({
 	available: false,
 	operation: undefined,
@@ -255,7 +312,7 @@ class OwnedSession {
 	readonly #getActiveToolNames: CapturedSessionOperation;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
-	#promptSettlement: Promise<PromptSettlement> | undefined;
+	#promptCell: OwnedSettlementCell | undefined;
 	#unsubscribe: (() => void | PromiseLike<void>) | undefined;
 	#unsubscribePromise: Promise<void> | undefined;
 	#waitPromise: Promise<void> | undefined;
@@ -300,39 +357,29 @@ class OwnedSession {
 	}
 
 	startPrompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<PromptSettlement> {
-		if (this.#promptSettlement) {
+		if (this.#promptCell) {
 			throw new AgentSessionRuntimeError("AgentSession prompt ownership was already acquired");
 		}
-		let resolveSettlement: ((settlement: PromptSettlement) => void) | undefined;
-		const settlement = new Promise<PromptSettlement>((resolve) => { resolveSettlement = resolve; });
+		const cell = new OwnedSettlementCell();
 		// Publish the owned, always-fulfilled settlement before invoking Pi. A prompt callback may
 		// synchronously abort or close the runtime; those barriers must still be able to join the
 		// prompt result even when the post-call activity check rejects the run.
-		this.#promptSettlement = settlement;
+		this.#promptCell = cell;
 		if (!this.#prompt.available) {
-			resolveSettlement?.({ status: "rejected", reason: this.#prompt.failure });
-			return settlement;
+			cell.settle({ status: "rejected", reason: this.#prompt.failure });
+			return cell.promise;
 		}
-		let returned: unknown;
 		try {
-			returned = Reflect.apply(this.#prompt.operation!, this.#session, [value, options]);
+			const returned = Reflect.apply(this.#prompt.operation!, this.#session, [value, options]);
+			adoptPromptReturn(returned, cell);
 		} catch (reason) {
-			resolveSettlement?.({ status: "rejected", reason });
-			return settlement;
+			cell.settle({ status: "rejected", reason });
 		}
-		// Attach both handlers in the same stack that obtained the native promise or foreign
-		// thenable. The chained promise is also observed so even a hostile Promise subclass cannot
-		// create an orphaned rejection after resolving the settlement record.
-		const observer = Promise.resolve(returned).then(
-			() => { resolveSettlement?.({ status: "fulfilled" }); },
-			(reason) => { resolveSettlement?.({ status: "rejected", reason }); },
-		);
-		observer.catch((reason) => { resolveSettlement?.({ status: "rejected", reason }); });
-		return settlement;
+		return cell.promise;
 	}
 
 	promptSettlementOnce(): Promise<PromptSettlement> {
-		return this.#promptSettlement ?? Promise.resolve({ status: "fulfilled" });
+		return this.#promptCell?.promise ?? new INTRINSIC_PROMISE((resolve) => resolve({ status: "fulfilled" }));
 	}
 
 	subscribe(listener: (event: AgentSessionEvent) => void): void {
@@ -709,6 +756,7 @@ interface TerminalCapture {
 	frozen: boolean;
 	contentPhases: Map<number, { kind: "text" | "thinking" | "toolCall"; phase: "open" | "ended" }>;
 	authorizedToolNames: ReadonlySet<string>;
+	projectArguments: ToolArgumentProjector;
 	toolCalls: Map<string, CapturedToolCall>;
 	stream?: AssistantTerminal;
 	failure?: AgentSessionRuntimeError;
@@ -741,7 +789,7 @@ interface CapturedAssistantContent {
 	thinking?: string;
 	id?: string;
 	name?: string;
-	arguments?: JsonEventValue;
+	argumentsIdentity?: string;
 	partialJson?: string;
 	identity: string;
 	terminalIdentity?: string;
@@ -1105,7 +1153,10 @@ export class ShepherdAgentSessionRuntime {
 			claim.validate();
 			assertExecutionActive();
 
-			const capture = newTerminalCapture(expectedToolNames);
+			const capture = newTerminalCapture(
+				expectedToolNames,
+				(name, raw, maximumBytes) => toolPolicy.projectArguments(name, raw, maximumBytes),
+			);
 			assertExecutionActive();
 			owned.subscribe((event) => {
 				captureEvent(capture, event, this.#options);
@@ -1757,7 +1808,10 @@ function assertApprovedArrayPrototype(value: unknown[], description: string): vo
 	}
 }
 
-function newTerminalCapture(expectedToolNames: readonly string[]): TerminalCapture {
+function newTerminalCapture(
+	expectedToolNames: readonly string[],
+	projectArguments: ToolArgumentProjector,
+): TerminalCapture {
 	return {
 		messageEndCount: 0,
 		agentEndCount: 0,
@@ -1767,6 +1821,7 @@ function newTerminalCapture(expectedToolNames: readonly string[]): TerminalCaptu
 		frozen: false,
 		contentPhases: new Map(),
 		authorizedToolNames: new Set(expectedToolNames),
+		projectArguments,
 		toolCalls: new Map(),
 		eventCount: 0,
 		eventBytes: 0,
@@ -1846,7 +1901,9 @@ function capturePiLifecycleEvent(
 				if (capture.piTurnAssistant) {
 					throw new AgentSessionRuntimeError("multiple assistant messages cannot replace one tool-bearing turn");
 				}
-				const initial = captureAssistantTerminal(fields.get("message"), true, options.maxEventBytes);
+				const initial = captureAssistantTerminal(
+					fields.get("message"), true, options.maxEventBytes, capture.projectArguments,
+				);
 				if (!initial) throw new AgentSessionRuntimeError("assistant message_start is invalid");
 				capture.stream = initial;
 				capture.contentPhases.clear();
@@ -1882,7 +1939,9 @@ function capturePiLifecycleEvent(
 				throw new AgentSessionRuntimeError("message_start and message_end roles disagree");
 			}
 			if (role === "assistant") {
-				const terminal = captureAssistantTerminal(fields.get("message"), false, options.maxEventBytes);
+				const terminal = captureAssistantTerminal(
+					fields.get("message"), false, options.maxEventBytes, capture.projectArguments,
+				);
 				if (!terminal) throw new AgentSessionRuntimeError("assistant message_end is invalid");
 				assertCompletedContentPhases(capture);
 				capture.messageEndCount += 1;
@@ -1910,7 +1969,9 @@ function capturePiLifecycleEvent(
 			if (capture.piPhase !== "turn" || capture.piOpenMessageRole !== undefined || !capture.piTurnAssistant) {
 				throw new AgentSessionRuntimeError("turn_end is out of order");
 			}
-			const terminal = captureAssistantTerminal(fields.get("message"), false, options.maxEventBytes);
+			const terminal = captureAssistantTerminal(
+				fields.get("message"), false, options.maxEventBytes, capture.projectArguments,
+			);
 			if (!terminal || !sameTerminal(terminal, capture.piTurnAssistant)) {
 				throw new AgentSessionRuntimeError("turn_end assistant does not match message_end");
 			}
@@ -1929,7 +1990,9 @@ function capturePiLifecycleEvent(
 			if (willRetry) throw new AgentSessionRuntimeError("retrying agent_end is not terminal evidence");
 			let lastAssistant: AssistantTerminal | undefined;
 			for (const message of captureDenseArray(fields.get("messages"), "AgentSession terminal messages")) {
-				const assistant = captureAssistantTerminal(message, false, options.maxEventBytes);
+				const assistant = captureAssistantTerminal(
+					message, false, options.maxEventBytes, capture.projectArguments,
+				);
 				if (assistant) lastAssistant = assistant;
 			}
 			if (!lastAssistant || !capture.messageEnd || !sameTerminal(lastAssistant, capture.messageEnd)) {
@@ -1956,10 +2019,12 @@ function capturePiLifecycleEvent(
 			}
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
-			const args = snapshotToolArguments(fields.get("args"), toolName, options.maxEventBytes);
+			const argsIdentity = projectToolArguments(
+				capture.projectArguments, toolName, fields.get("args"), options.maxEventBytes,
+			);
 			const call = capture.toolCalls.get(toolCallId);
 			if (!call || call.phase !== "announced" || call.name !== toolName ||
-				call.argsIdentity !== canonicalJson(args)) {
+				call.argsIdentity !== argsIdentity) {
 				throw new AgentSessionRuntimeError("tool execution start does not match one authorized assistant call");
 			}
 			call.phase = "started";
@@ -1977,9 +2042,11 @@ function capturePiLifecycleEvent(
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
 			const execution = capture.toolCalls.get(toolCallId);
-			const args = snapshotToolArguments(fields.get("args"), toolName, options.maxEventBytes);
+			const argsIdentity = projectToolArguments(
+				capture.projectArguments, toolName, fields.get("args"), options.maxEventBytes,
+			);
 			if (!execution || execution.phase !== "started" || execution.name !== toolName ||
-				execution.argsIdentity !== canonicalJson(args)) {
+				execution.argsIdentity !== argsIdentity) {
 				throw new AgentSessionRuntimeError("tool execution update does not match its start");
 			}
 			snapshotOpaqueValue(fields.get("partialResult"), "tool execution partial result", options.maxEventBytes);
@@ -2024,14 +2091,14 @@ function registerAssistantToolCalls(capture: TerminalCapture, terminal: Assistan
 		throw new AgentSessionRuntimeError("tool-use assistant must originate a fresh authorized call set");
 	}
 	for (const part of calls) {
-		if (!part.id || !part.name || part.arguments === undefined ||
+		if (!part.id || !part.name || part.argumentsIdentity === undefined ||
 			!capture.authorizedToolNames.has(part.name) || capture.toolCalls.has(part.id)) {
 			throw new AgentSessionRuntimeError("assistant originated an invalid or unauthorized tool call");
 		}
 		capture.toolCalls.set(part.id, {
 			id: part.id,
 			name: part.name,
-			argsIdentity: canonicalJson(part.arguments),
+			argsIdentity: part.argumentsIdentity,
 			phase: "announced",
 		});
 	}
@@ -2192,11 +2259,11 @@ function captureStreamingUpdateCharge(
 	const shape = shapes[type];
 	if (!shape) throw new AgentSessionRuntimeError(`unsupported Pi assistant streaming event ${JSON.stringify(type)}`);
 	assertExactCapturedFields(fields, shape, `Pi ${type} streaming event`);
-	const message = captureAssistantTerminal(messageValue, true, maximum);
+	const message = captureAssistantTerminal(messageValue, true, maximum, capture.projectArguments);
 	if (!message) throw new AgentSessionRuntimeError("message_update did not contain an assistant message");
 	const innerValue = fields.has("partial") ? fields.get("partial") : fields.has("message")
 		? fields.get("message") : fields.get("error");
-	const inner = captureAssistantTerminal(innerValue, true, maximum);
+	const inner = captureAssistantTerminal(innerValue, true, maximum, capture.projectArguments);
 	if (!inner || inner.identity !== message.identity) {
 		throw new AgentSessionRuntimeError(`Pi ${type} message and cumulative snapshot disagree`);
 	}
@@ -2299,7 +2366,7 @@ function validateIndexedStreamTransition(
 		}
 		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, byteLength(String(delta)));
 	}
-	const toolCall = snapshotToolCall(fields.get("toolCall"), MAX_EVENT_BYTES);
+	const toolCall = snapshotToolCall(fields.get("toolCall"), MAX_EVENT_BYTES, capture.projectArguments);
 	if (canonicalJson(toolCall) !== canonicalToolContent(next, false)) {
 		throw new AgentSessionRuntimeError("Pi toolcall_end disagrees with cumulative content");
 	}
@@ -2402,7 +2469,7 @@ interface JsonEventBudget {
 // message/tool DTOs or runtime-owned identity records; caller-owned peers are never discovered by
 // scanning a record. Keep this vocabulary schema-oriented and project arbitrary details elsewhere.
 const JSON_EVENT_RECORD_FIELDS = Object.freeze([
-	"api", "arguments", "cacheRead", "cacheWrite", "cacheWrite1h", "changed", "code", "content", "cost",
+	"api", "argumentsIdentity", "cacheRead", "cacheWrite", "cacheWrite1h", "changed", "code", "content", "cost",
 	"details", "diagnostics", "error", "errorMessage", "id", "input", "isError", "limit", "message", "model",
 	"name", "newText", "offset", "oldText", "output", "partialJson", "path", "provider", "reasoning", "redacted",
 	"references", "responseId", "responseModel", "resultIdentity", "role", "stack", "status", "stopReason", "summary",
@@ -2420,32 +2487,25 @@ function snapshotEventJson(value: unknown, description: string, maximum: number)
 	);
 }
 
-function snapshotToolArguments(value: unknown, toolName: string, maximum: number): JsonEventValue {
-	const knownFields = toolName === "workspace_read"
-		? ["path", "offset", "limit"] as const
-		: toolName === "workspace_edit"
-			? ["path", "oldText", "newText"] as const
-			: toolName === "workspace_write"
-				? ["path", "content"] as const
-				: toolName === "host_inspect" || toolName === "host_verify"
-					? ["target"] as const
-					: undefined;
-	if (!knownFields) throw new AgentSessionRuntimeError("tool arguments use an unregistered schema");
-	const fields = captureKnownRecordFields(value, `${toolName} arguments`, knownFields);
-	const projected = Object.create(null) as Record<string, unknown>;
-	for (const name of knownFields) {
-		if (!fields.has(name)) continue;
-		Object.defineProperty(projected, name, {
-			value: fields.get(name),
-			enumerable: true,
-			writable: false,
-			configurable: false,
-		});
+function projectToolArguments(
+	projectArguments: ToolArgumentProjector,
+	toolName: string,
+	value: unknown,
+	maximum: number,
+): string {
+	const projected = projectArguments(toolName, value, maximum);
+	const identity = JSON.stringify(projected);
+	if (typeof identity !== "string" || byteLength(identity) > maximum) {
+		throw new AgentSessionRuntimeError(`${toolName} projected arguments exceeded their identity bound`);
 	}
-	return snapshotEventJson(projected, `${toolName} argument projection`, maximum);
+	return identity;
 }
 
-function snapshotToolCall(value: unknown, maximum: number): JsonEventValue {
+function snapshotToolCall(
+	value: unknown,
+	maximum: number,
+	projectArguments: ToolArgumentProjector,
+): JsonEventValue {
 	const fields = captureKnownRecordFields(value, "Pi toolcall_end value", [
 		"type", "id", "name", "arguments", "thoughtSignature",
 	]);
@@ -2464,7 +2524,12 @@ function snapshotToolCall(value: unknown, maximum: number): JsonEventValue {
 		type: "toolCall",
 		id: fields.get("id") as string,
 		name: fields.get("name") as string,
-		arguments: snapshotToolArguments(fields.get("arguments"), fields.get("name") as string, maximum),
+		argumentsIdentity: projectToolArguments(
+			projectArguments,
+			fields.get("name") as string,
+			fields.get("arguments"),
+			maximum,
+		),
 		...(thoughtSignature === undefined ? {} : { thoughtSignature }),
 	}, "Pi toolcall_end projection", maximum);
 }
@@ -2592,8 +2657,9 @@ function canonicalToolContent(value: CapturedAssistantContent, _terminal: boolea
 
 function captureAssistantTerminal(
 	value: unknown,
-	streaming = false,
-	maximum = MAX_EVENT_BYTES,
+	streaming: boolean,
+	maximum: number,
+	projectArguments: ToolArgumentProjector,
 ): AssistantTerminal | undefined {
 	const fields = captureKnownRecordFields(value, "AgentSession terminal message", [
 		"role", "content", "api", "provider", "model", "responseModel", "responseId", "diagnostics", "usage",
@@ -2671,14 +2737,16 @@ function captureAssistantTerminal(
 			if (typeof id !== "string" || typeof name !== "string") {
 				throw new AgentSessionRuntimeError("AgentSession assistant tool-call identity is invalid");
 			}
-			const args = snapshotToolArguments(partFields.get("arguments"), name, maximum);
+			const argumentsIdentity = projectToolArguments(
+				projectArguments, name, partFields.get("arguments"), maximum,
+			);
 			const thoughtSignature = optionalCapturedString(partFields, "thoughtSignature", "assistant tool thought signature");
 			const partialJson = optionalCapturedString(partFields, "partialJson", "assistant tool partial JSON");
 			const terminalValue = snapshotEventJson({
 				type,
 				id,
 				name,
-				arguments: args,
+				argumentsIdentity,
 				...(thoughtSignature === undefined ? {} : { thoughtSignature }),
 			}, "AgentSession assistant tool identity", maximum);
 			const terminalIdentity = canonicalJson(terminalValue);
@@ -2686,7 +2754,7 @@ function captureAssistantTerminal(
 				? terminalIdentity
 				: canonicalJson(snapshotEventJson({ terminal: terminalValue, partialJson },
 					"AgentSession assistant streaming tool identity", maximum));
-			return Object.freeze({ type, id, name, arguments: args, partialJson, identity, terminalIdentity });
+			return Object.freeze({ type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity });
 		}
 		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${JSON.stringify(type)} is invalid`);
 	});
