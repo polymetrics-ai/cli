@@ -556,14 +556,14 @@ Frozen exact candidate/tree: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb` /
 `3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 11 reviews were read completely (399
 lines). The retained 791 focused tests and one intentional live-sandbox skip remain mandatory.
 
-| ID | Minimum rows | RED contract | PLAN state |
+| ID | Minimum rows | RED contract | Evidence trajectory |
 | --- | ---: | --- | --- |
-| C12-BEGIN | 6 | three valid foreign unsettled phases x two release orders retain separate requested/observed owners through terminal proof; zero requested effect, no foreign corruption, truthful key/stop join | RED: 6/6 leaves fail; parent fails |
-| C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | RED: 7/7 leaves fail; parent fails |
-| C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | RED: 5/5 leaves fail; parent fails |
-| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | RED: 15/15 leaves fail; parent fails |
-| C12-ASSIGN | 144 | planned 18 direct + 90 consumer rows, then independent review adds 6 direct + 30 consumer ANSI-C/case/heredoc rows | Original RED: direct 18/18 fail plus parent, consumers 90/90 pass; reviewer-gap RED: added direct 6/6 fail plus parent, added consumers 30/30 pass |
-| C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | RED checkpoint coherent |
+| C12-BEGIN | 6 | three valid foreign unsettled phases x two release orders retain separate requested/observed owners through terminal proof; zero requested effect, no foreign corruption, truthful key/stop join | Initial RED 6/6 leaves fail; reviewer-gap RED strengthens exact coordinates and 6/6 fail; GREEN 6/6 pass |
+| C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | Initial RED 7/7 fail; GREEN 7/7 pass |
+| C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | Initial RED 5/5 fail; GREEN 5/5 pass |
+| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | Initial RED 15/15 fail; GREEN 15/15 pass |
+| C12-ASSIGN | 144 | planned 18 direct + 90 consumer rows, then independent review adds 6 direct + 30 consumer ANSI-C/case/heredoc rows | Initial RED direct 18/18 fail and consumers 90/90 pass; reviewer-gap RED added direct 6/6 fail and consumers 30/30 pass; GREEN 144/144 pass |
+| C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | Terminal artifacts are locally GREEN and preserve `verificationPassed: false` / `reviewCoveragePassed: false` |
 
 Frozen production blobs before RED: orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence

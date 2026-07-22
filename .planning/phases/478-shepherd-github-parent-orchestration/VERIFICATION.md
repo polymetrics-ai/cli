@@ -316,7 +316,8 @@ all-production TypeScript pass; pinned Pi 0.80.6 offline discovery returns `true
 base/ancestry/merge-base/diff/21-path, three-JSON, and marker-confinement gates pass. A standalone
 REFACTOR was not required after the coherent GREEN inspection. Serialized Shepherd is 670 total /
 604 pass / 65 unchanged managed-sandbox process-identity `spawn EPERM` failures / 1 intentional
-skip. `verificationPassed` is true; `reviewCoveragePassed` remains false until two parent-owned
+skip. Historical machine truth is `verificationPassed: false` because the declared broad route is
+non-zero; `reviewCoveragePassed` remains false until two parent-owned
 fresh exact-head reviews complete.
 
 ## Cycle 8 verification contract

@@ -12,7 +12,6 @@
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "candidateRef": "HEAD",
     "priorCycleImplementationHead": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
-    "cycle12ImplementationHead": "723fdc122cea75a5d6f146fb8b39383e9e5795e3",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -111,8 +110,7 @@
       "cycle11Evidence": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
       "cycle12Plan": "7f96718c4d8c692cd618ff220ab0d53d2e6546a2",
       "cycle12Red": "2649cf6dcad1fcc943261c0838bbca8e56c5c595",
-      "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3",
-      "cycle12EvidenceRef": "HEAD"
+      "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
