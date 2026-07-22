@@ -52,6 +52,7 @@ export interface ProductionChildFailure {
 }
 
 export interface ProductionOwnershipRefreshRecord {
+	outcome: "rebased" | "reclaimed";
 	previousClaimId: string;
 	previousBaseHead: string;
 	effectKey: string;
@@ -60,6 +61,7 @@ export interface ProductionOwnershipRefreshRecord {
 
 export interface ProductionOwnershipRefreshInput {
 	childId: string;
+	outcome: "rebased" | "reclaimed";
 	previousClaimId: string;
 	previousBaseHead: string;
 	newBinding: ProductionWorkspaceBinding;
@@ -79,12 +81,15 @@ export interface ProductionChildRuntimeState {
 	maxAttempts: number;
 	maxCorrections: number;
 	attempts: number;
+	authorizedAttempts: number;
 	corrections: number;
 	status: ProductionChildStatus;
 	stage: ProductionChildStage;
+	resumeStage?: ProductionChildStage;
 	ownership?: ProductionWorkspaceBinding;
 	checkpoint?: ProductionStageCheckpoint;
 	ownershipRefresh?: ProductionOwnershipRefreshRecord;
+	retryAuthorization?: ProductionRetryAuthorizationRecord;
 	lastFailure?: ProductionChildFailure;
 }
 
@@ -115,6 +120,18 @@ export interface ProductionChildInterventionInput {
 	reason: string;
 	pullRequest?: number;
 	head?: string;
+	now?: Date;
+}
+
+export interface ProductionRetryAuthorizationRecord {
+	requestId: string;
+	generation: number;
+	authorizedAt: string;
+}
+
+export interface ProductionChildRetryAuthorizationInput {
+	childId: string;
+	requestId: string;
 	now?: Date;
 }
 
@@ -311,11 +328,15 @@ function validateFailure(value: unknown): ProductionChildFailure {
 function validateOwnershipRefresh(value: unknown): ProductionOwnershipRefreshRecord {
 	const candidate = exact(
 		value,
-		["previousClaimId", "previousBaseHead", "effectKey", "refreshedAt"],
+		["outcome", "previousClaimId", "previousBaseHead", "effectKey", "refreshedAt"],
 		[],
 		"production ownership refresh",
 	);
+	if (candidate.outcome !== "rebased" && candidate.outcome !== "reclaimed") {
+		throw new Error("invalid production ownership refresh outcome");
+	}
 	return {
+		outcome: candidate.outcome,
 		previousClaimId: safeText(candidate.previousClaimId, "previous workspace claim ID", 256),
 		previousBaseHead: safeText(candidate.previousBaseHead, "previous workspace base head", 256),
 		effectKey: safeText(candidate.effectKey, "ownership refresh effect key", 256),
@@ -323,11 +344,25 @@ function validateOwnershipRefresh(value: unknown): ProductionOwnershipRefreshRec
 	};
 }
 
+function validateRetryAuthorization(value: unknown): ProductionRetryAuthorizationRecord {
+	const candidate = exact(
+		value,
+		["requestId", "generation", "authorizedAt"],
+		[],
+		"production child retry authorization",
+	);
+	return {
+		requestId: safeText(candidate.requestId, "retry authorization request ID", 256),
+		generation: positive(candidate.generation, "retry authorization generation"),
+		authorizedAt: timestamp(candidate.authorizedAt, "retry authorization time"),
+	};
+}
+
 function validateChild(value: unknown): ProductionChildRuntimeState {
 	const candidate = exact(value, [
 		"id", "issue", "slug", "specDigest", "dependsOn", "writeScopes", "maxAttempts", "maxCorrections",
-		"attempts", "corrections", "status", "stage",
-	], ["ownership", "checkpoint", "ownershipRefresh", "lastFailure"], "production child state");
+		"attempts", "authorizedAttempts", "corrections", "status", "stage",
+	], ["resumeStage", "ownership", "checkpoint", "ownershipRefresh", "retryAuthorization", "lastFailure"], "production child state");
 	const id = safeText(candidate.id, "child ID", 128);
 	if (!SAFE_ID.test(id)) throw new Error("invalid child ID");
 	const statuses: ProductionChildStatus[] = ["pending", "running", "blocked", "succeeded", "failed", "cancelled"];
@@ -337,11 +372,20 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 	];
 	if (!statuses.includes(candidate.status as ProductionChildStatus)) throw new Error("invalid child status");
 	if (!stages.includes(candidate.stage as ProductionChildStage)) throw new Error("invalid child stage");
+	if (candidate.resumeStage !== undefined && !stages.includes(candidate.resumeStage as ProductionChildStage)) {
+		throw new Error("invalid child resume stage");
+	}
+	const resumeStage = candidate.resumeStage as ProductionChildStage | undefined;
+	if (resumeStage === "pending" || resumeStage === "succeeded" || resumeStage === "failed" || resumeStage === "cancelled") {
+		throw new Error("child resume stage must identify uncompleted lifecycle work");
+	}
 	const maxAttempts = positive(candidate.maxAttempts, "child attempt budget");
 	const maxCorrections = positive(candidate.maxCorrections, "child correction budget", true);
 	const attempts = positive(candidate.attempts, "child attempts", true);
+	const authorizedAttempts = positive(candidate.authorizedAttempts, "authorized child attempts", true);
 	const corrections = positive(candidate.corrections, "child corrections", true);
-	if (attempts > maxAttempts) throw new Error("child attempt budget exhausted");
+	if (authorizedAttempts > MAX_CHILDREN) throw new Error("authorized child attempts exceed the bounded intervention limit");
+	if (attempts > maxAttempts + authorizedAttempts) throw new Error("child attempt budget exhausted");
 	if (corrections > maxCorrections) throw new Error("child correction budget exhausted");
 	if (candidate.status === "pending" && candidate.stage !== "pending") throw new Error("pending child must have a pending stage");
 	if (candidate.status === "running" && attempts === 0) throw new Error("running child requires an accepted attempt");
@@ -349,9 +393,22 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 	if (candidate.status === "succeeded" && candidate.stage !== "succeeded") throw new Error("succeeded child must have a succeeded stage");
 	if (candidate.status === "failed" && candidate.stage !== "failed") throw new Error("failed child must have a failed stage");
 	if (candidate.status === "cancelled" && candidate.stage !== "cancelled") throw new Error("cancelled child must have a cancelled stage");
+	if (resumeStage !== undefined && candidate.status !== "pending" && candidate.status !== "cancelled" && candidate.status !== "blocked") {
+		throw new Error("resume stage is only valid for interrupted or pending child work");
+	}
+	if (candidate.status === "cancelled" && resumeStage === undefined) {
+		throw new Error("cancelled child must preserve its interrupted resume stage");
+	}
+	if (candidate.status === "pending" && attempts === 0 && resumeStage !== undefined) {
+		throw new Error("fresh pending child cannot have an interrupted resume stage");
+	}
 	const ownership = candidate.ownership === undefined ? undefined : validateWorkspace(candidate.ownership);
 	const checkpoint = candidate.checkpoint === undefined ? undefined : validateCheckpoint(candidate.checkpoint);
 	const ownershipRefresh = candidate.ownershipRefresh === undefined ? undefined : validateOwnershipRefresh(candidate.ownershipRefresh);
+	const retryAuthorization = candidate.retryAuthorization === undefined ? undefined : validateRetryAuthorization(candidate.retryAuthorization);
+	if ((authorizedAttempts > 0) !== (retryAuthorization !== undefined)) {
+		throw new Error("authorized child attempts require exact consumed gate evidence");
+	}
 	const writeScopes = stringArray(candidate.writeScopes, "child write scopes");
 	if (ownership && JSON.stringify(ownership.writeScopes) !== JSON.stringify(writeScopes)) {
 		throw new Error("workspace ownership scopes differ from the durable child binding");
@@ -372,12 +429,15 @@ function validateChild(value: unknown): ProductionChildRuntimeState {
 		maxAttempts,
 		maxCorrections,
 		attempts,
+		authorizedAttempts,
 		corrections,
 		status: candidate.status as ProductionChildStatus,
 		stage: candidate.stage as ProductionChildStage,
+		...(resumeStage === undefined ? {} : { resumeStage }),
 		...(ownership === undefined ? {} : { ownership }),
 		...(checkpoint === undefined ? {} : { checkpoint }),
 		...(ownershipRefresh === undefined ? {} : { ownershipRefresh }),
+		...(retryAuthorization === undefined ? {} : { retryAuthorization }),
 		...(candidate.lastFailure === undefined ? {} : { lastFailure: validateFailure(candidate.lastFailure) }),
 	};
 }
@@ -536,6 +596,7 @@ export function createProductionAutonomousState(
 			maxAttempts: child.maxAttempts,
 			maxCorrections: child.maxCorrections,
 			attempts: 0,
+			authorizedAttempts: 0,
 			corrections: 0,
 			status: "pending",
 			stage: "pending",
@@ -612,22 +673,63 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 		if (after.attempts < before.attempts || after.corrections < before.corrections) {
 			throw new ProductionStateConflictError("child retry or correction counter regressed");
 		}
+		if (after.authorizedAttempts < before.authorizedAttempts) {
+			throw new ProductionStateConflictError("authorized child attempt count regressed");
+		}
+		if (after.authorizedAttempts > before.authorizedAttempts) {
+			if (after.authorizedAttempts !== before.authorizedAttempts + 1
+				|| previous.childGate?.childId !== before.id
+				|| previous.childGate.status !== "pending"
+				|| next.childGate?.status !== "authorized"
+				|| next.childGate.requestId !== previous.childGate.requestId
+				|| after.retryAuthorization?.requestId !== previous.childGate.requestId
+				|| after.retryAuthorization.generation !== next.generation
+				|| next.status !== "running"
+				|| next.stage !== "schedule") {
+				throw new ProductionStateConflictError("authorized child attempt lacks exact consumed gate evidence");
+			}
+		} else if (JSON.stringify(before.retryAuthorization) !== JSON.stringify(after.retryAuthorization)) {
+			throw new ProductionStateConflictError("child retry authorization changed without a consumed gate");
+		}
+		if (before.resumeStage !== undefined) {
+			if (after.resumeStage === undefined) {
+				if (after.status !== "running" || after.stage !== before.resumeStage) {
+					throw new ProductionStateConflictError("child resume stage was discarded without exact-stage continuation");
+				}
+			} else if (after.resumeStage !== before.resumeStage) {
+				throw new ProductionStateConflictError("child resume stage changed across a durable transition");
+			}
+		}
 		if (!before.ownership && after.ownership
 			&& JSON.stringify(after.ownership) !== JSON.stringify(after.checkpoint?.workspace)) {
 			throw new ProductionStateConflictError("initial ownership requires an exact durable workspace checkpoint");
 		}
 		if (before.ownership && JSON.stringify(before.ownership) !== JSON.stringify(after.ownership)) {
 			const refresh = after.ownershipRefresh;
+			const commonRefreshTruth = after.ownership && refresh
+				&& refresh.previousClaimId === before.ownership.claimId
+				&& refresh.previousBaseHead === before.ownership.baseHead
+				&& refresh.effectKey === after.checkpoint?.effectKey
+				&& JSON.stringify(after.ownership) === JSON.stringify(after.checkpoint?.workspace)
+				&& JSON.stringify(after.ownership.writeScopes) === JSON.stringify(after.writeScopes)
+				&& after.stage === "verification"
+				&& after.checkpoint.review === undefined
+				&& after.checkpoint.integrationReceiptDigest === undefined;
+			const exactRebase = refresh?.outcome === "rebased" && after.ownership
+				&& after.ownership.claimId === before.ownership.claimId
+				&& after.ownership.ownershipId === before.ownership.ownershipId
+				&& after.ownership.worktreeIdentity === before.ownership.worktreeIdentity
+				&& after.ownership.cwd === before.ownership.cwd
+				&& after.ownership.repositoryIdentity === before.ownership.repositoryIdentity
+				&& after.ownership.branch === before.ownership.branch
+				&& after.ownership.baseBranch === before.ownership.baseBranch
+				&& after.ownership.baseHead !== before.ownership.baseHead
+				&& after.ownership.head !== before.ownership.head;
+			const exactReclaim = refresh?.outcome === "reclaimed" && after.ownership
+				&& after.ownership.claimId !== before.ownership.claimId
+				&& after.ownership.worktreeIdentity !== before.ownership.worktreeIdentity;
 			if (!after.ownership || !refresh
-				|| refresh.previousClaimId !== before.ownership.claimId
-				|| refresh.previousBaseHead !== before.ownership.baseHead
-				|| refresh.effectKey !== after.checkpoint?.effectKey
-				|| JSON.stringify(after.ownership) !== JSON.stringify(after.checkpoint?.workspace)
-				|| JSON.stringify(after.ownership.writeScopes) !== JSON.stringify(after.writeScopes)
-				|| after.ownership.claimId === before.ownership.claimId
-				|| after.stage !== "verification"
-				|| after.checkpoint.review !== undefined
-				|| after.checkpoint.integrationReceiptDigest !== undefined) {
+				|| !commonRefreshTruth || (!exactRebase && !exactReclaim)) {
 				throw new ProductionStateConflictError("immutable child ownership binding changed without an exact refresh receipt");
 			}
 			refreshedOwnership = true;
@@ -691,6 +793,38 @@ export function waitForProductionChildIntervention(
 	}, input.now ?? new Date());
 }
 
+export function authorizeProductionChildRetry(
+	currentValue: ProductionAutonomousState,
+	fence: ProductionStateFence,
+	input: ProductionChildRetryAuthorizationInput,
+): ProductionAutonomousState {
+	const current = validateProductionAutonomousState(currentValue);
+	const gate = current.childGate;
+	if (current.status !== "waiting_human" || current.stage !== "human_decision"
+		|| gate?.status !== "pending" || gate.childId !== input.childId || gate.requestId !== input.requestId) {
+		throw new ProductionStateConflictError("child retry authorization does not match the pending intervention gate");
+	}
+	const child = current.children.find((candidate) => candidate.id === input.childId)!;
+	if (child.attempts < child.maxAttempts + child.authorizedAttempts) {
+		throw new ProductionStateConflictError("child retry budget is not exhausted");
+	}
+	const now = input.now ?? new Date();
+	return evolveProductionState(current, fence, (draft) => {
+		draft.status = "running";
+		draft.stage = "schedule";
+		draft.childGate!.status = "authorized";
+		const target = draft.children.find((candidate) => candidate.id === input.childId)!;
+		target.authorizedAttempts += 1;
+		target.retryAuthorization = {
+			requestId: input.requestId,
+			generation: draft.generation,
+			authorizedAt: now.toISOString(),
+		};
+		target.status = "pending";
+		target.stage = "pending";
+	}, now);
+}
+
 export function refreshProductionChildOwnership(
 	currentValue: ProductionAutonomousState,
 	fence: ProductionStateFence,
@@ -706,12 +840,29 @@ export function refreshProductionChildOwnership(
 	if (JSON.stringify(newBinding.writeScopes) !== JSON.stringify(child.writeScopes)) {
 		throw new ProductionStateConflictError("refreshed ownership scopes differ from the durable child binding");
 	}
+	if (input.outcome === "rebased") {
+		if (newBinding.claimId !== child.ownership.claimId
+			|| newBinding.ownershipId !== child.ownership.ownershipId
+			|| newBinding.worktreeIdentity !== child.ownership.worktreeIdentity
+			|| newBinding.cwd !== child.ownership.cwd
+			|| newBinding.baseHead === child.ownership.baseHead
+			|| newBinding.head === child.ownership.head) {
+			throw new ProductionStateConflictError("rebased ownership must preserve its claim and advance exact base/head truth");
+		}
+	} else if (input.outcome === "reclaimed") {
+		if (newBinding.claimId === child.ownership.claimId || newBinding.worktreeIdentity === child.ownership.worktreeIdentity) {
+			throw new ProductionStateConflictError("reclaimed ownership requires a new claim and worktree identity");
+		}
+	} else {
+		throw new ProductionStateConflictError("invalid ownership refresh outcome");
+	}
 	const effectKey = safeText(input.effectKey, "ownership refresh effect key", 256);
 	const now = input.now ?? new Date();
 	return evolveProductionState(current, fence, (draft) => {
 		const target = draft.children.find((candidate) => candidate.id === input.childId)!;
 		target.ownership = newBinding;
 		target.ownershipRefresh = {
+			outcome: input.outcome,
 			previousClaimId: input.previousClaimId,
 			previousBaseHead: input.previousBaseHead,
 			effectKey,
@@ -760,7 +911,14 @@ export function advanceProductionGeneration(
 		delete draft.humanGate;
 		delete draft.childGate;
 		for (const child of draft.children) {
-			if (child.status === "running" || child.status === "cancelled") {
+			if (child.status === "running") {
+				child.resumeStage = child.stage;
+				child.status = "pending";
+				child.stage = "pending";
+			} else if (child.status === "cancelled") {
+				if (child.resumeStage === undefined) {
+					throw new ProductionStateConflictError("cancelled child lost its interrupted resume stage");
+				}
 				child.status = "pending";
 				child.stage = "pending";
 			}

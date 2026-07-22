@@ -8,6 +8,7 @@ import type { ProductionParentPlanDocument } from "./autonomous-production-contr
 import {
 	ProductionFileStateStore,
 	advanceProductionGeneration,
+	authorizeProductionChildRetry,
 	createProductionAutonomousState,
 	evolveProductionState,
 	refreshProductionChildOwnership,
@@ -191,6 +192,7 @@ test("only an exact refresh receipt may replace immutable ownership and it clear
 	}), /ownership|refresh/i);
 	const refreshed = refreshProductionChildOwnership(claimed, fence(claimed), {
 		childId: "state",
+		outcome: "reclaimed",
 		previousClaimId: "claim-1",
 		previousBaseHead: "a".repeat(40),
 		newBinding,
@@ -203,11 +205,27 @@ test("only an exact refresh receipt may replace immutable ownership and it clear
 	assert.equal(refreshed.children[0].checkpoint?.integrationReceiptDigest, undefined);
 	assert.throws(() => refreshProductionChildOwnership(claimed, fence(claimed), {
 		childId: "state",
+		outcome: "reclaimed",
 		previousClaimId: "wrong-claim",
 		previousBaseHead: "a".repeat(40),
 		newBinding,
 		effectKey: "refresh-effect",
 	}), /previous|claim/i);
+	const rebasedBinding = {
+		...firstBinding,
+		baseHead: "1".repeat(40),
+		head: "2".repeat(40),
+	};
+	const rebased = refreshProductionChildOwnership(claimed, fence(claimed), {
+		childId: "state",
+		outcome: "rebased",
+		previousClaimId: "claim-1",
+		previousBaseHead: "a".repeat(40),
+		newBinding: rebasedBinding,
+		effectKey: "rebase-effect",
+	});
+	assert.equal(rebased.children[0].ownership?.claimId, "claim-1");
+	assert.equal(rebased.children[0].ownershipRefresh?.outcome, "rebased");
 });
 
 test("budget exhaustion persists an exact child intervention wait instead of terminal failure", () => {
@@ -238,4 +256,44 @@ test("budget exhaustion persists an exact child intervention wait instead of ter
 	assert.throws(() => evolveProductionState(waiting, fence(waiting), (draft) => {
 		draft.childGate = { ...draft.childGate!, head: "e".repeat(40) };
 	}), /immutable|gate|binding/i);
+	const authorized = authorizeProductionChildRetry(waiting, fence(waiting), {
+		childId: "state",
+		requestId: "intervention-501-1",
+	});
+	assert.equal(authorized.children[0].authorizedAttempts, 1);
+	assert.equal(authorized.childGate?.status, "authorized");
+	const retrying = evolveProductionState(authorized, fence(authorized), (draft) => {
+		draft.children[0].attempts += 1;
+		draft.children[0].status = "running";
+		draft.children[0].stage = "implementation";
+	});
+	assert.equal(retrying.children[0].attempts, 3);
+	assert.throws(() => authorizeProductionChildRetry(authorized, fence(authorized), {
+		childId: "state",
+		requestId: "intervention-501-1",
+	}), /pending|gate/i);
+});
+
+test("generation advance durably preserves and enforces the exact interrupted child stage", () => {
+	const initial = createProductionAutonomousState(plan(), { runId: "run-1" });
+	const publishing = evolveProductionState(initial, fence(initial), (draft) => {
+		draft.children[0].attempts = 1;
+		draft.children[0].status = "running";
+		draft.children[0].stage = "publication";
+	});
+	const resumed = advanceProductionGeneration(publishing, fence(publishing), "run-2");
+	assert.equal(resumed.children[0].status, "pending");
+	assert.equal(resumed.children[0].stage, "pending");
+	assert.equal(resumed.children[0].resumeStage, "publication");
+	assert.throws(() => evolveProductionState(resumed, fence(resumed), (draft) => {
+		draft.children[0].status = "running";
+		draft.children[0].stage = "implementation";
+		delete draft.children[0].resumeStage;
+	}), /resume|exact-stage/i);
+	const continued = evolveProductionState(resumed, fence(resumed), (draft) => {
+		draft.children[0].status = "running";
+		draft.children[0].stage = "publication";
+		delete draft.children[0].resumeStage;
+	});
+	assert.equal(continued.children[0].stage, "publication");
 });
