@@ -17,6 +17,7 @@ import {
 	type RuntimeAgentSession,
 } from "./agent-session-runtime.ts";
 import { buildRolePrompts, routeForRole } from "./role-prompts.ts";
+import * as toolPolicyModule from "./tool-policy.ts";
 import {
 	createToolPolicy,
 	redactSensitiveText,
@@ -5673,4 +5674,596 @@ test("cycle 13 Pi tool lifecycle correlates one authorized call through result a
 		await observeSettlement(harness.runtime.close(), 150);
 	}
 	assert.deepEqual(problems, []);
+});
+
+type Cycle14PostCreateSeam =
+	| "session:get"
+	| "abort:get"
+	| "wait:get"
+	| "dispose:get"
+	| "prompt:get"
+	| "prompt:call"
+	| "subscribe:get"
+	| "active-tools:get"
+	| "model:get"
+	| "provider:get"
+	| "id:get"
+	| "thinking:get"
+	| "session-file:get"
+	| "active-tools:call"
+	| "subscribe:call";
+
+interface Cycle14HostileSessionStats {
+	callbacks: string[];
+	afterTrigger: string[];
+	triggerCalls: number;
+	abortCalls: number;
+	waitCalls: number;
+	disposeCalls: number;
+	promptCalls: number;
+	subscribeCalls: number;
+	unsubscribeCalls: number;
+}
+
+function cycle14HostileCreation(
+	seam: Cycle14PostCreateSeam,
+	onTrigger: () => void,
+): { result: RuntimeCreationResult; stats: Cycle14HostileSessionStats } {
+	const stats: Cycle14HostileSessionStats = {
+		callbacks: [],
+		afterTrigger: [],
+		triggerCalls: 0,
+		abortCalls: 0,
+		waitCalls: 0,
+		disposeCalls: 0,
+		promptCalls: 0,
+		subscribeCalls: 0,
+		unsubscribeCalls: 0,
+	};
+	let triggered = false;
+	const callback = (name: Cycle14PostCreateSeam): void => {
+		if (triggered) stats.afterTrigger.push(name);
+		stats.callbacks.push(name);
+		if (!triggered && name === seam) {
+			triggered = true;
+			stats.triggerCalls += 1;
+			onTrigger();
+		}
+	};
+	const session = Object.create(null) as Record<PropertyKey, unknown>;
+	const operation = (name: keyof RuntimeAgentSession, label: Cycle14PostCreateSeam, value: unknown): void => {
+		Object.defineProperty(session, name, {
+			configurable: true,
+			enumerable: true,
+			get() { callback(label); return value; },
+		});
+	};
+	operation("abort", "abort:get", async () => { stats.abortCalls += 1; });
+	operation("waitForIdle", "wait:get", async () => { stats.waitCalls += 1; });
+	operation("dispose", "dispose:get", () => { stats.disposeCalls += 1; });
+	operation("prompt", "prompt:get", async () => {
+		stats.promptCalls += 1;
+		callback("prompt:call");
+	});
+	operation("subscribe", "subscribe:get", (listener: EventListener) => {
+		void listener;
+		stats.subscribeCalls += 1;
+		callback("subscribe:call");
+		return () => { stats.unsubscribeCalls += 1; };
+	});
+	operation("getActiveToolNames", "active-tools:get", () => {
+		callback("active-tools:call");
+		return ["workspace_read", "workspace_edit", "workspace_write", "host_inspect"];
+	});
+	const model = Object.create(null) as Record<PropertyKey, unknown>;
+	Object.defineProperties(model, {
+		provider: {
+			configurable: true,
+			enumerable: true,
+			get() { callback("provider:get"); return "openai-codex"; },
+		},
+		id: {
+			configurable: true,
+			enumerable: true,
+			get() { callback("id:get"); return "gpt-5.6-sol"; },
+		},
+	});
+	Object.defineProperties(session, {
+		model: {
+			configurable: true,
+			enumerable: true,
+			get() { callback("model:get"); return model; },
+		},
+		thinkingLevel: {
+			configurable: true,
+			enumerable: true,
+			get() { callback("thinking:get"); return "high"; },
+		},
+		sessionFile: {
+			configurable: true,
+			enumerable: true,
+			get() { callback("session-file:get"); return undefined; },
+		},
+	});
+	const result = {
+		extensionsResult: { extensions: [], errors: [], runtime: {} },
+		modelFallbackMessage: undefined,
+	} as Record<PropertyKey, unknown>;
+	Object.defineProperty(result, "session", {
+		configurable: true,
+		enumerable: true,
+		get() { callback("session:get"); return session; },
+	});
+	return { result: result as unknown as RuntimeCreationResult, stats };
+}
+
+function cycle14Capability(name: string, mutates: boolean): HostCapability {
+	return {
+		name,
+		description: `Cycle 14 typed ${name}`,
+		mutates,
+		parameters: {
+			type: "object",
+			additionalProperties: false,
+			properties: { target: { type: "string", maxLength: 128 } },
+			required: ["target"],
+		},
+		async execute() {
+			return { status: "ok", summary: `${name} complete`, references: [] };
+		},
+	} as unknown as HostCapability;
+}
+
+async function cycle14ConsumerOutputs(
+	label: string,
+	payload: string,
+): Promise<Readonly<Record<string, string>>> {
+	const input = policyInputForRuntime(false);
+	input.workspace.readText = async () => payload;
+	input.workspace.editText = async () => ({ changed: true, summary: payload });
+	input.workspace.writeText = async () => ({ changed: true, summary: payload });
+	input.capabilities = [{
+		...inspectCapability(),
+		async execute() { return { status: "ok" as const, summary: payload, references: [payload] }; },
+	}];
+	const policy = createToolPolicy(input, { maxToolOutputBytes: 64 * 1024 });
+	const tools = new Map(policy.tools.map((tool) => [tool.name, tool]));
+	const toolText = async (name: string, callId: string, value: Record<string, unknown>): Promise<string> => {
+		const result = await tools.get(name)!.execute(callId, value, undefined);
+		return result.content.map((part) => part.text).join("");
+	};
+	const workspaceRead = await toolText("workspace_read", `${label}-read`, {
+		path: ".pi/extensions/shepherd/agent-session-runtime.ts",
+	});
+	const workspaceEdit = JSON.parse(await toolText("workspace_edit", `${label}-edit`, {
+		path: ".pi/extensions/shepherd/agent-session-runtime.ts", oldText: "a", newText: "b",
+	})) as { summary: string };
+	const workspaceWrite = JSON.parse(await toolText("workspace_write", `${label}-write`, {
+		path: ".pi/extensions/shepherd/agent-session-runtime.ts", content: "bounded",
+	})) as { summary: string };
+	const capabilityResult = JSON.parse(await toolText("host_inspect", `${label}-capability`, {
+		target: "owned",
+	})) as { summary: string; references: string[] };
+
+	const base = request();
+	const prompts = buildRolePrompts({
+		role: base.role,
+		task: payload,
+		context: [payload],
+		authority: {
+			issue: base.authority.issue,
+			branch: base.authority.branch,
+			workspaceId: base.authority.workspaceId,
+			readOnly: base.authority.readOnly,
+			readPrefixes: base.authority.readPrefixes,
+			writePrefixes: base.authority.writePrefixes,
+			toolNames: policy.names,
+			binding: base.binding,
+		},
+	});
+	const promptData = JSON.parse(prompts.userPrompt) as {
+		untrustedTask: string;
+		untrustedContext: string[];
+	};
+
+	const handoffHarness = runtime();
+	const handoffRequest = request({
+		binding: { ...request().binding, runId: `${label}-handoff`, laneId: `${label}-handoff` },
+	});
+	const terminalSafe = payload.replaceAll("\n", " | ");
+	handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
+		summary: terminalSafe,
+		findings: [terminalSafe],
+		verification: [{ name: `${label}-verification`, status: "passed", summary: terminalSafe }],
+	});
+	const handoff = await handoffHarness.runtime.run(handoffRequest);
+	await handoffHarness.runtime.close();
+
+	const policyErrorInput = policyInputForRuntime(true);
+	policyErrorInput.workspace.readText = async () => { throw new Error(payload); };
+	const policyErrorTool = createToolPolicy(policyErrorInput).tools.find((tool) => tool.name === "workspace_read")!;
+	const policyErrorOutcome = await observeSettlement(policyErrorTool.execute(`${label}-policy-error`, {
+		path: ".pi/extensions/shepherd/agent-session-runtime.ts",
+	}, undefined), 150);
+	const policyError = errorMessages(
+		policyErrorOutcome.status === "rejected" ? policyErrorOutcome.reason : undefined,
+	).join("\n");
+
+	const runtimeErrorSdk = new FakeSdk();
+	runtimeErrorSdk.findModel = () => { throw new Error(payload); };
+	const runtimeErrorOutcome = await observeSettlement(runtime(runtimeErrorSdk).runtime.run(request({
+		binding: { ...request().binding, runId: `${label}-runtime-error`, laneId: `${label}-runtime-error` },
+	})), 150);
+	const runtimeError = errorMessages(
+		runtimeErrorOutcome.status === "rejected" ? runtimeErrorOutcome.reason : undefined,
+	).join("\n");
+
+	return Object.freeze({
+		direct: redactSensitiveText(payload),
+		promptTask: promptData.untrustedTask,
+		promptContext: promptData.untrustedContext[0] ?? "",
+		workspaceRead,
+		workspaceEdit: workspaceEdit.summary,
+		workspaceWrite: workspaceWrite.summary,
+		capabilitySummary: capabilityResult.summary,
+		capabilityReference: capabilityResult.references[0] ?? "",
+		handoffSummary: handoff.summary,
+		handoffFinding: handoff.findings[0] ?? "",
+		handoffVerification: handoff.verification[0]?.summary ?? "",
+		policyError,
+		runtimeError,
+	});
+}
+
+test("cycle 14 post-create callbacks are lifecycle barriers before subscription and prompt", async () => {
+	const seams = [
+		"session:get",
+		"abort:get",
+		"wait:get",
+		"dispose:get",
+		"prompt:get",
+		"subscribe:get",
+		"active-tools:get",
+		"model:get",
+		"provider:get",
+		"id:get",
+		"thinking:get",
+		"session-file:get",
+		"active-tools:call",
+		"subscribe:call",
+	] as const satisfies readonly Cycle14PostCreateSeam[];
+	const controls = ["abort", "close", "shutdown"] as const;
+	const cleanupAcquisition = new Set<Cycle14PostCreateSeam>(["abort:get", "wait:get", "dispose:get"]);
+	const problems: string[] = [];
+	for (const seam of seams) {
+		for (const control of controls) {
+			const sdk = new FakeSdk();
+			const originalCreate = sdk.createAgentSession.bind(sdk);
+			const harness = runtime(sdk, { cleanupTimeoutMs: 40 });
+			const controller = new AbortController();
+			const slug = seam.replaceAll(":", "-");
+			const req = request({
+				timeoutMs: 60_000,
+				signal: controller.signal,
+				binding: {
+					...request().binding,
+					runId: `cycle14-${slug}-${control}`,
+					laneId: `cycle14-${slug}-${control}`,
+				},
+			});
+			let controlPromise: Promise<void> | undefined;
+			const creation = cycle14HostileCreation(seam, () => {
+				controlPromise ??= control === "abort"
+					? harness.runtime.abort(req.binding.runId)
+					: control === "close" ? harness.runtime.close() : harness.runtime.shutdown();
+			});
+			sdk.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+				sdk.options = options as unknown as Record<string, unknown>;
+				return creation.result;
+			}) as unknown as typeof sdk.createAgentSession;
+			const timers = captureLongTimers();
+			try {
+				const runOutcome = await observeSettlement(harness.runtime.run(req), 600);
+				const controlOutcome = controlPromise
+					? await observeSettlement(controlPromise, 600)
+					: { status: "missing" as const };
+				if (!isTypedOwnCause(runOutcome)) problems.push(`${seam}:${control}:run-${runOutcome.status}`);
+				if (controlOutcome.status !== "resolved") problems.push(`${seam}:${control}:control-${controlOutcome.status}`);
+				if (creation.stats.triggerCalls !== 1) problems.push(`${seam}:${control}:trigger-${creation.stats.triggerCalls}`);
+				const forbiddenAfterTrigger = creation.stats.afterTrigger.filter((name) =>
+					!cleanupAcquisition.has(name as Cycle14PostCreateSeam));
+				if (forbiddenAfterTrigger.length > 0) {
+					problems.push(`${seam}:${control}:late-${forbiddenAfterTrigger.join(",")}`);
+				}
+				if (creation.stats.promptCalls !== 0) problems.push(`${seam}:${control}:prompt-${creation.stats.promptCalls}`);
+				if (creation.stats.abortCalls !== 1) problems.push(`${seam}:${control}:abort-${creation.stats.abortCalls}`);
+				if (creation.stats.waitCalls !== 1) problems.push(`${seam}:${control}:wait-${creation.stats.waitCalls}`);
+				if (creation.stats.disposeCalls !== 1) problems.push(`${seam}:${control}:dispose-${creation.stats.disposeCalls}`);
+				const subscriptionExpected = seam === "subscribe:call" ? 1 : 0;
+				if (creation.stats.subscribeCalls !== subscriptionExpected) {
+					problems.push(`${seam}:${control}:subscribe-${creation.stats.subscribeCalls}`);
+				}
+				if (creation.stats.unsubscribeCalls !== subscriptionExpected) {
+					problems.push(`${seam}:${control}:unsubscribe-${creation.stats.unsubscribeCalls}`);
+				}
+				if (control === "abort") {
+					sdk.createAgentSession = originalCreate as typeof sdk.createAgentSession;
+					sdk.session = new FakeSession();
+					const retry = request({
+						binding: {
+							...request().binding,
+							runId: `cycle14-retry-${slug}`,
+							laneId: `cycle14-retry-${slug}`,
+						},
+					});
+					sdk.session.output = handoffFor(retry);
+					const retryOutcome = await observeSettlement(harness.runtime.run(retry), 300);
+					if (retryOutcome.status !== "resolved") problems.push(`${seam}:${control}:lease-${retryOutcome.status}`);
+				}
+				const closeOutcome = await observeSettlement(harness.runtime.close(), 400);
+				if (closeOutcome.status !== "resolved") problems.push(`${seam}:${control}:close-${closeOutcome.status}`);
+				if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`${seam}:${control}:listener`);
+				if (timers.referenced() !== 0) problems.push(`${seam}:${control}:timer-${timers.referenced()}`);
+			} finally {
+				timers.restoreAndClear();
+			}
+		}
+	}
+
+	const eventSdk = new FakeSdk();
+	const eventHarness = runtime(eventSdk, { cleanupTimeoutMs: 40 });
+	const eventController = new AbortController();
+	const eventRequest = request({
+		timeoutMs: 60_000,
+		signal: eventController.signal,
+		binding: { ...request().binding, runId: "cycle14-subscribe-event", laneId: "cycle14-subscribe-event" },
+	});
+	eventSdk.session.output = handoffFor(eventRequest);
+	eventSdk.session.subscribe = (listener) => {
+		eventSdk.session.listeners.add(listener);
+		listener({ type: "cycle14_invalid_synchronous_event" } as unknown as AgentSessionEvent);
+		return () => { eventSdk.session.listeners.delete(listener); };
+	};
+	const eventTimers = captureLongTimers();
+	try {
+		const eventOutcome = await observeSettlement(eventHarness.runtime.run(eventRequest), 300);
+		if (!isTypedOwnCause(eventOutcome)) problems.push(`subscribe-event:run-${eventOutcome.status}`);
+		if (eventSdk.session.promptCalls !== 0) problems.push(`subscribe-event:prompt-${eventSdk.session.promptCalls}`);
+		if (eventSdk.session.abortCalls !== 1) problems.push(`subscribe-event:abort-${eventSdk.session.abortCalls}`);
+		if (eventSdk.session.waitCalls !== 1) problems.push(`subscribe-event:wait-${eventSdk.session.waitCalls}`);
+		if (eventSdk.session.disposeCalls !== 1) problems.push(`subscribe-event:dispose-${eventSdk.session.disposeCalls}`);
+		if (eventSdk.session.listeners.size !== 0) problems.push(`subscribe-event:subscription-${eventSdk.session.listeners.size}`);
+		const closeOutcome = await observeSettlement(eventHarness.runtime.close(), 300);
+		if (closeOutcome.status !== "resolved") problems.push(`subscribe-event:close-${closeOutcome.status}`);
+		if (getEventListeners(eventController.signal, "abort").length !== 0) problems.push("subscribe-event:listener");
+		if (eventTimers.referenced() !== 0) problems.push(`subscribe-event:timer-${eventTimers.referenced()}`);
+	} finally {
+		eventTimers.restoreAndClear();
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 14 host authority is the exact closed typed capability registry", async () => {
+	type RuntimeRegistry = Readonly<Record<string, Readonly<{ mutates: boolean }>>>;
+	const registry = (toolPolicyModule as unknown as {
+		HOST_CAPABILITY_REGISTRY?: RuntimeRegistry;
+	}).HOST_CAPABILITY_REGISTRY;
+	const registryEntries = registry
+		? Object.entries(registry).map(([name, contract]) => [name, contract.mutates] as const)
+		: [];
+	const policyByMode: Record<string, string[]> = {};
+	for (const readOnly of [true, false]) {
+		const input = policyInputForRuntime(readOnly);
+		input.authority.capabilityNames = ["host_inspect", "host_verify"];
+		input.capabilities = [
+			cycle14Capability("host_inspect", false),
+			cycle14Capability("host_verify", true),
+		];
+		policyByMode[readOnly ? "read" : "write"] = createToolPolicy(input).names;
+	}
+
+	const unknownNames = [
+		"host_examine",
+		"host_attest",
+		"host_observe",
+		"host_validate",
+		"host_network_transmit",
+		"host_relational_upsert",
+		"host_delegate_worker",
+		"host_credential_retrieve",
+		"host_inspects",
+		"host_inspect_v2",
+		"host_verify_read",
+		"host_publish",
+		"HOST_INSPECT",
+		"host-inspect",
+	] as const;
+	const directAccepted: string[] = [];
+	const promptAccepted: string[] = [];
+	const runtimeSdkWork: string[] = [];
+	for (const name of unknownNames) {
+		const direct = policyInputForRuntime(false);
+		try {
+			createToolPolicy({
+				...direct,
+				authority: { ...direct.authority, capabilityNames: [name] },
+				capabilities: [cycle14Capability(name, false)],
+			} as unknown as Parameters<typeof createToolPolicy>[0]);
+			directAccepted.push(name);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, name);
+		}
+
+		const base = request();
+		try {
+			buildRolePrompts({
+				role: base.role,
+				task: base.task,
+				context: base.context,
+				authority: {
+					issue: base.authority.issue,
+					branch: base.authority.branch,
+					workspaceId: base.authority.workspaceId,
+					readOnly: false,
+					readPrefixes: base.authority.readPrefixes,
+					writePrefixes: base.authority.writePrefixes,
+					toolNames: [name],
+					binding: base.binding,
+				},
+			} as unknown as Parameters<typeof buildRolePrompts>[0]);
+			promptAccepted.push(name);
+		} catch { /* Every unknown identity is rejected, regardless of syntax or semantics. */ }
+
+		const sdk = new FakeSdk();
+		let sdkCalls = 0;
+		const originalFind = sdk.findModel.bind(sdk);
+		const originalCreate = sdk.createAgentSession.bind(sdk);
+		sdk.findModel = ((...args: Parameters<typeof sdk.findModel>) => {
+			sdkCalls += 1;
+			return originalFind(...args);
+		}) as typeof sdk.findModel;
+		sdk.createAgentSession = (async (...args: Parameters<typeof sdk.createAgentSession>) => {
+			sdkCalls += 1;
+			return originalCreate(...args);
+		}) as typeof sdk.createAgentSession;
+		const runtimeRequest = request({
+			capabilities: [cycle14Capability(name, false)],
+			authority: { ...request().authority, capabilityNames: [name] },
+			binding: {
+				...request().binding,
+				runId: `cycle14-unknown-${unknownNames.indexOf(name)}`,
+				laneId: `cycle14-unknown-${unknownNames.indexOf(name)}`,
+			},
+		} as unknown as Partial<RoleRunRequest>);
+		sdk.session.output = handoffFor(runtimeRequest);
+		const harness = runtime(sdk);
+		const outcome = await observeSettlement(harness.runtime.run(runtimeRequest), 250);
+		if (!isTypedOwnCause(outcome) || sdkCalls !== 0) {
+			runtimeSdkWork.push(`${name}:${outcome.status}:${sdkCalls}`);
+		}
+		await observeSettlement(harness.runtime.close(), 150);
+	}
+
+	const mutabilityAccepted: string[] = [];
+	const mutabilityCases = [
+		["host_inspect", true],
+		["host_verify", false],
+	] as const;
+	for (const [name, mutates] of mutabilityCases) {
+		const direct = policyInputForRuntime(false);
+		try {
+			createToolPolicy({
+				...direct,
+				authority: { ...direct.authority, capabilityNames: [name] },
+				capabilities: [cycle14Capability(name, mutates)],
+			} as unknown as Parameters<typeof createToolPolicy>[0]);
+			mutabilityAccepted.push(`${name}:${mutates}`);
+		} catch (error) {
+			assert.ok(error instanceof ToolPolicyError, name);
+		}
+	}
+
+	const readOnlyPrompt = request();
+	let readOnlyMutationAccepted = false;
+	try {
+		buildRolePrompts({
+			role: readOnlyPrompt.role,
+			task: readOnlyPrompt.task,
+			context: readOnlyPrompt.context,
+			authority: {
+				...readOnlyPrompt.authority,
+				readOnly: true,
+				writePrefixes: [],
+				toolNames: ["workspace_read", "host_verify"],
+				binding: readOnlyPrompt.binding,
+			},
+		} as unknown as Parameters<typeof buildRolePrompts>[0]);
+		readOnlyMutationAccepted = true;
+	} catch { /* Read-only prompts cannot advertise a mutating registry member. */ }
+
+	assert.deepEqual({
+		registryEntries,
+		registryFrozen: registry !== undefined && Object.isFrozen(registry),
+		registryMembersFrozen: registry !== undefined && Object.values(registry).every(Object.isFrozen),
+		policyByMode,
+		directAccepted,
+		promptAccepted,
+		runtimeSdkWork,
+		mutabilityAccepted,
+		readOnlyMutationAccepted,
+	}, {
+		registryEntries: [["host_inspect", false], ["host_verify", true]],
+		registryFrozen: true,
+		registryMembersFrozen: true,
+		policyByMode: {
+			read: ["workspace_read", "host_inspect"],
+			write: ["workspace_read", "workspace_edit", "workspace_write", "host_inspect", "host_verify"],
+		},
+		directAccepted: [],
+		promptAccepted: [],
+		runtimeSdkWork: [],
+		mutabilityAccepted: [],
+		readOnlyMutationAccepted: false,
+	});
+});
+
+test("cycle 14 structured field grammar fails closed while public metadata stays exact", async () => {
+	const secretMarkers = [
+		"C14S_API",
+		"C14S_PRIVATE",
+		"C14S_DB",
+		"C14S_AWS",
+		"C14S_OAUTH",
+		"C14S_CONFIG",
+		"C14S_GITHUB",
+		"C14U_MATERIAL",
+		"C14U_LOCATOR",
+		"C14U_AUTH",
+	];
+	const publicControls = [
+		"api.key.version: C14P_API_V1",
+		"private.key.algorithm=ed25519-C14P",
+		"database.url.scheme: pg-C14P",
+	];
+	const payload = [
+		`api.key=${secretMarkers[0]}`,
+		`private.key: ${secretMarkers[1]}`,
+		`database.url=${secretMarkers[2]}`,
+		`aws.secret.access.key: ${secretMarkers[3]}`,
+		`oauth.client_secret=${secretMarkers[4]}`,
+		`config.auth.access_token: ${secretMarkers[5]}`,
+		`github.token=${secretMarkers[6]}`,
+		`service.credential_material=${secretMarkers[7]}`,
+		`opaque_locator: ${secretMarkers[8]}`,
+		`custom.auth_blob=${secretMarkers[9]}`,
+		...publicControls,
+	].join("\n");
+	const outputs = await cycle14ConsumerOutputs("cycle14-field-grammar", payload);
+	const problems: string[] = [];
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		const leaks = leakedMarkers(rendered, secretMarkers);
+		if (leaks.length > 0) problems.push(`${consumer}:leaks-${leaks.join(",")}`);
+		for (const control of publicControls) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
+		}
+	}
+	type ScanMetrics = {
+		lineBoundaryVisits: number;
+		keyStartVisits: number;
+		totalCharacterVisits: number;
+	};
+	const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
+	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
+	const measured = instrumented(payload, metrics);
+	assert.deepEqual({
+		problems,
+		hasRedaction: Object.values(outputs).every((rendered) => rendered.includes("[REDACTED]")),
+		measuredLeaks: leakedMarkers(measured, secretMarkers),
+		bounded: metrics.totalCharacterVisits > 0 && metrics.totalCharacterVisits <= payload.length * 12,
+	}, {
+		problems: [],
+		hasRedaction: true,
+		measuredLeaks: [],
+		bounded: true,
+	});
 });
