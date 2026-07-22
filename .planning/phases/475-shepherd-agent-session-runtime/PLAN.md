@@ -1316,6 +1316,23 @@ must execute 134 rows: all 131 retained rows pass and exactly C14-01 through C14
 intended behavior assertions, with zero skip/cancel/todo. Focused strict TypeScript must pass and
 all three frozen production blobs must remain exact. No production edit may enter RED.
 
+### RED evidence
+
+- Test-only checkpoint: `229217f4` (`agent-session-runtime.test.ts` only), adding exactly the three
+  declared top-level C14 rows and no production or artifact mutation.
+- Focused result: 134 executed; all 131 retained rows pass; exactly C14-01, C14-02, and C14-03 fail;
+  0 skipped/cancelled/todo. C14-01 exposes continued post-trigger validation plus close/shutdown
+  subscription/prompt and synchronous invalid-event prompt. C14-02 exposes the missing registry,
+  admitted arbitrary names, forged mutability, prompt authority, and runtime SDK entry. C14-03
+  exposes three unknown-assignment leaks and modification of all three public metadata controls
+  through the shared consumer set.
+- Focused strict TypeScript 5.9.3 passes against the explicit Pi 0.80.6 roots. `git diff --check`
+  passes. Frozen production blobs remain exact: runtime `cd5c05411933c1a1f1b239d8ac85112e47e10b8b`,
+  policy `5a7f91b863f3a3eba3b489e79944c17a6511a776`, and role prompts
+  `d4365dd2e32854589a7d1bee91439e5cb0a17fe0`.
+- Production is now unlocked only for the single cohesive C14 GREEN; no family may be checkpointed
+  independently.
+
 ### Cohesive GREEN / REFACTOR / verification contract
 
 The three families freeze together, not piecemeal: one architecture-level implementation replaces

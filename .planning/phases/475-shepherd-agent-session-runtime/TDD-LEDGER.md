@@ -1179,3 +1179,18 @@ RED acceptance: 134 executed, 131 retained passes, exactly 3 intended C14 failur
 skip/cancel/todo; focused strict TypeScript green; production blobs exact. Production remains
 locked until that evidence is committed. GREEN is one cohesive architecture change across all
 three families; no family is frozen separately and no semantic synonym list may be expanded.
+
+### RED evidence
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| Test-only commit | pass | `229217f4`; exactly one focused test file; exactly three new top-level rows |
+| Focused RED | expected fail | 134 executed; 131 retained pass; exactly C14-01/C14-02/C14-03 fail; 0 skip/cancel/todo |
+| C14-01 | expected fail | later post-create validation runs; close/shutdown and sync subscription failure reach prompt |
+| C14-02 | expected fail | registry absent; arbitrary identities and forged mutability admitted by policy/prompt/runtime |
+| C14-03 | expected fail | unknown assignments leak and all three qualified public metadata leaves are modified across consumers |
+| Strict focused TypeScript | pass | TypeScript 5.9.3 with explicit pinned Pi 0.80.6 package/type roots |
+| Production lock | pass | runtime `cd5c0541`; policy `5a7f91b8`; prompts `d4365dd2`; `git diff --check` pass |
+
+All observed failures are behavior assertions from the three declared rows; no setup, compile,
+retention, skip, timeout, or infrastructure failure remains. Production unlocks as one C14 GREEN.

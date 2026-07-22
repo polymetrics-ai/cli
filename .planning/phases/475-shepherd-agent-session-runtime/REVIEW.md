@@ -23,7 +23,9 @@ remain mandatory.
 The #479 handoff is closed and narrow: AgentSession host tools are exactly `host_inspect` and
 `host_verify`; scoped workspace tools remain separate; scheduler, Git/worktree, GitHub, decision,
 review, and integration authority stays in #479's controller-owned adapters. There is no arbitrary
-host-name extension mechanism. Status: PLAN captured; production frozen pending one three-row RED.
+host-name extension mechanism. Status: exact three-row RED captured at `229217f4` with 131 retained
+passes and three intended failures; strict TypeScript passes and production is frozen at its
+pre-GREEN boundary.
 
 # Review Disposition — Issue #475 Cycle 13
 

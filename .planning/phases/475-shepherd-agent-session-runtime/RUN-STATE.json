@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_14_plan",
+  "currentCycle": "correction_cycle_14_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -343,15 +343,20 @@
       "cycle": "correction_cycle_14_plan",
       "decision": "read_only_spawned",
       "reason": "One bounded no-write explorer maps post-create Pi callbacks, the complete current/planned-#479 host capability inventory, and structured-field consumers while this issue worker owns the sole artifact, RED, production, verification, and commit path. Finite semantic blacklists are abandoned in favor of closed safe registries."
+    },
+    {
+      "cycle": "correction_cycle_14_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 229217f4 executed 134 focused tests with all 131 retained passes and exactly three intended Cycle 14 behavior failures; strict focused TypeScript passed and all three production blobs remained frozen."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_13_green_131_passed_0_failed_0_skipped_cancelled_todo",
+    "focusedTests": "cycle_14_red_134_executed_131_retained_passed_exactly_3_intended_failed_0_skipped_cancelled_todo",
     "fullShepherdTests": "cycle_13_environment_blocked_268_executed_237_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_194_passed_0_failed",
-    "strictTypeScriptPi0806": "cycle_13_passed_focused_and_all_12_production_files_typescript_5_9_3",
+    "strictTypeScriptPi0806": "cycle_14_red_passed_focused_source_tests_typescript_5_9_3; cycle_13_all_12_production_files_retained",
     "offlineRpcSmoke": "cycle_13_passed_explicit_pi_0_80_6_rpc_registration_and_retained_actual_no_tool_one_tool_whole_session_rows",
-    "diffCheck": "cycle_13_passed_at_implementation_e50b5f97_and_terminal_artifact_freeze",
-    "ownedScope": "cycle_13_frozen_start_5dafc572_green_48f546a5_refactor_e50b5f97_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths; no_push_network_github_live_model_go_connectors_or_make",
+    "diffCheck": "cycle_14_red_passed_at_test_only_229217f4; production_blobs_exact_to_frozen_start_67050a4a",
+    "ownedScope": "cycle_14_frozen_start_67050a4a_plan_62af2bbe_red_229217f4_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths; no_push_network_github_live_model_go_connectors_make_main_parent_478_or_479_mutation",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

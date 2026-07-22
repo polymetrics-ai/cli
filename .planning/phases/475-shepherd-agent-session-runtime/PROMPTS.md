@@ -361,5 +361,8 @@
   synonym-list expansion is allowed.
 - Baseline: focused 131/131; strict production lock blobs recorded in PLAN/TDD. Execution decision
   `read_only_spawned`; one mapper is advisory and the issue worker owns every mutation.
+- RED `229217f4`: exactly three new top-level rows; 134 executed / 131 retained passes / exactly
+  three intended behavior failures / zero skipped, cancelled, or todo. Focused strict TypeScript
+  passes and all runtime/policy/prompt production blobs remain frozen.
 - No push, network, GitHub, live model/auth, credential, service, Go/connectors, `make`, main,
   parent, #478, or #479 mutation.
