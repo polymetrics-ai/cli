@@ -5,13 +5,13 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 10 is locally implemented and verified at HEAD; focused and strict gates pass, the declared broad sandbox route remains non-zero, and fresh review coverage plus parent-owned integration remain pending.",
+  "reason": "Cycle 11 is planned against blocked Cycle 10 candidate 3b39cfce: durable-begin ownership, terminal typed conflicts, unified restart history, deterministic confirmation, complete assignment-tail redaction, and truthful artifacts remain unimplemented; focused Cycle 10 evidence was flaky and the broad route remains non-zero.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
     "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
     "candidateRef": "HEAD",
-    "priorCycleImplementationHead": "8946b67be2e42659baf267f2adbaec31d88c856c",
+    "priorCycleImplementationHead": "3b39cfce9b4a99940b0451302df6bf5c17b49c02",
     "subPr": 487,
     "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
     "adapter": "manual_gsd_fallback",
@@ -20,13 +20,20 @@
     "verificationPassed": false,
     "reviewCoveragePassed": false,
     "priorReviewState": {
-      "cycle": 9,
-      "priorReviewedCandidate": "a49e4df2798281d1e64c722ccbcab5f4a678c3e1",
+      "cycle": 10,
+      "priorReviewedCandidate": "3b39cfce9b4a99940b0451302df6bf5c17b49c02",
       "review1": "blocked",
       "review2": "blocked",
-      "findingsConsolidatedIntoCycle": 10
+      "findingsConsolidatedIntoCycle": 11
     },
     "reviewHistory": [
+      {
+        "cycle": 9,
+        "priorReviewedCandidate": "a49e4df2798281d1e64c722ccbcab5f4a678c3e1",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 10
+      },
       {
         "cycle": 8,
         "priorReviewedCandidate": "f97a698df90010ae072554e04563a8134a8e5f6e",
@@ -89,7 +96,8 @@
       "cycle10Red": "2256971a8612cfaba407834a6831d2ec5abfba07",
       "cycle10Green": "5f46206ea4ecc0e12e5804c4e14baf4e49fa6e53",
       "cycle10Refactor": "8946b67be2e42659baf267f2adbaec31d88c856c",
-      "cycle10EvidenceRef": "HEAD"
+      "cycle10Evidence": "3b39cfce9b4a99940b0451302df6bf5c17b49c02",
+      "cycle11PlanRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -102,7 +110,8 @@
       "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
       "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass",
       "cycle9": "PLAN 7ad23ed4; RED 442 total, 398 pass, 43 intended fail, 1 skip with all 5 production blobs frozen; GREEN 593ba1cf; focused five-file 450 total, 449 pass, 0 fail, 1 intentional live-sandbox skip; serialized 670 total, 604 pass, 65 unchanged managed-sandbox process-identity spawn EPERM failures, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; immutable base and exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, Cycle 9 marker confinement, and both Cycle 8 report replays pass",
-      "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false because the declared broad route exits non-zero"
+      "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip at local evidence head, but independent review later reproduced C10-CONFIRM flakiness; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false",
+      "cycle11": "planned against blocked exact candidate 3b39cfce; both Cycle 10 reviews consolidated; no Cycle 11 test or production edit has run; five production blobs frozen; verificationPassed and reviewCoveragePassed remain false"
     },
     "orchestrationDecisions": [
       {
@@ -186,6 +195,21 @@
         "reason": "Cycle 10 excludes push, network, GitHub mutation, reviewer dispatch, integration, merge, and human gates; the parent owns every external action."
       },
       {
+        "cycle": "cycle-11-plan",
+        "decision": "local_critical_path_with_read_only_restart_sidecar",
+        "reason": "A new spawn hit the agent limit, so a completed read-only sidecar was reused only to map restart invariants; this worker owns the artifact PLAN, executable RED, GREEN/refactor, and local evidence inside the unchanged 21-path boundary."
+      },
+      {
+        "cycle": "cycle-11-verification-reset",
+        "decision": "verification_and_review_false",
+        "reason": "Both Cycle 10 reviews are blocked, the focused confirmation family was independently observed flaky, the broad route remains non-zero, and Cycle 11 behavior is not implemented at the PLAN checkpoint."
+      },
+      {
+        "cycle": "cycle-11-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 11 excludes network, GitHub mutation, push, reviewer dispatch, ready, integration, merge, and all human gates; the parent owns every external action."
+      },
+      {
         "cycle": "cycle-8-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
@@ -222,5 +246,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T04:40:21.000Z"
+  "updatedAt": "2026-07-22T05:35:44.000Z"
 }

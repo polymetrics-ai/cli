@@ -239,3 +239,29 @@
 Execution completed locally as PLAN `470a8a85` -> RED `2256971a` -> GREEN `5f46206e` -> refactor
 `8946b67b`; focused and strict gates pass, while the non-zero broad sandbox route truthfully keeps
 verification false. Publication and fresh exact-head review remain parent-owned.
+
+## Cycle 11 consolidated-review prompt
+
+- Start from exact clean candidate `3b39cfce9b4a99940b0451302df6bf5c17b49c02`, tree
+  `962160e1ccae2e52f6f645185edb96819bd4a9f5`, immutable/exact merge base `3addb1f4`, and exact
+  21-path ownership. Read both complete Cycle 10 reviews and implement their union without deferral.
+- Commit nine artifact-only PLAN updates before tests or production. Then commit one executable
+  RED with all five production blobs frozen and report PLAN/RED SHAs plus exact failures before
+  GREEN.
+- Treat durable begin as uncertain: retain its invocation/key/stop owner until the original call
+  settles and only then read/recover authority. An early absent read cannot outrun a late applying
+  begin; every failed begin invokes zero ready effects.
+- Require every typed non-applied compare conflict to return exact invocation-bound atomic tombstone
+  proof. Preserve the typed coordinate, moved/foreign PR state, and truthful stop/reentry only after
+  terminal proof; malformed/lost compare output remains tracked recovery-owned.
+- Decode #479 restart data as one coherent history across prepared journal, settlement, authority,
+  current PR, applied/rollback values, decision, and unique causal mutation sequence before any
+  runtime role is constructed. Preserve explicit legitimate crash/pruning windows.
+- Replace C10-CONFIRM sleeps with causal fixture latches and repeat its isolated and focused routes
+  without retries, longer timeouts, or weaker assertions. Fully redact escaped quote/space/
+  continuation and command/parameter substitution tails for `=`/`+=`; all five validators remain
+  generic and reflect no marker.
+- Keep `verificationPassed: false` and `reviewCoveragePassed: false` while the broad route is
+  non-zero and reviews are blocked. Exclude Go/connectors/`make`, services, dependencies,
+  parent/main/#475, network/GitHub, push, reviewers, ready, integration, merge, and human gates.
+  Adapter remains `manual_gsd_fallback`; the worker owns only local PLAN/RED/GREEN/evidence.

@@ -1135,3 +1135,163 @@ sandbox failures / 1 skip, so machine `verificationPassed` remains false.
 
 Excluded: Go, connectors, `make`, runtime services, dependencies, parent/main/#475, credentials,
 network/GitHub, push, reviewer dispatch, self-review, integration, merge, and human-gate actions.
+
+## Cycle 11 consolidated-review correction
+
+Frozen reviewed candidate: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` (tree
+`962160e1ccae2e52f6f645185edb96819bd4a9f5`). Immutable base and exact merge base remain
+`3addb1f48be1afe8b1e2b59b54247679d7293805`; the worktree starts clean and the immutable-base range
+remains exactly the same 21 owned paths. Both complete Cycle 10 reports,
+`/tmp/478-REVIEW-CYCLE10-1.md` and `/tmp/478-REVIEW-CYCLE10-2.md`, were read before this plan. Their
+union is one correction: durable-begin settlement ownership, terminal typed conflicts, one coherent
+#479 restart history, deterministic confirmation synchronization, complete assignment-tail
+redaction, and truthful current artifacts. No finding is deferred.
+
+All five production blobs are frozen before RED:
+
+- orchestrator `1ef3a4ead93ce8572e121256564b7ecb8a6454a9`
+- decision broker `7be6785190176a8c15660fb180fc95c207b76d5b`
+- GitHub evidence `058ad1622249a9772ce9e03f7f83cc3bf28b464a`
+- human decision `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`
+- review router `ba0800f12f5c0bb99fdc2109221b7553daac7fb3`
+
+Required routing, issue contract, GSD programming-loop/runtime references, project artifacts, and
+runtime/RLM integration reference were reread. `scripts/gsd doctor` passes, while
+`scripts/gsd prompt programming-loop init --phase 478-shepherd-github-parent-orchestration
+--dry-run` still reports `unknown GSD command: programming-loop`; Cycle 11 therefore records the
+required `manual_gsd_fallback`. A read-only snapshot sidecar was reused after a new spawn hit the
+agent limit; this worker retains the ordered PLAN -> RED -> GREEN/refactor -> evidence path.
+
+### Cycle 11 durable-begin ownership table
+
+The durable begin is an uncertain mutation even though it precedes the ready effect. Its external
+invocation settlement, post-settlement authority reconciliation, keyed ensure, and stop token are
+one owner. An authority absence observed before the begin invocation settles is never terminal
+evidence.
+
+| Begin response / interruption | Required owner and ordering | Terminal proof | Public/lifecycle result |
+| --- | --- | --- | --- |
+| exact `ready_invoking` value | validate exact invocation after the begin call settles, then invoke compare/effect | exact invoking state is owned by the still-running commit | continue once; no duplicate effect |
+| rejection before durable write | retain invocation/key/stop through rejection settlement, then read authority | authoritative absence after settlement | blocked/quarantined; joined only after the read |
+| durable write then rejection or malformed response | after invocation settlement, read the exact authority and start fenced no-op recovery | exact tombstone/`draft_restored` or an already-terminal matching state | blocked/quarantined; effect is never invoked |
+| caller cancellation | abort the wait but retain invocation/key/stop; reconcile only after the invocation settles | absence or matching terminal authority | caller receives blocked/cancelled semantics; stop is incomplete while unsettled |
+| deadline before a signal-ignoring late write | do not accept an early null read; wait for the original invocation settlement, then reconcile | late `ready_invoking` is found and terminalized | blocked/quarantined; no late orphan and no effect |
+| begin never settles during the bounded stop window | retain the live token and key; never fabricate a terminal read | none yet | stop is truthfully incomplete; same-key reentry remains excluded |
+| valid matching applied/recovery state returned | start the existing exact-invocation recovery owner | matching `ready_settled` or fenced terminal recovery | quarantined until joined |
+| valid matching `ready_settled` returned | require exact applied revision and current authorization | matching settled state plus exact visible revision | ready reuse only after full authorization |
+| valid mismatched state | never mutate a foreign invocation; reconcile the observed exact state before release | requested invocation absent/terminal and any observed unsettled state separately owned | moved/quarantined; no unowned state |
+
+### Cycle 11 typed-conflict terminal transition table
+
+Every `kind: "conflict"` is non-applied and must include an exact invocation-bound atomic tombstone
+proof. The compare boundary removes only the requested fence-0 `ready_invoking` reservation in the
+same atomic decision that produces the coordinate; it never clears draft and never rolls back a
+foreign non-draft PR. The controller validates repository/PR/marker/generation/head,
+`invocationId`, authorization digest, and ready-mutation identity before returning the original
+coordinate blocker. A malformed/lost conflict response remains an uncertain compare result and
+uses the already tracked recovery path instead.
+
+| Post-begin compare observation | Atomic boundary transition | Visible PR rule | Controller result / join rule |
+| --- | --- | --- | --- |
+| policy/review/path/receipt/ancestry/decision/plan moved | exact invoking -> exact durable tombstone | unchanged draft | preserve typed coordinate; no state remains |
+| head moved while PR remains draft | tombstone requested old-head invocation only | preserve current head/revision/draft | `...conflict:head`; never rewrite moved PR |
+| PR revision moved while still draft | tombstone requested invocation only | preserve foreign revision | `...conflict:pull_request_revision` |
+| PR is foreign non-draft and no owned ready mutation exists | tombstone requested invocation only | leave foreign non-draft untouched | typed conflict; later prepare fails authority-missing safely |
+| prepared journal or authority identity is absent/moved | prove requested invocation absent or atomically tombstone its exact invoking record | unchanged | `...conflict:authorization_state` |
+| matching state is already terminal | return exact terminal/absence proof; perform no tombstone rewrite | terminal visibility must remain coherent | typed blocker or ready path according to the pre-compare state |
+| matching recovery has already claimed | typed non-applied conflict cannot claim terminality; join/start the matching recovery instead | only the recovery owner may alter owned ready effect | quarantined until matching terminal state |
+| compare response rejects/times out/cancels/is malformed | existing uncertain finalizer rereads after invocation settlement | no visibility inference | quarantined; key/stop retained until terminal |
+| valid tombstone proof is malformed or bound to another invocation | fail closed and start exact recovery/reconciliation | unchanged | quarantined/moved; never release on untrusted proof |
+
+No conforming typed conflict may mean "non-applied but unsettled." While an atomic compare is live,
+the external-call token makes an early stop incomplete. Once its validated tombstone is returned,
+the invocation is terminal, same-key reentry may proceed, and final stop joins. Serialized restart
+must contain no orphan `ready_invoking` for the tombstoned invocation.
+
+### Cycle 11 unified restart-history invariants
+
+`decodeCycle9RestartSnapshot` must validate a single graph before constructing any `Map`, backing,
+broker, or controller:
+
+1. Every settlement binds one exact prepared operation; its decision, authorization digest,
+   plan digest, mutation key, and current broker decision are identical.
+2. A `ready` settlement requires one exact `ready_settled` authority state, its ready mutation,
+   `appliedRevision > originalRevision`, a current non-draft PR at exactly `appliedRevision`, and
+   no rollback mutation/recovery attempt for that terminal history.
+3. A `blocked` settlement may accompany an absent authority after a terminal non-applied conflict,
+   or a retained `ready_invoking`, `ready_effect_applied`, `recovery_claimed`, or `draft_restored`
+   crash window; it can never accompany `ready_settled`. Visibility and receipts must match that
+   exact phase. `draft_restored` requires its exact ready/rollback ownership as applicable, a
+   current draft PR whose revision equals the rollback value revision, and the latest recovery
+   fence. A retained `ready` settlement cannot outlive its authority proof; terminal pruning must
+   remove a history as one closure or leave a digest-bound tombstone.
+4. Each ready mutation value revision equals the authority `appliedRevision`; each rollback value
+   revision equals the current restored PR revision. Head/number/marker/generation stay identical
+   across prepared authorization, authority, mutation values, and current readiness.
+5. Retained global mutation revisions are positive, unique, and causal: ready precedes its
+   rollback; `mutationRevision` equals or exceeds the unique maximum and may be higher after
+   pruning. Equal or reversed retained revisions reject. `recovery_claimed` may legitimately lack
+   a rollback receipt in the claim-before-effect crash window.
+6. The top-level decision is the exact prepared decision/broker record for the history. A moved
+   decision, settlement, authority phase, PR visibility/revision/head, or omitted component rejects
+   before runtime-role construction. Canonically reordered equivalent collections still decode
+   identically.
+
+### Cycle 11 deterministic confirmation and assignment policies
+
+The C10-CONFIRM fixture exposes causal latches for first confirmation entry, its deadline/abort,
+the newer recovery-fence call, and permission for that newer fence to settle. Tests take the early
+stop sample only while the production recovery is observably held, release the newer fence, and
+then assert terminal join. No fixed sleeps, retry wrapper, enlarged deadline, or relaxed assertion
+may establish correctness. The isolated family and complete focused route run repeatedly at the
+same RED and GREEN heads.
+
+The bounded assignment scanner consumes the complete shell-like value field after a sensitive
+`=` or `+=`: escaped quotes, escaped whitespace, line continuations, quoted/unquoted command
+substitutions, and parameter expansions cannot terminate redaction early. A malformed or
+unterminated construct conservatively redacts through the containing line/field boundary. Direct
+redactor tests require the complete synthetic marker to be absent; all five durable/outbound
+validators reject with generic text that contains neither the marker nor a credential suffix.
+
+### Cycle 11 executable RED matrix
+
+| ID | Minimum rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| C11-BEGIN | 6 | reject-before-write, apply-then-reject, malformed-after-write, caller cancellation, deadline-before-write, and signal-ignoring late apply retain invocation/key/stop through settlement and post-settlement terminal reconciliation; effect count stays zero |
+| C11-CONFLICT | 13 | all ten typed coordinates plus persistent moved-head, moved-draft-revision, and foreign-non-draft cases return exact tombstone proof, preserve PR state, serialize without invoking residue, and report truthful stop/reentry |
+| C11-SNAPSHOT | 12 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed mutation-history variants reject before construction; equivalent reorder remains canonical |
+| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation modes use causal latches and pass repeated isolated/full focused execution without wall-clock phase guesses |
+| C11-ASSIGN | 60 | two operators x five escaped/substitution forms prove full direct redaction plus generic rejection through each of five validators |
+| C11-ARTIFACT | 4 | leading summary, verification, PR-body/handoff, and machine state describe Cycle 10 as blocked and Cycle 11 as planned/RED/GREEN at the matching checkpoint |
+
+The executable RED changes only existing test files and phase artifacts. All retained controls stay
+green, every new behavior row fails for the named missing contract, and all five production blobs
+remain byte-exact through the RED commit.
+
+### Cycle 11 lifecycle and checkpoints
+
+1. Commit these nine artifact-only PLAN updates before any Cycle 11 test or production edit.
+2. Commit one complete executable RED covering the full review union; record exact failures and
+   frozen production blobs. Run the causally synchronized C10-CONFIRM family repeatedly at RED.
+3. Report PLAN and RED SHAs plus exact failures to the parent before GREEN.
+4. Implement the smallest coherent begin ownership, conflict tombstone, unified decoder, and
+   assignment scanner GREEN. Refactor only after focused GREEN; never weaken or time-relax a row.
+5. Repeat isolated confirmation and full focused runs; then run strict owned/all-production
+   TypeScript, pinned offline RPC, broad serialized classification, immutable-base/merge-base/
+   diff/exact-21-path, three JSON parses, marker confinement, and both Cycle 10 report replays.
+6. Keep `verificationPassed: false` while the declared broad route exits non-zero. Evidence stays
+   non-self-referential `HEAD`; parent owns publication, fresh reviews, integration, merge, and all
+   human gates.
+
+- [x] Both complete Cycle 10 reports read; candidate/tree/base/scope and frozen blobs confirmed.
+- [x] Required skills/contracts/runtime/project references read; doctor passed and unavailable
+      adapter recorded as `manual_gsd_fallback`; read-only sidecar reuse recorded.
+- [ ] Artifact-only Cycle 11 PLAN commit precedes all Cycle 11 tests and production edits.
+- [ ] Complete executable RED commit fails only the named new behavior groups with production frozen.
+- [ ] PLAN/RED SHAs and exact failures reported before GREEN.
+- [ ] Coherent GREEN/refactor and repeatable local evidence recorded truthfully.
+- [ ] Fresh exact-head reviews and all publication/integration/human gates remain parent-owned.
+
+Current machine truth at this plan checkpoint: `verificationPassed: false` and
+`reviewCoveragePassed: false`. Cycle 10's focused route was observed flaky by independent review,
+and the declared broad route remains non-zero; no Cycle 11 test or production edit has run.

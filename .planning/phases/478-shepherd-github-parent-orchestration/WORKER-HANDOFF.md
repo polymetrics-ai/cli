@@ -16,10 +16,11 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Prior frozen reviewed candidate: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1`
+Prior frozen reviewed candidate: `3b39cfce9b4a99940b0451302df6bf5c17b49c02`
 
-Cycle 10 status: artifact PLAN in progress; both Cycle 9 reviews are blocked and consolidated;
-no Cycle 10 test or production edit has occurred
+Cycle 11 status: artifact PLAN in progress; both Cycle 10 reviews are blocked and consolidated;
+no Cycle 11 test or production edit has occurred. Cycle 10 is historical local evidence, not a
+review-clean or verification-passing candidate.
 
 ## Scope Delivered
 
@@ -382,3 +383,27 @@ session-attestation contract and fixtures required to verify independent-review 
   failures / 1 skip. This non-zero route keeps `verificationPassed` false.
 - Exact base/merge-base, full-range diff, exact 21 paths, and all three JSON parses pass. No network,
   push, GitHub, reviewer, integration, merge, parent-ready, or other human-gate action ran.
+
+## Cycle 11 plan handoff
+
+- Frozen candidate/tree/base: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` /
+  `962160e1ccae2e52f6f645185edb96819bd4a9f5` / `3addb1f4`; clean exact 21 paths; both Cycle 10
+  reports read completely; all five production blobs frozen.
+- Durable begin is uncertain. The original invocation, same-key lock, and stop token remain owned
+  until that invocation settles and a later authority read proves absence or drives the exact
+  invocation terminal. A late signal-ignoring write cannot escape after an early null read.
+- Every typed non-applied conflict must carry exact atomic tombstone proof bound to the requested
+  invocation. The compare boundary removes only that `ready_invoking` reservation and never
+  rewrites a moved draft or foreign non-draft PR; the controller preserves the coordinate only
+  after validating the terminal proof.
+- The #479 decoder validates the cross-component history before constructing roles: settlement,
+  authority phase, current PR visibility/revision/head, applied/rollback values, prepared decision,
+  and unique causal mutation sequence must agree. Legitimate claim-before-effect and pruned-history
+  windows remain explicit.
+- C10-CONFIRM uses observable latches for confirmation entry, deadline/new fence entry, and release;
+  isolated and focused runs repeat without retry wrappers, timing relaxation, or fixed-delay phase
+  guesses. Escaped quote/space/continuation and command/parameter substitution tails are fully
+  redacted for `=`/`+=`; five validators reject generically without marker reflection.
+- `verificationPassed` and `reviewCoveragePassed` remain false. The broad route is non-zero and the
+  focused Cycle 10 route was observed flaky. Parent retains publication, review, integration,
+  ready, merge, and every human gate.

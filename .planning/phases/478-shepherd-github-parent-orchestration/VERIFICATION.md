@@ -1,11 +1,31 @@
 # Verification: #478
 
-Status: Cycle 10 is planned against blocked exact candidate
-`a49e4df2798281d1e64c722ccbcab5f4a678c3e1`. Both Cycle 9 reviews are consolidated; no Cycle 10
-test or production edit has run. `verificationPassed` is false because Cycle 10 is unimplemented
-and the declared broad route exits non-zero. Fresh exact-head reviews remain parent-owned.
-Earlier cycle gate sections below are retained as historical evidence and do not supersede the
-current Cycle 10 contract.
+Status: Cycle 11 is planned against blocked exact candidate
+`3b39cfce9b4a99940b0451302df6bf5c17b49c02`. Both Cycle 10 reviews are consolidated; no Cycle 11
+test or production edit has run. `verificationPassed` is false because the focused Cycle 10 gate
+was independently observed flaky and the declared broad route exits non-zero.
+`reviewCoveragePassed` is false because both exact-head reviews are blocked. Earlier cycle gate
+sections below are historical evidence and do not supersede the current Cycle 11 contract.
+
+## Cycle 11 verification contract
+
+- [x] Exact candidate/tree, immutable base/merge base/ancestry, clean worktree, exact 21 paths, and
+      five frozen production blobs are recorded before RED.
+- [x] Both complete Cycle 10 reports are read and mapped to durable-begin ownership, terminal
+      conflict, unified restart, causal confirmation, assignment-tail, and artifact contracts.
+- [x] Required routing/contracts/skills/runtime/project artifacts are read; doctor passes and the
+      unavailable adapter records `manual_gsd_fallback`.
+- [ ] Artifact-only Cycle 11 PLAN commit precedes every Cycle 11 test and production edit.
+- [ ] One executable RED captures the complete union with all five production blobs unchanged.
+- [ ] The causally synchronized C10-CONFIRM family repeats deterministically at RED and GREEN; the
+      complete focused route repeats at GREEN without retries, longer deadlines, or relaxed checks.
+- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
+      classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
+- [ ] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
+      reviewer, integration, merge, ready, or human-gate action runs.
+
+Machine verification and review coverage remain false throughout PLAN and RED. A focused pass
+cannot override the declared broad non-zero route, and no new exact-head review is worker-owned.
 
 ## Cycle 10 verification contract
 
@@ -16,11 +36,11 @@ current Cycle 10 contract.
 - [x] Required skills/contracts/project artifacts are loaded; doctor passes and unavailable adapter
       command records `manual_gsd_fallback`; unavailable agent capacity records
       `local_critical_path`.
-- [ ] Artifact-only PLAN commit precedes every Cycle 10 test and production edit.
-- [ ] One five-test-file executable RED captures all named groups with production blobs unchanged.
-- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
+- [x] Artifact-only PLAN commit `470a8a85` precedes every Cycle 10 test and production edit.
+- [x] One five-test-file executable RED `2256971a` captures all named groups with production blobs unchanged.
+- [x] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
       classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
-- [ ] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
+- [x] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
       review, integration, merge, or human-gate action runs.
 
 The phase-equivalent complete route remains the broad serialized Shepherd suite. Its recorded Cycle

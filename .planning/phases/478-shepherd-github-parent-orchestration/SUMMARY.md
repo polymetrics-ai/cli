@@ -1,8 +1,8 @@
 # Summary: #478
 
-Status: Cycle 10 is planned against blocked exact candidate `a49e4df2`. Both Cycle 9 reports are
-consolidated into one strict TDD correction; verification and fresh exact-head review remain false
-and parent-owned respectively.
+Status: Cycle 11 is planned against blocked exact candidate `3b39cfce`. Both Cycle 10 reports are
+consolidated into one strict TDD correction. No Cycle 11 test or production edit has run;
+verification and fresh exact-head review coverage remain false and parent-owned respectively.
 Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
@@ -208,7 +208,7 @@ refactor was necessary and no prohibited or external action ran.
 
 ## Cycle 10 correction status
 
-Both Cycle 9 reviews block `a49e4df2` and are consolidated into one plan-first correction. The
+Both Cycle 9 reviews blocked `a49e4df2` and were consolidated into one plan-first correction. The
 seven blockers are authority-first recovery ordering, settlement/recovery CAS arbitration, exact
 applied-revision proof, bounded post-rollback confirmation, terminal pre-application rejection,
 complete assignment operator/case/index policy, and warning-finding disposition chronology. The
@@ -218,10 +218,27 @@ The frozen design separates durable begin from the uncertain ready effect, store
 revision, queries authority before unrelated readiness gates, and makes terminal settlement versus
 fenced recovery mutually exclusive. `+=`, mixed/lowercase identifiers, and indexed assignments are
 classified by complete base name; only exact unindexed `FEATURE_TOKEN` is public. Snapshot maps and
-journal entries require unique reciprocal canonical state. No Cycle 10 test or production edit has
-run at this artifact checkpoint.
+journal entries require unique reciprocal canonical state. At the historical Cycle 10 PLAN
+checkpoint, no Cycle 10 test or production edit had run.
 
 Cycle 10 is now locally complete at PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, and
 refactor `8946b67b`. Focused evidence is 687 total / 686 pass / 0 fail / 1 intentional skip;
 strict owned/all-production TypeScript passes. The broad route remains non-zero at 841 pass / 65
 managed-sandbox failures / 1 skip, so verification remains false pending parent-owned review.
+
+## Cycle 11 correction status
+
+Both Cycle 10 reviews block exact candidate `3b39cfce`. Their complete union is frozen into one
+artifact-first correction: a lost/rejected/timed-out/cancelled/malformed durable begin retains its
+invocation, key, and stop owner through settlement and a subsequent authority reconciliation;
+every typed non-applied compare conflict returns exact atomic tombstone proof for the requested
+invocation; the #479 decoder validates one coherent settlement/authority/visibility/revision/
+mutation history; C10-CONFIRM uses causal latches rather than timing guesses; and sensitive
+assignment values redact escaped and substitution tails completely while validators stay generic.
+
+Cycle 10 did complete locally at PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, refactor
+`8946b67b`, and evidence `3b39cfce`, but its independent review is blocked. Review reproduced the
+focused gate nondeterministically and the declared broad route remains non-zero, so
+`verificationPassed` and `reviewCoveragePassed` are both false. The exact 21-path scope is
+unchanged. This Cycle 11 artifact checkpoint precedes every new test and production edit; parent
+ownership of publication, reviews, integration, merge, ready, and human gates is unchanged.

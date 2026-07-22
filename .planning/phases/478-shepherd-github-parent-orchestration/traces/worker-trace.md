@@ -427,3 +427,27 @@
 - Serialized route: 907 total / 841 pass / 65 unchanged managed-sandbox process/lease failures /
   1 skip. Exact base/merge-base, diff, 21 paths, and three JSON parses pass; machine verification
   remains false and every external/human gate remains parent-owned.
+
+## 2026-07-22 Cycle 11 plan
+
+- Started clean at blocked Cycle 10 candidate `3b39cfce9b4a99940b0451302df6bf5c17b49c02`
+  (tree `962160e1ccae2e52f6f645185edb96819bd4a9f5`), immutable/exact merge base `3addb1f4`, and exact
+  21 paths. Read both complete Cycle 10 reviews before planning.
+- Reloaded required routing, issue contract, GSD programming-loop skill/workflows, adapter/runtime
+  policy, runtime/RLM integration, and project/PRD/prompt/profile artifacts. Doctor passed;
+  `scripts/gsd prompt programming-loop init --phase 478-shepherd-github-parent-orchestration
+  --dry-run` remains unavailable, so `manual_gsd_fallback` is explicit.
+- A new read-only spawn hit the agent limit; the completed Cycle 10 sidecar was reused read-only to
+  map cross-component restart invariants. It edited nothing. This worker remains the local critical
+  path and owns only the ordered artifact PLAN, executable RED, coherent GREEN/refactor, and local
+  evidence.
+- Frozen production blobs: orchestrator `1ef3a4ead93ce8572e121256564b7ecb8a6454a9`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+  `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+  `ba0800f12f5c0bb99fdc2109221b7553daac7fb3`.
+- Froze begin-call settlement ownership and typed-conflict atomic tombstone tables before code.
+  The same RED covers unified restart history, causal confirmation latches, complete escaped/
+  substitution assignment redaction, and truthful leading artifacts. No Cycle 11 test,
+  production, network/GitHub, push, review, ready, integration, merge, or human-gate action ran
+  before this checkpoint. Verification and review coverage remain false.

@@ -481,7 +481,7 @@ intentional live-sandbox skip, remain mandatory.
 | --- | ---: | --- | --- |
 | C10-ORDER | 42 | prepare/reconcile query and recover each unsettled phase before independently broken roster, review, policy, broker, pending/expired request, or rejected decision gates | green |
 | C10-CAS | 6 | settlement-wins lost responses terminate recovery without rollback; recovery-wins conflicts settlement, blocks, restores draft once, and joins | green |
-| C10-REVISION | 15 | prepare/commit/reconcile require exact stored applied revision and provenance, rejecting original/lower/higher mismatch | green |
+| C10-REVISION | 15 | prepare/commit/reconcile require the exact stored applied resource revision, rejecting original/lower/higher/non-exact values; these rows do not independently mutate stored result provenance | green |
 | C10-CONFIRM | 4 | bounded post-rollback confirmation failure/hang is superseded by a newer fence and cannot freeze key/stop ownership | green |
 | C10-NOT-STARTED | 4 | pre-application effect rejection/timeout/cancel/malformed paths have durable invoking state and terminal no-op draft restoration | green |
 | C10-ASSIGN | 135 | all suffixes with `+=` cross five consumers; case/index policy is fail-closed; exact unindexed `FEATURE_TOKEN` controls remain public without marker reflection | green |
@@ -500,3 +500,27 @@ Cycle 10 checkpoints are PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, and 
 `8946b67b`. RED was 687 total / 470 pass / 216 intended TAP failures / 1 skip (204 failing leaf
 rows plus 12 parent containers). GREEN is 687 total / 686 pass / 0 fail / 1 skip; the exact
 authority subset is 89/89 and strict owned/all-production TypeScript passes.
+
+## Cycle 11 consolidated-review RED ledger
+
+Frozen exact candidate/tree: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` /
+`962160e1ccae2e52f6f645185edb96819bd4a9f5`; immutable base and exact merge base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 10 reviews were read completely. The
+retained 687 focused cases and one intentional live-sandbox skip remain mandatory; the
+C10-CONFIRM family is made causally deterministic before repeat evidence.
+
+| ID | Minimum rows | RED contract | State |
+| --- | ---: | --- | --- |
+| C11-BEGIN | 6 | begin rejection/malformed/cancellation/deadline/late-apply paths retain invocation, key, and stop ownership through invocation settlement plus terminal authority reconciliation; zero ready effects | planned RED |
+| C11-CONFLICT | 13 | all ten typed coordinates and three persistent moved/foreign PR cases atomically tombstone the requested invoking reservation, preserve PR state, and leave truthful stop/reentry/restart evidence | planned RED |
+| C11-SNAPSHOT | 12 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed retained mutation histories reject before role construction; canonical reorder passes | planned RED |
+| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation uses entry/deadline/new-fence/release latches and repeats without fixed-delay phase inference | planned fixture synchronization |
+| C11-ASSIGN | 60 | `=`/`+=` escaped quote/space/continuation and command/parameter substitution values redact their complete marker directly and reject generically through five consumers | planned RED |
+| C11-ARTIFACT | 4 | leading status, checklist, PR/handoff prose, and machine truth agree at every checkpoint | plan-first docs |
+
+Frozen production blobs before RED: orchestrator `1ef3a4ead93ce8572e121256564b7ecb8a6454a9`,
+broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
+`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, and review router
+`ba0800f12f5c0bb99fdc2109221b7553daac7fb3`. RED may modify only existing test files and phase
+artifacts. Exact failure counts, repeat distribution, and blob identity are recorded before GREEN.

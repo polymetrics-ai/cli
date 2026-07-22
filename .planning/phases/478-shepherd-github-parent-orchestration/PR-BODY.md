@@ -204,7 +204,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   gates, and both report replays pass. No prohibited or external action ran; fresh review is
   parent-owned.
 
-## Cycle 10 consolidated-review correction (planned)
+## Cycle 10 consolidated-review correction (historical local completion; review blocked)
 
 - frozen reviewed candidate/tree/base: `a49e4df2798281d1e64c722ccbcab5f4a678c3e1` /
   `9167ebaf82f92c1229e56b1b8334262a356dcd3c` /
@@ -226,3 +226,27 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - local checkpoints: PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, refactor `8946b67b`;
   focused 686 pass / 0 fail / 1 skip; strict TypeScript pass; broad 841 pass / 65 managed-sandbox
   failures / 1 skip, therefore machine verification remains false
+
+## Cycle 11 consolidated-review correction (planned)
+
+- frozen reviewed candidate/tree/base: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` /
+  `962160e1ccae2e52f6f645185edb96819bd4a9f5` /
+  `3addb1f48be1afe8b1e2b59b54247679d7293805`; exact scope remains 21 paths
+- both Cycle 10 reviews are blocked and consolidated without deferral: begin-response ownership,
+  typed-conflict terminality, unified restart-history coherence, deterministic confirmation,
+  complete escaped/substitution assignment redaction, and truthful leading artifacts
+- an interrupted durable begin retains its invocation/key/stop owner through invocation settlement
+  and a later authority read; absence before settlement cannot release ownership, and the ready
+  effect is never called on a failed begin
+- every non-applied conflict carries exact invocation-bound atomic tombstone proof; the boundary
+  removes only its own invoking reservation, preserves moved or foreign PR state, and the
+  controller retains the original typed coordinate only after validating terminal proof
+- the #479 value decoder rejects impossible settlement/phase/visibility/applied-revision/decision
+  and equal/reversed mutation histories before runtime-role construction, while legitimate crash
+  windows and canonical reorder remain supported
+- C10-CONFIRM is causally synchronized with explicit fixture latches and repeated without retries
+  or timing relaxation; assignment redaction consumes escaped quote/space/continuation and command/
+  parameter substitution tails for both operators, with generic validator failures
+- `verificationPassed` and `reviewCoveragePassed` remain false during PLAN/RED and while the broad
+  route is non-zero. Parent owns publication, fresh reviews, integration, ready, merge, and human
+  gates; this worker performs no network or external mutation
