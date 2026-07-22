@@ -1184,3 +1184,44 @@ GitHub, live model/auth, Go/connectors, `make`, runtime service, or credential a
   method calls/two accessor reads/mutable result; nine accepted corrupt tool lifecycles; six policy
   caller behavior calls; and all 30 role/name combinations admitted from the forbidden capability
   table. `git diff --check` passes.
+
+### GREEN evidence
+
+- First cohesive GREEN: `48f546a5`. `captureFreshDenseArray` now reads only the intrinsic array
+  brand, one own-data length descriptor, and the bounded indexed own-data descriptors before
+  freezing a fresh canonical array; no complete key set is materialized.
+- Runtime execution now reasserts lifecycle authority after every re-entrant SDK seam and
+  immediately before session creation. Abort, close, and shutdown observed by the second
+  `getAgentDir` callback therefore schedule no child session or prompt.
+- Exported policy and role-prompt entry points project caller arrays into private frozen dense
+  snapshots before validation or formatting. The prompt result is itself frozen.
+- Capability denial uses normalized structural token families for generic execution/process/
+  terminal authority and protected-data/export authority. Sensitive assignment classification
+  scans bounded dotted compounds rather than only the final segment.
+- Pi tool lifecycle capture now owns one exact assistant call identity through execution start/end,
+  tool-result message, `turn_end.toolResults`, subsequent turn, and final handoff. Orphaned,
+  replaced, duplicated, missing, early, or mismatched evidence fails closed.
+- Result: all seven C13 behavior rows and all 124 retained rows pass, for 131/131 focused.
+
+### REFACTOR / terminal verification
+
+- Refactor checkpoint: `e50b5f97`. It centralizes the capability token families, expands the
+  structural synonym controls, and strengthens result/error lifecycle mismatch coverage without
+  weakening any RED row or widening public authority.
+- Focused tests: 131 passed, 0 failed/skipped/cancelled/todo. Safe isolation excluding only the
+  environment-bound controller/state-store files: 194 passed, 0 failed/skipped/cancelled/todo.
+- Complete serialized Shepherd: 268 executed, 237 passed, 31 failed, 0 skipped/cancelled/todo.
+  Every failure is the unchanged controller/state-store process-identity family where the managed
+  sandbox rejects child creation with `spawn EPERM`; the complete suite is environment-blocked,
+  not represented as green.
+- Focused and all 12 non-test Shepherd strict TypeScript scopes pass with TypeScript 5.9.3 against
+  the explicit installed Pi 0.80.6 package/type roots. Explicit Pi 0.80.6 offline RPC exits 0 and
+  registers `pm-shepherd`; only the known global-settings-lock sandbox warnings are emitted.
+- Final production Git blobs are runtime `cd5c05411933c1a1f1b239d8ac85112e47e10b8b`, policy
+  `5a7f91b863f3a3eba3b489e79944c17a6511a776`, and role prompts
+  `d4365dd2e32854589a7d1bee91439e5cb0a17fe0`.
+- Both Cycle 12 reports were re-read in full after GREEN/refactor. Their complete two-plus-five
+  blocker union remains mapped to C13-01 through C13-07 with no omitted or deferred finding.
+- `git diff --check`, immutable-base/frozen-start ancestry, RUN-STATE JSON, credential-pattern,
+  dependency/Go/connector, and exact 20-path issue-scope checks pass. No push, network, GitHub,
+  live model/auth, credential, service, Go/connector, `make`, parent, or #478 mutation occurred.

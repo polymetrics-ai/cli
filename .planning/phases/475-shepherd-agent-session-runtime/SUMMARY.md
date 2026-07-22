@@ -1,5 +1,20 @@
 # Summary — Issue #475
 
+Status: Cycle 13 is locally complete at refactor `e50b5f97` against frozen start `5dafc572` and
+immutable base `e659d6f1`. Cohesive GREEN `48f546a5` closes all seven blockers from the two complete
+Cycle 12 reports: bounded indexed authority capture, post-SDK-seam lifecycle terminality, intrinsic
+policy/prompt snapshots, structural capability and qualified-sensitive-key classifiers, and exact
+authorized tool-call correlation across every Pi event and handoff boundary.
+
+The test-only RED `974d2e79` retained 124 passes and produced exactly seven intended failures with
+production frozen. GREEN/refactor passes 131/131 focused, 194/194 safe isolation, both strict Pi
+0.80.6 TypeScript scopes, and explicit offline RPC registration. Complete Shepherd executes 268
+tests with 237 passes and only the unchanged 31 managed-sandbox `spawn EPERM` failures in
+controller/state-store; it remains environment-blocked rather than green. Diff, ancestry, JSON,
+credential/dependency/Go/connector, exact 20-path scope, and clean-worktree gates pass. Both Cycle
+12 reports were re-read after implementation with no unhandled finding. No push, network, GitHub,
+live model/auth, credential, service, Go/connector, `make`, parent, or #478 mutation occurred.
+
 Status: Cycle 12 is locally complete at refactor `3dc4de71` against frozen start `7882cd70` and
 immutable base `e659d6f1`; parent orchestration owns the process-capable full-suite rerun, fresh
 exact-head review, integration, and delivery.

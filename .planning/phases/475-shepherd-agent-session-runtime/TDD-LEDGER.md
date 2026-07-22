@@ -1102,3 +1102,45 @@ parent-owned integration gate is permitted.
   0.80.6 roots and TypeScript 5.9.3.
 - Production Git blobs remain exactly frozen at Cycle 13 start. The test-only commit changes only
   `agent-session-runtime.test.ts` and `tool-policy.test.ts`; `git diff --check` passes.
+
+### GREEN
+
+- Status: captured at first cohesive GREEN `48f546a5`.
+- All seven top-level C13 behavior rows pass together with all 124 retained rows: 131 executed,
+  131 passed, 0 failed/skipped/cancelled/todo.
+- Minimal mechanisms: bounded indexed-descriptor array projection; post-SDK-seam lifecycle
+  assertions; direct public policy/prompt snapshots; structural capability denial; bounded dotted
+  sensitive compounds; and one exact assistant/execution/result/turn tool-call identity.
+
+### REFACTOR / VERIFY
+
+- Status: captured after no-contract-widening refactor `e50b5f97`.
+- The refactor centralizes capability families and adds terminal/program/cookie synonym controls,
+  plus exact tool-result result/error mismatch cases. No C13 assertion was removed or weakened.
+- Focused: 131/131 pass. Safe isolation: 194/194 pass.
+- Complete serialized Shepherd: 268 executed, 237 passed, 31 environment-classified failures in
+  only `controller.test.ts` and `state-store.test.ts`; every one reports managed-sandbox
+  `spawn EPERM`. Zero skipped/cancelled/todo.
+- Focused strict TypeScript and all 12 non-test Shepherd production TypeScript files pass with the
+  explicit Pi 0.80.6 roots. Explicit Pi 0.80.6 offline RPC registers `pm-shepherd` and exits 0.
+- Diff, immutable-base/frozen-start ancestry, JSON, credential-pattern, no-dependency/Go/connector,
+  exact 20-path scope, and clean-worktree checks pass at the terminal artifact boundary.
+- Both complete Cycle 12 reports were re-read after implementation; every blocker remains
+  represented by one passing C13 row. External/process-capable rerun and independent review remain
+  parent-owned; this lane performed no push or other external mutation.
+
+## Cycle 13 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | artifact `61a364e0`; exact start/base and seven-row matrix recorded before tests |
+| Seam-map amendment | pass | read-only mapping artifact `5e86520c`; bounded canonical-influence contract recorded |
+| RED | expected fail | test-only `974d2e79`; 124 retained pass plus exactly 7 intended failures; production frozen |
+| RED evidence | pass | artifact `6d3ce03a`; behavior-specific failures and frozen blobs recorded |
+| GREEN | pass | `48f546a5`; all 131 focused rows pass |
+| REFACTOR | pass | `e50b5f97`; strengthened classifiers/lifecycle controls; 131/131 retained |
+| Strict TypeScript | pass | focused source/tests and all 12 production files, TypeScript 5.9.3 / Pi 0.80.6 roots |
+| Offline RPC | pass | explicit Pi 0.80.6 `get_commands`; `pm-shepherd` registered |
+| Safe isolation | pass | 194 passed, 0 failed/skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 268 executed; 237 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
+| Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector scans; exact same 20 paths |

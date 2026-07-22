@@ -21,7 +21,7 @@ Prior-family disposition is explicit: Cycle 7 and 9–10 remain retained; R1-F1 
 the direct-boundary extension of Cycle 8/12 immutable snapshot coverage; R2-F2/F3 reopen the Cycle
 11 capability and qualified-key grammar at semantically equivalent forms; R2-F5 extends Cycle
 11/12 ordered lifecycle evidence to one complete tool identity. All 124 Cycle 12 rows remain
-mandatory. Status is RED captured at test-only checkpoint `974d2e79`: all 124 retained rows pass,
+mandatory. RED was captured at test-only checkpoint `974d2e79`: all 124 retained rows passed,
 exactly seven compiled behavior rows fail at their intended boundaries, strict focused TypeScript
 passes, and production remains frozen.
 
@@ -30,6 +30,13 @@ contract: ECMAScript offers only whole-key materializers for those fields. Cycle
 accepts the stronger authority property that is implementable without breaking the public API:
 only bounded indexed own-data is copied into a fresh immutable array, while every non-index source
 peer is neither read nor preserved and cannot affect policy, prompt, lifecycle, or handoff state.
+
+Status after GREEN/refactor: all seven accepted findings are implemented by cohesive GREEN
+`48f546a5` and hardened at `e50b5f97`. The unchanged seven top-level C13 rows now pass together
+with all 124 retained rows (131/131), both strict TypeScript scopes and explicit Pi 0.80.6 offline
+RPC pass, and safe isolation passes 194/194. Complete Shepherd is environment-blocked at 237/268
+only by the same 31 controller/state-store `spawn EPERM` rows. Both source reports were re-read in
+full after implementation; no finding is omitted, deferred, or silently narrowed.
 
 # Review Disposition — Issue #475 Cycle 11
 

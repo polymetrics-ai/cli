@@ -1,9 +1,42 @@
 # Verification — Issue #475
 
-Current result: Cycle 12 issue-owned verification is complete at implementation checkpoint
-`3dc4de7114d5ee501fdc4ecfb4364244a58a3ab9`; see **Cycle 12 Exact-Head Verification** below. The
+Current result: Cycle 13 issue-owned verification is complete at implementation/refactor
+checkpoints `48f546a5` / `e50b5f97`; see **Cycle 13 Exact-Head Verification** below. The
 complete-suite status remains environment-blocked, not green, because the managed sandbox denies
 the unchanged controller/state-store process-identity children with `spawn EPERM`.
+
+## Cycle 13 Exact-Head Verification
+
+Cycle 13 was executed against frozen reviewed candidate
+`5dafc5725167bb74ce88a723073b8c4ceb8314e0` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 12 reports were read before PLAN
+and re-read after implementation. Their two-plus-five blocker union maps exactly to the seven
+named C13 rows; no row is omitted or deferred.
+
+The ordered checkpoints are PLAN `61a364e0`, read-only seam-map amendment `5e86520c`, test-only RED
+`974d2e79`, RED evidence `6d3ce03a`, cohesive GREEN `48f546a5`, and classifier/lifecycle refactor
+`e50b5f97`. RED executed all 131 focused rows: every one of the 124 retained rows passed and
+exactly seven intended C13 rows failed while strict focused TypeScript passed and all three
+production blobs stayed frozen. GREEN/refactor passes all 131 rows.
+
+| Cycle 13 gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 131 executed; 124 retained pass; exactly 7 intended behavior failures; strict TS pass; all production blobs frozen |
+| Focused GREEN | pass | 131 passed, 0 failed/skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 268 executed; 237 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Environment isolation | pass | excluding only controller/state-store, 194 passed, 0 failed/skipped/cancelled/todo |
+| Strict TypeScript | pass | focused production/tests and all 12 non-test Shepherd `.ts`, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit binary reports package 0.80.6; RPC `get_commands` registers `pm-shepherd` and exits 0 |
+| Repository integrity | pass | diff, JSON, immutable-base/frozen-start ancestry, exact same 20 paths, credential/dependency/Go/connector scans, clean worktree |
+| External mutation | not attempted | no push, network, GitHub, review bot, merge, model/auth, credential, service, Go, connector, `make`, parent, or #478 action |
+
+Final production blobs are runtime `cd5c05411933c1a1f1b239d8ac85112e47e10b8b`, tool policy
+`5a7f91b863f3a3eba3b489e79944c17a6511a776`, and role prompts
+`d4365dd2e32854589a7d1bee91439e5cb0a17fe0`. The bounded-array contract intentionally makes
+non-index peers untouched, discarded, and non-authoritative because ECMAScript has no bounded
+primitive that can prove arbitrary hidden/symbol-key absence. Parent orchestration owns the
+process-capable complete-suite rerun, fresh independent exact-head review, integration, and
+delivery.
 
 ## Cycle 11 Verification Result
 

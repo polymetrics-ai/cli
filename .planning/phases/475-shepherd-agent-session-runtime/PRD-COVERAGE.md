@@ -8,14 +8,14 @@ reports form the phase-equivalent requirement source.
 
 | Required outcome | RED boundary | Cycle 13 status |
 |---|---|---|
-| Request-array authority is canonically captured with strictly bounded work | short length with many enumerable/hidden/symbol peers, descriptor counters, and zero peer influence | planned C13-01 |
-| Cancellation/close wins at every SDK seam before creation | abort/close/shutdown callback matrix with zero create/prompt/leaks | planned C13-02 |
-| Public policy authority is intrinsically snapshotted | hostile iterator/method/prototype/alias/length matrix | planned C13-03 |
-| Equivalent generic and protected-data capability names fail closed | role x order x compound x synonym table plus legitimate controls | planned C13-04 |
-| Split qualified sensitive assignments redact everywhere | direct/prompt/workspace/result/handoff/error marker matrix | planned C13-05 |
-| Public role-prompt arrays are intrinsically snapshotted | hostile context/authority arrays, immutable prompt, and length bounds | planned C13-06 |
-| Tool evidence has one authorized cross-event identity | assistant/execution/result/turn/next-turn/handoff mismatch matrix plus real Pi controls | planned C13-07 |
-| Cycle 12 behavior remains intact | all retained runtime, policy, prompt, Pi, ownership, parser, and mutator rows | 124 retained baseline passes |
+| Request-array authority is canonically captured with strictly bounded work | short length with many enumerable/hidden/symbol peers, descriptor counters, and zero peer influence | C13-01 focused GREEN |
+| Cancellation/close wins at every SDK seam before creation | abort/close/shutdown callback matrix with zero create/prompt/leaks | C13-02 focused GREEN |
+| Public policy authority is intrinsically snapshotted | hostile iterator/method/prototype/alias/length matrix | C13-03 focused GREEN |
+| Equivalent generic and protected-data capability names fail closed | role x order x compound x synonym table plus legitimate controls | C13-04 focused GREEN |
+| Split qualified sensitive assignments redact everywhere | direct/prompt/workspace/result/handoff/error marker matrix | C13-05 focused GREEN |
+| Public role-prompt arrays are intrinsically snapshotted | hostile context/authority arrays, immutable prompt, and length bounds | C13-06 focused GREEN |
+| Tool evidence has one authorized cross-event identity | assistant/execution/result/turn/next-turn/handoff mismatch matrix plus real Pi controls | C13-07 focused GREEN |
+| Cycle 12 behavior remains intact | all retained runtime, policy, prompt, Pi, ownership, parser, and mutator rows | 124 retained passes within focused 131/131 |
 
 The strict checkpoint order is artifact PLAN, exactly seven-row test-only RED, cohesive GREEN,
 REFACTOR, and terminal evidence. Complete Shepherd remains honestly classified if the same 31
@@ -28,6 +28,12 @@ bounded own-key absence proof for arbitrary hidden strings and symbols. Only len
 own-data descriptors are authoritative; all non-index peers are untouched and discarded. This is
 strictly bounded and preserves the raw-array public API, unlike an integration-breaking private
 brand requirement.
+
+GREEN/refactor is complete at `48f546a5` / `e50b5f97`: every C13 row and every retained row passes
+in the 131/131 focused suite. Both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, and
+194/194 safe isolation pass. Complete Shepherd remains honestly environment-blocked at 268
+executed / 237 passed / the unchanged 31 controller-state-store `spawn EPERM` failures. Both Cycle
+12 reports were re-read after implementation and their full seven-finding union is covered.
 
 ## Cycle 11 Consolidated Review Coverage
 

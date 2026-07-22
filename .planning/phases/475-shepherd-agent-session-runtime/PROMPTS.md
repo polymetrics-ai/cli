@@ -335,3 +335,12 @@
   worker owns the sole mutating path.
 - No push, network, GitHub, live model/auth, Go/connectors, `make`, services, credentials, or
   parent/#478/#479 edits.
+- GREEN `48f546a5` closes all seven rows through bounded indexed authority projection, SDK-seam
+  scope rechecks, intrinsic public snapshots, structural classifiers, and exact tool lifecycle
+  identity. REFACTOR `e50b5f97` strengthens synonym and result/error mismatch coverage.
+- Terminal local evidence: focused 131/131; safe isolation 194/194; both strict Pi 0.80.6
+  TypeScript scopes and explicit offline RPC pass. Complete Shepherd is environment-blocked at
+  237/268 only by the unchanged 31 controller/state-store `spawn EPERM` rows.
+- Both Cycle 12 review reports were re-read after implementation. Their full seven-blocker union
+  remains closed by C13-01 through C13-07; exact same 20 paths and all no-external-mutation
+  boundaries are preserved.
