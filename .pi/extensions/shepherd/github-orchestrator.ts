@@ -3912,21 +3912,8 @@ export class GitHubParentOrchestrator {
 			pullRequest: first.number,
 			headSha: first.headSha,
 		});
-		if (firstAuthorityState !== null
-			&& ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(firstAuthorityState.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(firstAuthorityState));
-			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
-		}
-		if (firstAuthorityState?.phase === "ready_settled"
-			&& (first.draft || firstAuthorityState.appliedRevision !== first.revision)) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
-		}
-		if (firstAuthorityState?.phase === "draft_restored" && !first.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
-		}
-		if (firstAuthorityState === null && !first.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_missing"] };
-		}
+		const firstAuthorityBlock = this.parentReadyRestartBlock(plan, first, firstAuthorityState);
+		if (firstAuthorityBlock !== null) return firstAuthorityBlock;
 		if (await this.completeIntegrationRoster(plan, integrationValues, first) === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
 		}
@@ -4033,21 +4020,8 @@ export class GitHubParentOrchestrator {
 			pullRequest: second.number,
 			headSha: second.headSha,
 		});
-		if (authorityState !== null
-			&& ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(authorityState.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(authorityState));
-			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
-		}
-		if (authorityState?.phase === "ready_settled"
-			&& (second.draft || authorityState.appliedRevision !== second.revision)) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
-		}
-		if (authorityState?.phase === "draft_restored" && !second.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
-		}
-		if (authorityState === null && !second.draft) {
-			return { kind: "blocked", blockers: ["parent_ready_authority_missing"] };
-		}
+		const secondAuthorityBlock = this.parentReadyRestartBlock(plan, second, authorityState);
+		if (secondAuthorityBlock !== null) return secondAuthorityBlock;
 		const currentRoster = await this.completeIntegrationRoster(plan, integrationValues, second);
 		if (currentRoster === null) {
 			return { kind: "blocked", blockers: ["children_incomplete"] };
@@ -4155,6 +4129,27 @@ export class GitHubParentOrchestrator {
 		state: ParentReadyAuthorityState,
 	): Pick<PreparedParentReadyOperation, "authorization" | "mutation"> {
 		return { authorization: state.authorization, mutation: state.readyMutation };
+	}
+
+	private parentReadyRestartBlock(
+		plan: ParentOrchestrationPlan,
+		pullRequest: GitHubPullRequestEvidence,
+		state: ParentReadyAuthorityState | null,
+	): Extract<ParentReadinessDecision, { kind: "blocked" }> | null {
+		if (state !== null && ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(state.phase)) {
+			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(state));
+			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+		}
+		if (state?.phase === "ready_settled"
+			&& (pullRequest.draft || state.appliedRevision !== pullRequest.revision)) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		if (state?.phase === "draft_restored" && !pullRequest.draft) {
+			return { kind: "blocked", blockers: ["parent_ready_authority_inconsistent"] };
+		}
+		return state === null && !pullRequest.draft
+			? { kind: "blocked", blockers: ["parent_ready_authority_missing"] }
+			: null;
 	}
 
 	private parentReadyRecovery(
