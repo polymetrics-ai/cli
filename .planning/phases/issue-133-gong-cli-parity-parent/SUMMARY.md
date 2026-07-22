@@ -1,22 +1,42 @@
 # Summary — Gong CLI parity parent (#133)
 
-Status: in progress (2026-07-22 completion cycle).
+Status: implementation complete; final local Codex review and CI readiness in progress.
 
-## Integrated baseline
+## Implemented
 
-- Public Gong OpenAPI ledger: 57 paths / 67 operations.
-- Existing parent branch: 12 streams, 19 bounded direct reads, 26 typed reverse-ETL actions.
-- Parent PR: https://github.com/polymetrics-ai/cli/pull/232.
+- Public Gong OpenAPI ledger: 57 paths / 67 operations, all executable through 12 streams, 29 bounded direct reads, or 26 typed reverse-ETL actions.
+- All 13 Gong POST read-query operations are typed, schema-gated, bounded, and recursively redacted. The ten final operations include `calls transcript`; no raw request-body or generic HTTP flag exists.
+- Transcript reads support typed call/time/workspace/cursor filters and a 16 MiB operation cap. Legacy GET direct reads remain capped at 1 MiB.
+- Dynamic connector help works before project initialization for `pm help gong`, bare `pm gong`, `pm gong --help`, and command `--help`.
+- Multipart approvals bind SHA-256 content identity. Execute propagates the approved digest by record/field, snapshots and verifies exact bytes before any HTTP request, and enforces per-file and aggregate limits during preflight, snapshotting, and streaming.
+- Gong manual/skill and website generated connector data are refreshed. Every newly enabled typed POST example includes a schema-valid minimum set of flags.
 
-## Remaining work
+## Verification
 
-- Dynamic connector help/bare namespace parity.
-- Content-bound upload approvals and streaming multipart byte enforcement.
-- Ten typed POST read-query commands, including call transcripts.
-- Generated docs/website refresh, full verification, automated review, human-ready PR state.
+Passed locally:
+
+- Targeted CLI, app, commandrunner, connsdk, engine, generator, and conformance tests.
+- Targeted race tests for CLI, payload identity, operation reads, and multipart writes.
+- Public Gong OpenAPI 3.0.1 re-fetch and schema/flag comparison; all non-deprecated local request leaves are typed. Deprecated `pointsOfInterest` remains intentionally unavailable.
+- `go run ./cmd/connectorgen validate internal/connectors/defs` — 547 connectors, 0 findings.
+- Runtime help checks and connector docs validation.
+- `go vet ./...`, `go test -timeout 20m ./...`, `go build ./cmd/pm`, and `make verify` for the feature commit.
+- Pushed-head CI exposed newly published GO-2026-5970 in existing indirect `x/text` v0.36.0. The existing dependency was upgraded to fixed v0.39.0 (with its required Go module companions); project-toolchain `govulncheck`, module verification, tests, vet, and build pass.
+
+## Local review
+
+The first local Codex review found and drove fixes for the CLI's accidental 1 MiB operation pre-clamp and `help` used as a legitimate flag value. Its legacy-upload-plan compatibility observation was dispositioned fail-closed: approvals created before SHA-256 binding must be invalidated rather than execute without content-bound approval.
+
+Final local Codex review is running against commit `b6534b8b`. Per user direction, CodeRabbit, Claude, and Copilot review requests are skipped.
 
 ## Orchestration
 
-- `subagent` tool unavailable in current Pi harness.
-- Decision: `not_spawned_runtime_capability_missing`; coupled implementation runs as `local_critical_path`.
-- No credentialed Gong checks or external writes.
+- Parent orchestrator remains the active owner of PR #232 and shared state.
+- This Pi harness exposes no `subagent` tool, so read/test lanes run concurrently through parallel tool calls while production edits remain serialized by file ownership.
+- No credentialed Gong requests, live writes, or external mutations were performed.
+
+## Remaining
+
+1. Receive and disposition the final local Codex review.
+2. Record final review/CI evidence, update PR #232 with closing keywords, and mark it ready.
+3. Human approval and merge to `main` remain mandatory.

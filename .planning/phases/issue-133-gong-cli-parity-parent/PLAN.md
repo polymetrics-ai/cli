@@ -136,7 +136,7 @@ Required slices:
 2. **Approval/upload safety (#254)** — bind approved file uploads to content digest, propagate the approved digest to the upload transport, snapshot and verify the exact bytes before any HTTP request, enforce multipart byte limits while snapshotting/streaming (not only preflight `stat`), and keep paths/content out of rendered plans.
 3. **Remaining typed POST reads (#252)** — replace all 10 planned Gong operation blockers with connector-authored typed flags and executable bounded/redacted direct reads. `calls transcript` is mandatory.
 4. **Coverage and generated parity (#133)** — classify the 10 operations as executable direct reads, regenerate connector manual/skill and website catalog, and retain reverse ETL plan → preview → approval → execute.
-5. **Final readiness** — validate that every documented typed POST example supplies a schema-valid minimum request, run CLI/upload/definition review lanes concurrently, then run full local gates and clean local Codex review coverage on the current head. Update PR closing keywords and preserve the human merge gate. Per user direction, skip CodeRabbit, Claude, and Copilot review requests for this change set.
+5. **Final readiness** — validate that every documented typed POST example supplies a schema-valid minimum request, run CLI/upload/definition review lanes concurrently, then run full local gates and clean local Codex review coverage on the current head. Clear the newly published GO-2026-5970 CI gate with a minimal existing indirect `golang.org/x/text` upgrade (no new dependency), update PR closing keywords, and preserve the human merge gate. Per user direction, skip CodeRabbit, Claude, and Copilot review requests for this change set.
 
 Parallel completion lanes (parent orchestrator owns integration):
 
@@ -152,6 +152,7 @@ TDD order:
 - Red CLI tests for dynamic connector help and bare namespace behavior.
 - Red upload tests proving same-size/same-mtime content changes invalidate approval, approved bytes are re-verified from a private snapshot before network send, and post-validation growth cannot exceed `MaxBytes`.
 - Red Gong coverage tests requiring zero planned direct reads, implemented transcript metadata, and schema-valid minimum examples for every newly enabled POST read.
+- Capture the pushed-head `govulncheck` red for GO-2026-5970 (`x/text` v0.36.0; fixed v0.39.0), perform only the fixed-version upgrade, then run tidy, verify, tests, vet, and govulncheck.
 - Smallest green implementation per slice, then refactor and generated artifact refresh.
 
 No credentialed Gong requests, live writes, new dependencies, raw body flags, generic HTTP writes, or parent merge to `main`.

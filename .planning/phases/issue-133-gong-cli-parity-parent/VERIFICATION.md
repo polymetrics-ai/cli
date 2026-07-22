@@ -101,26 +101,34 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 
 ## 2026-07-22 completion-cycle verification checklist
 
-- [ ] Red CLI help/bare-namespace tests captured.
-- [ ] Red upload approval/content-integrity test captured.
-- [ ] Red multipart post-validation growth test captured.
-- [ ] Red Gong zero-planned/transcript-executable test captured.
-- [ ] `go test ./internal/cli -run 'Connector.*Help|DynamicConnectorHelp' -count=1`
-- [ ] `go test ./internal/app -run 'PayloadIdentit|ConnectorCommandPlan' -count=1`
-- [ ] `go test ./internal/connectors/connsdk -run Multipart -count=1`
-- [ ] `go test ./internal/connectors/commandrunner -run OperationDirectRead -count=1`
-- [ ] `go test ./cmd/connectorgen -run Gong -count=1`
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
-- [ ] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
-- [ ] `./pm help gong` exits 0.
-- [ ] `./pm gong` exits 0 and renders contextual help.
-- [ ] `./pm gong --help` exits 0.
-- [ ] `./pm gong calls transcript --help` exits 0 without project/credentials.
-- [ ] `gofmt -w cmd internal`
-- [ ] `go vet ./...`
-- [ ] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] Automated review covers final head with no unresolved actionable findings.
+- [x] Red CLI help/bare-namespace tests captured.
+- [x] Red upload approval/content-integrity test captured.
+- [x] Red multipart post-validation growth test captured.
+- [x] Red Gong zero-planned/transcript-executable test captured.
+- [x] Red typed POST minimum-example test captured and made green.
+- [x] `go test ./internal/cli -run 'Connector.*Help|DynamicConnectorHelp|GongTranscriptCommandAllowsDeclaredResponseCap|GitHubCommandSurfaceRunsDirectReadFile' -count=1`
+- [x] `go test ./internal/app -run 'PayloadIdentit|ConnectorCommandPlan' -count=1`
+- [x] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [x] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteMultipart' -count=1`
+- [x] `go test ./internal/connectors/commandrunner -run 'GongTypedPOST|OperationDirectRead' -count=1`
+- [x] `go test ./cmd/connectorgen -run Gong -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 547 connectors, 0 findings.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+- [x] `./pm help gong` exits 0.
+- [x] `./pm gong` exits 0 and renders contextual help.
+- [x] `./pm gong --help` exits 0.
+- [x] `./pm gong calls transcript --help` exits 0 without project/credentials.
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test -timeout 20m ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify` for the Gong implementation commit; rerun after the security-gate commit.
+- [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — no vulnerabilities after upgrading existing `x/text` to v0.39.0. The local default Go 1.26.4 toolchain itself reports GO-2026-5856 and must be upgraded outside this module; CI/project toolchain Go 1.25.12 is not affected.
+- [x] `go mod verify`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` after the dependency upgrade.
+- [x] Targeted race checks: multipart/engine, payload identity, CLI help/transcript.
+- [x] Public OpenAPI 3.0.1 re-fetch confirmed 57 paths and the ten POST request schemas; every non-deprecated local schema leaf has a typed CLI flag. Deprecated `pointsOfInterest` remains intentionally unavailable.
+- [ ] Local Codex review covers final head with no unresolved actionable findings.
 - [ ] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
+
+Review route: local Codex only per user direction. CodeRabbit, Claude, and Copilot review requests are intentionally skipped.
