@@ -35,6 +35,7 @@ export interface ProductionChildPipelineContext {
 	child: ProductionChildSpec;
 	runtime: ProductionChildRuntimeState;
 	runId: string;
+	resourceGeneration: number;
 	generation: number;
 	timeoutMs: number;
 	signal: AbortSignal;
@@ -166,6 +167,7 @@ function mergeCheckpoint(
 		...next,
 		...(effectKeys.length === 0 ? {} : { effectKeys }),
 		...(next.workspace === undefined && previous?.workspace !== undefined ? { workspace: previous.workspace } : {}),
+		...(next.verification === undefined && previous?.verification !== undefined ? { verification: previous.verification } : {}),
 		...(next.pullRequest === undefined && previous?.pullRequest !== undefined ? { pullRequest: previous.pullRequest } : {}),
 		...(next.review === undefined && previous?.review !== undefined ? { review: previous.review } : {}),
 		...(next.integrationReceiptDigest === undefined && previous?.integrationReceiptDigest !== undefined
@@ -177,6 +179,14 @@ function mergeCheckpoint(
 function lifecycleError(value: unknown): ProductionLifecycleError {
 	if (value instanceof ProductionLifecycleError) return value;
 	return new ProductionLifecycleError("terminal", "production child adapter failed closed", ["adapter_failed"]);
+}
+
+function correctionFindings(runtime: ProductionChildRuntimeState): string[] {
+	const review = runtime.checkpoint?.review?.findings.map((finding) => finding.summary) ?? [];
+	if (review.length > 0) return review;
+	return runtime.checkpoint?.verification?.commands
+		.filter((command) => command.status === "failed")
+		.map((command) => `Verification ${command.id} failed (${command.failureKind ?? "unknown"}).`) ?? [];
 }
 
 export class ProductionShepherdController {
@@ -386,6 +396,7 @@ export class ProductionShepherdController {
 			child: structuredClone(child),
 			runtime: structuredClone(runtime),
 			runId,
+			resourceGeneration: state.resourceGeneration,
 			generation,
 			timeoutMs: state.timeoutMs,
 			signal,
@@ -508,7 +519,15 @@ export class ProductionShepherdController {
 					stage = "verification";
 				}
 				if (stage === "verification") {
-					await this.#stage(plan, childId, runId, generation, signal, "verification", (context) => this.#pipeline.verify(context));
+					const verified = await this.#stage(
+						plan, childId, runId, generation, signal, "verification", (context) => this.#pipeline.verify(context),
+					);
+					if (verified.verification === undefined) {
+						throw new ProductionLifecycleError("terminal", "verification stage lacks durable result evidence", ["verification_evidence_missing"]);
+					}
+					if (verified.verification.status === "failed") {
+						throw new ProductionLifecycleError("correction_required", "bounded verification requires correction", ["verification_failed"]);
+					}
 					stage = "publication";
 				}
 				if (stage === "publication") {
@@ -524,12 +543,13 @@ export class ProductionShepherdController {
 				}
 				if (stage === "correction") {
 					const current = this.#context(plan, childId, runId, generation, signal).runtime;
-					const findings = current.checkpoint?.review?.findings.map((finding) => finding.summary) ?? [];
+					const findings = correctionFindings(current);
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
 					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
 						child.checkpoint = mergeCheckpoint(child.checkpoint, corrected);
+						delete child.checkpoint.verification;
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});
@@ -582,12 +602,13 @@ export class ProductionShepherdController {
 						child.corrections += 1;
 						child.stage = "correction";
 					});
-					const findings = current.checkpoint?.review?.findings.map((finding) => finding.summary) ?? [];
+					const findings = correctionFindings(current);
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
 					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
 						child.checkpoint = mergeCheckpoint(child.checkpoint, corrected);
+						delete child.checkpoint.verification;
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});

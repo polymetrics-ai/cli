@@ -156,23 +156,21 @@ test("rejects stale head, unauthorized broker shape, and ambiguous authoritative
 	await assert.rejects(new ProductionHumanParentMergeGate(broker, new Lookup()).observe(request(), context()), /binding|generation|marker/i);
 });
 
-test("builds a fail-closed exact-head child intervention request only for exhausted budgets", () => {
+test("builds an issue-bound child intervention that also works before PR publication", () => {
 	const built = buildProductionChildInterventionDecisionRequest({
 		requestId: "child-a-retry-3",
 		repository: "acme/widgets",
 		childIssue: 42,
-		pullRequest: 43,
 		generation: 3,
-		headSha: HEAD,
 		reason: "retry_budget_exhausted",
 		actorAllowlist: ["maintainer"],
 		expiresAt: "2026-07-23T00:00:00.000Z",
 		question: "Authorize exactly one additional attempt?",
 	});
-	assert.equal(built.gate, "review");
+	assert.equal(built.gate, "scope");
 	assert.equal(built.parentIssue, 42);
-	assert.equal(built.pullRequest, 43);
-	assert.equal(built.headSha, HEAD);
+	assert.equal(built.pullRequest, 42);
+	assert.equal(built.headSha, undefined);
 	assert.deepEqual(built.allowedOptions, ["authorize-one-retry", "abort-child"]);
 	assert.throws(() => buildProductionChildInterventionDecisionRequest({
 		...({} as Parameters<typeof buildProductionChildInterventionDecisionRequest>[0]),

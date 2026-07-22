@@ -140,6 +140,7 @@ test("renders durable production scheduler, budget, and exact parent-gate status
 		parentBranch: "feat/parent",
 		parentBaseBranch: "main",
 		runId: "run-production",
+		resourceGeneration: 1,
 		generation: 2,
 		revision: 9,
 		maxConcurrency: 2,

@@ -158,6 +158,7 @@ function checkpointMerge(
 		...next,
 		...(effectKeys.length === 0 ? {} : { effectKeys }),
 		...(next.workspace === undefined && previous?.workspace !== undefined ? { workspace: previous.workspace } : {}),
+		...(next.verification === undefined && previous?.verification !== undefined ? { verification: previous.verification } : {}),
 		...(next.pullRequest === undefined && previous?.pullRequest !== undefined ? { pullRequest: previous.pullRequest } : {}),
 		...(next.review === undefined && previous?.review !== undefined ? { review: previous.review } : {}),
 	};
@@ -170,6 +171,7 @@ function contextFor(state: ProductionAutonomousState, value = plan()): Productio
 		child: structuredClone(value.children[0]),
 		runtime: structuredClone(state.children[0]),
 		runId: state.runId,
+		resourceGeneration: state.resourceGeneration,
 		generation: state.generation,
 		timeoutMs: state.timeoutMs,
 		signal: new AbortController().signal,
@@ -281,9 +283,13 @@ function integrationReceipt(
 class FakeWorkspaceSession implements ProductionWorkspaceSession {
 	#binding = binding();
 	#dirty = true;
+	#verificationFailures: number;
 	readonly calls: string[];
 
-	constructor(calls: string[]) { this.calls = calls; }
+	constructor(calls: string[], verificationFailures = 0) {
+		this.calls = calls;
+		this.#verificationFailures = verificationFailures;
+	}
 
 	get binding(): ProductionWorkspaceBinding { return structuredClone(this.#binding); }
 
@@ -322,16 +328,20 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 
 	async verify() {
 		this.calls.push("verify");
+		const failed = this.#verificationFailures > 0;
+		if (failed) this.#verificationFailures -= 1;
 		return [{
 			id: "tests",
 			executable: "node",
 			args: ["--test", "owned/child.test.ts"],
 			cwd: ".",
-			status: "passed" as const,
-			exitCode: 0,
+			status: failed ? "failed" as const : "passed" as const,
+			exitCode: failed ? 1 : 0,
+			signal: null,
 			durationMs: 1,
 			stdout: "ok",
 			stderr: "",
+			...(failed ? { failureKind: "exit" as const } : {}),
 			outputTruncated: false,
 		}];
 	}
@@ -392,6 +402,7 @@ interface HarnessOptions {
 	pullRequest?: Partial<GitHubPullRequestEvidence>;
 	integration?: ChildIntegrationDecision;
 	publicationTimeoutOnce?: boolean;
+	verificationFailures?: number;
 }
 
 async function harness(t: { after(fn: () => void | Promise<void>): void }, options: HarnessOptions = {}) {
@@ -399,7 +410,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const effects = new ProductionEffectJournal(root);
 	const calls: string[] = [];
-	const session = new FakeWorkspaceSession(calls);
+	const session = new FakeWorkspaceSession(calls, options.verificationFailures);
 	const lifecycle: ProductionWorkspaceLifecyclePort = {
 		async claim() { calls.push("workspace"); return session; },
 		async abort(runId) { calls.push(`abort:${runId}`); },
@@ -463,12 +474,14 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 			decisions.set(request.requestId, "pending");
 			const record = createHumanDecisionRecord({
 				requestId: request.requestId,
-				gate: "review",
+				gate: request.gate,
 				binding: {
 					repository: request.repository,
-					target: { kind: "pull_request", number: request.pullRequest },
+					target: request.gate === "scope"
+						? { kind: "issue", number: request.parentIssue }
+						: { kind: "pull_request", number: request.pullRequest },
 					generation: request.generation,
-					headSha: request.headSha,
+					...(request.headSha === undefined ? {} : { headSha: request.headSha }),
 				},
 				actorAllowlist: [...request.actorAllowlist],
 				expiresAt: request.expiresAt,
@@ -484,20 +497,21 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 			const base = decisionRecords.get(requestId);
 			if (base === undefined || JSON.stringify(base.binding) !== JSON.stringify(binding)) throw new Error("missing decision record");
 			if (status === "pending") return structuredClone(base);
+			const targetPath = binding.target.kind === "issue" ? "issues" : "pull";
 			return {
 				...base,
 				status: "decided" as const,
 				updatedAt: new Date(Date.now() - 250).toISOString(),
 				requestComment: {
 					id: 1,
-					url: "https://github.com/owner/repo/pull/77#issuecomment-1",
+					url: `https://github.com/owner/repo/${targetPath}/${binding.target.number}#issuecomment-1`,
 					actor: "shepherd-bot",
 					createdAt: new Date(Date.now() - 750).toISOString(),
 				},
 				decision: {
 					option: status === "authorized" ? "authorize-one-retry" : "abort-child",
 					actor: "maintainer",
-					sourceUrl: "https://github.com/owner/repo/pull/77#issuecomment-2",
+					sourceUrl: `https://github.com/owner/repo/${targetPath}/${binding.target.number}#issuecomment-2`,
 					decidedAt: new Date(Date.now() - 500).toISOString(),
 				},
 			};
@@ -508,12 +522,13 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 			if (status !== "authorized" && status !== "aborted") throw new Error("decision is not consumable");
 			const base = decisionRecords.get(requestId);
 			if (base === undefined || JSON.stringify(base.binding) !== JSON.stringify(binding)) throw new Error("missing decision record");
+			const targetPath = binding.target.kind === "issue" ? "issues" : "pull";
 			return {
 				...base,
 				status: "consumed",
 				requestComment: {
 					id: 1,
-					url: "https://github.com/owner/repo/pull/77#issuecomment-1",
+					url: `https://github.com/owner/repo/${targetPath}/${binding.target.number}#issuecomment-1`,
 					actor: "shepherd-bot",
 					createdAt: new Date(Date.now() - 750).toISOString(),
 				},
@@ -522,7 +537,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 				decision: {
 					option: status === "authorized" ? "authorize-one-retry" : "abort-child",
 					actor: "maintainer",
-					sourceUrl: "https://github.com/owner/repo/pull/77#issuecomment-2",
+					sourceUrl: `https://github.com/owner/repo/${targetPath}/${binding.target.number}#issuecomment-2`,
 					decidedAt: new Date(Date.now() - 500).toISOString(),
 				},
 			};
@@ -630,6 +645,44 @@ test("composes every child stage into exact durable checkpoints and never merges
 	assert.deepEqual(h.calls.slice(-3), ["join", "workspace-close", "github-stop"]);
 });
 
+test("corrects an exact failed verification before any pull request is published", async (t) => {
+	const h = await harness(t, { verificationFailures: 1 });
+	for (const stage of ["workspace", "implement"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	const failed = await h.pipeline.verify(contextFor(h.state));
+	assert.equal(failed.verification?.status, "failed");
+	assert.deepEqual(failed.verification?.commands, [{ id: "tests", status: "failed", failureKind: "exit" }]);
+	await persistAndAcknowledge(h.pipeline, h.state, failed);
+	h.state.children[0].corrections = 1;
+	const corrected = await h.pipeline.correct(contextFor(h.state), ["Verification tests failed (exit)."]);
+	await persistAndAcknowledge(h.pipeline, h.state, corrected);
+	delete h.state.children[0].checkpoint?.verification;
+	assert.equal(h.calls.includes("pull-request"), false);
+	const passed = await h.pipeline.verify(contextFor(h.state));
+	assert.equal(passed.verification?.status, "passed");
+	await persistAndAcknowledge(h.pipeline, h.state, passed);
+	await h.pipeline.close();
+});
+
+test("requests an issue-bound retry decision when a pre-PR correction budget is exhausted", async (t) => {
+	const h = await harness(t, { verificationFailures: 1 });
+	for (const stage of ["workspace", "implement", "verify"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	const request = await h.pipeline.requestIntervention(contextFor(h.state), "correction_budget_exhausted");
+	assert.equal(request.pullRequest, undefined);
+	assert.equal(request.head, undefined);
+	h.state.childGate = {
+		childId: "child", repository: "owner/repo", issue: 501, generation: 1,
+		requestId: request.requestId, reason: "correction_budget_exhausted", status: "pending",
+	};
+	await h.pipeline.acknowledge(request.effectKey!, structuredClone(h.state));
+	await h.pipeline.close();
+});
+
 test("records findings, correction dispositions, parent refresh, and exact child intervention consumption", async (t) => {
 	const finding = { id: "BLOCK-1", severity: "blocking" as const, summary: "Fix the exact bug" };
 	const h = await harness(t, { findings: [finding] });
@@ -651,15 +704,13 @@ test("records findings, correction dispositions, parent refresh, and exact child
 	await persistAndAcknowledge(h.pipeline, h.state, refreshed);
 
 	const request = await h.pipeline.requestIntervention(contextFor(h.state), "correction_budget_exhausted");
-	assert.equal(request.pullRequest, 77);
-	assert.equal(request.head, SHA_D);
+	assert.equal(request.pullRequest, undefined);
+	assert.equal(request.head, undefined);
 	h.state.childGate = {
 		childId: "child",
 		repository: "owner/repo",
 		issue: 501,
-		pullRequest: request.pullRequest,
 		generation: 1,
-		head: request.head,
 		requestId: request.requestId,
 		reason: "correction_budget_exhausted",
 		status: "pending",

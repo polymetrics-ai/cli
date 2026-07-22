@@ -82,6 +82,16 @@ function checkpoint(summary: string, extra: Partial<ProductionStageCheckpoint> =
 	return { summary, ...extra };
 }
 
+function passedVerification(summary = "verified"): ProductionStageCheckpoint {
+	return checkpoint(summary, {
+		verification: {
+			status: "passed",
+			resultDigest: "9".repeat(64),
+			commands: [{ id: "tests", status: "passed" }],
+		},
+	});
+}
+
 function command(action: "start" | "resume") {
 	return { action, issue: 479, backend: "sdk-inproc" as const, maxConcurrency: 2, timeoutMs: 30_000 };
 }
@@ -102,7 +112,7 @@ function greenPipeline(overrides: Partial<ProductionChildPipelinePort> = {}): Pr
 			return checkpoint("workspace", { workspace: binding(context.child) });
 		},
 		async implement(context) { calls.push(`implement:${context.child.id}`); return checkpoint("implemented"); },
-		async verify(context) { calls.push(`verify:${context.child.id}`); return checkpoint("verified"); },
+		async verify(context) { calls.push(`verify:${context.child.id}`); return passedVerification(); },
 		async publish(context) { calls.push(`publish:${context.child.id}`); return checkpoint("published", { pullRequest: context.child.issue + 1000 }); },
 		async review(context) {
 			calls.push(`review:${context.child.id}`);
@@ -239,6 +249,41 @@ test("correction and stale-parent refresh both force verification and a fresh ex
 	assert.equal(state.children[0].checkpoint?.review?.status, "clean");
 });
 
+test("failed pre-publication verification runs one bounded correction before publish", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-pre-pr-correction-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const manifest = plan([spec("alpha", 501, [], "owned/alpha")]);
+	let verificationRuns = 0;
+	const pipeline = greenPipeline({
+		async verify(context) {
+			pipeline.calls.push(`verify:${context.child.id}`);
+			verificationRuns += 1;
+			return checkpoint(verificationRuns === 1 ? "verification failed" : "verification passed", {
+				verification: verificationRuns === 1 ? {
+					status: "failed", resultDigest: "8".repeat(64),
+					commands: [{ id: "tests", status: "failed", failureKind: "exit" }],
+				} : {
+					status: "passed", resultDigest: "9".repeat(64), commands: [{ id: "tests", status: "passed" }],
+				},
+			});
+		},
+	});
+	const controller = new ProductionShepherdController({
+		stateStore: new ProductionFileStateStore(root),
+		intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { return { pullRequest: 438, head: HEAD_C, summary: "ready" }; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return { status: "pending" as const }; }, async close() {} },
+		newRunId: () => "run-pre-pr-correction",
+	});
+	const state = await controller.start(command("start"));
+	assert.equal(state.status, "waiting_human");
+	assert.deepEqual(pipeline.calls.filter((entry) => /^(?:verify|correct|publish):alpha$/.test(entry)), [
+		"verify:alpha", "correct:alpha", "verify:alpha", "publish:alpha",
+	]);
+});
+
 test("exhausted retries wait for an exact child decision and authorized resume continues the failed stage once", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "shepherd-production-retry-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
@@ -252,7 +297,7 @@ test("exhausted retries wait for an exact child decision and authorized resume c
 			pipeline.calls.push(`verify:${context.child.id}`);
 			verificationRuns += 1;
 			if (verificationRuns === 1) throw new ProductionLifecycleError("retryable", "transient verification");
-			return checkpoint("verified");
+			return passedVerification();
 		},
 		async observeIntervention() { return { status: "authorized" }; },
 	});
@@ -277,6 +322,7 @@ test("exhausted retries wait for an exact child decision and authorized resume c
 	assert.equal(resumed.status, "waiting_human");
 	assert.equal(resumed.humanGate?.requestId, "merge");
 	assert.equal(resumed.generation, 2);
+	assert.equal(resumed.resourceGeneration, 1, "resume must retain exact PR/review/integration resource identity");
 	assert.equal(resumed.children[0].attempts, 2);
 	assert.equal(resumed.children[0].authorizedAttempts, 1);
 	assert.equal(pipeline.calls.filter((entry) => entry === "workspace:alpha").length, 1);
@@ -449,6 +495,9 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 		async verify(context) {
 			pipeline.calls.push(`verify:${context.child.id}`);
 			return checkpoint("verified exact head", {
+				verification: {
+					status: "passed", resultDigest: "9".repeat(64), commands: [{ id: "tests", status: "passed" }],
+				},
 				effectKey: "verification-effect",
 				effectKeys: ["verification-log-effect"],
 			});

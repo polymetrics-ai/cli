@@ -152,6 +152,8 @@ export interface ProductionAutonomousState {
 	parentBranch: string;
 	parentBaseBranch: string;
 	runId: string;
+	/** Immutable identity epoch for GitHub issues, PRs, reviews, and integration receipts. */
+	resourceGeneration: number;
 	generation: number;
 	revision: number;
 	maxConcurrency: number;
@@ -301,11 +303,43 @@ function validateReview(value: unknown): NonNullable<ProductionStageCheckpoint["
 	};
 }
 
+function validateVerification(value: unknown): NonNullable<ProductionStageCheckpoint["verification"]> {
+	const candidate = exact(value, ["status", "resultDigest", "commands"], [], "production verification checkpoint");
+	if (candidate.status !== "passed" && candidate.status !== "failed") {
+		throw new Error("invalid production verification status");
+	}
+	const commands = denseArray(candidate.commands, "production verification commands").map((value) => {
+		const command = exact(value, ["id", "status"], ["failureKind"], "production verification command");
+		if (command.status !== "passed" && command.status !== "failed") throw new Error("invalid verification command status");
+		const failureKinds = ["spawn", "exit", "timeout", "output_limit", "aborted"];
+		if ((command.status === "passed" && command.failureKind !== undefined)
+			|| (command.status === "failed" && !failureKinds.includes(command.failureKind as string))) {
+			throw new Error("verification command failure evidence is invalid");
+		}
+		return {
+			id: safeText(command.id, "verification command ID", 128),
+			status: command.status as "passed" | "failed",
+			...(command.failureKind === undefined ? {} : {
+				failureKind: command.failureKind as "spawn" | "exit" | "timeout" | "output_limit" | "aborted",
+			}),
+		};
+	});
+	if ((candidate.status === "passed" && commands.some((command) => command.status !== "passed"))
+		|| (candidate.status === "failed" && commands.every((command) => command.status === "passed"))) {
+		throw new Error("verification checkpoint status conflicts with its command evidence");
+	}
+	return {
+		status: candidate.status,
+		resultDigest: digest(candidate.resultDigest, "verification result digest"),
+		commands,
+	};
+}
+
 function validateCheckpoint(value: unknown): ProductionStageCheckpoint {
 	const candidate = exact(
 		value,
 		["summary"],
-		["effectKey", "effectKeys", "workspace", "pullRequest", "review", "integrationReceiptDigest", "parentHead"],
+		["effectKey", "effectKeys", "workspace", "verification", "pullRequest", "review", "integrationReceiptDigest", "parentHead"],
 		"production stage checkpoint",
 	);
 	return {
@@ -313,6 +347,7 @@ function validateCheckpoint(value: unknown): ProductionStageCheckpoint {
 		...(candidate.effectKey === undefined ? {} : { effectKey: safeText(candidate.effectKey, "checkpoint effect key", 256) }),
 		...(candidate.effectKeys === undefined ? {} : { effectKeys: stringArray(candidate.effectKeys, "checkpoint effect keys") }),
 		...(candidate.workspace === undefined ? {} : { workspace: validateWorkspace(candidate.workspace) }),
+		...(candidate.verification === undefined ? {} : { verification: validateVerification(candidate.verification) }),
 		...(candidate.pullRequest === undefined ? {} : { pullRequest: positive(candidate.pullRequest, "checkpoint pull request") }),
 		...(candidate.review === undefined ? {} : { review: validateReview(candidate.review) }),
 		...(candidate.integrationReceiptDigest === undefined ? {} : {
@@ -520,7 +555,7 @@ function validateChildGate(value: unknown): ProductionChildHumanGate {
 export function validateProductionAutonomousState(value: unknown): ProductionAutonomousState {
 	const candidate = exact(value, [
 		"schemaVersion", "kind", "parentIssue", "repository", "planId", "planDigest", "parentBranch",
-		"parentBaseBranch", "runId", "generation", "revision", "maxConcurrency", "timeoutMs", "status", "stage",
+		"parentBaseBranch", "runId", "resourceGeneration", "generation", "revision", "maxConcurrency", "timeoutMs", "status", "stage",
 		"createdAt", "updatedAt", "children",
 	], ["idleReason", "terminalBlocker", "humanGate", "childGate"]);
 	if (candidate.schemaVersion !== 1 || candidate.kind !== "production_autonomous") throw new Error("unsupported production state schema");
@@ -569,6 +604,7 @@ export function validateProductionAutonomousState(value: unknown): ProductionAut
 		parentBranch: safeText(candidate.parentBranch, "parent branch", 256),
 		parentBaseBranch: safeText(candidate.parentBaseBranch, "parent base branch", 256),
 		runId: safeText(candidate.runId, "run ID", 256),
+		resourceGeneration: positive(candidate.resourceGeneration, "resource generation"),
 		generation: positive(candidate.generation, "state generation"),
 		revision: positive(candidate.revision, "state revision"),
 		maxConcurrency: positive(candidate.maxConcurrency, "maximum concurrency"),
@@ -607,6 +643,7 @@ export function createProductionAutonomousState(
 		parentBranch: plan.parentBranch,
 		parentBaseBranch: plan.parentBaseBranch,
 		runId: safeText(options.runId, "run ID", 256),
+		resourceGeneration: 1,
 		generation: 1,
 		revision: 1,
 		maxConcurrency: positive(options.maxConcurrency ?? 1, "maximum concurrency"),
@@ -665,6 +702,7 @@ function immutableBinding(state: ProductionAutonomousState) {
 		planDigest: state.planDigest,
 		parentBranch: state.parentBranch,
 		parentBaseBranch: state.parentBaseBranch,
+		resourceGeneration: state.resourceGeneration,
 		createdAt: state.createdAt,
 		maxConcurrency: state.maxConcurrency,
 		timeoutMs: state.timeoutMs,

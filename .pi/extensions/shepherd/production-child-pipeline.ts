@@ -194,9 +194,11 @@ function laneKey(runId: string, generation: number, childId: string): string {
 
 function validateContext(context: ProductionChildPipelineContext): void {
 	if (typeof context !== "object" || context === null || !SAFE_ID.test(context.runId)
+		|| !Number.isSafeInteger(context.resourceGeneration) || context.resourceGeneration < 1
 		|| !Number.isSafeInteger(context.generation) || context.generation < 1
 		|| !Number.isSafeInteger(context.timeoutMs) || context.timeoutMs < 1
 		|| context.state.runId !== context.runId || context.state.generation !== context.generation
+		|| context.state.resourceGeneration !== context.resourceGeneration
 		|| context.runtime.id !== context.child.id || context.child.access !== "mutating") {
 		throw new ProductionLifecycleError("terminal", "production child context is invalid", ["context_invalid"]);
 	}
@@ -256,14 +258,20 @@ function reviewTargetMatches(artifact: ProductionReviewArtifact, target: Indepen
 
 function interventionBinding(state: ProductionAutonomousState): HumanDecisionBinding {
 	const gate = state.childGate;
-	if (gate?.pullRequest === undefined || gate.head === undefined || !SHA.test(gate.head)) {
-		throw new ProductionLifecycleError("terminal", "child intervention lacks exact PR/head binding", ["intervention_binding_missing"]);
+	if (gate === undefined) {
+		throw new ProductionLifecycleError("terminal", "child intervention gate is absent", ["intervention_binding_missing"]);
+	}
+	if ((gate.pullRequest === undefined) !== (gate.head === undefined)
+		|| (gate.head !== undefined && !SHA.test(gate.head))) {
+		throw new ProductionLifecycleError("terminal", "child intervention binding is malformed", ["intervention_binding_missing"]);
 	}
 	return {
 		repository: gate.repository,
-		target: { kind: "pull_request", number: gate.pullRequest },
+		target: gate.pullRequest === undefined
+			? { kind: "issue", number: gate.issue }
+			: { kind: "pull_request", number: gate.pullRequest },
 		generation: gate.generation,
-		headSha: gate.head,
+		...(gate.head === undefined ? {} : { headSha: gate.head }),
 	};
 }
 
@@ -274,7 +282,7 @@ function validateInterventionRecord(
 ): HumanDecisionRecord {
 	const record = validateHumanDecisionRecord(value);
 	assertHumanDecisionBinding(record, binding);
-	if (record.requestId !== requestId || record.gate !== "review"
+	if (record.requestId !== requestId || record.gate !== "scope"
 		|| record.allowedOptions.length !== 2
 		|| record.allowedOptions[0] !== "authorize-one-retry"
 		|| record.allowedOptions[1] !== "abort-child") {
@@ -502,11 +510,11 @@ export class ProductionChildPipeline implements
 	}
 
 	async #plan(context: ProductionChildPipelineContext): Promise<ParentOrchestrationPlan> {
-		const key = `${context.state.planDigest}:${context.generation}`;
+		const key = `${context.state.planDigest}:${context.resourceGeneration}`;
 		let pending = this.#plans.get(key);
 		if (pending === undefined) {
 			pending = this.#github.createPlan(
-				productionOrchestrationObjective(context.plan, context.generation),
+				productionOrchestrationObjective(context.plan, context.resourceGeneration),
 				{ signal: context.signal, deadlineAt: new Date(Date.now() + context.timeoutMs).toISOString() },
 			);
 			this.#plans.set(key, pending);
@@ -568,13 +576,28 @@ export class ProductionChildPipeline implements
 			corrections: context.runtime.corrections,
 			commands: context.child.verification,
 		}, async () => entry.session.verify(context.signal));
-		if (effect.value.length !== context.child.verification.length
-			|| effect.value.some((result, index) => result.id !== context.child.verification[index]?.id || result.status !== "passed")) {
-			throw new ProductionLifecycleError("correction_required", "bounded verification did not pass every planned command", ["verification_failed"]);
+		if (effect.value.length < 1 || effect.value.length > context.child.verification.length
+			|| effect.value.some((result, index) => result.id !== context.child.verification[index]?.id)
+			|| effect.value.some((result) => result.status === "failed" && result.failureKind === undefined)) {
+			throw new ProductionLifecycleError("terminal", "bounded verification returned malformed command evidence", ["verification_evidence_invalid"]);
 		}
+		const commands = effect.value.map((result) => ({
+			id: result.id,
+			status: result.status,
+			...(result.failureKind === undefined ? {} : { failureKind: result.failureKind }),
+		}));
+		const passed = commands.length === context.child.verification.length
+			&& commands.every((command) => command.status === "passed");
 		return this.#checkpoint(context, effect, {
-			summary: "all bounded production verification commands passed",
+			summary: passed
+				? "all bounded production verification commands passed"
+				: "bounded production verification failed and requires correction",
 			workspace: entry.session.binding,
+			verification: {
+				status: passed ? "passed" : "failed",
+				resultDigest: digest(commands),
+				commands,
+			},
 		});
 	}
 
@@ -602,7 +625,7 @@ export class ProductionChildPipeline implements
 		const publication = await this.#effect(context, "child_pull_request", {
 			repository: context.plan.repository,
 			childId: context.child.id,
-			generation: context.generation,
+			generation: context.resourceGeneration,
 			branch: handoff.branch,
 			baseBranch: handoff.prBase,
 			baseHead: handoff.baseHead,
@@ -621,7 +644,7 @@ export class ProductionChildPipeline implements
 		});
 		const evidence = validateGitHubPullRequestEvidence(publication.value);
 		if (evidence.repository !== context.plan.repository || evidence.workItemId !== context.child.id
-			|| evidence.generation !== context.generation || evidence.state !== "open" || evidence.draft
+			|| evidence.generation !== context.resourceGeneration || evidence.state !== "open" || evidence.draft
 			|| evidence.baseBranch !== handoff.prBase || evidence.headBranch !== handoff.branch
 			|| evidence.baseSha !== handoff.baseHead || evidence.headSha !== handoff.head
 			|| !sameStrings(evidence.changedPaths, [...handoff.changedScope].sort())
@@ -647,7 +670,7 @@ export class ProductionChildPipeline implements
 			repository: context.plan.repository,
 			workItemId: context.child.id,
 			pullRequest: pullRequest as number,
-			generation: context.generation,
+			generation: context.resourceGeneration,
 			baseBranch: handoff.prBase,
 			headBranch: handoff.branch,
 			baseSha: handoff.baseHead,
@@ -691,26 +714,45 @@ export class ProductionChildPipeline implements
 		findings: readonly string[],
 	): Promise<ProductionStageCheckpoint> {
 		const entry = await this.#session(context);
-		const handoff = await entry.session.captureHandoff(context.signal);
-		const target = this.#target(context, handoff);
-		const checkpoint = context.runtime.checkpoint?.review;
-		if (checkpoint === undefined || checkpoint.status !== "blocked" || checkpoint.head !== target.headSha
-			|| !Array.isArray(findings) || findings.length === 0
-			|| !sameStrings(findings, checkpoint.findings.map((finding) => finding.summary))) {
-			throw new ProductionLifecycleError("terminal", "correction is not bound to authoritative review findings", ["correction_mismatch"]);
+		if (!Array.isArray(findings) || findings.length === 0) {
+			throw new ProductionLifecycleError("terminal", "correction requires exact durable findings", ["correction_mismatch"]);
 		}
-		const lookup = await this.#reviewRepository.find(target, externalContext(context.signal, context.timeoutMs));
-		if (!lookup.complete) throw new ProductionLifecycleError("terminal", "review repository lookup is incomplete", ["review_incomplete"]);
-		const matches = lookup.items.filter((artifact) => reviewTargetMatches(artifact, target)
-			&& independentReviewResultDigest(artifact.review) === checkpoint.resultDigest);
-		if (matches.length !== 1) {
-			throw new ProductionLifecycleError("terminal", "exact review artifact is absent or ambiguous", ["review_ambiguous"]);
+		const reviewCheckpoint = context.runtime.checkpoint?.review;
+		const verificationCheckpoint = context.runtime.checkpoint?.verification;
+		let target: IndependentReviewTarget | undefined;
+		let artifact: ProductionReviewArtifact | undefined;
+		let source: { kind: "review" | "verification"; resultDigest: string };
+		if (reviewCheckpoint?.status === "blocked") {
+			const handoff = await entry.session.captureHandoff(context.signal);
+			target = this.#target(context, handoff);
+			if (reviewCheckpoint.head !== target.headSha
+				|| !sameStrings(findings, reviewCheckpoint.findings.map((finding) => finding.summary))) {
+				throw new ProductionLifecycleError("terminal", "correction is not bound to authoritative review findings", ["correction_mismatch"]);
+			}
+			const lookup = await this.#reviewRepository.find(target, externalContext(context.signal, context.timeoutMs));
+			if (!lookup.complete) throw new ProductionLifecycleError("terminal", "review repository lookup is incomplete", ["review_incomplete"]);
+			const matches = lookup.items.filter((candidate) => reviewTargetMatches(candidate, target!)
+				&& independentReviewResultDigest(candidate.review) === reviewCheckpoint.resultDigest);
+			if (matches.length !== 1) {
+				throw new ProductionLifecycleError("terminal", "exact review artifact is absent or ambiguous", ["review_ambiguous"]);
+			}
+			artifact = matches[0];
+			source = { kind: "review", resultDigest: independentReviewResultDigest(artifact.review) };
+		} else if (verificationCheckpoint?.status === "failed") {
+			const expected = verificationCheckpoint.commands
+				.filter((command) => command.status === "failed")
+				.map((command) => `Verification ${command.id} failed (${command.failureKind ?? "unknown"}).`);
+			if (!sameStrings(findings, expected)) {
+				throw new ProductionLifecycleError("terminal", "correction is not bound to failed verification evidence", ["correction_mismatch"]);
+			}
+			source = { kind: "verification", resultDigest: verificationCheckpoint.resultDigest };
+		} else {
+			throw new ProductionLifecycleError("terminal", "correction has no exact review or verification authority", ["correction_authority_missing"]);
 		}
-		const artifact = matches[0];
 		const effect = await this.#effect(context, "agent_correction", {
-			target,
-			resultDigest: checkpoint.resultDigest,
-			findings: checkpoint.findings,
+			source,
+			...(target === undefined ? {} : { target }),
+			findings,
 			correction: context.runtime.corrections,
 		}, async () => {
 			const handoffResult = await entry.session.correct({
@@ -718,6 +760,7 @@ export class ProductionChildPipeline implements
 				signal: context.signal,
 				findings: [...findings],
 			});
+			if (target === undefined || artifact === undefined) return { handoff: handoffResult };
 			const recordedAt = this.#now().toISOString();
 			const disposition = await this.#reviewRepository.recordDispositions(target, artifact.review.findings.map((finding) => ({
 				findingId: finding.id,
@@ -732,7 +775,7 @@ export class ProductionChildPipeline implements
 		return this.#checkpoint(context, effect, {
 			summary: "bounded correction completed; verification and independent review invalidated",
 			workspace: entry.session.binding,
-			pullRequest: target.pullRequest,
+			...(target === undefined ? {} : { pullRequest: target.pullRequest }),
 		});
 	}
 
@@ -778,7 +821,7 @@ export class ProductionChildPipeline implements
 		const effect = await this.#effect(context, "child_integration", {
 			repository: context.plan.repository,
 			childId: context.child.id,
-			generation: context.generation,
+			generation: context.resourceGeneration,
 			pullRequest: context.runtime.checkpoint?.pullRequest,
 			baseHead: handoff.baseHead,
 			head: handoff.head,
@@ -797,7 +840,7 @@ export class ProductionChildPipeline implements
 		const decision: ChildIntegrationDecision = effect.value.decision;
 		if (decision.kind === "blocked") throw classifyIntegration(decision.blockers);
 		const receipt = validateChildIntegrationReceipt(decision.receipt);
-		if (receipt.childId !== context.child.id || receipt.generation !== context.generation
+		if (receipt.childId !== context.child.id || receipt.generation !== context.resourceGeneration
 			|| receipt.pullRequest !== context.runtime.checkpoint?.pullRequest
 			|| receipt.baseSha !== handoff.baseHead || receipt.headSha !== handoff.head
 			|| receipt.parentBranch !== context.plan.parentBranch) {
@@ -824,8 +867,8 @@ export class ProductionChildPipeline implements
 		validateContext(context);
 		const pullRequest = context.runtime.checkpoint?.pullRequest;
 		const head = context.runtime.checkpoint?.workspace?.head ?? context.runtime.ownership?.head;
-		if (!Number.isSafeInteger(pullRequest) || (pullRequest as number) < 1 || head === undefined || !SHA.test(head)) {
-			throw new ProductionLifecycleError("human_required", "child intervention requires an exact published PR/head", ["intervention_binding_missing"]);
+		if (head === undefined || !SHA.test(head)) {
+			throw new ProductionLifecycleError("human_required", "child intervention requires exact workspace ownership", ["intervention_binding_missing"]);
 		}
 		const requestId = `shepherd-${digest({
 			runId: context.runId,
@@ -839,9 +882,7 @@ export class ProductionChildPipeline implements
 			requestId,
 			repository: context.plan.repository,
 			childIssue: context.child.issue,
-			pullRequest: pullRequest as number,
 			generation: context.generation,
-			headSha: head,
 			reason,
 			actorAllowlist: context.plan.actorAllowlist,
 			expiresAt: context.plan.decisionExpiresAt,
@@ -849,9 +890,8 @@ export class ProductionChildPipeline implements
 		});
 		const binding: HumanDecisionBinding = {
 			repository: request.repository,
-			target: { kind: "pull_request", number: request.pullRequest },
+			target: { kind: "issue", number: context.child.issue },
 			generation: request.generation,
-			headSha: request.headSha,
 		};
 		const effect = await this.#effect(context, "human_request", request, async () =>
 			validateInterventionRecord(
@@ -866,10 +906,10 @@ export class ProductionChildPipeline implements
 			resultDigest: effect.resultDigest,
 			accepts: (state) => state.childGate?.childId === context.child.id
 				&& state.childGate.requestId === requestId && state.childGate.reason === reason
-				&& state.childGate.pullRequest === pullRequest && state.childGate.head === head
+				&& state.childGate.pullRequest === undefined && state.childGate.head === undefined
 				&& state.childGate.status === "pending",
 		});
-		return { requestId, pullRequest: pullRequest as number, head, effectKey: effect.key };
+		return { requestId, effectKey: effect.key };
 	}
 
 	async observeIntervention(

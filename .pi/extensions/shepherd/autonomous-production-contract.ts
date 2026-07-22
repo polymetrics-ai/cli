@@ -107,12 +107,24 @@ export interface ProductionReviewCheckpoint {
 	findings: Array<{ id: string; summary: string; disposition?: string }>;
 }
 
+export interface ProductionVerificationCheckpoint {
+	status: "passed" | "failed";
+	/** Stable digest excludes command output and nondeterministic duration. */
+	resultDigest: string;
+	commands: Array<{
+		id: string;
+		status: "passed" | "failed";
+		failureKind?: "spawn" | "exit" | "timeout" | "output_limit" | "aborted";
+	}>;
+}
+
 export interface ProductionStageCheckpoint {
 	summary: string;
 	effectKey?: string;
 	/** Every independently journaled effect represented by this stage result (for example commit, push, and PR). */
 	effectKeys?: string[];
 	workspace?: ProductionWorkspaceBinding;
+	verification?: ProductionVerificationCheckpoint;
 	pullRequest?: number;
 	review?: ProductionReviewCheckpoint;
 	integrationReceiptDigest?: string;

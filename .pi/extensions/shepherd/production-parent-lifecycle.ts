@@ -253,7 +253,7 @@ function assertExactParentCoordinates(
 	expected?: Pick<GitHubPullRequestEvidence, "number" | "baseSha" | "headSha">,
 ): void {
 	if (pullRequest.repository !== plan.repository || pullRequest.workItemId !== `parent-${plan.parentIssue}`
-		|| pullRequest.generation !== state.generation || pullRequest.marker !== marker
+		|| pullRequest.generation !== state.resourceGeneration || pullRequest.marker !== marker
 		|| pullRequest.baseBranch !== plan.parentBaseBranch || pullRequest.headBranch !== plan.parentBranch
 		|| pullRequest.state !== "open" || !sameStrings(pullRequest.allowedScopes, aggregateScopes(plan))) {
 		throw new Error("authoritative parent pull request does not match the exact repository, generation, branch, or scope binding");
@@ -351,7 +351,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 		return canonicalPolicySet(await this.#policies.findRequiredCheckPolicies({
 			repository: plan.repository,
 			parentIssue: plan.parentIssue,
-			generation: state.generation,
+			generation: state.resourceGeneration,
 			parentBranch: plan.parentBranch,
 			parentBaseBranch: plan.parentBaseBranch,
 		}, context), plan);
@@ -408,7 +408,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 			}
 			if (lookup.items.length !== 1) throw new Error(`authoritative integration receipt is absent or ambiguous for ${child.id}`);
 			const receipt = validateChildIntegrationReceipt(lookup.items[0]);
-			if (receipt.childId !== child.id || receipt.generation !== state.generation
+			if (receipt.childId !== child.id || receipt.generation !== state.resourceGeneration
 				|| receipt.marker !== child.markers.pullRequest || receipt.parentBranch !== plan.parentBranch
 				|| receipt.pullRequest !== runtime.checkpoint!.pullRequest
 				|| receipt.controllerProvenance.planDigest !== orchestration.canonical.digest
@@ -416,7 +416,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 				|| receipt.pullRequestSnapshot.repository !== plan.repository
 				|| receipt.pullRequestSnapshot.workItemId !== child.id
 				|| receipt.pullRequestSnapshot.number !== receipt.pullRequest
-				|| receipt.pullRequestSnapshot.generation !== state.generation
+				|| receipt.pullRequestSnapshot.generation !== state.resourceGeneration
 				|| receipt.pullRequestSnapshot.marker !== child.markers.pullRequest
 				|| receipt.pullRequestSnapshot.baseBranch !== plan.parentBranch
 				|| receipt.pullRequestSnapshot.baseSha !== receipt.baseSha
@@ -458,7 +458,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 			}
 		}
 		const initialPolicies = await this.#policiesFor(plan, state, context);
-		const orchestration = createProductionOrchestrationPlan(plan, state.generation, initialPolicies);
+		const orchestration = createProductionOrchestrationPlan(plan, state.resourceGeneration, initialPolicies);
 		const first = await this.#singleParent(plan.repository, orchestration.markers.parentPullRequest, context);
 		assertExactParentCoordinates(first, plan, state, orchestration.markers.parentPullRequest);
 		await this.#exactReceipts(plan, state, orchestration, first, initialPolicies, context);
@@ -467,7 +467,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 			repository: plan.repository,
 			workItemId: `parent-${plan.parentIssue}`,
 			pullRequest: first.number,
-			generation: state.generation,
+			generation: state.resourceGeneration,
 			baseBranch: plan.parentBaseBranch,
 			headBranch: plan.parentBranch,
 			baseSha: first.baseSha,
@@ -479,7 +479,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 		}
 		const paths = validateGitHubChangedPathEvidence(pathLookup.items[0]);
 		if (paths.repository !== plan.repository || paths.workItemId !== targetWithoutPaths.workItemId
-			|| paths.pullRequest !== first.number || paths.generation !== state.generation
+			|| paths.pullRequest !== first.number || paths.generation !== state.resourceGeneration
 			|| paths.baseSha !== first.baseSha || paths.headSha !== first.headSha
 			|| !sameStrings(paths.paths, first.changedPaths)) {
 			throw new Error("authoritative parent changed-path evidence moved from the exact parent head");
@@ -516,7 +516,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 		const expected = {
 			repository: plan.repository,
 			workItemId: `parent-${plan.parentIssue}`,
-			generation: state.generation,
+			generation: state.resourceGeneration,
 			number: first.number,
 			marker: orchestration.markers.parentPullRequest,
 			baseBranch: plan.parentBaseBranch,
@@ -543,7 +543,7 @@ export class ProductionParentFinalizer implements ProductionParentFinalizerPort 
 				repository: plan.repository,
 				parentIssue: plan.parentIssue,
 				pullRequest: second.number,
-				generation: state.generation,
+				generation: state.resourceGeneration,
 				branch: plan.parentBranch,
 				headSha: second.headSha,
 				expectedRevision: second.revision,

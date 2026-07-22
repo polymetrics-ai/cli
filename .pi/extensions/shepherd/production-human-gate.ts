@@ -34,9 +34,7 @@ export interface ProductionChildInterventionRequest {
 	requestId: string;
 	repository: string;
 	childIssue: number;
-	pullRequest: number;
 	generation: number;
-	headSha: string;
 	reason: "retry_budget_exhausted" | "correction_budget_exhausted";
 	actorAllowlist: string[];
 	expiresAt: string;
@@ -136,8 +134,8 @@ function decisionRequest(value: ProductionParentMergeRequest): GitHubDecisionReq
 export function buildProductionChildInterventionDecisionRequest(
 	value: ProductionChildInterventionRequest,
 ): GitHubDecisionRequest {
-	if (!REPOSITORY.test(value.repository) || !SHA.test(value.headSha)) {
-		throw new Error("invalid child intervention repository or exact head");
+	if (!REPOSITORY.test(value.repository)) {
+		throw new Error("invalid child intervention repository");
 	}
 	if (value.reason !== "retry_budget_exhausted" && value.reason !== "correction_budget_exhausted") {
 		throw new Error("child intervention is restricted to exhausted durable budgets");
@@ -148,12 +146,12 @@ export function buildProductionChildInterventionDecisionRequest(
 	}
 	return {
 		requestId: boundedText(value.requestId, "child intervention request ID", 128),
-		gate: "review",
+		gate: "scope",
 		repository: value.repository,
 		parentIssue: positiveInteger(value.childIssue, "child intervention issue"),
-		pullRequest: positiveInteger(value.pullRequest, "child intervention pull request"),
+		// The broker's issue-gate route ignores this legacy coordinate; keep it exact and non-fabricated.
+		pullRequest: positiveInteger(value.childIssue, "child intervention issue route"),
 		generation: positiveInteger(value.generation, "child intervention generation"),
-		headSha: value.headSha,
 		allowedOptions: ["authorize-one-retry", "abort-child"],
 		actorAllowlist: actors,
 		expiresAt: canonicalTimestamp(value.expiresAt, "child intervention expiry"),
