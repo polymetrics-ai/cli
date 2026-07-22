@@ -40,7 +40,10 @@ export interface ProductionChildPipelineContext {
 	signal: AbortSignal;
 }
 
-export type ProductionChildInterventionObservation = "pending" | "authorized" | "aborted";
+export interface ProductionChildInterventionObservation {
+	status: "pending" | "authorized" | "aborted";
+	effectKey?: string;
+}
 
 export interface ProductionChildPipelinePort {
 	workspace(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint>;
@@ -54,8 +57,10 @@ export interface ProductionChildPipelinePort {
 	requestIntervention(
 		context: ProductionChildPipelineContext,
 		reason: "retry_budget_exhausted" | "correction_budget_exhausted",
-	): Promise<{ requestId: string; pullRequest?: number; head?: string }>;
+	): Promise<{ requestId: string; pullRequest?: number; head?: string; effectKey?: string }>;
 	observeIntervention(state: ProductionAutonomousState, signal: AbortSignal): Promise<ProductionChildInterventionObservation>;
+	/** Marks an observed effect applied only after the supplied controller state is durably CAS-persisted. */
+	acknowledge(effectKey: string, state: ProductionAutonomousState): Promise<void>;
 	abort(runId: string): Promise<void>;
 	join(runId: string): Promise<void>;
 	close(): Promise<void>;
@@ -275,9 +280,9 @@ export class ProductionShepherdController {
 		if (state.humanGate) return this.#observeParentGate(snapshot.plan, state, signal);
 		if (state.childGate) {
 			const observation = await this.#pipeline.observeIntervention(state, signal);
-			if (observation === "pending") return state;
-			if (observation === "aborted") {
-				return this.#evolve(state.runId, state.generation, (draft) => {
+			if (observation.status === "pending") return state;
+			if (observation.status === "aborted") {
+				const persisted = await this.#evolve(state.runId, state.generation, (draft) => {
 					draft.childGate!.status = "aborted";
 					draft.status = "failed";
 					draft.stage = "blocked";
@@ -286,6 +291,8 @@ export class ProductionShepherdController {
 					child.status = "failed";
 					child.stage = "failed";
 				});
+				await this.#acknowledge(observation.effectKey, persisted);
+				return persisted;
 			}
 			const childId = state.childGate.childId;
 			const requestId = state.childGate.requestId;
@@ -295,6 +302,7 @@ export class ProductionShepherdController {
 					requestId,
 					now: this.#now(),
 				}));
+			await this.#acknowledge(observation.effectKey, state);
 		}
 		await this.#recovery.open({ runId: state.runId, generation: state.generation, signal });
 		if (command.maxConcurrency !== state.maxConcurrency || command.timeoutMs !== state.timeoutMs) {
@@ -487,13 +495,14 @@ export class ProductionShepherdController {
 					const current = this.#context(plan, childId, runId, generation, signal).runtime;
 					const findings = current.checkpoint?.review?.findings.map((finding) => finding.summary) ?? [];
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
-					await this.#evolve(runId, generation, (draft) => {
+					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
 						child.checkpoint = mergeCheckpoint(child.checkpoint, corrected);
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});
+					await this.#acknowledge(corrected.effectKey, persisted);
 					stage = "verification";
 				}
 				if (stage === "integration") {
@@ -521,7 +530,7 @@ export class ProductionShepherdController {
 					if (!before) throw new ProductionLifecycleError("terminal", "stale child has no durable ownership");
 					const refreshed = await this.#pipeline.refresh(this.#context(plan, childId, runId, generation, signal));
 					if (!refreshed.workspace || !refreshed.effectKey) throw new ProductionLifecycleError("terminal", "parent refresh lacks an exact receipt");
-					await this.#custom(runId, generation, (state, stateFence) => refreshProductionChildOwnership(state, stateFence, {
+					const persisted = await this.#custom(runId, generation, (state, stateFence) => refreshProductionChildOwnership(state, stateFence, {
 						childId,
 						outcome: refreshed.workspace!.claimId === before.claimId ? "rebased" : "reclaimed",
 						previousClaimId: before.claimId,
@@ -531,6 +540,7 @@ export class ProductionShepherdController {
 						summary: refreshed.summary,
 						now: this.#now(),
 					}));
+					await this.#acknowledge(refreshed.effectKey, persisted);
 					stage = "verification";
 					continue;
 				}
@@ -543,13 +553,14 @@ export class ProductionShepherdController {
 					});
 					const findings = current.checkpoint?.review?.findings.map((finding) => finding.summary) ?? [];
 					const corrected = await this.#pipeline.correct(this.#context(plan, childId, runId, generation, signal), findings);
-					await this.#evolve(runId, generation, (draft) => {
+					const persisted = await this.#evolve(runId, generation, (draft) => {
 						const child = draft.children.find((candidate) => candidate.id === childId)!;
 						child.stage = "verification";
 						child.checkpoint = mergeCheckpoint(child.checkpoint, corrected);
 						delete child.checkpoint.review;
 						delete child.checkpoint.integrationReceiptDigest;
 					});
+					await this.#acknowledge(corrected.effectKey, persisted);
 					stage = "verification";
 					continue;
 				}
@@ -586,11 +597,12 @@ export class ProductionShepherdController {
 		});
 		const result = await invoke(this.#context(plan, childId, runId, generation, signal));
 		if (signal.aborted) throw signal.reason ?? new Error("production stage cancelled");
-		await this.#evolve(runId, generation, (draft) => {
+		const persisted = await this.#evolve(runId, generation, (draft) => {
 			const child = draft.children.find((candidate) => candidate.id === childId)!;
 			child.checkpoint = mergeCheckpoint(child.checkpoint, result);
 			if (!child.ownership && result.workspace) child.ownership = result.workspace;
 		});
+		await this.#acknowledge(result.effectKey, persisted);
 		return result;
 	}
 
@@ -603,7 +615,7 @@ export class ProductionShepherdController {
 		reason: "retry_budget_exhausted" | "correction_budget_exhausted",
 	): Promise<"waiting"> {
 		const request = await this.#pipeline.requestIntervention(this.#context(plan, childId, runId, generation, signal), reason);
-		await this.#custom(runId, generation, (state, stateFence) => waitForProductionChildIntervention(state, stateFence, {
+		const persisted = await this.#custom(runId, generation, (state, stateFence) => waitForProductionChildIntervention(state, stateFence, {
 			childId,
 			requestId: request.requestId,
 			reason,
@@ -611,7 +623,12 @@ export class ProductionShepherdController {
 			...(request.head === undefined ? {} : { head: request.head }),
 			now: this.#now(),
 		}));
+		await this.#acknowledge(request.effectKey, persisted);
 		return "waiting";
+	}
+
+	async #acknowledge(effectKey: string | undefined, state: ProductionAutonomousState): Promise<void> {
+		if (effectKey !== undefined) await this.#pipeline.acknowledge(effectKey, structuredClone(state));
 	}
 
 	#evolve(

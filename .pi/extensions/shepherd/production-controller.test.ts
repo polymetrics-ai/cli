@@ -121,7 +121,8 @@ function greenPipeline(overrides: Partial<ProductionChildPipelinePort> = {}): Pr
 			calls.push(`intervention:${context.child.id}`);
 			return { requestId: `intervention-${context.child.id}`, pullRequest: context.child.issue + 1000, head: HEAD_B };
 		},
-		async observeIntervention() { return "pending"; },
+		async observeIntervention() { return { status: "pending" }; },
+		async acknowledge(effectKey) { calls.push(`ack:${effectKey}`); },
 		async abort(runId) { calls.push(`abort:${runId}`); },
 		async join(runId) { calls.push(`join:${runId}`); },
 		async close() { calls.push("close"); },
@@ -253,7 +254,7 @@ test("exhausted retries wait for an exact child decision and authorized resume c
 			if (verificationRuns === 1) throw new ProductionLifecycleError("retryable", "transient verification");
 			return checkpoint("verified");
 		},
-		async observeIntervention() { return "authorized"; },
+		async observeIntervention() { return { status: "authorized" }; },
 	});
 	const store = new ProductionFileStateStore(root);
 	let nextRun = 0;
@@ -428,4 +429,56 @@ test("resume rejects changed plan identity and run policy before recovery or mut
 		/resume concurrency\/timeout differs/i,
 	);
 	assert.equal(pipeline.calls.filter((entry) => entry.startsWith("workspace:")).length, 1);
+});
+
+test("effect acknowledgment happens only after the exact checkpoint is durably persisted", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-effect-ack-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const manifest = plan([spec("alpha", 501, [], "owned/alpha")]);
+	const store = new ProductionFileStateStore(root);
+	const acknowledgments: Array<{
+		effectKey: string;
+		stateRevision: number;
+		stateEffectKey?: string;
+		durableRevision?: number;
+		durableEffectKey?: string;
+	}> = [];
+	const pipeline = greenPipeline({
+		async verify(context) {
+			pipeline.calls.push(`verify:${context.child.id}`);
+			return checkpoint("verified exact head", { effectKey: "verification-effect" });
+		},
+		async acknowledge(effectKey, state) {
+			pipeline.calls.push(`ack:${effectKey}`);
+			const child = state.children.find((candidate) => candidate.id === "alpha");
+			const durable = await store.load(479);
+			acknowledgments.push({
+				effectKey,
+				stateRevision: state.revision,
+				...(child?.checkpoint?.effectKey === undefined ? {} : { stateEffectKey: child.checkpoint.effectKey }),
+				...(durable?.revision === undefined ? {} : { durableRevision: durable.revision }),
+				...(durable?.children[0].checkpoint?.effectKey === undefined
+					? {} : { durableEffectKey: durable.children[0].checkpoint.effectKey }),
+			});
+		},
+	});
+	const controller = new ProductionShepherdController({
+		stateStore: store,
+		intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return "pending" as const; }, async close() {} },
+		newRunId: () => "run-effect-ack",
+	});
+	const state = await controller.start(command("start"));
+	assert.equal(state.status, "waiting_human");
+	assert.equal(pipeline.calls.filter((entry) => entry === "ack:verification-effect").length, 1);
+	assert.deepEqual(acknowledgments, [{
+		effectKey: "verification-effect",
+		stateRevision: acknowledgments[0].stateRevision,
+		stateEffectKey: "verification-effect",
+		durableRevision: acknowledgments[0].stateRevision,
+		durableEffectKey: "verification-effect",
+	}]);
 });
