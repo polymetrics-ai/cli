@@ -94,20 +94,56 @@ an exact-head human decision before the parent merge. Implementation roles use
 `openai-codex/gpt-5.6-sol`/`high`; planning, research, verification, review, and orchestration roles
 use the same model/`xhigh`.
 
-Current branch status: the checked-in command is the hardened read-only control-plane foundation.
-It is not the intended release boundary and must not be treated as a complete Shepherd. Until child
-issues #473-#481 are integrated, only the existing read-only canary/status/stop behavior is safe to
-exercise. The autonomous start/resume command contract will be enabled by #479 after the policy,
-worker, Git, GitHub, and human-decision ports are integrated.
+Current branch status: #479 now provides the first bounded autonomous MVP. It schedules disjoint
+children at concurrency two, honors dependencies and write-scope collisions, runs implementation
+(`high`), verification/review (`xhigh`) as embedded Pi AgentSessions, persists schema-v2 status,
+joins stop, resumes unfinished children, and ends at a durable local parent-merge wait. The hardened
+schema-v1 read-only canary remains available separately.
 
-Target operator flow (not available until #479/#480 are complete):
+Operator flow:
 
 ~~~text
-/pm-shepherd start --issue 471 --backend sdk-inproc
+/pm-shepherd start --issue 471
 /pm-shepherd status --issue 471
 /pm-shepherd stop --issue 471
-/pm-shepherd resume --issue 471 --backend sdk-inproc
+/pm-shepherd resume --issue 471
+/pm-shepherd canary --issue 471 --pr 472 --read-only --backend sdk-inproc --experimental
 ~~~
+
+The MVP intake reads `.planning/shepherd/issue-<N>.json` from the current repository. Example:
+
+~~~json
+{
+  "schemaVersion": 1,
+  "parentIssue": 471,
+  "planId": "cli-shepherd-mvp-1",
+  "children": [
+    {
+      "id": "help",
+      "issue": 501,
+      "title": "Improve help",
+      "task": "Add the accepted contextual help behavior and its tests.",
+      "dependsOn": [],
+      "access": "mutating",
+      "writeScopes": ["cmd/help"]
+    },
+    {
+      "id": "tui",
+      "issue": 502,
+      "title": "Improve TUI",
+      "task": "Implement the accepted TUI slice and its tests.",
+      "dependsOn": [],
+      "access": "mutating",
+      "writeScopes": ["internal/tui"]
+    }
+  ]
+}
+~~~
+
+This first cut intentionally records an integration checkpoint and a local human wait; it does not
+yet publish GitHub issues/PRs, integrate child branches, post the human-gate comment, or observe the
+human merge. Those production adapters remain the next bounded slice. There is no parent-to-main
+merge capability in the controller.
 
 Mutating workers receive one issue, one branch, one isolated worktree, one declared write scope,
 and bounded workspace/host capabilities. Raw prompts, reasoning, credentials, and unrestricted tool

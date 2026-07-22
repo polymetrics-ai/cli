@@ -48,6 +48,7 @@ export interface AutonomousShepherdRunState {
 	status: AutonomousRunStatus;
 	stage: ParentLifecycleStage;
 	maxConcurrency: number;
+	timeoutMs: number;
 	createdAt: string;
 	updatedAt: string;
 	children: AutonomousChildState[];
@@ -74,6 +75,7 @@ export function validateAutonomousState(value: unknown): AutonomousShepherdRunSt
 	if (!Number.isSafeInteger(value.issue) || (value.issue as number) < 1
 		|| !Number.isSafeInteger(value.generation) || (value.generation as number) < 1
 		|| !Number.isSafeInteger(value.maxConcurrency) || (value.maxConcurrency as number) < 1
+		|| !Number.isSafeInteger(value.timeoutMs) || (value.timeoutMs as number) < 1
 		|| typeof value.planId !== "string" || typeof value.runId !== "string"
 		|| typeof value.createdAt !== "string" || typeof value.updatedAt !== "string"
 		|| !Array.isArray(value.children)) {

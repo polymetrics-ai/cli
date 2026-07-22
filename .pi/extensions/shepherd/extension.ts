@@ -1,4 +1,5 @@
 import { parseShepherdCommand, ShepherdArgumentError, type ShepherdCommand } from "./arguments.ts";
+import type { AutonomousShepherdRunState } from "./autonomous-state.ts";
 import type { ShepherdRunState } from "./domain.ts";
 import {
 	resolveCanonicalGitWorktree,
@@ -33,16 +34,29 @@ export type CanonicalWorktree = CanonicalGitWorktree;
 
 interface ExtensionDependencies {
 	resolveWorktree(context: ShepherdCommandContext, options: CanonicalGitWorktreeOptions): Promise<CanonicalWorktree>;
+	/** Hardened schema-v1 controller retained only for the explicit read-only canary. */
 	createController(context: ShepherdCommandContext, worktree: CanonicalWorktree): ShepherdControllerPort;
+	/** Autonomous schema-v2 controller. Optional only for compatibility with old extension harnesses. */
+	createAutonomousController?(context: ShepherdCommandContext, worktree: CanonicalWorktree): AutonomousShepherdControllerPort;
 }
 
 export interface ShepherdControllerPort {
 	status(issue: number): Promise<ShepherdRunState | undefined>;
-	start(command: Extract<ShepherdCommand, { action: "start" | "canary" }>): Promise<ShepherdRunState>;
-	resume(command: Extract<ShepherdCommand, { action: "resume" }>): Promise<ShepherdRunState>;
+	start(command: Extract<ShepherdCommand, { action: "canary" }>): Promise<ShepherdRunState>;
 	stop(issue: number): Promise<ShepherdRunState>;
 	shutdown(): Promise<void>;
 }
+
+export interface AutonomousShepherdControllerPort {
+	status(issue: number): Promise<AutonomousShepherdRunState | undefined>;
+	start(command: Extract<ShepherdCommand, { action: "start" }>): Promise<AutonomousShepherdRunState>;
+	resume(command: Extract<ShepherdCommand, { action: "resume" }>): Promise<AutonomousShepherdRunState>;
+	stop(issue: number): Promise<AutonomousShepherdRunState>;
+	shutdown(): Promise<void>;
+}
+
+type DisplayState = ShepherdRunState | AutonomousShepherdRunState;
+type ControllerEntry = ShepherdControllerPort | AutonomousShepherdControllerPort;
 
 interface LaunchSetup {
 	issue: number;
@@ -51,17 +65,17 @@ interface LaunchSetup {
 }
 
 const HELP = [
-	"Pi AgentSession Shepherd (experimental, interactive, read-only canary)",
+	"Pi AgentSession Shepherd (autonomous MVP plus explicit read-only canary)",
 	"",
 	"Commands:",
 	"  /pm-shepherd status --issue N",
 	"  /pm-shepherd canary --issue N --pr N --read-only --backend sdk-inproc --experimental",
-	"  /pm-shepherd start --issue N [--pr N] --read-only --backend sdk-inproc --experimental",
-	"  /pm-shepherd resume --issue N [--pr N] --read-only --backend sdk-inproc --experimental",
+	"  /pm-shepherd start --issue N [--pr N] [--backend sdk-inproc]",
+	"  /pm-shepherd resume --issue N [--pr N] [--backend sdk-inproc]",
 	"  /pm-shepherd stop --issue N",
 	"",
 	"Embedded sessions share this Pi process, memory, environment, and crash domain.",
-	"They stop if Pi exits; reopen Pi and use resume. No main merge or GitHub mutation is authorized.",
+	"They stop if Pi exits; reopen Pi and use resume. Parent-to-main merge remains human-owned.",
 ].join("\n");
 const SHUTDOWN_TIMEOUT_MS = 45_000;
 
@@ -84,8 +98,23 @@ export function canonicalizeGitWorktree(
 	return resolveCanonicalGitWorktree(cwd, options);
 }
 
-function renderState(state: ShepherdRunState | undefined): string {
+function isAutonomousState(state: DisplayState): state is AutonomousShepherdRunState {
+	return "kind" in state && state.kind === "autonomous";
+}
+
+function renderState(state: DisplayState | undefined): string {
 	if (!state) return "No persisted Shepherd run exists for this issue.";
+	if (isAutonomousState(state)) {
+		const lines = [
+			`Issue #${state.issue}${state.pr ? ` / PR #${state.pr}` : ""}`,
+			`run=${state.runId} generation=${state.generation} status=${state.status} stage=${state.stage}`,
+		];
+		for (const child of state.children) {
+			lines.push(`${child.id}: ${child.status}/${child.phase}${child.summary ? ` — ${child.summary}` : ""}`);
+		}
+		if (state.humanGate) lines.push(`human_gate=${state.humanGate.kind}:${state.humanGate.status}`);
+		return lines.join("\n");
+	}
 	const lines = [
 		`Issue #${state.issue}${state.pr ? ` / PR #${state.pr}` : ""}`,
 		`run=${state.runId} generation=${state.generation} status=${state.status}`,
@@ -111,22 +140,25 @@ export function registerShepherdExtension(
 	host: ShepherdExtensionHost,
 	dependencies: ExtensionDependencies,
 ): void {
-	const controllers = new Map<string, ShepherdControllerPort>();
-	let activeRun: { issue: number; promise: Promise<ShepherdRunState> } | undefined;
+	const controllers = new Map<string, ControllerEntry>();
+	let activeRun: { issue: number; promise: Promise<DisplayState> } | undefined;
 	let launchSetup: LaunchSetup | undefined;
 	let shuttingDown = false;
 
 	const controllerFor = async (
+		mode: "autonomous" | "canary",
 		issue: number,
 		context: ShepherdCommandContext,
 		options: CanonicalGitWorktreeOptions = {},
-	): Promise<ShepherdControllerPort> => {
+	): Promise<ControllerEntry> => {
 		const worktree = await dependencies.resolveWorktree(context, options);
-		const key = `${worktree.repositoryIdentity}\u0000${worktree.worktreeIdentity}\u0000${issue}`;
+		const key = `${mode}\u0000${worktree.repositoryIdentity}\u0000${worktree.worktreeIdentity}\u0000${issue}`;
 		const existing = controllers.get(key);
 		if (existing) return existing;
 		const canonicalContext = { ...context, cwd: worktree.cwd };
-		const controller = dependencies.createController(canonicalContext, worktree);
+		const controller = mode === "canary" || dependencies.createAutonomousController === undefined
+			? dependencies.createController(canonicalContext, worktree)
+			: dependencies.createAutonomousController(canonicalContext, worktree);
 		controllers.set(key, controller);
 		return controller;
 	};
@@ -151,9 +183,14 @@ export function registerShepherdExtension(
 		const abortController = new AbortController();
 		let ownedSetup: LaunchSetup;
 		const setupPromise = (async () => {
-			let controller: ShepherdControllerPort;
+			let controller: ControllerEntry;
 			try {
-				controller = await controllerFor(issue, context, { signal: abortController.signal });
+				controller = await controllerFor(
+					command.action === "canary" ? "canary" : "autonomous",
+					issue,
+					context,
+					{ signal: abortController.signal },
+				);
 			} catch (error) {
 				if (shuttingDown && abortController.signal.aborted) return;
 				throw error;
@@ -161,14 +198,15 @@ export function registerShepherdExtension(
 			if (shuttingDown || abortController.signal.aborted) return;
 			const statusKey = `pm-shepherd-${issue}`;
 			context.ui.setStatus(statusKey, `issue #${issue}: starting`);
-			const promise =
-				command.action === "resume"
-					? controller.resume(command)
-					: controller.start(command);
+			const promise: Promise<DisplayState> = command.action === "canary"
+				? (controller as ShepherdControllerPort).start(command)
+				: command.action === "resume"
+					? (controller as AutonomousShepherdControllerPort).resume(command)
+					: (controller as AutonomousShepherdControllerPort).start(command);
 			const ownedRun = { issue, promise };
 			activeRun = ownedRun;
 			context.ui.notify(
-				`Embedded read-only Shepherd started for issue #${issue}. Use /pm-shepherd status --issue ${issue}.`,
+				`${command.action === "canary" ? "Embedded read-only canary" : "Autonomous in-process Shepherd"} started for issue #${issue}. Use /pm-shepherd status --issue ${issue}.`,
 				"info",
 			);
 			void promise
@@ -195,7 +233,7 @@ export function registerShepherdExtension(
 	};
 
 	host.registerCommand("pm-shepherd", {
-		description: "Run the experimental in-process Pi AgentSession Shepherd",
+		description: "Run the in-process autonomous Shepherd or its read-only canary",
 		getArgumentCompletions: (prefix) =>
 			["help", "status", "canary", "start", "resume", "stop"]
 				.filter((candidate) => candidate.startsWith(prefix))
@@ -216,12 +254,12 @@ export function registerShepherdExtension(
 
 			const issue = commandIssue(command);
 			if (command.action === "status") {
-				const controller = await controllerFor(issue, context);
+				const controller = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
 				context.ui.notify(renderState(await controller.status(issue)), "info");
 				return;
 			}
 			if (command.action === "stop") {
-				const controller = await controllerFor(issue, context);
+				const controller = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
 				context.ui.notify(renderState(await controller.stop(issue)), "info");
 				return;
 			}

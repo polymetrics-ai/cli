@@ -125,11 +125,10 @@ test("start overlaps independent children, stop joins, resume continues dependen
 	assert.deepEqual(final.humanGate, { kind: "parent_merge", requestId: "merge-479", status: "pending" });
 	assert.equal(final.generation, 2);
 	assert.equal((await observer.status(479))?.humanGate?.requestId, "merge-479");
-	assert.deepEqual(effects, [
-		"verify:alpha", "review:alpha", "integrate:alpha",
-		"verify:beta", "review:beta", "integrate:beta",
-		"verify:gamma", "review:gamma", "integrate:gamma",
-		"request_human_gate",
-	]);
+	for (const id of ["alpha", "beta", "gamma"]) {
+		const childEffects = effects.filter((effect) => effect.endsWith(`:${id}`));
+		assert.deepEqual(childEffects, [`verify:${id}`, `review:${id}`, `integrate:${id}`]);
+	}
+	assert.equal(effects.at(-1), "request_human_gate");
 	assert.equal("mergeMain" in resumedController, false);
 });

@@ -26,9 +26,17 @@ export interface ShepherdStopCommand {
 	issue: number;
 }
 
-interface ShepherdRunCommandBase {
+interface ShepherdAutonomousRunCommandBase {
 	issue: number;
 	pr?: number;
+	backend: "sdk-inproc";
+	maxConcurrency: number;
+	timeoutMs: number;
+}
+
+interface ShepherdCanaryRunCommandBase {
+	issue: number;
+	pr: number;
 	readOnly: true;
 	backend: "sdk-inproc";
 	experimental: true;
@@ -36,17 +44,16 @@ interface ShepherdRunCommandBase {
 	timeoutMs: number;
 }
 
-export interface ShepherdStartCommand extends ShepherdRunCommandBase {
+export interface ShepherdStartCommand extends ShepherdAutonomousRunCommandBase {
 	action: "start";
 }
 
-export interface ShepherdResumeCommand extends ShepherdRunCommandBase {
+export interface ShepherdResumeCommand extends ShepherdAutonomousRunCommandBase {
 	action: "resume";
 }
 
-export interface ShepherdCanaryCommand extends ShepherdRunCommandBase {
+export interface ShepherdCanaryCommand extends ShepherdCanaryRunCommandBase {
 	action: "canary";
-	pr: number;
 }
 
 export type ShepherdCommand =
@@ -117,10 +124,40 @@ function optionalPR(flags: ParsedFlags): number | undefined {
 	return raw === undefined ? undefined : positiveInteger(raw, "--pr", MAX_GITHUB_NUMBER);
 }
 
-function parseRunCommand(
-	action: "start" | "resume" | "canary",
+function concurrencyAndTimeout(flags: ParsedFlags): { maxConcurrency: number; timeoutMs: number } {
+	const concurrencyRaw = flags.get("--max-concurrency");
+	const maxConcurrency = concurrencyRaw === undefined
+		? DEFAULT_MAX_CONCURRENCY
+		: positiveInteger(concurrencyRaw, "--max-concurrency", DEFAULT_MAX_CONCURRENCY);
+	const timeoutRaw = flags.get("--timeout-seconds");
+	const timeoutSeconds = timeoutRaw === undefined
+		? DEFAULT_TIMEOUT_SECONDS
+		: positiveInteger(timeoutRaw, "--timeout-seconds", MAX_TIMEOUT_SECONDS);
+	if (timeoutSeconds < MIN_TIMEOUT_SECONDS) {
+		fail(`--timeout-seconds must be between ${MIN_TIMEOUT_SECONDS} and ${MAX_TIMEOUT_SECONDS}`);
+	}
+	return { maxConcurrency, timeoutMs: timeoutSeconds * 1_000 };
+}
+
+function parseAutonomousCommand(
+	action: "start" | "resume",
 	flags: ParsedFlags,
-): ShepherdStartCommand | ShepherdResumeCommand | ShepherdCanaryCommand {
+): ShepherdStartCommand | ShepherdResumeCommand {
+	rejectUnexpected(flags, new Set(["--issue", "--pr", "--backend", "--max-concurrency", "--timeout-seconds"]));
+	const backend = flags.get("--backend");
+	if (backend !== undefined && backend !== "sdk-inproc") fail(`${action} supports only --backend sdk-inproc`);
+	const issue = requiredIssue(flags);
+	const pr = optionalPR(flags);
+	return {
+		action,
+		issue,
+		...(pr === undefined ? {} : { pr }),
+		backend: "sdk-inproc",
+		...concurrencyAndTimeout(flags),
+	};
+}
+
+function parseCanaryCommand(flags: ParsedFlags): ShepherdCanaryCommand {
 	rejectUnexpected(
 		flags,
 		new Set([
@@ -136,35 +173,19 @@ function parseRunCommand(
 
 	const issue = requiredIssue(flags);
 	const pr = optionalPR(flags);
-	if (action === "canary" && pr === undefined) fail("canary requires --pr");
-	if (flags.get("--read-only") !== true) fail(`${action} requires --read-only`);
-	if (flags.get("--experimental") !== true) fail(`${action} requires --experimental`);
-	if (flags.get("--backend") !== "sdk-inproc") fail(`${action} requires --backend sdk-inproc`);
-
-	const concurrencyRaw = flags.get("--max-concurrency");
-	const maxConcurrency = concurrencyRaw === undefined
-		? DEFAULT_MAX_CONCURRENCY
-		: positiveInteger(concurrencyRaw, "--max-concurrency", DEFAULT_MAX_CONCURRENCY);
-	const timeoutRaw = flags.get("--timeout-seconds");
-	const timeoutSeconds = timeoutRaw === undefined
-		? DEFAULT_TIMEOUT_SECONDS
-		: positiveInteger(timeoutRaw, "--timeout-seconds", MAX_TIMEOUT_SECONDS);
-	if (timeoutSeconds < MIN_TIMEOUT_SECONDS) {
-		fail(`--timeout-seconds must be between ${MIN_TIMEOUT_SECONDS} and ${MAX_TIMEOUT_SECONDS}`);
-	}
-
-	const common = {
+	if (pr === undefined) fail("canary requires --pr");
+	if (flags.get("--read-only") !== true) fail("canary requires --read-only");
+	if (flags.get("--experimental") !== true) fail("canary requires --experimental");
+	if (flags.get("--backend") !== "sdk-inproc") fail("canary requires --backend sdk-inproc");
+	return {
+		action: "canary",
 		issue,
-		...(pr === undefined ? {} : { pr }),
+		pr,
 		readOnly: true as const,
 		backend: "sdk-inproc" as const,
 		experimental: true as const,
-		maxConcurrency,
-		timeoutMs: timeoutSeconds * 1_000,
+		...concurrencyAndTimeout(flags),
 	};
-	if (action === "canary") return { action, ...common, pr: pr as number };
-	if (action === "resume") return { action, ...common };
-	return { action, ...common };
 }
 
 export function parseShepherdCommand(input: string): ShepherdCommand {
@@ -190,8 +211,9 @@ export function parseShepherdCommand(input: string): ShepherdCommand {
 			return { action, issue: requiredIssue(flags) };
 		case "start":
 		case "resume":
+			return parseAutonomousCommand(action, flags);
 		case "canary":
-			return parseRunCommand(action, flags);
+			return parseCanaryCommand(flags);
 		default:
 			return fail(`unknown action ${JSON.stringify(action)}`);
 	}
