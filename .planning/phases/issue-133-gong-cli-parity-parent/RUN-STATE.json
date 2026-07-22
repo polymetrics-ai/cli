@@ -1,0 +1,119 @@
+{
+  "phase": "issue-133-gong-cli-parity-parent",
+  "parent_issue": 133,
+  "branch": "feat/133-gong-cli-parity",
+  "status": "running",
+  "gsd": {
+    "doctor": "pass",
+    "verify_pi": "pass",
+    "list_json": "pass",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 133 --skip-research --tdd",
+    "programming_loop_prompt": "failed: scripts/gsd unknown GSD command: programming-loop",
+    "fallback": "manual GSD via .pi/prompts/pm-orchestrate.md, .pi/prompts/pm-gsd-loop.md, and gsd-universal-runtime-loop.md"
+  },
+  "verificationPassed": false,
+  "verificationStatus": "All implementation gates and CI passed at 798af7f7, and PR #232 is non-draft with closing keywords. This artifact-only state update creates a newer PR head, so terminal human-gate status is deferred until GitHub confirms that tip's required checks.",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "This Pi API session does not expose the subagent tool; mutating workers cannot be spawned into isolated worktrees from this session. Proceeding with issue #144 as local_critical_path.",
+      "issue_numbers": [
+        144
+      ]
+    },
+    {
+      "cycle": "execute-issue-144",
+      "decision": "local_critical_path",
+      "reason": "Gong operation ledger red/green slice completed inline; remaining subissues still dependency-blocked on parent coordination and later lanes.",
+      "issue_numbers": [
+        144
+      ]
+    },
+    {
+      "cycle": "post-issue-144-ready-queue",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Remaining ready lanes #141/#143/#145/#146 require either subagent isolation or sequential local critical path; current Pi API session has no subagent tool.",
+      "issue_numbers": [
+        141,
+        143,
+        145,
+        146
+      ]
+    },
+    {
+      "cycle": "2026-07-22-completion-plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "The current Pi harness does not expose the subagent tool; pm-gsd-worker, pm-scout, and pm-reviewer cannot be dispatched from this session.",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ]
+    },
+    {
+      "cycle": "2026-07-22-completion-local-critical-path",
+      "decision": "local_critical_path",
+      "reason": "CLI dispatch, engine upload safety, Gong operation metadata, generated docs, and shared parent artifacts overlap; execute sequential TDD slices in the parent checkout.",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ]
+    },
+    {
+      "cycle": "2026-07-22-parallel-finalization",
+      "decision": "parallel_read_test_lanes_local_critical_path_writes",
+      "reason": "No subagent tool is exposed. CLI, upload, definition/OpenAPI, race-test, docs, CI, and local Codex read-only lanes ran concurrently; production edits were serialized by disjoint file ownership.",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ]
+    },
+    {
+      "cycle": "2026-07-22-final-artifact-head-verification",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "Implementation review and CI are complete; orchestration remains running only to confirm required checks on the artifact-only final PR head before the human merge gate.",
+      "issue_numbers": [
+        133
+      ]
+    }
+  ],
+  "parentPR": "https://github.com/polymetrics-ai/cli/pull/232",
+  "activeSubissue": "parent-finalization",
+  "updated_at": "2026-07-22T13:29:30Z",
+  "integrated_issues": [
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    252,
+    253,
+    254
+  ],
+  "verification_latest": [
+    "go test ./internal/connectors/connsdk -run Multipart -count=1",
+    "go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1",
+    "go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1",
+    "go test ./internal/app -run PayloadIdentities -count=1",
+    "go test ./cmd/connectorgen -run 'Operation|Gong' -count=1",
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
+    "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs"
+  ],
+  "broader_gates": [
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "go test -timeout 20m ./...",
+    "make verify",
+    "go run ./cmd/pm connectors inspect gong --json"
+  ],
+  "engine_shape_summary": "Complete: dynamic help, all ten remaining typed POST reads including transcript, operation-specific response caps, SHA-256 approval propagation, snapshot-before-network multipart verification, stream-time byte enforcement, generated docs, and schema-valid examples."
+}

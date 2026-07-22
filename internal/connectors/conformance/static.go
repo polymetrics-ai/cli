@@ -347,8 +347,9 @@ func checkSurfaceComplete(b engine.Bundle) error {
 				if !directReads[directRead] {
 					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read %q is not an implemented direct_read command", i, ep.Method, ep.Path, directRead)
 				}
-				if !strings.EqualFold(ep.Method, "GET") {
-					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET", i, ep.Method, ep.Path)
+				method := strings.ToUpper(strings.TrimSpace(ep.Method))
+				if method != "GET" && method != "POST" {
+					return fmt.Errorf("endpoint %d (%s %s) covered_by.direct_read must use GET or POST", i, ep.Method, ep.Path)
 				}
 			}
 			if strings.EqualFold(ep.Method, "GET") {

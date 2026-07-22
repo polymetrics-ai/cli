@@ -1,0 +1,139 @@
+# Verification — Gong CLI Parity Parent (#133)
+
+## Preflight
+
+| Command | Result |
+|---|---|
+| `scripts/gsd doctor` | pass |
+| `scripts/gsd verify-pi` | pass |
+| `scripts/gsd list --json` | pass |
+| `scripts/gsd prompt plan-phase 133 --skip-research --tdd` | pass |
+| `scripts/gsd prompt programming-loop init --phase issue-133-gong-cli-parity --dry-run` | fail: adapter lacks `programming-loop`; manual-GSD fallback recorded |
+
+## Required local gates before parent handoff
+
+```bash
+gofmt -w cmd internal
+go vet ./...
+go test ./...
+go build ./cmd/pm
+make verify
+go run ./cmd/connectorgen validate internal/connectors/defs
+```
+
+## #144 targeted gates
+
+```bash
+go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1
+go run ./cmd/connectorgen validate internal/connectors/defs
+go test ./cmd/connectorgen -count=1
+go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1
+```
+
+Result: pass for all four commands on 2026-07-09.
+
+## Full gate attempt
+
+| Command | Result |
+|---|---|
+| `gofmt -w cmd internal` | pass |
+| `go vet ./...` | pass |
+| `go test ./...` | fail: `internal/connectors/certify` exceeded the default 10m package timeout in existing certify tests |
+| `go test -timeout 20m ./...` | pass |
+| `go build ./cmd/pm` | pass |
+| `make verify` | pass |
+| `go run ./cmd/connectorgen validate internal/connectors/defs` | pass (also included in `make verify`) |
+
+## CLI help/docs/website parity checklist
+
+Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector metadata/docs only unless CLI-rendered metadata changes.
+
+- [x] `pm help gong` and `pm help gong --json` checked.
+- [x] Bare and passive-flag namespace behavior checked; invalid/action-only flag forms return usage errors.
+- [x] `pm gong --help` and `pm gong calls transcript --help` checked.
+- [x] `docs/cli/**` exemption: connector manuals are generated from connector definitions; no static command page changed.
+- [x] Gong website connector data updated and validated.
+- [x] Gong `MANUAL.md`, `SKILL.md`, and website generated artifacts updated.
+
+## Safety verification
+
+- No secrets used.
+- No credentialed Gong requests used.
+- No reverse ETL execution.
+- No destructive/admin external actions.
+- No new dependencies.
+
+
+## 2026-07-10 integrated lane verification
+
+- [x] `go test ./internal/connectors/engine -run DirectRead -count=1`
+- [x] `go test ./internal/connectors/commandrunner -count=1`
+- [x] `go test ./cmd/connectorgen -run Gong -count=1`
+- [x] `go test ./cmd/connectorgen -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+
+## 2026-07-10 broader gates
+
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `go test -timeout 20m ./...`
+- [x] `make verify`
+- [x] `./pm help connectors`
+- [x] `./pm connectors inspect gong`
+- [x] `./pm connectors inspect gong --json`
+
+## Engine-shape issues #252/#253/#254 gates
+
+- [x] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [x] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1`
+- [x] `go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1`
+- [x] `go test ./internal/app -run PayloadIdentities -count=1`
+- [x] `go test ./cmd/connectorgen -run 'Operation|Gong' -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+- [x] `go test -timeout 20m ./...`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+
+## 2026-07-22 completion-cycle verification checklist
+
+- [x] Red CLI help/bare-namespace tests captured.
+- [x] Red upload approval/content-integrity test captured.
+- [x] Red multipart post-validation growth test captured.
+- [x] Red Gong zero-planned/transcript-executable test captured.
+- [x] Red typed POST minimum-example test captured and made green.
+- [x] `go test ./internal/cli -run 'Connector.*Help|DynamicConnectorHelp|GongTranscriptCommandAllowsDeclaredResponseCap|GitHubCommandSurfaceRunsDirectReadFile' -count=1`
+- [x] `go test ./internal/app -run 'PayloadIdentit|ConnectorCommandPlan' -count=1`
+- [x] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [x] `go test ./internal/connectors/engine -run 'OperationDirectRead|WriteMultipart' -count=1`
+- [x] `go test ./internal/connectors/commandrunner -run 'GongTypedPOST|OperationDirectRead' -count=1`
+- [x] `go test ./cmd/connectorgen -run Gong -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` — 547 connectors, 0 findings.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [x] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+- [x] `./pm help gong` exits 0.
+- [x] `./pm gong` exits 0 and renders contextual help.
+- [x] `./pm gong --help` exits 0.
+- [x] `./pm gong calls transcript --help` exits 0 without project/credentials.
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
+- [x] `go test -timeout 20m ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify` after the Gong implementation, security-gate upgrade, and local-review fixes.
+- [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — no vulnerabilities after upgrading existing `x/text` to v0.39.0. The local default Go 1.26.4 toolchain itself reports GO-2026-5856 and must be upgraded outside this module; CI/project toolchain Go 1.25.12 is not affected.
+- [x] `go mod verify`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` after the dependency upgrade.
+- [x] Targeted race checks: multipart/engine, payload identity, CLI help/transcript.
+- [x] Public OpenAPI 3.0.1 re-fetch confirmed 57 paths and the ten POST request schemas; every non-deprecated local schema leaf has a typed CLI flag. Deprecated `pointsOfInterest` remains intentionally unavailable.
+- [x] Local Codex review covers the final implementation head with no unresolved actionable findings.
+- [x] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
+- [x] Final implementation-head `make verify` passed at `798af7f7`.
+- [x] Implementation-head CI passed at `798af7f7`: verify, govulncheck, CodeQL, dependency review, website checks/image, Snyk, GSD evidence, branch/title, and linked-issue checks.
+- [ ] Confirm the same required checks on the final artifact-only PR head before terminal human-gate handoff.
+
+Local Codex reviewed the feature and each fix commit. Actionable findings were reproduced, fixed, and covered by focused tests: operation response caps, help tokens used as flag values, approval-token metadata, JSON dynamic help, passive/unknown/action-only namespace flags, false-y preview semantics, and empty/bare/repeated lifecycle values. Final review of implementation commit `798af7f7` reported no actionable regressions.
+
+Review route: local Codex only per user direction. CodeRabbit, Claude, and Copilot review requests were intentionally skipped.

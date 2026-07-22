@@ -17,8 +17,10 @@
           "method": { "type": "string" },
           "path": { "type": "string" },
           "path_fields": { "type": "array", "items": { "type": "string" } },
-          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql"] },
+          "body_type": { "type": "string", "enum": ["json", "form", "none", "graphql", "json_array", "multipart"] },
           "body_fields": { "type": "array", "items": { "type": "string" } },
+          "body_field": { "type": "string" },
+          "body_schema": { "type": "object" },
           "graphql": {
             "type": "object",
             "required": ["document", "operation_name"],
@@ -29,6 +31,30 @@
               "variables": {
                 "type": "object",
                 "additionalProperties": true
+              }
+            }
+          },
+          "multipart": {
+            "type": "object",
+            "required": ["parts"],
+            "additionalProperties": false,
+            "properties": {
+              "max_bytes": { "type": "integer" },
+              "parts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "type", "field"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "name": { "type": "string" },
+                    "type": { "type": "string", "enum": ["field", "file"] },
+                    "field": { "type": "string" },
+                    "content_type": { "type": "string" },
+                    "required": { "type": "boolean" },
+                    "max_bytes": { "type": "integer" }
+                  }
+                }
               }
             }
           },

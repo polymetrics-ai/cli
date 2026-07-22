@@ -1,0 +1,86 @@
+{
+  "issue": 146,
+  "parent_issue": 133,
+  "phase": "issue-146-gong-advanced-query-binary-engine",
+  "status": "green_local_integrated",
+  "planning_status": "implemented_via_subissues_252_253_254",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "gsd": {
+    "doctor": "passed",
+    "programming_loop": "manual_fallback_unavailable",
+    "prompt": "scripts/gsd prompt plan-phase 133 --skip-research"
+  },
+  "skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-testing",
+    "golang-documentation"
+  ],
+  "human_gates": [
+    "credentialed Gong checks",
+    "reverse ETL execution",
+    "destructive external actions",
+    "new dependencies",
+    "parent PR merge to main"
+  ],
+  "verification": [
+    "go test ./internal/connectors/connsdk -run Multipart -count=1",
+    "go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1",
+    "go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1",
+    "go test ./internal/app -run PayloadIdentities -count=1",
+    "go test ./cmd/connectorgen -run 'Operation|Gong' -count=1",
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
+    "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+    "go test -timeout 20m ./...",
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "make verify"
+  ],
+  "docs_parity": "Gong manual/skill and website generated catalog updated; pm docs validate and pm connectors inspect gong --json passed without credentials",
+  "engine_support_replan": {
+    "scope": "implemented_inline_manual_gsd_subissues_252_253_254",
+    "requested_shapes": [
+      "post_read_query_fixed_json_body",
+      "multipart_upload",
+      "top_level_array_request_body"
+    ],
+    "recommendation": "implemented with schema-gated typed operation/direct-read and write-action extensions; no raw generic body/upload command; local file uploads bind path hash plus size/mtime identity in reverse plans",
+    "human_gates": [
+      "credentialed Gong checks",
+      "reverse ETL execution",
+      "destructive external actions",
+      "new dependencies",
+      "parent PR merge to main"
+    ],
+    "planned_tests": [
+      "connsdk multipart fixture tests",
+      "engine operation direct-read tests",
+      "engine json_array write tests",
+      "engine multipart write tests",
+      "commandrunner operation/body mapping tests",
+      "connectorgen validator tests",
+      "Gong definition parity tests"
+    ],
+    "verification": [
+      "go test ./internal/connectors/connsdk -run Multipart -count=1",
+      "go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1",
+      "go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1",
+      "go test ./internal/app -run PayloadIdentities -count=1",
+      "go test ./cmd/connectorgen -run 'Operation|Gong' -count=1",
+      "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
+      "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "go test -timeout 20m ./...",
+      "go vet ./...",
+      "go build ./cmd/pm",
+      "make verify"
+    ]
+  }
+}

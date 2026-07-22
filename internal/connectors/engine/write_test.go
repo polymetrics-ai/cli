@@ -2,11 +2,14 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"os"
 	"strings"
 	"testing"
 
@@ -677,6 +680,162 @@ func TestWriteUnknownActionErrors(t *testing.T) {
 	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "does-not-exist"}, []connectors.Record{{}}, nil)
 	if err == nil {
 		t.Fatalf("Write: want error for unknown action")
+	}
+}
+
+func TestWriteJSONArrayBodySendsTopLevelArray(t *testing.T) {
+	srv, cap := captureServer(t, http.StatusOK, `{"ok":true}`)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:      "upload_schema",
+		Kind:      "create",
+		Method:    http.MethodPost,
+		Path:      "/entity-schema",
+		BodyType:  "json_array",
+		BodyField: "selected_fields",
+		BodySchema: json.RawMessage(`{
+			"type": "array",
+			"items": {"type": "object", "required": ["name"], "properties": {"name": {"type": "string"}}, "additionalProperties": false}
+		}`),
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["selected_fields"],
+			"properties": {"selected_fields": {"type": "array", "items": {"type": "object"}}}
+		}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_schema"}, []connectors.Record{
+		{"selected_fields": []any{map[string]any{"name": "Account"}}},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if cap.contentType != "application/json" {
+		t.Fatalf("content-type = %q, want application/json", cap.contentType)
+	}
+	var got []map[string]any
+	if err := json.Unmarshal(cap.body, &got); err != nil {
+		t.Fatalf("body is not a top-level array: %s: %v", string(cap.body), err)
+	}
+	if len(got) != 1 || got[0]["name"] != "Account" {
+		t.Fatalf("body = %+v, want selected_fields root array", got)
+	}
+}
+
+func TestWriteJSONArrayBodySchemaMismatchFailsBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) { hits++ }))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:         "upload_schema",
+		Kind:         "create",
+		Method:       http.MethodPost,
+		Path:         "/entity-schema",
+		BodyType:     "json_array",
+		BodyField:    "selected_fields",
+		BodySchema:   json.RawMessage(`{"type":"array","items":{"type":"object","required":["name"],"properties":{"name":{"type":"string"}},"additionalProperties":false}}`),
+		RecordSchema: json.RawMessage(`{"type":"object","required":["selected_fields"],"properties":{"selected_fields":{"type":"array","items":{"type":"object"}}}}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_schema"}, []connectors.Record{
+		{"selected_fields": []any{map[string]any{"extra": "not allowed"}}},
+	}, nil)
+	if err == nil {
+		t.Fatalf("Write: want schema validation error")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0 before schema-valid body", hits)
+	}
+}
+
+func TestWriteMultipartBodySendsDeclaredParts(t *testing.T) {
+	dir := t.TempDir()
+	filePath := dir + "/media.txt"
+	if err := os.WriteFile(filePath, []byte("hello media"), 0o600); err != nil {
+		t.Fatalf("WriteFile: %v", err)
+	}
+	var sawField, sawFile string
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !strings.HasPrefix(r.Header.Get("Content-Type"), "multipart/form-data; boundary=") {
+			t.Fatalf("Content-Type = %q, want multipart boundary", r.Header.Get("Content-Type"))
+		}
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Fatalf("ParseMultipartForm: %v", err)
+		}
+		sawField = r.MultipartForm.Value["source"][0]
+		fh := r.MultipartForm.File["mediaFile"][0]
+		f, err := fh.Open()
+		if err != nil {
+			t.Fatalf("Open part: %v", err)
+		}
+		defer func() { _ = f.Close() }()
+		raw, _ := io.ReadAll(f)
+		sawFile = string(raw)
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:       "upload_media",
+		Kind:       "update",
+		Method:     http.MethodPut,
+		Path:       "/calls/{{ record.id }}/media",
+		BodyType:   "multipart",
+		PathFields: []string{"id"},
+		Multipart: &MultipartSpec{MaxBytes: 1024, Parts: []MultipartPartSpec{
+			{Name: "source", Type: "field", Field: "source", Required: true},
+			{Name: "mediaFile", Type: "file", Field: "media_file_path", ContentType: "text/plain", Required: true, MaxBytes: 1024},
+		}},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["id","source","media_file_path"],"properties":{"id":{"type":"string"},"source":{"type":"string"},"media_file_path":{"type":"string"}}}`),
+	})
+
+	_, err := Write(context.Background(), b, connectors.WriteRequest{Action: "upload_media", Config: connectors.RuntimeConfig{ProjectDir: dir}}, []connectors.Record{
+		{"id": "call-1", "source": "recorder", "media_file_path": "media.txt"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("Write: %v", err)
+	}
+	if sawField != "recorder" || sawFile != "hello media" {
+		t.Fatalf("multipart parts source=%q file=%q", sawField, sawFile)
+	}
+}
+
+func TestWriteMultipartRejectsContentThatDoesNotMatchApproval(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(dir+"/media.txt", []byte("evil"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	approved := sha256.Sum256([]byte("safe"))
+	var hits int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := newWriteTestBundle(server, WriteAction{
+		Name:     "upload_media",
+		Method:   http.MethodPost,
+		Path:     "/upload",
+		BodyType: "multipart",
+		Multipart: &MultipartSpec{MaxBytes: 4, Parts: []MultipartPartSpec{
+			{Name: "mediaFile", Type: "file", Field: "media_file_path", Required: true, MaxBytes: 4},
+		}},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["media_file_path"],"properties":{"media_file_path":{"type":"string"}}}`),
+	})
+	_, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "upload_media",
+		Config: connectors.RuntimeConfig{
+			ProjectDir: dir,
+			ApprovedPayloadSHA256: map[string]string{
+				connectors.PayloadApprovalKey(0, "media_file_path"): hex.EncodeToString(approved[:]),
+			},
+		},
+	}, []connectors.Record{{"media_file_path": "media.txt"}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "changed since approval") {
+		t.Fatalf("Write error = %v, want approval mismatch", err)
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want zero", hits)
 	}
 }
 
