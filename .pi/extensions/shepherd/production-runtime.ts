@@ -1129,7 +1129,8 @@ export function createProductionRecoveryProbeTable(
 		const decisionRequest = recoveryRecord(descriptor.request, "human request recovery request");
 		if (typeof decisionRequest.requestId !== "string" || decisionRequest.gate !== "scope"
 			|| !sameRecoveryValue(decisionRequest.allowedOptions, ["authorize-one-retry", "abort-child"])
-			|| typeof decisionRequest.question !== "string") {
+			|| typeof decisionRequest.question !== "string"
+			|| decisionRequest.generation !== request.currentState.generation) {
 			throw new ProductionLifecycleError("terminal", "human request recovery descriptor is invalid", ["recovery_descriptor_invalid"]);
 		}
 		const reasonMatch = /^\[(retry_budget_exhausted|correction_budget_exhausted)\] /u.exec(decisionRequest.question);
@@ -1139,7 +1140,7 @@ export function createProductionRecoveryProbeTable(
 		const binding: HumanDecisionBinding = {
 			repository: request.currentState.repository,
 			target: { kind: "issue", number: child.issue },
-			generation: request.currentState.resourceGeneration,
+			generation: request.currentState.generation,
 		};
 		const stored = await options.decisions.load(decisionRequest.requestId);
 		if (stored === null) return { status: "absent" };
