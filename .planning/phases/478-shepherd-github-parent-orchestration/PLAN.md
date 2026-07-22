@@ -1619,7 +1619,31 @@ process-substitution, brace, case, and heredoc rows remain mandatory.
 - [x] Artifact-only Cycle 13 PLAN `27e7b5d2` committed before test or production changes.
 - [x] Executable RED prepared with 1061 / 1015 / 45 intended fail / 1 skip, strict owned
       TypeScript pass, all retained tests green, and frozen production blobs.
-- [ ] PLAN/RED evidence reported to parent before GREEN.
-- [ ] Coherent GREEN and truthful local evidence recorded.
+- [x] PLAN/RED evidence reported to parent before GREEN.
+- [x] Coherent GREEN `e0101044` and truthful local evidence recorded without any post-GREEN
+      production edit.
 - [x] Network/GitHub, push, reviewer dispatch, ready, integration, merge, and human gates remain
       parent-owned and out of this worker's scope.
+
+### Cycle 13 GREEN disposition
+
+GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` implements the complete review union. Mismatched
+begin returns create and await independently tracked requested and exact-returned-coordinate proofs;
+restart validation returns deterministic repairs only for the two coherent authority-terminal
+windows; prepared operations require the exact consumed affirmative parent-merge decision and one
+canonical marker owner; and assignment scanning is a bounded forward state machine with O(1)
+maintained composite/heredoc references.
+
+Focused is 1061 total / 1060 pass / 0 fail / 1 intentional skip; Cycle 13 targeted is 68/68 twice.
+The dense 60,000-opener case completes in approximately 14-24 ms and static assertions exclude
+repeated closer search, per-character frame search/reversal, and frame copying. Strict owned and all
+20 production TypeScript modules pass; pinned offline RPC returns `true`; exact base, ancestry,
+merge-base, full-diff, 21-path, JSON, marker, and report-replay gates pass. Broad is truthfully
+classified 1281/1215/65/1, exit 1, solely in unchanged managed-sandbox process/lease tests, so both
+machine gates remain false pending parent-owned exact-head review.
+
+Post-RED test edits are expectation-only: explicit stop cancellation is distinguished from key
+reentry, the divergent-head fixture chooses a guaranteed-different SHA, and the predeclared Cycle
+12 cross-bound duplicate-marker helper no longer serves as a canonical history. All twelve retained
+leaf identities remain, while legal single-owner controls still reach orphan and causal-sequence
+validation.

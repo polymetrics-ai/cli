@@ -288,7 +288,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - no network, push, review dispatch, integration, ready, merge, or human gate action is
   worker-owned or ran
 
-## Cycle 13 consolidated-review correction (executable RED; verification/review false)
+## Cycle 13 consolidated-review correction (local GREEN; verification/review false)
 
 - both complete Cycle 12 reviews block frozen candidate/tree `baef7615` / `6bf70b7a`; immutable
   base and exact merge base remain `3addb1f4`, scope remains exactly 21 paths, and all five
@@ -296,10 +296,18 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - the 73-row union covers dual requested/exact-returned begin proof (16), cross-store terminal
   settlement repair (10), consumed affirmative decision binding (9), unique current canonical
   marker ownership (4), bounded forward assignment scanning (30), and truthful artifacts (4)
-- artifact PLAN `27e7b5d2` precedes executable test-only RED: 1061 total / 1015 pass / 45 intended
-  fail / 1 skip, comprising 40 named leaves plus five parents; all 33 controls and all retained
-  Cycle 12 cases pass, strict owned TypeScript passes, and production remains exact
-- prior focused/strict results are historical, broad remains non-zero, and no fresh exact-head
-  review ran; `verificationPassed` and `reviewCoveragePassed` remain false
+- artifact PLAN `27e7b5d2` precedes executable RED `a36188f4` and coherent GREEN `e0101044`; RED
+  records 40 named leaves plus five parents, then focused GREEN passes 1060/1061 with one
+  intentional skip and targeted Cycle 13 passes 68/68 twice
+- exact requested/returned-coordinate proof joining, explicit cross-store settlement repairs,
+  consumed affirmative decision/marker binding, and a bounded forward scanner close the complete
+  review union; the 60,000-opener case completes in approximately 14-24 ms
+- strict owned/all-20-production TypeScript, pinned offline RPC, exact base/ancestry/diff/21-path,
+  JSON, marker, and both 487-line report-replay gates pass; broad is environmental
+  1281/1215/65/1 exit 1 and no fresh exact-head review ran, so `verificationPassed` and
+  `reviewCoveragePassed` remain false
+- post-RED expectation-only alignment distinguishes explicit-stop cancellation from reentry,
+  guarantees a divergent head fixture, and reclassifies the predeclared invalid Cycle 12
+  duplicate-marker helper without deleting any of its twelve retained leaves
 - adapter fallback is `manual_gsd_fallback`; agent-capacity decision is `local_critical_path`; no
   network, push, review dispatch, integration, ready, merge, or human gate ran

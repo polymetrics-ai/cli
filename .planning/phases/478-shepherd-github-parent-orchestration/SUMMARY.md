@@ -1,12 +1,14 @@
 # Summary: #478
 
-Status: Cycle 13 executable RED follows artifact PLAN
-`27e7b5d2736c62b80618de020e743df49abf76b6` against frozen reviewed candidate
-`baef761544b8f0f58e2662058ae0c1715f345300`. Focused RED is 1061 total / 1015 pass / 45
-intended failures / 1 skip: 40 intended leaves plus five parent containers; all 33 matrix controls
-and all retained Cycle 12 cases pass. Strict owned TypeScript passes and no production edit exists.
-The declared broad route remains non-zero and no fresh exact-head review ran, so
-`verificationPassed` and `reviewCoveragePassed` remain false.
+Status: Cycle 13 local GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` follows artifact PLAN
+`27e7b5d2736c62b80618de020e743df49abf76b6` and executable RED
+`a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae`. Focused is 1061 total / 1060 pass / 0 fail / 1
+intentional skip; Cycle 13 targeted is 68/68 on consecutive runs. Strict owned and all-production
+TypeScript pass, pinned Pi 0.80.6 offline RPC returns `true`, exact base/scope/integrity gates pass,
+and the 60,000-opener scanner case completes in roughly 14-24 ms. The broad route remains non-zero
+only in 65 unchanged managed-sandbox process/lease tests, and no fresh exact-head review ran, so
+`verificationPassed` and `reviewCoveragePassed` remain false. This is local evidence, not a frozen
+or review-clean candidate.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -308,19 +310,26 @@ Both Cycle 12 reports were read completely: 487 total lines with SHA-256
 against candidate/tree `baef7615` / `6bf70b7a`, immutable/exact merge base `3addb1f4`, clean exact
 21-path ownership, and five production blobs.
 
-The 73 planned rows require every valid mismatched begin return to join requested and exact
-returned-coordinate reconciliation, repair only coherent authority-terminal/journal-unsettled
-restart windows, bind authorization to the exact consumed affirmative human decision and unique
-current parent marker owner, and replace repeated closer rescans with a bounded forward assignment
-scanner that preserves unrelated public fields. The split is BEGIN 16, cross-store 10, decision 9,
-marker 4, scanner 30, and artifact 4. All 978 prior focused Cycle 12 cases remain mandatory.
+The complete union is implemented at GREEN `e0101044`: every mismatched begin joins requested and
+exact returned-coordinate proof; coherent authority-terminal/journal-pending windows return
+deterministic explicit settlement repairs; prepared authority binds the exact consumed affirmative
+decision and unique canonical marker owner; and the assignment scanner is a forward stack with
+O(1) maintained composite/heredoc references. The split remains BEGIN 16, cross-store 10, decision
+9, marker 4, scanner 30, and artifact 4.
 
-The artifact PLAN changes only nine planning artifacts; executable RED adds the existing five tests
-and no production. Frozen production blobs remain orchestrator
-`ca07667f4e598fee472ae174b2a3c55bc708db55`, router
-`2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
-`7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
-`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
-`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. The adapter remains
-`manual_gsd_fallback`; unavailable agent capacity records `local_critical_path`. No network,
-GitHub, push, reviewer, integration, ready, merge, or human-gate action ran.
+Focused passes 1060/1061 with one intentional skip; targeted Cycle 13 passes 68/68 twice. The
+single-pass source gate excludes `lastIndexOf`, per-character frame search/reverse, and frame-copy
+patterns; the maximum dense input falls from the reviewed 11.5-second implementation probe to
+14-24 ms. Post-RED expectation alignments only make the head-divergence fixture deterministic,
+record explicit-stop cancellation of an already excluded waiter, and stop treating Cycle 12's
+predeclared cross-bound duplicate-marker helper as canonical while retaining all twelve leaf
+identities and single-owner orphan/sequence controls.
+
+Strict TypeScript passes for five owned pairs and all 20 production modules against cached Pi
+0.80.6; offline RPC discovers `pm-shepherd`; exact merge base, ancestry, full diff, 21 paths, three
+JSON parses, marker confinement, and both 487-line report identities pass. Serialized broad is an
+environmental 1281 total / 1215 pass / 65 unchanged managed-sandbox failures / 1 skip. Current
+production blobs are orchestrator `63e1f68354de7b499aa727ab133caa84e8e1a35d`, router
+`8eb32b882ad030c9c9bd9bc7ba7f5d91884b293d`, broker `7be67851`, evidence `058ad162`, and human
+decision `fc1c6230`. The adapter remains `manual_gsd_fallback`; execution is `local_critical_path`.
+No network, GitHub, push, reviewer, integration, ready, merge, or human-gate action ran.

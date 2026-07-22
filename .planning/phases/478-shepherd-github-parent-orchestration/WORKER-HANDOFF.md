@@ -18,10 +18,12 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `baef761544b8f0f58e2662058ae0c1715f345300`
 
-Cycle 13 status: executable RED follows artifact PLAN `27e7b5d2`. Focused is 1061 / 1015 / 45
-intended fail / 1 skip; 40 named leaves plus five parents fail, all 33 controls and retained Cycle
-12 cases pass, strict owned TypeScript passes, and production is exact. Verification and review
-coverage remain false. This is not an implemented or review-clean Cycle 13 candidate.
+Cycle 13 status: local GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` follows PLAN
+`27e7b5d2` and RED `a36188f4`. Focused is 1061 / 1060 / 0 fail / 1 intentional skip; targeted Cycle
+13 passes 68/68 twice. Strict owned/all-production TypeScript, pinned offline RPC, exact
+base/scope/integrity, and report-replay gates pass. Broad is environmental 1281/1215/65/1 and no
+fresh exact-head review ran, so verification and review coverage remain false. This is local
+evidence, not a frozen or review-clean candidate.
 
 ## Scope Delivered
 
@@ -470,9 +472,18 @@ session-attestation contract and fixtures required to verify independent-review 
   binding plus one unique current canonical parent marker owner across histories.
 - C13-SCANNER has 30 rows: malformed case/heredoc ownership, later public closer preservation,
   five generic consumers, and bounded single-pass/no-repeated-`lastIndexOf` behavior.
-- Executable RED in the existing five tests preserves all 978 prior focused cases and the exact
-  production blobs. Its 40 intended leaves are BEGIN 16, cross-store 4, decision 8, marker 2, and
-  scanner 10; five parent containers fail and all 33 controls pass. PLAN/RED SHAs and exact blobs
-  must be reported before GREEN.
+- PLAN `27e7b5d2`, RED `a36188f4`, and GREEN `e0101044` preserve the ordered TDD history. Focused
+  GREEN is 1061/1060/0/1 and targeted Cycle 13 is 68/68 twice; all intended RED leaves close.
+- Strict owned/all-20-production TypeScript and pinned Pi 0.80.6 offline RPC pass. Exact immutable
+  base/reviewed-candidate ancestry, merge base, full diff, 21 paths, three JSON parses, Cycle 13
+  marker confinement, and both Cycle 12 report identities pass.
+- The forward scanner maintains O(1) composite/heredoc references and completes 60,000 unmatched
+  openers in approximately 14-24 ms. Current production blobs are orchestrator `63e1f683`, router
+  `8eb32b88`, broker `7be67851`, evidence `058ad162`, and human decision `fc1c6230`.
+- Broad is truthfully classified 1281/1215/65/1 exit 1 in unchanged managed-sandbox process/lease
+  tests; both machine gates remain false and fresh exact-head review is parent-owned.
+- Post-RED expectation alignment only distinguishes explicit-stop cancellation, guarantees the
+  divergent-head mutation, and reclassifies the invalid duplicate-marker Cycle 12 helper while
+  retaining all twelve leaves and legal single-owner orphan/sequence controls.
 - Adapter/runtime decisions are `manual_gsd_fallback` and `local_critical_path`. No network,
   GitHub, push, reviewer, integration, ready, merge, or human gate is worker-owned or ran.

@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 13 executable RED follows artifact PLAN 27e7b5d2: focused 1061/1015/45 intended fail/1 skip with 40 leaves plus 5 parents, all 33 controls and retained Cycle 12 cases passing, strict owned TypeScript passing, and production frozen. Broad remains non-zero and no fresh exact-head review ran, so verification/review remain false.",
+  "reason": "Cycle 13 local GREEN e0101044 follows PLAN 27e7b5d2 and RED a36188f4: focused 1061/1060/0/1, targeted 68/68 twice, strict owned/all-production TypeScript, pinned offline RPC, exact base/scope/integrity, and report replay pass. Broad is environmental 1281/1215/65/1 and no fresh exact-head review ran, so verification/review remain false.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -117,8 +117,10 @@
       "cycle11Evidence": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
       "cycle12Plan": "7f96718c4d8c692cd618ff220ab0d53d2e6546a2",
       "cycle12Red": "2649cf6dcad1fcc943261c0838bbca8e56c5c595",
-      "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3"
-      ,"cycle13Plan": "27e7b5d2736c62b80618de020e743df49abf76b6"
+      "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3",
+      "cycle13Plan": "27e7b5d2736c62b80618de020e743df49abf76b6",
+      "cycle13Red": "a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae",
+      "cycle13Green": "e0101044bb68f8a6b4cf45960029aac8d8b1ff78"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -134,7 +136,7 @@
       "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip at local evidence head, but independent review later reproduced C10-CONFIRM flakiness; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false",
       "cycle11": "PLAN 863bf94a; RED 1b4aa6f1 with 791 total, 743 pass, 47 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN e765e0d3; focused 791 total, 790 pass, 0 fail, 1 intentional skip; strict and bounded gates pass, but both independent Cycle 11 reviews block exact evidence 4f0e17df on adjacent dual-owner, total-graph, and redaction gaps; broad remains non-zero and both machine gates false",
       "cycle12": "PLAN 7f96718c; executable RED 2649cf6d at 942/885/56/1 with 51 leaves plus 5 parents and all production frozen; reviewer-gap RED 978/963/14/1 with 12 leaves plus 2 parents; coherent GREEN 723fdc12; focused 978/977/0/1; BEGIN 6/6, graph orphan 7/7, sequence 5/5, claim 15/15, assignment 144/144; strict five-pair and all-20-production TypeScript pass with TypeScript 5.9.3 and cached Pi 0.80.6; pinned offline RPC pass; broad environmental 1198/1132/65/1; immutable base/reviewed-candidate ancestry, exact merge base, full diff, exact 21 paths, JSON3, marker confinement, and report identity pass; both independent Cycle 12 reviews block exact evidence baef7615",
-      "cycle13": "artifact PLAN 27e7b5d2 precedes executable RED; 1061 total, 1015 pass, 45 intended fail, 1 skip; 40 leaves plus 5 parent containers fail, all 33 controls and retained Cycle 12 cases pass; strict owned TypeScript passes; five production blobs frozen; verification/review false"
+      "cycle13": "PLAN 27e7b5d2; executable RED a36188f4 at 1061 total, 1015 pass, 45 intended fail, 1 skip; GREEN e0101044; focused 1061 total, 1060 pass, 0 fail, 1 skip; targeted 68/68 twice; 60,000-opener scan approximately 14-24 ms; strict owned and all-20-production TypeScript pass; pinned offline RPC pass; broad environmental 1281/1215/65/1; exact base/reviewed-candidate ancestry, merge base, 62 commits, full diff, 21 paths, JSON3, marker confinement, and 487-line report replay pass; verification/review false"
     },
     "orchestrationDecisions": [
       {
@@ -296,6 +298,21 @@
         "cycle": "cycle-13-red",
         "decision": "complete_executable_red_production_frozen",
         "reason": "Focused RED executes 1061 tests with 40 intended failing leaves plus five parent containers and one skip; all 33 controls and retained Cycle 12 cases pass, strict owned TypeScript passes, and all five production blobs remain exact."
+      },
+      {
+        "cycle": "cycle-13-green",
+        "decision": "coherent_green_after_complete_red",
+        "reason": "GREEN e0101044 closes all intended RED leaves with focused 1061/1060/0/1, targeted Cycle 13 68/68 twice, O(1) scanner metadata, and no post-GREEN production edit."
+      },
+      {
+        "cycle": "cycle-13-verification",
+        "decision": "focused_green_broad_environmental_nonzero_awaiting_parent_review",
+        "reason": "Strict owned/all-production TypeScript, pinned offline RPC, exact base/scope/data/marker/report gates pass; broad is 1281/1215/65/1 in unchanged managed-sandbox process/lease tests, so verificationPassed remains false and fresh exact-head review remains parent-owned."
+      },
+      {
+        "cycle": "cycle-13-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 13 excludes network, GitHub mutation, push, reviewer dispatch, integration, ready, merge, and every human gate; none ran."
       },
       {
         "cycle": "cycle-8-plan",

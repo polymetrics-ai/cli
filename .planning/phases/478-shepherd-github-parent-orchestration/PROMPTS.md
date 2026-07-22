@@ -340,8 +340,12 @@ or human gates stay parent-owned.
   is absent. Exclude Go/connectors/`make`, services, dependencies, network/GitHub, push, reviewers,
   integration, ready, merge, and human gates.
 
-Execution status: artifact PLAN `27e7b5d2` precedes executable RED. The 73-row matrix produces
-1061 total / 1015 pass / 45 intended failures / 1 skip: 40 failing leaves (BEGIN 16, cross-store 4,
-decision 8, marker 2, scanner 10) plus five parent containers; all 33 controls and retained Cycle 12
-cases pass. Strict owned TypeScript passes and all production blobs remain exact. Adapter/runtime
-decisions are `manual_gsd_fallback` and `local_critical_path`.
+Execution status: artifact PLAN `27e7b5d2` precedes executable RED `a36188f4` and coherent GREEN
+`e0101044`. RED is 1061/1015/45/1 with 40 failing leaves plus five parent containers; GREEN focused
+is 1061/1060/0/1 and targeted Cycle 13 is 68/68 twice. Strict owned/all-production TypeScript,
+pinned offline RPC, exact base/scope/data/marker/report gates pass. The forward scanner holds O(1)
+stack metadata and completes the 60,000-opener bound in approximately 14-24 ms. Broad is
+environmental 1281/1215/65/1 exit 1, no exact-head review ran, and both machine gates remain false.
+Post-RED expectation alignment is limited to explicit-stop cancellation, guaranteed head divergence,
+and the predeclared invalid Cycle 12 duplicate-marker control; all twelve retained leaves remain.
+Adapter/runtime decisions are `manual_gsd_fallback` and `local_critical_path`.

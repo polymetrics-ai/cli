@@ -8731,31 +8731,31 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.throws(() => validate(invalid), /candidate|HEAD|historical|current/i);
 });
 
-test("cycle 13 leading artifacts name only the executed RED checkpoint", async (t) => {
-	await t.test("summary leads with exact Cycle 13 executable RED counts", async () => {
+test("cycle 13 leading artifacts record local GREEN with machine gates false", async (t) => {
+	await t.test("summary leads with exact Cycle 13 GREEN counts", async () => {
 		const summary = await readFile(
 			".planning/phases/478-shepherd-github-parent-orchestration/SUMMARY.md",
 			"utf8",
 		);
-		assert.match(summary.slice(0, 900), /Cycle 13 executable RED/i);
-		assert.match(summary.slice(0, 900), /1061 total \/ 1015 pass \/ 45.*failures \/ 1 skip/is);
-		assert.match(summary.slice(0, 900), /no production edit exists/i);
+		assert.match(summary.slice(0, 1_200), /Cycle 13 local GREEN/i);
+		assert.match(summary.slice(0, 1_200), /e0101044bb68f8a6b4cf45960029aac8d8b1ff78/u);
+		assert.match(summary.slice(0, 1_200), /1061 total \/ 1060 pass \/ 0 fail \/ 1.*skip/is);
 	});
 	await t.test("verification keeps both machine gates false", async () => {
 		const verification = await readFile(
 			".planning/phases/478-shepherd-github-parent-orchestration/VERIFICATION.md",
 			"utf8",
 		);
-		assert.match(verification.slice(0, 900), /Cycle 13 executable RED/i);
-		assert.match(verification.slice(0, 900), /verificationPassed.*reviewCoveragePassed.*false/is);
+		assert.match(verification.slice(0, 1_200), /Cycle 13 local GREEN/i);
+		assert.match(verification.slice(0, 1_200), /verificationPassed.*reviewCoveragePassed.*false/is);
 	});
-	await t.test("PR body and handoff label Cycle 13 executable RED", async () => {
+	await t.test("PR body and handoff label Cycle 13 local GREEN", async () => {
 		const [prBody, handoff] = await Promise.all([
 			readFile(".planning/phases/478-shepherd-github-parent-orchestration/PR-BODY.md", "utf8"),
 			readFile(".planning/phases/478-shepherd-github-parent-orchestration/WORKER-HANDOFF.md", "utf8"),
 		]);
-		assert.match(prBody, /Cycle 13 consolidated-review correction \(executable RED; verification\/review false\)/u);
-		assert.match(handoff.slice(0, 1_200), /Cycle 13 status: executable RED/is);
+		assert.match(prBody, /Cycle 13 consolidated-review correction \(local GREEN; verification\/review false\)/u);
+		assert.match(handoff.slice(0, 1_500), /Cycle 13 status: local GREEN/is);
 	});
 	await t.test("machine state records exact blocked review and false gates", async () => {
 		const raw = await readFile(
@@ -8769,6 +8769,7 @@ test("cycle 13 leading artifacts name only the executed RED checkpoint", async (
 		assert.equal(prior.findingsConsolidatedIntoCycle, 13);
 		assert.equal(state.details.verificationPassed, false);
 		assert.equal(state.details.reviewCoveragePassed, false);
-		assert.match(String((state.details.verification as Record<string, unknown>).cycle13), /1061 total.*45 intended fail/i);
+		assert.match(String((state.details.verification as Record<string, unknown>).cycle13),
+			/GREEN e0101044.*1061 total.*1060 pass.*0 fail.*1 skip.*1281.*1215.*65/is);
 	});
 });

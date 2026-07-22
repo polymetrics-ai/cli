@@ -1,10 +1,12 @@
 # Verification: #478
 
-Status: Cycle 13 executable RED follows artifact PLAN
-`27e7b5d2736c62b80618de020e743df49abf76b6`. Focused is 1061 / 1015 / 45 intended fail / 1
-skip; strict owned TypeScript passes; all five production blobs remain exact. No GREEN has run.
-The declared broad route remains non-zero and no fresh exact-head review ran, so
-`verificationPassed` and `reviewCoveragePassed` remain false.
+Status: Cycle 13 local GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` follows PLAN
+`27e7b5d2736c62b80618de020e743df49abf76b6` and RED
+`a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae`. Focused is 1061 total / 1060 pass / 0 fail / 1
+intentional skip; targeted Cycle 13 is 68/68 on consecutive runs. Strict, offline, exact-scope,
+integrity, and report-replay gates pass. Broad remains non-zero only in the classified 65 unchanged
+managed-sandbox failures and no fresh exact-head review ran; therefore `verificationPassed: false`
+and `reviewCoveragePassed: false` remain machine truth.
 
 ## Cycle 13 verification contract
 
@@ -20,8 +22,8 @@ The declared broad route remains non-zero and no fresh exact-head review ran, so
       five production blobs exactly.
 - [x] Focused RED is 1061 total / 1015 pass / 45 intended failures / 1 skip; strict owned
       TypeScript passes. Forty leaves plus five parent containers fail; 33 controls pass.
-- [ ] Exact PLAN/RED SHAs and frozen blobs are reported to the parent before GREEN.
-- [ ] Coherent GREEN, strict owned/all-production TypeScript, offline RPC, broad classification,
+- [x] Exact PLAN/RED SHAs and frozen blobs were reported to the parent before GREEN.
+- [x] Coherent GREEN, strict owned/all-production TypeScript, offline RPC, broad classification,
       and exact integrity/report gates are recorded.
 - [x] Go, connectors, `make`, services, dependencies, network/GitHub, push, reviewer dispatch,
       integration, ready, merge, and every human gate remain out of scope.
@@ -34,6 +36,26 @@ Intended failing leaves are BEGIN 16, cross-store 4, decision 8, marker 2, and s
 `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
 `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
 `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.
+
+### Cycle 13 GREEN and local evidence
+
+| Gate | Result |
+| --- | --- |
+| Checkpoints | PLAN `27e7b5d2736c62b80618de020e743df49abf76b6`; executable RED `a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae`; coherent GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` (tree `8400607605b1e86b9c0c47fba610b3c27eb634a1`) |
+| Focused five-file route | pass; 1061 total / 1060 pass / 0 fail / 1 intentional live-sandbox skip; 9603.586375 ms |
+| Cycle 13 targeted | pass twice; final 68/68, 0 skip; 1297.575917 ms |
+| Dense scanner bound | pass; 60,000 unmatched openers complete in approximately 14-24 ms; source contains no repeated `lastIndexOf`, frame `find/reverse`, or frame-spread scan |
+| Strict owned TypeScript | pass; five production/test pairs; TypeScript 5.9.3, strict NodeNext, no emit |
+| Strict production TypeScript | pass; all 20 Shepherd production modules against cached Pi 0.80.6 package/type resolver |
+| Offline extension discovery | pass; pinned Pi 0.80.6 RPC returned `true` for `pm-shepherd`; only expected settings-lock `EPERM` warnings |
+| Serialized Shepherd | environmental failure; 1281 total / 1215 pass / 65 unchanged managed-sandbox process/lease failures / 1 skip; exit 1; every focused/Cycle 13 assertion passes |
+| Base and scope | immutable base and reviewed Cycle 12 candidate are ancestors; exact merge base `3addb1f4`; 62 range commits; full-range diff clean; exact 21 paths |
+| Data and markers | all three JSON files parse; `CYCLE13_REVIEW_ROUTER_MARKER` appears only in `review-router.test.ts` |
+| Review report replay | pass after GREEN; 278 + 209 = 487 lines; SHA-256 `b7724f6845e0c48ac23f88e942fffe84d86faac532a2a08c914259e94eeea06e` and `38ccafdc48e4cf49043cc6bb5946b91910aaf18a74d17488d20209f763234593` |
+| Production blobs | orchestrator `63e1f68354de7b499aa727ab133caa84e8e1a35d`; router `8eb32b882ad030c9c9bd9bc7ba7f5d91884b293d`; broker `7be67851`; evidence `058ad162`; human decision `fc1c6230` |
+| Post-RED expectation alignment | explicit stop cancels but never admits an excluded waiter; divergent-head fixture always differs; invalid duplicate-marker Cycle 12 helper is no longer called canonical, with all 12 leaves retained and legal single-owner orphan/sequence controls still exercised |
+| Machine truth | `verificationPassed: false`; `reviewCoveragePassed: false` |
+| Prohibited/external actions | no Go, connector, `make`, services, dependencies, network/GitHub, push, review dispatch, integration, ready, merge, or human gate ran |
 
 ## Cycle 12 verification contract
 

@@ -606,3 +606,32 @@
   decision `fc1c6230`.
 - No production, dependency, network/GitHub, push, review, integration, ready, merge, or human-gate
   action ran. Both machine gates remain false.
+
+## 2026-07-22 Cycle 13 GREEN, refactor, and local evidence
+
+- Reported exact PLAN `27e7b5d2736c62b80618de020e743df49abf76b6`, executable RED
+  `a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae`, RED counts, and all five frozen blobs to the parent
+  before GREEN.
+- Committed coherent GREEN `e0101044bb68f8a6b4cf45960029aac8d8b1ff78`, tree
+  `8400607605b1e86b9c0c47fba610b3c27eb634a1`. It joins requested/exact-returned begin proofs,
+  returns deterministic cross-store terminal repairs, binds exact consumed decision/marker
+  authority, and replaces repeated closer scans with a one-pass frame machine.
+- Internal full-union audit removed per-character stack searches/copies and whole-line heredoc
+  allocation, maintained O(1) composite/heredoc references, and prevented quoted literal grouping
+  characters from opening raw frames. The 60,000-opener case fell from about 11.5 seconds during
+  GREEN inspection to approximately 14-24 ms.
+- Focused five-file final evidence is 1061 total / 1060 pass / 0 fail / 1 intentional skip in
+  9603.586375 ms. Targeted Cycle 13 passes 68/68 on consecutive runs; strict owned and all 20
+  production TypeScript modules pass; pinned Pi 0.80.6 offline RPC returns `true`.
+- Serialized broad is environmental 1281 total / 1215 pass / 65 unchanged managed-sandbox
+  process/lease failures / 1 skip, exit 1. Exact base and reviewed-candidate ancestry, merge base,
+  full diff, 62 commits, 21 paths, three JSON parses, marker confinement, and both complete report
+  replays pass (487 lines; exact hashes unchanged).
+- Post-RED expectation alignment distinguishes explicit-stop cancellation from key admission,
+  makes the divergent-head fixture deterministic, and stops calling the predeclared invalid Cycle
+  12 duplicate-marker helper canonical. All twelve retained leaves remain and legal single-owner
+  controls still reach orphan/causal-sequence validation.
+- Current blobs are orchestrator `63e1f68354de7b499aa727ab133caa84e8e1a35d`, router
+  `8eb32b882ad030c9c9bd9bc7ba7f5d91884b293d`, broker `7be67851`, evidence `058ad162`, and human
+  decision `fc1c6230`. No post-GREEN production edit, network/GitHub, push, reviewer dispatch,
+  integration, ready, merge, or human gate ran; both machine gates remain false.

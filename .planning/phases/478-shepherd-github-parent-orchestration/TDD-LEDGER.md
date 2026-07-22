@@ -650,3 +650,36 @@ orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
 `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
 `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
 `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.
+
+### Cycle 13 GREEN and refactor ledger
+
+| Family | GREEN evidence | State |
+| --- | --- | --- |
+| C13-BEGIN | all 16 proof-order rows await requested plus exact observed proof; zero requested ready effects; exact rollback coordinates; early public/key/stop gates retained | green |
+| C13-CROSS-STORE | two deterministic typed repairs, two idempotent replays, and six impossible histories all pass | green |
+| C13-DECISION | canonical consumed approval plus eight binding/digest failures all pass | green |
+| C13-MARKER | legal owner plus duplicate, ambiguous, and cross-bound failures all pass | green |
+| C13-SCANNER | 30 direct/consumer/linearity rows pass; no repeated closer/frame scan; 60,000-level case approximately 14-24 ms | green |
+| C13-ARTIFACT | leading phase artifacts and machine state record exact local GREEN while both machine gates stay false | green |
+
+Coherent GREEN is `e0101044bb68f8a6b4cf45960029aac8d8b1ff78` (tree
+`8400607605b1e86b9c0c47fba610b3c27eb634a1`). Focused is 1061 total / 1060 pass / 0 fail / 1
+intentional skip; targeted Cycle 13 passes 68/68 on consecutive runs. Strict TypeScript passes for
+the five owned production/test pairs and all 20 production modules against cached Pi 0.80.6;
+pinned offline RPC returns `true`. Broad is classified 1281 total / 1215 pass / 65 unchanged
+managed-sandbox process/lease failures / 1 skip, exit 1. Exact merge base, both ancestry checks,
+62-commit range, diff, 21 paths, three JSON parses, marker confinement, and 487-line report replay
+pass.
+
+The internal refactor removes quadratic per-opener stack scans and whole-line heredoc allocation,
+uses O(1) root-composite/heredoc references, and keeps quoted literal grouping characters from
+opening composite frames. Current production blobs are orchestrator
+`63e1f68354de7b499aa727ab133caa84e8e1a35d`, router
+`8eb32b882ad030c9c9bd9bc7ba7f5d91884b293d`, broker `7be67851`, evidence `058ad162`, and human
+decision `fc1c6230`.
+
+Post-RED expectation changes do not weaken behavior: an explicit stop rejects the already-excluded
+queued waiter without granting reentry; the head mutation is guaranteed to differ; and the Cycle 12
+cross-bound duplicate-marker helper is no longer called canonical under the predeclared Cycle 13
+ownership rule. All twelve retained leaf identities remain, with legal single-owner fixtures still
+reaching orphan and causal-sequence validators. No post-GREEN production edit exists.
