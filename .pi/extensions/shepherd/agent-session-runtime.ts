@@ -259,24 +259,23 @@ class OwnedSession {
 		// Abort, idle, and disposal are the mandatory cleanup root. They remain independently
 		// capturable after cancellation, while prompt/subscription/validation operations stop at
 		// the first lifecycle barrier.
-		this.#abort = captureSessionOperation(session, "abort");
-		if (mayContinue()) afterReentrantCallback();
-		this.#waitForIdle = captureSessionOperation(session, "waitForIdle");
-		if (mayContinue()) afterReentrantCallback();
-		this.#dispose = captureSessionOperation(session, "dispose");
-		if (mayContinue()) afterReentrantCallback();
-		if (mayContinue()) {
-			this.#prompt = captureSessionOperation(session, "prompt");
+		const captureMandatory = (name: keyof RuntimeAgentSession): CapturedSessionOperation => {
+			const captured = captureSessionOperation(session, name);
+			if (mayContinue()) afterReentrantCallback();
+			return captured;
+		};
+		const captureOptional = (name: keyof RuntimeAgentSession): CapturedSessionOperation => {
+			if (!mayContinue()) return UNCAPTURED_SESSION_OPERATION;
+			const captured = captureSessionOperation(session, name);
 			afterReentrantCallback();
-		} else this.#prompt = UNCAPTURED_SESSION_OPERATION;
-		if (mayContinue()) {
-			this.#subscribe = captureSessionOperation(session, "subscribe");
-			afterReentrantCallback();
-		} else this.#subscribe = UNCAPTURED_SESSION_OPERATION;
-		if (mayContinue()) {
-			this.#getActiveToolNames = captureSessionOperation(session, "getActiveToolNames");
-			afterReentrantCallback();
-		} else this.#getActiveToolNames = UNCAPTURED_SESSION_OPERATION;
+			return captured;
+		};
+		this.#abort = captureMandatory("abort");
+		this.#waitForIdle = captureMandatory("waitForIdle");
+		this.#dispose = captureMandatory("dispose");
+		this.#prompt = captureOptional("prompt");
+		this.#subscribe = captureOptional("subscribe");
+		this.#getActiveToolNames = captureOptional("getActiveToolNames");
 	}
 
 	validationFailures(): readonly unknown[] {

@@ -612,7 +612,7 @@ export function redactSensitiveText(value: string, metrics?: RedactionScanMetric
 	return redactStructuredAssignments(redactStrongCredentialSyntax(redactPrivateKeyBlocks(value)), scanMetrics);
 }
 
-type SensitiveAssignmentKind = "authorization" | "secret" | "unknown";
+type SensitiveAssignmentKind = "authorization" | "secret" | "unknown-sensitive";
 type SensitiveAssignmentContext = "flow" | "line";
 type LexicalQuote = "\"" | "'";
 type FlowCloser = "}" | "]";
@@ -1028,7 +1028,7 @@ function unquotedValueRedaction(
 		["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
 		containsWhitespace(scalar);
 	if (ambiguousLineProse || documentaryAssignmentProse) return { resumeAt: unredactedResumeAt };
-	if (assignment.kind !== "unknown" && isPublicScalar(scalar)) return { resumeAt };
+	if (assignment.kind !== "unknown-sensitive" && isPublicScalar(scalar)) return { resumeAt };
 	const redactionEnd = continuation?.end ?? scalarEnd;
 	return {
 		range: {
@@ -1168,9 +1168,7 @@ function redactStrongCredentialSyntax(value: string): string {
 }
 
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
-	const segments = key.toLowerCase().split(".").map((segment) => segment.replace(/[-_]/g, ""));
-	const path = segments.join(".");
-	const terminal = segments.at(-1) ?? "";
+	const { segments, path, terminal } = canonicalAssignmentKey(key);
 	if ((segments.length === 1 && publicAssignmentTerminals.has(terminal)) || publicAssignmentPaths.has(path)) {
 		return undefined;
 	}
@@ -1178,7 +1176,16 @@ function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefin
 	if (sensitiveAssignmentTerminals.has(terminal) || sensitiveAssignmentPaths.has(path)) return "secret";
 	// The structured grammar is deliberately closed: once assignment syntax is recognized, only
 	// reviewed public metadata escapes redaction. Unknown aliases do not become an extension path.
-	return "unknown";
+	return "unknown-sensitive";
+}
+
+function canonicalAssignmentKey(key: string): {
+	segments: string[];
+	path: string;
+	terminal: string;
+} {
+	const segments = key.toLowerCase().split(".").map((segment) => segment.replace(/[-_]/g, ""));
+	return { segments, path: segments.join("."), terminal: segments.at(-1) ?? "" };
 }
 
 function findStructuredKeyStart(
