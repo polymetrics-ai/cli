@@ -48,6 +48,12 @@ const MAX_EVENT_ARRAY_ITEMS = 4_096;
 const MAX_HANDOFF_SUMMARY_CHARACTERS = 4 * 1024;
 const MAX_HANDOFF_ARRAY_ITEMS = 32;
 const MAX_HANDOFF_ITEM_CHARACTERS = 2 * 1024;
+const INTRINSIC_OBJECT_PROTOTYPE = Object.prototype;
+const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
+const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
+const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
+const INTRINSIC_GET_OWN_PROPERTY_NAMES = Object.getOwnPropertyNames;
+const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
 interface RuntimeResourceLoader {
@@ -1050,6 +1056,7 @@ export class ShepherdAgentSessionRuntime {
 				if (runCreations.size === 0) this.#creationsByRunId.delete(request.binding.runId);
 			});
 			const created = await scope.race(createPromise);
+			assertExecutionActive();
 			const claim = creation.claim(created);
 			owned = claim.owned;
 			active.owned = owned;
@@ -1067,10 +1074,12 @@ export class ShepherdAgentSessionRuntime {
 			assertExecutionActive();
 			if (capture.failure) throw capture.failure;
 			assertExecutionActive();
-			await scope.race(owned.prompt(prompts.userPrompt, {
+			const promptPromise = owned.prompt(prompts.userPrompt, {
 				expandPromptTemplates: false,
 				source: "extension",
-			}));
+			});
+			assertExecutionActive();
+			await scope.race(promptPromise);
 			assertExecutionActive();
 			// Prompt settlement follows Pi's synchronous agent_settled dispatch. Freeze before
 			// releasing the listener, then await release so idle/dispose callbacks cannot mutate
@@ -1533,13 +1542,14 @@ function captureCreatedSession(
 			operation();
 		} catch (error) {
 			recordCaptureFailure(error);
+			captureActive = false;
 		}
 		afterReentrantCallback();
 	};
 	// Acquire the cleanup root before validating any peer field. The legacy public Pi result
 	// permits a session getter, so it is invoked exactly once; every other result field must be
 	// a data descriptor and is never read through ordinary property lookup.
-	const sessionDescriptor = Object.getOwnPropertyDescriptor(created, "session");
+	const sessionDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(created, "session");
 	let session: unknown;
 	if (sessionDescriptor && "value" in sessionDescriptor) session = sessionDescriptor.value;
 	else if (sessionDescriptor?.get) session = Reflect.apply(sessionDescriptor.get, created, []);
@@ -1552,11 +1562,16 @@ function captureCreatedSession(
 		afterReentrantCallback,
 		() => captureActive,
 	);
-	captureFailures.push(...owned.validationFailures());
+	const operationFailures = owned.validationFailures();
+	captureFailures.push(...operationFailures);
+	if (operationFailures.length > 0) captureActive = false;
 	let modelProvider: unknown;
 	let modelId: unknown;
 	let thinkingLevel: unknown;
 	let sessionFile: unknown;
+	let extensions: unknown;
+	let extensionErrors: unknown;
+	let rawActiveTools: unknown;
 	let activeTools: readonly string[] | undefined;
 	captureOptionalStep(() => {
 		if (!sessionDescriptor?.enumerable || sessionDescriptor.set ||
@@ -1565,23 +1580,24 @@ function captureCreatedSession(
 		}
 	});
 	captureOptionalStep(() => {
-		assertEnumerableFieldsAllowed(
+		assertOwnEnumerableFieldsAllowed(
 			created,
 			["session", "extensionsResult", "modelFallbackMessage"],
 			"Pi AgentSession result",
 		);
 	});
 	captureOptionalStep(() => {
-		const extensionsDescriptor = Object.getOwnPropertyDescriptor(created, "extensionsResult");
+		const extensionsDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(created, "extensionsResult");
 		if (!extensionsDescriptor?.enumerable || extensionsDescriptor.get || extensionsDescriptor.set ||
 			!("value" in extensionsDescriptor)) {
 			throw new AgentSessionRuntimeError("Pi returned an invalid extensions result descriptor");
-		} else {
-			captureEmptyExtensionsResult(extensionsDescriptor.value);
 		}
+		({ extensions, errors: extensionErrors } = captureExtensionsResult(extensionsDescriptor.value));
 	});
+	captureOptionalStep(() => { captureExactEmptyArray(extensions, "Pi extensions result extensions"); });
+	captureOptionalStep(() => { captureExactEmptyArray(extensionErrors, "Pi extensions result errors"); });
 	captureOptionalStep(() => {
-		const fallbackDescriptor = Object.getOwnPropertyDescriptor(created, "modelFallbackMessage");
+		const fallbackDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(created, "modelFallbackMessage");
 		if (!fallbackDescriptor?.enumerable || fallbackDescriptor.get || fallbackDescriptor.set ||
 			!("value" in fallbackDescriptor)) {
 			throw new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor");
@@ -1601,8 +1617,9 @@ function captureCreatedSession(
 		sessionFile = (session as RuntimeAgentSession).sessionFile;
 	});
 	captureOptionalStep(() => {
-		activeTools = captureToolNameArray(owned.activeToolNames());
+		rawActiveTools = owned.activeToolNames();
 	});
+	captureOptionalStep(() => { activeTools = captureToolNameArray(rawActiveTools); });
 
 	return Object.freeze({
 		owned,
@@ -1623,34 +1640,39 @@ function captureCreatedSession(
 	});
 }
 
-function captureEmptyExtensionsResult(value: unknown): void {
-	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
+function captureExtensionsResult(value: unknown): { extensions: unknown; errors: unknown } {
+	if (!value || typeof value !== "object" || Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid extensions result");
 	}
-	assertEnumerableFieldsAllowed(value, ["extensions", "errors", "runtime"], "Pi extensions result");
+	assertOwnEnumerableFieldsAllowed(value, ["extensions", "errors", "runtime"], "Pi extensions result");
+	const captured: { extensions?: unknown; errors?: unknown } = {};
 	for (const key of ["extensions", "errors"] as const) {
-		const descriptor = Object.getOwnPropertyDescriptor(value, key);
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`Pi extensions result ${key} must be an own data field`);
 		}
-		captureExactEmptyArray(descriptor.value, `Pi extensions result ${key}`);
+		captured[key] = descriptor.value;
 	}
-	const runtimeDescriptor = Object.getOwnPropertyDescriptor(value, "runtime");
+	const runtimeDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "runtime");
 	if (!runtimeDescriptor?.enumerable || runtimeDescriptor.get || runtimeDescriptor.set ||
 		!("value" in runtimeDescriptor)) {
 		throw new AgentSessionRuntimeError("Pi extensions result runtime must be an own data field");
 	}
+	return { extensions: captured.extensions, errors: captured.errors };
 }
 
-function assertEnumerableFieldsAllowed(
+function assertOwnEnumerableFieldsAllowed(
 	value: object,
 	allowed: readonly string[],
 	description: string,
 ): void {
+	assertApprovedRecordPrototype(value, description);
 	const allowedSet = new Set(allowed);
 	let count = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !allowedSet.has(key)) {
+	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
+		if (!descriptor?.enumerable) continue;
+		if (!allowedSet.has(key)) {
 			throw new AgentSessionRuntimeError(`${description} contains an unknown enumerable field`);
 		}
 		count += 1;
@@ -1659,34 +1681,36 @@ function assertEnumerableFieldsAllowed(
 }
 
 function captureExactEmptyArray(value: unknown, description: string): void {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be an exact non-proxy empty array`);
 	}
-	const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+	assertApprovedArrayPrototype(value, description);
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
 		lengthDescriptor.value !== 0) {
 		throw new AgentSessionRuntimeError(`${description} must be empty`);
 	}
-	for (const key in value) {
-		if (Object.hasOwn(value, key)) {
+	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		if (key === "length") continue;
+		if (INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key)?.enumerable) {
 			throw new AgentSessionRuntimeError(`${description} contains an enumerable item or extra field`);
 		}
-		throw new AgentSessionRuntimeError(`${description} contains an inherited field`);
 	}
 }
 
 function captureToolNameArray(value: unknown): readonly string[] | undefined {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value) || value.length > 256) return undefined;
-	let enumerableItems = 0;
-	for (const key in value) {
-		if (!Object.hasOwn(value, key) || !/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= value.length) return undefined;
-		enumerableItems += 1;
-		if (enumerableItems > value.length) return undefined;
+	if (!Array.isArray(value) || INTRINSIC_IS_PROXY(value)) return undefined;
+	assertApprovedArrayPrototype(value, "Pi AgentSession active tool names");
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
+		typeof lengthDescriptor.value !== "number" || !Number.isSafeInteger(lengthDescriptor.value) ||
+		lengthDescriptor.value < 0 || lengthDescriptor.value > 256) {
+		return undefined;
 	}
-	if (enumerableItems !== value.length) return undefined;
+	const length = lengthDescriptor.value;
 	const names: string[] = [];
-	for (let index = 0; index < value.length; index += 1) {
-		const descriptor = Reflect.getOwnPropertyDescriptor(value, String(index));
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 			typeof descriptor.value !== "string") {
 			return undefined;
@@ -1694,6 +1718,19 @@ function captureToolNameArray(value: unknown): readonly string[] | undefined {
 		names.push(descriptor.value);
 	}
 	return Object.freeze(names);
+}
+
+function assertApprovedRecordPrototype(value: object, description: string): void {
+	const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+	if (prototype !== null && prototype !== INTRINSIC_OBJECT_PROTOTYPE) {
+		throw new AgentSessionRuntimeError(`${description} has a non-approved direct prototype`);
+	}
+}
+
+function assertApprovedArrayPrototype(value: unknown[], description: string): void {
+	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
+		throw new AgentSessionRuntimeError(`${description} has a non-approved direct prototype`);
+	}
 }
 
 function newTerminalCapture(expectedToolNames: readonly string[]): TerminalCapture {

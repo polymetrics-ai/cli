@@ -613,6 +613,7 @@ export function redactSensitiveText(value: string, metrics?: RedactionScanMetric
 }
 
 type SensitiveAssignmentKind = "authorization" | "secret" | "unknown-sensitive";
+type AssignmentKeyClassification = SensitiveAssignmentKind | "public";
 type SensitiveAssignmentContext = "flow" | "line";
 type LexicalQuote = "\"" | "'";
 type FlowCloser = "}" | "]";
@@ -653,6 +654,12 @@ interface RedactionDecision {
 interface QuotedAssignmentKey {
 	key: string;
 	next: number;
+}
+
+interface AssignmentKeyCandidate {
+	exactKey?: string;
+	delimiter: ":" | "=";
+	delimiterIndex: number;
 }
 
 const REDACTED_TEXT = "[REDACTED]";
@@ -727,7 +734,15 @@ function redactStructuredAssignments(value: string, metrics?: RedactionScanMetri
 		const context: SensitiveAssignmentContext = state.flowClosers.length > 0 ? "flow" : "line";
 		const allowKey = state.index === state.structuredKeyStart ||
 			(context === "flow" && isFlowMappingKeyStart(value, state.index, state));
-		const assignment = sensitiveAssignmentAt(value, state.index, state.lineStart, allowKey, context, metrics);
+		const assignment = sensitiveAssignmentAt(
+			value,
+			state.index,
+			state.lineStart,
+			state.lineEnd,
+			allowKey,
+			context,
+			metrics,
+		);
 		if (!assignment) {
 			if (isCommentStart(value, state.index, state.lineStart)) {
 				advanceScannerIndex(state, state.lineEnd, metrics);
@@ -766,45 +781,158 @@ function sensitiveAssignmentAt(
 	value: string,
 	index: number,
 	lineStart: number,
+	lineEnd: number,
 	allowKey: boolean,
 	context: SensitiveAssignmentContext,
 	metrics?: RedactionScanMetrics,
 ): SensitiveAssignment | undefined {
 	if (!allowKey) return undefined;
-	let cursor = index;
-	let key: string;
-	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] : undefined;
-	if (quote) {
-		const decoded = decodeQuotedAssignmentKey(value, cursor, quote as LexicalQuote, metrics);
-		if (!decoded) return undefined;
-		key = decoded.key;
-		cursor = decoded.next;
-	} else {
-		const keyStart = cursor;
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (cursor === keyStart) return undefined;
-		key = value.slice(keyStart, cursor);
-	}
-
-	const kind = sensitiveAssignmentKind(key);
-	if (!kind) return undefined;
-	const normalizedKey = (key.toLowerCase().split(".").at(-1) ?? key).replace(/[-_]/g, "");
-	while (isHorizontalWhitespace(value[cursor])) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-	}
-	if (value[cursor] !== ":" && value[cursor] !== "=") return undefined;
-	const delimiter = value[cursor] as ":" | "=";
-	cursor += 1;
+	const candidate = scanAssignmentKeyCandidate(value, index, lineEnd, metrics);
+	if (!candidate) return undefined;
+	const classification = candidate.exactKey === undefined
+		? "unknown-sensitive"
+		: assignmentKeyClassification(candidate.exactKey);
+	if (classification === "public") return undefined;
+	const normalizedKey = candidate.exactKey === undefined
+		? ""
+		: (candidate.exactKey.toLowerCase().split(".").at(-1) ?? candidate.exactKey).replace(/[-_]/g, "");
+	let cursor = candidate.delimiterIndex + 1;
 	recordTotalVisits(metrics, 1);
 	while (isHorizontalWhitespace(value[cursor])) {
 		cursor += 1;
 		recordTotalVisits(metrics, 1);
 	}
-	return { kind, context, keyColumn: index - lineStart, normalizedKey, delimiter, valueStart: cursor };
+	return {
+		kind: classification,
+		context,
+		keyColumn: index - lineStart,
+		normalizedKey,
+		delimiter: candidate.delimiter,
+		valueStart: cursor,
+	};
+}
+
+function scanAssignmentKeyCandidate(
+	value: string,
+	start: number,
+	lineEnd: number,
+	metrics?: RedactionScanMetrics,
+): AssignmentKeyCandidate | undefined {
+	const quote = value[start] === '"' || value[start] === "'" ? value[start] as LexicalQuote : undefined;
+	if (quote) return scanQuotedAssignmentKeyCandidate(value, start, lineEnd, quote, metrics);
+	let cursor = start;
+	let exact = true;
+	let keyLength = 0;
+	let pendingWhitespace = false;
+	let forbidden = false;
+	let exactKey = "";
+	while (cursor < lineEnd) {
+		const character = value[cursor];
+		if (character === ":" || character === "=") {
+			if (keyLength === 0 || forbidden) return undefined;
+			return {
+				exactKey: exact && keyLength <= 64 ? exactKey : undefined,
+				delimiter: character,
+				delimiterIndex: cursor,
+			};
+		}
+		if (isHorizontalWhitespace(character)) {
+			pendingWhitespace = keyLength > 0;
+		} else {
+			if (pendingWhitespace) exact = false;
+			pendingWhitespace = false;
+			keyLength += 1;
+			if (keyLength <= 64 && isAssignmentKeyCharacter(character)) exactKey += character;
+			else exact = false;
+			if (character === "," || character === "{" || character === "}" || character === "[" ||
+				character === "]" || character === '"' || character === "'" || character === "#") {
+				forbidden = true;
+			}
+		}
+		cursor += 1;
+		recordTotalVisits(metrics, 1);
+	}
+	return undefined;
+}
+
+function scanQuotedAssignmentKeyCandidate(
+	value: string,
+	start: number,
+	lineEnd: number,
+	quote: LexicalQuote,
+	metrics?: RedactionScanMetrics,
+): AssignmentKeyCandidate | undefined {
+	let cursor = start + 1;
+	let decoded = "";
+	let decodedLength = 0;
+	let exact = true;
+	let closedAt: number | undefined;
+	let innerDelimiter: number | undefined;
+	const append = (character: string): void => {
+		decodedLength += 1;
+		if (decodedLength <= 64 && isAssignmentKeyCharacter(character)) decoded += character;
+		else exact = false;
+	};
+	while (cursor < lineEnd) {
+		const character = value[cursor];
+		recordTotalVisits(metrics, 1);
+		if ((character === ":" || character === "=") && innerDelimiter === undefined) innerDelimiter = cursor;
+		if (character === quote) {
+			if (quote === "'" && value[cursor + 1] === "'") {
+				append("'");
+				cursor += 2;
+				recordTotalVisits(metrics, 1);
+				continue;
+			}
+			closedAt = cursor;
+			break;
+		}
+		if (quote === '"' && character === "\\") {
+			const escaped = value[cursor + 1];
+			if (escaped === "u") {
+				const hex = value.slice(cursor + 2, cursor + 6);
+				if (/^[0-9a-fA-F]{4}$/.test(hex)) append(String.fromCharCode(Number.parseInt(hex, 16)));
+				else exact = false;
+				const consumed = Math.min(6, lineEnd - cursor);
+				cursor += consumed;
+				recordTotalVisits(metrics, Math.max(0, consumed - 1));
+				continue;
+			}
+			const simpleEscapes: Record<string, string> = {
+				'"': '"', "\\": "\\", "/": "/", b: "\b", f: "\f", n: "\n", r: "\r", t: "\t",
+			};
+			if (escaped !== undefined && Object.hasOwn(simpleEscapes, escaped)) append(simpleEscapes[escaped]);
+			else exact = false;
+			const consumed = Math.min(2, lineEnd - cursor);
+			cursor += consumed;
+			recordTotalVisits(metrics, Math.max(0, consumed - 1));
+			continue;
+		}
+		append(character);
+		cursor += 1;
+	}
+
+	if (closedAt !== undefined) {
+		cursor = closedAt + 1;
+		while (cursor < lineEnd && isHorizontalWhitespace(value[cursor])) {
+			cursor += 1;
+			recordTotalVisits(metrics, 1);
+		}
+		if (value[cursor] === ":" || value[cursor] === "=") {
+			return {
+				exactKey: exact && decodedLength > 0 && decodedLength <= 64 ? decoded : undefined,
+				delimiter: value[cursor] as ":" | "=",
+				delimiterIndex: cursor,
+			};
+		}
+	}
+	if (innerDelimiter !== undefined) {
+		return {
+			delimiter: value[innerDelimiter] as ":" | "=",
+			delimiterIndex: innerDelimiter,
+		};
+	}
+	return undefined;
 }
 
 function decodeQuotedAssignmentKey(
@@ -922,7 +1050,7 @@ function quotedValueRedaction(
 	const quoteEnd = findQuotedValueEnd(value, contentStart, quote, metrics);
 	const contentEnd = quoteEnd ?? lineEnd;
 	const resumeAt = quoteEnd === undefined ? afterLineEnding(value, lineEnd) : quoteEnd + 1;
-	if (assignment.kind === "secret") {
+	if (assignment.kind === "secret" || assignment.kind === "unknown-sensitive") {
 		if (value.slice(contentStart, contentEnd).trim().length === 0) return { resumeAt };
 		return { range: { start: contentStart, end: contentEnd, replacement: REDACTED_TEXT }, resumeAt };
 	}
@@ -1018,7 +1146,7 @@ function unquotedValueRedaction(
 	}
 
 	const scalar = value.slice(assignment.valueStart, scalarEnd);
-	const documentaryAssignmentProse = assignment.kind === "secret" && assignment.context === "line" &&
+	const documentaryAssignmentProse = assignment.context === "line" &&
 		assignment.delimiter === ":" &&
 		assignment.keyColumn === 0 && continuation === undefined &&
 		isDocumentaryAssignmentProse(scalar);
@@ -1167,16 +1295,21 @@ function redactStrongCredentialSyntax(value: string): string {
 		.replace(/(\bpassword[\t ]+)(?![=:])([^\s#]+)/gi, `$1${REDACTED_TEXT}`);
 }
 
-function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
+function assignmentKeyClassification(key: string): AssignmentKeyClassification {
 	const { segments, path, terminal } = canonicalAssignmentKey(key);
 	if ((segments.length === 1 && publicAssignmentTerminals.has(terminal)) || publicAssignmentPaths.has(path)) {
-		return undefined;
+		return "public";
 	}
 	if (terminal === "authorization" || terminal === "proxyauthorization") return "authorization";
 	if (sensitiveAssignmentTerminals.has(terminal) || sensitiveAssignmentPaths.has(path)) return "secret";
 	// The structured grammar is deliberately closed: once assignment syntax is recognized, only
 	// reviewed public metadata escapes redaction. Unknown aliases do not become an extension path.
 	return "unknown-sensitive";
+}
+
+function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
+	const classification = assignmentKeyClassification(key);
+	return classification === "public" ? undefined : classification;
 }
 
 function canonicalAssignmentKey(key: string): {
@@ -1214,7 +1347,7 @@ function findStructuredKeyStart(
 			recordKeyStartVisit(metrics);
 		}
 	}
-	return isPotentialAssignmentKeyStart(value[cursor]) ? cursor : undefined;
+	return isPotentialAssignmentCandidateStart(value[cursor]) ? cursor : undefined;
 }
 
 function advanceScannerLine(
@@ -1260,7 +1393,7 @@ function advanceScannerTo(
 
 function isFlowMappingKeyStart(value: string, index: number, state: StructuredScannerState): boolean {
 	if (!["}", "]"].includes(state.flowClosers[state.flowClosers.length - 1] ?? "") ||
-		!isPotentialAssignmentKeyStart(value[index])) {
+		!isPotentialAssignmentCandidateStart(value[index])) {
 		return false;
 	}
 	let cursor = index - 1;
@@ -1293,24 +1426,8 @@ function looksLikeFlowMapping(value: string, index: number, metrics?: RedactionS
 		cursor += 1;
 		recordTotalVisits(metrics, 1);
 	}
-	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] as LexicalQuote : undefined;
-	if (quote) {
-		const decoded = decodeQuotedAssignmentKey(value, cursor, quote, metrics);
-		if (!decoded) return false;
-		cursor = decoded.next;
-	} else {
-		const keyStart = cursor;
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-		if (cursor === keyStart || cursor - keyStart > 64) return false;
-	}
-	while (cursor < value.length && isHorizontalWhitespace(value[cursor])) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-	}
-	return value[cursor] === ":";
+	const lineEnd = findLineEnd(value, cursor, metrics);
+	return scanAssignmentKeyCandidate(value, cursor, lineEnd, metrics)?.delimiter === ":";
 }
 
 function looksLikeFlowSequence(value: string, index: number, metrics?: RedactionScanMetrics): boolean {
@@ -1320,23 +1437,8 @@ function looksLikeFlowSequence(value: string, index: number, metrics?: Redaction
 		recordTotalVisits(metrics, 1);
 	}
 	if (value[cursor] === "{" || value[cursor] === "[") return true;
-	const quote = value[cursor] === '"' || value[cursor] === "'" ? value[cursor] as LexicalQuote : undefined;
-	const keyStart = cursor;
-	if (quote) {
-		const decoded = decodeQuotedAssignmentKey(value, cursor, quote, metrics);
-		if (!decoded) return false;
-		cursor = decoded.next;
-	} else {
-		while (cursor < value.length && isAssignmentKeyCharacter(value[cursor]) && cursor - keyStart <= 64) {
-			cursor += 1;
-			recordTotalVisits(metrics, 1);
-		}
-	}
-	while (cursor < value.length && isHorizontalWhitespace(value[cursor])) {
-		cursor += 1;
-		recordTotalVisits(metrics, 1);
-	}
-	return cursor > keyStart && value[cursor] === ":";
+	const lineEnd = findLineEnd(value, cursor, metrics);
+	return scanAssignmentKeyCandidate(value, cursor, lineEnd, metrics)?.delimiter === ":";
 }
 
 function isStructuredValueQuote(
@@ -1411,6 +1513,12 @@ function isPotentialAssignmentKeyStart(character: string | undefined): boolean {
 	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
 		(code >= 97 && code <= 122) || character === "_" || character === "-" ||
 		character === '"' || character === "'";
+}
+
+function isPotentialAssignmentCandidateStart(character: string | undefined): boolean {
+	return character !== undefined && !isWhitespace(character) && character !== "#" &&
+		character !== "{" && character !== "}" && character !== "[" && character !== "]" &&
+		character !== "," && character !== ":" && character !== "=";
 }
 
 function isHorizontalWhitespace(character: string | undefined): boolean {
