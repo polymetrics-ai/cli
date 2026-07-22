@@ -279,6 +279,57 @@ test("every blocking finding needs an exact-current-head disposition plus a late
 	}), expected)).includes("undispositioned_finding"));
 });
 
+test("cycle 10 warning findings require later exact dispositions and a causally later clean review", async (t) => {
+	const warningReview = cleanReview({
+		completedAt: "2026-07-21T10:00:00.000Z",
+		verdict: "findings",
+		findings: [{ id: "W-10", severity: "warning", summary: "Disposition this warning before readiness." }],
+	});
+	const laterClean = cleanReview({ completedAt: "2026-07-21T12:00:00.000Z" });
+	const reviews = [warningReview, laterClean];
+	const expectedWithAttempts = {
+		...expected,
+		attestations: [
+			attestation(warningReview, { sessionId: "session-478-warning", runId: "run-478-warning" }),
+			attestation(laterClean, { sessionId: "session-478-warning-clean", runId: "run-478-warning-clean" }),
+		],
+	};
+	const fixed = {
+		findingId: "W-10",
+		kind: "fixed" as const,
+		rationale: "The warning was corrected and rereviewed.",
+		actor: "maintainer",
+		headSha,
+		recordedAt: "2026-07-21T11:00:00.000Z",
+	};
+	const mustBlock: Array<[string, Record<string, unknown>]> = [
+		["missing disposition", {}],
+		["stale-head disposition", { dispositions: [{ ...fixed, headSha: "9".repeat(40) }] }],
+		["pre-finding disposition", { dispositions: [{ ...fixed, recordedAt: "2026-07-21T09:59:59.000Z" }] }],
+		["equal-time disposition", { dispositions: [{ ...fixed, recordedAt: warningReview.completedAt }] }],
+		["unauthorized not-actionable disposition", { dispositions: [{ ...fixed, kind: "not_actionable" }] }],
+		["clean review before disposition", { dispositions: [{ ...fixed, recordedAt: "2026-07-21T12:30:00.000Z" }] }],
+	];
+	for (const [name, overrides] of mustBlock) {
+		await t.test(name, async () => {
+			const result = evaluateGitHubPullRequestEvidence(
+				await evidence({ reviews, ...overrides, observedAt: "2026-07-21T13:00:00.000Z" }),
+				expectedWithAttempts,
+			);
+			assert.ok(
+				blockerCodes(result).some((blocker) => blocker === "undispositioned_finding" || blocker === "review_missing"),
+				name,
+			);
+		});
+	}
+	await t.test("later fixed disposition followed by later clean review", async () => {
+		assert.equal(evaluateGitHubPullRequestEvidence(
+			await evidence({ reviews, dispositions: [fixed] }),
+			expectedWithAttempts,
+		).kind, "eligible");
+	});
+});
+
 test("head movement, stale reviewed ranges, topology drift, draft state, and merge conflicts fail closed", async () => {
 	const staleReview: IndependentReviewRecord = {
 		...createIndependentReviewWork({
@@ -1089,6 +1140,47 @@ test("cycle 9 parses the complete bounded assignment name before GitHub evidence
 				rejection = error;
 			}
 			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
+const cycle10AssignmentSuffixes = [
+	"AUTHORIZATION", "TOKEN", "ACCESS_TOKEN", "REFRESH_TOKEN", "API_KEY", "PASSWORD", "SECRET",
+	"CLIENT_SECRET", "PRIVATE_KEY", "DATABASE_URL", "CREDENTIAL", "CREDENTIALS", "COOKIE", "COOKIES",
+	"SET_COOKIE", "SESSION", "SESSION_ID", "SESSION_TOKEN", "SESSION_COOKIE", "CSRF_TOKEN",
+] as const;
+
+test("cycle 10 closes assignment operator case and index policy before GitHub evidence acceptance", async (t) => {
+	const candidate = await evidence();
+	const marker = "CYCLE10_GITHUB_EVIDENCE_MARKER";
+	const prefix = `${candidate.body}\n`;
+	const rows: Array<[string, string, boolean]> = [
+		...cycle10AssignmentSuffixes.map((suffix): [string, string, boolean] =>
+			[`append ${suffix}`, `ACME_${suffix}+=${marker}`, true]),
+		["lowercase base", `acme_api_key=${marker}`, true],
+		["mixed-case base append", `AcMe_ApI_KeY+=${marker}`, true],
+		["numeric index", `ACME_API_KEY[0]=${marker}`, true],
+		["associative index append", `ACME_API_KEY[slot]+=${marker}`, true],
+		["exact public ordinary control", "FEATURE_TOKEN=enabled", false],
+		["exact public append control", "FEATURE_TOKEN+=enabled", false],
+		["indexed public-lookalike", `FEATURE_TOKEN[0]=${marker}`, true],
+	];
+	for (const [name, assignment, rejects] of rows) {
+		await t.test(name, () => {
+			const body = `${prefix}${assignment}`;
+			if (!rejects) {
+				assert.equal(validateGitHubPullRequestEvidence({ ...candidate, body }).body, body);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				validateGitHubPullRequestEvidence({ ...candidate, body });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
 			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
 			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
 		});

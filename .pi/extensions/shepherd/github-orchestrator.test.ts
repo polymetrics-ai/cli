@@ -3523,6 +3523,45 @@ test("cycle 9 parses the complete bounded assignment name before orchestration e
 	}
 });
 
+const cycle10AssignmentSuffixes = [
+	"AUTHORIZATION", "TOKEN", "ACCESS_TOKEN", "REFRESH_TOKEN", "API_KEY", "PASSWORD", "SECRET",
+	"CLIENT_SECRET", "PRIVATE_KEY", "DATABASE_URL", "CREDENTIAL", "CREDENTIALS", "COOKIE", "COOKIES",
+	"SET_COOKIE", "SESSION", "SESSION_ID", "SESSION_TOKEN", "SESSION_COOKIE", "CSRF_TOKEN",
+] as const;
+
+test("cycle 10 closes assignment operator case and index policy before orchestration effects", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const marker = "CYCLE10_ORCHESTRATOR_MARKER";
+	const rows: Array<[string, string, boolean]> = [
+		...cycle10AssignmentSuffixes.map((suffix): [string, string, boolean] =>
+			[`append ${suffix}`, `ACME_${suffix}+=${marker}`, true]),
+		["lowercase base", `acme_api_key=${marker}`, true],
+		["mixed-case base append", `AcMe_ApI_KeY+=${marker}`, true],
+		["numeric index", `ACME_API_KEY[0]=${marker}`, true],
+		["associative index append", `ACME_API_KEY[slot]+=${marker}`, true],
+		["exact public ordinary control", "FEATURE_TOKEN=enabled", false],
+		["exact public append control", "FEATURE_TOKEN+=enabled", false],
+		["indexed public-lookalike", `FEATURE_TOKEN[0]=${marker}`, true],
+	];
+	for (const [name, objective, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createPlanFromSource({ ...source, objective }).objective, objective);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createPlanFromSource({ ...source, objective });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
 function cycle7FutureParentDecision(
 	request: GitHubDecisionRequest,
 	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
@@ -5951,6 +5990,569 @@ test("cycle 9 consults durable authority before every already-ready shortcut", a
 	}
 });
 
+function cycle10UnsettledAuthorityState(
+	operation: PreparedParentReadyOperation,
+	marker: string,
+	phase: "ready_invoking" | "ready_effect_applied" | "recovery_claimed",
+): ParentReadyAuthorityState {
+	const request = githubOrchestratorApi.validateMarkParentReadyRequest({
+		repository: operation.authorization.repository,
+		pullRequest: operation.authorization.pullRequest,
+		marker,
+		headSha: operation.authorization.headSha,
+		generation: operation.authorization.generation,
+		decisionRequestId: operation.authorization.decisionRequestId,
+		authorization: operation.authorization,
+		freshness: operation.freshness,
+		mutation: operation.mutation,
+	});
+	const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(request);
+	if (phase === "ready_invoking") return invoking;
+	if (phase === "ready_effect_applied") {
+		return githubOrchestratorApi.validateParentReadyAuthorityState({
+			...invoking,
+			phase,
+		});
+	}
+	return cycle9UnsettledAuthorityState(operation, marker);
+}
+
+test("cycle 10 prepare and reconcile recover authority before every unrelated readiness gate", async (t) => {
+	const phases = ["ready_invoking", "ready_effect_applied", "recovery_claimed"] as const;
+	const gates = ["roster", "review", "policy", "broker", "pending", "expired", "rejected"] as const;
+	for (const path of ["prepare", "reconcile"] as const) {
+		for (const phase of phases) {
+			for (const gate of gates) {
+				await t.test(`${path} ${phase} before ${gate}`, async () => {
+					let probe: Cycle9AuthorityReadProbe | undefined;
+					const scenario = await cycle8PortOnlyPreparedScenario((authority, backing) => {
+						probe = new Cycle9AuthorityReadProbe(authority, backing);
+						return probe;
+					});
+					assert.ok(probe);
+					probe.state = cycle10UnsettledAuthorityState(
+						scenario.operation,
+						scenario.candidate.markers.parentPullRequest,
+						phase,
+					);
+					const index = scenario.backing.pullRequests.findIndex((entry) =>
+						entry.number === scenario.operation.authorization.pullRequest);
+					const current = scenario.backing.pullRequests[index];
+					if (index < 0 || current === undefined) throw new Error("cycle 10 parent PR is missing");
+					scenario.backing.pullRequests.splice(index, 1, {
+						...current,
+						draft: false,
+						revision: current.revision + 1,
+						...(gate === "review" ? { reviews: [] } : {}),
+					});
+					const broker = gate === "broker" ? undefined : new FakeDecisionBroker();
+					if (broker !== undefined && gate === "pending") broker.pollResult = { status: "pending", attempts: 1 };
+					if (broker !== undefined && gate === "expired") broker.pollResult = { status: "expired", attempts: 1 };
+					if (broker !== undefined && gate === "rejected") {
+						broker.pollResult = {
+							status: "decided",
+							decision: { ...approvedDecision, option: "reject" },
+							attempts: 1,
+						};
+					}
+					let policyReads = 0;
+					const policySource: RequiredCheckPolicySource = gate === "policy"
+						? {
+							async findRequiredCheckPolicies() {
+								policyReads += 1;
+								return { items: [], complete: true };
+							},
+						}
+						: portOnlyPolicySource();
+					const orchestrator = new GitHubParentOrchestrator(
+						scenario.transport,
+						broker,
+						portOnlyAttestations(scenario.backing),
+						policySource,
+						{
+							externalCallTimeoutMs: 20,
+							parentReadyAuthority: probe,
+							now: () => new Date("2026-07-22T00:00:00.000Z"),
+						},
+					);
+					const receipts = gate === "roster" ? [] : scenario.receipts;
+					const result = path === "prepare"
+						? await orchestrator.prepareParentReadiness(scenario.candidate, receipts, decisionPolicy)
+						: await orchestrator.reconcileParentReadiness(scenario.candidate, receipts, decisionPolicy);
+					assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
+					assert.ok(probe.readCalls >= 1, "authority must be queried before unrelated gates");
+					assert.equal(probe.visibleReadyAtRecovery, true);
+					if (broker !== undefined) assert.equal(broker.requests.length, 0, "broker gate must not run first");
+					assert.equal(policyReads, 0, "moved policy must not suppress prior recovery");
+					assert.equal((await orchestrator.stop()).kind, "joined");
+				});
+			}
+		}
+	}
+});
+
+test("cycle 10 settled-ready reuse requires the exact persisted applied revision on every public path", async (t) => {
+	for (const path of ["prepare", "commit", "reconcile"] as const) {
+		for (const [name, revisionDelta, ready] of [
+			["original revision", 0, false],
+			["lower revision", -1, false],
+			["higher but not exact", 2, false],
+			["far higher mismatch", 10, false],
+			["exact applied revision", 1, true],
+		] as const) {
+			await t.test(`${path} ${name}`, async () => {
+				let probe: Cycle9AuthorityReadProbe | undefined;
+				const scenario = await cycle8PortOnlyPreparedScenario((authority, backing) => {
+					probe = new Cycle9AuthorityReadProbe(authority, backing);
+					return probe;
+				});
+				assert.ok(probe);
+				const invoking = cycle10UnsettledAuthorityState(
+					scenario.operation,
+					scenario.candidate.markers.parentPullRequest,
+					"ready_invoking",
+				);
+				probe.state = githubOrchestratorApi.validateParentReadyAuthorityState({
+					...invoking,
+					phase: "ready_settled",
+					status: "settled",
+				});
+				const index = scenario.backing.pullRequests.findIndex((entry) =>
+					entry.number === scenario.operation.authorization.pullRequest);
+				const current = scenario.backing.pullRequests[index];
+				if (index < 0 || current === undefined) throw new Error("cycle 10 settled PR is absent");
+				scenario.backing.pullRequests.splice(index, 1, {
+					...current,
+					draft: false,
+					revision: scenario.operation.authorization.pullRequestRevision + revisionDelta,
+				});
+				const result = path === "prepare"
+					? await scenario.orchestrator.prepareParentReadiness(
+						scenario.candidate,
+						scenario.receipts,
+						decisionPolicy,
+					)
+					: path === "commit"
+						? await scenario.orchestrator.commitPreparedParentReadiness(
+							scenario.candidate,
+							scenario.receipts,
+							scenario.operation,
+						)
+						: await scenario.orchestrator.reconcileParentReadiness(
+							scenario.candidate,
+							scenario.receipts,
+							decisionPolicy,
+						);
+				assert.equal(result.kind === "ready", ready, `${path} ${name}`);
+			});
+		}
+	}
+});
+
+class Cycle10LostSettlementAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	readonly #backing: PortOnlyReadinessBacking;
+	readonly #mode: "reject" | "timeout" | "cancel" | "malformed";
+	readonly #onSettled: () => void;
+	#override: ParentReadyAuthorityState | null = null;
+	#releaseRecovery = (): void => {};
+	readonly #recoveryGate = new Promise<void>((resolve) => { this.#releaseRecovery = resolve; });
+	rollbackCalls = 0;
+
+	constructor(
+		delegate: ParentReadyDurableAuthorityBoundary,
+		backing: PortOnlyReadinessBacking,
+		mode: "reject" | "timeout" | "cancel" | "malformed",
+		onSettled: () => void = () => {},
+	) {
+		this.#delegate = delegate;
+		this.#backing = backing;
+		this.#mode = mode;
+		this.#onSettled = onSettled;
+	}
+
+	releaseRecovery(): void {
+		this.#releaseRecovery();
+	}
+
+	async readParentReadyState(
+		query: ParentReadyAuthorityQuery,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState | null> {
+		return structuredClone(this.#override ?? await this.#delegate.readParentReadyState(query, context));
+	}
+
+	compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		return this.#delegate.compareConsumeAndMarkParentReady(request, context);
+	}
+
+	async settleParentReady(
+		request: SettleParentReadyAuthorityRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState> {
+		this.#override = await this.#delegate.settleParentReady(request, context);
+		this.#onSettled();
+		if (this.#mode === "reject") throw new Error("cycle 10 settlement response lost");
+		if (this.#mode === "malformed") return JSON.parse("{}");
+		await new Promise<void>((resolve) => setTimeout(resolve, 60));
+		return structuredClone(this.#override);
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		_context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackCalls += 1;
+		await this.#recoveryGate;
+		const settled = this.#override;
+		if (settled === null) throw new Error("cycle 10 cleanup settlement is absent");
+		const claimed = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...settled,
+			rollbackMutation: request.mutation,
+			phase: "recovery_claimed",
+			status: "unsettled",
+			fence: request.recovery.attempt,
+		});
+		this.#override = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...claimed,
+			phase: "draft_restored",
+			status: "settled",
+		});
+		const index = this.#backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#backing.pullRequests[index];
+		if (index < 0 || current === undefined) throw new Error("cycle 10 cleanup PR is absent");
+		const draft = current.draft ? current : { ...current, draft: true, revision: current.revision + 1 };
+		this.#backing.pullRequests.splice(index, 1, draft);
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: request.recovery.attempt,
+			applied: true,
+			value: structuredClone(draft),
+		};
+	}
+}
+
+test("cycle 10 settlement-wins lost responses terminate recovery without rollback", async (t) => {
+	for (const mode of ["reject", "timeout", "cancel", "malformed"] as const) {
+		await t.test(mode, async () => {
+			const caller = new AbortController();
+			let authority: Cycle10LostSettlementAuthority | undefined;
+			const scenario = await cycle8PortOnlyPreparedScenario((delegate, backing) => {
+				authority = new Cycle10LostSettlementAuthority(
+					delegate,
+					backing,
+					mode,
+					mode === "cancel" ? () => caller.abort() : () => {},
+				);
+				return authority;
+			});
+			assert.ok(authority);
+			await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+			const result = await scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+				mode === "cancel" ? { signal: caller.signal } : undefined,
+			);
+			await new Promise<void>((resolve) => setTimeout(resolve, 30));
+			const rollbackCalls = authority.rollbackCalls;
+			authority.releaseRecovery();
+			await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			const stopped = await scenario.orchestrator.stop();
+			assert.equal(result.kind, "ready", `${mode} must reconcile the winning settlement`);
+			assert.equal(rollbackCalls, 0, `${mode} must not attempt rollback after ready_settled`);
+			assert.equal(stopped.kind, "joined");
+		});
+	}
+});
+
+class Cycle10PreApplicationFailureAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	readonly #backing: PortOnlyReadinessBacking;
+	readonly #mode: "reject" | "timeout" | "cancel" | "malformed";
+	readonly #onEffect: () => void;
+	#request: MarkParentReadyRequest | null = null;
+	#state: ParentReadyAuthorityState | null = null;
+	#releaseRecovery = (): void => {};
+	readonly #recoveryGate = new Promise<void>((resolve) => { this.#releaseRecovery = resolve; });
+	stateObservedAtEffect: ParentReadyAuthorityState | null = null;
+	rollbackCalls = 0;
+
+	constructor(
+		delegate: ParentReadyDurableAuthorityBoundary,
+		backing: PortOnlyReadinessBacking,
+		mode: "reject" | "timeout" | "cancel" | "malformed",
+		onEffect: () => void = () => {},
+	) {
+		this.#delegate = delegate;
+		this.#backing = backing;
+		this.#mode = mode;
+		this.#onEffect = onEffect;
+	}
+
+	releaseRecovery(): void {
+		this.#releaseRecovery();
+	}
+
+	async readParentReadyState(
+		query: ParentReadyAuthorityQuery,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState | null> {
+		return structuredClone(this.#state ?? await this.#delegate.readParentReadyState(query, context));
+	}
+
+	settleParentReady(
+		request: SettleParentReadyAuthorityRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState> {
+		return this.#delegate.settleParentReady(request, context);
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		this.#request = request;
+		this.stateObservedAtEffect = await this.#delegate.readParentReadyState({
+			repository: request.repository,
+			pullRequest: request.pullRequest,
+			marker: request.marker,
+			headSha: request.headSha,
+			generation: request.generation,
+		}, context);
+		this.#onEffect();
+		if (this.#mode === "reject") throw new Error("cycle 10 rejected before ready state");
+		if (this.#mode === "malformed") return JSON.parse("{}");
+		await new Promise<void>((resolve) => setTimeout(resolve, 60));
+		throw new Error("cycle 10 delayed pre-application failure");
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		_context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackCalls += 1;
+		await this.#recoveryGate;
+		const original = this.#request;
+		if (original === null) throw new Error("cycle 10 effect request is absent");
+		const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(original);
+		const claimed = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...invoking,
+			rollbackMutation: request.mutation,
+			phase: "recovery_claimed",
+			status: "unsettled",
+			fence: request.recovery.attempt,
+		});
+		this.#state = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...claimed,
+			phase: "draft_restored",
+			status: "settled",
+		});
+		const current = this.#backing.pullRequests.find((entry) => entry.number === request.pullRequest);
+		if (current === undefined) throw new Error("cycle 10 pre-application PR is absent");
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: request.recovery.attempt,
+			applied: false,
+			value: structuredClone(current),
+		};
+	}
+}
+
+test("cycle 10 pre-application failures have durable invoking state and terminal no-op recovery", async (t) => {
+	for (const mode of ["reject", "timeout", "cancel", "malformed"] as const) {
+		await t.test(mode, async () => {
+			const caller = new AbortController();
+			let authority: Cycle10PreApplicationFailureAuthority | undefined;
+			const scenario = await cycle8PortOnlyPreparedScenario((delegate, backing) => {
+				authority = new Cycle10PreApplicationFailureAuthority(
+					delegate,
+					backing,
+					mode,
+					mode === "cancel" ? () => caller.abort() : () => {},
+				);
+				return authority;
+			});
+			assert.ok(authority);
+			await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+			const result = await scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+				mode === "cancel" ? { signal: caller.signal } : undefined,
+			);
+			await new Promise<void>((resolve) => setTimeout(resolve, 30));
+			const stateAtEffect = authority.stateObservedAtEffect;
+			authority.releaseRecovery();
+			await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			const resumed = await scenario.orchestrator.prepareParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				decisionPolicy,
+			);
+			const stopped = await scenario.orchestrator.stop();
+			assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
+			assert.equal(stateAtEffect?.phase, "ready_invoking", "durable begin must precede effect invocation");
+			assert.equal(authority.rollbackCalls, 1);
+			assert.equal(resumed.kind, "prepared", "terminal no-op recovery must permit keyed reentry");
+			assert.equal(stopped.kind, "joined");
+		});
+	}
+});
+
+class Cycle10PostRollbackConfirmationAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	readonly #backing: PortOnlyReadinessBacking;
+	readonly #mode: "hang" | "late" | "reject" | "malformed";
+	#state: ParentReadyAuthorityState | null = null;
+	#awaitingConfirmation = false;
+	#perturbedConfirmation = false;
+	#releaseConfirmation = (): void => {};
+	readonly #confirmationGate = new Promise<void>((resolve) => { this.#releaseConfirmation = resolve; });
+	rollbackCalls = 0;
+
+	constructor(
+		delegate: ParentReadyDurableAuthorityBoundary,
+		backing: PortOnlyReadinessBacking,
+		mode: "hang" | "late" | "reject" | "malformed",
+	) {
+		this.#delegate = delegate;
+		this.#backing = backing;
+		this.#mode = mode;
+	}
+
+	releaseConfirmation(): void {
+		this.#releaseConfirmation();
+	}
+
+	async readParentReadyState(
+		query: ParentReadyAuthorityQuery,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState | null> {
+		if (this.#awaitingConfirmation) {
+			this.#awaitingConfirmation = false;
+			if (!this.#perturbedConfirmation) {
+				this.#perturbedConfirmation = true;
+				if (this.#mode === "reject") throw new Error("cycle 10 confirmation rejected");
+				if (this.#mode === "malformed") return JSON.parse("{}");
+				const stale = structuredClone(this.#state);
+				if (this.#mode === "late") {
+					await Promise.race([
+						this.#confirmationGate,
+						new Promise<void>((resolve) => setTimeout(resolve, 160)),
+					]);
+				} else {
+					await this.#confirmationGate;
+				}
+				return stale;
+			}
+		}
+		return structuredClone(this.#state ?? await this.#delegate.readParentReadyState(query, context));
+	}
+
+	settleParentReady(
+		request: SettleParentReadyAuthorityRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyAuthorityState> {
+		return this.#delegate.settleParentReady(request, context);
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		await this.#delegate.compareConsumeAndMarkParentReady(request, context);
+		this.#state = await this.#delegate.readParentReadyState({
+			repository: request.repository,
+			pullRequest: request.pullRequest,
+			marker: request.marker,
+			headSha: request.headSha,
+			generation: request.generation,
+		}, context);
+		throw new Error("cycle 10 ready response lost after application");
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		_context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackCalls += 1;
+		const prior = this.#state;
+		if (prior === null) throw new Error("cycle 10 confirmation authority state is absent");
+		const claimed = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...prior,
+			rollbackMutation: request.mutation,
+			phase: "recovery_claimed",
+			status: "unsettled",
+			fence: request.recovery.attempt,
+		});
+		this.#state = request.recovery.attempt === 1
+			? claimed
+			: githubOrchestratorApi.validateParentReadyAuthorityState({
+				...claimed,
+				phase: "draft_restored",
+				status: "settled",
+			});
+		const index = this.#backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#backing.pullRequests[index];
+		if (index < 0 || current === undefined) throw new Error("cycle 10 confirmation PR is absent");
+		const draft = current.draft ? current : { ...current, draft: true, revision: current.revision + 1 };
+		this.#backing.pullRequests.splice(index, 1, draft);
+		this.#awaitingConfirmation = true;
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: request.recovery.attempt,
+			applied: request.recovery.attempt === 1,
+			value: structuredClone(draft),
+		};
+	}
+}
+
+test("cycle 10 post-rollback confirmation is bounded and superseded by a later fence", async (t) => {
+	for (const mode of ["hang", "late", "reject", "malformed"] as const) {
+		await t.test(mode, async () => {
+			let authority: Cycle10PostRollbackConfirmationAuthority | undefined;
+			const scenario = await cycle8PortOnlyPreparedScenario((delegate, backing) => {
+				authority = new Cycle10PostRollbackConfirmationAuthority(delegate, backing, mode);
+				return authority;
+			});
+			assert.ok(authority);
+			await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+			const result = await scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+			);
+			await new Promise<void>((resolve) => setTimeout(resolve, 10));
+			const initiallyStopped = await scenario.orchestrator.stop();
+			await new Promise<void>((resolve) => setTimeout(resolve, 60));
+			const supersededStop = await scenario.orchestrator.stop();
+			const rollbackCalls = authority.rollbackCalls;
+			authority.releaseConfirmation();
+			await new Promise<void>((resolve) => setTimeout(resolve, 100));
+			const cleanupStop = await scenario.orchestrator.stop();
+			assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
+			assert.equal(
+				initiallyStopped.kind,
+				mode === "hang" || mode === "late" ? "incomplete" : "joined",
+				"only an unsettled confirmation remains recovery-owned",
+			);
+			assert.ok(rollbackCalls >= 2, "a newer durable fence must supersede the abandoned confirmation");
+			assert.equal(supersededStop.kind, "joined", "the successful newer fence must release lifecycle ownership");
+			assert.equal(cleanupStop.kind, "joined");
+		});
+	}
+});
+
 test("cycle 9 exposes the canonical authority recovery and settlement surface", async (t) => {
 	for (const exportName of [
 		"validateParentReadyAuthorityQuery",
@@ -6007,6 +6609,172 @@ test("cycle 9 exact issue 479 fixture is value-serialized and contains no fake o
 		for (const word of ["conflict", "uncertain", "restart", "incomplete", "joined", "settlement"]) {
 			assert.match(fixture, new RegExp(word, "iu"));
 		}
+	});
+});
+
+interface Cycle10MutableRestartSnapshot extends Record<string, unknown> {
+	journal: {
+		prepared: unknown[];
+		settlements: Array<Record<string, unknown> & { mutationIdempotencyKey: string }>;
+	};
+	authority: Record<string, unknown> & {
+		mutationRevision: number;
+		readyMutations: unknown[];
+		rollbackMutations: unknown[];
+		recoveryAttempts: unknown[];
+		states: Array<[string, ParentReadyAuthorityState]>;
+	};
+}
+
+async function cycle10RestartSnapshotSeed(): Promise<{
+	plan: ParentOrchestrationPlan;
+	snapshot: Cycle10MutableRestartSnapshot;
+	state: ParentReadyAuthorityState;
+	readyKey: string;
+	rollbackKey: string;
+	recoveryId: string;
+}> {
+	const scenario = await cycle8PortOnlyPreparedScenario();
+	const operation = scenario.operation;
+	const request = githubOrchestratorApi.validateMarkParentReadyRequest({
+		repository: operation.authorization.repository,
+		pullRequest: operation.authorization.pullRequest,
+		marker: scenario.candidate.markers.parentPullRequest,
+		headSha: operation.authorization.headSha,
+		generation: operation.authorization.generation,
+		decisionRequestId: operation.authorization.decisionRequestId,
+		authorization: operation.authorization,
+		freshness: operation.freshness,
+		mutation: operation.mutation,
+	});
+	const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(request);
+	const recovery: ParentReadyRecoveryFence = {
+		schemaVersion: 1,
+		invocationId: invoking.invocationId,
+		recoveryId: invoking.recoveryId,
+		attempt: 1,
+		supersedesAttempt: null,
+		readyMutation: operation.mutation,
+	};
+	const rollbackMutation = createDurableMutationIntent(
+		"parent_ready_rollback",
+		[recovery.recoveryId, recovery.attempt],
+		{
+			repository: invoking.repository,
+			pullRequest: invoking.pullRequest,
+			marker: invoking.marker,
+			headSha: invoking.headSha,
+			generation: invoking.generation,
+			authorizationDigest: invoking.authorization.digest,
+			recovery,
+		},
+		null,
+	);
+	const state = githubOrchestratorApi.validateParentReadyAuthorityState({
+		...invoking,
+		rollbackMutation,
+		phase: "draft_restored",
+		status: "settled",
+		fence: 1,
+	});
+	const current = scenario.backing.pullRequests.find((entry) => entry.number === operation.authorization.pullRequest);
+	if (current === undefined) throw new Error("cycle 10 restart seed parent PR is absent");
+	const ready = { ...current, draft: false, revision: current.revision + 1 };
+	const draft = { ...ready, draft: true, revision: ready.revision + 1 };
+	const stateKey = `${state.repository}\u0000${state.pullRequest}\u0000${state.marker}\u0000${state.generation}\u0000${state.headSha}`;
+	const settlement = {
+		schemaVersion: 1 as const,
+		planDigest: operation.planDigest,
+		authorizationDigest: operation.authorization.digest,
+		mutationIdempotencyKey: operation.mutation.idempotencyKey,
+		outcome: "blocked" as const,
+		settledAt: "2026-07-22T00:00:00.000Z",
+	};
+	return {
+		plan: scenario.candidate,
+		state,
+		readyKey: operation.mutation.idempotencyKey,
+		rollbackKey: rollbackMutation.idempotencyKey,
+		recoveryId: recovery.recoveryId,
+		snapshot: {
+			readiness: {
+				issues: scenario.backing.issues,
+				pullRequests: [draft],
+				rosters: scenario.backing.rosters,
+				integrations: scenario.backing.integrations,
+			},
+			journal: { prepared: [operation], settlements: [settlement] },
+			authority: {
+				mutationRevision: 2,
+				readyMutations: [[operation.mutation.idempotencyKey, {
+					digest: operation.mutation.intentDigest,
+					value: ready,
+					revision: 1,
+				}]],
+				rollbackMutations: [[rollbackMutation.idempotencyKey, {
+					digest: rollbackMutation.intentDigest,
+					value: draft,
+					revision: 2,
+				}]],
+				recoveryAttempts: [[recovery.recoveryId, 1]],
+				states: [[stateKey, state]],
+			},
+			decision: operation.decision,
+		},
+	};
+}
+
+test("cycle 10 restart decoding rejects ambiguous and internally incomplete snapshots", async (t) => {
+	const seed = await cycle10RestartSnapshotSeed();
+	const decode = (snapshot: unknown): Cycle9RestartSnapshot => {
+		const decoded: unknown = JSON.parse(JSON.stringify(snapshot));
+		return decodeCycle9RestartSnapshot(decoded, seed.plan);
+	};
+	assert.doesNotThrow(() => decode(seed.snapshot));
+	const mutate = (change: (snapshot: Cycle10MutableRestartSnapshot) => void): Cycle10MutableRestartSnapshot => {
+		const snapshot = structuredClone(seed.snapshot);
+		change(snapshot);
+		return snapshot;
+	};
+	const rejects: Array<[string, Cycle10MutableRestartSnapshot]> = [
+		["duplicate prepared query", mutate((value) => { value.journal.prepared.push(value.journal.prepared[0]); })],
+		["duplicate settlement query", mutate((value) => { value.journal.settlements.push(value.journal.settlements[0]); })],
+		["duplicate ready mutation key", mutate((value) => { value.authority.readyMutations.push(value.authority.readyMutations[0]); })],
+		["duplicate rollback mutation key", mutate((value) => { value.authority.rollbackMutations.push(value.authority.rollbackMutations[0]); })],
+		["duplicate recovery ID", mutate((value) => { value.authority.recoveryAttempts.push(value.authority.recoveryAttempts[0]); })],
+		["duplicate authority state key", mutate((value) => { value.authority.states.push(value.authority.states[0]); })],
+		["state missing ready mutation", mutate((value) => { value.authority.readyMutations = []; })],
+		["restored state missing rollback mutation", mutate((value) => { value.authority.rollbackMutations = []; })],
+		["recovery state missing attempt", mutate((value) => { value.authority.recoveryAttempts = []; })],
+		["stale recovery fence", mutate((value) => {
+			value.authority.states[0][1].fence = 2;
+			value.authority.states[0][1].rollbackMutation = createDurableMutationIntent(
+				"parent_ready_rollback",
+				[seed.recoveryId, 2],
+				{ stale: "cycle-10-fence" },
+				null,
+			);
+		})],
+		["mutation revision regression", mutate((value) => { value.authority.mutationRevision = 1; })],
+		["orphan settlement query", mutate((value) => {
+			value.journal.settlements[0].mutationIdempotencyKey = "cycle-10-orphan-settlement";
+		})],
+	];
+	for (const [name, snapshot] of rejects) {
+		await t.test(name, () => assert.throws(() => decode(snapshot), /snapshot|duplicate|canonical|authority|mutation|recovery|settlement|journal|fence|revision|owned/i));
+	}
+	await t.test("oversized and extra-field values retain exact bounds", () => {
+		assert.throws(() => decode(mutate((value) => { value.authority.states = Array(17).fill(value.authority.states[0]); })), /snapshot|invalid|bounded/i);
+		assert.throws(() => decode(mutate((value) => { value.authority.extra = true; })), /field|shape|snapshot/i);
+	});
+	await t.test("reordered equivalent map collections decode identically", () => {
+		const reordered = mutate((value) => {
+			value.authority.readyMutations.reverse();
+			value.authority.rollbackMutations.reverse();
+			value.authority.recoveryAttempts.reverse();
+			value.authority.states.reverse();
+		});
+		assert.deepEqual(decode(reordered), decode(seed.snapshot));
 	});
 });
 
@@ -6103,8 +6871,9 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.equal(details.candidateRef, "HEAD");
 	assert.equal(Object.hasOwn(details, "frozenCandidate"), false);
 	assert.equal((details.priorReviewState as Record<string, unknown>).priorReviewedCandidate,
-		"f97a698df90010ae072554e04563a8134a8e5f6e");
-	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 9);
+		"a49e4df2798281d1e64c722ccbcab5f4a678c3e1");
+	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 10);
+	assert.equal(details.verificationPassed, false);
 	const validate = githubOrchestratorApi.validateRunStateCandidateSemantics;
 	assert.doesNotThrow(() => validate(state));
 	const invalid = structuredClone(state);

@@ -614,6 +614,44 @@ test("cycle 9 parses the complete bounded assignment name before durable human-d
 	}
 });
 
+const cycle10AssignmentSuffixes = [
+	"AUTHORIZATION", "TOKEN", "ACCESS_TOKEN", "REFRESH_TOKEN", "API_KEY", "PASSWORD", "SECRET",
+	"CLIENT_SECRET", "PRIVATE_KEY", "DATABASE_URL", "CREDENTIAL", "CREDENTIALS", "COOKIE", "COOKIES",
+	"SET_COOKIE", "SESSION", "SESSION_ID", "SESSION_TOKEN", "SESSION_COOKIE", "CSRF_TOKEN",
+] as const;
+
+test("cycle 10 closes assignment operator case and index policy before durable decision state", async (t) => {
+	const marker = "CYCLE10_HUMAN_DECISION_MARKER";
+	const rows: Array<[string, string, boolean]> = [
+		...cycle10AssignmentSuffixes.map((suffix): [string, string, boolean] =>
+			[`append ${suffix}`, `ACME_${suffix}+=${marker}`, true]),
+		["lowercase base", `acme_api_key=${marker}`, true],
+		["mixed-case base append", `AcMe_ApI_KeY+=${marker}`, true],
+		["numeric index", `ACME_API_KEY[0]=${marker}`, true],
+		["associative index append", `ACME_API_KEY[slot]+=${marker}`, true],
+		["exact public ordinary control", "FEATURE_TOKEN=enabled", false],
+		["exact public append control", "FEATURE_TOKEN+=enabled", false],
+		["indexed public-lookalike", `FEATURE_TOKEN[0]=${marker}`, true],
+	];
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createHumanDecisionRecord(spec({ question })).question, question);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
 	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
 	const requestComment = {
