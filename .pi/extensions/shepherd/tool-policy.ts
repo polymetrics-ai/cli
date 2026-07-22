@@ -922,7 +922,6 @@ interface StreamingAssignment {
 	valueStart?: number;
 	valueEnd: number;
 	valuePrefix: string;
-	valuePrefixTruncated: boolean;
 	nonWhitespace: boolean;
 	range?: PlannedRedactionRange;
 	compositeDepth?: number;
@@ -1056,7 +1055,7 @@ function scanRedactionPlan(source: string, metrics?: RedactionScanMetrics): Plan
 		const position = state.i;
 		const character = source[position]!;
 		consumeOriginalCharacter(state, metrics, position);
-		feedStrongCredentialRecognizers(source, state, character, position, metrics);
+		feedStrongCredentialRecognizers(state, character, position, metrics);
 
 		if (state.recovery) {
 			state.recovery.range.end = position + 1;
@@ -1389,7 +1388,6 @@ function commitStreamingCandidate(
 		skipNextSingleQuote: false,
 		valueEnd: position + 1,
 		valuePrefix: "",
-		valuePrefixTruncated: false,
 		nonWhitespace: false,
 		pendingLineBoundary: false,
 	});
@@ -1450,7 +1448,6 @@ function appendStreamingValueCharacter(
 	if (!assignment.nonWhitespace && isHorizontalWhitespace(character)) return;
 	assignment.nonWhitespace = true;
 	if (assignment.valuePrefix.length < 160) assignment.valuePrefix += character;
-	else assignment.valuePrefixTruncated = true;
 }
 
 function advanceStreamingQuotedValue(
@@ -1585,14 +1582,9 @@ function finishPhysicalLine(
 	}
 	state.comment = false;
 	state.lineStart = position + 1;
-	if (characterStartsCrLf(source, position)) state.lineStart = position + 1;
 	state.lineHasContent = false;
 	state.lineCandidateSlot = true;
 	state.flowCandidateSlot = false;
-}
-
-function characterStartsCrLf(source: string, position: number): boolean {
-	return source[position] === "\r" && source[position + 1] === "\n";
 }
 
 function finishAssignmentsAtBoundary(
@@ -1837,7 +1829,6 @@ function isPhysicalLineEnding(character: string): boolean {
 }
 
 function feedStrongCredentialRecognizers(
-	source: string,
 	state: RedactionStreamingState,
 	character: string,
 	position: number,
