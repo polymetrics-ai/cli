@@ -653,17 +653,20 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 	}
 	path := flags.values["_"]
 	if len(path) == 0 {
-		declared := make(map[string]bool, len(surface.GlobalFlags))
+		declared := map[string]bool{
+			"credential": true, "connection": true, "config": true,
+			"limit": true, "max-bytes": true,
+		}
 		for _, flag := range surface.GlobalFlags {
 			declared[flag.Name] = true
 		}
-		actionFlags := map[string]bool{
-			"plan": true, "preview": true, "approve": true, "confirm": true,
-		}
 		for name := range flags.values {
-			if name != "_" && (!declared[name] || actionFlags[name]) {
+			if name != "_" && !declared[name] {
 				return false
 			}
+		}
+		if flags.first("plan") != "" || flags.first("approve") != "" || flags.first("confirm") != "" || truthyFlag(flags.first("preview")) {
+			return false
 		}
 		return true
 	}

@@ -59,6 +59,7 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 		{name: "connector help flag", args: []string{"gong", "--help"}},
 		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}},
 		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}},
+		{name: "false preview is passive", args: []string{"gong", "--preview=false"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -74,6 +75,14 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestDynamicConnectorSharedPassiveFlagRendersHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "--credential", "github-local"}, &stdout, &stderr)
+	if code != 0 || !strings.Contains(stdout.String(), "pm github") {
+		t.Fatalf("Run(github --credential) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
 	}
 }
 
