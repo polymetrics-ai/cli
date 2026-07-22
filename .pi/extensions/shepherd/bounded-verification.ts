@@ -142,6 +142,7 @@ export class BoundedVerificationRunner {
 			timeout.unref?.();
 			const onAbort = (): void => terminate("aborted");
 			signal?.addEventListener("abort", onAbort, { once: true });
+			if (signal?.aborted) terminate("aborted");
 
 			const finish = (exitCode: number | null, processSignal: NodeJS.Signals | null): void => {
 				if (finished) return;

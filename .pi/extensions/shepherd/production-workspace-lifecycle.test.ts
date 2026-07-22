@@ -69,13 +69,17 @@ class FakeAgent implements ProductionAgentSessionPort {
 	aborted: string[] = [];
 	closed = 0;
 	gate: Promise<void> | undefined;
+	abortFailure: Error | undefined;
 
 	async run(request: RoleRunRequest): Promise<AgentSessionHandoff> {
 		this.requests.push(request);
 		await this.gate;
 		return handoff(request);
 	}
-	async abort(runId: string): Promise<void> { this.aborted.push(runId); }
+	async abort(runId: string): Promise<void> {
+		this.aborted.push(runId);
+		if (this.abortFailure) throw this.abortFailure;
+	}
 	async close(): Promise<void> { this.closed += 1; }
 }
 
@@ -202,6 +206,9 @@ test("claims canonical per-child workspaces with generation-independent stable o
 	assert.deepEqual(first.binding.writeScopes, [".pi/extensions/shepherd/lane-b"]);
 	await Promise.all([first.join(), second.join()]);
 	assert.deepEqual(f.workspaceAdapter.released.sort(), [502, 503]);
+	const resumed = await f.claim(child("lane-b", 502), 9, "resume");
+	assert.equal(f.workspaceAdapter.claims[2].ownershipId, f.workspaceAdapter.claims[0].ownershipId);
+	await resumed.join();
 });
 
 test("runs implementation in the claimed workspace then verifies, commits, pushes, and captures exact handoff", async (t) => {
@@ -298,6 +305,14 @@ test("abort joins only sessions for its run before release and close owns the Ag
 	await f.lifecycle.close();
 	await f.lifecycle.close();
 	assert.equal(f.agentSession.closed, 1);
+});
+
+test("abort failure cannot strand the run's accepted workspace lease", async (t) => {
+	const f = await fixture(t);
+	await f.claim();
+	f.agentSession.abortFailure = new Error("agent abort failed");
+	await assert.rejects(f.lifecycle.abort("run-479"), /abort failed/);
+	assert.deepEqual(f.workspaceAdapter.released, [502]);
 });
 
 function executeThenTimeoutOn(...commands: string[]): GitCommandExecutor {

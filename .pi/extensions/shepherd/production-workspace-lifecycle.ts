@@ -165,8 +165,10 @@ export class ProductionWorkspaceLifecycle {
 	async abort(runId: string): Promise<void> {
 		if (typeof runId !== "string" || !SAFE_IDENTIFIER.test(runId)) throw new Error("production run ID is invalid");
 		const sessions = [...this.#sessions].filter((session) => session.runId === runId);
-		await this.#agentSession.abort(runId);
-		await Promise.all(sessions.map((session) => session.join()));
+		const failures: unknown[] = [];
+		collectFailures(await Promise.allSettled([this.#agentSession.abort(runId)]), failures);
+		collectFailures(await Promise.allSettled(sessions.map((session) => session.join())), failures);
+		throwFailures(failures, "production run abort/join failed");
 	}
 
 	async close(): Promise<void> {
@@ -174,9 +176,13 @@ export class ProductionWorkspaceLifecycle {
 		this.#closed = true;
 		this.#closePromise = (async () => {
 			const runIds = [...new Set([...this.#sessions].map((session) => session.runId))];
-			await Promise.all(runIds.map((runId) => this.#agentSession.abort(runId)));
-			await Promise.all([...this.#sessions].map((session) => session.join()));
-			await this.#agentSession.close?.();
+			const failures: unknown[] = [];
+			collectFailures(await Promise.allSettled(runIds.map((runId) => this.#agentSession.abort(runId))), failures);
+			collectFailures(await Promise.allSettled([...this.#sessions].map((session) => session.join())), failures);
+			if (this.#agentSession.close) {
+				collectFailures(await Promise.allSettled([this.#agentSession.close()]), failures);
+			}
+			throwFailures(failures, "production workspace lifecycle close failed");
 		})();
 		return this.#closePromise;
 	}
@@ -539,4 +545,13 @@ async function resolveScopedFile(
 
 function mutationResult(previous: string | undefined, next: string): WorkspaceMutationResult {
 	return { changed: previous !== next, summary: previous === next ? "unchanged" : "updated one scoped file" };
+}
+
+function collectFailures(settlements: readonly PromiseSettledResult<unknown>[], failures: unknown[]): void {
+	for (const settlement of settlements) if (settlement.status === "rejected") failures.push(settlement.reason);
+}
+
+function throwFailures(failures: readonly unknown[], message: string): void {
+	if (failures.length === 1) throw failures[0];
+	if (failures.length > 1) throw new AggregateError(failures, message);
 }
