@@ -19,6 +19,6 @@
   "risk": {
     "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted",
     "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
-    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind payload size/mtime identity"
+    "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send"
   }
 }

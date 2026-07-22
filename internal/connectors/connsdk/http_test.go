@@ -2,6 +2,8 @@ package connsdk
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -328,6 +330,36 @@ func TestRequesterDoMultipartRejectsGrowthAfterPreflightValidation(t *testing.T)
 	}
 	if !strings.Contains(err.Error(), "too large") {
 		t.Fatalf("DoMultipart error = %q, want too large", err.Error())
+	}
+}
+
+func TestRequesterDoMultipartRejectsChangedApprovedContentBeforeSend(t *testing.T) {
+	filePath := t.TempDir() + "/media.txt"
+	if err := os.WriteFile(filePath, []byte("evil"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	approved := sha256.Sum256([]byte("safe"))
+	var calls atomic.Int32
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		calls.Add(1)
+		w.WriteHeader(http.StatusOK)
+	}))
+	defer server.Close()
+
+	r := &Requester{BaseURL: server.URL, MaxRetries: 1, Sleep: noSleep}
+	_, err := r.DoMultipart(context.Background(), http.MethodPost, "/upload", nil, MultipartForm{
+		Files: []MultipartFile{{
+			FieldName:      "mediaFile",
+			Path:           filePath,
+			MaxBytes:       4,
+			ExpectedSHA256: hex.EncodeToString(approved[:]),
+		}},
+	})
+	if err == nil || !strings.Contains(err.Error(), "changed since approval") {
+		t.Fatalf("DoMultipart error = %v, want approved-content mismatch", err)
+	}
+	if got := calls.Load(); got != 0 {
+		t.Fatalf("HTTP calls = %d, want zero before approved content is verified", got)
 	}
 }
 

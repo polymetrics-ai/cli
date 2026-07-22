@@ -3,6 +3,8 @@ package connsdk
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -56,16 +58,18 @@ func (e *HTTPError) Error() string {
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
 // applied for the rest on first use.
 type MultipartForm struct {
-	Fields map[string]string
-	Files  []MultipartFile
+	Fields   map[string]string
+	Files    []MultipartFile
+	MaxBytes int64
 }
 
 type MultipartFile struct {
-	FieldName   string
-	Path        string
-	FileName    string
-	ContentType string
-	MaxBytes    int64
+	FieldName      string
+	Path           string
+	FileName       string
+	ContentType    string
+	MaxBytes       int64
+	ExpectedSHA256 string
 }
 
 type requestBody struct {
@@ -241,18 +245,30 @@ func (r *Requester) DoMultipart(ctx context.Context, method, path string, query 
 	if err := validateMultipartForm(form); err != nil {
 		return nil, err
 	}
+	prepared, cleanup, err := snapshotApprovedMultipartFiles(ctx, form)
+	if err != nil {
+		return nil, err
+	}
+	defer cleanup()
 	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
-		return multipartBody(form)
+		return multipartBody(prepared)
 	})
 }
 
 func validateMultipartForm(form MultipartForm) error {
+	var total int64
 	for i, file := range form.Files {
 		if strings.TrimSpace(file.FieldName) == "" {
 			return fmt.Errorf("multipart file %d field name is required", i)
 		}
 		if strings.TrimSpace(file.Path) == "" {
 			return fmt.Errorf("multipart file %q path is required", file.FieldName)
+		}
+		if file.ExpectedSHA256 != "" {
+			digest, err := hex.DecodeString(file.ExpectedSHA256)
+			if err != nil || len(digest) != sha256.Size {
+				return fmt.Errorf("multipart file %q expected SHA-256 is invalid", file.FieldName)
+			}
 		}
 		info, err := os.Stat(file.Path)
 		if err != nil {
@@ -264,8 +280,125 @@ func validateMultipartForm(form MultipartForm) error {
 		if file.MaxBytes > 0 && info.Size() > file.MaxBytes {
 			return fmt.Errorf("multipart file %q too large: %d bytes exceeds limit %d", file.FieldName, info.Size(), file.MaxBytes)
 		}
+		total += info.Size()
+		if form.MaxBytes > 0 && total > form.MaxBytes {
+			return fmt.Errorf("multipart files too large: %d bytes exceeds limit %d", total, form.MaxBytes)
+		}
 	}
 	return nil
+}
+
+func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (MultipartForm, func(), error) {
+	prepared := form
+	prepared.Files = append([]MultipartFile(nil), form.Files...)
+	tempPaths := make([]string, 0, len(form.Files))
+	cleanup := func() {
+		for _, path := range tempPaths {
+			_ = os.Remove(path)
+		}
+	}
+	var total int64
+	for i, file := range form.Files {
+		if file.ExpectedSHA256 == "" {
+			info, err := os.Stat(file.Path)
+			if err != nil {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+			}
+			total += info.Size()
+			continue
+		}
+		limit := file.MaxBytes
+		if limit <= 0 {
+			limit = -1
+		}
+		if form.MaxBytes > 0 {
+			remaining := form.MaxBytes - total
+			if remaining < 0 {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart files too large: exceeds limit %d", form.MaxBytes)
+			}
+			if limit < 0 || remaining < limit {
+				limit = remaining
+			}
+		}
+		tempPath, size, digest, err := snapshotMultipartFile(ctx, file, limit)
+		if err != nil {
+			cleanup()
+			return MultipartForm{}, func() {}, err
+		}
+		tempPaths = append(tempPaths, tempPath)
+		expected, _ := hex.DecodeString(file.ExpectedSHA256)
+		if !bytes.Equal(digest, expected) {
+			cleanup()
+			return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+		}
+		if prepared.Files[i].FileName == "" {
+			prepared.Files[i].FileName = filepath.Base(file.Path)
+		}
+		prepared.Files[i].Path = tempPath
+		total += size
+	}
+	return prepared, cleanup, nil
+}
+
+func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, error) {
+	source, err := os.Open(file.Path)
+	if err != nil {
+		return "", 0, nil, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+	}
+	defer source.Close()
+	temp, err := os.CreateTemp("", "polymetrics-upload-*")
+	if err != nil {
+		return "", 0, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	tempPath := temp.Name()
+	removeTemp := true
+	defer func() {
+		_ = temp.Close()
+		if removeTemp {
+			_ = os.Remove(tempPath)
+		}
+	}()
+
+	hash := sha256.New()
+	reader := io.Reader(&contextReader{ctx: ctx, reader: source})
+	if maxBytes >= 0 {
+		reader = io.LimitReader(reader, maxBytes)
+	}
+	written, err := io.Copy(io.MultiWriter(temp, hash), reader)
+	if err != nil {
+		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	if maxBytes >= 0 && written == maxBytes {
+		var extra [1]byte
+		n, readErr := (&contextReader{ctx: ctx, reader: source}).Read(extra[:])
+		if n > 0 {
+			return "", written, nil, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+		}
+		if readErr != nil && readErr != io.EOF {
+			return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
+		}
+	}
+	if err := temp.Close(); err != nil {
+		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	removeTemp = false
+	return tempPath, written, hash.Sum(nil), nil
+}
+
+type contextReader struct {
+	ctx    context.Context
+	reader io.Reader
+}
+
+func (r *contextReader) Read(p []byte) (int, error) {
+	select {
+	case <-r.ctx.Done():
+		return 0, r.ctx.Err()
+	default:
+		return r.reader.Read(p)
+	}
 }
 
 func multipartBody(form MultipartForm) (*requestBody, error) {
@@ -305,15 +438,28 @@ func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
 			return err
 		}
 	}
+	var total int64
 	for _, file := range form.Files {
-		if err := writeMultipartFile(mw, file); err != nil {
+		limit := file.MaxBytes
+		if limit <= 0 {
+			limit = -1
+		}
+		if form.MaxBytes > 0 {
+			remaining := form.MaxBytes - total
+			if limit < 0 || remaining < limit {
+				limit = remaining
+			}
+		}
+		written, err := writeMultipartFile(mw, file, limit)
+		if err != nil {
 			return err
 		}
+		total += written
 	}
 	return nil
 }
 
-func writeMultipartFile(mw *multipart.Writer, file MultipartFile) error {
+func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
 	name := file.FileName
 	if strings.TrimSpace(name) == "" {
 		name = filepath.Base(file.Path)
@@ -325,15 +471,33 @@ func writeMultipartFile(mw *multipart.Writer, file MultipartFile) error {
 	}
 	part, err := mw.CreatePart(header)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	f, err := os.Open(file.Path)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	defer f.Close()
-	_, err = io.Copy(part, f)
-	return err
+	if maxBytes < 0 {
+		written, err := io.Copy(part, f)
+		return written, err
+	}
+	written, err := io.CopyN(part, f, maxBytes)
+	if err != nil && err != io.EOF {
+		return written, err
+	}
+	if written < maxBytes {
+		return written, nil
+	}
+	var extra [1]byte
+	n, readErr := f.Read(extra[:])
+	if n > 0 {
+		return written, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+	}
+	if readErr != nil && readErr != io.EOF {
+		return written, readErr
+	}
+	return written, nil
 }
 
 // do is the shared request core for Do/DoForm. payload is the already-encoded

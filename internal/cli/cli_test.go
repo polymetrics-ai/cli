@@ -76,6 +76,43 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
+func TestGongTranscriptCommandAllowsDeclaredResponseCap(t *testing.T) {
+	response := `{"transcript":"` + strings.Repeat("x", (1<<20)+1024) + `"}`
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/calls/transcript" {
+			t.Errorf("request = %s %s, want POST /v2/calls/transcript", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(response))
+	}))
+	t.Cleanup(server.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("PM_TEST_GONG_ACCESS_KEY", "fixture-access-key")
+	t.Setenv("PM_TEST_GONG_ACCESS_KEY_SECRET", "fixture-access-key-secret")
+	runCLI(t, []string{
+		"credentials", "add", "gong-local",
+		"--connector", "gong",
+		"--from-env", "access_key=PM_TEST_GONG_ACCESS_KEY",
+		"--from-env", "access_key_secret=PM_TEST_GONG_ACCESS_KEY_SECRET",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"gong", "calls", "transcript",
+		"--credential", "gong-local",
+		"--call-id", "call-fixture",
+		"--root", root,
+		"--json",
+	})
+	if !strings.Contains(stdout, `"kind": "ConnectorCommandDirectRead"`) {
+		t.Fatalf("output missing direct-read envelope: %.200s", stdout)
+	}
+}
+
 func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"--json", "--help"}, &stdout, &stderr)
@@ -533,6 +570,18 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
 		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
+	}
+
+	gotPath = ""
+	runCLI(t, []string{
+		"github", "repo", "read-file",
+		"--credential", "github-local",
+		"--path", "help",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/repos/octocat/hello-world/contents/help" {
+		t.Fatalf("request path for help-valued flag = %q, want contents/help", gotPath)
 	}
 }
 

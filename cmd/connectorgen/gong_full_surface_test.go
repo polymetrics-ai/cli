@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"os"
+	"strings"
 	"testing"
 )
 
@@ -17,13 +18,14 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}](t, "../../internal/connectors/defs/gong/api_surface.json")
 	cli := loadGongJSON[struct {
 		Commands []struct {
-			Path         string `json:"path"`
-			Intent       string `json:"intent"`
-			Availability string `json:"availability"`
-			Stream       string `json:"stream"`
-			Write        string `json:"write"`
-			Operation    string `json:"operation"`
-			OutputPolicy string `json:"output_policy"`
+			Path         string   `json:"path"`
+			Intent       string   `json:"intent"`
+			Availability string   `json:"availability"`
+			Stream       string   `json:"stream"`
+			Write        string   `json:"write"`
+			Operation    string   `json:"operation"`
+			OutputPolicy string   `json:"output_policy"`
+			Examples     []string `json:"examples"`
 			Flags        []struct {
 				Name   string `json:"name"`
 				MapsTo string `json:"maps_to"`
@@ -83,11 +85,13 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		intent, availability, stream, write, operation, outputPolicy string
 	}{}
 	flagsByPath := map[string]map[string]string{}
+	examplesByPath := map[string][]string{}
 	for _, cmd := range cli.Commands {
 		commandsByPath[cmd.Path] = struct {
 			intent, availability, stream, write, operation, outputPolicy string
 		}{cmd.Intent, cmd.Availability, cmd.Stream, cmd.Write, cmd.Operation, cmd.OutputPolicy}
 		flagsByPath[cmd.Path] = map[string]string{}
+		examplesByPath[cmd.Path] = cmd.Examples
 		for _, flag := range cmd.Flags {
 			flagsByPath[cmd.Path][flag.Name] = flag.MapsTo
 		}
@@ -147,6 +151,29 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 	if _, exists := flagsByPath["calls transcript"]["body"]; exists {
 		t.Fatal("calls transcript must not expose a raw body flag")
+	}
+
+	minimumExampleFlags := map[string][]string{
+		"calls extensive":                    {"call-id"},
+		"calls users-access get":             {"call-id"},
+		"tasks list":                         {"status", "task-action", "task-type", "user-id"},
+		"stats interaction":                  {"from-date", "to-date"},
+		"stats activity-scorecards":          {"scorecard-id"},
+		"stats activity-day-by-day":          {"from-date", "to-date"},
+		"stats activity-aggregate":           {"from-date", "to-date"},
+		"stats activity-aggregate-by-period": {"from-date", "to-date", "aggregation-period"},
+		"calls transcript":                   {"call-id"},
+	}
+	for path, requiredFlags := range minimumExampleFlags {
+		examples := examplesByPath[path]
+		if len(examples) == 0 {
+			t.Fatalf("command %q has no executable example", path)
+		}
+		for _, flag := range requiredFlags {
+			if !strings.Contains(examples[0], "--"+flag+" ") {
+				t.Fatalf("command %q example %q omits required --%s", path, examples[0], flag)
+			}
+		}
 	}
 
 	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task", "upload_call_media", "upload_crm_entities", "upload_crm_entity_schema"} {

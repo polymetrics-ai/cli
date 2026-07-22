@@ -193,7 +193,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 			}
 		}
 
-		if err := executeWriteRecord(ctx, b, action, rec, req.Config, rt); err != nil {
+		if err := executeWriteRecord(ctx, b, action, rec, i, req.Config, rt); err != nil {
 			if isMissingOkDelete(action, err) {
 				result.RecordsWritten++
 				continue
@@ -209,7 +209,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 
 // executeWriteRecord performs the single HTTP request for one record: builds
 // the path from path_fields, the body per body_type, and issues Do/DoForm.
-func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig, rt *Runtime) error {
+func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig, rt *Runtime) error {
 	vars := Vars{Config: cfg.Config, Secrets: cfg.Secrets, Record: map[string]any(rec)}
 
 	path, err := InterpolatePath(action.Path, vars)
@@ -249,7 +249,7 @@ func executeWriteRecord(ctx context.Context, b Bundle, action WriteAction, rec c
 		_, err = rt.Requester.Do(ctx, method, path, nil, payload)
 		return err
 	case "multipart":
-		form, err := buildMultipartPayload(action, rec, cfg)
+		form, err := buildMultipartPayload(action, rec, recordIndex, cfg)
 		if err != nil {
 			return err
 		}
@@ -324,11 +324,11 @@ func buildJSONArrayPayload(action WriteAction, rec connectors.Record) (any, erro
 	return value, nil
 }
 
-func buildMultipartPayload(action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
+func buildMultipartPayload(action WriteAction, rec connectors.Record, recordIndex int, cfg connectors.RuntimeConfig) (connsdk.MultipartForm, error) {
 	if action.Multipart == nil {
 		return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart spec is required", action.Name)
 	}
-	form := connsdk.MultipartForm{Fields: map[string]string{}}
+	form := connsdk.MultipartForm{Fields: map[string]string{}, MaxBytes: action.Multipart.MaxBytes}
 	var total int64
 	for _, part := range action.Multipart.Parts {
 		value, err := resolveRecordPathValue(map[string]any(rec), strings.Split(part.Field, "."))
@@ -352,6 +352,10 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, cfg connec
 			if !ok || strings.TrimSpace(path) == "" {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q requires a file path string", action.Name, part.Name)
 			}
+			expectedSHA256 := cfg.ApprovedPayloadSHA256[connectors.PayloadApprovalKey(recordIndex, part.Field)]
+			if cfg.ApprovedPayloadSHA256 != nil && expectedSHA256 == "" {
+				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q is missing its approved payload digest", action.Name, part.Name)
+			}
 			resolved, size, err := resolveMultipartFilePath(cfg.ProjectDir, path, part.MaxBytes)
 			if err != nil {
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart file part %q: %w", action.Name, part.Name, err)
@@ -361,10 +365,11 @@ func buildMultipartPayload(action WriteAction, rec connectors.Record, cfg connec
 				return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart payload too large: %d bytes exceeds limit %d", action.Name, total, action.Multipart.MaxBytes)
 			}
 			form.Files = append(form.Files, connsdk.MultipartFile{
-				FieldName:   part.Name,
-				Path:        resolved,
-				ContentType: part.ContentType,
-				MaxBytes:    part.MaxBytes,
+				FieldName:      part.Name,
+				Path:           resolved,
+				ContentType:    part.ContentType,
+				MaxBytes:       part.MaxBytes,
+				ExpectedSHA256: expectedSHA256,
 			})
 		default:
 			return connsdk.MultipartForm{}, fmt.Errorf("engine: write action %q: multipart part %q has unsupported type %q", action.Name, part.Name, part.Type)

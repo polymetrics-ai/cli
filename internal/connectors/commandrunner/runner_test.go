@@ -2,11 +2,16 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 type fakeConnector struct {
@@ -751,9 +756,82 @@ func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
 	if connector.operationDirectReadReq.Operation != "gong.meetings_integration_status" {
 		t.Fatalf("operation = %q", connector.operationDirectReadReq.Operation)
 	}
+	if connector.operationDirectReadReq.MaxBytes != MaxOperationDirectReadBytes {
+		t.Fatalf("operation max bytes = %d, want %d", connector.operationDirectReadReq.MaxBytes, MaxOperationDirectReadBytes)
+	}
 	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
 	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
 		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
+	tests := []struct {
+		name         string
+		path         []string
+		endpointPath string
+		flags        map[string][]string
+	}{
+		{name: "calls extensive", path: []string{"calls", "extensive"}, endpointPath: "/v2/calls/extensive", flags: map[string][]string{"call-id": {"call-1"}}},
+		{name: "call access", path: []string{"calls", "users-access", "get"}, endpointPath: "/v2/calls/users-access", flags: map[string][]string{"call-id": {"call-1"}}},
+		{name: "users extensive", path: []string{"users", "extensive"}, endpointPath: "/v2/users/extensive"},
+		{name: "tasks", path: []string{"tasks", "list"}, endpointPath: "/v2/tasks", flags: map[string][]string{"user-id": {"user-1"}, "status": {"OPEN"}, "task-action": {"CALL"}, "task-type": {"FLOW"}}},
+		{name: "interaction stats", path: []string{"stats", "interaction"}, endpointPath: "/v2/stats/interaction", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "scorecards", path: []string{"stats", "activity-scorecards"}, endpointPath: "/v2/stats/activity/scorecards", flags: map[string][]string{"scorecard-id": {"scorecard-1"}}},
+		{name: "day by day", path: []string{"stats", "activity-day-by-day"}, endpointPath: "/v2/stats/activity/day-by-day", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "aggregate", path: []string{"stats", "activity-aggregate"}, endpointPath: "/v2/stats/activity/aggregate", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "aggregate by period", path: []string{"stats", "activity-aggregate-by-period"}, endpointPath: "/v2/stats/activity/aggregate-by-period", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}, "aggregation-period": {"DAY"}}},
+		{name: "transcript", path: []string{"calls", "transcript"}, endpointPath: "/v2/calls/transcript", flags: map[string][]string{"call-id": {"call-1"}}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var body map[string]any
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != http.MethodPost || r.URL.Path != tt.endpointPath {
+					t.Errorf("request = %s %s, want POST %s", r.Method, r.URL.Path, tt.endpointPath)
+				}
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Errorf("decode request body: %v", err)
+				}
+				_, _ = w.Write([]byte(`{"ok":true}`))
+			}))
+			defer server.Close()
+
+			bundle, err := engine.Load(defs.FS, "gong")
+			if err != nil {
+				t.Fatalf("load Gong bundle: %v", err)
+			}
+			bundle.HTTP.URL = server.URL
+			connector := engine.New(bundle, nil)
+			result, err := Run(context.Background(), connector, Request{
+				Path:  tt.path,
+				Flags: tt.flags,
+				Config: connectors.RuntimeConfig{Secrets: map[string]string{
+					"access_key":        "fixture_access_key",
+					"access_key_secret": "fixture_access_key_secret",
+				}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for direct read")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.DirectRead == nil || body == nil {
+				t.Fatalf("result/body = %+v / %+v, want direct read and typed body", result, body)
+			}
+			if tt.name == "transcript" {
+				filter, ok := body["filter"].(map[string]any)
+				if !ok {
+					t.Fatalf("transcript filter = %#v, want object", body["filter"])
+				}
+				callIDs, ok := filter["callIds"].([]any)
+				if !ok || len(callIDs) != 1 || callIDs[0] != "call-1" {
+					t.Fatalf("transcript callIds = %#v, want [call-1]", filter["callIds"])
+				}
+			}
+		})
 	}
 }
 

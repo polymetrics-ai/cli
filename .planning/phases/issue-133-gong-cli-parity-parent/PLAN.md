@@ -133,16 +133,25 @@ Execution decision: `not_spawned_runtime_capability_missing` followed by `local_
 Required slices:
 
 1. **CLI help parity (#142)** — make `pm help gong`, `pm gong`, `pm gong --help`, and command-level `--help` render connector metadata without opening a project or requiring credentials.
-2. **Approval/upload safety (#254)** — bind approved file uploads to content digest, enforce multipart byte limits while streaming (not only preflight `stat`), and keep paths/content out of rendered plans.
+2. **Approval/upload safety (#254)** — bind approved file uploads to content digest, propagate the approved digest to the upload transport, snapshot and verify the exact bytes before any HTTP request, enforce multipart byte limits while snapshotting/streaming (not only preflight `stat`), and keep paths/content out of rendered plans.
 3. **Remaining typed POST reads (#252)** — replace all 10 planned Gong operation blockers with connector-authored typed flags and executable bounded/redacted direct reads. `calls transcript` is mandatory.
 4. **Coverage and generated parity (#133)** — classify the 10 operations as executable direct reads, regenerate connector manual/skill and website catalog, and retain reverse ETL plan → preview → approval → execute.
-5. **Final readiness** — full local gates, clean automated review coverage on the current head, PR closing keywords, and human merge gate.
+5. **Final readiness** — validate that every documented typed POST example supplies a schema-valid minimum request, run CLI/upload/definition review lanes concurrently, then run full local gates and clean local Codex review coverage on the current head. Update PR closing keywords and preserve the human merge gate. Per user direction, skip CodeRabbit, Claude, and Copilot review requests for this change set.
+
+Parallel completion lanes (parent orchestrator owns integration):
+
+- Lane A: CLI help and response-cap review (`internal/cli/**`, `commandrunner/**`).
+- Lane B: upload approval/snapshot review (`internal/app/**`, `connectors.go`, `connsdk/**`, `engine/write*`).
+- Lane C: Gong operation schema, minimum-example, and API-ledger review (`defs/gong/**`, Gong generator tests).
+- Lane D: generated docs/website refresh after Lane C.
+- Lane E: targeted checks in parallel, followed by one repository-wide verification barrier and local Codex review.
+- Runtime note: the current Pi harness still has no `subagent` tool, so independent read/test lanes run concurrently through parallel tool calls while production file ownership remains serialized to avoid collisions.
 
 TDD order:
 
 - Red CLI tests for dynamic connector help and bare namespace behavior.
-- Red upload tests proving same-size/same-mtime content changes invalidate approval and post-validation growth cannot exceed `MaxBytes`.
-- Red Gong coverage tests requiring zero planned direct reads and implemented transcript metadata.
+- Red upload tests proving same-size/same-mtime content changes invalidate approval, approved bytes are re-verified from a private snapshot before network send, and post-validation growth cannot exceed `MaxBytes`.
+- Red Gong coverage tests requiring zero planned direct reads, implemented transcript metadata, and schema-valid minimum examples for every newly enabled POST read.
 - Smallest green implementation per slice, then refactor and generated artifact refresh.
 
 No credentialed Gong requests, live writes, new dependencies, raw body flags, generic HTTP writes, or parent merge to `main`.

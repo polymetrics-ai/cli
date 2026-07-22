@@ -122,6 +122,7 @@ type PayloadIdentity struct {
 	RecordIndex     int    `json:"record_index"`
 	Field           string `json:"field"`
 	PathHash        string `json:"path_hash"`
+	ContentSHA256   string `json:"content_sha256"`
 	SizeBytes       int64  `json:"size_bytes"`
 	ModTimeUnixNano int64  `json:"mod_time_unix_nano"`
 }

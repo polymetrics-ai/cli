@@ -42,10 +42,10 @@
       "id": "gong.calls_extensive",
       "kind": "rest_read",
       "summary": "Retrieve detailed call data by various filters (/v2/calls/extensive)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -57,22 +57,147 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                },
+                "fromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 call start lower bound."
+                },
+                "toDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 call start upper bound."
+                },
+                "primaryUserIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Primary Gong user IDs."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Gong workspace ID."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
             },
             "contentSelector": {
               "type": "object",
-              "description": "The content selector identifies which data components, if any, are needed, by the caller",
-              "additionalProperties": true
+              "properties": {
+                "context": {
+                  "type": "string",
+                  "description": "Context expansion level.",
+                  "enum": [
+                    "None",
+                    "Basic",
+                    "Extended"
+                  ]
+                },
+                "contextTiming": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Now",
+                      "TimeOfCall"
+                    ]
+                  },
+                  "description": "Context timing values."
+                },
+                "exposedFields": {
+                  "type": "object",
+                  "properties": {
+                    "parties": {
+                      "type": "boolean",
+                      "description": "Include call party information."
+                    },
+                    "media": {
+                      "type": "boolean",
+                      "description": "Include temporary media URLs; URL fields are redacted from CLI output."
+                    },
+                    "collaboration": {
+                      "type": "object",
+                      "properties": {
+                        "publicComments": {
+                          "type": "boolean",
+                          "description": "Include public comments."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "brief": {
+                          "type": "boolean"
+                        },
+                        "callOutcome": {
+                          "type": "boolean"
+                        },
+                        "highlights": {
+                          "type": "boolean"
+                        },
+                        "keyPoints": {
+                          "type": "boolean"
+                        },
+                        "outline": {
+                          "type": "boolean"
+                        },
+                        "structure": {
+                          "type": "boolean"
+                        },
+                        "topics": {
+                          "type": "boolean"
+                        },
+                        "trackers": {
+                          "type": "boolean"
+                        },
+                        "trackerOccurrences": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "interaction": {
+                      "type": "object",
+                      "properties": {
+                        "personInteractionStats": {
+                          "type": "boolean"
+                        },
+                        "questions": {
+                          "type": "boolean"
+                        },
+                        "speakers": {
+                          "type": "boolean"
+                        },
+                        "video": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -80,10 +205,10 @@
       "id": "gong.calls_users_access_get",
       "kind": "rest_read",
       "summary": "Retrieve users that have specific individual access to calls (/v2/calls/users-access)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -95,12 +220,25 @@
           "properties": {
             "filter": {
               "type": "object",
-              "additionalProperties": true
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                }
+              },
+              "required": [
+                "callIds"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -108,10 +246,10 @@
       "id": "gong.users_extensive",
       "kind": "rest_read",
       "summary": "List users by filter (/v2/users/extensive)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -123,17 +261,41 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 user creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 user creation upper bound."
+                },
+                "includeAvatars": {
+                  "type": "boolean",
+                  "description": "Include Gong avatar users."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                }
+              },
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
+        },
+        "body": {
+          "filter": {}
         }
       }
     },
@@ -141,10 +303,10 @@
       "id": "gong.tasks_list",
       "kind": "rest_read",
       "summary": "List user's tasks (/v2/tasks)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -153,17 +315,65 @@
         "max_bytes": 1048576,
         "body_schema": {
           "type": "object",
-          "description": "Get user's tasks",
           "properties": {
             "filter": {
               "type": "object",
-              "description": "Reminder filter criteria",
-              "additionalProperties": true
+              "properties": {
+                "status": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "OPEN",
+                      "DONE",
+                      "DISMISSED"
+                    ]
+                  },
+                  "description": "Task statuses."
+                },
+                "taskAction": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "CALL"
+                    ]
+                  },
+                  "description": "Task actions."
+                },
+                "types": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "FLOW",
+                      "MANUAL"
+                    ]
+                  },
+                  "description": "Task creation types."
+                },
+                "userId": {
+                  "type": "string",
+                  "description": "Owning Gong user ID."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Optional workspace ID."
+                }
+              },
+              "required": [
+                "status",
+                "taskAction",
+                "types",
+                "userId"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -171,10 +381,10 @@
       "id": "gong.stats_interaction",
       "kind": "rest_read",
       "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -186,17 +396,46 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -204,10 +443,10 @@
       "id": "gong.stats_activity_scorecards",
       "kind": "rest_read",
       "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -219,17 +458,59 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "callFromDate": {
+                  "type": "string",
+                  "description": "Inclusive call date in YYYY-MM-DD format."
+                },
+                "callToDate": {
+                  "type": "string",
+                  "description": "Exclusive call date in YYYY-MM-DD format."
+                },
+                "reviewFromDate": {
+                  "type": "string",
+                  "description": "Inclusive review date in YYYY-MM-DD format."
+                },
+                "reviewToDate": {
+                  "type": "string",
+                  "description": "Exclusive review date in YYYY-MM-DD format."
+                },
+                "reviewMethod": {
+                  "type": "string",
+                  "description": "Review method.",
+                  "enum": [
+                    "AUTOMATIC",
+                    "MANUAL",
+                    "BOTH"
+                  ]
+                },
+                "reviewedUserIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Reviewed Gong user IDs."
+                },
+                "scorecardIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Scorecard IDs."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -237,10 +518,10 @@
       "id": "gong.stats_activity_day_by_day",
       "kind": "rest_read",
       "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -252,17 +533,46 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -270,10 +580,10 @@
       "id": "gong.stats_activity_aggregate",
       "kind": "rest_read",
       "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -285,17 +595,46 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -303,10 +642,10 @@
       "id": "gong.stats_activity_aggregate_by_period",
       "kind": "rest_read",
       "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "medium",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
@@ -318,16 +657,11 @@
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
-            },
-            "filter": {
-              "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "description": "Pagination cursor."
             },
             "aggregationPeriod": {
               "type": "string",
-              "description": "Calendar time period for aggregating data. Note: First day of the week is Monday.",
+              "description": "Aggregation period.",
               "enum": [
                 "DAY",
                 "WEEK",
@@ -335,12 +669,46 @@
                 "QUARTER",
                 "YEAR"
               ]
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
             }
           },
           "required": [
             "aggregationPeriod",
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     },
@@ -527,32 +895,54 @@
       "id": "gong.calls_transcript",
       "kind": "rest_read",
       "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
-      "description": "Typed Gong POST read-query operation. It remains non-executable until the operation executor supports fixed JSON request bodies for read queries.",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
       "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
       "risk": "high",
-      "approval": "none: read-query metadata only; execution is blocked until the fixed-body operation executor is available",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
       "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
         "path": "/v2/calls/transcript",
         "content_type": "application/json",
-        "max_bytes": 1048576,
+        "max_bytes": 16777216,
         "body_schema": {
           "type": "object",
           "properties": {
             "cursor": {
               "type": "string",
-              "description": "When paging is needed, provide the value supplied by the previous API call to bring the following page of records."
+              "description": "Pagination cursor."
             },
             "filter": {
               "type": "object",
-              "description": "Filter parameters.",
-              "additionalProperties": true
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                },
+                "fromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 call start lower bound."
+                },
+                "toDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 call start upper bound."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Gong workspace ID."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
             }
           },
           "required": [
             "filter"
-          ]
+          ],
+          "additionalProperties": false
         }
       }
     }

@@ -76,9 +76,15 @@ type Catalog struct {
 }
 
 type RuntimeConfig struct {
-	ProjectDir string            `json:"-"`
-	Config     map[string]string `json:"config"`
-	Secrets    map[string]string `json:"-"`
+	ProjectDir            string            `json:"-"`
+	Config                map[string]string `json:"config"`
+	Secrets               map[string]string `json:"-"`
+	ApprovedPayloadSHA256 map[string]string `json:"-"`
+}
+
+// PayloadApprovalKey identifies a file field within an approved write batch.
+func PayloadApprovalKey(recordIndex int, field string) string {
+	return fmt.Sprintf("%d:%s", recordIndex, field)
 }
 
 type ReadRequest struct {

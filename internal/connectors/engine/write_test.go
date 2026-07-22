@@ -2,6 +2,8 @@ package engine
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -794,6 +796,46 @@ func TestWriteMultipartBodySendsDeclaredParts(t *testing.T) {
 	}
 	if sawField != "recorder" || sawFile != "hello media" {
 		t.Fatalf("multipart parts source=%q file=%q", sawField, sawFile)
+	}
+}
+
+func TestWriteMultipartRejectsContentThatDoesNotMatchApproval(t *testing.T) {
+	dir := t.TempDir()
+	if err := os.WriteFile(dir+"/media.txt", []byte("evil"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	approved := sha256.Sum256([]byte("safe"))
+	var hits int
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		hits++
+		w.WriteHeader(http.StatusOK)
+	}))
+	t.Cleanup(server.Close)
+
+	bundle := newWriteTestBundle(server, WriteAction{
+		Name:     "upload_media",
+		Method:   http.MethodPost,
+		Path:     "/upload",
+		BodyType: "multipart",
+		Multipart: &MultipartSpec{MaxBytes: 4, Parts: []MultipartPartSpec{
+			{Name: "mediaFile", Type: "file", Field: "media_file_path", Required: true, MaxBytes: 4},
+		}},
+		RecordSchema: json.RawMessage(`{"type":"object","required":["media_file_path"],"properties":{"media_file_path":{"type":"string"}}}`),
+	})
+	_, err := Write(context.Background(), bundle, connectors.WriteRequest{
+		Action: "upload_media",
+		Config: connectors.RuntimeConfig{
+			ProjectDir: dir,
+			ApprovedPayloadSHA256: map[string]string{
+				connectors.PayloadApprovalKey(0, "media_file_path"): hex.EncodeToString(approved[:]),
+			},
+		},
+	}, []connectors.Record{{"media_file_path": "media.txt"}}, nil)
+	if err == nil || !strings.Contains(err.Error(), "changed since approval") {
+		t.Fatalf("Write error = %v, want approval mismatch", err)
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want zero", hits)
 	}
 }
 

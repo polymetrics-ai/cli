@@ -75,12 +75,13 @@ Red targets:
 - CLI: `pm help gong`, bare `pm gong`, and `pm gong --help` currently fail instead of rendering connector help.
 - Approval integrity: same-size file content can change while size/mtime are restored, leaving the prior payload identity unchanged.
 - Multipart bound: file growth after preflight `stat` can exceed `MultipartFile.MaxBytes` because the stream uses unbounded `io.Copy`.
+- Upload TOCTOU: execute-time approval hashing and later multipart file opening are separate operations, so a same-size mutation in that gap could be sent unless the transport snapshots and compares the approved SHA-256 before opening the HTTP request.
 - Gong completion: 10 POST direct-read commands, including `calls transcript`, remain `planned` and their API ledger rows remain blocked operations.
 
 Green targets:
 
 - Dynamic connector help resolves before app/project initialization and bare connector namespaces exit 0.
-- Payload identity includes a content digest; multipart copies at most `MaxBytes+1` and fails closed before accepting an oversized body.
+- Payload identity includes a content digest; execution propagates approved digests by record/field; multipart snapshots and verifies approved bytes before network send, copies at most `MaxBytes+1`, and fails closed before accepting an altered or oversized body.
 - All 10 POST read-query commands have typed connector-authored flags, bounded `json_redacted` output, and `availability: implemented`; no raw JSON body flag exists.
 - Gong API ledger reports 67 executable classifications and zero blocked operation rows.
 
@@ -89,4 +90,8 @@ Red captured 2026-07-22:
 - `go test ./internal/cli -run TestDynamicConnectorHelpAndBareNamespace -count=1` — failed: `help topic "gong" not found`, bare namespace `missing connector command path`, transcript command still `availability=planned`.
 - `go test ./internal/app -run TestPayloadIdentitiesBindSameSizeContentWhenMTimeIsRestored -count=1` — build failed because `PayloadIdentity.ContentSHA256` does not exist.
 - `go test ./internal/connectors/connsdk -run TestRequesterDoMultipartRejectsGrowthAfterPreflightValidation -count=1` — failed: `DoMultipart error = nil, want stream-time max-bytes rejection`.
+- `go test ./internal/connectors/connsdk -run TestRequesterDoMultipartRejectsChangedApprovedContentBeforeSend -count=1` — red captured: `unknown field ExpectedSHA256 in struct literal of type MultipartFile`; the test also requires zero HTTP calls on mismatch.
+- Local Codex review found the CLI pre-clamped operation reads to 1 MiB and treated a flag value equal to `help` as help. `go test ./internal/cli -run 'GongTranscriptCommandAllowsDeclaredResponseCap|GitHubCommandSurfaceRunsDirectReadFile' -count=1` captured both reds: transcript rejected at 1,048,577 bytes and `--path help` sent no request. Both are now green.
+- Final schema/example review found newly generated examples that omitted required typed POST filters. Add a generator red test requiring each newly enabled operation example to include enough typed flags to satisfy its declared minimum schema; then fix examples and regenerate docs/website.
+- Local Codex's legacy-plan compatibility finding is intentionally not changed: pre-digest upload approvals must fail closed after upgrade because their approved hash did not bind file content. The short-lived plan is invalidated rather than weakening the new upload guarantee.
 - `go test ./cmd/connectorgen -run 'TestGongAPISurfaceOperationLedger|TestGongFullSurfaceCommandAndOperationCoverage' -count=1` — failed: 57/67 covered and 19/29 direct reads; 10 operation blockers remain.

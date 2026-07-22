@@ -13,7 +13,10 @@ import (
 	"polymetrics.ai/internal/safety"
 )
 
-const MaxDirectReadBytes = 1 << 20
+const (
+	MaxDirectReadBytes          = 1 << 20
+	MaxOperationDirectReadBytes = 16 << 20
+)
 
 type Request struct {
 	Path     []string
@@ -323,10 +326,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
-		maxBytes = MaxDirectReadBytes
+		maxBytes = MaxOperationDirectReadBytes
 	}
-	if maxBytes > MaxDirectReadBytes {
-		maxBytes = MaxDirectReadBytes
+	if maxBytes > MaxOperationDirectReadBytes {
+		maxBytes = MaxOperationDirectReadBytes
 	}
 	direct, err := reader.OperationDirectRead(ctx, connectors.OperationDirectReadRequest{
 		Operation:    cmd.Operation,

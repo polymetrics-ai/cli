@@ -36,14 +36,8 @@
     {
       "method": "POST",
       "path": "/v2/calls/extensive",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listCallsExtensive; follow_up=#146; operation=gong.calls_extensive"
+      "covered_by": {
+        "direct_read": "calls extensive"
       }
     },
     {
@@ -126,14 +120,8 @@
     {
       "method": "POST",
       "path": "/v2/calls/users-access",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getUsersAccessToCalls; follow_up=#146; operation=gong.calls_users_access_get"
+      "covered_by": {
+        "direct_read": "calls users-access get"
       }
     },
     {
@@ -153,92 +141,50 @@
     {
       "method": "POST",
       "path": "/v2/users/extensive",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsers; follow_up=#146; operation=gong.users_extensive"
+      "covered_by": {
+        "direct_read": "users extensive"
       }
     },
     {
       "method": "POST",
       "path": "/v2/tasks",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listTasks; follow_up=#146; operation=gong.tasks_list"
+      "covered_by": {
+        "direct_read": "tasks list"
       }
     },
     {
       "method": "POST",
       "path": "/v2/stats/interaction",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listInteractionStats; follow_up=#146; operation=gong.stats_interaction"
+      "covered_by": {
+        "direct_read": "stats interaction"
       }
     },
     {
       "method": "POST",
       "path": "/v2/stats/activity/scorecards",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listAnsweredScorecards; follow_up=#146; operation=gong.stats_activity_scorecards"
+      "covered_by": {
+        "direct_read": "stats activity-scorecards"
       }
     },
     {
       "method": "POST",
       "path": "/v2/stats/activity/day-by-day",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersDayByDayActivity; follow_up=#146; operation=gong.stats_activity_day_by_day"
+      "covered_by": {
+        "direct_read": "stats activity-day-by-day"
       }
     },
     {
       "method": "POST",
       "path": "/v2/stats/activity/aggregate",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersAggregateActivity; follow_up=#146; operation=gong.stats_activity_aggregate"
+      "covered_by": {
+        "direct_read": "stats activity-aggregate"
       }
     },
     {
       "method": "POST",
       "path": "/v2/stats/activity/aggregate-by-period",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "medium",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=listMultipleUsersAggregateByPeriod; follow_up=#146; operation=gong.stats_activity_aggregate_by_period"
+      "covered_by": {
+        "direct_read": "stats activity-aggregate-by-period"
       }
     },
     {
@@ -363,14 +309,8 @@
     {
       "method": "POST",
       "path": "/v2/calls/transcript",
-      "operation": {
-        "model": "direct_read",
-        "status": "blocked",
-        "risk": "high",
-        "blocked_by_default": true,
-        "reason": "Official Gong POST read-query operation is typed in operations.json but remains unavailable until connector-authored safe filter/body flags are selected; raw request bodies are not exposed.",
-        "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-        "notes": "operationId=getCallTranscripts; follow_up=#146; operation=gong.calls_transcript"
+      "covered_by": {
+        "direct_read": "calls transcript"
       }
     },
     {

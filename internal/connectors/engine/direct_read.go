@@ -19,6 +19,7 @@ import (
 
 const (
 	defaultDirectReadMaxBytes                  = 1 << 20
+	maxOperationDirectReadBytes                = 16 << 20
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
@@ -243,7 +244,13 @@ func cloneAnyMap(in map[string]any) map[string]any {
 }
 
 func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
-	maxBytes := clampDirectReadMaxBytes(requested)
+	maxBytes := requested
+	if maxBytes <= 0 {
+		maxBytes = operationMax
+	}
+	if maxBytes <= 0 || maxBytes > maxOperationDirectReadBytes {
+		maxBytes = maxOperationDirectReadBytes
+	}
 	if operationMax > 0 && maxBytes > operationMax {
 		return operationMax
 	}

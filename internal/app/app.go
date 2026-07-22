@@ -936,6 +936,7 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		_ = a.save()
 		return ReverseRun{}, errors.New("reverse plan source rows or payload files changed since approval")
 	}
+	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	mapped := mapReverseRecords(records, plan.Mappings, plan.ID)
 	runID, err := prefixedID("rrun")
 	if err != nil {
@@ -1014,6 +1015,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, planIndex int, plan R
 		_ = a.save()
 		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
 	}
+	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err

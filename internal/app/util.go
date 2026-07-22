@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -104,6 +105,23 @@ func connectorCommandPlanHash(planName, connector, credential string, config map
 	return hashJSON(payload)
 }
 
+func approvedPayloadSHA256(identities []PayloadIdentity) map[string]string {
+	if len(identities) == 0 {
+		return nil
+	}
+	approved := make(map[string]string, len(identities))
+	for _, identity := range identities {
+		if identity.ContentSHA256 == "" {
+			continue
+		}
+		approved[connectors.PayloadApprovalKey(identity.RecordIndex, identity.Field)] = identity.ContentSHA256
+	}
+	if len(approved) == 0 {
+		return nil
+	}
+	return approved
+}
+
 func payloadIdentitiesForRecords(projectDir string, records []connectors.Record) ([]PayloadIdentity, error) {
 	var identities []PayloadIdentity
 	for i, record := range records {
@@ -140,20 +158,46 @@ func payloadIdentityForPath(projectDir string, recordIndex int, field, raw strin
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
 	}
-	info, err := os.Stat(resolved)
+	contentDigest, info, err := digestPayloadFile(resolved)
 	if err != nil {
 		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: %w", field, err)
-	}
-	if !info.Mode().IsRegular() {
-		return PayloadIdentity{}, fmt.Errorf("payload identity for %s: file must be a regular file", field)
 	}
 	return PayloadIdentity{
 		RecordIndex:     recordIndex,
 		Field:           field,
 		PathHash:        hashString(resolved),
+		ContentSHA256:   contentDigest,
 		SizeBytes:       info.Size(),
 		ModTimeUnixNano: info.ModTime().UTC().UnixNano(),
 	}, nil
+}
+
+func digestPayloadFile(path string) (string, os.FileInfo, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return "", nil, err
+	}
+	defer file.Close()
+
+	before, err := file.Stat()
+	if err != nil {
+		return "", nil, err
+	}
+	if !before.Mode().IsRegular() {
+		return "", nil, fmt.Errorf("file must be a regular file")
+	}
+	hash := sha256.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return "", nil, err
+	}
+	after, err := file.Stat()
+	if err != nil {
+		return "", nil, err
+	}
+	if before.Size() != after.Size() || !before.ModTime().Equal(after.ModTime()) {
+		return "", nil, fmt.Errorf("payload file changed while computing approval identity")
+	}
+	return hex.EncodeToString(hash.Sum(nil)), after, nil
 }
 
 func resolvePayloadPath(projectDir, raw string) (string, error) {

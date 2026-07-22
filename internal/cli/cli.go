@@ -128,12 +128,15 @@ func runHelp(args []string, stdout io.Writer) error {
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
+	if text, ok := docs[topic]; ok {
+		fmt.Fprint(stdout, text)
+		return nil
 	}
-	fmt.Fprint(stdout, text)
-	return nil
+	if manual, ok := dynamicConnectorManual(topic); ok {
+		fmt.Fprint(stdout, manual)
+		return nil
+	}
+	return fmt.Errorf("help topic %q not found", topic)
 }
 
 func isManualCommand(cmd string) bool {
@@ -147,6 +150,9 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
+		text, ok = dynamicConnectorManual(topic)
+	}
+	if !ok {
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	if jsonOut {
@@ -154,6 +160,21 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	}
 	fmt.Fprint(stdout, text)
 	return nil
+}
+
+func dynamicConnectorManual(name string) (string, bool) {
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return "", false
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return "", false
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return "", false
+	}
+	return connectors.RenderConnectorManual(connector), true
 }
 
 func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -607,6 +628,14 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
+	if len(args) == 0 || connectorHelpRequested(args) {
+		manual := connectors.RenderConnectorManual(connector)
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName, "manual": manual})
+		}
+		fmt.Fprint(stdout, manual)
+		return nil
+	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
@@ -622,6 +651,23 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
 	})
+}
+
+func connectorHelpRequested(args []string) bool {
+	flags := parseFlags(args)
+	if _, ok := flags.values["help"]; ok {
+		return true
+	}
+	path := flags.values["_"]
+	if len(path) == 1 && path[0] == "help" {
+		return true
+	}
+	for _, part := range path {
+		if part == "-h" {
+			return true
+		}
+	}
+	return false
 }
 
 func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -648,15 +694,9 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if limit > maxConnectorCommandLimit {
 		limit = maxConnectorCommandLimit
 	}
-	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 1<<20)
+	maxBytes, err := connectorCommandMaxBytes(flags)
 	if err != nil {
 		return err
-	}
-	if maxBytes <= 0 {
-		maxBytes = 1 << 20
-	}
-	if maxBytes > commandrunner.MaxDirectReadBytes {
-		maxBytes = commandrunner.MaxDirectReadBytes
 	}
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
@@ -737,6 +777,20 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		fmt.Fprintln(stdout, string(b))
 	}
 	return nil
+}
+
+func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), commandrunner.MaxOperationDirectReadBytes)
+	if err != nil {
+		return 0, err
+	}
+	if maxBytes <= 0 {
+		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	}
+	if maxBytes > commandrunner.MaxOperationDirectReadBytes {
+		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	}
+	return maxBytes, nil
 }
 
 func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {
