@@ -1,16 +1,19 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdtemp, stat } from "node:fs/promises";
+import { mkdtemp, rm, stat } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
 import {
+	advanceProductionGeneration,
 	createProductionAutonomousState,
 	evolveProductionState,
 	ProductionFileStateStore,
 	type ProductionStateFence,
 } from "./autonomous-production-state.ts";
+import { ProductionEffectJournal, productionEffectKey } from "./autonomous-effect-journal.ts";
+import { ProductionRecoveryBarrier } from "./autonomous-recovery.ts";
 import type {
 	ProductionEffectRecord,
 	ProductionParentPlanDocument,
@@ -22,6 +25,12 @@ import type { ParentReadyDurableAuthorityBoundary } from "./github-orchestrator.
 import { ProductionShepherdController } from "./production-controller.ts";
 import type { ProductionParentReadyTransitionPort } from "./production-parent-lifecycle.ts";
 import { createAgentSessionAttestation, createIndependentReviewWork } from "./review-router.ts";
+import {
+	FileHumanDecisionRepository,
+	persistHumanDecisionRequest,
+	recordHumanDecisionRequestComment,
+} from "./human-decision.ts";
+import { ProductionEffectRecoveryAuthority } from "./production-effect-recovery-authority.ts";
 import { productionWorkspaceOwnershipId } from "./production-workspace-lifecycle.ts";
 import {
 	composeProductionShepherdController,
@@ -581,6 +590,127 @@ test("default production recovery probes are exhaustive and fail closed on absen
 		}], complete: true }; } },
 	}));
 	await assert.rejects(ambiguous.independent_review(request), /ambiguous/i);
+});
+
+test("fresh-process recovery preserves one generation-2 child intervention request without duplicate publication", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-generation-2-intervention-recovery-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const stateRoot = join(root, "state");
+	const decisionsRoot = join(root, "decisions");
+	const store = new ProductionFileStateStore(stateRoot);
+	const initial = await store.create(recoveryState());
+	const state = advanceProductionGeneration(
+		initial,
+		fence(initial),
+		"run-recovery-generation-2",
+		new Date("2026-07-22T10:00:00.250Z"),
+	);
+	await store.compareAndSwap(fence(initial), state);
+
+	const requestId = "generation-2-intervention";
+	const decisionRequest = {
+		requestId,
+		gate: "scope" as const,
+		binding: {
+			repository: state.repository,
+			target: { kind: "issue" as const, number: state.children[0].issue },
+			generation: state.generation,
+		},
+		allowedOptions: ["authorize-one-retry", "abort-child"],
+		actorAllowlist: ["maintainer"],
+		expiresAt: "2026-08-01T00:00:00.000Z",
+		question: "[retry_budget_exhausted] Authorize exactly one additional bounded child attempt, or abort this child?",
+	};
+	let requestPublications = 0;
+	const decisions = new FileHumanDecisionRepository(decisionsRoot);
+	await persistHumanDecisionRequest(decisions, decisionRequest, new Date("2026-07-22T10:00:00.000Z"));
+	requestPublications += 1;
+	await recordHumanDecisionRequestComment(decisions, requestId, decisionRequest.binding, {
+		id: 2202,
+		url: `https://github.com/acme/widgets/issues/${state.children[0].issue}#issuecomment-2202`,
+		actor: "shepherd-bot",
+		createdAt: "2026-07-22T10:00:00.000Z",
+	}, new Date("2026-07-22T10:00:00.000Z"));
+
+	const descriptor = {
+		operation: "human_request",
+		childId: state.children[0].id,
+		childIssue: state.children[0].issue,
+		childSlug: state.children[0].slug,
+		generation: state.resourceGeneration,
+		parentBaseBranch: state.parentBaseBranch,
+		parentBranch: state.parentBranch,
+		parentIssue: state.parentIssue,
+		planDigest: state.planDigest,
+		repository: state.repository,
+		request: {
+			requestId,
+			gate: "scope",
+			repository: state.repository,
+			parentIssue: state.children[0].issue,
+			pullRequest: state.children[0].issue,
+			generation: state.generation,
+			allowedOptions: decisionRequest.allowedOptions,
+			actorAllowlist: decisionRequest.actorAllowlist,
+			expiresAt: decisionRequest.expiresAt,
+			question: decisionRequest.question,
+		},
+	};
+	const intentDigest = stableDigest(descriptor);
+	const coordinates = {
+		kind: "human_request" as const,
+		runId: state.runId,
+		generation: state.generation,
+		childId: state.children[0].id,
+		intentDigest,
+	};
+	const journal = new ProductionEffectJournal(stateRoot);
+	await journal.prepare({
+		...coordinates,
+		key: productionEffectKey(coordinates),
+		recoveryDescriptor: descriptor,
+	}, new Date("2026-07-22T10:00:00.500Z"));
+
+	const recoveredJournal = new ProductionEffectJournal(stateRoot);
+	const recoveredDecisions = new FileHumanDecisionRepository(decisionsRoot);
+	const probes = createProductionRecoveryProbeTable(recoveryProbeOptions({ decisions: recoveredDecisions }));
+	const authority = new ProductionEffectRecoveryAuthority({
+		stateRoot,
+		issue: state.parentIssue,
+		stateStore: new ProductionFileStateStore(stateRoot),
+		probes,
+	});
+	assert.deepEqual(await new ProductionRecoveryBarrier(recoveredJournal, authority).open({
+		runId: state.runId,
+		generation: state.generation,
+	}), { reconciled: 1 });
+
+	const recovered = await new ProductionFileStateStore(stateRoot).load(state.parentIssue);
+	assert.equal(requestPublications, 1);
+	assert.equal(recovered?.generation, 2);
+	assert.equal(recovered?.resourceGeneration, 1);
+	assert.deepEqual(recovered?.childGate, {
+		childId: state.children[0].id,
+		repository: state.repository,
+		issue: state.children[0].issue,
+		generation: 2,
+		requestId,
+		reason: "retry_budget_exhausted",
+		status: "pending",
+	});
+	assert.equal((await recoveredJournal.load(productionEffectKey(coordinates)))?.phase, "applied");
+	assert.deepEqual(await new ProductionRecoveryBarrier(
+		new ProductionEffectJournal(stateRoot),
+		new ProductionEffectRecoveryAuthority({
+			stateRoot,
+			issue: state.parentIssue,
+			stateStore: new ProductionFileStateStore(stateRoot),
+			probes: createProductionRecoveryProbeTable(recoveryProbeOptions({
+				decisions: new FileHumanDecisionRepository(decisionsRoot),
+			})),
+		}),
+	).open({ runId: state.runId, generation: state.generation }), { reconciled: 0 });
+	assert.equal(requestPublications, 1);
 });
 
 test("default shell recovery reruns only the bounded read-only commands and projects their stable checkpoint", async () => {
