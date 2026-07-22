@@ -32,10 +32,19 @@ test("status is read-only and does not require experimental acknowledgement", ()
 	});
 });
 
-test("resume accepts either an omitted or explicit PR for persisted-target binding", () => {
-	const base = "resume --issue 397 --read-only --backend sdk-inproc --experimental";
-	assert.equal(parseShepherdCommand(base).pr, undefined);
-	assert.equal(parseShepherdCommand(`${base} --pr 438`).pr, 438);
+test("parses autonomous start and resume without read-only canary acknowledgements", () => {
+	assert.deepEqual(parseShepherdCommand("start --issue 479"), {
+		action: "start",
+		issue: 479,
+		backend: "sdk-inproc",
+		maxConcurrency: 2,
+		timeoutMs: 900_000,
+	});
+	assert.equal(parseShepherdCommand("resume --issue 479 --pr 472").pr, 472);
+	assert.throws(
+		() => parseShepherdCommand("start --issue 479 --read-only"),
+		/canary|not valid/i,
+	);
 });
 
 test("rejects unsafe or ambiguous command shapes", () => {
@@ -43,11 +52,11 @@ test("rejects unsafe or ambiguous command shapes", () => {
 		"canary --issue 397 --pr 438 --read-only --backend sdk-inproc",
 		"canary --issue 397 --pr 438 --backend sdk-inproc --experimental",
 		"canary --issue 397 --read-only --backend sdk-inproc --experimental",
-		"start --issue 397 --backend subprocess --experimental --read-only",
-		"start --issue 0 --backend sdk-inproc --experimental --read-only",
-		"start --issue 397 --issue 398 --backend sdk-inproc --experimental --read-only",
-		"start --issue 397 --backend sdk-inproc --experimental --read-only --max-concurrency 3",
-		"start --issue 397 --backend sdk-inproc --experimental --read-only --timeout-seconds 5",
+		"start --issue 397 --backend subprocess",
+		"start --issue 0",
+		"start --issue 397 --issue 398",
+		"start --issue 397 --max-concurrency 3",
+		"start --issue 397 --timeout-seconds 5",
 		"stop --issue ../397",
 		"status --issue 397\u0000",
 		"dance --issue 397",
