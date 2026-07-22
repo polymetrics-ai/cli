@@ -25,31 +25,37 @@ const MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS = 512;
 const MAX_TOOL_INPUT_BYTES = MAX_WRITE_CHARACTERS + 64 * 1024;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
-const forbiddenCapabilityPatterns = [
-	/(?:^|_)(?:bash|shell|exec|command)(?:_|$)/,
-	/(?:^|_)(?:subagent|spawn_agent|delegate|orchestrat(?:e|ion)|agent_create)(?:_|$)/,
-	/(?:^|_)http_(?:request|write|post|put|patch|delete)(?:_|$)/,
-	/(?:^|_)sql_(?:request|query|write|insert|update|delete|execute)(?:_|$)/,
-	/(?:^|_)(?:secret|credential|token|password|auth)_(?:read|get|list|dump|export)(?:_|$)/,
-] as const;
+/** The complete reviewed host-tool domain. Unknown strings have no extension path. */
+export const HOST_CAPABILITY_REGISTRY = Object.freeze({
+	host_inspect: Object.freeze({ mutates: false as const }),
+	host_verify: Object.freeze({ mutates: true as const }),
+} as const);
 
-const capabilitySensitiveNouns = new Set([
-	"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
-]);
-const capabilityExecutionResources = new Set(["process", "program", "subprocess", "terminal"]);
-const capabilityExecutionActions = new Set(["run", "launch", "start", "execute", "open", "invoke"]);
-const capabilityTransportResources = new Set(["http", "web"]);
-const capabilityTransportActions = new Set(["request", "write", "post", "put", "patch", "delete", "send"]);
-const capabilityDatabaseResources = new Set(["sql", "database", "db"]);
-const capabilityDatabaseActions = new Set([
-	"request", "query", "write", "insert", "update", "delete", "execute", "modify",
-]);
-const capabilityRecursiveActions = new Set(["create", "spawn", "delegate", "orchestrate", "run", "launch"]);
-const capabilityProtectedData = new Set(["vault", "keychain", "keystore", "environment", "cookie", "session"]);
-const capabilityExposureActions = new Set([
-	"read", "get", "list", "view", "show", "dump", "export", "copy", "download", "obtain", "reveal",
-	"lookup", "print", "inspect",
-]);
+export type HostCapabilityName = keyof typeof HOST_CAPABILITY_REGISTRY;
+
+const WORKSPACE_TOOL_REGISTRY = Object.freeze({
+	workspace_read: Object.freeze({ mutates: false as const }),
+	workspace_edit: Object.freeze({ mutates: true as const }),
+	workspace_write: Object.freeze({ mutates: true as const }),
+} as const);
+
+export type WorkspaceToolName = keyof typeof WORKSPACE_TOOL_REGISTRY;
+export type SessionToolName = WorkspaceToolName | HostCapabilityName;
+
+export function isHostCapabilityName(value: unknown): value is HostCapabilityName {
+	return typeof value === "string" && Object.hasOwn(HOST_CAPABILITY_REGISTRY, value);
+}
+
+export function isSessionToolName(value: unknown): value is SessionToolName {
+	return typeof value === "string" &&
+		(Object.hasOwn(WORKSPACE_TOOL_REGISTRY, value) || Object.hasOwn(HOST_CAPABILITY_REGISTRY, value));
+}
+
+export function sessionToolMutates(name: SessionToolName): boolean {
+	return isHostCapabilityName(name)
+		? HOST_CAPABILITY_REGISTRY[name].mutates
+		: WORKSPACE_TOOL_REGISTRY[name].mutates;
+}
 
 const sensitivePathPatterns = [
 	/(?:^|\/)\.git(?:\/|$)/i,
@@ -97,20 +103,24 @@ export interface CapabilityResult {
 	references?: string[];
 }
 
-/** A narrow host action. Generic transports and orchestration capabilities are rejected by name. */
-export interface HostCapability {
-	readonly name: string;
+interface HostCapabilityContract<Name extends HostCapabilityName> {
+	readonly name: Name;
 	readonly description: string;
-	readonly mutates: boolean;
+	readonly mutates: (typeof HOST_CAPABILITY_REGISTRY)[Name]["mutates"];
 	readonly parameters: Readonly<Record<string, unknown>>;
 	execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal): Promise<CapabilityResult>;
 }
+
+/** A narrow host action whose identity and mutability are closed by the runtime registry. */
+export type HostCapability = {
+	[Name in HostCapabilityName]: HostCapabilityContract<Name>;
+}[HostCapabilityName];
 
 export interface ToolAuthority {
 	workspaceId: string;
 	readPrefixes: string[];
 	writePrefixes: string[];
-	capabilityNames: string[];
+	capabilityNames: HostCapabilityName[];
 }
 
 type PlainJsonSchema = Readonly<Record<string, unknown>>;
@@ -132,7 +142,7 @@ export type SessionTool = Omit<PiSessionTool, "execute"> & {
 };
 
 export interface ToolPolicy {
-	readonly names: string[];
+	readonly names: SessionToolName[];
 	readonly tools: SessionTool[];
 }
 
@@ -184,7 +194,7 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 			workspaceId: input.authority.workspaceId,
 			readPrefixes: capturePolicyArray<string>(input.authority.readPrefixes, "read prefixes", 64, false),
 			writePrefixes: capturePolicyArray<string>(input.authority.writePrefixes, "write prefixes", 64, input.readOnly),
-			capabilityNames: capturePolicyArray<string>(
+			capabilityNames: capturePolicyArray<HostCapabilityName>(
 				input.authority.capabilityNames,
 				"capability authority",
 				MAX_CAPABILITIES,
@@ -222,7 +232,10 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 	}
 
 	for (const tool of tools) Object.freeze(tool);
-	const names = tools.map((tool) => tool.name);
+	const names = tools.map((tool) => {
+		if (!isSessionToolName(tool.name)) throw new ToolPolicyError("tool policy constructed an unregistered tool identity");
+		return tool.name;
+	});
 	Object.freeze(names);
 	Object.freeze(tools);
 	return Object.freeze({ names, tools });
@@ -247,13 +260,15 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 		throw new ToolPolicyError("capability authority must be a bounded array");
 	}
 
-	const declared = new Set<string>();
+	const declared = new Set<HostCapabilityName>();
 	for (const name of input.authority.capabilityNames) {
-		validateCapabilityName(name);
+		if (!isHostCapabilityName(name)) {
+			throw new ToolPolicyError(`capability ${JSON.stringify(name)} is not in the closed host registry`);
+		}
 		if (declared.has(name)) throw new ToolPolicyError(`duplicate declared capability ${name}`);
 		declared.add(name);
 	}
-	const supplied = new Set<string>();
+	const supplied = new Set<HostCapabilityName>();
 	const capabilities: HostCapability[] = [];
 	for (const capability of input.capabilities) {
 		if (!capability || typeof capability !== "object") throw new ToolPolicyError("capability must be an object");
@@ -262,7 +277,9 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 		const mutates = capability.mutates;
 		const parameterSource = capability.parameters;
 		const execute = capability.execute;
-		validateCapabilityName(name);
+		if (!isHostCapabilityName(name)) {
+			throw new ToolPolicyError(`capability ${JSON.stringify(name)} is not in the closed host registry`);
+		}
 		if (supplied.has(name)) throw new ToolPolicyError(`duplicate supplied capability ${name}`);
 		supplied.add(name);
 		if (!declared.has(name)) {
@@ -272,7 +289,7 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 			/[\u0000-\u001f\u007f]/.test(description)) {
 			throw new ToolPolicyError(`capability ${name} has an invalid description`);
 		}
-		if (typeof mutates !== "boolean" || typeof execute !== "function") {
+		if (mutates !== HOST_CAPABILITY_REGISTRY[name].mutates || typeof execute !== "function") {
 			throw new ToolPolicyError(`capability ${name} has an invalid typed contract`);
 		}
 		const parameters = snapshotCapabilitySchema(parameterSource, name);
@@ -284,7 +301,7 @@ function validatePolicyInput(input: ToolPolicyInput): HostCapability[] {
 			execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
 				return Reflect.apply(execute, capability, [input, signal]);
 			},
-		}));
+		}) as HostCapability);
 	}
 	for (const name of declared) {
 		if (!supplied.has(name)) throw new ToolPolicyError(`declared capability ${name} was not supplied`);
@@ -595,7 +612,7 @@ export function redactSensitiveText(value: string, metrics?: RedactionScanMetric
 	return redactStructuredAssignments(redactStrongCredentialSyntax(redactPrivateKeyBlocks(value)), scanMetrics);
 }
 
-type SensitiveAssignmentKind = "authorization" | "secret";
+type SensitiveAssignmentKind = "authorization" | "secret" | "unknown";
 type SensitiveAssignmentContext = "flow" | "line";
 type LexicalQuote = "\"" | "'";
 type FlowCloser = "}" | "]";
@@ -650,6 +667,27 @@ const secretAssignmentKeys = new Set([
 	"clientsecret",
 	"cookie",
 	"setcookie",
+]);
+const sensitiveAssignmentTerminals = new Set([
+	...secretAssignmentKeys,
+	"privatekey",
+	"databaseurl",
+	"awssecretaccesskey",
+	"secretaccesskey",
+	"githubtoken",
+]);
+const sensitiveAssignmentPaths = new Set([
+	"api.key",
+	"private.key",
+	"database.url",
+	"aws.secret.access.key",
+]);
+const publicAssignmentTerminals = new Set(["safe", "enabled", "retained", "flavor", "message"]);
+const publicAssignmentPaths = new Set([
+	"api.version",
+	"api.key.version",
+	"private.key.algorithm",
+	"database.url.scheme",
 ]);
 
 function redactStructuredAssignments(value: string, metrics?: RedactionScanMetrics): string {
@@ -867,7 +905,7 @@ function redactionForAssignment(
 	if (quote === '"' || quote === "'") {
 		return quotedValueRedaction(value, assignment, quote, lineEnd, metrics);
 	}
-	if (assignment.kind === "secret" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
+	if (assignment.kind !== "authorization" && isYamlBlockHeader(value.slice(assignment.valueStart, lineEnd))) {
 		return yamlBlockRedaction(value, assignment, lineEnd, metrics);
 	}
 	return unquotedValueRedaction(value, assignment, lineEnd, metrics);
@@ -980,17 +1018,17 @@ function unquotedValueRedaction(
 	}
 
 	const scalar = value.slice(assignment.valueStart, scalarEnd);
-	const documentaryAssignmentProse = assignment.context === "line" &&
+	const documentaryAssignmentProse = assignment.kind === "secret" && assignment.context === "line" &&
 		assignment.delimiter === ":" &&
 		assignment.keyColumn === 0 && continuation === undefined &&
 		isDocumentaryAssignmentProse(scalar);
-	const ambiguousLineProse = assignment.context === "line" &&
+	const ambiguousLineProse = assignment.kind === "secret" && assignment.context === "line" &&
 		assignment.delimiter === ":" &&
 		assignment.keyColumn === 0 && continuation === undefined &&
 		["token", "password", "passwd", "secret"].includes(assignment.normalizedKey) &&
 		containsWhitespace(scalar);
 	if (ambiguousLineProse || documentaryAssignmentProse) return { resumeAt: unredactedResumeAt };
-	if (isPublicScalar(scalar)) return { resumeAt };
+	if (assignment.kind !== "unknown" && isPublicScalar(scalar)) return { resumeAt };
 	const redactionEnd = continuation?.end ?? scalarEnd;
 	return {
 		range: {
@@ -1131,26 +1169,16 @@ function redactStrongCredentialSyntax(value: string): string {
 
 function sensitiveAssignmentKind(key: string): SensitiveAssignmentKind | undefined {
 	const segments = key.toLowerCase().split(".").map((segment) => segment.replace(/[-_]/g, ""));
-	for (let start = 0; start < segments.length; start += 1) {
-		let compound = "";
-		for (let end = start; end < segments.length; end += 1) {
-			compound += segments[end];
-			const kind = normalizedSensitiveAssignmentKind(compound);
-			if (kind) return kind;
-		}
+	const path = segments.join(".");
+	const terminal = segments.at(-1) ?? "";
+	if ((segments.length === 1 && publicAssignmentTerminals.has(terminal)) || publicAssignmentPaths.has(path)) {
+		return undefined;
 	}
-	return undefined;
-}
-
-function normalizedSensitiveAssignmentKind(normalized: string): SensitiveAssignmentKind | undefined {
-	if (normalized.endsWith("authorization")) return "authorization";
-	if (secretAssignmentKeys.has(normalized) || normalized === "awssecretaccesskey" ||
-		normalized.endsWith("token") || normalized.endsWith("password") ||
-		normalized.endsWith("secret") || normalized.endsWith("apikey") ||
-		normalized.endsWith("privatekey") || normalized.endsWith("databaseurl")) {
-		return "secret";
-	}
-	return undefined;
+	if (terminal === "authorization" || terminal === "proxyauthorization") return "authorization";
+	if (sensitiveAssignmentTerminals.has(terminal) || sensitiveAssignmentPaths.has(path)) return "secret";
+	// The structured grammar is deliberately closed: once assignment syntax is recognized, only
+	// reviewed public metadata escapes redaction. Unknown aliases do not become an extension path.
+	return "unknown";
 }
 
 function findStructuredKeyStart(
@@ -1549,50 +1577,6 @@ function recordKeyStartVisit(metrics: RedactionScanMetrics | undefined, count = 
 function recordTotalVisits(metrics: RedactionScanMetrics | undefined, count: number): void {
 	if (!metrics || count <= 0) return;
 	metrics.totalCharacterVisits = (metrics.totalCharacterVisits ?? 0) + count;
-}
-
-function validateCapabilityName(name: string): void {
-	if (typeof name !== "string" || !/^host_[a-z][a-z0-9_]{1,63}$/.test(name)) {
-		throw new ToolPolicyError(`capability name ${JSON.stringify(name)} must use the bounded host_ namespace`);
-	}
-	const tokens = name.slice("host_".length).split("_");
-	const normalizedTokens = tokens.map(normalizeCapabilityToken);
-	const tokenSet = new Set(normalizedTokens);
-	const compact = name.slice("host_".length).replaceAll("_", "");
-	const hasSensitivePair = normalizedTokens.some((token, index) =>
-		(token === "api" && normalizedTokens[index + 1] === "key") ||
-		(token === "private" && normalizedTokens[index + 1] === "key") ||
-		(token === "token" && normalizedTokens[index + 1] === "cache") ||
-		(token === "access" && normalizedTokens[index + 1] === "token") ||
-		(token === "refresh" && normalizedTokens[index + 1] === "token"));
-	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => capabilitySensitiveNouns.has(token));
-	const hasAnyToken = (values: ReadonlySet<string>): boolean => normalizedTokens.some((token) => values.has(token));
-	const hasForbiddenSemanticPair =
-		(hasAnyToken(capabilityExecutionResources) && hasAnyToken(capabilityExecutionActions)) ||
-		(hasAnyToken(capabilityTransportResources) && hasAnyToken(capabilityTransportActions)) ||
-		(hasAnyToken(capabilityDatabaseResources) && hasAnyToken(capabilityDatabaseActions)) ||
-		(tokenSet.has("agent") && hasAnyToken(capabilityRecursiveActions)) ||
-		(hasAnyToken(capabilityProtectedData) && hasAnyToken(capabilityExposureActions));
-	const hasForbiddenCompact =
-		/(?:bash|shell|exec|command)/.test(compact) ||
-		/(?:subagent|spawnagent|delegate|orchestrat|agentcreate|agentrunner|recursiveagent)/.test(compact) ||
-		/(?:http(?:request|write|post|put|patch|delete)|webrequest(?:write|post|put|patch|delete))/.test(compact) ||
-		/sql(?:request|query|queries|write|insert|update|delete|execute)/.test(compact) ||
-		/(?:secret|credential|token|password|passwd|auth|authorization|apikey|privatekey)/.test(compact);
-	if (forbiddenCapabilityPatterns.some((pattern) => pattern.test(name)) ||
-		hasSensitiveNoun || hasForbiddenCompact || hasForbiddenSemanticPair) {
-		throw new ToolPolicyError(`capability ${name} requests forbidden generic, secret, or recursive authority`);
-	}
-}
-
-function normalizeCapabilityToken(token: string): string {
-	if (token === "process") return token;
-	if (token === "queries") return "query";
-	if (token === "processes") return "process";
-	if (token === "cookies") return "cookie";
-	if (token.endsWith("ies") && token.length > 3) return `${token.slice(0, -3)}y`;
-	if (token.endsWith("s") && token.length > 1) return token.slice(0, -1);
-	return token;
 }
 
 export function normalizeScopedPrefixes(prefixes: unknown, description: string): string[] {

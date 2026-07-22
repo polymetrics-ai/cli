@@ -9,8 +9,10 @@ import {
 	normalizeScopedPrefixes,
 	redactSensitiveText,
 	type HostCapability,
+	type HostCapabilityName,
 	type ScopedWorkspace,
 	type SessionTool,
+	type ToolPolicyInput,
 } from "./tool-policy.ts";
 
 function text(result: Awaited<ReturnType<SessionTool["execute"]>>): string {
@@ -64,10 +66,12 @@ function capability(
 				references: ["ref-1"],
 			};
 		},
-	};
+	} as unknown as HostCapability;
 }
 
-function policyInput(readOnly: boolean, readOutput?: string) {
+type TestPolicyInput = ToolPolicyInput & { workspace: ReturnType<typeof fakeWorkspace> };
+
+function policyInput(readOnly: boolean, readOutput?: string): TestPolicyInput {
 	return {
 		readOnly,
 		workspace: fakeWorkspace(readOutput),
@@ -480,8 +484,8 @@ test("mutating policy exposes only workspace-bound read/edit/write and allowlist
 		"host_inspect",
 		"host_verify",
 	]);
-	assert.equal(policy.names.includes("bash"), false);
-	assert.equal(policy.names.includes("subagent"), false);
+	assert.equal((policy.names as readonly string[]).includes("bash"), false);
+	assert.equal((policy.names as readonly string[]).includes("subagent"), false);
 
 	const edit = policy.tools.find((tool) => tool.name === "workspace_edit");
 	const write = policy.tools.find((tool) => tool.name === "workspace_write");
@@ -551,7 +555,7 @@ test("capability authority is closed and cannot add generic or recursive tools",
 				...policyInput(false),
 				authority: {
 					...policyInput(false).authority,
-					capabilityNames: [name],
+					capabilityNames: [name] as never,
 				},
 				capabilities: [capability(name)],
 			}),
@@ -574,10 +578,10 @@ test("policy rejects workspace identity mismatch, duplicate capabilities, and un
 
 	assert.throws(() => createToolPolicy({
 		...policyInput(false),
+		authority: { ...policyInput(false).authority, capabilityNames: ["host_inspect"] },
 		capabilities: [
 			capability("host_inspect"),
 			capability("host_verify", { mutates: true }),
-			capability("host_publish"),
 		],
 	}), /undeclared capability/i);
 });
@@ -1010,7 +1014,7 @@ test("cycle 9 capability names deny sensitive noun and acquisition verb permutat
 					try {
 						createToolPolicy({
 							...policyInput(readOnly),
-							authority: { ...policyInput(readOnly).authority, capabilityNames: [name] },
+							authority: { ...policyInput(readOnly).authority, capabilityNames: [name] as never },
 							capabilities: [capability(name)],
 						});
 						accepted.push(`${readOnly ? "read" : "write"}:${name}`);
@@ -1396,7 +1400,7 @@ test("cycle 10 capability authority denies sensitive nouns regardless of acquisi
 			try {
 				createToolPolicy({
 					...policyInput(readOnly),
-					authority: { ...policyInput(readOnly).authority, capabilityNames: [name] },
+					authority: { ...policyInput(readOnly).authority, capabilityNames: [name] as never },
 					capabilities: [capability(name)],
 				});
 				accepted.push(`${readOnly ? "read" : "write"}:${name}`);
@@ -1455,7 +1459,7 @@ test("cycle 11 capability authority denies concatenated separated plural and mix
 				const input = policyInput(readOnly);
 				createToolPolicy({
 					...input,
-					authority: { ...input.authority, capabilityNames: [name] },
+					authority: { ...input.authority, capabilityNames: [name] as never },
 					capabilities: [capability(name)],
 				});
 				accepted.push(`${readOnly ? "read" : "write"}:${name}`);
@@ -1602,8 +1606,8 @@ test("cycle 13 public tool-policy arrays are intrinsic dense snapshots with no c
 	const input = policyInput(false);
 	const readPrefixes = poison([".pi/extensions/shepherd"]);
 	const writePrefixes = poison([".pi/extensions/shepherd"]);
-	const capabilityNames = poison(["host_inspect", "host_verify"]);
-	const capabilities = poison([capability("host_inspect"), capability("host_verify")]);
+	const capabilityNames = poison<HostCapabilityName>(["host_inspect", "host_verify"]);
+	const capabilities = poison([capability("host_inspect"), capability("host_verify", { mutates: true })]);
 	input.authority.readPrefixes = readPrefixes;
 	input.authority.writePrefixes = writePrefixes;
 	input.authority.capabilityNames = capabilityNames;
@@ -1612,7 +1616,7 @@ test("cycle 13 public tool-policy arrays are intrinsic dense snapshots with no c
 	const beforeMutation = [...policy.names];
 	readPrefixes[0] = "outside";
 	writePrefixes[0] = "outside";
-	capabilityNames[0] = "host_process_run";
+	(capabilityNames as unknown as string[])[0] = "host_process_run";
 	capabilities[0] = capability("host_process_run");
 
 	const read = policy.tools.find((tool) => tool.name === "workspace_read");
@@ -1673,7 +1677,7 @@ test("cycle 13 capability names structurally deny equivalent generic and protect
 				const input = policyInput(readOnly);
 				createToolPolicy({
 					...input,
-					authority: { ...input.authority, capabilityNames: [name] },
+					authority: { ...input.authority, capabilityNames: [name] as never },
 					capabilities: [capability(name)],
 				});
 				accepted.push(`${readOnly ? "read" : "write"}:${name}`);

@@ -23,7 +23,9 @@ import {
 	redactSensitiveText,
 	ToolPolicyError,
 	type HostCapability,
+	type SessionToolName,
 	type ScopedWorkspace,
+	type ToolPolicyInput,
 } from "./tool-policy.ts";
 
 const HEAD = "a".repeat(40);
@@ -112,7 +114,7 @@ function inspectCapability(): HostCapability {
 	};
 }
 
-function policyInputForRuntime(readOnly: boolean) {
+function policyInputForRuntime(readOnly: boolean): ToolPolicyInput {
 	const req = request();
 	return {
 		readOnly,
@@ -5532,7 +5534,7 @@ test("cycle 13 public role prompts use intrinsic immutable array snapshots only"
 	const context = poison(["bounded original context"]);
 	const readPrefixes = poison([".pi/extensions/shepherd"]);
 	const writePrefixes = poison([".pi/extensions/shepherd"]);
-	const toolNames = poison(["workspace_read", "workspace_edit"]);
+	const toolNames = poison<SessionToolName>(["workspace_read", "workspace_edit"]);
 	const prompts = buildRolePrompts({
 		role: base.role,
 		task: base.task,
@@ -5552,7 +5554,7 @@ test("cycle 13 public role prompts use intrinsic immutable array snapshots only"
 	context[0] = "attacker context";
 	readPrefixes[0] = "outside";
 	writePrefixes[0] = "outside";
-	toolNames[0] = "bash";
+	(toolNames as unknown as string[])[0] = "bash";
 
 	let accessorReads = 0;
 	const accessorContext = ["placeholder"];
@@ -5597,7 +5599,8 @@ test("cycle 13 public role prompts use intrinsic immutable array snapshots only"
 			role: base.role, task: base.task, context: [],
 			authority: {
 				...base.authority,
-				toolNames: Array.from({ length: 41 }, (_value, index) => `host_tool_${index}`),
+				toolNames: Array.from({ length: 41 }, (_value, index) =>
+					`host_tool_${index}`) as unknown as SessionToolName[],
 				binding: base.binding,
 			},
 		}),
@@ -5870,7 +5873,7 @@ async function cycle14ConsumerOutputs(
 	const handoffRequest = request({
 		binding: { ...request().binding, runId: `${label}-handoff`, laneId: `${label}-handoff` },
 	});
-	const terminalSafe = payload.replaceAll("\n", " | ");
+	const terminalSafe = `{ safe: retained, ${payload.replaceAll("\n", ", ")} }`;
 	handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
 		summary: terminalSafe,
 		findings: [terminalSafe],

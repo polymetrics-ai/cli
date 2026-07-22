@@ -15,10 +15,13 @@ import {
 } from "./role-prompts.ts";
 import {
 	createToolPolicy,
+	HOST_CAPABILITY_REGISTRY,
+	isHostCapabilityName,
 	normalizeScopedPrefixes,
 	redactSensitiveText,
 	validateScopedPath,
 	type HostCapability,
+	type HostCapabilityName,
 	type ScopedWorkspace,
 	type ToolPolicy,
 	type ToolAuthority,
@@ -209,6 +212,13 @@ interface CapturedSessionOperation {
 	readonly failure: unknown;
 }
 
+const UNCAPTURED_SESSION_OPERATION: CapturedSessionOperation = Object.freeze({
+	available: false,
+	operation: undefined,
+	failurePresent: false,
+	failure: undefined,
+});
+
 function captureSessionOperation(session: object, name: keyof RuntimeAgentSession): CapturedSessionOperation {
 	let candidate: unknown;
 	try {
@@ -240,16 +250,33 @@ class OwnedSession {
 	#unsubscribePromise: Promise<void> | undefined;
 	#waitPromise: Promise<void> | undefined;
 
-	constructor(session: RuntimeAgentSession) {
+	constructor(
+		session: RuntimeAgentSession,
+		afterReentrantCallback: () => void = () => undefined,
+		mayContinue: () => boolean = () => true,
+	) {
 		this.#session = session;
-		// Capture every operation independently. A hostile getter for an operational method
-		// must never prevent us from acquiring a later dispose operation.
+		// Abort, idle, and disposal are the mandatory cleanup root. They remain independently
+		// capturable after cancellation, while prompt/subscription/validation operations stop at
+		// the first lifecycle barrier.
 		this.#abort = captureSessionOperation(session, "abort");
+		if (mayContinue()) afterReentrantCallback();
 		this.#waitForIdle = captureSessionOperation(session, "waitForIdle");
+		if (mayContinue()) afterReentrantCallback();
 		this.#dispose = captureSessionOperation(session, "dispose");
-		this.#prompt = captureSessionOperation(session, "prompt");
-		this.#subscribe = captureSessionOperation(session, "subscribe");
-		this.#getActiveToolNames = captureSessionOperation(session, "getActiveToolNames");
+		if (mayContinue()) afterReentrantCallback();
+		if (mayContinue()) {
+			this.#prompt = captureSessionOperation(session, "prompt");
+			afterReentrantCallback();
+		} else this.#prompt = UNCAPTURED_SESSION_OPERATION;
+		if (mayContinue()) {
+			this.#subscribe = captureSessionOperation(session, "subscribe");
+			afterReentrantCallback();
+		} else this.#subscribe = UNCAPTURED_SESSION_OPERATION;
+		if (mayContinue()) {
+			this.#getActiveToolNames = captureSessionOperation(session, "getActiveToolNames");
+			afterReentrantCallback();
+		} else this.#getActiveToolNames = UNCAPTURED_SESSION_OPERATION;
 	}
 
 	validationFailures(): readonly unknown[] {
@@ -1007,7 +1034,7 @@ export class ShepherdAgentSessionRuntime {
 			const owner = new SessionCreationOwnership(
 				createPromise,
 				this.#options.cleanupTimeoutMs,
-				(created) => captureCreatedSession(created, thinking, expectedToolNames),
+				(created) => captureCreatedSession(created, thinking, expectedToolNames, assertExecutionActive),
 				(error) => {
 					this.#setQuarantine(error);
 				},
@@ -1028,29 +1055,30 @@ export class ShepherdAgentSessionRuntime {
 			owned = claim.owned;
 			active.owned = owned;
 			scope.setOnCancel(() => { void owned?.abortOnce().catch(() => undefined); });
-			scope.assertActive();
-			try {
-				claim.validate();
-			} catch (error) {
-				throw error;
-			}
+			assertExecutionActive();
+			claim.validate();
+			assertExecutionActive();
 
 			const capture = newTerminalCapture(expectedToolNames);
+			assertExecutionActive();
 			owned.subscribe((event) => {
 				captureEvent(capture, event, this.#options);
 				if (capture.failure) void owned?.abortOnce().catch(() => undefined);
 			});
+			assertExecutionActive();
+			if (capture.failure) throw capture.failure;
+			assertExecutionActive();
 			await scope.race(owned.prompt(prompts.userPrompt, {
 				expandPromptTemplates: false,
 				source: "extension",
 			}));
-			scope.assertActive();
+			assertExecutionActive();
 			// Prompt settlement follows Pi's synchronous agent_settled dispatch. Freeze before
 			// releasing the listener, then await release so idle/dispose callbacks cannot mutate
 			// evidence that is about to be verified.
 			capture.frozen = true;
 			await scope.race(bounded(owned.unsubscribeOnce(), this.#options.cleanupTimeoutMs, "session unsubscribe"));
-			scope.assertActive();
+			assertExecutionActive();
 			if (capture.failure) throw capture.failure;
 			const terminal = verifyTerminalCapture(capture);
 			if (terminal.provider !== REQUIRED_PROVIDER || terminal.model !== REQUIRED_MODEL) {
@@ -1308,9 +1336,11 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const writePrefixes = readOnly && writePrefixesSource.length === 0
 		? frozenArray<string>([])
 		: frozenArray(normalizeScopedPrefixes(writePrefixesSource, "write"));
-	const capabilityNames: string[] = [];
+	const capabilityNames: HostCapabilityName[] = [];
 	for (const name of capabilityNamesSource) {
-		if (typeof name !== "string") throw new AgentSessionRuntimeError("authority capability name is invalid");
+		if (!isHostCapabilityName(name)) {
+			throw new AgentSessionRuntimeError("authority capability name is outside the closed host registry");
+		}
 		capabilityNames.push(name);
 	}
 	Object.freeze(capabilityNames);
@@ -1413,12 +1443,15 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 function normalizeCapability(capability: HostCapability): HostCapability {
 	const fields = captureClosedRecordFields(capability, "capability", 5);
 	assertExactCapturedFields(fields, ["name", "description", "mutates", "parameters", "execute"], "capability");
-	const name = fields.get("name") as string;
+	const name = fields.get("name");
 	const description = fields.get("description") as string;
-	const mutates = fields.get("mutates") as boolean;
+	const mutates = fields.get("mutates");
 	const parameters = fields.get("parameters") as HostCapability["parameters"];
 	const execute = fields.get("execute");
-	if (typeof execute !== "function") throw new AgentSessionRuntimeError("capability execute must be a function");
+	if (!isHostCapabilityName(name) || mutates !== HOST_CAPABILITY_REGISTRY[name].mutates ||
+		typeof execute !== "function") {
+		throw new AgentSessionRuntimeError("capability identity, mutability, or execute contract is invalid");
+	}
 	return Object.freeze({
 		name,
 		description,
@@ -1427,7 +1460,7 @@ function normalizeCapability(capability: HostCapability): HostCapability {
 		execute(input: Readonly<Record<string, unknown>>, signal?: AbortSignal) {
 			return Reflect.apply(execute, capability, [input, signal]);
 		},
-	});
+	}) as HostCapability;
 }
 
 function captureFreshDenseArray(
@@ -1478,10 +1511,32 @@ function captureCreatedSession(
 	created: RuntimeSessionResult,
 	thinking: ShepherdAgentThinking,
 	expectedTools: readonly string[],
+	assertActive?: () => void,
 ): CreatedSessionClaim {
 	if (!created || typeof created !== "object" || Array.isArray(created) || nodeTypes.isProxy(created)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result");
 	}
+	const captureFailures: unknown[] = [];
+	let captureActive = true;
+	const recordCaptureFailure = (error: unknown): void => { captureFailures.push(error); };
+	const afterReentrantCallback = (): void => {
+		if (!captureActive || !assertActive) return;
+		try {
+			assertActive();
+		} catch (error) {
+			captureActive = false;
+			recordCaptureFailure(error);
+		}
+	};
+	const captureOptionalStep = (operation: () => void): void => {
+		if (!captureActive) return;
+		try {
+			operation();
+		} catch (error) {
+			recordCaptureFailure(error);
+		}
+		afterReentrantCallback();
+	};
 	// Acquire the cleanup root before validating any peer field. The legacy public Pi result
 	// permits a session getter, so it is invoked exactly once; every other result field must be
 	// a data descriptor and is never read through ordinary property lookup.
@@ -1489,69 +1544,66 @@ function captureCreatedSession(
 	let session: unknown;
 	if (sessionDescriptor && "value" in sessionDescriptor) session = sessionDescriptor.value;
 	else if (sessionDescriptor?.get) session = Reflect.apply(sessionDescriptor.get, created, []);
+	afterReentrantCallback();
 	if (!session || typeof session !== "object") {
 		throw new AgentSessionRuntimeError("Pi returned an invalid AgentSession result without a cleanable session");
 	}
-	const owned = new OwnedSession(session as RuntimeAgentSession);
-	const captureFailures: unknown[] = [...owned.validationFailures()];
+	const owned = new OwnedSession(
+		session as RuntimeAgentSession,
+		afterReentrantCallback,
+		() => captureActive,
+	);
+	captureFailures.push(...owned.validationFailures());
 	let modelProvider: unknown;
 	let modelId: unknown;
 	let thinkingLevel: unknown;
 	let sessionFile: unknown;
 	let activeTools: readonly string[] | undefined;
-	const recordCaptureFailure = (error: unknown): void => { captureFailures.push(error); };
-	if (!sessionDescriptor?.enumerable || sessionDescriptor.set ||
-		(!("value" in sessionDescriptor) && !sessionDescriptor.get)) {
-		recordCaptureFailure(new AgentSessionRuntimeError("Pi session ownership descriptor is invalid"));
-	}
-	try {
+	captureOptionalStep(() => {
+		if (!sessionDescriptor?.enumerable || sessionDescriptor.set ||
+			(!("value" in sessionDescriptor) && !sessionDescriptor.get)) {
+			throw new AgentSessionRuntimeError("Pi session ownership descriptor is invalid");
+		}
+	});
+	captureOptionalStep(() => {
 		assertEnumerableFieldsAllowed(
 			created,
 			["session", "extensionsResult", "modelFallbackMessage"],
 			"Pi AgentSession result",
 		);
-	} catch (error) {
-		recordCaptureFailure(error);
-	}
-	const extensionsDescriptor = Object.getOwnPropertyDescriptor(created, "extensionsResult");
-	if (!extensionsDescriptor?.enumerable || extensionsDescriptor.get || extensionsDescriptor.set ||
-		!("value" in extensionsDescriptor)) {
-		recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid extensions result descriptor"));
-	} else {
-		try {
+	});
+	captureOptionalStep(() => {
+		const extensionsDescriptor = Object.getOwnPropertyDescriptor(created, "extensionsResult");
+		if (!extensionsDescriptor?.enumerable || extensionsDescriptor.get || extensionsDescriptor.set ||
+			!("value" in extensionsDescriptor)) {
+			throw new AgentSessionRuntimeError("Pi returned an invalid extensions result descriptor");
+		} else {
 			captureEmptyExtensionsResult(extensionsDescriptor.value);
-		} catch (error) {
-			recordCaptureFailure(error);
 		}
-	}
-	const fallbackDescriptor = Object.getOwnPropertyDescriptor(created, "modelFallbackMessage");
-	if (!fallbackDescriptor?.enumerable || fallbackDescriptor.get || fallbackDescriptor.set || !("value" in fallbackDescriptor)) {
-		recordCaptureFailure(new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor"));
-	} else if (fallbackDescriptor.value !== undefined) {
-		recordCaptureFailure(new AgentSessionRuntimeError("Pi attempted a forbidden model fallback"));
-	}
-	try {
-		const model = (session as RuntimeAgentSession).model;
-		modelProvider = model?.provider;
-		modelId = model?.id;
-	} catch (error) {
-		recordCaptureFailure(error);
-	}
-	try {
+	});
+	captureOptionalStep(() => {
+		const fallbackDescriptor = Object.getOwnPropertyDescriptor(created, "modelFallbackMessage");
+		if (!fallbackDescriptor?.enumerable || fallbackDescriptor.get || fallbackDescriptor.set ||
+			!("value" in fallbackDescriptor)) {
+			throw new AgentSessionRuntimeError("Pi returned an invalid fallback descriptor");
+		}
+		if (fallbackDescriptor.value !== undefined) {
+			throw new AgentSessionRuntimeError("Pi attempted a forbidden model fallback");
+		}
+	});
+	let model: RuntimeSessionModel | undefined;
+	captureOptionalStep(() => { model = (session as RuntimeAgentSession).model; });
+	captureOptionalStep(() => { modelProvider = model?.provider; });
+	captureOptionalStep(() => { modelId = model?.id; });
+	captureOptionalStep(() => {
 		thinkingLevel = (session as RuntimeAgentSession).thinkingLevel;
-	} catch (error) {
-		recordCaptureFailure(error);
-	}
-	try {
+	});
+	captureOptionalStep(() => {
 		sessionFile = (session as RuntimeAgentSession).sessionFile;
-	} catch (error) {
-		recordCaptureFailure(error);
-	}
-	try {
+	});
+	captureOptionalStep(() => {
 		activeTools = captureToolNameArray(owned.activeToolNames());
-	} catch (error) {
-		recordCaptureFailure(error);
-	}
+	});
 
 	return Object.freeze({
 		owned,

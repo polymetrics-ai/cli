@@ -1,6 +1,11 @@
 import { types as nodeTypes } from "node:util";
 
-import { redactSensitiveText } from "./tool-policy.ts";
+import {
+	isSessionToolName,
+	redactSensitiveText,
+	sessionToolMutates,
+	type SessionToolName,
+} from "./tool-policy.ts";
 
 export const SHEPHERD_AGENT_PROVIDER = "openai-codex";
 export const SHEPHERD_AGENT_MODEL = "gpt-5.6-sol";
@@ -38,7 +43,7 @@ export interface PromptAuthority {
 	readOnly: boolean;
 	readPrefixes: string[];
 	writePrefixes: string[];
-	toolNames: string[];
+	toolNames: SessionToolName[];
 	binding: PromptBinding;
 }
 
@@ -107,7 +112,7 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 			64,
 			input.authority.readOnly,
 		),
-		toolNames: capturePromptArray<string>(input.authority.toolNames, "prompt tool authority", 40, true),
+		toolNames: capturePromptArray<SessionToolName>(input.authority.toolNames, "prompt tool authority", 40, true),
 		binding: input.authority.binding,
 	});
 	validateAuthority(authority);
@@ -221,9 +226,13 @@ function validateAuthority(authority: PromptAuthority): void {
 		}
 	}
 	if (!Array.isArray(authority.toolNames) || authority.toolNames.length > 40 ||
-		new Set(authority.toolNames).size !== authority.toolNames.length ||
-		authority.toolNames.some((name) => !/^[a-z][a-z0-9_]{1,63}$/.test(name))) {
+		new Set(authority.toolNames).size !== authority.toolNames.length) {
 		throw new RolePromptError("prompt tool authority is invalid");
+	}
+	for (const name of authority.toolNames) {
+		if (!isSessionToolName(name) || (authority.readOnly && sessionToolMutates(name))) {
+			throw new RolePromptError("prompt tool authority is invalid or exceeds the access mode");
+		}
 	}
 	const binding = authority.binding;
 	if (!binding || !validIdentifier(binding.runId) || !validIdentifier(binding.laneId) ||
