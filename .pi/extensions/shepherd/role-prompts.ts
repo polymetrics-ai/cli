@@ -81,16 +81,67 @@ const INTRINSIC_OBJECT_PROTOTYPE = Object.prototype;
 const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
+const INTRINSIC_OBJECT_DEFINE_PROPERTY = Object.defineProperty;
+const INTRINSIC_OBJECT_FREEZE = Object.freeze;
+const INTRINSIC_OBJECT_HAS_OWN = Object.hasOwn;
+const INTRINSIC_ARRAY_IS_ARRAY = Array.isArray;
+const INTRINSIC_NUMBER_IS_SAFE_INTEGER = Number.isSafeInteger;
+const INTRINSIC_STRING = String;
+const INTRINSIC_STRING_TRIM = String.prototype.trim;
+const INTRINSIC_STRING_CHAR_CODE_AT = String.prototype.charCodeAt;
+const INTRINSIC_STRING_STARTS_WITH = String.prototype.startsWith;
+const INTRINSIC_STRING_ENDS_WITH = String.prototype.endsWith;
+const INTRINSIC_STRING_INCLUDES = String.prototype.includes;
+const INTRINSIC_ARRAY_JOIN = Array.prototype.join;
+const INTRINSIC_REFLECT_APPLY = Reflect.apply;
+const INTRINSIC_JSON_STRINGIFY = JSON.stringify;
+const INTRINSIC_ERROR = Error;
+const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 
-export class RolePromptError extends Error {
+function intrinsicString(value: unknown): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING, undefined, [value]) as string;
+}
+
+function stringTrim(value: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TRIM, value, []) as string;
+}
+
+function stringCharCodeAt(value: string, index: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
+}
+
+function stringStartsWith(value: string, prefix: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_STARTS_WITH, value, [prefix]) as boolean;
+}
+
+function stringEndsWith(value: string, suffix: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_ENDS_WITH, value, [suffix]) as boolean;
+}
+
+function stringIncludes(value: string, search: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_INCLUDES, value, [search]) as boolean;
+}
+
+function arrayJoin(value: readonly string[], separator: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_JOIN, value, [separator]) as string;
+}
+
+export class RolePromptError extends INTRINSIC_ERROR {
 	constructor(message: string) {
 		super(message);
-		this.name = "RolePromptError";
+		INTRINSIC_OBJECT_DEFINE_PROPERTY(this, "name", {
+			value: "RolePromptError", enumerable: false, writable: true, configurable: true,
+		});
+		INTRINSIC_OBJECT_DEFINE_PROPERTY(this, "stack", {
+			value: `RolePromptError: ${message}`, enumerable: false, writable: true, configurable: true,
+		});
 	}
 }
 
 export function routeForRole(role: ShepherdAgentRole): RoleRoute {
-	if (!Object.hasOwn(roleDescriptions, role)) throw new RolePromptError(`unknown Shepherd AgentSession role ${JSON.stringify(role)}`);
+	if (!INTRINSIC_OBJECT_HAS_OWN(roleDescriptions, role)) {
+		throw new RolePromptError(`unknown Shepherd AgentSession role ${INTRINSIC_JSON_STRINGIFY(role)}`);
+	}
 	return {
 		provider: SHEPHERD_AGENT_PROVIDER,
 		model: SHEPHERD_AGENT_MODEL,
@@ -104,7 +155,7 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	const context = snapshot.context;
 	const authority = snapshot.authority;
 	validateAuthority(authority);
-	if (snapshot.task.trim().length === 0 || byteLength(snapshot.task) > MAX_TASK_BYTES) {
+	if (stringTrim(snapshot.task).length === 0 || byteLength(snapshot.task) > MAX_TASK_BYTES) {
 		throw new RolePromptError("role task must be non-empty and bounded");
 	}
 	let contextBytes = 0;
@@ -116,7 +167,7 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	}
 	if (contextBytes > MAX_CONTEXT_BYTES) throw new RolePromptError("role context exceeded its total bound");
 
-	const systemPrompt = [
+	const systemPrompt = arrayJoin([
 		"You are a bounded Polymetrics Shepherd AgentSession role.",
 		roleDescriptions[snapshot.role],
 		"The following authority envelope is host-owned and immutable:",
@@ -124,9 +175,9 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 		`- branch ${authority.branch}`,
 		`- workspace ${authority.workspaceId}`,
 		`- access ${authority.readOnly ? "read-only" : "scoped mutation"}`,
-		`- read scope ${authority.readPrefixes.join(", ")}`,
-		`- write scope ${authority.writePrefixes.length === 0 ? "none" : authority.writePrefixes.join(", ")}`,
-		`- tools ${authority.toolNames.length === 0 ? "none" : authority.toolNames.join(", ")}`,
+		`- read scope ${arrayJoin(authority.readPrefixes, ", ")}`,
+		`- write scope ${authority.writePrefixes.length === 0 ? "none" : arrayJoin(authority.writePrefixes, ", ")}`,
+		`- tools ${authority.toolNames.length === 0 ? "none" : arrayJoin(authority.toolNames, ", ")}`,
 		`- route ${route.provider}/${route.model}/${route.thinking}`,
 		`- binding run=${authority.binding.runId} generation=${authority.binding.generation} lane=${authority.binding.laneId}`,
 		`- binding head=${authority.binding.candidateHead} nonce=${authority.binding.validationNonce}`,
@@ -135,14 +186,18 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 		"Do not delegate or create another agent. Do not invoke subagents, orchestration, generic shell, generic HTTP write, or generic SQL write authority.",
 		"Use only the active tools. A missing tool means the action is outside authority; report it as blocked instead of improvising.",
 		"Return exactly one JSON object matching the Shepherd handoff schema. Do not include prose, markdown, reasoning, raw logs, tool output, or authority requests.",
-	].join("\n");
+	], "\n");
 
-	const userPrompt = JSON.stringify({
+	const redactedContext: string[] = [];
+	for (let index = 0; index < context.length; index += 1) {
+		redactedContext[index] = redactSensitiveText(context[index]!);
+	}
+	const userPrompt = INTRINSIC_JSON_STRINGIFY({
 		type: "shepherd_role_task_v1",
 		role: snapshot.role,
 		binding: authority.binding,
 		untrustedTask: redactSensitiveText(snapshot.task),
-		untrustedContext: context.map(redactSensitiveText),
+		untrustedContext: redactedContext,
 		handoffSchema: {
 			schemaVersion: 1,
 			runId: authority.binding.runId,
@@ -163,7 +218,7 @@ export function buildRolePrompts(input: RolePromptInput): RolePrompts {
 	if (byteLength(systemPrompt) > MAX_SYSTEM_PROMPT_BYTES || byteLength(userPrompt) > MAX_USER_PROMPT_BYTES) {
 		throw new RolePromptError("constructed role prompts exceeded their bounds");
 	}
-	return Object.freeze({ systemPrompt, userPrompt });
+	return INTRINSIC_OBJECT_FREEZE({ systemPrompt, userPrompt });
 }
 
 function snapshotRolePromptInput(value: unknown): Readonly<RolePromptInput> {
@@ -181,14 +236,14 @@ function snapshotRolePromptInput(value: unknown): Readonly<RolePromptInput> {
 	}
 	const readOnly = authorityFields.get("readOnly");
 	if (typeof readOnly !== "boolean") throw new RolePromptError("prompt access mode is invalid");
-	const binding = Object.freeze({
+	const binding = INTRINSIC_OBJECT_FREEZE({
 		runId: bindingFields.get("runId") as string,
 		generation: bindingFields.get("generation") as number,
 		laneId: bindingFields.get("laneId") as string,
 		candidateHead: bindingFields.get("candidateHead") as string,
 		validationNonce: bindingFields.get("validationNonce") as string,
 	}) satisfies PromptBinding;
-	const authority: PromptAuthority = Object.freeze({
+	const authority: PromptAuthority = INTRINSIC_OBJECT_FREEZE({
 		issue: authorityFields.get("issue") as number,
 		branch: authorityFields.get("branch") as string,
 		workspaceId: authorityFields.get("workspaceId") as string,
@@ -207,7 +262,7 @@ function snapshotRolePromptInput(value: unknown): Readonly<RolePromptInput> {
 	for (const item of context) {
 		if (typeof item !== "string") throw new RolePromptError("role context item must be a string");
 	}
-	return Object.freeze({ role: role as ShepherdAgentRole, task, context, authority });
+	return INTRINSIC_OBJECT_FREEZE({ role: role as ShepherdAgentRole, task, context, authority });
 }
 
 function capturePromptRecord(
@@ -215,7 +270,7 @@ function capturePromptRecord(
 	fields: readonly string[],
 	description: string,
 ): ReadonlyMap<string, unknown> {
-	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!value || typeof value !== "object" || INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new RolePromptError(`${description} must be a non-proxy record`);
 	}
 	const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
@@ -239,7 +294,7 @@ function capturePromptArray<T>(
 	maximum: number,
 	allowEmpty: boolean,
 ): T[] {
-	if (!Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new RolePromptError(`${description} must be a bounded non-proxy array`);
 	}
 	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
@@ -248,25 +303,27 @@ function capturePromptArray<T>(
 	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
-		typeof length !== "number" || !Number.isSafeInteger(length) || length < (allowEmpty ? 0 : 1) ||
+		typeof length !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) || length < (allowEmpty ? 0 : 1) ||
 		length > maximum) {
 		throw new RolePromptError(`${description} has an invalid authoritative length`);
 	}
 	const captured: T[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new RolePromptError(`${description} contains a sparse or accessor element`);
 		}
 		captured[index] = descriptor.value as T;
 	}
-	Object.freeze(captured);
+	INTRINSIC_OBJECT_FREEZE(captured);
 	return captured;
 }
 
 function validateAuthority(authority: PromptAuthority): void {
 	if (!authority || typeof authority !== "object") throw new RolePromptError("prompt authority is required");
-	if (!Number.isSafeInteger(authority.issue) || authority.issue < 1) throw new RolePromptError("prompt issue is invalid");
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(authority.issue) || authority.issue < 1) {
+		throw new RolePromptError("prompt issue is invalid");
+	}
 	if (typeof authority.branch !== "string" || authority.branch.length < 1 || authority.branch.length > 255 ||
 		/[\u0000-\u001f\u007f]/.test(authority.branch) || authority.branch === "main") {
 		throw new RolePromptError("prompt branch is invalid or targets the default branch");
@@ -277,13 +334,14 @@ function validateAuthority(authority: PromptAuthority): void {
 		["read", authority.readPrefixes, false],
 		["write", authority.writePrefixes, authority.readOnly],
 	] as const) {
-		if (!Array.isArray(prefixes) || (!allowEmpty && prefixes.length === 0) || prefixes.length > 64 ||
+		if (!INTRINSIC_ARRAY_IS_ARRAY(prefixes) || (!allowEmpty && prefixes.length === 0) || prefixes.length > 64 ||
 			prefixes.some((prefix) => typeof prefix !== "string" || prefix.length < 1 || prefix.length > 512 ||
-				/[\u0000-\u001f\u007f\\]/.test(prefix) || prefix.startsWith("/") || prefix.endsWith("/") || prefix.includes("//"))) {
+				/[\u0000-\u001f\u007f\\]/.test(prefix) || stringStartsWith(prefix, "/") ||
+				stringEndsWith(prefix, "/") || stringIncludes(prefix, "//"))) {
 			throw new RolePromptError(`prompt ${name} scope is invalid`);
 		}
 	}
-	if (!Array.isArray(authority.toolNames) || authority.toolNames.length > 40 ||
+	if (!INTRINSIC_ARRAY_IS_ARRAY(authority.toolNames) || authority.toolNames.length > 40 ||
 		new Set(authority.toolNames).size !== authority.toolNames.length) {
 		throw new RolePromptError("prompt tool authority is invalid");
 	}
@@ -294,7 +352,7 @@ function validateAuthority(authority: PromptAuthority): void {
 	}
 	const binding = authority.binding;
 	if (!binding || !validIdentifier(binding.runId) || !validIdentifier(binding.laneId) ||
-		!Number.isSafeInteger(binding.generation) || binding.generation < 1 ||
+		!INTRINSIC_NUMBER_IS_SAFE_INTEGER(binding.generation) || binding.generation < 1 ||
 		!/^[0-9a-f]{40}$/.test(binding.candidateHead) ||
 		!validIdentifier(binding.validationNonce) || binding.validationNonce.length < 12) {
 		throw new RolePromptError("prompt binding is invalid");
@@ -306,5 +364,18 @@ function validIdentifier(value: unknown): value is string {
 }
 
 function byteLength(value: string): number {
-	return new TextEncoder().encode(value).byteLength;
+	let bytes = 0;
+	for (let index = 0; index < value.length; index += 1) {
+		const code = stringCharCodeAt(value, index);
+		if (code <= 0x7f) bytes += 1;
+		else if (code <= 0x7ff) bytes += 2;
+		else if (code >= 0xd800 && code <= 0xdbff && index + 1 < value.length) {
+			const next = stringCharCodeAt(value, index + 1);
+			if (next >= 0xdc00 && next <= 0xdfff) {
+				bytes += 4;
+				index += 1;
+			} else bytes += 3;
+		} else bytes += 3;
+	}
+	return bytes;
 }

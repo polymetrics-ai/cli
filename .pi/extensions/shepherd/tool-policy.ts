@@ -35,11 +35,119 @@ const INTRINSIC_OBJECT_HAS_OWN = Object.hasOwn;
 const INTRINSIC_OBJECT_VALUES = Object.values;
 const INTRINSIC_IS_ARRAY = Array.isArray;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
+const INTRINSIC_IS_NATIVE_ERROR = nodeTypes.isNativeError;
 const INTRINSIC_REFLECT_APPLY = Reflect.apply;
+const INTRINSIC_NUMBER = Number;
+const INTRINSIC_NUMBER_IS_FINITE = Number.isFinite;
+const INTRINSIC_NUMBER_IS_INTEGER = Number.isInteger;
+const INTRINSIC_NUMBER_IS_SAFE_INTEGER = Number.isSafeInteger;
+const INTRINSIC_NUMBER_PARSE_INT = Number.parseInt;
+const INTRINSIC_NUMBER_MIN_SAFE_INTEGER = Number.MIN_SAFE_INTEGER;
+const INTRINSIC_NUMBER_MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER;
+const INTRINSIC_STRING = String;
 const INTRINSIC_JSON_STRINGIFY = JSON.stringify;
 const INTRINSIC_STRING_CHAR_CODE_AT = String.prototype.charCodeAt;
+const INTRINSIC_STRING_CODE_POINT_AT = String.prototype.codePointAt;
 const INTRINSIC_STRING_TRIM = String.prototype.trim;
+const INTRINSIC_STRING_SLICE = String.prototype.slice;
+const INTRINSIC_STRING_REPLACE = String.prototype.replace;
+const INTRINSIC_STRING_STARTS_WITH = String.prototype.startsWith;
+const INTRINSIC_STRING_ENDS_WITH = String.prototype.endsWith;
+const INTRINSIC_STRING_INCLUDES = String.prototype.includes;
+const INTRINSIC_STRING_SPLIT = String.prototype.split;
+const INTRINSIC_STRING_TO_LOWER_CASE = String.prototype.toLowerCase;
+const INTRINSIC_STRING_FROM_CHAR_CODE = String.fromCharCode;
+const INTRINSIC_ARRAY_PUSH = Array.prototype.push;
+const INTRINSIC_ARRAY_POP = Array.prototype.pop;
+const INTRINSIC_ARRAY_AT = Array.prototype.at;
+const INTRINSIC_ARRAY_SPLICE = Array.prototype.splice;
+const INTRINSIC_ARRAY_JOIN = Array.prototype.join;
+const INTRINSIC_ARRAY_INCLUDES = Array.prototype.includes;
+const INTRINSIC_ARRAY_LAST_INDEX_OF = Array.prototype.lastIndexOf;
+const INTRINSIC_MATH_MIN = Math.min;
+const INTRINSIC_MATH_MAX = Math.max;
+const INTRINSIC_ERROR = Error;
+const INTRINSIC_WEAK_SET = WeakSet;
+const INTRINSIC_WEAK_SET_HAS = WeakSet.prototype.has;
+const INTRINSIC_WEAK_SET_ADD = WeakSet.prototype.add;
+const INTRINSIC_WEAK_SET_DELETE = WeakSet.prototype.delete;
 const NATIVE_ABORTED_GETTER = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(AbortSignal.prototype, "aborted")?.get;
+
+function intrinsicString(value: unknown): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING, undefined, [value]) as string;
+}
+
+function intrinsicMin(left: number, right: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_MATH_MIN, undefined, [left, right]) as number;
+}
+
+function intrinsicMax(left: number, right: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_MATH_MAX, undefined, [left, right]) as number;
+}
+
+function arrayPush<T>(target: T[], value: T): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_PUSH, target, [value]) as number;
+}
+
+function stringSlice(value: string, start: number, end?: number): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_SLICE, value, end === undefined ? [start] : [start, end]) as string;
+}
+
+function stringReplace(value: string, pattern: string | RegExp, replacement: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_REPLACE, value, [pattern, replacement]) as string;
+}
+
+function stringStartsWith(value: string, search: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_STARTS_WITH, value, [search]) as boolean;
+}
+
+function stringEndsWith(value: string, search: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_ENDS_WITH, value, [search]) as boolean;
+}
+
+function stringIncludes(value: string, search: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_INCLUDES, value, [search]) as boolean;
+}
+
+function stringTrim(value: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TRIM, value, []) as string;
+}
+
+function stringToLowerCase(value: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TO_LOWER_CASE, value, []) as string;
+}
+
+function stringSplit(value: string, separator: string): string[] {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_SPLIT, value, [separator]) as string[];
+}
+
+function stringFromCharCode(value: number): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_FROM_CHAR_CODE, undefined, [value]) as string;
+}
+
+function arrayAt<T>(value: readonly T[], index: number): T | undefined {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_AT, value, [index]) as T | undefined;
+}
+
+function arrayPop<T>(value: T[]): T | undefined {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_POP, value, []) as T | undefined;
+}
+
+function arraySplice<T>(value: T[], start: number, deleteCount: number): T[] {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_SPLICE, value, [start, deleteCount]) as T[];
+}
+
+function arrayJoin(value: readonly string[], separator: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_JOIN, value, [separator]) as string;
+}
+
+function arrayIncludes<T>(value: readonly T[], candidate: T): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_INCLUDES, value, [candidate]) as boolean;
+}
+
+function arrayLastIndexOf<T>(value: readonly T[], candidate: T): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_LAST_INDEX_OF, value, [candidate]) as number;
+}
 
 /** The complete reviewed host-tool domain. Unknown strings have no extension path. */
 export const HOST_CAPABILITY_REGISTRY = INTRINSIC_OBJECT_FREEZE({
@@ -352,10 +460,8 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 		: normalizeScopedPrefixes(capturedInput.authority.writePrefixes, "write");
 	const tools: SessionTool[] = [workspaceReadTool(capturedInput.workspace, readPrefixes, limits)];
 	if (!capturedInput.readOnly) {
-		tools.push(
-			workspaceEditTool(capturedInput.workspace, writePrefixes, limits),
-			workspaceWriteTool(capturedInput.workspace, writePrefixes, limits),
-		);
+		arrayPush(tools, workspaceEditTool(capturedInput.workspace, writePrefixes, limits));
+		arrayPush(tools, workspaceWriteTool(capturedInput.workspace, writePrefixes, limits));
 	}
 
 	const declared = new Set(capturedInput.authority.capabilityNames);
@@ -365,7 +471,7 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 			throw new ToolPolicyError(`undeclared capability ${INTRINSIC_JSON_STRINGIFY(capability.name)} cannot expand authority`);
 		}
 		if (capturedInput.readOnly && capability.mutates) continue;
-		tools.push(hostCapabilityTool(capability, limits));
+		arrayPush(tools, hostCapabilityTool(capability, limits));
 		hostContracts.set(capability.name, capability.argumentContract);
 	}
 
@@ -455,7 +561,7 @@ function validatePolicyInput(input: ToolPolicyInput, maximumStringLength: number
 		}
 		const parameterSnapshot = snapshotCapabilitySchema(parameterSource, name);
 		const argumentContract = compileToolArgumentContract(parameterSnapshot, name, maximumStringLength);
-		capabilities.push(INTRINSIC_OBJECT_FREEZE({
+		arrayPush(capabilities, INTRINSIC_OBJECT_FREEZE({
 			name,
 			description,
 			mutates,
@@ -483,6 +589,7 @@ interface ProjectionBudget {
 	keys: number;
 	items: number;
 	containers: number;
+	scalarUnits: number;
 	bytes: number;
 	maximumBytes: number;
 	seen: WeakSet<object>;
@@ -509,18 +616,19 @@ function compileToolArgumentContract(
 	return INTRINSIC_OBJECT_FREEZE({
 		schema: compiled.schema,
 		project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>> {
-			if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
+			if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(maximumBytes) || maximumBytes < 1) {
 				throw new ToolPolicyError(`${name} input has an invalid byte bound`);
 			}
-			const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
+			const effectiveMaximum = intrinsicMin(maximumBytes, MAX_TOOL_INPUT_BYTES);
 			const projected = compiled.project(raw, `${name} input`, 0, {
 				nodes: 0,
 				keys: 0,
 				items: 0,
 				containers: 0,
+				scalarUnits: 0,
 				bytes: 0,
 				maximumBytes: effectiveMaximum,
-				seen: new WeakSet<object>(),
+				seen: new INTRINSIC_WEAK_SET<object>(),
 			});
 			if (!isRecord(projected)) throw new ToolPolicyError(`${name} input must be an object`);
 			return projected;
@@ -540,7 +648,7 @@ function compileSchemaNode(
 		assertSchemaVocabulary(schema, ["type"], ["minLength", "maxLength", "enum"], description);
 		const minimum = optionalSchemaInteger(schema, "minLength", 0, maximumStringLength, description) ?? 0;
 		const authoredMaximum = optionalSchemaInteger(schema, "maxLength", 0, MAX_WRITE_CHARACTERS, description);
-		const maximum = Math.min(authoredMaximum ?? maximumStringLength, maximumStringLength);
+		const maximum = intrinsicMin(authoredMaximum ?? maximumStringLength, maximumStringLength);
 		const enumSource = optionalOwnSchemaField(schema, "enum", description);
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "string", description);
 		if (minimum > maximum) {
@@ -549,7 +657,7 @@ function compileSchemaNode(
 		const entries: Array<readonly [string, JsonData]> = [
 			["type", type], ["minLength", minimum], ["maxLength", maximum],
 		];
-		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		if (enumValues !== undefined) arrayPush(entries, ["enum", enumValues as JsonData[]]);
 		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
@@ -558,11 +666,10 @@ function compileSchemaNode(
 		) => {
 			chargeProjectionNode(budget, valueDepth, valueDescription);
 			const normalized = normalizeSchemaString(value, valueDescription);
-			const normalizedLength = jsonSchemaStringLength(normalized);
+			const normalizedLength = chargeProjectedStringAndMeasure(budget, normalized, valueDescription);
 			if (normalizedLength < minimum || normalizedLength > maximum || !enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its string schema`);
 			}
-			chargeProjectedScalarBytes(budget, normalized, valueDescription);
 			return normalized;
 		} });
 	}
@@ -571,15 +678,15 @@ function compileSchemaNode(
 		const authoredMinimum = optionalSchemaFiniteNumber(schema, "minimum", description);
 		const authoredMaximum = optionalSchemaFiniteNumber(schema, "maximum", description);
 		if (type === "integer" &&
-			((authoredMinimum !== undefined && !Number.isInteger(authoredMinimum)) ||
-				(authoredMaximum !== undefined && !Number.isInteger(authoredMaximum)))) {
+			((authoredMinimum !== undefined && !INTRINSIC_NUMBER_IS_INTEGER(authoredMinimum)) ||
+				(authoredMaximum !== undefined && !INTRINSIC_NUMBER_IS_INTEGER(authoredMaximum)))) {
 			throw new ToolPolicyError(`${description} integer bounds must be integral`);
 		}
 		const minimum = type === "integer"
-			? Math.max(authoredMinimum ?? Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)
+			? intrinsicMax(authoredMinimum ?? INTRINSIC_NUMBER_MIN_SAFE_INTEGER, INTRINSIC_NUMBER_MIN_SAFE_INTEGER)
 			: authoredMinimum;
 		const maximum = type === "integer"
-			? Math.min(authoredMaximum ?? Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+			? intrinsicMin(authoredMaximum ?? INTRINSIC_NUMBER_MAX_SAFE_INTEGER, INTRINSIC_NUMBER_MAX_SAFE_INTEGER)
 			: authoredMaximum;
 		const enumSource = optionalOwnSchemaField(schema, "enum", description);
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, type, description);
@@ -587,9 +694,9 @@ function compileSchemaNode(
 			throw new ToolPolicyError(`${description} has inverted numeric bounds`);
 		}
 		const entries: Array<readonly [string, JsonData]> = [["type", type]];
-		if (minimum !== undefined) entries.push(["minimum", minimum]);
-		if (maximum !== undefined) entries.push(["maximum", maximum]);
-		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		if (minimum !== undefined) arrayPush(entries, ["minimum", minimum]);
+		if (maximum !== undefined) arrayPush(entries, ["maximum", maximum]);
+		if (enumValues !== undefined) arrayPush(entries, ["enum", enumValues as JsonData[]]);
 		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
@@ -597,8 +704,8 @@ function compileSchemaNode(
 			budget: ProjectionBudget,
 		) => {
 			chargeProjectionNode(budget, valueDepth, valueDescription);
-			const normalized = normalizeSchemaNumber(value, type, valueDescription);
-			if ((type === "integer" && !Number.isSafeInteger(normalized)) ||
+			const normalized = normalizeSchemaNumber(value, type, valueDescription, budget);
+			if ((type === "integer" && !INTRINSIC_NUMBER_IS_SAFE_INTEGER(normalized)) ||
 				(minimum !== undefined && normalized < minimum) || (maximum !== undefined && normalized > maximum) ||
 				!enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its numeric schema`);
@@ -612,7 +719,7 @@ function compileSchemaNode(
 		const enumSource = optionalOwnSchemaField(schema, "enum", description);
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "boolean", description);
 		const entries: Array<readonly [string, JsonData]> = [["type", type]];
-		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
+		if (enumValues !== undefined) arrayPush(entries, ["enum", enumValues as JsonData[]]);
 		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
@@ -655,14 +762,14 @@ function compileSchemaNode(
 			const length = ownArrayLength(value, valueDescription);
 			if (length < minimum || length > maximum) throw new ToolPolicyError(`${valueDescription} violates its array bounds`);
 			chargeProjectionItems(budget, length, valueDescription);
-			chargeProjectionBytes(budget, 2 + Math.max(0, length - 1), valueDescription);
+			chargeProjectionBytes(budget, 2 + intrinsicMax(0, length - 1), valueDescription);
 			const projected: JsonData[] = [];
 			for (let index = 0; index < length; index += 1) {
-				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new ToolPolicyError(`${valueDescription} contains a sparse or accessor item`);
 				}
-				projected.push(item.project(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1, budget));
+				arrayPush(projected, item.project(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1, budget));
 			}
 			return INTRINSIC_OBJECT_FREEZE(projected) as JsonData[];
 		} });
@@ -691,7 +798,7 @@ function compileSchemaNode(
 	const requiredNames: string[] = [];
 	const unique = new Set<string>();
 	for (let index = 0; index < requiredLength; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(required, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(required, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 			typeof descriptor.value !== "string" || descriptor.value.length < 1 || descriptor.value.length > 128 ||
 			unique.has(descriptor.value)) {
@@ -699,7 +806,7 @@ function compileSchemaNode(
 		}
 		const propertyName = descriptor.value;
 		unique.add(propertyName);
-		requiredNames.push(propertyName);
+		arrayPush(requiredNames, propertyName);
 	}
 	const names = INTRINSIC_OBJECT_KEYS(properties);
 	let propertySetMatches = names.length === requiredNames.length;
@@ -723,7 +830,7 @@ function compileSchemaNode(
 			depth + 1,
 			maximumStringLength,
 		);
-		projectors.push(property.project);
+		arrayPush(projectors, property.project);
 		INTRINSIC_DEFINE_PROPERTY(canonicalProperties, propertyName, {
 			value: property.schema,
 			enumerable: true,
@@ -755,22 +862,11 @@ function compileSchemaNode(
 			throw new ToolPolicyError(`${valueDescription} must use an exact approved prototype`);
 		}
 		chargeProjectionContainer(budget, value, valueDescription);
-		const suppliedNames = INTRINSIC_OBJECT_KEYS(value);
-		let suppliedSetMatches = suppliedNames.length === names.length;
-		for (let index = 0; suppliedSetMatches && index < suppliedNames.length; index += 1) {
-			suppliedSetMatches = unique.has(suppliedNames[index]!);
-		}
-		if (!suppliedSetMatches) {
-			throw new ToolPolicyError(`${valueDescription} contains unknown or missing fields`);
-		}
-		chargeProjectionKeys(budget, names.length, valueDescription);
-		chargeProjectionBytes(budget, 2 + Math.max(0, names.length - 1), valueDescription);
+		assertBoundedClosedRecordKeys(value, unique, names.length, budget, valueDescription);
+		chargeProjectionBytes(budget, 2 + intrinsicMax(0, names.length - 1), valueDescription);
 		for (const field of names) {
-			chargeProjectionBytes(
-				budget,
-				byteLength(INTRINSIC_JSON_STRINGIFY(field)) + 1,
-				valueDescription,
-			);
+			chargeProjectedStringBytes(budget, field, valueDescription);
+			chargeProjectionBytes(budget, 1, valueDescription);
 		}
 		const projected = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonData>;
 		for (let index = 0; index < names.length; index += 1) {
@@ -847,16 +943,16 @@ function optionalSchemaInteger(
 ): number | undefined {
 	const value = optionalOwnSchemaField(schema, field, description);
 	if (value === undefined) return undefined;
-	if (!Number.isSafeInteger(value) || Number(value) < minimum || Number(value) > maximum) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(value) || (value as number) < minimum || (value as number) > maximum) {
 		throw new ToolPolicyError(`${description} has an invalid ${field}`);
 	}
-	return Number(value);
+	return value as number;
 }
 
 function optionalSchemaFiniteNumber(schema: PlainJsonSchema, field: string, description: string): number | undefined {
 	const value = optionalOwnSchemaField(schema, field, description);
 	if (value === undefined) return undefined;
-	if (typeof value !== "number" || !Number.isFinite(value)) {
+	if (typeof value !== "number" || !INTRINSIC_NUMBER_IS_FINITE(value)) {
 		throw new ToolPolicyError(`${description} has an invalid ${field}`);
 	}
 	return value === 0 ? 0 : value;
@@ -877,19 +973,20 @@ function captureCompiledEnum(
 	}
 	const values: JsonData[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(source, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(source, intrinsicString(index));
 		const sourceValue = descriptor && "value" in descriptor ? descriptor.value : undefined;
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 			typeof sourceValue !== (type === "integer" || type === "number" ? "number" : type) ||
 			(typeof sourceValue === "number" &&
-				(!Number.isFinite(sourceValue) || (type === "integer" && !Number.isSafeInteger(sourceValue))))) {
+				(!INTRINSIC_NUMBER_IS_FINITE(sourceValue) ||
+					(type === "integer" && !INTRINSIC_NUMBER_IS_SAFE_INTEGER(sourceValue))))) {
 			throw new ToolPolicyError(`${description} enum contains an unsupported value`);
 		}
 		const value = typeof sourceValue === "number" && sourceValue === 0 ? 0 : sourceValue as JsonData;
 		for (const existing of values) {
 			if (existing === value) throw new ToolPolicyError(`${description} enum contains a canonical duplicate`);
 		}
-		values.push(value);
+		arrayPush(values, value);
 	}
 	return INTRINSIC_OBJECT_FREEZE(values);
 }
@@ -905,38 +1002,128 @@ function enumAccepts(values: readonly JsonData[] | undefined, value: JsonData): 
 function normalizeSchemaString(value: unknown, description: string): string {
 	if (typeof value === "string") return value;
 	if (value === null) return "";
-	if (typeof value === "boolean") return String(value);
-	if (typeof value === "number" && Number.isFinite(value)) return String(value);
+	if (typeof value === "boolean") return intrinsicString(value);
+	if (typeof value === "number" && INTRINSIC_NUMBER_IS_FINITE(value)) return intrinsicString(value);
 	throw new ToolPolicyError(`${description} violates its string schema`);
 }
 
-// JSON Schema counts Unicode code points rather than UTF-16 code units. Keep the
-// projection path allocation-free while matching Pi's Ajv-backed validator.
-function jsonSchemaStringLength(value: string): number {
-	let length = 0;
-	for (let index = 0; index < value.length; index += 1) {
-		length += 1;
-		const first = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
-		if (first < 0xd800 || first > 0xdbff || index + 1 >= value.length) continue;
-		const second = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index + 1]) as number;
-		if (second >= 0xdc00 && second <= 0xdfff) index += 1;
+function isTypeBoxCombiningMark(codePoint: number): boolean {
+	return (codePoint >= 0x0300 && codePoint <= 0x036f) ||
+		(codePoint >= 0x1ab0 && codePoint <= 0x1aff) ||
+		(codePoint >= 0x1dc0 && codePoint <= 0x1dff) ||
+		(codePoint >= 0xfe20 && codePoint <= 0xfe2f) ||
+		(codePoint >= 0xfe00 && codePoint <= 0xfe0f);
+}
+
+function isHighSurrogate(code: number): boolean {
+	return code >= 0xd800 && code <= 0xdbff;
+}
+
+function isLowSurrogate(code: number): boolean {
+	return code >= 0xdc00 && code <= 0xdfff;
+}
+
+function codePointAt(value: string, index: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CODE_POINT_AT, value, [index]) as number;
+}
+
+// Pi 0.80.6's pinned TypeBox guard uses this intentionally small grapheme
+// implementation. Preserve its fast-path quirks as part of the tool ABI while
+// charging each consumed UTF-16 point's exact JSON/UTF-8 bytes in the same walk.
+function chargeProjectedStringAndMeasure(
+	budget: ProjectionBudget,
+	value: string,
+	description: string,
+): number {
+	chargeProjectionBytes(budget, 2, description);
+	if (value.length > budget.maximumBytes - budget.bytes) {
+		throw new ToolPolicyError(`${description} exceeded its incremental encoded-byte bound`);
 	}
-	return length;
+	let requiresSlowPath = false;
+	const consumePoint = (index: number): number => {
+		const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
+		if (isHighSurrogate(code) || (code >= 0x0300 && code <= 0x036f) || code === 0x200d) {
+			requiresSlowPath = true;
+		}
+		if (code === 0x22 || code === 0x5c || code === 0x08 || code === 0x09 || code === 0x0a ||
+			code === 0x0c || code === 0x0d) {
+			chargeProjectionBytes(budget, 2, description);
+			return index + 1;
+		}
+		if (code <= 0x1f) {
+			chargeProjectionBytes(budget, 6, description);
+			return index + 1;
+		}
+		if (isHighSurrogate(code)) {
+			if (index + 1 < value.length) {
+				const second = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index + 1]) as number;
+				if (isLowSurrogate(second)) {
+					chargeProjectionBytes(budget, 4, description);
+					return index + 2;
+				}
+			}
+			chargeProjectionBytes(budget, 6, description);
+			return index + 1;
+		}
+		if (isLowSurrogate(code)) chargeProjectionBytes(budget, 6, description);
+		else if (code <= 0x7f) chargeProjectionBytes(budget, 1, description);
+		else if (code <= 0x7ff) chargeProjectionBytes(budget, 2, description);
+		else chargeProjectionBytes(budget, 3, description);
+		return index + 1;
+	};
+
+	let graphemes = 0;
+	let index = 0;
+	while (index < value.length) {
+		graphemes += 1;
+		const firstPoint = codePointAt(value, index);
+		index = consumePoint(index);
+
+		// TypeBox pairs leading regional indicators, matching its pinned guard.
+		if (firstPoint >= 0x1f1e6 && firstPoint <= 0x1f1ff && index < value.length) {
+			const nextPoint = codePointAt(value, index);
+			if (nextPoint >= 0x1f1e6 && nextPoint <= 0x1f1ff) index = consumePoint(index);
+		}
+
+		while (index < value.length && isTypeBoxCombiningMark(codePointAt(value, index))) {
+			index = consumePoint(index);
+		}
+		while (index < value.length && codePointAt(value, index) === 0x200d) {
+			index = consumePoint(index);
+			if (index >= value.length) {
+				graphemes += 1;
+				break;
+			}
+			index = consumePoint(index);
+			while (index < value.length && isTypeBoxCombiningMark(codePointAt(value, index))) {
+				index = consumePoint(index);
+			}
+		}
+	}
+	return requiresSlowPath ? graphemes : value.length;
+}
+
+function chargeProjectedStringBytes(budget: ProjectionBudget, value: string, description: string): void {
+	chargeProjectedStringAndMeasure(budget, value, description);
 }
 
 function normalizeSchemaNumber(
 	value: unknown,
 	type: "integer" | "number",
 	description: string,
+	budget: ProjectionBudget,
 ): number {
 	let normalized: number;
 	if (value === null) normalized = 0;
 	else if (typeof value === "boolean") normalized = value ? 1 : 0;
 	else if (typeof value === "number") normalized = value;
-	else if (typeof value === "string" &&
-		(INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TRIM, value, []) as string).length > 0) normalized = Number(value);
+	else if (typeof value === "string") {
+		chargeProjectionScalarWork(budget, value.length, description);
+		if (stringTrim(value).length < 1) throw new ToolPolicyError(`${description} violates its numeric schema`);
+		normalized = INTRINSIC_REFLECT_APPLY(INTRINSIC_NUMBER, undefined, [value]) as number;
+	}
 	else throw new ToolPolicyError(`${description} violates its numeric schema`);
-	if (!Number.isFinite(normalized) || (type === "integer" && !Number.isInteger(normalized))) {
+	if (!INTRINSIC_NUMBER_IS_FINITE(normalized) || (type === "integer" && !INTRINSIC_NUMBER_IS_INTEGER(normalized))) {
 		throw new ToolPolicyError(`${description} violates its numeric schema`);
 	}
 	return normalized === 0 ? 0 : normalized;
@@ -962,8 +1149,31 @@ function chargeProjectionContainer(budget: ProjectionBudget, value: object, desc
 	if (budget.containers > MAX_PROJECTED_CONTAINER_ENCOUNTERS) {
 		throw new ToolPolicyError(`${description} exceeded its shared container bound`);
 	}
-	if (budget.seen.has(value)) throw new ToolPolicyError(`${description} repeats an object or array identity`);
-	budget.seen.add(value);
+	if (INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_HAS, budget.seen, [value])) {
+		throw new ToolPolicyError(`${description} repeats an object or array identity`);
+	}
+	INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_ADD, budget.seen, [value]);
+}
+
+function assertBoundedClosedRecordKeys(
+	value: Readonly<Record<string, unknown>>,
+	allowed: ReadonlySet<string>,
+	expectedCount: number,
+	budget: ProjectionBudget,
+	description: string,
+): void {
+	let ownCount = 0;
+	for (const field in value) {
+		chargeProjectionKeys(budget, 1, description);
+		if (!INTRINSIC_OBJECT_HAS_OWN(value, field)) continue;
+		ownCount += 1;
+		if (ownCount > expectedCount || !allowed.has(field)) {
+			throw new ToolPolicyError(`${description} contains unknown or missing fields`);
+		}
+	}
+	if (ownCount !== expectedCount) {
+		throw new ToolPolicyError(`${description} contains unknown or missing fields`);
+	}
 }
 
 function chargeProjectionKeys(budget: ProjectionBudget, count: number, description: string): void {
@@ -987,16 +1197,40 @@ function chargeProjectionBytes(budget: ProjectionBudget, count: number, descript
 	budget.bytes += count;
 }
 
+function chargeProjectionScalarWork(budget: ProjectionBudget, count: number, description: string): void {
+	if (count > budget.maximumBytes - budget.scalarUnits) {
+		throw new ToolPolicyError(`${description} exceeded its bounded scalar-work limit`);
+	}
+	budget.scalarUnits += count;
+}
+
 function chargeProjectedScalarBytes(budget: ProjectionBudget, value: JsonData, description: string): void {
-	const encoded = INTRINSIC_JSON_STRINGIFY(value);
-	if (typeof encoded !== "string") throw new ToolPolicyError(`${description} contains a non-JSON scalar`);
-	chargeProjectionBytes(budget, byteLength(encoded), description);
+	if (typeof value === "string") {
+		chargeProjectedStringBytes(budget, value, description);
+		return;
+	}
+	if (value === null) {
+		chargeProjectionBytes(budget, 4, description);
+		return;
+	}
+	if (typeof value === "boolean") {
+		chargeProjectionBytes(budget, value ? 4 : 5, description);
+		return;
+	}
+	if (typeof value === "number" && INTRINSIC_NUMBER_IS_FINITE(value)) {
+		const encoded = INTRINSIC_REFLECT_APPLY(INTRINSIC_JSON_STRINGIFY, undefined, [value]);
+		if (typeof encoded === "string") {
+			chargeProjectionBytes(budget, encoded.length, description);
+			return;
+		}
+	}
+	throw new ToolPolicyError(`${description} contains a non-JSON scalar`);
 }
 
 function ownArrayLength(value: readonly unknown[], description: string): number {
 	const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	if (!descriptor || descriptor.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
-		!Number.isSafeInteger(descriptor.value) || descriptor.value < 0) {
+		!INTRINSIC_NUMBER_IS_SAFE_INTEGER(descriptor.value) || descriptor.value < 0) {
 		throw new ToolPolicyError(`${description} has an invalid authoritative length`);
 	}
 	return descriptor.value as number;
@@ -1016,7 +1250,7 @@ function snapshotCapabilitySchema(source: unknown, name: string): PlainJsonSchem
 		source,
 		0,
 		{ nodes: 0, keys: 0, bytes: 0 },
-		new WeakSet<object>(),
+		new INTRINSIC_WEAK_SET<object>(),
 		`${name} parameter schema`,
 	);
 	if (!isRecord(snapshot)) {
@@ -1056,14 +1290,16 @@ function snapshotJsonData(
 		return value;
 	}
 	if (typeof value === "number") {
-		if (!Number.isFinite(value)) throw new ToolPolicyError(`${description} contains a non-JSON number`);
+		if (!INTRINSIC_NUMBER_IS_FINITE(value)) throw new ToolPolicyError(`${description} contains a non-JSON number`);
 		addSchemaBytes(budget, 24, description);
 		return value;
 	}
 	if (typeof value !== "object") throw new ToolPolicyError(`${description} contains a non-JSON value`);
 	if (INTRINSIC_IS_PROXY(value)) throw new ToolPolicyError(`${description} cannot be a Proxy`);
-	if (ancestors.has(value)) throw new ToolPolicyError(`${description} contains a cycle`);
-	ancestors.add(value);
+	if (INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_HAS, ancestors, [value])) {
+		throw new ToolPolicyError(`${description} contains a cycle`);
+	}
+	INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_ADD, ancestors, [value]);
 	addSchemaBytes(budget, 2, description);
 
 	try {
@@ -1083,11 +1319,11 @@ function snapshotJsonData(
 			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) throw new ToolPolicyError(`${description} exceeded its key bound`);
 			const result: JsonData[] = [];
 			for (let index = 0; index < value.length; index += 1) {
-				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new ToolPolicyError(`${description} array contains an accessor or sparse item`);
 				}
-				result.push(snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description));
+				arrayPush(result, snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description));
 			}
 			return INTRINSIC_OBJECT_FREEZE(result) as JsonData[];
 		}
@@ -1122,7 +1358,7 @@ function snapshotJsonData(
 		}
 		return INTRINSIC_OBJECT_FREEZE(result);
 	} finally {
-		ancestors.delete(value);
+		INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_DELETE, ancestors, [value]);
 	}
 }
 
@@ -1155,7 +1391,7 @@ function workspaceReadTool(
 				const params = recordParams(rawParams, "workspace_read");
 				assertOnlyKeys(params, ["path", "offset", "limit"], "workspace_read");
 				const path = validateScopedPath(requiredString(params.path, "path"), prefixes);
-				const offset = optionalBoundedInteger(params.offset, "offset", 0, Number.MAX_SAFE_INTEGER);
+				const offset = optionalBoundedInteger(params.offset, "offset", 0, INTRINSIC_NUMBER_MAX_SAFE_INTEGER);
 				const limit = optionalBoundedInteger(params.limit, "limit", 1, limits.maxReadCharacters);
 				const value = await workspace.readText(path, { offset, limit, signal });
 				if (typeof value !== "string") throw new ToolPolicyError("workspace read returned non-text data");
@@ -1260,10 +1496,10 @@ function projectWorkspaceArguments(
 	raw: unknown,
 	maximumBytes: number,
 ): Readonly<Record<string, unknown>> {
-	if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(maximumBytes) || maximumBytes < 1) {
 		throw new ToolPolicyError(`${name} arguments have an invalid byte bound`);
 	}
-	const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
+	const effectiveMaximum = intrinsicMin(maximumBytes, MAX_TOOL_INPUT_BYTES);
 	const allowed = name === "workspace_read"
 		? ["path", "offset", "limit"] as const
 		: name === "workspace_edit"
@@ -1281,11 +1517,11 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 	if (typeof path !== "string" || path.length < 1 || path.length > MAX_PATH_CHARACTERS) {
 		throw new ToolPolicyError("workspace path is empty or exceeds its bound");
 	}
-	if (/[\u0000-\u001f\u007f\\]/.test(path) || path.startsWith("/") || /^[A-Za-z]:/.test(path)) {
+	if (/[\u0000-\u001f\u007f\\]/.test(path) || stringStartsWith(path, "/") || /^[A-Za-z]:/.test(path)) {
 		throw new ToolPolicyError("workspace path must be a portable relative path without control characters");
 	}
 	const normalized = posix.normalize(path);
-	if (normalized === ".." || normalized.startsWith("../") || normalized === ".") {
+	if (normalized === ".." || stringStartsWith(normalized, "../") || normalized === ".") {
 		throw new ToolPolicyError("workspace path traversal or workspace-root access is forbidden");
 	}
 	if (matchesSensitivePathPattern(normalized)) {
@@ -1294,7 +1530,7 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 	let allowed = false;
 	for (let index = 0; index < prefixes.length; index += 1) {
 		const prefix = prefixes[index];
-		if (prefix === "." || normalized === prefix || normalized.startsWith(`${prefix}/`)) {
+		if (prefix === "." || normalized === prefix || stringStartsWith(normalized, `${prefix}/`)) {
 			allowed = true;
 			break;
 		}
@@ -1522,7 +1758,7 @@ function scanRedactionPlan(source: string, metrics?: RedactionScanMetrics): Plan
 			if (advanceStreamingCandidate(source, state, character, position, metrics)) continue;
 		}
 
-		const top = state.assignments.at(-1);
+		const top = arrayAt(state.assignments, -1);
 		if (top?.mode === "quoted" || top?.mode === "quoted-closed") {
 			if (advanceStreamingQuotedValue(source, state, top, character, position, metrics)) continue;
 		}
@@ -1540,7 +1776,7 @@ function scanRedactionPlan(source: string, metrics?: RedactionScanMetrics): Plan
 		}
 		if (candidateContext && isHorizontalWhitespace(character)) continue;
 
-		const current = state.assignments.at(-1);
+		const current = arrayAt(state.assignments, -1);
 		if (current?.mode === "waiting") {
 			if (isHorizontalWhitespace(character)) continue;
 			beginStreamingValue(state, current, character, position, metrics);
@@ -1594,7 +1830,7 @@ function consumeOriginalCharacter(
 	chargeWork(metrics);
 	const visits = state.visits;
 	if (visits) {
-		visits[position] = Math.min(255, visits[position]! + 1);
+		visits[position] = intrinsicMin(255, visits[position]! + 1);
 		if (visits[position]! > metrics.maxMainCursorVisits) {
 			metrics.maxMainCursorVisits = visits[position]!;
 		}
@@ -1662,7 +1898,7 @@ function emitPlannedRange(
 	metrics?: RedactionScanMetrics,
 ): PlannedRedactionRange {
 	const range = { start, end, replacement, priority, active } satisfies PlannedRedactionRange;
-	state.ranges.push(range);
+	arrayPush(state.ranges, range);
 	chargeCategorizedWork(metrics, "rangeEmissions");
 	return range;
 }
@@ -1724,7 +1960,7 @@ function advanceStreamingCandidate(
 					if (/^[0-9a-fA-F]{4}$/.test(candidate.unicodeValue)) {
 						appendDecodedCandidateCharacter(
 							candidate,
-							String.fromCharCode(Number.parseInt(candidate.unicodeValue, 16)),
+							stringFromCharCode(INTRINSIC_NUMBER_PARSE_INT(candidate.unicodeValue, 16)),
 						);
 					} else candidate.exact = false;
 					candidate.unicodeValue = "";
@@ -1849,10 +2085,11 @@ function commitStreamingCandidate(
 		? candidate.decoded
 		: undefined;
 	const kind = exactKey === undefined ? "unknown-sensitive" : assignmentKeyClassification(exactKey);
+	const normalizedKeyParts = exactKey === undefined ? [] : stringSplit(stringToLowerCase(exactKey), ".");
 	const normalizedKey = exactKey === undefined
 		? ""
-		: (exactKey.toLowerCase().split(".").at(-1) ?? exactKey).replace(/[-_]/g, "");
-	state.assignments.push({
+		: stringReplace(arrayAt(normalizedKeyParts, -1) ?? exactKey, /[-_]/g, "");
+	arrayPush(state.assignments, {
 		kind,
 		context: candidate.context,
 		delimiter,
@@ -2043,7 +2280,7 @@ function finishPhysicalLine(
 			finishMalformedQuotedCandidate(source, state, candidate, position, metrics);
 		} else state.candidate = undefined;
 	}
-	const top = state.assignments.at(-1);
+	const top = arrayAt(state.assignments, -1);
 	if (top?.mode === "quoted") {
 		finishOneStreamingAssignment(state, top, position, true, metrics);
 	} else if (top && top.compositeDepth === undefined) {
@@ -2064,7 +2301,7 @@ function finishAssignmentsAtBoundary(
 	malformedQuote: boolean,
 	metrics?: RedactionScanMetrics,
 ): void {
-	const assignment = state.assignments.at(-1);
+	const assignment = arrayAt(state.assignments, -1);
 	if (assignment && assignment.compositeDepth === undefined) {
 		finishOneStreamingAssignment(state, assignment, position, malformedQuote, metrics);
 	}
@@ -2076,7 +2313,7 @@ function finishAssignmentsAtMemberBoundary(
 	metrics?: RedactionScanMetrics,
 ): void {
 	while (true) {
-		const assignment = state.assignments.at(-1);
+		const assignment = arrayAt(state.assignments, -1);
 		if (!assignment || assignment.baseDepth !== state.frames.length || assignment.compositeDepth !== undefined) return;
 		finishOneStreamingAssignment(state, assignment, position, false, metrics);
 	}
@@ -2090,9 +2327,9 @@ function finishOneStreamingAssignment(
 	metrics?: RedactionScanMetrics,
 ): void {
 	chargeCategorizedWork(metrics, "lexicalTransitions");
-	assignment.valueEnd = Math.max(assignment.valueStart ?? end, end);
+	assignment.valueEnd = intrinsicMax(assignment.valueStart ?? end, end);
 	if (assignment.range) assignment.range.end = assignment.valueEnd;
-	const prefix = assignment.valuePrefix.trim();
+	const prefix = stringTrim(assignment.valuePrefix);
 	if (assignment.kind === "public") {
 		if (assignment.range) {
 			assignment.range.active = malformed && !isDocumentaryPublicMultilinePrefix(prefix);
@@ -2104,8 +2341,8 @@ function finishOneStreamingAssignment(
 		const publicLiteral = assignment.kind === "secret" && isReviewedPublicLiteral(prefix);
 		if (documentary || publicLiteral || prefix.length === 0) assignment.range.active = false;
 	}
-	const index = state.assignments.lastIndexOf(assignment);
-	if (index >= 0) state.assignments.splice(index, 1);
+	const index = arrayLastIndexOf(state.assignments, assignment);
+	if (index >= 0) arraySplice(state.assignments, index, 1);
 }
 
 function finalizeAuthorizationRange(assignment: StreamingAssignment, prefix: string): void {
@@ -2122,9 +2359,9 @@ function finalizeAuthorizationRange(assignment: StreamingAssignment, prefix: str
 		range.active = false;
 		return;
 	}
-	const scheme = prefix.slice(0, firstSpace).toLowerCase();
-	const credentialText = prefix.slice(credential);
-	const parameterized = scheme === "digest" || scheme === "signature" || scheme.startsWith("aws4-");
+	const scheme = stringToLowerCase(stringSlice(prefix, 0, firstSpace));
+	const credentialText = stringSlice(prefix, credential);
+	const parameterized = scheme === "digest" || scheme === "signature" || stringStartsWith(scheme, "aws4-");
 	if (!parameterized && containsWhitespace(credentialText)) {
 		range.active = false;
 		return;
@@ -2133,23 +2370,23 @@ function finalizeAuthorizationRange(assignment: StreamingAssignment, prefix: str
 }
 
 function isBoundedDocumentaryProse(value: string): boolean {
-	const lower = value.toLowerCase();
-	return lower.startsWith("number of ") || lower.startsWith("name of ") ||
-		lower.startsWith("description of ") || lower.startsWith("meaning of ") ||
-		lower.startsWith("definition of ") || lower.startsWith("count of ") ||
+	const lower = stringToLowerCase(value);
+	return stringStartsWith(lower, "number of ") || stringStartsWith(lower, "name of ") ||
+		stringStartsWith(lower, "description of ") || stringStartsWith(lower, "meaning of ") ||
+		stringStartsWith(lower, "definition of ") || stringStartsWith(lower, "count of ") ||
 		lower === "a surprising detail in a story." ||
-		lower.startsWith("describes ") || lower.startsWith("describe ") ||
-		lower.startsWith("names ") || lower.startsWith("name ") ||
-		lower.startsWith("explains ") || lower.startsWith("explain ") ||
-		lower.startsWith("means ") || lower.startsWith("refers to ");
+		stringStartsWith(lower, "describes ") || stringStartsWith(lower, "describe ") ||
+		stringStartsWith(lower, "names ") || stringStartsWith(lower, "name ") ||
+		stringStartsWith(lower, "explains ") || stringStartsWith(lower, "explain ") ||
+		stringStartsWith(lower, "means ") || stringStartsWith(lower, "refers to ");
 }
 
 function isDocumentaryPublicMultilinePrefix(value: string): boolean {
-	return value.toLowerCase().startsWith("the following lines document configuration vocabulary");
+	return stringStartsWith(stringToLowerCase(value), "the following lines document configuration vocabulary");
 }
 
 function isReviewedPublicLiteral(value: string): boolean {
-	const lower = value.toLowerCase();
+	const lower = stringToLowerCase(value);
 	return lower === "true" || lower === "false" || lower === "null" || lower === "~";
 }
 
@@ -2168,7 +2405,7 @@ function pushStreamingFrameOrRecover(
 		assignment.mode = "composite";
 		assignment.compositeDepth = state.frames.length + 1;
 	}
-	state.frames.push({
+	arrayPush(state.frames, {
 		closer,
 		openedAt: position,
 		publicOwner: assignment?.kind === "public" && assignment.compositeDepth === state.frames.length + 1
@@ -2187,17 +2424,17 @@ function closeStreamingFrameOrRecover(
 	metrics?: RedactionScanMetrics,
 ): void {
 	finishAssignmentsAtMemberBoundary(state, position, metrics);
-	const frame = state.frames.at(-1);
+	const frame = arrayAt(state.frames, -1);
 	if (!frame || frame.closer !== character) {
 		const publicRange = latestPublicRecoveryRange(state, metrics);
 		beginStreamingRecovery(state, publicRange?.start ?? position, publicRange, "recovery", metrics);
 		return;
 	}
 	const closingDepth = state.frames.length;
-	state.frames.pop();
+	arrayPop(state.frames);
 	chargeCategorizedWork(metrics, "frameOperations");
 	while (true) {
-		const assignment = state.assignments.at(-1);
+		const assignment = arrayAt(state.assignments, -1);
 		if (!assignment || assignment.compositeDepth !== closingDepth) break;
 		finishOneStreamingAssignment(state, assignment, position + 1, false, metrics);
 	}
@@ -2226,7 +2463,7 @@ function beginStreamingRecovery(
 	const range = existing ?? emitPlannedRange(state, start, start, REDACTED_TEXT, priority, true, metrics);
 	range.active = true;
 	range.priority = priority;
-	range.end = Math.max(range.end, state.i);
+	range.end = intrinsicMax(range.end, state.i);
 	state.recovery = { range };
 	chargeCategorizedWork(metrics, "recoveryTransitions");
 	state.candidate = undefined;
@@ -2370,16 +2607,16 @@ function feedCookieCredentialRecognizer(
 		return;
 	}
 	cookie.tail += character.toLowerCase();
-	if (cookie.tail.length > 48) cookie.tail = cookie.tail.slice(-48);
+	if (cookie.tail.length > 48) cookie.tail = stringSlice(cookie.tail, -48);
 	if (character !== ":") return;
-	if (cookie.tail.endsWith("request header cookie:") ||
-		cookie.tail.endsWith("request headers cookie:") ||
-		cookie.tail.endsWith("request header set-cookie:") ||
-		cookie.tail.endsWith("request headers set-cookie:") ||
-		cookie.tail.endsWith("response header cookie:") ||
-		cookie.tail.endsWith("response headers cookie:") ||
-		cookie.tail.endsWith("response header set-cookie:") ||
-		cookie.tail.endsWith("response headers set-cookie:")) {
+	if (stringEndsWith(cookie.tail, "request header cookie:") ||
+		stringEndsWith(cookie.tail, "request headers cookie:") ||
+		stringEndsWith(cookie.tail, "request header set-cookie:") ||
+		stringEndsWith(cookie.tail, "request headers set-cookie:") ||
+		stringEndsWith(cookie.tail, "response header cookie:") ||
+		stringEndsWith(cookie.tail, "response headers cookie:") ||
+		stringEndsWith(cookie.tail, "response header set-cookie:") ||
+		stringEndsWith(cookie.tail, "response headers set-cookie:")) {
 		cookie.waitingValue = true;
 	}
 }
@@ -2394,7 +2631,7 @@ function feedPrivateKeyRecognizer(
 	const block = state.strong.privateBlock;
 	if (block) {
 		block.tail += lower;
-		if (block.tail.length > block.endMarker.length) block.tail = block.tail.slice(-block.endMarker.length);
+		if (block.tail.length > block.endMarker.length) block.tail = stringSlice(block.tail, -block.endMarker.length);
 		if (block.tail === block.endMarker) {
 			block.range.end = position + 1;
 			state.strong.privateBlock = undefined;
@@ -2410,8 +2647,8 @@ function feedPrivateKeyRecognizer(
 			header.text += lower;
 			let label: string | undefined;
 			if (header.text === "private key-----") label = "";
-			else if (header.text.endsWith(PRIVATE_KEY_HEADER_SUFFIX)) {
-				const candidateLabel = header.text.slice(0, -PRIVATE_KEY_HEADER_SUFFIX.length);
+			else if (stringEndsWith(header.text, PRIVATE_KEY_HEADER_SUFFIX)) {
+				const candidateLabel = stringSlice(header.text, 0, -PRIVATE_KEY_HEADER_SUFFIX.length);
 				if (candidateLabel.length > 0 && candidateLabel.length <= 64 && isPrivateKeyLabel(candidateLabel)) {
 					label = candidateLabel;
 				}
@@ -2452,7 +2689,7 @@ function feedPrivateKeyRecognizer(
 
 function isPrivateKeyLabel(value: string): boolean {
 	for (const character of value) {
-		const code = character.charCodeAt(0);
+		const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, character, [0]) as number;
 		if (!((code >= 48 && code <= 57) || (code >= 97 && code <= 122) || character === " ")) return false;
 	}
 	return true;
@@ -2509,7 +2746,7 @@ function feedUrlCredentialRecognizer(
 		url.schemeLength = 0;
 		return;
 	}
-	const code = character.charCodeAt(0);
+	const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, character, [0]) as number;
 	if ((code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
 		(url.schemeLength > 0 && ((code >= 48 && code <= 57) || character === "+" || character === "." || character === "-"))) {
 		url.schemeLength += 1;
@@ -2541,7 +2778,7 @@ function feedQueryCredentialRecognizer(
 	}
 	if (!query.collecting) return;
 	if (character === "=") {
-		const normalized = query.key.replace(/[-_]/g, "").toLowerCase();
+		const normalized = stringToLowerCase(stringReplace(query.key, /[-_]/g, ""));
 		if (QUERY_SECRET_KEYS.has(normalized)) {
 			query.activeRange = emitPlannedRange(
 				state,
@@ -2556,7 +2793,7 @@ function feedQueryCredentialRecognizer(
 		query.collecting = false;
 		return;
 	}
-	const code = character.charCodeAt(0);
+	const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, character, [0]) as number;
 	if ((code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122) ||
 		character === "_" || character === "-") {
 		if (query.key.length < 32) query.key += character;
@@ -2597,7 +2834,7 @@ function feedPasswordCredentialRecognizer(
 		}
 		return;
 	}
-	const code = character.charCodeAt(0);
+	const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, character, [0]) as number;
 	const wordCharacter = (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
 	if (wordCharacter) {
 		if (password.word.length < 16) password.word += character.toLowerCase();
@@ -2625,20 +2862,20 @@ function applyRedactionPlan(
 	for (const candidate of planned) {
 		chargeCategorizedWork(metrics, "rangeExaminations");
 		if (!candidate.active || candidate.end <= candidate.start) continue;
-		const start = Math.max(0, Math.min(source.length, candidate.start));
-		const end = Math.max(start, Math.min(source.length, candidate.end));
+		const start = intrinsicMax(0, intrinsicMin(source.length, candidate.start));
+		const end = intrinsicMax(start, intrinsicMin(source.length, candidate.end));
 		if (end <= start) continue;
 		const previous = ranges.at(-1);
 		if (previous && start <= previous.end) {
 			chargeCategorizedWork(metrics, "rangeCoalescences");
-			previous.end = Math.max(previous.end, end);
+			previous.end = intrinsicMax(previous.end, end);
 			if (rangePriority(candidate.priority) > rangePriority(previous.priority)) {
 				previous.priority = candidate.priority;
 				previous.replacement = candidate.replacement;
 			}
 		} else {
 			chargeCategorizedWork(metrics, "rangeInsertions");
-			ranges.push({ ...candidate, start, end });
+			arrayPush(ranges, { ...candidate, start, end });
 		}
 	}
 	if (ranges.length === 0) return source;
@@ -2646,12 +2883,12 @@ function applyRedactionPlan(
 	let cursor = 0;
 	for (const range of ranges) {
 		appendRenderedSource(chunks, source, cursor, range.start, metrics);
-		chunks.push(range.replacement);
+		arrayPush(chunks, range.replacement);
 		chargeCategorizedWork(metrics, "replacementEmissions");
 		cursor = range.end;
 	}
 	appendRenderedSource(chunks, source, cursor, source.length, metrics);
-	return chunks.join("");
+	return arrayJoin(chunks, "");
 }
 
 function appendRenderedSource(
@@ -2665,7 +2902,7 @@ function appendRenderedSource(
 	for (let position = start; position < end; position += 1) {
 		chargeCategorizedWork(metrics, "renderedSourceUnits");
 	}
-	chunks.push(source.slice(start, end));
+	arrayPush(chunks, stringSlice(source, start, end));
 }
 
 function rangePriority(priority: PlannedRangePriority): number {
@@ -2733,12 +2970,12 @@ function canonicalAssignmentKey(key: string): {
 	path: string;
 	terminal: string;
 } {
-	const sourceSegments = key.toLowerCase().split(".");
+	const sourceSegments = stringSplit(stringToLowerCase(key), ".");
 	const segments: string[] = [];
 	for (let index = 0; index < sourceSegments.length; index += 1) {
-		segments[index] = sourceSegments[index]!.replace(/[-_]/g, "");
+		segments[index] = stringReplace(sourceSegments[index]!, /[-_]/g, "");
 	}
-	return { segments, path: segments.join("."), terminal: segments.at(-1) ?? "" };
+	return { segments, path: arrayJoin(segments, "."), terminal: arrayAt(segments, -1) ?? "" };
 }
 
 function flowCloserForOpener(character: string | undefined): FlowCloser | undefined {
@@ -2749,7 +2986,7 @@ function flowCloserForOpener(character: string | undefined): FlowCloser | undefi
 
 function isAssignmentKeyCharacter(character: string | undefined): boolean {
 	if (character === undefined) return false;
-	const code = character.charCodeAt(0);
+	const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, character, [0]) as number;
 	return (code >= 48 && code <= 57) || (code >= 65 && code <= 90) ||
 		(code >= 97 && code <= 122) || character === "_" || character === "-" || character === ".";
 }
@@ -2778,18 +3015,18 @@ export function normalizeScopedPrefixes(prefixes: unknown, description: string):
 	const normalized: string[] = [];
 	for (const prefix of capturedPrefixes) {
 		if (prefix === ".") {
-			normalized.push(prefix);
+			arrayPush(normalized, prefix);
 			continue;
 		}
 		if (typeof prefix !== "string" || prefix.length < 1 || prefix.length > MAX_PATH_CHARACTERS ||
-			/[\u0000-\u001f\u007f\\]/.test(prefix) || prefix.startsWith("/") || prefix.includes("..")) {
+			/[\u0000-\u001f\u007f\\]/.test(prefix) || stringStartsWith(prefix, "/") || stringIncludes(prefix, "..")) {
 			throw new ToolPolicyError(`${description} prefix is invalid`);
 		}
-		const value = posix.normalize(prefix).replace(/\/$/, "");
+		const value = stringReplace(posix.normalize(prefix), /\/$/, "");
 		if (value === "." || matchesSensitivePathPattern(value)) {
 			throw new ToolPolicyError(`${description} prefix grants sensitive or workspace-root authority`);
 		}
-		normalized.push(value);
+		arrayPush(normalized, value);
 	}
 	if (new Set(normalized).size !== normalized.length) throw new ToolPolicyError(`duplicate ${description} prefix`);
 	INTRINSIC_OBJECT_FREEZE(normalized);
@@ -2811,13 +3048,13 @@ function capturePolicyArray<T>(
 	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
-		typeof length !== "number" || !Number.isSafeInteger(length) || length < (allowEmpty ? 0 : 1) ||
+		typeof length !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) || length < (allowEmpty ? 0 : 1) ||
 		length > maximum) {
 		throw new ToolPolicyError(`${description} has an invalid authoritative length`);
 	}
 	const captured: T[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new ToolPolicyError(`${description} contains a sparse or accessor element`);
 		}
@@ -2839,7 +3076,7 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 	const status = fields.get("status");
 	const summarySource = fields.get("summary");
 	const referencesSource = fields.get("references");
-	if (typeof status !== "string" || !["ok", "blocked", "failed"].includes(status)) {
+	if (typeof status !== "string" || !arrayIncludes(["ok", "blocked", "failed"] as const, status)) {
 		throw new ToolPolicyError(`${name} returned an invalid status`);
 	}
 	const summary = boundedString(summarySource, `${name} summary`, MAX_CAPABILITY_SUMMARY_CHARACTERS, false);
@@ -2852,12 +3089,12 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 			throw new ToolPolicyError(`${name} references must use the exact Array prototype`);
 		}
 		for (let index = 0; index < referencesSource.length; index += 1) {
-			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(referencesSource, String(index));
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(referencesSource, intrinsicString(index));
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new ToolPolicyError(`${name} returned sparse or accessor references`);
 			}
 			const reference = descriptor.value;
-			references.push(boundedString(reference, `${name} reference`, MAX_REFERENCE_CHARACTERS, false));
+			arrayPush(references, boundedString(reference, `${name} reference`, MAX_REFERENCE_CHARACTERS, false));
 		}
 	}
 	INTRINSIC_OBJECT_FREEZE(references);
@@ -2912,20 +3149,23 @@ function captureOwnResultFields(
 function sanitizedToolBoundaryError(operation: string, error: unknown): ToolPolicyError {
 	let source = "external operation failed";
 	try {
-		if (!INTRINSIC_IS_PROXY(error) && error instanceof Error) {
+		if (!INTRINSIC_IS_PROXY(error) &&
+			INTRINSIC_REFLECT_APPLY(INTRINSIC_IS_NATIVE_ERROR, undefined, [error])) {
 			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(error, "message");
 			const message = descriptor && "value" in descriptor ? descriptor.value : undefined;
 			if (descriptor && !descriptor.get && !descriptor.set && typeof message === "string" && message.length > 0) {
-				source = message.slice(0, 4_096);
+				source = stringSlice(message, 0, 4_096);
 			}
 		}
 	} catch {
 		// Hostile error accessors are reduced to the stable fallback.
 	}
-	const safe = redactSensitiveText(source)
-		.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ")
-		.slice(0, 2_048);
-	const cause = new Error(safe || "external operation failed");
+	const safe = stringSlice(stringReplace(
+		redactSensitiveText(source),
+		/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g,
+		" ",
+	), 0, 2_048);
+	const cause = new INTRINSIC_ERROR(safe || "external operation failed");
 	return new ToolPolicyError(`${operation} failed: ${safe || "external operation failed"}`, { cause });
 }
 
@@ -2976,7 +3216,7 @@ function recordParams(value: unknown, description: string): Readonly<Record<stri
 		value,
 		0,
 		{ nodes: 0, keys: 0, bytes: 0, maximumBytes: MAX_TOOL_INPUT_BYTES },
-		new WeakSet<object>(),
+		new INTRINSIC_WEAK_SET<object>(),
 		`${description} input`,
 	);
 	if (!isRecord(snapshot)) throw new ToolPolicyError(`${description} input must be an object`);
@@ -2997,14 +3237,14 @@ function boundedString(value: unknown, name: string, max: number, allowEmpty: bo
 
 function optionalBoundedInteger(value: unknown, name: string, min: number, max: number): number | undefined {
 	if (value === undefined) return undefined;
-	if (!Number.isSafeInteger(value) || Number(value) < min || Number(value) > max) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(value) || (value as number) < min || (value as number) > max) {
 		throw new ToolPolicyError(`${name} must be a bounded integer`);
 	}
-	return Number(value);
+	return value as number;
 }
 
 function boundedPositiveInteger(value: number, name: string, maximum: number): number {
-	if (!Number.isSafeInteger(value) || value <= 0 || value > maximum) {
+	if (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(value) || value <= 0 || value > maximum) {
 		throw new ToolPolicyError(`${name} must be a positive safe integer within the embedded maximum ${maximum}`);
 	}
 	return value;
@@ -3027,5 +3267,18 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function byteLength(value: string): number {
-	return new TextEncoder().encode(value).byteLength;
+	let bytes = 0;
+	for (let index = 0; index < value.length; index += 1) {
+		const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
+		if (code <= 0x7f) bytes += 1;
+		else if (code <= 0x7ff) bytes += 2;
+		else if (isHighSurrogate(code) && index + 1 < value.length) {
+			const second = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index + 1]) as number;
+			if (isLowSurrogate(second)) {
+				bytes += 4;
+				index += 1;
+			} else bytes += 3;
+		} else bytes += 3;
+	}
+	return bytes;
 }

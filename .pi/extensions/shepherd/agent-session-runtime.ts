@@ -56,10 +56,33 @@ const INTRINSIC_OBJECT_CREATE = Object.create;
 const INTRINSIC_OBJECT_DEFINE_PROPERTY = Object.defineProperty;
 const INTRINSIC_OBJECT_FREEZE = Object.freeze;
 const INTRINSIC_OBJECT_HAS_OWN = Object.hasOwn;
+const INTRINSIC_NUMBER = Number;
 const INTRINSIC_NUMBER_IS_FINITE = Number.isFinite;
 const INTRINSIC_NUMBER_IS_SAFE_INTEGER = Number.isSafeInteger;
+const INTRINSIC_STRING = String;
+const INTRINSIC_STRING_CHAR_CODE_AT = String.prototype.charCodeAt;
+const INTRINSIC_STRING_SLICE = String.prototype.slice;
+const INTRINSIC_STRING_REPLACE = String.prototype.replace;
+const INTRINSIC_STRING_STARTS_WITH = String.prototype.startsWith;
+const INTRINSIC_STRING_ENDS_WITH = String.prototype.endsWith;
+const INTRINSIC_STRING_INCLUDES = String.prototype.includes;
+const INTRINSIC_STRING_SPLIT = String.prototype.split;
+const INTRINSIC_STRING_TRIM = String.prototype.trim;
+const INTRINSIC_ARRAY_PUSH = Array.prototype.push;
+const INTRINSIC_ARRAY_JOIN = Array.prototype.join;
+const INTRINSIC_ARRAY_INCLUDES = Array.prototype.includes;
+const INTRINSIC_MATH_MIN = Math.min;
+const INTRINSIC_MATH_MAX = Math.max;
+const INTRINSIC_ERROR = Error;
+const INTRINSIC_ERROR_PROTOTYPE = Error.prototype;
+const INTRINSIC_AGGREGATE_ERROR_PROTOTYPE = AggregateError.prototype;
+const INTRINSIC_WEAK_SET = WeakSet;
+const INTRINSIC_WEAK_SET_HAS = WeakSet.prototype.has;
+const INTRINSIC_WEAK_SET_ADD = WeakSet.prototype.add;
+const INTRINSIC_WEAK_SET_DELETE = WeakSet.prototype.delete;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 const INTRINSIC_IS_PROMISE = nodeTypes.isPromise;
+const INTRINSIC_IS_NATIVE_ERROR = nodeTypes.isNativeError;
 const INTRINSIC_REFLECT_APPLY = Reflect.apply;
 const INTRINSIC_JSON = JSON;
 const INTRINSIC_JSON_PARSE = JSON.parse;
@@ -68,6 +91,66 @@ const INTRINSIC_PROMISE = Promise;
 const INTRINSIC_PROMISE_PROTOTYPE = Promise.prototype;
 const INTRINSIC_PROMISE_THEN = Promise.prototype.then;
 const NATIVE_ABORTED_GETTER = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(AbortSignal.prototype, "aborted")?.get;
+
+function intrinsicString(value: unknown): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING, undefined, [value]) as string;
+}
+
+function intrinsicNumber(value: unknown): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_NUMBER, undefined, [value]) as number;
+}
+
+function intrinsicMin(left: number, right: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_MATH_MIN, undefined, [left, right]) as number;
+}
+
+function intrinsicMax(left: number, right: number): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_MATH_MAX, undefined, [left, right]) as number;
+}
+
+function arrayPush<T>(value: T[], item: T): number {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_PUSH, value, [item]) as number;
+}
+
+function arrayJoin(value: readonly string[], separator: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_JOIN, value, [separator]) as string;
+}
+
+function arrayIncludes<T>(value: readonly T[], item: T): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_ARRAY_INCLUDES, value, [item]) as boolean;
+}
+
+function stringSlice(value: string, start: number, end?: number): string {
+	return INTRINSIC_REFLECT_APPLY(
+		INTRINSIC_STRING_SLICE,
+		value,
+		end === undefined ? [start] : [start, end],
+	) as string;
+}
+
+function stringReplace(value: string, pattern: RegExp, replacement: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_REPLACE, value, [pattern, replacement]) as string;
+}
+
+function stringStartsWith(value: string, prefix: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_STARTS_WITH, value, [prefix]) as boolean;
+}
+
+function stringEndsWith(value: string, suffix: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_ENDS_WITH, value, [suffix]) as boolean;
+}
+
+function stringIncludes(value: string, search: string): boolean {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_INCLUDES, value, [search]) as boolean;
+}
+
+function stringSplit(value: string, separator: string | RegExp): string[] {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_SPLIT, value, [separator]) as string[];
+}
+
+function stringTrim(value: string): string {
+	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_TRIM, value, []) as string;
+}
 
 interface RuntimeResourceLoader {
 	reload(): Promise<void>;
@@ -160,12 +243,20 @@ export interface AgentSessionRuntimeOptions {
 	parentSignal?: AbortSignal;
 }
 
-export class AgentSessionRuntimeError extends Error {
+export class AgentSessionRuntimeError extends INTRINSIC_ERROR {
 	constructor(message: string, options?: ErrorOptions) {
 		// Passing an options object even for a literal-undefined reason gives every public
 		// failure a stable own `cause` field instead of erasing reasonless adapter failures.
 		super(message, { cause: options?.cause });
-		this.name = "AgentSessionRuntimeError";
+		INTRINSIC_OBJECT_DEFINE_PROPERTY(this, "name", {
+			value: "AgentSessionRuntimeError", enumerable: false, writable: true, configurable: true,
+		});
+		INTRINSIC_OBJECT_DEFINE_PROPERTY(this, "stack", {
+			value: `AgentSessionRuntimeError: ${message}`,
+			enumerable: false,
+			writable: true,
+			configurable: true,
+		});
 	}
 }
 
@@ -185,7 +276,7 @@ class CancellationScope {
 		this.signal = this.#controller.signal;
 		this.#termination = new Promise<never>((_resolve, reject) => { this.#reject = reject; });
 		this.#termination.catch(() => undefined);
-		const remaining = Math.max(0, deadlineAt - Date.now());
+		const remaining = intrinsicMax(0, deadlineAt - Date.now());
 		this.#timer = setTimeout(() => this.cancel(new AgentSessionRuntimeError(timeoutDescription)), remaining);
 	}
 
@@ -307,7 +398,7 @@ function captureSessionOperation(session: object, name: keyof RuntimeAgentSessio
 		return {
 			available: false,
 			failurePresent: true,
-			failure: new AgentSessionRuntimeError(`Pi AgentSession operation ${String(name)} is missing or invalid`),
+			failure: new AgentSessionRuntimeError(`Pi AgentSession operation ${intrinsicString(name)} is missing or invalid`),
 		};
 	}
 	return { available: true, operation: candidate as (...args: unknown[]) => unknown, failurePresent: false, failure: undefined };
@@ -357,9 +448,12 @@ class OwnedSession {
 	}
 
 	validationFailures(): readonly unknown[] {
-		return [this.#abort, this.#waitForIdle, this.#dispose, this.#prompt, this.#subscribe, this.#getActiveToolNames]
-			.filter((captured) => captured.failurePresent)
-			.map((captured) => captured.failure);
+		const captured = [this.#abort, this.#waitForIdle, this.#dispose, this.#prompt, this.#subscribe, this.#getActiveToolNames];
+		const failures: unknown[] = [];
+		for (let index = 0; index < captured.length; index += 1) {
+			if (captured[index]!.failurePresent) arrayPush(failures, captured[index]!.failure);
+		}
+		return failures;
 	}
 
 	activeToolNames(): unknown {
@@ -459,29 +553,29 @@ async function cleanupOwnedSession(
 		try {
 			await bounded(owned.abortOnce(), timeoutMs, "session abort");
 		} catch (error) {
-			failures.push(error);
+			arrayPush(failures, error);
 		}
 	}
 	try {
 		await bounded(owned.promptSettlementOnce(), timeoutMs, "session prompt settlement");
 	} catch (error) {
-		failures.push(error);
+		arrayPush(failures, error);
 	}
 	try {
 		await bounded(owned.waitOnce(), timeoutMs, "session idle wait");
 	} catch (error) {
-		failures.push(error);
+		arrayPush(failures, error);
 	}
 	try {
 		await bounded(owned.unsubscribeOnce(), timeoutMs, "session unsubscribe");
 	} catch (error) {
-		failures.push(error);
+		arrayPush(failures, error);
 	}
 	// Disposal owns a separate bound and remains reachable after every earlier phase.
 	try {
 		await bounded(owned.disposeOnce(), timeoutMs, "session dispose");
 	} catch (error) {
-		failures.push(error);
+		arrayPush(failures, error);
 	}
 	if (failures.length > 0) throw combineFailures(failures, "AgentSession cleanup phases failed");
 }
@@ -632,17 +726,17 @@ class SessionCreationOwnership {
 			true,
 		);
 		for (const settlement of await Promise.allSettled([abort, idle])) {
-			if (settlement.status === "rejected") failures.push(settlement.reason);
+			if (settlement.status === "rejected") arrayPush(failures, settlement.reason);
 		}
 		try {
 			await bounded(owned.unsubscribeOnce(), this.#cleanupTimeoutMs, "abandoned session unsubscribe", true);
 		} catch (error) {
-			failures.push(error);
+			arrayPush(failures, error);
 		}
 		try {
 			await bounded(owned.disposeOnce(), this.#cleanupTimeoutMs, "abandoned session dispose", true);
 		} catch (error) {
-			failures.push(error);
+			arrayPush(failures, error);
 		}
 		if (failures.length > 0) throw combineFailures(failures, "abandoned AgentSession cleanup phases failed");
 	}
@@ -969,17 +1063,25 @@ export class ShepherdAgentSessionRuntime {
 			if (!validIdentifier(runId)) throw new AgentSessionRuntimeError("abort runId is invalid");
 			const admissions = [...(this.#runAdmissions.get(runId) ?? [])];
 			for (const admission of admissions) admission.cancel();
-			const matches = [...this.#active.values()].filter((active) => active.runId === runId);
+			const matches: ActiveRun[] = [];
+			for (const active of this.#active.values()) {
+				if (active.runId === runId) arrayPush(matches, active);
+			}
 			const owners = new Set(this.#creationsByRunId.get(runId) ?? []);
 			for (const active of matches) {
 				active.scope.cancel(new AgentSessionRuntimeError(`AgentSession run ${runId} was aborted`));
 				void active.owned?.abortOnce().catch(() => undefined);
 				if (active.creation) owners.add(active.creation);
 			}
-			await Promise.all([...admissions.map((admission) => admission.done), ...matches.map((active) => active.done)]);
+			const pending: Promise<void>[] = [];
+			for (let index = 0; index < admissions.length; index += 1) arrayPush(pending, admissions[index]!.done);
+			for (let index = 0; index < matches.length; index += 1) arrayPush(pending, matches[index]!.done);
+			await Promise.all(pending);
 			for (const owner of this.#creationsByRunId.get(runId) ?? []) owners.add(owner);
 			if (owners.size > 0) {
-				const joined = await Promise.all([...owners].map((owner) => owner.joinForAbort()));
+				const ownerJoins: Promise<boolean>[] = [];
+				for (const owner of owners) arrayPush(ownerJoins, owner.joinForAbort());
+				const joined = await Promise.all(ownerJoins);
 				if (joined.some((complete) => !complete)) {
 					const failure = new AgentSessionRuntimeError(
 						`AgentSession run ${runId} creation ownership remained pending at its join bound`,
@@ -1015,10 +1117,16 @@ export class ShepherdAgentSessionRuntime {
 			active.scope.cancel(new AgentSessionRuntimeError(reason));
 			void active.owned?.abortOnce().catch(() => undefined);
 		}
-		await Promise.all([...this.#active.values()].map((active) => active.done));
+		const activeCompletions: Promise<void>[] = [];
+		for (const active of this.#active.values()) arrayPush(activeCompletions, active.done);
+		await Promise.all(activeCompletions);
 		const creationOwners = [...this.#creations];
 		if (creationOwners.length > 0) {
-			const joined = await Promise.all(creationOwners.map((creation) => creation.joinForClose()));
+			const creationJoins: Promise<boolean>[] = [];
+			for (let index = 0; index < creationOwners.length; index += 1) {
+				arrayPush(creationJoins, creationOwners[index]!.joinForClose());
+			}
+			const joined = await Promise.all(creationJoins);
 			if (joined.some((complete) => !complete)) {
 				this.#setQuarantine(new AgentSessionRuntimeError(
 					"AgentSession creation remained pending during bounded close",
@@ -1030,10 +1138,10 @@ export class ShepherdAgentSessionRuntime {
 		try {
 			this.#parentListenerLease?.release();
 		} catch (error) {
-			failures.push(error);
+			arrayPush(failures, error);
 		}
 		if (this.#quarantineFailurePresent) {
-			failures.push(this.#quarantineFailure);
+			arrayPush(failures, this.#quarantineFailure);
 		}
 		if (failures.length > 0) {
 			throw new AgentSessionRuntimeError("AgentSession runtime closed while cleanup failed", {
@@ -1259,7 +1367,7 @@ export class ShepherdAgentSessionRuntime {
 		if (cleanupFailurePresent) {
 			const cleanupSnapshot = this.#quarantineFailurePresent
 				? this.#quarantineFailure
-				: new Error("AgentSession cleanup failure was unavailable");
+				: createErrorSnapshot("AgentSession cleanup failure was unavailable");
 			throw new AgentSessionRuntimeError("AgentSession cleanup/join failed; runtime quarantined", {
 				cause: primaryFailurePresent
 					? combineFailures([primaryFailure, cleanupSnapshot], "AgentSession primary and cleanup failures")
@@ -1458,11 +1566,11 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		if (!isHostCapabilityName(name)) {
 			throw new AgentSessionRuntimeError("authority capability name is outside the closed host registry");
 		}
-		capabilityNames.push(name);
+		arrayPush(capabilityNames, name);
 	}
 	INTRINSIC_OBJECT_FREEZE(capabilityNames);
 	const authority = INTRINSIC_OBJECT_FREEZE({
-		issue: Number(issue),
+		issue,
 		branch,
 		workspaceId: authorityWorkspaceId,
 		readOnly,
@@ -1486,7 +1594,7 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		!validIdentifier(validationNonce) || validationNonce.length < 12) {
 		throw new AgentSessionRuntimeError("request binding is invalid");
 	}
-	const binding = INTRINSIC_OBJECT_FREEZE({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
+	const binding = INTRINSIC_OBJECT_FREEZE({ runId, generation, laneId, candidateHead, validationNonce });
 
 	const workspaceFields = captureKnownRecordFields(workspaceSource, "workspace capability", [
 		"id", "cwd", "readText", "editText", "writeText",
@@ -1519,14 +1627,14 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const capabilityValues = captureFreshDenseArray(capabilitiesSource, "typed host capabilities", 32, true);
 	const capabilities: HostCapability[] = [];
 	for (const capability of capabilityValues) {
-		capabilities.push(normalizeCapability(capability as HostCapability));
+		arrayPush(capabilities, normalizeCapability(capability as HostCapability));
 	}
 	INTRINSIC_OBJECT_FREEZE(capabilities);
 	const contextValues = captureFreshDenseArray(contextSource, "role context", 64, true);
 	const context: string[] = [];
 	for (const entry of contextValues) {
 		if (typeof entry !== "string") throw new AgentSessionRuntimeError("role context item is invalid");
-		context.push(entry);
+		arrayPush(context, entry);
 	}
 	INTRINSIC_OBJECT_FREEZE(context);
 	const normalized = INTRINSIC_OBJECT_FREEZE({
@@ -1608,7 +1716,7 @@ function captureFreshDenseArray(
 	const length = lengthValue;
 	const captured: unknown[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains a sparse or accessor element`);
 		}
@@ -1644,7 +1752,7 @@ function captureCreatedSession(
 	}
 	const captureFailures: unknown[] = [];
 	let captureActive = true;
-	const recordCaptureFailure = (error: unknown): void => { captureFailures.push(error); };
+	const recordCaptureFailure = (error: unknown): void => { arrayPush(captureFailures, error); };
 	const afterReentrantCallback = (): void => {
 		if (!captureActive || !assertActive) return;
 		try {
@@ -1681,7 +1789,9 @@ function captureCreatedSession(
 		() => captureActive,
 	);
 	const operationFailures = owned.validationFailures();
-	captureFailures.push(...operationFailures);
+	for (let index = 0; index < operationFailures.length; index += 1) {
+		arrayPush(captureFailures, operationFailures[index]);
+	}
 	if (operationFailures.length > 0) captureActive = false;
 	let modelProvider: unknown;
 	let modelId: unknown;
@@ -1799,12 +1909,12 @@ function captureToolNameArray(value: unknown): readonly string[] | undefined {
 	const length = lengthDescriptor.value;
 	const names: string[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
 			typeof descriptor.value !== "string") {
 			return undefined;
 		}
-		names.push(descriptor.value);
+		arrayPush(names, descriptor.value);
 	}
 	return INTRINSIC_OBJECT_FREEZE(names);
 }
@@ -2094,7 +2204,11 @@ function capturePiLifecycleEvent(
 }
 
 function registerAssistantToolCalls(capture: TerminalCapture, terminal: AssistantTerminal): void {
-	const calls = terminal.content.filter((part) => part.type === "toolCall");
+	const calls: Readonly<CapturedAssistantContent>[] = [];
+	for (let index = 0; index < terminal.content.length; index += 1) {
+		const part = terminal.content[index]!;
+		if (part.type === "toolCall") arrayPush(calls, part);
+	}
 	if (terminal.stopReason !== "toolUse") {
 		if (calls.length > 0) {
 			throw new AgentSessionRuntimeError("non-tool assistant terminal contains a tool call");
@@ -2281,17 +2395,19 @@ function captureStreamingUpdateCharge(
 	if (!inner || inner.identity !== message.identity) {
 		throw new AgentSessionRuntimeError(`Pi ${type} message and cumulative snapshot disagree`);
 	}
-	if (fields.has("contentIndex") && (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(fields.get("contentIndex")) || Number(fields.get("contentIndex")) < 0)) {
+	const contentIndex = fields.get("contentIndex");
+	if (fields.has("contentIndex") && (!INTRINSIC_NUMBER_IS_SAFE_INTEGER(contentIndex) ||
+		typeof contentIndex !== "number" || contentIndex < 0)) {
 		throw new AgentSessionRuntimeError(`Pi ${type} content index is invalid`);
 	}
 	const variable = fields.has("delta") ? fields.get("delta") : undefined;
 	if (variable !== undefined && typeof variable !== "string") {
 		throw new AgentSessionRuntimeError(`Pi ${type} delta is invalid`);
 	}
-	if (type === "done" && !["stop", "length", "toolUse"].includes(String(fields.get("reason")))) {
+	if (type === "done" && !arrayIncludes(["stop", "length", "toolUse"] as const, intrinsicString(fields.get("reason")))) {
 		throw new AgentSessionRuntimeError("Pi done reason is invalid");
 	}
-	if (type === "error" && !["aborted", "error"].includes(String(fields.get("reason")))) {
+	if (type === "error" && !arrayIncludes(["aborted", "error"] as const, intrinsicString(fields.get("reason")))) {
 		throw new AgentSessionRuntimeError("Pi error reason is invalid");
 	}
 	const growth = fields.has("contentIndex")
@@ -2311,14 +2427,14 @@ function validateIndexedStreamTransition(
 	fields: ReadonlyMap<string, unknown>,
 ): number {
 	const envelopeGrowth = cumulativeIdentityGrowth(previous?.envelopeIdentity, current.envelopeIdentity, 0);
-	const index = Number(fields.get("contentIndex"));
+	const index = intrinsicNumber(fields.get("contentIndex"));
 	const previousContent = previous?.content ?? [];
 	if (index >= current.content.length || current.content.length < previousContent.length ||
 		current.content.length > previousContent.length + 1 ||
 		(current.content.length === previousContent.length + 1 && index !== previousContent.length)) {
 		throw new AgentSessionRuntimeError(`Pi ${type} content index skipped or replaced stream state`);
 	}
-	for (let cursor = 0; cursor < Math.min(previousContent.length, current.content.length); cursor += 1) {
+	for (let cursor = 0; cursor < intrinsicMin(previousContent.length, current.content.length); cursor += 1) {
 		if (cursor !== index && previousContent[cursor]?.identity !== current.content[cursor]?.identity) {
 			throw new AgentSessionRuntimeError(`Pi ${type} replaced an unrelated content item`);
 		}
@@ -2326,8 +2442,8 @@ function validateIndexedStreamTransition(
 	const prior = previousContent[index];
 	const next = current.content[index];
 	if (!next) throw new AgentSessionRuntimeError(`Pi ${type} content item is missing`);
-	const kind = type.startsWith("text_") ? "text" : type.startsWith("thinking_") ? "thinking" : "toolCall";
-	const transition = type.endsWith("_start") ? "start" : type.endsWith("_delta") ? "delta" : "end";
+	const kind = stringStartsWith(type, "text_") ? "text" : stringStartsWith(type, "thinking_") ? "thinking" : "toolCall";
+	const transition = stringEndsWith(type, "_start") ? "start" : stringEndsWith(type, "_delta") ? "delta" : "end";
 	const ownedPhase = capture.contentPhases.get(index);
 	if (transition === "start") {
 		if (ownedPhase) throw new AgentSessionRuntimeError(`Pi ${type} duplicated an owned content phase`);
@@ -2338,35 +2454,35 @@ function validateIndexedStreamTransition(
 		ownedPhase.phase = "ended";
 	}
 	const delta = fields.get("delta");
-	if (type.startsWith("text_")) {
+	if (stringStartsWith(type, "text_")) {
 		if (next.type !== "text") throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
 		const before = prior?.type === "text" ? prior.text ?? "" : "";
 		const after = next.text ?? "";
 		if (type === "text_start" && after !== "") throw new AgentSessionRuntimeError("Pi text_start must begin empty");
-		if (type === "text_delta" && after !== before + String(delta)) {
+		if (type === "text_delta" && after !== before + intrinsicString(delta)) {
 			throw new AgentSessionRuntimeError("Pi text_delta is not the actual novel suffix");
 		}
-		if (type === "text_end" && (fields.get("content") !== after || !after.startsWith(before))) {
+		if (type === "text_end" && (fields.get("content") !== after || !stringStartsWith(after, before))) {
 			throw new AgentSessionRuntimeError("Pi text_end replaced or misreported content");
 		}
-		const novelBytes = byteLength(after.slice(before.length));
+		const novelBytes = byteLength(stringSlice(after, before.length));
 		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, novelBytes);
 	}
-	if (type.startsWith("thinking_")) {
+	if (stringStartsWith(type, "thinking_")) {
 		if (next.type !== "thinking") throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
 		const before = prior?.type === "thinking" ? prior.thinking ?? "" : "";
 		const after = next.thinking ?? "";
 		if (type === "thinking_start" && after !== "") throw new AgentSessionRuntimeError("Pi thinking_start must begin empty");
-		if (type === "thinking_delta" && after !== before + String(delta)) {
+		if (type === "thinking_delta" && after !== before + intrinsicString(delta)) {
 			throw new AgentSessionRuntimeError("Pi thinking_delta is not the actual novel suffix");
 		}
-		if (type === "thinking_end" && (fields.get("content") !== after || !after.startsWith(before))) {
+		if (type === "thinking_end" && (fields.get("content") !== after || !stringStartsWith(after, before))) {
 			throw new AgentSessionRuntimeError("Pi thinking_end replaced or misreported content");
 		}
-		const novelBytes = byteLength(after.slice(before.length));
+		const novelBytes = byteLength(stringSlice(after, before.length));
 		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, novelBytes);
 	}
-	if (!type.startsWith("toolcall_") || next.type !== "toolCall") {
+	if (!stringStartsWith(type, "toolcall_") || next.type !== "toolCall") {
 		throw new AgentSessionRuntimeError(`Pi ${type} content type is invalid`);
 	}
 	if (type === "toolcall_start") {
@@ -2375,10 +2491,10 @@ function validateIndexedStreamTransition(
 	}
 	if (type === "toolcall_delta") {
 		const before = prior?.type === "toolCall" ? prior.partialJson ?? "" : "";
-		if (next.partialJson !== before + String(delta)) {
+		if (next.partialJson !== before + intrinsicString(delta)) {
 			throw new AgentSessionRuntimeError("Pi toolcall_delta is not the actual novel suffix");
 		}
-		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, byteLength(String(delta)));
+		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, byteLength(intrinsicString(delta)));
 	}
 	const toolCall = snapshotToolCall(fields.get("toolCall"), MAX_EVENT_BYTES, capture.projectArguments);
 	if (canonicalJson(toolCall) !== canonicalToolContent(next, false)) {
@@ -2402,16 +2518,16 @@ function streamSnapshotGrowth(previous: AssistantTerminal | undefined, current: 
 }
 
 function cumulativeIdentityGrowth(previous: string | undefined, current: string, novelBytes: number): number {
-	if (previous === undefined) return Math.max(novelBytes, byteLength(current));
+	if (previous === undefined) return intrinsicMax(novelBytes, byteLength(current));
 	if (previous === current) return novelBytes;
 	const previousBytes = byteLength(previous);
 	const currentBytes = byteLength(current);
 	if (novelBytes > 0 && currentBytes > previousBytes) {
-		return Math.max(novelBytes, currentBytes - previousBytes);
+		return intrinsicMax(novelBytes, currentBytes - previousBytes);
 	}
 	// A changed identity without provable append-only growth is replacement state. Charge the
 	// complete replacement so equal-size or shrinking metadata cannot evade the aggregate bound.
-	return Math.max(novelBytes, currentBytes);
+	return intrinsicMax(novelBytes, currentBytes);
 }
 
 function captureKnownRecordFields(
@@ -2441,7 +2557,9 @@ function assertExactCapturedFields(
 	expected: readonly string[],
 	description: string,
 ): void {
-	if (fields.size !== expected.length || expected.some((name) => !fields.has(name))) {
+	let exact = fields.size === expected.length;
+	for (let index = 0; exact && index < expected.length; index += 1) exact = fields.has(expected[index]!);
+	if (!exact) {
 		throw new AgentSessionRuntimeError(`${description} must be an exact closed record`);
 	}
 }
@@ -2459,11 +2577,11 @@ function captureDenseArray(value: unknown, description: string): readonly unknow
 	}
 	const captured: unknown[] = [];
 	for (let index = 0; index < length; index += 1) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 			throw new AgentSessionRuntimeError(`${description} contains an invalid array element`);
 		}
-		captured.push(descriptor.value);
+		arrayPush(captured, descriptor.value);
 	}
 	return INTRINSIC_OBJECT_FREEZE(captured);
 }
@@ -2496,7 +2614,7 @@ function snapshotEventJson(value: unknown, description: string, maximum: number)
 		value,
 		0,
 		{ nodes: 0, keys: 0, bytes: 0, maximum },
-		new WeakSet<object>(),
+		new INTRINSIC_WEAK_SET<object>(),
 		description,
 	);
 }
@@ -2577,7 +2695,7 @@ function snapshotToolResultContent(value: unknown, maximum: number): JsonEventVa
 		if (fields.get("type") !== "text" || typeof fields.get("text") !== "string") {
 			throw new AgentSessionRuntimeError("tool result content item is invalid");
 		}
-		projected.push(snapshotEventJson(
+		arrayPush(projected, snapshotEventJson(
 			{ type: "text", text: fields.get("text") as string },
 			"tool result content item projection",
 			maximum,
@@ -2611,8 +2729,10 @@ function snapshotEventJsonValue(
 	}
 	if (typeof value !== "object") throw new AgentSessionRuntimeError(`${description} contains a non-JSON value`);
 	if (INTRINSIC_IS_PROXY(value)) throw new AgentSessionRuntimeError(`${description} contains a proxy`);
-	if (ancestors.has(value)) throw new AgentSessionRuntimeError(`${description} contains a cycle`);
-	ancestors.add(value);
+	if (INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_HAS, ancestors, [value])) {
+		throw new AgentSessionRuntimeError(`${description} contains a cycle`);
+	}
+	INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_ADD, ancestors, [value]);
 	add(2);
 	try {
 		if (INTRINSIC_ARRAY_IS_ARRAY(value)) {
@@ -2627,11 +2747,11 @@ function snapshotEventJsonValue(
 			if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError(`${description} exceeded its key bound`);
 			const snapshot: JsonEventValue[] = [];
 			for (let index = 0; index < length; index += 1) {
-				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, intrinsicString(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new AgentSessionRuntimeError(`${description} array contains an invalid item`);
 				}
-				snapshot.push(snapshotEventJsonValue(descriptor.value, depth + 1, budget, ancestors, description));
+				arrayPush(snapshot, snapshotEventJsonValue(descriptor.value, depth + 1, budget, ancestors, description));
 			}
 			return INTRINSIC_OBJECT_FREEZE(snapshot);
 		}
@@ -2657,7 +2777,7 @@ function snapshotEventJsonValue(
 		}
 		return INTRINSIC_OBJECT_FREEZE(snapshot);
 	} finally {
-		ancestors.delete(value);
+		INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_DELETE, ancestors, [value]);
 	}
 }
 
@@ -2704,7 +2824,10 @@ function captureAssistantTerminal(
 	const diagnostics = fields.has("diagnostics")
 		? captureAssistantDiagnostics(fields.get("diagnostics"), maximum)
 		: undefined;
-	const content = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content").map((part) => {
+	const contentSource = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content");
+	const content: Readonly<CapturedAssistantContent>[] = [];
+	for (let contentIndex = 0; contentIndex < contentSource.length; contentIndex += 1) {
+		const part = contentSource[contentIndex];
 		const partFields = captureKnownRecordFields(part, "AgentSession assistant content part", [
 			"type", "text", "textSignature", "thinking", "thinkingSignature", "redacted", "id", "name", "arguments",
 			"thoughtSignature", "partialJson",
@@ -2721,7 +2844,8 @@ function captureAssistantTerminal(
 			const textSignature = optionalCapturedString(partFields, "textSignature", "assistant text signature");
 			const identity = canonicalJson(snapshotEventJson({ type, text, ...(textSignature === undefined ? {} : { textSignature }) },
 				"AgentSession assistant text identity", maximum));
-			return INTRINSIC_OBJECT_FREEZE({ type, text, identity });
+			arrayPush(content, INTRINSIC_OBJECT_FREEZE({ type, text, identity }));
+			continue;
 		}
 		if (type === "thinking") {
 			assertAllowedCapturedFields(partFields, ["type", "thinking", "thinkingSignature", "redacted"], ["type", "thinking"],
@@ -2741,7 +2865,8 @@ function captureAssistantTerminal(
 				...(thinkingSignature === undefined ? {} : { thinkingSignature }),
 				...(redacted === undefined ? {} : { redacted }),
 			}, "AgentSession assistant thinking identity", maximum));
-			return INTRINSIC_OBJECT_FREEZE({ type, thinking, identity });
+			arrayPush(content, INTRINSIC_OBJECT_FREEZE({ type, thinking, identity }));
+			continue;
 		}
 		if (type === "toolCall") {
 			assertAllowedCapturedFields(partFields, ["type", "id", "name", "arguments", "thoughtSignature", ...(streaming ? ["partialJson"] : [])],
@@ -2775,10 +2900,13 @@ function captureAssistantTerminal(
 				partialJson,
 				...(thoughtSignature === undefined ? {} : { thoughtSignature }),
 			}, "AgentSession assistant streaming tool identity", maximum));
-			return INTRINSIC_OBJECT_FREEZE({ type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity });
+			arrayPush(content, INTRINSIC_OBJECT_FREEZE({
+				type, id, name, argumentsIdentity, partialJson, identity, terminalIdentity,
+			}));
+			continue;
 		}
 		throw new AgentSessionRuntimeError(`AgentSession assistant content type ${INTRINSIC_JSON_STRINGIFY(type)} is invalid`);
-	});
+	}
 	const envelope = {
 		role: "assistant",
 		api,
@@ -2797,9 +2925,11 @@ function captureAssistantTerminal(
 		"AgentSession assistant envelope identity",
 		maximum,
 	));
+	const contentIdentities: string[] = [];
+	for (let index = 0; index < content.length; index += 1) arrayPush(contentIdentities, content[index]!.identity);
 	const identity = canonicalJson(snapshotEventJson({
 		...envelope,
-		content: content.map((part) => part.identity),
+		content: contentIdentities,
 	}, "AgentSession assistant identity", maximum));
 	return INTRINSIC_OBJECT_FREEZE({
 		role: "assistant",
@@ -2861,13 +2991,15 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 		}
 		const detailsValue = fields.get("details");
 		if (detailsValue !== undefined) {
-			const details = projectDiagnosticJson(detailsValue, 0, { nodes: 0, keys: 0 }, new WeakSet<object>());
+			const details = projectDiagnosticJson(
+				detailsValue, 0, { nodes: 0, keys: 0 }, new INTRINSIC_WEAK_SET<object>(),
+			);
 			if (details === undefined || !details || INTRINSIC_ARRAY_IS_ARRAY(details) || typeof details !== "object") {
 				throw new AgentSessionRuntimeError("AgentSession assistant diagnostic details are invalid");
 			}
 			output.details = details;
 		}
-		projected.push(snapshotEventJson(output, "AgentSession assistant diagnostic snapshot", maximum));
+		arrayPush(projected, snapshotEventJson(output, "AgentSession assistant diagnostic snapshot", maximum));
 	}
 	return snapshotEventJson(projected, "AgentSession assistant diagnostics snapshot", maximum);
 }
@@ -2891,8 +3023,10 @@ function projectDiagnosticJson(
 	if (typeof value !== "object" || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a non-JSON value");
 	}
-	if (ancestors.has(value)) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a cycle");
-	ancestors.add(value);
+	if (INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_HAS, ancestors, [value])) {
+		throw new AgentSessionRuntimeError("AgentSession assistant diagnostic contains a cycle");
+	}
+	INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_ADD, ancestors, [value]);
 	try {
 		if (INTRINSIC_ARRAY_IS_ARRAY(value)) {
 			const items = captureDenseArray(value, "AgentSession assistant diagnostic array");
@@ -2904,7 +3038,7 @@ function projectDiagnosticJson(
 				if (projected === undefined) {
 					throw new AgentSessionRuntimeError("AgentSession assistant diagnostic array contains undefined");
 				}
-				output.push(projected);
+				arrayPush(output, projected);
 			}
 			return INTRINSIC_OBJECT_FREEZE(output);
 		}
@@ -2920,7 +3054,7 @@ function projectDiagnosticJson(
 		});
 		return INTRINSIC_OBJECT_FREEZE(output);
 	} finally {
-		ancestors.delete(value);
+		INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_DELETE, ancestors, [value]);
 	}
 }
 
@@ -2975,7 +3109,9 @@ function assertAllowedCapturedFields(
 			throw new AgentSessionRuntimeError(`${description} contains unknown field ${INTRINSIC_JSON_STRINGIFY(key)}`);
 		}
 	}
-	if (required.some((key) => !fields.has(key))) {
+	let missing = false;
+	for (let index = 0; !missing && index < required.length; index += 1) missing = !fields.has(required[index]!);
+	if (missing) {
 		throw new AgentSessionRuntimeError(`${description} is missing a required field`);
 	}
 }
@@ -2998,8 +3134,12 @@ function sameTerminal(left: AssistantTerminal, right: AssistantTerminal): boolea
 }
 
 function assistantText(terminal: AssistantTerminal): string {
-	return terminal.content.filter((part) => part.type === "text" && typeof part.text === "string")
-		.map((part) => part.text).join("").trim();
+	const text: string[] = [];
+	for (let index = 0; index < terminal.content.length; index += 1) {
+		const part = terminal.content[index]!;
+		if (part.type === "text" && typeof part.text === "string") arrayPush(text, part.text);
+	}
+	return stringTrim(arrayJoin(text, ""));
 }
 
 function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): AgentSessionHandoff {
@@ -3033,7 +3173,7 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 		if (actual !== expected) throw new AgentSessionRuntimeError(`handoff ${name} binding mismatch`);
 	}
 	const handoffStatus = fields.get("status");
-	if (!["completed", "blocked", "failed"].includes(String(handoffStatus))) {
+	if (!arrayIncludes(["completed", "blocked", "failed"] as const, intrinsicString(handoffStatus))) {
 		throw new AgentSessionRuntimeError("handoff status is invalid");
 	}
 	const summary = redactedBoundedString(fields.get("summary"), "handoff summary", MAX_HANDOFF_SUMMARY_CHARACTERS, false);
@@ -3057,8 +3197,8 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 		const entry = verificationValues[index];
 		if (!isRecord(entry)) throw new AgentSessionRuntimeError("handoff verification entry is invalid");
 		const verificationFields = captureKnownRecordFields(entry, "handoff verification", ["name", "status", "summary"]);
-		const status = String(verificationFields.get("status"));
-		if (!["passed", "failed", "blocked", "not_run"].includes(status)) {
+		const status = intrinsicString(verificationFields.get("status"));
+		if (!arrayIncludes(["passed", "failed", "blocked", "not_run"] as const, status)) {
 			throw new AgentSessionRuntimeError("handoff verification status is invalid");
 		}
 		verification[index] = {
@@ -3129,15 +3269,15 @@ function redactedBoundedString(value: unknown, description: string, max: number,
 
 function computeDeadline(timeoutMs: number, deadlineAt: number | undefined): number {
 	const timeoutDeadline = Date.now() + timeoutMs;
-	return deadlineAt === undefined ? timeoutDeadline : Math.min(timeoutDeadline, deadlineAt);
+	return deadlineAt === undefined ? timeoutDeadline : intrinsicMin(timeoutDeadline, deadlineAt);
 }
 
 function isAbsoluteNonTraversingPath(value: unknown): value is string {
 	if (typeof value !== "string" || value.length < 1 || value.length > 4_096 || /[\u0000-\u001f\u007f]/.test(value)) return false;
 	const flavor = win32.isAbsolute(value) ? win32 : posix;
 	if (!flavor.isAbsolute(value)) return false;
-	const segments = flavor === win32 ? value.split(/[\\/]+/) : value.split("/");
-	return !segments.includes("..");
+	const segments = flavor === win32 ? stringSplit(value, /[\\/]+/) : stringSplit(value, "/");
+	return !arrayIncludes(segments, "..");
 }
 
 function canonicalWorkspacePath(value: string): string {
@@ -3166,7 +3306,22 @@ function frozenArray<T>(values: T[]): T[] {
 	return values;
 }
 
-function byteLength(value: string): number { return new TextEncoder().encode(value).byteLength; }
+function byteLength(value: string): number {
+	let bytes = 0;
+	for (let index = 0; index < value.length; index += 1) {
+		const code = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index]) as number;
+		if (code <= 0x7f) bytes += 1;
+		else if (code <= 0x7ff) bytes += 2;
+		else if (code >= 0xd800 && code <= 0xdbff && index + 1 < value.length) {
+			const second = INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CHAR_CODE_AT, value, [index + 1]) as number;
+			if (second >= 0xdc00 && second <= 0xdfff) {
+				bytes += 4;
+				index += 1;
+			} else bytes += 3;
+		} else bytes += 3;
+	}
+	return bytes;
+}
 
 function deferred(): { promise: Promise<void>; resolve(): void } {
 	let resolvePromise: (() => void) | undefined;
@@ -3199,7 +3354,7 @@ async function boundedUntil<T>(
 	unref: boolean,
 ): Promise<T> {
 	let timer: ReturnType<typeof setTimeout> | undefined;
-	const timeoutMs = Math.max(0, deadlineAt - Date.now());
+	const timeoutMs = intrinsicMax(0, deadlineAt - Date.now());
 	const timeout = new Promise<never>((_resolve, reject) => {
 		timer = setTimeout(() => reject(new AgentSessionRuntimeError(`${description} timed out after ${timeoutMs}ms`)), timeoutMs);
 		if (unref) unrefTimeout(timer);
@@ -3244,18 +3399,21 @@ function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
 		if ((typeof error === "object" && error !== null) || typeof error === "function") {
 			if (INTRINSIC_IS_PROXY(error)) {
 				return new AgentSessionRuntimeError("AgentSession run failed", {
-					cause: new Error("proxied failure was omitted"),
+					cause: createErrorSnapshot("proxied failure was omitted"),
 				});
 			}
 		}
-		if (error instanceof AgentSessionRuntimeError) {
-			const message = safeRuntimeMessage(readErrorMessage(error), "AgentSession operation failed");
-			let cause: unknown;
-			try {
-				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause") ? snapshotRuntimeFailure(error.cause) : undefined;
-			} catch {
-				cause = new Error("failure cause was unavailable");
-			}
+		if (hasRuntimeErrorPrototype(error, AgentSessionRuntimeError.prototype)) {
+			// Runtime-authored typed messages are finite literals plus already-validated identifiers.
+			// Preserve their operational category (extension/tool/model/cleanup) while still removing
+			// terminal controls. Untrusted SDK errors take the redacting path below.
+			const message = sanitizeRuntimeMessage(readErrorMessage(error), "AgentSession operation failed");
+			const causeDescriptor = readOwnDataDescriptor(error as object, "cause");
+			const cause = causeDescriptor.status === "data"
+				? snapshotRuntimeFailure(causeDescriptor.value)
+				: causeDescriptor.status === "invalid"
+					? createErrorSnapshot("failure cause was unavailable")
+					: undefined;
 			return new AgentSessionRuntimeError(message, { cause });
 		}
 		const sourceMessage = readErrorMessage(error);
@@ -3266,112 +3424,194 @@ function normalizeRuntimeError(error: unknown): AgentSessionRuntimeError {
 		);
 	} catch {
 		return new AgentSessionRuntimeError("AgentSession operation failed", {
-			cause: new Error("failure normalization was unavailable"),
+			cause: createErrorSnapshot("failure normalization was unavailable"),
 		});
 	}
+}
+
+type OwnDataDescriptorResult =
+	| { readonly status: "absent" }
+	| { readonly status: "invalid" }
+	| { readonly status: "data"; readonly value: unknown };
+
+function readOwnDataDescriptor(value: object, field: PropertyKey): OwnDataDescriptorResult {
+	const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, field);
+	if (!descriptor) return { status: "absent" };
+	if (descriptor.get || descriptor.set || !("value" in descriptor)) return { status: "invalid" };
+	return { status: "data", value: descriptor.value };
+}
+
+function hasRuntimeErrorPrototype(value: unknown, target: object): boolean {
+	if ((typeof value !== "object" || value === null) && typeof value !== "function") return false;
+	try {
+		if (INTRINSIC_IS_PROXY(value)) return false;
+		let prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+		for (let depth = 0; prototype !== null && depth < 8; depth += 1) {
+			if (prototype === target) return true;
+			prototype = INTRINSIC_GET_PROTOTYPE_OF(prototype);
+		}
+	} catch {
+		return false;
+	}
+	return false;
+}
+
+function isNativeRuntimeError(value: unknown): value is object {
+	if ((typeof value !== "object" || value === null) && typeof value !== "function") return false;
+	try {
+		return !INTRINSIC_IS_PROXY(value) && (
+			Boolean(INTRINSIC_REFLECT_APPLY(INTRINSIC_IS_NATIVE_ERROR, undefined, [value])) ||
+			hasRuntimeErrorPrototype(value, INTRINSIC_ERROR_PROTOTYPE)
+		);
+	} catch {
+		return false;
+	}
+}
+
+function defineErrorData(value: object, field: string, data: unknown): void {
+	INTRINSIC_OBJECT_DEFINE_PROPERTY(value, field, {
+		value: data,
+		enumerable: false,
+		writable: false,
+		configurable: false,
+	});
+}
+
+function createErrorSnapshot(
+	message: string,
+	name = "Error",
+	causePresent = false,
+	cause?: unknown,
+): Error {
+	const snapshot = INTRINSIC_OBJECT_CREATE(INTRINSIC_ERROR_PROTOTYPE) as Error;
+	defineErrorData(snapshot, "message", message);
+	defineErrorData(snapshot, "name", name);
+	defineErrorData(snapshot, "stack", `${name}: ${message}`);
+	if (causePresent) defineErrorData(snapshot, "cause", cause);
+	return INTRINSIC_OBJECT_FREEZE(snapshot);
+}
+
+function createAggregateErrorSnapshot(
+	errors: readonly unknown[],
+	message: string,
+	causePresent = false,
+	cause?: unknown,
+): AggregateError {
+	const members: unknown[] = [];
+	const length = intrinsicMin(errors.length, 16);
+	for (let index = 0; index < length; index += 1) members[index] = errors[index];
+	INTRINSIC_OBJECT_FREEZE(members);
+	const snapshot = INTRINSIC_OBJECT_CREATE(INTRINSIC_AGGREGATE_ERROR_PROTOTYPE) as AggregateError;
+	defineErrorData(snapshot, "message", message);
+	defineErrorData(snapshot, "name", "AggregateError");
+	defineErrorData(snapshot, "stack", `AggregateError: ${message}`);
+	defineErrorData(snapshot, "errors", members);
+	if (causePresent) defineErrorData(snapshot, "cause", cause);
+	return INTRINSIC_OBJECT_FREEZE(snapshot);
 }
 
 function snapshotRuntimeFailure(
 	error: unknown,
 	depth = 0,
-	seen: WeakSet<object> = new WeakSet<object>(),
+	seen: WeakSet<object> = new INTRINSIC_WEAK_SET<object>(),
 ): unknown {
 	if (error === undefined || error === null || typeof error === "boolean" || typeof error === "number") return error;
 	if (typeof error === "string") return safeRuntimeMessage(error, "failure");
 	if (typeof error !== "object" && typeof error !== "function") return "unsupported failure";
 	const object = error as object;
 	try {
-		if (INTRINSIC_IS_PROXY(object)) return new Error("proxied failure omitted");
+		if (INTRINSIC_IS_PROXY(object)) return createErrorSnapshot("proxied failure omitted");
 	} catch {
-		return new Error("failure shape unavailable");
+		return createErrorSnapshot("failure shape unavailable");
 	}
-	if (seen.has(object)) return new Error("cyclic failure omitted");
-	if (depth >= 4) return new Error("nested failure omitted");
-	seen.add(object);
+	if (INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_HAS, seen, [object])) {
+		return createErrorSnapshot("cyclic failure omitted");
+	}
+	if (depth >= 4) return createErrorSnapshot("nested failure omitted");
+	INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_ADD, seen, [object]);
 	try {
-		if (error instanceof AggregateError) {
-			const nested = snapshotAggregateMembers(error, depth, seen);
-			let cause: unknown;
-			try {
-				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause")
-					? snapshotRuntimeFailure(error.cause, depth + 1, seen)
-					: undefined;
-			} catch {
-				cause = new Error("aggregate cause was unavailable");
-			}
-			return new AggregateError(nested, safeRuntimeMessage(readErrorMessage(error), "multiple failures"), { cause });
+		if (!isNativeRuntimeError(error)) return createErrorSnapshot("non-Error failure object");
+		const causeDescriptor = readOwnDataDescriptor(object, "cause");
+		const causePresent = causeDescriptor.status !== "absent";
+		const cause = causeDescriptor.status === "data"
+			? snapshotRuntimeFailure(causeDescriptor.value, depth + 1, seen)
+			: causeDescriptor.status === "invalid"
+				? createErrorSnapshot("failure cause was unavailable")
+				: undefined;
+		if (hasRuntimeErrorPrototype(error, INTRINSIC_AGGREGATE_ERROR_PROTOTYPE)) {
+			const nested = snapshotAggregateMembers(object, depth, seen);
+			return createAggregateErrorSnapshot(
+				nested,
+				safeRuntimeMessage(readErrorMessage(error), "multiple failures"),
+				causePresent,
+				cause,
+			);
 		}
-		if (error instanceof Error) {
-			let cause: unknown;
-			try {
-				cause = INTRINSIC_OBJECT_HAS_OWN(error, "cause")
-					? snapshotRuntimeFailure(error.cause, depth + 1, seen)
-					: undefined;
-			} catch {
-				cause = new Error("failure cause was unavailable");
-			}
-			return new Error(safeRuntimeMessage(readErrorMessage(error), "external failure"), { cause });
-		}
-		return new Error("non-Error failure object");
+		return createErrorSnapshot(
+			safeRuntimeMessage(readErrorMessage(error), "external failure"),
+			"Error",
+			causePresent,
+			cause,
+		);
 	} finally {
-		seen.delete(object);
+		INTRINSIC_REFLECT_APPLY(INTRINSIC_WEAK_SET_DELETE, seen, [object]);
 	}
 }
 
-function snapshotAggregateMembers(error: AggregateError, depth: number, seen: WeakSet<object>): unknown[] {
+function snapshotAggregateMembers(error: object, depth: number, seen: WeakSet<object>): unknown[] {
+	const unavailable = (): unknown[] => [createErrorSnapshot("aggregate members were unavailable")];
+	const errorsDescriptor = readOwnDataDescriptor(error, "errors");
+	if (errorsDescriptor.status !== "data" || !INTRINSIC_ARRAY_IS_ARRAY(errorsDescriptor.value)) return unavailable();
+	const source = errorsDescriptor.value;
+	if (INTRINSIC_IS_PROXY(source) || INTRINSIC_GET_PROTOTYPE_OF(source) !== INTRINSIC_ARRAY_PROTOTYPE) {
+		return unavailable();
+	}
+	const lengthDescriptor = readOwnDataDescriptor(source, "length");
+	if (lengthDescriptor.status !== "data" || typeof lengthDescriptor.value !== "number" ||
+		!INTRINSIC_NUMBER_IS_SAFE_INTEGER(lengthDescriptor.value) || lengthDescriptor.value < 0 ||
+		lengthDescriptor.value > 16) return unavailable();
 	const nested: unknown[] = [];
-	let iterator: Iterator<unknown> | undefined;
-	let exhausted = false;
-	try {
-		const source = error.errors as Iterable<unknown>;
-		const iteratorFactory = source?.[Symbol.iterator];
-		if (typeof iteratorFactory !== "function") throw new Error("aggregate members are not iterable");
-		iterator = INTRINSIC_REFLECT_APPLY(iteratorFactory, source, []) as Iterator<unknown>;
-		const next = iterator?.next;
-		if (typeof next !== "function") throw new Error("aggregate iterator is invalid");
-		for (let index = 0; index < 16; index += 1) {
-			const step = INTRINSIC_REFLECT_APPLY(next, iterator, []) as IteratorResult<unknown>;
-			if (!step || typeof step !== "object") throw new Error("aggregate iterator step is invalid");
-			if (step.done) {
-				exhausted = true;
-				break;
-			}
-			nested.push(snapshotRuntimeFailure(step.value, depth + 1, seen));
-		}
-	} catch {
-		nested.push(new Error("aggregate members were unavailable"));
-	} finally {
-		if (iterator && !exhausted) {
-			try {
-				const close = iterator.return;
-				if (typeof close === "function") INTRINSIC_REFLECT_APPLY(close, iterator, []);
-			} catch {
-				if (nested.length < 16) nested.push(new Error("aggregate iterator close failed"));
-			}
-		}
+	const length = lengthDescriptor.value;
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(source, intrinsicString(index));
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) return unavailable();
+		nested[index] = snapshotRuntimeFailure(descriptor.value, depth + 1, seen);
 	}
 	return nested;
 }
 
 function readErrorMessage(error: unknown): string {
 	try {
-		if (!(error instanceof Error) || INTRINSIC_IS_PROXY(error)) return "";
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(error, "message");
-		if (!descriptor || descriptor.get || descriptor.set || !("value" in descriptor)) return "";
-		return typeof descriptor.value === "string" ? descriptor.value : "";
+		if (!isNativeRuntimeError(error)) return "";
+		const descriptor = readOwnDataDescriptor(error, "message");
+		return descriptor.status === "data" && typeof descriptor.value === "string" ? descriptor.value : "";
 	} catch {
 		return "";
 	}
 }
 
 function safeRuntimeMessage(value: string, fallback: string): string {
-	const source = value.length > 0 ? value.slice(0, 4_096) : fallback;
-	return redactSensitiveText(source)
-		.replace(/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g, " ")
-		.slice(0, 2_048) || fallback;
+	const source = value.length > 0 ? stringSlice(value, 0, 4_096) : fallback;
+	return stringSlice(stringReplace(
+		redactSensitiveText(source),
+		/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g,
+		" ",
+	), 0, 2_048) || fallback;
+}
+
+function sanitizeRuntimeMessage(value: string, fallback: string): string {
+	const source = value.length > 0 ? stringSlice(value, 0, 4_096) : fallback;
+	return stringSlice(stringReplace(
+		source,
+		/[\u0000-\u001f\u007f-\u009f\u061c\u200e\u200f\u2028-\u202e\u2066-\u2069]/g,
+		" ",
+	), 0, 2_048) || fallback;
 }
 
 function combineFailures(failures: readonly unknown[], message: string): unknown {
-	if (failures.length === 1) return failures[0];
-	return new AggregateError([...failures], message);
+	if (failures.length === 1) return snapshotRuntimeFailure(failures[0]);
+	const nested: unknown[] = [];
+	const length = intrinsicMin(failures.length, 16);
+	for (let index = 0; index < length; index += 1) nested[index] = snapshotRuntimeFailure(failures[index]);
+	return createAggregateErrorSnapshot(nested, message);
 }
