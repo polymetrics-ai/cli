@@ -17,7 +17,7 @@
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api",
-    "status": "human_gate"
+    "status": "awaiting_final_artifact_head_ci"
   },
   "ready_queue": [
     {
@@ -407,7 +407,7 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-22T13:09:49Z",
+  "updated_at": "2026-07-22T13:15:30Z",
   "integration_notes": [
     {
       "timestamp": "2026-07-10T00:00:00Z",
@@ -431,7 +431,7 @@
       "summary": "Completion cycle started: dynamic Gong help, content-bound approval identities, stream-time multipart byte enforcement, and all remaining POST direct reads including transcript. Verification reset to pending."
     },
     {
-      "timestamp": "2026-07-22T13:09:49Z",
+      "timestamp": "2026-07-22T13:15:30Z",
       "issues": [
         133,
         141,
@@ -445,8 +445,8 @@
         253,
         254
       ],
-      "status": "human_review_ready",
-      "summary": "Implementation head 798af7f7 passed local make verify, pushed-head CI, and final local Codex review with no unresolved actionable findings. PR #232 contains closing keywords and is ready; merge to main remains human-gated."
+      "status": "review_ready_pending_artifact_head_ci",
+      "summary": "Implementation head 798af7f7 passed local make verify, pushed-head CI, and final local Codex review with no unresolved actionable findings. PR #232 is non-draft with closing keywords. Terminal human-gate state is deferred because this artifact-only update creates a newer head whose required checks must complete."
     }
   ]
 }

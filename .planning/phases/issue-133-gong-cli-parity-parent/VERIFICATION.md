@@ -131,7 +131,8 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] Local Codex review covers the final implementation head with no unresolved actionable findings.
 - [x] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
 - [x] Final implementation-head `make verify` passed at `798af7f7`.
-- [x] Pushed-head CI passed at `798af7f7`: verify, govulncheck, CodeQL, dependency review, website checks/image, Snyk, GSD evidence, branch/title, and linked-issue checks.
+- [x] Implementation-head CI passed at `798af7f7`: verify, govulncheck, CodeQL, dependency review, website checks/image, Snyk, GSD evidence, branch/title, and linked-issue checks.
+- [ ] Confirm the same required checks on the final artifact-only PR head before terminal human-gate handoff.
 
 Local Codex reviewed the feature and each fix commit. Actionable findings were reproduced, fixed, and covered by focused tests: operation response caps, help tokens used as flag values, approval-token metadata, JSON dynamic help, passive/unknown/action-only namespace flags, false-y preview semantics, and empty/bare/repeated lifecycle values. Final review of implementation commit `798af7f7` reported no actionable regressions.
 

@@ -1,6 +1,6 @@
 # Summary — Gong CLI parity parent (#133)
 
-Status: human-review ready; implementation, local Codex review, local gates, and pushed-head CI are complete.
+Status: implementation is human-review ready; final artifact-only head CI must complete before terminal human-gate handoff.
 
 ## Implemented
 
@@ -37,4 +37,5 @@ Later local Codex reviews found approval-token metadata, JSON help, and nuanced 
 
 ## Remaining
 
-1. Human approval and merge of PR #232 to `main` remain mandatory.
+1. Confirm required checks on the final artifact-only PR head.
+2. Human approval and merge of PR #232 to `main` remain mandatory.
