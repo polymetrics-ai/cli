@@ -93,6 +93,7 @@ test("entrypoint ensures one exact marker-bound parent draft before starting pro
 	const controller = new ProductionPiEntrypointController({
 		issue: 479,
 		delegate: delegate(479, calls),
+		async validateAuthority() {},
 		async ensureParentDraft(issue, signal) {
 			assert.equal(issue, 479);
 			assert.equal(signal.aborted, false);
@@ -127,6 +128,7 @@ test("entrypoint fails closed before production state when parent draft preparat
 	const controller = new ProductionPiEntrypointController({
 		issue: 479,
 		delegate: delegate(479, calls),
+		async validateAuthority() {},
 		async ensureParentDraft() { throw new Error("parent draft evidence is ambiguous"); },
 		resources: [],
 	});
@@ -243,6 +245,7 @@ test("production host rejects a conventional default alias as the parent integra
 test("production Pi host composes separate implementation and review AgentSession runtimes at the issue boundary", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "production-pi-host-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
+	await writeProductionPlan(root);
 	const coordinator: GitBinding = {
 		cwd: root,
 		repositoryIdentity: "1".repeat(64),

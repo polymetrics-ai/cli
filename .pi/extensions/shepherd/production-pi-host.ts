@@ -55,10 +55,12 @@ const DEFAULT_GITHUB_OUTPUT_BYTES = 2 * 1024 * 1024;
 
 type ClosableAgentRuntime = ProductionAgentSessionPort & Pick<ShepherdAgentSessionRuntime, "close">;
 type ParentDraftEnsurer = (issue: number, signal: AbortSignal) => Promise<void>;
+type ParentAuthorityValidator = (issue: number, signal: AbortSignal) => Promise<void>;
 
 export interface ProductionPiEntrypointControllerOptions {
 	issue: number;
 	delegate: AutonomousShepherdControllerPort;
+	validateAuthority: ParentAuthorityValidator;
 	ensureParentDraft: ParentDraftEnsurer;
 	resources: Array<{ close(): Promise<void> }>;
 }
@@ -71,6 +73,7 @@ export interface ProductionPiEntrypointControllerOptions {
 export class ProductionPiEntrypointController implements AutonomousShepherdControllerPort {
 	readonly #issue: number;
 	readonly #delegate: AutonomousShepherdControllerPort;
+	readonly #validateAuthority: ParentAuthorityValidator;
 	readonly #ensureParentDraft: ParentDraftEnsurer;
 	readonly #resources: Array<{ close(): Promise<void> }>;
 	#preflight: { controller: AbortController; promise: Promise<void> } | undefined;
@@ -84,6 +87,7 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 			|| typeof options.delegate.resume !== "function"
 			|| typeof options.delegate.stop !== "function"
 			|| typeof options.delegate.shutdown !== "function"
+			|| typeof options.validateAuthority !== "function"
 			|| typeof options.ensureParentDraft !== "function"
 			|| !Array.isArray(options.resources)
 			|| options.resources.some((resource) => typeof resource?.close !== "function")) {
@@ -91,6 +95,7 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		}
 		this.#issue = options.issue;
 		this.#delegate = options.delegate;
+		this.#validateAuthority = options.validateAuthority;
 		this.#ensureParentDraft = options.ensureParentDraft;
 		this.#resources = [...options.resources];
 	}
@@ -105,25 +110,33 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		return this.#delegate.status(issue) as Promise<ProductionAutonomousState | undefined>;
 	}
 
-	async start(command: ShepherdStartCommand): Promise<ProductionAutonomousState> {
-		this.#assertIssue(command.issue);
-		if (await this.#delegate.status(command.issue)) {
-			throw new Error(`production Shepherd state already exists for issue #${command.issue}; use resume`);
-		}
-		if (this.#preflight !== undefined) throw new Error("production parent draft preflight is already active");
+	async #runPreflight(issue: number, prepareDraft: boolean): Promise<void> {
+		if (this.#preflight !== undefined) throw new Error("production authority preflight is already active");
 		const controller = new AbortController();
-		const promise = this.#ensureParentDraft(command.issue, controller.signal);
+		const promise = (async () => {
+			await this.#validateAuthority(issue, controller.signal);
+			if (prepareDraft) await this.#ensureParentDraft(issue, controller.signal);
+		})();
 		this.#preflight = { controller, promise };
 		try {
 			await promise;
 		} finally {
 			if (this.#preflight?.promise === promise) this.#preflight = undefined;
 		}
+	}
+
+	async start(command: ShepherdStartCommand): Promise<ProductionAutonomousState> {
+		this.#assertIssue(command.issue);
+		if (await this.#delegate.status(command.issue)) {
+			throw new Error(`production Shepherd state already exists for issue #${command.issue}; use resume`);
+		}
+		await this.#runPreflight(command.issue, true);
 		return this.#delegate.start(command) as Promise<ProductionAutonomousState>;
 	}
 
-	resume(command: ShepherdResumeCommand): Promise<ProductionAutonomousState> {
+	async resume(command: ShepherdResumeCommand): Promise<ProductionAutonomousState> {
 		this.#assertIssue(command.issue);
+		await this.#runPreflight(command.issue, false);
 		return this.#delegate.resume(command) as Promise<ProductionAutonomousState>;
 	}
 
@@ -131,7 +144,7 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		this.#assertIssue(issue);
 		const preflight = this.#preflight;
 		if (preflight !== undefined) {
-			preflight.controller.abort(new Error("production parent draft preflight stop requested"));
+			preflight.controller.abort(new Error("production authority preflight stop requested"));
 			try { await preflight.promise; } catch { /* The authoritative state check below decides the result. */ }
 		}
 		const durable = await this.#delegate.status(issue);
@@ -375,6 +388,36 @@ export interface ProductionPiHostOptions {
 	dependencies?: Partial<ProductionPiHostDependencies> & Pick<ProductionPiHostDependencies, "git">;
 }
 
+const FORBIDDEN_PARENT_INTEGRATION_TARGETS = new Set(["main", "master", "trunk"]);
+
+function defaultParentAuthorityValidator(options: {
+	repositoryRoot: string;
+	git: GitAdapter;
+	coordinator: GitBinding;
+	inspectCoordinator(git: GitAdapter, repositoryRoot: string): Promise<GitBinding>;
+}): ParentAuthorityValidator {
+	return async (issue, signal) => {
+		const snapshot = await new ProductionRepositoryPlanIntake(options.repositoryRoot).load(issue, signal);
+		const live = await options.inspectCoordinator(options.git, options.repositoryRoot);
+		if (signal.aborted) throw signal.reason ?? new Error("production authority preflight aborted");
+		if (live.repositoryIdentity !== options.coordinator.repositoryIdentity
+			|| live.worktreeIdentity !== options.coordinator.worktreeIdentity
+			|| live.remoteIdentity !== options.coordinator.remoteIdentity
+			|| live.fetchEndpointIdentity !== options.coordinator.fetchEndpointIdentity
+			|| live.pushEndpointIdentity !== options.coordinator.pushEndpointIdentity) {
+			throw new Error("production coordinator or remote identity changed since controller construction");
+		}
+		if (live.defaultBranch === undefined
+			|| snapshot.plan.parentBaseBranch !== live.defaultBranch) {
+			throw new Error("production parent plan base no longer matches the authoritative remote default branch");
+		}
+		if (snapshot.plan.parentBranch === live.defaultBranch
+			|| FORBIDDEN_PARENT_INTEGRATION_TARGETS.has(snapshot.plan.parentBranch)) {
+			throw new Error("production parent integration target is a protected default branch alias");
+		}
+	};
+}
+
 function defaultParentDraftEnsurer(options: {
 	repositoryRoot: string;
 	git: GitAdapter;
@@ -479,6 +522,12 @@ export async function createProductionPiHostController(
 		);
 		const readyAuthority = dependencies.createParentReadyAuthority(options.stateRoot);
 		const github = options.github ?? {};
+		const validateAuthority = defaultParentAuthorityValidator({
+			repositoryRoot: options.repositoryRoot,
+			git: dependencies.git,
+			coordinator,
+			inspectCoordinator: dependencies.inspectCoordinator,
+		});
 		const delegate = dependencies.createController({
 			parentIssue: options.issue,
 			repositoryRoot: options.repositoryRoot,
@@ -497,6 +546,7 @@ export async function createProductionPiHostController(
 		return new ProductionPiEntrypointController({
 			issue: options.issue,
 			delegate,
+			validateAuthority,
 			ensureParentDraft: dependencies.createParentDraftEnsurer({
 				repositoryRoot: options.repositoryRoot,
 				git: dependencies.git,
