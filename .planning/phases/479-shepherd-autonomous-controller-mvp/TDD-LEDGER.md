@@ -2,9 +2,16 @@
 
 ## RED
 
-Pending: one fake-port trajectory will assert parallel independent children, dependency waiting,
-execute/verify/review/integrate ordering, durable state, stop/resume, and the final human gate.
-Parser and extension tests will assert writable autonomous start while preserving read-only canary.
+Behavior contract and compiling port/state scaffold committed before controller behavior. Command:
+
+```bash
+node --test --test-concurrency=1 .pi/extensions/shepherd/autonomous-controller.test.ts
+```
+
+Result: 1 executed, 0 passed, exactly 1 intended failure at
+`AutonomousShepherdController.start`: `autonomous Shepherd MVP is not implemented`. The trajectory
+covers parallel independent children, dependency waiting, execute/verify/review/integrate ordering,
+durable state, stop/join/resume, the final human gate, and absence of a merge-main capability.
 
 ## GREEN
 
