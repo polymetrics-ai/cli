@@ -71,4 +71,6 @@ passes offline RPC. `docs/cli/**`, website docs, and generated `pm` manuals are 
   review is retained as an additional internal exact-head gate and is not mislabeled as Claude.
 - PR #489 is open. Publish parent repair head `387d41fd` first, then the child repair head and
   confirm the authoritative GitHub range.
+- Bounded Codex xhigh review at `d2f20366` passed the code/topology repair and found one stale
+  resume-evidence blocker; the durable parent/PR values are corrected in the final docs checkpoint.
 - Before parent integration: remote complete-suite CI and policy review coverage must be clean.

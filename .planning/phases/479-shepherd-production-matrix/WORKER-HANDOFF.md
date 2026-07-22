@@ -88,7 +88,7 @@ node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 # strict no-emit TypeScript for all 49 non-test Shepherd modules
 # pinned Pi 0.80.6 offline RPC get_commands
 scripts/verify-gsd-workflow origin/main
-git diff --check 45c27b9d...HEAD
+git diff --check 387d41fd...HEAD
 ```
 
 Result: the focused real-Go fixture passes 1/1 with Go 1.25.12; exact Pi-family verification,
@@ -98,17 +98,17 @@ advisory database because sandbox DNS is blocked. Fresh ordinary-host CI remains
 
 ## Automated Review
 
-- Requested internal review: Codex `gpt-5.6-sol` / xhigh at `ca3f6c6f`.
-- Internal result: BLOCKED; exact Pi-family assertion is corrected at `a594be98`; the local
-  parent range is reconciled at `45c27b9d`/`766709b3`; authoritative publication remains
-  external.
+- Requested internal review: Codex `gpt-5.6-sol` / xhigh at `d2f20366`.
+- Internal result: BLOCKED only on stale resume/publication evidence; the workflow, dependency
+  baseline, and stack topology passed. This handoff corrects the durable state to repaired parent
+  `387d41fd` and existing PR #489; exact-head follow-up remains external.
 - Primary schema route: blocked pending `claude_auto` or an allowed recorded fallback.
 - Fallback route: human.
 - Coverage route: blocked.
 - Coverage status: blocked.
-- Review URL: pending child PR.
-- Disposition summary: internal finding 1 corrected; finding 2 is locally reconciled and now
-  requires parent-first publication plus authoritative remote-range verification.
+- Review URL: https://github.com/polymetrics-ai/cli/pull/489
+- Disposition summary: stale resume state accepted and corrected; parent-first republication plus
+  authoritative remote-range verification remain.
 - Unresolved findings: remote parent base, remote CI, and policy review coverage.
 
 ## Merge Recommendation

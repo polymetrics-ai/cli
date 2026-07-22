@@ -114,11 +114,11 @@ real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `T
 
 ## Remaining external gates
 
-1. Publish/fetch parent `45c27b9d` first, verify the authoritative remote head, then push the
-   non-default child branch and run the new complete-suite CI gate where
+1. Publish/fetch repaired parent `387d41fd` first, verify the authoritative remote head, then update
+   existing PR #489 with the repaired child branch and rerun the complete-suite CI gate where
    process-identity/Git/worktree commands are permitted; the managed Codex sandbox blocks those 64
    tests at `spawn EPERM` before their assertions execute.
-2. Obtain one bounded Codex 5.6 Sol xhigh follow-up review of the exact child handoff head.
+2. Obtain one bounded Codex 5.6 Sol xhigh follow-up review of the exact repaired child head.
 3. Obtain repository-policy `claude_auto` coverage or an allowed recorded fallback on the
    authoritative PR range.
 4. Live GitHub mutation was not run because no designated sandbox repository was authorized. The
