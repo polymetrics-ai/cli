@@ -4495,6 +4495,9 @@ type Cycle13ToolLifecycleVariant =
 	| "execution-arguments"
 	| "unauthorized-name"
 	| "result-message"
+	| "result-error"
+	| "message-id"
+	| "message-name"
 	| "turn-result"
 	| "orphan-result"
 	| "duplicate-result"
@@ -4526,13 +4529,15 @@ function driveCycle13ToolLifecycle(
 	const messageResult = variant === "result-message"
 		? { content: [{ type: "text" as const, text: "replacement result" }], details: null }
 		: executionResult;
+	const messageId = variant === "message-id" ? "cycle13-message-replacement" : executionId;
+	const messageName = variant === "message-name" ? "workspace_write" : executionName;
 	const message: PiToolResultMessage = {
 		role: "toolResult",
-		toolCallId: executionId,
-		toolName: executionName,
+		toolCallId: messageId,
+		toolName: messageName,
 		content: messageResult.content,
 		details: messageResult.details,
-		isError: false,
+		isError: variant === "result-error",
 		timestamp: 476,
 	};
 	const turnMessage: PiToolResultMessage = variant === "turn-result"
@@ -5633,6 +5638,9 @@ test("cycle 13 Pi tool lifecycle correlates one authorized call through result a
 		"execution-arguments",
 		"unauthorized-name",
 		"result-message",
+		"result-error",
+		"message-id",
+		"message-name",
 		"turn-result",
 		"orphan-result",
 		"duplicate-result",

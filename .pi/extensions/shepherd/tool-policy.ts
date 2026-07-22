@@ -33,6 +33,24 @@ const forbiddenCapabilityPatterns = [
 	/(?:^|_)(?:secret|credential|token|password|auth)_(?:read|get|list|dump|export)(?:_|$)/,
 ] as const;
 
+const capabilitySensitiveNouns = new Set([
+	"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
+]);
+const capabilityExecutionResources = new Set(["process", "program", "subprocess", "terminal"]);
+const capabilityExecutionActions = new Set(["run", "launch", "start", "execute", "open", "invoke"]);
+const capabilityTransportResources = new Set(["http", "web"]);
+const capabilityTransportActions = new Set(["request", "write", "post", "put", "patch", "delete", "send"]);
+const capabilityDatabaseResources = new Set(["sql", "database", "db"]);
+const capabilityDatabaseActions = new Set([
+	"request", "query", "write", "insert", "update", "delete", "execute", "modify",
+]);
+const capabilityRecursiveActions = new Set(["create", "spawn", "delegate", "orchestrate", "run", "launch"]);
+const capabilityProtectedData = new Set(["vault", "keychain", "keystore", "environment", "cookie", "session"]);
+const capabilityExposureActions = new Set([
+	"read", "get", "list", "view", "show", "dump", "export", "copy", "download", "obtain", "reveal",
+	"lookup", "print", "inspect",
+]);
+
 const sensitivePathPatterns = [
 	/(?:^|\/)\.git(?:\/|$)/i,
 	/(?:^|\/)\.env(?:\.|$)/i,
@@ -1541,35 +1559,20 @@ function validateCapabilityName(name: string): void {
 	const normalizedTokens = tokens.map(normalizeCapabilityToken);
 	const tokenSet = new Set(normalizedTokens);
 	const compact = name.slice("host_".length).replaceAll("_", "");
-	const sensitiveNouns = new Set([
-		"secret", "credential", "token", "password", "passwd", "auth", "authorization", "apikey",
-	]);
 	const hasSensitivePair = normalizedTokens.some((token, index) =>
 		(token === "api" && normalizedTokens[index + 1] === "key") ||
 		(token === "private" && normalizedTokens[index + 1] === "key") ||
 		(token === "token" && normalizedTokens[index + 1] === "cache") ||
 		(token === "access" && normalizedTokens[index + 1] === "token") ||
 		(token === "refresh" && normalizedTokens[index + 1] === "token"));
-	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => sensitiveNouns.has(token));
+	const hasSensitiveNoun = hasSensitivePair || normalizedTokens.some((token) => capabilitySensitiveNouns.has(token));
 	const hasAnyToken = (values: ReadonlySet<string>): boolean => normalizedTokens.some((token) => values.has(token));
-	const executionResources = new Set(["process", "program", "subprocess", "terminal"]);
-	const executionActions = new Set(["run", "launch", "start", "execute", "open", "invoke"]);
-	const transportResources = new Set(["http", "web"]);
-	const transportActions = new Set(["request", "write", "post", "put", "patch", "delete", "send"]);
-	const databaseResources = new Set(["sql", "database", "db"]);
-	const databaseActions = new Set(["request", "query", "write", "insert", "update", "delete", "execute", "modify"]);
-	const recursiveActions = new Set(["create", "spawn", "delegate", "orchestrate", "run", "launch"]);
-	const protectedData = new Set(["vault", "keychain", "keystore", "environment", "cookie", "session"]);
-	const exposureActions = new Set([
-		"read", "get", "list", "view", "show", "dump", "export", "copy", "download", "obtain", "reveal",
-		"lookup", "print", "inspect",
-	]);
 	const hasForbiddenSemanticPair =
-		(hasAnyToken(executionResources) && hasAnyToken(executionActions)) ||
-		(hasAnyToken(transportResources) && hasAnyToken(transportActions)) ||
-		(hasAnyToken(databaseResources) && hasAnyToken(databaseActions)) ||
-		(tokenSet.has("agent") && hasAnyToken(recursiveActions)) ||
-		(hasAnyToken(protectedData) && hasAnyToken(exposureActions));
+		(hasAnyToken(capabilityExecutionResources) && hasAnyToken(capabilityExecutionActions)) ||
+		(hasAnyToken(capabilityTransportResources) && hasAnyToken(capabilityTransportActions)) ||
+		(hasAnyToken(capabilityDatabaseResources) && hasAnyToken(capabilityDatabaseActions)) ||
+		(tokenSet.has("agent") && hasAnyToken(capabilityRecursiveActions)) ||
+		(hasAnyToken(capabilityProtectedData) && hasAnyToken(capabilityExposureActions));
 	const hasForbiddenCompact =
 		/(?:bash|shell|exec|command)/.test(compact) ||
 		/(?:subagent|spawnagent|delegate|orchestrat|agentcreate|agentrunner|recursiveagent)/.test(compact) ||

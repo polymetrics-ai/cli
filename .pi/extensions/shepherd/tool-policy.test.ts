@@ -1649,6 +1649,10 @@ test("cycle 13 capability names structurally deny equivalent generic and protect
 		"host_create_agent",
 		"host_process_run",
 		"host_run_process",
+		"host_terminal_run",
+		"host_run_terminal",
+		"host_program_launch",
+		"host_launch_program",
 		"host_web_send",
 		"host_send_web",
 		"host_database_modify",
@@ -1659,6 +1663,8 @@ test("cycle 13 capability names structurally deny equivalent generic and protect
 		"host_export_environment",
 		"host_keychain_dump",
 		"host_dump_keychain",
+		"host_cookie_export",
+		"host_export_cookie",
 	] as const;
 	const accepted: string[] = [];
 	for (const readOnly of [true, false]) {
