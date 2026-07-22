@@ -1,17 +1,35 @@
 # Verification — Issue #475
 
-Current result: Cycle 18 is locally complete at REFACTOR `6354b156` after PLAN `aa92f751`,
-test-only RED `50b04a24`, and cohesive GREEN `ea23780f`. Local focused, isolation, strict
-TypeScript, pinned offline Pi, ancestry, JSON, source, diff, and scope gates pass. The complete
-serialized suite remains environment-blocked at 265/296 by 31 unchanged controller/state-store
-`spawn EPERM` failures. Two independent exact-head reviews and a process-capable replay remain
-pending; `verificationPassed` is false.
+Current result: both independent Cycle 18 reports block exact candidate `a0cd1057a0da642185f10b4ddfe72263602c7513`.
+Cycle 19 is at its artifact-only PLAN gate; production and tests remain frozen and
+`verificationPassed` is false.
+
+## Cycle 19 Pre-Execution Verification Contract
+
+Both complete reports were read before PLAN and accepted without deferral. Their union maps exactly
+to C19-01 through C19-05.
+
+| Cycle 19 gate | Status | Required evidence |
+|---|---|---|
+| Exact start / report replay | pass | exact `a0cd1057`; tree `d428be42e`; both full reports and recorded SHA-256 values |
+| Baseline focused tests | pass | 159 passed, 0 failed/skipped/cancelled/todo |
+| Baseline focused strict TypeScript | pass | TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| PLAN / frozen blobs | in progress | artifact-only commit; exact runtime/policy/prompt/runtime-test/policy-test blobs |
+| Comprehensive RED | pending | exactly five top-level rows; 164 executed; 159 retained pass; exactly five named failures; 0 skipped/cancelled/todo |
+| Production freeze | pending | runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f` exact after RED |
+| Scope / integrity | pending | exact same 20 paths, clean diff, ancestry and JSON gates |
+| GREEN / REFACTOR / terminal verification | blocked by order | no production edit before committed RED and parent checkpoint report |
+| External mutation | not attempted | no push, network, GitHub, integration, model/auth, service, Go/connector, `make`, parent, or #478 action |
+
+The finite normalization, exact reflection/handoff boundaries, independent category trace, and
+shared projection-budget definitions are fixed in PLAN before RED. No Cycle 19 completion or GREEN
+claim is made here.
 
 ## Cycle 18 Terminal Verification
 
-Both complete Cycle 17 reports were read before PLAN and accepted without deferral. Their exact
-seven-contract union maps to C18-01 through C18-07 and is closed locally without widening the
-finite schema vocabulary or issue-owned surface.
+Both complete Cycle 17 reports were read before PLAN and accepted without deferral. This section
+records the implementing worker's Cycle 18 local evidence; the later independent Cycle 18 reports
+found C18-04 through C18-07 only partially closed and supersede its closure claim.
 
 | Cycle 18 gate | Status | Evidence |
 |---|---|---|
@@ -23,7 +41,7 @@ finite schema vocabulary or issue-owned surface.
 | Strict TypeScript | pass | TypeScript 5.9.3 over all 12 non-test Shepherd production files with explicit Pi 0.80.6 base/type roots |
 | Pi offline boundary | pass | explicit `/Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi` reports 0.80.6; offline RPC `get_commands` registers `pm-shepherd` and exits 0 |
 | Integrity and scope | pass | immutable-base/PLAN/RED/GREEN/REFACTOR ancestry; JSON/diff/source guards; exact same 20 issue paths and 13 Cycle 18 paths |
-| Independent exact-head review | pending | two final-candidate reviews remain parent-owned; no self-review or integration claim |
+| Independent exact-head review | blocked | both final-candidate reports completed and produced the five-contract Cycle 19 correction |
 | External mutation | not attempted | no push, network, GitHub, live model/auth, credential, service, Go/connector, `make`, main, parent, or #478 action |
 
 Final blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy

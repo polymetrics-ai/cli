@@ -1,5 +1,25 @@
 # PRD Coverage — Issue #475
 
+## Cycle 19 Exact-Head Coverage Contract
+
+Frozen candidate: `a0cd1057a0da642185f10b4ddfe72263602c7513`; immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 authorized paths. Both complete Cycle
+18 reports are accepted as one five-contract correction.
+
+| Required outcome | Executable RED boundary | Pre-execution status |
+|---|---|---|
+| One finite Pi/direct/callback/event/lifecycle contract | explicit Pi 0.80.6 coercion table; safe integer bounds; explicit 512 array ceiling; canonical `-0` -> `+0`; canonical enums and frozen DTO identity | C19-01 blocked |
+| Reflection authority is captured once | schema/raw/event/result/reference/error success and rejection after awaited callbacks; all post-import ambient poison counters remain zero | C19-02 blocked |
+| Terminal handoff arrays are exact snapshots | all three vectors reject proxy/proxy-prototype/accessor/sparse inputs before callbacks and map only fresh frozen dense copies | C19-03 blocked |
+| Work accounting has an independent exact oracle | public per-category trace, hard-coded fixture tuples, one-category omission checks, exact total, retained affine ceiling | C19-04 blocked |
+| Projection is incrementally bounded | one shared 4,096-node/key/item/DAG, depth-64, exact-byte budget rejects cycles/shared fanout before second descent/allocation; expressible limits canonicalized to Pi | C19-05 blocked |
+
+Baseline is focused 159/159 and focused strict TypeScript passing. Expected RED is 164 executed,
+159 retained pass, exactly five named failures, zero skipped/cancelled/todo, strict TypeScript
+passing, and all production blobs frozen. `verificationPassed` remains false. No dependency,
+prompt/lease drift, parent, #478, network, push, integration, live model/auth, credential, service,
+Go/connector, `make`, main, or scope expansion is authorized.
+
 ## Cycle 18 Exact-Head Coverage Contract
 
 Frozen candidate: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`. Immutable base:

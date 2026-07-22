@@ -1935,3 +1935,132 @@ offline Pi 0.80.6 RPC registration. The broad serialized suite is honestly envir
 265/296 by the unchanged 31 controller/state-store `spawn EPERM` failures. Exact ancestry, JSON,
 diff/source guards, the same 20-path issue scope, and the 13-path Cycle 18 delta pass. Independent
 exact-head reviews and process-capable replay remain pending; `verificationPassed` stays false.
+
+## Consolidated Exact-Head Correction Cycle 19 Plan
+
+Frozen start is the exact independently reviewed evidence candidate
+`a0cd1057a0da642185f10b4ddfe72263602c7513`; candidate tree is
+`d428be42e501d96a9e4d197738d5d5326f25e322`; immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; and the allowlist remains exactly 20 paths. Both
+`/tmp/475-REVIEW-CYCLE18-1.md` and `/tmp/475-REVIEW-CYCLE18-2.md` were read in full before this
+plan (SHA-256 `48144b90ee7ba8dca980c30d1e1acac1254e72ce71182d5291f1cd955cab971b`
+and `13b3b492fbd67126bdcb39707d385dc54a1f5628a5e478457f49cdc84aafdf18`). Their nine reported
+observations deduplicate to the five contracts below; none is declined, deferred, or narrowed by
+claiming generic JSON Schema compatibility.
+
+### One finite normalized capability contract
+
+Pi 0.80.6's installed `validateToolArguments` clones and converts plain JSON-schema arguments
+before validation. Cycle 19 therefore defines one finite normalization rather than advertising
+exact-type semantics Pi does not provide:
+
+- `string`: a string remains exact; `null` becomes `""`; a finite number or boolean becomes its
+  JavaScript string form. The canonical schema always emits `minLength` (default 0) and a bounded
+  `maxLength` no wider than the active policy write ceiling.
+- `integer`: `null` becomes 0, booleans become 0/1, and a non-empty string is admitted only when
+  `Number(value)` is integral. The normalized value must be a safe integer. Every canonical integer
+  schema emits the author bounds intersected with
+  `[-9007199254740991, 9007199254740991]`.
+- `number`: `null` becomes 0, booleans become 0/1, and a non-empty string is admitted only when
+  `Number(value)` is finite. The normalized value must remain finite.
+- `boolean`: `null` becomes false; only exact strings `"true"`/`"false"` and numbers 1/0 convert;
+  every other non-boolean rejects.
+- Every normalized numeric `-0` becomes canonical `+0` before bounds, enum comparison, callback,
+  event identity, or serialization. Numeric schema bounds and enum members use the same
+  canonicalization; enums use SameValueZero identity and canonical duplicates reject.
+- Arrays remain exact intrinsic dense arrays and every canonical schema emits `minItems` (default
+  0) and `maxItems` (default and hard ceiling 512). Closed objects remain required-only. Optional
+  fields, unknown keywords, unions/combinators, and other unsupported semantics still reject.
+
+The compiler-built schema is Pi's only registered surface. The same compiler normalizes and
+descriptor-projects direct input, Pi/event arguments, callback DTOs, and lifecycle identities into
+one frozen DTO. Real pinned-Pi tests cover unsafe integers, every supported coercion family, an
+omitted 512-item ceiling, signed zero, canonical enum identity, direct execution, callback, event,
+and lifecycle correlation. If any primitive cannot be proven equal to Pi 0.80.6 under this finite
+matrix, GREEN must reject that primitive schema at registration rather than advertise drift.
+
+### Captured reflection and exact terminal arrays
+
+All reflection/serialization capabilities are captured once at module initialization and used
+exclusively afterward: object/array prototypes, `Object.keys`/fixed descriptor reads, create,
+define, freeze, has-own/value discovery, `Array.isArray`, proxy detection, `Reflect.apply`, and
+JSON parse/stringify where those operations cross schema, raw input, event, result, reference, or
+error boundaries. No callback can replace an ambient primitive after import and influence a later
+classification. Error capture is descriptor-based or reduced to a constant sanitized fallback;
+it never invokes caller getters.
+
+`changedPaths`, `verification`, and `findings` use the same exact array rule as request/event arrays:
+captured intrinsic `Array.prototype`, non-proxy root and direct prototype, authoritative own length
+descriptor, dense enumerable own data indexes, maximum 32, and one fresh frozen snapshot. Mapping
+is indexed over that snapshot only; caller `.map` and inherited iteration are never consulted.
+
+### Independent category work trace
+
+`RedactionScanMetrics` exposes one field for every charged class:
+
+- existing `cursorAdvances`, `boundaryCharacterVisits`, and `keyCharacterVisits`;
+- `recognizerCharacterVisits`, one per character examined by each of the five strong recognizers;
+- `lexicalTransitions`, `frameOperations`, and `recoveryTransitions`;
+- `rangeEmissions`, `rangeExaminations`, `rangeInsertions`, and `rangeCoalescences`;
+- `replacementEmissions` and `renderedSourceUnits` over original coordinates.
+
+`totalWork` is exactly the sum of those public category counters. No uncategorized work charge is
+allowed. The RED oracle uses hard-coded, test-side expected traces for empty, one-character
+identity, frame, recovery, protected assignment, private-key, and overlapping/coalescing fixtures.
+It then omits each category from a copied expected trace and proves the total no longer matches.
+Unit-write and `16n + 64` ceiling assertions remain secondary guards; neither supplies the oracle.
+
+### One shared incremental projection budget
+
+Every compiled projection receives one mutable budget before root inspection. It charges before
+descent or output insertion and is shared across the complete graph:
+
+- at most 4,096 projected schema-node executions;
+- at most 4,096 object-key descriptor examinations;
+- at most 4,096 dense array-item descriptor examinations;
+- root depth 0 through maximum depth 64;
+- at most 4,096 object/array identity encounters, with cycles and any repeated DAG identity
+  rejected before the second descent;
+- exact incremental encoded JSON bytes no greater than
+  `min(callMaximumBytes, MAX_TOOL_INPUT_BYTES)`.
+
+Braces/brackets, commas, quoted keys, colons, scalar encodings, and escaped string bytes are charged
+as they are admitted. Per-node safe-integer, string-length, and array-cardinality limits appear in
+the canonical Pi schema because JSON Schema can express them. Aggregate nodes/keys/items/depth/
+identity/encoded-byte limits are enforced by the same projector on direct, callback, and event
+paths; they are not misrepresented as standard schema keywords. Near-limit trees retain behavior;
+nested fanout, cycles, and shared DAG aliases reject before multiplicative traversal/allocation.
+
+### Comprehensive five-row RED matrix
+
+After this artifact-only checkpoint, one test-only commit adds exactly five top-level rows:
+
+| ID | Exact executable boundary |
+|---|---|
+| C19-01 | `cycle 19 Pi direct callback event and lifecycle share one finite normalized schema` — real Pi 0.80.6 unsafe integers, full supported coercion table, implicit 512-item limit, `+0`/`-0`, enum canonicalization, and exact normalized DTO identities |
+| C19-02 | `cycle 19 every schema raw event result reference and error path uses captured reflection` — post-import poisoning of each admitted reflection primitive before/after awaited host and workspace callbacks, success/rejection paths, zero poison calls |
+| C19-03 | `cycle 19 terminal handoff arrays use exact intrinsic dense snapshots without caller map` — changed paths, verification, and findings x direct proxy/proxy prototype/accessor/sparse/post-capture mutation with zero traps and frozen DTOs |
+| C19-04 | `cycle 19 redaction work trace independently accounts for every category` — hard-coded exact traces plus one-category omission checks and retained affine/unit-write guards |
+| C19-05 | `cycle 19 one incremental projection budget rejects before multiplicative traversal` — nodes/keys/items/depth/bytes/DAG counters, nested shared aliases, pre-allocation rejection, expressible Pi limits, and near-limit controls |
+
+Expected RED is 164 executed: all 159 retained rows pass and exactly C19-01 through C19-05 fail
+their intended behavior assertions, with zero skipped/cancelled/todo. Focused strict TypeScript must
+pass. Frozen production blobs through RED are runtime
+`e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`; pre-RED test blobs are runtime test
+`d918930205120d6a491a6288a95ee14550a0c567` and policy test
+`39fb20e0dc4667b9743c5acc4f87223b01128788`.
+
+Baseline at the exact start is focused 159/159 and focused strict TypeScript 5.9.3 against explicit
+Pi 0.80.6 roots. `scripts/gsd doctor` passes 69 commands while the adapter rejects
+`programming-loop`; explicit manual-GSD PLAN -> RED -> GREEN -> REFACTOR -> VERIFY remains active.
+Skills used are `gsd-programming-loop`, `architecture-patterns`, `javascript-testing-patterns`,
+`typescript-advanced-types`, and `github-issue-first-delivery`, plus repository routing, runtime/Pi,
+issue, adapter, and universal-loop guidance. The four-agent runtime is saturated, so no read-only
+mapper was spawned; Cycle 19 records `not_spawned_runtime_capability_missing` and stays on the local
+critical path.
+
+No production edit precedes committed RED. No dependency, prompt/lease/route contract, parent,
+#478, network, push, integration, live model/auth, credential, service, Go/connector, `make`, main,
+or path-scope change is authorized.

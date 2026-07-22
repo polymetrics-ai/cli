@@ -1283,6 +1283,41 @@ GREEN fixture alignment. No production edit is authorized before the RED checkpo
   Two independent exact-head reviews and process-capable broad replay remain pending;
   `verificationPassed` stays false.
 
+## Cycle 19 TDD Ledger
+
+### PLAN / frozen baseline
+
+- Exact start: `a0cd1057a0da642185f10b4ddfe72263602c7513`; tree `d428be42e`; immutable
+  base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact 20-path allowlist and clean worktree.
+- Both Cycle 18 independent reports were read completely. Their full union maps to C19-01 through
+  C19-05; no blocker is declined or deferred.
+- Baseline focused gate: 159 executed, 159 passed, zero failed/skipped/cancelled/todo. Focused
+  strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots: exit 0.
+- Frozen production blobs: runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`; policy
+  `efc7564ec0adc8a424c30d62cab97f1f4fca7a53`; prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. Frozen test controls: runtime test
+  `d918930205120d6a491a6288a95ee14550a0c567`; policy test
+  `39fb20e0dc4667b9743c5acc4f87223b01128788`.
+- Manual-GSD fallback remains active: doctor passes 69 commands and the adapter rejects
+  `programming-loop`. A read-only mapper could not spawn because all four agent slots are occupied;
+  decision `not_spawned_runtime_capability_missing` is recorded without claiming agent output.
+
+### Planned RED
+
+One test-only checkpoint adds exactly five top-level rows:
+
+| ID | Required failing proof at frozen production |
+|---|---|
+| C19-01 | Pi 0.80.6 and direct/callback/event/lifecycle paths share the documented finite coercion, safe integer/array ceilings, signed-zero and enum normalization |
+| C19-02 | post-import ambient reflection poisoning cannot affect schema/raw/event/result/reference/error paths before or after awaited callbacks |
+| C19-03 | changedPaths, verification, and findings are exact intrinsic dense frozen snapshots and never caller-map dispatch |
+| C19-04 | independent hard-coded traces account every public work category exactly and every one-category omission fails |
+| C19-05 | one shared nodes/keys/items/depth/bytes/DAG budget rejects nested multiplication before further traversal/allocation and retains near-limit inputs |
+
+RED acceptance is 164 executed: all 159 retained rows pass and exactly C19-01 through C19-05 fail,
+zero skipped/cancelled/todo, focused strict TypeScript green, and all production blobs exact. No
+production edit is authorized before the RED checkpoint commits.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

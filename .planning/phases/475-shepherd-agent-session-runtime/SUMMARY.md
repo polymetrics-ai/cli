@@ -1,35 +1,33 @@
 # Summary — Issue #475
 
-Status: Cycle 18 is locally complete at REFACTOR `6354b156` against reviewed start
-`687d053df5f7e7d08c4cab7d2a2d8f153850e673` and immutable base
-`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The ordered chain is PLAN `aa92f751`, test-only RED
-`50b04a24`, cohesive GREEN `ea23780f`, and REFACTOR `6354b156`. RED executed 159 focused rows with
-all 152 retained rows passing and exactly seven intended failures; GREEN/refactor passes 159/159.
-The seven accepted Cycle 17 review contracts are closed without expanding the finite schema,
-prompt-return contract, or issue-owned surface.
+Status: both complete Cycle 18 exact-head reports block candidate
+`a0cd1057a0da642185f10b4ddfe72263602c7513`. Cycle 19 is planned against immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; no Cycle 18 local-completion claim remains current.
+Their overlap is exactly five contracts: finite Pi/direct normalization, captured reflection,
+terminal handoff array snapshots, independent category work accounting, and one incremental
+projection budget.
 
-Safe isolation passes 222/222, exactly the retained 215 plus seven Cycle 18 rows. Strict TypeScript
-5.9.3 passes all 12 Shepherd production files against explicit Pi 0.80.6 roots, and explicit Pi
-0.80.6 offline RPC registers `pm-shepherd`. The serialized broad suite executes 296 rows: 265 pass
-and only the unchanged 31 controller/state-store process-identity rows fail with managed-sandbox
-`spawn EPERM`; zero rows are skipped/cancelled/todo. It is environment-blocked, not green.
+The selected schema contract mirrors Pi 0.80.6's finite primitive conversions, canonicalizes all
+numeric signed zero to `+0`, emits safe-integer and 512-item array ceilings, and feeds one frozen
+normalized DTO to direct execution, callback, event, and lifecycle identity. Any primitive that
+cannot satisfy the real-Pi matrix must reject at registration. Projection shares one pre-descent
+budget for 4,096 nodes, keys, items, and container encounters, depth 64, exact encoded bytes, and
+immediate cycle/repeated-DAG denial.
 
-The `16n + 64` work bound charges the full actual ledger: main consume/boundary, each of five
-strong recognizers per examined UTF-16 source unit, key/lexical/frame/recovery/finalization
-transitions, every range operation and coalescence, replacement emission, and every original source
-unit actually rendered. A no-range identity return has no fictional render charge. Main visits
-remain at most one per completed non-empty source unit and zero for empty input; the coefficient is
-complete accounting, not relaxed linearity.
+The pre-execution baseline is focused 159/159 with zero skipped/cancelled/todo and focused strict
+TypeScript 5.9.3 passing against explicit Pi 0.80.6 roots. Cycle 19 requires one artifact-only PLAN
+checkpoint followed by exactly five top-level test-only RED rows. Expected RED is 164 executed,
+159 retained pass, exactly five named failures, zero skipped/cancelled/todo, strict TypeScript
+passing, and production frozen.
 
-Final blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
-`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, unchanged prompts
+Frozen blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, prompts
 `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
 `d918930205120d6a491a6288a95ee14550a0c567`, and policy test
-`39fb20e0dc4667b9743c5acc4f87223b01128788`. Exact ancestry, JSON, source/diff guards, the same
-20-path issue scope, and 13-path Cycle 18 delta pass. Two independent exact-head reviews and the
-process-capable broad replay remain pending and parent-owned, so `verificationPassed` remains false.
-No dependency, parent, #478, network, push, integration, live model/auth, credential, service,
-Go/connector, `make`, main, or external mutation occurred.
+`39fb20e0dc4667b9743c5acc4f87223b01128788`. The exact 20-path scope remains fixed and
+`verificationPassed` remains false. No dependency, prompt/lease/route change, parent, #478,
+network, push, integration, live model/auth, credential, service, Go/connector, `make`, main, or
+external mutation is authorized.
 
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full

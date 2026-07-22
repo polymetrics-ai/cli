@@ -175,3 +175,18 @@ registration. The serialized broad suite executes 296 rows, with 265 passing and
 31 controller/state-store `spawn EPERM` failures; it is environment-blocked, not green. The exact
 20-path issue scope and 13-path Cycle 18 delta pass. Two independent exact-head reviews and a
 process-capable broad replay remain parent-owned and pending, so `verificationPassed` remains false.
+
+## Cycle 19 Agent Delegation
+
+Both complete Cycle 18 reports were read before planning. Their overlap consolidates to five
+contracts: one finite Pi/direct normalization, captured reflection through every asynchronous
+boundary, exact terminal handoff arrays, an independently checkable category work trace, and one
+shared incremental projection budget. The four-agent runtime is saturated by the parent program,
+so the bounded read-only mapper cannot be spawned. Cycle 19 records
+`not_spawned_runtime_capability_missing`; the issue worker retains the only PLAN and five-row RED
+path, and production remains frozen through committed RED.
+
+The worker may change only the existing issue-owned runtime/policy source, tests, and nine phase
+artifacts. Prompt, lease, route, lifecycle, dependency, parent, #478, network, push, integration,
+live model/auth, credential, service, Go/connector, `make`, main, and external delivery contracts
+remain frozen or outside authority.

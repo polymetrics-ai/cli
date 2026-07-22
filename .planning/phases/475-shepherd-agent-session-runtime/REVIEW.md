@@ -317,3 +317,21 @@ green: it executes 296 rows, passes 265, and has the unchanged 31 controller/sta
 Cycle 18 paths. This is the implementing worker's disposition, not independent review of the final
 evidence head. Two fresh independent exact-head reviews and the process-capable broad replay remain
 pending and parent-owned; `verificationPassed` remains false.
+
+## Review Disposition — Issue #475 Cycle 19
+
+Frozen independently reviewed candidate: `a0cd1057a0da642185f10b4ddfe72263602c7513`.
+
+Both complete Cycle 18 reports were read and accepted. Review 1's four blockers map to schema
+normalization, captured reflection, terminal arrays, and independent work accounting. Review 2
+confirms those four and adds the shared projection-budget blocker. Their complete union is exactly
+C19-01 through C19-05; nothing is declined, deferred, or answered by widening a blacklist.
+
+Cycle 18's quote ownership, candidate reset, and multiword sensitive-scalar corrections remain
+closed for the reported cases. Prompt settlement/adoption, lease ownership, route/model authority,
+lifecycle cleanup, and role prompt bytes remain frozen because neither report found a new defect.
+
+No GREEN disposition is claimed. Acceptance requires the artifact PLAN followed by one test-only
+five-row RED executing 164 rows with all 159 retained passes and exactly five intended failures
+while all production blobs remain frozen. Independent review of a later implementation remains
+parent-owned; `verificationPassed` stays false.

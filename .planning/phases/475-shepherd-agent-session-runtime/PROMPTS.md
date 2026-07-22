@@ -1,5 +1,35 @@
 # Prompt Trace — Issue #475
 
+## Consolidated Exact-Head Correction Cycle 19 Snapshot
+
+- Exact frozen start: `a0cd1057a0da642185f10b4ddfe72263602c7513`; tree `d428be42e`; immutable
+  base `e659d6f1`; exact same 20 authorized paths.
+- Inputs read completely: `/tmp/475-REVIEW-CYCLE18-1.md` and
+  `/tmp/475-REVIEW-CYCLE18-2.md`, with SHA-256 values recorded in PLAN. Their overlap is exactly
+  five contracts; Cycle 18's local closure claim is superseded.
+- Schema decision: mirror Pi 0.80.6's finite primitive conversion, canonicalize numeric signed zero
+  to `+0`, emit safe-integer/string/array limits, reject canonical enum duplicates, and feed one
+  frozen normalized DTO to direct execution, callback, events, and lifecycle identity. Any
+  unprovable primitive is removed at registration.
+- Projection decision: one shared budget charges before descent/insertion—4,096 nodes, 4,096 keys,
+  4,096 items, depth 64, 4,096 container identities with repeated DAG aliases/cycles denied, and
+  exact incremental encoded bytes capped by the call/hard limit.
+- Work decision: expose recognizer, lexical, frame, recovery, range emission/examination/insertion/
+  coalescence, replacement, and rendered-source counters. A hard-coded test oracle and omission
+  checks—not production total writes—prove exact accounting.
+- Boundary decision: captured reflection only across schema/raw/event/result/reference/error paths,
+  and exact frozen dense copies for all three handoff vectors with no caller `.map`.
+- Method: manual-GSD artifact PLAN -> exactly five named test-only RED rows -> stop and report before
+  GREEN. Doctor passes 69 commands; the adapter rejects `programming-loop`.
+- Baseline: focused 159/159 and focused strict TypeScript 5.9.3 pass. Expected RED: 164 executed,
+  159 retained pass, exactly five failures, zero skipped/cancelled/todo, strict TypeScript pass.
+- Execution decision: `not_spawned_runtime_capability_missing`; all four runtime slots are occupied.
+  No agent output is claimed; the issue worker retains the only mutating path.
+- Frozen blobs through RED: runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f`, runtime test
+  `d9189302`, policy test `39fb20e0` before RED.
+- No dependency, prompt/lease/route change, parent, #478, network, push, integration, live
+  auth/model, credential, service, Go/connector, `make`, main, or out-of-scope mutation.
+
 ## Consolidated Exact-Head Correction Cycle 18 Snapshot
 
 - Exact frozen start: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`; immutable base:
