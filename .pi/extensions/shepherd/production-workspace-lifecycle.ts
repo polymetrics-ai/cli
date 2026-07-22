@@ -80,6 +80,8 @@ export interface ProductionWorkspaceClaim {
 	parentHead: string;
 	child: ProductionChildSpec;
 	mode: "start" | "resume";
+	/** Exact prior owner on resume; it must equal the stable plan/issue-derived owner. */
+	ownershipId?: string;
 }
 
 export interface ProductionImplementationRequest {
@@ -100,12 +102,14 @@ export interface ProductionWorkspaceSession {
 	join(): Promise<void>;
 }
 
-export function productionWorkspaceOwnershipId(runId: string, childId: string): string {
-	if (typeof runId !== "string" || !SAFE_IDENTIFIER.test(runId) || Buffer.byteLength(runId) > 256
+export function productionWorkspaceOwnershipId(parentIssue: number, childIssue: number, childId: string): string {
+	if (!Number.isSafeInteger(parentIssue) || parentIssue < 1 || !Number.isSafeInteger(childIssue) || childIssue < 1
 		|| typeof childId !== "string" || !/^[a-z0-9][a-z0-9_-]{0,63}$/.test(childId)) {
 		throw new Error("production workspace ownership inputs are invalid");
 	}
-	return `production:${createHash("sha256").update(`${runId}\0${childId}`).digest("hex")}`;
+	return `production:${createHash("sha256")
+		.update(`${parentIssue}\0${childIssue}\0${childId}`)
+		.digest("hex")}`;
 }
 
 export class ProductionWorkspaceLifecycle {
@@ -136,7 +140,10 @@ export class ProductionWorkspaceLifecycle {
 	async claim(request: ProductionWorkspaceClaim): Promise<ProductionWorkspaceSession> {
 		if (this.#closed) throw new Error("production workspace lifecycle is closed");
 		validateClaim(request);
-		const ownershipId = productionWorkspaceOwnershipId(request.runId, request.child.id);
+		const ownershipId = productionWorkspaceOwnershipId(request.parentIssue, request.child.issue, request.child.id);
+		if (request.ownershipId !== undefined && request.ownershipId !== ownershipId) {
+			throw new Error("persisted production workspace ownership changed across resume");
+		}
 		const workspace = await this.#workspaceAdapter.claim({
 			coordinator: request.coordinator,
 			trustedWorktreeRoot: request.trustedWorktreeRoot,
@@ -442,7 +449,9 @@ function validateClaim(request: ProductionWorkspaceClaim): void {
 		|| !Number.isSafeInteger(request.parentIssue) || request.parentIssue < 1
 		|| typeof request.parentSlug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(request.parentSlug)
 		|| !SHA_PATTERN.test(request.parentHead) || !isProductionChild(request.child)
-		|| (request.mode !== "start" && request.mode !== "resume")) {
+		|| (request.mode !== "start" && request.mode !== "resume")
+		|| (request.ownershipId !== undefined && (typeof request.ownershipId !== "string"
+			|| !SAFE_IDENTIFIER.test(request.ownershipId) || Buffer.byteLength(request.ownershipId) > 256))) {
 		throw new Error("production workspace claim is invalid");
 	}
 }

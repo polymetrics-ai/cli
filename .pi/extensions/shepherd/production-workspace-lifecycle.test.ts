@@ -187,8 +187,8 @@ async function fixture(t: test.TestContext) {
 	return {
 		root, workspaceAdapter, agentSession, lifecycle, verificationCalls,
 		setVerificationPassed(value: boolean) { verificationPassed = value; },
-		claim: (lane = child(), generation = 1, mode: "start" | "resume" = "start") => lifecycle.claim({
-			runId: "run-479", generation, coordinator, trustedWorktreeRoot: root,
+		claim: (lane = child(), generation = 1, mode: "start" | "resume" = "start", runId = "run-479") => lifecycle.claim({
+			runId, generation, coordinator, trustedWorktreeRoot: root,
 			parentIssue: 471, parentSlug: "pi-agent-session-shepherd", parentHead: SHA_A,
 			child: lane, mode,
 		}),
@@ -199,14 +199,13 @@ test("claims canonical per-child workspaces with generation-independent stable o
 	const f = await fixture(t);
 	const first = await f.claim(child("lane-b", 502), 1, "start");
 	const second = await f.claim(child("lane-c", 503), 2, "resume");
-	assert.equal(f.workspaceAdapter.claims[0].ownershipId, productionWorkspaceOwnershipId("run-479", "lane-b"));
-	assert.equal(productionWorkspaceOwnershipId("run-479", "lane-b"), productionWorkspaceOwnershipId("run-479", "lane-b"));
+	assert.equal(f.workspaceAdapter.claims[0].ownershipId, productionWorkspaceOwnershipId(471, 502, "lane-b"));
 	assert.equal(f.workspaceAdapter.claims[1].leaseMode, "resume");
 	assert.notEqual(first.binding.worktreeIdentity, second.binding.worktreeIdentity);
 	assert.deepEqual(first.binding.writeScopes, [".pi/extensions/shepherd/lane-b"]);
 	await Promise.all([first.join(), second.join()]);
 	assert.deepEqual(f.workspaceAdapter.released.sort(), [502, 503]);
-	const resumed = await f.claim(child("lane-b", 502), 9, "resume");
+	const resumed = await f.claim(child("lane-b", 502), 9, "resume", "rotated-resume-run");
 	assert.equal(f.workspaceAdapter.claims[2].ownershipId, f.workspaceAdapter.claims[0].ownershipId);
 	await resumed.join();
 });
