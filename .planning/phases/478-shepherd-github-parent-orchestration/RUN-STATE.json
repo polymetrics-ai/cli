@@ -1,0 +1,355 @@
+{
+  "schemaVersion": "2.1",
+  "phase": "478-shepherd-github-parent-orchestration",
+  "issue": 478,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "status": "in_progress",
+  "reason": "Cycle 13 local GREEN e0101044 follows PLAN 27e7b5d2 and RED a36188f4: focused 1061/1060/0/1, targeted 68/68 twice, strict owned/all-production TypeScript, pinned offline RPC, exact base/scope/integrity, and report replay pass. Broad is environmental 1281/1215/65/1 and no fresh exact-head review ran, so verification/review remain false.",
+  "details": {
+    "branch": "feat/478-shepherd-github-parent-orchestration",
+    "baseBranch": "feat/471-pi-agent-session-shepherd",
+    "exactBase": "3addb1f48be1afe8b1e2b59b54247679d7293805",
+    "candidateRef": "HEAD",
+    "priorCycleImplementationHead": "baef761544b8f0f58e2662058ae0c1715f345300",
+    "subPr": 487,
+    "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/487",
+    "adapter": "manual_gsd_fallback",
+    "adapterHealth": "doctor_passed_programming_loop_unavailable",
+    "modelPolicy": "openai-codex/gpt-5.6-sol:high",
+    "verificationPassed": false,
+    "reviewCoveragePassed": false,
+    "priorReviewState": {
+      "cycle": 12,
+      "priorReviewedCandidate": "baef761544b8f0f58e2662058ae0c1715f345300",
+      "review1": "blocked",
+      "review2": "blocked",
+      "findingsConsolidatedIntoCycle": 13
+    },
+    "reviewHistory": [
+      {
+        "cycle": 11,
+        "priorReviewedCandidate": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 12
+      },
+      {
+        "cycle": 10,
+        "priorReviewedCandidate": "3b39cfce9b4a99940b0451302df6bf5c17b49c02",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 11
+      },
+      {
+        "cycle": 9,
+        "priorReviewedCandidate": "a49e4df2798281d1e64c722ccbcab5f4a678c3e1",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 10
+      },
+      {
+        "cycle": 8,
+        "priorReviewedCandidate": "f97a698df90010ae072554e04563a8134a8e5f6e",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 9
+      },
+      {
+        "cycle": 7,
+        "priorReviewedCandidate": "b90037df1fff38c755ebc8025579120d17031330",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 8
+      },
+      {
+        "cycle": 6,
+        "priorReviewedCandidate": "dbce5b7d0c698bc802594211072fed77eff23c1c",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 7
+      },
+      {
+        "cycle": 5,
+        "priorReviewedCandidate": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
+        "review1": "blocked",
+        "review2": "blocked",
+        "findingsConsolidatedIntoCycle": 6
+      }
+    ],
+    "checkpoints": {
+      "cycle4Plan": "607e203ef1f76ff112c130ccff5d155973d984f6",
+      "cycle4Red": "abbf388b8a852836e0dd10a55b9f17720b9fde22",
+      "cycle4Green": "b92b5ff7dd3738dc3b3350ebb4d2f2b42074f954",
+      "cycle4Evidence": "ca6f6873d168db707bbe58291b5ee1b582e9404f",
+      "cycle5Plan": "7cf9c88ddadee395020444c19ee9f001b0807a53",
+      "cycle5Red": "6cb21902244e4bccf390c4e7556eb615e5e1697f",
+      "cycle5Green": "3ae10dc2303409230153e32e6b6231b27b18cdcf",
+      "cycle5Evidence": "63ac436fdac5fc46be7004f8109c4f068aa5749c",
+      "cycle6Plan": "2832993b93d07ea20197bad52ec23700fe21fc1e",
+      "cycle6Red": "ca4d97d1100b1b44176da9d7dfd6ee6f56f4e1e6",
+      "cycle6Green": "2c6371e725d58b2dc05902d68f9e6812904664d6",
+      "cycle6Evidence": "dbce5b7d0c698bc802594211072fed77eff23c1c",
+      "cycle7Plan": "2c64979829048d3de0d1ff1575c2a4f43cb699ba",
+      "cycle7Red": "10033bc532d06967ce960e408c2bc9725020478a",
+      "cycle7Green": "5bab0bc7e56292171eb28618cc2f37488ed1b7a4",
+      "cycle7Refactor": "87e704010f3e2226d8393d12e1a1bdf72df212a0",
+      "cycle7AuditRed": "b1560e76a3abbac5efcd33b2740b7275b6acc137",
+      "cycle7AuditGreen": "915882c219f52da2c1edebce84d2bf90c61a4592",
+      "cycle7Evidence": "b90037df1fff38c755ebc8025579120d17031330",
+      "cycle8Plan": "bccee8e6cdbcb6e38419114f264222b1f5616f66",
+      "cycle8Red": "851bb3bfa3e23042211a8b37f3a97253cc6fedf5",
+      "cycle8Green": "013bdc8b264e1ce8808d4af2558e2ec40b85ee49",
+      "cycle8Refactor": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
+      "cycle8Evidence": "f97a698df90010ae072554e04563a8134a8e5f6e",
+      "cycle9Plan": "7ad23ed476c0ae60eaa783a9dae29dabb4ea8844",
+      "cycle9Red": "9278e97e0ef1b318bfd794dc0e52e4f31f58c542",
+      "cycle9Green": "593ba1cf977bdfd9f193b3d7883882b96f99a189",
+      "cycle9Evidence": "a49e4df2798281d1e64c722ccbcab5f4a678c3e1",
+      "cycle10Plan": "470a8a85cf1ca747ac092e16c9cf2fbac4eac3a9",
+      "cycle10Red": "2256971a8612cfaba407834a6831d2ec5abfba07",
+      "cycle10Green": "5f46206ea4ecc0e12e5804c4e14baf4e49fa6e53",
+      "cycle10Refactor": "8946b67be2e42659baf267f2adbaec31d88c856c",
+      "cycle10Evidence": "3b39cfce9b4a99940b0451302df6bf5c17b49c02",
+      "cycle11Plan": "863bf94ac6115fd0342db064555bd95f239f8854",
+      "cycle11Red": "1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21",
+      "cycle11Green": "e765e0d31c426ecf201162509519fa03d460d871",
+      "cycle11Evidence": "4f0e17df4a241f120e5991d8a7d501d1e8fbfebb",
+      "cycle12Plan": "7f96718c4d8c692cd618ff220ab0d53d2e6546a2",
+      "cycle12Red": "2649cf6dcad1fcc943261c0838bbca8e56c5c595",
+      "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3",
+      "cycle13Plan": "27e7b5d2736c62b80618de020e743df49abf76b6",
+      "cycle13Red": "a36188f4e3f2ee532f10bd38fbcaa1d7ce43e6ae",
+      "cycle13Green": "e0101044bb68f8a6b4cf45960029aac8d8b1ff78"
+    },
+    "verification": {
+      "cycle4Focused": "68/68 pass",
+      "cycle4StrictOwnedTypeScript": "pass",
+      "cycle4StrictProductionTypeScript": "pass",
+      "cycle4OfflineRpc": "pass",
+      "cycle4Serialized": "332 total; 266 pass; 65 unrelated managed-sandbox spawn EPERM failures; 1 intentional skip",
+      "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass",
+      "cycle6": "focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip; retained Cycle 5 109/109; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized 427 total, 361 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base, ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass",
+      "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
+      "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass",
+      "cycle9": "PLAN 7ad23ed4; RED 442 total, 398 pass, 43 intended fail, 1 skip with all 5 production blobs frozen; GREEN 593ba1cf; focused five-file 450 total, 449 pass, 0 fail, 1 intentional live-sandbox skip; serialized 670 total, 604 pass, 65 unchanged managed-sandbox process-identity spawn EPERM failures, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; immutable base and exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, Cycle 9 marker confinement, and both Cycle 8 report replays pass",
+      "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip at local evidence head, but independent review later reproduced C10-CONFIRM flakiness; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false",
+      "cycle11": "PLAN 863bf94a; RED 1b4aa6f1 with 791 total, 743 pass, 47 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN e765e0d3; focused 791 total, 790 pass, 0 fail, 1 intentional skip; strict and bounded gates pass, but both independent Cycle 11 reviews block exact evidence 4f0e17df on adjacent dual-owner, total-graph, and redaction gaps; broad remains non-zero and both machine gates false",
+      "cycle12": "PLAN 7f96718c; executable RED 2649cf6d at 942/885/56/1 with 51 leaves plus 5 parents and all production frozen; reviewer-gap RED 978/963/14/1 with 12 leaves plus 2 parents; coherent GREEN 723fdc12; focused 978/977/0/1; BEGIN 6/6, graph orphan 7/7, sequence 5/5, claim 15/15, assignment 144/144; strict five-pair and all-20-production TypeScript pass with TypeScript 5.9.3 and cached Pi 0.80.6; pinned offline RPC pass; broad environmental 1198/1132/65/1; immutable base/reviewed-candidate ancestry, exact merge base, full diff, exact 21 paths, JSON3, marker confinement, and report identity pass; both independent Cycle 12 reviews block exact evidence baef7615",
+      "cycle13": "PLAN 27e7b5d2; executable RED a36188f4 at 1061 total, 1015 pass, 45 intended fail, 1 skip; GREEN e0101044; focused 1061 total, 1060 pass, 0 fail, 1 skip; targeted 68/68 twice; 60,000-opener scan approximately 14-24 ms; strict owned and all-20-production TypeScript pass; pinned offline RPC pass; broad environmental 1281/1215/65/1; exact base/reviewed-candidate ancestry, merge base, 62 commits, full diff, 21 paths, JSON3, marker confinement, and 487-line report replay pass; verification/review false"
+    },
+    "orchestrationDecisions": [
+      {
+        "cycle": "cycle-5-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One explorer maps coupled orchestrator symbols read-only; this isolated worker owns the ordered plan, RED, GREEN, and evidence path."
+      },
+      {
+        "cycle": "cycle-5-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 5 explicitly excludes push, network, and GitHub mutation; parent owns publication and exact-head review."
+      },
+      {
+        "cycle": "cycle-5-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All #478-focused, strict TypeScript, offline extension, base, scope, data, and integrity gates pass; the broad serialized suite is classified as environmentally failing only in 65 unrelated process-identity spawn EPERM tests."
+      },
+      {
+        "cycle": "cycle-6-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One read-only explorer maps real broker and shared-boundary symbols; this isolated worker owns the ordered PLAN, RED, GREEN, and evidence path."
+      },
+      {
+        "cycle": "cycle-6-scope-amendment",
+        "decision": "broker_owned_reread_requires_21_paths",
+        "reason": "The completed contract map proves an honest adapter requires GitHubDecisionBroker.readRecord over its own repository plus native broker and human-decision tests; the exact allowlist is amended before RED from 18 to 21 paths."
+      },
+      {
+        "cycle": "cycle-6-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All Cycle 6 focused, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, and synthetic-data gates pass; broad unrelated process-identity tests remain classified separately under the managed sandbox."
+      },
+      {
+        "cycle": "cycle-6-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 6 excludes push, network, live GitHub mutation, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
+        "cycle": "cycle-7-plan",
+        "decision": "local_critical_path_with_public_prepare_commit_seam",
+        "reason": "All agent slots were occupied; the #479 preflight risk is incorporated through a production-typed prepare/journal/commit boundary plus one durable atomic authority/quarantine port."
+      },
+      {
+        "cycle": "cycle-7-authority-audit",
+        "decision": "bounded_additional_red_green_before_evidence_freeze",
+        "reason": "Independent mapping found an optional legacy ready-mutation route and fake-shaped role projection; audit RED/GREEN made authority mandatory, removed ready mutation from public transport, typed atomic conflicts, and separated production transport, authority, and journal roles."
+      },
+      {
+        "cycle": "cycle-9-plan",
+        "decision": "local_critical_path_authority_owned_recovery",
+        "reason": "All four agent slots are occupied. This isolated worker owns one 69-row PLAN, RED, GREEN/refactor, and evidence path with a five-state durable authority record and monotonic fence; exact scope remains 21 paths."
+      },
+      {
+        "cycle": "cycle-9-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All 69 Cycle 9 rows, retained focused tests, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, marker, report-replay, and integrity gates pass; no standalone production refactor was required."
+      },
+      {
+        "cycle": "cycle-9-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 9 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
+        "cycle": "cycle-10-plan",
+        "decision": "local_critical_path",
+        "reason": "The read-only sidecar spawn was rejected at the agent limit. This isolated worker owns the artifact PLAN, one executable RED matrix, coherent GREEN/refactor, and evidence for the complete Cycle 9 review union inside the unchanged 21-path boundary."
+      },
+      {
+        "cycle": "cycle-10-verification-reset",
+        "decision": "verification_false_pending_complete_route",
+        "reason": "Cycle 10 is unimplemented and the declared broad serialized route exited non-zero; focused or strict subset passes cannot set machine verification true."
+      },
+      {
+        "cycle": "cycle-10-verification",
+        "decision": "locally_green_broad_route_nonzero_awaiting_parent_reviews",
+        "reason": "Focused, authority-target, strict TypeScript, base, scope, diff, and JSON gates pass; 65 unchanged managed-sandbox failures keep verification false and fresh exact-head review remains parent-owned."
+      },
+      {
+        "cycle": "cycle-10-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 10 excludes push, network, GitHub mutation, reviewer dispatch, integration, merge, and human gates; the parent owns every external action."
+      },
+      {
+        "cycle": "cycle-11-plan",
+        "decision": "local_critical_path_with_read_only_restart_sidecar",
+        "reason": "A new spawn hit the agent limit, so a completed read-only sidecar was reused only to map restart invariants; this worker owns the artifact PLAN, executable RED, GREEN/refactor, and local evidence inside the unchanged 21-path boundary."
+      },
+      {
+        "cycle": "cycle-11-verification-reset",
+        "decision": "verification_and_review_false",
+        "reason": "Both Cycle 10 reviews are blocked, the focused confirmation family was independently observed flaky, the broad route remains non-zero, and Cycle 11 behavior is not implemented at the PLAN checkpoint."
+      },
+      {
+        "cycle": "cycle-11-red",
+        "decision": "complete_executable_red_production_frozen",
+        "reason": "Focused RED executes 791 tests with 42 intended failing leaves plus five parent containers and one skip; causal confirmation repeats 5/5 across five runs; all five production blobs remain exact."
+      },
+      {
+        "cycle": "cycle-11-green",
+        "decision": "coherent_green_no_separate_refactor_required",
+        "reason": "GREEN e765e0d3 closes durable begin settlement ownership, exact atomic conflict tombstones, unified restart-history validation, causal confirmation, and complete assignment-tail redaction; focused and strict gates pass without weakened assertions or timing relaxation."
+      },
+      {
+        "cycle": "cycle-11-verification",
+        "decision": "focused_green_broad_environmental_nonzero",
+        "reason": "Focused 790/790 non-skipped tests, strict TypeScript, offline RPC, base/scope/data/marker/report gates pass; the declared serialized route has 65 unchanged managed-sandbox spawn EPERM failures, so verificationPassed remains false and fresh exact-head review is parent-owned."
+      },
+      {
+        "cycle": "cycle-11-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 11 excludes network, GitHub mutation, push, reviewer dispatch, ready, integration, merge, and all human gates; the parent owns every external action."
+      },
+      {
+        "cycle": "cycle-12-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One read-only explorer maps test/helper reuse; this worker owns the ordered artifact PLAN, initial executable RED, any review-triggered gap RED, coherent GREEN/refactor, and evidence within the unchanged 21-path boundary."
+      },
+      {
+        "cycle": "cycle-12-verification-reset",
+        "decision": "verification_and_review_false",
+        "reason": "Both Cycle 11 reviews are blocked, Cycle 12 behavior is unimplemented at PLAN, and the declared broad route remains non-zero."
+      },
+      {
+        "cycle": "cycle-12-red",
+        "decision": "initial_executable_red_production_frozen",
+        "reason": "Initial focused RED executes 942 tests with 51 intended failing leaves plus five parent containers and one skip; all 90 new consumers pass generically, strict TypeScript passes, and all five production blobs remain exact."
+      },
+      {
+        "cycle": "cycle-12-reviewer-gap-red",
+        "decision": "bounded_additional_red_before_final_green",
+        "reason": "Independent review strengthens exact foreign begin coordinates and adds ANSI-C, case-pattern, and heredoc assignment forms; the expanded route is 978/963/14/1 with twelve intended leaves plus two parents and all thirty added consumers already generic."
+      },
+      {
+        "cycle": "cycle-12-green",
+        "decision": "coherent_green_no_optional_refactor",
+        "reason": "GREEN 723fdc12 closes exact-coordinate dual ownership, total causal restart-role validation, and all twelve assignment forms; focused is 978/977/0/1 and strict owned/all-production TypeScript passes."
+      },
+      {
+        "cycle": "cycle-12-verification",
+        "decision": "focused_green_broad_environmental_nonzero_awaiting_parent_review",
+        "reason": "Pinned offline RPC and exact base/scope/data/marker/report gates pass; broad is 1198/1132/65/1 in the managed-sandbox process-spawn/lease family, so verificationPassed remains false and fresh exact-head review is parent-owned."
+      },
+      {
+        "cycle": "cycle-12-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 12 excludes network, GitHub mutation, push, reviewer dispatch, ready, integration, merge, and every human gate; the parent owns all external actions."
+      },
+      {
+        "cycle": "cycle-13-plan",
+        "decision": "local_critical_path",
+        "reason": "The read-only sidecar attempt hit the agent-thread limit. This worker owns the artifact PLAN, one complete executable RED, coherent GREEN/refactor, and local evidence for the full Cycle 12 review union inside the unchanged exact 21-path boundary; the missing adapter command records manual_gsd_fallback."
+      },
+      {
+        "cycle": "cycle-13-verification-reset",
+        "decision": "verification_and_review_false",
+        "reason": "Both Cycle 12 reviews are blocked, Cycle 13 behavior is unimplemented at artifact PLAN, the declared broad route remains non-zero, and no fresh exact-head review ran."
+      },
+      {
+        "cycle": "cycle-13-red",
+        "decision": "complete_executable_red_production_frozen",
+        "reason": "Focused RED executes 1061 tests with 40 intended failing leaves plus five parent containers and one skip; all 33 controls and retained Cycle 12 cases pass, strict owned TypeScript passes, and all five production blobs remain exact."
+      },
+      {
+        "cycle": "cycle-13-green",
+        "decision": "coherent_green_after_complete_red",
+        "reason": "GREEN e0101044 closes all intended RED leaves with focused 1061/1060/0/1, targeted Cycle 13 68/68 twice, O(1) scanner metadata, and no post-GREEN production edit."
+      },
+      {
+        "cycle": "cycle-13-verification",
+        "decision": "focused_green_broad_environmental_nonzero_awaiting_parent_review",
+        "reason": "Strict owned/all-production TypeScript, pinned offline RPC, exact base/scope/data/marker/report gates pass; broad is 1281/1215/65/1 in unchanged managed-sandbox process/lease tests, so verificationPassed remains false and fresh exact-head review remains parent-owned."
+      },
+      {
+        "cycle": "cycle-13-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 13 excludes network, GitHub mutation, push, reviewer dispatch, integration, ready, merge, and every human gate; none ran."
+      },
+      {
+        "cycle": "cycle-8-plan",
+        "decision": "read_only_spawned_and_local_critical_path",
+        "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
+      },
+      {
+        "cycle": "cycle-8-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All Cycle 8 focused, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, marker, report-replay, and integrity gates pass; the serialized suite is honestly classified as environmentally failing only in 65 unchanged unrelated process-identity spawn EPERM tests."
+      },
+      {
+        "cycle": "cycle-8-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 8 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
+        "cycle": "cycle-7-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 7 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns all external and review actions."
+      },
+      {
+        "cycle": "cycle-7-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All focused, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, and explicit synthetic-marker gates pass; the serialized suite is honestly classified as environmentally failing only in 65 unrelated process-identity spawn EPERM tests."
+      }
+    ],
+    "humanGates": [
+      "new_dependency",
+      "auth_scope_or_secret_access",
+      "live_github_mutation",
+      "policy_exception",
+      "quality_gate_reduction",
+      "parent_ready",
+      "exact_head_parent_merge",
+      "main_branch_merge"
+    ]
+  },
+  "updatedAt": "2026-07-22T08:23:38.000Z"
+}

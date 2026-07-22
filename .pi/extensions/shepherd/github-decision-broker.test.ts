@@ -35,6 +35,8 @@ const prBinding: HumanDecisionBinding = {
 	headSha: head,
 };
 
+type Cycle6ReadRecord = GitHubDecisionBroker["readRecord"];
+
 class MemoryRepository implements HumanDecisionRepository {
 	readonly states = new Map<string, HumanDecisionRecord>();
 	private queue = Promise.resolve();
@@ -139,6 +141,50 @@ function classifiedTransportFailure(retryable: boolean, marker: string): Error &
 	return Object.assign(new Error(`raw transport failure ${marker}`), { retryable });
 }
 
+function consumedRecordAt(
+	request: ReturnType<typeof brokerHarness>["request"],
+	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
+): HumanDecisionRecord {
+	const record = createHumanDecisionRecord({
+		requestId: request.requestId,
+		gate: request.gate,
+		binding: issueBinding,
+		allowedOptions: request.allowedOptions,
+		actorAllowlist: request.actorAllowlist,
+		expiresAt: request.expiresAt,
+		question: request.question,
+	}, new Date("2026-07-21T10:00:00.000Z"));
+	const future = "2026-07-21T10:05:02.000Z";
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: mode === "creation" || mode === "request_comment" || mode === "all"
+			? future
+			: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: ["creation", "request_comment", "decision", "all"].includes(mode)
+			? "2026-07-21T10:05:03.000Z"
+			: "2026-07-21T10:01:00.000Z",
+	};
+	const consumedAt = ["creation", "request_comment", "decision", "consumption", "all"].includes(mode)
+		? "2026-07-21T10:05:04.000Z"
+		: "2026-07-21T10:02:00.000Z";
+	return {
+		...record,
+		createdAt: mode === "creation" || mode === "all" ? future : record.createdAt,
+		requestComment,
+		status: "consumed",
+		decision,
+		consumedAt,
+		updatedAt: mode === "update" ? future : consumedAt,
+	};
+}
+
 test("creates exactly one marker-owned request across retry and broker restart", async () => {
 	const harness = brokerHarness();
 	const first = await harness.broker.request(harness.request);
@@ -150,6 +196,77 @@ test("creates exactly one marker-owned request across retry and broker restart",
 	assert.equal(second.requestComment?.id, third.requestComment?.id);
 	assert.match(harness.transport.created[0].body, /<!-- shepherd-decision:v1:req-477:/);
 	assert.equal(harness.transport.created[0].body, renderDecisionRequestComment(first));
+});
+
+test("cycle 8 real broker resumes an exact consumed request after expiry without reviving new decisions", async (t) => {
+	const harness = brokerHarness();
+	await harness.broker.request(harness.request);
+	harness.setNow("2026-07-21T10:02:00.000Z");
+	harness.transport.comments.push(fixture.allowlistedHuman);
+	const polled = await harness.broker.poll(harness.request.requestId, issueBinding);
+	assert.equal(polled.status, "decided");
+	const consumedEvidence = await harness.broker.consume(harness.request.requestId, issueBinding);
+	const consumedRecord = await harness.broker.readRecord(harness.request.requestId, issueBinding);
+	assert.equal(consumedRecord.status, "consumed");
+	harness.setNow("2026-07-22T10:00:01.000Z");
+	const restarted = new GitHubDecisionBroker(harness.repository, harness.transport, {
+		now: () => new Date("2026-07-22T10:00:01.000Z"),
+	});
+
+	await t.test("an exact durable replay returns the already prepared consumed state", async () => {
+		const replayed = await restarted.request(harness.request);
+		assert.deepEqual(replayed, consumedRecord);
+		assert.deepEqual(replayed.decision, consumedEvidence);
+		assert.equal(replayed.requestComment?.id, harness.transport.requestCommentId);
+		assert.equal(harness.transport.created.length, 1, "restart must not publish a second marker");
+	});
+
+	await t.test("the consumed decision remains one-shot after replay", async () => {
+		await assert.rejects(
+			restarted.consume(harness.request.requestId, issueBinding),
+			/consum/i,
+		);
+		assert.deepEqual(await restarted.readRecord(harness.request.requestId, issueBinding), consumedRecord);
+	});
+
+	await t.test("a changed retry cannot hide behind the expired lifetime", async () => {
+		await assert.rejects(
+			restarted.request({
+				...harness.request,
+				question: "Approve a different exact gate after expiry?",
+			}),
+			/conflict|differs/i,
+		);
+		assert.equal(harness.transport.created.length, 1);
+		assert.deepEqual(await restarted.readRecord(harness.request.requestId, issueBinding), consumedRecord);
+	});
+
+	await t.test("a genuinely new expired request is rejected before persistence or publication", async () => {
+		const fresh = brokerHarness();
+		fresh.setNow("2026-07-22T10:00:01.000Z");
+		const requestId = "req-477-cycle8-new-expired";
+		await assert.rejects(
+			fresh.broker.request({ ...fresh.request, requestId }),
+			/expired/i,
+		);
+		assert.equal(await fresh.repository.load(requestId), null);
+		assert.equal(fresh.transport.created.length, 0);
+	});
+
+	await t.test("a response first observed at expiry cannot create a new decision", async () => {
+		const fresh = brokerHarness();
+		await fresh.broker.request(fresh.request);
+		fresh.setNow("2026-07-22T10:00:00.000Z");
+		fresh.transport.comments.push({
+			...fixture.allowlistedHuman,
+			createdAt: "2026-07-22T10:00:00.000Z",
+			updatedAt: "2026-07-22T10:00:00.000Z",
+		});
+		const result = await fresh.broker.poll(fresh.request.requestId, issueBinding);
+		assert.equal(result.status, "expired");
+		assert.equal((await fresh.broker.readRecord(fresh.request.requestId, issueBinding)).status, "expired");
+		await assert.rejects(fresh.broker.consume(fresh.request.requestId, issueBinding), /expired|decid|ready/i);
+	});
 });
 
 test("accepts a real safe-integer comment ID and second-resolution GitHub timestamp", async () => {
@@ -493,4 +610,359 @@ test("live GitHub comment test is skipped without an explicitly designated sandb
 
 test("file repository type remains usable by the broker without a live transport", () => {
 	assert.equal(typeof FileHumanDecisionRepository, "function");
+});
+
+test("cycle 6 rereads the broker-owned canonical record across compact poll and evidence consume", async () => {
+	const harness = brokerHarness();
+	const readRecord: Cycle6ReadRecord = harness.broker.readRecord.bind(harness.broker);
+	const requested = await harness.broker.request(harness.request);
+	assert.ok(requested.requestComment);
+
+	const pending = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(pending.status, "pending");
+	pending.question = "mutated caller copy";
+	assert.equal((await readRecord(harness.request.requestId, issueBinding)).question, harness.request.question);
+
+	harness.setNow("2026-07-21T10:02:00.000Z");
+	harness.transport.comments.push(fixture.allowlistedHuman);
+	const polled = await harness.broker.poll(harness.request.requestId, issueBinding);
+	assert.equal(polled.status, "decided");
+	const decided = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(decided.status, "decided");
+	if (polled.status === "decided") assert.deepEqual(decided.decision, polled.decision);
+
+	const evidence = await harness.broker.consume(harness.request.requestId, issueBinding);
+	const consumed = await readRecord(harness.request.requestId, issueBinding);
+	assert.equal(consumed.status, "consumed");
+	assert.deepEqual(consumed.decision, evidence);
+	assert.ok(consumed.requestComment);
+	assert.ok(consumed.consumedAt);
+	await assert.rejects(
+		readRecord(harness.request.requestId, { ...issueBinding, generation: issueBinding.generation + 1 }),
+		/binding|stale|generation/i,
+	);
+});
+
+test("cycle 7 real broker rejects every future durable chronology coordinate on owned reread", async (t) => {
+	for (const mode of ["creation", "request_comment", "decision", "consumption", "update", "all"] as const) {
+		await t.test(mode, async () => {
+			const harness = brokerHarness();
+			harness.setNow("2026-07-21T10:05:00.000Z");
+			harness.repository.states.set(harness.request.requestId, consumedRecordAt(harness.request, mode));
+			await assert.rejects(
+				harness.broker.readRecord(harness.request.requestId, issueBinding),
+				/future|observation|clock|chronology|timestamp/i,
+			);
+		});
+	}
+});
+
+test("cycle 7 broker rejects finite schema credentials before persistence or comment publication", async (t) => {
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const [index, question] of samples.entries()) {
+		await t.test(`schema form ${index + 1}`, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try { await harness.broker.request({ ...harness.request, question }); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive/i);
+			assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});
+
+test("cycle 8 provider-neutral credential suffixes close the real broker request boundary", async (t) => {
+	const suffixAssignments = [
+		"UNLISTED_ALPHA_AUTHORIZATION=SYNTHETIC_CYCLE8_AUTHORIZATION_MARKER",
+		"UNLISTED_BRAVO_TOKEN=SYNTHETIC_CYCLE8_TOKEN_MARKER",
+		"UNLISTED_CHARLIE_ACCESS_TOKEN=SYNTHETIC_CYCLE8_ACCESS_TOKEN_MARKER",
+		"UNLISTED_DELTA_REFRESH_TOKEN=SYNTHETIC_CYCLE8_REFRESH_TOKEN_MARKER",
+		"UNLISTED_ECHO_API_KEY=SYNTHETIC_CYCLE8_API_KEY_MARKER",
+		"UNLISTED_FOXTROT_PASSWORD=SYNTHETIC_CYCLE8_PASSWORD_MARKER",
+		"UNLISTED_GOLF_SECRET=SYNTHETIC_CYCLE8_SECRET_MARKER",
+		"UNLISTED_HOTEL_CLIENT_SECRET=SYNTHETIC_CYCLE8_CLIENT_SECRET_MARKER",
+		"UNLISTED_INDIA_PRIVATE_KEY=SYNTHETIC_CYCLE8_PRIVATE_KEY_MARKER",
+		"UNLISTED_JULIET_DATABASE_URL=SYNTHETIC_CYCLE8_DATABASE_URL_MARKER",
+		"UNLISTED_KILO_CREDENTIAL=SYNTHETIC_CYCLE8_CREDENTIAL_MARKER",
+		"UNLISTED_LIMA_CREDENTIALS=SYNTHETIC_CYCLE8_CREDENTIALS_MARKER",
+		"UNLISTED_MIKE_COOKIE=SYNTHETIC_CYCLE8_COOKIE_MARKER",
+		"UNLISTED_NOVEMBER_COOKIES=SYNTHETIC_CYCLE8_COOKIES_MARKER",
+		"UNLISTED_OSCAR_SET_COOKIE=SYNTHETIC_CYCLE8_SET_COOKIE_MARKER",
+		"UNLISTED_PAPA_SESSION=SYNTHETIC_CYCLE8_SESSION_MARKER",
+		"UNLISTED_QUEBEC_SESSION_ID=SYNTHETIC_CYCLE8_SESSION_ID_MARKER",
+		"UNLISTED_ROMEO_SESSION_TOKEN=SYNTHETIC_CYCLE8_SESSION_TOKEN_MARKER",
+		"UNLISTED_SIERRA_SESSION_COOKIE=SYNTHETIC_CYCLE8_SESSION_COOKIE_MARKER",
+		"UNLISTED_TANGO_CSRF_TOKEN=SYNTHETIC_CYCLE8_CSRF_TOKEN_MARKER",
+	];
+	const finiteSchemaAssignments = [
+		"client-key-data: SYNTHETIC_CYCLE8_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_CYCLE8_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_CYCLE8_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_CYCLE8_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_CYCLE8_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_CYCLE8_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_CYCLE8_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+
+	await t.test("classifies every recognized suffix with an unknown provider prefix", async () => {
+		for (const question of suffixAssignments) {
+			const harness = brokerHarness();
+			await assert.rejects(
+				harness.broker.request({ ...harness.request, question }),
+				/credential|secret|sensitive/i,
+				question,
+			);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
+
+	await t.test("rejects without reflecting the classified synthetic value", async () => {
+		for (const question of suffixAssignments) {
+			const harness = brokerHarness();
+			const marker = question.slice(question.indexOf("=") + 1);
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, question);
+			assert.match(rejection.message, /credential|secret|sensitive/i, question);
+			assert.doesNotMatch(rejection.message, new RegExp(marker), question);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
+
+	await t.test("allows only the exact documented public FEATURE_TOKEN field", async () => {
+		const publicHarness = brokerHarness();
+		const publicQuestion = "FEATURE_TOKEN=non-sensitive-build-label";
+		const created = await publicHarness.broker.request({ ...publicHarness.request, question: publicQuestion });
+		assert.equal(created.question, publicQuestion);
+		assert.equal(publicHarness.repository.states.size, 1);
+		assert.equal(publicHarness.transport.created.length, 1);
+
+		const nearbyHarness = brokerHarness();
+		await assert.rejects(
+			nearbyHarness.broker.request({
+				...nearbyHarness.request,
+				question: "UNLISTED_FEATURE_TOKEN=SYNTHETIC_CYCLE8_NEARBY_MARKER",
+			}),
+			/credential|secret|sensitive/i,
+		);
+		assert.equal(nearbyHarness.repository.states.size, 0);
+		assert.equal(nearbyHarness.transport.created.length, 0);
+	});
+
+	await t.test("retains the finite Kubernetes Docker and AWS forms", async () => {
+		for (const question of finiteSchemaAssignments) {
+			const harness = brokerHarness();
+			await assert.rejects(
+				harness.broker.request({ ...harness.request, question }),
+				/credential|secret|sensitive/i,
+				question,
+			);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
+});
+
+function cycle9BrokerAssignment(nameLength: number, marker = "CYCLE9_DECISION_BROKER_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before broker persistence or publication", async (t) => {
+	const marker = "CYCLE9_DECISION_BROKER_MARKER";
+	const largestName = 4_096 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9BrokerAssignment(127, marker), true],
+		["128 characters", cycle9BrokerAssignment(128, marker), true],
+		["129 characters", cycle9BrokerAssignment(129, marker), true],
+		["256 characters", cycle9BrokerAssignment(256, marker), true],
+		["largest in-field name", cycle9BrokerAssignment(largestName, marker), true],
+		["over-field name", cycle9BrokerAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			if (!rejects) {
+				const record = await harness.broker.request({ ...harness.request, question });
+				assert.equal(record.question, question);
+				assert.equal(harness.repository.states.size, 1);
+				assert.equal(harness.transport.created.length, 1);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});
+
+const cycle10AssignmentSuffixes = [
+	"AUTHORIZATION", "TOKEN", "ACCESS_TOKEN", "REFRESH_TOKEN", "API_KEY", "PASSWORD", "SECRET",
+	"CLIENT_SECRET", "PRIVATE_KEY", "DATABASE_URL", "CREDENTIAL", "CREDENTIALS", "COOKIE", "COOKIES",
+	"SET_COOKIE", "SESSION", "SESSION_ID", "SESSION_TOKEN", "SESSION_COOKIE", "CSRF_TOKEN",
+] as const;
+
+test("cycle 10 closes assignment operator case and index policy before broker effects", async (t) => {
+	const marker = "CYCLE10_DECISION_BROKER_MARKER";
+	const rows: Array<[string, string, boolean]> = [
+		...cycle10AssignmentSuffixes.map((suffix): [string, string, boolean] =>
+			[`append ${suffix}`, `ACME_${suffix}+=${marker}`, true]),
+		["lowercase base", `acme_api_key=${marker}`, true],
+		["mixed-case base append", `AcMe_ApI_KeY+=${marker}`, true],
+		["numeric index", `ACME_API_KEY[0]=${marker}`, true],
+		["associative index append", `ACME_API_KEY[slot]+=${marker}`, true],
+		["exact public ordinary control", "FEATURE_TOKEN=enabled", false],
+		["exact public append control", "FEATURE_TOKEN+=enabled", false],
+		["indexed public-lookalike", `FEATURE_TOKEN[0]=${marker}`, true],
+	];
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			if (!rejects) {
+				assert.equal((await harness.broker.request({ ...harness.request, question })).question, question);
+				assert.equal(harness.repository.states.size, 1);
+				assert.equal(harness.transport.created.length, 1);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});
+
+function cycle11SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["escaped double quote", `"alpha\\"${marker}"`],
+		["escaped whitespace", `alpha\\ ${marker}`],
+		["line continuation", `alpha\\\n${marker}`],
+		["command substitution", `$(printf ${marker})`],
+		["parameter expansion", `\${UNSAFE:-${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 11 keeps assignment-tail rejection generic before broker effects", async (t) => {
+	const marker = "CYCLE11_DECISION_BROKER_MARKER";
+	for (const [name, question] of cycle11SensitiveAssignmentTails(marker)) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});
+
+function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["multiline double quote", `"prefix\n${marker}"`],
+		["multiline single quote", `'prefix\n${marker}'`],
+		["multiline backtick", `\`prefix\n${marker}\``],
+		["multiline command substitution", `$(printf prefix\n${marker})`],
+		["multiline parameter expansion", `\${UNSAFE:-prefix\n${marker}}`],
+		["array composite", `(prefix ${marker})`],
+		["input process substitution", `<(printf ${marker})`],
+		["output process substitution", `>(printf ${marker})`],
+		["brace composite", `{prefix,${marker}}`],
+		["ANSI-C escaped quote", `$'prefix\\' ${marker}'`],
+		["case-pattern command substitution", `$(case x in x) printf ${marker} ;; esac)`],
+		["heredoc command substitution", `$(cat <<'CYCLE12_EOF'\n)\n${marker}\nCYCLE12_EOF\n)`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 12 keeps multiline and composite assignment rejection generic before broker effects", async (t) => {
+	const marker = "CYCLE12_DECISION_BROKER_MARKER";
+	for (const [name, question] of cycle12SensitiveAssignmentTails(marker)) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});
+
+function cycle13MalformedAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["malformed case", `$(case x in x) printf ${marker} ;; esac`],
+		["malformed heredoc", `$(cat <<'CYCLE13_EOF'\n)\n${marker}\nCYCLE13_EOF`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 13 keeps malformed assignment rejection generic before broker effects", async (t) => {
+	const marker = "CYCLE13_DECISION_BROKER_MARKER";
+	for (const [name, question] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try { await harness.broker.request({ ...harness.request, question }); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
 });

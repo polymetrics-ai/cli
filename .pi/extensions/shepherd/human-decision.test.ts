@@ -10,9 +10,12 @@ import {
 	createHumanDecisionRecord,
 	persistHumanDecisionRequest,
 	recordHumanDecision,
+	recordHumanDecisionRequestComment,
 	routeHumanDecisionTarget,
+	validateHumanDecisionRecord,
 	validateHumanDecisionRequestComment,
 	type HumanDecisionBinding,
+	type HumanDecisionRecord,
 	type HumanDecisionRequestSpec,
 } from "./human-decision.ts";
 
@@ -183,12 +186,69 @@ test("durably round-trips and rejects a changed retry specification after restar
 	assert.equal(serialized.includes("github_pat_"), false);
 });
 
+test("cycle 8 replays an exact persisted request after expiry before rejecting new or changed input", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-cycle8-expiry-replay-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const originalSpec = spec({ expiresAt: "2026-07-21T10:01:00.000Z" });
+	const first = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	const created = await persistHumanDecisionRequest(
+		first,
+		originalSpec,
+		new Date("2026-07-21T10:00:00.000Z"),
+	);
+	const restarted = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	const afterExpiry = new Date("2026-07-21T10:02:00.000Z");
+
+	await t.test("an exact durable retry returns the original record after its expiry", async () => {
+		const replayed = await persistHumanDecisionRequest(restarted, originalSpec, afterExpiry);
+		assert.deepEqual(replayed, created);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+
+	await t.test("a genuinely new expired request still rejects without persistence", async () => {
+		const requestId = "req-477-cycle8-new-expired";
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, { ...originalSpec, requestId }, afterExpiry),
+			/expired/i,
+		);
+		assert.equal(await restarted.load(requestId), null);
+	});
+
+	await t.test("a changed retry specification cannot hide behind the expired lifetime", async () => {
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, {
+				...originalSpec,
+				question: "Approve a different exact request after expiry?",
+			}, afterExpiry),
+			/conflict|differs/i,
+		);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+
+	await t.test("a changed future expiry cannot revive or replace the original request", async () => {
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, {
+				...originalSpec,
+				expiresAt: "2026-07-22T10:01:00.000Z",
+			}, afterExpiry),
+			/conflict|differs/i,
+		);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+});
+
 test("persists minimal accepted evidence and consumes it exactly once across repository instances", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-consume-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const first = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	const second = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
 	await persistHumanDecisionRequest(first, spec(), new Date("2026-07-21T10:00:00.000Z"));
+	await recordHumanDecisionRequestComment(first, "req-477", issueBinding, {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	}, new Date("2026-07-21T10:00:10.000Z"));
 	await recordHumanDecision(first, "req-477", issueBinding, {
 		option: "approve",
 		actor: "maintainer-one",
@@ -388,4 +448,441 @@ test("reclaim removes only a dead token path and preserves a live replacement ow
 	await assert.rejects(readFile(deadPath, "utf8"), /ENOENT/);
 	const liveOwner = JSON.parse(await readFile(livePath, "utf8"));
 	assert.equal(liveOwner.token, liveToken);
+});
+
+test("cycle 6 rejects the shared credential grammar at the native human-decision boundary", async (t) => {
+	const samples = [
+		"//registry.invalid/:_authToken=SYNTHETIC_NPM_MARKER",
+		"machine github.com login maintainer password SYNTHETIC_NETRC_MARKER",
+		"aws_secret_access_key = SYNTHETIC_AWS_MARKER",
+		"azure_client_secret=SYNTHETIC_AZURE_MARKER",
+		"credentials_file = /tmp/SYNTHETIC_CREDENTIAL_FILE",
+	];
+	for (const question of samples) {
+		await t.test(question.split("SYNTHETIC_")[0].trim(), () => assert.throws(
+			() => createHumanDecisionRecord(spec({ question })),
+			(error: unknown) => error instanceof Error
+				&& /credential|secret|sensitive/i.test(error.message)
+				&& !error.message.includes("SYNTHETIC_"),
+		));
+	}
+});
+
+test("cycle 7 rejects finite Kubernetes Docker and AWS schemas before persistence or comment rendering", async (t) => {
+	const samples = [
+		"client-key-data: SYNTHETIC_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	for (const [index, question] of samples.entries()) {
+		await t.test(`schema form ${index + 1}`, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive/i);
+			assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
+		});
+	}
+});
+
+test("cycle 8 provider-neutral credential suffixes close the native human-decision boundary", async (t) => {
+	const suffixAssignments = [
+		"UNLISTED_ALPHA_AUTHORIZATION=SYNTHETIC_CYCLE8_AUTHORIZATION_MARKER",
+		"UNLISTED_BRAVO_TOKEN=SYNTHETIC_CYCLE8_TOKEN_MARKER",
+		"UNLISTED_CHARLIE_ACCESS_TOKEN=SYNTHETIC_CYCLE8_ACCESS_TOKEN_MARKER",
+		"UNLISTED_DELTA_REFRESH_TOKEN=SYNTHETIC_CYCLE8_REFRESH_TOKEN_MARKER",
+		"UNLISTED_ECHO_API_KEY=SYNTHETIC_CYCLE8_API_KEY_MARKER",
+		"UNLISTED_FOXTROT_PASSWORD=SYNTHETIC_CYCLE8_PASSWORD_MARKER",
+		"UNLISTED_GOLF_SECRET=SYNTHETIC_CYCLE8_SECRET_MARKER",
+		"UNLISTED_HOTEL_CLIENT_SECRET=SYNTHETIC_CYCLE8_CLIENT_SECRET_MARKER",
+		"UNLISTED_INDIA_PRIVATE_KEY=SYNTHETIC_CYCLE8_PRIVATE_KEY_MARKER",
+		"UNLISTED_JULIET_DATABASE_URL=SYNTHETIC_CYCLE8_DATABASE_URL_MARKER",
+		"UNLISTED_KILO_CREDENTIAL=SYNTHETIC_CYCLE8_CREDENTIAL_MARKER",
+		"UNLISTED_LIMA_CREDENTIALS=SYNTHETIC_CYCLE8_CREDENTIALS_MARKER",
+		"UNLISTED_MIKE_COOKIE=SYNTHETIC_CYCLE8_COOKIE_MARKER",
+		"UNLISTED_NOVEMBER_COOKIES=SYNTHETIC_CYCLE8_COOKIES_MARKER",
+		"UNLISTED_OSCAR_SET_COOKIE=SYNTHETIC_CYCLE8_SET_COOKIE_MARKER",
+		"UNLISTED_PAPA_SESSION=SYNTHETIC_CYCLE8_SESSION_MARKER",
+		"UNLISTED_QUEBEC_SESSION_ID=SYNTHETIC_CYCLE8_SESSION_ID_MARKER",
+		"UNLISTED_ROMEO_SESSION_TOKEN=SYNTHETIC_CYCLE8_SESSION_TOKEN_MARKER",
+		"UNLISTED_SIERRA_SESSION_COOKIE=SYNTHETIC_CYCLE8_SESSION_COOKIE_MARKER",
+		"UNLISTED_TANGO_CSRF_TOKEN=SYNTHETIC_CYCLE8_CSRF_TOKEN_MARKER",
+	];
+	const finiteSchemaAssignments = [
+		"client-key-data: SYNTHETIC_CYCLE8_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_CYCLE8_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_CYCLE8_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_CYCLE8_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_CYCLE8_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_CYCLE8_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_CYCLE8_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	const observedAt = new Date("2026-07-21T10:00:00.000Z");
+
+	await t.test("classifies every recognized suffix with an unknown provider prefix", () => {
+		for (const question of suffixAssignments) {
+			assert.throws(
+				() => createHumanDecisionRecord(spec({ question }), observedAt),
+				/credential|secret|sensitive/i,
+				question,
+			);
+		}
+	});
+
+	await t.test("rejects without reflecting the classified synthetic value", () => {
+		for (const question of suffixAssignments) {
+			const marker = question.slice(question.indexOf("=") + 1);
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }), observedAt);
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, question);
+			assert.match(rejection.message, /credential|secret|sensitive/i, question);
+			assert.doesNotMatch(rejection.message, new RegExp(marker), question);
+		}
+	});
+
+	await t.test("allows only the exact documented public FEATURE_TOKEN field", () => {
+		const publicQuestion = "FEATURE_TOKEN=non-sensitive-build-label";
+		assert.equal(createHumanDecisionRecord(spec({ question: publicQuestion }), observedAt).question, publicQuestion);
+		assert.throws(
+			() => createHumanDecisionRecord(spec({
+				question: "UNLISTED_FEATURE_TOKEN=SYNTHETIC_CYCLE8_NEARBY_MARKER",
+			}), observedAt),
+			/credential|secret|sensitive/i,
+		);
+	});
+
+	await t.test("retains the finite Kubernetes Docker and AWS forms", () => {
+		for (const question of finiteSchemaAssignments) {
+			assert.throws(
+				() => createHumanDecisionRecord(spec({ question }), observedAt),
+				/credential|secret|sensitive/i,
+				question,
+			);
+		}
+	});
+});
+
+function cycle9DecisionAssignment(nameLength: number, marker = "CYCLE9_HUMAN_DECISION_MARKER"): string {
+	const suffix = "_TOKEN";
+	if (nameLength <= suffix.length) throw new Error("cycle 9 assignment length is too short");
+	return `V${"A".repeat(nameLength - suffix.length - 1)}${suffix}=${marker}`;
+}
+
+test("cycle 9 parses the complete bounded assignment name before durable human-decision state", async (t) => {
+	const marker = "CYCLE9_HUMAN_DECISION_MARKER";
+	const largestName = 4_096 - marker.length - 1;
+	const rows = [
+		["leading underscore", `_UNLISTED_TOKEN=${marker}`, true],
+		["127 characters", cycle9DecisionAssignment(127, marker), true],
+		["128 characters", cycle9DecisionAssignment(128, marker), true],
+		["129 characters", cycle9DecisionAssignment(129, marker), true],
+		["256 characters", cycle9DecisionAssignment(256, marker), true],
+		["largest in-field name", cycle9DecisionAssignment(largestName, marker), true],
+		["over-field name", cycle9DecisionAssignment(largestName + 1, marker), true],
+		["exact public control", "FEATURE_TOKEN=non-sensitive-build-label", false],
+	] as const;
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createHumanDecisionRecord(spec({ question })).question, question);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
+const cycle10AssignmentSuffixes = [
+	"AUTHORIZATION", "TOKEN", "ACCESS_TOKEN", "REFRESH_TOKEN", "API_KEY", "PASSWORD", "SECRET",
+	"CLIENT_SECRET", "PRIVATE_KEY", "DATABASE_URL", "CREDENTIAL", "CREDENTIALS", "COOKIE", "COOKIES",
+	"SET_COOKIE", "SESSION", "SESSION_ID", "SESSION_TOKEN", "SESSION_COOKIE", "CSRF_TOKEN",
+] as const;
+
+test("cycle 10 closes assignment operator case and index policy before durable decision state", async (t) => {
+	const marker = "CYCLE10_HUMAN_DECISION_MARKER";
+	const rows: Array<[string, string, boolean]> = [
+		...cycle10AssignmentSuffixes.map((suffix): [string, string, boolean] =>
+			[`append ${suffix}`, `ACME_${suffix}+=${marker}`, true]),
+		["lowercase base", `acme_api_key=${marker}`, true],
+		["mixed-case base append", `AcMe_ApI_KeY+=${marker}`, true],
+		["numeric index", `ACME_API_KEY[0]=${marker}`, true],
+		["associative index append", `ACME_API_KEY[slot]+=${marker}`, true],
+		["exact public ordinary control", "FEATURE_TOKEN=enabled", false],
+		["exact public append control", "FEATURE_TOKEN+=enabled", false],
+		["indexed public-lookalike", `FEATURE_TOKEN[0]=${marker}`, true],
+	];
+	for (const [name, question, rejects] of rows) {
+		await t.test(name, () => {
+			if (!rejects) {
+				assert.equal(createHumanDecisionRecord(spec({ question })).question, question);
+				return;
+			}
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+});
+
+function cycle11SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["escaped double quote", `"alpha\\"${marker}"`],
+		["escaped whitespace", `alpha\\ ${marker}`],
+		["line continuation", `alpha\\\n${marker}`],
+		["command substitution", `$(printf ${marker})`],
+		["parameter expansion", `\${UNSAFE:-${marker}}`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 11 keeps assignment-tail rejection generic before durable decision state", async (t) => {
+	const marker = "CYCLE11_HUMAN_DECISION_MARKER";
+	for (const [name, question] of cycle11SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
+function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["multiline double quote", `"prefix\n${marker}"`],
+		["multiline single quote", `'prefix\n${marker}'`],
+		["multiline backtick", `\`prefix\n${marker}\``],
+		["multiline command substitution", `$(printf prefix\n${marker})`],
+		["multiline parameter expansion", `\${UNSAFE:-prefix\n${marker}}`],
+		["array composite", `(prefix ${marker})`],
+		["input process substitution", `<(printf ${marker})`],
+		["output process substitution", `>(printf ${marker})`],
+		["brace composite", `{prefix,${marker}}`],
+		["ANSI-C escaped quote", `$'prefix\\' ${marker}'`],
+		["case-pattern command substitution", `$(case x in x) printf ${marker} ;; esac)`],
+		["heredoc command substitution", `$(cat <<'CYCLE12_EOF'\n)\n${marker}\nCYCLE12_EOF\n)`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 12 keeps multiline and composite assignment rejection generic before durable decision state", async (t) => {
+	const marker = "CYCLE12_HUMAN_DECISION_MARKER";
+	for (const [name, question] of cycle12SensitiveAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }));
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
+function cycle13MalformedAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["malformed case", `$(case x in x) printf ${marker} ;; esac`],
+		["malformed heredoc", `$(cat <<'CYCLE13_EOF'\n)\n${marker}\nCYCLE13_EOF`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 13 keeps malformed assignment rejection generic before durable decision state", async (t) => {
+	const marker = "CYCLE13_HUMAN_DECISION_MARKER";
+	for (const [name, question] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try { createHumanDecisionRecord(spec({ question })); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
+test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {
+	const pending = createHumanDecisionRecord(spec(), new Date("2026-07-21T10:00:00.000Z"));
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: "2026-07-21T10:01:00.000Z",
+	};
+	const decided = {
+		...pending,
+		requestComment,
+		status: "decided",
+		decision,
+		updatedAt: decision.decidedAt,
+	};
+	const consumed = {
+		...decided,
+		status: "consumed",
+		consumedAt: "2026-07-21T10:02:00.000Z",
+		updatedAt: "2026-07-21T10:02:00.000Z",
+	};
+
+	await t.test("decided requires request-comment provenance", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...decided, requestComment: undefined }),
+		/request.?comment|provenance|coherence/i,
+	));
+	await t.test("decision follows request comment", () => assert.throws(
+		() => validateHumanDecisionRecord({
+			...decided,
+			requestComment: { ...requestComment, createdAt: "2026-07-21T10:01:30.000Z" },
+		}),
+		/chronology|timestamp|request.?comment/i,
+	));
+	await t.test("updatedAt covers the decision", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...decided, updatedAt: "2026-07-21T10:00:30.000Z" }),
+		/chronology|update|decision/i,
+	));
+	await t.test("updatedAt covers consumption", () => assert.throws(
+		() => validateHumanDecisionRecord({ ...consumed, updatedAt: "2026-07-21T10:01:30.000Z" }),
+		/chronology|update|consum/i,
+	));
+
+	await t.test("wide records reject before accessors", () => {
+		let accessed = false;
+		const wide: Record<string, unknown> = {};
+		Object.defineProperty(wide, "schemaVersion", {
+			enumerable: true,
+			get() {
+				accessed = true;
+				throw new Error("SYNTHETIC_CYCLE6_ACCESSOR_MARKER");
+			},
+		});
+		for (let index = 0; index < 300; index += 1) wide[`field${index}`] = index;
+		assert.throws(() => validateHumanDecisionRecord(wide), /bounded|field|shape|record/i);
+		assert.equal(accessed, false);
+	});
+
+	await t.test("normal and revoked proxies reject without traps or host text", () => {
+		let trapped = false;
+		const proxied = new Proxy(consumed, {
+			ownKeys() {
+				trapped = true;
+				throw new Error("SYNTHETIC_CYCLE6_PROXY_MARKER");
+			},
+		});
+		assert.throws(() => validateHumanDecisionRecord(proxied), /proxy|shape|record|invalid/i);
+		assert.equal(trapped, false);
+
+		const revoked = Proxy.revocable(consumed, {});
+		revoked.revoke();
+		let rejection: unknown;
+		try {
+			validateHumanDecisionRecord(revoked.proxy);
+		} catch (error) {
+			rejection = error;
+		}
+		assert.ok(rejection instanceof Error);
+		assert.match(String(rejection), /proxy|shape|record|invalid/i);
+		assert.doesNotMatch(String(rejection), /Cannot perform|revoked/i);
+	});
+});
+
+test("cycle 7 bounds every canonical decision event to a controller-owned observation clock", async (t) => {
+	const observedAt = new Date("2026-07-21T10:05:00.000Z");
+	const pending = createHumanDecisionRecord(spec({ expiresAt: "2027-07-22T10:00:00.000Z" }), new Date("2026-07-21T10:00:00.000Z"));
+	const requestComment = {
+		id: 1001,
+		url: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1001",
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T10:00:10.000Z",
+	};
+	const decision = {
+		option: "approve",
+		actor: "maintainer-one",
+		sourceUrl: "https://github.com/polymetrics-ai/cli/issues/471#issuecomment-1002",
+		decidedAt: "2026-07-21T10:01:00.000Z",
+	};
+	const consumed = {
+		...pending,
+		requestComment,
+		status: "consumed" as const,
+		decision,
+		consumedAt: "2026-07-21T10:02:00.000Z",
+		updatedAt: "2026-07-21T10:02:00.000Z",
+	};
+	const future = "2026-07-21T10:05:02.000Z";
+	const cases: Array<[string, HumanDecisionRecord]> = [
+		["creation", { ...pending, createdAt: future, updatedAt: future }],
+		["request comment", {
+			...pending,
+			requestComment: { ...requestComment, createdAt: future },
+			updatedAt: future,
+		}],
+		["decision", {
+			...consumed,
+			decision: { ...decision, decidedAt: future },
+			consumedAt: future,
+			updatedAt: future,
+		}],
+		["consumption", { ...consumed, consumedAt: future, updatedAt: future }],
+		["update", { ...consumed, updatedAt: future }],
+		["all events", {
+			...consumed,
+			createdAt: "2026-07-21T10:05:02.000Z",
+			requestComment: { ...requestComment, createdAt: "2026-07-21T10:05:03.000Z" },
+			decision: { ...decision, decidedAt: "2026-07-21T10:05:04.000Z" },
+			consumedAt: "2026-07-21T10:05:05.000Z",
+			updatedAt: "2026-07-21T10:05:05.000Z",
+		}],
+	];
+	const validateAt = validateHumanDecisionRecord as unknown as (value: unknown, observedAt: Date) => HumanDecisionRecord;
+	for (const [name, record] of cases) {
+		await t.test(name, () => assert.throws(
+			() => validateAt(record, observedAt),
+			/future|observation|clock|chronology|timestamp/i,
+		));
+	}
 });

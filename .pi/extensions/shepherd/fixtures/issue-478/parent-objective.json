@@ -1,0 +1,52 @@
+{
+  "repository": "polymetrics-ai/cli",
+  "parentIssue": 471,
+  "generation": 3,
+  "title": "Pi Agent Session Shepherd",
+  "objective": "Deliver the bounded parent orchestration program.",
+  "parentBranch": "feat/471-pi-agent-session-shepherd",
+  "parentBaseBranch": "main",
+  "children": [
+    {
+      "id": "evidence",
+      "title": "Typed GitHub evidence",
+      "objective": "Validate authoritative GitHub evidence.",
+      "slug": "github-evidence",
+      "dependsOn": [],
+      "access": "mutating",
+      "writeScopes": [".pi/extensions/shepherd/github-evidence.ts"],
+      "requiredSkills": ["javascript-testing-patterns"],
+      "verification": [
+        {
+          "id": "focused-tests",
+          "kind": "test",
+          "description": "Focused evidence tests pass."
+        }
+      ],
+      "humanGates": ["review"]
+    },
+    {
+      "id": "orchestrator",
+      "title": "Parent GitHub orchestrator",
+      "objective": "Reconcile parent and child GitHub state.",
+      "slug": "github-parent-orchestrator",
+      "dependsOn": ["evidence"],
+      "access": "mutating",
+      "writeScopes": [".pi/extensions/shepherd/github-orchestrator.ts"],
+      "requiredSkills": ["architecture-patterns", "javascript-testing-patterns"],
+      "verification": [
+        {
+          "id": "focused-tests",
+          "kind": "test",
+          "description": "Focused orchestrator tests pass."
+        },
+        {
+          "id": "strict-types",
+          "kind": "typecheck",
+          "description": "Strict TypeScript passes."
+        }
+      ],
+      "humanGates": ["parent_merge"]
+    }
+  ]
+}
