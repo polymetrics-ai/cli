@@ -88,7 +88,7 @@ function command(action: "start" | "resume") {
 
 async function eventually(assertion: () => void): Promise<void> {
 	for (let attempt = 0; attempt < 200; attempt += 1) {
-		try { assertion(); return; } catch { await new Promise((resolve) => setImmediate(resolve)); }
+		try { assertion(); return; } catch { await new Promise((resolve) => setTimeout(resolve, 2)); }
 	}
 	assertion();
 }
@@ -165,7 +165,12 @@ test("production controller drives parallel disjoint children, dependencies, int
 		newRunId: () => "run-1",
 	});
 	const running = controller.start(command("start"));
-	await eventually(() => assert.deepEqual(starts, ["alpha", "beta"]));
+	let startFailure: unknown;
+	void running.catch((error) => { startFailure = error; });
+	await eventually(() => {
+		if (startFailure !== undefined) throw startFailure;
+		assert.deepEqual(starts, ["alpha", "beta"]);
+	});
 	assert.equal(starts.includes("gamma"), false);
 	gates.get("alpha")!.resolve();
 	await eventually(() => assert.deepEqual(starts, ["alpha", "beta", "gamma"]));
@@ -231,4 +236,52 @@ test("correction and stale-parent refresh both force verification and a fresh ex
 	assert.equal(pipeline.calls.filter((entry) => entry === "integrate:alpha").length, 2);
 	assert.equal(state.children[0].ownership?.baseHead, HEAD_C);
 	assert.equal(state.children[0].checkpoint?.review?.status, "clean");
+});
+
+test("exhausted retries wait for an exact child decision and authorized resume continues the failed stage once", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-retry-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const child = spec("alpha", 501, [], "owned/alpha");
+	child.maxAttempts = 1;
+	const manifest = plan([child]);
+	let verificationRuns = 0;
+	const base = greenPipeline();
+	const pipeline = greenPipeline({
+		async verify(context) {
+			pipeline.calls.push(`verify:${context.child.id}`);
+			verificationRuns += 1;
+			if (verificationRuns === 1) throw new ProductionLifecycleError("retryable", "transient verification");
+			return checkpoint("verified");
+		},
+		async observeIntervention() { return "authorized"; },
+	});
+	const store = new ProductionFileStateStore(root);
+	let nextRun = 0;
+	const options = {
+		stateStore: store,
+		intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return "pending" as const; }, async close() {} },
+		newRunId: () => `run-retry-${++nextRun}`,
+	};
+	const first = await new ProductionShepherdController(options).start(command("start"));
+	assert.equal(first.status, "waiting_human");
+	assert.equal(first.childGate?.reason, "retry_budget_exhausted");
+	assert.equal(first.children[0].attempts, 1);
+	assert.equal(first.children[0].stage, "verification");
+
+	const resumed = await new ProductionShepherdController(options).resume(command("resume"));
+	assert.equal(resumed.status, "waiting_human");
+	assert.equal(resumed.humanGate?.requestId, "merge");
+	assert.equal(resumed.generation, 2);
+	assert.equal(resumed.children[0].attempts, 2);
+	assert.equal(resumed.children[0].authorizedAttempts, 1);
+	assert.equal(pipeline.calls.filter((entry) => entry === "workspace:alpha").length, 1);
+	assert.equal(pipeline.calls.filter((entry) => entry === "implement:alpha").length, 1);
+	assert.equal(pipeline.calls.filter((entry) => entry === "verify:alpha").length, 2);
+	assert.equal(pipeline.calls.filter((entry) => entry === "publish:alpha").length, 1);
+	assert.equal(pipeline.calls.filter((entry) => entry === "review:alpha").length, 1);
+	void base;
 });
