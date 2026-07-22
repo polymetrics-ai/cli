@@ -145,3 +145,19 @@ all commits. Focused 152/152 and safe isolation 215/215 pass; strict TypeScript 
 Pi RPC pass; the broad suite is environment-blocked at 258/289 only by the unchanged 31
 controller/state-store `spawn EPERM` rows. Two independent exact-head reviews remain pending and
 parent-owned, so this local handoff does not set `verificationPassed` true or claim integration.
+
+## Cycle 18 Agent Delegation
+
+The issue worker owns the artifact PLAN and the single collision-heavy seven-row RED across the
+existing runtime/policy test seam. A bounded read-only mapper was requested after both complete
+Cycle 17 reports were read, but the runtime rejected the spawn because the agent-thread limit was
+saturated. The recorded execution decision is `not_spawned_runtime_capability_missing`; no
+`spawned` or `read_only_spawned` claim is made. Production, prompt behavior, and tests remain frozen
+until the PLAN checkpoint, and all production remains frozen through committed RED evidence.
+
+The accepted review union is quoted-flow ownership, locator/public-candidate reset, multiword
+sensitive scalar closure, one finite compiled Pi/direct/event schema contract, descriptor-only
+tool/event/result DTOs, exact runtime dense-array prototypes, and transition-derived work metrics.
+The issue worker retains PLAN, RED, GREEN, REFACTOR, verification, commit, and handoff ownership;
+there is no dependency, parent, #478, network, push, integration, service, credential, model,
+Go/connector, `make`, main, or external delivery authority.

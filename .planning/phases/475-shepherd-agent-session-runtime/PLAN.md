@@ -1803,3 +1803,107 @@ authorized.
   Local evidence is terminal, but `verificationPassed` remains false: two independent exact-head
   reviews of the final evidence candidate are still pending and parent-owned, as are the
   process-capable replay, integration, and delivery gates.
+
+## Consolidated Exact-Head Correction Cycle 18 Plan
+
+Frozen start is exact independently reviewed candidate
+`687d053df5f7e7d08c4cab7d2a2d8f153850e673`; immutable base remains
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; the allowlist remains the same exact 20 paths.
+Both `/tmp/475-REVIEW-CYCLE17-1.md` and `/tmp/475-REVIEW-CYCLE17-2.md` were read in full before
+this plan (SHA-256 `fb309309fe47002b6a803f8c4558e22d278f477113f074cf9607c1befcdfc4a2`
+and `4d65a09fbaa8fe2e6557007545af78fb0d2ca4c4ba1545d8eb1d2558fdceb2d1`). Their ten
+reported observations deduplicate to the seven blocking contracts below. None is declined,
+deferred, or answered by expanding a blacklist or claiming generic JSON Schema support.
+
+### One lexer, one finite contract, one descriptor boundary
+
+1. **Quoted flow ownership.** While a value is quoted, escape/doubled-quote handling and the
+   matching close are evaluated before any comma, semicolon, or closer. Punctuation inside an open
+   quote is value data, never a member delimiter. An unclosed quote owns and conservatively redacts
+   through its proven physical-line or typed-container boundary; recovery may resume only at a
+   delimiter proven to belong to that same typed depth. No protected tail or later sibling may
+   escape through direct redaction or any of the 12 indirect shared consumers.
+2. **Candidate reset and public proof.** Locator state suppresses only its internal `://` colon.
+   Every flow comma, semicolon, and matching typed closer first terminates and clears the current
+   candidate, then reprocesses that boundary exactly once. No candidate bit survives a completed
+   member. A public value is preserved only after the lexer proves the entire finite scalar at its
+   boundary; locator-like or partially public text cannot shield a later protected assignment.
+3. **Sensitive scalars are default-secret.** `token`, `password`, `passwd`, `secret`, and every
+   other protected key redact one-, two-, and many-word plain scalars. Whitespace alone never makes
+   a protected scalar documentary or public. The only documentary escape is the existing finite
+   prefix grammar in `isBoundedDocumentaryProse`; retained prose controls prove fidelity.
+4. **Finite supported host schema.** Registration compiles and canonicalizes the sole effective
+   contract. Supported node vocabularies are exact own-enumerable data fields:
+   object `{type, additionalProperties, properties, required}`; string
+   `{type, minLength?, maxLength?, enum?}`; integer/number
+   `{type, minimum?, maximum?, enum?}`; boolean `{type, enum?}`; and bounded array
+   `{type, items, minItems?, maxItems?}`. Object `additionalProperties` is exactly `false`; its
+   exact property-name set equals its dense authoritative `required` vector, so optional host
+   fields do not exist. Enums are non-empty exact arrays whose every value matches the node type
+   (safe integers for `integer`). `pattern`, `format`, `$ref`, combinators, nullable/multi-type,
+   defaults, optional properties, unknown keywords, and mixed enums fail registration at any
+   depth. Hidden/symbol peers remain inert and have no authority. Pi `parameters` are rebuilt from
+   the compiled representation; Pi validation, `projectArguments`, direct `execute`, callback DTO,
+   and every tool lifecycle identity consume that same frozen canonical contract and projected DTO.
+5. **Exact descriptor DTOs at tool/event/result boundaries.** Tool policy captures reflection
+   intrinsics once, rejects proxy or unapproved direct prototypes before descriptor work, and
+   snapshots the public policy envelope, authority, workspace ports, capability contracts, tool
+   event envelopes, and workspace/capability results through fixed own enumerable data descriptors.
+   Accessors/setters/inherited fields reject without invocation. No later step directly rereads a
+   caller envelope; a fresh frozen DTO is the only behavior-affecting input. The historical Cycle 9
+   getter-acceptance fixture is explicitly superseded and may be aligned only after RED is frozen.
+6. **Exact runtime arrays.** Every dense array entering `agent-session-runtime.ts` must have direct
+   prototype equal to the captured intrinsic `Array.prototype` before length, index, SDK, tool, or
+   lifecycle lookup. This includes request context/capabilities/read prefixes/write prefixes/
+   capability names and all creation, active-tool, event content/messages/tool-results/diagnostics,
+   and terminal handoff arrays. Proxy-backed prototypes reject with zero traps and zero later
+   side effects; exact arrays retain current behavior.
+7. **Transition-derived work accounting.** The main cursor and all metrics use original UTF-16
+   source coordinates. `cursorAdvances` charges each original-source consume; key and lexical
+   counters charge only their actual transitions; each of the five strong recognizers is charged
+   once per character it examines; frame/recovery actions, every emitted and examined range, every
+   range insert/coalescence, each replacement emission, and each original source unit actually
+   rendered are charged at the operation. A no-range identity return has no fictional render pass.
+   `totalWork` is the sum of these increments, never a bulk asserted formula; per-offset main visits
+   are measured (zero for empty, one for completed non-empty input). The independent RED oracle
+   covers empty/one-byte/public/protected/quoted/locator/private-key/overlap/recovery inputs, setter
+   fail-fast probes, exact equality, and the derived ceiling `totalWork <= 16n + 64`.
+
+### Comprehensive seven-row RED matrix
+
+After this artifact-only checkpoint, one test-only commit adds exactly seven named top-level rows:
+
+| ID | Exact row / executable boundary |
+|---|---|
+| C18-01 | `cycle 18 quoted flow punctuation stays inside owned quotes and cannot expose protected siblings` — both quote styles × comma/semicolon × valid/malformed flow ownership through all 13 consumers |
+| C18-02 | `cycle 18 locator and public scalar candidates reset at proven flow boundaries` — mapping/sequence, quoted/unquoted locator controls, multiple later sibling positions, exact preservation plus marker absence and work bound |
+| C18-03 | `cycle 18 multiword sensitive scalars redact while bounded documentary prose remains public` — one/two/many-word values for every affected key through all consumers plus retained prose controls |
+| C18-04 | `cycle 18 one finite compiled host schema governs Pi execution and lifecycle identity` — root/nested optional and unsupported keywords, mixed enums, exact supported nested controls, real Pi validator/direct callback/projector/event identity equality |
+| C18-05 | `cycle 18 tool event and result envelopes use exact descriptor DTOs without caller callbacks` — root/nested policy, workspace/capability, result, and tool-event accessors/proxies/inheritance/mutation with zero getter/trap/re-read counts |
+| C18-06 | `cycle 18 every runtime dense array requires the exact intrinsic Array prototype` — request, SDK result, active-tool, event, and handoff arrays reject proxy direct prototypes before any index/SDK/lifecycle side effect |
+| C18-07 | `cycle 18 redaction work metrics exactly charge recognizers ranges and render in original coordinates` — independent exact oracle, per-counter setters, range overlap/coalescing, identity render, max visits, and affine bound |
+
+Expected RED is 159 executed: all 152 retained rows pass and exactly C18-01 through C18-07 fail
+their behavior assertions, with zero skip/cancel/todo. Focused strict TypeScript must pass. Frozen
+production blobs through RED are runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
+`00d8482d4f320fb948abcbef893e87cf0690d1a3`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`; frozen controls are runtime test
+`e9fb05b8d1dd5b438cd66da707c7549f33e754c6` and policy test
+`b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f` before the one intended RED edit.
+
+### Ordered execution and boundaries
+
+Baseline at the exact start is focused 152/152 and focused strict TypeScript 5.9.3 against explicit
+Pi 0.80.6 roots. `scripts/gsd doctor` passes 69 commands; the adapter again rejects
+`programming-loop`, so the explicit manual-GSD PLAN -> RED -> cohesive GREEN -> REFACTOR -> VERIFY
+fallback remains recorded. Skills used are `gsd-programming-loop`, `architecture-patterns`,
+`javascript-testing-patterns`, `typescript-advanced-types`, and `github-issue-first-delivery`, plus
+the repository routing, runtime/Pi, issue, adapter, and universal-loop references. A requested
+read-only mapper could not start because the runtime agent-thread limit was saturated; execution
+decision is `not_spawned_runtime_capability_missing`, and the collision-heavy seven-row RED remains
+on the local critical path.
+
+No production edit precedes the committed RED evidence. No dependency, parent, #478, network,
+push, integration, live model/auth, credential, service, Go/connector, `make`, main, prompt-return
+contract, or path-scope change is authorized. GREEN must close all seven contracts together; the
+trusted Pi 0.80.6 prompt adoption/settlement behavior from Cycle 17 is frozen and retained.

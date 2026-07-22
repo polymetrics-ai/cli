@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_17_evidence",
+  "currentCycle": "correction_cycle_18_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -458,16 +458,21 @@
       "cycle": "correction_cycle_17_summary",
       "decision": "local_critical_path",
       "reason": "Cycle 17 local implementation evidence is terminal, but two independent exact-head reviews remain pending and parent-owned; no self-review, external mutation, integration, or delivery action was attempted."
+    },
+    {
+      "cycle": "correction_cycle_18_plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Both complete Cycle 17 reports block exact candidate 687d053d with seven consolidated contracts. A bounded read-only mapper was requested but the four-slot runtime was saturated, so no agent output is claimed; this worker owns the artifact-only PLAN and seven-row test-only RED while all production stays frozen."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_17_red_152_executed_143_retained_pass_exactly_9_named_failures_0_cancelled_skipped_todo; green_refactor_152_executed_152_passed_0_failed_cancelled_skipped_todo",
+    "focusedTests": "cycle_18_baseline_152_executed_152_passed_0_failed_cancelled_skipped_todo; red_pending_exactly_7_named_rows_159_executed_152_retained_pass_expected",
     "fullShepherdTests": "safe_isolation_215_passed_0_failed_cancelled_skipped_todo_retained_206_plus_cycle_17_9; complete_289_executed_258_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
-    "strictTypeScriptPi0806": "passed_focused_source_tests_and_all_12_production_files_typescript_5_9_3_explicit_pi_0_80_6_roots",
+    "strictTypeScriptPi0806": "cycle_18_baseline_passed_focused_source_tests_typescript_5_9_3_explicit_pi_0_80_6_roots; red_replay_pending",
     "offlineRpcSmoke": "passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_exit_0_with_writable_temporary_pi_directory",
-    "diffCheck": "cycle_17_plan_15a0b70f_red_ed8e79e3_green_e7dfbb35_refactor_81c34cc5_exact_start_5f0bef9c_base_e659d6f1_final_blobs_runtime_66c92cf3_policy_00d8482d_prompts_c5b6c27f_runtime_test_e9fb05b8_policy_test_b7fa0a1c",
-    "ownedScope": "exact_same_20_issue_owned_paths_clean_base_diff; no_dependency_connector_go_cmd_internal_paths; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation; two_independent_exact_head_reviews_pending_parent_owned",
-    "independentExactHeadReviews": "review_1_pending_parent_owned; review_2_pending_parent_owned; verification_passed_false",
+    "diffCheck": "cycle_18_exact_start_687d053d_base_e659d6f1_reports_sha256_fb309309_and_4d65a09f_plan_in_progress; frozen_blobs_runtime_66c92cf3_policy_00d8482d_prompts_c5b6c27f_runtime_test_e9fb05b8_policy_test_b7fa0a1c",
+    "ownedScope": "exact_same_20_issue_owned_paths; no_dependency_connector_go_cmd_internal_paths; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
+    "independentExactHeadReviews": "cycle_17_review_1_blocking_accepted; cycle_17_review_2_blocking_accepted; cycle_18_verification_passed_false",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -503,6 +508,11 @@
     "cycle_17 JavaScript cannot retroactively observe an already-rejected native Promise whose own then surface is unobservable; the trusted Pi adapter return shape is constrained/normalized instead of claiming impossible hostile-promise support",
     "cycle_17 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 215/215",
     "cycle_17 local evidence is terminal but verificationPassed remains false until the two parent-owned independent exact-head reviews and process-capable replay are recorded",
-    "cycle_17 external mutation, dependency, parent, #478, Go/connector/make, network, push, self-review, and integration actions are outside this lane"
+    "cycle_17 external mutation, dependency, parent, #478, Go/connector/make, network, push, self-review, and integration actions are outside this lane",
+    "cycle_18 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit artifact PLAN then test-only RED remains mandatory",
+    "cycle_18 both complete Cycle 17 reports were read and accepted as exactly seven blocking contracts; no Cycle 17 terminal claim remains current",
+    "cycle_18 read-only mapper was not spawned because the four-slot runtime was saturated; recorded as not_spawned_runtime_capability_missing without claiming agent output",
+    "cycle_18 production and tests remain frozen through the artifact-only PLAN; RED must add exactly seven top-level rows in agent-session-runtime.test.ts only",
+    "cycle_18 external mutation, dependency, parent, #478, Go/connector/make, network, push, integration, live model/auth, credentials, and services are outside this lane"
   ]
 }

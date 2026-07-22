@@ -1,5 +1,38 @@
 # Prompt Trace — Issue #475
 
+## Consolidated Exact-Head Correction Cycle 18 Snapshot
+
+- Exact frozen start: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 authorized paths.
+- Inputs read completely: `/tmp/475-REVIEW-CYCLE17-1.md` and
+  `/tmp/475-REVIEW-CYCLE17-2.md`, with SHA-256 values recorded in PLAN. Their union is exactly
+  seven blocking contracts; the prior Cycle 17 terminal claim is superseded.
+- Objective: make quoted and candidate lexical ownership fail closed; remove the multiword
+  sensitive-scalar exemption; compile one finite required-only host schema for registration, Pi,
+  direct execution, and event identity; use exact descriptor DTOs; require exact intrinsic array
+  prototypes; and charge every recognizer/range/render operation in original coordinates.
+- Lexer proof: boundary reset precedes locator/public-candidate exemption, and only a completely
+  closed, finite public scalar can survive. Comma/closer/line/EOF transition ownership explicitly;
+  quoted punctuation cannot become a sibling boundary while its quote owns the cursor.
+- Schema proof: optional properties and all unsupported JSON Schema semantics fail registration.
+  The compiler emits the canonical Pi parameter schema and the one projector used by every host
+  execution and lifecycle consumer; no raw caller schema remains authoritative.
+- Method: manual-GSD artifact PLAN -> exactly seven named test-only RED rows -> stop and report
+  before GREEN. The healthy 69-command adapter rejects `programming-loop`, so the fallback is
+  explicit rather than silently weakening TDD.
+- Baseline: 152/152 focused, zero skipped/cancelled/todo, and focused strict TypeScript pass.
+  Expected RED: 159 executed, 152 retained pass, exactly seven failures, strict TypeScript pass.
+- Frozen blobs through RED: runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
+  `00d8482d4f320fb948abcbef893e87cf0690d1a3`, prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+  `e9fb05b8d1dd5b438cd66da707c7549f33e754c6`, and policy test
+  `b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f` before RED.
+- Execution decision: `not_spawned_runtime_capability_missing`; the requested read-only mapper
+  could not start because the four-slot runtime was saturated. This worker retains the only
+  mutating path and records that failed delegation without claiming agent output.
+- No dependency, parent, #478, network, push, integration, live auth/model, credential, service,
+  Go/connector, `make`, main, or out-of-scope mutation.
+
 ## Kickoff Snapshot
 
 - Role: isolated sub-issue implementation worker

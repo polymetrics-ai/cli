@@ -1,10 +1,36 @@
 # Verification — Issue #475
 
-Current result: Cycle 17 local implementation evidence is terminal through PLAN `15a0b70f`,
-test-only RED `ed8e79e3`, cohesive GREEN `e7dfbb35`, and behavior-preserving REFACTOR `81c34cc5`
-against frozen start `5f0bef9c` and immutable base `e659d6f1`. `verificationPassed` remains false:
-the serialized broad suite is environment-blocked by 31 unchanged `spawn EPERM` rows, and two
-independent exact-head reviews of the final evidence candidate remain pending and parent-owned.
+Current result: both independent Cycle 17 exact-head reports block candidate
+`687d053df5f7e7d08c4cab7d2a2d8f153850e673`. Cycle 18 is at the artifact-only PLAN gate against
+immutable base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; production and tests remain frozen and
+`verificationPassed` is false.
+
+## Cycle 18 Pre-Execution Verification Contract
+
+Both complete Cycle 17 reports were read before PLAN and accepted without deferral. Their union
+maps exactly to C18-01 through C18-07: quoted flow ownership, boundary-first candidate reset,
+multiword sensitive scalar denial, one finite compiled host schema, descriptor-only DTO capture,
+exact intrinsic array prototypes, and fully charged original-coordinate redaction work.
+
+| Cycle 18 gate | Status | Required evidence |
+|---|---|---|
+| Exact start / report replay | pass | exact `687d053d`; both complete reports and recorded SHA-256 values |
+| Baseline focused tests | pass | 152 passed, 0 failed/skipped/cancelled/todo |
+| Baseline focused strict TypeScript | pass | TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| PLAN / frozen blobs | in progress | artifact-only commit; exact runtime/policy/prompt/runtime-test/policy-test blobs |
+| Comprehensive RED | pending | exactly seven top-level rows; 159 executed; 152 retained pass; exactly 7 named failures; 0 skipped/cancelled/todo |
+| RED strict TypeScript | pending | focused source/tests compile against explicit Pi 0.80.6 roots |
+| Production freeze | pending | runtime `66c92cf3`, policy `00d8482d`, prompts `c5b6c27f` exact after RED |
+| Scope / integrity | pending | exact same 20 paths, clean diff, ancestry and JSON gates |
+| GREEN / REFACTOR / terminal verification | blocked by order | no production edit before committed RED and parent checkpoint report |
+| External mutation | not attempted | no push, network, GitHub, integration, model/auth, service, Go/connector, `make`, parent, or #478 action |
+
+The schema surface is a finite required-only vocabulary; unsupported and optional semantics fail
+at registration. The lexer must reset candidate state at proven comma/closer/line/EOF boundaries
+before considering locator or public-scalar proof. Capture uses exact own data descriptors only,
+and every runtime dense array must have direct `Array.prototype`. Work metrics charge recognizers,
+range insertion/coalescing, and render over original coordinates under `totalWork <= 16n + 64`.
+No completion or GREEN claim is made here.
 
 ## Cycle 16 Verification Contract
 

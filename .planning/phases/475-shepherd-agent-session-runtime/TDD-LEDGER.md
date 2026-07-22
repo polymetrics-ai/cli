@@ -1211,6 +1211,45 @@ must remain frozen before GREEN is authorized.
   independent exact-head reviews and the process-capable broad replay remain parent-owned and
   pending. No self-review, integration, push, network, or other external mutation was attempted.
 
+## Cycle 18 TDD Ledger
+
+### PLAN / frozen baseline
+
+- Exact start: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20-path allowlist and clean worktree.
+- Both complete Cycle 17 independent reports were read before edits. Their complete union is
+  represented by C18-01 through C18-07; no blocker is declined or deferred.
+- Baseline focused gate: 152 executed, 152 passed, zero failed/skipped/cancelled/todo. Focused
+  strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots: exit 0.
+- Frozen production blobs: runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`; policy
+  `00d8482d4f320fb948abcbef893e87cf0690d1a3`; prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. Frozen test controls: runtime test
+  `e9fb05b8d1dd5b438cd66da707c7549f33e754c6`; policy test
+  `b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f`.
+- Manual-GSD fallback is active because doctor passes 69 commands while the adapter rejects
+  `programming-loop`. The attempted read-only mapper was rejected by the saturated agent-thread
+  limit, so Cycle 18 records `not_spawned_runtime_capability_missing` and stays local.
+
+### Planned RED
+
+One test-only checkpoint adds exactly seven top-level rows:
+
+| ID | Required failing proof at frozen production |
+|---|---|
+| C18-01 | open quotes own comma/semicolon until matching quote or proven malformed line/container boundary; protected tails/siblings disappear through all 13 consumers |
+| C18-02 | locator and public-scalar candidate state clears at comma/semicolon/matching closer; harmless locators remain byte-identical and later protected siblings redact |
+| C18-03 | one/two/many-word protected values redact for `token`/`password`/`passwd`/`secret`; only exact bounded documentary controls survive |
+| C18-04 | root/nested optional or unsupported schema semantics and mixed enums reject at registration; supported canonical schema has identical Pi/direct/callback/event DTOs |
+| C18-05 | policy/tool-event/workspace/capability/result roots and fields reject proxies, inheritance, or accessors with zero caller callbacks and no post-snapshot reread |
+| C18-06 | every runtime request/SDK/event/handoff dense array rejects a non-exact direct prototype before index, SDK, tool, or lifecycle influence |
+| C18-07 | independent oracle exactly matches original-coordinate cursor/key/boundary/recognizer/range/coalescing/render work and measured maximum visits under `16n + 64` |
+
+RED acceptance is 159 executed: all 152 retained rows pass and exactly C18-01 through C18-07 fail
+their intended behavior assertions, zero skipped/cancelled/todo, focused strict TypeScript green,
+and all production blobs exact. The historical Cycle 9 result-getter acceptance row is retained
+unchanged through RED to prove the new row is additive; it may be superseded only with the cohesive
+GREEN fixture alignment. No production edit is authorized before the RED checkpoint commits.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

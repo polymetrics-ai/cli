@@ -1,5 +1,42 @@
 # PRD Coverage — Issue #475
 
+## Cycle 18 Exact-Head Coverage Contract
+
+Frozen candidate: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. The complete reports
+`/tmp/475-REVIEW-CYCLE17-1.md` (SHA-256
+`fb309309fe47002b6a803f8c4558e22d278f477113f074cf9607c1befcdfc4a2`) and
+`/tmp/475-REVIEW-CYCLE17-2.md` (SHA-256
+`4d65a09fbaa8fe2e6557007545af78fb0d2ca4c4ba1545d8eb1d2558fdceb2d1`) are
+accepted as one seven-contract correction. Every row is blocked before Cycle 18 execution; no
+Cycle 17 completion claim survives the two exact-head reports.
+
+| Required outcome | Executable RED boundary | Pre-execution status |
+|---|---|---|
+| Quoted flow punctuation cannot expose protected siblings | both quote styles, comma/semicolon, valid and malformed ownership through all 13 consumers | C18-01 blocked |
+| Locator/public candidates cannot shield later assignments | reset-before-exemption at comma/closer across mapping/sequence, quoted/unquoted, sibling positions | C18-02 blocked |
+| Sensitive multiword scalars are never documentary exemptions | one/two/many-word values for `token`, `password`, `passwd`, and `secret`; exact bounded prose controls | C18-03 blocked |
+| Registration, Pi validation, direct execution, and lifecycle identity share one compiled host contract | root/nested optional properties, unsupported keywords, mixed enums reject; supported nested DTOs are canonical and identical | C18-04 blocked |
+| Tool/event/result capture never invokes caller code or rereads caller envelopes | accessor/proxy/inheritance/mutation matrices with exact descriptor DTOs and zero getter/trap/re-read counts | C18-05 blocked |
+| Every runtime dense array has the exact intrinsic array prototype | request, SDK result, active-tool, event, and handoff arrays reject direct-prototype proxies before lookup or side effect | C18-06 blocked |
+| One original-coordinate work ledger charges all performed redaction work | independent recognizer/range/render oracle, setter trace, overlaps, identity render, max visits, affine bound | C18-07 blocked |
+
+The supported host-schema vocabulary is intentionally finite: required-only objects with
+`type`, `additionalProperties`, `properties`, and `required`; strings with optional
+`minLength`/`maxLength`/homogeneous `enum`; integer/number with optional `minimum`/`maximum`/
+homogeneous `enum`; booleans with optional homogeneous `enum`; and arrays with required `items`
+plus optional `minItems`/`maxItems`. Object property names must exactly equal a dense required
+vector. Optional properties, unknown keywords, patterns, formats, references, combinators, and
+mixed enums fail registration. A compiler-built canonical schema is the Pi parameter surface and
+the same compiled projector governs direct execution and event identity.
+
+The ordered gate is artifact-only PLAN, exactly seven top-level test-only RED rows, cohesive
+GREEN, REFACTOR, both-report replay, and terminal verification. Baseline is 152/152 focused and
+strict focused TypeScript. Expected RED is 159 executed, 152 retained pass, exactly seven named
+failures, zero skipped/cancelled/todo, strict TypeScript passing, and all production blobs frozen.
+No dependency, parent, #478, network, push, integration, live model/auth, credential, service,
+Go/connector, `make`, main, or scope expansion is authorized.
+
 ## Cycle 16 Consolidated Review Coverage
 
 Frozen candidate: `df930d62adbf85af88cebbdf66e5eefaab587f4b`. Immutable base:

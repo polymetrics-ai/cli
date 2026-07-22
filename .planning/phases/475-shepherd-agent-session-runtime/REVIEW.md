@@ -271,3 +271,31 @@ This section is the issue worker's disposition of the two Cycle 16 input reports
 review of the resulting head. Two independent exact-head reviews of the final evidence candidate
 remain pending and parent-owned. Until both are recorded, `verificationPassed` remains false and
 no integration or delivery claim is made.
+
+# Review Disposition — Issue #475 Cycle 18
+
+Frozen independently reviewed candidate: `687d053df5f7e7d08c4cab7d2a2d8f153850e673`
+
+Sources read in full: `/tmp/475-REVIEW-CYCLE17-1.md` and
+`/tmp/475-REVIEW-CYCLE17-2.md` (SHA-256 `fb309309fe47002b6a803f8c4558e22d278f477113f074cf9607c1befcdfc4a2`
+and `4d65a09fbaa8fe2e6557007545af78fb0d2ca4c4ba1545d8eb1d2558fdceb2d1`).
+
+Both reports are accepted completely. Their overlap deduplicates to seven blocking contracts:
+quoted punctuation/malformed ownership; locator/public-candidate reset; multiword sensitive scalar
+closure; a finite compiled schema shared with Pi/direct execution/events; descriptor-only
+tool/event/result DTOs; exact runtime array prototypes; and transition-derived work accounting.
+Review 1's schema/work/array findings map to C18-04/C18-07/C18-06. Review 2's seven findings map to
+C18-01 through C18-07. Nothing is declined, deferred, narrowed away, or answered by claiming broad
+JSON Schema compatibility.
+
+Cycle 17's prompt settlement/adoption and immutable prompt snapshot contracts are retained and
+frozen; neither report found a new prompt defect. Cycle 18 prefers a smaller fail-closed schema
+vocabulary: every property is required, every keyword is supported and canonicalized, enums match
+their node type, and Pi receives only the compiler-built schema used by execution and lifecycle
+identity. Lexer recovery is likewise structural: quotes own internal punctuation, candidates reset
+at proven boundaries, and only fully proven finite public scalars survive.
+
+No GREEN disposition is claimed. Acceptance requires the committed artifact PLAN followed by one
+test-only seven-row RED executing 159 rows with all 152 retained passes and exactly seven intended
+failures while the three production blobs remain frozen. Independent review is parent-owned only
+after a later cohesive GREEN/refactor/evidence candidate.
