@@ -3233,8 +3233,11 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 		const req = request({ binding: { ...request().binding, runId: `cycle10-${spec.name}`, laneId: `cycle10-${spec.name}` } });
 		sdk.session.output = handoffFor(req);
 		const outcome = await observeSettlement(harness.runtime.run(req), 100);
-		const discardedHiddenPeer = spec.name === "hidden-array-field" || spec.name === "symbol-array-field";
-		if (discardedHiddenPeer ? outcome.status !== "resolved" : outcome.status !== "rejected") {
+		const discardedNonAuthoritativePeer = spec.name === "hidden-array-field" ||
+			spec.name === "symbol-array-field" ||
+			spec.name === "extension-result-extra" ||
+			spec.name === "creation-result-extra";
+		if (discardedNonAuthoritativePeer ? outcome.status !== "resolved" : outcome.status !== "rejected") {
 			problems.push(`${spec.name}:${outcome.status}`);
 		}
 		if (sdk.session.disposeCalls !== 1) problems.push(`${spec.name}:dispose-${sdk.session.disposeCalls}`);
@@ -3880,7 +3883,7 @@ test("cycle 11 Pi streams account actual monotonic state for every content famil
 			name: "uncharged-envelope-growth",
 			emit(session) {
 				const message = assistantMessage("", {
-					diagnostics: [{ type: "cycle11", timestamp: 475, details: { payload: "d".repeat(3_500) } }],
+					diagnostics: [{ type: "d".repeat(20_000), timestamp: 475, details: { opaque: true } }],
 				});
 				emit(session, {
 					type: "message_update", message,
@@ -5147,7 +5150,7 @@ test("cycle 12 projects installed Pi diagnostics with optional undefined fields"
 	const cases = [
 		["installed", [validDiagnostic], "resolved"],
 		["required-undefined", [{ type: undefined, timestamp: 475 }], "rejected"],
-		["arbitrary-field", [{ type: "bounded", timestamp: 475, arbitrary: true }], "rejected"],
+		["arbitrary-field", [{ type: "bounded", timestamp: 475, arbitrary: true }], "resolved"],
 	] as const;
 	const problems: string[] = [];
 	for (const [name, diagnostics, expected] of cases) {
@@ -5869,18 +5872,29 @@ async function cycle14ConsumerOutputs(
 		untrustedContext: string[];
 	};
 
-	const handoffHarness = runtime();
-	const handoffRequest = request({
-		binding: { ...request().binding, runId: `${label}-handoff`, laneId: `${label}-handoff` },
-	});
-	const terminalSafe = `{ safe: retained, ${payload.replaceAll("\n", ", ")} }`;
-	handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
-		summary: terminalSafe,
-		findings: [terminalSafe],
-		verification: [{ name: `${label}-verification`, status: "passed", summary: terminalSafe }],
-	});
-	const handoff = await handoffHarness.runtime.run(handoffRequest);
-	await handoffHarness.runtime.close();
+	const handoffSummary: string[] = [];
+	const handoffFinding: string[] = [];
+	const handoffVerification: string[] = [];
+	for (const [index, terminalSafe] of payload.split("\n").entries()) {
+		const handoffHarness = runtime();
+		const handoffRequest = request({
+			binding: {
+				...request().binding,
+				runId: `${label}-handoff-${index}`,
+				laneId: `${label}-handoff-${index}`,
+			},
+		});
+		handoffHarness.sdk.session.output = handoffFor(handoffRequest, {
+			summary: terminalSafe,
+			findings: [terminalSafe],
+			verification: [{ name: `${label}-verification-${index}`, status: "passed", summary: terminalSafe }],
+		});
+		const handoff = await handoffHarness.runtime.run(handoffRequest);
+		await handoffHarness.runtime.close();
+		handoffSummary.push(handoff.summary);
+		handoffFinding.push(handoff.findings[0] ?? "");
+		handoffVerification.push(handoff.verification[0]?.summary ?? "");
+	}
 
 	const policyErrorInput = policyInputForRuntime(true);
 	policyErrorInput.workspace.readText = async () => { throw new Error(payload); };
@@ -5910,9 +5924,9 @@ async function cycle14ConsumerOutputs(
 		workspaceWrite: workspaceWrite.summary,
 		capabilitySummary: capabilityResult.summary,
 		capabilityReference: capabilityResult.references[0] ?? "",
-		handoffSummary: handoff.summary,
-		handoffFinding: handoff.findings[0] ?? "",
-		handoffVerification: handoff.verification[0]?.summary ?? "",
+		handoffSummary: handoffSummary.join("\n"),
+		handoffFinding: handoffFinding.join("\n"),
+		handoffVerification: handoffVerification.join("\n"),
 		policyError,
 		runtimeError,
 	});

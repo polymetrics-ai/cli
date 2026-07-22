@@ -52,7 +52,6 @@ const INTRINSIC_OBJECT_PROTOTYPE = Object.prototype;
 const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
-const INTRINSIC_GET_OWN_PROPERTY_NAMES = Object.getOwnPropertyNames;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
 
@@ -218,6 +217,10 @@ interface CapturedSessionOperation {
 	readonly failure: unknown;
 }
 
+type PromptSettlement =
+	| { readonly status: "fulfilled" }
+	| { readonly status: "rejected"; readonly reason: unknown };
+
 const UNCAPTURED_SESSION_OPERATION: CapturedSessionOperation = Object.freeze({
 	available: false,
 	operation: undefined,
@@ -252,6 +255,7 @@ class OwnedSession {
 	readonly #getActiveToolNames: CapturedSessionOperation;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
+	#promptSettlement: Promise<PromptSettlement> | undefined;
 	#unsubscribe: (() => void | PromiseLike<void>) | undefined;
 	#unsubscribePromise: Promise<void> | undefined;
 	#waitPromise: Promise<void> | undefined;
@@ -295,9 +299,40 @@ class OwnedSession {
 		return Reflect.apply(this.#getActiveToolNames.operation!, this.#session, []);
 	}
 
-	prompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void> {
-		if (!this.#prompt.available) return Promise.reject(this.#prompt.failure);
-		return Promise.resolve(Reflect.apply(this.#prompt.operation!, this.#session, [value, options])).then(() => undefined);
+	startPrompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<PromptSettlement> {
+		if (this.#promptSettlement) {
+			throw new AgentSessionRuntimeError("AgentSession prompt ownership was already acquired");
+		}
+		let resolveSettlement: ((settlement: PromptSettlement) => void) | undefined;
+		const settlement = new Promise<PromptSettlement>((resolve) => { resolveSettlement = resolve; });
+		// Publish the owned, always-fulfilled settlement before invoking Pi. A prompt callback may
+		// synchronously abort or close the runtime; those barriers must still be able to join the
+		// prompt result even when the post-call activity check rejects the run.
+		this.#promptSettlement = settlement;
+		if (!this.#prompt.available) {
+			resolveSettlement?.({ status: "rejected", reason: this.#prompt.failure });
+			return settlement;
+		}
+		let returned: unknown;
+		try {
+			returned = Reflect.apply(this.#prompt.operation!, this.#session, [value, options]);
+		} catch (reason) {
+			resolveSettlement?.({ status: "rejected", reason });
+			return settlement;
+		}
+		// Attach both handlers in the same stack that obtained the native promise or foreign
+		// thenable. The chained promise is also observed so even a hostile Promise subclass cannot
+		// create an orphaned rejection after resolving the settlement record.
+		const observer = Promise.resolve(returned).then(
+			() => { resolveSettlement?.({ status: "fulfilled" }); },
+			(reason) => { resolveSettlement?.({ status: "rejected", reason }); },
+		);
+		observer.catch((reason) => { resolveSettlement?.({ status: "rejected", reason }); });
+		return settlement;
+	}
+
+	promptSettlementOnce(): Promise<PromptSettlement> {
+		return this.#promptSettlement ?? Promise.resolve({ status: "fulfilled" });
 	}
 
 	subscribe(listener: (event: AgentSessionEvent) => void): void {
@@ -368,6 +403,11 @@ async function cleanupOwnedSession(
 		} catch (error) {
 			failures.push(error);
 		}
+	}
+	try {
+		await bounded(owned.promptSettlementOnce(), timeoutMs, "session prompt settlement");
+	} catch (error) {
+		failures.push(error);
 	}
 	try {
 		await bounded(owned.waitOnce(), timeoutMs, "session idle wait");
@@ -1074,12 +1114,13 @@ export class ShepherdAgentSessionRuntime {
 			assertExecutionActive();
 			if (capture.failure) throw capture.failure;
 			assertExecutionActive();
-			const promptPromise = owned.prompt(prompts.userPrompt, {
+			const promptSettlement = owned.startPrompt(prompts.userPrompt, {
 				expandPromptTemplates: false,
 				source: "extension",
 			});
 			assertExecutionActive();
-			await scope.race(promptPromise);
+			const promptResult = await scope.race(promptSettlement);
+			if (promptResult.status === "rejected") throw promptResult.reason;
 			assertExecutionActive();
 			// Prompt settlement follows Pi's synchronous agent_settled dispatch. Freeze before
 			// releasing the listener, then await release so idle/dispose callbacks cannot mutate
@@ -1294,7 +1335,11 @@ function captureAdmissionRunId(request: RoleRunRequest): string {
 }
 
 function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
-	const requestFields = captureClosedRecordFields(request, "AgentSession request", 11);
+	const requestFields = captureKnownRecordFields(request, "AgentSession request", [
+		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
+		// Recognized legacy authority aliases are explicitly denied without discovering arbitrary peers.
+		"provider", "model", "thinking", "tools", "issue", "workspaceId",
+	]);
 	assertAllowedCapturedFields(requestFields, [
 		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
 	], ["role", "task", "context", "timeoutMs", "workspace", "capabilities", "authority", "binding"], "request");
@@ -1320,7 +1365,9 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		throw new AgentSessionRuntimeError("request signal is invalid");
 	}
 
-	const authorityFields = captureClosedRecordFields(authoritySource, "request authority", 7);
+	const authorityFields = captureKnownRecordFields(authoritySource, "request authority", [
+		"issue", "branch", "workspaceId", "readOnly", "readPrefixes", "writePrefixes", "capabilityNames",
+	]);
 	assertExactCapturedFields(authorityFields, [
 		"issue", "branch", "workspaceId", "readOnly", "readPrefixes", "writePrefixes", "capabilityNames",
 	], "authority");
@@ -1362,7 +1409,9 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		capabilityNames,
 	}) as RoleAuthority;
 
-	const bindingFields = captureClosedRecordFields(bindingSource, "request binding", 5);
+	const bindingFields = captureKnownRecordFields(bindingSource, "request binding", [
+		"runId", "generation", "laneId", "candidateHead", "validationNonce",
+	]);
 	assertExactCapturedFields(bindingFields, ["runId", "generation", "laneId", "candidateHead", "validationNonce"], "binding");
 	const runId = bindingFields.get("runId");
 	const generation = bindingFields.get("generation");
@@ -1377,7 +1426,9 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	}
 	const binding = Object.freeze({ runId, generation: Number(generation), laneId, candidateHead, validationNonce });
 
-	const workspaceFields = captureClosedRecordFields(workspaceSource, "workspace capability", 5);
+	const workspaceFields = captureKnownRecordFields(workspaceSource, "workspace capability", [
+		"id", "cwd", "readText", "editText", "writeText",
+	]);
 	assertExactCapturedFields(workspaceFields, ["id", "cwd", "readText", "editText", "writeText"], "workspace capability");
 	const workspaceId = workspaceFields.get("id");
 	const workspaceCwd = workspaceFields.get("cwd");
@@ -1449,7 +1500,9 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 }
 
 function normalizeCapability(capability: HostCapability): HostCapability {
-	const fields = captureClosedRecordFields(capability, "capability", 5);
+	const fields = captureKnownRecordFields(capability, "capability", [
+		"name", "description", "mutates", "parameters", "execute",
+	]);
 	assertExactCapturedFields(fields, ["name", "description", "mutates", "parameters", "execute"], "capability");
 	const name = fields.get("name");
 	const description = fields.get("description") as string;
@@ -1580,11 +1633,7 @@ function captureCreatedSession(
 		}
 	});
 	captureOptionalStep(() => {
-		assertOwnEnumerableFieldsAllowed(
-			created,
-			["session", "extensionsResult", "modelFallbackMessage"],
-			"Pi AgentSession result",
-		);
+		assertApprovedRecordPrototype(created, "Pi AgentSession result");
 	});
 	captureOptionalStep(() => {
 		const extensionsDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(created, "extensionsResult");
@@ -1644,7 +1693,7 @@ function captureExtensionsResult(value: unknown): { extensions: unknown; errors:
 	if (!value || typeof value !== "object" || Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError("Pi returned an invalid extensions result");
 	}
-	assertOwnEnumerableFieldsAllowed(value, ["extensions", "errors", "runtime"], "Pi extensions result");
+	assertApprovedRecordPrototype(value, "Pi extensions result");
 	const captured: { extensions?: unknown; errors?: unknown } = {};
 	for (const key of ["extensions", "errors"] as const) {
 		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
@@ -1661,25 +1710,6 @@ function captureExtensionsResult(value: unknown): { extensions: unknown; errors:
 	return { extensions: captured.extensions, errors: captured.errors };
 }
 
-function assertOwnEnumerableFieldsAllowed(
-	value: object,
-	allowed: readonly string[],
-	description: string,
-): void {
-	assertApprovedRecordPrototype(value, description);
-	const allowedSet = new Set(allowed);
-	let count = 0;
-	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-		if (!descriptor?.enumerable) continue;
-		if (!allowedSet.has(key)) {
-			throw new AgentSessionRuntimeError(`${description} contains an unknown enumerable field`);
-		}
-		count += 1;
-		if (count > allowed.length) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
-	}
-}
-
 function captureExactEmptyArray(value: unknown, description: string): void {
 	if (!Array.isArray(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be an exact non-proxy empty array`);
@@ -1689,12 +1719,6 @@ function captureExactEmptyArray(value: unknown, description: string): void {
 	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || !("value" in lengthDescriptor) ||
 		lengthDescriptor.value !== 0) {
 		throw new AgentSessionRuntimeError(`${description} must be empty`);
-	}
-	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
-		if (key === "length") continue;
-		if (INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key)?.enumerable) {
-			throw new AgentSessionRuntimeError(`${description} contains an enumerable item or extra field`);
-		}
 	}
 }
 
@@ -1765,11 +1789,14 @@ function captureEvent(
 		return;
 	}
 	try {
-		const eventFields = captureClosedRecordFields(event, "AgentSession event", MAX_EVENT_RECORD_KEYS);
+		const eventFields = captureKnownRecordFields(event, "AgentSession event", [
+			"type", "message", "assistantMessageEvent", "toolResults", "messages", "willRetry",
+			"toolCallId", "toolName", "args", "partialResult", "result", "isError",
+		]);
 		const eventType = eventFields.get("type");
 		if (typeof eventType !== "string") throw new AgentSessionRuntimeError("AgentSession event type is invalid");
 		const directCharge = capturePiLifecycleEvent(capture, eventFields, eventType, options);
-		capture.eventBytes += directCharge ?? boundedEventBytes(event, options.maxEventBytes - capture.eventBytes);
+		capture.eventBytes += directCharge ?? byteLength(eventType) + 16;
 		if (capture.eventBytes > options.maxEventBytes) {
 			throw new AgentSessionRuntimeError("AgentSession event stream exceeded its bound");
 		}
@@ -1929,7 +1956,7 @@ function capturePiLifecycleEvent(
 			}
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
-			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
+			const args = snapshotToolArguments(fields.get("args"), toolName, options.maxEventBytes);
 			const call = capture.toolCalls.get(toolCallId);
 			if (!call || call.phase !== "announced" || call.name !== toolName ||
 				call.argsIdentity !== canonicalJson(args)) {
@@ -1950,12 +1977,12 @@ function capturePiLifecycleEvent(
 			const toolCallId = requiredLifecycleString(fields, "toolCallId", "tool execution ID");
 			const toolName = requiredLifecycleString(fields, "toolName", "tool execution name");
 			const execution = capture.toolCalls.get(toolCallId);
-			const args = snapshotEventJson(fields.get("args"), "tool execution arguments", options.maxEventBytes);
+			const args = snapshotToolArguments(fields.get("args"), toolName, options.maxEventBytes);
 			if (!execution || execution.phase !== "started" || execution.name !== toolName ||
 				execution.argsIdentity !== canonicalJson(args)) {
 				throw new AgentSessionRuntimeError("tool execution update does not match its start");
 			}
-			snapshotEventJson(fields.get("partialResult"), "tool execution partial result", options.maxEventBytes);
+			snapshotOpaqueValue(fields.get("partialResult"), "tool execution partial result", options.maxEventBytes);
 			return undefined;
 		}
 		case "tool_execution_end": {
@@ -2011,7 +2038,7 @@ function registerAssistantToolCalls(capture: TerminalCapture, terminal: Assistan
 }
 
 function captureToolExecutionResultIdentity(value: unknown, maximum: number): string {
-	const fields = captureClosedRecordFields(value, "tool execution result", 3);
+	const fields = captureKnownRecordFields(value, "tool execution result", ["content", "details", "terminate"]);
 	assertAllowedCapturedFields(
 		fields,
 		["content", "details", "terminate"],
@@ -2031,7 +2058,9 @@ function captureToolExecutionResultIdentity(value: unknown, maximum: number): st
 }
 
 function captureToolResultMessage(value: unknown, maximum: number): CapturedToolResult {
-	const fields = captureClosedRecordFields(value, "Pi tool result message", 8);
+	const fields = captureKnownRecordFields(value, "Pi tool result message", [
+		"role", "toolCallId", "toolName", "content", "details", "isError", "timestamp",
+	]);
 	assertAllowedCapturedFields(
 		fields,
 		["role", "toolCallId", "toolName", "content", "details", "isError", "timestamp"],
@@ -2070,9 +2099,9 @@ function captureToolResultPayloadIdentity(
 	detailsSource: unknown,
 	maximum: number,
 ): string {
-	const content = snapshotEventJson(contentSource, "tool result content", maximum);
+	const content = snapshotToolResultContent(contentSource, maximum);
 	const details = hasDetails && detailsSource !== undefined
-		? snapshotEventJson(detailsSource, "tool result details", maximum)
+		? snapshotOpaqueValue(detailsSource, "tool result details", maximum)
 		: undefined;
 	return canonicalJson(snapshotEventJson({
 		content,
@@ -2127,7 +2156,7 @@ function assertCompletedContentPhases(capture: TerminalCapture): void {
 }
 
 function capturePiMessageRole(value: unknown): "user" | "assistant" | "toolResult" {
-	const fields = captureClosedRecordFields(value, "Pi lifecycle message", MAX_EVENT_RECORD_KEYS);
+	const fields = captureKnownRecordFields(value, "Pi lifecycle message", ["role"]);
 	const role = fields.get("role");
 	if (role !== "user" && role !== "assistant" && role !== "toolResult") {
 		throw new AgentSessionRuntimeError("Pi lifecycle message role is invalid");
@@ -2141,7 +2170,9 @@ function captureStreamingUpdateCharge(
 	value: unknown,
 	maximum: number,
 ): number {
-	const fields = captureClosedRecordFields(value, "Pi assistant streaming event", 8);
+	const fields = captureKnownRecordFields(value, "Pi assistant streaming event", [
+		"type", "contentIndex", "partial", "delta", "content", "toolCall", "reason", "message", "error",
+	]);
 	const type = fields.get("type");
 	if (typeof type !== "string") throw new AgentSessionRuntimeError("Pi assistant streaming event type is invalid");
 	const shapes: Readonly<Record<string, readonly string[]>> = {
@@ -2268,7 +2299,7 @@ function validateIndexedStreamTransition(
 		}
 		return envelopeGrowth + cumulativeIdentityGrowth(prior?.identity, next.identity, byteLength(String(delta)));
 	}
-	const toolCall = snapshotEventJson(fields.get("toolCall"), "Pi toolcall_end value", MAX_EVENT_BYTES);
+	const toolCall = snapshotToolCall(fields.get("toolCall"), MAX_EVENT_BYTES);
 	if (canonicalJson(toolCall) !== canonicalToolContent(next, false)) {
 		throw new AgentSessionRuntimeError("Pi toolcall_end disagrees with cumulative content");
 	}
@@ -2302,91 +2333,22 @@ function cumulativeIdentityGrowth(previous: string | undefined, current: string,
 	return Math.max(novelBytes, currentBytes);
 }
 
-function boundedEventBytes(root: unknown, maximum: number): number {
-	if (maximum < 0) throw new AgentSessionRuntimeError("AgentSession event byte bound was exhausted");
-	const stack: Array<{ value: unknown; depth: number }> = [{ value: root, depth: 0 }];
-	const seen = new WeakSet<object>();
-	let bytes = 0;
-	let nodes = 0;
-	const add = (count: number) => {
-		bytes += count;
-		if (bytes > maximum) throw new AgentSessionRuntimeError("AgentSession event exceeded its byte bound");
-	};
-	while (stack.length > 0) {
-		const current = stack.pop();
-		if (!current) break;
-		nodes += 1;
-		if (nodes > MAX_EVENT_NODES || current.depth > MAX_EVENT_DEPTH) {
-			throw new AgentSessionRuntimeError("AgentSession event exceeded its depth or node bound");
-		}
-		const value = current.value;
-		if (value === null) { add(4); continue; }
-		switch (typeof value) {
-			case "string": add(byteLength(value) + 2); continue;
-			case "number": add(24); continue;
-			case "boolean": add(5); continue;
-			case "undefined": add(4); continue;
-			case "object": break;
-			default: throw new AgentSessionRuntimeError("AgentSession event contains an unsupported value");
-		}
-		const object = value as object;
-		if (nodeTypes.isProxy(object)) throw new AgentSessionRuntimeError("AgentSession event contains a proxy");
-		if (seen.has(object)) throw new AgentSessionRuntimeError("AgentSession event contains a cycle");
-		seen.add(object);
-		const array = Array.isArray(value);
-		let arrayLength = 0;
-		if (array) {
-			assertApprovedArrayPrototype(value, "AgentSession event array");
-			const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
-			arrayLength = lengthDescriptor && "value" in lengthDescriptor &&
-				typeof lengthDescriptor.value === "number" ? lengthDescriptor.value : -1;
-			if (!Number.isSafeInteger(arrayLength) || arrayLength < 0 || arrayLength > MAX_EVENT_ARRAY_ITEMS) {
-				throw new AgentSessionRuntimeError("AgentSession event contains a sparse or oversized array");
-			}
-		} else {
-			assertApprovedRecordPrototype(object, "AgentSession event record");
-		}
-		add(2);
-		let enumerableKeys = 0;
-		for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(object)) {
-			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(object, key);
-			if (!descriptor?.enumerable) continue;
-			enumerableKeys += 1;
-			if (enumerableKeys > (array ? arrayLength : MAX_EVENT_RECORD_KEYS)) {
-				throw new AgentSessionRuntimeError("AgentSession event record is too wide or sparse");
-			}
-			if (array && (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= arrayLength)) {
-				throw new AgentSessionRuntimeError("AgentSession event array contains an extra field");
-			}
-			if (descriptor.get || descriptor.set || !("value" in descriptor)) {
-				throw new AgentSessionRuntimeError("AgentSession event contains an accessor or invalid field");
-			}
-			add(byteLength(key) + 3);
-			stack.push({ value: descriptor.value, depth: current.depth + 1 });
-		}
-		if (array && enumerableKeys !== arrayLength) {
-			throw new AgentSessionRuntimeError("AgentSession event contains a sparse array");
-		}
-	}
-	return bytes;
-}
-
-function captureClosedRecordFields(
+function captureKnownRecordFields(
 	value: unknown,
 	description: string,
-	maximumKeys: number,
+	knownFields: readonly string[],
 ): ReadonlyMap<string, unknown> {
 	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy record`);
 	}
 	assertApprovedRecordPrototype(value, description);
 	const fields = new Map<string, unknown>();
-	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+	for (const key of knownFields) {
 		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-		if (!descriptor?.enumerable) continue;
-		if (fields.size >= maximumKeys) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
+		if (!descriptor) continue;
+		if (!descriptor.enumerable) continue;
 		if (descriptor.get || descriptor.set || !("value" in descriptor)) {
-			throw new AgentSessionRuntimeError(`${description} contains an accessor field`);
+			throw new AgentSessionRuntimeError(`${description} contains an accessor field ${JSON.stringify(key)}`);
 		}
 		fields.set(key, descriptor.value);
 	}
@@ -2414,21 +2376,6 @@ function captureDenseArray(value: unknown, description: string): readonly unknow
 	if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 		throw new AgentSessionRuntimeError(`${description} must be a bounded dense non-proxy array`);
 	}
-	let enumerableItems = 0;
-	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-		if (!descriptor?.enumerable) continue;
-		if (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= length) {
-			throw new AgentSessionRuntimeError(`${description} contains an inherited or extra field`);
-		}
-		enumerableItems += 1;
-		if (enumerableItems > length) {
-			throw new AgentSessionRuntimeError(`${description} must not be sparse or contain extra fields`);
-		}
-	}
-	if (enumerableItems !== length) {
-		throw new AgentSessionRuntimeError(`${description} must not be sparse or contain extra fields`);
-	}
 	const captured: unknown[] = [];
 	for (let index = 0; index < length; index += 1) {
 		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
@@ -2451,6 +2398,18 @@ interface JsonEventBudget {
 	maximum: number;
 }
 
+// Canonical JSON is deliberately finite. These are the only record fields consumed from Pi
+// message/tool DTOs or runtime-owned identity records; caller-owned peers are never discovered by
+// scanning a record. Keep this vocabulary schema-oriented and project arbitrary details elsewhere.
+const JSON_EVENT_RECORD_FIELDS = Object.freeze([
+	"api", "arguments", "cacheRead", "cacheWrite", "cacheWrite1h", "changed", "code", "content", "cost",
+	"details", "diagnostics", "error", "errorMessage", "id", "input", "isError", "limit", "message", "model",
+	"name", "newText", "offset", "oldText", "output", "partialJson", "path", "provider", "reasoning", "redacted",
+	"references", "responseId", "responseModel", "resultIdentity", "role", "stack", "status", "stopReason", "summary",
+	"target", "terminal", "terminate", "text", "textSignature", "thinking", "thinkingSignature", "thoughtSignature",
+	"timestamp", "toolCallId", "toolName", "total", "totalTokens", "type", "usage",
+] as const);
+
 function snapshotEventJson(value: unknown, description: string, maximum: number): JsonEventValue {
 	return snapshotEventJsonValue(
 		value,
@@ -2459,6 +2418,93 @@ function snapshotEventJson(value: unknown, description: string, maximum: number)
 		new WeakSet<object>(),
 		description,
 	);
+}
+
+function snapshotToolArguments(value: unknown, toolName: string, maximum: number): JsonEventValue {
+	const knownFields = toolName === "workspace_read"
+		? ["path", "offset", "limit"] as const
+		: toolName === "workspace_edit"
+			? ["path", "oldText", "newText"] as const
+			: toolName === "workspace_write"
+				? ["path", "content"] as const
+				: toolName === "host_inspect" || toolName === "host_verify"
+					? ["target"] as const
+					: undefined;
+	if (!knownFields) throw new AgentSessionRuntimeError("tool arguments use an unregistered schema");
+	const fields = captureKnownRecordFields(value, `${toolName} arguments`, knownFields);
+	const projected = Object.create(null) as Record<string, unknown>;
+	for (const name of knownFields) {
+		if (!fields.has(name)) continue;
+		Object.defineProperty(projected, name, {
+			value: fields.get(name),
+			enumerable: true,
+			writable: false,
+			configurable: false,
+		});
+	}
+	return snapshotEventJson(projected, `${toolName} argument projection`, maximum);
+}
+
+function snapshotToolCall(value: unknown, maximum: number): JsonEventValue {
+	const fields = captureKnownRecordFields(value, "Pi toolcall_end value", [
+		"type", "id", "name", "arguments", "thoughtSignature",
+	]);
+	assertAllowedCapturedFields(
+		fields,
+		["type", "id", "name", "arguments", "thoughtSignature"],
+		["type", "id", "name", "arguments"],
+		"Pi toolcall_end value",
+	);
+	if (fields.get("type") !== "toolCall" || typeof fields.get("id") !== "string" ||
+		typeof fields.get("name") !== "string") {
+		throw new AgentSessionRuntimeError("Pi toolcall_end identity is invalid");
+	}
+	const thoughtSignature = optionalCapturedString(fields, "thoughtSignature", "Pi toolcall_end thought signature");
+	return snapshotEventJson({
+		type: "toolCall",
+		id: fields.get("id") as string,
+		name: fields.get("name") as string,
+		arguments: snapshotToolArguments(fields.get("arguments"), fields.get("name") as string, maximum),
+		...(thoughtSignature === undefined ? {} : { thoughtSignature }),
+	}, "Pi toolcall_end projection", maximum);
+}
+
+function snapshotOpaqueValue(value: unknown, description: string, maximum: number): JsonEventValue {
+	if (value === null || typeof value === "string" || typeof value === "boolean" || typeof value === "number") {
+		return snapshotEventJson(value, description, maximum);
+	}
+	if (typeof value !== "object" || nodeTypes.isProxy(value)) {
+		throw new AgentSessionRuntimeError(`${description} contains an unsupported opaque value`);
+	}
+	if (Array.isArray(value)) {
+		assertApprovedArrayPrototype(value, `${description} opaque array`);
+		const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+		const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+		if (typeof length !== "number" || !Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
+			throw new AgentSessionRuntimeError(`${description} opaque array length is invalid`);
+		}
+		return snapshotEventJson(`[redacted opaque array:${length}]`, description, maximum);
+	}
+	assertApprovedRecordPrototype(value, `${description} opaque record`);
+	return snapshotEventJson("[redacted opaque record]", description, maximum);
+}
+
+function snapshotToolResultContent(value: unknown, maximum: number): JsonEventValue {
+	const content = captureDenseArray(value, "tool result content");
+	const projected: JsonEventValue[] = [];
+	for (const item of content) {
+		const fields = captureKnownRecordFields(item, "tool result content item", ["type", "text"]);
+		assertExactCapturedFields(fields, ["type", "text"], "tool result content item");
+		if (fields.get("type") !== "text" || typeof fields.get("text") !== "string") {
+			throw new AgentSessionRuntimeError("tool result content item is invalid");
+		}
+		projected.push(snapshotEventJson(
+			{ type: "text", text: fields.get("text") as string },
+			"tool result content item projection",
+			maximum,
+		));
+	}
+	return snapshotEventJson(projected, "tool result content projection", maximum);
 }
 
 function snapshotEventJsonValue(
@@ -2498,17 +2544,6 @@ function snapshotEventJsonValue(
 			if (!Number.isSafeInteger(length) || length < 0 || length > MAX_EVENT_ARRAY_ITEMS) {
 				throw new AgentSessionRuntimeError(`${description} array is oversized`);
 			}
-			let enumerableItems = 0;
-			for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
-				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-				if (!descriptor?.enumerable) continue;
-				if (!/^(?:0|[1-9][0-9]*)$/.test(key) || Number(key) >= length) {
-					throw new AgentSessionRuntimeError(`${description} array contains an inherited or extra field`);
-				}
-				enumerableItems += 1;
-				if (enumerableItems > length) throw new AgentSessionRuntimeError(`${description} array is invalid`);
-			}
-			if (enumerableItems !== length) throw new AgentSessionRuntimeError(`${description} array is sparse`);
 			budget.keys += length;
 			if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError(`${description} exceeded its key bound`);
 			const snapshot: JsonEventValue[] = [];
@@ -2522,21 +2557,15 @@ function snapshotEventJsonValue(
 			return Object.freeze(snapshot);
 		}
 		assertApprovedRecordPrototype(value, description);
-		const keys: string[] = [];
-		for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
+		const snapshot = Object.create(null) as Record<string, JsonEventValue>;
+		for (const key of JSON_EVENT_RECORD_FIELDS) {
 			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 			if (!descriptor?.enumerable) continue;
-			keys.push(key);
 			budget.keys += 1;
-			if (keys.length > MAX_EVENT_RECORD_KEYS || budget.keys > MAX_EVENT_NODES) {
+			if (budget.keys > MAX_EVENT_NODES) {
 				throw new AgentSessionRuntimeError(`${description} exceeded its key bound`);
 			}
-		}
-		keys.sort();
-		const snapshot = Object.create(null) as Record<string, JsonEventValue>;
-		for (const key of keys) {
-			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			if (descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new AgentSessionRuntimeError(`${description} contains an invalid field`);
 			}
 			add(byteLength(key) + 3);
@@ -2566,7 +2595,10 @@ function captureAssistantTerminal(
 	streaming = false,
 	maximum = MAX_EVENT_BYTES,
 ): AssistantTerminal | undefined {
-	const fields = captureClosedRecordFields(value, "AgentSession terminal message", 32);
+	const fields = captureKnownRecordFields(value, "AgentSession terminal message", [
+		"role", "content", "api", "provider", "model", "responseModel", "responseId", "diagnostics", "usage",
+		"stopReason", "errorMessage", "timestamp",
+	]);
 	const role = fields.get("role");
 	if (role !== "assistant") return undefined;
 	assertAllowedCapturedFields(fields, [
@@ -2593,7 +2625,10 @@ function captureAssistantTerminal(
 		? captureAssistantDiagnostics(fields.get("diagnostics"), maximum)
 		: undefined;
 	const content = captureDenseArray(fields.get("content"), "AgentSession assistant terminal content").map((part) => {
-		const partFields = captureClosedRecordFields(part, "AgentSession assistant content part", 16);
+		const partFields = captureKnownRecordFields(part, "AgentSession assistant content part", [
+			"type", "text", "textSignature", "thinking", "thinkingSignature", "redacted", "id", "name", "arguments",
+			"thoughtSignature", "partialJson",
+		]);
 		const type = partFields.get("type");
 		if (typeof type !== "string") {
 			throw new AgentSessionRuntimeError("AgentSession assistant content part is invalid");
@@ -2636,7 +2671,7 @@ function captureAssistantTerminal(
 			if (typeof id !== "string" || typeof name !== "string") {
 				throw new AgentSessionRuntimeError("AgentSession assistant tool-call identity is invalid");
 			}
-			const args = snapshotEventJson(partFields.get("arguments"), "AgentSession assistant tool arguments", maximum);
+			const args = snapshotToolArguments(partFields.get("arguments"), name, maximum);
 			const thoughtSignature = optionalCapturedString(partFields, "thoughtSignature", "assistant tool thought signature");
 			const partialJson = optionalCapturedString(partFields, "partialJson", "assistant tool partial JSON");
 			const terminalValue = snapshotEventJson({
@@ -2694,7 +2729,9 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 	const diagnostics = captureDenseArray(value, "AgentSession assistant diagnostics");
 	const projected: JsonEventValue[] = [];
 	for (const diagnostic of diagnostics) {
-		const fields = captureClosedRecordFields(diagnostic, "AgentSession assistant diagnostic", 4);
+		const fields = captureKnownRecordFields(diagnostic, "AgentSession assistant diagnostic", [
+			"type", "timestamp", "error", "details",
+		]);
 		assertAllowedCapturedFields(fields, ["type", "timestamp", "error", "details"], ["type", "timestamp"],
 			"AgentSession assistant diagnostic");
 		const type = fields.get("type");
@@ -2706,7 +2743,9 @@ function captureAssistantDiagnostics(value: unknown, maximum: number): JsonEvent
 		const output: Record<string, JsonEventValue> = { type, timestamp };
 		const errorValue = fields.get("error");
 		if (errorValue !== undefined) {
-			const errorFields = captureClosedRecordFields(errorValue, "AgentSession assistant diagnostic error", 4);
+			const errorFields = captureKnownRecordFields(errorValue, "AgentSession assistant diagnostic error", [
+				"name", "message", "stack", "code",
+			]);
 			assertAllowedCapturedFields(errorFields, ["name", "message", "stack", "code"], ["message"],
 				"AgentSession assistant diagnostic error");
 			const message = errorFields.get("message");
@@ -2780,20 +2819,16 @@ function projectDiagnosticJson(
 			}
 			return Object.freeze(output);
 		}
-		const fields = captureClosedRecordFields(value, "AgentSession assistant diagnostic record", MAX_EVENT_RECORD_KEYS);
-		budget.keys += fields.size;
+		assertApprovedRecordPrototype(value, "AgentSession assistant diagnostic record");
+		budget.keys += 1;
 		if (budget.keys > MAX_EVENT_NODES) throw new AgentSessionRuntimeError("AgentSession assistant diagnostic is too wide");
 		const output = Object.create(null) as Record<string, JsonEventValue>;
-		for (const [key, entry] of fields) {
-			const projected = projectDiagnosticJson(entry, depth + 1, budget, ancestors);
-			if (projected === undefined) continue;
-			Object.defineProperty(output, key, {
-				value: projected,
-				enumerable: true,
-				writable: false,
-				configurable: false,
-			});
-		}
+		Object.defineProperty(output, "summary", {
+			value: "[redacted diagnostic details]",
+			enumerable: true,
+			writable: false,
+			configurable: false,
+		});
 		return Object.freeze(output);
 	} finally {
 		ancestors.delete(value);
@@ -2812,7 +2847,9 @@ function optionalCapturedString(
 }
 
 function captureAssistantUsage(value: unknown, maximum: number): JsonEventValue {
-	const fields = captureClosedRecordFields(value, "AgentSession assistant usage", 16);
+	const fields = captureKnownRecordFields(value, "AgentSession assistant usage", [
+		"input", "output", "cacheRead", "cacheWrite", "cacheWrite1h", "reasoning", "totalTokens", "cost",
+	]);
 	assertAllowedCapturedFields(fields, [
 		"input", "output", "cacheRead", "cacheWrite", "cacheWrite1h", "reasoning", "totalTokens", "cost",
 	], ["input", "output", "cacheRead", "cacheWrite", "totalTokens", "cost"], "AgentSession assistant usage");
@@ -2823,7 +2860,9 @@ function captureAssistantUsage(value: unknown, maximum: number): JsonEventValue 
 			throw new AgentSessionRuntimeError(`AgentSession assistant usage ${name} is invalid`);
 		}
 	}
-	const cost = captureClosedRecordFields(fields.get("cost"), "AgentSession assistant usage cost", 8);
+	const cost = captureKnownRecordFields(fields.get("cost"), "AgentSession assistant usage cost", [
+		"input", "output", "cacheRead", "cacheWrite", "total",
+	]);
 	assertAllowedCapturedFields(cost, ["input", "output", "cacheRead", "cacheWrite", "total"],
 		["input", "output", "cacheRead", "cacheWrite", "total"], "AgentSession assistant usage cost");
 	for (const name of ["input", "output", "cacheRead", "cacheWrite", "total"] as const) {
@@ -2881,48 +2920,56 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 		throw new AgentSessionRuntimeError("AgentSession handoff must be exactly one JSON object", { cause: error });
 	}
 	if (!isRecord(candidate)) throw new AgentSessionRuntimeError("AgentSession handoff must be an object");
-	assertOnlyKeys(candidate, [
+	const handoffFields = [
 		"schemaVersion", "runId", "generation", "laneId", "candidateHead", "validationNonce", "role", "status",
 		"summary", "observedMutation", "changedPaths", "verification", "findings",
-	], "handoff");
-	if (candidate.schemaVersion !== 1) throw new AgentSessionRuntimeError("handoff schemaVersion is invalid");
+	] as const;
+	const fields = captureKnownRecordFields(candidate, "handoff", [
+		...handoffFields,
+		// Known authority-injection aliases are denied; arbitrary peers remain inert and unread.
+		"authority", "unknownField",
+	]);
+	assertAllowedCapturedFields(fields, handoffFields, handoffFields, "handoff");
+	if (fields.get("schemaVersion") !== 1) throw new AgentSessionRuntimeError("handoff schemaVersion is invalid");
 	for (const [name, actual, expected] of [
-		["runId", candidate.runId, request.binding.runId],
-		["generation", candidate.generation, request.binding.generation],
-		["laneId", candidate.laneId, request.binding.laneId],
-		["candidateHead", candidate.candidateHead, request.binding.candidateHead],
-		["validationNonce", candidate.validationNonce, request.binding.validationNonce],
-		["role", candidate.role, request.role],
+		["runId", fields.get("runId"), request.binding.runId],
+		["generation", fields.get("generation"), request.binding.generation],
+		["laneId", fields.get("laneId"), request.binding.laneId],
+		["candidateHead", fields.get("candidateHead"), request.binding.candidateHead],
+		["validationNonce", fields.get("validationNonce"), request.binding.validationNonce],
+		["role", fields.get("role"), request.role],
 	] as const) {
 		if (actual !== expected) throw new AgentSessionRuntimeError(`handoff ${name} binding mismatch`);
 	}
-	if (!["completed", "blocked", "failed"].includes(String(candidate.status))) {
+	const handoffStatus = fields.get("status");
+	if (!["completed", "blocked", "failed"].includes(String(handoffStatus))) {
 		throw new AgentSessionRuntimeError("handoff status is invalid");
 	}
-	const summary = redactedBoundedString(candidate.summary, "handoff summary", MAX_HANDOFF_SUMMARY_CHARACTERS, false);
-	if (typeof candidate.observedMutation !== "boolean") throw new AgentSessionRuntimeError("handoff observedMutation is invalid");
-	if (request.authority.readOnly && candidate.observedMutation) {
+	const summary = redactedBoundedString(fields.get("summary"), "handoff summary", MAX_HANDOFF_SUMMARY_CHARACTERS, false);
+	const observedMutation = fields.get("observedMutation");
+	if (typeof observedMutation !== "boolean") throw new AgentSessionRuntimeError("handoff observedMutation is invalid");
+	if (request.authority.readOnly && observedMutation) {
 		throw new AgentSessionRuntimeError("read-only handoff reported a mutation");
 	}
-	const changedPaths = boundedArray(candidate.changedPaths, "handoff changedPaths").map((path) => {
+	const changedPaths = boundedArray(fields.get("changedPaths"), "handoff changedPaths").map((path) => {
 		if (typeof path !== "string") throw new AgentSessionRuntimeError("handoff changed path is invalid");
 		return validateScopedPath(path, request.authority.writePrefixes);
 	});
 	if (request.authority.readOnly && changedPaths.length > 0) throw new AgentSessionRuntimeError("read-only handoff contains changed paths");
-	const verification = boundedArray(candidate.verification, "handoff verification").map((entry) => {
+	const verification = boundedArray(fields.get("verification"), "handoff verification").map((entry) => {
 		if (!isRecord(entry)) throw new AgentSessionRuntimeError("handoff verification entry is invalid");
-		assertOnlyKeys(entry, ["name", "status", "summary"], "handoff verification");
-		const status = String(entry.status);
+		const verificationFields = captureKnownRecordFields(entry, "handoff verification", ["name", "status", "summary"]);
+		const status = String(verificationFields.get("status"));
 		if (!["passed", "failed", "blocked", "not_run"].includes(status)) {
 			throw new AgentSessionRuntimeError("handoff verification status is invalid");
 		}
 		return {
-			name: redactedBoundedString(entry.name, "handoff verification name", 128, false),
+			name: redactedBoundedString(verificationFields.get("name"), "handoff verification name", 128, false),
 			status: status as HandoffVerification["status"],
-			summary: redactedBoundedString(entry.summary, "handoff verification summary", MAX_HANDOFF_ITEM_CHARACTERS, false),
+			summary: redactedBoundedString(verificationFields.get("summary"), "handoff verification summary", MAX_HANDOFF_ITEM_CHARACTERS, false),
 		};
 	});
-	const findings = boundedArray(candidate.findings, "handoff findings").map((finding) =>
+	const findings = boundedArray(fields.get("findings"), "handoff findings").map((finding) =>
 		redactedBoundedString(finding, "handoff finding", MAX_HANDOFF_ITEM_CHARACTERS, false));
 	return {
 		schemaVersion: 1,
@@ -2932,9 +2979,9 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 		candidateHead: request.binding.candidateHead,
 		validationNonce: request.binding.validationNonce,
 		role: request.role,
-		status: candidate.status as AgentSessionHandoff["status"],
+		status: handoffStatus as AgentSessionHandoff["status"],
 		summary,
-		observedMutation: candidate.observedMutation,
+		observedMutation,
 		changedPaths,
 		verification,
 		findings,
@@ -2974,20 +3021,6 @@ function isAbsoluteNonTraversingPath(value: unknown): value is string {
 
 function canonicalWorkspacePath(value: string): string {
 	return /^(?:[A-Za-z]:[\\/]|\\\\)/.test(value) ? win32.normalize(value) : posix.normalize(value);
-}
-
-function assertOnlyKeys(value: Record<string, unknown>, allowed: readonly string[], description: string): void {
-	const allowedSet = new Set(allowed);
-	let count = 0;
-	for (const key of INTRINSIC_GET_OWN_PROPERTY_NAMES(value)) {
-		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
-		if (!descriptor?.enumerable) continue;
-		if (!allowedSet.has(key)) {
-			throw new AgentSessionRuntimeError(`${description} contains unknown field ${JSON.stringify(key)}`);
-		}
-		count += 1;
-		if (count > allowed.length) throw new AgentSessionRuntimeError(`${description} contains too many fields`);
-	}
 }
 
 function validIdentifier(value: unknown): value is string {
