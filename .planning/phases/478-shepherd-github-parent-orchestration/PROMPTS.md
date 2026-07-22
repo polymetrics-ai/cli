@@ -313,3 +313,33 @@ full diff, exact 21 paths, three JSON parses, Cycle 12 marker confinement, and b
 identities pass. The broad route remains non-zero at 1198 / 1132 / 65 / 1 because of the same
 managed-sandbox process-spawn/lease family, so verification/review remain false and all external
 or human gates stay parent-owned.
+
+## Cycle 13 consolidated-review prompt
+
+- Start from exact clean candidate `baef761544b8f0f58e2662058ae0c1715f345300`, tree
+  `6bf70b7afa9d995a943b8796ce2277a9ce337256`, immutable/exact merge base `3addb1f4`, and exact
+  21-path ownership. Read `/tmp/478-REVIEW-CYCLE12-1.md` and
+  `/tmp/478-REVIEW-CYCLE12-2.md` completely and implement their union without deferral.
+- Commit nine artifact-only PLAN updates before tests or production. Then commit one complete
+  executable RED in the existing five tests, retaining 978 prior cases and freezing all five
+  production blobs. Report exact PLAN/RED SHAs, counts, and blobs before GREEN.
+- Every valid mismatched begin return must reread/reconcile the exact returned coordinate and also
+  terminally reconcile the requested invocation. Public return, keyed release, and abort-bounded
+  stop wait for both independently tracked proofs for absent, unsettled, terminal, and stale-return
+  outcomes. Never synthesize returned coordinates from the request.
+- Accept only coherent authority-terminal-before-journal-settlement restart windows by returning a
+  deterministic typed repair for explicit journal persistence; reject impossible identity,
+  outcome, chronology, duplication, and receipt/visibility histories.
+- Bind a prepared authorization to the exact consumed `parent_merge` / `approve-merge` human
+  decision repository, PR target, generation, and head. Require one unique current PR owner for
+  the canonical parent marker across all retained histories.
+- Replace repeated closer rescans with a bounded forward assignment scanner. Malformed case and
+  heredoc values remain safely owned without leaking markers or consuming later unrelated public
+  fields; all five consumers stay generic.
+- Keep evidence narrow and both machine gates false while broad is non-zero and exact-head review
+  is absent. Exclude Go/connectors/`make`, services, dependencies, network/GitHub, push, reviewers,
+  integration, ready, merge, and human gates.
+
+Execution status: artifact PLAN only. The matrix is 73 rows: BEGIN 16, cross-store 10, decision 9,
+marker 4, scanner 30, and artifact 4. No Cycle 13 test or production edit has run. Adapter/runtime
+decisions are `manual_gsd_fallback` and `local_critical_path`.

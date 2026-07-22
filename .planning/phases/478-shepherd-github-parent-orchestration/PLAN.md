@@ -1486,3 +1486,139 @@ review router `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
 `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. No Go, connector, `make`, service,
 dependency, parent/main/#475, credential, network/GitHub, push, reviewer, ready, integration,
 merge, or human-gate action ran.
+
+## Cycle 13 consolidated-review correction
+
+Frozen reviewed candidate: `baef761544b8f0f58e2662058ae0c1715f345300` (tree
+`6bf70b7afa9d995a943b8796ce2277a9ce337256`). Immutable base and exact merge base remain
+`3addb1f48be1afe8b1e2b59b54247679d7293805`; the clean immutable-base range remains exactly 21
+owned paths. Both independent Cycle 12 reports were read completely before planning:
+`/tmp/478-REVIEW-CYCLE12-1.md` is 278 lines with SHA-256
+`b7724f6845e0c48ac23f88e942fffe84d86faac532a2a08c914259e94eeea06e` and
+`/tmp/478-REVIEW-CYCLE12-2.md` is 209 lines with SHA-256
+`38ccafdc48e4cf49043cc6bb5946b91910aaf18a74d17488d20209f763234593`.
+
+All five production blobs are frozen before Cycle 13 RED:
+
+- orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`
+- review router `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`
+- decision broker `7be6785190176a8c15660fb180fc95c207b76d5b`
+- GitHub evidence `058ad1622249a9772ce9e03f7f83cc3bf28b464a`
+- human decision `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`
+
+Required routing, GSD programming-loop, issue-delivery, architecture, JavaScript testing,
+compact-orchestration, universal runtime, Pi adapter, runtime-integration, project, roadmap,
+state, prompt, PRD, and repo-profile sources were read. `scripts/gsd doctor` passes, while
+`scripts/gsd prompt programming-loop init --phase 478-shepherd-github-parent-orchestration
+--dry-run` reports `unknown GSD command: programming-loop`. Cycle 13 therefore records
+`manual_gsd_fallback`. A read-only sidecar was attempted after report intake but the runtime was at
+its agent-thread limit, so the explicit execution decision is `local_critical_path`.
+
+### Cycle 13 six-state dual reconciliation matrix
+
+Every structurally valid mismatched `beginParentReady` return is untrusted until two independently
+tracked proofs close: the originally requested coordinate and the exact coordinate carried by the
+returned state. The returned coordinate is never synthesized from the requested plan.
+
+| Observed exact-coordinate outcome | Required observation proof | Final public rule |
+| --- | --- | --- |
+| absent on reread | authoritative absence after the returned coordinate is read | requested proof must also join before `authority_moved` |
+| `ready_invoking` | adopt exact invocation and recover/terminalize it | quarantined until both proofs join |
+| `ready_effect_applied` | adopt exact applied revision and recover its own mutation only | quarantined until both proofs join |
+| `recovery_claimed` | resume exact recovery ID/fence/rollback intent | quarantined until both proofs join |
+| `ready_settled` | exact terminal reread with matching repository/PR/marker/generation/head | moved only after requested proof joins |
+| `draft_restored` | exact terminal reread with matching terminal record | moved only after requested proof joins |
+| stale returned `ready_settled` rereads as `ready_invoking` | adopt the reread unsettled state, not the stale return | quarantined until both proofs join |
+| stale returned `draft_restored` rereads as `recovery_claimed` | resume the reread recovery, not the stale return | quarantined until both proofs join |
+
+Each of the eight outcomes runs in requested-first and observed-first completion order: 16 rows.
+Before the second proof, the public promise remains pending, same-key reentry remains excluded, and
+an abort-bounded `stop()` is incomplete. Requested ready effects remain zero. Final result, key
+release, and joined stop occur only after both exact proofs; no rollback may target a synthetic
+requested coordinate or mutate unrelated foreign PR fields.
+
+### Cycle 13 cross-store terminal-window matrix
+
+Authority and journal remain separate durable stores. Restart validation returns an exact,
+deterministic settlement-repair plan for coherent half-transitions instead of rejecting or
+silently fabricating completion:
+
+| Authority terminal state | Missing journal record | Deterministic repair |
+| --- | --- | --- |
+| `ready_settled` with exact ready receipt and non-draft current PR | ready settlement | one exact `ready` settlement bound to plan/authorization/mutation, timestamped no earlier than the consumed decision |
+| `draft_restored` with exact recovery attempt, rollback receipt, and restored draft PR | blocked settlement | one exact `blocked` settlement with the same binding and causal timestamp |
+
+Repair application through `ParentReadyOperationJournal.persistSettlement` is explicit and
+idempotent; revalidation after persistence yields no repair. Wrong identity, wrong outcome,
+duplicate settlement, orphan terminal state, stale decision chronology, and incompatible receipt/
+visibility history still reject. The matrix has 10 rows: two canonical repairs, two idempotent
+replays, and six rejection controls.
+
+### Cycle 13 decision and marker ownership matrix
+
+Every prepared authorization must carry the exact consumed human decision that authorized it:
+`gate=parent_merge`, status `consumed`, decision option `approve-merge`, and binding repository,
+pull-request target/number, generation, and head equal to the authorization. Canonical digest
+recomputation cannot legitimize a cross-bound record. One canonical control plus eight altered
+status/gate/option/repository/target-kind-or-number/generation/head/digest rows form the 9-row
+decision matrix.
+
+The restart graph permits exactly one current plan-owned PR with the canonical parent marker.
+Duplicate canonical-marker histories, ambiguous current PR ownership, and a prepared history
+cross-bound to another PR/head reject. One legal control plus those three failures form the
+4-row marker matrix. Cycle 12's cross-bound two-history helper is not a canonical control.
+
+### Cycle 13 linear assignment-scanner matrix
+
+The scanner uses one bounded forward state per assignment. It may conservatively own the current
+bounded field when syntax is malformed, but it must not rescan the remaining input per opener and
+must not consume unrelated later public fields.
+
+The 30-row matrix contains:
+
+- eight direct rows: both operators across malformed case, malformed heredoc, later public `)`,
+  and later public `}` preservation;
+- twenty generic/no-marker consumer rows: both operators x malformed case/heredoc x five owned
+  validators;
+- two linearity rows: no repeated `lastIndexOf` closer search and a maximum-bound unmatched-opener
+  input completes with the sensitive field redacted and the adjacent public field preserved.
+
+Retained well-formed multiline quote, ANSI-C, backtick, command/parameter substitution, array,
+process-substitution, brace, case, and heredoc rows remain mandatory.
+
+### Cycle 13 executable RED matrix
+
+| ID | Rows | RED contract |
+| --- | ---: | --- |
+| C13-BEGIN | 16 | eight exact observed outcomes x two proof orders; public/key/stop await both and use no synthetic coordinate |
+| C13-CROSS-STORE | 10 | two repairable terminal windows, idempotent replay, and six impossible-history rejections |
+| C13-DECISION | 9 | exact consumed affirmative decision binding plus eight fail-closed mutations |
+| C13-MARKER | 4 | one legal current owner plus duplicate-marker, ambiguous-current, and cross-bound rejection |
+| C13-SCANNER | 30 | eight direct, twenty consumer, and two linear/malformed-bound rows |
+| C13-ARTIFACT | 4 | leading summary, verification, PR/handoff, and machine state name only executed rows |
+
+### Cycle 13 lifecycle
+
+1. Commit these nine artifact-only PLAN updates before any Cycle 13 test or production edit.
+2. Add the complete 73-row executable RED only in the existing five tests; keep every production
+   blob exact and retain all 978 focused Cycle 12 cases.
+3. Run the focused route and strict owned TypeScript, record exact failing leaves/containers and
+   controls, commit RED, then report PLAN/RED SHAs, counts, and frozen blobs before GREEN.
+4. Implement the smallest exact-coordinate reconciliation, pure restart-repair result,
+   decision/marker binding, and bounded forward scanner. No optional refactor.
+5. Run focused, targeted repeats, strict owned/all-production TypeScript, pinned offline RPC, one
+   broad serialized classification, immutable-base/merge-base/full-diff/exact-21-path, JSON,
+   marker, and both Cycle 12 report identity gates.
+6. Keep `verificationPassed: false` while broad exits non-zero and
+   `reviewCoveragePassed: false` until parent-owned fresh exact-head review completes.
+
+- [x] Exact Cycle 12 candidate/tree/base/scope and five frozen blobs confirmed.
+- [x] Both complete Cycle 12 reports read and consolidated without deferral.
+- [x] Required skills/contracts/project context read; doctor passed; adapter unavailable; agent
+      limit recorded as `local_critical_path` and `manual_gsd_fallback`.
+- [ ] Artifact-only Cycle 13 PLAN committed before test or production changes.
+- [ ] Executable RED committed with exact counts and frozen production blobs.
+- [ ] PLAN/RED evidence reported to parent before GREEN.
+- [ ] Coherent GREEN and truthful local evidence recorded.
+- [x] Network/GitHub, push, reviewer dispatch, ready, integration, merge, and human gates remain
+      parent-owned and out of this worker's scope.

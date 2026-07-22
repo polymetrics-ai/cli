@@ -619,3 +619,30 @@ evidence `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
 The broad non-zero route and absent fresh exact-head review keep `verificationPassed: false` and
 `reviewCoveragePassed: false`. No network/GitHub, push, review dispatch, ready, integration,
 merge, or human gate ran.
+
+## Cycle 13 consolidated-review RED ledger
+
+Frozen exact candidate/tree: `baef761544b8f0f58e2662058ae0c1715f345300` /
+`6bf70b7afa9d995a943b8796ce2277a9ce337256`; immutable base and exact merge base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 12 reports were read completely before
+this ledger: 278 + 209 = 487 lines with SHA-256
+`b7724f6845e0c48ac23f88e942fffe84d86faac532a2a08c914259e94eeea06e` and
+`38ccafdc48e4cf49043cc6bb5946b91910aaf18a74d17488d20209f763234593`.
+
+| Family | Planned rows | RED boundary |
+| --- | ---: | --- |
+| C13-BEGIN | 16 | eight returned/reread outcomes x requested-first/observed-first; public/key/stop await both exact proofs |
+| C13-CROSS-STORE | 10 | two repairable terminal windows, two idempotent replays, six impossible-history rejects |
+| C13-DECISION | 9 | canonical consumed approval plus eight exact-binding failures |
+| C13-MARKER | 4 | legal owner plus duplicate marker, ambiguous current owner, and cross-bound rejection |
+| C13-SCANNER | 30 | eight direct, twenty five-consumer, and two bounded-linearity rows |
+| C13-ARTIFACT | 4 | leading summary, verification, PR/handoff, and machine truth name only executed evidence |
+
+At artifact PLAN, no Cycle 13 test has run, no production edit exists, and none of these rows is
+claimed executed. The RED commit must preserve all 978 prior focused Cycle 12 cases and exact blobs:
+orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+`2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
+`7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. Strict owned TypeScript must pass at RED; exact
+failing leaves/containers and passing controls will be recorded only after execution.

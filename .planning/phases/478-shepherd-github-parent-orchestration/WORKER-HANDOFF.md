@@ -16,13 +16,11 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Prior frozen reviewed candidate: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`
+Prior frozen reviewed candidate: `baef761544b8f0f58e2662058ae0c1715f345300`
 
-Cycle 12 status: locally GREEN at `723fdc122cea75a5d6f146fb8b39383e9e5795e3` after artifact
-PLAN `7f96718c` and executable RED `2649cf6d`. Focused is 978 / 977 / 0 / 1; strict
-owned/all-production TypeScript, pinned offline RPC, and exact integrity gates pass. Verification
-remains false because broad is 1198 / 1132 / 65 / 1, and review coverage remains false because no
-fresh exact-head review ran. This is a local evidence candidate, not a review-clean candidate.
+Cycle 13 status: both Cycle 12 reviews block the frozen candidate. The 73-row union is at its
+artifact-only PLAN checkpoint; no Cycle 13 test or production edit has run. Verification and review
+coverage remain false. This is neither an implemented nor review-clean Cycle 13 candidate.
 
 ## Scope Delivered
 
@@ -457,3 +455,22 @@ session-attestation contract and fixtures required to verify independent-review 
   human decision `fc1c6230`.
 - `verificationPassed` and `reviewCoveragePassed` remain false; publication, review dispatch,
   integration, ready, merge, and every human gate remain parent-owned and did not run.
+
+## Cycle 13 correction handoff
+
+- Frozen candidate/tree/base: `baef7615` / `6bf70b7a` / `3addb1f4`; exact 21 paths and five
+  production blobs; both Cycle 12 reports read completely (487 lines, exact hashes recorded).
+- C13-BEGIN has 16 rows: absent, three unsettled phases, two terminal phases, and two stale-terminal
+  rereads, each in both proof orders. Public return, key release, and stop completion await both the
+  requested and exact returned-coordinate proof; requested coordinates are never synthesized.
+- C13-CROSS-STORE has 10 rows: deterministic typed journal repair for two coherent terminal
+  authority windows, idempotent replay, and six impossible-history rejections.
+- C13-DECISION/MARKER has 13 rows: exact consumed `parent_merge`/`approve-merge` authorization
+  binding plus one unique current canonical parent marker owner across histories.
+- C13-SCANNER has 30 rows: malformed case/heredoc ownership, later public closer preservation,
+  five generic consumers, and bounded single-pass/no-repeated-`lastIndexOf` behavior.
+- The next checkpoint is one complete test-only RED in the existing five tests, preserving all 978
+  prior focused cases and the exact production blobs. PLAN/RED SHAs and counts must be reported
+  before GREEN.
+- Adapter/runtime decisions are `manual_gsd_fallback` and `local_critical_path`. No network,
+  GitHub, push, reviewer, integration, ready, merge, or human gate is worker-owned or ran.

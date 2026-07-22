@@ -1,12 +1,10 @@
 # Summary: #478
 
-Status: Cycle 12 is locally GREEN at implementation checkpoint
-`723fdc122cea75a5d6f146fb8b39383e9e5795e3` after artifact PLAN `7f96718c` and executable
-RED `2649cf6d`. The focused route is 978 total / 977 pass / 0 fail / 1 intentional skip; strict
-owned/all-production TypeScript, pinned offline RPC, and exact integrity gates pass. The declared
-broad route remains non-zero at 1198 / 1132 / 65 / 1 because of the managed-sandbox
-process-spawn/lease family, and no fresh exact-head review ran. Verification and review coverage
-therefore remain false; earlier delivery status below is retained as historical context.
+Status: both independent Cycle 12 reviews block exact candidate
+`baef761544b8f0f58e2662058ae0c1715f345300`. Cycle 13 is at its artifact-only PLAN checkpoint:
+the 73-row review union is frozen, but no Cycle 13 test or production edit has run. The prior
+Cycle 12 focused and strict results are historical only; the declared broad route remains non-zero
+and no fresh exact-head review ran. `verificationPassed` and `reviewCoveragePassed` remain false.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -299,3 +297,27 @@ are orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
 `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, and
 human decision `fc1c6230`. `verificationPassed` and `reviewCoveragePassed` remain false. No
 network, publication, reviewer dispatch, integration, ready, merge, or human gate ran.
+
+## Cycle 13 correction status
+
+Both Cycle 12 reports were read completely: 487 total lines with SHA-256
+`b7724f6845e0c48ac23f88e942fffe84d86faac532a2a08c914259e94eeea06e` and
+`38ccafdc48e4cf49043cc6bb5946b91910aaf18a74d17488d20209f763234593`. Their union is frozen
+against candidate/tree `baef7615` / `6bf70b7a`, immutable/exact merge base `3addb1f4`, clean exact
+21-path ownership, and five production blobs.
+
+The 73 planned rows require every valid mismatched begin return to join requested and exact
+returned-coordinate reconciliation, repair only coherent authority-terminal/journal-unsettled
+restart windows, bind authorization to the exact consumed affirmative human decision and unique
+current parent marker owner, and replace repeated closer rescans with a bounded forward assignment
+scanner that preserves unrelated public fields. The split is BEGIN 16, cross-store 10, decision 9,
+marker 4, scanner 30, and artifact 4. All 978 prior focused Cycle 12 cases remain mandatory.
+
+This checkpoint changes only the nine planning artifacts. Frozen production blobs are orchestrator
+`ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+`2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
+`7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. The adapter remains
+`manual_gsd_fallback`; unavailable agent capacity records `local_critical_path`. No network,
+GitHub, push, reviewer, integration, ready, merge, or human-gate action ran.

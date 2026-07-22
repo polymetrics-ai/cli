@@ -571,3 +571,24 @@
   `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.
 - `verificationPassed` and `reviewCoveragePassed` remain false. No network/GitHub, push,
   review dispatch, ready, integration, merge, or human gate ran.
+
+## 2026-07-22 Cycle 13 plan
+
+- Reconciled exact clean candidate/tree `baef761544b8f0f58e2662058ae0c1715f345300` /
+  `6bf70b7afa9d995a943b8796ce2277a9ce337256`, immutable and exact merge base `3addb1f4`, and
+  exact 21-path ownership before edits.
+- Read both Cycle 12 reports completely: 487 lines total with SHA-256
+  `b7724f6845e0c48ac23f88e942fffe84d86faac532a2a08c914259e94eeea06e` and
+  `38ccafdc48e4cf49043cc6bb5946b91910aaf18a74d17488d20209f763234593`.
+- Reloaded required skill routing, GSD programming loop/workflows, issue contract, universal
+  runtime, adapter/runtime integration, project, roadmap, state, prompt, PRD, and repo profile.
+  Doctor passed; the missing adapter command records `manual_gsd_fallback`.
+- A read-only sidecar attempt hit the agent-thread limit, so this worker records
+  `local_critical_path` and owns the artifact PLAN, complete executable RED, GREEN/refactor, and
+  local evidence inside the unchanged boundary.
+- Froze the 73-row union: exact dual begin proof 16, cross-store terminal repair 10, consumed
+  decision binding 9, unique marker ownership 4, bounded assignment scanner 30, and artifacts 4.
+  No Cycle 13 test or production edit ran.
+- Frozen blobs: orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+  `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, human
+  decision `fc1c6230`. Both machine gates remain false; no external or human gate ran.
