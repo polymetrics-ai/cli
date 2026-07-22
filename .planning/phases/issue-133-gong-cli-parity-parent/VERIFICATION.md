@@ -98,3 +98,29 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] `go vet ./...`
 - [x] `go build ./cmd/pm`
 - [x] `make verify`
+
+## 2026-07-22 completion-cycle verification checklist
+
+- [ ] Red CLI help/bare-namespace tests captured.
+- [ ] Red upload approval/content-integrity test captured.
+- [ ] Red multipart post-validation growth test captured.
+- [ ] Red Gong zero-planned/transcript-executable test captured.
+- [ ] `go test ./internal/cli -run 'Connector.*Help|DynamicConnectorHelp' -count=1`
+- [ ] `go test ./internal/app -run 'PayloadIdentit|ConnectorCommandPlan' -count=1`
+- [ ] `go test ./internal/connectors/connsdk -run Multipart -count=1`
+- [ ] `go test ./internal/connectors/commandrunner -run OperationDirectRead -count=1`
+- [ ] `go test ./cmd/connectorgen -run Gong -count=1`
+- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs`
+- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
+- [ ] `go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs`
+- [ ] `./pm help gong` exits 0.
+- [ ] `./pm gong` exits 0 and renders contextual help.
+- [ ] `./pm gong --help` exits 0.
+- [ ] `./pm gong calls transcript --help` exits 0 without project/credentials.
+- [ ] `gofmt -w cmd internal`
+- [ ] `go vet ./...`
+- [ ] `go test ./...`
+- [ ] `go build ./cmd/pm`
+- [ ] `make verify`
+- [ ] Automated review covers final head with no unresolved actionable findings.
+- [ ] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.

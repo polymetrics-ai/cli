@@ -123,3 +123,26 @@ Created follow-up implementation issues from the #146 analysis to close the rema
 - #254 — bounded typed multipart upload support.
 
 Runtime decision: no subagent tool is available in this Pi API session and the write scopes overlap in `internal/connectors/engine`, `internal/connectors/commandrunner`, `cmd/connectorgen`, and Gong definitions, so the parent orchestrator records `local_critical_path_runtime_capability_missing` and executes the slices sequentially on `feat/133-gong-cli-parity`.
+
+## 2026-07-22 completion and merge-readiness cycle
+
+User objective: finish remaining Gong surface, make transcript executable, enable connector immediately on merge, and prepare parent PR #232 for human merge.
+
+Execution decision: `not_spawned_runtime_capability_missing` followed by `local_critical_path`. The current Pi harness exposes `read`, `bash`, `edit`, and `write`, but no `subagent` tool. Coupled changes also overlap in CLI dispatch, engine safety, Gong definitions, generated docs, and shared parent artifacts.
+
+Required slices:
+
+1. **CLI help parity (#142)** — make `pm help gong`, `pm gong`, `pm gong --help`, and command-level `--help` render connector metadata without opening a project or requiring credentials.
+2. **Approval/upload safety (#254)** — bind approved file uploads to content digest, enforce multipart byte limits while streaming (not only preflight `stat`), and keep paths/content out of rendered plans.
+3. **Remaining typed POST reads (#252)** — replace all 10 planned Gong operation blockers with connector-authored typed flags and executable bounded/redacted direct reads. `calls transcript` is mandatory.
+4. **Coverage and generated parity (#133)** — classify the 10 operations as executable direct reads, regenerate connector manual/skill and website catalog, and retain reverse ETL plan → preview → approval → execute.
+5. **Final readiness** — full local gates, clean automated review coverage on the current head, PR closing keywords, and human merge gate.
+
+TDD order:
+
+- Red CLI tests for dynamic connector help and bare namespace behavior.
+- Red upload tests proving same-size/same-mtime content changes invalidate approval and post-validation growth cannot exceed `MaxBytes`.
+- Red Gong coverage tests requiring zero planned direct reads and implemented transcript metadata.
+- Smallest green implementation per slice, then refactor and generated artifact refresh.
+
+No credentialed Gong requests, live writes, new dependencies, raw body flags, generic HTTP writes, or parent merge to `main`.

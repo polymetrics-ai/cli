@@ -151,6 +151,28 @@
         254
       ],
       "reason": "User requested creating issues and implementing the remaining Gong engine-shape gaps. This Pi API session still has no subagent tool, and the write scopes collide in engine/commandrunner/defs, so execute sequentially inline on the parent branch."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "reason": "Project pm-gsd-worker, pm-scout, and pm-reviewer agents were reviewed, but the current Pi harness does not expose the subagent tool. Next unblock action: relaunch Pi with read,bash,edit,write,grep,find,ls,subagent; current requested delivery continues as local critical path."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "reason": "Completion changes overlap across dynamic CLI help, upload approval safety, Gong operation metadata, generated docs, and parent artifacts; execute sequential TDD slices in the parent checkout."
     }
   ],
   "subissues": [
@@ -374,7 +396,7 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-10T00:00:00Z",
+  "updated_at": "2026-07-22T10:37:13Z",
   "integration_notes": [
     {
       "timestamp": "2026-07-10T00:00:00Z",
@@ -385,6 +407,17 @@
       ],
       "status": "sub_pr_green",
       "summary": "Engine-shape subissues implemented inline because no subagent tool is available: typed POST read-query direct reads, json_array write bodies, multipart write bodies, Gong safe availability flips, docs/website updates, and make verify passed. Local file upload approvals bind path hash plus size/mtime identity."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "issues": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "status": "worker_in_progress",
+      "summary": "Completion cycle started: dynamic Gong help, content-bound approval identities, stream-time multipart byte enforcement, and all remaining POST direct reads including transcript. Verification reset to pending."
     }
   ]
 }

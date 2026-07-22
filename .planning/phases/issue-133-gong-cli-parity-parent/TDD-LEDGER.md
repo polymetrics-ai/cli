@@ -65,3 +65,21 @@ Green:
 Refactor:
 - Remaining broad filter-shaped POST reads stay planned until safe typed filter flags are authored; blocker text now reflects command-specific mapping work rather than missing engine support.
 - Multipart and top-level array support remain reverse-ETL/write-record scoped; no generic upload/raw JSON command was introduced.
+
+## 2026-07-22 completion cycle — planned red/green ledger
+
+Execution decision: `not_spawned_runtime_capability_missing`; implementation proceeds as coupled `local_critical_path` in the parent checkout.
+
+Red targets:
+
+- CLI: `pm help gong`, bare `pm gong`, and `pm gong --help` currently fail instead of rendering connector help.
+- Approval integrity: same-size file content can change while size/mtime are restored, leaving the prior payload identity unchanged.
+- Multipart bound: file growth after preflight `stat` can exceed `MultipartFile.MaxBytes` because the stream uses unbounded `io.Copy`.
+- Gong completion: 10 POST direct-read commands, including `calls transcript`, remain `planned` and their API ledger rows remain blocked operations.
+
+Green targets:
+
+- Dynamic connector help resolves before app/project initialization and bare connector namespaces exit 0.
+- Payload identity includes a content digest; multipart copies at most `MaxBytes+1` and fails closed before accepting an oversized body.
+- All 10 POST read-query commands have typed connector-authored flags, bounded `json_redacted` output, and `availability: implemented`; no raw JSON body flag exists.
+- Gong API ledger reports 67 executable classifications and zero blocked operation rows.
