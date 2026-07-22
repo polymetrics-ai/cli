@@ -114,6 +114,15 @@ func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing
 			}
 		})
 	}
+
+	t.Run("bare flag before repeated value", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		args := []string{"github", "issue", "create", "--plan", "--plan", "rplan_fixture"}
+		code := cli.Run(args, &stdout, &stderr)
+		if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "requires a value") {
+			t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+		}
+	})
 }
 
 func TestDynamicConnectorHelpJSONIsAgentReadable(t *testing.T) {

@@ -803,9 +803,11 @@ func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 		if _, ok := flags.values[name]; !ok {
 			continue
 		}
-		value := strings.TrimSpace(flags.first(name))
-		if value == "" || value == "true" {
-			return usageErrorf("--%s requires a value", name)
+		for _, raw := range flags.values[name] {
+			value := strings.TrimSpace(raw)
+			if value == "" || value == "true" {
+				return usageErrorf("--%s requires a value", name)
+			}
 		}
 	}
 	return nil
