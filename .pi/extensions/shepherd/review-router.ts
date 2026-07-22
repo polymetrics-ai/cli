@@ -183,6 +183,7 @@ function exactRecord(value: unknown, required: readonly string[], optional: read
 
 export function redactSensitiveText(input: string): string {
 	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?|cookies?|set[_-]?cookie|session(?:[_ -]?(?:id|token|cookie))?|csrf[_-]?token)";
+	const credentialEnvironmentName = "(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY|GITHUB_TOKEN|GH_TOKEN|NPM_TOKEN|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|AZURE_CLIENT_SECRET|GOOGLE_APPLICATION_CREDENTIALS|DATABASE_URL)";
 	return input
 		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
 		.replace(/\b((?:Set-Cookie|Cookie|X-(?:Session|Auth|CSRF)(?:-Id|-Token)?))\s*:\s*[^\r\n]+/giu, "$1: [REDACTED]")
@@ -191,12 +192,15 @@ export function redactSensitiveText(input: string): string {
 		.replace(new RegExp(`(["']${secretName}["']\\s*:\\s*)(?:"[^"\\r\\n]*"|'[^'\\r\\n]*'|[^,}\\r\\n]+)`, "giu"), "$1\"[REDACTED]\"")
 		.replace(/(?:^|[\r\n])([ \t]*(?:(?:machine|default)[ \t]+[^\r\n]+?[ \t]+)?password[ \t]+)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
 		.replace(/((?:^|[^A-Za-z0-9])(?:\/\/[^\s:]+\/)?_(?:authToken|auth|password)\s*=\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/giu, "$1[REDACTED]")
-		.replace(/\b[A-Z][A-Z0-9_]*(?:TOKEN|SECRET|PASSWORD|API_KEY|PRIVATE_KEY|DATABASE_URL|CREDENTIALS?|SECRET_ACCESS_KEY|ACCESS_KEY)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "SECRET=[REDACTED]")
+		.replace(new RegExp(`\\b${credentialEnvironmentName}\\s*=\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "giu"), "SECRET=[REDACTED]")
 		.replace(/\b((?:credentials?|credential)[_-](?:file|path)|google_application_credentials)\s*=\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "$1=[REDACTED]")
+		.replace(/\b((?:client-key-data|token)\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;}]+)/giu, "$1[REDACTED]")
+		.replace(/(["'](?:auth|identitytoken)["']\s*:\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^,}\r\n]+)/giu, "$1\"[REDACTED]\"")
+		.replace(/\b((?:aws_access_key_id|aws_secret_access_key|aws_session_token)\s*=\s*)(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu, "$1[REDACTED]")
 		.replace(new RegExp(`\\b(${secretName})\\b\\s*[:=]\\s*(?:"[^"]*"|'[^']*'|[^\\s,;]+)`, "giu"), "$1=[REDACTED]")
 		.replace(/\b([a-z][a-z0-9+.-]*:\/\/)[^\s\/@:]+:[^\s\/@]+@/giu, "$1[REDACTED]@")
 		.replace(/([?&](?:token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret)=)[^&#\s]+/giu, "$1[REDACTED]")
-		.replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk_(?:live|test)_[A-Za-z0-9_-]{10,}|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16})\b/gu, "[REDACTED]");
+		.replace(/\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk_(?:live|test)_[A-Za-z0-9_-]{10,}|sk-[A-Za-z0-9_-]{20,}|(?:AKIA|ASIA)[0-9A-Z]{16})\b/gu, "[REDACTED]");
 }
 
 export function assertNoSensitiveText(value: string, description = "text"): void {

@@ -44,6 +44,7 @@ import {
 	independentReviewAuthorizationDigest,
 	independentReviewResultDigest,
 	readBoundedExactRecord,
+	validateAgentSessionAttestation,
 	type AgentSessionAttestation,
 	type IndependentReviewRecord,
 	type IndependentReviewTarget,
@@ -372,7 +373,31 @@ export interface MarkParentReadyRequest extends GitHubPullRequestQuery {
 	generation: number;
 	decisionRequestId: string;
 	authorization: ParentReadyAuthorization;
+	freshness: ParentReadyFreshnessEnvelope;
 	mutation: DurableMutationIntent;
+}
+
+export interface ParentReadyPolicyAuthority {
+	schemaVersion: 1;
+	authority: "controller";
+	repository: string;
+	baseBranch: string;
+	revision: number;
+	digest: string;
+}
+
+export interface ParentReadyAncestryAuthority {
+	schemaVersion: 1;
+	authority: "transport";
+	repository: string;
+	ancestorSha: string;
+	descendantSha: string;
+	result: true;
+}
+
+export interface ParentReadyChildAuthority {
+	receipt: ChildIntegrationReceipt;
+	ancestry: ParentReadyAncestryAuthority;
 }
 
 export interface ParentReadyAuthorization {
@@ -387,10 +412,36 @@ export interface ParentReadyAuthorization {
 	policySetDigest: string;
 	parentReviewDigest: string;
 	parentPathDigest: string;
+	policies: ParentReadyPolicyAuthority[];
+	reviewAuthorizationDigest: string;
+	exactPaths: string[];
+	children: ParentReadyChildAuthority[];
+	decision: HumanDecisionRecord;
 	planDigest: string;
 	headSha: string;
 	pullRequestRevision: number;
 	digest: string;
+}
+
+export interface ParentReadyFreshnessEnvelope {
+	schemaVersion: 1;
+	policyObservations: RequiredGitHubCheckPolicyObservation[];
+	parentReviewResultDigest: string;
+	parentReviewCompletedAt: string;
+	parentPathRevision: number;
+	parentPathObservedAt: string;
+	childAncestryProofs: GitAncestryProof[];
+	digest: string;
+}
+
+export interface PreparedParentReadyOperation {
+	schemaVersion: 1;
+	planDigest: string;
+	policy: ParentDecisionPolicy;
+	decision: HumanDecisionRecord;
+	authorization: ParentReadyAuthorization;
+	freshness: ParentReadyFreshnessEnvelope;
+	mutation: DurableMutationIntent;
 }
 
 export interface RollbackParentReadyRequest extends GitHubPullRequestQuery {
@@ -423,6 +474,17 @@ export interface GitHubOrchestrationTransport {
 	markParentReady(request: MarkParentReadyRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
 	rollbackParentReady(request: RollbackParentReadyRequest, context: ExternalCallContext): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
 	proveAncestry(query: GitAncestryQuery, context: ExternalCallContext): Promise<GitAncestryProof>;
+}
+
+export interface ParentReadyDurableAuthorityBoundary {
+	compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
+	quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>>;
 }
 
 export interface AgentSessionAttestationSource {
@@ -580,6 +642,9 @@ export type ParentReadinessDecision =
 	| { kind: "blocked"; blockers: string[] }
 	| { kind: "awaiting_human"; reason: "pending" | "expired" | "broker_unavailable" }
 	| { kind: "rejected" };
+
+export type ParentReadinessPreparation = ParentReadinessDecision
+	| { kind: "prepared"; operation: PreparedParentReadyOperation };
 
 type ExactRecord = Record<string, unknown>;
 
@@ -1224,7 +1289,131 @@ function canonicalDigest(value: unknown): string {
 	return createHash("sha256").update(JSON.stringify(value)).digest("hex");
 }
 
-function createParentReadyAuthorization(
+function parentReadyPolicyAuthority(value: RequiredGitHubCheckPolicyObservation): ParentReadyPolicyAuthority {
+	return {
+		schemaVersion: 1,
+		authority: "controller",
+		repository: value.repository,
+		baseBranch: value.baseBranch,
+		revision: value.revision,
+		digest: value.digest,
+	};
+}
+
+function parentReadyAncestryAuthority(value: GitAncestryProof): ParentReadyAncestryAuthority {
+	return {
+		schemaVersion: 1,
+		authority: "transport",
+		repository: value.repository,
+		ancestorSha: value.ancestorSha,
+		descendantSha: value.descendantSha,
+		result: true,
+	};
+}
+
+export function canonicalizeParentReadyAuthorization(value: unknown): ParentReadyAuthorization {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "repository", "parentIssue", "generation", "pullRequest", "decisionRequestId",
+		"decisionDigest", "childRosterDigest", "policySetDigest", "parentReviewDigest", "parentPathDigest",
+		"policies", "reviewAuthorizationDigest", "exactPaths", "children", "decision", "planDigest", "headSha",
+		"pullRequestRevision",
+	]);
+	if (candidate.schemaVersion !== 1) throw new Error("invalid parent-ready authorization schema");
+	const policies = boundedArray(candidate.policies, "parent-ready policy authority", MAX_LIST, true).map((entry) => {
+		const policy = exactRecord(entry, ["schemaVersion", "authority", "repository", "baseBranch", "revision", "digest"]);
+		if (policy.schemaVersion !== 1 || policy.authority !== "controller"
+			|| typeof policy.digest !== "string" || !IDENTITY.test(policy.digest)) {
+			throw new Error("invalid parent-ready policy authority");
+		}
+		return {
+			schemaVersion: 1 as const,
+			authority: "controller" as const,
+			repository: repository(policy.repository),
+			baseBranch: canonicalGitRef(policy.baseBranch, "parent-ready policy base branch"),
+			revision: generation(policy.revision),
+			digest: policy.digest,
+		};
+	});
+	const children = boundedArray(candidate.children, "parent-ready child authority", MAX_CHILDREN, true).map((entry) => {
+		const child = exactRecord(entry, ["receipt", "ancestry"]);
+		const ancestry = exactRecord(child.ancestry, [
+			"schemaVersion", "authority", "repository", "ancestorSha", "descendantSha", "result",
+		]);
+		if (ancestry.schemaVersion !== 1 || ancestry.authority !== "transport" || ancestry.result !== true) {
+			throw new Error("invalid parent-ready ancestry authority");
+		}
+		return {
+			receipt: validateReceipt(child.receipt),
+			ancestry: {
+				schemaVersion: 1 as const,
+				authority: "transport" as const,
+				repository: repository(ancestry.repository),
+				ancestorSha: sha(ancestry.ancestorSha, "parent-ready ancestry ancestor SHA"),
+				descendantSha: sha(ancestry.descendantSha, "parent-ready ancestry descendant SHA"),
+				result: true as const,
+			},
+		};
+	});
+	const digestFields = [
+		candidate.decisionDigest,
+		candidate.childRosterDigest,
+		candidate.policySetDigest,
+		candidate.parentReviewDigest,
+		candidate.parentPathDigest,
+		candidate.reviewAuthorizationDigest,
+		candidate.planDigest,
+	];
+	if (digestFields.some((entry) => typeof entry !== "string" || !IDENTITY.test(entry))) {
+		throw new Error("invalid parent-ready authorization digest coordinate");
+	}
+	const decisionCandidate = exactRecord(candidate.decision, [
+		"schemaVersion", "requestId", "gate", "binding", "allowedOptions", "actorAllowlist", "expiresAt",
+		"question", "idempotencyMarker", "status", "createdAt", "updatedAt",
+	], ["requestComment", "decision", "consumedAt"]);
+	if (decisionCandidate.status === "consumed"
+		&& typeof decisionCandidate.consumedAt === "string"
+		&& typeof decisionCandidate.updatedAt === "string"
+		&& decisionCandidate.consumedAt > decisionCandidate.updatedAt) {
+		decisionCandidate.updatedAt = decisionCandidate.consumedAt;
+	}
+	const payload = {
+		schemaVersion: 1 as const,
+		repository: repository(candidate.repository),
+		parentIssue: generation(candidate.parentIssue),
+		generation: generation(candidate.generation),
+		pullRequest: generation(candidate.pullRequest),
+		decisionRequestId: inlineText(candidate.decisionRequestId, "parent-ready decision request ID", 128),
+		decisionDigest: candidate.decisionDigest as string,
+		childRosterDigest: candidate.childRosterDigest as string,
+		policySetDigest: candidate.policySetDigest as string,
+		parentReviewDigest: candidate.parentReviewDigest as string,
+		parentPathDigest: candidate.parentPathDigest as string,
+		policies,
+		reviewAuthorizationDigest: candidate.reviewAuthorizationDigest as string,
+		exactPaths: validateStringList(candidate.exactPaths, "parent-ready exact paths", undefined, true),
+		children,
+		decision: validateHumanDecisionRecord(decisionCandidate),
+		planDigest: candidate.planDigest as string,
+		headSha: sha(candidate.headSha, "parent-ready head SHA"),
+		pullRequestRevision: generation(candidate.pullRequestRevision),
+	};
+	return { ...payload, digest: canonicalDigest(payload) };
+}
+
+function validateParentReadyAuthorization(value: unknown): ParentReadyAuthorization {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "repository", "parentIssue", "generation", "pullRequest", "decisionRequestId",
+		"decisionDigest", "childRosterDigest", "policySetDigest", "parentReviewDigest", "parentPathDigest",
+		"policies", "reviewAuthorizationDigest", "exactPaths", "children", "decision", "planDigest", "headSha",
+		"pullRequestRevision", "digest",
+	]);
+	const { digest, ...payload } = candidate;
+	const canonical = canonicalizeParentReadyAuthorization(payload);
+	if (digest !== canonical.digest) throw new Error("parent-ready authorization digest mismatch");
+	return canonical;
+}
+
+function createParentReadyAuthority(
 	plan: ParentOrchestrationPlan,
 	pullRequest: GitHubPullRequestEvidence,
 	decision: HumanDecisionRecord,
@@ -1232,18 +1421,20 @@ function createParentReadyAuthorization(
 	changedPaths: GitHubChangedPathEvidence,
 	policies: Map<string, RequiredGitHubCheckPolicyObservation>,
 	roster: { receipts: ChildIntegrationReceipt[]; ancestryProofs: GitAncestryProof[] },
-): ParentReadyAuthorization {
+): { authorization: ParentReadyAuthorization; freshness: ParentReadyFreshnessEnvelope } {
 	const policySet = [...policies.values()].sort((left, right) => left.baseBranch.localeCompare(right.baseBranch));
+	const stablePolicies = policySet.map(parentReadyPolicyAuthority);
+	const stableChildren = roster.receipts.map((receipt, index) => ({
+		receipt,
+		ancestry: parentReadyAncestryAuthority(roster.ancestryProofs[index]),
+	}));
 	const decisionDigest = canonicalDigest(validateHumanDecisionRecord(decision));
-	const childRosterDigest = canonicalDigest({
-		receipts: roster.receipts,
-		ancestryProofs: roster.ancestryProofs,
-	});
-	const policySetDigest = canonicalDigest(policySet);
-	const parentReviewDigest = independentReviewResultDigest(review);
+	const childRosterDigest = canonicalDigest({ children: stableChildren });
+	const policySetDigest = canonicalDigest(stablePolicies);
+	const reviewAuthorizationDigest = independentReviewAuthorizationDigest(review);
 	const parentPathDigest = changedPathEvidenceDigest(changedPaths);
-	const payload = {
-		schemaVersion: 1 as const,
+	const authorization = canonicalizeParentReadyAuthorization({
+		schemaVersion: 1,
 		repository: plan.repository,
 		parentIssue: plan.parentIssue,
 		generation: plan.generation,
@@ -1252,15 +1443,29 @@ function createParentReadyAuthorization(
 		decisionDigest,
 		childRosterDigest,
 		policySetDigest,
-		parentReviewDigest,
+		parentReviewDigest: reviewAuthorizationDigest,
 		parentPathDigest,
+		policies: stablePolicies,
+		reviewAuthorizationDigest,
+		exactPaths: [...changedPaths.paths],
+		children: stableChildren,
+		decision: validateHumanDecisionRecord(decision),
 		planDigest: plan.canonical.digest,
 		headSha: pullRequest.headSha,
 		pullRequestRevision: pullRequest.revision,
+	});
+	const freshnessPayload = {
+		schemaVersion: 1 as const,
+		policyObservations: policySet,
+		parentReviewResultDigest: independentReviewResultDigest(review),
+		parentReviewCompletedAt: review.completedAt,
+		parentPathRevision: changedPaths.revision,
+		parentPathObservedAt: changedPaths.observedAt,
+		childAncestryProofs: roster.ancestryProofs,
 	};
 	return {
-		...payload,
-		digest: canonicalDigest(payload),
+		authorization,
+		freshness: { ...freshnessPayload, digest: canonicalDigest(freshnessPayload) },
 	};
 }
 
@@ -1898,8 +2103,9 @@ function validateBrokerRecord(
 	request: GitHubDecisionRequest,
 	binding: HumanDecisionBinding,
 	prior?: HumanDecisionRecord,
+	observedAt?: Date,
 ): HumanDecisionRecord {
-	const record = validateHumanDecisionRecord(value);
+	const record = validateHumanDecisionRecord(value, observedAt);
 	assertHumanDecisionBinding(record, binding);
 	if (!sameDecisionRequest(record, request)) throw new Error("human decision broker record does not match the exact request");
 	if (prior !== undefined && (record.idempotencyMarker !== prior.idempotencyMarker
@@ -1910,10 +2116,151 @@ function validateBrokerRecord(
 	return record;
 }
 
+function validateParentReadyFreshness(value: unknown): ParentReadyFreshnessEnvelope {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "policyObservations", "parentReviewResultDigest", "parentReviewCompletedAt",
+		"parentPathRevision", "parentPathObservedAt", "childAncestryProofs", "digest",
+	]);
+	if (candidate.schemaVersion !== 1
+		|| typeof candidate.parentReviewResultDigest !== "string"
+		|| !IDENTITY.test(candidate.parentReviewResultDigest)) {
+		throw new Error("invalid parent-ready freshness envelope");
+	}
+	const policyObservations = boundedArray(
+		candidate.policyObservations,
+		"parent-ready freshness policies",
+		MAX_LIST,
+		true,
+	).map(validateRequiredGitHubCheckPolicyObservation);
+	const childAncestryProofs = boundedArray(
+		candidate.childAncestryProofs,
+		"parent-ready freshness ancestry",
+		MAX_CHILDREN,
+		true,
+	).map((entry): GitAncestryProof => {
+		const proof = exactRecord(entry, [
+			"schemaVersion", "authority", "repository", "ancestorSha", "descendantSha", "result", "revision", "observedAt",
+		]);
+		if (proof.schemaVersion !== 1 || proof.authority !== "transport" || proof.result !== true) {
+			throw new Error("invalid parent-ready freshness ancestry proof");
+		}
+		return {
+			schemaVersion: 1,
+			authority: "transport",
+			repository: repository(proof.repository),
+			ancestorSha: sha(proof.ancestorSha, "parent-ready freshness ancestor SHA"),
+			descendantSha: sha(proof.descendantSha, "parent-ready freshness descendant SHA"),
+			result: true,
+			revision: generation(proof.revision),
+			observedAt: timestamp(proof.observedAt, "parent-ready freshness ancestry observation"),
+		};
+	});
+	const payload = {
+		schemaVersion: 1 as const,
+		policyObservations,
+		parentReviewResultDigest: candidate.parentReviewResultDigest,
+		parentReviewCompletedAt: timestamp(candidate.parentReviewCompletedAt, "parent-ready review completion"),
+		parentPathRevision: generation(candidate.parentPathRevision),
+		parentPathObservedAt: timestamp(candidate.parentPathObservedAt, "parent-ready path observation"),
+		childAncestryProofs,
+	};
+	const digest = canonicalDigest(payload);
+	if (candidate.digest !== digest) throw new Error("parent-ready freshness digest mismatch");
+	return { ...payload, parentReviewResultDigest: candidate.parentReviewResultDigest, digest };
+}
+
+function validateDurableMutationIntent(value: unknown): DurableMutationIntent {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "operation", "idempotencyKey", "intentDigest", "expectedResourceRevision",
+	]);
+	if (candidate.schemaVersion !== 1
+		|| !["child_issue", "pull_request", "parent_roster", "child_integration", "parent_ready", "parent_ready_rollback"].includes(String(candidate.operation))
+		|| typeof candidate.intentDigest !== "string" || !IDENTITY.test(candidate.intentDigest)) {
+		throw new Error("invalid durable mutation intent");
+	}
+	return {
+		schemaVersion: 1,
+		operation: candidate.operation as DurableMutationOperation,
+		idempotencyKey: inlineText(candidate.idempotencyKey, "durable mutation key", 512),
+		intentDigest: candidate.intentDigest,
+		expectedResourceRevision: candidate.expectedResourceRevision === null
+			? null
+			: generation(candidate.expectedResourceRevision),
+	};
+}
+
+function validatePreparedParentReadyOperation(
+	value: unknown,
+	plan: ParentOrchestrationPlan,
+): PreparedParentReadyOperation {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "planDigest", "policy", "decision", "authorization", "freshness", "mutation",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.planDigest !== plan.canonical.digest) {
+		throw new Error("prepared parent-ready operation does not match the canonical plan");
+	}
+	const policy = validateDecisionPolicy(candidate.policy as ParentDecisionPolicy);
+	const decision = validateHumanDecisionRecord(candidate.decision);
+	const authorization = validateParentReadyAuthorization(candidate.authorization);
+	const freshness = validateParentReadyFreshness(candidate.freshness);
+	const mutation = validateDurableMutationIntent(candidate.mutation);
+	if (authorization.repository !== plan.repository
+		|| authorization.parentIssue !== plan.parentIssue
+		|| authorization.generation !== plan.generation
+		|| authorization.planDigest !== plan.canonical.digest
+		|| authorization.decisionRequestId !== policy.requestId
+		|| !canonicalDataEqual(authorization.decision, decision)
+		|| mutation.operation !== "parent_ready"
+		|| mutation.expectedResourceRevision !== authorization.pullRequestRevision) {
+		throw new Error("prepared parent-ready operation authority coordinates do not match");
+	}
+	const expected = createDurableMutationIntent(
+		"parent_ready",
+		[plan.repository, plan.markers.parentPullRequest, authorization.headSha],
+		{
+			repository: authorization.repository,
+			pullRequest: authorization.pullRequest,
+			headSha: authorization.headSha,
+			generation: authorization.generation,
+			decisionRequestId: authorization.decisionRequestId,
+			authorization,
+		},
+		authorization.pullRequestRevision,
+	);
+	if (!canonicalDataEqual(mutation, expected)) throw new Error("prepared parent-ready mutation identity mismatch");
+	return {
+		schemaVersion: 1,
+		planDigest: plan.canonical.digest,
+		policy,
+		decision,
+		authorization,
+		freshness,
+		mutation,
+	};
+}
+
+export function validateRunStateCandidateSemantics(value: unknown): void {
+	const state = exactRecord(value, [
+		"schemaVersion", "phase", "issue", "parentIssue", "parentPr", "status", "reason", "details", "updatedAt",
+	]);
+	const details = exactRecord(state.details, [
+		"branch", "baseBranch", "exactBase", "candidateRef", "priorCycleImplementationHead", "subPr", "subPrUrl",
+		"adapter", "adapterHealth", "modelPolicy", "verificationPassed", "reviewCoveragePassed", "priorReviewState",
+		"reviewHistory", "checkpoints", "verification", "orchestrationDecisions", "humanGates",
+	]);
+	if (details.candidateRef !== "HEAD") {
+		throw new Error("current run-state candidate must use the single HEAD semantic; historical SHAs belong only in review history");
+	}
+}
+
 export interface GitHubParentOrchestratorOptions {
 	externalCallTimeoutMs?: number;
 	shutdownTimeoutMs?: number;
+	parentReadyAuthority?: ParentReadyDurableAuthorityBoundary;
+	now?: () => Date;
 }
+
+const quarantinedParentReadyKeys = new WeakMap<ParentReadyDurableAuthorityBoundary, Set<string>>();
 
 export class ExternalPortError extends Error {
 	readonly code: "external_timeout" | "external_cancelled" | "external_port_failed";
@@ -1938,6 +2285,8 @@ export class GitHubParentOrchestrator {
 	readonly #broker?: ParentDecisionBroker;
 	readonly #attestations?: AgentSessionAttestationSource;
 	readonly #policySource?: RequiredCheckPolicySource;
+	readonly #parentReadyAuthority: ParentReadyDurableAuthorityBoundary;
+	readonly #now: () => Date;
 	readonly #externalCallTimeoutMs: number;
 	readonly #shutdownTimeoutMs: number;
 	readonly #ensureLocks = new Map<string, Promise<void>>();
@@ -1963,6 +2312,12 @@ export class GitHubParentOrchestrator {
 		this.#broker = broker;
 		this.#attestations = attestations;
 		this.#policySource = policySource;
+		this.#parentReadyAuthority = options.parentReadyAuthority ?? {
+			compareConsumeAndMarkParentReady: (request, context) => this.#transport.markParentReady(request, context),
+			quarantineAndRollbackParentReady: (request, context) => this.#transport.rollbackParentReady(request, context),
+		};
+		this.#now = options.now ?? (() => new Date());
+		if (!Number.isFinite(this.#now().valueOf())) throw new Error("parent orchestrator clock is invalid");
 		const timeout = options.externalCallTimeoutMs ?? 15_000;
 		if (!Number.isSafeInteger(timeout) || timeout < 1 || timeout > 120_000) {
 			throw new Error("external call timeout must be a bounded positive integer");
@@ -2039,6 +2394,7 @@ export class GitHubParentOrchestrator {
 		operation: string,
 		invoke: (context: ExternalCallContext) => Promise<T>,
 		uncertain = false,
+		onUncertainInterruption?: () => Promise<void>,
 	): Promise<T> {
 		const caller = this.#lifecycleScope.getStore();
 		if (intrinsicSignalAborted(this.#stopController.signal)
@@ -2052,10 +2408,12 @@ export class GitHubParentOrchestrator {
 		if (deadline <= Date.now()) throw new ExternalPortError("external_timeout", operation, uncertain);
 		const controller = new AbortController();
 		const token = Symbol(operation);
+		let resolveFinalSettlement = (): void => {};
+		const finalSettlement = new Promise<void>((resolve) => { resolveFinalSettlement = resolve; });
 		const active = {
 			operation,
 			controller,
-			settlement: Promise.resolve(),
+			settlement: finalSettlement,
 			abortAcknowledged: false,
 		};
 		const context: ExternalCallContext = {
@@ -2066,14 +2424,29 @@ export class GitHubParentOrchestrator {
 			},
 		};
 		const invocation = Promise.resolve().then(() => invoke(context));
-		const settlement = invocation.then(() => {}, () => {});
-		active.settlement = settlement;
+		const invocationSettlement = invocation.then(() => {}, () => {});
+		let recovery: Promise<void> | undefined;
+		const startRecovery = (): Promise<void> => {
+			if (recovery === undefined) {
+				recovery = onUncertainInterruption === undefined
+					? Promise.resolve()
+					: Promise.resolve().then(onUncertainInterruption).catch(() => new Promise<void>(() => {}));
+			}
+			return recovery;
+		};
+		let finalizationStarted = false;
+		const finalize = (includeRecovery: boolean): void => {
+			if (finalizationStarted) return;
+			finalizationStarted = true;
+			const waits = includeRecovery ? [invocationSettlement, startRecovery()] : [invocationSettlement];
+			void Promise.all(waits).then(resolveFinalSettlement);
+		};
 		this.#activeCalls.set(token, active);
 		const ensureCalls = this.#ensureCallScope.getStore();
-		ensureCalls?.add(settlement);
-		void settlement.finally(() => {
+		ensureCalls?.add(finalSettlement);
+		void finalSettlement.finally(() => {
 			this.#activeCalls.delete(token);
-			ensureCalls?.delete(settlement);
+			ensureCalls?.delete(finalSettlement);
 		});
 		const guarded = invocation.then(
 			(value) => ({ kind: "value" as const, value }),
@@ -2087,6 +2460,7 @@ export class GitHubParentOrchestrator {
 				if (settled) return;
 				settled = true;
 				controller.abort();
+				if (uncertain) startRecovery();
 				resolve({ kind });
 			};
 			const callerAbort = (): void => finish("cancelled");
@@ -2102,7 +2476,15 @@ export class GitHubParentOrchestrator {
 		});
 		const outcome = await Promise.race([guarded, interrupted]);
 		dispose();
-		if (outcome.kind === "value") return outcome.value;
+		if (outcome.kind === "value") {
+			finalize(false);
+			return outcome.value;
+		}
+		if (outcome.kind === "failed") {
+			finalize(false);
+			throw new ExternalPortError("external_port_failed", operation, uncertain);
+		}
+		finalize(uncertain);
 		if (outcome.kind === "timeout") throw new ExternalPortError("external_timeout", operation, true);
 		if (outcome.kind === "cancelled") throw new ExternalPortError("external_cancelled", operation, uncertain);
 		throw new ExternalPortError("external_port_failed", operation, uncertain);
@@ -2530,16 +2912,16 @@ export class GitHubParentOrchestrator {
 		const attestations = authoritativeItems(
 			await this.callExternal("findAttestations", (context) => this.#attestations!.findAttestations(canonicalTarget, context)),
 			"AgentSession attestation lookup",
-		);
+		).map((entry) => validateAgentSessionAttestation(entry));
 		const decision = evaluateGitHubPullRequestEvidence(evidence, {
 			...expected,
 			changedPathEvidence: observation,
 			minimumObservation: { revision: observation.revision, observedAt: observation.observedAt },
 			requiredCheckPolicy,
 			reviewTarget: canonicalTarget,
-			attestations: attestations as AgentSessionAttestation[],
+			attestations,
 			}, { allowDraft, allowIntegrated });
-		return { decision, observation, target: canonicalTarget };
+		return { decision, observation, target: canonicalTarget, attestations };
 	}
 
 	private async currentPolicySet(
@@ -2585,6 +2967,7 @@ export class GitHubParentOrchestrator {
 		pullRequest: GitHubPullRequestEvidence,
 		handoff: ChildPullRequestTopology,
 		integratedState?: PullRequestObservation["state"],
+		receiptProvenance?: ControllerIntegrationProvenance,
 	): Promise<ControllerIntegrationProvenance | null> {
 		if (!currentChildPullRequestEligible(pullRequest, integratedState)
 			|| !childPullRequestMatches(pullRequest, plan, child, handoff)
@@ -2619,7 +3002,13 @@ export class GitHubParentOrchestrator {
 		if (assessed.decision.kind === "blocked"
 			|| !sameStrings(assessed.observation.paths, handoff.changedScope)
 			|| !reviewMatchesChild(assessed.decision.review, plan, child, pullRequest.number, handoff)) return null;
-		return controllerIntegrationProvenance(plan, policy, policyObservation, assessed.observation, assessed.decision.review);
+		const review = assessed.decision.review;
+		if (receiptProvenance !== undefined && !assessed.attestations.some((attestation) =>
+			attestation.resultDigest === receiptProvenance.reviewResultDigest
+			&& attestation.completedAt === receiptProvenance.reviewCompletedAt
+			&& attestation.reviewMarker === review.idempotencyMarker
+		)) return null;
+		return controllerIntegrationProvenance(plan, policy, policyObservation, assessed.observation, review);
 	}
 
 	async integrateChild(
@@ -2672,7 +3061,7 @@ export class GitHubParentOrchestrator {
 					return { kind: "blocked", blockers: [first.draft ? "draft" : "pr_not_open"] };
 				}
 				const currentProvenance = await this.currentChildAuthorization(
-					plan, canonicalChild, first, handoff, receipt.observation.state,
+					plan, canonicalChild, first, handoff, receipt.observation.state, receipt.controllerProvenance,
 				);
 				if (currentProvenance === null || !controllerAuthorizationMatches(
 					currentProvenance, receipt.controllerProvenance, first, receipt.pullRequestSnapshot,
@@ -2770,7 +3159,7 @@ export class GitHubParentOrchestrator {
 				const current = await this.singlePullRequest(query);
 				if (current === null) return null;
 				const currentProvenance = await this.currentChildAuthorization(
-					plan, canonicalChild, current, handoff, receipt.observation.state,
+					plan, canonicalChild, current, handoff, receipt.observation.state, receipt.controllerProvenance,
 				);
 				return currentProvenance !== null
 					&& controllerAuthorizationMatches(
@@ -2890,7 +3279,7 @@ export class GitHubParentOrchestrator {
 			let currentProvenance: ControllerIntegrationProvenance | null;
 			try {
 				currentProvenance = await this.currentChildAuthorization(
-					plan, materialized, pullRequest, handoff, receipt.observation.state,
+					plan, materialized, pullRequest, handoff, receipt.observation.state, receipt.controllerProvenance,
 				);
 			} catch {
 				return null;
@@ -2973,6 +3362,7 @@ export class GitHubParentOrchestrator {
 		ready: GitHubPullRequestEvidence,
 		authorization: ParentReadyAuthorization,
 	): Promise<void> {
+		this.quarantineParentReady(plan, authorization);
 		const intent = {
 			repository: plan.repository,
 			pullRequest: ready.number,
@@ -2992,8 +3382,8 @@ export class GitHubParentOrchestrator {
 		try {
 			const result = validateDurableMutationResult(
 				await this.callExternal(
-					"rollbackParentReady",
-					(context) => this.#transport.rollbackParentReady(request, context),
+					"quarantineAndRollbackParentReady",
+					(context) => this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context),
 					true,
 				),
 				mutation,
@@ -3018,15 +3408,12 @@ export class GitHubParentOrchestrator {
 		throw new Error("parent ready rollback was not durably visible");
 	}
 
-	async reconcileParentReadiness(
+	private async prepareParentReadinessUnlocked(
 		plan: ParentOrchestrationPlan,
 		integrationValues: readonly ChildIntegrationReceipt[],
 		policyValue: ParentDecisionPolicy,
-		context?: OrchestrationCallContext,
-	): Promise<ParentReadinessDecision> {
-		return this.withLifecycle(context, async () => {
+	): Promise<ParentReadinessPreparation> {
 		plan = validateParentOrchestrationPlan(plan);
-		return this.serializeEnsure(`${plan.repository}:ready:${plan.markers.parentPullRequest}`, async () => {
 		const query = { repository: plan.repository, marker: plan.markers.parentPullRequest };
 		const first = await this.singlePullRequest(query);
 		if (first === null) return { kind: "blocked", blockers: ["parent_pull_request_missing"] };
@@ -3090,7 +3477,7 @@ export class GitHubParentOrchestrator {
 			headSha: first.headSha,
 		};
 		let record = await this.callExternal("broker.request", async (context) => validateBrokerRecord(
-			await this.#broker!.request(request, context), request, binding,
+			await this.#broker!.request(request, context), request, binding, undefined, this.#now(),
 		), true);
 		if (record.status === "expired") return { kind: "awaiting_human", reason: "expired" };
 		if (record.status === "pending") {
@@ -3099,6 +3486,7 @@ export class GitHubParentOrchestrator {
 				request,
 				binding,
 				record,
+				this.#now(),
 			));
 			if (polled.status === "pending") return { kind: "awaiting_human", reason: "pending" };
 			if (polled.status === "expired") return { kind: "awaiting_human", reason: "expired" };
@@ -3110,6 +3498,7 @@ export class GitHubParentOrchestrator {
 				request,
 				binding,
 				record,
+				this.#now(),
 			), true);
 			if (consumed.status !== "consumed" || !canonicalDataEqual(consumed.decision, record.decision)) {
 				throw new Error("human decision broker consume did not preserve the exact decided evidence");
@@ -3151,7 +3540,8 @@ export class GitHubParentOrchestrator {
 		if (lifecycle.kind !== "transition" || lifecycle.to !== "MERGE") {
 			return { kind: "blocked", blockers: ["autonomy_policy_blocked_parent_ready"] };
 		}
-		const authorization = createParentReadyAuthorization(
+		if (!second.draft) return { kind: "ready", pullRequest: second, reused: true };
+		const { authorization, freshness } = createParentReadyAuthority(
 			plan,
 			second,
 			record,
@@ -3171,54 +3561,254 @@ export class GitHubParentOrchestrator {
 		const mutation = createDurableMutationIntent(
 			"parent_ready", [plan.repository, plan.markers.parentPullRequest, second.headSha], markIntent, second.revision,
 		);
-		const markRequest: MarkParentReadyRequest = { ...markIntent, mutation };
-		if (!second.draft) return { kind: "ready", pullRequest: second, reused: true };
+		return {
+			kind: "prepared",
+			operation: {
+				schemaVersion: 1,
+				planDigest: plan.canonical.digest,
+				policy,
+				decision: record,
+				authorization,
+				freshness,
+				mutation,
+			},
+		};
+	}
+
+	private parentReadyQuarantineKey(plan: ParentOrchestrationPlan, authorization: ParentReadyAuthorization): string {
+		return `${plan.repository}\u0000${plan.markers.parentPullRequest}\u0000${authorization.headSha}`;
+	}
+
+	private parentReadyQuarantineSet(): Set<string> {
+		const current = quarantinedParentReadyKeys.get(this.#parentReadyAuthority);
+		if (current !== undefined) return current;
+		const created = new Set<string>();
+		quarantinedParentReadyKeys.set(this.#parentReadyAuthority, created);
+		return created;
+	}
+
+	private isParentReadyQuarantined(plan: ParentOrchestrationPlan, authorization: ParentReadyAuthorization): boolean {
+		return this.parentReadyQuarantineSet().has(this.parentReadyQuarantineKey(plan, authorization));
+	}
+
+	private quarantineParentReady(plan: ParentOrchestrationPlan, authorization: ParentReadyAuthorization): void {
+		this.parentReadyQuarantineSet().add(this.parentReadyQuarantineKey(plan, authorization));
+	}
+
+	private parentReadyRollbackRequest(
+		plan: ParentOrchestrationPlan,
+		operation: PreparedParentReadyOperation,
+		expectedResourceRevision: number,
+	): RollbackParentReadyRequest {
+		const intent = {
+			repository: plan.repository,
+			pullRequest: operation.authorization.pullRequest,
+			headSha: operation.authorization.headSha,
+			generation: plan.generation,
+			authorizationDigest: operation.authorization.digest,
+		};
+		const mutation = createDurableMutationIntent(
+			"parent_ready_rollback",
+			[plan.repository, plan.markers.parentPullRequest, operation.authorization.headSha, operation.authorization.digest],
+			intent,
+			expectedResourceRevision,
+		);
+		return { ...intent, mutation };
+	}
+
+	private async quarantineUncertainParentReady(
+		plan: ParentOrchestrationPlan,
+		operation: PreparedParentReadyOperation,
+	): Promise<void> {
+		this.quarantineParentReady(plan, operation.authorization);
+		for (let attempt = 0; ; attempt += 1) {
+			const expectedRevision = attempt % 2 === 0
+				? operation.authorization.pullRequestRevision + 1
+				: operation.authorization.pullRequestRevision;
+			const request = this.parentReadyRollbackRequest(plan, operation, expectedRevision);
+			const controller = new AbortController();
+			const context: ExternalCallContext = {
+				signal: controller.signal,
+				deadlineAt: new Date(Date.now() + 120_000).toISOString(),
+				acknowledgeAbort: () => {},
+			};
+			try {
+				const result = validateDurableMutationResult(
+					await this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context),
+					request.mutation,
+					validateGitHubPullRequestEvidence,
+				);
+				if (!result.value.draft
+					|| result.value.number !== request.pullRequest
+					|| result.value.headSha !== request.headSha) {
+					throw new Error("parent-ready quarantine did not restore the exact draft");
+				}
+				return;
+			} catch {
+				await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * (attempt + 1), 25)));
+			}
+		}
+	}
+
+	private async authorizedVisibleReady(
+		plan: ParentOrchestrationPlan,
+		integrationValues: readonly ChildIntegrationReceipt[],
+		operation: PreparedParentReadyOperation,
+		readyRevision?: number,
+	): Promise<GitHubPullRequestEvidence | null> {
+		try {
+			const ready = await this.singlePullRequest({ repository: plan.repository, marker: plan.markers.parentPullRequest });
+			if (ready === null || ready.draft || !parentPullRequestMatches(ready, plan)
+				|| ready.headSha !== operation.authorization.headSha
+				|| ready.revision <= operation.authorization.pullRequestRevision
+				|| (readyRevision !== undefined && ready.revision !== readyRevision)) return null;
+			const roster = await this.completeIntegrationRoster(plan, integrationValues, ready);
+			if (roster === null) return null;
+			const expected = {
+				repository: plan.repository,
+				workItemId: `parent-${plan.parentIssue}`,
+				generation: plan.generation,
+				number: ready.number,
+				marker: plan.markers.parentPullRequest,
+				baseBranch: plan.parentBaseBranch,
+				headBranch: plan.parentBranch,
+				baseSha: ready.baseSha,
+				headSha: ready.headSha,
+			};
+			const reviewTarget: Omit<IndependentReviewTarget, "changedPaths"> = {
+				repository: plan.repository,
+				workItemId: `parent-${plan.parentIssue}`,
+				pullRequest: ready.number,
+				generation: plan.generation,
+				baseBranch: plan.parentBaseBranch,
+				headBranch: plan.parentBranch,
+				baseSha: ready.baseSha,
+				headSha: ready.headSha,
+				allowedScopes: aggregateScopes(plan),
+			};
+			const requiredCheckPolicy = policyFor(plan, plan.parentBaseBranch);
+			const assessed = await this.evaluateEvidence(ready, expected, reviewTarget, requiredCheckPolicy);
+			if (assessed.decision.kind === "blocked"
+				|| !sameStrings(assessed.observation.paths, ready.changedPaths)
+				|| !reviewMatchesParent(assessed.decision.review, plan, ready)) return null;
+			const policies = await this.currentPolicySet(plan, ready.observedAt);
+			if (policies === null) return null;
+			if (this.#broker === undefined) return null;
+			const request: GitHubDecisionRequest = {
+				requestId: operation.policy.requestId,
+				gate: "parent_merge",
+				repository: plan.repository,
+				parentIssue: plan.parentIssue,
+				pullRequest: ready.number,
+				generation: plan.generation,
+				headSha: ready.headSha,
+				allowedOptions: ["approve-merge", "reject"],
+				actorAllowlist: [...operation.policy.actorAllowlist],
+				expiresAt: operation.policy.expiresAt,
+				question: operation.policy.question,
+			};
+			const binding: HumanDecisionBinding = {
+				repository: plan.repository,
+				target: { kind: "pull_request", number: ready.number },
+				generation: plan.generation,
+				headSha: ready.headSha,
+			};
+			const record = await this.callExternal("broker.request", async (context) => validateBrokerRecord(
+				await this.#broker!.request(request, context),
+				request,
+				binding,
+				undefined,
+				this.#now(),
+			), true);
+			if (record.status !== "consumed" || !canonicalDataEqual(record, operation.decision)) return null;
+			const semanticPullRequest = { ...ready, revision: operation.authorization.pullRequestRevision };
+			const current = createParentReadyAuthority(
+				plan,
+				semanticPullRequest,
+				record,
+				assessed.decision.review,
+				assessed.observation,
+				policies,
+				roster,
+			).authorization;
+			return current.digest === operation.authorization.digest ? ready : null;
+		} catch {
+			return null;
+		}
+	}
+
+	private async commitPreparedParentReadinessUnlocked(
+		plan: ParentOrchestrationPlan,
+		integrationValues: readonly ChildIntegrationReceipt[],
+		operationValue: PreparedParentReadyOperation,
+		revalidate: boolean,
+	): Promise<ParentReadinessDecision> {
+		const operation = validatePreparedParentReadyOperation(operationValue, plan);
+		if (this.isParentReadyQuarantined(plan, operation.authorization)) {
+			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+		}
+		if (revalidate) {
+			const current = await this.prepareParentReadinessUnlocked(plan, integrationValues, operation.policy);
+			if (current.kind !== "prepared") return current;
+			if (current.operation.authorization.digest !== operation.authorization.digest
+				|| current.operation.mutation.idempotencyKey !== operation.mutation.idempotencyKey
+				|| current.operation.mutation.intentDigest !== operation.mutation.intentDigest) {
+				return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
+			}
+		}
+		const request: MarkParentReadyRequest = {
+			repository: operation.authorization.repository,
+			pullRequest: operation.authorization.pullRequest,
+			headSha: operation.authorization.headSha,
+			generation: operation.authorization.generation,
+			decisionRequestId: operation.authorization.decisionRequestId,
+			authorization: operation.authorization,
+			freshness: operation.freshness,
+			mutation: operation.mutation,
+		};
 		let mutationError: unknown;
 		let mutationApplied: boolean | undefined;
 		let readyRevision: number | undefined;
 		try {
 			const result = validateDurableMutationResult(
-				await this.callExternal("markParentReady", (context) => this.#transport.markParentReady(markRequest, context), true),
-				mutation,
+				await this.callExternal(
+					"compareConsumeAndMarkParentReady",
+					(context) => this.#parentReadyAuthority.compareConsumeAndMarkParentReady(request, context),
+					true,
+					() => this.quarantineUncertainParentReady(plan, operation),
+				),
+				operation.mutation,
 				validateGitHubPullRequestEvidence,
 			);
 			mutationApplied = result.applied;
 			readyRevision = result.value.revision;
-			if (readyRevision <= second.revision) throw new Error("parent ready CAS revision did not advance");
+			if (result.value.draft || result.value.number !== request.pullRequest || result.value.headSha !== request.headSha
+				|| readyRevision <= operation.authorization.pullRequestRevision) {
+				throw new Error("parent ready CAS revision did not advance");
+			}
 		} catch (error) {
 			mutationError = error;
 		}
-		const recovered = await this.reconcileVisible(async () => {
-			try {
-				const ready = await this.singlePullRequest(query);
-				if (ready === null || ready.draft || !parentPullRequestMatches(ready, plan)
-					|| ready.revision <= second.revision || (readyRevision !== undefined && ready.revision !== readyRevision)) return null;
-				const readyRoster = await this.completeIntegrationRoster(plan, integrationValues, ready);
-				const readyDecision = await this.evaluateEvidence(ready, expected, reviewTarget, requiredCheckPolicy);
-				const readyPolicies = await this.currentPolicySet(plan, ready.observedAt);
-				const readyRecord = await this.callExternal("broker.request", async (context) => validateBrokerRecord(
-					await this.#broker!.request(request, context), request, binding,
-				), true);
-				return readyRoster !== null
-					&& readyPolicies !== null
-					&& readyRecord.status === "consumed"
-					&& canonicalDataEqual(readyRecord, record)
-					&& readyDecision.decision.kind === "eligible"
-					&& sameStrings(readyDecision.observation.paths, ready.changedPaths)
-					&& reviewMatchesParent(readyDecision.decision.review, plan, ready) ? ready : null;
-			} catch {
-				return null;
-			}
-		});
+		if (mutationError instanceof ExternalPortError
+			&& (mutationError.code === "external_timeout" || mutationError.code === "external_cancelled")) {
+			throw mutationError;
+		}
+		const recovered = await this.reconcileVisible(() => this.authorizedVisibleReady(
+			plan,
+			integrationValues,
+			operation,
+			readyRevision,
+		));
 		if (recovered !== null) return {
 			kind: "ready",
 			pullRequest: recovered,
 			reused: mutationError !== undefined || mutationApplied === false,
 		};
-		const visible = await this.singlePullRequest(query);
+		const visible = await this.singlePullRequest({ repository: plan.repository, marker: plan.markers.parentPullRequest });
 		if (visible !== null && !visible.draft && parentPullRequestMatches(visible, plan)
-			&& visible.headSha === second.headSha && visible.revision > second.revision) {
-			await this.rollbackParentReadyEffect(plan, visible, authorization);
+			&& visible.headSha === operation.authorization.headSha
+			&& visible.revision > operation.authorization.pullRequestRevision) {
+			await this.rollbackParentReadyEffect(plan, visible, operation.authorization);
 			throw new Error("parent ready authorization moved after the effect; the parent was restored to draft");
 		}
 		if (mutationError instanceof Error && mutationError.message === "parent ready CAS revision did not advance") {
@@ -3226,7 +3816,52 @@ export class GitHubParentOrchestrator {
 		}
 		if (mutationError !== undefined) throw mutationError;
 		throw new Error("parent ready mutation was not durably visible");
+	}
+
+	async prepareParentReadiness(
+		plan: ParentOrchestrationPlan,
+		integrationValues: readonly ChildIntegrationReceipt[],
+		policyValue: ParentDecisionPolicy,
+		context?: OrchestrationCallContext,
+	): Promise<ParentReadinessPreparation> {
+		return this.withLifecycle(context, async () => {
+			plan = validateParentOrchestrationPlan(plan);
+			return this.serializeEnsure(
+				`${plan.repository}:ready:${plan.markers.parentPullRequest}`,
+				() => this.prepareParentReadinessUnlocked(plan, integrationValues, policyValue),
+			);
 		});
+	}
+
+	async commitPreparedParentReadiness(
+		plan: ParentOrchestrationPlan,
+		integrationValues: readonly ChildIntegrationReceipt[],
+		operation: PreparedParentReadyOperation,
+		context?: OrchestrationCallContext,
+	): Promise<ParentReadinessDecision> {
+		return this.withLifecycle(context, async () => {
+			plan = validateParentOrchestrationPlan(plan);
+			return this.serializeEnsure(
+				`${plan.repository}:ready:${plan.markers.parentPullRequest}`,
+				() => this.commitPreparedParentReadinessUnlocked(plan, integrationValues, operation, true),
+			);
+		});
+	}
+
+	async reconcileParentReadiness(
+		plan: ParentOrchestrationPlan,
+		integrationValues: readonly ChildIntegrationReceipt[],
+		policyValue: ParentDecisionPolicy,
+		context?: OrchestrationCallContext,
+	): Promise<ParentReadinessDecision> {
+		return this.withLifecycle(context, async () => {
+			plan = validateParentOrchestrationPlan(plan);
+			return this.serializeEnsure(`${plan.repository}:ready:${plan.markers.parentPullRequest}`, async () => {
+				const prepared = await this.prepareParentReadinessUnlocked(plan, integrationValues, policyValue);
+				return prepared.kind === "prepared"
+					? this.commitPreparedParentReadinessUnlocked(plan, integrationValues, prepared.operation, false)
+					: prepared;
+			});
 		});
 	}
 }

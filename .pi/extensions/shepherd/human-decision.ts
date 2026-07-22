@@ -12,7 +12,8 @@ const MAX_STATE_BYTES = 256 * 1024;
 const DEFAULT_LOCK_RETRY_MS = 10;
 const DEFAULT_LOCK_MAX_ATTEMPTS = 500;
 const DEFAULT_LOCK_STALE_MS = 600_000;
-const GITHUB_SECOND_RESOLUTION_SKEW_MS = 999;
+export const HUMAN_DECISION_FUTURE_SKEW_MS = 999;
+const GITHUB_SECOND_RESOLUTION_SKEW_MS = HUMAN_DECISION_FUTURE_SKEW_MS;
 const REQUEST_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{0,127}$/;
 const OPTION = /^[a-z][a-z0-9_-]{0,63}$/;
 const LOGIN = /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/;
@@ -613,8 +614,23 @@ function validateRecord(value: unknown): HumanDecisionRecord {
 	return record;
 }
 
-export function validateHumanDecisionRecord(value: unknown): HumanDecisionRecord {
-	return validateRecord(value);
+export function validateHumanDecisionRecord(value: unknown, observedAt?: Date): HumanDecisionRecord {
+	const record = validateRecord(value);
+	if (observedAt === undefined) return record;
+	const observedTime = observedAt.valueOf();
+	if (!Number.isFinite(observedTime)) throw new Error("invalid human decision observation clock");
+	const latestAllowed = observedTime + HUMAN_DECISION_FUTURE_SKEW_MS;
+	const eventTimes = [
+		record.createdAt,
+		record.requestComment?.createdAt,
+		record.decision?.decidedAt,
+		record.consumedAt,
+		record.updatedAt,
+	].filter((timestamp): timestamp is string => timestamp !== undefined);
+	if (eventTimes.some((event) => new Date(event).valueOf() > latestAllowed)) {
+		throw new Error("human decision durable chronology is ahead of the observation clock");
+	}
+	return record;
 }
 
 function validateRepositoryOption(value: unknown, fallback: number, maximum: number, description: string): number {
