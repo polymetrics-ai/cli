@@ -6270,3 +6270,317 @@ test("cycle 14 structured field grammar fails closed while public metadata stays
 		bounded: true,
 	});
 });
+
+test("cycle 15 quoted unknown assignments redact whole values through every shared consumer", async () => {
+	const secretMarkers = [
+		"C15Q_LINE_DOUBLE_HEAD",
+		"C15Q_LINE_DOUBLE_TAIL",
+		"C15Q_LINE_SINGLE_HEAD",
+		"C15Q_LINE_SINGLE_TAIL",
+		"C15Q_FLOW_DOUBLE_HEAD",
+		"C15Q_FLOW_DOUBLE_TAIL",
+		"C15Q_FLOW_SINGLE_HEAD",
+		"C15Q_FLOW_SINGLE_TAIL",
+	];
+	const publicControls = [
+		'"api.key.version": "C15P_API_V1"',
+		"'private.key.algorithm': 'ed25519-C15P'",
+		'"database.url.scheme": "pg-C15P"',
+	];
+	const payload = [
+		...publicControls.slice(0, 2),
+		`"custom.alias": "${secretMarkers[0]} middle ${secretMarkers[1]}"`,
+		`'custom_alias' = '${secretMarkers[2]} middle ${secretMarkers[3]}'`,
+		`{ ${publicControls[2]}, "custom.flow": "${secretMarkers[4]} middle ${secretMarkers[5]}", ` +
+			`'custom_flow': '${secretMarkers[6]} middle ${secretMarkers[7]}', safe: retained }`,
+	].join("\n");
+	const outputs = await cycle14ConsumerOutputs("cycle15-quoted-unknown", payload);
+	const problems: string[] = [];
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		const leaks = leakedMarkers(rendered, secretMarkers);
+		if (leaks.length > 0) problems.push(`${consumer}:leaks-${leaks.join(",")}`);
+		for (const control of publicControls) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
+		}
+	}
+	type ScanMetrics = {
+		lineBoundaryVisits: number;
+		keyStartVisits: number;
+		totalCharacterVisits: number;
+	};
+	const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
+	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
+	const measured = instrumented(payload, metrics);
+	assert.deepEqual({
+		problems,
+		hasRedaction: Object.values(outputs).every((rendered) => rendered.includes("[REDACTED]")),
+		measuredLeaks: leakedMarkers(measured, secretMarkers),
+		bounded: metrics.totalCharacterVisits > 0 && metrics.totalCharacterVisits <= payload.length * 16,
+	}, {
+		problems: [],
+		hasRedaction: true,
+		measuredLeaks: [],
+		bounded: true,
+	});
+});
+
+test("cycle 15 uncertain assignment keys fail closed across cutoffs flows and later siblings", async () => {
+	const lengthKeys = [63, 64, 65, 66].map((length) => "a".repeat(length));
+	const lineMarkers = lengthKeys.map((_, index) => `C15U_LENGTH_${index}`);
+	const uncertainLineMarkers = [
+		"C15U_SPACE_LINE",
+		"C15U_AT_LINE",
+		"C15U_EXTENDED_LINE",
+		"C15U_EXTENDED_START",
+		"C15U_QUOTED_CUTOFF_LINE",
+		"C15U_UNCLOSED_LINE",
+	];
+	const flowMarkers = [
+		"C15U_SPACE_FLOW",
+		"C15U_AT_FLOW",
+		"C15U_EXTENDED_FLOW",
+		"C15U_LENGTH_FLOW",
+		"C15U_QUOTED_CUTOFF_FLOW",
+		"C15U_UNCLOSED_FLOW",
+	];
+	const laterSiblingMarkers = flowMarkers.map((_, index) => `C15U_LATER_SECRET_${index}`);
+	const publicControls = [
+		"api.key.version: C15P_API_V2",
+		"private.key.algorithm: ed25519-C15P2",
+		"database.url.scheme: pg-C15P2",
+		"safe: C15P_SAFE_SPACE",
+		"safe: C15P_SAFE_AT",
+		"safe: C15P_SAFE_EXTENDED",
+		"safe: C15P_SAFE_LENGTH",
+		"safe: C15P_SAFE_QUOTED",
+	];
+	const longQuotedKey = `"${"q".repeat(392)}"`;
+	const consumerCases = [
+		{
+			label: "length-lines",
+			payload: [...publicControls.slice(0, 3), ...lengthKeys.map((key, index) =>
+				`${key}: ${lineMarkers[index]}`)].join("\n"),
+			markers: lineMarkers,
+			controls: publicControls.slice(0, 3),
+		},
+		{
+			label: "unsupported-lines",
+			payload: [
+				`custom alias: ${uncertainLineMarkers[0]}`,
+				`custom@alias=${uncertainLineMarkers[1]}`,
+				`customéalias: ${uncertainLineMarkers[2]}`,
+				`écustom: ${uncertainLineMarkers[3]}`,
+			].join("\n"),
+			markers: uncertainLineMarkers.slice(0, 4),
+			controls: [] as string[],
+		},
+		{
+			label: "unsupported-flows",
+			payload: [
+				`{ custom alias: ${flowMarkers[0]}, client_secret: ${laterSiblingMarkers[0]}, ${publicControls[3]} }`,
+				`{ custom@alias: ${flowMarkers[1]}, client_secret: ${laterSiblingMarkers[1]}, ${publicControls[4]} }`,
+				`{ customéalias: ${flowMarkers[2]}, client_secret: ${laterSiblingMarkers[2]}, ${publicControls[5]} }`,
+			].join("\n"),
+			markers: [...flowMarkers.slice(0, 3), ...laterSiblingMarkers.slice(0, 3)],
+			controls: publicControls.slice(3, 6),
+		},
+		{
+			label: "plain-cutoff-flow",
+			payload: `{ ${"z".repeat(66)}: ${flowMarkers[3]}, client_secret: ${laterSiblingMarkers[3]}, ` +
+				`${publicControls[6]} }`,
+			markers: [flowMarkers[3], laterSiblingMarkers[3]],
+			controls: [publicControls[6]],
+		},
+		{
+			label: "quoted-cutoff-line",
+			payload: `${longQuotedKey}: "${uncertainLineMarkers[4]} tail"`,
+			markers: [uncertainLineMarkers[4]],
+			controls: [] as string[],
+		},
+		{
+			label: "quoted-cutoff-flow",
+			payload: `{ ${longQuotedKey}: "${flowMarkers[4]}", client_secret: ${laterSiblingMarkers[4]} }`,
+			markers: [flowMarkers[4], laterSiblingMarkers[4]],
+			controls: [] as string[],
+		},
+		{
+			label: "unclosed",
+			payload: [
+				`"unclosed alias: ${uncertainLineMarkers[5]}`,
+				`{ "unclosed alias: ${flowMarkers[5]}, client_secret: ${laterSiblingMarkers[5]} }`,
+			].join("\n"),
+			markers: [uncertainLineMarkers[5], flowMarkers[5], laterSiblingMarkers[5]],
+			controls: [] as string[],
+		},
+	] as const;
+	const problems: string[] = [];
+	for (const consumerCase of consumerCases) {
+		assert.ok(consumerCase.payload.length <= 512, `${consumerCase.label} exceeds the shared reference bound`);
+		const outputs = await cycle14ConsumerOutputs(`cycle15-${consumerCase.label}`, consumerCase.payload);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			const leaks = leakedMarkers(rendered, consumerCase.markers);
+			if (leaks.length > 0) problems.push(`${consumerCase.label}:${consumer}:leaks-${leaks.join(",")}`);
+			for (const control of consumerCase.controls) {
+				if (!rendered.includes(control)) problems.push(`${consumerCase.label}:${consumer}:changed-${control}`);
+			}
+		}
+	}
+
+	type ScanMetrics = {
+		lineBoundaryVisits: number;
+		keyStartVisits: number;
+		totalCharacterVisits: number;
+	};
+	const instrumented = redactSensitiveText as unknown as (value: string, metrics: ScanMetrics) => string;
+	const sizes = [25, 50, 100].map((kib) => kib * 1024);
+	const visits: number[] = [];
+	const workLeaks: string[][] = [];
+	for (const size of sizes) {
+		const unit = `{ ${"w".repeat(66)}: C15_WORK_UNKNOWN, client_secret: C15_WORK_LATER, safe: retained }\n`;
+		const sample = unit.repeat(Math.ceil(size / unit.length)).slice(0, size);
+		const metrics: ScanMetrics = { lineBoundaryVisits: 0, keyStartVisits: 0, totalCharacterVisits: 0 };
+		const rendered = instrumented(sample, metrics);
+		visits.push(metrics.totalCharacterVisits);
+		workLeaks.push(leakedMarkers(rendered, ["C15_WORK_UNKNOWN", "C15_WORK_LATER"]));
+	}
+	assert.deepEqual({
+		problems,
+		workLeaks,
+		bounded: visits.every((count, index) => count > 0 && count <= sizes[index]! * 16) &&
+			visits[1]! <= visits[0]! * 2.25 && visits[2]! <= visits[1]! * 2.25,
+	}, {
+		problems: [],
+		workLeaks: [[], [], []],
+		bounded: true,
+	});
+});
+
+test("cycle 15 post-create validation rejects prototype callbacks and barriers every split seam", async () => {
+	type HostileStructure = "creation-result" | "extensions-result" | "extensions-array" |
+		"errors-array" | "active-tool-array";
+	const structures = [
+		"creation-result",
+		"extensions-result",
+		"extensions-array",
+		"errors-array",
+		"active-tool-array",
+	] as const satisfies readonly HostileStructure[];
+	const problems: string[] = [];
+	for (const structure of structures) {
+		const sdk = new FakeSdk();
+		const originalCreate = sdk.createAgentSession.bind(sdk);
+		let prototypeTrapCalls = 0;
+		const hostilePrototype = (array: boolean): object => new Proxy(
+			array ? Array.prototype : Object.prototype,
+			{
+				ownKeys(target) { prototypeTrapCalls += 1; return Reflect.ownKeys(target); },
+				getOwnPropertyDescriptor(target, key) {
+					prototypeTrapCalls += 1;
+					return Reflect.getOwnPropertyDescriptor(target, key);
+				},
+			},
+		);
+		sdk.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+			const created = await originalCreate(options);
+			if (structure === "creation-result") Object.setPrototypeOf(created, hostilePrototype(false));
+			if (structure === "extensions-result") {
+				Object.setPrototypeOf(created.extensionsResult, hostilePrototype(false));
+			}
+			if (structure === "extensions-array") {
+				Object.setPrototypeOf(created.extensionsResult.extensions, hostilePrototype(true));
+			}
+			if (structure === "errors-array") {
+				Object.setPrototypeOf(created.extensionsResult.errors, hostilePrototype(true));
+			}
+			if (structure === "active-tool-array") {
+				sdk.session.getActiveToolNames = () => {
+					const names = [...sdk.session.activeTools];
+					Object.setPrototypeOf(names, hostilePrototype(true));
+					return names;
+				};
+			}
+			return created;
+		}) as typeof sdk.createAgentSession;
+		const harness = runtime(sdk, { cleanupTimeoutMs: 40 });
+		const req = request({
+			timeoutMs: 60_000,
+			binding: {
+				...request().binding,
+				runId: `cycle15-prototype-${structure}`,
+				laneId: `cycle15-prototype-${structure}`,
+			},
+		});
+		sdk.session.output = handoffFor(req);
+		const timers = captureLongTimers();
+		try {
+			const outcome = await observeSettlement(harness.runtime.run(req), 400);
+			if (!isTypedOwnCause(outcome)) problems.push(`${structure}:run-${outcome.status}`);
+			if (prototypeTrapCalls !== 0) problems.push(`${structure}:prototype-traps-${prototypeTrapCalls}`);
+			if (sdk.session.promptCalls !== 0) problems.push(`${structure}:prompt-${sdk.session.promptCalls}`);
+			if (sdk.session.abortCalls !== 1) problems.push(`${structure}:abort-${sdk.session.abortCalls}`);
+			if (sdk.session.waitCalls !== 1) problems.push(`${structure}:wait-${sdk.session.waitCalls}`);
+			if (sdk.session.disposeCalls !== 1) problems.push(`${structure}:dispose-${sdk.session.disposeCalls}`);
+			const closeOutcome = await observeSettlement(harness.runtime.close(), 300);
+			if (closeOutcome.status !== "resolved") problems.push(`${structure}:close-${closeOutcome.status}`);
+			if (sdk.session.listeners.size !== 0) problems.push(`${structure}:listeners-${sdk.session.listeners.size}`);
+			if (timers.referenced() !== 0) problems.push(`${structure}:timer-${timers.referenced()}`);
+		} finally {
+			timers.restoreAndClear();
+		}
+	}
+
+	for (const control of ["abort", "close", "shutdown"] as const) {
+		const sdk = new FakeSdk();
+		const originalCreate = sdk.createAgentSession.bind(sdk);
+		const harness = runtime(sdk, { cleanupTimeoutMs: 40 });
+		const req = request({
+			timeoutMs: 60_000,
+			binding: {
+				...request().binding,
+				runId: `cycle15-active-tools-${control}`,
+				laneId: `cycle15-active-tools-${control}`,
+			},
+		});
+		let triggerCalls = 0;
+		let prototypeTrapCalls = 0;
+		let controlPromise: Promise<void> | undefined;
+		sdk.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+			const created = await originalCreate(options);
+			sdk.session.getActiveToolNames = () => {
+				triggerCalls += 1;
+				controlPromise ??= control === "abort"
+					? harness.runtime.abort(req.binding.runId)
+					: control === "close" ? harness.runtime.close() : harness.runtime.shutdown();
+				const names = [...sdk.session.activeTools];
+				Object.setPrototypeOf(names, new Proxy(Array.prototype, {
+					ownKeys(target) { prototypeTrapCalls += 1; return Reflect.ownKeys(target); },
+				}));
+				return names;
+			};
+			return created;
+		}) as typeof sdk.createAgentSession;
+		const controller = new AbortController();
+		const timers = captureLongTimers();
+		try {
+			const outcome = await observeSettlement(harness.runtime.run({ ...req, signal: controller.signal }), 500);
+			const controlOutcome = controlPromise
+				? await observeSettlement(controlPromise, 500)
+				: { status: "missing" as const };
+			if (!isTypedOwnCause(outcome)) problems.push(`active-tools:${control}:run-${outcome.status}`);
+			if (controlOutcome.status !== "resolved") problems.push(`active-tools:${control}:control-${controlOutcome.status}`);
+			if (triggerCalls !== 1) problems.push(`active-tools:${control}:trigger-${triggerCalls}`);
+			if (prototypeTrapCalls !== 0) problems.push(`active-tools:${control}:prototype-traps-${prototypeTrapCalls}`);
+			if (sdk.session.promptCalls !== 0) problems.push(`active-tools:${control}:prompt-${sdk.session.promptCalls}`);
+			if (sdk.session.abortCalls !== 1) problems.push(`active-tools:${control}:abort-${sdk.session.abortCalls}`);
+			if (sdk.session.waitCalls !== 1) problems.push(`active-tools:${control}:wait-${sdk.session.waitCalls}`);
+			if (sdk.session.disposeCalls !== 1) problems.push(`active-tools:${control}:dispose-${sdk.session.disposeCalls}`);
+			const closeOutcome = await observeSettlement(harness.runtime.close(), 300);
+			if (closeOutcome.status !== "resolved") problems.push(`active-tools:${control}:close-${closeOutcome.status}`);
+			if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`active-tools:${control}:listener`);
+			if (timers.referenced() !== 0) problems.push(`active-tools:${control}:timer-${timers.referenced()}`);
+		} finally {
+			timers.restoreAndClear();
+		}
+	}
+	assert.deepEqual(problems, []);
+});
