@@ -592,3 +592,17 @@
 - Frozen blobs: orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
   `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, human
   decision `fc1c6230`. Both machine gates remain false; no external or human gate ran.
+
+## 2026-07-22 Cycle 13 executable RED
+
+- Artifact PLAN `27e7b5d2736c62b80618de020e743df49abf76b6` precedes every test edit.
+- The existing five tests execute 1061 total / 1015 pass / 45 intended fail / 1 intentional skip.
+  Forty intended leaves fail: BEGIN 16, cross-store 4, decision 8, marker 2, and scanner 10; their
+  five parent containers account for the remaining failures. All 33 controls and all retained
+  Cycle 12 cases pass; there are no setup or retained failures.
+- Strict no-emit TypeScript 5.9.3 passes for the five production/test pairs. Frozen blobs remain
+  orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
+  `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker `7be67851`, evidence `058ad162`, and human
+  decision `fc1c6230`.
+- No production, dependency, network/GitHub, push, review, integration, ready, merge, or human-gate
+  action ran. Both machine gates remain false.

@@ -3640,6 +3640,30 @@ test("cycle 12 keeps multiline and composite assignment rejection generic before
 	}
 });
 
+function cycle13MalformedAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["malformed case", `$(case x in x) printf ${marker} ;; esac`],
+		["malformed heredoc", `$(cat <<'CYCLE13_EOF'\n)\n${marker}\nCYCLE13_EOF`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 13 keeps malformed assignment rejection generic before orchestration effects", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const marker = "CYCLE13_ORCHESTRATOR_MARKER";
+	for (const [name, objective] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(name, () => {
+			let rejection: unknown;
+			try { createPlanFromSource({ ...source, objective }); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+});
+
 function cycle7FutureParentDecision(
 	request: GitHubDecisionRequest,
 	mode: "creation" | "request_comment" | "decision" | "consumption" | "update" | "all",
@@ -6871,13 +6895,29 @@ test("cycle 11 durable begin owns invocation settlement before terminal reconcil
 });
 
 type Cycle12ForeignBeginPhase = "ready_invoking" | "ready_effect_applied" | "recovery_claimed";
+type Cycle13ForeignBeginOutcome = Cycle12ForeignBeginPhase
+	| "absent"
+	| "ready_settled"
+	| "draft_restored"
+	| "stale_ready_settled_to_ready_invoking"
+	| "stale_draft_restored_to_recovery_claimed";
 
 class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	readonly #requested: ParentReadyDurableAuthorityBoundary;
 	readonly #requestedBacking: PortOnlyReadinessBacking;
 	#foreign: ParentReadyDurableAuthorityBoundary | null = null;
-	#foreignState: ParentReadyAuthorityState | null = null;
+	#returnedForeignState: ParentReadyAuthorityState | null = null;
+	#actualForeignState: ParentReadyAuthorityState | null = null;
 	#foreignBacking: PortOnlyReadinessBacking | null = null;
+	#holdForeignRead = false;
+	#foreignReadReleased = false;
+	#foreignReadAnnounced = false;
+	#announceForeignRead = (): void => {};
+	readonly foreignProofEntered = new Promise<void>((resolve) => { this.#announceForeignRead = resolve; });
+	#announceForeignReadSettled = (): void => {};
+	readonly foreignReadSettled = new Promise<void>((resolve) => { this.#announceForeignReadSettled = resolve; });
+	#releaseForeignRead = (): void => {};
+	readonly #foreignReadGate = new Promise<void>((resolve) => { this.#releaseForeignRead = resolve; });
 	#announceRequestedRecovery = (): void => {};
 	readonly requestedRecoveryEntered = new Promise<void>((resolve) => { this.#announceRequestedRecovery = resolve; });
 	#announceForeignRecovery = (): void => {};
@@ -6909,7 +6949,7 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	configure(
 		_planValue: ParentOrchestrationPlan,
 		operation: PreparedParentReadyOperation,
-		phase: Cycle12ForeignBeginPhase,
+		phase: Cycle13ForeignBeginOutcome,
 	): void {
 		const requestedPullRequest = this.#requestedBacking.pullRequests.find((entry) =>
 			entry.number === operation.authorization.pullRequest);
@@ -6941,6 +6981,32 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 		this.#foreignBacking = foreignBacking;
 		const { digest: _discardedDigest, ...authorizationPayload } = operation.authorization;
 		void _discardedDigest;
+		const foreignDecisionValue = {
+			...structuredClone(operation.decision),
+			binding: {
+				repository: foreignPullRequest.repository,
+				target: { kind: "pull_request" as const, number: foreignPullRequest.number },
+				generation: foreignPullRequest.generation,
+				headSha: foreignPullRequest.headSha,
+			},
+		};
+		foreignDecisionValue.idempotencyMarker = createHumanDecisionRecord({
+			requestId: foreignDecisionValue.requestId,
+			gate: "parent_merge",
+			binding: foreignDecisionValue.binding,
+			allowedOptions: ["approve-merge", "reject"],
+			actorAllowlist: foreignDecisionValue.actorAllowlist,
+			expiresAt: foreignDecisionValue.expiresAt,
+			question: foreignDecisionValue.question,
+		}, new Date(foreignDecisionValue.createdAt)).idempotencyMarker;
+		const foreignDecisionBase = `https://github.com/${foreignPullRequest.repository}/pull/${foreignPullRequest.number}`;
+		if (foreignDecisionValue.requestComment !== undefined) {
+			foreignDecisionValue.requestComment.url = `${foreignDecisionBase}#issuecomment-${foreignDecisionValue.requestComment.id}`;
+		}
+		if (foreignDecisionValue.decision !== undefined && foreignDecisionValue.requestComment !== undefined) {
+			foreignDecisionValue.decision.sourceUrl = `${foreignDecisionBase}#issuecomment-${foreignDecisionValue.requestComment.id + 1}`;
+		}
+		const foreignDecision = validateHumanDecisionRecord(foreignDecisionValue);
 		const authorization = githubOrchestratorApi.canonicalizeParentReadyAuthorization({
 			...authorizationPayload,
 			repository: foreignPullRequest.repository,
@@ -6948,6 +7014,8 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 			pullRequest: foreignPullRequest.number,
 			headSha: foreignPullRequest.headSha,
 			pullRequestRevision: foreignPullRequest.revision,
+			decision: foreignDecision,
+			decisionDigest: createHash("sha256").update(JSON.stringify(foreignDecision)).digest("hex"),
 		});
 		const mutation = createDurableMutationIntent(
 			"parent_ready",
@@ -6974,57 +7042,94 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 			mutation,
 		});
 		const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(request);
-		let state = invoking;
-		if (phase !== "ready_invoking") {
-			const ready = { ...foreignPullRequest, draft: false, revision: foreignPullRequest.revision + 1 };
-			foreignBacking.pullRequests.splice(0, 1, ready);
-			authorityBacking.mutationRevision = 1;
+		const ready = { ...foreignPullRequest, draft: false, revision: foreignPullRequest.revision + 1 };
+		const applied = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...invoking,
+			appliedRevision: ready.revision,
+			phase: "ready_effect_applied",
+		});
+		const recovery: ParentReadyRecoveryFence = {
+			schemaVersion: 1,
+			invocationId: applied.invocationId,
+			recoveryId: applied.recoveryId,
+			attempt: 1,
+			supersedesAttempt: null,
+			readyMutation: mutation,
+		};
+		const rollbackMutation = createDurableMutationIntent(
+			"parent_ready_rollback",
+			[recovery.recoveryId, recovery.attempt],
+			{
+				repository: applied.repository,
+				pullRequest: applied.pullRequest,
+				marker: applied.marker,
+				headSha: applied.headSha,
+				generation: applied.generation,
+				authorizationDigest: applied.authorization.digest,
+				recovery,
+			},
+			null,
+		);
+		const claimed = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...applied,
+			rollbackMutation,
+			phase: "recovery_claimed",
+			status: "unsettled",
+			fence: 1,
+		});
+		const readySettled = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...applied,
+			rollbackMutation: null,
+			phase: "ready_settled",
+			status: "settled",
+			fence: 0,
+		});
+		const draft = { ...ready, draft: true, revision: ready.revision + 1 };
+		const draftRestored = githubOrchestratorApi.validateParentReadyAuthorityState({
+			...claimed,
+			phase: "draft_restored",
+			status: "settled",
+		});
+		const states = { ready_invoking: invoking, ready_effect_applied: applied, recovery_claimed: claimed,
+			ready_settled: readySettled, draft_restored: draftRestored } as const;
+		const actualPhase: keyof typeof states | "absent" = phase === "stale_ready_settled_to_ready_invoking"
+			? "ready_invoking"
+			: phase === "stale_draft_restored_to_recovery_claimed"
+				? "recovery_claimed"
+				: phase;
+		const returnedPhase: keyof typeof states = phase === "absent"
+			? "ready_settled"
+			: phase === "stale_ready_settled_to_ready_invoking"
+				? "ready_settled"
+				: phase === "stale_draft_restored_to_recovery_claimed"
+					? "draft_restored"
+					: phase;
+		const actualState = actualPhase === "absent" ? null : states[actualPhase];
+		this.#returnedForeignState = states[returnedPhase];
+		this.#actualForeignState = actualState;
+		if (actualState !== null) {
+			const stateKey = `${actualState.repository}\u0000${actualState.pullRequest}\u0000${actualState.marker}\u0000${actualState.generation}\u0000${actualState.headSha}`;
+			authorityBacking.states.set(stateKey, actualState);
+		}
+		if (actualState !== null && actualState.appliedRevision !== null) {
+			foreignBacking.pullRequests.splice(0, 1, actualState.phase === "draft_restored" ? draft : ready);
+			authorityBacking.mutationRevision = actualState.phase === "draft_restored" ? 2 : 1;
 			authorityBacking.readyMutations.set(mutation.idempotencyKey, {
 				digest: mutation.intentDigest,
 				value: structuredClone(ready),
 				revision: 1,
 			});
-			state = githubOrchestratorApi.validateParentReadyAuthorityState({
-				...invoking,
-				appliedRevision: ready.revision,
-				phase: "ready_effect_applied",
+		}
+		if (actualState !== null && ["recovery_claimed", "draft_restored"].includes(actualState.phase)) {
+			authorityBacking.recoveryAttempts.set(actualState.recoveryId, 1);
+		}
+		if (actualState?.phase === "draft_restored") {
+			authorityBacking.rollbackMutations.set(rollbackMutation.idempotencyKey, {
+				digest: rollbackMutation.intentDigest,
+				value: structuredClone(draft),
+				revision: 2,
 			});
 		}
-		if (phase === "recovery_claimed") {
-			const recovery: ParentReadyRecoveryFence = {
-				schemaVersion: 1,
-				invocationId: state.invocationId,
-				recoveryId: state.recoveryId,
-				attempt: 1,
-				supersedesAttempt: null,
-				readyMutation: mutation,
-			};
-			const rollbackMutation = createDurableMutationIntent(
-				"parent_ready_rollback",
-				[recovery.recoveryId, recovery.attempt],
-				{
-					repository: state.repository,
-					pullRequest: state.pullRequest,
-					marker: state.marker,
-					headSha: state.headSha,
-					generation: state.generation,
-					authorizationDigest: state.authorization.digest,
-					recovery,
-				},
-				null,
-			);
-			authorityBacking.recoveryAttempts.set(state.recoveryId, 1);
-			state = githubOrchestratorApi.validateParentReadyAuthorityState({
-				...state,
-				rollbackMutation,
-				phase: "recovery_claimed",
-				status: "unsettled",
-				fence: 1,
-			});
-		}
-		const stateKey = `${state.repository}\u0000${state.pullRequest}\u0000${state.marker}\u0000${state.generation}\u0000${state.headSha}`;
-		authorityBacking.states.set(stateKey, state);
-		this.#foreignState = state;
 	}
 
 	releaseRequestedRecovery(): void {
@@ -7035,8 +7140,27 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 		this.#releaseForeign();
 	}
 
+	holdForeignProofRead(): void {
+		this.#holdForeignRead = true;
+	}
+
+	releaseForeignProofRead(): void {
+		this.#foreignReadReleased = true;
+		this.#releaseForeignRead();
+	}
+
+	actualForeignPhase(): ParentReadyAuthorityState["phase"] | "absent" {
+		return this.#actualForeignState?.phase ?? "absent";
+	}
+
+	foreignProofSettled(): Promise<void> {
+		return ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(this.actualForeignPhase())
+			? this.foreignRecoverySettled
+			: this.foreignReadSettled;
+	}
+
 	foreignPullRequest(): GitHubPullRequestEvidence {
-		const state = this.#foreignState;
+		const state = this.#returnedForeignState;
 		const backing = this.#foreignBacking;
 		if (state === null || backing === null) throw new Error("cycle 12 foreign authority is not configured");
 		const pullRequest = backing.pullRequests.find((entry) => entry.number === state.pullRequest);
@@ -7045,7 +7169,7 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	}
 
 	foreignQuery(): ParentReadyAuthorityQuery {
-		const state = this.#foreignState;
+		const state = this.#returnedForeignState;
 		if (state === null) throw new Error("cycle 12 foreign authority is not configured");
 		return {
 			repository: state.repository,
@@ -7057,18 +7181,28 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	}
 
 	private delegateForPullRequest(pullRequest: number): ParentReadyDurableAuthorityBoundary {
-		if (this.#foreignState?.pullRequest === pullRequest) {
+		if (this.#returnedForeignState?.pullRequest === pullRequest) {
 			if (this.#foreign === null) throw new Error("cycle 12 foreign authority is not configured");
 			return this.#foreign;
 		}
 		return this.#requested;
 	}
 
-	readParentReadyState(
+	async readParentReadyState(
 		query: ParentReadyAuthorityQuery,
 		context: ExternalCallContext,
 	): Promise<ParentReadyAuthorityState | null> {
-		return this.delegateForPullRequest(query.pullRequest).readParentReadyState(query, context);
+		const foreign = this.#returnedForeignState?.pullRequest === query.pullRequest;
+		if (foreign && this.#holdForeignRead && !this.#foreignReadReleased) {
+			if (!this.#foreignReadAnnounced) {
+				this.#foreignReadAnnounced = true;
+				this.#announceForeignRead();
+			}
+			await this.#foreignReadGate;
+		}
+		const result = await this.delegateForPullRequest(query.pullRequest).readParentReadyState(query, context);
+		if (foreign) this.#announceForeignReadSettled();
+		return result;
 	}
 
 	async beginParentReady(
@@ -7077,8 +7211,8 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	): Promise<ParentReadyAuthorityState> {
 		this.beginCalls += 1;
 		await this.#requested.beginParentReady(request, context);
-		if (this.#foreignState === null) throw new Error("cycle 12 foreign state is not configured");
-		return structuredClone(this.#foreignState);
+		if (this.#returnedForeignState === null) throw new Error("cycle 12 foreign state is not configured");
+		return structuredClone(this.#returnedForeignState);
 	}
 
 	settleParentReady(
@@ -7100,7 +7234,7 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 		request: RollbackParentReadyRequest,
 		context: ExternalCallContext,
 	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
-		const foreign = this.#foreignState?.pullRequest === request.pullRequest;
+		const foreign = this.#returnedForeignState?.pullRequest === request.pullRequest;
 		this.rollbackTargets.push({
 			repository: request.repository,
 			pullRequest: request.pullRequest,
@@ -7142,12 +7276,11 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 					entry.number === scenario.operation.authorization.pullRequest));
 				const foreignBefore = authority.foreignPullRequest();
 				try {
-					const result = await scenario.orchestrator.commitPreparedParentReadiness(
+					const resultPromise = scenario.orchestrator.commitPreparedParentReadiness(
 						scenario.candidate,
 						scenario.receipts,
 						scenario.operation,
 					);
-					assert.deepEqual(result, { kind: "blocked", blockers: ["parent_ready_quarantined"] });
 					assert.notEqual(await settleWithin(authority.requestedRecoveryEntered, 100), "hung");
 					assert.notEqual(await settleWithin(authority.foreignRecoveryEntered, 100), "hung");
 					assert.equal(authority.readyEffectCalls, 0, "the requested ready effect must not run");
@@ -7179,6 +7312,8 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 						? authority.foreignRecoverySettled
 						: authority.requestedRecoverySettled;
 					assert.notEqual(await settleWithin(secondSettlement, 100), "hung");
+					assert.deepEqual(await resultPromise,
+						{ kind: "blocked", blockers: ["parent_ready_quarantined"] });
 					assert.equal(await settleWithin(queued, 100), "rejected",
 						"same-key reentry remains excluded after the explicit stop request");
 
@@ -7225,6 +7360,113 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 					authority.releaseRequestedRecovery();
 					authority.releaseForeignRecovery();
 					await scenario.orchestrator.stop().catch(() => ({ kind: "incomplete" as const, active: 0, unacknowledged: 0 }));
+				}
+			});
+		}
+	}
+});
+
+test("cycle 13 mismatched begin joins requested and exact returned-coordinate proof", async (t) => {
+	const outcomes: readonly Cycle13ForeignBeginOutcome[] = [
+		"absent",
+		"ready_invoking",
+		"ready_effect_applied",
+		"recovery_claimed",
+		"ready_settled",
+		"draft_restored",
+		"stale_ready_settled_to_ready_invoking",
+		"stale_draft_restored_to_recovery_claimed",
+	];
+	for (const outcome of outcomes) {
+		for (const proofOrder of ["requested_first", "observed_first"] as const) {
+			await t.test(`${outcome} ${proofOrder}`, async () => {
+				let authority: Cycle12DualBeginAuthority | undefined;
+				const scenario = await cycle8PortOnlyPreparedScenario((delegate, backing) => {
+					authority = new Cycle12DualBeginAuthority(delegate, backing);
+					return authority;
+				});
+				assert.ok(authority);
+				authority.configure(scenario.candidate, scenario.operation, outcome);
+				authority.holdForeignProofRead();
+				await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+				const requestedQuery = cycle11AuthorityQuery(scenario.candidate, scenario.operation);
+				const foreignQuery = authority.foreignQuery();
+				const actualForeignPhase = authority.actualForeignPhase();
+				const foreignNeedsRecovery = ["ready_invoking", "ready_effect_applied", "recovery_claimed"]
+					.includes(actualForeignPhase);
+				const releaseObserved = (): void => {
+					authority!.releaseForeignProofRead();
+					if (foreignNeedsRecovery) authority!.releaseForeignRecovery();
+				};
+				try {
+					const publicResult = scenario.orchestrator.commitPreparedParentReadiness(
+						scenario.candidate,
+						scenario.receipts,
+						scenario.operation,
+					).then((value) => ({ kind: "resolved" as const, value }),
+						(error: unknown) => ({ kind: "rejected" as const, error }));
+					assert.notEqual(await settleWithin(authority.requestedRecoveryEntered, 100), "hung",
+						"requested invocation must have a terminal reconciliation owner");
+					assert.notEqual(await settleWithin(authority.foreignProofEntered, 100), "hung",
+						"the exact returned coordinate must be reread even for terminal or absent outcomes");
+
+					const queued = scenario.orchestrator.prepareParentReadiness(
+						scenario.candidate,
+						scenario.receipts,
+						decisionPolicy,
+					).then(() => "settled" as const, () => "rejected" as const);
+					assert.equal(await settleWithin(publicResult, 5), "hung",
+						"public result must not precede either independently tracked proof");
+					assert.equal(await settleWithin(queued, 5), "hung",
+						"same-key reentry must remain excluded before both proofs");
+					const firstStop = new AbortController();
+					firstStop.abort();
+					assert.equal((await scenario.orchestrator.stop({ signal: firstStop.signal })).kind, "incomplete");
+
+					const requestedFirst = proofOrder === "requested_first";
+					if (requestedFirst) authority.releaseRequestedRecovery();
+					else releaseObserved();
+					const firstProof = requestedFirst
+						? authority.requestedRecoverySettled
+						: authority.foreignProofSettled();
+					assert.notEqual(await settleWithin(firstProof, 100), "hung");
+					assert.equal(await settleWithin(publicResult, 5), "hung",
+						"one exact proof cannot release the public result");
+					assert.equal(await settleWithin(queued, 5), "hung",
+						"one exact proof cannot release the key");
+					const secondStop = new AbortController();
+					secondStop.abort();
+					assert.equal((await scenario.orchestrator.stop({ signal: secondStop.signal })).kind, "incomplete");
+
+					if (requestedFirst) releaseObserved();
+					else authority.releaseRequestedRecovery();
+					const secondProof = requestedFirst
+						? authority.foreignProofSettled()
+						: authority.requestedRecoverySettled;
+					assert.notEqual(await settleWithin(secondProof, 100), "hung");
+					const completed = await publicResult;
+					assert.equal(completed.kind, "resolved");
+					if (completed.kind === "resolved") {
+						assert.deepEqual(completed.value, foreignNeedsRecovery
+							? { kind: "blocked", blockers: ["parent_ready_quarantined"] }
+							: { kind: "blocked", blockers: ["parent_ready_authority_moved"] });
+					}
+					assert.equal(authority.readyEffectCalls, 0);
+					assert.equal(await settleWithin(queued, 100), "rejected");
+					const requestedTargets = authority.rollbackTargets.filter((entry) =>
+						entry.repository === requestedQuery.repository && entry.pullRequest === requestedQuery.pullRequest);
+					const observedTargets = authority.rollbackTargets.filter((entry) =>
+						entry.repository === foreignQuery.repository && entry.pullRequest === foreignQuery.pullRequest);
+					assert.equal(requestedTargets.length, 1, "requested proof must use its exact durable coordinate");
+					assert.equal(observedTargets.length, foreignNeedsRecovery ? 1 : 0,
+						"observed recovery must never target a synthetic requested coordinate");
+					assert.equal((await scenario.orchestrator.stop()).kind, "joined");
+				} finally {
+					authority.releaseForeignProofRead();
+					authority.releaseRequestedRecovery();
+					authority.releaseForeignRecovery();
+					await scenario.orchestrator.stop()
+						.catch(() => ({ kind: "incomplete" as const, active: 0, unacknowledged: 0 }));
 				}
 			});
 		}
@@ -8068,6 +8310,235 @@ test("cycle 12 validates every recovery-claimed receipt and visibility window", 
 	});
 });
 
+function cycle13RestartRepairResult(
+	snapshot: Cycle10MutableRestartSnapshot,
+	planValue: ParentOrchestrationPlan,
+): unknown {
+	const decoded: unknown = JSON.parse(JSON.stringify(cycle12RestartHistoryInput(snapshot)));
+	return Reflect.apply(githubOrchestratorApi.validateParentReadyRestartHistory, undefined, [decoded, planValue]);
+}
+
+function cycle13ExpectedSettlement(
+	snapshot: Cycle10MutableRestartSnapshot,
+	outcome: ParentReadySettlementRecord["outcome"],
+): ParentReadySettlementRecord {
+	const operation = snapshot.journal.prepared[0];
+	if (snapshot.decision.consumedAt === undefined) throw new Error("cycle 13 consumed decision is absent");
+	return {
+		schemaVersion: 1,
+		planDigest: operation.planDigest,
+		authorizationDigest: operation.authorization.digest,
+		mutationIdempotencyKey: operation.mutation.idempotencyKey,
+		outcome,
+		settledAt: snapshot.decision.consumedAt,
+	};
+}
+
+test("cycle 13 restart validation repairs only coherent authority-terminal journal windows", async (t) => {
+	const seed = await cycle10RestartSnapshotSeed();
+	const readySettled = cycle11ReadySettledSnapshot(seed);
+	const readyPending = structuredClone(readySettled);
+	readyPending.journal.settlements = [];
+	const restoredPending = structuredClone(seed.snapshot);
+	restoredPending.journal.settlements = [];
+
+	await t.test("ready-settled authority returns one exact ready settlement repair", () => {
+		assert.deepEqual(cycle13RestartRepairResult(readyPending, seed.plan), {
+			settlementRepairs: [cycle13ExpectedSettlement(readyPending, "ready")],
+		});
+	});
+	await t.test("draft-restored authority returns one exact blocked settlement repair", () => {
+		assert.deepEqual(cycle13RestartRepairResult(restoredPending, seed.plan), {
+			settlementRepairs: [cycle13ExpectedSettlement(restoredPending, "blocked")],
+		});
+	});
+	await t.test("ready repair replay is idempotent after explicit journal persistence", () => {
+		const repaired = structuredClone(readyPending);
+		repaired.journal.settlements.push({ ...cycle13ExpectedSettlement(repaired, "ready") });
+		assert.deepEqual(cycle13RestartRepairResult(repaired, seed.plan), { settlementRepairs: [] });
+	});
+	await t.test("blocked repair replay is idempotent after explicit journal persistence", () => {
+		const repaired = structuredClone(restoredPending);
+		repaired.journal.settlements.push({ ...cycle13ExpectedSettlement(repaired, "blocked") });
+		assert.deepEqual(cycle13RestartRepairResult(repaired, seed.plan), { settlementRepairs: [] });
+	});
+
+	const rejects: ReadonlyArray<readonly [string, Cycle10MutableRestartSnapshot]> = [
+		["wrong terminal identity", (() => {
+			const value = structuredClone(readyPending);
+			value.authority.states[0][1].authorization = {
+				...value.authority.states[0][1].authorization,
+				digest: "f".repeat(64),
+			};
+			return value;
+		})()],
+		["wrong settlement outcome", (() => {
+			const value = structuredClone(readySettled);
+			value.journal.settlements[0].outcome = "blocked";
+			return value;
+		})()],
+		["duplicate journal settlement", (() => {
+			const value = structuredClone(seed.snapshot);
+			value.journal.settlements.push(structuredClone(value.journal.settlements[0]));
+			return value;
+		})()],
+		["orphan terminal authority", (() => {
+			const value = structuredClone(readyPending);
+			value.journal.prepared = [];
+			return value;
+		})()],
+		["stale settlement chronology", (() => {
+			const value = structuredClone(seed.snapshot);
+			value.journal.settlements[0].settledAt = "2026-07-21T11:59:00.000Z";
+			return value;
+		})()],
+		["incompatible terminal receipt visibility", (() => {
+			const value = structuredClone(readyPending);
+			value.readiness.pullRequests[0].draft = true;
+			return value;
+		})()],
+	];
+	for (const [name, snapshot] of rejects) {
+		await t.test(name, () => assert.throws(
+			() => cycle13RestartRepairResult(snapshot, seed.plan),
+			/restart|history|authority|identity|digest|settlement|orphan|chronology|visibility|receipt|duplicate/i,
+		));
+	}
+});
+
+function cycle13RebindDecisionUrls(value: Record<string, unknown>): void {
+	const binding = value.binding as Record<string, unknown>;
+	const target = binding.target as Record<string, unknown>;
+	const repository = String(binding.repository);
+	const route = target.kind === "pull_request" ? "pull" : "issues";
+	const base = `https://github.com/${repository}/${route}/${String(target.number)}`;
+	const requestComment = value.requestComment as Record<string, unknown>;
+	requestComment.url = `${base}#issuecomment-${String(requestComment.id)}`;
+	const decision = value.decision as Record<string, unknown>;
+	decision.sourceUrl = `${base}#issuecomment-${String(Number(requestComment.id) + 1)}`;
+}
+
+function cycle13PreparedWithDecision(
+	operation: PreparedParentReadyOperation,
+	marker: string,
+	mutate: (value: Record<string, unknown>) => void,
+	decisionDigestOverride?: string,
+): PreparedParentReadyOperation {
+	const rawDecision = structuredClone(operation.decision) as unknown as Record<string, unknown>;
+	mutate(rawDecision);
+	const refreshed = createHumanDecisionRecord({
+		requestId: rawDecision.requestId,
+		gate: rawDecision.gate,
+		binding: rawDecision.binding,
+		allowedOptions: rawDecision.allowedOptions,
+		actorAllowlist: rawDecision.actorAllowlist,
+		expiresAt: rawDecision.expiresAt,
+		question: rawDecision.question,
+	} as Parameters<typeof createHumanDecisionRecord>[0], new Date(String(rawDecision.createdAt)));
+	rawDecision.idempotencyMarker = refreshed.idempotencyMarker;
+	const decision = validateHumanDecisionRecord(rawDecision);
+	const { digest: _discardedDigest, ...authorizationPayload } = operation.authorization;
+	void _discardedDigest;
+	const decisionDigest = decisionDigestOverride
+		?? createHash("sha256").update(JSON.stringify(decision)).digest("hex");
+	const authorization = githubOrchestratorApi.canonicalizeParentReadyAuthorization({
+		...authorizationPayload,
+		decision,
+		decisionDigest,
+	});
+	const mutation = createDurableMutationIntent(
+		"parent_ready",
+		[authorization.repository, marker, authorization.headSha],
+		{
+			repository: authorization.repository,
+			pullRequest: authorization.pullRequest,
+			headSha: authorization.headSha,
+			generation: authorization.generation,
+			decisionRequestId: authorization.decisionRequestId,
+			authorization,
+		},
+		authorization.pullRequestRevision,
+	);
+	return { ...structuredClone(operation), decision, authorization, mutation };
+}
+
+test("cycle 13 prepared authorization is bound to the exact consumed affirmative decision", async (t) => {
+	const seed = await cycle10RestartSnapshotSeed();
+	const operation = seed.snapshot.journal.prepared[0];
+	await t.test("canonical consumed parent merge approval", () => {
+		assert.doesNotThrow(() => githubOrchestratorApi.validatePreparedParentReadyOperation(operation, seed.plan));
+	});
+	const rows: ReadonlyArray<readonly [string, (value: Record<string, unknown>) => void, string?]> = [
+		["status is not consumed", (value) => {
+			value.status = "decided";
+			delete value.consumedAt;
+		}],
+		["gate is not parent merge", (value) => { value.gate = "merge"; }],
+		["decision option is not approve merge", (value) => {
+			(value.decision as Record<string, unknown>).option = "reject";
+		}],
+		["binding repository diverges", (value) => {
+			(value.binding as Record<string, unknown>).repository = "polymetrics-ai/cycle-13-foreign";
+			cycle13RebindDecisionUrls(value);
+		}],
+		["binding target number diverges with canonical pull-request kind", (value) => {
+			const binding = value.binding as Record<string, unknown>;
+			binding.target = { kind: "pull_request", number: operation.authorization.pullRequest + 1 };
+			cycle13RebindDecisionUrls(value);
+		}],
+		["binding generation diverges", (value) => {
+			const binding = value.binding as Record<string, unknown>;
+			binding.generation = Number(binding.generation) + 1;
+		}],
+		["binding head diverges", (value) => {
+			(value.binding as Record<string, unknown>).headSha = "e".repeat(40);
+		}],
+		["decision digest diverges", () => {}, "f".repeat(64)],
+	];
+	for (const [name, mutate, digestOverride] of rows) {
+		await t.test(name, () => {
+			const altered = cycle13PreparedWithDecision(
+				operation,
+				seed.plan.markers.parentPullRequest,
+				mutate,
+				digestOverride,
+			);
+			assert.throws(
+				() => githubOrchestratorApi.validatePreparedParentReadyOperation(altered, seed.plan),
+				/decision|authorization|binding|consumed|parent.merge|approve.merge|repository|pull.request|generation|head|digest/i,
+			);
+		});
+	}
+});
+
+test("cycle 13 restart history has one unique current canonical parent marker owner", async (t) => {
+	const seed = await cycle10RestartSnapshotSeed();
+	await t.test("one canonical current owner", () => {
+		assert.doesNotThrow(() => cycle12ValidateRestartHistory(seed.snapshot, seed.plan));
+	});
+	await t.test("duplicate canonical marker histories reject before role reconstruction", () => {
+		assert.throws(
+			() => cycle12ValidateRestartHistory(cycle12TwoHistorySnapshot(seed), seed.plan),
+			/marker|unique|ambiguous/i,
+		);
+	});
+	await t.test("ambiguous duplicate current pull request rejects", () => {
+		const ambiguous = structuredClone(seed.snapshot);
+		ambiguous.readiness.pullRequests.push(structuredClone(ambiguous.readiness.pullRequests[0]));
+		assert.throws(
+			() => cycle12ValidateRestartHistory(ambiguous, seed.plan),
+			/current|pull.request|ambiguous|duplicate/i,
+		);
+	});
+	await t.test("cross-bound prepared history rejects even after digest recomputation", () => {
+		const crossBound = cycle12TwoHistorySnapshot(seed).journal.prepared[1];
+		assert.throws(
+			() => githubOrchestratorApi.validatePreparedParentReadyOperation(crossBound, seed.plan),
+			/decision|authorization|binding|repository|pull.request|generation|head/i,
+		);
+	});
+});
+
 test("cycle 11 typed non-applied conflicts require exact atomic tombstone proof", async (t) => {
 	const scenario = await cycle8PortOnlyPreparedScenario();
 	const request = cycle11MarkReadyRequest(scenario.candidate, scenario.operation);
@@ -8235,12 +8706,54 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.equal(details.candidateRef, "HEAD");
 	assert.equal(Object.hasOwn(details, "frozenCandidate"), false);
 	assert.equal((details.priorReviewState as Record<string, unknown>).priorReviewedCandidate,
-		"4f0e17df4a241f120e5991d8a7d501d1e8fbfebb");
-	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 12);
+		"baef761544b8f0f58e2662058ae0c1715f345300");
+	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 13);
 	assert.equal(details.verificationPassed, false);
 	const validate = githubOrchestratorApi.validateRunStateCandidateSemantics;
 	assert.doesNotThrow(() => validate(state));
 	const invalid = structuredClone(state);
 	(invalid.details as Record<string, unknown>).candidateRef = "dbce5b7d0c698bc802594211072fed77eff23c1c";
 	assert.throws(() => validate(invalid), /candidate|HEAD|historical|current/i);
+});
+
+test("cycle 13 leading artifacts name only the executed RED checkpoint", async (t) => {
+	await t.test("summary leads with exact Cycle 13 executable RED counts", async () => {
+		const summary = await readFile(
+			".planning/phases/478-shepherd-github-parent-orchestration/SUMMARY.md",
+			"utf8",
+		);
+		assert.match(summary.slice(0, 900), /Cycle 13 executable RED/i);
+		assert.match(summary.slice(0, 900), /1061 total \/ 1015 pass \/ 45.*failures \/ 1 skip/is);
+		assert.match(summary.slice(0, 900), /no production edit exists/i);
+	});
+	await t.test("verification keeps both machine gates false", async () => {
+		const verification = await readFile(
+			".planning/phases/478-shepherd-github-parent-orchestration/VERIFICATION.md",
+			"utf8",
+		);
+		assert.match(verification.slice(0, 900), /Cycle 13 executable RED/i);
+		assert.match(verification.slice(0, 900), /verificationPassed.*reviewCoveragePassed.*false/is);
+	});
+	await t.test("PR body and handoff label Cycle 13 executable RED", async () => {
+		const [prBody, handoff] = await Promise.all([
+			readFile(".planning/phases/478-shepherd-github-parent-orchestration/PR-BODY.md", "utf8"),
+			readFile(".planning/phases/478-shepherd-github-parent-orchestration/WORKER-HANDOFF.md", "utf8"),
+		]);
+		assert.match(prBody, /Cycle 13 consolidated-review correction \(executable RED; verification\/review false\)/u);
+		assert.match(handoff.slice(0, 1_200), /Cycle 13 status: executable RED/is);
+	});
+	await t.test("machine state records exact blocked review and false gates", async () => {
+		const raw = await readFile(
+			".planning/phases/478-shepherd-github-parent-orchestration/RUN-STATE.json",
+			"utf8",
+		);
+		const state = JSON.parse(raw) as { details: Record<string, unknown> };
+		const prior = state.details.priorReviewState as Record<string, unknown>;
+		assert.equal(prior.cycle, 12);
+		assert.equal(prior.priorReviewedCandidate, "baef761544b8f0f58e2662058ae0c1715f345300");
+		assert.equal(prior.findingsConsolidatedIntoCycle, 13);
+		assert.equal(state.details.verificationPassed, false);
+		assert.equal(state.details.reviewCoveragePassed, false);
+		assert.match(String((state.details.verification as Record<string, unknown>).cycle13), /1061 total.*45 intended fail/i);
+	});
 });

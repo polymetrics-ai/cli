@@ -1,9 +1,10 @@
 # Verification: #478
 
-Status: both Cycle 12 reports block exact candidate `baef761544b8f0f58e2662058ae0c1715f345300`.
-Cycle 13 is at artifact-only PLAN: no Cycle 13 executable RED, production change, or GREEN has run.
-The prior focused/strict results are historical, the declared broad route remains non-zero, and no
-fresh exact-head review ran. `verificationPassed` and `reviewCoveragePassed` remain false.
+Status: Cycle 13 executable RED follows artifact PLAN
+`27e7b5d2736c62b80618de020e743df49abf76b6`. Focused is 1061 / 1015 / 45 intended fail / 1
+skip; strict owned TypeScript passes; all five production blobs remain exact. No GREEN has run.
+The declared broad route remains non-zero and no fresh exact-head review ran, so
+`verificationPassed` and `reviewCoveragePassed` remain false.
 
 ## Cycle 13 verification contract
 
@@ -14,17 +15,20 @@ fresh exact-head review ran. `verificationPassed` and `reviewCoveragePassed` rem
       bounded forward assignment scanning, and narrow evidence.
 - [x] Required skills/contracts/runtime/project sources are read; doctor passes; unavailable adapter
       and agent capacity record `manual_gsd_fallback` and `local_critical_path`.
-- [ ] Artifact-only Cycle 13 PLAN commit precedes every Cycle 13 test and production edit.
-- [ ] One complete executable RED covers 73 rows while retaining 978 prior focused cases and all
+- [x] Artifact-only Cycle 13 PLAN `27e7b5d2` precedes every Cycle 13 test and production edit.
+- [x] One complete executable RED covers 73 rows while retaining 978 prior focused cases and all
       five production blobs exactly.
-- [ ] Focused/strict RED counts and PLAN/RED SHAs are reported before GREEN.
+- [x] Focused RED is 1061 total / 1015 pass / 45 intended failures / 1 skip; strict owned
+      TypeScript passes. Forty leaves plus five parent containers fail; 33 controls pass.
+- [ ] Exact PLAN/RED SHAs and frozen blobs are reported to the parent before GREEN.
 - [ ] Coherent GREEN, strict owned/all-production TypeScript, offline RPC, broad classification,
       and exact integrity/report gates are recorded.
 - [x] Go, connectors, `make`, services, dependencies, network/GitHub, push, reviewer dispatch,
       integration, ready, merge, and every human gate remain out of scope.
 
-Planned rows are BEGIN 16, cross-store 10, decision 9, marker 4, scanner 30, and artifact 4. No row
-is named executed at this checkpoint. Frozen production blobs are orchestrator
+Executed rows are BEGIN 16, cross-store 10, decision 9, marker 4, scanner 30, and artifact 4.
+Intended failing leaves are BEGIN 16, cross-store 4, decision 8, marker 2, and scanner 10; the other
+33 rows pass as canonical/rejection/generic/artifact controls. Frozen production blobs are orchestrator
 `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
 `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
 `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence

@@ -18,9 +18,10 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `baef761544b8f0f58e2662058ae0c1715f345300`
 
-Cycle 13 status: both Cycle 12 reviews block the frozen candidate. The 73-row union is at its
-artifact-only PLAN checkpoint; no Cycle 13 test or production edit has run. Verification and review
-coverage remain false. This is neither an implemented nor review-clean Cycle 13 candidate.
+Cycle 13 status: executable RED follows artifact PLAN `27e7b5d2`. Focused is 1061 / 1015 / 45
+intended fail / 1 skip; 40 named leaves plus five parents fail, all 33 controls and retained Cycle
+12 cases pass, strict owned TypeScript passes, and production is exact. Verification and review
+coverage remain false. This is not an implemented or review-clean Cycle 13 candidate.
 
 ## Scope Delivered
 
@@ -469,8 +470,9 @@ session-attestation contract and fixtures required to verify independent-review 
   binding plus one unique current canonical parent marker owner across histories.
 - C13-SCANNER has 30 rows: malformed case/heredoc ownership, later public closer preservation,
   five generic consumers, and bounded single-pass/no-repeated-`lastIndexOf` behavior.
-- The next checkpoint is one complete test-only RED in the existing five tests, preserving all 978
-  prior focused cases and the exact production blobs. PLAN/RED SHAs and counts must be reported
-  before GREEN.
+- Executable RED in the existing five tests preserves all 978 prior focused cases and the exact
+  production blobs. Its 40 intended leaves are BEGIN 16, cross-store 4, decision 8, marker 2, and
+  scanner 10; five parent containers fail and all 33 controls pass. PLAN/RED SHAs and exact blobs
+  must be reported before GREEN.
 - Adapter/runtime decisions are `manual_gsd_fallback` and `local_critical_path`. No network,
   GitHub, push, reviewer, integration, ready, merge, or human gate is worker-owned or ran.

@@ -638,11 +638,15 @@ this ledger: 278 + 209 = 487 lines with SHA-256
 | C13-SCANNER | 30 | eight direct, twenty five-consumer, and two bounded-linearity rows |
 | C13-ARTIFACT | 4 | leading summary, verification, PR/handoff, and machine truth name only executed evidence |
 
-At artifact PLAN, no Cycle 13 test has run, no production edit exists, and none of these rows is
-claimed executed. The RED commit must preserve all 978 prior focused Cycle 12 cases and exact blobs:
+Artifact PLAN `27e7b5d2736c62b80618de020e743df49abf76b6` precedes executable RED. Focused RED is
+1061 total / 1015 pass / 45 intended failures / 1 skip. The 40 failing leaves are BEGIN 16,
+cross-store 4, decision 8, marker 2, and direct/linearity scanner 10; their five parent containers
+account for the remaining failures. All 33 canonical, impossible-history, generic-consumer, and
+artifact controls pass, as do all retained Cycle 12 cases. Strict owned TypeScript passes.
+
+No production edit exists. RED preserves all 978 prior focused Cycle 12 cases and exact blobs:
 orchestrator `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
 `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
 `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
 `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
-`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. Strict owned TypeScript must pass at RED; exact
-failing leaves/containers and passing controls will be recorded only after execution.
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`.

@@ -1,10 +1,12 @@
 # Summary: #478
 
-Status: both independent Cycle 12 reviews block exact candidate
-`baef761544b8f0f58e2662058ae0c1715f345300`. Cycle 13 is at its artifact-only PLAN checkpoint:
-the 73-row review union is frozen, but no Cycle 13 test or production edit has run. The prior
-Cycle 12 focused and strict results are historical only; the declared broad route remains non-zero
-and no fresh exact-head review ran. `verificationPassed` and `reviewCoveragePassed` remain false.
+Status: Cycle 13 executable RED follows artifact PLAN
+`27e7b5d2736c62b80618de020e743df49abf76b6` against frozen reviewed candidate
+`baef761544b8f0f58e2662058ae0c1715f345300`. Focused RED is 1061 total / 1015 pass / 45
+intended failures / 1 skip: 40 intended leaves plus five parent containers; all 33 matrix controls
+and all retained Cycle 12 cases pass. Strict owned TypeScript passes and no production edit exists.
+The declared broad route remains non-zero and no fresh exact-head review ran, so
+`verificationPassed` and `reviewCoveragePassed` remain false.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -313,7 +315,8 @@ current parent marker owner, and replace repeated closer rescans with a bounded 
 scanner that preserves unrelated public fields. The split is BEGIN 16, cross-store 10, decision 9,
 marker 4, scanner 30, and artifact 4. All 978 prior focused Cycle 12 cases remain mandatory.
 
-This checkpoint changes only the nine planning artifacts. Frozen production blobs are orchestrator
+The artifact PLAN changes only nine planning artifacts; executable RED adds the existing five tests
+and no production. Frozen production blobs remain orchestrator
 `ca07667f4e598fee472ae174b2a3c55bc708db55`, router
 `2c5fd80e4ee5ba536fb7f608ca4e424661a5431e`, broker
 `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence

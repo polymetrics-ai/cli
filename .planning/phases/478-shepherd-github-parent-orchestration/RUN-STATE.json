@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Both Cycle 12 reviews block exact candidate baef7615; Cycle 13 is at artifact-only PLAN with its 73-row union frozen and no Cycle 13 test or production edit. Broad remains non-zero and no fresh exact-head review ran, so verification/review remain false.",
+  "reason": "Cycle 13 executable RED follows artifact PLAN 27e7b5d2: focused 1061/1015/45 intended fail/1 skip with 40 leaves plus 5 parents, all 33 controls and retained Cycle 12 cases passing, strict owned TypeScript passing, and production frozen. Broad remains non-zero and no fresh exact-head review ran, so verification/review remain false.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -118,6 +118,7 @@
       "cycle12Plan": "7f96718c4d8c692cd618ff220ab0d53d2e6546a2",
       "cycle12Red": "2649cf6dcad1fcc943261c0838bbca8e56c5c595",
       "cycle12Green": "723fdc122cea75a5d6f146fb8b39383e9e5795e3"
+      ,"cycle13Plan": "27e7b5d2736c62b80618de020e743df49abf76b6"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -133,7 +134,7 @@
       "cycle10": "PLAN 470a8a85; RED 2256971a with 687 total, 470 pass, 216 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN 5f46206e; refactor 8946b67b; authority target 89/89; focused five-file 687 total, 686 pass, 0 fail, 1 intentional skip at local evidence head, but independent review later reproduced C10-CONFIRM flakiness; strict owned and all 20 production TypeScript pass; serialized environmental failure 907 total, 841 pass, 65 unchanged managed-sandbox process/lease failures, 1 skip; immutable exact merge base, full-range diff, exact 21 paths, and 3 JSON parses pass; verification remains false",
       "cycle11": "PLAN 863bf94a; RED 1b4aa6f1 with 791 total, 743 pass, 47 intended TAP failures, 1 skip and all 5 production blobs frozen; GREEN e765e0d3; focused 791 total, 790 pass, 0 fail, 1 intentional skip; strict and bounded gates pass, but both independent Cycle 11 reviews block exact evidence 4f0e17df on adjacent dual-owner, total-graph, and redaction gaps; broad remains non-zero and both machine gates false",
       "cycle12": "PLAN 7f96718c; executable RED 2649cf6d at 942/885/56/1 with 51 leaves plus 5 parents and all production frozen; reviewer-gap RED 978/963/14/1 with 12 leaves plus 2 parents; coherent GREEN 723fdc12; focused 978/977/0/1; BEGIN 6/6, graph orphan 7/7, sequence 5/5, claim 15/15, assignment 144/144; strict five-pair and all-20-production TypeScript pass with TypeScript 5.9.3 and cached Pi 0.80.6; pinned offline RPC pass; broad environmental 1198/1132/65/1; immutable base/reviewed-candidate ancestry, exact merge base, full diff, exact 21 paths, JSON3, marker confinement, and report identity pass; both independent Cycle 12 reviews block exact evidence baef7615",
-      "cycle13": "artifact PLAN only against baef7615/tree 6bf70b7a; both complete Cycle 12 reports consolidated into 73 planned rows; no Cycle 13 test or production edit; five production blobs frozen; verification/review false"
+      "cycle13": "artifact PLAN 27e7b5d2 precedes executable RED; 1061 total, 1015 pass, 45 intended fail, 1 skip; 40 leaves plus 5 parent containers fail, all 33 controls and retained Cycle 12 cases pass; strict owned TypeScript passes; five production blobs frozen; verification/review false"
     },
     "orchestrationDecisions": [
       {
@@ -292,6 +293,11 @@
         "reason": "Both Cycle 12 reviews are blocked, Cycle 13 behavior is unimplemented at artifact PLAN, the declared broad route remains non-zero, and no fresh exact-head review ran."
       },
       {
+        "cycle": "cycle-13-red",
+        "decision": "complete_executable_red_production_frozen",
+        "reason": "Focused RED executes 1061 tests with 40 intended failing leaves plus five parent containers and one skip; all 33 controls and retained Cycle 12 cases pass, strict owned TypeScript passes, and all five production blobs remain exact."
+      },
+      {
         "cycle": "cycle-8-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
@@ -328,5 +334,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T08:04:21.000Z"
+  "updatedAt": "2026-07-22T08:23:38.000Z"
 }

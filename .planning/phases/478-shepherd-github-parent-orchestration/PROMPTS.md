@@ -340,6 +340,8 @@ or human gates stay parent-owned.
   is absent. Exclude Go/connectors/`make`, services, dependencies, network/GitHub, push, reviewers,
   integration, ready, merge, and human gates.
 
-Execution status: artifact PLAN only. The matrix is 73 rows: BEGIN 16, cross-store 10, decision 9,
-marker 4, scanner 30, and artifact 4. No Cycle 13 test or production edit has run. Adapter/runtime
+Execution status: artifact PLAN `27e7b5d2` precedes executable RED. The 73-row matrix produces
+1061 total / 1015 pass / 45 intended failures / 1 skip: 40 failing leaves (BEGIN 16, cross-store 4,
+decision 8, marker 2, scanner 10) plus five parent containers; all 33 controls and retained Cycle 12
+cases pass. Strict owned TypeScript passes and all production blobs remain exact. Adapter/runtime
 decisions are `manual_gsd_fallback` and `local_critical_path`.

@@ -940,3 +940,29 @@ test("cycle 12 keeps multiline and composite assignment rejection generic before
 		});
 	}
 });
+
+function cycle13MalformedAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["malformed case", `$(case x in x) printf ${marker} ;; esac`],
+		["malformed heredoc", `$(cat <<'CYCLE13_EOF'\n)\n${marker}\nCYCLE13_EOF`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 13 keeps malformed assignment rejection generic before broker effects", async (t) => {
+	const marker = "CYCLE13_DECISION_BROKER_MARKER";
+	for (const [name, question] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(name, async () => {
+			const harness = brokerHarness();
+			let rejection: unknown;
+			try { await harness.broker.request({ ...harness.request, question }); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+			assert.equal(harness.repository.states.size, 0);
+			assert.equal(harness.transport.created.length, 0);
+		});
+	}
+});

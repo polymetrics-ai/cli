@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 import {
@@ -699,6 +700,69 @@ test("cycle 12 consumes multiline and composite assignment tails completely", as
 		assert.equal(
 			reviewRouterApi.redactSensitiveText("ACME_API_KEY=prefix\nPUBLIC_NOTE=retained"),
 			"ACME_API_KEY=[REDACTED]\nPUBLIC_NOTE=retained",
+		);
+	});
+});
+
+function cycle13MalformedAssignmentTails(marker: string): ReadonlyArray<readonly [string, string]> {
+	const values: ReadonlyArray<readonly [string, string]> = [
+		["malformed case", `$(case x in x) printf ${marker} ;; esac`],
+		["malformed heredoc", `$(cat <<'CYCLE13_EOF'\n)\n${marker}\nCYCLE13_EOF`],
+	];
+	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
+		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
+}
+
+test("cycle 13 assignment scanner is bounded forward and preserves later public fields", async (t) => {
+	const marker = "CYCLE13_REVIEW_ROUTER_MARKER";
+	const publicBoundary = "PUBLIC_NOTE=retained";
+	for (const [name, assignment] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(name, () => {
+			const operator = assignment.startsWith("ACME_API_KEY+=") ? "+=" : "=";
+			const redacted = reviewRouterApi.redactSensitiveText(`${assignment}\n${publicBoundary}`);
+			assert.equal(redacted, `ACME_API_KEY${operator}[REDACTED]\n${publicBoundary}`);
+			assert.doesNotMatch(redacted, new RegExp(marker, "u"));
+		});
+	}
+	for (const [name, assignment] of cycle13MalformedAssignmentTails(marker)) {
+		await t.test(`${name} generic review-work rejection`, () => {
+			let rejection: unknown;
+			try { createIndependentReviewWork(target({ workItemId: assignment })); } catch (error) { rejection = error; }
+			assert.ok(rejection instanceof Error, name);
+			assert.match(rejection.message, /credential|secret|sensitive|invalid|bounded/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			assert.doesNotMatch(rejection.message, /API_KEY/iu);
+		});
+	}
+	for (const operator of ["=", "+="] as const) {
+		await t.test(`${operator} later public close parenthesis`, () => {
+			assert.equal(
+				reviewRouterApi.redactSensitiveText(
+					`ACME_API_KEY${operator}$(printf ${marker})\n${publicBoundary})`,
+				),
+				`ACME_API_KEY${operator}[REDACTED]\n${publicBoundary})`,
+			);
+		});
+		await t.test(`${operator} later public close brace`, () => {
+			assert.equal(
+				reviewRouterApi.redactSensitiveText(
+					`ACME_API_KEY${operator}\${UNSAFE:-${marker}}\n${publicBoundary}}`,
+				),
+				`ACME_API_KEY${operator}[REDACTED]\n${publicBoundary}}`,
+			);
+		});
+	}
+	await t.test("scanner source has no repeated whole-input closer search", async () => {
+		const source = await readFile(".pi/extensions/shepherd/review-router.ts", "utf8");
+		const scanner = source.slice(source.indexOf("function assignmentValueEnd"),
+			source.indexOf("function redactCredentialAssignments"));
+		assert.doesNotMatch(scanner, /\.lastIndexOf\s*\(/u);
+	});
+	await t.test("maximum-bound unmatched opener redacts its field and preserves adjacent public text", () => {
+		const input = `ACME_API_KEY=${"(".repeat(60_000)}\n${publicBoundary}`;
+		assert.equal(
+			reviewRouterApi.redactSensitiveText(input),
+			`ACME_API_KEY=[REDACTED]\n${publicBoundary}`,
 		);
 	});
 });

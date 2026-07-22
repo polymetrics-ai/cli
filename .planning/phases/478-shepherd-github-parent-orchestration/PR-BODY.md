@@ -288,7 +288,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - no network, push, review dispatch, integration, ready, merge, or human gate action is
   worker-owned or ran
 
-## Cycle 13 consolidated-review correction (artifact PLAN; verification/review false)
+## Cycle 13 consolidated-review correction (executable RED; verification/review false)
 
 - both complete Cycle 12 reviews block frozen candidate/tree `baef7615` / `6bf70b7a`; immutable
   base and exact merge base remain `3addb1f4`, scope remains exactly 21 paths, and all five
@@ -296,8 +296,9 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - the 73-row union covers dual requested/exact-returned begin proof (16), cross-store terminal
   settlement repair (10), consumed affirmative decision binding (9), unique current canonical
   marker ownership (4), bounded forward assignment scanning (30), and truthful artifacts (4)
-- no Cycle 13 test or production edit has run at this artifact checkpoint; the next checkpoint is
-  one executable test-only RED retaining all 978 prior focused Cycle 12 cases
+- artifact PLAN `27e7b5d2` precedes executable test-only RED: 1061 total / 1015 pass / 45 intended
+  fail / 1 skip, comprising 40 named leaves plus five parents; all 33 controls and all retained
+  Cycle 12 cases pass, strict owned TypeScript passes, and production remains exact
 - prior focused/strict results are historical, broad remains non-zero, and no fresh exact-head
   review ran; `verificationPassed` and `reviewCoveragePassed` remain false
 - adapter fallback is `manual_gsd_fallback`; agent-capacity decision is `local_critical_path`; no
