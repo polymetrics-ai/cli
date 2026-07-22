@@ -11,7 +11,8 @@ scheduling, and AI-agent-safe automation. It runs as one Go binary, keeps
 credentials local, and speaks JSON everywhere.
 
 [![Website](https://img.shields.io/badge/website-cli.polymetrics.ai-0f3d2e?logo=icloud&logoColor=white)](https://cli.polymetrics.ai)
-[![License: Elastic 2.0](https://img.shields.io/badge/license-Elastic%202.0-244c3a.svg)](LICENSE)
+[![Core license: AGPL-3.0-only](https://img.shields.io/badge/core-AGPL--3.0--only-244c3a.svg)](LICENSE)
+[![Connector definitions: MIT](https://img.shields.io/badge/connector%20defs-MIT-2f7d64.svg)](internal/connectors/defs/LICENSE)
 [![Verify](https://github.com/polymetrics-ai/cli/actions/workflows/verify.yml/badge.svg)](https://github.com/polymetrics-ai/cli/actions/workflows/verify.yml)
 ![Go](https://img.shields.io/badge/go-1.25.11+-00ADD8?logo=go&logoColor=white)
 [![GitHub stars](https://img.shields.io/github/stars/polymetrics-ai/cli?style=social)](https://github.com/polymetrics-ai/cli/stargazers)
@@ -199,9 +200,18 @@ Use Conventional Commits:
 
 ## License
 
-[Elastic License 2.0](LICENSE) (c) 2026 Polymetrics AI.
+Polymetrics uses an explicit path-based license boundary:
 
-Polymetrics CLI is public source and free to use under Elastic License 2.0. The
-license does not permit offering the software to third parties as a hosted or
-managed service where users access a substantial set of its functionality. For
-commercial licensing beyond those terms, contact Polymetrics AI.
+| Scope | License |
+| --- | --- |
+| Core and repository default | [GNU AGPL v3.0 only](LICENSE) (`AGPL-3.0-only`) |
+| `internal/connectors/defs/**` | [MIT](internal/connectors/defs/LICENSE) |
+
+The permissive definitions license is intended to make connector catalog
+contributions and reuse straightforward. The engine, CLI, website, and other
+core code remain AGPL. See [LICENSING.md](LICENSING.md) for the complete path
+map, contribution terms, and third-party boundaries.
+
+The AGPL permits commercial use subject to its conditions. Organizations that
+need different terms may contact Polymetrics AI about a separate written
+agreement; this repository does not itself grant a commercial license.

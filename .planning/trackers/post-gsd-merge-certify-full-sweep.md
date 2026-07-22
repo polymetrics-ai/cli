@@ -236,9 +236,9 @@ Follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 
 - If #121 remains stacked, target the parent branch and use `Refs #121`.
 - If targeting `main` directly and completing #121, use `Closes #121`.
-- Wait for CodeRabbit automatic review on non-draft PRs to `main`.
-- Do not post redundant `@coderabbitai review` commands unless fallback conditions apply.
-- Copilot review is fallback-only when CodeRabbit is blocked.
+- Wait for Claude automatic review on non-draft PRs to `main`.
+- Do not post redundant `@claude review` commands unless fallback conditions apply.
+- Copilot review is fallback-only when Claude is blocked.
 
 ## All-Streams Read Sweep Slice Evidence
 

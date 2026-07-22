@@ -21,3 +21,6 @@ deploy/compose/.env
 *.log
 __pycache__/
 *.py[cod]
+
+# Pi autonomous loop runtime state (durable resume lives on disk; not committed)
+.planning/auto-loop/

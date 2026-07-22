@@ -480,7 +480,7 @@ Add an `agent_skills` section to `.planning/config.json` mapping agent types to 
     "gsd-executor": [
       "skills/testing-standards",
       "global:shared-conventions",
-      "global:coderabbit:code-review"
+      "global:claude:code-review"
     ],
     "gsd-planner": ["skills/architecture-rules"],
     "gsd-verifier": ["skills/acceptance-criteria"]
@@ -502,7 +502,7 @@ Each element in the array is one of three forms:
 
 **Global personal skills** (`global:<name>`) resolve against the runtime's global skills directory (e.g. `~/.claude/skills/`). Symlink-escape protection applies unless the target is listed in `agent_skills_security.trusted_global_roots`.
 
-**Plugin-provided skills** (`global:<plugin>:<skill>`) follow the namespaced form `seg(:seg)*`, where each segment is one or more alphanumeric characters, underscores, or hyphens joined by single colons (e.g. `global:coderabbit:code-review`). This form is **Claude-only**: on the Claude runtime GSD emits a Skill-tool load directive in the agent's `<agent_skills>` block so the agent loads the skill by name via the Skill tool, and Claude Code resolves the `plugin:skill` namespace. On all other runtimes the entry is skipped with a warning — the plugin/Skill-tool model is specific to Claude Code and has no equivalent elsewhere.
+**Plugin-provided skills** (`global:<plugin>:<skill>`) follow the namespaced form `seg(:seg)*`, where each segment is one or more alphanumeric characters, underscores, or hyphens joined by single colons (e.g. `global:claude:code-review`). This form is **Claude-only**: on the Claude runtime GSD emits a Skill-tool load directive in the agent's `<agent_skills>` block so the agent loads the skill by name via the Skill tool, and Claude Code resolves the `plugin:skill` namespace. On all other runtimes the entry is skipped with a warning — the plugin/Skill-tool model is specific to Claude Code and has no equivalent elsewhere.
 
 > **Why load by name rather than path?** Claude Code's plugin cache is versioned and ephemeral, so there is no stable filesystem path to `@`-include. Loading by namespaced name via the Skill tool lets Claude Code's own resolver locate the current version of the plugin skill at runtime.
 
@@ -556,7 +556,7 @@ For a mixed config (path-resolvable and plugin-provided skills together), entrie
 <agent_skills>
 Read these user-configured skills:
 - @skills/testing-standards/SKILL.md
-- Load the `coderabbit:code-review` skill via the Skill tool before proceeding (plugin-provided).
+- Load the `claude:code-review` skill via the Skill tool before proceeding (plugin-provided).
 </agent_skills>
 ```
 

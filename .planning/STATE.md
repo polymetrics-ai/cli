@@ -59,7 +59,7 @@ These are quick-map inputs only; authoritative counts require Phase 1 inventory 
 
 1. Run GSD/Pi, YAML/JSON, diff, and scope verification.
 2. Commit and push the CLI help/docs/website parity guidance to PR #123.
-3. Let CI and CodeRabbit automatic review run; do not post redundant manual review commands unless documented fallback conditions apply.
+3. Let CI and Claude automatic review run; do not post redundant manual review commands unless documented fallback conditions apply.
 
 ---
 *State refreshed: 2026-07-08 via repo-local official GSD Core Pi adapter.*

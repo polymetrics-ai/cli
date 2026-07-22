@@ -21,7 +21,7 @@
 
 ## Delivery Pitfalls
 
-- Posting redundant CodeRabbit manual review commands after every push.
+- Posting redundant Claude manual review commands after every push.
 - Treating skipped/rate-limited automated review as approval.
 - Adding dependencies without human approval.
 - Running credentialed connector checks or reverse ETL execution during planning-only work.

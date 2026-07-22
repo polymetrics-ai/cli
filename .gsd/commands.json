@@ -1346,8 +1346,8 @@
           "description": "Include Codex CLI review"
         },
         {
-          "flag": "--coderabbit",
-          "description": "Include CodeRabbit review"
+          "flag": "--claude",
+          "description": "Include Claude review"
         },
         {
           "flag": "--opencode",

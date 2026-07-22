@@ -21,4 +21,4 @@ jq empty .planning/phases/cross-connector-rollout/RUN-STATE.json
 
 - Full Go verification is not required for this docs-only slice because no Go, connector, or build
   files are edited.
-- CodeRabbit manual review must not be triggered for this stacked sub-PR.
+- Claude manual review must not be triggered for this stacked sub-PR.

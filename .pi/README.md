@@ -64,21 +64,75 @@ Useful prompt templates:
   Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
 - `/pm-gsd-loop`: issue-first GSD/TDD implementation loop.
   Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
-- `/pm-review-loop`: CodeRabbit/Copilot review disposition loop.
+- `/pm-review-loop`: Claude/Copilot review disposition loop.
   Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
+- `/pm-auto-loop`: fully automated, resumable delivery loop. The orchestrator model comes from the
+  driver, and worker models come from `.pi/agents/*.md` frontmatter. Given one problem prompt it
+  (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent draft PR
+  and per-slice sub-PRs, then runs plan→execute→verify→review→correct per task until integrated.
+  Handles any task (`problem_type: implementation | connector`).
+  Example: `/pm-auto-loop "add a --since flag to pm connectors list"`.
+  See `.agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md`.
+- `/pm-connector-loop`: connector specialization of the auto-loop — always runs the RESEARCH stage
+  (full provider API surface via `pm-web-researcher`) and the 7-slice all-ops CLI-parity decomposition.
+  Example: `/pm-connector-loop "twenty (Twenty CRM, https://twenty.com, GraphQL + REST)"`.
+  Export `SEARXNG_BASE` (and its token if proxied) first so research can query the audited `searxng`
+  connector via `pm`.
+
+### Autonomous driver (unattended, resumable)
+
+Run the loop unattended until it reaches a human gate; it resumes after any interruption
+(including token exhaustion) by reconciling from durable state each turn:
+
+```bash
+# general task
+scripts/pi-auto-loop.sh "add a --since flag to pm connectors list"
+# connector (research + all-ops); set the connector loop + SearXNG first
+export SEARXNG_BASE=https://<your-searxng-host>
+LOOP_CMD=/pm-connector-loop scripts/pi-auto-loop.sh "twenty (Twenty CRM, https://twenty.com, GraphQL + REST)"
+scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
+```
+
+### Claude-orchestrated driver + Shepherd validator (recommended)
+
+Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
+usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.5`) for
+implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
+bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
+
+```bash
+export SEARXNG_BASE=http://localhost:8888
+# headless autonomy needs a permission posture; safest is acceptEdits, fully unattended is skip:
+export CLAUDE_ARGS="--output-format text --permission-mode acceptEdits"
+scripts/claude-auto-loop.sh "twenty (Twenty CRM, https://twenty.com, GraphQL + REST) — full all-ops CLI parity"
+scripts/claude-auto-loop.sh --resume
+```
+
+The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) and
+`VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
+`claude` CLI to be logged in (`claude -p "ok"` should work).
+
+Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
+agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
+validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
+subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
+environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`
+connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied) before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 
-For automated runs, load project agents with `agentScope` and explicit project-agent trust:
+For automated runs, install the subagent tool once (`pi install npm:pi-sub-agent`) and launch with
+`--approve` so project-local files are trusted:
 
 ```bash
 pi -p "Run the GSD verify cycle for phase github-projects-discussions" \
-  --tools read,bash,edit,write,grep,find,ls,subagent \
-  --agentScope both --confirmProjectAgents false
+  --tools read,bash,edit,write,grep,find,ls,subagent --approve
 ```
 
-Only set `--confirmProjectAgents false` after reviewing and trusting the agents under
-`.pi/agents/`.
+Project agents under `.pi/agents/` are included by passing `agentScope: "project"` or `"both"` in
+the `subagent` tool call (with `confirmProjectAgents: false` for non-interactive runs) — these are
+tool parameters, not CLI flags; pi 0.80.x has no `--agentScope`/`--confirmProjectAgents` options.
+Only run non-interactively after reviewing and trusting the agents under `.pi/agents/`.
 
 ### Compaction and retry
 

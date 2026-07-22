@@ -2,7 +2,7 @@
   "schemaVersion": "1.0",
   "phase": "github-projects-discussions",
   "status": "verification_blocked_ci_flaky",
-  "reason": "CodeRabbit review comments and pi runtime audit findings addressed; focused local gates pass. Full make verify did not exit 0 in CI: the certify package timed out (10m per-package limit) on the pre-existing slow TestWriteStagesLedgerWrittenBeforeCreate, which is unrelated to this PR's diff (base branch certify package is 298s vs 299s here). Re-running CI is required before merge; verificationPassed is false until a full make verify exits 0.",
+  "reason": "Claude review comments and pi runtime audit findings addressed; focused local gates pass. Full make verify did not exit 0 in CI: the certify package timed out (10m per-package limit) on the pre-existing slow TestWriteStagesLedgerWrittenBeforeCreate, which is unrelated to this PR's diff (base branch certify package is 298s vs 299s here). Re-running CI is required before merge; verificationPassed is false until a full make verify exits 0.",
   "details": {
     "lifecycle": [
       "load-project-context",
@@ -59,7 +59,7 @@
       {"cycle": "gsd-execute-phase", "decision": "local_critical_path", "reason": "Implementation slices were coupled to the github connector bundle; no disjoint write scope to spawn as a separate worker. Subagent tooling was available but no independent ready sub-issue existed."},
       {"cycle": "local-verification", "decision": "local_critical_path", "reason": "Unified verification/cleanup slice; no independent sub-issues to spawn."},
       {"cycle": "gsd-verify-work", "decision": "local_critical_path", "reason": "Focused gate verification; inline pass."},
-      {"cycle": "gsd-gap-loop", "decision": "local_critical_path", "reason": "Gap remediation (CodeRabbit dispositions, pi runtime audit fixes); coupled; inline pass."},
+      {"cycle": "gsd-gap-loop", "decision": "local_critical_path", "reason": "Gap remediation (Claude dispositions, pi runtime audit fixes); coupled; inline pass."},
       {"cycle": "write-phase-summary", "decision": "local_critical_path", "reason": "Single summary artifact; inline pass."}
     ]
   },

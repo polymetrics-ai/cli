@@ -69,19 +69,19 @@ before implementation.
     - Use `Refs #N` for sub-PRs that target a parent branch.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
 15. After implementation and local verification, choose the automated review route using
-    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the CodeRabbit
+    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the Claude
     review loop in
-    `.agents/agentic-delivery/workflows/coderabbit-review-loop.md`.
-16. Confirm that CodeRabbit actually produced review records or that the stacked-PR parent-review
+    `.agents/agentic-delivery/workflows/claude-review-loop.md`.
+16. Confirm that Claude actually produced review records or that the stacked-PR parent-review
     fallback covers the sub-issue. A skipped-review status, rate-limit notice, or processing-only
     comment is not approval.
-17. If CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
+17. If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
     blocking progress, request GitHub Copilot review once as a backup when enabled. Copilot
-    comments are dispositioned like CodeRabbit comments, but Copilot review is not approval.
+    comments are dispositioned like Claude comments, but Copilot review is not approval.
 18. Reply to every actionable automated review item with the disposition template before resolving
     it.
-19. Ensure accepted fix commits have been reviewed. Prefer CodeRabbit's automatic incremental review
-    when active; request manual `@coderabbitai review` only when automatic review is paused,
+19. Ensure accepted fix commits have been reviewed. Prefer Claude's automatic incremental review
+    when active; request manual `@claude review` only when automatic review is paused,
     disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
     reached.
 20. Ping the human coordinator only after no actionable automated review findings remain or a
@@ -135,4 +135,4 @@ Every implementation PR must include:
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred
 - automated review disposition summary, including accepted, declined, deferred, and human-gated
-  findings, plus the CodeRabbit and Copilot route status
+  findings, plus the Claude and Copilot route status

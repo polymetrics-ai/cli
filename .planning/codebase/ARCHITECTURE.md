@@ -98,7 +98,7 @@ These are quick map inputs, not certification claims.
 
 **Contains:** `.gsd/`, `.pi/`, `.agents/`, `.planning/`, `docs/migration`, `docs/architecture`.
 
-**Depends on:** official `open-gsd/gsd-core@next` docs snapshot, repo-local Pi extension, issue contracts, CodeRabbit/Copilot routing docs.
+**Depends on:** official `open-gsd/gsd-core@next` docs snapshot, repo-local Pi extension, issue contracts, Claude/Copilot routing docs.
 
 **Runtime model:**
 

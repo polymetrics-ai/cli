@@ -24,7 +24,7 @@ checkout. The phase still follows the GSD programming loop manually:
 5. Run targeted and broader verification.
 6. Commit and push green checkpoints.
 7. Open a stacked sub-PR against the parent branch.
-8. Use the automated review routing and CodeRabbit loop before integration.
+8. Use the automated review routing and Claude loop before integration.
 
 ## Scope
 

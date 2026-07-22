@@ -57,7 +57,7 @@ true:
 - automated review loop is complete and comments are resolved
 - automated review coverage exists through the sub-PR, through a parent PR fallback review that
   covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
-  because CodeRabbit is blocked
+  because Claude is blocked
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

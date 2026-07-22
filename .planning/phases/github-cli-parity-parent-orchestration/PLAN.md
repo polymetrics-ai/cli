@@ -29,8 +29,8 @@ human gate.
 - [x] Add repo-local `caveman` compact-output skill for orchestration handoffs.
 - [x] Make parent issue orchestration active instead of advisory.
 - [ ] Push updated parent branch.
-- [ ] Wait for automatic PR #49 CodeRabbit review and checks after the new parent commits.
-- [ ] Resolve current PR #49 CodeRabbit findings with dispositions.
+- [ ] Wait for automatic PR #49 Claude review and checks after the new parent commits.
+- [ ] Resolve current PR #49 Claude findings with dispositions.
 - [ ] Continue sub-issues in dependency order:
   - [ ] #35 help renderer
   - [ ] #37 operation ledger

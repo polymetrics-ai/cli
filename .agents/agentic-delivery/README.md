@@ -20,9 +20,9 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `contracts/parent-orchestrator-contract.md`: runtime contract for parent issue orchestration.
 - `contracts/worker-handoff-template.md`: required worker-to-orchestrator handoff format.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
-- `workflows/coderabbit-review-loop.md`: post-implementation CodeRabbit review and disposition
+- `workflows/claude-review-loop.md`: post-implementation Claude review and disposition
   loop.
-- `workflows/automated-review-routing-loop.md`: routing policy for CodeRabbit primary review,
+- `workflows/automated-review-routing-loop.md`: routing policy for Claude primary review,
   Copilot backup review, and human fallback.
 - `workflows/parent-issue-orchestration-loop.md`: full parent issue execution loop across workers,
   sub-PRs, parent PR review, and human readiness.
@@ -34,8 +34,8 @@ skills, guardrails, YAML agent definitions, and handoff rules.
   issue hierarchies.
 - `references/issue-roadmap-best-practices.md`: source-backed GitHub and Atlassian planning
   guidance.
-- `references/coderabbit-review-best-practices.md`: source-backed CodeRabbit review practices.
-- `references/automated-review-routing-best-practices.md`: source-backed CodeRabbit-to-Copilot
+- `references/claude-review-best-practices.md`: source-backed Claude review practices.
+- `references/automated-review-routing-best-practices.md`: source-backed Claude-to-Copilot
   fallback policy.
 - `references/caveman-token-compression.md`: compact-output guidance for long-running
   orchestration.
@@ -54,7 +54,7 @@ same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
 activation adapters. They must point back to the `.agents/` YAML and Markdown contracts instead of
-copying GSD/TDD, CodeRabbit, or human-gate policy.
+copying GSD/TDD, Claude, or human-gate policy.
 
 ## Design principles
 
@@ -85,20 +85,21 @@ copying GSD/TDD, CodeRabbit, or human-gate policy.
   generated help/manual artifacts, and tests in parity; follow
   `references/cli-help-docs-website-parity.md`.
 - Runtime/RLM/Pi-agent work must preserve the dependency-free default, treat Podman/PostgreSQL/DragonflyDB/Temporal as optional runtime-backed services unless explicitly in scope, and follow `references/runtime-rlm-website-integration.md`.
-- CodeRabbit review is a post-implementation gate. Every actionable review item must receive a
-  reasoned disposition before it is resolved. Non-draft PRs targeting `main` should rely on
-  automatic review. Follow-up fix commits should rely on automatic incremental review when active;
-  manual review commands are only a fallback for paused, disabled, skipped, rate-limited, or
-  auto-paused review states.
-- CodeRabbit automatic review is the primary automated review route. GitHub Copilot review is
-  fallback-only when CodeRabbit is rate-limited, skipped, disabled, paused, or unavailable and
-  review coverage is blocking progress.
-- A skipped CodeRabbit review is not approval. For sub-PRs whose base is not `main`, the
+- Claude review is a post-implementation gate. Every actionable review item must receive a
+  reasoned disposition before it is resolved. Non-draft PRs targeting `main` from trusted authors
+  are reviewed automatically on open, reopen, or ready-for-review. Follow-up fix commits need a
+  single `@claude review` to re-review the new unreviewed commits; do not comment `@claude review`
+  after every push. A manual `@claude review` is also required when the automatic review did not
+  run, such as for an untrusted or first-time author.
+- Claude automatic review is the primary automated review route. GitHub Copilot review is
+  fallback-only when a Claude run errors, its quota is exhausted, the automatic review did not run,
+  or Claude is otherwise unavailable and review coverage is blocking progress.
+- A skipped Claude review is not approval. For sub-PRs whose base is not `main`, the
   orchestrator must record sub-PR review coverage or route the integrated commit range through the
   parent PR review fallback.
-- GitHub Copilot review is a backup route when CodeRabbit is rate-limited, skipped, disabled,
-  paused, or unavailable. Copilot comments must be dispositioned like CodeRabbit comments, but
-  Copilot review is not approval and must not bypass human gates.
+- GitHub Copilot review is a backup route when a Claude run errors, its quota is exhausted, the
+  review did not run, or Claude is otherwise unavailable. Copilot comments must be dispositioned
+  like Claude comments, but Copilot review is not approval and must not bypass human gates.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
 - Parent PRs into `main` are always human-gated.

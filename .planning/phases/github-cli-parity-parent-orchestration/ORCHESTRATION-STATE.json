@@ -72,7 +72,7 @@
       "timestamp": "2026-07-07T08:21:29Z",
       "decision": "not_spawned_review_blocked",
       "issue_numbers": [39],
-      "reason": "Parent PR #49 checks and automatic CodeRabbit coverage are running after #69 integration and active-orchestration workflow edits."
+      "reason": "Parent PR #49 checks and automatic Claude coverage are running after #69 integration and active-orchestration workflow edits."
     }
   ],
   "subissues": [
@@ -86,7 +86,7 @@
       "write_scope": ["internal/connectors/defs/github", "website", ".planning"],
       "verification": "Integrated in parent branch before current active-orchestration slice",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "clean",
         "head_sha": "222e0f3",
         "reviewed_range": "parent PR #49 historical range",
@@ -106,7 +106,7 @@
       "write_scope": ["internal/cli", "internal/connectors/commandrunner", "website", ".planning"],
       "verification": "Integrated in parent branch before current active-orchestration slice",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "clean",
         "head_sha": "fb2a2a3",
         "reviewed_range": "parent PR #49 historical range",
@@ -126,7 +126,7 @@
       "write_scope": ["internal/connectors/commandrunner", "internal/cli", ".planning"],
       "verification": "Integrated in parent branch before current active-orchestration slice",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "clean",
         "head_sha": "7096d44",
         "reviewed_range": "parent PR #49 historical range",
@@ -146,7 +146,7 @@
       "write_scope": ["internal/connectors/defs/github", ".planning"],
       "verification": "Integrated in parent branch before current active-orchestration slice",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "clean",
         "head_sha": "8bc6044",
         "reviewed_range": "parent PR #49 historical range",
@@ -166,7 +166,7 @@
       "write_scope": ["internal/connectors/commandrunner", "internal/cli", "website", ".planning"],
       "verification": "Integrated in parent branch before current active-orchestration slice",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "clean",
         "head_sha": "7c3ae32",
         "reviewed_range": "parent PR #49 historical range",
@@ -192,7 +192,7 @@
       ],
       "verification": "PR #69 checks passed before merge",
       "automated_review": {
-        "primary_route": "coderabbit_auto",
+        "primary_route": "claude_auto",
         "status": "pending",
         "head_sha": "300c4cae",
         "reviewed_range": "parent PR #49 after #69 integration",
