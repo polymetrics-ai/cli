@@ -16,7 +16,7 @@ import {
 	type RoleRunRequest,
 	type RuntimeAgentSession,
 } from "./agent-session-runtime.ts";
-import { routeForRole } from "./role-prompts.ts";
+import { buildRolePrompts, routeForRole } from "./role-prompts.ts";
 import {
 	createToolPolicy,
 	redactSensitiveText,
@@ -4353,13 +4353,20 @@ function emitPiTextAssistant(
 	return completed;
 }
 
-function emitPiToolAssistant(session: FakeSession): PiAssistantMessage {
+function emitPiToolAssistant(
+	session: FakeSession,
+	toolCall: { id: string; name: string; arguments: Record<string, unknown> } = {
+		id: "cycle12-tool-call",
+		name: "workspace_read",
+		arguments: { path: ".pi/extensions/shepherd/agent-session-runtime.ts" },
+	},
+): PiAssistantMessage {
 	const initial = assistantMessage("", { content: [], stopReason: "toolUse" });
 	emitSessionEvent(session, { type: "message_start", message: initial } as AgentSessionEvent);
 	const startedCall = {
 		type: "toolCall" as const,
-		id: "cycle12-tool-call",
-		name: "workspace_read",
+		id: toolCall.id,
+		name: toolCall.name,
 		arguments: {},
 		partialJson: "",
 	};
@@ -4372,8 +4379,8 @@ function emitPiToolAssistant(session: FakeSession): PiAssistantMessage {
 		message: started,
 		assistantMessageEvent: { type: "toolcall_start", contentIndex: 0, partial: started },
 	} as AgentSessionEvent);
-	const argumentsJson = JSON.stringify({ path: ".pi/extensions/shepherd/agent-session-runtime.ts" });
-	const growingCall = { ...startedCall, arguments: { path: ".pi/extensions/shepherd/agent-session-runtime.ts" }, partialJson: argumentsJson };
+	const argumentsJson = JSON.stringify(toolCall.arguments);
+	const growingCall = { ...startedCall, arguments: toolCall.arguments, partialJson: argumentsJson };
 	const growing = assistantMessage("", {
 		content: [growingCall] as unknown as PiAssistantMessage["content"],
 		stopReason: "toolUse",
@@ -4479,6 +4486,112 @@ function drivePiLifecycle(
 		for (const listener of retained) listener({ type: "turn_start" } as AgentSessionEvent);
 	}
 	return finalAssistant;
+}
+
+type Cycle13ToolLifecycleVariant =
+	| "canonical"
+	| "execution-id"
+	| "execution-name"
+	| "execution-arguments"
+	| "unauthorized-name"
+	| "result-message"
+	| "turn-result"
+	| "orphan-result"
+	| "duplicate-result"
+	| "missing-result"
+	| "early-handoff";
+
+function driveCycle13ToolLifecycle(
+	session: FakeSession,
+	handoff: string,
+	variant: Cycle13ToolLifecycleVariant,
+): void {
+	const user = piUserMessage(`bounded cycle 13 ${variant}`);
+	const canonicalArguments = { path: ".pi/extensions/shepherd/agent-session-runtime.ts" };
+	const assistantName = variant === "unauthorized-name" ? "host_unlisted_process" : "workspace_read";
+	const assistantCall = {
+		id: "cycle13-tool-call",
+		name: assistantName,
+		arguments: canonicalArguments,
+	};
+	const executionId = variant === "execution-id" ? "cycle13-replaced-call" : assistantCall.id;
+	const executionName = variant === "execution-name" ? "workspace_edit" : assistantCall.name;
+	const executionArguments = variant === "execution-arguments"
+		? { path: ".pi/extensions/shepherd/tool-policy.ts" }
+		: canonicalArguments;
+	const executionResult = {
+		content: [{ type: "text" as const, text: "bounded cycle 13 result" }],
+		details: null,
+	};
+	const messageResult = variant === "result-message"
+		? { content: [{ type: "text" as const, text: "replacement result" }], details: null }
+		: executionResult;
+	const message: PiToolResultMessage = {
+		role: "toolResult",
+		toolCallId: executionId,
+		toolName: executionName,
+		content: messageResult.content,
+		details: messageResult.details,
+		isError: false,
+		timestamp: 476,
+	};
+	const turnMessage: PiToolResultMessage = variant === "turn-result"
+		? { ...message, content: [{ type: "text", text: "turn replacement result" }] }
+		: message;
+
+	emitSessionEvent(session, { type: "agent_start" } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "turn_start" } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_start", message: user } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "message_end", message: user } as AgentSessionEvent);
+	const intermediate = emitPiToolAssistant(session, assistantCall);
+	if (variant === "early-handoff") {
+		const finalAssistant = emitPiTextAssistant(session, handoff);
+		emitSessionEvent(session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+		emitSessionEvent(session, {
+			type: "agent_end", messages: [user, intermediate, finalAssistant], willRetry: false,
+		} as AgentSessionEvent);
+		emitSessionEvent(session, { type: "agent_settled" } as AgentSessionEvent);
+		return;
+	}
+
+	if (variant !== "orphan-result") {
+		emitSessionEvent(session, {
+			type: "tool_execution_start",
+			toolCallId: executionId,
+			toolName: executionName,
+			args: executionArguments,
+		} as AgentSessionEvent);
+		emitSessionEvent(session, {
+			type: "tool_execution_end",
+			toolCallId: executionId,
+			toolName: executionName,
+			result: executionResult,
+			isError: false,
+		} as AgentSessionEvent);
+	}
+	const includeResult = variant !== "missing-result";
+	if (includeResult) {
+		emitSessionEvent(session, { type: "message_start", message } as AgentSessionEvent);
+		emitSessionEvent(session, { type: "message_end", message } as AgentSessionEvent);
+		if (variant === "duplicate-result") {
+			emitSessionEvent(session, { type: "message_start", message } as AgentSessionEvent);
+			emitSessionEvent(session, { type: "message_end", message } as AgentSessionEvent);
+		}
+	}
+	const turnResults = includeResult
+		? variant === "duplicate-result" ? [turnMessage, turnMessage] : [turnMessage]
+		: [];
+	emitSessionEvent(session, {
+		type: "turn_end", message: intermediate, toolResults: turnResults,
+	} as AgentSessionEvent);
+	emitSessionEvent(session, { type: "turn_start" } as AgentSessionEvent);
+	const finalAssistant = emitPiTextAssistant(session, handoff);
+	emitSessionEvent(session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+	const messages = includeResult
+		? [user, intermediate, message, finalAssistant]
+		: [user, intermediate, finalAssistant];
+	emitSessionEvent(session, { type: "agent_end", messages, willRetry: false } as AgentSessionEvent);
+	emitSessionEvent(session, { type: "agent_settled" } as AgentSessionEvent);
 }
 
 test("cycle 12 follows the complete Pi lifecycle and selects only the final settled assistant", async () => {
@@ -5174,4 +5287,381 @@ test("cycle 12 Cookie headers redact in JSON quoted-flow and diagnostic-prefix c
 		leaks: leakedMarkers(rendered, markers),
 		harmless: redactSensitiveText(harmless),
 	}, { leaks: [], harmless });
+});
+
+test("cycle 13 request arrays use bounded indexed canonical influence only", async () => {
+	let peerAccessorCalls = 0;
+	let wholeKeyCalls = 0;
+	let indexedDescriptorCalls = 0;
+	const context = ["bounded cycle 13 context"];
+	for (let index = 0; index < 1_024; index += 1) {
+		Object.defineProperty(context, `enumerable-extra-${index}`, {
+			configurable: true,
+			enumerable: true,
+			get() { peerAccessorCalls += 1; return `forbidden-${index}`; },
+		});
+		Object.defineProperty(context, `hidden-extra-${index}`, {
+			configurable: true,
+			get() { peerAccessorCalls += 1; return `forbidden-${index}`; },
+		});
+		Object.defineProperty(context, Symbol(`symbol-extra-${index}`), {
+			configurable: true,
+			enumerable: true,
+			get() { peerAccessorCalls += 1; return `forbidden-${index}`; },
+		});
+	}
+	Object.defineProperty(context, Symbol.iterator, {
+		configurable: true,
+		get() { peerAccessorCalls += 1; throw new Error("caller iterator must remain inert"); },
+	});
+
+	const wholeKeyMethods = [
+		[Reflect, "ownKeys"],
+		[Object, "keys"],
+		[Object, "getOwnPropertyNames"],
+		[Object, "getOwnPropertySymbols"],
+		[Object, "getOwnPropertyDescriptors"],
+	] as const;
+	const descriptorMethods = [
+		[Reflect, "getOwnPropertyDescriptor"],
+		[Object, "getOwnPropertyDescriptor"],
+	] as const;
+	const saved = [...wholeKeyMethods, ...descriptorMethods].map(([owner, name]) => ({
+		owner,
+		name,
+		descriptor: Object.getOwnPropertyDescriptor(owner, name),
+	}));
+	for (const [owner, name] of wholeKeyMethods) {
+		const original = Reflect.get(owner, name) as (...args: unknown[]) => unknown;
+		Object.defineProperty(owner, name, {
+			configurable: true,
+			writable: true,
+			value(target: unknown, ...args: unknown[]) {
+				if (target === context) {
+					wholeKeyCalls += 1;
+					throw new Error("whole-key materialization is forbidden");
+				}
+				return Reflect.apply(original, this, [target, ...args]);
+			},
+		});
+	}
+	for (const [owner, name] of descriptorMethods) {
+		const original = Reflect.get(owner, name) as (...args: unknown[]) => unknown;
+		Object.defineProperty(owner, name, {
+			configurable: true,
+			writable: true,
+			value(target: unknown, ...args: unknown[]) {
+				if (target === context) indexedDescriptorCalls += 1;
+				return Reflect.apply(original, this, [target, ...args]);
+			},
+		});
+	}
+
+	const harness = runtime();
+	const req = request({
+		context,
+		binding: { ...request().binding, runId: "cycle13-canonical-array", laneId: "cycle13-canonical-array" },
+	});
+	harness.sdk.session.output = handoffFor(req);
+	let outcome: PromiseOutcome;
+	try {
+		outcome = await observeSettlement(harness.runtime.run(req), 300);
+	} finally {
+		for (const { owner, name, descriptor } of saved) {
+			if (descriptor) Object.defineProperty(owner, name, descriptor);
+		}
+	}
+	await observeSettlement(harness.runtime.close(), 150);
+	assert.deepEqual({
+		status: outcome.status,
+		wholeKeyCalls,
+		indexedDescriptorCalls,
+		peerAccessorCalls,
+		prompted: harness.sdk.session.promptCalls,
+	}, {
+		status: "resolved",
+		wholeKeyCalls: 0,
+		indexedDescriptorCalls: 2,
+		peerAccessorCalls: 0,
+		prompted: 1,
+	});
+});
+
+test("cycle 13 every re-entrant SDK seam is cancellation-terminal before session creation", async () => {
+	type Seam = "settings" | "session" | "agent-dir-first" | "resource" | "reload" | "agent-dir-second";
+	type Control = "abort" | "close" | "shutdown";
+	const problems: string[] = [];
+	for (const seam of ["settings", "session", "agent-dir-first", "resource", "reload", "agent-dir-second"] as const satisfies readonly Seam[]) {
+		for (const control of ["abort", "close", "shutdown"] as const satisfies readonly Control[]) {
+			const sdk = new FakeSdk();
+			const harness = runtime(sdk);
+			const signal = new AbortController();
+			const req = request({
+				signal: signal.signal,
+				binding: {
+					...request().binding,
+					runId: `cycle13-sdk-${seam}-${control}`,
+					laneId: `cycle13-sdk-${seam}-${control}`,
+				},
+			});
+			let controlPromise: Promise<void> | undefined;
+			const trigger = () => {
+				controlPromise ??= control === "abort"
+					? harness.runtime.abort(req.binding.runId)
+					: control === "close" ? harness.runtime.close() : harness.runtime.shutdown();
+			};
+			const originalSettings = sdk.createSettingsManager.bind(sdk);
+			sdk.createSettingsManager = ((...args: Parameters<typeof sdk.createSettingsManager>) => {
+				if (seam === "settings") trigger();
+				return originalSettings(...args);
+			}) as typeof sdk.createSettingsManager;
+			const originalSession = sdk.createSessionManager.bind(sdk);
+			sdk.createSessionManager = ((...args: Parameters<typeof sdk.createSessionManager>) => {
+				if (seam === "session") trigger();
+				return originalSession(...args);
+			}) as typeof sdk.createSessionManager;
+			let agentDirCalls = 0;
+			const originalAgentDir = sdk.getAgentDir.bind(sdk);
+			sdk.getAgentDir = () => {
+				agentDirCalls += 1;
+				if ((seam === "agent-dir-first" && agentDirCalls === 1) ||
+					(seam === "agent-dir-second" && agentDirCalls === 2)) trigger();
+				return originalAgentDir();
+			};
+			const originalResource = sdk.createResourceLoader.bind(sdk);
+			sdk.createResourceLoader = ((...args: Parameters<typeof sdk.createResourceLoader>) => {
+				if (seam === "resource") trigger();
+				const loader = originalResource(...args);
+				if (seam !== "reload") return loader;
+				const reload = loader.reload.bind(loader);
+				return { ...loader, async reload() { trigger(); await reload(); } };
+			}) as typeof sdk.createResourceLoader;
+			let createCalls = 0;
+			const originalCreate = sdk.createAgentSession.bind(sdk);
+			sdk.createAgentSession = (async (...args: Parameters<typeof sdk.createAgentSession>) => {
+				createCalls += 1;
+				return originalCreate(...args);
+			}) as typeof sdk.createAgentSession;
+			sdk.session.output = handoffFor(req);
+			const runOutcome = await observeSettlement(harness.runtime.run(req), 350);
+			const controlOutcome = controlPromise
+				? await observeSettlement(controlPromise, 350)
+				: { status: "missing" as const };
+			if (!isTypedOwnCause(runOutcome)) problems.push(`${seam}:${control}:run-${runOutcome.status}`);
+			if (controlOutcome.status !== "resolved") problems.push(`${seam}:${control}:control-${controlOutcome.status}`);
+			if (createCalls !== 0) problems.push(`${seam}:${control}:create-${createCalls}`);
+			if (sdk.session.promptCalls !== 0) problems.push(`${seam}:${control}:prompt-${sdk.session.promptCalls}`);
+			await observeSettlement(harness.runtime.close(), 200);
+			if (getEventListeners(signal.signal, "abort").length !== 0) problems.push(`${seam}:${control}:listener`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 13 split qualified sensitive keys redact through every shared consumer", async () => {
+	const markers = [
+		"SYNTHETIC_SECRET_MARKER_CYCLE13_API_KEY",
+		"SYNTHETIC_SECRET_MARKER_CYCLE13_PRIVATE_KEY",
+		"SYNTHETIC_SECRET_MARKER_CYCLE13_DATABASE_URL",
+		"SYNTHETIC_SECRET_MARKER_CYCLE13_AWS_KEY",
+	];
+	const payload = [
+		`api.key=${markers[0]}`,
+		`private.key: ${markers[1]}`,
+		`database.url = ${markers[2]}`,
+		`aws.secret.access.key: ${markers[3]}`,
+	].join("\n");
+	const rendered = await renderCycle11Consumers("cycle13-qualified-compounds", payload);
+	assert.deepEqual({
+		leaks: leakedMarkers(rendered, markers),
+		hasRedaction: rendered.includes("[REDACTED]"),
+		harmless: redactSensitiveText("api.version: number of public schema fields"),
+	}, {
+		leaks: [],
+		hasRedaction: true,
+		harmless: "api.version: number of public schema fields",
+	});
+});
+
+test("cycle 13 public role prompts use intrinsic immutable array snapshots only", () => {
+	let callerBehaviorCalls = 0;
+	const poison = <T>(values: T[]): T[] => {
+		Object.defineProperties(values, {
+			[Symbol.iterator]: {
+				configurable: true,
+				value() {
+					callerBehaviorCalls += 1;
+					return Array.prototype[Symbol.iterator].call(this);
+				},
+			},
+			some: {
+				configurable: true,
+				value(callback: (...args: unknown[]) => unknown) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.some.call(this, callback);
+				},
+			},
+			map: {
+				configurable: true,
+				value(callback: (...args: unknown[]) => unknown) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.map.call(this, callback);
+				},
+			},
+			join: {
+				configurable: true,
+				value(separator?: string) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.join.call(this, separator);
+				},
+			},
+			constructor: {
+				configurable: true,
+				get() { callerBehaviorCalls += 1; return Array; },
+			},
+		});
+		return values;
+	};
+	const base = request();
+	const context = poison(["bounded original context"]);
+	const readPrefixes = poison([".pi/extensions/shepherd"]);
+	const writePrefixes = poison([".pi/extensions/shepherd"]);
+	const toolNames = poison(["workspace_read", "workspace_edit"]);
+	const prompts = buildRolePrompts({
+		role: base.role,
+		task: base.task,
+		context,
+		authority: {
+			issue: base.authority.issue,
+			branch: base.authority.branch,
+			workspaceId: base.authority.workspaceId,
+			readOnly: base.authority.readOnly,
+			readPrefixes,
+			writePrefixes,
+			toolNames,
+			binding: base.binding,
+		},
+	});
+	const originalPrompts = { ...prompts };
+	context[0] = "attacker context";
+	readPrefixes[0] = "outside";
+	writePrefixes[0] = "outside";
+	toolNames[0] = "bash";
+
+	let accessorReads = 0;
+	const accessorContext = ["placeholder"];
+	Object.defineProperty(accessorContext, "0", {
+		enumerable: true,
+		get() { accessorReads += 1; return "accessor context"; },
+	});
+	let accessorRejected = false;
+	try {
+		buildRolePrompts({
+			role: base.role,
+			task: base.task,
+			context: accessorContext,
+			authority: {
+				issue: base.authority.issue,
+				branch: base.authority.branch,
+				workspaceId: base.authority.workspaceId,
+				readOnly: base.authority.readOnly,
+				readPrefixes: [".pi/extensions/shepherd"],
+				writePrefixes: [".pi/extensions/shepherd"],
+				toolNames: ["workspace_read"],
+				binding: base.binding,
+			},
+		});
+	} catch {
+		accessorRejected = true;
+	}
+	const oneAboveRejected = [
+		() => buildRolePrompts({
+			role: base.role, task: base.task, context: Array.from({ length: 33 }, () => "x"),
+			authority: { ...base.authority, toolNames: ["workspace_read"], binding: base.binding },
+		}),
+		() => buildRolePrompts({
+			role: base.role, task: base.task, context: [],
+			authority: {
+				...base.authority,
+				readPrefixes: Array.from({ length: 65 }, (_value, index) => `owned/${index}`),
+				toolNames: ["workspace_read"], binding: base.binding,
+			},
+		}),
+		() => buildRolePrompts({
+			role: base.role, task: base.task, context: [],
+			authority: {
+				...base.authority,
+				toolNames: Array.from({ length: 41 }, (_value, index) => `host_tool_${index}`),
+				binding: base.binding,
+			},
+		}),
+	].map((operation) => {
+		try { operation(); return false; } catch { return true; }
+	});
+	assert.deepEqual({
+		callerBehaviorCalls,
+		accessorReads,
+		accessorRejected,
+		oneAboveRejected,
+		frozen: Object.isFrozen(prompts),
+		stable: prompts,
+		originalPrompts,
+		containsOriginal: prompts.systemPrompt.includes(".pi/extensions/shepherd") &&
+			prompts.userPrompt.includes("bounded original context"),
+		containsAttacker: `${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("attacker") ||
+			`${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("outside") ||
+			`${prompts.systemPrompt}\n${prompts.userPrompt}`.includes("bash"),
+	}, {
+		callerBehaviorCalls: 0,
+		accessorReads: 0,
+		accessorRejected: true,
+		oneAboveRejected: [true, true, true],
+		frozen: true,
+		stable: originalPrompts,
+		originalPrompts,
+		containsOriginal: true,
+		containsAttacker: false,
+	});
+});
+
+test("cycle 13 Pi tool lifecycle correlates one authorized call through result and handoff", async () => {
+	const variants: readonly Cycle13ToolLifecycleVariant[] = [
+		"canonical",
+		"execution-id",
+		"execution-name",
+		"execution-arguments",
+		"unauthorized-name",
+		"result-message",
+		"turn-result",
+		"orphan-result",
+		"duplicate-result",
+		"missing-result",
+		"early-handoff",
+	];
+	const problems: string[] = [];
+	for (const variant of variants) {
+		const harness = runtime();
+		const req = request({
+			binding: {
+				...request().binding,
+				runId: `cycle13-tool-${variant}`,
+				laneId: `cycle13-tool-${variant}`,
+			},
+		});
+		Object.defineProperty(harness.sdk.session, "prompt", {
+			configurable: true,
+			async value() {
+				harness.sdk.session.promptCalls += 1;
+				driveCycle13ToolLifecycle(harness.sdk.session, handoffFor(req), variant);
+			},
+		});
+		const outcome = await observeSettlement(harness.runtime.run(req), 300);
+		if (variant === "canonical") {
+			if (outcome.status !== "resolved") problems.push(`${variant}:${outcome.status}`);
+		} else if (!isTypedOwnCause(outcome)) {
+			problems.push(`${variant}:${outcome.status}`);
+		}
+		await observeSettlement(harness.runtime.close(), 150);
+	}
+	assert.deepEqual(problems, []);
 });

@@ -6,6 +6,7 @@ import { pathToFileURL } from "node:url";
 import {
 	ToolPolicyError,
 	createToolPolicy,
+	normalizeScopedPrefixes,
 	redactSensitiveText,
 	type HostCapability,
 	type ScopedWorkspace,
@@ -1551,4 +1552,137 @@ test("cycle 12 every hostile tool input fails as a typed bounded redacted DTO er
 	}
 	if (proxyTraps > 0) problems.push(`proxy:traps-${proxyTraps}`);
 	assert.deepEqual(problems, []);
+});
+
+test("cycle 13 public tool-policy arrays are intrinsic dense snapshots with no caller behavior", async () => {
+	let callerBehaviorCalls = 0;
+	const poison = <T>(values: T[]): T[] => {
+		Object.defineProperties(values, {
+			[Symbol.iterator]: {
+				configurable: true,
+				value() {
+					callerBehaviorCalls += 1;
+					return Array.prototype[Symbol.iterator].call(this);
+				},
+			},
+			some: {
+				configurable: true,
+				value(callback: (...args: unknown[]) => unknown) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.some.call(this, callback);
+				},
+			},
+			map: {
+				configurable: true,
+				value(callback: (...args: unknown[]) => unknown) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.map.call(this, callback);
+				},
+			},
+			join: {
+				configurable: true,
+				value(separator?: string) {
+					callerBehaviorCalls += 1;
+					return Array.prototype.join.call(this, separator);
+				},
+			},
+			constructor: {
+				configurable: true,
+				get() {
+					callerBehaviorCalls += 1;
+					return Array;
+				},
+			},
+		});
+		return values;
+	};
+
+	const directPrefixes = poison(["direct/owned"]);
+	const normalized = normalizeScopedPrefixes(directPrefixes, "cycle 13 direct");
+	const input = policyInput(false);
+	const readPrefixes = poison([".pi/extensions/shepherd"]);
+	const writePrefixes = poison([".pi/extensions/shepherd"]);
+	const capabilityNames = poison(["host_inspect", "host_verify"]);
+	const capabilities = poison([capability("host_inspect"), capability("host_verify")]);
+	input.authority.readPrefixes = readPrefixes;
+	input.authority.writePrefixes = writePrefixes;
+	input.authority.capabilityNames = capabilityNames;
+	input.capabilities = capabilities;
+	const policy = createToolPolicy(input);
+	const beforeMutation = [...policy.names];
+	readPrefixes[0] = "outside";
+	writePrefixes[0] = "outside";
+	capabilityNames[0] = "host_process_run";
+	capabilities[0] = capability("host_process_run");
+
+	const read = policy.tools.find((tool) => tool.name === "workspace_read");
+	assert.ok(read);
+	const outside = await Promise.resolve(read.execute("cycle13-policy-outside", {
+		path: "outside/file.txt",
+	}, undefined)).then(
+		() => "resolved",
+		(error: unknown) => error instanceof ToolPolicyError ? "typed-rejected" : "untyped-rejected",
+	);
+	assert.throws(
+		() => normalizeScopedPrefixes(Array.from({ length: 65 }, (_value, index) => `owned/${index}`), "cycle 13 max"),
+		ToolPolicyError,
+	);
+	assert.deepEqual({
+		callerBehaviorCalls,
+		normalized,
+		beforeMutation,
+		afterMutation: policy.names,
+		outside,
+	}, {
+		callerBehaviorCalls: 0,
+		normalized: ["direct/owned"],
+		beforeMutation: ["workspace_read", "workspace_edit", "workspace_write", "host_inspect", "host_verify"],
+		afterMutation: ["workspace_read", "workspace_edit", "workspace_write", "host_inspect", "host_verify"],
+		outside: "typed-rejected",
+	});
+});
+
+test("cycle 13 capability names structurally deny equivalent generic and protected-data authority", () => {
+	const forbidden = [
+		"host_write_http",
+		"host_query_sql",
+		"host_create_agent",
+		"host_process_run",
+		"host_run_process",
+		"host_web_send",
+		"host_send_web",
+		"host_database_modify",
+		"host_modify_database",
+		"host_vault_view",
+		"host_view_vault",
+		"host_environment_export",
+		"host_export_environment",
+		"host_keychain_dump",
+		"host_dump_keychain",
+	] as const;
+	const accepted: string[] = [];
+	for (const readOnly of [true, false]) {
+		for (const name of forbidden) {
+			try {
+				const input = policyInput(readOnly);
+				createToolPolicy({
+					...input,
+					authority: { ...input.authority, capabilityNames: [name] },
+					capabilities: [capability(name)],
+				});
+				accepted.push(`${readOnly ? "read" : "write"}:${name}`);
+			} catch (error) {
+				assert.ok(error instanceof ToolPolicyError, name);
+			}
+		}
+	}
+	const safeInput = policyInput(false);
+	const safePolicy = createToolPolicy(safeInput);
+	assert.deepEqual({
+		accepted,
+		safeHostTools: safePolicy.names.filter((name) => name.startsWith("host_")),
+	}, {
+		accepted: [],
+		safeHostTools: ["host_inspect", "host_verify"],
+	});
 });
