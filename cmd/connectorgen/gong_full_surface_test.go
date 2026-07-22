@@ -17,6 +17,10 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		} `json:"endpoints"`
 	}](t, "../../internal/connectors/defs/gong/api_surface.json")
 	cli := loadGongJSON[struct {
+		GlobalFlags []struct {
+			Name string `json:"name"`
+			Type string `json:"type"`
+		} `json:"global_flags"`
 		Commands []struct {
 			Path         string   `json:"path"`
 			Intent       string   `json:"intent"`
@@ -61,6 +65,11 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 	}
 	if got, want := len(ops.Operations), 16; got != want {
 		t.Fatalf("operations = %d, want %d", got, want)
+	}
+	for _, flag := range cli.GlobalFlags {
+		if flag.Name == "approve" && flag.Type != "string" {
+			t.Fatalf("global --approve type = %q, want string approval token", flag.Type)
+		}
 	}
 
 	coverage := map[string]int{}

@@ -27,7 +27,7 @@ Passed locally:
 
 The first local Codex review found and drove fixes for the CLI's accidental 1 MiB operation pre-clamp and `help` used as a legitimate flag value. Its legacy-upload-plan compatibility observation was dispositioned fail-closed: approvals created before SHA-256 binding must be invalidated rather than execute without content-bound approval.
 
-Final local Codex review is running against commit `b6534b8b`. Per user direction, CodeRabbit, Claude, and Copilot review requests are skipped.
+Local Codex review of `b6534b8b` found three final parity issues: approval token metadata was boolean, dynamic `help` ignored JSON output, and flag-only namespaces did not render help. All three were reproduced with focused tests, fixed, regenerated, and passed full verification. A follow-up local Codex review will cover the fix commit. Per user direction, CodeRabbit, Claude, and Copilot review requests are skipped.
 
 ## Orchestration
 

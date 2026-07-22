@@ -192,8 +192,8 @@
     },
     {
       "name": "approve",
-      "type": "boolean",
-      "summary": "Approve a reverse-ETL plan before execution."
+      "type": "string",
+      "summary": "Approval token required to execute a reverse-ETL plan."
     },
     {
       "name": "confirm",

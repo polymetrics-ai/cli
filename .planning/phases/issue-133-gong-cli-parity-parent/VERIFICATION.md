@@ -123,12 +123,14 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] `go vet ./...`
 - [x] `go test -timeout 20m ./...`
 - [x] `go build ./cmd/pm`
-- [x] `make verify` for the Gong implementation commit; rerun after the security-gate commit.
+- [x] `make verify` after the Gong implementation, security-gate upgrade, and local-review fixes.
 - [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — no vulnerabilities after upgrading existing `x/text` to v0.39.0. The local default Go 1.26.4 toolchain itself reports GO-2026-5856 and must be upgraded outside this module; CI/project toolchain Go 1.25.12 is not affected.
 - [x] `go mod verify`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` after the dependency upgrade.
 - [x] Targeted race checks: multipart/engine, payload identity, CLI help/transcript.
 - [x] Public OpenAPI 3.0.1 re-fetch confirmed 57 paths and the ten POST request schemas; every non-deprecated local schema leaf has a typed CLI flag. Deprecated `pointsOfInterest` remains intentionally unavailable.
 - [ ] Local Codex review covers final head with no unresolved actionable findings.
 - [ ] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
+
+Local Codex review of `b6534b8b` completed and all three actionable findings were reproduced, fixed, and covered by focused tests: approval token metadata, JSON dynamic help, and flag-only namespace help. Follow-up review of the fix commit is pending.
 
 Review route: local Codex only per user direction. CodeRabbit, Claude, and Copilot review requests are intentionally skipped.

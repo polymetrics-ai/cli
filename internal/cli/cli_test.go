@@ -58,6 +58,7 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 		{name: "bare connector", args: []string{"gong"}},
 		{name: "connector help flag", args: []string{"gong", "--help"}},
 		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}},
+		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -73,6 +74,25 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestDynamicConnectorHelpJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "gong", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help gong --json) code = %d stderr = %s", code, stderr.String())
+	}
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Manual  string `json:"manual"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+		t.Fatalf("decode JSON help: %v\n%s", err, stdout.String())
+	}
+	if env.Kind != "CommandManual" || env.Command != "gong" || !strings.Contains(env.Manual, "calls transcript") {
+		t.Fatalf("help envelope = %+v", env)
 	}
 }
 
