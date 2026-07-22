@@ -1,0 +1,592 @@
+{
+  "schemaVersion": 1,
+  "phase": "475-shepherd-agent-session-runtime",
+  "issue": 475,
+  "status": "in_progress",
+  "gsdMode": "manual_gsd_fallback",
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
+  "verificationPolicy": "issue_focused_shepherd_typescript_only",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_20_plan",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "An isolated sub-issue worker owns a single exclusive TypeScript scope; nested delegation is neither required nor authorized."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Fake-injected Pi SDK authority and lifecycle tests were authored and produced the expected missing-production-module RED result."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "The minimal scoped runtime, prompt envelope, tool policy, and handoff parser made all 19 focused tests pass without widening the owned scope."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 22/22, full Shepherd 159/159, strict pinned Pi 0.80.6 TypeScript, offline RPC smoke, diff, immutable-base, and owned-scope gates passed."
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "Phase evidence and terminal artifacts were updated; PR creation and independent exact-head review remain parent delivery steps."
+    },
+    {
+      "cycle": "correction_plan",
+      "decision": "local_critical_path",
+      "reason": "Both exact-head findings overlap issue-owned runtime/tool-policy tests and source while all four runtime slots are occupied; keep one collision-free correction lane."
+    },
+    {
+      "cycle": "correction_red",
+      "decision": "local_critical_path",
+      "reason": "Focused test-only regressions produced five expected failures with production unchanged; proceed to the smallest owned lifecycle and redaction fixes."
+    },
+    {
+      "cycle": "correction_green",
+      "decision": "local_critical_path",
+      "reason": "The minimal claimed/abandoned creation owner and quoted-value redaction grammar made all 24 focused tests pass; continue to refactor and the declared Shepherd-only gates."
+    },
+    {
+      "cycle": "correction_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 24/24, complete Shepherd 161/161, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_summary",
+      "decision": "local_critical_path",
+      "reason": "Exact-head correction evidence is terminal; parent orchestration owns the next independent PR review and all integration gates."
+    },
+    {
+      "cycle": "correction_cycle_3_plan",
+      "decision": "local_critical_path",
+      "reason": "Both findings overlap issue-owned Shepherd modules and the runtime thread cap rejected a read-only design sidecar; proceed locally without widening scope."
+    },
+    {
+      "cycle": "correction_cycle_3_red",
+      "decision": "local_critical_path",
+      "reason": "Focused test-only regressions produced seven expected failures with production unchanged; proceed to the smallest structured-redaction and bounded-cleanup fixes."
+    },
+    {
+      "cycle": "correction_cycle_3_green",
+      "decision": "local_critical_path",
+      "reason": "The bounded structured scanner and shared-deadline detached cleanup made all 27 focused tests and focused strict TypeScript pass; continue to refactor and the declared Shepherd-only gates."
+    },
+    {
+      "cycle": "correction_cycle_3_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 27/27, complete Shepherd 164/164, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_3_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 3 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_4_plan",
+      "decision": "local_critical_path",
+      "reason": "Both exact-head findings collide in the issue-owned runtime/tool-policy source and tests; a read-only design sidecar was rejected by the runtime thread cap, so record the four-case cleanup and structured-redaction plan locally."
+    },
+    {
+      "cycle": "correction_cycle_4_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only regressions produced eight expected failures with production unchanged: four forced-disposal rows and four redaction consumer boundaries; proceed to the smallest owned fixes."
+    },
+    {
+      "cycle": "correction_cycle_4_green",
+      "decision": "local_critical_path",
+      "reason": "The explicit bounded cleanup pipeline and linear flow-aware redactor made all 31 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to the declared Shepherd-only gates."
+    },
+    {
+      "cycle": "correction_cycle_4_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 31/31, complete Shepherd 168/168, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_4_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 4 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_5_plan",
+      "decision": "local_critical_path",
+      "reason": "The timer and lexical-state findings overlap the issue-owned runtime/tool-policy modules; a read-only architecture sidecar was rejected by the thread cap, so record the architectural correction locally before tests."
+    },
+    {
+      "cycle": "correction_cycle_5_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only regressions produced seven expected failures with production unchanged: referenced duplicate timer plus prompt, handoff, direct, control, and typed-tool lexical boundaries; proceed to the architectural minimum fixes."
+    },
+    {
+      "cycle": "correction_cycle_5_green",
+      "decision": "local_critical_path",
+      "reason": "Reserve-before-scope admission and the explicit monotonic line/flow lexical state machine make all 36 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to refactor and declared gates."
+    },
+    {
+      "cycle": "correction_cycle_5_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 36/36, complete Shepherd 173/173, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_5_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 5 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_6_plan",
+      "decision": "local_critical_path",
+      "reason": "All three transformer findings overlap the issue-owned scanner/consumer tests; a read-only architecture sidecar was rejected by the thread cap, so record multiline ownership, token-aware quote, and monotonic line-end corrections locally before tests."
+    },
+    {
+      "cycle": "correction_cycle_6_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only regressions produced seven expected failures with production unchanged: prompt, handoff, workspace_read, typed capability, two direct lexical boundaries, and deterministic line-boundary metrics; proceed to the smallest scanner corrections."
+    },
+    {
+      "cycle": "correction_cycle_6_green",
+      "decision": "local_critical_path",
+      "reason": "Multiline value-local ownership, token-aware hyphen quote boundaries, and reused scanner line ends make all 40 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to declared verification."
+    },
+    {
+      "cycle": "correction_cycle_6_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 40/40, complete Shepherd 177/177, both strict TypeScript scopes, pinned offline Pi RPC, diff, immutable-base, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_6_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 6 evidence is terminal; parent orchestration owns fresh independent exact-head review and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_7_plan",
+      "decision": "local_critical_path",
+      "reason": "The 11 stable-head findings overlap the two issue-owned runtime/redaction modules and consumer tests; a read-only lifecycle sidecar was rejected by the runtime thread cap, so record the complete behavior matrix locally before the single test-only RED."
+    },
+    {
+      "cycle": "correction_cycle_7_red",
+      "decision": "local_critical_path",
+      "reason": "The one test-only checkpoint executed 53 focused tests with 40 retained passes and 13 intended behavior failures while both production blobs remained byte-identical to the frozen candidate."
+    },
+    {
+      "cycle": "correction_cycle_7_green",
+      "decision": "local_critical_path",
+      "reason": "Exception-safe listener and creation ownership plus the multiline/indent-aware monotonic redactor make all 53 focused tests and focused strict Pi 0.80.6 TypeScript pass; continue to declared terminal gates."
+    },
+    {
+      "cycle": "correction_cycle_7_verify",
+      "decision": "local_critical_path",
+      "reason": "Focused 53/53, complete Shepherd 190/190, both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, immutable-base, pushed-head equality, and issue-owned path gates passed."
+    },
+    {
+      "cycle": "correction_cycle_7_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 7 evidence is terminal; parent orchestration owns the fresh stable-head review campaign and every integration gate."
+    },
+    {
+      "cycle": "correction_cycle_8_plan",
+      "decision": "read_only_spawned",
+      "reason": "A read-only lifecycle sidecar maps exact test and implementation seams while this isolated issue worker retains the single mutating critical path for the deduplicated Cycle 8 batch."
+    },
+    {
+      "cycle": "correction_cycle_8_plan_amendment",
+      "decision": "local_critical_path",
+      "reason": "The #479 consumer audit and local #471 contract confirm bounded parallel dispatch for disjoint isolated mutators; add a canonical authority/scope lease matrix before the one RED without editing scheduler-owned files."
+    },
+    {
+      "cycle": "correction_cycle_8_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 11aa2212 executed all 70 focused tests with 53 retained passes and exactly 17 intended Cycle 8 assertion failures; strict focused TypeScript passed and production matched frozen f219b730."
+    },
+    {
+      "cycle": "correction_cycle_8_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN c4d34c37 closes immutable request ownership, cleanup/listener totality, bounded mutator leases, hard maxima, bounded events, canonical scopes, terminal safety, and the remaining redaction parser matrix; focused 70/70 and both strict TypeScript scopes pass."
+    },
+    {
+      "cycle": "correction_cycle_8_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused, strict TypeScript, pinned offline Pi RPC, diff, ancestry, and owned-scope gates pass; the managed sandbox denies the pre-existing /bin/ps process-identity probe and DNS prevents pushing the local ordered commits."
+    },
+    {
+      "cycle": "correction_cycle_9_plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only explorer maps the two overlapping stable-head review ledgers while the isolated issue #475 lane retains the only mutating path for the consolidated Cycle 9 PLAN, RED, GREEN, and evidence chain."
+    },
+    {
+      "cycle": "correction_cycle_9_plan_amendment",
+      "decision": "local_critical_path",
+      "reason": "The completed read-only seam map is committed as the required multi-agent trace and binds Cycle 9 to closed-field terminal parsing plus public Pi 0.80.6 tool types without a brittle transitive TypeBox import or new dependency."
+    },
+    {
+      "cycle": "correction_cycle_10_plan",
+      "decision": "local_critical_path",
+      "reason": "Both complete Cycle 9 reports collapse into one overlapping runtime/policy correction lane; a read-only architecture explorer was attempted but rejected by the runtime thread cap, so the isolated issue worker records and executes the complete matrix locally."
+    },
+    {
+      "cycle": "correction_cycle_10_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 6df77689 executed all 102 focused tests with 86 retained passes and exactly 16 intended Cycle 10 assertion failures; strict focused TypeScript passed and all production blobs remained exact to frozen f63957ae."
+    },
+    {
+      "cycle": "correction_cycle_10_green",
+      "decision": "local_critical_path",
+      "reason": "Architectural GREEN a88cbe52 closes all 13 review groups through shared ownership, bounded snapshot/event/error, redaction, path, and capability mechanisms; focused 102/102 and both strict Pi 0.80.6 TypeScript scopes pass."
+    },
+    {
+      "cycle": "correction_cycle_10_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused, both strict TypeScript scopes, pinned offline Pi RPC/no-model validation, diff, ancestry, and owned-scope gates pass; complete Shepherd executes 239 with 208 passes and only the unchanged 31 controller/state-store failures where the managed sandbox denies /bin/ps with spawn EPERM. Isolation passes 165/165."
+    },
+    {
+      "cycle": "correction_cycle_10_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 10 issue-owned implementation and evidence are terminal locally; no external mutation was attempted, and parent orchestration owns permitted-environment rerun, fresh exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_11_plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only explorer maps the explicit installed Pi 0.80.6 factory/result/event contract while this isolated issue worker owns the only mutating path for the complete Cycle 11 PLAN, RED, GREEN, verification, and handoff sequence."
+    },
+    {
+      "cycle": "correction_cycle_11_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED c5886520 executed 114 focused tests with all 102 retained passes and exactly 12 intended Cycle 11 behavior failures; strict focused TypeScript passed and all three production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_11_green",
+      "decision": "local_critical_path",
+      "reason": "First GREEN 1e605675 closes all accepted runtime and policy findings through shared Pi-adapter, lifecycle, bounded-evidence, failure-sanitizer, path, capability, and redaction mechanisms; focused 114/114 and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_11_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor d9b4eaee accounts complete assistant envelopes and replacement state, including terminal signatures and diagnostics, while preserving linear cumulative-stream accounting and 114/114 focused tests."
+    },
+    {
+      "cycle": "correction_cycle_11_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused, both strict TypeScript scopes, explicit Pi 0.80.6 RPC and real no-model factory/result cleanup, diff, ancestry, JSON, and owned-scope gates pass; complete Shepherd executes 251 with 220 passes and only the unchanged 31 controller/state-store failures where the managed sandbox denies /bin/ps with spawn EPERM. Isolation passes 177/177."
+    },
+    {
+      "cycle": "correction_cycle_11_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 11 issue-owned implementation and evidence are terminal locally; no external mutation or disallowed gate was attempted, and parent orchestration owns the process-capable rerun, fresh exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_12_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded read-only explorer maps exact installed Pi 0.80.6 no-tool/one-tool lifecycle and the public inert whole-session seam while this isolated issue worker retains the only mutating PLAN, RED, GREEN, verification, commit, and handoff path."
+    },
+    {
+      "cycle": "correction_cycle_12_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 58af21f1 executed 124 focused tests with all 114 retained passes and exactly 10 intended Cycle 12 behavior failures; strict focused TypeScript passed and every production blob remained exact to frozen start 7882cd70."
+    },
+    {
+      "cycle": "correction_cycle_12_no_tool_green",
+      "decision": "local_critical_path",
+      "reason": "Checkpoint 11008da1 owns the real pinned Pi whole-session no-tool prompt through the complete non-retrying agent_end and agent_settled boundary; the targeted row and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_12_tool_green",
+      "decision": "local_critical_path",
+      "reason": "Checkpoint b3a99d79 closes shared one-tool multi-turn lifecycle and per-content phase ownership; the targeted rows and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_12_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor 3dc4de71 removes the legacy assistant-only success bypass and closes admission, freeze, diagnostic, dense-array, native-signal, tool-input, and Cookie-redaction boundaries; focused tests pass 124/124."
+    },
+    {
+      "cycle": "correction_cycle_12_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 124/124, both strict TypeScript scopes, actual pinned Pi no-tool/one-tool sessions, explicit offline RPC, diff, ancestry, JSON, credential-pattern, and scope gates pass. Complete Shepherd executes 261 with 230 passes and only the unchanged 31 controller/state-store spawn EPERM failures; isolation passes 187/187."
+    },
+    {
+      "cycle": "correction_cycle_12_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 12 issue-owned implementation and evidence are terminal locally; no external mutation or disallowed gate was attempted, and parent orchestration owns the process-capable rerun, fresh exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_13_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer maps all seven exact-head blockers and installed Pi tool-lifecycle seams while this issue worker retains the sole mutating PLAN, RED, GREEN, REFACTOR, verification, commit, and handoff path."
+    },
+    {
+      "cycle": "correction_cycle_13_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 974d2e79 executed 131 focused tests with all 124 retained passes and exactly seven intended Cycle 13 behavior failures; strict focused TypeScript passed and all three production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_13_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN 48f546a5 closes all seven accepted boundaries through bounded indexed authority capture, SDK-seam scope assertions, direct policy/prompt snapshots, structural classifiers, and exact Pi tool lifecycle correlation; focused 131/131 passes."
+    },
+    {
+      "cycle": "correction_cycle_13_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor e50b5f97 strengthens terminal/program/cookie synonym denial and tool-result result/error mismatch coverage without weakening any RED row; focused 131/131 remains green."
+    },
+    {
+      "cycle": "correction_cycle_13_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 131/131, safe isolation 194/194, both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, ancestry, JSON, credential/dependency/Go/connector, and exact 20-path gates pass. Complete Shepherd executes 268 with 237 passes and only the unchanged 31 controller/state-store spawn EPERM failures."
+    },
+    {
+      "cycle": "correction_cycle_13_summary",
+      "decision": "local_critical_path",
+      "reason": "Both Cycle 12 reports were re-read after implementation and their complete seven-blocker union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_14_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer maps post-create Pi callbacks, the complete current/planned-#479 host capability inventory, and structured-field consumers while this issue worker owns the sole artifact, RED, production, verification, and commit path. Finite semantic blacklists are abandoned in favor of closed safe registries."
+    },
+    {
+      "cycle": "correction_cycle_14_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 229217f4 executed 134 focused tests with all 131 retained passes and exactly three intended Cycle 14 behavior failures; strict focused TypeScript passed and all three production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_14_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN 9af22e72 closes post-create callback barriers, exact typed host-capability authority, and closed structured-field grammar together; focused 134/134 and strict focused TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_14_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor 27c07eec centralizes mandatory and optional session-operation capture plus canonical unknown-sensitive assignment classification without widening any authority or weakening a RED row; focused 134/134 remains green."
+    },
+    {
+      "cycle": "correction_cycle_14_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 134/134, safe isolation 197/197, both strict TypeScript scopes, retained actual pinned no-tool/one-tool sessions, explicit Pi 0.80.6 offline RPC, diff, ancestry, JSON, credential/dependency/Go/connector, and exact 20-path gates pass. Complete Shepherd executes 271 with 240 passes and only the unchanged 31 controller/state-store spawn EPERM failures."
+    },
+    {
+      "cycle": "correction_cycle_14_summary",
+      "decision": "local_critical_path",
+      "reason": "Both Cycle 13 reports were re-read after implementation and their complete three-family union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_15_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer consolidates both Cycle 14 exact-head reports into a scanner/runtime seam map while this isolated issue worker retains the sole PLAN, comprehensive test-only RED, cohesive GREEN, REFACTOR, verification, and commit path."
+    },
+    {
+      "cycle": "correction_cycle_15_red",
+      "decision": "local_critical_path",
+      "reason": "Comprehensive test-only RED 5d83d519 executed 137 focused tests with all 134 retained passes and exactly the three named Cycle 15 behavior failures; strict focused TypeScript passed and runtime, policy, and prompt production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_15_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN 38e95460 closes quoted and uncertain whole-value redaction, bounded flow continuation, approved-prototype own-descriptor capture, and immediate split callback barriers together; focused 137/137 passes."
+    },
+    {
+      "cycle": "correction_cycle_15_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor ee4943f4 centralizes bounded own capture and removes the superseded decoder and remaining runtime for-in enumeration without weakening any RED row; focused 137/137 remains green."
+    },
+    {
+      "cycle": "correction_cycle_15_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 137/137, safe isolation 200/200, both strict TypeScript scopes, explicit Pi 0.80.6 offline RPC, diff, ancestry, JSON, credential/dependency/Go/connector, exact 20-path, and clean-worktree gates pass. Complete Shepherd executes 274 with 243 passes and only the unchanged 31 controller/state-store spawn EPERM failures."
+    },
+    {
+      "cycle": "correction_cycle_15_summary",
+      "decision": "local_critical_path",
+      "reason": "Both Cycle 14 reports were re-read after GREEN/refactor and their complete three-blocker union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_16_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer deduplicated both complete Cycle 15 reports into six architecture families and mapped lexer, capture, prompt, and test seams while this isolated issue worker owns the sole artifact, RED, cohesive GREEN, REFACTOR, verification, and commit path."
+    },
+    {
+      "cycle": "correction_cycle_16_red",
+      "decision": "local_critical_path",
+      "reason": "Comprehensive test-only RED 7ec93fcd executed 143 focused tests with all 137 retained passes and exactly the six named Cycle 16 behavior failures; strict focused TypeScript passed and all production/control blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_16_green",
+      "decision": "read_only_spawned",
+      "reason": "Cohesive GREEN c30cfe88 combines one forward scanner, fixed schema descriptor projectors, opaque arbitrary records, and synchronously owned prompt settlement; the bounded runtime worker edited only its assigned source and the issue worker reconciled tests and commits after handoff. Focused 143/143 passes."
+    },
+    {
+      "cycle": "correction_cycle_16_refactor",
+      "decision": "local_critical_path",
+      "reason": "Refactor af9222b1 removes all legacy metric aliases and compatibility counters, leaving the exact seven-field work record without weakening any RED row; focused 143/143 and strict focused TypeScript remain green."
+    },
+    {
+      "cycle": "correction_cycle_16_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 143/143, safe isolation 206/206, both strict TypeScript scopes, explicit Pi 0.80.6 RPC, report replay, ancestry, source, and exact 20-path gates pass. Complete Shepherd executes 280 with 249 passes and only the unchanged 31 controller/state-store spawn EPERM failures."
+    },
+    {
+      "cycle": "correction_cycle_16_summary",
+      "decision": "local_critical_path",
+      "reason": "Both Cycle 15 reports were re-read after refactor and their complete six-family union is closed locally. No external or parent-owned mutation was attempted; parent orchestration owns independent exact-head review, process-capable replay, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_17_plan",
+      "decision": "read_only_spawned",
+      "reason": "One separately spawned bounded no-write mapper consolidates both complete Cycle 16 reports into a single lexer/schema/prompt/capture architecture while this issue worker retains the sole PLAN, nine-row RED, production, verification, commit, and handoff path."
+    },
+    {
+      "cycle": "correction_cycle_17_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED ed8e79e3489e5826b1be8078c32c01d945256ea7 executed 152 focused rows with all 143 retained passes and exactly the nine named Cycle 17 behavior failures; strict focused TypeScript passed and production remained frozen after PLAN 15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f."
+    },
+    {
+      "cycle": "correction_cycle_17_green",
+      "decision": "read_only_spawned",
+      "reason": "Cohesive GREEN e7dfbb358824efb5423e284ee2c6a78ea2f3cd30 closes the nine contracts through one original-coordinate scanner, compiled schema projection, owned prompt adoption, frozen prompt DTO, and exact-prototype capture; a bounded runtime/prompt worker edited only its assigned files and the issue worker integrated tool policy and tests."
+    },
+    {
+      "cycle": "correction_cycle_17_refactor",
+      "decision": "local_critical_path",
+      "reason": "Behavior-preserving REFACTOR 81c34cc5b7db9bffe4bd27d17122007d47ecedb6 removes only dead event/scanner state and a redundant helper without adding feature surface; focused 152/152 and safe isolation 215/215 remain green."
+    },
+    {
+      "cycle": "correction_cycle_17_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 152/152, safe isolation 215/215, both strict TypeScript scopes, explicit pinned Pi 0.80.6 offline RPC, source/diff/ancestry, and exact 20-path gates pass. Complete Shepherd executes 289 with 258 passes and only the unchanged 31 controller/state-store spawn EPERM failures. verificationPassed remains false."
+    },
+    {
+      "cycle": "correction_cycle_17_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 17 local implementation evidence is terminal, but two independent exact-head reviews remain pending and parent-owned; no self-review, external mutation, integration, or delivery action was attempted."
+    },
+    {
+      "cycle": "correction_cycle_18_plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Both complete Cycle 17 reports block exact candidate 687d053d with seven consolidated contracts. A bounded read-only mapper was requested but the four-slot runtime was saturated, so no agent output is claimed; this worker owns the artifact-only PLAN and seven-row test-only RED while all production stays frozen."
+    },
+    {
+      "cycle": "correction_cycle_18_red",
+      "decision": "local_critical_path",
+      "reason": "PLAN aa92f751 preceded test-only RED 50b04a24. RED executed 159 focused rows with all 152 retained passes and exactly C18-01 through C18-07 failing, zero skipped/cancelled/todo; focused strict TypeScript passed and all production blobs remained frozen."
+    },
+    {
+      "cycle": "correction_cycle_18_green",
+      "decision": "local_critical_path",
+      "reason": "Cohesive GREEN ea23780f closes all seven accepted contracts through quote-owned lexical transitions, boundary-first candidate reset, finite compiled required-only schemas, descriptor DTOs, exact intrinsic arrays, and original-coordinate accounting; focused 159/159 passes."
+    },
+    {
+      "cycle": "correction_cycle_18_refactor",
+      "decision": "local_critical_path",
+      "reason": "REFACTOR 6354b156 charges the actual five-recognizer, transition, range, replacement, and render work under 16n+64 without changing the one-main-visit invariant; focused 159/159 remains green."
+    },
+    {
+      "cycle": "correction_cycle_18_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Safe isolation passes 222/222, exactly retained 215 plus seven Cycle 18 rows; strict TypeScript passes all 12 production files; pinned offline Pi 0.80.6 RPC and exact guards pass. Complete Shepherd executes 296 with 265 passes and only the unchanged 31 controller/state-store spawn EPERM failures. verificationPassed remains false."
+    },
+    {
+      "cycle": "correction_cycle_18_summary",
+      "decision": "local_critical_path",
+      "reason": "Cycle 18 local evidence is terminal with the exact 20-path issue scope and 13-path cycle delta. Two independent exact-head reviews and process-capable broad replay remain pending and parent-owned; no self-review, external mutation, integration, or delivery action was attempted."
+    },
+    {
+      "cycle": "correction_cycle_19_plan",
+      "decision": "not_spawned_runtime_capability_missing",
+      "reason": "Both complete Cycle 18 reports block exact candidate a0cd1057 with five consolidated contracts. All four runtime slots are occupied, so no read-only mapper output is claimed; this worker owns the artifact-only PLAN and five-row test-only RED while all production stays frozen."
+    },
+    {
+      "cycle": "correction_cycle_19_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only 8519df27 executes 164 rows, retains all 159 prior passes, and fails exactly the five declared Cycle 19 rows with runtime, policy, and prompts byte-frozen; strict TypeScript remains green."
+    },
+    {
+      "cycle": "correction_cycle_19_green",
+      "decision": "bounded_delegation",
+      "reason": "A child worker owns only exact terminal-handoff array snapshots while the issue worker owns policy and reflection, integrates cohesive GREEN 6edb1d5b, verifies 164/164, and makes the commit."
+    },
+    {
+      "cycle": "correction_cycle_19_review_fix",
+      "decision": "local_critical_path",
+      "reason": "Post-GREEN review finds whitespace numeric and Unicode code-point Pi parity, direct runtime reflection/message getter, and vacuous omission-test gaps. Fix e9bdddd0 closes all findings; the reflection row is mutation-proven and 164/164 plus strict TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_19_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 164/164, safe isolation 227/227, strict all 12 production files, pinned Pi 0.80.6 offline RPC, and exact integrity pass. Broad executes 301 with 270 passes and only 31 unchanged controller/state-store spawn EPERM failures; verificationPassed remains false pending process-capable replay and two parent-owned independent exact-head reviews."
+    },
+    {
+      "cycle": "correction_cycle_20_plan",
+      "decision": "read_only_spawned",
+      "reason": "Both complete Cycle 19 reports block exact candidate 427cad08 and consolidate into four contracts. One bounded source mapper has no edit, commit, network, or gate authority; this worker owns the artifact-only PLAN and four-row test-only RED while all production and retained Cycle 19 handoff-array/category-oracle behavior stay frozen."
+    }
+  ],
+  "gates": {
+    "focusedTests": "cycle_19_red_164_executed_159_retained_passed_exactly_5_named_failures_0_skipped_cancelled_todo; cycle_19_final_and_cycle_20_baseline_164_executed_164_passed_0_failed_skipped_cancelled_todo; cycle_20_red_planned_168_executed_164_retained_passed_exactly_4_named_failures",
+    "fullShepherdTests": "cycle_19_safe_isolation_227_passed_0_failed_cancelled_skipped_todo_exact_retained_222_plus_5; complete_301_executed_270_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
+    "strictTypeScriptPi0806": "cycle_19_baseline_red_final_focused_and_all_12_production_passed_typescript_5_9_3_explicit_pi_0_80_6_roots",
+    "offlineRpcSmoke": "cycle_19_passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_exit_0_with_writable_temporary_pi_directory",
+    "diffCheck": "cycle_20_exact_start_427cad08_tree_f5057e96_base_e659d6f1_reports_sha256_04c3a1eb_and_8deafaf0; frozen_blobs_runtime_e678193e_policy_499f5a0b_prompts_c5b6c27f_runtime_test_d25a8e1b_policy_test_c744c7d3; exact_20_path_integrity_mandatory",
+    "ownedScope": "exact_same_20_issue_owned_paths; retain_cycle_19_handoff_arrays_and_category_oracle; no_dependency_connector_go_cmd_internal_paths; no_prompt_lease_route_parent_478_or_479_mutation; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_mutation",
+    "independentExactHeadReviews": "cycle_19_review_1_blocking_accepted; cycle_19_review_2_blocking_accepted; four_contract_cycle_20_correction_planned; future_cycle_20_exact_head_reviews_parent_owned; verification_passed_false",
+    "parentGoConnectorGates": "not_run_parent_integration_boundary"
+  },
+  "deviations": [
+    "manual_gsd_fallback: healthy adapter registry does not expose programming-loop",
+    "repository-wide Go/connector gates intentionally deferred to parent integration and GitHub CI by explicit policy",
+    "ambient PATH resolved Pi 0.80.10 at final verification; authoritative smoke and type checks used the explicit unchanged Pi 0.80.6 installation",
+    "cycle_8 full Shepherd suite blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM",
+    "cycle_8 push blocked before remote contact: ssh: Could not resolve hostname github.com: -65563",
+    "cycle_10 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM; issue-focused isolation passes 165/165",
+    "cycle_10 external mutation intentionally not attempted by explicit lane policy; parent owns push, review, and integration",
+    "cycle_11 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing Darwin /bin/ps process-identity child with spawn EPERM; issue-focused isolation passes 177/177",
+    "cycle_11 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, push, review, and integration",
+    "cycle_12 complete Shepherd suite environment-blocked where the managed sandbox denies the pre-existing process-identity child with spawn EPERM; safe isolation passes 187/187",
+    "cycle_12 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_12 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, push, review, and integration",
+    "cycle_13 complete Shepherd suite environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 194/194",
+    "cycle_13 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_13 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, review, integration, and delivery",
+    "cycle_14 complete Shepherd suite environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 197/197",
+    "cycle_14 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_14 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, exact-head review, integration, and delivery",
+    "cycle_15 complete Shepherd suite environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 200/200",
+    "cycle_15 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_15 credential-pattern scan passes with only two intentional BEGIN PRIVATE KEY parser/test grammar literals and no credential values",
+    "cycle_15 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, exact-head review, integration, and delivery",
+    "cycle_16 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter does not expose programming-loop; PLAN-RED-GREEN-REFACTOR-VERIFY remains explicit",
+    "cycle_16 comprehensive RED retained all 137 prior rows and failed exactly six named rows with production frozen; GREEN and REFACTOR pass 143/143",
+    "cycle_16 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 206/206",
+    "cycle_16 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
+    "cycle_16 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable replay, independent exact-head review, integration, and delivery",
+    "cycle_17 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit PLAN-RED-GREEN-REFACTOR-VERIFY remains mandatory",
+    "cycle_17 both complete Cycle 16 reports were read before planning; their union is nine contracts and production remains frozen through comprehensive RED",
+    "cycle_17 JavaScript cannot retroactively observe an already-rejected native Promise whose own then surface is unobservable; the trusted Pi adapter return shape is constrained/normalized instead of claiming impossible hostile-promise support",
+    "cycle_17 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 215/215",
+    "cycle_17 local evidence is terminal but verificationPassed remains false until the two parent-owned independent exact-head reviews and process-capable replay are recorded",
+    "cycle_17 external mutation, dependency, parent, #478, Go/connector/make, network, push, self-review, and integration actions are outside this lane",
+    "cycle_18 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit artifact PLAN then test-only RED remains mandatory",
+    "cycle_18 both complete Cycle 17 reports were read and accepted as exactly seven blocking contracts; no Cycle 17 terminal claim remains current",
+    "cycle_18 read-only mapper was not spawned because the four-slot runtime was saturated; recorded as not_spawned_runtime_capability_missing without claiming agent output",
+    "cycle_18 production and tests remained frozen through PLAN aa92f751 and test-only RED 50b04a24; RED retained 152 passes and failed exactly seven named rows before GREEN ea23780f and REFACTOR 6354b156",
+    "cycle_18 complete Shepherd suite is environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 222/222",
+    "cycle_18 16n+64 is the derived complete accounting ceiling: it charges main consumption, five recognizers, transitions, frame/recovery/finalization, every range operation, replacement emission, and actual original-coordinate rendering; identity returns have no fictional render and main visits remain at most one per completed non-empty unit",
+    "cycle_18 local evidence is terminal but verificationPassed remains false until two parent-owned independent exact-head reviews and the process-capable broad replay are recorded",
+    "cycle_18 external mutation, dependency, parent, #478, Go/connector/make, network, push, self-review, integration, live model/auth, credentials, and services are outside this lane",
+    "cycle_19 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit artifact PLAN then five-row test-only RED remains mandatory",
+    "cycle_19 both complete Cycle 18 reports were read and accepted as exactly five blocking contracts; no Cycle 18 local-completion claim remains current",
+    "cycle_19 read-only mapper was not spawned because all four runtime slots are occupied; recorded as not_spawned_runtime_capability_missing without claiming agent output",
+    "cycle_19 finite normalization mirrors Pi 0.80.6 primitive conversion, canonicalizes signed zero, emits safe integer and array limits, and rejects any primitive whose exact parity cannot be proven",
+    "cycle_19 projection uses one pre-descent 4096-node/key/item/DAG depth-64 exact-byte budget with cycles and repeated identities denied; category work traces require hard-coded independent oracle tuples and omission checks",
+    "cycle_19 production and tests remained frozen through PLAN 337cba17 and test-only RED 8519df27; RED retained all 159 prior passes and failed exactly five named rows before GREEN 6edb1d5b and review fix e9bdddd0",
+    "cycle_19 post-GREEN audit found and fixed whitespace-only numeric coercion, Unicode code-point length parity, direct runtime ambient reflection and hostile message getter access, and the vacuous omission matrix; the direct reflection probe is mutation-proven",
+    "cycle_19 final focused 164/164, safe isolation 227/227, all-production strict TypeScript, pinned offline Pi 0.80.6 RPC, and exact integrity pass; broad is environment-blocked at 270/301 by only 31 unchanged controller/state-store spawn EPERM rows",
+    "cycle_19 external mutation, dependency, prompt/lease/route, parent, #478, Go/connector/make, network, push, integration, live model/auth, credentials, and services are outside this lane",
+    "cycle_20 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter rejects programming-loop; explicit artifact PLAN then four-row test-only RED remains mandatory",
+    "cycle_20 both complete Cycle 19 reports were read and accepted as four blocking contracts; no Cycle 19 local-completion claim remains current",
+    "cycle_20 read-only mapper is advisory only; the issue worker owns every repository write and checkpoint",
+    "cycle_20 supersedes bounded hostile aggregate iteration with exact dense own-array snapshots and zero caller callbacks",
+    "cycle_20 narrows the blanket for-in source ban to one named bounded no-vector plain-record key helper because JavaScript exposes no lazy own-string-key reflection primitive",
+    "cycle_20 production and tests remain frozen through PLAN; production remains frozen through the planned 168-row RED; exact Cycle 19 handoff arrays and category oracle remain retained",
+    "cycle_20 external mutation, dependency, prompt/lease/route, parent, #478, Go/connector/make, network, push, integration, live model/auth, credentials, and services are outside this lane"
+  ]
+}
