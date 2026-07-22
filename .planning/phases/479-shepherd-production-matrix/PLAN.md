@@ -149,8 +149,13 @@ reopening implementation hardening:
     inventory on ordinary infrastructure with pinned Node 24.13.1 and no secrets.
 15. [x] Repair committed diff hygiene, add the production-matrix summary, and reconcile final-head
     planning evidence.
-16. [ ] Obtain one bounded Codex 5.6 Sol xhigh exact-head review, then push the child branch and open
-    its PR against `feat/471-pi-agent-session-shepherd` if GitHub connectivity permits.
+16. [x] Obtain one bounded Codex 5.6 Sol xhigh review at `ca3f6c6f`. It confirmed the local
+    64-failure class and returned two release blockers: assert the complete shrinkwrap-pinned Pi
+    family in CI, and publish/reconcile the parent base before opening the child PR.
+17. [ ] Add a deterministic post-install Pi-family assertion, reconcile the parent-owned ledger and
+    child handoff/PR artifacts, then run an exact-head review follow-up.
+18. [ ] Push the reconciled parent before the child and open the child PR against
+    `feat/471-pi-agent-session-shepherd` when GitHub DNS/auth permit.
 
 This cycle uses `local_critical_path`: the files are a tightly coupled issue-#479 CI/evidence slice,
 while the parent issue orchestrator remains the read-only topology and integration owner. It does not

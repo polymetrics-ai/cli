@@ -73,3 +73,10 @@ the durable ledger records exact counts because those RED states were intentiona
 
 The CI workflow is the only behavior-changing slice in this closure. The whitespace and summary
 changes are documentation-only, so a runtime behavior RED is not applicable to them.
+
+## Exact-head review correction
+
+| Finding | RED evidence | GREEN target | Status |
+|---|---|---|---|
+| Complete Pi-family determinism | The `ca3f6c6f` review found that the top-level Pi package manifest uses caret ranges. File/step checks both exited 1 because no committed post-install assertion existed. | CI verifies the published `npm-shrinkwrap.json` and installed nested `pi-coding-agent`, `pi-ai`, `pi-agent-core`, and `pi-tui` are all exactly 0.80.6 before running tests. | RED captured; correction pending. |
+| Published parent base | Local parent `69a1a988` is 175 commits ahead of cached origin `2a89142e`; a child PR against the cached remote would expose the wrong range. | Reconcile local parent artifacts, publish parent first, fetch/verify authoritative remote head, then publish/open #479 and verify the PR range. | Local reconciliation pending; remote GREEN blocked by DNS/auth. |
