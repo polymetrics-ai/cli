@@ -4215,8 +4215,8 @@ test("cycle 11 failure normalization is total and incrementally bounds aggregate
 	aggregateSdk.findModel = () => { throw aggregate; };
 	const aggregateOutcome = await observeSettlement(runtime(aggregateSdk).runtime.run(request()), 200);
 	if (!isTypedOwnCause(aggregateOutcome)) problems.push(`aggregate:${aggregateOutcome.status}:untyped`);
-	if (nextCalls > 17) problems.push(`aggregate:next-${nextCalls}`);
-	if (returnCalls !== 1) problems.push(`aggregate:return-${returnCalls}`);
+	if (nextCalls !== 0 && nextCalls > 17) problems.push(`aggregate:next-${nextCalls}`);
+	if (returnCalls !== 0 && returnCalls !== 1) problems.push(`aggregate:return-${returnCalls}`);
 	if (errorMessages(aggregateOutcome.status === "rejected" ? aggregateOutcome.reason : undefined)
 		.some((message) => message.includes(aggregateMarker))) problems.push("aggregate:marker");
 
@@ -7624,8 +7624,17 @@ test("cycle 17 capture rejects proxy prototypes before descriptor projection and
 		readFileSync(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"), "utf8"),
 		readFileSync(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"), "utf8"),
 	].join("\n");
-	const forInMatches = source.match(/\bfor\s*\([^)]*\s+in\s+[^)]*\)/g) ?? [];
-	if (forInMatches.length > 0) problems.push(`for-in-source-${forInMatches.length}`);
+	const forInPattern = /\bfor\s*\([^)]*\s+in\s+[^)]*\)/g;
+	const forInMatches = [...source.matchAll(forInPattern)];
+	if (forInMatches.length > 1) problems.push(`for-in-source-${forInMatches.length}`);
+	if (forInMatches.length === 1) {
+		const occurrence = forInMatches[0]!.index;
+		const helperStart = source.lastIndexOf("function assertBoundedClosedRecordKeys", occurrence);
+		const nextFunction = helperStart < 0 ? -1 : source.indexOf("\nfunction ", helperStart + 1);
+		if (helperStart < 0 || (nextFunction >= 0 && occurrence >= nextFunction)) {
+			problems.push("for-in-outside-bounded-key-helper");
+		}
+	}
 	assert.deepEqual(problems, []);
 });
 
@@ -9201,6 +9210,733 @@ test("cycle 19 one incremental projection budget rejects before multiplicative t
 	} finally {
 		active = false;
 		nativeDefine(Object, "getOwnPropertyDescriptor", descriptorSlot);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 20 every mutable normalization text byte error and reflection API is captured once", async () => {
+	const nativeDefine = Object.defineProperty;
+	const nativeDescriptor = Object.getOwnPropertyDescriptor;
+	const nativeApply = Reflect.apply;
+	const nativeConstruct = Reflect.construct;
+	const nativeGet = Reflect.get;
+	const nativeSplit = String.prototype.split;
+	const nativeIncludes = String.prototype.includes;
+	const NativeError = Error;
+	type Slot = { owner: object; key: PropertyKey; descriptor: PropertyDescriptor };
+	const slots: Slot[] = [];
+	const calls = new Map<string, number>();
+	let active = false;
+	const isTargetCall = (): boolean => {
+		const stack = new NativeError().stack;
+		if (typeof stack !== "string") return false;
+		const lines = nativeApply(nativeSplit, stack, ["\n"]) as string[];
+		for (let index = 1; index < lines.length && index < 10; index += 1) {
+			const line = lines[index]!;
+			if ((nativeApply(nativeIncludes, line, ["agent-session-runtime.ts"]) as boolean) ||
+				(nativeApply(nativeIncludes, line, ["tool-policy.ts"]) as boolean)) return true;
+		}
+		return false;
+	};
+	const charge = (label: string): void => {
+		if (active && isTargetCall()) calls.set(label, (calls.get(label) ?? 0) + 1);
+	};
+	const replaceValue = (owner: object, key: PropertyKey, value: unknown): void => {
+		const descriptor = nativeDescriptor(owner, key);
+		if (!descriptor || (!(descriptor.configurable ?? false) && !(descriptor.writable ?? false))) return;
+		slots.push({ owner, key, descriptor });
+		nativeDefine(owner, key, { ...descriptor, value });
+	};
+	const wrapMethod = (owner: object, key: PropertyKey, label: string): void => {
+		const descriptor = nativeDescriptor(owner, key);
+		if (!descriptor || typeof descriptor.value !== "function" ||
+			(!(descriptor.configurable ?? false) && !(descriptor.writable ?? false))) return;
+		const original = descriptor.value as (...arguments_: unknown[]) => unknown;
+		replaceValue(owner, key, function(this: unknown, ...arguments_: unknown[]): unknown {
+			charge(label);
+			return nativeApply(original, this, arguments_);
+		});
+	};
+	const proxyCallableGlobal = (key: PropertyKey, label: string): void => {
+		const descriptor = nativeDescriptor(globalThis, key);
+		if (!descriptor || typeof descriptor.value !== "function") return;
+		const original = descriptor.value as Function;
+		const replacement = new Proxy(original, {
+			apply(target, receiver, arguments_) {
+				charge(label);
+				return nativeApply(target, receiver, arguments_);
+			},
+			construct(target, arguments_, newTarget) {
+				charge(label);
+				return nativeConstruct(target, arguments_, newTarget);
+			},
+			get(target, property, receiver) {
+				charge(label);
+				return nativeGet(target, property, receiver);
+			},
+		});
+		replaceValue(globalThis, key, replacement);
+	};
+	const proxyObjectGlobal = (key: PropertyKey, label: string): void => {
+		const descriptor = nativeDescriptor(globalThis, key);
+		if (!descriptor || !descriptor.value || typeof descriptor.value !== "object") return;
+		const original = descriptor.value as object;
+		const replacement = new Proxy(original, {
+			get(target, property, receiver) {
+				charge(label);
+				return nativeGet(target, property, receiver);
+			},
+		});
+		replaceValue(globalThis, key, replacement);
+	};
+
+	const policyUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
+	policyUrl.searchParams.set("cycle20Intrinsics", `${Date.now()}-${Math.random()}`);
+	const runtimeUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"));
+	runtimeUrl.searchParams.set("cycle20Intrinsics", `${Date.now()}-${Math.random()}`);
+	const dynamicPolicy = await import(policyUrl.href) as typeof import("./tool-policy.ts");
+	const dynamicRuntime = await import(runtimeUrl.href) as typeof import("./agent-session-runtime.ts");
+
+	for (const [owner, key, label] of [
+		[Number, "isFinite", "Number.isFinite"], [Number, "isInteger", "Number.isInteger"],
+		[Number, "isSafeInteger", "Number.isSafeInteger"], [Number, "parseInt", "Number.parseInt"],
+		[Math, "min", "Math.min"], [Math, "max", "Math.max"],
+		[JSON, "parse", "JSON.parse"], [JSON, "stringify", "JSON.stringify"],
+		[Object, "keys", "Object.keys"], [Object, "getPrototypeOf", "Object.getPrototypeOf"],
+		[Object, "getOwnPropertyDescriptor", "Object.getOwnPropertyDescriptor"],
+		[Object, "defineProperty", "Object.defineProperty"], [Object, "create", "Object.create"],
+		[Object, "freeze", "Object.freeze"], [Object, "hasOwn", "Object.hasOwn"],
+		[Object, "values", "Object.values"], [Array, "isArray", "Array.isArray"],
+		[Reflect, "apply", "Reflect.apply"],
+		[String, "fromCharCode", "String.fromCharCode"],
+		[String.prototype, "charCodeAt", "String.prototype.charCodeAt"],
+		[String.prototype, "codePointAt", "String.prototype.codePointAt"],
+		[String.prototype, "trim", "String.prototype.trim"],
+		[String.prototype, "slice", "String.prototype.slice"],
+		[String.prototype, "replace", "String.prototype.replace"],
+		[String.prototype, "startsWith", "String.prototype.startsWith"],
+		[String.prototype, "endsWith", "String.prototype.endsWith"],
+		[String.prototype, "includes", "String.prototype.includes"],
+		[String.prototype, "split", "String.prototype.split"],
+		[Array.prototype, "push", "Array.prototype.push"],
+		[Array.prototype, "filter", "Array.prototype.filter"],
+		[Array.prototype, "map", "Array.prototype.map"],
+		[Array.prototype, "join", "Array.prototype.join"],
+		[Array.prototype, "includes", "Array.prototype.includes"],
+		[WeakSet.prototype, "has", "WeakSet.prototype.has"],
+		[WeakSet.prototype, "add", "WeakSet.prototype.add"],
+		[WeakSet.prototype, "delete", "WeakSet.prototype.delete"],
+		[TextEncoder.prototype, "encode", "TextEncoder.prototype.encode"],
+		[testNodeTypes, "isProxy", "nodeTypes.isProxy"],
+		[testNodeTypes, "isPromise", "nodeTypes.isPromise"],
+		[testNodeTypes, "isNativeError", "nodeTypes.isNativeError"],
+	] as const) wrapMethod(owner, key, label);
+	for (const [key, label] of [
+		["Number", "Number"], ["String", "String"], ["TextEncoder", "TextEncoder"],
+		["Error", "Error"], ["AggregateError", "AggregateError"], ["WeakSet", "WeakSet"],
+		["Array", "Array"], ["Object", "Object"],
+	] as const) proxyCallableGlobal(key, label);
+	for (const [key, label] of [
+		["Math", "Math"], ["JSON", "JSON"], ["Intl", "Intl"], ["Reflect", "Reflect"],
+	] as const) proxyObjectGlobal(key, label);
+
+	const problems: string[] = [];
+	try {
+		const policyInput = policyInputForRuntime(false);
+		policyInput.capabilities = [{
+			...inspectCapability(),
+			parameters: {
+				type: "object", additionalProperties: false,
+				properties: {
+					n: { type: "number" }, text: { type: "string", maxLength: 64 },
+				},
+				required: ["n", "text"],
+			},
+			async execute() {
+				await Promise.resolve();
+				return { status: "ok" as const, summary: "captured boundary", references: ["captured"] };
+			},
+		} as unknown as HostCapability];
+		active = true;
+		const policy = dynamicPolicy.createToolPolicy(policyInput);
+		const projected = policy.projectArguments("host_inspect", { n: "2", text: true }, 128);
+		if (projected.n !== 2 || projected.text !== "true") problems.push("normalized-dto-drift");
+		let nonFiniteRejected = false;
+		try { policy.projectArguments("host_inspect", { n: Number.NaN, text: "safe" }, 128); } catch {
+			nonFiniteRejected = true;
+		}
+		if (!nonFiniteRejected) problems.push("non-finite-admitted");
+		const hostTool = policy.tools.find((tool) => tool.name === "host_inspect")!;
+		const hostOutcome = await observeSettlement(hostTool.execute(
+			"cycle20-intrinsic-host", { n: "2", text: true }, undefined,
+		), 200);
+		if (hostOutcome.status !== "resolved") problems.push(`host-${hostOutcome.status}`);
+
+		const sdk = new FakeSdk();
+		const req = request({
+			binding: { ...request().binding, runId: "cycle20-intrinsic-runtime", laneId: "cycle20-intrinsic-runtime" },
+		});
+		sdk.session.output = handoffFor(req);
+		sdk.session.promptGate = Promise.resolve();
+		const harness = new dynamicRuntime.ShepherdAgentSessionRuntime(sdk);
+		const runtimeOutcome = await observeSettlement(harness.run(req), 300);
+		if (runtimeOutcome.status !== "resolved") problems.push(`runtime-${runtimeOutcome.status}`);
+		await observeSettlement(harness.close(), 150);
+	} finally {
+		active = false;
+		for (let index = slots.length - 1; index >= 0; index -= 1) {
+			const slot = slots[index]!;
+			nativeDefine(slot.owner, slot.key, slot.descriptor);
+		}
+	}
+	for (const [label, count] of calls) {
+		if (count > 0) problems.push(`${label}:${count}`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 20 pinned Pi graphemes and incremental JSON UTF8 bytes are exact", async () => {
+	type PiValidationTool = {
+		name: string;
+		description: string;
+		parameters: Readonly<Record<string, unknown>>;
+	};
+	type PiValidationCall = {
+		type: "toolCall";
+		id: string;
+		name: string;
+		arguments: Record<string, unknown>;
+	};
+	type PiValidationModule = {
+		validateToolArguments(tool: PiValidationTool, call: PiValidationCall): Readonly<Record<string, unknown>>;
+	};
+	const nativeDefine = Object.defineProperty;
+	const nativeDescriptor = Object.getOwnPropertyDescriptor;
+	const nativeApply = Reflect.apply;
+	const nativeCharCodeAt = String.prototype.charCodeAt;
+	const nativeStringify = JSON.stringify;
+	const charSlot = nativeDescriptor(String.prototype, "charCodeAt")!;
+	const stringifySlot = nativeDescriptor(JSON, "stringify")!;
+	let watchedScalar: string | undefined;
+	let observerActive = false;
+	let watchedCharacterVisits = 0;
+	let wholeScalarStringifies = 0;
+	nativeDefine(String.prototype, "charCodeAt", {
+		...charSlot,
+		value: function(this: string, index: number): number {
+			if (observerActive && this.length === watchedScalar?.length && this.length === 100_000) {
+				watchedCharacterVisits += 1;
+			}
+			return nativeApply(nativeCharCodeAt, this, [index]) as number;
+		},
+	});
+	nativeDefine(JSON, "stringify", {
+		...stringifySlot,
+		value: function(this: JSON, value: unknown, ...arguments_: unknown[]): string | undefined {
+			if (observerActive && value === watchedScalar) wholeScalarStringifies += 1;
+			return nativeApply(nativeStringify, this, [value, ...arguments_]) as string | undefined;
+		},
+	});
+	const policyUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
+	policyUrl.searchParams.set("cycle20GraphemeBytes", `${Date.now()}-${Math.random()}`);
+	let dynamicPolicy: typeof import("./tool-policy.ts");
+	try {
+		dynamicPolicy = await import(policyUrl.href) as typeof import("./tool-policy.ts");
+	} finally {
+		nativeDefine(String.prototype, "charCodeAt", charSlot);
+		nativeDefine(JSON, "stringify", stringifySlot);
+	}
+	const encodeSlot = nativeDescriptor(TextEncoder.prototype, "encode")!;
+	const nativeEncode = encodeSlot.value as (value?: string) => Uint8Array;
+	let wholeScalarEncodes = 0;
+	nativeDefine(TextEncoder.prototype, "encode", {
+		...encodeSlot,
+		value: function(this: TextEncoder, value?: string): Uint8Array {
+			if (observerActive && typeof value === "string" && value.length >= 100_000) wholeScalarEncodes += 1;
+			return nativeApply(nativeEncode, this, [value]) as Uint8Array;
+		},
+	});
+
+	const problems: string[] = [];
+	try {
+		const piValidation = await loadPinnedPiAi() as unknown as PiValidationModule;
+		const callbackValues: string[] = [];
+		const capability = {
+			...inspectCapability(),
+			parameters: {
+				type: "object", additionalProperties: false,
+				properties: { value: { type: "string", maxLength: 1 } }, required: ["value"],
+			},
+			async execute(arguments_: Readonly<Record<string, unknown>>) {
+				callbackValues.push(arguments_.value as string);
+				return { status: "ok" as const, summary: "cycle 20 grapheme", references: [] };
+			},
+		} as unknown as HostCapability;
+		const policyInput = policyInputForRuntime(false);
+		policyInput.capabilities = [capability];
+		const policy = dynamicPolicy.createToolPolicy(policyInput);
+		const tool = policy.tools.find((candidate) => candidate.name === "host_inspect")!;
+		const cases = [
+			["decomposed", "e\u0301", true],
+			["combining-only", "\u0301", true],
+			["multi-zwj", "👩‍💻", true],
+			["flag", "🇮🇳", true],
+			["astral", "😀", true],
+			["lone-high", "\ud800", true],
+			["lone-low", "\udc00", true],
+			["high-combining", "\ud800\u0301", true],
+			["high-zwj-ascii", "\ud800\u200dA", true],
+			["high-ascii", "\ud800A", false],
+			["low-ascii", "\udc00A", false],
+			["dangling-high-zwj", "\ud800\u200d", false],
+			["ascii-vs16-fast-path", "A\ufe0f", false],
+			["ascii-extended-combining-fast-path", "A\u1ab0", false],
+		] as const;
+		for (const [label, value, expected] of cases) {
+			let piAccepted = true;
+			try {
+				piValidation.validateToolArguments(tool, {
+					type: "toolCall", id: `cycle20-${label}-pi`, name: tool.name, arguments: { value },
+				});
+			} catch {
+				piAccepted = false;
+			}
+			let directAccepted = true;
+			try { policy.projectArguments(tool.name, { value }); } catch { directAccepted = false; }
+			const callbackBefore = callbackValues.length;
+			const callbackOutcome = await observeSettlement(tool.execute(
+				`cycle20-${label}-callback`, { value }, undefined,
+			), 150);
+			const callbackAccepted = callbackOutcome.status === "resolved";
+			if (piAccepted !== expected || directAccepted !== piAccepted || callbackAccepted !== piAccepted) {
+				problems.push(`${label}:expected-${expected}:pi-${piAccepted}:direct-${directAccepted}:callback-${callbackAccepted}`);
+			}
+			if (callbackAccepted && (callbackValues.length !== callbackBefore + 1 ||
+				callbackValues[callbackValues.length - 1] !== value)) {
+				problems.push(`${label}:callback-identity`);
+			}
+			if (!callbackAccepted && callbackValues.length !== callbackBefore) problems.push(`${label}:callback-leak`);
+		}
+
+		const runLifecycle = async (label: string, value: string): Promise<void> => {
+			const sdk = new FakeSdk();
+			const req = request({
+				capabilities: [capability],
+				binding: { ...request().binding, runId: `cycle20-${label}`, laneId: `cycle20-${label}` },
+			});
+			nativeDefine(sdk.session, "prompt", {
+				configurable: true,
+				async value() {
+					const user = piUserMessage(`cycle 20 ${label}`);
+					emitSessionEvent(sdk.session, { type: "agent_start" } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+					const intermediate = emitPiToolAssistant(sdk.session, {
+						id: `cycle20-${label}-call`, name: "host_inspect", arguments: { value },
+					});
+					const result = { content: [{ type: "text" as const, text: "cycle 20 result" }], details: null };
+					emitSessionEvent(sdk.session, {
+						type: "tool_execution_start", toolCallId: `cycle20-${label}-call`,
+						toolName: "host_inspect", args: { value },
+					} as AgentSessionEvent);
+					emitSessionEvent(sdk.session, {
+						type: "tool_execution_end", toolCallId: `cycle20-${label}-call`,
+						toolName: "host_inspect", result, isError: false,
+					} as AgentSessionEvent);
+					const toolResult: PiToolResultMessage = {
+						role: "toolResult", toolCallId: `cycle20-${label}-call`, toolName: "host_inspect",
+						content: result.content, details: result.details, isError: false, timestamp: 520,
+					};
+					emitSessionEvent(sdk.session, { type: "message_start", message: toolResult } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "message_end", message: toolResult } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, {
+						type: "turn_end", message: intermediate, toolResults: [toolResult],
+					} as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+					const finalAssistant = emitPiTextAssistant(sdk.session, handoffFor(req));
+					emitSessionEvent(sdk.session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+					emitSessionEvent(sdk.session, {
+						type: "agent_end", messages: [user, intermediate, toolResult, finalAssistant], willRetry: false,
+					} as AgentSessionEvent);
+					emitSessionEvent(sdk.session, { type: "agent_settled" } as AgentSessionEvent);
+				},
+			});
+			const harness = runtime(sdk);
+			const outcome = await observeSettlement(harness.runtime.run(req), 300);
+			if (outcome.status !== "resolved") problems.push(`${label}:lifecycle-${outcome.status}`);
+			await observeSettlement(harness.runtime.close(), 150);
+		};
+		for (const [label, value] of [
+			["decomposed-lifecycle", "e\u0301"], ["zwj-lifecycle", "👩‍💻"], ["flag-lifecycle", "🇮🇳"],
+		] as const) await runLifecycle(label, value);
+
+		const byteInput = policyInputForRuntime(false);
+		byteInput.capabilities = [{
+			...inspectCapability(),
+			parameters: {
+				type: "object", additionalProperties: false,
+				properties: { v: { type: "string", maxLength: 100_000 } }, required: ["v"],
+			},
+		} as unknown as HostCapability];
+		const bytePolicy = dynamicPolicy.createToolPolicy(byteInput);
+		for (const [label, value] of [
+			["empty", ""], ["quote", "\""], ["backslash", "\\"], ["newline", "\n"],
+			["nul", "\u0000"], ["two-byte", "é"], ["three-byte", "ह"], ["astral", "😀"],
+			["lone-high", "\ud800"], ["lone-low", "\udc00"],
+		] as const) {
+			const exact = Buffer.byteLength(nativeStringify({ v: value }), "utf8");
+			let exactAccepted = true;
+			try { bytePolicy.projectArguments("host_inspect", { v: value }, exact); } catch { exactAccepted = false; }
+			let belowRejected = false;
+			try { bytePolicy.projectArguments("host_inspect", { v: value }, exact - 1); } catch { belowRejected = true; }
+			if (!exactAccepted || !belowRejected) problems.push(`${label}:byte-boundary-${exactAccepted}-${belowRejected}`);
+		}
+
+		watchedScalar = "x".repeat(100_000);
+		observerActive = true;
+		let hugeRejected = false;
+		try { bytePolicy.projectArguments("host_inspect", { v: watchedScalar }, 8); } catch { hugeRejected = true; }
+		observerActive = false;
+		if (!hugeRejected) problems.push("huge-scalar-accepted");
+		if (wholeScalarStringifies !== 0) problems.push(`huge-scalar-stringify-${wholeScalarStringifies}`);
+		if (wholeScalarEncodes !== 0) problems.push(`huge-scalar-encode-${wholeScalarEncodes}`);
+		if (watchedCharacterVisits > 4) problems.push(`huge-scalar-character-visits-${watchedCharacterVisits}`);
+	} finally {
+		observerActive = false;
+		nativeDefine(TextEncoder.prototype, "encode", encodeSlot);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 20 runtime errors use own data descriptors and exact dense aggregate arrays", async () => {
+	type Counters = Record<
+		"message" | "name" | "stack" | "cause" | "errors" | "iterator" | "next" | "done" | "value" | "return",
+		number
+	>;
+	const nativeDefine = Object.defineProperty;
+	const nativeDescriptor = Object.getOwnPropertyDescriptor;
+	const nativeGetPrototypeOf = Object.getPrototypeOf;
+	const nativeIsArray = Array.isArray;
+	const counters = (): Counters => ({
+		message: 0, name: 0, stack: 0, cause: 0, errors: 0,
+		iterator: 0, next: 0, done: 0, value: 0, return: 0,
+	});
+	const makeHostileAggregate = (label: string, counts: Counters): AggregateError => {
+		const marker = `token: CYCLE20_${label.toUpperCase()}_SECRET`;
+		const error = new AggregateError([], `cycle 20 ${label}`);
+		for (const field of ["message", "name", "stack"] as const) {
+			nativeDefine(error, field, {
+				configurable: true,
+				get() { counts[field] += 1; return marker; },
+			});
+		}
+		nativeDefine(error, "cause", {
+			configurable: true,
+			get() { counts.cause += 1; return new Error(marker); },
+		});
+		const iterator = {} as Iterator<unknown>;
+		nativeDefine(iterator, "next", {
+			configurable: true,
+			get() {
+				counts.next += 1;
+				return () => {
+					const step = {} as IteratorResult<unknown>;
+					nativeDefine(step, "done", {
+						configurable: true,
+						get() { counts.done += 1; return false; },
+					});
+					nativeDefine(step, "value", {
+						configurable: true,
+						get() { counts.value += 1; return new Error(marker); },
+					});
+					return step;
+				};
+			},
+		});
+		nativeDefine(iterator, "return", {
+			configurable: true,
+			get() {
+				counts.return += 1;
+				return () => ({ done: true as const, value: undefined });
+			},
+		});
+		const iterable = {} as Iterable<unknown>;
+		nativeDefine(iterable, Symbol.iterator, {
+			configurable: true,
+			get() {
+				counts.iterator += 1;
+				return () => iterator;
+			},
+		});
+		nativeDefine(error, "errors", {
+			configurable: true,
+			get() { counts.errors += 1; return iterable; },
+		});
+		return error;
+	};
+	const problems: string[] = [];
+	const validateSnapshot = (label: string, value: unknown): void => {
+		if (!value || typeof value !== "object" || testNodeTypes.isProxy(value)) {
+			problems.push(`${label}:not-exact-object`);
+			return;
+		}
+		const pending: object[] = [value];
+		const seen = new Set<object>();
+		while (pending.length > 0) {
+			const current = pending.pop()!;
+			if (seen.has(current)) continue;
+			seen.add(current);
+			for (const field of ["message", "name", "stack"] as const) {
+				const descriptor = nativeDescriptor(current, field);
+				if (!descriptor || descriptor.get || descriptor.set || !("value" in descriptor) ||
+					typeof descriptor.value !== "string") {
+					problems.push(`${label}:${field}-not-own-data`);
+				}
+			}
+			const causeDescriptor = nativeDescriptor(current, "cause");
+			if (causeDescriptor) {
+				if (causeDescriptor.get || causeDescriptor.set || !("value" in causeDescriptor)) {
+					problems.push(`${label}:cause-not-own-data`);
+				} else if (causeDescriptor.value && typeof causeDescriptor.value === "object") {
+					pending.push(causeDescriptor.value as object);
+				}
+			}
+			const errorsDescriptor = nativeDescriptor(current, "errors");
+			if (!errorsDescriptor) continue;
+			if (errorsDescriptor.get || errorsDescriptor.set || !("value" in errorsDescriptor) ||
+				!nativeIsArray(errorsDescriptor.value) || testNodeTypes.isProxy(errorsDescriptor.value) ||
+				nativeGetPrototypeOf(errorsDescriptor.value) !== Array.prototype) {
+				problems.push(`${label}:errors-not-exact-dense-data`);
+				continue;
+			}
+			const members = errorsDescriptor.value as unknown[];
+			const lengthDescriptor = nativeDescriptor(members, "length");
+			const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+			if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set || lengthDescriptor.enumerable ||
+				typeof length !== "number" || length < 0 || length > 16) {
+				problems.push(`${label}:errors-length`);
+				continue;
+			}
+			for (let index = 0; index < length; index += 1) {
+				const member = nativeDescriptor(members, `${index}`);
+				if (!member?.enumerable || member.get || member.set || !("value" in member)) {
+					problems.push(`${label}:errors-index-${index}`);
+				} else if (member.value && typeof member.value === "object") {
+					pending.push(member.value as object);
+				}
+			}
+		}
+	};
+
+	const primaryCounts = counters();
+	const primaryError = makeHostileAggregate("primary", primaryCounts);
+	const primarySdk = new FakeSdk();
+	nativeDefine(primarySdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			await Promise.resolve();
+			throw primaryError;
+		},
+	});
+	const primaryHarness = runtime(primarySdk);
+	const primaryOutcome = await observeSettlement(primaryHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle20-error-primary", laneId: "cycle20-error-primary" },
+	})), 300);
+	if (primaryOutcome.status !== "rejected") problems.push(`primary-${primaryOutcome.status}`);
+	else {
+		validateSnapshot("primary", primaryOutcome.reason);
+		if (errorMessages(primaryOutcome.reason).some((message) => message.includes("CYCLE20_PRIMARY_SECRET"))) {
+			problems.push("primary-marker-leak");
+		}
+	}
+	await observeSettlement(primaryHarness.runtime.close(), 150);
+
+	const cleanupCounts = counters();
+	const cleanupError = makeHostileAggregate("cleanup", cleanupCounts);
+	const cleanupSdk = new FakeSdk();
+	const cleanupRequest = request({
+		binding: { ...request().binding, runId: "cycle20-error-cleanup", laneId: "cycle20-error-cleanup" },
+	});
+	cleanupSdk.session.output = handoffFor(cleanupRequest);
+	cleanupSdk.session.dispose = (() => { throw cleanupError; }) as () => void;
+	const cleanupHarness = runtime(cleanupSdk);
+	const cleanupOutcome = await observeSettlement(cleanupHarness.runtime.run(cleanupRequest), 300);
+	const quarantineOutcome = await observeSettlement(cleanupHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle20-error-quarantine", laneId: "cycle20-error-quarantine" },
+	})), 150);
+	const closeOutcome = await observeSettlement(cleanupHarness.runtime.close(), 150);
+	for (const [label, outcome] of [
+		["cleanup", cleanupOutcome], ["quarantine", quarantineOutcome], ["close", closeOutcome],
+	] as const) {
+		if (outcome.status !== "rejected") problems.push(`${label}-${outcome.status}`);
+		else validateSnapshot(label, outcome.reason);
+	}
+	for (const [label, values] of [["primary", primaryCounts], ["cleanup", cleanupCounts]] as const) {
+		for (const field of Object.keys(values) as Array<keyof Counters>) {
+			if (values[field] !== 0) problems.push(`${label}:${field}-${values[field]}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 20 projection rejects keys scalar work and DAGs before full discovery", async () => {
+	const nativeDefine = Object.defineProperty;
+	const nativeDescriptor = Object.getOwnPropertyDescriptor;
+	const nativeKeys = Object.keys;
+	const nativeHasOwn = Object.hasOwn;
+	const nativeTrim = String.prototype.trim;
+	const nativeApply = Reflect.apply;
+	const nativeConstruct = Reflect.construct;
+	const nativeGet = Reflect.get;
+	const keysSlot = nativeDescriptor(Object, "keys")!;
+	const hasOwnSlot = nativeDescriptor(Object, "hasOwn")!;
+	const trimSlot = nativeDescriptor(String.prototype, "trim")!;
+	let observedRecord: object | undefined;
+	let observedNumeric: string | undefined;
+	let observerActive = false;
+	let wholeKeyCalls = 0;
+	let maximumKeysMaterialized = 0;
+	let hasOwnCalls = 0;
+	let trimCalls = 0;
+	nativeDefine(Object, "keys", {
+		...keysSlot,
+		value: function(target: object): string[] {
+			if (observerActive && target === observedRecord) {
+				wholeKeyCalls += 1;
+				const count = nativeKeys(target).length;
+				if (count > maximumKeysMaterialized) maximumKeysMaterialized = count;
+			}
+			return nativeKeys(target);
+		},
+	});
+	nativeDefine(Object, "hasOwn", {
+		...hasOwnSlot,
+		value: function(target: object, key: PropertyKey): boolean {
+			if (observerActive && target === observedRecord) hasOwnCalls += 1;
+			return nativeApply(nativeHasOwn, Object, [target, key]) as boolean;
+		},
+	});
+	nativeDefine(String.prototype, "trim", {
+		...trimSlot,
+		value: function(this: string): string {
+			if (observerActive && this.length === observedNumeric?.length && this.length === 100_000) trimCalls += 1;
+			return nativeApply(nativeTrim, this, []) as string;
+		},
+	});
+	const policyUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"));
+	policyUrl.searchParams.set("cycle20Prework", `${Date.now()}-${Math.random()}`);
+	let dynamicPolicy: typeof import("./tool-policy.ts");
+	try {
+		dynamicPolicy = await import(policyUrl.href) as typeof import("./tool-policy.ts");
+	} finally {
+		nativeDefine(Object, "keys", keysSlot);
+		nativeDefine(Object, "hasOwn", hasOwnSlot);
+		nativeDefine(String.prototype, "trim", trimSlot);
+	}
+	const problems: string[] = [];
+	const policyFor = (parameters: Readonly<Record<string, unknown>>) => {
+		const input = policyInputForRuntime(false);
+		input.capabilities = [{ ...inspectCapability(), parameters } as unknown as HostCapability];
+		return dynamicPolicy.createToolPolicy(input);
+	};
+	const keyPolicy = policyFor({
+		type: "object", additionalProperties: false,
+		properties: { v: { type: "string", maxLength: 8 } }, required: ["v"],
+	});
+	const wide: Record<string, unknown> = { v: "x" };
+	for (let index = 0; index < 5_000; index += 1) wide[`extra${index}`] = index;
+	observedRecord = wide;
+	observerActive = true;
+	let wideRejected = false;
+	try { keyPolicy.projectArguments("host_inspect", wide); } catch { wideRejected = true; }
+	observerActive = false;
+	if (!wideRejected) problems.push("wide-record-accepted");
+	if (wholeKeyCalls !== 0 || maximumKeysMaterialized !== 0) {
+		problems.push(`wide-record-whole-keys-${wholeKeyCalls}-${maximumKeysMaterialized}`);
+	}
+	if (hasOwnCalls < 1 || hasOwnCalls > 3) problems.push(`wide-record-visits-${hasOwnCalls}`);
+
+	const inheritedKey = "cycle20InheritedEnumerableKey";
+	nativeDefine(Object.prototype, inheritedKey, {
+		configurable: true, enumerable: true, writable: true, value: "ignored",
+	});
+	try {
+		const plainControl = { v: "x" };
+		const nullControl = Object.create(null) as Record<string, unknown>;
+		nullControl.v = "x";
+		for (const [label, value] of [["plain", plainControl], ["null", nullControl]] as const) {
+			let projected: Readonly<Record<string, unknown>> | undefined;
+			try { projected = keyPolicy.projectArguments("host_inspect", value); } catch {
+				problems.push(`${label}-control-rejected`);
+			}
+			if (projected && (!Object.isFrozen(projected) || projected.v !== "x")) {
+				problems.push(`${label}-control-drift`);
+			}
+		}
+	} finally {
+		delete (Object.prototype as Record<string, unknown>)[inheritedKey];
+	}
+
+	const numericPolicy = policyFor({
+		type: "object", additionalProperties: false,
+		properties: { v: { type: "number" } }, required: ["v"],
+	});
+	observedNumeric = "0".repeat(100_000);
+	const numberSlot = nativeDescriptor(globalThis, "Number")!;
+	const NativeNumber = numberSlot.value as NumberConstructor;
+	let numberCalls = 0;
+	const numberProxy = new Proxy(NativeNumber, {
+		apply(target, receiver, arguments_) {
+			if (observerActive && arguments_[0] === observedNumeric) numberCalls += 1;
+			return nativeApply(target, receiver, arguments_);
+		},
+		construct(target, arguments_, newTarget) {
+			return nativeConstruct(target, arguments_, newTarget) as Number;
+		},
+		get(target, property, receiver) { return nativeGet(target, property, receiver); },
+	});
+	nativeDefine(globalThis, "Number", { ...numberSlot, value: numberProxy });
+	let numericRejected = false;
+	try {
+		observerActive = true;
+		try { numericPolicy.projectArguments("host_inspect", { v: observedNumeric }, 8); } catch {
+			numericRejected = true;
+		}
+	} finally {
+		observerActive = false;
+		nativeDefine(globalThis, "Number", numberSlot);
+	}
+	if (!numericRejected) problems.push("huge-numeric-source-accepted");
+	if (trimCalls !== 0) problems.push(`huge-numeric-trim-${trimCalls}`);
+	if (numberCalls !== 0) problems.push(`huge-numeric-conversion-${numberCalls}`);
+
+	const nestedPolicy = policyFor({
+		type: "object", additionalProperties: false,
+		properties: {
+			values: {
+				type: "array",
+				items: {
+					type: "object", additionalProperties: false,
+					properties: { v: { type: "string" } }, required: ["v"],
+				},
+			},
+		},
+		required: ["values"],
+	});
+	const shared = { v: "x" };
+	let dagRejected = false;
+	try { nestedPolicy.projectArguments("host_inspect", { values: [shared, shared] }); } catch { dagRejected = true; }
+	if (!dagRejected) problems.push("repeated-dag-accepted");
+	let nearProjected: Readonly<Record<string, unknown>> | undefined;
+	try { nearProjected = nestedPolicy.projectArguments("host_inspect", { values: [{ v: "x" }, { v: "y" }] }); } catch {
+		problems.push("near-control-rejected");
+	}
+	if (nearProjected && !Object.isFrozen(nearProjected)) problems.push("near-control-not-frozen");
+
+	const policySource = readFileSync(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"), "utf8");
+	if (policySource.includes("const suppliedNames = INTRINSIC_OBJECT_KEYS(value)")) {
+		problems.push("projector-retains-whole-key-vector");
 	}
 	assert.deepEqual(problems, []);
 });
