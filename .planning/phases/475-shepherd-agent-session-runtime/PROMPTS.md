@@ -480,3 +480,21 @@ Terminal execution snapshot:
   TypeScript, and issue-first delivery. One separate mapper is read-only; this worker owns writes.
 - No dependency, parent, #478, network, push, integration, model/auth, credential, service,
   Go/connector, `make`, or main mutation.
+
+### Cycle 17 terminal execution snapshot
+
+- Ordered checkpoints: PLAN `15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`, comprehensive
+  test-only RED `ed8e79e3489e5826b1be8078c32c01d945256ea7`, cohesive GREEN
+  `e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`, and behavior-preserving REFACTOR
+  `81c34cc5b7db9bffe4bd27d17122007d47ecedb6`.
+- RED executed 152 rows: 143 retained pass, exactly nine intended failures, zero
+  skipped/cancelled/todo, strict focused TypeScript pass, and production frozen.
+- GREEN/refactor result: 152/152 focused and 215/215 safe isolation pass; strict focused
+  source/tests and all 12 production files pass against TypeScript 5.9.3 with explicit Pi 0.80.6
+  roots; pinned offline Pi RPC exits 0 and registers `pm-shepherd`.
+- Complete Shepherd executes 289 rows: 258 pass and only the unchanged 31 controller/state-store
+  `spawn EPERM` environment failures remain; zero skipped/cancelled/todo. The broad gate is not
+  called green.
+- Exact immutable-base scope remains 20 authorized paths. Local evidence is terminal but
+  `verificationPassed` is false: two independent exact-head reviews and process-capable replay are
+  still pending and parent-owned. No self-review or external mutation was performed.

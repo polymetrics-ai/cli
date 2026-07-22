@@ -135,3 +135,13 @@ parent, #478, integration, or delivery authority. Its advice may refine the cohe
 the issue worker retains the sole PLAN, comprehensive nine-row RED, GREEN, REFACTOR, verification,
 commit, and handoff path. Production and tests are frozen until the artifact PLAN commits;
 production remains frozen through the RED checkpoint.
+
+Cycle 17 completed the local mutation path through PLAN `15a0b70f`, test-only RED `ed8e79e3`,
+cohesive GREEN `e7dfbb35`, and behavior-preserving REFACTOR `81c34cc5`. A bounded runtime/prompt
+worker owned only `agent-session-runtime.ts` and `role-prompts.ts`; it closed prompt adoption and
+prompt snapshot contracts and returned its uncommitted handoff to the issue worker. The issue
+worker retained tool-policy/tests, reconciled the cohesive GREEN, ran the declared gates, and made
+all commits. Focused 152/152 and safe isolation 215/215 pass; strict TypeScript and pinned offline
+Pi RPC pass; the broad suite is environment-blocked at 258/289 only by the unchanged 31
+controller/state-store `spawn EPERM` rows. Two independent exact-head reviews remain pending and
+parent-owned, so this local handoff does not set `verificationPassed` true or claim integration.

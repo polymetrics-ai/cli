@@ -1,9 +1,10 @@
 # Verification — Issue #475
 
-Current result: Cycle 16 is locally complete through cohesive GREEN `c30cfe88` and exact-metric
-REFACTOR `af9222b1` against frozen start `df930d62` and immutable base `e659d6f1`. Parent
-orchestration retains independent exact-head review, process-capable replay, integration, and
-delivery.
+Current result: Cycle 17 local implementation evidence is terminal through PLAN `15a0b70f`,
+test-only RED `ed8e79e3`, cohesive GREEN `e7dfbb35`, and behavior-preserving REFACTOR `81c34cc5`
+against frozen start `5f0bef9c` and immutable base `e659d6f1`. `verificationPassed` remains false:
+the serialized broad suite is environment-blocked by 31 unchanged `spawn EPERM` rows, and two
+independent exact-head reviews of the final evidence candidate remain pending and parent-owned.
 
 ## Cycle 16 Verification Contract
 
@@ -476,16 +477,29 @@ service, or network. No push, GitHub, Go, connector, `make`, runtime-service, or
 gate was attempted. The complete-suite classification is deliberately not called green; parent
 orchestration owns its rerun where child process creation is permitted.
 
-## Cycle 17 Pre-Execution Verification Contract
+## Cycle 17 Terminal Local Evidence
 
-No Cycle 17 completion is claimed. At exact start `5f0bef9c`, focused runtime/tool-policy tests
-execute 143/143 green and focused strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots exits 0.
-The worktree is clean, `git diff --check` passes, immutable-base ancestry and the exact 20 paths are
-unchanged, and all five production/test-control blobs match the PLAN ledger.
+The ordered checkpoints are PLAN `15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`, test-only RED
+`ed8e79e3489e5826b1be8078c32c01d945256ea7`, cohesive GREEN
+`e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`, and behavior-preserving REFACTOR
+`81c34cc5b7db9bffe4bd27d17122007d47ecedb6`. RED executed 152 rows with all 143 retained passes,
+exactly nine named behavior failures, zero skip/cancel/todo, strict focused TypeScript green, and
+production frozen.
 
-The next admissible evidence is a test-only RED commit executing 152 rows with 143 retained passes
-and exactly nine named failures, strict focused TypeScript green, production blobs frozen, zero
-skip/cancel/todo, and no out-of-scope path. Only after that checkpoint may cohesive production
-work begin. Terminal verification will additionally require both report replays, focused 152/152,
-both strict scopes, actual/offline Pi, safe isolation, serialized broad classification, integrity,
-source guards, and a clean exact-path head.
+| Cycle 17 gate | Status | Evidence |
+|---|---|---|
+| Focused GREEN | pass | 152 passed, 0 failed/skipped/cancelled/todo |
+| Safe isolation | pass | 215 passed, 0 failed/skipped/cancelled/todo; retained 206 plus the nine Cycle 17 rows |
+| Strict TypeScript | pass | focused source/tests and all 12 production files; TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit pinned Pi 0.80.6 RPC `get_commands`; `pm-shepherd` registered; exit 0 |
+| Complete Shepherd | environment-blocked | 289 executed; 258 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Integrity / scope | pass | diff/source/ancestry checks; immutable base `e659d6f1`; exact 20 authorized paths |
+| Independent exact-head review 1 | pending | parent-owned; no local self-review substituted |
+| Independent exact-head review 2 | pending | parent-owned; no local self-review substituted |
+| External mutation | not attempted | no push, network, GitHub, integration, live model/auth, service, Go/connector, `make`, parent, or #478 action |
+
+Final production blobs are runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
+`00d8482d4f320fb948abcbef893e87cf0690d1a3`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. The broad result is deliberately not called green.
+Local implementation evidence is terminal, but phase verification remains false until the two
+independent exact-head reviews and parent-owned process-capable replay are recorded.

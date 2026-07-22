@@ -1781,3 +1781,25 @@ serialized complete-suite classification; diff, ancestry, JSON, credential/depen
 scans; source guards; exact 20 paths; and clean worktree. No dependency, parent, #478, network,
 push, integration, live model/auth, credential, service, Go/connector, `make`, or main mutation is
 authorized.
+
+### Cycle 17 execution result
+
+- Artifact PLAN `15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`; comprehensive test-only RED
+  `ed8e79e3489e5826b1be8078c32c01d945256ea7`; cohesive GREEN
+  `e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`; behavior-preserving REFACTOR
+  `81c34cc5b7db9bffe4bd27d17122007d47ecedb6`.
+- RED executed all 152 focused rows: all 143 retained rows passed and exactly C17-01 through
+  C17-09 failed their intended behavior assertions, with zero skipped/cancelled/todo, focused
+  strict TypeScript green, and every production blob frozen.
+- GREEN/refactor passes 152/152 focused and 215/215 safe isolation, the latter comprising the
+  retained 206 isolation rows plus the nine Cycle 17 rows. Both focused and all 12 production
+  strict TypeScript scopes pass against TypeScript 5.9.3 and explicit Pi 0.80.6 roots.
+- Explicit pinned Pi 0.80.6 offline RPC exits 0 and registers `pm-shepherd`. Serialized complete
+  Shepherd executes 289 tests: 258 pass and the unchanged 31 controller/state-store rows fail only
+  because the managed sandbox denies process creation with `spawn EPERM`; zero rows are skipped,
+  cancelled, or todo. That broad gate remains environment-blocked and is not called green.
+- Diff/source/ancestry checks retain the exact 20 authorized paths against immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. No feature surface or external mutation was added.
+  Local evidence is terminal, but `verificationPassed` remains false: two independent exact-head
+  reviews of the final evidence candidate are still pending and parent-owned, as are the
+  process-capable replay, integration, and delivery gates.

@@ -1,28 +1,25 @@
 # Summary — Issue #475
 
-Status: Cycle 16 is locally complete through PLAN `6e3b05c8`, test-only RED `7ec93fcd`, cohesive
-GREEN `c30cfe88`, and exact-metric REFACTOR `af9222b1`, descended from blocked start `df930d62`
-and immutable base `e659d6f1`. Both Cycle 15 reports were accepted in full and re-read after
-refactor. Their six-family union is closed: punctuation/default-deny assignment admission,
-malformed quote bounds, one-pass work, finite public-scalar fidelity, zero whole-key untrusted
-capture, and prompt settlement ownership before the lifecycle barrier.
+Status: Cycle 17 local implementation evidence is terminal through PLAN `15a0b70f`, test-only RED
+`ed8e79e3`, cohesive GREEN `e7dfbb35`, and behavior-preserving REFACTOR `81c34cc5`, descended from
+blocked start `5f0bef9c` and immutable base `e659d6f1`. The nine-contract union from both complete
+Cycle 16 reports is closed locally by one original-coordinate typed scanner, one compiled closed
+schema projection shared by host execution and lifecycle identity, total prompt adoption ownership,
+one frozen prompt DTO, typed nesting, truthful work metrics, and exact-prototype capture.
 
-RED executed 143 rows with all 137 retained rows passing and exactly the six named behavior rows
+RED executed 152 rows with all 143 retained rows passing and exactly the nine named behavior rows
 failing, zero skip/cancel/todo, focused strict TypeScript green, and production frozen. GREEN and
-REFACTOR pass 143/143 focused and 206/206 safe isolation. Both strict TypeScript scopes pass
-against TypeScript 5.9.3 and explicit Pi 0.80.6 roots; explicit offline RPC registers
-`pm-shepherd`. Complete Shepherd executes 280 tests with 249 passes and only the unchanged 31
-controller/state-store `spawn EPERM` environment failures. No external or parent-owned mutation
-was attempted.
+REFACTOR pass 152/152 focused and 215/215 safe isolation. Both strict TypeScript scopes pass
+against TypeScript 5.9.3 and explicit Pi 0.80.6 roots; explicit pinned offline RPC exits 0 and
+registers `pm-shepherd`. Complete Shepherd executes 289 tests with 258 passes and only the unchanged
+31 controller/state-store `spawn EPERM` environment failures, with zero skip/cancel/todo.
 
-The scanner now has one monotonic cursor, default-deny uncertain keys, line/container/EOF malformed
-quote recovery, finite public scalar forms, and an exact seven-field work metric guarded at
-`8n + 64`. Runtime capture projects fixed schema descriptors and dense indexes only, never calls a
-whole-key primitive, and makes arbitrary details opaque. Prompt return/throw is converted to an
-owned always-fulfilled settlement before any abort/close/shutdown barrier and is joined during
-cleanup. Final production blobs are runtime `cd754a1e9b5baddf738c163cbba4d9fd1f279527`, policy
-`b7e2296123fb6da2fb0122f9d879c8aacf9dd2d6`, and unchanged prompts
-`b762787b2a63b5b02f9591c7bf3fff46394738cc`.
+Final production blobs are runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
+`00d8482d4f320fb948abcbef893e87cf0690d1a3`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. The exact same 20-path immutable-base scope is
+retained. `verificationPassed` remains false because the broad process-capable replay and two
+independent exact-head reviews remain pending and parent-owned; no external, review, integration,
+or delivery action was attempted.
 
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full
@@ -309,14 +306,17 @@ exact-head review; this lane made no Go/connector, dependency, service, GitHub, 
 change.
 
 Cycle 17 starts from exact blocked head `5f0bef9c`. Both complete Cycle 16 reports were read and
-their union was consolidated into nine contracts before any production or test edit. The selected
-design is one original-coordinate typed lexer with deferred ranges and truthful amortized work;
-one compiled closed-schema DTO shared by host execution and tool identity; one always-settled
-prompt adoption record; one descriptor-snapshotted deep-frozen role/binding input; and exact-
-prototype descriptor capture with no inherited enumeration.
+their union was consolidated into nine contracts before any production or test edit. PLAN
+`15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f` preceded test-only RED
+`ed8e79e3489e5826b1be8078c32c01d945256ea7`, which retained 143 passes and failed exactly nine
+named rows with production frozen. Cohesive GREEN `e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`
+and REFACTOR `81c34cc5b7db9bffe4bd27d17122007d47ecedb6` close the full architecture without
+adding feature surface.
 
-Baseline focused tests pass 143/143 and strict focused TypeScript exits 0. The next checkpoint is
-one test-only matrix with exactly nine top-level rows and expected 152/143/9 execution. Runtime,
-policy, prompts, and both existing tests are frozen at their recorded blobs through PLAN; all
-production remains frozen through RED. This lane performs no dependency, parent, #478, network,
-push, integration, service, credential, model, Go/connector, `make`, or main mutation.
+Terminal local gates are 152/152 focused, 215/215 safe isolation, both strict TypeScript scopes,
+and pinned offline Pi RPC registration. Serialized broad classification is 258/289 with only the
+unchanged 31 controller/state-store `spawn EPERM` rows; it is environment-blocked, not green.
+Diff/source/ancestry checks retain exactly 20 authorized paths. Two independent exact-head reviews
+of the evidence candidate are pending, so verification remains false and parent orchestration owns
+review, process-capable replay, integration, and delivery. This lane performed no dependency,
+parent, #478, network, push, service, credential, model, Go/connector, `make`, or main mutation.

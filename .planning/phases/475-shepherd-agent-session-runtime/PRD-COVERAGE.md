@@ -242,21 +242,32 @@ merge, or parent-artifact work is required or authorized.
 
 ## Cycle 17 Exact-Head Coverage Contract
 
-| Required outcome | Proof boundary | Pre-RED status |
+| Required outcome | Proof boundary | Terminal local evidence |
 |---|---|---|
-| Dense failed flow members are amortized linear | plain/quoted/whitespace geometric sizes, fail-fast work setter, later secret | blocked by C16-R1-01 |
-| Public quotes remain inside their line/container | both quotes, every public terminal/path, direct plus 12 indirect consumers | blocked by C16-R1-02 |
-| Host schemas are executable closed authority | direct execute extra/missing/type/range rejection and valid non-target DTO identity | blocked by C16-R1-03 |
-| Prompt outcomes are owned through adoption | exact-native/foreign fulfill/reject and foreign assimilation failures under abort/close/shutdown; unsupported native shapes reject the explicit adapter contract | blocked by C16-R1-04 / C16-R2-B5 |
-| Exported prompts snapshot role and binding once | descriptor/proxy/accessor/inheritance rejection and post-call mutation stability | blocked by C16-R1-05 |
-| Public fast path admits only finite scalars | valid/malformed object/sequence descendants across shared consumers | blocked by C16-R2-B1 |
-| Deep flow retains delimiter types | mixed 255/256/257 nesting and protected terminal sibling | blocked by C16-R2-B2 |
-| Metrics use original coordinates and actual work | expanding/shrinking replacements, actual visit maximum, every named pass | blocked by C16-R1-06 / C16-R2-B3 |
-| Capture has no inherited enumeration influence | exact prototypes; proxy-prototype traps at schema/capability/workspace results | blocked by C16-R1-06 / C16-R2-B4 |
+| Dense failed flow members are amortized linear | plain/quoted/whitespace geometric sizes, fail-fast work setter, later secret | C17-01 pass at GREEN/refactor |
+| Public quotes remain inside their line/container | both quotes, every public terminal/path, direct plus 12 indirect consumers | C17-02 pass at GREEN/refactor |
+| Host schemas are executable closed authority | direct execute extra/missing/type/range rejection and valid non-target DTO identity | C17-03 pass at GREEN/refactor |
+| Prompt outcomes are owned through adoption | exact-native/foreign fulfill/reject and foreign assimilation failures under abort/close/shutdown; unsupported native shapes reject the explicit adapter contract | C17-04 pass at GREEN/refactor |
+| Exported prompts snapshot role and binding once | descriptor/proxy/accessor/inheritance rejection and post-call mutation stability | C17-05 pass at GREEN/refactor |
+| Public fast path admits only finite scalars | valid/malformed object/sequence descendants across shared consumers | C17-06 pass at GREEN/refactor |
+| Deep flow retains delimiter types | mixed 255/256/257 nesting and protected terminal sibling | C17-07 pass at GREEN/refactor |
+| Metrics use original coordinates and actual work | expanding/shrinking replacements, actual visit maximum, every named pass | C17-08 pass at GREEN/refactor |
+| Capture has no inherited enumeration influence | exact prototypes; proxy-prototype traps at schema/capability/workspace results | C17-09 pass at GREEN/refactor |
 
-The nine rows are one replacement architecture, not independent synonym/guard patches. Baseline is
-143/143 focused plus strict focused TypeScript. Expected RED is 152 executed, 143 retained pass,
-and exactly nine named failures with every production blob frozen.
+The nine rows are one replacement architecture, not independent synonym/guard patches. Baseline
+was 143/143 focused plus strict focused TypeScript. RED executed 152 rows with 143 retained passes,
+exactly nine named failures, and every production blob frozen.
+
+The ordered evidence chain is PLAN `15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`, RED
+`ed8e79e3489e5826b1be8078c32c01d945256ea7`, GREEN
+`e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`, and REFACTOR
+`81c34cc5b7db9bffe4bd27d17122007d47ecedb6`. RED retained all 143 prior rows and failed exactly
+the nine planned rows with production frozen. Terminal local gates pass 152/152 focused, 215/215
+safe isolation, both strict TypeScript scopes, and pinned offline Pi RPC. Complete Shepherd is
+environment-blocked at 258/289 only by the unchanged 31 controller/state-store `spawn EPERM` rows;
+zero rows are skipped/cancelled/todo. Coverage is locally implemented, but `verificationPassed`
+remains false while two independent exact-head reviews and process-capable replay remain pending
+and parent-owned.
 
 ## Cycle 7 Stable-Head Diagnostic
 

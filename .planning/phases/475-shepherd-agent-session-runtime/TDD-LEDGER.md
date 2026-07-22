@@ -1174,6 +1174,43 @@ result is 152 executed, all 143 retained rows passed, exactly nine named behavio
 zero skipped/cancelled/todo. Focused strict TypeScript must remain green and all production blobs
 must remain frozen before GREEN is authorized.
 
+### RED evidence
+
+- PLAN checkpoint: `15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`.
+- Test-only RED checkpoint: `ed8e79e3489e5826b1be8078c32c01d945256ea7`; only
+  `agent-session-runtime.test.ts` changed.
+- Focused RED executed all 152 rows: all 143 retained rows passed, exactly C17-01 through C17-09
+  failed their intended behavior assertions, and zero rows were skipped, cancelled, or todo.
+- Focused strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots passed. Runtime, policy, and
+  prompt production blobs remained frozen, so the cohesive production change was authorized.
+
+### GREEN / REFACTOR / VERIFY
+
+- Cohesive GREEN `e7dfbb358824efb5423e284ee2c6a78ea2f3cd30` changes only runtime, role prompts,
+  and tool policy. It implements the original-coordinate deferred-range scanner, compiled host
+  schema projector, total prompt adoption cell, frozen descriptor-captured prompt DTO, typed closer
+  stack, truthful seven-field work ledger, and exact-prototype capture as one architecture.
+- Behavior-preserving REFACTOR `81c34cc5b7db9bffe4bd27d17122007d47ecedb6` removes only an
+  unused event-key constant, unused scanner state/parameter, and a redundant CRLF helper. It adds
+  no feature surface and weakens no RED row.
+- Focused: 152/152 pass. Safe isolation: 215/215 pass, comprising all retained 206 isolation rows
+  plus nine Cycle 17 rows. Both have zero failed/skipped/cancelled/todo.
+- Focused source/tests and all 12 production files pass strict no-emit TypeScript 5.9.3 against
+  explicit Pi 0.80.6 roots. Explicit pinned Pi offline RPC exits 0 and registers `pm-shepherd`.
+- Serialized complete Shepherd executes 289 rows: 258 pass and 31 fail only in unchanged
+  controller/state-store process-identity coverage because the managed sandbox returns
+  `spawn EPERM`; zero rows are skipped, cancelled, or todo. This gate is environment-blocked and
+  is not called green.
+- Final blobs are runtime `66c92cf368746b9fcf5ba3fdc5cd28aebc21a8e4`, policy
+  `00d8482d4f320fb948abcbef893e87cf0690d1a3`, prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+  `e9fb05b8d1dd5b438cd66da707c7549f33e754c6`, and unchanged policy test
+  `b7fa0a1c1f1fbfb1ec0b10b9fbd022229e84e56f`.
+- Diff, source guards, immutable-base ancestry, and the exact 20-path allowlist pass. Local
+  implementation evidence is terminal, but `verificationPassed` remains false while two
+  independent exact-head reviews and the process-capable broad replay remain parent-owned and
+  pending. No self-review, integration, push, network, or other external mutation was attempted.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

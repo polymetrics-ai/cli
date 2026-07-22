@@ -254,5 +254,20 @@ policy. The JavaScript-observability limit for an already-rejected native Promis
 unobservable poisoned own `then` is recorded explicitly; the trusted adapter must normalize that
 return rather than the runtime claiming impossible support after return.
 
-No GREEN disposition is claimed here. Acceptance requires the committed nine-row RED evidence,
-then 152/152 focused and every declared gate without widening the exact 20-path boundary.
+The complete prior-review union is locally dispositioned by the ordered Cycle 17 chain: PLAN
+`15a0b70f2b94ccd14f22dd0bcad410d512fb8c4f`, test-only RED
+`ed8e79e3489e5826b1be8078c32c01d945256ea7`, cohesive GREEN
+`e7dfbb358824efb5423e284ee2c6a78ea2f3cd30`, and behavior-preserving REFACTOR
+`81c34cc5b7db9bffe4bd27d17122007d47ecedb6`. RED retained all 143 prior rows and exposed exactly
+the nine named behavior failures with production frozen. GREEN/refactor passes 152/152 focused,
+215/215 safe isolation, both strict TypeScript scopes, and explicit pinned Pi offline RPC.
+
+The serialized complete suite executes 289 rows: 258 pass and only the unchanged 31
+controller/state-store rows fail because the managed sandbox returns `spawn EPERM`; zero rows are
+skipped, cancelled, or todo. The broad gate remains environment-blocked and is not represented as
+green. Diff, ancestry, source guards, and the exact 20-path boundary pass locally.
+
+This section is the issue worker's disposition of the two Cycle 16 input reports, not independent
+review of the resulting head. Two independent exact-head reviews of the final evidence candidate
+remain pending and parent-owned. Until both are recorded, `verificationPassed` remains false and
+no integration or delivery claim is made.
