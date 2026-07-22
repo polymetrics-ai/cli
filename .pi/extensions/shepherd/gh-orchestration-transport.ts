@@ -15,6 +15,7 @@ import {
 	validateIndependentReviewRecord,
 	type IndependentReviewRecord,
 } from "./review-router.ts";
+import { validateReviewedChildIntegrationEvidence } from "./github-orchestrator.ts";
 import type {
 	AuthoritativeLookup,
 	ChildIntegrationQuery,
@@ -829,24 +830,43 @@ export class GhCliOrchestrationTransport implements GitHubOrchestrationTransport
 		if (request.parentBranch === request.parentBaseBranch) {
 			throw new Error("child integration transport refuses default-branch and parent-to-main merges");
 		}
+		if (["main", "master", "trunk"].includes(request.parentBranch)) {
+			throw new Error("child integration transport refuses conventional protected branch aliases");
+		}
+		const integration = validateReviewedChildIntegrationEvidence(request.integration);
+		if (integration.parentBranch !== request.parentBranch
+			|| integration.baseSha !== request.baseSha || integration.headSha !== request.headSha
+			|| integration.mergeCommitSha === integration.baseSha
+			|| integration.mergeCommitSha === integration.headSha) {
+			throw new Error("child integration Git evidence does not match the exact request");
+		}
 		const existing = await this.findChildIntegration(request, context);
 		if (existing.items.length > 1) throw new Error("duplicate child integration receipt is ambiguous");
 		if (existing.items.length === 1) {
 			return durableResult(request.mutation, existing.items[0].transportProvenance.revision, false, existing.items[0]);
 		}
-		const pr = record(await this.#api("GET", `/repos/${request.repository}/pulls/${request.pullRequest}`, context), "child pull request");
+		const repo = repository(request.repository);
+		const repositoryEvidence = record(await this.#api("GET", `/repos/${repo}`, context), "repository");
+		const liveDefaultBranch = text(repositoryEvidence.default_branch, "repository default branch", 240);
+		if (liveDefaultBranch !== request.parentBaseBranch || request.parentBranch === liveDefaultBranch) {
+			throw new Error("child integration remote default branch moved before publication");
+		}
+		const pr = record(await this.#api("GET", `/repos/${repo}/pulls/${request.pullRequest}`, context), "child pull request");
 		const base = record(pr.base, "child pull request base");
 		const head = record(pr.head, "child pull request head");
 		if (base.ref !== request.parentBranch || head.sha !== request.headSha) throw new Error("child integration exact branch/head moved");
-		if (pr.merged !== true) {
-			try {
-				await this.#api("PUT", `/repos/${request.repository}/pulls/${request.pullRequest}/merge`, context, [
-					`sha=${request.headSha}`, "merge_method=merge",
-				]);
-			} catch (error) {
-				const observed = record(await this.#api("GET", `/repos/${request.repository}/pulls/${request.pullRequest}`, context), "reconciled child pull request");
-				if (observed.merged !== true || record(observed.head, "reconciled head").sha !== request.headSha) throw error;
-			}
+		if (pr.merged !== true || sha(pr.merge_commit_sha, "child pull request merge commit SHA") !== integration.mergeCommitSha) {
+			throw new Error("child integration is not authoritatively merged at the exact Git integration commit");
+		}
+		const parentRef = record(await this.#api(
+			"GET",
+			`/repos/${repo}/git/ref/heads/${encodeURIComponent(request.parentBranch)}`,
+			context,
+		), "parent branch ref");
+		const parentObject = record(parentRef.object, "parent branch ref object");
+		if (parentRef.ref !== `refs/heads/${request.parentBranch}`
+			|| parentObject.type !== "commit" || parentObject.sha !== integration.parentHead) {
+			throw new Error("child integration parent ref does not match lease-bound Git evidence");
 		}
 		const pendingBody = `${INTEGRATION_PENDING_PREFIX}${Buffer.from(request.mutation.idempotencyKey).toString("base64url")} -->`;
 		let pending = (await this.#issueComments(request.repository, request.pullRequest, context)).items

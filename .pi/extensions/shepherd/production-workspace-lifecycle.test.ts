@@ -94,6 +94,7 @@ class FakeWorkspace implements ProductionWorkspaceAdapterPort {
 	released: number[] = [];
 	commits = 0;
 	pushes = 0;
+	integrations = 0;
 	handoffs = 0;
 	refreshes = 0;
 	childHeadReconciliations = 0;
@@ -133,6 +134,28 @@ class FakeWorkspace implements ProductionWorkspaceAdapterPort {
 	async pushIssueBranch(workspace: ClaimedWorkspace) {
 		this.pushes += 1;
 		return { branch: workspace.branch, head: workspace.head, remoteName: "origin" as const };
+	}
+	async integrateReviewedChild(workspace: ClaimedWorkspace, request: {
+		parentBranch: string;
+		defaultBranch: string;
+		baseSha: string;
+		headSha: string;
+	}) {
+		this.integrations += 1;
+		assert.equal(request.parentBranch, workspace.prBase);
+		assert.equal(request.defaultBranch, workspace.defaultBranch);
+		assert.equal(request.baseSha, workspace.baseHead);
+		assert.equal(request.headSha, workspace.head);
+		return {
+			schemaVersion: 1 as const,
+			authority: "git" as const,
+			parentBranch: request.parentBranch,
+			baseSha: request.baseSha,
+			headSha: request.headSha,
+			mergeCommitSha: SHA_C,
+			parentHead: SHA_C,
+			reused: false,
+		};
 	}
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: "pending" | "passed" | "failed") {
 		this.handoffs += 1;
@@ -260,6 +283,15 @@ test("runs implementation in the claimed workspace then verifies, commits, pushe
 	const captured = await session.captureHandoff();
 	assert.equal(captured.verificationState, "passed");
 	assert.equal(captured.head, SHA_B);
+	const integrated = await session.integrateReviewedChild({
+		parentBranch: captured.prBase,
+		defaultBranch: "main",
+		baseSha: captured.baseHead,
+		headSha: captured.head,
+		effectKey: "a".repeat(64),
+	});
+	assert.equal(integrated.mergeCommitSha, SHA_C);
+	assert.equal(f.workspaceAdapter.integrations, 1);
 	await session.join();
 	assert.deepEqual(f.workspaceAdapter.released, [502]);
 });

@@ -11,7 +11,10 @@ import {
 	type WorkAccess,
 	type WorkItemStatus,
 } from "./dependency-graph.ts";
-import { canonicalIssueBranch } from "./git-adapter.ts";
+import {
+	canonicalIssueBranch,
+	type GitReviewedChildIntegrationEvidence,
+} from "./git-adapter.ts";
 import {
 	canonicalGitRef,
 	evaluateGitHubPullRequestEvidence,
@@ -364,11 +367,31 @@ export interface IntegrateChildRequest extends GitHubPullRequestQuery {
 	parentBranch: string;
 	/** Plan-bound authoritative default/base branch that child integration must never target. */
 	parentBaseBranch: string;
+	/** Exact lease-bound Git CAS evidence; the transport may publish but cannot merge. */
+	integration: GitReviewedChildIntegrationEvidence;
 	pullRequestSnapshot: CanonicalPullRequestSnapshot;
 	observation: PullRequestObservation;
 	controllerProvenance: ControllerIntegrationProvenance;
 	mutation: DurableMutationIntent;
 }
+
+export interface ChildIntegrationMutationAuthorization {
+	repository: string;
+	childId: string;
+	pullRequest: number;
+	generation: number;
+	marker: string;
+	parentBranch: string;
+	parentBaseBranch: string;
+	baseSha: string;
+	headSha: string;
+	idempotencyKey: string;
+	intentDigest: string;
+}
+
+export type ChildIntegrationMutation = (
+	authorization: ChildIntegrationMutationAuthorization,
+) => Promise<GitReviewedChildIntegrationEvidence>;
 
 export interface MarkParentReadyRequest extends GitHubPullRequestQuery {
 	marker: string;
@@ -1660,6 +1683,25 @@ function validateTransportProvenance(value: unknown): TransportMutationProvenanc
 		idempotencyKey: inlineText(candidate.idempotencyKey, "transport mutation key", 512),
 		intentDigest: candidate.intentDigest,
 		revision: generation(candidate.revision),
+	};
+}
+
+export function validateReviewedChildIntegrationEvidence(value: unknown): GitReviewedChildIntegrationEvidence {
+	const candidate = exactRecord(value, [
+		"schemaVersion", "authority", "parentBranch", "baseSha", "headSha", "mergeCommitSha", "parentHead", "reused",
+	]);
+	if (candidate.schemaVersion !== 1 || candidate.authority !== "git" || typeof candidate.reused !== "boolean") {
+		throw new Error("invalid reviewed child Git integration evidence");
+	}
+	return {
+		schemaVersion: 1,
+		authority: "git",
+		parentBranch: canonicalGitRef(candidate.parentBranch, "Git integration parent branch"),
+		baseSha: sha(candidate.baseSha, "Git integration base SHA"),
+		headSha: sha(candidate.headSha, "Git integration head SHA"),
+		mergeCommitSha: sha(candidate.mergeCommitSha, "Git integration merge commit SHA"),
+		parentHead: sha(candidate.parentHead, "Git integration parent head"),
+		reused: candidate.reused,
 	};
 }
 
@@ -3970,8 +4012,10 @@ export class GitHubParentOrchestrator {
 		plan: ParentOrchestrationPlan,
 		child: MaterializedChildRecord,
 		handoffValue: WorkspaceHandoffEvidence,
+		mutate: ChildIntegrationMutation,
 		context?: OrchestrationCallContext,
 	): Promise<ChildIntegrationDecision> {
+		if (typeof mutate !== "function") throw new Error("child integration requires lease-bound Git mutation authority");
 		return this.withLifecycle(context, async () => {
 		plan = validateParentOrchestrationPlan(plan);
 		const canonicalChild = await this.canonicalMaterializedChild(plan, child);
@@ -4025,7 +4069,8 @@ export class GitHubParentOrchestrator {
 				}
 				return { kind: "integrated", receipt, reused: true };
 			}
-			if (!currentChildPullRequestEligible(first)) {
+			const recoveringIntegrated = first.state === "merged";
+			if (!currentChildPullRequestEligible(first, recoveringIntegrated ? "merged" : undefined)) {
 				return { kind: "blocked", blockers: [first.draft ? "draft" : "pr_not_open"] };
 			}
 			const reviewTarget: Omit<IndependentReviewTarget, "changedPaths"> = {
@@ -4040,7 +4085,7 @@ export class GitHubParentOrchestrator {
 				allowedScopes: canonicalChild.writeScopes,
 			};
 			const policy = policyFor(plan, canonicalChild.prBase);
-			const assessed = await this.evaluateEvidence(first, expected, reviewTarget, policy);
+			const assessed = await this.evaluateEvidence(first, expected, reviewTarget, policy, false, recoveringIntegrated);
 			if (assessed.decision.kind === "blocked") return assessed.decision;
 			if (!sameStrings(assessed.observation.paths, handoff.changedScope)
 				|| !reviewMatchesChild(assessed.decision.review, plan, canonicalChild, first.number, handoff)) {
@@ -4053,7 +4098,14 @@ export class GitHubParentOrchestrator {
 				|| !sameStrings(second.changedPaths, handoff.changedScope)) {
 				return { kind: "blocked", blockers: ["resource_mismatch"] };
 			}
-			const revalidated = await this.evaluateEvidence(second, expected, reviewTarget, policy);
+			const revalidated = await this.evaluateEvidence(
+				second,
+				expected,
+				reviewTarget,
+				policy,
+				false,
+				recoveringIntegrated || second.state === "merged",
+			);
 			if (revalidated.decision.kind === "blocked") return revalidated.decision;
 			if (!sameStrings(revalidated.observation.paths, handoff.changedScope)
 				|| !reviewMatchesChild(revalidated.decision.review, plan, canonicalChild, second.number, handoff)) {
@@ -4087,9 +4139,29 @@ export class GitHubParentOrchestrator {
 				childIntegrationMutationProjection(requestIntent),
 				null,
 			);
+			const integration = validateReviewedChildIntegrationEvidence(await mutate({
+				repository: plan.repository,
+				childId: canonicalChild.id,
+				pullRequest: second.number,
+				generation: plan.generation,
+				marker: canonicalChild.markers.pullRequest,
+				parentBranch: plan.parentBranch,
+				parentBaseBranch: plan.parentBaseBranch,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+				idempotencyKey: mutation.idempotencyKey,
+				intentDigest: mutation.intentDigest,
+			}));
+			if (integration.parentBranch !== plan.parentBranch
+				|| integration.baseSha !== handoff.baseHead || integration.headSha !== handoff.head
+				|| integration.mergeCommitSha === integration.baseSha
+				|| integration.mergeCommitSha === integration.headSha) {
+				throw new Error("lease-bound Git integration evidence does not match the exact reviewed child");
+			}
 			const request: IntegrateChildRequest = {
 				...requestIntent,
 				parentBaseBranch: plan.parentBaseBranch,
+				integration,
 				mutation,
 			};
 			let mutationError: unknown;

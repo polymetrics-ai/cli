@@ -263,3 +263,71 @@ test("child integration transport never merges a PR and publishes nothing until 
 	);
 	assert.deepEqual([...new Set(methods)], ["GET"]);
 });
+
+test("child integration transport publishes one receipt only after exact merged PR and parent-ref reconciliation", async () => {
+	const marker = "<!-- shepherd-pr:v1:471:child-a:abc -->";
+	const calls: string[][] = [];
+	const execute: GhOrchestrationExecutor = async (_file, args) => {
+		calls.push([...args]);
+		const method = args[2] ?? "";
+		const endpoint = args[3] ?? "";
+		if (endpoint.includes("/pulls?")) return JSON.stringify([{ number: 9, body: marker }]);
+		if (endpoint.includes("/issues/9/comments?")) return "[]";
+		if (endpoint === "/repos/acme/widgets") return JSON.stringify({ default_branch: "main" });
+		if (endpoint === "/repos/acme/widgets/git/ref/heads/feat%2Fparent") return JSON.stringify({
+			ref: "refs/heads/feat/parent",
+			object: { type: "commit", sha: "3".repeat(40) },
+		});
+		if (endpoint.endsWith("/pulls/9")) return JSON.stringify({
+			number: 9,
+			merged: true,
+			merged_at: "2026-07-22T00:00:00.000Z",
+			merge_commit_sha: "3".repeat(40),
+			base: { ref: "feat/parent", sha: "3".repeat(40) },
+			head: { ref: "feat/child", sha: "2".repeat(40) },
+		});
+		if (method === "POST" && endpoint.endsWith("/issues/9/comments")) {
+			return JSON.stringify({ id: 88, body: args.at(-1) });
+		}
+		if (method === "PATCH" && endpoint.endsWith("/issues/comments/88")) return "{}";
+		throw new Error(`unexpected gh call ${args.join(" ")}`);
+	};
+	const now = new Date("2026-07-22T00:00:01.000Z");
+	const transport = new GhCliOrchestrationTransport({ execute, now: () => now });
+	const request = {
+		repository: "acme/widgets",
+		childId: "child-a",
+		pullRequest: 9,
+		generation: 7,
+		marker,
+		baseSha: "1".repeat(40),
+		headSha: "2".repeat(40),
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
+		integration: {
+			schemaVersion: 1,
+			authority: "git",
+			parentBranch: "feat/parent",
+			baseSha: "1".repeat(40),
+			headSha: "2".repeat(40),
+			mergeCommitSha: "3".repeat(40),
+			parentHead: "3".repeat(40),
+			reused: false,
+		},
+		pullRequestSnapshot: {},
+		observation: {},
+		controllerProvenance: {},
+		mutation: {
+			schemaVersion: 1,
+			operation: "child_integration",
+			idempotencyKey: "shepherd-mutation:v1:child_integration:abc",
+			intentDigest: "d".repeat(64),
+			expectedResourceRevision: null,
+		},
+	} as unknown as IntegrateChildRequest;
+	const result = await transport.integrateChild(request, context());
+	assert.equal(result.value.childId, "child-a");
+	assert.equal(result.value.headSha, "2".repeat(40));
+	assert.equal(result.applied, true);
+	assert.equal(calls.some((args) => args.some((arg) => /\/merge$/u.test(arg))), false);
+});

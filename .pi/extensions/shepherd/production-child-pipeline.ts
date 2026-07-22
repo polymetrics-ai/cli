@@ -1033,11 +1033,37 @@ export class ProductionChildPipeline implements
 			head: handoff.head,
 			reviewResultDigest: review.resultDigest,
 			marker: integrationChild.markers.pullRequest,
-		}, async () => {
-			const decision = await this.#github.integrateChild(integrationParent, integrationChild, handoff, {
-				signal: context.signal,
-				deadlineAt: new Date(Date.now() + context.timeoutMs).toISOString(),
-			});
+		}, async (effectKey) => {
+			const decision = await this.#github.integrateChild(
+				integrationParent,
+				integrationChild,
+				handoff,
+				async (authorization) => {
+					if (authorization.repository !== context.plan.repository
+						|| authorization.childId !== context.child.id
+						|| authorization.generation !== context.resourceGeneration
+						|| authorization.parentBranch !== context.plan.parentBranch
+						|| authorization.parentBaseBranch !== context.plan.parentBaseBranch
+						|| authorization.baseSha !== handoff.baseHead || authorization.headSha !== handoff.head) {
+						throw new ProductionLifecycleError(
+							"terminal",
+							"Git integration authorization escaped the exact production child binding",
+							["integration_authorization_mismatch"],
+						);
+					}
+					return entry.session.integrateReviewedChild({
+						parentBranch: authorization.parentBranch,
+						defaultBranch: authorization.parentBaseBranch,
+						baseSha: authorization.baseSha,
+						headSha: authorization.headSha,
+						effectKey,
+					}, context.signal);
+				},
+				{
+					signal: context.signal,
+					deadlineAt: new Date(Date.now() + context.timeoutMs).toISOString(),
+				},
+			);
 			// A blocked integration has no external mutation/result to acknowledge. Classify it
 			// while the intent is still prepared so recovery may prove absence and abandon it;
 			// observing a synthetic "blocked" result would poison every later resume.

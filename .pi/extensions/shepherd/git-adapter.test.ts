@@ -512,6 +512,63 @@ test("push binds caller and live remote default branches to inspected symbolic H
 	await assert.rejects(git(liveFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
 });
 
+test("reviewed child integration advances only the exact parent ref and reuses one deterministic merge", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["child.txt"], {
+		processId: 47_600,
+		processIdentity: "integration-success-owner",
+		isProcessAlive: () => true,
+		tokenFactory: () => "integration-success-token",
+	});
+	t.after(() => workspace.release().catch(() => undefined));
+	await write(workspace.cwd, "child.txt", "reviewed child\n");
+	const committed = await workspaceAdapter.commitIssueChanges(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		message: "test: reviewed child",
+		scopes: ["child.txt"],
+	});
+	await workspaceAdapter.pushIssueBranch(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: committed.head,
+		defaultBranch: "main",
+	});
+	const request = {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		parentBranch: fixture.parentBranch,
+		defaultBranch: "main",
+		baseSha: fixture.parentHead,
+		headSha: committed.head,
+		effectKey: "0".repeat(64),
+	};
+	const first = await workspaceAdapter.integrateReviewedChild(workspace, request);
+	assert.equal(first.reused, false);
+	assert.equal(first.parentHead, first.mergeCommitSha);
+	assert.deepEqual(
+		(await git(fixture.coordinator, "show", "--no-patch", "--format=%P", first.mergeCommitSha)).trim().split(" "),
+		[fixture.parentHead, committed.head],
+	);
+	assert.equal(
+		(await git(fixture.remote, "rev-parse", `refs/heads/${fixture.parentBranch}`)).trim(),
+		first.mergeCommitSha,
+	);
+	assert.equal((await git(fixture.coordinator, "rev-parse", `refs/heads/${fixture.parentBranch}`)).trim(), fixture.parentHead);
+
+	const retried = await workspaceAdapter.integrateReviewedChild(workspace, request);
+	assert.equal(retried.reused, true);
+	assert.equal(retried.mergeCommitSha, first.mergeCommitSha);
+	assert.equal(retried.parentHead, first.parentHead);
+});
+
 test("reviewed child integration loses an exact parent-head race without replacing the newer remote", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);

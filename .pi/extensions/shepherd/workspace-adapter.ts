@@ -12,12 +12,14 @@ import {
 	type GitBinding,
 	type GitCommitEvidence,
 	type GitCommitRequest,
+	type GitIntegrateReviewedChildRequest,
 	type GitMutationLease,
 	type GitMutationLeaseRequest,
 	type GitPushEvidence,
 	type GitPushRequest,
 	type GitReconcileIssueHeadEvidence,
 	type GitRefreshIssueEvidence,
+	type GitReviewedChildIntegrationEvidence,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
 import type { FileStateStoreOptions } from "./state-store.ts";
@@ -1037,6 +1039,14 @@ export class WorkspaceAdapter {
 	async pushIssueBranch(workspace: ClaimedWorkspace, request: GitPushRequest): Promise<GitPushEvidence> {
 		const context = this.#mutationContext(workspace);
 		return this.#git.pushIssueBranch(context.lease, this.#worktreeBinding(context), request);
+	}
+
+	async integrateReviewedChild(
+		workspace: ClaimedWorkspace,
+		request: GitIntegrateReviewedChildRequest,
+	): Promise<GitReviewedChildIntegrationEvidence> {
+		const context = this.#mutationContext(workspace);
+		return this.#git.integrateReviewedChild(context.lease, context.coordinator, request);
 	}
 
 	async refreshParent(

@@ -12,8 +12,10 @@ import type {
 	GitBinding,
 	GitCommitEvidence,
 	GitCommitRequest,
+	GitIntegrateReviewedChildRequest,
 	GitPushEvidence,
 	GitPushRequest,
+	GitReviewedChildIntegrationEvidence,
 } from "./git-adapter.ts";
 import type {
 	ClaimedWorkspace,
@@ -81,6 +83,10 @@ export interface ProductionWorkspaceAdapterPort {
 	claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace>;
 	commitIssueChanges(workspace: ClaimedWorkspace, request: GitCommitRequest): Promise<GitCommitEvidence>;
 	pushIssueBranch(workspace: ClaimedWorkspace, request: GitPushRequest): Promise<GitPushEvidence>;
+	integrateReviewedChild(
+		workspace: ClaimedWorkspace,
+		request: GitIntegrateReviewedChildRequest,
+	): Promise<GitReviewedChildIntegrationEvidence>;
 	captureHandoff(workspace: ClaimedWorkspace, verificationState: "pending" | "passed" | "failed"): Promise<WorkspaceHandoffEvidence>;
 	refreshParent(workspace: ClaimedWorkspace, request: ProductionParentRefreshRequest): Promise<ProductionParentRefreshEvidence>;
 	reconcileChildHead(
@@ -117,6 +123,14 @@ export interface ProductionImplementationRequest {
 	signal?: AbortSignal;
 }
 
+export interface ProductionReviewedChildIntegrationRequest {
+	parentBranch: string;
+	defaultBranch: string;
+	baseSha: string;
+	headSha: string;
+	effectKey: string;
+}
+
 export interface ProductionWorkspaceSession {
 	readonly binding: ProductionWorkspaceBinding;
 	implement(request: ProductionImplementationRequest): Promise<AgentSessionHandoff>;
@@ -124,6 +138,10 @@ export interface ProductionWorkspaceSession {
 	verify(signal?: AbortSignal): Promise<ProductionVerificationResult[]>;
 	commit(message: string, signal?: AbortSignal): Promise<GitCommitEvidence>;
 	push(signal?: AbortSignal): Promise<GitPushEvidence>;
+	integrateReviewedChild(
+		request: ProductionReviewedChildIntegrationRequest,
+		signal?: AbortSignal,
+	): Promise<GitReviewedChildIntegrationEvidence>;
 	captureHandoff(signal?: AbortSignal): Promise<WorkspaceHandoffEvidence>;
 	refreshParent(request: ProductionParentRefreshRequest, signal?: AbortSignal): Promise<ProductionParentRefreshEvidence>;
 	reconcileChildHead(
@@ -156,6 +174,7 @@ export class ProductionWorkspaceLifecycle {
 			|| typeof options.workspaceAdapter?.claim !== "function"
 			|| typeof options.workspaceAdapter?.commitIssueChanges !== "function"
 			|| typeof options.workspaceAdapter?.pushIssueBranch !== "function"
+			|| typeof options.workspaceAdapter?.integrateReviewedChild !== "function"
 			|| typeof options.workspaceAdapter?.captureHandoff !== "function"
 			|| typeof options.workspaceAdapter?.refreshParent !== "function"
 			|| typeof options.workspaceAdapter?.reconcileChildHead !== "function"
@@ -423,6 +442,32 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 				branch: this.#workspace.branch,
 				expectedHead: this.#workspace.head,
 				defaultBranch: this.#workspace.defaultBranch,
+			});
+			assertNotAborted(signal);
+			return evidence;
+		});
+	}
+
+	integrateReviewedChild(
+		request: ProductionReviewedChildIntegrationRequest,
+		signal?: AbortSignal,
+	): Promise<GitReviewedChildIntegrationEvidence> {
+		return this.#enqueue(async () => {
+			this.#assertVerified();
+			assertNotAborted(signal);
+			if (typeof request !== "object" || request === null
+				|| request.parentBranch !== this.#workspace.prBase
+				|| request.defaultBranch !== this.#workspace.defaultBranch
+				|| request.baseSha !== this.#workspace.baseHead
+				|| request.headSha !== this.#workspace.head
+				|| typeof request.effectKey !== "string" || !/^[0-9a-f]{64}$/.test(request.effectKey)) {
+				throw new LifecycleError("stale_parent", "reviewed integration request does not match the exact workspace");
+			}
+			const evidence = await this.#workspaceAdapter.integrateReviewedChild(this.#workspace, {
+				issue: this.#request.child.issue,
+				slug: this.#request.child.slug,
+				branch: this.#workspace.branch,
+				...request,
 			});
 			assertNotAborted(signal);
 			return evidence;

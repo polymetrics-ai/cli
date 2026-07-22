@@ -381,6 +381,31 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 		return { branch: this.#binding.branch, head: this.#binding.head, remoteName: "origin" as const };
 	}
 
+	async integrateReviewedChild(request: {
+		parentBranch: string;
+		defaultBranch: string;
+		baseSha: string;
+		headSha: string;
+		effectKey: string;
+	}) {
+		this.calls.push("git-integrate");
+		assert.equal(request.parentBranch, this.#binding.baseBranch);
+		assert.equal(request.defaultBranch, "main");
+		assert.equal(request.baseSha, this.#binding.baseHead);
+		assert.equal(request.headSha, this.#binding.head);
+		assert.match(request.effectKey, /^[0-9a-f]{64}$/u);
+		return {
+			schemaVersion: 1 as const,
+			authority: "git" as const,
+			parentBranch: request.parentBranch,
+			baseSha: request.baseSha,
+			headSha: request.headSha,
+			mergeCommitSha: SHA_B,
+			parentHead: SHA_B,
+			reused: false,
+		};
+	}
+
 	handoff() {
 		return {
 			issue: 501,
@@ -439,7 +464,7 @@ interface HarnessOptions {
 	findings?: IndependentReviewFinding[];
 	pullRequest?: Partial<GitHubPullRequestEvidence>;
 	integration?: ChildIntegrationDecision;
-	integrationBlockedOnce?: string;
+	integrationBlockedOnce?: Extract<ChildIntegrationDecision, { kind: "blocked" }>["blockers"][number];
 	childHeadMoveOnce?: boolean;
 	publicationTimeoutOnce?: boolean;
 	verificationFailures?: number;
@@ -477,8 +502,9 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 			}
 			return published;
 		},
-		async integrateChild(value, child, handoff) {
+		async integrateChild(value, child, handoff, mutate) {
 			calls.push("integrate");
+			if (handoff.verificationState !== "passed") throw new Error("test integration requires passed handoff");
 			if (integrationBlockPending !== undefined) {
 				const blocker = integrationBlockPending;
 				integrationBlockPending = undefined;
@@ -490,6 +516,19 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 			}
 			if (options.integration !== undefined) return options.integration;
 			const evidence = pullRequestEvidence(value, child, handoff);
+			await mutate({
+				repository: value.repository,
+				childId: child.id,
+				pullRequest: evidence.number,
+				generation: value.generation,
+				marker: child.markers.pullRequest,
+				parentBranch: value.parentBranch,
+				parentBaseBranch: value.parentBaseBranch,
+				baseSha: handoff.baseHead,
+				headSha: handoff.head,
+				idempotencyKey: "integration-501",
+				intentDigest: DIGEST,
+			});
 			receipt = integrationReceipt(value, child, evidence);
 			currentParentHead = SHA_B;
 			return { kind: "integrated", receipt, reused: false };
@@ -684,7 +723,7 @@ test("composes every child stage into exact durable checkpoints and never merges
 	assert.deepEqual(h.calls, [
 		"parent-head", "workspace", "implement", "verify", "commit", "push", "handoff",
 		"plan", "issue", "pull-request", "handoff", "review", "handoff", "parent-head",
-		"integrate", "parent-head",
+		"integrate", "git-integrate", "parent-head",
 	]);
 	assert.equal(h.calls.some((call) => /merge.*main|main.*merge/iu.test(call)), false);
 	assert.equal(await h.pipeline.find({
