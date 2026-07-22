@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "phase": "479-shepherd-production-matrix",
-  "status": "merge_readiness_closure_in_progress",
-  "checkpoint": "ci_gate_red_captured",
+  "status": "waiting_external_ci_and_exact_head_review",
+  "checkpoint": "complete_suite_ci_gate_configured",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
-  "verificationTestHead": "78708cbef64b33e54ed32078bf2a107d81126236",
+  "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
   "matrix": {
     "pass": 17,
     "open": 0
@@ -24,7 +24,7 @@
     "strictProductionTypeScript": "pass",
     "offlinePiRpc": "pass",
     "reviewDisposition": "exact_head_review_pending",
-    "ciCompleteInventory": "pending"
+    "ciCompleteInventory": "configured_remote_run_pending"
   },
   "manualGsdFallback": true,
   "reviewRoundsAllowed": 1,
@@ -32,6 +32,8 @@
   "orchestrationDecision": "local_critical_path",
   "remainingExternalGates": [
     "fresh_ci_outside_managed_sandbox",
+    "codex_xhigh_exact_head_review",
+    "child_push_and_pr",
     "human_parent_integration"
   ]
 }

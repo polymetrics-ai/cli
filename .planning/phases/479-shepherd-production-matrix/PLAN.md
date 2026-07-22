@@ -145,9 +145,9 @@ reopening implementation hardening:
 
 13. [x] Re-run the complete Shepherd inventory at exact head and classify the managed-sandbox
     `/bin/ps` failures without treating blocked assertions as passes.
-14. [ ] Add a least-privilege GitHub Actions gate that runs the complete sequential Shepherd
+14. [x] Add a least-privilege GitHub Actions gate that runs the complete sequential Shepherd
     inventory on ordinary infrastructure with pinned Node 24.13.1 and no secrets.
-15. [ ] Repair committed diff hygiene, add the production-matrix summary, and reconcile final-head
+15. [x] Repair committed diff hygiene, add the production-matrix summary, and reconcile final-head
     planning evidence.
 16. [ ] Obtain one bounded Codex 5.6 Sol xhigh exact-head review, then push the child branch and open
     its PR against `feat/471-pi-agent-session-shepherd` if GitHub connectivity permits.
@@ -156,6 +156,12 @@ This cycle uses `local_critical_path`: the files are a tightly coupled issue-#47
 while the parent issue orchestrator remains the read-only topology and integration owner. It does not
 authorize a parent/default-branch merge. The repo-local GSD adapter passed `scripts/gsd doctor`, but
 still did not expose `programming-loop`; the manual-GSD fallback therefore remains explicit.
+
+At implementation checkpoint `307ea409648e2f293c8a48cc957ffc312cc44542`, workflow structure,
+strict production TypeScript, pinned offline Pi registration, GSD/TDD evidence validation, and
+branch-range/worktree diff hygiene pass. The complete local inventory remains 1,647 pass, 64 blocked
+at the managed sandbox's `/bin/ps` spawn boundary, and one skipped; the workflow's first remote run
+is therefore still a required external GREEN gate.
 
 ## Proportional verification commands
 

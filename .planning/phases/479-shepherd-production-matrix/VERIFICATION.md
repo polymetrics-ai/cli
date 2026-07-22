@@ -6,9 +6,10 @@
 
 The original 17-row implementation was frozen at `9169241531dc0f88710bcfc637a272dd379dec99`.
 The 2026-07-22 release-blocker correction is frozen at
-`78708cbef64b33e54ed32078bf2a107d81126236`; this later documentation checkpoint does not change
-production code. A bounded independent audit returned **PASS** for the four requested release paths
-after one correction pass and targeted cross-layer closure.
+`78708cbef64b33e54ed32078bf2a107d81126236`. The 2026-07-23 merge-readiness implementation
+checkpoint is `307ea409648e2f293c8a48cc957ffc312cc44542`; it adds CI and evidence only and does not
+change production code. A bounded independent audit returned **PASS** for the four requested release
+paths after one correction pass and targeted cross-layer closure.
 
 The historical GSD/TDD process gap remains recorded separately: the original implementation did
 not preserve behavior-level RED evidence for every row. The release-blocker correction has genuine
@@ -23,16 +24,29 @@ misreported as retroactive proof of the missing original RED checkpoints.
 | Release-blocker affected suite | **PASS — 767/767**, sequential, 0 failed, 0 skipped, at code head `78708cbe` |
 | Exact Git integration CAS | **PASS — 3/3**, including parent race, default alias, deterministic retry |
 | Generation-2 recovery | **PASS** — runtime 10/10, recovery 83/83, controller 34/34 |
-| Complete Shepherd inventory | Final correction-head rerun: 1,712 total, **1,647 pass, 64 fail, 1 skipped**, 117.8s. The same 64 baseline failures enter the file/Git/worktree lease path under the managed sandbox; 61 report `spawn EPERM` directly and three concurrency assertions observe zero successful leases after that blocked process-identity path. Fresh CI must rerun this gate outside the managed sandbox. |
+| Complete Shepherd inventory | Exact merge-readiness checkpoint rerun: 1,712 total, **1,647 pass, 64 fail, 1 skipped**, 93.6s. All 64 failures enter the file/Git/worktree lease path under the managed sandbox through `defaultProcessIdentity`; no independent product failure class appeared. Fresh CI must rerun this gate outside the managed sandbox. |
+| Complete-suite CI gate | **CONFIGURED; REMOTE GREEN PENDING** — `.github/workflows/shepherd.yml` uses read-only contents permission, exact Node 24.13.1, exact Pi 0.80.6, no secrets, and the complete sequential inventory command. |
 | Strict production TypeScript | **PASS** — 49 non-test Shepherd modules, TS 5.9.3, strict/no-emit, ES2024 + NodeNext, pinned Pi type roots |
 | Offline Pi registration | **PASS** — pinned Pi 0.80.6 RPC exposes `pm-shepherd` from the production extension |
 | Real command RPC | **PASS** — bare/help, invalid action, and read-only `status --issue 479`; no model, auth, or network call |
 | Plan/intake/docs | **PASS** — 4/4 bootstrap tests, including real `host_inspect` tool-policy compilation and real GitHub orchestration-plan construction; README matches generated-plan and parent-draft behavior |
-| Diff/worktree hygiene | **PASS** — `git diff --check`; worktree clean before the docs freeze |
+| Diff/worktree hygiene | **PASS** — branch-range and worktree `git diff --check`; six committed blank-EOF defects are repaired |
 | Independent release-blocker disposition | **PASS** — bounded final audit confirmed all four requested paths and their cross-layer contracts at `78708cbe` |
 
 The broad Go/connector gates are intentionally not part of this TypeScript/Pi sub-issue. They
 remain parent-head gates and do not substitute for Shepherd verification.
+
+## 2026-07-23 merge-readiness closure
+
+- RED proved that no workflow ran the complete Shepherd inventory, the production-matrix summary
+  was absent, and the child range failed diff hygiene in six files.
+- GREEN adds a path-scoped pull-request/main-push/workflow-dispatch CI job on an ordinary
+  GitHub-hosted runner. The only globally installed test runtime is the already-required exact Pi
+  0.80.6 package; install scripts are disabled.
+- Local exact-head checks pass for workflow structure, strict TypeScript, offline Pi registration,
+  GSD/TDD evidence, and diff hygiene. The full local suite reproduces only the known managed-sandbox
+  `/bin/ps` block.
+- One bounded Codex 5.6 Sol xhigh exact-head review and the first remote CI result remain pending.
 
 ## 17-row production matrix
 
@@ -95,11 +109,12 @@ real planning tool-schema compilation. Exact RED/GREEN counts are recorded in `T
 
 ## Remaining external gates
 
-1. Fresh CI must run the complete Shepherd suite where the process-identity/Git/worktree commands
-   are permitted; the managed Codex sandbox blocks those 64 tests at `spawn EPERM` before their
-   assertions execute.
-2. Live GitHub mutation was not run because no designated sandbox repository was authorized. The
+1. Push the non-default child branch and run the new complete-suite CI gate where
+   process-identity/Git/worktree commands are permitted; the managed Codex sandbox blocks those 64
+   tests at `spawn EPERM` before their assertions execute.
+2. Obtain and record one bounded Codex 5.6 Sol xhigh review of the exact child head.
+3. Live GitHub mutation was not run because no designated sandbox repository was authorized. The
    typed transport and bare-remote CAS fixtures provide local evidence; a live sandbox smoke remains
    optional before parent integration.
-3. No branch was pushed and no parent/default-branch merge was performed. Parent integration stays
+4. No parent/default-branch merge was performed. Parent integration stays
    behind the repository's human gate.
