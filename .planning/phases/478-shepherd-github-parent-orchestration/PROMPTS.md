@@ -275,3 +275,27 @@ pinned offline RPC, base/scope/data/marker/report gates pass. The broad route re
 1011 total / 945 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip, so
 `verificationPassed` and `reviewCoveragePassed` stay false and the parent retains every external
 and human gate.
+
+## Cycle 12 consolidated-review prompt
+
+- Start from exact clean candidate `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`, tree
+  `4f9797b2343ddcbf6de5c1bab2816bcd7743f298`, immutable/exact merge base `3addb1f4`, and exact
+  21-path ownership. Read both Cycle 11 reports in full and implement their union without deferral.
+- Commit nine artifact-only PLAN updates before tests or production, then one executable RED with
+  all five production blobs frozen. Report PLAN/RED SHAs, exact counts, and blobs before GREEN.
+- On a valid request-mismatched begin, independently own requested durable reconciliation and the
+  observed foreign unsettled state from its own record/terminal proof. Keep key/stop truthful,
+  invoke no requested effect, and never corrupt foreign PR state.
+- Validate restart data as a total causal graph. Reverse-consume every authority, settlement,
+  ready/rollback receipt, recovery attempt, and current PR into exactly one prepared/decision/PR
+  history; reject orphans and globally duplicated/reversed mutation revisions. Validate every
+  `recovery_claimed` receipt/visibility window while preserving claim-before-effect without a
+  rollback receipt.
+- Fully redact bare-newline multiline quotes/backticks/substitutions and array/input-process/
+  output-process/brace composite tails for `=`/`+=`; five consumers remain generic and reflect no
+  marker.
+- Narrow evidence to exactly executed invariants. Keep both machine gates false while broad is
+  non-zero. Exclude Go/connectors/`make`, services, dependencies, parent/main/#475, network/GitHub,
+  push, reviewers, ready, integration, merge, and human gates. Adapter is `manual_gsd_fallback`.
+
+Execution status: PLAN only. No Cycle 12 test or production edit has run.

@@ -1,10 +1,10 @@
 # Summary: #478
 
-Status: Cycle 11 local GREEN `e765e0d3` follows artifact PLAN `863bf94a` and executable RED
-`1b4aa6f1` against blocked candidate `3b39cfce`. Both Cycle 10 reports are consolidated and every
-named correction row passes locally. Verification remains false because the declared broad route
-has 65 unchanged managed-sandbox failures; fresh exact-head review coverage remains false. Earlier
-delivery status below is retained as historical context.
+Status: Cycle 11 exact evidence candidate `4f0e17df` is blocked by both independent reviews. Cycle
+12 is at its artifact-only PLAN checkpoint: both reports are consolidated into dual durable-begin
+ownership, a total restart-role graph, multiline/composite assignment redaction, and narrowly
+scoped evidence claims. No Cycle 12 test or production edit has run. Verification and review
+coverage remain false; earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -257,3 +257,25 @@ parses, marker confinement, and both Cycle 10 report replays pass. The serialize
 total / 945 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip, so
 `verificationPassed` remains false; `reviewCoveragePassed` is also false pending parent-owned fresh
 review. No network, publication, review, integration, ready, merge, or human-gate action has run.
+
+## Cycle 12 correction status
+
+Both Cycle 11 reviews block exact candidate `4f0e17df`. Their 399-line union is frozen in an
+artifact-first plan against the unchanged base, merge base, 21 paths, and five production blobs.
+A valid request-mismatched begin now requires two independent owners in the RED contract: the
+requested invocation must be authoritatively reconciled, while the observed foreign unsettled
+state must be adopted from its own durable record or closed by exact terminal proof. Neither the
+key nor stop may join until both settle; requested effects remain zero and foreign PR state may be
+changed only by its exact owned recovery.
+
+Restart validation is planned as a total reverse-consumed graph rather than a loop over prepared
+entries. Every authority, settlement, ready receipt, rollback receipt, recovery attempt, and
+current PR must belong to exactly one prepared/decision/PR history. Retained mutation revisions
+must be globally unique and causal. Four legitimate `recovery_claimed` pre/post-effect receipt/
+visibility windows remain explicit, including claim-before-effect without a rollback receipt.
+
+The assignment matrix covers both operators across multiline quotes/backticks/substitutions and
+top-level array/input-process/output-process/brace composites: 18 direct redactions plus 90
+generic/no-marker checks in the five consumers. Cycle 11 counts remain historical and are not
+evidence that these adjacent invariants pass. `verificationPassed` and `reviewCoveragePassed`
+remain false. No external or human gate is worker-owned.

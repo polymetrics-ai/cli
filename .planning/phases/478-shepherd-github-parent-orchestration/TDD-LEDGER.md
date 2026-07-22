@@ -548,3 +548,27 @@ candidate ancestry, exact merge base, full-range diff, exact 21 paths, three JSO
 marker confinement, and both complete Cycle 10 report replays pass. No standalone production
 refactor was necessary: GREEN already isolates the invocation tombstone and unified restart-history
 validators. Fresh exact-head review and all external/human gates remain parent-owned.
+
+## Cycle 12 consolidated-review RED ledger
+
+Frozen exact candidate/tree: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb` /
+`4f9797b2343ddcbf6de5c1bab2816bcd7743f298`; immutable base and exact merge base:
+`3addb1f48be1afe8b1e2b59b54247679d7293805`. Both Cycle 11 reviews were read completely (399
+lines). The retained 791 focused tests and one intentional live-sandbox skip remain mandatory.
+
+| ID | Minimum rows | RED contract | PLAN state |
+| --- | ---: | --- | --- |
+| C12-BEGIN | 6 | three valid foreign unsettled phases x two release orders retain separate requested/observed owners through terminal proof; zero requested effect, no foreign corruption, truthful key/stop join | planned |
+| C12-GRAPH-ORPHAN | 7 | orphan authority, settlement, ready, rollback, recovery, current-PR, and disconnected role-bundle cases reject unless reverse-consumed by exactly one prepared/decision/PR history | planned |
+| C12-GRAPH-SEQUENCE | 5 | retained mutation revisions are globally unique across role kinds/histories and causally ordered, with a non-regressing high-water mark | planned |
+| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed receipt/visibility windows plus one restart control decode; ten incoherent receipt, visibility, fence, and settlement variants reject | planned |
+| C12-ASSIGN | 108 | 18 direct `=`/`+=` multiline/composite redactions plus 90 generic/no-marker checks through five consumers | planned |
+| C12-ARTIFACT | 4 | leading evidence names only tested invariants and keeps machine verification/review false | planned |
+
+Frozen production blobs before RED: orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`,
+broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
+`058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
+`fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, and review router
+`4eadd5d96347950edcf51626a9d7069c1297a96d`. At this PLAN checkpoint no Cycle 12 test or
+production edit has run. One executable RED will record exact TAP failures and controls before any
+production blob may move.

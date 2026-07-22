@@ -1310,3 +1310,152 @@ report replays pass. The declared serialized route is honestly non-zero at 1011 
 verification true. Production changed only in the orchestrator (`158749ba`) and review router
 (`4eadd5d9`); broker, evidence, and human-decision blobs remain unchanged. No network/GitHub, push,
 reviewer, integration, ready, merge, or human-gate action ran.
+
+## Cycle 12 consolidated-review correction
+
+Frozen reviewed candidate: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb` (tree
+`4f9797b2343ddcbf6de5c1bab2816bcd7743f298`). Immutable base and exact merge base remain
+`3addb1f48be1afe8b1e2b59b54247679d7293805`; the worktree starts clean and the immutable-base range
+remains exactly the same 21 owned paths. Both complete Cycle 11 reports,
+`/tmp/478-REVIEW-CYCLE11-1.md` (277 lines) and `/tmp/478-REVIEW-CYCLE11-2.md` (122 lines), were read
+before this plan. Their complete union is one correction with no deferred finding: dual ownership
+after a valid request-mismatched durable begin, a total causal restart-role graph including every
+recovery-claimed window, complete multiline/composite assignment-tail redaction, and evidence
+claims narrowed to exactly the tested invariants.
+
+All five production blobs are frozen before RED:
+
+- orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`
+- decision broker `7be6785190176a8c15660fb180fc95c207b76d5b`
+- GitHub evidence `058ad1622249a9772ce9e03f7f83cc3bf28b464a`
+- human decision `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`
+- review router `4eadd5d96347950edcf51626a9d7069c1297a96d`
+
+The required routing, issue contract, GSD programming-loop skill/workflows, universal runtime
+policy, runtime/RLM reference, and project/PRD/prompt/profile artifacts were reread. This is a
+TypeScript-only Shepherd correction, so no Go skill applies. `scripts/gsd doctor` passes;
+`scripts/gsd prompt programming-loop init --phase 478-shepherd-github-parent-orchestration
+--dry-run` reports `unknown GSD command: programming-loop`, and the skill helper
+`scripts/programming-loop.mjs` is absent. Cycle 12 therefore records `manual_gsd_fallback`. One
+read-only explorer maps test/helper reuse while this worker alone owns the ordered artifact PLAN,
+one executable RED, coherent GREEN/refactor, and local evidence within the unchanged path set.
+
+### Cycle 12 dual begin-ownership matrix
+
+A successful `beginParentReady` return proves only that the call settled. It does not prove that
+the requested invocation was not durably retained, and a structurally valid mismatched state is
+not authority for the requested operation. The requested invocation and the observed foreign
+state therefore have distinct lifecycle owners and distinct terminal proofs.
+
+| Returned state / durable observation | Requested-invocation owner | Observed-state owner | Public, key, stop, and mutation rule |
+| --- | --- | --- | --- |
+| exact matching `ready_invoking` | current keyed commit owns compare/effect | same owner | continue once under fence 0 |
+| mismatched `ready_invoking` | tracked reconciliation rereads the requested durable coordinate until absence or exact terminal state | independently reread/adopt the returned invocation from its own durable coordinate, or prove it terminal/absent | return quarantined; requested effect count stays zero; key and stop include both settlements |
+| mismatched `ready_effect_applied` | same requested reconciliation; never infer absence from the foreign value | independently recover only the foreign authorization/mutation and exact applied revision | no requested effect; rollback may touch only the foreign owned effect; foreign PR/head/revision is otherwise preserved |
+| mismatched `recovery_claimed` | same requested reconciliation | join/resume the exact foreign recovery ID, fence, rollback intent, and durable record | never supersede with an unrelated fence; key/stop remain incomplete while either owner is held |
+| mismatched `ready_settled` or `draft_restored` | requested coordinate still needs an authoritative absence/terminal proof | validate the foreign terminal record without mutation | moved only after requested reconciliation joins; no foreign PR rewrite |
+| returned foreign value is not found at its own coordinate | requested reconciliation remains mandatory | exact authoritative absence/terminal proof closes the observation owner | moved/quarantined only after both proofs; an untrusted return alone never releases |
+| either owner cannot obtain terminal proof | owner remains tracked and same-key exclusion remains active | owner remains tracked | `stop()` is truthfully incomplete; no fabricated success or release |
+
+The RED fixture must durably retain the requested `ready_invoking` record while returning a valid
+foreign unsettled record on another exact coordinate. It exposes independent latches for requested
+and foreign cleanup. Before either latch is released, the public result is quarantined, compare/
+ready effect is zero, early stop is incomplete, and same-key reentry cannot overlap. Releasing one
+owner is insufficient. Final release must join both, leave requested authority terminal/absent,
+leave the foreign authority terminal/absent through its own fence, and preserve every PR field not
+owned by that exact recovery.
+
+### Cycle 12 total restart-role graph
+
+Restart validation consumes a bounded graph before any `Map`, backing store, broker, journal,
+authority, transport, or controller is constructed. The graph includes top-level
+`mutationRevision` and every prepared operation, decision, current PR, settlement, authority
+state, ready receipt, rollback receipt, and recovery-attempt entry.
+
+| Role / phase | Exactly-one ownership and visibility invariant | Receipt / sequence invariant |
+| --- | --- | --- |
+| prepared operation | owns one decision and exactly one current PR history; may own zero or one settlement and zero or one authority state according to its crash window | derives the only legal invocation, ready key, recovery ID, and rollback key |
+| settlement | reverse-consumed by exactly one prepared operation with identical plan/authorization/mutation identity and causally later consumed decision | `ready` requires ready-settled closure; `blocked` permits only a phase-coherent non-ready history |
+| authority state | reverse-consumed by exactly one prepared operation and current PR; orphan, ambiguous, wrong-key, or wrong-coordinate states reject | its phase determines the complete legal role/receipt set below |
+| ready receipt | reverse-consumed by exactly one authority/prepared history; no orphan receipt or cross-history key reuse | receipt value equals applied visibility; its positive mutation revision is globally unique |
+| rollback receipt | reverse-consumed by exactly one recovery authority/prepared history | receipt value equals restored visibility; revision is globally unique and later than its owned ready receipt when present |
+| recovery attempt | reverse-consumed by exactly one `recovery_claimed` or `draft_restored` authority with exact recovery ID and latest fence | no orphan/stale/foreign attempt; fence equals the authority attempt |
+| global mutation sequence | all retained ready and rollback receipt revisions are positive and pairwise unique across every history | each owned ready precedes rollback; high-water `mutationRevision` is at least the retained maximum and may be higher only because records were pruned |
+
+Phase closure is total, not prepared-loop inference:
+
+| Authority phase | Current PR visibility | Required roles | Forbidden roles |
+| --- | --- | --- | --- |
+| absent non-applied tombstone | exact original draft/revision | optional blocked settlement | authority, ready/rollback receipts, recovery attempt |
+| `ready_invoking` | exact original draft/revision | authority; optional blocked settlement | ready/rollback receipts and recovery attempt |
+| `ready_effect_applied` | exact non-draft applied revision/value | exact ready receipt; authority; optional blocked settlement | rollback receipt and recovery attempt |
+| `ready_settled` | exact non-draft applied revision/value | exact ready receipt, ready settlement, authority | rollback receipt and recovery attempt |
+| `recovery_claimed`, no rollback receipt, never applied | exact original draft/revision | authority, rollback intent, exact recovery attempt; optional blocked settlement | ready receipt and rollback receipt |
+| `recovery_claimed`, no rollback receipt, ready applied | exact non-draft applied value | authority, exact ready receipt, rollback intent, recovery attempt; optional blocked settlement | rollback receipt |
+| `recovery_claimed`, rollback receipt present, never applied | exact draft value in rollback receipt at original PR revision | authority, exact rollback receipt and recovery attempt; optional blocked settlement | ready receipt |
+| `recovery_claimed`, rollback receipt present, ready applied | exact restored draft value in rollback receipt | authority, exact ready and rollback receipts and recovery attempt; optional blocked settlement | any pre-effect visibility |
+| `draft_restored` | exact draft value in rollback receipt | authority, exact recovery attempt and rollback receipt; ready receipt iff `appliedRevision` is non-null; blocked settlement | missing receipt/attempt or non-draft visibility |
+
+The legitimate recovery-claim-before-effect states with no rollback receipt must survive JSON
+round-trip and reconstruction. Every other receipt/visibility combination, every orphan role, a
+role owned by zero or multiple prepared histories, duplicate mutation sequence revisions across
+independent histories, and reversed ready/rollback causality reject before role construction.
+
+### Cycle 12 assignment and evidence policies
+
+The bounded assignment scanner consumes CR/LF while a quoted, backtick, command/parameter
+substitution, array, process-substitution, or brace-composite value remains open. Top-level array
+`(...)`, input/output process substitution `<(...)`/`>(...)`, and brace composite `{...,...}` cannot expose a
+suffix after whitespace or comma. Unsupported or unterminated composite syntax conservatively
+redacts through its bounded line/field closure. For both `=` and `+=`, direct redactor assertions
+must remove the complete marker and each of the five owned consumers must reject with generic text
+containing neither marker nor credential name.
+
+Cycle 12 evidence names only demonstrated rows. It does not equate typed-conflict shape tests with
+all persistence proofs, does not call the Cycle 11 BEGIN or SNAPSHOT families complete, and does
+not claim verification or review coverage. Prior numeric counts remain historical. Current claims
+advance only after the exact Cycle 12 RED/GREEN rows and declared gates run.
+
+### Cycle 12 executable RED matrix
+
+| ID | Minimum rows | Required failing behavior before GREEN |
+| --- | ---: | --- |
+| C12-BEGIN | 6 | request-retained plus foreign `ready_invoking`, `ready_effect_applied`, and `recovery_claimed`, each in both owner-release orders, create two tracked owners; independent latches prove zero requested effect, no foreign corruption, same-key exclusion, early incomplete stop, and final dual join |
+| C12-GRAPH-ORPHAN | 7 | authority, settlement, ready receipt, rollback receipt, recovery attempt, current PR, and a disconnected role bundle with no exactly-one prepared/decision/PR owner reject before construction |
+| C12-GRAPH-SEQUENCE | 5 | ready/ready, ready/rollback, and rollback/rollback revisions cannot be reused across independent histories; owned rollback cannot precede ready; high-water cannot trail a retained receipt |
+| C12-GRAPH-CLAIM | 15 | four coherent recovery-claimed pre/post-effect controls survive JSON round-trip; ten named receipt/visibility/fence/settlement variants reject; one production-shaped claim-before-effect restart resumes the exact fence and joins idempotently |
+| C12-ASSIGN | 108 | two operators x nine multiline/composite forms prove 18 direct complete redactions plus 90 generic/no-marker consumer rejections across five validators |
+| C12-ARTIFACT | 4 | leading summary, verification, PR/handoff prose, and machine state describe Cycle 11 as review-blocked and Cycle 12 only at its actual PLAN/RED/GREEN checkpoint |
+
+The one executable RED changes only existing test files and these phase artifacts. All retained
+controls stay green, every new behavior leaf either fails for the named missing production
+contract or is a deliberate canonical control, and all five production blobs remain byte-exact
+through the RED commit.
+
+### Cycle 12 lifecycle and checkpoints
+
+1. Commit these nine artifact-only PLAN updates before any Cycle 12 test or production edit.
+2. Commit one complete executable RED for the full review union. Record exact TAP leaf/container
+   failures, canonical controls, strict TypeScript result, and all five frozen production blobs.
+3. Report PLAN and RED SHAs, exact counts, and frozen blobs to the parent before GREEN.
+4. Implement the smallest coherent dual-owner begin reconciliation, total restart graph, and
+   bounded assignment scanner. Refactor only after focused GREEN; never weaken a row.
+5. Run focused/targeted repeats, strict owned/all-production TypeScript, pinned offline RPC, broad
+   serialized classification, immutable-base/merge-base/full-diff/exact-21-path checks, three JSON
+   parses, marker confinement, and both Cycle 11 report replays.
+6. Keep `verificationPassed: false` while the declared broad route exits non-zero. Parent owns
+   publication, fresh exact-head reviews, integration, ready, merge, and every human gate.
+
+- [x] Both complete Cycle 11 reports read; candidate/tree/base/scope and frozen blobs confirmed.
+- [x] Required skill/contracts/runtime/project references read; doctor passed, unavailable adapter
+      and helper recorded as `manual_gsd_fallback`; read-only sidecar recorded.
+- [ ] Artifact-only Cycle 12 PLAN commit precedes all Cycle 12 tests and production edits.
+- [ ] One complete executable RED is committed with exact failures and frozen blobs.
+- [ ] PLAN/RED SHAs, counts, and frozen blobs are reported before GREEN.
+- [ ] Coherent GREEN/refactor and truthful local verification are recorded.
+- [ ] Fresh exact-head review and every publication/integration/human gate remain parent-owned.
+
+Current PLAN-checkpoint machine truth is `verificationPassed: false` and
+`reviewCoveragePassed: false`. No Cycle 12 test or production edit has run. No Go, connector,
+`make`, service, dependency, parent/main/#475, credential, network/GitHub, push, reviewer, ready,
+integration, merge, or human-gate action is in scope.

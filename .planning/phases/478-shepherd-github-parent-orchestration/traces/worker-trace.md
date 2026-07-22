@@ -508,3 +508,24 @@
   `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
   `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. `verificationPassed` and
   `reviewCoveragePassed` remain false; no external or human gate ran.
+
+## 2026-07-22 Cycle 12 plan
+
+- Started clean at reviewed Cycle 11 candidate `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`
+  (tree `4f9797b2`), immutable/exact merge base `3addb1f4`, and exact 21 paths. Read both complete
+  Cycle 11 reports (399 lines) before planning.
+- Reloaded required routing, issue contract, GSD programming-loop skill/workflows, universal
+  runtime policy, runtime/RLM reference, and project/PRD/prompt/profile artifacts. Doctor passed;
+  the adapter command remains unavailable and `scripts/programming-loop.mjs` is absent, so
+  `manual_gsd_fallback` is explicit. No Go skill applies to this TypeScript-only slice.
+- Spawned one read-only explorer for test/helper reuse; it owns no files or external state. This
+  worker owns the artifact PLAN, executable RED, GREEN/refactor, and local evidence.
+- Frozen production blobs: orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+  `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`, review router
+  `4eadd5d96347950edcf51626a9d7069c1297a96d`.
+- Froze dual requested/foreign begin ownership and total restart-role/phase matrices before code.
+  The same planned RED covers multiline/composite assignment tails and narrow evidence. No Cycle
+  12 test, production, network/GitHub, push, reviewer, ready, integration, merge, or human-gate
+  action ran. Verification and review coverage remain false.

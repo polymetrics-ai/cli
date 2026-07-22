@@ -260,3 +260,18 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - `verificationPassed` and `reviewCoveragePassed` remain false because the declared broad route is
   non-zero and no fresh exact-head review has run. Parent owns publication, reviews, integration,
   ready, merge, and human gates; this worker performs no network or external mutation
+
+## Cycle 12 consolidated-review correction (PLAN only; verification/review false)
+
+- both Cycle 11 reviews block exact `4f0e17df`; their complete union is planned without deferral
+- valid request-mismatched begin success requires separate requested reconciliation and observed-
+  foreign recovery/terminal proof, with zero requested effect and truthful key/stop ownership
+- restart validation becomes a total causal role graph: every authority/settlement/ready/rollback/
+  recovery/current-PR entry has exactly one prepared/decision/PR owner; mutation sequences are
+  globally unique; legitimate recovery-claim-before-effect without rollback receipt remains valid
+- `=`/`+=` multiline and composite shell values require complete direct redaction plus generic
+  no-marker rejection through all five consumers
+- Cycle 11 evidence claims are narrowed to their named rows. At this checkpoint no Cycle 12 test
+  or production edit has run; all five production blobs are frozen and both machine gates are false
+- exact 21-path scope is unchanged; no network, push, review, integration, ready, merge, or human
+  gate action is worker-owned

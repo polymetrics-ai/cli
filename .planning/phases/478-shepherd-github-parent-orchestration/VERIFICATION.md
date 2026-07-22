@@ -1,12 +1,31 @@
 # Verification: #478
 
-Status: Cycle 11 local GREEN `e765e0d31c426ecf201162509519fa03d460d871` follows artifact PLAN
-`863bf94ac6115fd0342db064555bd95f239f8854` and executable RED
-`1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21`. Both Cycle 10 reviews are consolidated and every
-named behavior row passes locally. `verificationPassed` is false because the declared broad route
-exits non-zero with 65 unchanged managed-sandbox failures. `reviewCoveragePassed` is false because
-no fresh exact-head Cycle 11 review has run. Earlier cycle gate sections below are historical
-evidence and do not supersede the current Cycle 11 contract.
+Status: both Cycle 11 reviews block exact candidate
+`4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`. Cycle 12 is at the artifact-only PLAN checkpoint;
+no Cycle 12 test or production edit has run. `verificationPassed` and `reviewCoveragePassed` remain
+false. Earlier cycle gate sections below are historical evidence and do not supersede the current
+Cycle 12 contract.
+
+## Cycle 12 verification contract
+
+- [x] Exact candidate/tree, immutable base/merge base, clean worktree, exact 21 paths, and five
+      frozen production blobs are recorded before RED.
+- [x] Both complete Cycle 11 reports are read and mapped without deferral to dual begin ownership,
+      total restart-role consumption, recovery-claimed windows, assignment tails, and evidence.
+- [x] Required skill/contracts/runtime/project artifacts are read; doctor passes and unavailable
+      adapter/helper records `manual_gsd_fallback`; TypeScript-only scope makes Go skills N/A.
+- [ ] Artifact-only Cycle 12 PLAN commit precedes every Cycle 12 test and production edit.
+- [ ] One executable RED records exact failures/controls with all five production blobs unchanged.
+- [ ] PLAN/RED SHAs, counts, and blobs are reported before GREEN.
+- [ ] Focused, strict owned/all-production TypeScript, offline RPC, broad serialized
+      classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
+- [x] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
+      reviewer, integration, merge, ready, or human-gate action is authorized.
+
+Planned RED rows are BEGIN 6, orphan-role 7, global-sequence 5, recovery-claimed 15, assignment
+108, and artifact 4. Canonical claim-window controls are counted separately from expected
+failures. Cycle 11 focused and broad counts remain historical; they do not close Cycle 12. Machine
+verification and review coverage remain false.
 
 ## Cycle 11 verification contract
 

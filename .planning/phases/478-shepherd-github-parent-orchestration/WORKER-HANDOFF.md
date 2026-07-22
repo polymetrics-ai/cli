@@ -16,12 +16,11 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Prior frozen reviewed candidate: `3b39cfce9b4a99940b0451302df6bf5c17b49c02`
+Prior frozen reviewed candidate: `4f0e17df4a241f120e5991d8a7d501d1e8fbfebb`
 
-Cycle 11 status: artifact PLAN `863bf94a`, complete executable RED `1b4aa6f1`, and coherent local
-GREEN `e765e0d3` are captured; both Cycle 10 reviews are blocked and consolidated. Focused and
-strict gates pass, but the broad route remains non-zero and no fresh exact-head review has run, so
-this is not a review-clean or verification-passing candidate.
+Cycle 12 status: both Cycle 11 reviews block the exact candidate and are consolidated in the
+artifact-only PLAN. No Cycle 12 test or production edit has run. Verification/review remain false,
+the broad route remains historically non-zero, and this is not a review-clean candidate.
 
 ## Scope Delivered
 
@@ -427,3 +426,22 @@ session-attestation contract and fixtures required to verify independent-review 
   tombstone and restart-history validators.
 - No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push, reviewer,
   integration, ready, merge, or human-gate action ran.
+
+## Cycle 12 correction handoff
+
+- Frozen candidate/tree/base: `4f0e17df` / `4f9797b2` / `3addb1f4`; exact 21 paths, clean start,
+  both Cycle 11 reports read completely, all five production blobs frozen.
+- A valid request-mismatched begin must retain two owners: reconcile the requested invocation from
+  its authoritative durable coordinate and independently adopt/close the observed foreign state.
+  Stop/key join only after both terminal proofs; requested effect stays zero and foreign PR state
+  is not corrupted.
+- Restart input is one total graph. Every settlement, authority, ready receipt, rollback receipt,
+  recovery attempt, and current PR is reverse-consumed by exactly one prepared/decision/PR
+  history. Mutation sequence revisions are globally unique and causal. Recovery-claimed before
+  effect without a rollback receipt remains a valid reconstructible state.
+- Both `=` and `+=` multiline quote/backtick/substitution and array/input-process/output-process/
+  brace composite values must redact their full marker directly and reject generically through all
+  five consumers.
+- Evidence claims are narrowed to named test rows. Cycle 11 counts are historical. Machine
+  verification/review stay false; publication, review, integration, ready, merge, and every human
+  gate remain parent-owned.
