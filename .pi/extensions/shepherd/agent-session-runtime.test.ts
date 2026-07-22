@@ -6584,3 +6584,371 @@ test("cycle 15 post-create validation rejects prototype callbacks and barriers e
 	}
 	assert.deepEqual(problems, []);
 });
+
+test("cycle 16 punctuation-bearing assignments fail closed and preserve later siblings through every shared consumer", async () => {
+	const markers = [
+		"C16PHL",
+		"C16PCL",
+		"C16PQL",
+		"C16PHF",
+		"C16PHS",
+		"C16PQF",
+		"C16PQS",
+	];
+	const publicControls = [
+		"api.key.version: C16PPA",
+		"private.key.algorithm: C16PPK",
+		"database.url.scheme: C16PPD",
+	];
+	const payload = [
+		...publicControls,
+		`custom#alias: ${markers[0]}`,
+		`custom,alias: ${markers[1]}`,
+		`custom"alias: ${markers[2]}`,
+		`{ custom#alias: ${markers[3]}, "client_secret": ${markers[4]}, safe: retained }`,
+		`{ custom"alias: ${markers[5]}, "client_secret": ${markers[6]}, enabled: true }`,
+	].join("\n");
+	assert.ok(payload.length <= 512, "cycle 16 punctuation payload exceeds the shared reference bound");
+	const outputs = await cycle14ConsumerOutputs("cycle16-punctuation", payload);
+	const problems: string[] = [];
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		const leaks = leakedMarkers(rendered, markers);
+		if (leaks.length > 0) problems.push(`${consumer}:leaks-${leaks.join(",")}`);
+		for (const control of publicControls) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 16 malformed quoted values resynchronize quoted siblings across line flow and quote styles", async () => {
+	const markers = [
+		"C16_MALFORMED_DOUBLE_LINE",
+		"C16_MALFORMED_DOUBLE_SIBLING",
+		"C16_MALFORMED_SINGLE_LINE",
+		"C16_MALFORMED_SINGLE_SIBLING",
+		"C16_MALFORMED_DOUBLE_FLOW",
+		"C16_MALFORMED_DOUBLE_FLOW_SIBLING",
+		"C16_MALFORMED_SINGLE_FLOW",
+		"C16_MALFORMED_SINGLE_FLOW_SIBLING",
+	];
+	const publicControls = [
+		"api.key.version: C16_QUOTE_PUBLIC_API",
+		"private.key.algorithm: C16_QUOTE_PUBLIC_ALGORITHM",
+	];
+	const payload = [
+		...publicControls,
+		`custom.alias: "${markers[0]}`,
+		`"client_secret": "${markers[1]}"`,
+		`custom.alias: '${markers[2]}`,
+		`'client_secret': '${markers[3]}'`,
+		`{ custom.alias: "${markers[4]}, "client_secret": "${markers[5]}", safe: retained }`,
+		`{ custom.alias: '${markers[6]}, 'client_secret': '${markers[7]}', enabled: true }`,
+	].join("\n");
+	const outputs = await cycle14ConsumerOutputs("cycle16-malformed-quotes", payload);
+	const problems: string[] = [];
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		const leaks = leakedMarkers(rendered, markers);
+		if (leaks.length > 0) problems.push(`${consumer}:leaks-${leaks.join(",")}`);
+		for (const control of publicControls) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 16 assignment lexer is one-pass monotonic across dense openers malformed flows and terminal siblings", () => {
+	type Cycle16ScanMetrics = {
+		sourceLength: number;
+		cursorAdvances: number;
+		cursorRegressions: number;
+		maxMainCursorVisits: number;
+		keyCharacterVisits: number;
+		boundaryCharacterVisits: number;
+		totalWork: number;
+		lineBoundaryVisits: number;
+		keyStartVisits: number;
+		totalCharacterVisits: number;
+	};
+	const instrumented = redactSensitiveText as unknown as (
+		value: string,
+		metrics: Cycle16ScanMetrics,
+	) => string;
+	const sizes = [25, 50, 100].map((kib) => kib * 1024);
+	const problems: string[] = [];
+	for (const size of sizes) {
+		const marker = `C16_MONOTONIC_UNKNOWN_${size}`;
+		const sibling = `C16_MONOTONIC_LATER_${size}`;
+		const suffix = ` opaque#alias: ${marker}, "client_secret": ${sibling} }\nsafe: retained`;
+		const sample = `${"{".repeat(Math.max(1, size - suffix.length))}${suffix}`;
+		let legacyVisits = 0;
+		const metrics = {
+			sourceLength: 0,
+			cursorAdvances: 0,
+			cursorRegressions: 0,
+			maxMainCursorVisits: 0,
+			keyCharacterVisits: 0,
+			boundaryCharacterVisits: 0,
+			totalWork: 0,
+			lineBoundaryVisits: 0,
+			keyStartVisits: 0,
+		} as Omit<Cycle16ScanMetrics, "totalCharacterVisits"> & Partial<Pick<Cycle16ScanMetrics, "totalCharacterVisits">>;
+		Object.defineProperty(metrics, "totalCharacterVisits", {
+			configurable: true,
+			enumerable: true,
+			get() { return legacyVisits; },
+			set(value: number) {
+				legacyVisits = value;
+				if (value > (8 * sample.length) + 64) throw new Error("cycle 16 scanner work ceiling exceeded");
+			},
+		});
+		let rendered = "";
+		try {
+			rendered = instrumented(sample, metrics as Cycle16ScanMetrics);
+		} catch (error) {
+			problems.push(`${size}:threw-${error instanceof Error ? error.message : String(error)}`);
+		}
+		const exact = metrics as Cycle16ScanMetrics;
+		if (exact.sourceLength !== sample.length) problems.push(`${size}:source-length-${exact.sourceLength}`);
+		if (exact.cursorRegressions !== 0) problems.push(`${size}:regressions-${exact.cursorRegressions}`);
+		if (exact.maxMainCursorVisits > 1 || exact.maxMainCursorVisits < 1) {
+			problems.push(`${size}:main-visits-${exact.maxMainCursorVisits}`);
+		}
+		if (exact.cursorAdvances < 1 || exact.cursorAdvances > sample.length) {
+			problems.push(`${size}:advances-${exact.cursorAdvances}`);
+		}
+		if (exact.totalWork < 1 || exact.totalWork > (8 * sample.length) + 64) {
+			problems.push(`${size}:work-${exact.totalWork}`);
+		}
+		if (leakedMarkers(rendered, [marker, sibling]).length > 0) problems.push(`${size}:marker-leak`);
+		if (rendered && !rendered.includes("safe: retained")) problems.push(`${size}:public-control-changed`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 16 finite public scalar grammar remains byte-identical while adjacent assignments fail closed", async () => {
+	const publicControls = [
+		"https://public.example/path?mode=retained&api=1",
+		"12:34:56Z",
+		"2026-07-22T12:34:56+05:30",
+		'"https://quoted.example/path?x=1&enabled=true"',
+		"'12:34:56'",
+	];
+	const markers = ["C16_FIDELITY_UNKNOWN", "C16_FIDELITY_SECRET"];
+	const payload = [
+		...publicControls,
+		`opaque_alias: ${markers[0]}`,
+		`client_secret: ${markers[1]}`,
+	].join("\n");
+	const outputs = await cycle14ConsumerOutputs("cycle16-public-scalars", payload);
+	const problems: string[] = [];
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		const leaks = leakedMarkers(rendered, markers);
+		if (leaks.length > 0) problems.push(`${consumer}:leaks-${leaks.join(",")}`);
+		for (const control of publicControls) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:changed-${control}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 16 schema captures avoid every whole-key primitive across creation request event and handoff boundaries", async () => {
+	type InstrumentedPrimitive =
+		| "Reflect.ownKeys"
+		| "Object.keys"
+		| "Object.getOwnPropertyNames"
+		| "Object.getOwnPropertySymbols"
+		| "Object.getOwnPropertyDescriptors"
+		| "Object.values"
+		| "Object.entries";
+	type CaptureBoundary = "creation" | "request" | "event" | "handoff";
+	const primitives = [
+		"Reflect.ownKeys",
+		"Object.keys",
+		"Object.getOwnPropertyNames",
+		"Object.getOwnPropertySymbols",
+		"Object.getOwnPropertyDescriptors",
+		"Object.values",
+		"Object.entries",
+	] as const satisfies readonly InstrumentedPrimitive[];
+	const calls = Object.fromEntries(primitives.map((name) => [name, 0])) as Record<InstrumentedPrimitive, number>;
+	const boundaryCalls: Record<CaptureBoundary, number> = { creation: 0, request: 0, event: 0, handoff: 0 };
+	const tagged = new WeakMap<object, CaptureBoundary>();
+	let peerReads = 0;
+	const originalDescriptor = Object.getOwnPropertyDescriptor;
+	const primitiveSlots = [
+		[Reflect, "ownKeys", "Reflect.ownKeys"],
+		[Object, "keys", "Object.keys"],
+		[Object, "getOwnPropertyNames", "Object.getOwnPropertyNames"],
+		[Object, "getOwnPropertySymbols", "Object.getOwnPropertySymbols"],
+		[Object, "getOwnPropertyDescriptors", "Object.getOwnPropertyDescriptors"],
+		[Object, "values", "Object.values"],
+		[Object, "entries", "Object.entries"],
+	] as const;
+	const originals = primitiveSlots.map(([owner, property]) => ({
+		owner,
+		property,
+		descriptor: originalDescriptor(owner, property)!,
+	}));
+	const boundaryFor = (value: unknown): CaptureBoundary | undefined => {
+		if (!value || (typeof value !== "object" && typeof value !== "function")) return undefined;
+		const object = value as object;
+		const explicit = tagged.get(object);
+		if (explicit) return explicit;
+		const type = originalDescriptor(object, "type");
+		if (type && "value" in type && typeof type.value === "string") return "event";
+		const schema = originalDescriptor(object, "schemaVersion");
+		const runId = originalDescriptor(object, "runId");
+		if (schema && "value" in schema && schema.value === 1 && runId && "value" in runId) return "handoff";
+		return undefined;
+	};
+	for (const [owner, property, label] of primitiveSlots) {
+		const descriptor = originalDescriptor(owner, property)!;
+		const original = descriptor.value as (...args: unknown[]) => unknown;
+		Object.defineProperty(owner, property, {
+			...descriptor,
+			value: function (target: unknown, ...args: unknown[]): unknown {
+				const boundary = boundaryFor(target);
+				if (boundary) {
+					calls[label] += 1;
+					boundaryCalls[boundary] += 1;
+				}
+				return Reflect.apply(original, this, [target, ...args]);
+			},
+		});
+	}
+	const addHiddenPeers = (target: object, boundary: CaptureBoundary): void => {
+		tagged.set(target, boundary);
+		for (let index = 0; index < 4_096; index += 1) {
+			Object.defineProperty(target, `cycle16_hidden_${index}`, {
+				configurable: true,
+				enumerable: false,
+				get() { peerReads += 1; return index; },
+			});
+		}
+		for (let index = 0; index < 16; index += 1) {
+			Object.defineProperty(target, Symbol(`cycle16_hidden_${index}`), {
+				configurable: true,
+				enumerable: index % 2 === 0,
+				get() { peerReads += 1; return index; },
+			});
+		}
+	};
+	let runStatus = "missing";
+	let closeStatus = "missing";
+	try {
+		const moduleUrl = pathToFileURL(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"));
+		moduleUrl.searchParams.set("cycle16Capture", `${Date.now()}-${Math.random()}`);
+		const dynamicModule = await import(moduleUrl.href) as typeof import("./agent-session-runtime.ts");
+		const sdk = new FakeSdk();
+		const originalCreate = sdk.createAgentSession.bind(sdk);
+		sdk.createAgentSession = (async (options: CreateAgentSessionOptions) => {
+			const created = await originalCreate(options);
+			addHiddenPeers(created, "creation");
+			addHiddenPeers(created.extensionsResult, "creation");
+			addHiddenPeers(created.extensionsResult.extensions, "creation");
+			addHiddenPeers(created.extensionsResult.errors, "creation");
+			return created;
+		}) as typeof sdk.createAgentSession;
+		const dynamicRuntime = new dynamicModule.ShepherdAgentSessionRuntime(sdk, { cleanupTimeoutMs: 40 });
+		const req = request({
+			binding: {
+				...request().binding,
+				runId: "cycle16-whole-key-capture",
+				laneId: "cycle16-whole-key-capture",
+			},
+		});
+		addHiddenPeers(req, "request");
+		sdk.session.output = handoffFor(req);
+		runStatus = (await observeSettlement(dynamicRuntime.run(req), 500)).status;
+		closeStatus = (await observeSettlement(dynamicRuntime.close(), 300)).status;
+	} finally {
+		for (const { owner, property, descriptor } of originals) Object.defineProperty(owner, property, descriptor);
+	}
+	assert.deepEqual({ calls, boundaryCalls, peerReads, runStatus, closeStatus }, {
+		calls: Object.fromEntries(primitives.map((name) => [name, 0])),
+		boundaryCalls: { creation: 0, request: 0, event: 0, handoff: 0 },
+		peerReads: 0,
+		runStatus: "resolved",
+		closeStatus: "resolved",
+	});
+});
+
+test("cycle 16 prompt settlement is owned before synchronous abort close and shutdown barriers", async () => {
+	type Control = "abort" | "close" | "shutdown";
+	type PromptResult = "native-rejection" | "thenable-rejection" | "synchronous-throw";
+	const controls = ["abort", "close", "shutdown"] as const satisfies readonly Control[];
+	const promptResults = [
+		"native-rejection",
+		"thenable-rejection",
+		"synchronous-throw",
+	] as const satisfies readonly PromptResult[];
+	const problems: string[] = [];
+	const unhandled: unknown[] = [];
+	const originalEmit = process.emit;
+	process.emit = ((event: string | symbol, ...args: unknown[]) => {
+		if (event === "unhandledRejection") {
+			unhandled.push(args[0]);
+			return true;
+		}
+		return Reflect.apply(originalEmit, process, [event, ...args]);
+	}) as typeof process.emit;
+	try {
+		for (const control of controls) {
+			for (const promptResult of promptResults) {
+				const sdk = new FakeSdk();
+				const harness = runtime(sdk, { cleanupTimeoutMs: 40 });
+				const req = request({
+					timeoutMs: 60_000,
+					binding: {
+						...request().binding,
+						runId: `cycle16-prompt-${control}-${promptResult}`,
+						laneId: `cycle16-prompt-${control}-${promptResult}`,
+					},
+				});
+				let controlPromise: Promise<void> | undefined;
+				const rejection = new Error(`cycle16 prompt ${control} ${promptResult}`);
+				sdk.session.prompt = ((prompt: string, options: { expandPromptTemplates: false; source: "extension" }) => {
+					sdk.session.promptCalls += 1;
+					sdk.session.lastPrompt = prompt;
+					assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
+					controlPromise = control === "abort"
+						? harness.runtime.abort(req.binding.runId)
+						: control === "close" ? harness.runtime.close() : harness.runtime.shutdown();
+					if (promptResult === "synchronous-throw") throw rejection;
+					if (promptResult === "native-rejection") return Promise.reject(rejection);
+					return {
+						then(_resolve: (value?: void) => void, reject: (reason: unknown) => void): void {
+							queueMicrotask(() => reject(rejection));
+						},
+					} as unknown as Promise<void>;
+				}) as RuntimeAgentSession["prompt"];
+				const controller = new AbortController();
+				const timers = captureLongTimers();
+				try {
+					const outcome = await observeSettlement(harness.runtime.run({ ...req, signal: controller.signal }), 600);
+					const controlOutcome = controlPromise
+						? await observeSettlement(controlPromise, 600)
+						: { status: "missing" as const };
+					await new Promise<void>((resolve) => setImmediate(resolve));
+					await new Promise<void>((resolve) => setImmediate(resolve));
+					const label = `${control}:${promptResult}`;
+					if (outcome.status !== "rejected") problems.push(`${label}:run-${outcome.status}`);
+					if (controlOutcome.status !== "resolved") problems.push(`${label}:control-${controlOutcome.status}`);
+					if (sdk.session.promptCalls !== 1) problems.push(`${label}:prompt-${sdk.session.promptCalls}`);
+					if (sdk.session.abortCalls !== 1) problems.push(`${label}:abort-${sdk.session.abortCalls}`);
+					if (sdk.session.waitCalls !== 1) problems.push(`${label}:wait-${sdk.session.waitCalls}`);
+					if (sdk.session.disposeCalls !== 1) problems.push(`${label}:dispose-${sdk.session.disposeCalls}`);
+					if (sdk.session.listeners.size !== 0) problems.push(`${label}:listeners-${sdk.session.listeners.size}`);
+					if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`${label}:signal-listener`);
+					if (timers.referenced() !== 0) problems.push(`${label}:timers-${timers.referenced()}`);
+				} finally {
+					timers.restoreAndClear();
+				}
+			}
+		}
+	} finally {
+		process.emit = originalEmit;
+	}
+	assert.deepEqual({ problems, unhandled: unhandled.length }, { problems: [], unhandled: 0 });
+});
