@@ -105,7 +105,7 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 }
 
 func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
-	for _, flag := range []string{"--plan=", "--approve=", "--confirm="} {
+	for _, flag := range []string{"--plan=", "--approve=", "--confirm=", "--plan", "--approve", "--confirm"} {
 		t.Run(flag, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := cli.Run([]string{"github", "issue", "create", flag}, &stdout, &stderr)

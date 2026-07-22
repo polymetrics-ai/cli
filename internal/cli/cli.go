@@ -800,7 +800,11 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 
 func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
 	for _, name := range []string{"plan", "approve", "confirm"} {
-		if _, ok := flags.values[name]; ok && strings.TrimSpace(flags.first(name)) == "" {
+		if _, ok := flags.values[name]; !ok {
+			continue
+		}
+		value := strings.TrimSpace(flags.first(name))
+		if value == "" || value == "true" {
 			return usageErrorf("--%s requires a value", name)
 		}
 	}
