@@ -82,3 +82,29 @@ network, credential, service, model, or external state was modified.
    handoff summary/finding/verification, and policy/runtime public errors. Qualified controls such
    as `api.key.version`, `private.key.algorithm`, and `database.url.scheme` expose the fuzzy
    ancestor-matching defect without weakening their paired terminal-secret cases.
+
+## Cycle 15 Boundary-Map Appendix
+
+Assignment: read-only consolidation of every unique blocker in the two complete Cycle 14 reports
+against frozen candidate `f41cde91`, with exact scanner and post-create Pi seams. No file, test,
+network, credential, service, model, or external state was modified.
+
+1. Quoted unknown keys already classify as `unknown-sensitive`, but `quotedValueRedaction` routes
+   them through the authorization parser. A quoted multi-component value can therefore return no
+   range. Unknown-sensitive quoted, scalar, and block values must always use whole-value redaction.
+2. Assignment recognition repeats a short ASCII/64-character grammar. Unsupported, spaced,
+   extended, overlong, or malformed candidates collapse to “not assignment”; flow lookahead then
+   fails to open a frame and can expose later protected siblings. Replace this with a total
+   `none | public-certain | protected-certain | opaque-uncertain` result and monotonic resume cursor.
+3. `captureCreatedSession` batches nested validation behind one barrier. Three `for...in` loops in
+   result, empty-array, and active-tool validation traverse Proxy prototypes before the trailing
+   lifecycle check. Decode only approved direct prototypes and own data descriptors/canonical
+   indexes, with every unavoidable Pi callback followed immediately by the execution barrier.
+4. Cleanup ownership remains first: capture the own session descriptor and mandatory operations
+   before optional DTO validation. Split creation-result decoding, extension-result decoding,
+   active-tool invocation/array decoding, subscription/unsubscriber capture, and prompt into
+   distinct callback/barrier or callback-free decode steps so cancellation stops later effects.
+5. Retain 134 rows and add exactly three aggregate RED rows: whole quoted unknown redaction through
+   every shared consumer; uncertain key/cutoff/flow recovery with public controls and bounded work;
+   and prototype-safe post-create decoding plus immediate lifecycle barriers. Expected frozen-head
+   result is 137 executed, 134 retained passes, and exactly three intended failures.

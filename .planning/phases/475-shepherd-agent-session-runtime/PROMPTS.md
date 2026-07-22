@@ -377,3 +377,25 @@
   preserved.
 - No push, network, GitHub, live model/auth, credential, service, Go/connectors, `make`, main,
   parent, #478, or #479 mutation.
+
+## Consolidated Stable-Head Correction Cycle 15 Snapshot
+
+- Frozen blocked start: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; same exact 20 issue paths.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE14-1.md` and
+  `/tmp/475-REVIEW-CYCLE14-2.md`; all three unique blockers are accepted together.
+- Objective: make unknown/uncertain assignments whole-value default-deny across quotes, cutoffs,
+  malformed/extended keys, flows, later siblings, and every shared consumer; replace post-create
+  prototype-chain enumeration/batched validation with approved-prototype own-descriptor capture and
+  an immediate closure-aware barrier after every unavoidable Pi callback.
+- Method: required manual-GSD artifact PLAN -> exactly three top-level test-only RED rows -> one
+  cohesive GREEN across scanner/runtime -> REFACTOR -> exact evidence. Production stays frozen
+  through RED and no family freezes separately.
+- Baseline: focused 134/134; focused strict TypeScript passes; exact production blobs recorded in
+  PLAN/TDD. Execution decision `read_only_spawned`; one no-write explorer is advisory and the issue
+  worker owns every mutation.
+- Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `PRD-COVERAGE.md`, `REVIEW.md`, `PROMPTS.md`,
+  `RUN-STATE.json`, `AGENTS.md`, existing agent/trace appendices, tests, cohesive production, then
+  `SUMMARY.md` and `VERIFICATION.md` exact evidence.
+- No self-review/integration, push, network, GitHub, live model/auth, credential, service,
+  Go/connectors, `make`, main, parent, #478, or #479 mutation.

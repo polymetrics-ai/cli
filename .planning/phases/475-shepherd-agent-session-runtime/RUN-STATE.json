@@ -6,8 +6,8 @@
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_14_summary",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_15_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -368,15 +368,20 @@
       "cycle": "correction_cycle_14_summary",
       "decision": "local_critical_path",
       "reason": "Both Cycle 13 reports were re-read after implementation and their complete three-family union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_15_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer consolidates both Cycle 14 exact-head reports into a scanner/runtime seam map while this isolated issue worker retains the sole PLAN, comprehensive test-only RED, cohesive GREEN, REFACTOR, verification, and commit path."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_14_green_refactor_134_passed_0_failed_skipped_cancelled_todo_including_actual_pinned_no_tool_one_tool_sessions",
-    "fullShepherdTests": "cycle_14_environment_blocked_271_executed_240_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_197_passed_0_failed_skipped_cancelled_todo",
-    "strictTypeScriptPi0806": "cycle_14_passed_focused_source_tests_and_all_12_production_files_typescript_5_9_3_explicit_pi_0_80_6_roots",
-    "offlineRpcSmoke": "cycle_14_passed_explicit_pi_0_80_6_rpc_registration_and_retained_actual_no_tool_one_tool_whole_session_rows",
-    "diffCheck": "cycle_14_passed_after_refactor_27c07eec_and_terminal_artifact_freeze; production_blobs_runtime_e37078fa_policy_f8dfcdd3_prompts_b762787b",
-    "ownedScope": "cycle_14_frozen_start_67050a4a_green_9af22e72_refactor_27c07eec_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths; no_push_network_github_live_model_go_connectors_make_main_parent_478_or_479_mutation",
+    "focusedTests": "cycle_15_plan_baseline_134_passed_0_failed_skipped_cancelled_todo; comprehensive_three_row_red_pending",
+    "fullShepherdTests": "cycle_15_pending; cycle_14_environment_baseline_271_executed_240_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_197_passed",
+    "strictTypeScriptPi0806": "cycle_15_plan_baseline_passed_focused_source_tests_typescript_5_9_3_explicit_pi_0_80_6_roots; red_and_terminal_scopes_pending",
+    "offlineRpcSmoke": "cycle_15_pending; cycle_14_baseline_explicit_pi_0_80_6_rpc_registration_and_actual_no_tool_one_tool_rows_passed",
+    "diffCheck": "cycle_15_frozen_start_f41cde91; production_blobs_runtime_e37078fa_policy_f8dfcdd3_prompts_b762787b; plan_checkpoint_pending",
+    "ownedScope": "cycle_15_frozen_start_f41cde91_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths; no_push_network_github_live_model_auth_credentials_services_go_connectors_make_main_parent_478_or_479_mutation",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [

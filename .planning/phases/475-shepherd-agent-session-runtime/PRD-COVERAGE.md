@@ -1,5 +1,26 @@
 # PRD Coverage — Issue #475
 
+## Cycle 15 Consolidated Review Coverage
+
+Frozen candidate: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 14 reports and the issue contract
+form the phase-equivalent source.
+
+| Required outcome | RED boundary | Cycle 15 status |
+|---|---|---|
+| Unknown-sensitive quoted values always redact whole content | both quotes, line/flow, multi-component/malformed keys, every shared consumer, exact public controls | planned C15-01 |
+| Assignment recognition fails closed at every grammar boundary | spaces/extended characters, unsupported characters, both sides of key cutoff, malformed keys, later flow siblings, bounded metrics | planned C15-02 |
+| Post-create Pi validation never traverses prototype chains or batches callbacks | approved direct prototypes, expected own descriptors/indexes, proxy-prototype traps, abort/close/shutdown seam matrix, exact cleanup | planned C15-03 |
+| Cycle 14 and all prior authority/lifecycle/tool/parser behavior remains intact | all retained focused rows including actual pinned Pi no-tool/one-tool sessions | 134 retained baseline passes |
+
+The scanner architecture is default-deny rather than alias-driven: exact unambiguous public
+metadata is the sole structured exception; exact sensitive rules override; uncertainty is
+unknown-sensitive and consumes the whole bounded value/container. The runtime architecture uses
+approved direct prototypes and expected own descriptors/canonical indexes only, with one barrier
+after every unavoidable callback. Ordered execution is artifact PLAN, exactly three-row test-only
+RED, one cohesive GREEN, REFACTOR, and exact evidence. No piecemeal freeze or scope expansion is
+permitted.
+
 ## Cycle 14 Consolidated Review Coverage
 
 Frozen candidate: `67050a4a3cf62d0d40660de76938ab72ac68ee96`. Immutable base:

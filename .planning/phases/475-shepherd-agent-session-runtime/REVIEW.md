@@ -1,3 +1,25 @@
+# Review Disposition — Issue #475 Cycle 15
+
+Frozen reviewed candidate: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+Sources: `/tmp/475-REVIEW-CYCLE14-1.md`, `/tmp/475-REVIEW-CYCLE14-2.md`
+
+Both reports are accepted completely. Review 1's two blockers and Review 2's one blocker are three
+unique behavior families; none is declined, deferred, or answered with a case-by-case key/prototype
+patch.
+
+| Cycle 15 group | Review findings | Planned disposition / proof boundary |
+|---|---|---|
+| Quoted unknown whole-value closure | C14-R1-01 | route every unknown-sensitive quote style directly to complete value redaction; never Authorization component parsing; every shared consumer and exact public controls |
+| Conservative assignment/flow grammar | C14-R2-B1 | one bounded candidate parser recognizes assignment syntax independently of canonical eligibility; uncertainty/cutoff/malformed state redacts bounded value/container and resumes later siblings |
+| Own-descriptor post-create capture | C14-R1-02 | reject non-approved direct prototypes; remove prototype-chain enumeration; capture expected own fields/indexes in split steps with an immediate closure-aware barrier after every getter/method callback |
+
+The Cycle 14 exact host-capability registry remains closed and retained. C14-01 is reopened only at
+the nested prototype-reflection batching seam. C14-03 is reopened for quoted unknown routing and
+plain/flow admission boundaries; its exact public controls remain required. Planned RED is exactly
+three new top-level rows on top of the 134/134 baseline, with production frozen until all three
+fail as intended.
+
 # Review Disposition — Issue #475 Cycle 14
 
 Frozen reviewed candidate: `67050a4a3cf62d0d40660de76938ab72ac68ee96`

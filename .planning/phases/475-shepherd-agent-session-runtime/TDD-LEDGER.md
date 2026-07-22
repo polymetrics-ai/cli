@@ -1145,6 +1145,38 @@ parent-owned integration gate is permitted.
 | Complete Shepherd | environment-blocked | 268 executed; 237 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
 | Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector scans; exact same 20 paths |
 
+## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
+
+### PLAN / baseline
+
+- Frozen start: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 issue paths and clean worktree.
+- Both complete Cycle 14 reports were read. Their two-plus-one blockers deduplicate to quoted
+  unknown-sensitive whole-value redaction, uncertain/cutoff/flow assignment closure, and
+  prototype-safe barriered post-create capture.
+- Baseline focused: 134/134 with zero skip/cancel/todo. Focused strict TypeScript passes. Production
+  lock: runtime `e37078faaae0f1afb9583a6a3dbcd114acd92040`, policy
+  `f8dfcdd32b5f559b9d3ac409ac37f66bd42a88f0`, prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`.
+- Manual-GSD fallback remains explicit because the healthy 69-command adapter has no
+  `programming-loop` entry. Required programming/architecture/testing/TypeScript/issue skills are
+  loaded. Execution decision is `read_only_spawned`; the explorer is advisory and no-write.
+
+### RED contract
+
+Exactly three new top-level test rows are added in one test-only checkpoint:
+
+| ID | Row | Expected frozen-head failure |
+|---|---|---|
+| C15-01 | quoted unknown whole-value closure | multi-component quoted unknown values retain at least one component because they enter Authorization parsing |
+| C15-02 | uncertain key/cutoff/flow closure | spaced, extended, unsupported, overlong, or malformed assignments leak; an unrecognized first flow key can hide a later protected sibling |
+| C15-03 | own-descriptor post-create barriers | `for...in` traverses proxy prototypes and batches multiple callbacks behind one trailing lifecycle assertion |
+
+RED acceptance: 137 executed, all 134 retained pass, exactly C15-01/C15-02/C15-03 fail, zero
+skipped/cancelled/todo, focused strict TypeScript passes, and all frozen production blobs remain
+exact. Production stays locked until this evidence is committed. GREEN must close all three rows
+together; no scanner-only or runtime-only production checkpoint is allowed.
+
 ## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
 
 ### PLAN / baseline

@@ -1,5 +1,20 @@
 # Summary — Issue #475
 
+Status: Cycle 15 correction planning is frozen against blocked start `f41cde91` and immutable base
+`e659d6f1`. Both Cycle 14 reports are accepted in full as three unique blockers: quoted
+unknown-sensitive values must redact whole content, assignment recognition must fail closed at
+spaces/unsupported characters/cutoffs/malformed flow boundaries without hiding later siblings,
+and post-create Pi validation must remove prototype-chain enumeration plus callback batching.
+
+The planned architecture uses one bounded default-deny assignment candidate parser with exact
+public metadata as the only exception, and an own-descriptor/canonical-index post-create capture
+pipeline with approved direct prototypes and an immediate closure-aware barrier after every
+unavoidable callback. Baseline focused is 134/134 with strict focused TypeScript green; production
+blobs are frozen. One read-only mapper is advisory; this worker owns the exact PLAN -> three-row
+test-only RED -> cohesive GREEN -> REFACTOR -> evidence chain. No push, network, GitHub, live
+model/auth, credential, service, Go/connector, `make`, main, parent, #478, or #479 mutation is
+authorized.
+
 Status: Cycle 14 is locally complete at cohesive GREEN `9af22e72` and REFACTOR `27c07eec`
 against frozen start `67050a4a` and immutable base `e659d6f1`. Every post-create Pi/session
 callback now has a cancellation/closure barrier before any later subscription or prompt side

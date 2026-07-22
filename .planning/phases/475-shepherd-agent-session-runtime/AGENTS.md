@@ -75,3 +75,16 @@ registry, and structured-field inventory informed the closed-schema implementati
 test, artifact, verification, and commit decision remained with the issue worker. Focused 134/134
 and safe isolation 197/197 pass. The complete suite remains environment-blocked only by the
 unchanged 31 controller/state-store `spawn EPERM` rows; no external mutation was attempted.
+
+## Cycle 15 Agent Delegation
+
+The issue worker owns every write in Cycle 15. One read-only explorer maps the three frozen-head
+scanner/runtime blockers without edit, commit, test-gate, network, model, credential, service,
+parent, #478, or #479 authority.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle15-boundary-map` | read-only | default-deny candidate parsing, quoted unknown routing, flow continuation, direct-prototype/own-descriptor Pi capture, cleanup/work-bound risks | Cycle 15 appendices in the existing Cycle 12 map and trace |
+
+Its findings are advisory. The issue worker retains the sole PLAN, RED, cohesive GREEN, REFACTOR,
+verification, commit, and handoff path.

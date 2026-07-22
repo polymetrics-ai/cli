@@ -151,3 +151,21 @@ must add per-role message/tool lifecycles, select the last assistant from the fi
   narrow public-metadata controls, and fail-closed unknown assignments.
 - Ownership: advisory map only; no file or external state changed. The issue worker owns all plan,
   test, production, commit, and verification actions.
+
+## Cycle 15 Read-Only Trace
+
+- Agent: `/root/issue_475_agent_session_runtime/cycle15_boundary_map`.
+- Input: all three unique blockers from both complete Cycle 14 reports; frozen candidate
+  `f41cde91`; same exact 20 issue-owned paths only.
+- Scanner result: a recognized unknown quoted value currently shares authorization parsing and can
+  emit no range; short/ASCII-only key and flow probes also erase uncertainty. Use a total bounded
+  candidate result, whole-value unknown/opaque redaction, and separator-aware flow recovery that
+  resumes later siblings without rescanning long keys.
+- Runtime result: `captureOptionalStep` contains nested callbacks and three prototype-traversing
+  `for...in` loops. Acquire cleanup ownership first, reject non-approved direct prototypes, decode
+  own descriptors/canonical indexes only, and place an execution barrier immediately after every
+  Pi getter/method before any returned-structure decode or later callback.
+- Test result: retain all 134 rows and add exactly three top-level aggregate rows, yielding a
+  test-first expectation of 137 executed / 134 passed / 3 failed with frozen production.
+- Ownership: advisory map only. The issue worker retains every artifact edit, RED, production edit,
+  refactor, verification gate, commit, and handoff; the mapper changed no file or external state.

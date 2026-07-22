@@ -1,9 +1,19 @@
 # Verification — Issue #475
 
-Current result: Cycle 14 issue-owned verification is complete at implementation/refactor
-checkpoints `9af22e72` / `27c07eec`; see **Cycle 14 Exact-Head Verification** below. The
-complete-suite status remains environment-blocked, not green, because the managed sandbox denies
-the unchanged controller/state-store process-identity children with `spawn EPERM`.
+Current result: Cycle 14 frozen head `f41cde91` is blocked by the three accepted Cycle 15
+correction families below. Cycle 15 is at artifact-only PLAN with production frozen.
+
+## Cycle 15 Verification Contract
+
+Cycle 15 starts at exact frozen candidate `f41cde91e01e439a5ebbbaa4867729e0fa80b371` and immutable
+base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Baseline focused is 134/134 and focused strict
+TypeScript passes. Verification cannot freeze until one test-only RED executes 137 rows with all
+134 retained passes and exactly three intended failures, one cohesive GREEN and refactor pass
+137/137, both Cycle 14 reports are re-read, and the declared focused, safe-isolation, strict
+focused/all-production Pi 0.80.6 TypeScript, explicit offline RPC, broad environment
+classification, diff/ancestry/JSON/scans, exact same 20 paths, and clean-head gates are recorded.
+The known controller/state-store `spawn EPERM` family remains an environment block, never a green
+full-suite claim.
 
 ## Cycle 14 Exact-Head Verification
 

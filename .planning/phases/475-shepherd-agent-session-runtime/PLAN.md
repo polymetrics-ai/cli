@@ -1378,3 +1378,98 @@ service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorize
   dependency/Go/connector, exact same 20-path issue scope, and clean-worktree checks pass at the
   terminal artifact boundary. No push, network, GitHub, live model/auth, credential, service,
   Go/connector, `make`, main, parent, #478, or #479 mutation was attempted.
+
+## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
+
+### Frozen baseline and complete inputs
+
+- Frozen blocked start: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; clean worktree and the exact same 20 issue paths.
+- Complete inputs: `/tmp/475-REVIEW-CYCLE14-1.md` and `/tmp/475-REVIEW-CYCLE14-2.md`. Their unique
+  union is exactly three blockers: quoted unknown-sensitive values, conservative assignment-key/
+  flow closure at grammar boundaries, and post-create prototype-reflection/callback batching.
+- Baseline focused result: 134 passed, 0 failed/skipped/cancelled/todo. Focused strict TypeScript
+  passes. Frozen production blobs are runtime `e37078faaae0f1afb9583a6a3dbcd114acd92040`, policy
+  `f8dfcdd32b5f559b9d3ac409ac37f66bd42a88f0`, and prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`.
+- Required skills loaded: `gsd-programming-loop`, `architecture-patterns`,
+  `javascript-testing-patterns`, `typescript-advanced-types`, and
+  `github-issue-first-delivery`. `scripts/gsd doctor` passes, but `scripts/gsd prompt
+  programming-loop ...` remains absent; Cycle 15 records the required manual-GSD fallback without
+  weakening PLAN -> RED -> GREEN -> REFACTOR -> VERIFY.
+- Execution decision: `read_only_spawned`; one bounded no-write explorer maps the scanner and Pi
+  capture seams while this worker owns every artifact, test, production edit, commit, and gate.
+
+### Scanner default-deny architecture
+
+The scanner will stop treating its narrow canonical-key grammar as the admission grammar. One
+monotonic bounded candidate parser will recognize line and flow assignment syntax independently of
+whether the key can be canonically classified. It retains at most the reviewed canonical-key
+prefix, marks spaces, unsupported characters, malformed quoting/escaping, and length overflow as
+uncertain, and continues only far enough to find a delimiter or the already-bounded line/container
+boundary. It never enumerates an unbounded key or abandons the remaining flow after uncertainty.
+
+Classification is closed: an unambiguous exact reviewed public terminal/path is the only
+non-redacted assignment. Exact sensitive paths/terminals override. Every other recognized or
+uncertain assignment is `unknown-sensitive`. Unknown-sensitive quoted values always redact their
+complete quoted content; they never enter Authorization credential splitting. Unquoted, block,
+multi-component, malformed, and flow values redact their complete bounded value. If a flow field
+cannot be safely separated, the remaining bounded field/container is redacted conservatively and
+the scanner resumes at the next provable sibling boundary. Public controls
+`api.key.version`, `private.key.algorithm`, and `database.url.scheme` remain byte-identical only
+under an exact unambiguous parse. Scanner metrics must remain constant-factor monotonic.
+
+### Post-create own-descriptor capture architecture
+
+Post-create validation will use no `for...in` or prototype-chain enumeration on Pi values. Direct
+proxies reject before reflection. Result records and extension records must have approved direct
+record prototypes; extension and active-tool arrays must have the canonical array prototype.
+Validation captures only expected own data descriptors and canonical indexed descriptors; inert
+prototype/non-authoritative peers are never traversed or invoked.
+
+Creation-result ownership, extension-result capture, each extension array, active-tool method
+return/canonical indexes, subscription call, and returned unsubscriber acquisition become explicit
+ordered seams. Every unavoidable Pi getter or method callback is followed immediately by the
+closure-aware execution barrier before the next callback, validation step, subscription, or
+prompt. Abort, close, or shutdown may stop optional capture but cannot erase the mandatory
+abort/wait/dispose cleanup root or exactly-once unsubscribe/dispose/join ownership.
+
+### Comprehensive test-only RED matrix
+
+One test-only commit adds exactly three top-level rows and no production/artifact change:
+
+1. `cycle 15 quoted unknown assignments redact whole values through every shared consumer`
+   tables both quote styles, line/flow forms, multi-component values, malformed/extended quoted
+   unknown keys, and exact quoted public controls. Every component must disappear through direct,
+   both prompts, workspace read/edit/write, capability summary/reference, handoff fields, and
+   policy/runtime public errors.
+2. `cycle 15 uncertain assignment keys fail closed across cutoffs flows and later siblings`
+   tables both sides of the canonical character/length cutoffs, internal spaces, unsupported
+   characters, malformed forms, line/flow contexts, and later protected siblings. Unknown and
+   later sensitive markers must disappear through every shared consumer; exact public controls
+   remain byte-identical; 25/50/100-KiB metrics remain constant-factor monotonic.
+3. `cycle 15 post-create validation rejects prototype callbacks and barriers every split seam`
+   tables ordinary result/extension/array values with hostile proxy prototypes plus synchronous
+   abort/close/shutdown at every unavoidable getter/method/subscription seam. Prototype traps and
+   later callbacks/prompt must stay zero; acquired abort/wait/unsubscribe/dispose/join ownership,
+   listeners, leases, and referenced timers must settle exactly.
+
+RED acceptance is 137 executed: all 134 retained rows pass and exactly these three new rows fail
+their behavior assertions, with zero skip/cancel/todo and focused strict TypeScript green. All
+three production blobs must remain exact. No production family may freeze separately; one cohesive
+GREEN must close all three rows before refactoring.
+
+### GREEN / REFACTOR / verification contract
+
+GREEN is one architectural change across the shared scanner and post-create capture pipeline. It
+may not add key aliases, public exceptions, prototype allowlist escape hatches, or dynamic
+authority. REFACTOR may centralize candidate parsing, prototype predicates, and callback barriers
+only after 137/137 passes and may not weaken a RED row.
+
+Declared gates are focused runtime/tool-policy/role-prompt behavior; focused and all 12 production
+strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots; retained actual pinned no-tool/one-tool
+rows; explicit Pi 0.80.6 offline RPC; safe isolation; serialized complete Shepherd environment
+classification; `git diff --check`; immutable-base/frozen-start ancestry; RUN-STATE JSON;
+credential/dependency/Go/connector scans; exact same 20 paths; and clean head. Both Cycle 14 reports
+must be re-read after GREEN. No self-review/integration, push, network, GitHub, live model/auth,
+credential, service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorized.
