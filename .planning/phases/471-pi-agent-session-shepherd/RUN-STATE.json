@@ -21,13 +21,15 @@
     "status": "blocked"
   },
   "reconciliation_base_head": "69a1a9884325d227652afdc8632bbce8c019ed1b",
-  "cached_remote_parent_head": "2a89142e1514de0ce1481164d99f21c7f89acadb",
+  "cached_remote_parent_head": "45c27b9d43941c9f92fa3cf02c65918429873a68",
+  "main_baseline_head": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "main_sync_merge_head": "383fcf93f9bc220be89fef1636e84fbecec2485a",
   "verificationPassed": false,
   "reviewCoveragePassed": false,
   "ready_queue": [
     {
       "number": 479,
-      "status": "local_correction_complete_external_gates_pending",
+      "status": "sub_pr_open_ci_repair_in_progress",
       "dependencies": [474, 475, 476, 477, 478],
       "write_scope": [
         ".pi/extensions/shepherd/**",
@@ -81,6 +83,18 @@
       "decision": "not_spawned_verification_blocked",
       "issue_numbers": [481],
       "reason": "#481 remains blocked by #480 and the exact-head parent verification sequence."
+    },
+    {
+      "timestamp": "2026-07-23T03:42:54+05:30",
+      "decision": "read_only_spawned",
+      "issue_numbers": [479],
+      "reason": "A parent orchestrator audited PR #489 topology and the parent-first repair order while the coordinator owned the isolated critical path."
+    },
+    {
+      "timestamp": "2026-07-23T03:42:54+05:30",
+      "decision": "local_critical_path",
+      "issue_numbers": [479],
+      "reason": "The coordinator merged the current main security baseline into the non-default parent and pinned the child CI Go toolchain without changing Shepherd behavior."
     }
   ],
   "subissues": [
@@ -232,9 +246,9 @@
       "number": 479,
       "url": "https://github.com/polymetrics-ai/cli/issues/479",
       "branch": "feat/479-shepherd-production-matrix",
-      "pr_url": null,
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/489",
       "worker": "coordinator local critical path",
-      "status": "worker_in_progress",
+      "status": "sub_pr_open",
       "write_scope": [
         ".pi/extensions/shepherd/**",
         ".pi/README.md",
@@ -243,12 +257,15 @@
       ],
       "worker_directory": "/private/tmp/shepherd-479-production-matrix",
       "verification": {
-        "status": "local_functional_pass_external_gates_pending",
+        "status": "ci_repair_in_progress",
         "implementation_head": "78708cbe",
         "ci_correction_head": "a594be98b9722a8d183584a27832cd88af8702f9",
+        "go_toolchain_correction_head": "52866972891c5d794f90f4be8254520434e6b4ef",
         "evidence_head": "d895dc38",
         "focused_tests": "767/767 pass",
-        "complete_inventory": "1,647 pass, 64 managed-sandbox process-identity failures, 1 skip"
+        "real_go_fixture": "1/1 pass with Go 1.25.12",
+        "complete_inventory": "local rerun reproduces only managed-sandbox process-identity failures; remote rerun pending",
+        "security": "x/text v0.39.0 inherited from main; remote govulncheck rerun pending"
       },
       "automated_review": {
         "primary_route": "blocked",
@@ -257,7 +274,7 @@
         "reviewed_range": "79e51f5629a93d212c5a5e8f578475cc02481a1c..ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
         "coverage_route": "blocked",
         "fallback_route": "human",
-        "disposition_summary": "Independent Codex xhigh review found two blockers. The complete Pi-family pin is corrected at a594be98; parent-first publication, exact-head follow-up, and source-policy review coverage remain.",
+        "disposition_summary": "Earlier coverage is stale after the parent baseline and CI toolchain corrections. One bounded exact-head Codex review and repository-policy coverage remain pending.",
         "disposition_url": null
       }
     },
@@ -320,5 +337,5 @@
     "quality-gate reductions",
     "scope or authority changes"
   ],
-  "updated_at": "2026-07-23T02:30:31+05:30"
+  "updated_at": "2026-07-23T03:42:54+05:30"
 }

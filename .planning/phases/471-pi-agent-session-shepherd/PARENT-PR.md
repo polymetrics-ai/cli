@@ -27,7 +27,9 @@ Supersedes #470
 
 ## Current state
 
-- #479 production matrix: functional implementation available locally; remote CI/review/PR gates pending.
+- #479 production matrix: PR #489 is open against the parent. Nine checks pass; its bounded Go
+  toolchain and inherited `x/text` CI repairs are implemented locally and awaiting parent-first
+  publication plus fresh CI/review.
 - Autonomous child roster: #473-#481, dependency-linked from #471; lifecycle reconciliation pending.
 - #480 and #481: dependency-blocked.
 - Final parent verification: not started.
