@@ -42,13 +42,13 @@ integrator, with no overlapping edits.
 
 ## Acceptance checks
 
-- Autonomous start needs only `--issue`; canary still requires explicit read-only acknowledgement.
-- Two independent non-colliding child jobs overlap at concurrency two; a dependent child waits.
-- Each child passes through execute, verify, review, and integrate ports.
-- State is persisted after meaningful transitions and rendered by status.
-- Stop joins accepted work and persists stopped; resume continues unfinished work.
-- Completion of child work becomes `waiting_human` at `parent_merge`.
-- The controller exposes no parent-to-main merge operation.
+- [x] Autonomous start needs only `--issue`; canary still requires explicit read-only acknowledgement.
+- [x] Two independent non-colliding child jobs overlap at concurrency two; a dependent child waits.
+- [x] Each child passes through execute, verify, review, and integrate ports.
+- [x] State is persisted after meaningful transitions and rendered by status.
+- [x] Stop joins accepted work and persists stopped; resume continues unfinished work.
+- [x] Completion of child work becomes `waiting_human` at `parent_merge`.
+- [x] The controller exposes no parent-to-main merge operation.
 
 Pi slash-command help and `.pi/README.md` are applicable. Go `pm help`, generated manuals, and the
 website are not applicable because this is a project-local Pi extension, not a Go CLI command.

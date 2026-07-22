@@ -1,9 +1,24 @@
 {
   "schemaVersion": 1,
   "issue": 479,
-  "status": "planned",
+  "status": "ready_for_parent_integration",
   "baseHead": "c958d7e608eac4afedceea953408a8fd4cfcb566",
+  "implementationHead": "e6ef3b3221890260c37bc82439bc47be1f461cfb",
   "manualGsdFallback": true,
   "reviewPolicy": "one_blocker_only_pass",
+  "reviewStatus": "complete_blockers_fixed",
+  "focusedTests": {
+    "total": 25,
+    "passed": 25,
+    "failed": 0
+  },
+  "safeShepherdTests": {
+    "total": 1340,
+    "passed": 1339,
+    "failed": 0,
+    "skipped": 1
+  },
+  "strictTypeScript": "passed",
+  "offlinePiRpc": "get_commands_help_status_passed",
   "hardeningDeferred": true
 }
