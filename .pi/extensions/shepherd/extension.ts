@@ -64,6 +64,13 @@ interface LaunchSetup {
 	promise: Promise<void>;
 }
 
+interface ActiveExtensionRun {
+	issue: number;
+	mode: "autonomous" | "canary";
+	controller: ControllerEntry;
+	promise: Promise<DisplayState>;
+}
+
 const HELP = [
 	"Pi AgentSession Shepherd (autonomous MVP plus explicit read-only canary)",
 	"",
@@ -141,7 +148,7 @@ export function registerShepherdExtension(
 	dependencies: ExtensionDependencies,
 ): void {
 	const controllers = new Map<string, ControllerEntry>();
-	let activeRun: { issue: number; promise: Promise<DisplayState> } | undefined;
+	let activeRun: ActiveExtensionRun | undefined;
 	let launchSetup: LaunchSetup | undefined;
 	let shuttingDown = false;
 
@@ -203,7 +210,12 @@ export function registerShepherdExtension(
 				: command.action === "resume"
 					? (controller as AutonomousShepherdControllerPort).resume(command)
 					: (controller as AutonomousShepherdControllerPort).start(command);
-			const ownedRun = { issue, promise };
+			const ownedRun: ActiveExtensionRun = {
+				issue,
+				mode: command.action === "canary" ? "canary" : "autonomous",
+				controller,
+				promise,
+			};
 			activeRun = ownedRun;
 			context.ui.notify(
 				`${command.action === "canary" ? "Embedded read-only canary" : "Autonomous in-process Shepherd"} started for issue #${issue}. Use /pm-shepherd status --issue ${issue}.`,
@@ -254,13 +266,32 @@ export function registerShepherdExtension(
 
 			const issue = commandIssue(command);
 			if (command.action === "status") {
-				const controller = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
-				context.ui.notify(renderState(await controller.status(issue)), "info");
+				const autonomous = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
+				const autonomousState = await autonomous.status(issue);
+				if (autonomousState || dependencies.createAutonomousController === undefined) {
+					context.ui.notify(renderState(autonomousState), "info");
+				} else {
+					const canary = await controllerFor("canary", issue, context) as ShepherdControllerPort;
+					context.ui.notify(renderState(await canary.status(issue)), "info");
+				}
 				return;
 			}
 			if (command.action === "stop") {
-				const controller = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
-				context.ui.notify(renderState(await controller.stop(issue)), "info");
+				const running = activeRun?.issue === issue ? activeRun : undefined;
+				if (running?.mode === "canary") {
+					context.ui.notify(renderState(await (running.controller as ShepherdControllerPort).stop(issue)), "info");
+				} else if (running?.mode === "autonomous") {
+					context.ui.notify(renderState(await (running.controller as AutonomousShepherdControllerPort).stop(issue)), "info");
+				} else {
+					const autonomous = await controllerFor("autonomous", issue, context) as AutonomousShepherdControllerPort;
+					const autonomousState = await autonomous.status(issue);
+					if (autonomousState || dependencies.createAutonomousController === undefined) {
+						context.ui.notify(renderState(await autonomous.stop(issue)), "info");
+					} else {
+						const canary = await controllerFor("canary", issue, context) as ShepherdControllerPort;
+						context.ui.notify(renderState(await canary.stop(issue)), "info");
+					}
+				}
 				return;
 			}
 			await launch(command, context);

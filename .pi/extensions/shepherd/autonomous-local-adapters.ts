@@ -198,6 +198,9 @@ export class AgentSessionMvpLifecycle implements AutonomousChildLifecyclePort {
 			binding,
 		});
 		if (handoff.status !== "completed") throw new Error(`${role} AgentSession did not complete: ${handoff.summary}`);
+		if (role === "review" && handoff.findings.length > 0) {
+			throw new Error(`independent review reported blocking findings: ${handoff.findings.join("; ")}`);
+		}
 		return { summary: handoff.summary };
 	}
 
