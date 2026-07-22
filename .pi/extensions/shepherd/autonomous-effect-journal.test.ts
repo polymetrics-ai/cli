@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -80,4 +80,19 @@ test("serializes competing phase transitions across repository instances", async
 	]);
 	assert.equal(outcomes.filter((result) => result.status === "fulfilled").length, 1);
 	assert.equal(outcomes.filter((result) => result.status === "rejected").length, 1);
+});
+
+test("restart reclaims a complete orphan journal lock owned by a dead process", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-effect-orphan-lock-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const lock = join(root, ".production-effects.lock");
+	await mkdir(lock);
+	await writeFile(join(lock, "owner.json"), JSON.stringify({
+		schemaVersion: 1,
+		pid: 99_999_999,
+		token: "00000000-0000-4000-8000-000000000002",
+	}));
+	const journal = new ProductionEffectJournal(root);
+	assert.equal((await journal.prepare(intent())).phase, "prepared");
+	assert.deepEqual(await readdir(root), ["production-effects.json"]);
 });

@@ -963,6 +963,45 @@ export class ProductionFileStateStore implements ProductionStateStore {
 		try { await directory.sync(); } finally { await directory.close(); }
 	}
 
+	#processIsAlive(pid: number): boolean {
+		try {
+			process.kill(pid, 0);
+			return true;
+		} catch (error) {
+			return !isErrno(error, "ESRCH");
+		}
+	}
+
+	async #reclaimDeadLock(path: string): Promise<boolean> {
+		let value: unknown;
+		try { value = JSON.parse(await readFile(join(path, "owner.json"), "utf8")); } catch (error) {
+			if (isErrno(error, "ENOENT")) return false;
+			return false;
+		}
+		let owner: ReturnType<typeof exact>;
+		try { owner = exact(value, ["schemaVersion", "pid", "token"], [], "production lock owner"); } catch { return false; }
+		if (owner.schemaVersion !== 1 || !Number.isSafeInteger(owner.pid) || (owner.pid as number) < 1
+			|| typeof owner.token !== "string" || !/^[0-9a-f-]{36}$/.test(owner.token)) return false;
+		if (this.#processIsAlive(owner.pid as number)) return false;
+		const quarantine = `${path}.stale.${randomUUID()}`;
+		try { await rename(path, quarantine); } catch (error) {
+			if (isErrno(error, "ENOENT")) return true;
+			throw error;
+		}
+		try {
+			const moved = exact(
+				JSON.parse(await readFile(join(quarantine, "owner.json"), "utf8")),
+				["schemaVersion", "pid", "token"],
+				[],
+				"production lock owner",
+			);
+			if (moved.token !== owner.token || moved.pid !== owner.pid) {
+				throw new Error("production state stale lock identity changed during reclamation");
+			}
+		} finally { await rm(quarantine, { recursive: true, force: true }); }
+		return true;
+	}
+
 	async #acquire(issue: number): Promise<FileLock> {
 		await this.#ensureRoot();
 		const path = this.#lockPath(issue);
@@ -981,6 +1020,7 @@ export class ProductionFileStateStore implements ProductionStateStore {
 					await rm(path, { recursive: true, force: true });
 					throw error;
 				}
+				if (await this.#reclaimDeadLock(path)) continue;
 				await new Promise((resolve) => setTimeout(resolve, LOCK_RETRY_MS));
 			}
 		}

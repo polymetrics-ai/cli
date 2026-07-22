@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -296,4 +296,20 @@ test("generation advance durably preserves and enforces the exact interrupted ch
 		delete draft.children[0].resumeStage;
 	});
 	assert.equal(continued.children[0].stage, "publication");
+});
+
+test("restart reclaims a complete orphan lock owned by a dead process", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-orphan-lock-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const lock = join(root, ".production-issue-479.lock");
+	await mkdir(lock);
+	await writeFile(join(lock, "owner.json"), JSON.stringify({
+		schemaVersion: 1,
+		pid: 99_999_999,
+		token: "00000000-0000-4000-8000-000000000001",
+	}));
+	const store = new ProductionFileStateStore(root);
+	const created = await store.create(createProductionAutonomousState(plan(), { runId: "run-after-crash" }));
+	assert.equal(created.runId, "run-after-crash");
+	assert.deepEqual(await readdir(root), ["production-issue-479.json"]);
 });
