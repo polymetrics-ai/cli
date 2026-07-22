@@ -198,6 +198,77 @@ test("creates exactly one marker-owned request across retry and broker restart",
 	assert.equal(harness.transport.created[0].body, renderDecisionRequestComment(first));
 });
 
+test("cycle 8 real broker resumes an exact consumed request after expiry without reviving new decisions", async (t) => {
+	const harness = brokerHarness();
+	await harness.broker.request(harness.request);
+	harness.setNow("2026-07-21T10:02:00.000Z");
+	harness.transport.comments.push(fixture.allowlistedHuman);
+	const polled = await harness.broker.poll(harness.request.requestId, issueBinding);
+	assert.equal(polled.status, "decided");
+	const consumedEvidence = await harness.broker.consume(harness.request.requestId, issueBinding);
+	const consumedRecord = await harness.broker.readRecord(harness.request.requestId, issueBinding);
+	assert.equal(consumedRecord.status, "consumed");
+	harness.setNow("2026-07-22T10:00:01.000Z");
+	const restarted = new GitHubDecisionBroker(harness.repository, harness.transport, {
+		now: () => new Date("2026-07-22T10:00:01.000Z"),
+	});
+
+	await t.test("an exact durable replay returns the already prepared consumed state", async () => {
+		const replayed = await restarted.request(harness.request);
+		assert.deepEqual(replayed, consumedRecord);
+		assert.deepEqual(replayed.decision, consumedEvidence);
+		assert.equal(replayed.requestComment?.id, harness.transport.requestCommentId);
+		assert.equal(harness.transport.created.length, 1, "restart must not publish a second marker");
+	});
+
+	await t.test("the consumed decision remains one-shot after replay", async () => {
+		await assert.rejects(
+			restarted.consume(harness.request.requestId, issueBinding),
+			/consum/i,
+		);
+		assert.deepEqual(await restarted.readRecord(harness.request.requestId, issueBinding), consumedRecord);
+	});
+
+	await t.test("a changed retry cannot hide behind the expired lifetime", async () => {
+		await assert.rejects(
+			restarted.request({
+				...harness.request,
+				question: "Approve a different exact gate after expiry?",
+			}),
+			/conflict|differs/i,
+		);
+		assert.equal(harness.transport.created.length, 1);
+		assert.deepEqual(await restarted.readRecord(harness.request.requestId, issueBinding), consumedRecord);
+	});
+
+	await t.test("a genuinely new expired request is rejected before persistence or publication", async () => {
+		const fresh = brokerHarness();
+		fresh.setNow("2026-07-22T10:00:01.000Z");
+		const requestId = "req-477-cycle8-new-expired";
+		await assert.rejects(
+			fresh.broker.request({ ...fresh.request, requestId }),
+			/expired/i,
+		);
+		assert.equal(await fresh.repository.load(requestId), null);
+		assert.equal(fresh.transport.created.length, 0);
+	});
+
+	await t.test("a response first observed at expiry cannot create a new decision", async () => {
+		const fresh = brokerHarness();
+		await fresh.broker.request(fresh.request);
+		fresh.setNow("2026-07-22T10:00:00.000Z");
+		fresh.transport.comments.push({
+			...fixture.allowlistedHuman,
+			createdAt: "2026-07-22T10:00:00.000Z",
+			updatedAt: "2026-07-22T10:00:00.000Z",
+		});
+		const result = await fresh.broker.poll(fresh.request.requestId, issueBinding);
+		assert.equal(result.status, "expired");
+		assert.equal((await fresh.broker.readRecord(fresh.request.requestId, issueBinding)).status, "expired");
+		await assert.rejects(fresh.broker.consume(fresh.request.requestId, issueBinding), /expired|decid|ready/i);
+	});
+});
+
 test("accepts a real safe-integer comment ID and second-resolution GitHub timestamp", async () => {
 	const harness = brokerHarness();
 	harness.transport.requestCommentId = 5_034_006_493;
@@ -609,4 +680,103 @@ test("cycle 7 broker rejects finite schema credentials before persistence or com
 			assert.equal(harness.transport.created.length, 0);
 		});
 	}
+});
+
+test("cycle 8 provider-neutral credential suffixes close the real broker request boundary", async (t) => {
+	const suffixAssignments = [
+		"UNLISTED_ALPHA_AUTHORIZATION=SYNTHETIC_CYCLE8_AUTHORIZATION_MARKER",
+		"UNLISTED_BRAVO_TOKEN=SYNTHETIC_CYCLE8_TOKEN_MARKER",
+		"UNLISTED_CHARLIE_ACCESS_TOKEN=SYNTHETIC_CYCLE8_ACCESS_TOKEN_MARKER",
+		"UNLISTED_DELTA_REFRESH_TOKEN=SYNTHETIC_CYCLE8_REFRESH_TOKEN_MARKER",
+		"UNLISTED_ECHO_API_KEY=SYNTHETIC_CYCLE8_API_KEY_MARKER",
+		"UNLISTED_FOXTROT_PASSWORD=SYNTHETIC_CYCLE8_PASSWORD_MARKER",
+		"UNLISTED_GOLF_SECRET=SYNTHETIC_CYCLE8_SECRET_MARKER",
+		"UNLISTED_HOTEL_CLIENT_SECRET=SYNTHETIC_CYCLE8_CLIENT_SECRET_MARKER",
+		"UNLISTED_INDIA_PRIVATE_KEY=SYNTHETIC_CYCLE8_PRIVATE_KEY_MARKER",
+		"UNLISTED_JULIET_DATABASE_URL=SYNTHETIC_CYCLE8_DATABASE_URL_MARKER",
+		"UNLISTED_KILO_CREDENTIAL=SYNTHETIC_CYCLE8_CREDENTIAL_MARKER",
+		"UNLISTED_LIMA_CREDENTIALS=SYNTHETIC_CYCLE8_CREDENTIALS_MARKER",
+		"UNLISTED_MIKE_COOKIE=SYNTHETIC_CYCLE8_COOKIE_MARKER",
+		"UNLISTED_NOVEMBER_COOKIES=SYNTHETIC_CYCLE8_COOKIES_MARKER",
+		"UNLISTED_OSCAR_SET_COOKIE=SYNTHETIC_CYCLE8_SET_COOKIE_MARKER",
+		"UNLISTED_PAPA_SESSION=SYNTHETIC_CYCLE8_SESSION_MARKER",
+		"UNLISTED_QUEBEC_SESSION_ID=SYNTHETIC_CYCLE8_SESSION_ID_MARKER",
+		"UNLISTED_ROMEO_SESSION_TOKEN=SYNTHETIC_CYCLE8_SESSION_TOKEN_MARKER",
+		"UNLISTED_SIERRA_SESSION_COOKIE=SYNTHETIC_CYCLE8_SESSION_COOKIE_MARKER",
+		"UNLISTED_TANGO_CSRF_TOKEN=SYNTHETIC_CYCLE8_CSRF_TOKEN_MARKER",
+	];
+	const finiteSchemaAssignments = [
+		"client-key-data: SYNTHETIC_CYCLE8_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_CYCLE8_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_CYCLE8_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_CYCLE8_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_CYCLE8_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_CYCLE8_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_CYCLE8_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+
+	await t.test("classifies every recognized suffix with an unknown provider prefix", async () => {
+		for (const question of suffixAssignments) {
+			const harness = brokerHarness();
+			await assert.rejects(
+				harness.broker.request({ ...harness.request, question }),
+				/credential|secret|sensitive/i,
+				question,
+			);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
+
+	await t.test("rejects without reflecting the classified synthetic value", async () => {
+		for (const question of suffixAssignments) {
+			const harness = brokerHarness();
+			const marker = question.slice(question.indexOf("=") + 1);
+			let rejection: unknown;
+			try {
+				await harness.broker.request({ ...harness.request, question });
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, question);
+			assert.match(rejection.message, /credential|secret|sensitive/i, question);
+			assert.doesNotMatch(rejection.message, new RegExp(marker), question);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
+
+	await t.test("allows only the exact documented public FEATURE_TOKEN field", async () => {
+		const publicHarness = brokerHarness();
+		const publicQuestion = "FEATURE_TOKEN=non-sensitive-build-label";
+		const created = await publicHarness.broker.request({ ...publicHarness.request, question: publicQuestion });
+		assert.equal(created.question, publicQuestion);
+		assert.equal(publicHarness.repository.states.size, 1);
+		assert.equal(publicHarness.transport.created.length, 1);
+
+		const nearbyHarness = brokerHarness();
+		await assert.rejects(
+			nearbyHarness.broker.request({
+				...nearbyHarness.request,
+				question: "UNLISTED_FEATURE_TOKEN=SYNTHETIC_CYCLE8_NEARBY_MARKER",
+			}),
+			/credential|secret|sensitive/i,
+		);
+		assert.equal(nearbyHarness.repository.states.size, 0);
+		assert.equal(nearbyHarness.transport.created.length, 0);
+	});
+
+	await t.test("retains the finite Kubernetes Docker and AWS forms", async () => {
+		for (const question of finiteSchemaAssignments) {
+			const harness = brokerHarness();
+			await assert.rejects(
+				harness.broker.request({ ...harness.request, question }),
+				/credential|secret|sensitive/i,
+				question,
+			);
+			assert.equal(harness.repository.states.size, 0, question);
+			assert.equal(harness.transport.created.length, 0, question);
+		}
+	});
 });

@@ -186,6 +186,57 @@ test("durably round-trips and rejects a changed retry specification after restar
 	assert.equal(serialized.includes("github_pat_"), false);
 });
 
+test("cycle 8 replays an exact persisted request after expiry before rejecting new or changed input", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-cycle8-expiry-replay-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const originalSpec = spec({ expiresAt: "2026-07-21T10:01:00.000Z" });
+	const first = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	const created = await persistHumanDecisionRequest(
+		first,
+		originalSpec,
+		new Date("2026-07-21T10:00:00.000Z"),
+	);
+	const restarted = new FileHumanDecisionRepository(root, { lockRetryMs: 1 });
+	const afterExpiry = new Date("2026-07-21T10:02:00.000Z");
+
+	await t.test("an exact durable retry returns the original record after its expiry", async () => {
+		const replayed = await persistHumanDecisionRequest(restarted, originalSpec, afterExpiry);
+		assert.deepEqual(replayed, created);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+
+	await t.test("a genuinely new expired request still rejects without persistence", async () => {
+		const requestId = "req-477-cycle8-new-expired";
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, { ...originalSpec, requestId }, afterExpiry),
+			/expired/i,
+		);
+		assert.equal(await restarted.load(requestId), null);
+	});
+
+	await t.test("a changed retry specification cannot hide behind the expired lifetime", async () => {
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, {
+				...originalSpec,
+				question: "Approve a different exact request after expiry?",
+			}, afterExpiry),
+			/conflict|differs/i,
+		);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+
+	await t.test("a changed future expiry cannot revive or replace the original request", async () => {
+		await assert.rejects(
+			persistHumanDecisionRequest(restarted, {
+				...originalSpec,
+				expiresAt: "2026-07-22T10:01:00.000Z",
+			}, afterExpiry),
+			/conflict|differs/i,
+		);
+		assert.deepEqual(await restarted.load(originalSpec.requestId), created);
+	});
+});
+
 test("persists minimal accepted evidence and consumes it exactly once across repository instances", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "pm-shepherd-477-consume-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
@@ -441,6 +492,88 @@ test("cycle 7 rejects finite Kubernetes Docker and AWS schemas before persistenc
 			assert.doesNotMatch(rejection.message, /SYNTHETIC_/u);
 		});
 	}
+});
+
+test("cycle 8 provider-neutral credential suffixes close the native human-decision boundary", async (t) => {
+	const suffixAssignments = [
+		"UNLISTED_ALPHA_AUTHORIZATION=SYNTHETIC_CYCLE8_AUTHORIZATION_MARKER",
+		"UNLISTED_BRAVO_TOKEN=SYNTHETIC_CYCLE8_TOKEN_MARKER",
+		"UNLISTED_CHARLIE_ACCESS_TOKEN=SYNTHETIC_CYCLE8_ACCESS_TOKEN_MARKER",
+		"UNLISTED_DELTA_REFRESH_TOKEN=SYNTHETIC_CYCLE8_REFRESH_TOKEN_MARKER",
+		"UNLISTED_ECHO_API_KEY=SYNTHETIC_CYCLE8_API_KEY_MARKER",
+		"UNLISTED_FOXTROT_PASSWORD=SYNTHETIC_CYCLE8_PASSWORD_MARKER",
+		"UNLISTED_GOLF_SECRET=SYNTHETIC_CYCLE8_SECRET_MARKER",
+		"UNLISTED_HOTEL_CLIENT_SECRET=SYNTHETIC_CYCLE8_CLIENT_SECRET_MARKER",
+		"UNLISTED_INDIA_PRIVATE_KEY=SYNTHETIC_CYCLE8_PRIVATE_KEY_MARKER",
+		"UNLISTED_JULIET_DATABASE_URL=SYNTHETIC_CYCLE8_DATABASE_URL_MARKER",
+		"UNLISTED_KILO_CREDENTIAL=SYNTHETIC_CYCLE8_CREDENTIAL_MARKER",
+		"UNLISTED_LIMA_CREDENTIALS=SYNTHETIC_CYCLE8_CREDENTIALS_MARKER",
+		"UNLISTED_MIKE_COOKIE=SYNTHETIC_CYCLE8_COOKIE_MARKER",
+		"UNLISTED_NOVEMBER_COOKIES=SYNTHETIC_CYCLE8_COOKIES_MARKER",
+		"UNLISTED_OSCAR_SET_COOKIE=SYNTHETIC_CYCLE8_SET_COOKIE_MARKER",
+		"UNLISTED_PAPA_SESSION=SYNTHETIC_CYCLE8_SESSION_MARKER",
+		"UNLISTED_QUEBEC_SESSION_ID=SYNTHETIC_CYCLE8_SESSION_ID_MARKER",
+		"UNLISTED_ROMEO_SESSION_TOKEN=SYNTHETIC_CYCLE8_SESSION_TOKEN_MARKER",
+		"UNLISTED_SIERRA_SESSION_COOKIE=SYNTHETIC_CYCLE8_SESSION_COOKIE_MARKER",
+		"UNLISTED_TANGO_CSRF_TOKEN=SYNTHETIC_CYCLE8_CSRF_TOKEN_MARKER",
+	];
+	const finiteSchemaAssignments = [
+		"client-key-data: SYNTHETIC_CYCLE8_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_CYCLE8_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_CYCLE8_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_CYCLE8_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_CYCLE8_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_CYCLE8_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_CYCLE8_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+	const observedAt = new Date("2026-07-21T10:00:00.000Z");
+
+	await t.test("classifies every recognized suffix with an unknown provider prefix", () => {
+		for (const question of suffixAssignments) {
+			assert.throws(
+				() => createHumanDecisionRecord(spec({ question }), observedAt),
+				/credential|secret|sensitive/i,
+				question,
+			);
+		}
+	});
+
+	await t.test("rejects without reflecting the classified synthetic value", () => {
+		for (const question of suffixAssignments) {
+			const marker = question.slice(question.indexOf("=") + 1);
+			let rejection: unknown;
+			try {
+				createHumanDecisionRecord(spec({ question }), observedAt);
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, question);
+			assert.match(rejection.message, /credential|secret|sensitive/i, question);
+			assert.doesNotMatch(rejection.message, new RegExp(marker), question);
+		}
+	});
+
+	await t.test("allows only the exact documented public FEATURE_TOKEN field", () => {
+		const publicQuestion = "FEATURE_TOKEN=non-sensitive-build-label";
+		assert.equal(createHumanDecisionRecord(spec({ question: publicQuestion }), observedAt).question, publicQuestion);
+		assert.throws(
+			() => createHumanDecisionRecord(spec({
+				question: "UNLISTED_FEATURE_TOKEN=SYNTHETIC_CYCLE8_NEARBY_MARKER",
+			}), observedAt),
+			/credential|secret|sensitive/i,
+		);
+	});
+
+	await t.test("retains the finite Kubernetes Docker and AWS forms", () => {
+		for (const question of finiteSchemaAssignments) {
+			assert.throws(
+				() => createHumanDecisionRecord(spec({ question }), observedAt),
+				/credential|secret|sensitive/i,
+				question,
+			);
+		}
+	});
 });
 
 test("cycle 6 closes canonical decision records before reading hostile values", async (t) => {

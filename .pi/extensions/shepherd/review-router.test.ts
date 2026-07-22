@@ -454,3 +454,89 @@ test("cycle 7 shared credential grammar covers finite Kubernetes Docker and AWS 
 		"finite grammar non-credential assignment",
 	));
 });
+
+test("cycle 8 provider-neutral credential suffixes close every shared review-router text boundary", async (t) => {
+	const suffixAssignments = [
+		"UNLISTED_ALPHA_AUTHORIZATION=SYNTHETIC_CYCLE8_AUTHORIZATION_MARKER",
+		"UNLISTED_BRAVO_TOKEN=SYNTHETIC_CYCLE8_TOKEN_MARKER",
+		"UNLISTED_CHARLIE_ACCESS_TOKEN=SYNTHETIC_CYCLE8_ACCESS_TOKEN_MARKER",
+		"UNLISTED_DELTA_REFRESH_TOKEN=SYNTHETIC_CYCLE8_REFRESH_TOKEN_MARKER",
+		"UNLISTED_ECHO_API_KEY=SYNTHETIC_CYCLE8_API_KEY_MARKER",
+		"UNLISTED_FOXTROT_PASSWORD=SYNTHETIC_CYCLE8_PASSWORD_MARKER",
+		"UNLISTED_GOLF_SECRET=SYNTHETIC_CYCLE8_SECRET_MARKER",
+		"UNLISTED_HOTEL_CLIENT_SECRET=SYNTHETIC_CYCLE8_CLIENT_SECRET_MARKER",
+		"UNLISTED_INDIA_PRIVATE_KEY=SYNTHETIC_CYCLE8_PRIVATE_KEY_MARKER",
+		"UNLISTED_JULIET_DATABASE_URL=SYNTHETIC_CYCLE8_DATABASE_URL_MARKER",
+		"UNLISTED_KILO_CREDENTIAL=SYNTHETIC_CYCLE8_CREDENTIAL_MARKER",
+		"UNLISTED_LIMA_CREDENTIALS=SYNTHETIC_CYCLE8_CREDENTIALS_MARKER",
+		"UNLISTED_MIKE_COOKIE=SYNTHETIC_CYCLE8_COOKIE_MARKER",
+		"UNLISTED_NOVEMBER_COOKIES=SYNTHETIC_CYCLE8_COOKIES_MARKER",
+		"UNLISTED_OSCAR_SET_COOKIE=SYNTHETIC_CYCLE8_SET_COOKIE_MARKER",
+		"UNLISTED_PAPA_SESSION=SYNTHETIC_CYCLE8_SESSION_MARKER",
+		"UNLISTED_QUEBEC_SESSION_ID=SYNTHETIC_CYCLE8_SESSION_ID_MARKER",
+		"UNLISTED_ROMEO_SESSION_TOKEN=SYNTHETIC_CYCLE8_SESSION_TOKEN_MARKER",
+		"UNLISTED_SIERRA_SESSION_COOKIE=SYNTHETIC_CYCLE8_SESSION_COOKIE_MARKER",
+		"UNLISTED_TANGO_CSRF_TOKEN=SYNTHETIC_CYCLE8_CSRF_TOKEN_MARKER",
+	];
+	const finiteSchemaAssignments = [
+		"client-key-data: SYNTHETIC_CYCLE8_KUBERNETES_KEY_DATA",
+		"token: SYNTHETIC_CYCLE8_KUBERNETES_TOKEN",
+		'{"auth":"SYNTHETIC_CYCLE8_DOCKER_AUTH"}',
+		'{"identitytoken":"SYNTHETIC_CYCLE8_DOCKER_IDENTITY_TOKEN"}',
+		"aws_access_key_id = SYNTHETIC_CYCLE8_AWS_ACCESS_KEY_ID",
+		"aws_secret_access_key = SYNTHETIC_CYCLE8_AWS_SECRET_ACCESS_KEY",
+		"aws_session_token = SYNTHETIC_CYCLE8_AWS_SESSION_TOKEN",
+		"ASIAABCDEFGHIJKLMNOP",
+	];
+
+	await t.test("classifies every recognized suffix with an unknown provider prefix", () => {
+		for (const assignment of suffixAssignments) {
+			assert.throws(
+				() => reviewRouterApi.assertNoSensitiveText(assignment, "cycle 8 provider-neutral credential"),
+				/credential|secret|sensitive/i,
+				assignment,
+			);
+			assert.notEqual(reviewRouterApi.redactSensitiveText(assignment), assignment, assignment);
+		}
+	});
+
+	await t.test("redacts the classified value without reflecting its synthetic marker", () => {
+		for (const assignment of suffixAssignments) {
+			const marker = assignment.slice(assignment.indexOf("=") + 1);
+			let rejection: unknown;
+			try {
+				reviewRouterApi.assertNoSensitiveText(assignment, "cycle 8 provider-neutral credential");
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error, assignment);
+			assert.doesNotMatch(rejection.message, new RegExp(marker), assignment);
+			assert.doesNotMatch(reviewRouterApi.redactSensitiveText(assignment), new RegExp(marker), assignment);
+		}
+	});
+
+	await t.test("allows only the exact documented public FEATURE_TOKEN field", () => {
+		assert.doesNotThrow(() => reviewRouterApi.assertNoSensitiveText(
+			"FEATURE_TOKEN=non-sensitive-build-label",
+			"cycle 8 documented public field",
+		));
+		assert.throws(
+			() => reviewRouterApi.assertNoSensitiveText(
+				"UNLISTED_FEATURE_TOKEN=SYNTHETIC_CYCLE8_NEARBY_MARKER",
+				"cycle 8 nearby credential field",
+			),
+			/credential|secret|sensitive/i,
+		);
+	});
+
+	await t.test("retains the finite Kubernetes Docker and AWS forms", () => {
+		for (const assignment of finiteSchemaAssignments) {
+			assert.throws(
+				() => reviewRouterApi.assertNoSensitiveText(assignment, "cycle 8 retained schema credential"),
+				/credential|secret|sensitive/i,
+				assignment,
+			);
+			assert.notEqual(reviewRouterApi.redactSensitiveText(assignment), assignment, assignment);
+		}
+	});
+});

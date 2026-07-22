@@ -18,8 +18,10 @@ import {
 	type ChildIntegrationQuery,
 	type ChildIssueMarkerQuery,
 	type ExternalCallContext,
+	type DurableMutationResult,
 	type GitHubChildIssue,
 	type GitHubOrchestrationTransport,
+	type GitAncestryProof,
 	type GitAncestryQuery,
 	type GitHubPullRequestQuery,
 	type GitHubRosterQuery,
@@ -30,6 +32,7 @@ import {
 	type ParentDecisionPolicy,
 	type ParentReadyAuthorization,
 	type ParentReadyAuthorityCoordinate,
+	type ParentReadyCompareEffectResult,
 	type ParentReadyDurableAuthorityBoundary,
 	type ParentReadyFreshnessEnvelope,
 	type ParentReadyJournalQuery,
@@ -40,6 +43,7 @@ import {
 	type PublishRosterRequest,
 	type PullRequestMarkerQuery,
 	type RequiredCheckPolicySource,
+	type ParentReadyRecoveryFence,
 	type RollbackParentReadyRequest,
 } from "./github-orchestrator.ts";
 import * as githubOrchestratorApi from "./github-orchestrator.ts";
@@ -550,6 +554,7 @@ function orchestratorFor(
 	policySource: unknown = defaultPolicySource(transport),
 	timeoutMs = 25,
 	parentReadyAuthority: ParentReadyDurableAuthorityBoundary = transport,
+	now: () => Date = () => new Date("2026-07-22T00:00:00.000Z"),
 ): GitHubParentOrchestrator {
 	const sessionSource = {
 		async findAttestations(target: { pullRequest: number; workItemId: string }, context?: TestCallContext): Promise<unknown> {
@@ -602,7 +607,7 @@ function orchestratorFor(
 		{
 			externalCallTimeoutMs: timeoutMs,
 			parentReadyAuthority,
-			now: () => new Date("2026-07-22T00:00:00.000Z"),
+			now,
 		},
 	) as GitHubParentOrchestrator;
 }
@@ -2763,10 +2768,10 @@ test("cycle 5 links caller lifecycle and retains keyed ownership until live port
 test("cycle 5 durable run state names current review truth and exact available checkpoints", async () => {
 	const raw = await readFile(".planning/phases/478-shepherd-github-parent-orchestration/RUN-STATE.json", "utf8");
 	const state = JSON.parse(raw) as any;
-	assert.equal(state.details.reviewHistory[0].cycle, 5);
-	assert.equal(state.details.reviewHistory[0].priorReviewedCandidate, "63ac436fdac5fc46be7004f8109c4f068aa5749c");
-	assert.equal(state.details.reviewHistory[0].review1, "blocked");
-	assert.equal(state.details.reviewHistory[0].review2, "blocked");
+	const historical = state.details.reviewHistory.find((entry: { cycle?: number }) => entry.cycle === 5);
+	assert.equal(historical.priorReviewedCandidate, "63ac436fdac5fc46be7004f8109c4f068aa5749c");
+	assert.equal(historical.review1, "blocked");
+	assert.equal(historical.review2, "blocked");
 	assert.equal(state.details.checkpoints.cycle5Plan, "7cf9c88ddadee395020444c19ee9f001b0807a53");
 	assert.equal(state.details.checkpoints.cycle5Red, "6cb21902244e4bccf390c4e7556eb615e5e1697f");
 	assert.equal(state.details.checkpoints.cycle5Evidence, "63ac436fdac5fc46be7004f8109c4f068aa5749c");
@@ -3191,9 +3196,9 @@ test("cycle 6 durable run state is current, exact, and non-self-referential", as
 	const raw = await readFile(".planning/phases/478-shepherd-github-parent-orchestration/RUN-STATE.json", "utf8");
 	const state = JSON.parse(raw) as any;
 	assert.equal(state.details.candidateRef, "HEAD");
-	assert.equal(state.details.priorReviewState.cycle, 6);
-	assert.equal(state.details.priorReviewState.priorReviewedCandidate, "dbce5b7d0c698bc802594211072fed77eff23c1c");
-	assert.equal(state.details.priorReviewState.findingsConsolidatedIntoCycle, 7);
+	const historical = state.details.reviewHistory.find((entry: { cycle?: number }) => entry.cycle === 6);
+	assert.equal(historical.priorReviewedCandidate, "dbce5b7d0c698bc802594211072fed77eff23c1c");
+	assert.equal(historical.findingsConsolidatedIntoCycle, 7);
 	assert.equal(state.details.checkpoints.cycle5Evidence, "63ac436fdac5fc46be7004f8109c4f068aa5749c");
 	assert.equal(state.details.checkpoints.cycle6Plan, "2832993b93d07ea20197bad52ec23700fe21fc1e");
 	assert.match(state.details.checkpoints.cycle6Red, /^[0-9a-f]{40}$/u);
@@ -3237,6 +3242,78 @@ test("cycle 7 rejects every finite schema credential at every plan and decision-
 				.reconcileParentReadiness(candidate, receipts, { ...decisionPolicy, question: sample }));
 		});
 	}
+});
+
+const cycle8CredentialAssignmentSuffixes = [
+	"AUTHORIZATION",
+	"TOKEN",
+	"ACCESS_TOKEN",
+	"REFRESH_TOKEN",
+	"API_KEY",
+	"PASSWORD",
+	"SECRET",
+	"CLIENT_SECRET",
+	"PRIVATE_KEY",
+	"DATABASE_URL",
+	"CREDENTIAL",
+	"CREDENTIALS",
+	"COOKIE",
+	"COOKIES",
+	"SET_COOKIE",
+	"SESSION",
+	"SESSION_ID",
+	"SESSION_TOKEN",
+	"SESSION_COOKIE",
+	"CSRF_TOKEN",
+] as const;
+
+test("cycle 8 rejects every provider-neutral credential suffix through orchestration consumers", async (t) => {
+	const source = JSON.parse(await readFile(objectivePath, "utf8")) as Record<string, unknown>;
+	const child = (source.children as Array<Record<string, unknown>>)[0];
+	for (const [index, suffix] of cycle8CredentialAssignmentSuffixes.entries()) {
+		await t.test(suffix.toLowerCase(), async () => {
+			const marker = `CYCLE8_ASSIGNMENT_${index + 1}`;
+			const sample = `UNLISTED_VENDOR_${suffix}=${marker}`;
+			const variants: Record<string, unknown>[] = [
+				{ ...source, title: sample },
+				{ ...source, objective: sample },
+				{ ...source, children: [{ ...child, title: sample }] },
+				{ ...source, children: [{ ...child, objective: sample }] },
+				{ ...source, children: [{ ...child, verification: [{ id: "focused", kind: "test", description: sample }] }] },
+			];
+			for (const value of variants) {
+				let rejection: unknown;
+				try { createPlanFromSource(value); } catch (error) { rejection = error; }
+				assert.ok(rejection instanceof Error);
+				assert.match(rejection.message, /credential|secret|sensitive/i);
+				assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+			}
+			const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+			let rejection: unknown;
+			try {
+				await orchestratorFor(transport, new FakeDecisionBroker()).reconcileParentReadiness(
+					candidate,
+					receipts,
+					{ ...decisionPolicy, question: sample },
+				);
+			} catch (error) {
+				rejection = error;
+			}
+			assert.ok(rejection instanceof Error);
+			assert.match(rejection.message, /credential|secret|sensitive/i);
+			assert.doesNotMatch(rejection.message, new RegExp(marker, "u"));
+		});
+	}
+
+	const safePlan = createPlanFromSource({ ...source, title: "FEATURE_TOKEN=enabled" });
+	assert.equal(safePlan.title, "FEATURE_TOKEN=enabled");
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	const safeDecision = await orchestratorFor(transport, new FakeDecisionBroker()).reconcileParentReadiness(
+		candidate,
+		receipts,
+		{ ...decisionPolicy, question: "FEATURE_TOKEN=enabled" },
+	);
+	assert.equal(safeDecision.kind, "ready");
 });
 
 function cycle7FutureParentDecision(
@@ -3545,6 +3622,271 @@ test("cycle 7 joins and quarantines every uncertain late parent-ready effect", a
 	});
 });
 
+class ImmediateApplyThenRejectAuthority implements ParentReadyDurableAuthorityBoundary {
+	compareCalls = 0;
+	rollbackCalls = 0;
+	readonly rollbackRequests: RollbackParentReadyRequest[] = [];
+	readonly #transport: FakeTransport;
+	readonly #recoveryStarted: Promise<void>;
+	#announceRecovery = (): void => {};
+	readonly #recoveryGate: Promise<void>;
+	#releaseRecovery = (): void => {};
+
+	constructor(transport: FakeTransport) {
+		this.#transport = transport;
+		this.#recoveryStarted = new Promise<void>((resolve) => { this.#announceRecovery = resolve; });
+		this.#recoveryGate = new Promise<void>((resolve) => { this.#releaseRecovery = resolve; });
+	}
+
+	get recoveryStarted(): Promise<void> {
+		return this.#recoveryStarted;
+	}
+
+	releaseRecovery(): void {
+		this.#releaseRecovery();
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		this.compareCalls += 1;
+		await this.#transport.markParentReady(request, context);
+		throw new Error("synthetic response serialization failure after durable ready effect");
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		_context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackCalls += 1;
+		this.rollbackRequests.push(structuredClone(request));
+		this.#announceRecovery();
+		await this.#recoveryGate;
+		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#transport.pullRequests[index];
+		if (index < 0 || current === undefined) throw new Error("parent pull request missing");
+		const draft = { ...current, draft: true, revision: current.revision + 1 };
+		this.#transport.pullRequests.splice(index, 1, draft);
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: this.rollbackCalls,
+			applied: true,
+			value: structuredClone(draft),
+		};
+	}
+}
+
+async function cycle8ImmediateUncertainScenario(): Promise<{
+	candidate: ParentOrchestrationPlan;
+	receipts: ChildIntegrationReceipt[];
+	transport: FakeTransport;
+	authority: ImmediateApplyThenRejectAuthority;
+	orchestrator: GitHubParentOrchestrator;
+	first: Promise<"rejected" | "resolved">;
+}> {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	const authority = new ImmediateApplyThenRejectAuthority(transport);
+	transport.onPullRequestRead = (_query, matches) => {
+		if (authority.compareCalls > 0) throw new Error("synthetic all-read outage after ready effect");
+		return matches;
+	};
+	const orchestrator = orchestratorFor(
+		transport,
+		new FakeDecisionBroker(),
+		defaultPolicySource(transport),
+		25,
+		authority,
+	);
+	const first = orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy)
+		.then(() => "resolved" as const, () => "rejected" as const);
+	return { candidate, receipts, transport, authority, orchestrator, first };
+}
+
+test("cycle 8 quarantines every immediate uncertain non-value outcome", async (t) => {
+	await t.test("apply then reject starts recovery even when every visibility read fails", async () => {
+		const scenario = await cycle8ImmediateUncertainScenario();
+		assert.equal(await settleWithin(scenario.first, 100), "rejected");
+		const started = await settleWithin(scenario.authority.recoveryStarted, 100);
+		scenario.authority.releaseRecovery();
+		assert.notEqual(started, "hung");
+		await new Promise<void>((resolve) => setTimeout(resolve, 20));
+	});
+
+	await t.test("durable recovery restores the exact parent draft", async () => {
+		const scenario = await cycle8ImmediateUncertainScenario();
+		await scenario.first;
+		const started = await settleWithin(scenario.authority.recoveryStarted, 100);
+		scenario.authority.releaseRecovery();
+		assert.notEqual(started, "hung");
+		await new Promise<void>((resolve) => setTimeout(resolve, 30));
+		const parent = scenario.transport.pullRequests.find((entry) => entry.number === 900);
+		assert.ok(parent);
+		assert.equal(parent.draft, true);
+	});
+
+	await t.test("same keyed operation cannot reenter while recovery owns the effect", async () => {
+		const scenario = await cycle8ImmediateUncertainScenario();
+		await scenario.first;
+		const started = await settleWithin(scenario.authority.recoveryStarted, 100);
+		assert.notEqual(started, "hung");
+		scenario.transport.onPullRequestRead = undefined;
+		const second = await settleWithin(
+			scenario.orchestrator.reconcileParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy)
+				.then(() => "resolved" as const, () => "rejected" as const),
+			80,
+		);
+		assert.notEqual(second, "resolved");
+		assert.equal(scenario.authority.compareCalls, 1);
+		scenario.authority.releaseRecovery();
+		await new Promise<void>((resolve) => setTimeout(resolve, 30));
+	});
+
+	await t.test("stop remains incomplete until durable recovery settles and then joins", async () => {
+		const scenario = await cycle8ImmediateUncertainScenario();
+		await scenario.first;
+		const started = await settleWithin(scenario.authority.recoveryStarted, 100);
+		assert.notEqual(started, "hung");
+		const early = await scenario.orchestrator.stop({ deadlineAt: new Date(Date.now() + 10).toISOString() });
+		assert.equal(early.kind, "incomplete");
+		scenario.authority.releaseRecovery();
+		await new Promise<void>((resolve) => setTimeout(resolve, 30));
+		assert.equal((await scenario.orchestrator.stop()).kind, "joined");
+	});
+});
+
+class FencedRollbackAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly rollbackRequests: RollbackParentReadyRequest[] = [];
+	readonly rollbackContexts: ExternalCallContext[] = [];
+	readyRequest?: MarkParentReadyRequest;
+	firstAttemptAborted = false;
+	readonly #transport: FakeTransport;
+	readonly #secondAttemptStarted: Promise<void>;
+	#announceSecondAttempt = (): void => {};
+	readonly #secondAttemptGate: Promise<void>;
+	#releaseSecondAttempt = (): void => {};
+	#resolveFirstAttempt = (): void => {};
+	#staleReady?: GitHubPullRequestEvidence;
+
+	constructor(transport: FakeTransport) {
+		this.#transport = transport;
+		this.#secondAttemptStarted = new Promise<void>((resolve) => { this.#announceSecondAttempt = resolve; });
+		this.#secondAttemptGate = new Promise<void>((resolve) => { this.#releaseSecondAttempt = resolve; });
+	}
+
+	get secondAttemptStarted(): Promise<void> {
+		return this.#secondAttemptStarted;
+	}
+
+	releaseSecondAttempt(): void {
+		this.#releaseSecondAttempt();
+	}
+
+	resolveSupersededFirstAttempt(): void {
+		this.#resolveFirstAttempt();
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		this.readyRequest = structuredClone(request);
+		const mutation = await this.#transport.markParentReady(request, context);
+		this.#staleReady = structuredClone(mutation.value);
+		await new Promise<void>((resolve) => setTimeout(resolve, 120));
+		return { schemaVersion: 1, kind: "applied", mutation };
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackRequests.push(structuredClone(request));
+		this.rollbackContexts.push(context);
+		const attempt = this.rollbackRequests.length;
+		if (attempt === 1) {
+			context.signal.addEventListener("abort", () => { this.firstAttemptAborted = true; }, { once: true });
+			return new Promise<DurableMutationResult<GitHubPullRequestEvidence>>((resolve) => {
+				this.#resolveFirstAttempt = () => {
+					const staleReady = this.#staleReady;
+					if (staleReady === undefined) throw new Error("missing stale ready response");
+					resolve({
+						schemaVersion: 1,
+						idempotencyKey: request.mutation.idempotencyKey,
+						intentDigest: request.mutation.intentDigest,
+						revision: 1,
+						applied: true,
+						value: structuredClone(staleReady),
+					});
+				};
+			});
+		}
+		this.#announceSecondAttempt();
+		await this.#secondAttemptGate;
+		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#transport.pullRequests[index];
+		if (index < 0 || current === undefined) throw new Error("parent pull request missing");
+		const draft = current.draft ? current : { ...current, draft: true, revision: current.revision + 1 };
+		this.#transport.pullRequests.splice(index, 1, draft);
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: attempt,
+			applied: true,
+			value: structuredClone(draft),
+		};
+	}
+}
+
+test("cycle 8 bounds and durably fences rollback attempts before releasing quarantine", async () => {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	const authority = new FencedRollbackAuthority(transport);
+	const orchestrator = orchestratorFor(
+		transport,
+		new FakeDecisionBroker(),
+		defaultPolicySource(transport),
+		20,
+		authority,
+	);
+	await assert.rejects(
+		orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy),
+		/timeout|external|ready/i,
+	);
+	const retried = await settleWithin(authority.secondAttemptStarted, 250);
+	assert.notEqual(retried, "hung", "a non-settling rollback response must not defeat the next fenced attempt");
+	assert.equal(authority.firstAttemptAborted, true, "the first rollback response wait receives a real abort");
+	assert.ok(authority.readyRequest);
+	assert.ok(authority.rollbackRequests.length >= 2);
+	const first = authority.rollbackRequests[0];
+	const second = authority.rollbackRequests[1];
+	const firstFence: ParentReadyRecoveryFence = first.recovery;
+	const secondFence: ParentReadyRecoveryFence = second.recovery;
+	assert.equal(firstFence.recoveryId, secondFence.recoveryId);
+	assert.equal(firstFence.attempt, 1);
+	assert.equal(secondFence.attempt, 2);
+	assert.equal(firstFence.supersedesAttempt, null);
+	assert.equal(secondFence.supersedesAttempt, 1);
+	assert.deepEqual(firstFence.readyMutation, authority.readyRequest.mutation);
+	assert.deepEqual(secondFence.readyMutation, authority.readyRequest.mutation);
+	assert.equal(first.mutation.expectedResourceRevision, null);
+	assert.equal(second.mutation.expectedResourceRevision, null);
+	const blockedStop = await orchestrator.stop({ deadlineAt: new Date(Date.now() + 10).toISOString() });
+	assert.equal(blockedStop.kind, "incomplete", "a claimed fence alone is not an authoritative draft observation");
+	authority.releaseSecondAttempt();
+	await new Promise<void>((resolve) => setTimeout(resolve, 150));
+	const draft = transport.pullRequests.find((entry) => entry.number === 900);
+	assert.ok(draft);
+	assert.equal(draft.draft, true);
+	assert.equal((await orchestrator.stop()).kind, "joined");
+	authority.resolveSupersededFirstAttempt();
+	await new Promise<void>((resolve) => setTimeout(resolve, 20));
+	assert.equal(transport.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+	assert.equal((await orchestrator.stop()).kind, "joined", "a superseded late result cannot resettle controller state");
+});
+
 test("cycle 7 stable parent-ready identity excludes volatile freshness metadata", async (t) => {
 	const baseline = await captureCycle7ReadyRequest();
 	for (const [name, refreshed] of [
@@ -3567,6 +3909,199 @@ test("cycle 7 stable parent-ready identity excludes volatile freshness metadata"
 			assert.notEqual(refreshedFreshness.digest, baselineFreshness.digest);
 		});
 	}
+});
+
+type Cycle8FreshnessRefresh = "policy" | "ancestry" | "review" | "combined";
+
+async function captureCycle8PublicPreparedCommit(
+	refresh: Cycle8FreshnessRefresh,
+): Promise<{
+	journaled: PreparedParentReadyOperation;
+	journaledBeforeCommit: PreparedParentReadyOperation;
+	refreshed: PreparedParentReadyOperation;
+	request: MarkParentReadyRequest;
+}> {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	let policyObservedAt = "2026-07-21T12:06:00.000Z";
+	let ancestryObservedAt = "2026-07-21T12:05:00.000Z";
+	let ancestryRevision = 1;
+	transport.ancestryProof = async (query) => ({
+		schemaVersion: 1,
+		authority: "transport",
+		...query,
+		result: true,
+		revision: ancestryRevision,
+		observedAt: ancestryObservedAt,
+	});
+	const baselinePolicySource = defaultPolicySource(transport);
+	const policySource: RequiredCheckPolicySource = {
+		async findRequiredCheckPolicies(query, context) {
+			const found = await baselinePolicySource.findRequiredCheckPolicies(query, context) as {
+				items: RequiredGitHubCheckPolicyObservation[];
+				complete: boolean;
+			};
+			return {
+				...found,
+				items: found.items.map((item) => ({ ...item, observedAt: policyObservedAt })),
+			};
+		},
+	};
+	let captured: MarkParentReadyRequest | undefined;
+	const authority: ParentReadyDurableAuthorityBoundary = {
+		async compareConsumeAndMarkParentReady(request): Promise<ParentReadyCompareEffectResult> {
+			captured = structuredClone(request);
+			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+		},
+		async quarantineAndRollbackParentReady(): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+			throw new Error("freshness capture must not invoke rollback");
+		},
+	};
+	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker(), policySource, 25, authority);
+	const prepared = await orchestrator.prepareParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(prepared.kind, "prepared");
+	if (prepared.kind !== "prepared") throw new Error("parent readiness did not prepare");
+	const journaled = structuredClone(prepared.operation);
+	if (refresh === "policy" || refresh === "combined") {
+		policyObservedAt = "2026-07-21T12:08:00.000Z";
+	}
+	if (refresh === "ancestry" || refresh === "combined") {
+		ancestryObservedAt = "2026-07-21T12:08:00.000Z";
+		ancestryRevision = 3;
+	}
+	if (refresh === "review" || refresh === "combined") {
+		const parent = transport.pullRequests.find((entry) => entry.number === 900);
+		assert.ok(parent);
+		parent.reviews.push({ ...parent.reviews[0], completedAt: "2026-07-21T12:03:00.000Z" });
+	}
+	const current = await orchestrator.prepareParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(current.kind, "prepared");
+	if (current.kind !== "prepared") throw new Error("refreshed parent readiness did not prepare");
+	const journaledBeforeCommit = structuredClone(journaled);
+	const result = await orchestrator.commitPreparedParentReadiness(candidate, receipts, journaled);
+	assert.deepEqual(result, {
+		kind: "blocked",
+		blockers: ["parent_ready_authority_conflict:authorization_state"],
+	});
+	assert.ok(captured);
+	return { journaled, journaledBeforeCommit, refreshed: current.operation, request: captured };
+}
+
+test("cycle 8 public prepared commit forwards refreshed evidence with stable journaled identity", async (t) => {
+	for (const [name, refresh] of [
+		["policy observation", "policy"],
+		["ancestry observation", "ancestry"],
+		["equivalent later clean review", "review"],
+		["combined freshness envelope", "combined"],
+	] as const) {
+		await t.test(name, async () => {
+			const captured = await captureCycle8PublicPreparedCommit(refresh);
+			assert.notEqual(captured.refreshed.freshness.digest, captured.journaled.freshness.digest);
+			assert.deepEqual(captured.request.freshness, captured.refreshed.freshness);
+		});
+	}
+
+	await t.test("original authorization key and intent remain exact while the journal stays immutable", async () => {
+		const captured = await captureCycle8PublicPreparedCommit("combined");
+		assert.deepEqual(captured.request.authorization, captured.journaled.authorization);
+		assert.deepEqual(captured.request.mutation, captured.journaled.mutation);
+		assert.deepEqual(captured.journaled, captured.journaledBeforeCommit);
+		assert.deepEqual(captured.request.freshness, captured.refreshed.freshness);
+		assert.notEqual(captured.request.freshness.digest, captured.journaled.freshness.digest);
+	});
+});
+
+test("cycle 8 actual broker adapter resumes one persisted consumed authorization after expiry", async () => {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	const repository = new MemoryHumanDecisionRepository();
+	const request: GitHubDecisionRequest = {
+		requestId: decisionPolicy.requestId,
+		gate: "parent_merge",
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		pullRequest: 900,
+		generation: candidate.generation,
+		headSha: "e".repeat(40),
+		allowedOptions: ["approve-merge", "reject"],
+		actorAllowlist: [...decisionPolicy.actorAllowlist],
+		expiresAt: decisionPolicy.expiresAt,
+		question: decisionPolicy.question,
+	};
+	const binding = {
+		repository: request.repository,
+		target: { kind: "pull_request" as const, number: request.pullRequest },
+		generation: request.generation,
+		headSha: request.headSha,
+	};
+	repository.records.set(request.requestId, createHumanDecisionRecord({
+		requestId: request.requestId,
+		gate: request.gate,
+		binding,
+		allowedOptions: request.allowedOptions,
+		actorAllowlist: request.actorAllowlist,
+		expiresAt: request.expiresAt,
+		question: request.question,
+	}, new Date("2026-07-21T12:00:00.000Z")));
+	await recordHumanDecisionRequestComment(repository, request.requestId, binding, {
+		id: 1,
+		url: `https://github.com/${request.repository}/pull/${request.pullRequest}#issuecomment-1`,
+		actor: "shepherd-host",
+		createdAt: "2026-07-21T12:00:10.000Z",
+	}, new Date("2026-07-21T12:00:10.000Z"));
+	await recordHumanDecision(repository, request.requestId, binding, approvedDecision);
+	await consumeHumanDecision(repository, request.requestId, binding, new Date("2026-07-21T12:00:40.000Z"));
+	let unexpectedGitHubCalls = 0;
+	const githubTransport: GitHubDecisionTransport = {
+		async getAuthenticatedActor(): Promise<string> {
+			unexpectedGitHubCalls += 1;
+			throw new Error("existing consumed decision must not query GitHub actor");
+		},
+		async listComments(): Promise<GitHubComment[]> {
+			unexpectedGitHubCalls += 1;
+			throw new Error("existing consumed decision must not list GitHub comments");
+		},
+		async createDecisionRequestComment(): Promise<GitHubComment> {
+			unexpectedGitHubCalls += 1;
+			throw new Error("existing consumed decision must not publish another comment");
+		},
+	};
+	const beforeExpiry = githubOrchestratorApi.adaptGitHubDecisionBroker(new GitHubDecisionBroker(
+		repository,
+		githubTransport,
+		{ now: () => new Date("2026-07-21T12:01:00.000Z") },
+	));
+	const firstController = orchestratorFor(
+		transport,
+		beforeExpiry,
+		defaultPolicySource(transport),
+		25,
+		transport,
+		() => new Date("2026-07-21T12:01:00.000Z"),
+	);
+	const prepared = await firstController.prepareParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(prepared.kind, "prepared");
+	if (prepared.kind !== "prepared") throw new Error("parent readiness did not prepare before expiry");
+	const journaled = structuredClone(prepared.operation);
+	const afterExpiry = githubOrchestratorApi.adaptGitHubDecisionBroker(new GitHubDecisionBroker(
+		repository,
+		githubTransport,
+		{ now: () => new Date("2028-07-21T12:01:00.000Z") },
+	));
+	const restartedController = orchestratorFor(
+		transport,
+		afterExpiry,
+		defaultPolicySource(transport),
+		25,
+		transport,
+		() => new Date("2028-07-21T12:01:00.000Z"),
+	);
+	const committed = await restartedController.commitPreparedParentReadiness(candidate, receipts, journaled);
+	assert.equal(committed.kind, "ready");
+	assert.equal(transport.markReadyCalls, 1);
+	const replayed = await restartedController.commitPreparedParentReadiness(candidate, receipts, journaled);
+	assert.equal(replayed.kind, "ready");
+	assert.equal(transport.markReadyCalls, 1, "the journaled authorization applies exactly once");
+	assert.equal(unexpectedGitHubCalls, 0);
+	assert.equal((await restartedController.stop()).kind, "joined");
 });
 
 test("cycle 7 timeout retry reuses one intent after harmless authority refresh", async () => {
@@ -3651,30 +4186,40 @@ test("cycle 7 timeout retry reuses one intent after harmless authority refresh",
 	assert.notEqual(requests[1].freshness.digest, requests[0].freshness.digest);
 });
 
-class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
+interface PortOnlyReadinessSeed {
+	issues: readonly GitHubChildIssue[];
+	pullRequests: readonly GitHubPullRequestEvidence[];
+	rosters: readonly GitHubRosterSnapshot[];
+	integrations: readonly ChildIntegrationReceipt[];
+}
+
+class PortOnlyReadinessBacking {
 	readonly issues: GitHubChildIssue[];
 	readonly pullRequests: GitHubPullRequestEvidence[];
 	readonly rosters: GitHubRosterSnapshot[];
 	readonly integrations: ChildIntegrationReceipt[];
 	pullRequestReadCalls = 0;
 
-	constructor(seed: {
-		issues: readonly GitHubChildIssue[];
-		pullRequests: readonly GitHubPullRequestEvidence[];
-		rosters: readonly GitHubRosterSnapshot[];
-		integrations: readonly ChildIntegrationReceipt[];
-	}) {
+	constructor(seed: PortOnlyReadinessSeed) {
 		this.issues = structuredClone([...seed.issues]);
 		this.pullRequests = structuredClone([...seed.pullRequests]);
 		this.rosters = structuredClone([...seed.rosters]);
 		this.integrations = structuredClone([...seed.integrations]);
+	}
+}
+
+class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
+	readonly #backing: PortOnlyReadinessBacking;
+
+	constructor(backing: PortOnlyReadinessBacking) {
+		this.#backing = backing;
 	}
 
 	async findChildIssues(
 		query: ChildIssueMarkerQuery,
 		_context: ExternalCallContext,
 	): Promise<AuthoritativeLookup<GitHubChildIssue>> {
-		return { items: this.issues.filter((entry) => entry.marker === query.marker), complete: true };
+		return { items: this.#backing.issues.filter((entry) => entry.marker === query.marker), complete: true };
 	}
 
 	async createChildIssue(_request: CreateChildIssueRequest, _context: ExternalCallContext): Promise<never> {
@@ -3685,8 +4230,8 @@ class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
 		query: PullRequestMarkerQuery,
 		_context: ExternalCallContext,
 	): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>> {
-		this.pullRequestReadCalls += 1;
-		return { items: this.pullRequests.filter((entry) => entry.marker === query.marker), complete: true };
+		this.#backing.pullRequestReadCalls += 1;
+		return { items: this.#backing.pullRequests.filter((entry) => entry.marker === query.marker), complete: true };
 	}
 
 	async createPullRequest(_request: CreatePullRequestRequest, _context: ExternalCallContext): Promise<never> {
@@ -3697,7 +4242,7 @@ class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
 		query: GitHubRosterQuery,
 		_context: ExternalCallContext,
 	): Promise<AuthoritativeLookup<GitHubRosterSnapshot>> {
-		return { items: this.rosters.filter((entry) => entry.marker === query.marker), complete: true };
+		return { items: this.#backing.rosters.filter((entry) => entry.marker === query.marker), complete: true };
 	}
 
 	async publishParentRoster(_request: PublishRosterRequest, _context: ExternalCallContext): Promise<never> {
@@ -3709,7 +4254,7 @@ class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
 		_context: ExternalCallContext,
 	): Promise<AuthoritativeLookup<ChildIntegrationReceipt>> {
 		return {
-			items: this.integrations.filter((entry) => entry.childId === query.childId && entry.marker === query.marker),
+			items: this.#backing.integrations.filter((entry) => entry.childId === query.childId && entry.marker === query.marker),
 			complete: true,
 		};
 	}
@@ -3718,7 +4263,7 @@ class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
 		throw new Error("port-only readiness fixture does not integrate children");
 	}
 
-	async proveAncestry(query: GitAncestryQuery, _context: ExternalCallContext): Promise<any> {
+	async proveAncestry(query: GitAncestryQuery, _context: ExternalCallContext): Promise<GitAncestryProof> {
 		return {
 			schemaVersion: 1,
 			authority: "transport",
@@ -3733,6 +4278,21 @@ class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
 class PortOnlyParentReadyJournal implements ParentReadyOperationJournal {
 	readonly #prepared = new Map<string, PreparedParentReadyOperation>();
 	readonly settlements: ParentReadySettlementRecord[] = [];
+
+	constructor(snapshot?: {
+		prepared: readonly PreparedParentReadyOperation[];
+		settlements: readonly ParentReadySettlementRecord[];
+	}) {
+		for (const operation of snapshot?.prepared ?? []) {
+			const query = {
+				planDigest: operation.planDigest,
+				authorizationDigest: operation.authorization.digest,
+				mutationIdempotencyKey: operation.mutation.idempotencyKey,
+			};
+			this.#prepared.set(this.key(query), structuredClone(operation));
+		}
+		this.settlements.push(...structuredClone(snapshot?.settlements ?? []));
+	}
 
 	private key(query: ParentReadyJournalQuery): string {
 		return `${query.planDigest}\u0000${query.authorizationDigest}\u0000${query.mutationIdempotencyKey}`;
@@ -3757,23 +4317,30 @@ class PortOnlyParentReadyJournal implements ParentReadyOperationJournal {
 	async persistSettlement(settlement: ParentReadySettlementRecord, _context: ExternalCallContext): Promise<void> {
 		this.settlements.push(githubOrchestratorApi.validateParentReadySettlementRecord(settlement));
 	}
+
+	snapshot(): { prepared: PreparedParentReadyOperation[]; settlements: ParentReadySettlementRecord[] } {
+		return {
+			prepared: structuredClone([...this.#prepared.values()]),
+			settlements: structuredClone(this.settlements),
+		};
+	}
 }
 
 class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundary {
-	readonly #transport: PortOnlyReadinessTransport;
+	readonly #backing: PortOnlyReadinessBacking;
 	readonly #journal: ParentReadyOperationJournal;
 	#mutationRevision = 0;
 	readonly #mutations = new Map<string, { digest: string; value: GitHubPullRequestEvidence; revision: number }>();
 
-	constructor(transport: PortOnlyReadinessTransport, journal: ParentReadyOperationJournal) {
-		this.#transport = transport;
+	constructor(backing: PortOnlyReadinessBacking, journal: ParentReadyOperationJournal) {
+		this.#backing = backing;
 		this.#journal = journal;
 	}
 
 	async compareConsumeAndMarkParentReady(
 		requestValue: MarkParentReadyRequest,
 		context: ExternalCallContext,
-	): Promise<any> {
+	): Promise<ParentReadyCompareEffectResult> {
 		const request = githubOrchestratorApi.validateMarkParentReadyRequest(requestValue);
 		const query = {
 			planDigest: request.authorization.planDigest,
@@ -3805,8 +4372,8 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 				},
 			};
 		}
-		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
-		const current = this.#transport.pullRequests[index];
+		const index = this.#backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#backing.pullRequests[index];
 		if (index < 0 || current === undefined || current.headSha !== request.headSha) {
 			return { schemaVersion: 1, kind: "conflict", coordinate: "head" };
 		}
@@ -3814,7 +4381,7 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 			return { schemaVersion: 1, kind: "conflict", coordinate: "pull_request_revision" };
 		}
 		const updated = { ...current, draft: false, revision: current.revision + 1 };
-		this.#transport.pullRequests.splice(index, 1, updated);
+		this.#backing.pullRequests.splice(index, 1, updated);
 		const revision = ++this.#mutationRevision;
 		this.#mutations.set(request.mutation.idempotencyKey, {
 			digest: request.mutation.intentDigest,
@@ -3838,12 +4405,12 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 	async quarantineAndRollbackParentReady(
 		request: RollbackParentReadyRequest,
 		_context: ExternalCallContext,
-	): Promise<any> {
-		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		const index = this.#backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
 		if (index < 0) throw new Error("parent pull request missing");
-		const current = this.#transport.pullRequests[index];
+		const current = this.#backing.pullRequests[index];
 		const updated = { ...current, draft: true, revision: current.revision + 1 };
-		this.#transport.pullRequests.splice(index, 1, updated);
+		this.#backing.pullRequests.splice(index, 1, updated);
 		return {
 			schemaVersion: 1,
 			idempotencyKey: request.mutation.idempotencyKey,
@@ -3852,6 +4419,49 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 			applied: true,
 			value: structuredClone(updated),
 		};
+	}
+}
+
+class PortOnlyDelayedParentReadyAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #delegate: ParentReadyDurableAuthorityBoundary;
+	readonly #recoveryStarted: Promise<void>;
+	#announceRecovery = (): void => {};
+	readonly #recoveryGate: Promise<void>;
+	#releaseRecovery = (): void => {};
+	rollbackCalls = 0;
+
+	constructor(delegate: ParentReadyDurableAuthorityBoundary) {
+		this.#delegate = delegate;
+		this.#recoveryStarted = new Promise<void>((resolve) => { this.#announceRecovery = resolve; });
+		this.#recoveryGate = new Promise<void>((resolve) => { this.#releaseRecovery = resolve; });
+	}
+
+	get recoveryStarted(): Promise<void> {
+		return this.#recoveryStarted;
+	}
+
+	releaseRecovery(): void {
+		this.#releaseRecovery();
+	}
+
+	async compareConsumeAndMarkParentReady(
+		request: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<ParentReadyCompareEffectResult> {
+		const result = await this.#delegate.compareConsumeAndMarkParentReady(request, context);
+		await new Promise<void>((resolve) => setTimeout(resolve, 80));
+		return result;
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
+		this.rollbackCalls += 1;
+		const result = await this.#delegate.quarantineAndRollbackParentReady(request, context);
+		this.#announceRecovery();
+		await this.#recoveryGate;
+		return result;
 	}
 }
 
@@ -3883,11 +4493,94 @@ function portOnlyPolicySource(): RequiredCheckPolicySource {
 	};
 }
 
-function portOnlyAttestations(transport: PortOnlyReadinessTransport): AgentSessionAttestationSource {
+class PortOnlyDecisionBacking {
+	record: HumanDecisionRecord | null = null;
+}
+
+class PortOnlyDecisionBroker implements ParentDecisionBroker {
+	readonly #backing: PortOnlyDecisionBacking;
+
+	constructor(backing: PortOnlyDecisionBacking) {
+		this.#backing = backing;
+	}
+
+	async request(request: GitHubDecisionRequest, _context: ExternalCallContext): Promise<HumanDecisionRecord> {
+		if (this.#backing.record !== null) return structuredClone(this.#backing.record);
+		if (request.gate !== "parent_merge") throw new Error("port-only broker accepts only parent merge decisions");
+		const binding = {
+			repository: request.repository,
+			target: { kind: "pull_request" as const, number: request.pullRequest },
+			generation: request.generation,
+			...(request.headSha === undefined ? {} : { headSha: request.headSha }),
+		};
+		const created = createHumanDecisionRecord({
+			requestId: request.requestId,
+			gate: request.gate,
+			binding,
+			allowedOptions: request.allowedOptions,
+			actorAllowlist: request.actorAllowlist,
+			expiresAt: request.expiresAt,
+			question: request.question,
+		}, new Date("2026-07-21T12:00:00.000Z"));
+		const persisted: HumanDecisionRecord = {
+			...created,
+			requestComment: {
+				id: 1,
+				url: `https://github.com/${request.repository}/pull/${request.pullRequest}#issuecomment-1`,
+				actor: "shepherd-host",
+				createdAt: "2026-07-21T12:00:10.000Z",
+			},
+			updatedAt: "2026-07-21T12:00:10.000Z",
+		};
+		this.#backing.record = persisted;
+		return structuredClone(persisted);
+	}
+
+	async poll(
+		_requestId: string,
+		_binding: HumanDecisionRecord["binding"],
+		_options: GitHubDecisionPollOptions,
+		_context: ExternalCallContext,
+	): Promise<HumanDecisionRecord> {
+		const current = this.#backing.record;
+		if (current === null) throw new Error("decision request is absent");
+		if (current.status === "pending") {
+			const decided: HumanDecisionRecord = {
+				...current,
+				status: "decided",
+				decision: approvedDecision,
+				updatedAt: approvedDecision.decidedAt,
+			};
+			this.#backing.record = decided;
+			return structuredClone(decided);
+		}
+		return structuredClone(current);
+	}
+
+	async consume(
+		_requestId: string,
+		_binding: HumanDecisionRecord["binding"],
+		_context: ExternalCallContext,
+	): Promise<HumanDecisionRecord> {
+		const current = this.#backing.record;
+		if (current === null || current.status !== "decided" || current.decision === undefined) {
+			throw new Error("decision is not consumable");
+		}
+		this.#backing.record = {
+			...current,
+			status: "consumed",
+			consumedAt: "2026-07-21T12:00:40.000Z",
+			updatedAt: "2026-07-21T12:00:40.000Z",
+		};
+		return structuredClone(this.#backing.record);
+	}
+}
+
+function portOnlyAttestations(backing: PortOnlyReadinessBacking): AgentSessionAttestationSource {
 	return {
 		async findAttestations(target, _context) {
 			return {
-				items: transport.pullRequests
+				items: backing.pullRequests
 					.filter((pullRequest) => pullRequest.number === target.pullRequest)
 					.flatMap((pullRequest) => pullRequest.reviews)
 					.filter((review) => review.workItemId === target.workItemId)
@@ -3897,7 +4590,7 @@ function portOnlyAttestations(transport: PortOnlyReadinessTransport): AgentSessi
 		},
 		async findChangedPathEvidence(target, _context) {
 			return {
-				items: transport.pullRequests
+				items: backing.pullRequests
 					.filter((pullRequest) => pullRequest.number === target.pullRequest)
 					.map((pullRequest): GitHubChangedPathEvidence => ({
 						schemaVersion: 1,
@@ -3919,6 +4612,57 @@ function portOnlyAttestations(transport: PortOnlyReadinessTransport): AgentSessi
 	};
 }
 
+async function cycle8PortOnlyPreparedScenario(
+	wrapAuthority: (authority: ParentReadyDurableAuthorityBoundary) => ParentReadyDurableAuthorityBoundary
+		= (authority) => authority,
+): Promise<{
+	backing: PortOnlyReadinessBacking;
+	transport: GitHubOrchestrationTransport;
+	journal: ParentReadyOperationJournal;
+	journalImplementation: PortOnlyParentReadyJournal;
+	authority: ParentReadyDurableAuthorityBoundary;
+	orchestrator: GitHubParentOrchestrator;
+	candidate: ParentOrchestrationPlan;
+	receipts: ChildIntegrationReceipt[];
+	operation: PreparedParentReadyOperation;
+}> {
+	const scenario = await cycle5ReadinessScenario();
+	const backing = new PortOnlyReadinessBacking({
+		issues: scenario.transport.issues,
+		pullRequests: scenario.transport.pullRequests,
+		rosters: scenario.transport.rosters,
+		integrations: scenario.transport.integrations,
+	});
+	const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(backing);
+	const journalImplementation = new PortOnlyParentReadyJournal();
+	const journal: ParentReadyOperationJournal = journalImplementation;
+	const authority = wrapAuthority(new PortOnlyParentReadyAuthority(backing, journal));
+	const orchestrator = new GitHubParentOrchestrator(
+		transport,
+		new FakeDecisionBroker(),
+		portOnlyAttestations(backing),
+		portOnlyPolicySource(),
+		{
+			externalCallTimeoutMs: 20,
+			parentReadyAuthority: authority,
+			now: () => new Date("2026-07-22T00:00:00.000Z"),
+		},
+	);
+	const prepared = await orchestrator.prepareParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy);
+	if (prepared.kind !== "prepared") throw new Error("port-only readiness did not prepare");
+	return {
+		backing,
+		transport,
+		journal,
+		journalImplementation,
+		authority,
+		orchestrator,
+		candidate: scenario.candidate,
+		receipts: scenario.receipts,
+		operation: prepared.operation,
+	};
+}
+
 test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", async () => {
 	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
 	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
@@ -3936,34 +4680,36 @@ test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", 
 });
 
 test("cycle 7 production contract requires atomic authority and exports canonical validators", () => {
-	const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport({
+	const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(new PortOnlyReadinessBacking({
 		issues: [],
 		pullRequests: [],
 		rosters: [],
 		integrations: [],
-	});
+	}));
 	assert.equal("markParentReady" in transport, false);
 	assert.equal("rollbackParentReady" in transport, false);
 	assert.throws(
 		() => Reflect.construct(GitHubParentOrchestrator, [transport, undefined, undefined, undefined, {}]),
 		/parent.ready.*authority|authority.*required/i,
 	);
-	const api = githubOrchestratorApi as unknown as Record<string, unknown>;
-	assert.equal(typeof api.validateParentReadyAuthorization, "function");
-	assert.equal(typeof api.validateParentReadyCompareEffectResult, "function");
+	assert.equal(typeof githubOrchestratorApi.validateParentReadyAuthorization, "function");
+	assert.equal(typeof githubOrchestratorApi.validateParentReadyCompareEffectResult, "function");
+	assert.equal(typeof githubOrchestratorApi.validateRollbackParentReadyRequest, "function");
 });
 
 test("cycle 7 issue 479-shaped wiring uses only public production ports", async () => {
 	const scenario = await cycle5ReadinessScenario();
 	const { candidate, receipts } = scenario;
-	const transport: GitHubOrchestrationTransport & PortOnlyReadinessTransport = new PortOnlyReadinessTransport({
+	const backing = new PortOnlyReadinessBacking({
 		issues: scenario.transport.issues,
 		pullRequests: scenario.transport.pullRequests,
 		rosters: scenario.transport.rosters,
 		integrations: scenario.transport.integrations,
 	});
-	const journal: ParentReadyOperationJournal & PortOnlyParentReadyJournal = new PortOnlyParentReadyJournal();
-	const authority: ParentReadyDurableAuthorityBoundary = new PortOnlyParentReadyAuthority(transport, journal);
+	const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(backing);
+	const journalImplementation = new PortOnlyParentReadyJournal();
+	const journal: ParentReadyOperationJournal = journalImplementation;
+	const authority: ParentReadyDurableAuthorityBoundary = new PortOnlyParentReadyAuthority(backing, journal);
 	const policySource: RequiredCheckPolicySource = {
 		async findRequiredCheckPolicies(query, _context) {
 			const policy = cycle3CheckPolicy(query.baseBranch);
@@ -3981,39 +4727,7 @@ test("cycle 7 issue 479-shaped wiring uses only public production ports", async 
 			};
 		},
 	};
-	const attestations: AgentSessionAttestationSource = {
-		async findAttestations(target, _context) {
-			return {
-				items: transport.pullRequests
-					.filter((pullRequest) => pullRequest.number === target.pullRequest)
-					.flatMap((pullRequest) => pullRequest.reviews)
-					.filter((review) => review.workItemId === target.workItemId)
-					.map(attestReview),
-				complete: true,
-			};
-		},
-		async findChangedPathEvidence(target, _context) {
-			return {
-				items: transport.pullRequests
-					.filter((pullRequest) => pullRequest.number === target.pullRequest)
-					.map((pullRequest): GitHubChangedPathEvidence => ({
-						schemaVersion: 1,
-						authority: "controller",
-						repository: pullRequest.repository,
-						workItemId: pullRequest.workItemId,
-						pullRequest: pullRequest.number,
-						generation: pullRequest.generation,
-						baseSha: pullRequest.baseSha,
-						headSha: pullRequest.headSha,
-						paths: [...pullRequest.changedPaths],
-						complete: true,
-						revision: Math.max(1, pullRequest.revision - 1),
-						observedAt: "2026-07-21T11:58:00.000Z",
-					})),
-				complete: true,
-			};
-		},
-	};
+	const attestations: AgentSessionAttestationSource = portOnlyAttestations(backing);
 	const repository = new MemoryHumanDecisionRepository();
 	const decisionRequest: GitHubDecisionRequest = {
 		requestId: decisionPolicy.requestId,
@@ -4098,8 +4812,233 @@ test("cycle 7 issue 479-shaped wiring uses only public production ports", async 
 		outcome: "ready",
 		settledAt: "2026-07-22T00:00:00.000Z",
 	}, context);
-	assert.equal(journal.settlements.length, 1);
+	assert.equal(journalImplementation.settlements.length, 1);
 	assert.equal((await orchestrator.stop()).kind, "joined");
+});
+
+test("cycle 8 issue 479 composition keeps every production role exact and public", async (t) => {
+	await t.test("transport returns an exact GitAncestryProof", async () => {
+		const backing = new PortOnlyReadinessBacking({ issues: [], pullRequests: [], rosters: [], integrations: [] });
+		const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(backing);
+		const proof: GitAncestryProof = await transport.proveAncestry({
+			repository: "polymetrics-ai/cli",
+			ancestorSha: "a".repeat(40),
+			descendantSha: "b".repeat(40),
+		}, portOnlyContext());
+		assert.equal(proof.result, true);
+		assert.equal(proof.authority, "transport");
+	});
+
+	await t.test("typed applied success crosses transport authority and journal roles", async () => {
+		const scenario = await cycle8PortOnlyPreparedScenario();
+		await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+		const result = await scenario.orchestrator.commitPreparedParentReadiness(
+			scenario.candidate,
+			scenario.receipts,
+			scenario.operation,
+		);
+		assert.equal(result.kind, "ready");
+		assert.equal(scenario.backing.pullRequests.find((entry) => entry.number === 900)?.draft, false);
+	});
+
+	await t.test("typed non-applied conflict remains explicit", async () => {
+		const scenario = await cycle8PortOnlyPreparedScenario();
+		const result = await scenario.orchestrator.commitPreparedParentReadiness(
+			scenario.candidate,
+			scenario.receipts,
+			scenario.operation,
+		);
+		assert.deepEqual(result, {
+			kind: "blocked",
+			blockers: ["parent_ready_authority_conflict:authorization_state"],
+		});
+		assert.equal(scenario.backing.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+	});
+
+	await t.test("uncertain applied result invokes the exact rollback result contract", async () => {
+		let delayed: PortOnlyDelayedParentReadyAuthority | undefined;
+		const scenario = await cycle8PortOnlyPreparedScenario((authority) => {
+			delayed = new PortOnlyDelayedParentReadyAuthority(authority);
+			return delayed;
+		});
+		await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+		await assert.rejects(
+			scenario.orchestrator.commitPreparedParentReadiness(
+				scenario.candidate,
+				scenario.receipts,
+				scenario.operation,
+			),
+			/timeout|external|ready/i,
+		);
+		assert.ok(delayed);
+		assert.notEqual(await settleWithin(delayed.recoveryStarted, 100), "hung");
+		delayed.releaseRecovery();
+		await new Promise<void>((resolve) => setTimeout(resolve, 100));
+		assert.equal(delayed.rollbackCalls, 1);
+		assert.equal(scenario.backing.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+	});
+
+	await t.test("live recovery reports stop incomplete and then joined", async () => {
+		let delayed: PortOnlyDelayedParentReadyAuthority | undefined;
+		const scenario = await cycle8PortOnlyPreparedScenario((authority) => {
+			delayed = new PortOnlyDelayedParentReadyAuthority(authority);
+			return delayed;
+		});
+		await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+		await assert.rejects(scenario.orchestrator.commitPreparedParentReadiness(
+			scenario.candidate,
+			scenario.receipts,
+			scenario.operation,
+		));
+		assert.ok(delayed);
+		assert.notEqual(await settleWithin(delayed.recoveryStarted, 100), "hung");
+		assert.equal((await scenario.orchestrator.stop({ deadlineAt: new Date(Date.now() + 10).toISOString() })).kind, "incomplete");
+		delayed.releaseRecovery();
+		await new Promise<void>((resolve) => setTimeout(resolve, 100));
+		assert.equal((await scenario.orchestrator.stop()).kind, "joined");
+	});
+
+	await t.test("durable settlement uses the public journal record", async () => {
+		const scenario = await cycle8PortOnlyPreparedScenario();
+		const query: ParentReadyJournalQuery = {
+			planDigest: scenario.operation.planDigest,
+			authorizationDigest: scenario.operation.authorization.digest,
+			mutationIdempotencyKey: scenario.operation.mutation.idempotencyKey,
+		};
+		await scenario.journal.persistPrepared(scenario.operation, portOnlyContext());
+		await scenario.journal.persistSettlement({
+			schemaVersion: 1,
+			...query,
+			outcome: "blocked",
+			settledAt: "2026-07-22T00:00:00.000Z",
+		}, portOnlyContext());
+		assert.equal(scenario.journalImplementation.settlements.length, 1);
+		assert.deepEqual(scenario.journalImplementation.settlements[0], {
+			schemaVersion: 1,
+			...query,
+			outcome: "blocked",
+			settledAt: "2026-07-22T00:00:00.000Z",
+		});
+	});
+});
+
+test("cycle 8 reconstructs every readiness role from serialized durable state", async (t) => {
+	const scenario = await cycle5ReadinessScenario();
+	const originalBacking = new PortOnlyReadinessBacking({
+		issues: scenario.transport.issues,
+		pullRequests: scenario.transport.pullRequests,
+		rosters: scenario.transport.rosters,
+		integrations: scenario.transport.integrations,
+	});
+	const originalTransport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(originalBacking);
+	const originalJournalImplementation = new PortOnlyParentReadyJournal();
+	const originalJournal: ParentReadyOperationJournal = originalJournalImplementation;
+	const originalAuthorityAdapter = new PortOnlyDelayedParentReadyAuthority(
+		new PortOnlyParentReadyAuthority(originalBacking, originalJournal),
+	);
+	const decisionBacking = new PortOnlyDecisionBacking();
+	const originalBroker: ParentDecisionBroker = new PortOnlyDecisionBroker(decisionBacking);
+	const originalController = new GitHubParentOrchestrator(
+		originalTransport,
+		originalBroker,
+		portOnlyAttestations(originalBacking),
+		portOnlyPolicySource(),
+		{
+			externalCallTimeoutMs: 20,
+			parentReadyAuthority: originalAuthorityAdapter,
+			now: () => new Date("2026-07-22T00:00:00.000Z"),
+		},
+	);
+	const prepared = await originalController.prepareParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy);
+	assert.equal(prepared.kind, "prepared");
+	if (prepared.kind !== "prepared") throw new Error("restart fixture did not prepare");
+	await originalJournal.persistPrepared(prepared.operation, portOnlyContext());
+	await assert.rejects(originalController.commitPreparedParentReadiness(
+		scenario.candidate,
+		scenario.receipts,
+		prepared.operation,
+	));
+	assert.notEqual(await settleWithin(originalAuthorityAdapter.recoveryStarted, 100), "hung");
+	assert.equal((await originalController.stop({ deadlineAt: new Date(Date.now() + 10).toISOString() })).kind, "incomplete");
+
+	const serialized = JSON.stringify({
+		readiness: {
+			issues: originalBacking.issues,
+			pullRequests: originalBacking.pullRequests,
+			rosters: originalBacking.rosters,
+			integrations: originalBacking.integrations,
+		},
+		journal: originalJournalImplementation.snapshot(),
+	});
+	const decoded = JSON.parse(serialized);
+	const restartedBacking = new PortOnlyReadinessBacking(decoded.readiness);
+	const restartedJournalImplementation = new PortOnlyParentReadyJournal(decoded.journal);
+	const restartedJournal: ParentReadyOperationJournal = restartedJournalImplementation;
+	const restartedTransport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport(restartedBacking);
+	const restartedAuthority: ParentReadyDurableAuthorityBoundary = new PortOnlyParentReadyAuthority(
+		restartedBacking,
+		restartedJournal,
+	);
+	const restartedBroker: ParentDecisionBroker = new PortOnlyDecisionBroker(decisionBacking);
+	const restartedController = new GitHubParentOrchestrator(
+		restartedTransport,
+		restartedBroker,
+		portOnlyAttestations(restartedBacking),
+		portOnlyPolicySource(),
+		{
+			externalCallTimeoutMs: 20,
+			parentReadyAuthority: restartedAuthority,
+			now: () => new Date("2026-07-22T00:00:00.000Z"),
+		},
+	);
+
+	await t.test("prepared operation and journal survive value serialization", async () => {
+		const restored = await restartedJournal.readPrepared({
+			planDigest: prepared.operation.planDigest,
+			authorizationDigest: prepared.operation.authorization.digest,
+			mutationIdempotencyKey: prepared.operation.mutation.idempotencyKey,
+		}, portOnlyContext());
+		assert.deepEqual(restored, prepared.operation);
+	});
+
+	await t.test("controller broker journal transport and authority adapters are reconstructed", () => {
+		assert.notEqual(restartedController, originalController);
+		assert.notEqual(restartedBroker, originalBroker);
+		assert.notEqual(restartedJournal, originalJournal);
+		assert.notEqual(restartedTransport, originalTransport);
+		assert.notEqual(restartedAuthority, originalAuthorityAdapter);
+	});
+
+	await t.test("reconstructed roles reconcile the uncertain draft and resume once", async () => {
+		assert.equal(restartedBacking.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+		const resumed = await restartedController.prepareParentReadiness(scenario.candidate, scenario.receipts, decisionPolicy);
+		assert.equal(resumed.kind, "prepared");
+		if (resumed.kind !== "prepared") throw new Error("restart did not produce a resumable authorization");
+		await restartedJournal.persistPrepared(resumed.operation, portOnlyContext());
+		const committed = await restartedController.commitPreparedParentReadiness(
+			scenario.candidate,
+			scenario.receipts,
+			resumed.operation,
+		);
+		assert.equal(committed.kind, "ready");
+		const replayed = await restartedController.commitPreparedParentReadiness(
+			scenario.candidate,
+			scenario.receipts,
+			resumed.operation,
+		);
+		assert.equal(replayed.kind, "ready");
+		assert.equal(restartedBacking.pullRequests.find((entry) => entry.number === 900)?.draft, false);
+	});
+
+	await t.test("cross-instance truth has no module WeakMap or authority-object identity", async () => {
+		const production = await readFile(".pi/extensions/shepherd/github-orchestrator.ts", "utf8");
+		assert.doesNotMatch(production, /\bWeakMap\b/u);
+		assert.equal((await restartedController.stop()).kind, "joined");
+	});
+
+	originalAuthorityAdapter.releaseRecovery();
+	await new Promise<void>((resolve) => setTimeout(resolve, 100));
+	assert.equal((await originalController.stop()).kind, "joined");
 });
 
 test("cycle 7 atomic authority boundary rejects every moved coordinate without recovery", async (t) => {
@@ -4122,12 +5061,13 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 		await t.test(name, async () => {
 			const scenario = await cycle5ReadinessScenario();
 			const { candidate, receipts } = scenario;
-			const implementation = new PortOnlyReadinessTransport({
+			const backing = new PortOnlyReadinessBacking({
 				issues: scenario.transport.issues,
 				pullRequests: scenario.transport.pullRequests,
 				rosters: scenario.transport.rosters,
 				integrations: scenario.transport.integrations,
 			});
+			const implementation = new PortOnlyReadinessTransport(backing);
 			const transport: GitHubOrchestrationTransport = implementation;
 			let current: ParentReadyAuthorization | undefined;
 			let quarantined = false;
@@ -4135,7 +5075,7 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 			let rollbackCalls = 0;
 			const authority: ParentReadyDurableAuthorityBoundary = {
 				async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest) {
-					readsAtCompare = implementation.pullRequestReadCalls;
+					readsAtCompare = backing.pullRequestReadCalls;
 					if (quarantined || current?.digest !== request.authorization.digest) {
 						return { schemaVersion: 1, kind: "conflict", coordinate };
 					}
@@ -4149,7 +5089,7 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 			const orchestrator = new GitHubParentOrchestrator(
 				transport,
 				new FakeDecisionBroker(),
-				portOnlyAttestations(implementation),
+				portOnlyAttestations(backing),
 				portOnlyPolicySource(),
 				{
 					externalCallTimeoutMs: 25,
@@ -4175,8 +5115,8 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 				blockers: [`parent_ready_authority_conflict:${coordinate}`],
 			});
 			assert.equal(rollbackCalls, 0);
-			assert.equal(implementation.pullRequestReadCalls, readsAtCompare, "conflict returns without recovery reads");
-			assert.equal(implementation.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+			assert.equal(backing.pullRequestReadCalls, readsAtCompare, "conflict returns without recovery reads");
+			assert.equal(backing.pullRequests.find((entry) => entry.number === 900)?.draft, true);
 		});
 	}
 });
@@ -4188,7 +5128,8 @@ test("cycle 7 run-state schema has one current HEAD semantic and rejects histori
 	assert.equal(details.candidateRef, "HEAD");
 	assert.equal(Object.hasOwn(details, "frozenCandidate"), false);
 	assert.equal((details.priorReviewState as Record<string, unknown>).priorReviewedCandidate,
-		"dbce5b7d0c698bc802594211072fed77eff23c1c");
+		"b90037df1fff38c755ebc8025579120d17031330");
+	assert.equal((details.priorReviewState as Record<string, unknown>).findingsConsolidatedIntoCycle, 8);
 	const validate = githubOrchestratorApi.validateRunStateCandidateSemantics;
 	assert.doesNotThrow(() => validate(state));
 	const invalid = structuredClone(state);
