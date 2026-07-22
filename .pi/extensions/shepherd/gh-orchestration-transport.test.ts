@@ -201,3 +201,65 @@ test("refuses child integration into a default branch before any GitHub mutation
 	await assert.rejects(transport.integrateChild(request, context()), /refuses default-branch/i);
 	assert.equal(calls, 0);
 });
+
+test("child integration transport never merges a PR and publishes nothing until Git evidence is authoritatively merged", async () => {
+	const marker = "<!-- shepherd-pr:v1:471:child-a:abc -->";
+	const methods: string[] = [];
+	const execute: GhOrchestrationExecutor = async (_file, args) => {
+		const method = args[2] ?? "";
+		const endpoint = args[3] ?? "";
+		methods.push(method);
+		if (endpoint.includes("/pulls?")) return JSON.stringify([{ number: 9, body: marker }]);
+		if (endpoint.includes("/issues/9/comments?")) return "[]";
+		if (endpoint === "/repos/acme/widgets") return JSON.stringify({ default_branch: "main" });
+		if (endpoint === "/repos/acme/widgets/git/ref/heads/feat%2Fparent") return JSON.stringify({
+			ref: "refs/heads/feat/parent",
+			object: { type: "commit", sha: "3".repeat(40) },
+		});
+		if (endpoint.endsWith("/pulls/9")) return JSON.stringify({
+			number: 9,
+			merged: false,
+			merged_at: null,
+			base: { ref: "feat/parent", sha: "1".repeat(40) },
+			head: { ref: "feat/child", sha: "2".repeat(40) },
+		});
+		throw new Error(`unexpected gh call ${args.join(" ")}`);
+	};
+	const transport = new GhCliOrchestrationTransport({ execute });
+	const request = {
+		repository: "acme/widgets",
+		childId: "child-a",
+		pullRequest: 9,
+		generation: 7,
+		marker,
+		baseSha: "1".repeat(40),
+		headSha: "2".repeat(40),
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
+		integration: {
+			schemaVersion: 1,
+			authority: "git",
+			parentBranch: "feat/parent",
+			baseSha: "1".repeat(40),
+			headSha: "2".repeat(40),
+			mergeCommitSha: "3".repeat(40),
+			parentHead: "3".repeat(40),
+			reused: false,
+		},
+		pullRequestSnapshot: {},
+		observation: {},
+		controllerProvenance: {},
+		mutation: {
+			schemaVersion: 1,
+			operation: "child_integration",
+			idempotencyKey: "shepherd-mutation:v1:child_integration:abc",
+			intentDigest: "d".repeat(64),
+			expectedResourceRevision: null,
+		},
+	} as unknown as IntegrateChildRequest;
+	await assert.rejects(
+		transport.integrateChild(request, context()),
+		/merged|integration.*evidence|uncertain publication/i,
+	);
+	assert.deepEqual([...new Set(methods)], ["GET"]);
+});

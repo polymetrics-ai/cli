@@ -13,7 +13,11 @@ import {
 } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write, type LocalGitFixture } from "./issue-476-git-fixture.ts";
 import { resolveCanonicalGitWorktree } from "./target-evidence.ts";
-import { WorkspaceAdapter, type ClaimedWorkspace } from "./workspace-adapter.ts";
+import {
+	WorkspaceAdapter,
+	type ClaimedWorkspace,
+	type WorkspaceAdapterOptions,
+} from "./workspace-adapter.ts";
 
 function recordingExecutor(requests: GitCommandRequest[]): GitCommandExecutor {
 	return (request) => new Promise((resolve, reject) => {
@@ -33,8 +37,9 @@ async function claimedMutationWorkspace(
 	adapter: GitAdapter,
 	fixture: LocalGitFixture,
 	allowedScopes: readonly string[],
+	leaseOptions?: NonNullable<WorkspaceAdapterOptions["leaseOptions"]>,
 ): Promise<{ workspaceAdapter: WorkspaceAdapter; workspace: ClaimedWorkspace }> {
-	const workspaceAdapter = new WorkspaceAdapter(adapter);
+	const workspaceAdapter = new WorkspaceAdapter(adapter, { ...(leaseOptions === undefined ? {} : { leaseOptions }) });
 	const workspace = await workspaceAdapter.claim({
 		coordinator: await adapter.inspect(fixture.coordinator),
 		trustedWorktreeRoot: fixture.worktreeRoot,
@@ -505,6 +510,151 @@ test("push binds caller and live remote default branches to inspected symbolic H
 		defaultBranch: "main",
 	}), /default branch|symbolic HEAD/i);
 	await assert.rejects(git(liveFixture.remote, "show-ref", "--verify", `refs/heads/${branch}`));
+});
+
+test("reviewed child integration loses an exact parent-head race without replacing the newer remote", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const requests: GitCommandRequest[] = [];
+	const tree = (await git(fixture.coordinator, "rev-parse", `${fixture.parentHead}^{tree}`)).trim();
+	const racingHead = (await git(
+		fixture.coordinator,
+		"commit-tree", tree, "-p", fixture.parentHead, "-m", "test: concurrent parent advance",
+	)).trim();
+	let injectedRace = false;
+	const execute = recordingExecutor(requests);
+	const adapter = new GitAdapter({
+		async execute(request) {
+			if (!injectedRace && request.args.some((arg) => arg.startsWith("--force-with-lease=refs/heads/"))) {
+				injectedRace = true;
+				await git(
+					fixture.coordinator,
+					"push", "--porcelain", fixture.remote,
+					`${racingHead}:refs/heads/${fixture.parentBranch}`,
+				);
+			}
+			return execute(request);
+		},
+	});
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["child.txt"], {
+		processId: 47_601,
+		processIdentity: "integration-race-owner",
+		isProcessAlive: () => true,
+		tokenFactory: () => "integration-race-token",
+	});
+	t.after(() => workspace.release().catch(() => undefined));
+	await write(workspace.cwd, "child.txt", "reviewed child\n");
+	const committed = await workspaceAdapter.commitIssueChanges(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		message: "test: reviewed child",
+		scopes: ["child.txt"],
+	});
+	await workspaceAdapter.pushIssueBranch(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: committed.head,
+		defaultBranch: "main",
+	});
+
+	type IntegrationPort = {
+		integrateReviewedChild(
+			workspaceValue: ClaimedWorkspace,
+			request: {
+				issue: number;
+				slug: string;
+				branch: string;
+				parentBranch: string;
+				defaultBranch: string;
+				baseSha: string;
+				headSha: string;
+				effectKey: string;
+			},
+		): Promise<{ mergeCommitSha: string; parentHead: string }>;
+	};
+	await assert.rejects(
+		(workspaceAdapter as WorkspaceAdapter & IntegrationPort).integrateReviewedChild(workspace, {
+			issue: 476,
+			slug: "shepherd-worktree-git-adapter",
+			branch,
+			parentBranch: fixture.parentBranch,
+			defaultBranch: "main",
+			baseSha: fixture.parentHead,
+			headSha: committed.head,
+			effectKey: "a".repeat(64),
+		}),
+		/lease|stale|parent.*moved|exact.*head/i,
+	);
+	assert.equal(injectedRace, true);
+	assert.equal(
+		(await git(fixture.remote, "rev-parse", `refs/heads/${fixture.parentBranch}`)).trim(),
+		racingHead,
+	);
+	assert.ok(requests.some((request) => request.args.includes(
+		`--force-with-lease=refs/heads/${fixture.parentBranch}:${fixture.parentHead}`,
+	)));
+});
+
+test("reviewed child integration rejects a trunk-to-main default change and conventional aliases", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	await git(fixture.remote, "update-ref", "refs/heads/trunk", fixture.parentHead);
+	await git(fixture.remote, "symbolic-ref", "HEAD", "refs/heads/trunk");
+	await git(fixture.coordinator, "fetch", "origin", "trunk:refs/remotes/origin/trunk");
+	await git(fixture.coordinator, "remote", "set-head", "origin", "trunk");
+	const adapter = new GitAdapter();
+	const branch = canonicalIssueBranch(476, "shepherd-worktree-git-adapter");
+	const { workspaceAdapter, workspace } = await claimedMutationWorkspace(adapter, fixture, ["child.txt"], {
+		processId: 47_602,
+		processIdentity: "integration-default-owner",
+		isProcessAlive: () => true,
+		tokenFactory: () => "integration-default-token",
+	});
+	t.after(() => workspace.release().catch(() => undefined));
+	await write(workspace.cwd, "child.txt", "reviewed child\n");
+	const committed = await workspaceAdapter.commitIssueChanges(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: fixture.parentHead,
+		message: "test: reviewed child",
+		scopes: ["child.txt"],
+	});
+	await workspaceAdapter.pushIssueBranch(workspace, {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		expectedHead: committed.head,
+		defaultBranch: "trunk",
+	});
+	await git(fixture.remote, "symbolic-ref", "HEAD", "refs/heads/main");
+
+	const integration = workspaceAdapter as WorkspaceAdapter & {
+		integrateReviewedChild(workspaceValue: ClaimedWorkspace, request: Record<string, unknown>): Promise<unknown>;
+	};
+	const request = {
+		issue: 476,
+		slug: "shepherd-worktree-git-adapter",
+		branch,
+		parentBranch: fixture.parentBranch,
+		defaultBranch: "trunk",
+		baseSha: fixture.parentHead,
+		headSha: committed.head,
+		effectKey: "b".repeat(64),
+	};
+	await assert.rejects(integration.integrateReviewedChild(workspace, request), /default branch|symbolic HEAD/i);
+	await assert.rejects(
+		integration.integrateReviewedChild(workspace, { ...request, parentBranch: "trunk", defaultBranch: "main" }),
+		/default branch|conventional|protected|trunk/i,
+	);
+	assert.equal(
+		(await git(fixture.remote, "rev-parse", `refs/heads/${fixture.parentBranch}`)).trim(),
+		fixture.parentHead,
+	);
 });
 
 test("rejects a changed effective push endpoint before the alternate remote receives objects", async (t) => {
