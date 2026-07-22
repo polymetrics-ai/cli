@@ -110,11 +110,14 @@ export default function shepherdExtension(pi: ExtensionAPI): void {
 				stateFingerprint(worktree.worktreeIdentity),
 			);
 			const registry = context.modelRegistry as ShepherdModelRegistry;
-			const runtime = new ShepherdAgentSessionRuntime(embeddedRuntimeSdk(registry), { maxConcurrency: 2 });
+			const runtimeSdk = embeddedRuntimeSdk(registry);
 			return new AutonomousShepherdController({
 				store: new AutonomousFileStateStore(root),
 				intake: new RepositoryManifestIntake(context.cwd),
-				lifecycle: new AgentSessionMvpLifecycle(runtime, context.cwd),
+				lifecycle: new AgentSessionMvpLifecycle(
+					() => new ShepherdAgentSessionRuntime(runtimeSdk, { maxConcurrency: 1 }),
+					context.cwd,
+				),
 				humanGate: new LocalParentMergeGate(),
 			});
 		},

@@ -9,8 +9,9 @@ import { AutonomousFileStateStore, type AutonomousChildPlan } from "./autonomous
 
 function deferred<T>() {
 	let resolve!: (value: T) => void;
-	const promise = new Promise<T>((accept) => { resolve = accept; });
-	return { promise, resolve };
+	let reject!: (reason?: unknown) => void;
+	const promise = new Promise<T>((accept, decline) => { resolve = accept; reject = decline; });
+	return { promise, resolve, reject };
 }
 
 function child(id: string, issue: number, dependsOn: string[], writeScope: string): AutonomousChildPlan {
@@ -131,4 +132,49 @@ test("start overlaps independent children, stop joins, resume continues dependen
 	}
 	assert.equal(effects.at(-1), "request_human_gate");
 	assert.equal("mergeMain" in resumedController, false);
+});
+
+test("a failed child aborts and joins its live sibling before the run settles", { timeout: 2_000 }, async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-mvp-failure-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const sibling = deferred<{ summary: string }>();
+	let abortCalls = 0;
+	const controller = new AutonomousShepherdController({
+		store: new AutonomousFileStateStore(root),
+		intake: {
+			async load() {
+				return {
+					planId: "failure-plan",
+					children: [child("alpha", 501, [], "owned/alpha"), child("beta", 502, [], "owned/beta")],
+				};
+			},
+		},
+		lifecycle: {
+			async execute({ child: item }) {
+				if (item.id === "alpha") throw new Error("alpha failed");
+				return sibling.promise;
+			},
+			async verify() { return { summary: "verified" }; },
+			async review() { return { summary: "reviewed" }; },
+			async integrate() { return { summary: "integrated" }; },
+			async abort() {
+				abortCalls += 1;
+				sibling.reject(new Error("beta aborted"));
+			},
+			async close() {},
+		},
+		humanGate: {
+			async request() { throw new Error("human gate must not be reached"); },
+			async observe() { return "pending" as const; },
+			async close() {},
+		},
+		newRunId: () => "failure-run",
+	});
+
+	const state = await controller.start(command("start"));
+	assert.equal(abortCalls, 1);
+	assert.equal(state.status, "failed");
+	assert.equal(state.stage, "BLOCKED");
+	assert.equal(state.children.find((item) => item.id === "alpha")?.status, "failed");
+	assert.equal(state.children.find((item) => item.id === "beta")?.status, "failed");
 });

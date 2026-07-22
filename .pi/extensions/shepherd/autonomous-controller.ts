@@ -297,6 +297,11 @@ export class AutonomousShepherdController {
 				for (const child of state.children) {
 					if (child.status === "running") child.status = "blocked";
 				}
+				try {
+					await this.#lifecycle.abort(state.runId);
+				} catch (abortError) {
+					failure = new AggregateError([failure, abortError], "child failure and sibling abort both failed");
+				}
 			}
 			const remaining = await Promise.all(active.values());
 			failure ??= remaining.find((settlement) => settlement.error !== undefined)?.error;
