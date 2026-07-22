@@ -102,7 +102,8 @@ test("fresh processes reconcile every external-effect kind at prepared and obser
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const kinds: ProductionEffectKind[] = [
 		"workspace_claim", "agent_implementation", "agent_correction", "shell_verification", "git_commit", "git_push",
-		"child_pull_request", "independent_review", "child_integration", "parent_refresh", "human_request", "human_consume",
+		"child_pull_request", "independent_review", "child_integration", "parent_refresh", "child_head_reconciliation",
+		"human_request", "human_consume",
 		"parent_merge_observation",
 	];
 	const writer = new ProductionEffectJournal(root);

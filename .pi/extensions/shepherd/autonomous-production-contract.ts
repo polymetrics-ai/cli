@@ -24,6 +24,7 @@ export type ProductionEffectKind =
 	| "independent_review"
 	| "child_integration"
 	| "parent_refresh"
+	| "child_head_reconciliation"
 	| "human_request"
 	| "human_consume"
 	| "parent_merge_observation";

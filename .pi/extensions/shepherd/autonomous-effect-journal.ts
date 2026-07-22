@@ -139,7 +139,8 @@ function descriptorDigest(value: unknown): string {
 function kind(value: unknown): ProductionEffectKind {
 	const kinds: ProductionEffectKind[] = [
 		"workspace_claim", "agent_implementation", "agent_correction", "shell_verification", "git_commit", "git_push",
-		"child_pull_request", "independent_review", "child_integration", "parent_refresh", "human_request", "human_consume",
+		"child_pull_request", "independent_review", "child_integration", "parent_refresh", "child_head_reconciliation",
+		"human_request", "human_consume",
 		"parent_merge_observation",
 	];
 	if (!kinds.includes(value as ProductionEffectKind)) throw new Error("invalid production effect kind");
