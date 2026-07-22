@@ -160,7 +160,7 @@ test("production controller drives parallel disjoint children, dependencies, int
 		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "parent ready" }; }, async close() {} },
 		parentGate: {
 			async request() { parentRequests += 1; return { requestId: "parent-merge-1" }; },
-			async observe() { return "pending" as const; },
+			async observe() { return { status: "pending" as const }; },
 			async close() {},
 		},
 		newRunId: () => "run-1",
@@ -224,7 +224,7 @@ test("correction and stale-parent refresh both force verification and a fresh ex
 		recovery: { async open() { return { reconciled: 0 }; } },
 		pipeline,
 		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
-		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return "pending" as const; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return { status: "pending" as const }; }, async close() {} },
 		newRunId: () => "run-refresh",
 	});
 	const state = await controller.start(command("start"));
@@ -264,7 +264,7 @@ test("exhausted retries wait for an exact child decision and authorized resume c
 		recovery: { async open() { return { reconciled: 0 }; } },
 		pipeline,
 		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
-		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return "pending" as const; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return { status: "pending" as const }; }, async close() {} },
 		newRunId: () => `run-retry-${++nextRun}`,
 	};
 	const first = await new ProductionShepherdController(options).start(command("start"));
@@ -319,7 +319,7 @@ test("stop cancels and joins accepted work at every external child lifecycle sta
 				recovery: { async open() { return { reconciled: 0 }; } },
 				pipeline,
 				finalizer: { async finalize() { throw new Error("stopped run must not finalize"); }, async close() {} },
-				parentGate: { async request() { throw new Error("stopped run must not request parent gate"); }, async observe() { return "pending" as const; }, async close() {} },
+				parentGate: { async request() { throw new Error("stopped run must not request parent gate"); }, async observe() { return { status: "pending" as const }; }, async close() {} },
 				newRunId: () => `run-stop-${stage}`,
 			});
 			const running = controller.start(command("start"));
@@ -366,7 +366,7 @@ test("one child failure aborts and joins its running sibling before durable fail
 		recovery: { async open() { return { reconciled: 0 }; } },
 		pipeline,
 		finalizer: { async finalize() { throw new Error("failed siblings must not finalize"); }, async close() {} },
-		parentGate: { async request() { throw new Error("failed siblings must not request a gate"); }, async observe() { return "pending" as const; }, async close() {} },
+		parentGate: { async request() { throw new Error("failed siblings must not request a gate"); }, async observe() { return { status: "pending" as const }; }, async close() {} },
 		newRunId: () => "run-sibling-abort",
 	});
 	const state = await controller.start(command("start"));
@@ -403,7 +403,7 @@ test("resume rejects changed plan identity and run policy before recovery or mut
 		recovery: { async open() { recoveries += 1; return { reconciled: 0 }; } },
 		pipeline,
 		finalizer: { async finalize() { throw new Error("stopped run must not finalize"); }, async close() {} },
-		parentGate: { async request() { throw new Error("stopped run must not request a gate"); }, async observe() { return "pending" as const; }, async close() {} },
+		parentGate: { async request() { throw new Error("stopped run must not request a gate"); }, async observe() { return { status: "pending" as const }; }, async close() {} },
 		newRunId: () => `run-binding-${++runNumber}`,
 	};
 	const firstController = new ProductionShepherdController(options);
@@ -476,7 +476,7 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 		recovery: { async open() { return { reconciled: 0 }; } },
 		pipeline,
 		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
-		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return "pending" as const; }, async close() {} },
+		parentGate: { async request() { return { requestId: "merge" }; }, async observe() { return { status: "pending" as const }; }, async close() {} },
 		newRunId: () => "run-effect-ack",
 	});
 	const state = await controller.start(command("start"));
@@ -491,4 +491,74 @@ test("effect acknowledgment happens only after the exact checkpoint is durably p
 		assert.equal(acknowledgment.durableEffectKey, "verification-effect");
 		assert.deepEqual(acknowledgment.durableEffectKeys, ["verification-effect", "verification-log-effect"]);
 	}
+});
+
+test("resume completes only from an exact-head authoritative merge and persists its evidence", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-parent-merge-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const manifest = plan([spec("alpha", 501, [], "owned/alpha")]);
+	const pipeline = greenPipeline();
+	let merged = false;
+	let run = 0;
+	const options = {
+		stateStore: new ProductionFileStateStore(root),
+		intake: { async load() { return { plan: manifest, digest: "unused", path: "fixture" }; } },
+		recovery: { async open() { return { reconciled: 0 }; } },
+		pipeline,
+		finalizer: { async finalize() { return { pullRequest: 472, head: HEAD_C, summary: "ready" }; }, async close() {} },
+		parentGate: {
+			async request() { return { requestId: "merge-exact-parent" }; },
+			async observe() {
+				return merged ? {
+					status: "merged" as const,
+					repository: "owner/repo",
+					pullRequest: 472,
+					head: HEAD_C,
+					mergedAt: "2026-07-22T12:00:00.000Z",
+					mergeCommitSha: "9".repeat(40),
+					revision: 27,
+					observedAt: "2026-07-22T12:00:01.000Z",
+				} : { status: "approved_waiting_for_merge" as const };
+			},
+			async close() {},
+		},
+		newRunId: () => `run-parent-merge-${++run}`,
+	};
+	const waiting = await new ProductionShepherdController(options).start(command("start"));
+	assert.equal(waiting.status, "waiting_human");
+	assert.equal((await new ProductionShepherdController(options).resume(command("resume"))).status, "waiting_human");
+	merged = true;
+	const completed = await new ProductionShepherdController(options).resume(command("resume"));
+	assert.equal(completed.status, "completed");
+	assert.equal(completed.stage, "completed");
+	assert.equal(completed.humanGate?.status, "merged");
+	assert.deepEqual(completed.humanGate?.mergeEvidence, {
+		mergedAt: "2026-07-22T12:00:00.000Z",
+		mergeCommitSha: "9".repeat(40),
+		revision: 27,
+		observedAt: "2026-07-22T12:00:01.000Z",
+	});
+
+	const movedOptions = {
+		...options,
+		parentGate: {
+			...options.parentGate,
+			async observe() {
+				return {
+					status: "merged" as const,
+					repository: "owner/repo",
+					pullRequest: 472,
+					head: HEAD_B,
+					mergedAt: "2026-07-22T12:00:00.000Z",
+					mergeCommitSha: "9".repeat(40),
+					revision: 28,
+					observedAt: "2026-07-22T12:00:02.000Z",
+				};
+			},
+		},
+	};
+	await assert.rejects(
+		new ProductionShepherdController(movedOptions).resume(command("resume")),
+		/exact-head gate/i,
+	);
 });

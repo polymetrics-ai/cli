@@ -20,6 +20,7 @@ const LOCK_RETRY_MS = 5;
 const LOCK_ATTEMPTS = 2_000;
 const SAFE_ID = /^[a-z0-9][a-z0-9_-]{0,127}$/;
 const DIGEST = /^[0-9a-f]{64}$/;
+const SHA = /^[0-9a-f]{40}$/;
 const UNSAFE_TEXT = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
 const SECRET_TEXT = /(?:github_pat_|ghp_|sk-[A-Za-z0-9_-]{16,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|(?:api[_-]?key|access[_-]?token|client[_-]?secret|password)\s*[:=])/iu;
 
@@ -100,6 +101,12 @@ export interface ProductionParentHumanGate {
 	head: string;
 	requestId: string;
 	status: "pending" | "merged" | "rejected";
+	mergeEvidence?: {
+		mergedAt: string;
+		mergeCommitSha: string;
+		revision: number;
+		observedAt: string;
+	};
 }
 
 export interface ProductionChildHumanGate {
@@ -447,11 +454,31 @@ function validateHumanGate(value: unknown): ProductionParentHumanGate {
 	const candidate = exact(
 		value,
 		["repository", "pullRequest", "generation", "head", "requestId", "status"],
-		[],
+		["mergeEvidence"],
 		"production parent human gate",
 	);
 	if (candidate.status !== "pending" && candidate.status !== "merged" && candidate.status !== "rejected") {
 		throw new Error("invalid production parent human gate status");
+	}
+	let mergeEvidence: ProductionParentHumanGate["mergeEvidence"];
+	if (candidate.mergeEvidence !== undefined) {
+		const evidence = exact(
+			candidate.mergeEvidence,
+			["mergedAt", "mergeCommitSha", "revision", "observedAt"],
+			[],
+			"production parent merge evidence",
+		);
+		const mergeCommitSha = safeText(evidence.mergeCommitSha, "parent merge commit SHA", 40);
+		if (!SHA.test(mergeCommitSha)) throw new Error("parent merge evidence requires an exact commit SHA");
+		mergeEvidence = {
+			mergedAt: timestamp(evidence.mergedAt, "parent merge time"),
+			mergeCommitSha,
+			revision: positive(evidence.revision, "parent merge revision"),
+			observedAt: timestamp(evidence.observedAt, "parent merge observation time"),
+		};
+	}
+	if ((candidate.status === "merged") !== (mergeEvidence !== undefined)) {
+		throw new Error("only a merged parent gate may contain authoritative merge evidence");
 	}
 	return {
 		repository: safeText(candidate.repository, "human gate repository", 256),
@@ -460,6 +487,7 @@ function validateHumanGate(value: unknown): ProductionParentHumanGate {
 		head: safeText(candidate.head, "human gate head", 256),
 		requestId: safeText(candidate.requestId, "human gate request ID", 256),
 		status: candidate.status,
+		...(mergeEvidence === undefined ? {} : { mergeEvidence }),
 	};
 }
 
@@ -745,8 +773,8 @@ function assertTransition(previous: ProductionAutonomousState, next: ProductionA
 		}
 	}
 	if (previous.humanGate && next.generation === previous.generation) {
-		const { status: _beforeStatus, ...beforeBinding } = previous.humanGate;
-		const { status: _afterStatus, ...afterBinding } = next.humanGate ?? previous.humanGate;
+		const { status: _beforeStatus, mergeEvidence: _beforeEvidence, ...beforeBinding } = previous.humanGate;
+		const { status: _afterStatus, mergeEvidence: _afterEvidence, ...afterBinding } = next.humanGate ?? previous.humanGate;
 		if (!next.humanGate || JSON.stringify(beforeBinding) !== JSON.stringify(afterBinding)) {
 			throw new ProductionStateConflictError("immutable parent human gate binding changed");
 		}

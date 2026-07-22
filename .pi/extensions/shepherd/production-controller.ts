@@ -81,6 +81,19 @@ export interface ProductionParentFinalizerPort {
 	close(): Promise<void>;
 }
 
+export type ProductionParentGateObservation =
+	| { status: "pending" | "approved_waiting_for_merge" | "rejected" }
+	| {
+		status: "merged";
+		repository: string;
+		pullRequest: number;
+		head: string;
+		mergedAt: string;
+		mergeCommitSha: string;
+		revision: number;
+		observedAt: string;
+	};
+
 export interface ProductionParentGatePort {
 	request(
 		plan: ProductionParentPlanDocument,
@@ -92,7 +105,7 @@ export interface ProductionParentGatePort {
 		plan: ProductionParentPlanDocument,
 		state: ProductionAutonomousState,
 		signal: AbortSignal,
-	): Promise<"pending" | "approved_waiting_for_merge" | "merged" | "rejected">;
+	): Promise<ProductionParentGateObservation>;
 	close(): Promise<void>;
 }
 
@@ -328,11 +341,22 @@ export class ProductionShepherdController {
 		signal: AbortSignal,
 	): Promise<ProductionAutonomousState> {
 		const observation = await this.#parentGate.observe(plan, state, signal);
-		if (observation === "pending" || observation === "approved_waiting_for_merge") return state;
+		if (observation.status === "pending" || observation.status === "approved_waiting_for_merge") return state;
 		return this.#evolve(state.runId, state.generation, (draft) => {
 			if (!draft.humanGate) throw new Error("parent gate disappeared during observation");
-			if (observation === "merged") {
+			if (observation.status === "merged") {
+				if (observation.repository !== draft.humanGate.repository
+					|| observation.pullRequest !== draft.humanGate.pullRequest
+					|| observation.head !== draft.humanGate.head) {
+					throw new Error("authoritative parent merge observation moved from the durable exact-head gate");
+				}
 				draft.humanGate.status = "merged";
+				draft.humanGate.mergeEvidence = {
+					mergedAt: observation.mergedAt,
+					mergeCommitSha: observation.mergeCommitSha,
+					revision: observation.revision,
+					observedAt: observation.observedAt,
+				};
 				draft.status = "completed";
 				draft.stage = "completed";
 			} else {
