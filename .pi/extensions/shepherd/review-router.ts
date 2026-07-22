@@ -215,7 +215,7 @@ function redactCredentialAssignment(match: string, prefix: string, name: string,
 export function redactSensitiveText(input: string): string {
 	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?|cookies?|set[_-]?cookie|session(?:[_ -]?(?:id|token|cookie))?|csrf[_-]?token)";
 	const credentialEnvironmentName = "(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY|GITHUB_TOKEN|GH_TOKEN|NPM_TOKEN|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|AZURE_CLIENT_SECRET|GOOGLE_APPLICATION_CREDENTIALS|DATABASE_URL)";
-	const credentialAssignment = /(^|[^A-Za-z0-9_])([A-Z][A-Z0-9_]{0,127})([ \t]*=[ \t]*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gmu;
+	const credentialAssignment = /(^|[^A-Za-z0-9_])([A-Z_][A-Z0-9_]*)([ \t]*=[ \t]*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gmu;
 	return input
 		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
 		.replace(/\b((?:Set-Cookie|Cookie|X-(?:Session|Auth|CSRF)(?:-Id|-Token)?))\s*:\s*[^\r\n]+/giu, "$1: [REDACTED]")
