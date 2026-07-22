@@ -7617,3 +7617,707 @@ test("cycle 17 capture rejects proxy prototypes before descriptor projection and
 	if (forInMatches.length > 0) problems.push(`for-in-source-${forInMatches.length}`);
 	assert.deepEqual(problems, []);
 });
+
+test("cycle 18 quoted flow punctuation stays inside owned quotes and cannot expose protected siblings", async () => {
+	const markers: string[] = [];
+	const lines: string[] = [];
+	for (const quote of ['"', "'"] as const) {
+		for (const punctuation of [",", ";"] as const) {
+			const suffix = `${quote === '"' ? "double" : "single"}-${punctuation === "," ? "comma" : "semicolon"}`;
+			const validMarker = `C18_QUOTED_VALID_${suffix.toUpperCase().replaceAll("-", "_")}`;
+			const malformedMarker = `C18_QUOTED_MALFORMED_${suffix.toUpperCase().replaceAll("-", "_")}`;
+			markers.push(validMarker, malformedMarker);
+			lines.push(
+				`{client_secret: ${quote}protected prefix${punctuation} ${validMarker}${quote}, safe: retained}`,
+				`{client_secret: ${quote}protected prefix${punctuation} ${malformedMarker}${punctuation} safe: retained}`,
+			);
+		}
+	}
+	const publicControls = [
+		'{safe: "alpha, beta; gamma", enabled: true}',
+		"{safe: 'alpha, beta; gamma', enabled: true}",
+	] as const;
+	const problems: string[] = [];
+	for (const [index, line] of lines.entries()) {
+		const outputs = await cycle14ConsumerOutputs(`cycle18-quoted-flow-${index}`, line);
+		if (Object.keys(outputs).length !== 13) problems.push(`${index}:consumer-count-${Object.keys(outputs).length}`);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			for (const marker of markers) {
+				if (rendered.includes(marker)) problems.push(`${index}:${consumer}:leak:${marker}`);
+			}
+		}
+	}
+	for (const [index, control] of publicControls.entries()) {
+		const outputs = await cycle14ConsumerOutputs(`cycle18-quoted-public-${index}`, control);
+		if (Object.keys(outputs).length !== 13) problems.push(`public-${index}:consumer-count-${Object.keys(outputs).length}`);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:public-control-changed:${control}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 locator and public scalar candidates reset at proven flow boundaries", async () => {
+	const cases = [
+		{
+			locator: "https://c18.example/map-first",
+			marker: "C18_LOCATOR_MAP_FIRST",
+			line: "{https://c18.example/map-first, client_secret: C18_LOCATOR_MAP_FIRST}",
+		},
+		{
+			locator: "https://c18.example/sequence-first",
+			marker: "C18_LOCATOR_SEQUENCE_FIRST",
+			line: "[https://c18.example/sequence-first, token: C18_LOCATOR_SEQUENCE_FIRST]",
+		},
+		{
+			locator: "https://c18.example/sequence-middle",
+			marker: "C18_LOCATOR_SEQUENCE_MIDDLE",
+			line: "[retained, https://c18.example/sequence-middle, secret: C18_LOCATOR_SEQUENCE_MIDDLE]",
+		},
+		{
+			locator: "https://c18.example/map-later",
+			marker: "C18_LOCATOR_MAP_LATER",
+			line: "{https://c18.example/map-later, safe: retained, password: C18_LOCATOR_MAP_LATER}",
+		},
+		{
+			locator: "https://c18.example/quoted-double",
+			marker: "C18_LOCATOR_QUOTED_DOUBLE",
+			line: '["https://c18.example/quoted-double", client_secret: C18_LOCATOR_QUOTED_DOUBLE]',
+		},
+		{
+			locator: "https://c18.example/quoted-single",
+			marker: "C18_LOCATOR_QUOTED_SINGLE",
+			line: "['https://c18.example/quoted-single', passwd: C18_LOCATOR_QUOTED_SINGLE]",
+		},
+	] as const;
+	const payload = cases.map((entry) => entry.line).join("\n");
+	const outputs = await cycle14ConsumerOutputs("cycle18-locator-reset", payload);
+	const metrics = emptyRedactionScanMetrics();
+	redactSensitiveText(payload, metrics);
+	const problems: string[] = [];
+	if (Object.keys(outputs).length !== 13) problems.push(`consumer-count-${Object.keys(outputs).length}`);
+	for (const [consumer, rendered] of Object.entries(outputs)) {
+		for (const entry of cases) {
+			if (rendered.includes(entry.marker)) problems.push(`${consumer}:leak:${entry.marker}`);
+			if (!rendered.includes(entry.locator)) problems.push(`${consumer}:locator-changed:${entry.locator}`);
+		}
+	}
+	if (metrics.sourceLength !== payload.length) problems.push(`source-${metrics.sourceLength}`);
+	if (metrics.cursorRegressions !== 0) problems.push(`regressions-${metrics.cursorRegressions}`);
+	if (metrics.maxMainCursorVisits !== 1) problems.push(`main-visits-${metrics.maxMainCursorVisits}`);
+	if (metrics.totalWork > (16 * payload.length) + 64) problems.push(`work-${metrics.totalWork}`);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 multiword sensitive scalars redact while bounded documentary prose remains public", async () => {
+	const keys = ["token", "password", "passwd", "secret"] as const;
+	const markers: string[] = [];
+	const lines: string[] = [];
+	for (const key of keys) {
+		for (const [width, tail] of [
+			["one", ""],
+			["two", " second"],
+			["many", " second third fourth"],
+		] as const) {
+			const marker = `C18_${key.toUpperCase()}_${width.toUpperCase()}`;
+			markers.push(marker);
+			lines.push(`${key}: ${marker}${tail}`);
+		}
+	}
+	const publicControls = [
+		"token: number of retained records",
+		"password: description of the public field",
+		"passwd: means the public field name",
+		"secret: refers to configuration vocabulary",
+	] as const;
+	const problems: string[] = [];
+	for (const [index, line] of lines.entries()) {
+		const outputs = await cycle14ConsumerOutputs(`cycle18-multiword-${index}`, line);
+		if (Object.keys(outputs).length !== 13) problems.push(`${index}:consumer-count-${Object.keys(outputs).length}`);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			for (const marker of markers) {
+				if (rendered.includes(marker)) problems.push(`${index}:${consumer}:leak:${marker}`);
+			}
+		}
+	}
+	for (const [index, control] of publicControls.entries()) {
+		const outputs = await cycle14ConsumerOutputs(`cycle18-documentary-${index}`, control);
+		if (Object.keys(outputs).length !== 13) problems.push(`documentary-${index}:consumer-count-${Object.keys(outputs).length}`);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			if (!rendered.includes(control)) problems.push(`${consumer}:documentary-control-changed:${control}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 one finite compiled host schema governs Pi execution and lifecycle identity", async () => {
+	type PiValidationTool = {
+		name: string;
+		description: string;
+		parameters: Readonly<Record<string, unknown>>;
+	};
+	type PiValidationCall = {
+		type: "toolCall";
+		id: string;
+		name: string;
+		arguments: Record<string, unknown>;
+	};
+	type PiValidationModule = {
+		validateToolArguments(tool: PiValidationTool, call: PiValidationCall): Readonly<Record<string, unknown>>;
+	};
+	const piValidation = await loadPinnedPiAi() as unknown as PiValidationModule;
+	const problems: string[] = [];
+	let rejectedSchemaCallbacks = 0;
+	const rejectedSchemas = [
+		{
+			label: "root-optional",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string" }, note: { type: "string" } },
+				required: ["target"],
+			},
+		},
+		{
+			label: "nested-optional",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: {
+					config: {
+						type: "object", additionalProperties: false,
+						properties: { mode: { type: "string" }, note: { type: "string" } },
+						required: ["mode"],
+					},
+				},
+				required: ["config"],
+			},
+		},
+		{
+			label: "pattern",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", pattern: "^safe$" } }, required: ["target"],
+			},
+		},
+		{
+			label: "format",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", format: "uri" } }, required: ["target"],
+			},
+		},
+		{
+			label: "reference",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", $ref: "#/$defs/target" } }, required: ["target"],
+			},
+		},
+		{
+			label: "combinator",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", oneOf: [{ type: "string" }] } }, required: ["target"],
+			},
+		},
+		{
+			label: "mixed-enum",
+			schema: {
+				type: "object", additionalProperties: false,
+				properties: { target: { type: "string", enum: ["owned", 1] } }, required: ["target"],
+			},
+		},
+	] as const;
+	for (const entry of rejectedSchemas) {
+		const input = policyInputForRuntime(false);
+		input.capabilities = [{
+			...inspectCapability(),
+			parameters: entry.schema,
+			async execute() {
+				rejectedSchemaCallbacks += 1;
+				return { status: "ok" as const, summary: "must remain unreachable", references: [] };
+			},
+		} as unknown as HostCapability];
+		let rejected = false;
+		try {
+			createToolPolicy(input);
+		} catch {
+			rejected = true;
+		}
+		if (!rejected) problems.push(`${entry.label}:registered`);
+	}
+	if (rejectedSchemaCallbacks !== 0) problems.push(`rejected-schema-callbacks-${rejectedSchemaCallbacks}`);
+
+	const supportedSchema = {
+		type: "object",
+		additionalProperties: false,
+		properties: {
+			target: { type: "string", minLength: 1, maxLength: 32, enum: ["owned", "all"] },
+			config: {
+				type: "object",
+				additionalProperties: false,
+				properties: {
+					mode: { type: "string", enum: ["brief", "deep"] },
+					depth: { type: "integer", minimum: 1, maximum: 3 },
+					enabled: { type: "boolean", enum: [true] },
+				},
+				required: ["mode", "depth", "enabled"],
+			},
+			tags: {
+				type: "array", items: { type: "string", enum: ["code", "tests"] }, minItems: 1, maxItems: 2,
+			},
+		},
+		required: ["target", "config", "tags"],
+	} as const;
+	const callbackInputs: Readonly<Record<string, unknown>>[] = [];
+	const capability = {
+		...inspectCapability(),
+		parameters: supportedSchema,
+		async execute(input: Readonly<Record<string, unknown>>) {
+			callbackInputs.push(input);
+			return { status: "ok" as const, summary: "finite schema complete", references: [] };
+		},
+	} as unknown as HostCapability;
+	const input = policyInputForRuntime(false);
+	input.capabilities = [capability];
+	const policy = createToolPolicy(input);
+	const hostTool = policy.tools.find((tool) => tool.name === "host_inspect")!;
+	const validArguments = {
+		target: "owned",
+		config: { mode: "deep", depth: 2, enabled: true },
+		tags: ["code", "tests"],
+	};
+	const call = {
+		type: "toolCall" as const,
+		id: "cycle18-finite-schema",
+		name: hostTool.name,
+		arguments: validArguments,
+	};
+	let piProjected: Readonly<Record<string, unknown>> | undefined;
+	try {
+		piProjected = piValidation.validateToolArguments(hostTool, call);
+	} catch (error) {
+		problems.push(`pi-valid-rejected:${error instanceof Error ? error.message : String(error)}`);
+	}
+	let directProjected: Readonly<Record<string, unknown>> | undefined;
+	try {
+		directProjected = policy.projectArguments(hostTool.name, validArguments);
+	} catch (error) {
+		problems.push(`direct-project-rejected:${error instanceof Error ? error.message : String(error)}`);
+	}
+	const directOutcome = await observeSettlement(hostTool.execute(call.id, validArguments, undefined), 150);
+	if (directOutcome.status !== "resolved") problems.push(`direct-execute-${directOutcome.status}`);
+	if (JSON.stringify(hostTool.parameters) !== JSON.stringify(supportedSchema)) problems.push("canonical-schema-drift");
+	if (JSON.stringify(piProjected) !== JSON.stringify(validArguments)) problems.push("pi-projection-drift");
+	if (JSON.stringify(directProjected) !== JSON.stringify(validArguments)) problems.push("direct-projection-drift");
+	if (callbackInputs.length !== 1 || JSON.stringify(callbackInputs[0]) !== JSON.stringify(validArguments) ||
+		!Object.isFrozen(callbackInputs[0])) {
+		problems.push(`callback-projection-${callbackInputs.length}`);
+	}
+
+	const lifecycleSchema = {
+		type: "object",
+		additionalProperties: false,
+		properties: {
+			target: { type: "string", maxLength: 32 },
+			mode: { type: "string", enum: ["brief", "deep"] },
+			depth: { type: "integer", minimum: 1, maximum: 3 },
+		},
+		required: ["target", "mode", "depth"],
+	} as const;
+	const lifecycleCapability = {
+		...inspectCapability(),
+		parameters: lifecycleSchema,
+	} as unknown as HostCapability;
+	const lifecycleArguments = { target: "owned", mode: "deep", depth: 2 };
+	const sdk = new FakeSdk();
+	const harness = runtime(sdk);
+	const req = request({
+		capabilities: [lifecycleCapability],
+		binding: {
+			...request().binding,
+			runId: "cycle18-finite-schema-lifecycle",
+			laneId: "cycle18-finite-schema-lifecycle",
+		},
+	});
+	Object.defineProperty(sdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			sdk.session.promptCalls += 1;
+			const user = piUserMessage("cycle 18 finite schema lifecycle");
+			emitSessionEvent(sdk.session, { type: "agent_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+			const intermediate = emitPiToolAssistant(sdk.session, {
+				id: "cycle18-finite-schema-call", name: "host_inspect", arguments: lifecycleArguments,
+			});
+			const result = { content: [{ type: "text" as const, text: "finite schema result" }], details: null };
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_start", toolCallId: "cycle18-finite-schema-call",
+				toolName: "host_inspect", args: lifecycleArguments,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_end", toolCallId: "cycle18-finite-schema-call",
+				toolName: "host_inspect", result, isError: false,
+			} as AgentSessionEvent);
+			const toolResult: PiToolResultMessage = {
+				role: "toolResult", toolCallId: "cycle18-finite-schema-call", toolName: "host_inspect",
+				content: result.content, details: result.details, isError: false, timestamp: 476,
+			};
+			emitSessionEvent(sdk.session, { type: "message_start", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "turn_end", message: intermediate, toolResults: [toolResult],
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			const finalAssistant = emitPiTextAssistant(sdk.session, handoffFor(req));
+			emitSessionEvent(sdk.session, {
+				type: "turn_end", message: finalAssistant, toolResults: [],
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "agent_end", messages: [user, intermediate, toolResult, finalAssistant], willRetry: false,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "agent_settled" } as AgentSessionEvent);
+		},
+	});
+	const lifecycleOutcome = await observeSettlement(harness.runtime.run(req), 300);
+	if (lifecycleOutcome.status !== "resolved") {
+		const detail = lifecycleOutcome.status === "rejected"
+			? errorMessages(lifecycleOutcome.reason).join("|")
+			: rejectionMessage(lifecycleOutcome);
+		problems.push(`lifecycle-${lifecycleOutcome.status}:${detail}`);
+	}
+	await observeSettlement(harness.runtime.close(), 150);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 tool event and result envelopes use exact descriptor DTOs without caller callbacks", async () => {
+	const problems: string[] = [];
+	const inboundCases: Array<{ label: string; input: ToolPolicyInput; calls(): number }> = [];
+
+	{
+		const base = policyInputForRuntime(false);
+		let calls = 0;
+		const source = Object.create(null) as Record<PropertyKey, unknown>;
+		Object.defineProperties(source, {
+			readOnly: { enumerable: true, value: base.readOnly },
+			workspace: { enumerable: true, value: base.workspace },
+			capabilities: { enumerable: true, value: base.capabilities },
+			authority: { enumerable: true, get() { calls += 1; return base.authority; } },
+		});
+		inboundCases.push({ label: "root-authority-accessor", input: source as unknown as ToolPolicyInput, calls: () => calls });
+	}
+	{
+		const base = policyInputForRuntime(false);
+		let calls = 0;
+		const authority = { ...base.authority } as Record<PropertyKey, unknown>;
+		Object.defineProperty(authority, "workspaceId", {
+			enumerable: true,
+			get() { calls += 1; return base.authority.workspaceId; },
+		});
+		inboundCases.push({
+			label: "authority-workspace-accessor",
+			input: { ...base, authority: authority as unknown as ToolPolicyInput["authority"] },
+			calls: () => calls,
+		});
+	}
+	{
+		const base = policyInputForRuntime(false);
+		let calls = 0;
+		const hostileWorkspace = { ...base.workspace } as Record<PropertyKey, unknown>;
+		Object.defineProperty(hostileWorkspace, "readText", {
+			enumerable: true,
+			get() { calls += 1; return base.workspace.readText; },
+		});
+		inboundCases.push({
+			label: "workspace-method-accessor",
+			input: { ...base, workspace: hostileWorkspace as unknown as ScopedWorkspace },
+			calls: () => calls,
+		});
+	}
+	{
+		const base = policyInputForRuntime(false);
+		let calls = 0;
+		const original = inspectCapability();
+		const hostileCapability = { ...original } as Record<PropertyKey, unknown>;
+		Object.defineProperty(hostileCapability, "parameters", {
+			enumerable: true,
+			get() { calls += 1; return original.parameters; },
+		});
+		inboundCases.push({
+			label: "capability-schema-accessor",
+			input: { ...base, capabilities: [hostileCapability as unknown as HostCapability] },
+			calls: () => calls,
+		});
+	}
+	{
+		const base = policyInputForRuntime(false);
+		let calls = 0;
+		const proxy = new Proxy(base, {
+			get(target, key, receiver) {
+				calls += 1;
+				return Reflect.get(target, key, receiver);
+			},
+		});
+		inboundCases.push({ label: "direct-proxy-root", input: proxy, calls: () => calls });
+	}
+	for (const entry of inboundCases) {
+		let rejected = false;
+		try {
+			createToolPolicy(entry.input);
+		} catch {
+			rejected = true;
+		}
+		if (!rejected) problems.push(`${entry.label}:accepted`);
+		if (entry.calls() !== 0) problems.push(`${entry.label}:callbacks-${entry.calls()}`);
+	}
+
+	const mutableInput = policyInputForRuntime(false);
+	let originalReads = 0;
+	let replacementReads = 0;
+	mutableInput.workspace.readText = async () => { originalReads += 1; return "original workspace snapshot"; };
+	const mutablePolicy = createToolPolicy(mutableInput);
+	mutableInput.workspace.readText = async () => { replacementReads += 1; return "replacement workspace reread"; };
+	const readTool = mutablePolicy.tools.find((tool) => tool.name === "workspace_read")!;
+	const mutableOutcome = await observeSettlement(readTool.execute(
+		"cycle18-workspace-snapshot", { path: ".pi/extensions/shepherd/tool-policy.ts" }, undefined,
+	), 150);
+	if (mutableOutcome.status !== "resolved") problems.push(`workspace-snapshot:${mutableOutcome.status}`);
+	if (originalReads !== 1 || replacementReads !== 0) {
+		problems.push(`workspace-reread:original-${originalReads}:replacement-${replacementReads}`);
+	}
+
+	let workspaceResultGetters = 0;
+	const workspaceResultInput = policyInputForRuntime(false);
+	workspaceResultInput.workspace.editText = async () => {
+		const result = Object.create(null) as Record<PropertyKey, unknown>;
+		Object.defineProperties(result, {
+			changed: { enumerable: true, get() { workspaceResultGetters += 1; return true; } },
+			summary: { enumerable: true, get() { workspaceResultGetters += 1; return "workspace result"; } },
+		});
+		return result as unknown as { changed: boolean; summary: string };
+	};
+	const editTool = createToolPolicy(workspaceResultInput).tools.find((tool) => tool.name === "workspace_edit")!;
+	const workspaceResultOutcome = await observeSettlement(editTool.execute(
+		"cycle18-workspace-result",
+		{ path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "a", newText: "b" }, undefined,
+	), 150);
+	if (workspaceResultOutcome.status !== "rejected") problems.push(`workspace-result:${workspaceResultOutcome.status}`);
+	if (workspaceResultGetters !== 0) problems.push(`workspace-result-getters-${workspaceResultGetters}`);
+
+	let capabilityResultGetters = 0;
+	const capabilityResultInput = policyInputForRuntime(false);
+	capabilityResultInput.capabilities = [{
+		...inspectCapability(),
+		async execute() {
+			const result = Object.create(null) as Record<PropertyKey, unknown>;
+			Object.defineProperties(result, {
+				status: { enumerable: true, get() { capabilityResultGetters += 1; return "ok"; } },
+				summary: { enumerable: true, get() { capabilityResultGetters += 1; return "capability result"; } },
+				references: { enumerable: true, get() { capabilityResultGetters += 1; return []; } },
+			});
+			return result as unknown as { status: "ok"; summary: string; references: string[] };
+		},
+	}];
+	const capabilityTool = createToolPolicy(capabilityResultInput).tools.find((tool) => tool.name === "host_inspect")!;
+	const capabilityResultOutcome = await observeSettlement(capabilityTool.execute(
+		"cycle18-capability-result", { target: "owned" }, undefined,
+	), 150);
+	if (capabilityResultOutcome.status !== "rejected") problems.push(`capability-result:${capabilityResultOutcome.status}`);
+	if (capabilityResultGetters !== 0) problems.push(`capability-result-getters-${capabilityResultGetters}`);
+
+	let eventGetters = 0;
+	const sdk = new FakeSdk();
+	const harness = runtime(sdk);
+	Object.defineProperty(sdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			sdk.session.promptCalls += 1;
+			const event = Object.create(null) as Record<PropertyKey, unknown>;
+			Object.defineProperty(event, "type", {
+				enumerable: true,
+				get() { eventGetters += 1; return "agent_start"; },
+			});
+			emitSessionEvent(sdk.session, event as unknown as AgentSessionEvent);
+		},
+	});
+	const eventOutcome = await observeSettlement(harness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle18-event-descriptor", laneId: "cycle18-event-descriptor" },
+	})), 300);
+	if (eventOutcome.status !== "rejected") problems.push(`event-accessor:${eventOutcome.status}`);
+	if (eventGetters !== 0) problems.push(`event-getters-${eventGetters}`);
+	await observeSettlement(harness.runtime.close(), 150);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 every runtime dense array requires the exact intrinsic Array prototype", async () => {
+	function hostileArray<T>(values: readonly T[], trapCounter: { value: number }): T[] {
+		const array = [...values];
+		const prototype = new Proxy(Array.prototype, {
+			get(target, key, receiver) {
+				trapCounter.value += 1;
+				return Reflect.get(target, key, receiver);
+			},
+			ownKeys(target) {
+				trapCounter.value += 1;
+				return Reflect.ownKeys(target);
+			},
+			getOwnPropertyDescriptor(target, key) {
+				trapCounter.value += 1;
+				return Reflect.getOwnPropertyDescriptor(target, key);
+			},
+		});
+		Object.setPrototypeOf(array, prototype);
+		return array;
+	}
+	const requestCases = ["context", "capabilities", "readPrefixes", "writePrefixes", "capabilityNames"] as const;
+	const problems: string[] = [];
+	for (const field of requestCases) {
+		const sdk = new FakeSdk();
+		let modelLookups = 0;
+		const findModel = sdk.findModel.bind(sdk);
+		sdk.findModel = (provider: string, model: string) => {
+			modelLookups += 1;
+			return findModel(provider, model);
+		};
+		const traps = { value: 0 };
+		let req = request({
+			binding: {
+				...request().binding,
+				runId: `cycle18-array-${field}`,
+				laneId: `cycle18-array-${field}`,
+			},
+		});
+		if (field === "context") req = { ...req, context: hostileArray(req.context, traps) };
+		else if (field === "capabilities") req = { ...req, capabilities: hostileArray(req.capabilities, traps) };
+		else if (field === "readPrefixes") {
+			req = { ...req, authority: { ...req.authority, readPrefixes: hostileArray(req.authority.readPrefixes, traps) } };
+		} else if (field === "writePrefixes") {
+			req = { ...req, authority: { ...req.authority, writePrefixes: hostileArray(req.authority.writePrefixes, traps) } };
+		} else {
+			req = { ...req, authority: { ...req.authority, capabilityNames: hostileArray(req.authority.capabilityNames, traps) } };
+		}
+		sdk.session.output = handoffFor(req);
+		const harness = runtime(sdk);
+		const outcome = await observeSettlement(harness.runtime.run(req), 300);
+		if (outcome.status !== "rejected") problems.push(`${field}:accepted-${outcome.status}`);
+		if (modelLookups !== 0) problems.push(`${field}:model-lookups-${modelLookups}`);
+		if (traps.value !== 0) problems.push(`${field}:prototype-traps-${traps.value}`);
+		await observeSettlement(harness.runtime.close(), 150);
+	}
+
+	const exactSdk = new FakeSdk();
+	const exactRequest = request({
+		binding: { ...request().binding, runId: "cycle18-array-exact-control", laneId: "cycle18-array-exact-control" },
+	});
+	exactSdk.session.output = handoffFor(exactRequest);
+	const exactHarness = runtime(exactSdk);
+	const exactOutcome = await observeSettlement(exactHarness.runtime.run(exactRequest), 300);
+	if (exactOutcome.status !== "resolved") problems.push(`exact-control:${exactOutcome.status}`);
+	await observeSettlement(exactHarness.runtime.close(), 150);
+
+	const activeTraps = { value: 0 };
+	const activeSdk = new FakeSdk();
+	activeSdk.session.getActiveToolNames = () => hostileArray(
+		["workspace_read", "workspace_edit", "workspace_write", "host_inspect"], activeTraps,
+	);
+	const activeHarness = runtime(activeSdk);
+	const activeOutcome = await observeSettlement(activeHarness.runtime.run(request({
+		binding: { ...request().binding, runId: "cycle18-array-active", laneId: "cycle18-array-active" },
+	})), 300);
+	if (activeOutcome.status !== "rejected") problems.push(`active-tools:${activeOutcome.status}`);
+	if (activeTraps.value !== 0) problems.push(`active-tools-traps-${activeTraps.value}`);
+	await observeSettlement(activeHarness.runtime.close(), 150);
+
+	const eventTraps = { value: 0 };
+	const eventSdk = new FakeSdk();
+	const eventHarness = runtime(eventSdk);
+	const eventRequest = request({
+		binding: { ...request().binding, runId: "cycle18-array-event", laneId: "cycle18-array-event" },
+	});
+	Object.defineProperty(eventSdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			eventSdk.session.promptCalls += 1;
+			const user = piUserMessage("cycle 18 event array");
+			emitSessionEvent(eventSdk.session, { type: "agent_start" } as AgentSessionEvent);
+			emitSessionEvent(eventSdk.session, { type: "turn_start" } as AgentSessionEvent);
+			emitSessionEvent(eventSdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+			emitSessionEvent(eventSdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+			const finalAssistant = emitPiTextAssistant(eventSdk.session, handoffFor(eventRequest));
+			emitSessionEvent(eventSdk.session, {
+				type: "turn_end", message: finalAssistant, toolResults: [],
+			} as AgentSessionEvent);
+			emitSessionEvent(eventSdk.session, {
+				type: "agent_end", messages: hostileArray([user, finalAssistant], eventTraps), willRetry: false,
+			} as AgentSessionEvent);
+		},
+	});
+	const eventOutcome = await observeSettlement(eventHarness.runtime.run(eventRequest), 300);
+	if (eventOutcome.status !== "rejected") problems.push(`event-array:${eventOutcome.status}`);
+	if (eventTraps.value !== 0) problems.push(`event-array-traps-${eventTraps.value}`);
+	await observeSettlement(eventHarness.runtime.close(), 150);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 18 redaction work metrics exactly charge recognizers ranges and render in original coordinates", () => {
+	const emptyMetrics = emptyRedactionScanMetrics();
+	const emptyRendered = redactSensitiveText("", emptyMetrics);
+	const problems: string[] = [];
+	if (emptyRendered !== "") problems.push("empty-render");
+	if (emptyMetrics.sourceLength !== 0 || emptyMetrics.cursorAdvances !== 0 ||
+		emptyMetrics.cursorRegressions !== 0 || emptyMetrics.maxMainCursorVisits !== 0 ||
+		emptyMetrics.totalWork !== 0) {
+		problems.push(`empty-metrics:${JSON.stringify(emptyMetrics)}`);
+	}
+
+	const samples = [
+		["identity", "    ", undefined],
+		["public", "safe: retained", undefined],
+		["protected", "client_secret: C18_WORK_PROTECTED", "C18_WORK_PROTECTED"],
+		["quoted", '{client_secret: "prefix, C18_WORK_QUOTED"}', "C18_WORK_QUOTED"],
+		["locator", "[https://c18.example/work, token: C18_WORK_LOCATOR]", "C18_WORK_LOCATOR"],
+		["private", "-----BEGIN PRIVATE KEY-----\nC18_WORK_PRIVATE\n-----END PRIVATE KEY-----", "C18_WORK_PRIVATE"],
+		["overlap", "http://user:pass@host/path?api_key=C18_WORK_OVERLAP", "C18_WORK_OVERLAP"],
+	] as const;
+	for (const [label, sample, marker] of samples) {
+		const metrics = emptyRedactionScanMetrics();
+		let total = 0;
+		let initialized = false;
+		let unitCharges = 0;
+		Object.defineProperty(metrics, "totalWork", {
+			configurable: true,
+			enumerable: true,
+			get() { return total; },
+			set(value: number) {
+				if (!initialized) {
+					if (value !== 0) throw new Error(`initial total work was ${value}`);
+					initialized = true;
+					total = value;
+					return;
+				}
+				if (value !== total + 1) {
+					throw new Error(`non-unit work charge ${total}->${value}`);
+				}
+				total = value;
+				unitCharges += 1;
+			},
+		});
+		let rendered = "";
+		try {
+			rendered = redactSensitiveText(sample, metrics);
+		} catch (error) {
+			problems.push(`${label}:trace-${error instanceof Error ? error.message : String(error)}`);
+			continue;
+		}
+		if (marker && rendered.includes(marker)) problems.push(`${label}:leak`);
+		if (metrics.sourceLength !== sample.length) problems.push(`${label}:source-${metrics.sourceLength}`);
+		if (metrics.cursorAdvances !== sample.length) problems.push(`${label}:advances-${metrics.cursorAdvances}`);
+		if (metrics.cursorRegressions !== 0) problems.push(`${label}:regressions-${metrics.cursorRegressions}`);
+		if (metrics.maxMainCursorVisits !== 1) problems.push(`${label}:main-visits-${metrics.maxMainCursorVisits}`);
+		if (metrics.totalWork !== unitCharges) problems.push(`${label}:ledger-${metrics.totalWork}-${unitCharges}`);
+		if (metrics.totalWork < sample.length * 6) problems.push(`${label}:recognizers-unaccounted-${metrics.totalWork}`);
+		if (metrics.totalWork > (16 * sample.length) + 64) problems.push(`${label}:work-bound-${metrics.totalWork}`);
+	}
+	assert.deepEqual(problems, []);
+});
