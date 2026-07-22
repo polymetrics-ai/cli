@@ -14,6 +14,9 @@ import {
 	type CreateChildIssueRequest,
 	type CreatePullRequestRequest,
 	type AgentSessionAttestationSource,
+	type AuthoritativeLookup,
+	type ChildIntegrationQuery,
+	type ChildIssueMarkerQuery,
 	type ExternalCallContext,
 	type GitHubChildIssue,
 	type GitHubOrchestrationTransport,
@@ -26,8 +29,12 @@ import {
 	type ParentDecisionBroker,
 	type ParentDecisionPolicy,
 	type ParentReadyAuthorization,
+	type ParentReadyAuthorityCoordinate,
 	type ParentReadyDurableAuthorityBoundary,
 	type ParentReadyFreshnessEnvelope,
+	type ParentReadyJournalQuery,
+	type ParentReadyOperationJournal,
+	type ParentReadySettlementRecord,
 	type PreparedParentReadyOperation,
 	type ParentOrchestrationPlan,
 	type PublishRosterRequest,
@@ -37,7 +44,11 @@ import {
 } from "./github-orchestrator.ts";
 import * as githubOrchestratorApi from "./github-orchestrator.ts";
 import * as githubEvidenceApi from "./github-evidence.ts";
-import type { GitHubChangedPathEvidence, GitHubPullRequestEvidence } from "./github-evidence.ts";
+import type {
+	GitHubChangedPathEvidence,
+	GitHubPullRequestEvidence,
+	RequiredGitHubCheckPolicyObservation,
+} from "./github-evidence.ts";
 import {
 	createAgentSessionAttestation,
 	createIndependentReviewWork,
@@ -478,7 +489,11 @@ class FakeTransport implements GitHubOrchestrationTransport, ParentReadyDurableA
 	}
 
 	async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest, context?: TestCallContext): Promise<any> {
-		return this.markParentReady(request, context);
+		return {
+			schemaVersion: 1,
+			kind: "applied",
+			mutation: await this.markParentReady(request, context),
+		};
 	}
 
 	async quarantineAndRollbackParentReady(request: RollbackParentReadyRequest, context?: TestCallContext): Promise<any> {
@@ -2925,7 +2940,7 @@ test("cycle 6 makes parent-ready one conditional authorization effect with rollb
 		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
 		const authority: ParentReadyDurableAuthorityBoundary = {
 			async compareConsumeAndMarkParentReady() {
-				throw new Error("current durable authority moved before the atomic effect");
+				return { schemaVersion: 1, kind: "conflict", coordinate: "policy" };
 			},
 			async quarantineAndRollbackParentReady() {
 				throw new Error("rollback must not authorize a pre-effect conflict");
@@ -3375,7 +3390,7 @@ async function captureCycle7ReadyRequest(options: {
 	const authority: ParentReadyDurableAuthorityBoundary = {
 		async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest, _context: ExternalCallContext) {
 			captured = request;
-			throw new Error("cycle 7 capture boundary");
+			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
 		},
 		async quarantineAndRollbackParentReady() {
 			throw new Error("cycle 7 capture boundary should not recover a pre-effect failure");
@@ -3420,12 +3435,16 @@ class DelayedParentReadyAuthority implements ParentReadyDurableAuthorityBoundary
 			await new Promise<void>((resolve) => setTimeout(resolve, this.delayMs));
 			if (this.quarantined) throw new Error("durable authority was quarantined before effect");
 			this.effectStarted = true;
-			return this.transport.markParentReady(request, context);
+			return {
+				schemaVersion: 1,
+				kind: "applied",
+				mutation: await this.transport.markParentReady(request, context),
+			};
 		}
 		this.effectStarted = true;
 		const result = await this.transport.markParentReady(request, context);
 		await new Promise<void>((resolve) => setTimeout(resolve, this.delayMs));
-		return result;
+		return { schemaVersion: 1, kind: "applied", mutation: result };
 	}
 
 	async quarantineAndRollbackParentReady(
@@ -3567,7 +3586,7 @@ test("cycle 7 timeout retry reuses one intent after harmless authority refresh",
 	const policySource: RequiredCheckPolicySource = {
 		async findRequiredCheckPolicies(query, context) {
 			const result = await baselinePolicySource.findRequiredCheckPolicies(query, context) as {
-				items: Array<Record<string, unknown>>;
+				items: RequiredGitHubCheckPolicyObservation[];
 				complete: boolean;
 			};
 			return {
@@ -3632,6 +3651,274 @@ test("cycle 7 timeout retry reuses one intent after harmless authority refresh",
 	assert.notEqual(requests[1].freshness.digest, requests[0].freshness.digest);
 });
 
+class PortOnlyReadinessTransport implements GitHubOrchestrationTransport {
+	readonly issues: GitHubChildIssue[];
+	readonly pullRequests: GitHubPullRequestEvidence[];
+	readonly rosters: GitHubRosterSnapshot[];
+	readonly integrations: ChildIntegrationReceipt[];
+	pullRequestReadCalls = 0;
+
+	constructor(seed: {
+		issues: readonly GitHubChildIssue[];
+		pullRequests: readonly GitHubPullRequestEvidence[];
+		rosters: readonly GitHubRosterSnapshot[];
+		integrations: readonly ChildIntegrationReceipt[];
+	}) {
+		this.issues = structuredClone([...seed.issues]);
+		this.pullRequests = structuredClone([...seed.pullRequests]);
+		this.rosters = structuredClone([...seed.rosters]);
+		this.integrations = structuredClone([...seed.integrations]);
+	}
+
+	async findChildIssues(
+		query: ChildIssueMarkerQuery,
+		_context: ExternalCallContext,
+	): Promise<AuthoritativeLookup<GitHubChildIssue>> {
+		return { items: this.issues.filter((entry) => entry.marker === query.marker), complete: true };
+	}
+
+	async createChildIssue(_request: CreateChildIssueRequest, _context: ExternalCallContext): Promise<never> {
+		throw new Error("port-only readiness fixture does not create issues");
+	}
+
+	async findPullRequests(
+		query: PullRequestMarkerQuery,
+		_context: ExternalCallContext,
+	): Promise<AuthoritativeLookup<GitHubPullRequestEvidence>> {
+		this.pullRequestReadCalls += 1;
+		return { items: this.pullRequests.filter((entry) => entry.marker === query.marker), complete: true };
+	}
+
+	async createPullRequest(_request: CreatePullRequestRequest, _context: ExternalCallContext): Promise<never> {
+		throw new Error("port-only readiness fixture does not create pull requests");
+	}
+
+	async findParentRosters(
+		query: GitHubRosterQuery,
+		_context: ExternalCallContext,
+	): Promise<AuthoritativeLookup<GitHubRosterSnapshot>> {
+		return { items: this.rosters.filter((entry) => entry.marker === query.marker), complete: true };
+	}
+
+	async publishParentRoster(_request: PublishRosterRequest, _context: ExternalCallContext): Promise<never> {
+		throw new Error("port-only readiness fixture does not publish rosters");
+	}
+
+	async findChildIntegration(
+		query: ChildIntegrationQuery,
+		_context: ExternalCallContext,
+	): Promise<AuthoritativeLookup<ChildIntegrationReceipt>> {
+		return {
+			items: this.integrations.filter((entry) => entry.childId === query.childId && entry.marker === query.marker),
+			complete: true,
+		};
+	}
+
+	async integrateChild(_request: IntegrateChildRequest, _context: ExternalCallContext): Promise<never> {
+		throw new Error("port-only readiness fixture does not integrate children");
+	}
+
+	async proveAncestry(query: GitAncestryQuery, _context: ExternalCallContext): Promise<any> {
+		return {
+			schemaVersion: 1,
+			authority: "transport",
+			...query,
+			result: true,
+			revision: 1,
+			observedAt: "2026-07-21T12:05:00.000Z",
+		};
+	}
+}
+
+class PortOnlyParentReadyJournal implements ParentReadyOperationJournal {
+	readonly #prepared = new Map<string, PreparedParentReadyOperation>();
+	readonly settlements: ParentReadySettlementRecord[] = [];
+
+	private key(query: ParentReadyJournalQuery): string {
+		return `${query.planDigest}\u0000${query.authorizationDigest}\u0000${query.mutationIdempotencyKey}`;
+	}
+
+	async persistPrepared(operation: PreparedParentReadyOperation, _context: ExternalCallContext): Promise<void> {
+		const query = {
+			planDigest: operation.planDigest,
+			authorizationDigest: operation.authorization.digest,
+			mutationIdempotencyKey: operation.mutation.idempotencyKey,
+		};
+		this.#prepared.set(this.key(query), structuredClone(operation));
+	}
+
+	async readPrepared(
+		query: ParentReadyJournalQuery,
+		_context: ExternalCallContext,
+	): Promise<PreparedParentReadyOperation | null> {
+		return structuredClone(this.#prepared.get(this.key(query)) ?? null);
+	}
+
+	async persistSettlement(settlement: ParentReadySettlementRecord, _context: ExternalCallContext): Promise<void> {
+		this.settlements.push(githubOrchestratorApi.validateParentReadySettlementRecord(settlement));
+	}
+}
+
+class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundary {
+	readonly #transport: PortOnlyReadinessTransport;
+	readonly #journal: ParentReadyOperationJournal;
+	#mutationRevision = 0;
+	readonly #mutations = new Map<string, { digest: string; value: GitHubPullRequestEvidence; revision: number }>();
+
+	constructor(transport: PortOnlyReadinessTransport, journal: ParentReadyOperationJournal) {
+		this.#transport = transport;
+		this.#journal = journal;
+	}
+
+	async compareConsumeAndMarkParentReady(
+		requestValue: MarkParentReadyRequest,
+		context: ExternalCallContext,
+	): Promise<any> {
+		const request = githubOrchestratorApi.validateMarkParentReadyRequest(requestValue);
+		const query = {
+			planDigest: request.authorization.planDigest,
+			authorizationDigest: request.authorization.digest,
+			mutationIdempotencyKey: request.mutation.idempotencyKey,
+		};
+		const prepared = await this.#journal.readPrepared(query, context);
+		if (prepared === null
+			|| prepared.authorization.digest !== request.authorization.digest
+			|| prepared.mutation.idempotencyKey !== request.mutation.idempotencyKey
+			|| prepared.mutation.intentDigest !== request.mutation.intentDigest) {
+			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+		}
+		const existing = this.#mutations.get(request.mutation.idempotencyKey);
+		if (existing !== undefined) {
+			if (existing.digest !== request.mutation.intentDigest) {
+				return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			}
+			return {
+				schemaVersion: 1,
+				kind: "applied",
+				mutation: {
+					schemaVersion: 1,
+					idempotencyKey: request.mutation.idempotencyKey,
+					intentDigest: request.mutation.intentDigest,
+					revision: existing.revision,
+					applied: false,
+					value: structuredClone(existing.value),
+				},
+			};
+		}
+		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		const current = this.#transport.pullRequests[index];
+		if (index < 0 || current === undefined || current.headSha !== request.headSha) {
+			return { schemaVersion: 1, kind: "conflict", coordinate: "head" };
+		}
+		if (!current.draft || current.revision !== request.authorization.pullRequestRevision) {
+			return { schemaVersion: 1, kind: "conflict", coordinate: "pull_request_revision" };
+		}
+		const updated = { ...current, draft: false, revision: current.revision + 1 };
+		this.#transport.pullRequests.splice(index, 1, updated);
+		const revision = ++this.#mutationRevision;
+		this.#mutations.set(request.mutation.idempotencyKey, {
+			digest: request.mutation.intentDigest,
+			value: structuredClone(updated),
+			revision,
+		});
+		return {
+			schemaVersion: 1,
+			kind: "applied",
+			mutation: {
+				schemaVersion: 1,
+				idempotencyKey: request.mutation.idempotencyKey,
+				intentDigest: request.mutation.intentDigest,
+				revision,
+				applied: true,
+				value: structuredClone(updated),
+			},
+		};
+	}
+
+	async quarantineAndRollbackParentReady(
+		request: RollbackParentReadyRequest,
+		_context: ExternalCallContext,
+	): Promise<any> {
+		const index = this.#transport.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
+		if (index < 0) throw new Error("parent pull request missing");
+		const current = this.#transport.pullRequests[index];
+		const updated = { ...current, draft: true, revision: current.revision + 1 };
+		this.#transport.pullRequests.splice(index, 1, updated);
+		return {
+			schemaVersion: 1,
+			idempotencyKey: request.mutation.idempotencyKey,
+			intentDigest: request.mutation.intentDigest,
+			revision: ++this.#mutationRevision,
+			applied: true,
+			value: structuredClone(updated),
+		};
+	}
+}
+
+function portOnlyContext(): ExternalCallContext {
+	return {
+		signal: new AbortController().signal,
+		deadlineAt: "2026-07-22T00:01:00.000Z",
+		acknowledgeAbort: () => {},
+	};
+}
+
+function portOnlyPolicySource(): RequiredCheckPolicySource {
+	return {
+		async findRequiredCheckPolicies(query, _context) {
+			const policy = cycle3CheckPolicy(query.baseBranch);
+			return {
+				items: [{
+					schemaVersion: 1,
+					authority: "controller",
+					repository: query.repository,
+					baseBranch: query.baseBranch,
+					revision: Number(policy.revision),
+					digest: String(policy.digest),
+					observedAt: "2026-07-21T12:06:00.000Z",
+				}],
+				complete: true,
+			};
+		},
+	};
+}
+
+function portOnlyAttestations(transport: PortOnlyReadinessTransport): AgentSessionAttestationSource {
+	return {
+		async findAttestations(target, _context) {
+			return {
+				items: transport.pullRequests
+					.filter((pullRequest) => pullRequest.number === target.pullRequest)
+					.flatMap((pullRequest) => pullRequest.reviews)
+					.filter((review) => review.workItemId === target.workItemId)
+					.map(attestReview),
+				complete: true,
+			};
+		},
+		async findChangedPathEvidence(target, _context) {
+			return {
+				items: transport.pullRequests
+					.filter((pullRequest) => pullRequest.number === target.pullRequest)
+					.map((pullRequest): GitHubChangedPathEvidence => ({
+						schemaVersion: 1,
+						authority: "controller",
+						repository: pullRequest.repository,
+						workItemId: pullRequest.workItemId,
+						pullRequest: pullRequest.number,
+						generation: pullRequest.generation,
+						baseSha: pullRequest.baseSha,
+						headSha: pullRequest.headSha,
+						paths: [...pullRequest.changedPaths],
+						complete: true,
+						revision: Math.max(1, pullRequest.revision - 1),
+						observedAt: "2026-07-21T11:58:00.000Z",
+					})),
+				complete: true,
+			};
+		},
+	};
+}
+
 test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", async () => {
 	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
 	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
@@ -3649,7 +3936,14 @@ test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", 
 });
 
 test("cycle 7 production contract requires atomic authority and exports canonical validators", () => {
-	const transport: GitHubOrchestrationTransport = new FakeTransport();
+	const transport: GitHubOrchestrationTransport = new PortOnlyReadinessTransport({
+		issues: [],
+		pullRequests: [],
+		rosters: [],
+		integrations: [],
+	});
+	assert.equal("markParentReady" in transport, false);
+	assert.equal("rollbackParentReady" in transport, false);
 	assert.throws(
 		() => Reflect.construct(GitHubParentOrchestrator, [transport, undefined, undefined, undefined, {}]),
 		/parent.ready.*authority|authority.*required/i,
@@ -3660,12 +3954,18 @@ test("cycle 7 production contract requires atomic authority and exports canonica
 });
 
 test("cycle 7 issue 479-shaped wiring uses only public production ports", async () => {
-	const { candidate, transport: transportImplementation, receipts } = await cycle5ReadinessScenario();
-	const transport: GitHubOrchestrationTransport = transportImplementation;
-	const authority: ParentReadyDurableAuthorityBoundary = transportImplementation;
+	const scenario = await cycle5ReadinessScenario();
+	const { candidate, receipts } = scenario;
+	const transport: GitHubOrchestrationTransport & PortOnlyReadinessTransport = new PortOnlyReadinessTransport({
+		issues: scenario.transport.issues,
+		pullRequests: scenario.transport.pullRequests,
+		rosters: scenario.transport.rosters,
+		integrations: scenario.transport.integrations,
+	});
+	const journal: ParentReadyOperationJournal & PortOnlyParentReadyJournal = new PortOnlyParentReadyJournal();
+	const authority: ParentReadyDurableAuthorityBoundary = new PortOnlyParentReadyAuthority(transport, journal);
 	const policySource: RequiredCheckPolicySource = {
-		async findRequiredCheckPolicies(query, context) {
-			transportImplementation.trackContext("findRequiredCheckPolicies", context);
+		async findRequiredCheckPolicies(query, _context) {
 			const policy = cycle3CheckPolicy(query.baseBranch);
 			return {
 				items: [{
@@ -3682,10 +3982,9 @@ test("cycle 7 issue 479-shaped wiring uses only public production ports", async 
 		},
 	};
 	const attestations: AgentSessionAttestationSource = {
-		async findAttestations(target, context) {
-			transportImplementation.trackContext("findAttestations", context);
+		async findAttestations(target, _context) {
 			return {
-				items: transportImplementation.pullRequests
+				items: transport.pullRequests
 					.filter((pullRequest) => pullRequest.number === target.pullRequest)
 					.flatMap((pullRequest) => pullRequest.reviews)
 					.filter((review) => review.workItemId === target.workItemId)
@@ -3693,10 +3992,9 @@ test("cycle 7 issue 479-shaped wiring uses only public production ports", async 
 				complete: true,
 			};
 		},
-		async findChangedPathEvidence(target, context) {
-			transportImplementation.trackContext("findChangedPathEvidence", context);
+		async findChangedPathEvidence(target, _context) {
 			return {
-				items: transportImplementation.pullRequests
+				items: transport.pullRequests
 					.filter((pullRequest) => pullRequest.number === target.pullRequest)
 					.map((pullRequest): GitHubChangedPathEvidence => ({
 						schemaVersion: 1,
@@ -3782,48 +4080,83 @@ test("cycle 7 issue 479-shaped wiring uses only public production ports", async 
 	const prepared = await orchestrator.prepareParentReadiness(candidate, receipts, decisionPolicy);
 	assert.equal(prepared.kind, "prepared");
 	if (prepared.kind !== "prepared") return;
-	const durableJournal: PreparedParentReadyOperation[] = [structuredClone(prepared.operation)];
-	assert.equal(durableJournal[0].decision.status, "consumed");
-	const settled = await orchestrator.commitPreparedParentReadiness(candidate, receipts, durableJournal[0]);
+	const context = portOnlyContext();
+	await journal.persistPrepared(prepared.operation, context);
+	const query = {
+		planDigest: prepared.operation.planDigest,
+		authorizationDigest: prepared.operation.authorization.digest,
+		mutationIdempotencyKey: prepared.operation.mutation.idempotencyKey,
+	};
+	const journaled = await journal.readPrepared(query, context);
+	assert.ok(journaled);
+	assert.equal(journaled.decision.status, "consumed");
+	const settled = await orchestrator.commitPreparedParentReadiness(candidate, receipts, journaled);
 	assert.equal(settled.kind, "ready");
+	await journal.persistSettlement({
+		schemaVersion: 1,
+		...query,
+		outcome: "ready",
+		settledAt: "2026-07-22T00:00:00.000Z",
+	}, context);
+	assert.equal(journal.settlements.length, 1);
 	assert.equal((await orchestrator.stop()).kind, "joined");
 });
 
 test("cycle 7 atomic authority boundary rejects every moved coordinate without recovery", async (t) => {
-	const mutations: Array<[string, (authorization: Record<string, any>) => void]> = [
-		["policy", (value) => { value.policies[0].revision += 1; }],
-		["review", (value) => { value.reviewAuthorizationDigest = "f".repeat(64); }],
-		["exact paths", (value) => { value.exactPaths = [...value.exactPaths, "cycle-7/moved.ts"]; }],
-		["child receipt", (value) => { value.children[0].receipt.integratedAt = "2026-07-21T12:11:00.000Z"; }],
-		["ancestry", (value) => { value.children[0].ancestry.descendantSha = "f".repeat(40); }],
-		["decision", (value) => {
+	const mutations: Array<[string, ParentReadyAuthorityCoordinate, (authorization: Record<string, any>) => void]> = [
+		["policy", "policy", (value) => { value.policies[0].revision += 1; }],
+		["review", "review", (value) => { value.reviewAuthorizationDigest = "f".repeat(64); }],
+		["exact paths", "exact_paths", (value) => { value.exactPaths = [...value.exactPaths, "cycle-7/moved.ts"]; }],
+		["child receipt", "child_receipt", (value) => { value.children[0].receipt.integratedAt = "2026-07-21T12:11:00.000Z"; }],
+		["ancestry", "ancestry", (value) => { value.children[0].ancestry.descendantSha = "f".repeat(40); }],
+		["decision", "decision", (value) => {
 			value.decision.consumedAt = "2026-07-21T12:00:41.000Z";
 			value.decision.updatedAt = "2026-07-21T12:00:41.000Z";
 		}],
-		["plan", (value) => { value.planDigest = "f".repeat(64); }],
-		["head", (value) => { value.headSha = "f".repeat(40); }],
-		["PR revision", (value) => { value.pullRequestRevision += 1; }],
-		["durable authorization state", () => {}],
+		["plan", "plan", (value) => { value.planDigest = "f".repeat(64); }],
+		["head", "head", (value) => { value.headSha = "f".repeat(40); }],
+		["PR revision", "pull_request_revision", (value) => { value.pullRequestRevision += 1; }],
+		["durable authorization state", "authorization_state", () => {}],
 	];
-	for (const [name, mutate] of mutations) {
+	for (const [name, coordinate, mutate] of mutations) {
 		await t.test(name, async () => {
-			const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+			const scenario = await cycle5ReadinessScenario();
+			const { candidate, receipts } = scenario;
+			const implementation = new PortOnlyReadinessTransport({
+				issues: scenario.transport.issues,
+				pullRequests: scenario.transport.pullRequests,
+				rosters: scenario.transport.rosters,
+				integrations: scenario.transport.integrations,
+			});
+			const transport: GitHubOrchestrationTransport = implementation;
 			let current: ParentReadyAuthorization | undefined;
 			let quarantined = false;
-			let compareStarted = false;
+			let readsAtCompare = 0;
+			let rollbackCalls = 0;
 			const authority: ParentReadyDurableAuthorityBoundary = {
-				async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest, context: ExternalCallContext) {
-					compareStarted = true;
+				async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest) {
+					readsAtCompare = implementation.pullRequestReadCalls;
 					if (quarantined || current?.digest !== request.authorization.digest) {
-						throw new Error("durable parent-ready authority conflict");
+						return { schemaVersion: 1, kind: "conflict", coordinate };
 					}
-					return transport.markParentReady(request, context);
+					throw new Error("atomic movement case unexpectedly retained current authority");
 				},
 				async quarantineAndRollbackParentReady() {
+					rollbackCalls += 1;
 					throw new Error("rollback is unavailable and must not be needed for an authority conflict");
 				},
 			};
-			const orchestrator = orchestratorFor(transport, new FakeDecisionBroker(), defaultPolicySource(transport), 25, authority);
+			const orchestrator = new GitHubParentOrchestrator(
+				transport,
+				new FakeDecisionBroker(),
+				portOnlyAttestations(implementation),
+				portOnlyPolicySource(),
+				{
+					externalCallTimeoutMs: 25,
+					parentReadyAuthority: authority,
+					now: () => new Date("2026-07-22T00:00:00.000Z"),
+				},
+			);
 			const prepared = await orchestrator.prepareParentReadiness(candidate, receipts, decisionPolicy);
 			assert.equal(prepared.kind, "prepared");
 			if (prepared.kind !== "prepared") return;
@@ -3836,17 +4169,14 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 				const { digest: _digest, ...payload } = moved;
 				current = githubOrchestratorApi.canonicalizeParentReadyAuthorization(payload);
 			}
-			transport.onPullRequestRead = (_query, matches) => {
-				if (compareStarted) throw new Error("post-effect read unavailable");
-				return matches;
-			};
-			let result: unknown;
-			try { result = await orchestrator.commitPreparedParentReadiness(candidate, receipts, prepared.operation); } catch {
-				// A typed conflict is the expected fail-closed outcome.
-			}
-			assert.notEqual((result as { kind?: string } | undefined)?.kind, "ready");
-			assert.equal(transport.markReadyCalls, 0);
-			assert.equal(transport.pullRequests.find((entry) => entry.number === 900)?.draft, true);
+			const result = await orchestrator.commitPreparedParentReadiness(candidate, receipts, prepared.operation);
+			assert.deepEqual(result, {
+				kind: "blocked",
+				blockers: [`parent_ready_authority_conflict:${coordinate}`],
+			});
+			assert.equal(rollbackCalls, 0);
+			assert.equal(implementation.pullRequestReadCalls, readsAtCompare, "conflict returns without recovery reads");
+			assert.equal(implementation.pullRequests.find((entry) => entry.number === 900)?.draft, true);
 		});
 	}
 });
