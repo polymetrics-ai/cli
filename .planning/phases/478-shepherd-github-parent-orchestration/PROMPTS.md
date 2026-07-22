@@ -266,8 +266,12 @@ verification false. Publication and fresh exact-head review remain parent-owned.
   parent/main/#475, network/GitHub, push, reviewers, ready, integration, merge, and human gates.
   Adapter remains `manual_gsd_fallback`; the worker owns only local PLAN/RED/GREEN/evidence.
 
-Execution status: artifact PLAN `863bf94a` precedes a complete executable RED. Focused RED is 791
-total / 743 pass / 47 intended TAP failures / 1 intentional skip; all five production blobs remain
-frozen. The 42 failing leaves are BEGIN 6, SNAPSHOT 13, conflict proof 10, persistent tombstone 3,
-and direct redaction 10, plus five parent containers. Fifty generic consumer rows pass. The
-latch-based C10-CONFIRM family passes five consecutive 5/5 runs. GREEN has not started.
+Execution status: artifact PLAN `863bf94a` precedes executable RED `1b4aa6f1`, whose 791 total /
+743 pass / 47 intended TAP failures / 1 skip preserve all five production blobs. Coherent GREEN
+`e765e0d3` closes the complete union: focused 791 total / 790 pass / 0 fail / 1 intentional skip;
+all 60 assignment rows and every begin/conflict/snapshot row pass. The latch-based C10-CONFIRM
+family passes five consecutive 5/5 runs at RED and GREEN. Strict owned/all-production TypeScript,
+pinned offline RPC, base/scope/data/marker/report gates pass. The broad route remains non-zero at
+1011 total / 945 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip, so
+`verificationPassed` and `reviewCoveragePassed` stay false and the parent retains every external
+and human gate.

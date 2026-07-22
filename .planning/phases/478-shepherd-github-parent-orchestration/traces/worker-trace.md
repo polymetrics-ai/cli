@@ -474,4 +474,37 @@
   `manual_gsd_fallback`; no production edit began.
 - No production, dependency, network/GitHub, push, reviewer, ready, integration, merge, or human-
   gate action ran. `verificationPassed` and `reviewCoveragePassed` remain false. The RED checkpoint
-  is represented non-self-referentially as `HEAD` until its SHA is reported to the parent.
+  was committed as `1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21` and reported to the parent before
+  production work.
+
+## 2026-07-22 Cycle 11 GREEN and local evidence
+
+- Coherent GREEN `e765e0d31c426ecf201162509519fa03d460d871` changes only the orchestrator
+  production/test pair and review-router production. It defers begin reconciliation until the
+  original uncertain invocation settles, validates exact atomic conflict tombstones, checks one
+  causal restart history before reconstruction, and consumes complete shell-like assignment tails.
+- All named rows pass: BEGIN 6/6, typed proof 10/10, persistent tombstone 3/3, snapshot 16/16 plus
+  canonical controls, and assignment 60/60. Focused five-file TAP is 791 total / 790 pass / 0 fail /
+  1 intentional skip in 8500.347542 ms.
+- One provisional pre-commit run rejected a retained blocked settlement over an unsettled applied
+  authority and left its fixture cleanup pending. The run was interrupted, that retained Cycle 8
+  case was isolated, the legitimate recovery window was restored, and it passed 5/5 before the
+  exact complete GREEN run. No retry wrapper or assertion/timing relaxation was introduced.
+- C10-CONFIRM repeats five consecutive 5/5 runs at GREEN (374.180292-383.614625 ms). Strict
+  TypeScript 5.9.3 passes for the five owned pairs and all 20 production modules against cached Pi
+  0.80.6. No separate production refactor was needed because the GREEN already extracts the exact
+  tombstone and unified restart-history validators.
+- Pinned Pi 0.80.6 offline RPC returns `true` for `pm-shepherd` from `extension`, with only expected
+  global-settings lock warnings. Serialized Shepherd is an environmental failure: 1011 total /
+  945 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip in 41763.036958 ms.
+- Immutable base and reviewed candidate ancestry, exact merge base `3addb1f4`, full-range diff,
+  exact 21 paths, all three changed JSON parses, Cycle 11 synthetic-marker confinement, and both
+  complete Cycle 10 report replays pass. Review reports total 679 lines with SHA-256
+  `b5c990e3c930cecc58e4c1e237a64a9b1eb754ba7049f3c6686d80b3bbced8c1` and
+  `10c1c568af358d5b770026dec93ccb8bc88315f51858485181e49bf5d1df30eb`.
+- Final production blobs are orchestrator `158749baab70869eb4f0d96dbbe1786a81b0a6d5`, review router
+  `4eadd5d96347950edcf51626a9d7069c1297a96d`, broker
+  `7be6785190176a8c15660fb180fc95c207b76d5b`, evidence
+  `058ad1622249a9772ce9e03f7f83cc3bf28b464a`, and human decision
+  `fc1c62307ccca0c2590ea0a7cd61626876f3f71f`. `verificationPassed` and
+  `reviewCoveragePassed` remain false; no external or human gate ran.

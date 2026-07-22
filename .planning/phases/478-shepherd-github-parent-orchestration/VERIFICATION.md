@@ -1,11 +1,12 @@
 # Verification: #478
 
-Status: Cycle 11 executable RED is captured after artifact PLAN
-`863bf94ac6115fd0342db064555bd95f239f8854`; all five production blobs remain frozen. Both Cycle 10
-reviews are consolidated. `verificationPassed` is false because Cycle 11 is intentionally red, the
-focused Cycle 10 gate was independently observed flaky, and the declared broad route exits non-zero.
-`reviewCoveragePassed` is false because both exact-head reviews are blocked. Earlier cycle gate
-sections below are historical evidence and do not supersede the current Cycle 11 contract.
+Status: Cycle 11 local GREEN `e765e0d31c426ecf201162509519fa03d460d871` follows artifact PLAN
+`863bf94ac6115fd0342db064555bd95f239f8854` and executable RED
+`1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21`. Both Cycle 10 reviews are consolidated and every
+named behavior row passes locally. `verificationPassed` is false because the declared broad route
+exits non-zero with 65 unchanged managed-sandbox failures. `reviewCoveragePassed` is false because
+no fresh exact-head Cycle 11 review has run. Earlier cycle gate sections below are historical
+evidence and do not supersede the current Cycle 11 contract.
 
 ## Cycle 11 verification contract
 
@@ -18,15 +19,15 @@ sections below are historical evidence and do not supersede the current Cycle 11
 - [x] Artifact-only Cycle 11 PLAN `863bf94a` precedes every Cycle 11 test and production edit.
 - [x] One executable RED captures the complete union with all five production blobs unchanged:
       791 total / 743 pass / 47 intended TAP failures / 1 intentional skip.
-- [ ] The causally synchronized C10-CONFIRM family repeats deterministically at RED and GREEN; the
+- [x] The causally synchronized C10-CONFIRM family repeats deterministically at RED and GREEN; the
       complete focused route repeats at GREEN without retries, longer deadlines, or relaxed checks.
-- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
+- [x] Focused, strict owned/all-production TypeScript, pinned offline RPC, broad serialized
       classification, base/scope/data/marker/report-replay, and integrity gates are recorded.
-- [ ] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
+- [x] No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push,
       reviewer, integration, merge, ready, or human-gate action runs.
 
-Machine verification and review coverage remain false throughout PLAN and RED. A focused pass
-cannot override the declared broad non-zero route, and no new exact-head review is worker-owned.
+Machine verification and review coverage remain false. A focused pass cannot override the declared
+broad non-zero route, and no new exact-head review is worker-owned.
 
 Cycle 11 RED failure ledger: BEGIN 6 leaves; unified snapshot 13 leaves; mandatory terminal proof
 10 coordinate leaves; persistent tombstone 3 leaves; complete direct redaction 10 leaves; five
@@ -37,6 +38,29 @@ no-emit TypeScript 5.9.3 passes over the five changed tests and their transitive
 against cached Pi 0.80.6 Node declarations. The generic TDD helper cannot parse the phase's retained
 multi-cycle ledger; its out-of-scope generated report was removed and executable RED evidence is
 recorded manually under the declared `manual_gsd_fallback`.
+
+### Cycle 11 GREEN and local evidence
+
+| Gate | Result |
+| --- | --- |
+| Checkpoints | PLAN `863bf94a`; RED `1b4aa6f1`; GREEN `e765e0d3`; evidence is non-self-referential `HEAD` |
+| Focused five-file route | 791 total; 790 pass; 0 fail; 1 intentional live-sandbox skip; 8500.347542 ms |
+| Cycle 11 rows | BEGIN 6/6; typed terminal proof 10/10; persistent tombstone 3/3; snapshot 16/16 plus canonical controls; assignment 60/60 |
+| C10-CONFIRM repeat | five consecutive runs at 5/5 at RED and GREEN; zero retries, deadline increases, assertion relaxation, or phase sleeps |
+| Strict TypeScript | pass for five owned production/test pairs and all 20 production modules; TypeScript 5.9.3 / cached Pi 0.80.6 |
+| Offline extension discovery | pass; pinned Pi RPC returns `true` for `pm-shepherd` from `extension`; only expected global-settings lock warnings |
+| Serialized Shepherd | environmental failure: 1011 total; 945 pass; 65 unchanged managed-sandbox `spawn EPERM` failures; 1 skip; 41763.036958 ms |
+| Base and scope | immutable base and reviewed candidate are ancestors; exact merge base `3addb1f4`; full-range diff and exact 21 paths pass |
+| Data and replay | all 3 changed JSON files parse; Cycle 11 synthetic markers are test-only; both complete Cycle 10 reports replayed (679 lines total) |
+| Production blobs | orchestrator `158749ba`; review router `4eadd5d9`; broker `7be67851`, evidence `058ad162`, and human decision `fc1c6230` unchanged |
+| Machine truth | `verificationPassed: false`; `reviewCoveragePassed: false` |
+
+One provisional GREEN run over-restricted the retained blocked-plus-unsettled restart window and
+left that fixture's cleanup pending. The run was interrupted, the single retained Cycle 8 case was
+isolated, the phase-coherent blocked window was restored, and the retained case passed 5/5 before
+the coherent GREEN commit. The exact 791-case focused route then passed without a retry wrapper.
+No separate production refactor was needed after GREEN because the implementation already extracts
+the tombstone and unified-history validators.
 
 ## Cycle 10 verification contract
 

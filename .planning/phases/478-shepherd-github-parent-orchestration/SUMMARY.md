@@ -1,9 +1,10 @@
 # Summary: #478
 
-Status: Cycle 11 executable RED follows artifact PLAN `863bf94a` against blocked candidate
-`3b39cfce`. Both Cycle 10 reports are consolidated into one strict TDD correction. All five
-production blobs remain frozen; verification and fresh exact-head review coverage remain false.
-Earlier delivery status below is retained as historical context.
+Status: Cycle 11 local GREEN `e765e0d3` follows artifact PLAN `863bf94a` and executable RED
+`1b4aa6f1` against blocked candidate `3b39cfce`. Both Cycle 10 reports are consolidated and every
+named correction row passes locally. Verification remains false because the declared broad route
+has 65 unchanged managed-sandbox failures; fresh exact-head review coverage remains false. Earlier
+delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -237,16 +238,22 @@ mutation history; C10-CONFIRM uses causal latches rather than timing guesses; an
 assignment values redact escaped and substitution tails completely while validators stay generic.
 
 Cycle 10 did complete locally at PLAN `470a8a85`, RED `2256971a`, GREEN `5f46206e`, refactor
-`8946b67b`, and evidence `3b39cfce`, but its independent review is blocked. Review reproduced the
-focused gate nondeterministically and the declared broad route remains non-zero, so
-`verificationPassed` and `reviewCoveragePassed` are both false. The exact 21-path scope is
-unchanged. This Cycle 11 artifact checkpoint precedes every new test and production edit; parent
-ownership of publication, reviews, integration, merge, ready, and human gates is unchanged.
+`8946b67b`, and evidence `3b39cfce`, but its independent review is blocked. Cycle 11 PLAN
+`863bf94a` precedes executable RED `1b4aa6f1` and coherent GREEN `e765e0d3`. The exact 21-path
+scope is unchanged; parent ownership of publication, reviews, integration, merge, ready, and human
+gates is unchanged.
 
 The complete Cycle 11 RED now executes 791 focused tests: 743 pass, 42 intended failing leaves plus
 five failing parent containers, and one intentional live-sandbox skip. Failures isolate all six
 begin settlement trajectories, thirteen cross-history snapshot gaps, ten missing typed-coordinate
 terminal proofs, three persistent moved/foreign tombstones, and ten incomplete direct redactions.
 All fifty durable/outbound consumer rows already reject generically without marker or `API_KEY`
-reflection. The causally latched C10-CONFIRM family passes five consecutive 5/5 runs. No production,
-network, publication, review, integration, ready, merge, or human-gate action has run.
+reflection. GREEN makes all 60 assignment rows pass and closes every begin, terminal-conflict, and
+unified-history row. Focused evidence is 791 total / 790 pass / 0 fail / 1 intentional skip. The
+causally latched C10-CONFIRM family passes five consecutive 5/5 runs at both RED and GREEN. Strict
+TypeScript passes for the five owned pairs and all 20 production modules; pinned offline RPC
+returns `true`; immutable base/ancestry/merge-base, full-range diff, exact 21 paths, three JSON
+parses, marker confinement, and both Cycle 10 report replays pass. The serialized route is 1011
+total / 945 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip, so
+`verificationPassed` remains false; `reviewCoveragePassed` is also false pending parent-owned fresh
+review. No network, publication, review, integration, ready, merge, or human-gate action has run.

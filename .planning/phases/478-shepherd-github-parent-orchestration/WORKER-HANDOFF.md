@@ -18,9 +18,10 @@ Worker directory: `/tmp/shepherd-478-correction`
 
 Prior frozen reviewed candidate: `3b39cfce9b4a99940b0451302df6bf5c17b49c02`
 
-Cycle 11 status: artifact PLAN `863bf94a` and complete executable RED are captured; both Cycle 10
-reviews are blocked and consolidated. No Cycle 11 production edit has occurred. Cycle 10 is
-historical local evidence, not a review-clean or verification-passing candidate.
+Cycle 11 status: artifact PLAN `863bf94a`, complete executable RED `1b4aa6f1`, and coherent local
+GREEN `e765e0d3` are captured; both Cycle 10 reviews are blocked and consolidated. Focused and
+strict gates pass, but the broad route remains non-zero and no fresh exact-head review has run, so
+this is not a review-clean or verification-passing candidate.
 
 ## Scope Delivered
 
@@ -384,7 +385,7 @@ session-attestation contract and fixtures required to verify independent-review 
 - Exact base/merge-base, full-range diff, exact 21 paths, and all three JSON parses pass. No network,
   push, GitHub, reviewer, integration, merge, parent-ready, or other human-gate action ran.
 
-## Cycle 11 plan handoff
+## Cycle 11 correction handoff
 
 - Frozen candidate/tree/base: `3b39cfce9b4a99940b0451302df6bf5c17b49c02` /
   `962160e1ccae2e52f6f645185edb96819bd4a9f5` / `3addb1f4`; clean exact 21 paths; both Cycle 10
@@ -405,9 +406,24 @@ session-attestation contract and fixtures required to verify independent-review 
   guesses. Escaped quote/space/continuation and command/parameter substitution tails are fully
   redacted for `=`/`+=`; five validators reject generically without marker reflection.
 - `verificationPassed` and `reviewCoveragePassed` remain false. The broad route is non-zero and the
-  focused Cycle 10 route was observed flaky. Parent retains publication, review, integration,
+  fresh Cycle 11 head has not been reviewed. Parent retains publication, review, integration,
   ready, merge, and every human gate.
 - RED evidence: 791 total / 743 pass / 47 intended TAP failures / 1 intentional skip. The exact 42
   failing leaves are BEGIN 6, SNAPSHOT 13, terminal-proof 10, persistent-tombstone 3, and direct
   redaction 10; five parent containers account for the remaining failures. All five production
   blobs remain exact. C10-CONFIRM passes five consecutive causally latched 5/5 runs.
+- GREEN `e765e0d31c426ecf201162509519fa03d460d871` closes every named row. Focused is 791 total /
+  790 pass / 0 fail / 1 intentional skip. All 60 assignment rows pass; begin is 6/6, typed conflict
+  is 10/10, persistent tombstone is 3/3, and all 16 named snapshot rows plus their controls pass.
+- C10-CONFIRM repeats five consecutive 5/5 runs at GREEN without retries, longer deadlines, phase
+  sleeps, or weaker assertions. Strict TypeScript 5.9.3 passes over the five owned pairs and all 20
+  production modules against pinned Pi 0.80.6 declarations.
+- Pinned offline RPC returns `true` for `pm-shepherd`; exact base/reviewed-candidate ancestry and
+  merge base, full-range diff, exact 21 paths, three JSON parses, Cycle 11 marker confinement, and
+  both complete Cycle 10 report replays pass.
+- Serialized Shepherd is an honest environmental failure: 1011 total / 945 pass / 65 unchanged
+  managed-sandbox `spawn EPERM` failures / 1 skip. This keeps machine verification false. No
+  standalone code refactor followed GREEN because the coherent change already isolates the
+  tombstone and restart-history validators.
+- No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub, push, reviewer,
+  integration, ready, merge, or human-gate action ran.

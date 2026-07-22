@@ -1261,7 +1261,7 @@ validators reject with generic text that contains neither the marker nor a crede
 | --- | ---: | --- |
 | C11-BEGIN | 6 | reject-before-write, apply-then-reject, malformed-after-write, caller cancellation, deadline-before-write, and signal-ignoring late apply retain invocation/key/stop through settlement and post-settlement terminal reconciliation; effect count stays zero |
 | C11-CONFLICT | 13 | all ten typed coordinates plus persistent moved-head, moved-draft-revision, and foreign-non-draft cases return exact tombstone proof, preserve PR state, serialize without invoking residue, and report truthful stop/reentry |
-| C11-SNAPSHOT | 12 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed mutation-history variants reject before construction; equivalent reorder remains canonical |
+| C11-SNAPSHOT | 16 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed mutation-history variants reject before construction; equivalent reorder and legitimate absent-tombstone history remain canonical |
 | C11-CONFIRM | 4 | hang/late/reject/malformed confirmation modes use causal latches and pass repeated isolated/full focused execution without wall-clock phase guesses |
 | C11-ASSIGN | 60 | two operators x five escaped/substitution forms prove full direct redaction plus generic rejection through each of five validators |
 | C11-ARTIFACT | 4 | leading summary, verification, PR-body/handoff, and machine state describe Cycle 10 as blocked and Cycle 11 as planned/RED/GREEN at the matching checkpoint |
@@ -1292,14 +1292,21 @@ remain byte-exact through the RED commit.
       precedes all Cycle 11 tests and production edits.
 - [x] Complete executable RED at this checkpoint fails only the named new behavior groups with all
       five production blobs frozen.
-- [ ] PLAN/RED SHAs and exact failures reported before GREEN.
-- [ ] Coherent GREEN/refactor and repeatable local evidence recorded truthfully.
-- [ ] Fresh exact-head reviews and all publication/integration/human gates remain parent-owned.
+- [x] PLAN `863bf94a` and RED `1b4aa6f1` SHAs plus exact failures reported before GREEN.
+- [x] Coherent GREEN `e765e0d3`; no separate production refactor was required because the GREEN
+      already isolates tombstone and restart-history validators. Repeatable local evidence is
+      recorded truthfully.
+- [x] Fresh exact-head reviews and all publication/integration/human gates remain parent-owned.
 
-Current machine truth at this plan checkpoint: `verificationPassed: false` and
-`reviewCoveragePassed: false`. Cycle 10's focused route was observed flaky by independent review,
-and the declared broad route remains non-zero. Cycle 11 RED executes 791 tests: 743 pass, 42
-intended failing leaves plus five parent containers, and one intentional skip. The leaf failures
-are BEGIN 6, SNAPSHOT 13, conflict-proof 10, persistent-conflict 3, and direct-redaction 10. All 50
-generic consumer rows pass. C10-CONFIRM repeats five times at 5/5 with causal latches. No production
-edit has run and the five frozen blobs remain exact.
+Current machine truth after local evidence: `verificationPassed: false` and
+`reviewCoveragePassed: false`. Cycle 11 focused GREEN executes 791 tests: 790 pass, 0 fail, and one
+intentional live-sandbox skip. Every C11-BEGIN, C11-CONFLICT, C11-SNAPSHOT, C11-CONFIRM, and
+C11-ASSIGN row passes; C10-CONFIRM repeats five times at 5/5 at both RED and GREEN without retries
+or timing relaxation. Strict TypeScript passes for the five owned pairs and all 20 production
+modules; pinned offline RPC returns `true`; immutable-base/reviewed-candidate ancestry, exact merge
+base, full-range diff, exact 21 paths, three JSON parses, marker confinement, and both Cycle 10
+report replays pass. The declared serialized route is honestly non-zero at 1011 total / 945 pass /
+65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip, so focused success cannot set machine
+verification true. Production changed only in the orchestrator (`158749ba`) and review router
+(`4eadd5d9`); broker, evidence, and human-decision blobs remain unchanged. No network/GitHub, push,
+reviewer, integration, ready, merge, or human-gate action ran.

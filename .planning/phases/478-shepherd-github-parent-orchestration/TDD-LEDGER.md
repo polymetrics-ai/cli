@@ -511,12 +511,12 @@ C10-CONFIRM family is made causally deterministic before repeat evidence.
 
 | ID | Minimum rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C11-BEGIN | 6 | begin rejection/malformed/cancellation/deadline/late-apply paths retain invocation, key, and stop ownership through invocation settlement plus terminal authority reconciliation; zero ready effects | red: 6/6 intended leaves fail on missing post-settlement read/recovery |
-| C11-CONFLICT | 13 | all ten typed coordinates and three persistent moved/foreign PR cases atomically tombstone the requested invoking reservation, preserve PR state, and leave truthful stop/reentry/restart evidence | red: 10/10 proof-contract plus 3/3 persistent leaves fail |
-| C11-SNAPSHOT | 16 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed retained mutation histories reject before role construction; canonical and legitimate absent-tombstone controls pass | red: 13 missing cross-history leaves fail; 3 already-closed local-shape rows pass |
-| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation uses entry/deadline/new-fence/release latches and repeats without fixed-delay phase inference | deterministic fixture green at RED: five consecutive 5/5 runs |
-| C11-ASSIGN | 60 | `=`/`+=` escaped quote/space/continuation and command/parameter substitution values redact their complete marker directly and reject generically through five consumers | red: 10/10 direct leaves fail; 50/50 generic consumer rows pass |
-| C11-ARTIFACT | 4 | leading status, checklist, PR/handoff prose, and machine truth agree at every checkpoint | plan/RED artifact checks green; verification/review false |
+| C11-BEGIN | 6 | begin rejection/malformed/cancellation/deadline/late-apply paths retain invocation, key, and stop ownership through invocation settlement plus terminal authority reconciliation; zero ready effects | red_then_green: 6/6 pass |
+| C11-CONFLICT | 13 | all ten typed coordinates and three persistent moved/foreign PR cases atomically tombstone the requested invoking reservation, preserve PR state, and leave truthful stop/reentry/restart evidence | red_then_green: 13/13 pass |
+| C11-SNAPSHOT | 16 | cross-component settlement/phase/visibility/revision/decision/omission and equal/reversed retained mutation histories reject before role construction; canonical and legitimate absent-tombstone controls pass | red_then_green: 16/16 named rows and controls pass |
+| C11-CONFIRM | 4 | hang/late/reject/malformed confirmation uses entry/deadline/new-fence/release latches and repeats without fixed-delay phase inference | green: five consecutive 5/5 runs at RED and GREEN |
+| C11-ASSIGN | 60 | `=`/`+=` escaped quote/space/continuation and command/parameter substitution values redact their complete marker directly and reject generically through five consumers | red_then_green: 60/60 pass |
+| C11-ARTIFACT | 4 | leading status, checklist, PR/handoff prose, and machine truth agree at every checkpoint | green locally; verification/review remain false |
 
 Frozen production blobs before RED: orchestrator `1ef3a4ead93ce8572e121256564b7ecb8a6454a9`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, GitHub evidence
@@ -535,4 +535,16 @@ distinguish the current Cycle 11 ledger from historical checklist rows in this l
 its generated out-of-scope `TDD-GATE.json` was removed immediately, so the exact executable TAP
 and strict-TypeScript evidence above is the recorded `manual_gsd_fallback`. Production blobs remain
 exactly frozen. PLAN `863bf94ac6115fd0342db064555bd95f239f8854` precedes every RED edit; the RED
-checkpoint is this commit (`HEAD`).
+checkpoint is `1b4aa6f1586036d0a1a3f57003593cf3f0e4ff21`.
+
+Cycle 11 coherent GREEN is `e765e0d31c426ecf201162509519fa03d460d871`. The five-file route is
+791 total / 790 pass / 0 fail / 1 intentional skip; all Cycle 11 behavior rows pass. C10-CONFIRM
+repeats five consecutive 5/5 runs at GREEN without retries, longer deadlines, weaker assertions,
+or fixed-delay phase inference. Strict TypeScript 5.9.3 passes for the five owned pairs and all 20
+production modules against cached Pi 0.80.6; offline RPC returns `true`. The serialized route is
+honestly classified environmental at 1011 total / 945 pass / 65 unchanged managed-sandbox
+`spawn EPERM` failures / 1 skip, leaving `verificationPassed: false`. Immutable base and reviewed
+candidate ancestry, exact merge base, full-range diff, exact 21 paths, three JSON parses, Cycle 11
+marker confinement, and both complete Cycle 10 report replays pass. No standalone production
+refactor was necessary: GREEN already isolates the invocation tombstone and unified restart-history
+validators. Fresh exact-head review and all external/human gates remain parent-owned.
