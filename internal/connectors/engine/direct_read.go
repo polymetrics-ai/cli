@@ -19,12 +19,106 @@ import (
 
 const (
 	defaultDirectReadMaxBytes                  = 1 << 20
+	maxOperationDirectReadBytes                = 16 << 20
 	defaultDirectReadTimeout                   = 30 * time.Second
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
+	directReadPolicyJSONRedacted               = "json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
+
+func OperationDirectRead(ctx context.Context, b Bundle, req connectors.OperationDirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
+	if err := ctx.Err(); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	op, err := findOperation(b, req.Operation)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	if op.Kind != "rest_read" || op.REST == nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires rest_read operation, got %q", op.Kind)
+	}
+	method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+	if method != http.MethodGet && method != http.MethodPost {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires GET or POST, got %s", method)
+	}
+	if isAbsoluteHTTPURL(op.REST.Path) {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read endpoint must be connector-relative, got absolute URL")
+	}
+	if method == http.MethodPost && !strings.EqualFold(strings.TrimSpace(op.REST.ContentType), "application/json") {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires application/json content_type")
+	}
+	if method == http.MethodPost && len(op.REST.BodySchema) == 0 {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read POST requires body_schema")
+	}
+	if op.REST.MaxBytes <= 0 {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read requires positive max_bytes")
+	}
+	if err := requireOperationDirectReadEndpoint(b, method, op.REST.Path); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	cfg := materializeConfigDefaults(b, req.Config)
+	resolvedPath, err := resolveSurfaceEndpointPath(op.REST.Path, cfg, req.PathParams)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	queryMap := map[string]string{}
+	for key, value := range op.REST.Query {
+		queryMap[key] = value
+	}
+	for key, value := range req.Query {
+		queryMap[key] = value
+	}
+	query, err := directReadQuery(queryMap)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	policy := req.OutputPolicy
+	if policy == "" {
+		policy = op.OutputPolicy
+	}
+	if err := validateDirectReadOutputPolicy(policy, req.PathParams); err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	body, err := operationReadBody(op, req.Body)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+
+	ctx, cancel := context.WithTimeout(ctx, defaultDirectReadTimeout)
+	defer cancel()
+	rt, err := newRuntime(ctx, b, cfg, h)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	maxBytes := clampOperationDirectReadMaxBytes(req.MaxBytes, op.REST.MaxBytes)
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, body, maxBytes)
+	if err != nil {
+		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
+		msg := safety.RedactErrorText(err.Error())
+		if hint != "" {
+			msg = msg + ": " + hint
+		}
+		if class != "" {
+			msg = class + ": " + msg
+		}
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read %s %s: %s", method, op.REST.Path, msg)
+	}
+	if len(resp.Body) > maxBytes {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
+	}
+	decoded, err := decodeDirectReadBody(resp.Body, maxBytes)
+	if err != nil {
+		return connectors.DirectReadResult{}, fmt.Errorf("operation direct read response is not JSON: %w", err)
+	}
+	decoded, err = applyDirectReadOutputPolicy(policy, decoded)
+	if err != nil {
+		return connectors.DirectReadResult{}, err
+	}
+	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded}, nil
+}
 
 func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest, h Hooks) (connectors.DirectReadResult, error) {
 	if err := ctx.Err(); err != nil {
@@ -62,7 +156,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}
 
 	maxBytes := clampDirectReadMaxBytes(req.MaxBytes)
-	resp, err := rt.Requester.DoLimited(ctx, method, resolvedPath, query, nil, maxBytes)
+	requestPath := normalizeDirectReadPathForBaseURL(resolvedPath, directReadBaseURL(b, cfg))
+	resp, err := rt.Requester.DoLimited(ctx, method, requestPath, query, nil, maxBytes)
 	if err != nil {
 		class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
 		msg := safety.RedactErrorText(err.Error())
@@ -79,10 +174,8 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response too large: %d bytes exceeds limit %d", len(resp.Body), maxBytes)
 	}
 
-	var body any
-	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(resp.Body), int64(maxBytes)+1))
-	dec.UseNumber()
-	if err := dec.Decode(&body); err != nil {
+	body, err := decodeDirectReadBody(resp.Body, maxBytes)
+	if err != nil {
 		return connectors.DirectReadResult{}, fmt.Errorf("direct read response is not JSON: %w", err)
 	}
 	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
@@ -98,6 +191,82 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	}, nil
 }
 
+func findOperation(b Bundle, id string) (OperationSpec, error) {
+	for _, op := range b.Operations {
+		if op.ID == id {
+			return op, nil
+		}
+	}
+	return OperationSpec{}, fmt.Errorf("operation %q not found in bundle %q", id, b.Name)
+}
+
+func requireOperationDirectReadEndpoint(b Bundle, method, endpointPath string) error {
+	if b.Surface == nil {
+		return nil
+	}
+	for _, ep := range b.Surface.Endpoints {
+		if strings.EqualFold(ep.Method, method) && ep.Path == endpointPath {
+			if ep.Operation == nil && (ep.CoveredBy == nil || (ep.CoveredBy.DirectRead == "" && len(ep.CoveredBy.DirectReads) == 0)) {
+				return fmt.Errorf("api_surface endpoint %s %s is not declared as an operation or direct_read command", method, endpointPath)
+			}
+			return nil
+		}
+	}
+	return fmt.Errorf("api_surface endpoint %s %s not found", method, endpointPath)
+}
+
+func operationReadBody(op OperationSpec, overrides map[string]any) (any, error) {
+	if op.REST == nil || strings.ToUpper(strings.TrimSpace(op.REST.Method)) != http.MethodPost {
+		return nil, nil
+	}
+	body := cloneAnyMap(op.REST.Body)
+	for key, value := range overrides {
+		body[key] = value
+	}
+	if len(op.REST.BodySchema) > 0 {
+		sch, err := CompileSchema(op.REST.BodySchema)
+		if err != nil {
+			return nil, fmt.Errorf("operation %q: compile body_schema: %w", op.ID, err)
+		}
+		if err := sch.Validate(body); err != nil {
+			return nil, fmt.Errorf("operation %q: body_schema: %w", op.ID, err)
+		}
+	}
+	return body, nil
+}
+
+func cloneAnyMap(in map[string]any) map[string]any {
+	out := make(map[string]any, len(in))
+	for key, value := range in {
+		out[key] = value
+	}
+	return out
+}
+
+func clampOperationDirectReadMaxBytes(requested, operationMax int) int {
+	maxBytes := requested
+	if maxBytes <= 0 {
+		maxBytes = operationMax
+	}
+	if maxBytes <= 0 || maxBytes > maxOperationDirectReadBytes {
+		maxBytes = maxOperationDirectReadBytes
+	}
+	if operationMax > 0 && maxBytes > operationMax {
+		return operationMax
+	}
+	return maxBytes
+}
+
+func decodeDirectReadBody(raw []byte, maxBytes int) (any, error) {
+	var body any
+	dec := json.NewDecoder(io.LimitReader(bytes.NewReader(raw), int64(maxBytes)+1))
+	dec.UseNumber()
+	if err := dec.Decode(&body); err != nil {
+		return nil, err
+	}
+	return body, nil
+}
+
 func clampDirectReadMaxBytes(maxBytes int) int {
 	if maxBytes <= 0 || maxBytes > defaultDirectReadMaxBytes {
 		return defaultDirectReadMaxBytes
@@ -111,6 +280,8 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
 			return err
 		}
+		return nil
+	case directReadPolicyJSONRedacted:
 		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
@@ -142,9 +313,84 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
+	case directReadPolicyJSONRedacted:
+		return redactJSONValue(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+func directReadBaseURL(b Bundle, cfg connectors.RuntimeConfig) string {
+	baseURL, err := Interpolate(b.HTTP.URL, Vars{Config: cfg.Config, Secrets: cfg.Secrets})
+	if err != nil || strings.TrimSpace(baseURL) == "" {
+		if cfg.Config != nil && cfg.Config["base_url"] != "" {
+			return cfg.Config["base_url"]
+		}
+		return b.HTTP.URL
+	}
+	return baseURL
+}
+
+func normalizeDirectReadPathForBaseURL(resolvedPath, baseURL string) string {
+	parsed, err := url.Parse(baseURL)
+	if err != nil {
+		return resolvedPath
+	}
+	basePath := strings.TrimRight(parsed.EscapedPath(), "/")
+	if basePath == "" || basePath == "." {
+		return resolvedPath
+	}
+	if resolvedPath == basePath {
+		return "/"
+	}
+	prefix := basePath + "/"
+	if strings.HasPrefix(resolvedPath, prefix) {
+		return "/" + strings.TrimPrefix(resolvedPath, prefix)
+	}
+	return resolvedPath
+}
+
+func redactJSONValue(value any) any {
+	switch v := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, item := range v {
+			if item != nil && shouldRedactJSONField(key) {
+				out[key+"_redacted"] = true
+				continue
+			}
+			out[key] = redactJSONValue(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(v))
+		for i, item := range v {
+			out[i] = redactJSONValue(item)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func shouldRedactJSONField(name string) bool {
+	normalized := strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
+	switch normalized {
+	case "content", "body", "payload", "raw", "download_url", "download_media_url", "clone_url", "api_key", "apikey", "access_key", "private_key", "authorization", "credential", "credentials":
+		return true
+	}
+	if strings.Contains(normalized, "download") && strings.Contains(normalized, "url") {
+		return true
+	}
+	if strings.Contains(normalized, "clone") && strings.Contains(normalized, "url") {
+		return true
+	}
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "apikey", "access_key", "authorization", "credential"} {
+		if strings.Contains(normalized, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 func redactGitHubContentsObject(in map[string]any) map[string]any {

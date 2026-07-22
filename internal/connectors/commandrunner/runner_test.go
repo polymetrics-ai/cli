@@ -2,27 +2,33 @@ package commandrunner
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
+	"net/http"
+	"net/http/httptest"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/defs"
+	"polymetrics.ai/internal/connectors/engine"
 )
 
 type fakeConnector struct {
-	surface       *connectors.CommandSurface
-	manifest      connectors.Manifest
-	readReq       connectors.ReadRequest
-	directReadReq connectors.DirectReadRequest
-	validateReq   connectors.WriteRequest
-	dryRunReq     connectors.WriteRequest
-	writeReq      connectors.WriteRequest
-	writeRecords  []connectors.Record
-	validateErr   error
-	dryRunErr     error
-	writeErr      error
-	preview       connectors.WritePreview
-	writeResult   connectors.WriteResult
+	surface                *connectors.CommandSurface
+	manifest               connectors.Manifest
+	readReq                connectors.ReadRequest
+	directReadReq          connectors.DirectReadRequest
+	operationDirectReadReq connectors.OperationDirectReadRequest
+	validateReq            connectors.WriteRequest
+	dryRunReq              connectors.WriteRequest
+	writeReq               connectors.WriteRequest
+	writeRecords           []connectors.Record
+	validateErr            error
+	dryRunErr              error
+	writeErr               error
+	preview                connectors.WritePreview
+	writeResult            connectors.WriteResult
 }
 
 func (f *fakeConnector) Name() string { return "github" }
@@ -48,6 +54,16 @@ func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadR
 			"name": "README.md",
 			"type": "file",
 		},
+	}, nil
+}
+func (f *fakeConnector) OperationDirectRead(_ context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	f.operationDirectReadReq = req
+	return connectors.DirectReadResult{
+		Connector: "gong",
+		Method:    "POST",
+		Path:      "/v2/meetings/integration/status",
+		Status:    200,
+		Body:      map[string]any{"ok": true},
 	}, nil
 }
 func (f *fakeConnector) Write(_ context.Context, req connectors.WriteRequest, records []connectors.Record) (connectors.WriteResult, error) {
@@ -379,6 +395,24 @@ func TestBuildWriteCommandPreviewDryRunsAndRedactsSecretLikeFields(t *testing.T)
 	}
 }
 
+func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) {
+	redacted := redactRecord(connectors.Record{
+		"downloadMediaUrl": "https://media.example.test/call.mp4",
+		"content":          "sensitive body",
+		"media_file_path":  "fixtures/call.mp4",
+		"data_file_path":   "fixtures/crm.csv",
+		"title":            "visible",
+	})
+	for _, key := range []string{"downloadMediaUrl", "content", "media_file_path", "data_file_path"} {
+		if redacted[key] != "***" {
+			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+		}
+	}
+	if redacted["title"] != "visible" {
+		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	}
+}
+
 func TestRunReverseETLCommandRemainsNonExecutableInGenericRunner(t *testing.T) {
 	connector := reverseETLFakeConnector()
 
@@ -459,7 +493,7 @@ func TestRunReverseETLRejectsMissingWriteAndUnsupportedFlagMapping(t *testing.T)
 	}
 }
 
-func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
+func TestRunImplementedOperationCommandRequiresTypedMetadata(t *testing.T) {
 	connector := &fakeConnector{surface: &connectors.CommandSurface{
 		Commands: []connectors.CommandSurfaceCommand{
 			{
@@ -482,9 +516,8 @@ func TestRunImplementedOperationCommandIsFeatureGated(t *testing.T) {
 	if !errors.As(err, &blocked) {
 		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
 	}
-	if !strings.Contains(err.Error(), "operation github.projects.list") ||
-		!strings.Contains(err.Error(), "executor is not implemented") {
-		t.Fatalf("Run error = %q, want operation feature gate", err.Error())
+	if !strings.Contains(err.Error(), "operation direct_read commands require exactly one api_surface endpoint") {
+		t.Fatalf("Run error = %q, want typed operation metadata gate", err.Error())
 	}
 }
 
@@ -685,6 +718,172 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	}
 	if connector.directReadReq.OutputPolicy != "github_contents_file_metadata" {
 		t.Fatalf("direct read output policy = %q, want github_contents_file_metadata", connector.directReadReq.OutputPolicy)
+	}
+}
+
+func TestRunImplementedOperationDirectReadCommand(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface: []connectors.CommandSurfaceEndpointRef{
+					{Method: "POST", Path: "/v2/meetings/integration/status"},
+				},
+				OutputPolicy: "json_redacted",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "email", Type: "string_array", MapsTo: "body.emails"},
+				},
+			},
+		},
+	}}
+
+	result, err := Run(context.Background(), connector, Request{
+		Path:  []string{"meetings", "integration-status"},
+		Flags: map[string][]string{"email": {"ada@example.com", "grace@example.com"}},
+	}, func(connectors.Record) error {
+		t.Fatal("emit called for operation direct-read command")
+		return nil
+	})
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
+	if result.DirectRead == nil {
+		t.Fatalf("DirectRead = nil, want result")
+	}
+	if connector.operationDirectReadReq.Operation != "gong.meetings_integration_status" {
+		t.Fatalf("operation = %q", connector.operationDirectReadReq.Operation)
+	}
+	if connector.operationDirectReadReq.MaxBytes != MaxOperationDirectReadBytes {
+		t.Fatalf("operation max bytes = %d, want %d", connector.operationDirectReadReq.MaxBytes, MaxOperationDirectReadBytes)
+	}
+	emails, ok := connector.operationDirectReadReq.Body["emails"].([]string)
+	if !ok || len(emails) != 2 || emails[0] != "ada@example.com" || emails[1] != "grace@example.com" {
+		t.Fatalf("operation body = %#v, want typed emails", connector.operationDirectReadReq.Body)
+	}
+}
+
+func TestRunGongTypedPOSTDirectReadsIncludingTranscript(t *testing.T) {
+	tests := []struct {
+		name         string
+		path         []string
+		endpointPath string
+		flags        map[string][]string
+	}{
+		{name: "calls extensive", path: []string{"calls", "extensive"}, endpointPath: "/v2/calls/extensive", flags: map[string][]string{"call-id": {"call-1"}}},
+		{name: "call access", path: []string{"calls", "users-access", "get"}, endpointPath: "/v2/calls/users-access", flags: map[string][]string{"call-id": {"call-1"}}},
+		{name: "users extensive", path: []string{"users", "extensive"}, endpointPath: "/v2/users/extensive"},
+		{name: "tasks", path: []string{"tasks", "list"}, endpointPath: "/v2/tasks", flags: map[string][]string{"user-id": {"user-1"}, "status": {"OPEN"}, "task-action": {"CALL"}, "task-type": {"FLOW"}}},
+		{name: "interaction stats", path: []string{"stats", "interaction"}, endpointPath: "/v2/stats/interaction", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "scorecards", path: []string{"stats", "activity-scorecards"}, endpointPath: "/v2/stats/activity/scorecards", flags: map[string][]string{"scorecard-id": {"scorecard-1"}}},
+		{name: "day by day", path: []string{"stats", "activity-day-by-day"}, endpointPath: "/v2/stats/activity/day-by-day", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "aggregate", path: []string{"stats", "activity-aggregate"}, endpointPath: "/v2/stats/activity/aggregate", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}}},
+		{name: "aggregate by period", path: []string{"stats", "activity-aggregate-by-period"}, endpointPath: "/v2/stats/activity/aggregate-by-period", flags: map[string][]string{"from-date": {"2026-01-01"}, "to-date": {"2026-01-02"}, "aggregation-period": {"DAY"}}},
+		{name: "transcript", path: []string{"calls", "transcript"}, endpointPath: "/v2/calls/transcript", flags: map[string][]string{"call-id": {"call-1"}}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var body map[string]any
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != http.MethodPost || r.URL.Path != tt.endpointPath {
+					t.Errorf("request = %s %s, want POST %s", r.Method, r.URL.Path, tt.endpointPath)
+				}
+				if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+					t.Errorf("decode request body: %v", err)
+				}
+				_, _ = w.Write([]byte(`{"ok":true}`))
+			}))
+			defer server.Close()
+
+			bundle, err := engine.Load(defs.FS, "gong")
+			if err != nil {
+				t.Fatalf("load Gong bundle: %v", err)
+			}
+			bundle.HTTP.URL = server.URL
+			connector := engine.New(bundle, nil)
+			result, err := Run(context.Background(), connector, Request{
+				Path:  tt.path,
+				Flags: tt.flags,
+				Config: connectors.RuntimeConfig{Secrets: map[string]string{
+					"access_key":        "fixture_access_key",
+					"access_key_secret": "fixture_access_key_secret",
+				}},
+			}, func(connectors.Record) error {
+				t.Fatal("emit called for direct read")
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.DirectRead == nil || body == nil {
+				t.Fatalf("result/body = %+v / %+v, want direct read and typed body", result, body)
+			}
+			if tt.name == "transcript" {
+				filter, ok := body["filter"].(map[string]any)
+				if !ok {
+					t.Fatalf("transcript filter = %#v, want object", body["filter"])
+				}
+				callIDs, ok := filter["callIds"].([]any)
+				if !ok || len(callIDs) != 1 || callIDs[0] != "call-1" {
+					t.Fatalf("transcript callIds = %#v, want [call-1]", filter["callIds"])
+				}
+			}
+		})
+	}
+}
+
+func TestRunOperationDirectReadRejectsRawBodyAndMissingPolicy(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		flags   map[string][]string
+		want    string
+	}{
+		{
+			name: "unknown raw body flag",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				OutputPolicy: "json_redacted",
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"body": {`{"emails":["ada@example.com"]}`}},
+			want:  "unknown flag",
+		},
+		{
+			name: "missing output policy keeps operation blocked",
+			command: connectors.CommandSurfaceCommand{
+				Path:         "meetings integration-status",
+				Intent:       "direct_read",
+				Availability: "implemented",
+				Operation:    "gong.meetings_integration_status",
+				APISurface:   []connectors.CommandSurfaceEndpointRef{{Method: "POST", Path: "/v2/meetings/integration/status"}},
+				Flags:        []connectors.CommandSurfaceFlag{{Name: "email", Type: "string_array", MapsTo: "body.emails"}},
+			},
+			flags: map[string][]string{"email": {"ada@example.com"}},
+			want:  "output_policy",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{tt.command}}}
+			_, err := Run(context.Background(), connector, Request{Path: strings.Fields(tt.command.Path), Flags: tt.flags}, func(connectors.Record) error {
+				t.Fatal("emit called for rejected operation direct-read command")
+				return nil
+			})
+			if err == nil {
+				t.Fatal("Run error = nil, want rejection")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %q, want %q", err.Error(), tt.want)
+			}
+		})
 	}
 }
 

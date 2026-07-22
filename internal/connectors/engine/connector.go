@@ -112,6 +112,10 @@ func (c *Connector) DirectRead(ctx context.Context, req connectors.DirectReadReq
 	return DirectRead(ctx, c.bundle, req, c.hooks)
 }
 
+func (c *Connector) OperationDirectRead(ctx context.Context, req connectors.OperationDirectReadRequest) (connectors.DirectReadResult, error) {
+	return OperationDirectRead(ctx, c.bundle, req, c.hooks)
+}
+
 // InitialState satisfies connectors.StatefulReader by delegating to the
 // package-level engine.InitialState.
 func (c *Connector) InitialState(ctx context.Context, stream string, cfg connectors.RuntimeConfig) (map[string]string, error) {
@@ -237,8 +241,8 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 	for _, a := range b.Writes {
 		writeActions = append(writeActions, connectors.WriteActionSpec{
 			Name:           a.Name,
-			RequiredFields: a.PathFields,
-			OptionalFields: a.BodyFields,
+			RequiredFields: writeActionRequiredFields(a),
+			OptionalFields: writeActionOptionalFields(a),
 			Method:         a.Method,
 			Path:           a.Path,
 			Risk:           a.Risk,
@@ -259,6 +263,46 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 			Approval: b.Metadata.Risk.Approval,
 		},
 	}
+}
+
+func writeActionRequiredFields(action WriteAction) []string {
+	fields := appendUniqueStrings(nil, action.PathFields...)
+	var schema struct {
+		Required []string `json:"required"`
+	}
+	if len(action.RecordSchema) > 0 && json.Unmarshal(action.RecordSchema, &schema) == nil {
+		fields = appendUniqueStrings(fields, schema.Required...)
+	}
+	return fields
+}
+
+func writeActionOptionalFields(action WriteAction) []string {
+	required := map[string]bool{}
+	for _, field := range writeActionRequiredFields(action) {
+		required[field] = true
+	}
+	var optional []string
+	for _, field := range action.BodyFields {
+		if !required[field] {
+			optional = appendUniqueStrings(optional, field)
+		}
+	}
+	return optional
+}
+
+func appendUniqueStrings(base []string, values ...string) []string {
+	seen := map[string]bool{}
+	for _, value := range base {
+		seen[value] = true
+	}
+	for _, value := range values {
+		if value == "" || seen[value] {
+			continue
+		}
+		seen[value] = true
+		base = append(base, value)
+	}
+	return base
 }
 
 // synthesizeDefinition builds connectors.Definition from the bundle (design

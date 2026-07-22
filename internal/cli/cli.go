@@ -58,7 +58,7 @@ func Run(args []string, stdout, stderr io.Writer) int {
 	case "init":
 		err = runInit(root, stdout, jsonOut)
 	case "help", "man":
-		err = runHelp(rest, stdout)
+		err = runHelp(rest, stdout, jsonOut)
 	case "connectors":
 		err = runConnectors(ctx, root, rest, stdout, jsonOut)
 	case "credentials":
@@ -123,17 +123,12 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 	return nil
 }
 
-func runHelp(args []string, stdout io.Writer) error {
+func runHelp(args []string, stdout io.Writer, jsonOut bool) error {
 	topic := ""
 	if len(args) > 0 {
 		topic = args[0]
 	}
-	text, ok := docs[topic]
-	if !ok {
-		return fmt.Errorf("help topic %q not found", topic)
-	}
-	fmt.Fprint(stdout, text)
-	return nil
+	return writeManual(topic, stdout, jsonOut)
 }
 
 func isManualCommand(cmd string) bool {
@@ -147,6 +142,9 @@ func isManualCommand(cmd string) bool {
 func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	text, ok := docs[topic]
 	if !ok {
+		text, ok = dynamicConnectorManual(topic)
+	}
+	if !ok {
 		return fmt.Errorf("help topic %q not found", topic)
 	}
 	if jsonOut {
@@ -154,6 +152,21 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	}
 	fmt.Fprint(stdout, text)
 	return nil
+}
+
+func dynamicConnectorManual(name string) (string, bool) {
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return "", false
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return "", false
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		return "", false
+	}
+	return connectors.RenderConnectorManual(connector), true
 }
 
 func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -607,10 +620,22 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if !ok || surfaceProvider.CommandSurface() == nil {
 		return usageErrorf("unknown command %q", connectorName)
 	}
+	surface := surfaceProvider.CommandSurface()
+	if len(args) == 0 || connectorHelpRequested(args, surface) {
+		manual := connectors.RenderConnectorManual(connector)
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName, "manual": manual})
+		}
+		fmt.Fprint(stdout, manual)
+		return nil
+	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
 	if len(path) == 0 {
 		return usageErrorf("missing connector command path")
+	}
+	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
+		return err
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
@@ -622,6 +647,46 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	return withApp(root, func(a *app.App) error {
 		return runConnectorCommand(ctx, a, connectorName, args, stdout, jsonOut)
 	})
+}
+
+func connectorHelpRequested(args []string, surface *connectors.CommandSurface) bool {
+	flags := parseFlags(args)
+	if _, ok := flags.values["help"]; ok {
+		return true
+	}
+	path := flags.values["_"]
+	if len(path) == 0 {
+		declared := map[string]bool{
+			"credential": true, "connection": true, "config": true,
+			"limit": true, "max-bytes": true,
+		}
+		for _, flag := range surface.GlobalFlags {
+			declared[flag.Name] = true
+		}
+		for name := range flags.values {
+			if name != "_" && !declared[name] {
+				return false
+			}
+		}
+		for _, name := range []string{"plan", "approve", "confirm"} {
+			if _, ok := flags.values[name]; ok {
+				return false
+			}
+		}
+		if truthyFlag(flags.first("preview")) {
+			return false
+		}
+		return true
+	}
+	if len(path) == 1 && path[0] == "help" {
+		return true
+	}
+	for _, part := range path {
+		if part == "-h" {
+			return true
+		}
+	}
+	return false
 }
 
 func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -648,15 +713,9 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	if limit > maxConnectorCommandLimit {
 		limit = maxConnectorCommandLimit
 	}
-	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), 1<<20)
+	maxBytes, err := connectorCommandMaxBytes(flags)
 	if err != nil {
 		return err
-	}
-	if maxBytes <= 0 {
-		maxBytes = 1 << 20
-	}
-	if maxBytes > commandrunner.MaxDirectReadBytes {
-		maxBytes = commandrunner.MaxDirectReadBytes
 	}
 	commandFlags := map[string][]string{}
 	for name, values := range flags.values {
@@ -737,6 +796,35 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 		fmt.Fprintln(stdout, string(b))
 	}
 	return nil
+}
+
+func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
+	for _, name := range []string{"plan", "approve", "confirm"} {
+		if _, ok := flags.values[name]; !ok {
+			continue
+		}
+		for _, raw := range flags.values[name] {
+			value := strings.TrimSpace(raw)
+			if value == "" || value == "true" {
+				return usageErrorf("--%s requires a value", name)
+			}
+		}
+	}
+	return nil
+}
+
+func connectorCommandMaxBytes(flags parsedFlags) (int, error) {
+	maxBytes, err := parseIntFlag("max-bytes", flags.first("max-bytes"), commandrunner.MaxOperationDirectReadBytes)
+	if err != nil {
+		return 0, err
+	}
+	if maxBytes <= 0 {
+		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	}
+	if maxBytes > commandrunner.MaxOperationDirectReadBytes {
+		maxBytes = commandrunner.MaxOperationDirectReadBytes
+	}
+	return maxBytes, nil
 }
 
 func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, credential string, config map[string]string, path []string, commandFlags map[string][]string, flags parsedFlags, stdout io.Writer, jsonOut bool) error {

@@ -266,6 +266,141 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	}
 }
 
+func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"id":"call-1",
+			"downloadMediaUrl":"https://media.example.test/download/call-1",
+			"content":"raw sensitive content",
+			"nested":{"apiToken":"secret-token","safe":"ok"},
+			"items":[{"password":"secret","name":"visible"}]
+		}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/calls/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/calls/{id}",
+		PathParams:   map[string]string{"id": "call-1"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want object", result.Body)
+	}
+	for _, key := range []string{"downloadMediaUrl", "content"} {
+		if _, ok := body[key]; ok {
+			t.Fatalf("%s was not redacted: %+v", key, body)
+		}
+	}
+	if body["downloadMediaUrl_redacted"] != true || body["content_redacted"] != true {
+		t.Fatalf("top-level redaction markers missing: %+v", body)
+	}
+	nested := body["nested"].(map[string]any)
+	if _, ok := nested["apiToken"]; ok || nested["apiToken_redacted"] != true || nested["safe"] != "ok" {
+		t.Fatalf("nested redaction = %+v, want apiToken redacted and safe preserved", nested)
+	}
+	items := body["items"].([]any)
+	item := items[0].(map[string]any)
+	if _, ok := item["password"]; ok || item["password_redacted"] != true || item["name"] != "visible" {
+		t.Fatalf("array redaction = %+v, want password redacted and name preserved", item)
+	}
+}
+
+func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
+	var sawBody map[string]any
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost {
+			t.Fatalf("method = %s, want POST", r.Method)
+		}
+		if r.URL.Path != "/v2/meetings/integration/status" {
+			t.Fatalf("path = %s, want /v2/meetings/integration/status", r.URL.Path)
+		}
+		if r.Header.Get("Content-Type") != "application/json" {
+			t.Fatalf("Content-Type = %q, want application/json", r.Header.Get("Content-Type"))
+		}
+		if err := json.NewDecoder(r.Body).Decode(&sawBody); err != nil {
+			t.Fatalf("decode request body: %v", err)
+		}
+		_, _ = w.Write([]byte(`{"ok":true,"apiToken":"secret-token"}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "gong",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:           "gong.meetings_integration_status",
+			Kind:         "rest_read",
+			Summary:      "Validate meeting integration",
+			Risk:         "medium",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			REST: &RESTOperationSpec{
+				Method:      http.MethodPost,
+				Path:        "/v2/meetings/integration/status",
+				ContentType: "application/json",
+				MaxBytes:    1024,
+				BodySchema:  json.RawMessage(`{"type":"object","required":["emails"],"properties":{"emails":{"type":"array","items":{"type":"string"}}},"additionalProperties":false}`),
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodPost,
+			Path:   "/v2/meetings/integration/status",
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "medium",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation:    "gong.meetings_integration_status",
+		Config:       connectors.RuntimeConfig{},
+		Body:         map[string]any{"emails": []any{"ada@example.com"}},
+		MaxBytes:     1024,
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	if emails, ok := sawBody["emails"].([]any); !ok || len(emails) != 1 || emails[0] != "ada@example.com" {
+		t.Fatalf("request body = %+v, want emails array", sawBody)
+	}
+	body := result.Body.(map[string]any)
+	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
+		t.Fatalf("response body = %+v, want apiToken redacted", body)
+	}
+}
+
+func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/v2/calls/call-1" {
+			t.Fatalf("path = %s, want /v2/calls/call-1", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":"call-1"}`))
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL+"/v2", http.MethodGet, "/v2/calls/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/v2/calls/{id}",
+		PathParams:   map[string]string{"id": "call-1"},
+		OutputPolicy: "json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+}
+
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
 		Name: "github",
