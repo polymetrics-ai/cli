@@ -71,8 +71,8 @@ function harness() {
 					return controller;
 				},
 				...(autonomousFactory ? {
-					createAutonomousController(ctx, worktree) {
-						const controller = autonomousFactory(ctx, worktree);
+					createAutonomousController(ctx, worktree, issue) {
+						const controller = autonomousFactory(ctx, worktree, issue);
 						controllers.push(controller);
 						return controller;
 					},
@@ -126,6 +126,64 @@ test("routes autonomous control separately from the retained read-only canary an
 	assert.deepEqual(calls, ["auto:start", "auto:status", "canary:start"]);
 	assert.match(h.notifications.at(-1).message, /unknown action/i);
 	assert.doesNotMatch(h.notifications.find((entry) => /Commands:/.test(entry.message))?.message ?? "", /merge-main/);
+});
+
+test("binds an asynchronous production controller factory to the exact parent issue", async () => {
+	const h = harness();
+	const factoryCalls = [];
+	const productionState = {
+		schemaVersion: 1,
+		kind: "production_autonomous",
+		parentIssue: 479,
+		repository: "acme/widgets",
+		planId: "production-plan",
+		planDigest: "d".repeat(64),
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
+		runId: "run-production",
+		resourceGeneration: 1,
+		generation: 1,
+		revision: 1,
+		maxConcurrency: 2,
+		timeoutMs: 900_000,
+		status: "waiting_human",
+		stage: "human_decision",
+		createdAt: "2026-07-22T08:00:00.000Z",
+		updatedAt: "2026-07-22T08:01:00.000Z",
+		children: [],
+	};
+	h.register(
+		() => ({
+			async status() { return undefined; },
+			async start(command) { return state(command.issue); },
+			async stop(issue) { return state(issue, "stopped"); },
+			async shutdown() {},
+		}),
+		undefined,
+		async (context, worktree, issue) => {
+			await new Promise((resolve) => setImmediate(resolve));
+			factoryCalls.push({ cwd: context.cwd, worktree, issue });
+			return {
+				async status() { return productionState; },
+				async start() { return productionState; },
+				async resume() { return productionState; },
+				async stop() { return productionState; },
+				async shutdown() {},
+			};
+		},
+	);
+
+	await h.command.handler("status --issue 479", h.context);
+	assert.deepEqual(factoryCalls, [{
+		cwd: "/tmp/pr-438",
+		worktree: {
+			cwd: "/tmp/pr-438",
+			repositoryIdentity: "a".repeat(64),
+			worktreeIdentity: "b".repeat(64),
+		},
+		issue: 479,
+	}]);
+	assert.match(h.notifications.at(-1).message, /Issue #479/);
 });
 
 test("renders durable production scheduler, budget, and exact parent-gate status", async () => {

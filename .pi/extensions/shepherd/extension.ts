@@ -37,8 +37,12 @@ interface ExtensionDependencies {
 	resolveWorktree(context: ShepherdCommandContext, options: CanonicalGitWorktreeOptions): Promise<CanonicalWorktree>;
 	/** Hardened schema-v1 controller retained only for the explicit read-only canary. */
 	createController(context: ShepherdCommandContext, worktree: CanonicalWorktree): ShepherdControllerPort;
-	/** Autonomous schema-v2 controller. Optional only for compatibility with old extension harnesses. */
-	createAutonomousController?(context: ShepherdCommandContext, worktree: CanonicalWorktree): AutonomousShepherdControllerPort;
+	/** Production autonomous controller. Optional only for compatibility with old extension harnesses. */
+	createAutonomousController?(
+		context: ShepherdCommandContext,
+		worktree: CanonicalWorktree,
+		issue: number,
+	): AutonomousShepherdControllerPort | Promise<AutonomousShepherdControllerPort>;
 }
 
 export interface ShepherdControllerPort {
@@ -74,7 +78,7 @@ interface ActiveExtensionRun {
 }
 
 const HELP = [
-	"Pi AgentSession Shepherd (autonomous MVP plus explicit read-only canary)",
+	"Pi AgentSession Shepherd (production orchestrator plus explicit read-only canary)",
 	"",
 	"Commands:",
 	"  /pm-shepherd status --issue N",
@@ -192,7 +196,7 @@ export function registerShepherdExtension(
 		const canonicalContext = { ...context, cwd: worktree.cwd };
 		const controller = mode === "canary" || dependencies.createAutonomousController === undefined
 			? dependencies.createController(canonicalContext, worktree)
-			: dependencies.createAutonomousController(canonicalContext, worktree);
+			: await dependencies.createAutonomousController(canonicalContext, worktree, issue);
 		controllers.set(key, controller);
 		return controller;
 	};
@@ -245,7 +249,7 @@ export function registerShepherdExtension(
 			};
 			activeRun = ownedRun;
 			context.ui.notify(
-				`${command.action === "canary" ? "Embedded read-only canary" : "Autonomous in-process Shepherd"} started for issue #${issue}. Use /pm-shepherd status --issue ${issue}.`,
+				`${command.action === "canary" ? "Embedded read-only canary" : "Production in-process Shepherd"} started for issue #${issue}. Use /pm-shepherd status --issue ${issue}.`,
 				"info",
 			);
 			void promise
@@ -272,7 +276,7 @@ export function registerShepherdExtension(
 	};
 
 	host.registerCommand("pm-shepherd", {
-		description: "Run the in-process autonomous Shepherd or its read-only canary",
+		description: "Run the in-process production Shepherd or its read-only canary",
 		getArgumentCompletions: (prefix) =>
 			["help", "status", "canary", "start", "resume", "stop"]
 				.filter((candidate) => candidate.startsWith(prefix))
