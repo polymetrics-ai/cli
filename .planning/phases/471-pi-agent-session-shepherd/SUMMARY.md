@@ -25,11 +25,21 @@ Pi-family CI correction is `a594be98`, and child evidence is `d895dc38`. This br
 aggregation does not claim current review/CI readiness or that every independent child issue or
 stacked PR is closed.
 
+## PR #489 CI repair
+
+The reconciled parent was published at `45c27b9d`, and child PR #489 now targets that exact
+non-default branch. Its first ordinary-host run passed nine checks and exposed two bounded release
+failures: the Shepherd workflow lacked an exact Go setup for its real-Go fixture, and the stack had
+not yet inherited `golang.org/x/text v0.39.0` from current `main`. The current main baseline
+`873cd7b2` is merged into the parent at `383fcf93`; the child CI pins Go `1.25.12` at `52866972`.
+The focused fixture, exact Pi family, strict TypeScript, YAML, and module-integrity checks pass
+locally. The complete inventory and `govulncheck` still require their ordinary-host CI rerun because
+the managed sandbox blocks `/bin/ps` and external advisory-database DNS respectively.
+
 ## Remaining critical path
 
-1. Publish/fetch the reconciled parent branch, then push/open the #479 child PR against that exact
-   non-default base.
-2. Run the complete Shepherd inventory in fresh CI, complete exact-head internal Codex review, and
+1. Publish the main-synchronized parent first, then the repaired #479 child head.
+2. Rerun the complete Shepherd inventory and security scan in fresh CI, complete exact-head internal Codex review, and
    obtain repository-policy review coverage or an allowed recorded fallback.
 3. Integrate #479 into the non-default parent and reconcile #473-#478 lifecycle records.
 4. Complete #480 recovery/audit/reversible-cutover preparation.
