@@ -15,26 +15,24 @@ Status: `parent_pr_open`
 - The parent workflow, phase context/plan, prompt contract, docs, and human-decision protocol now
   describe a complete autonomous replacement rather than a read-only companion.
 
-## Reusable foundation already present
+## Aggregate implementation available on the child branch
 
-The parent branch contains an earlier read-only Pi `AgentSession` control plane with strict parsing,
-state/evidence validation, bounded concurrency, cancellation, lease ownership, offline command
-registration, and a historical read-only #438 canary. Its prior green gates are useful regression
-evidence, not overall completion proof.
-
-Additional uncommitted adversarial remediation strengthens target evidence, state roots/leases,
-SDK cleanup, lifecycle ownership, and extension coordination. It belongs to #473 and must be
-finished test-first before integration.
+The #479 production-matrix branch contains the capabilities originally decomposed across #473-#478:
+the durable control plane, policy scheduler, scoped in-process `AgentSession` runtime, isolated
+workspace/Git lifecycle, GitHub decision broker, parent orchestration, and production composition.
+The original 17-row matrix is `91692415`, current production code is `78708cbe`, the deterministic
+Pi-family CI correction is `a594be98`, and child evidence is `d895dc38`. This branch-local
+aggregation does not claim current review/CI readiness or that every independent child issue or
+stacked PR is closed.
 
 ## Remaining critical path
 
-1. Finish #473 blockers: first-wins cancellation, authoritative lease acquisition across epoch
-   cleanup races, root device/inode pinning, unsuppressed root failures, coherent state invariants,
-   bounded epochs, and honest macOS threat documentation.
-2. Open/review/integrate the #473 child PR into #472.
-3. Dispatch #474-#477 concurrently in isolated worktrees.
-4. Complete #478 parent/GitHub orchestration, #479 controller/UX integration, and #480 recovery/
-   audit/reversible-cutover preparation.
+1. Publish/fetch the reconciled parent branch, then push/open the #479 child PR against that exact
+   non-default base.
+2. Run the complete Shepherd inventory in fresh CI, complete exact-head internal Codex review, and
+   obtain repository-policy review coverage or an allowed recorded fallback.
+3. Integrate #479 into the non-default parent and reconcile #473-#478 lifecycle records.
+4. Complete #480 recovery/audit/reversible-cutover preparation.
 5. Run #481 against #397/#438; only after it passes, activate legacy-shell deprecation, then run
    full local/CI gates, exact-head independent review, and the durable parent merge decision.
 

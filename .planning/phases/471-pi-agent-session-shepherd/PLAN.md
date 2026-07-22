@@ -57,13 +57,14 @@ than an infinite retry.
 | 2 | #476 | worktree and typed Git adapter | #473 | parallel with #474/#475/#477 |
 | 2 | #477 | GitHub human-decision broker | #473 | parallel with #474-#476 |
 | 3 | #478 | parent/sub-issue/PR/review orchestration | #474/#476/#477 | after ports are stable |
-| 4 | #479 | shared autonomous controller and command wiring | #474-#478 | deliberate integration point |
+| 4 | #479 | production matrix, issue bootstrap, host verification, controller and command wiring | #474-#478 | deliberate integration point |
 | 5 | #480 | recovery, audit, operator UX, reversible legacy-cutover preparation | #479 | sequential safety gate |
 | 6 | #481 | #397/#438 canary, post-pass deprecation activation, and final evidence | #480 | final validation and activation |
 
 Each mutating child uses its issue branch/worktree and targets the parent branch. Child PRs use
 `Refs #<child>` and `Refs #471`; only #472 closes #471. #474-#477 have disjoint file ownership and
-must be dispatched together after #473 is reviewed and integrated.
+were designed as disjoint parallel lanes. Their capabilities now exist in the #479 aggregate, but
+their independent issue/PR lifecycle records still require parent reconciliation.
 
 ## TDD execution contract
 
@@ -94,17 +95,18 @@ For each child:
 
 ## Current critical path
 
-#473, #474, #476, and #477 are integrated. #475 is completing one consolidated stable-head
-RED/GREEN correction, including workspace-keyed disjoint mutator reservations. #478 is in a fresh
-exact-head independent-review campaign after its consolidated correction. Once both are clean and
-integrated, execute #479 using the preflight scope and RED matrix recorded in
-`traces/479-preflight-interface-audit.md`; do not begin production wiring against the old read-only
-v1 DTO or immutable initial-parent-base assumptions.
+#479 contains the aggregate production implementation. The original matrix is `91692415`, current
+production code is `78708cbe`, the deterministic Pi-family CI correction is `a594be98`, and child
+evidence is `d895dc38`. Focused release tests pass 767/767; the complete local inventory is 1,647
+pass, 64 managed-sandbox process-identity failures, and one skip. Publish the reconciled parent
+before opening the child PR, then require remote complete-suite CI, final exact-head internal Codex
+review, source-policy automated review coverage or fallback, and parent-orchestrator integration.
+#480 remains dependency-blocked and #481 remains blocked by #480.
 
 ## Verification
 
 ```bash
-node --test .pi/extensions/shepherd/*.test.ts
+node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 pi --list-extensions
 git diff --check
 gofmt -w cmd internal

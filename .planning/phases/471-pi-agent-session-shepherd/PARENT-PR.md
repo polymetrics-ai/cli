@@ -8,10 +8,10 @@ scheduling, isolated in-process implementation workers, typed Git/GitHub operati
 decision gates, verification/review/correction loops, recovery, and an end-to-end CLI Architecture
 v2 canary.
 
-The commits currently on this branch are the read-only control-plane foundation. They are retained
-and hardened, but they are not the final scope or release boundary.
+The local parent contains the earlier control-plane and aggregate MVP inputs. The production #479
+child remains outside the parent until its publication, CI, review, and integration gates pass.
 
-Closes #471
+Refs #471
 Supersedes #372
 Supersedes #389
 Supersedes #470
@@ -27,16 +27,16 @@ Supersedes #470
 
 ## Current state
 
-- Control-plane foundation: implemented; adversarial hardening in progress.
-- Autonomous child roster: #473-#481, dependency-linked from #471.
-- Final verification: not started.
+- #479 production matrix: functional implementation available locally; remote CI/review/PR gates pending.
+- Autonomous child roster: #473-#481, dependency-linked from #471; lifecycle reconciliation pending.
+- #480 and #481: dependency-blocked.
+- Final parent verification: not started.
 - Human merge gate: pending after all implementation, CI, review, and canary gates.
 
 ## Verification
 
 ```bash
-node --test .pi/extensions/shepherd/*.test.ts
-node --test .pi/extensions/shepherd/**/*.test.ts
+node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 pi --list-extensions
 git diff --check
 gofmt -w cmd internal
