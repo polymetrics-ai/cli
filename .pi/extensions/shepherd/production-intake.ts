@@ -34,9 +34,19 @@ export class ProductionRepositoryPlanIntake {
 		if (signal.aborted) throw signal.reason ?? new Error("production plan intake cancelled");
 		const repositoryRoot = await realpath(this.#cwd);
 		const path = resolve(repositoryRoot, ".planning", "shepherd", `issue-${issue}.json`);
-		const parent = await realpath(dirname(path));
+		let parent: string;
+		try {
+			parent = await realpath(dirname(path));
+		} catch (error) {
+			throw new Error(`production plan is unavailable; create .planning/shepherd/issue-${issue}.json`, { cause: error });
+		}
 		if (!isWithin(repositoryRoot, parent)) throw new Error("production plan directory escapes the repository");
-		const metadata = await lstat(path);
+		let metadata: Awaited<ReturnType<typeof lstat>>;
+		try {
+			metadata = await lstat(path);
+		} catch (error) {
+			throw new Error(`production plan is unavailable; create .planning/shepherd/issue-${issue}.json`, { cause: error });
+		}
 		if (!metadata.isFile() || metadata.isSymbolicLink()) throw new Error("production plan must be a regular non-symlink file");
 		if (metadata.size < 2 || metadata.size > MAX_PLAN_BYTES) throw new Error("production plan exceeds its bounded size");
 		const noFollow = "O_NOFOLLOW" in constants ? constants.O_NOFOLLOW : 0;

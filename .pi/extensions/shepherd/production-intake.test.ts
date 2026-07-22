@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
+import { lstat, mkdir, mkdtemp, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
@@ -74,4 +74,18 @@ test("production intake rejects a symlink plan and read-only top-level work", as
 	hostile.children[0].access = "read_only";
 	await writeFile(join(root, ".planning", "shepherd", "issue-479.json"), JSON.stringify(hostile));
 	await assert.rejects(intake.load(479, new AbortController().signal), /must be mutating/);
+});
+
+test("missing production intake explains the exact initialization file without mutating the repository", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "shepherd-production-intake-missing-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const intake = new ProductionRepositoryPlanIntake(root);
+	await assert.rejects(
+		intake.load(479, new AbortController().signal),
+		/production plan is unavailable; create \.planning\/shepherd\/issue-479\.json/,
+	);
+	await assert.rejects(
+		lstat(join(root, ".planning")),
+		(error) => typeof error === "object" && error !== null && "code" in error && error.code === "ENOENT",
+	);
 });
