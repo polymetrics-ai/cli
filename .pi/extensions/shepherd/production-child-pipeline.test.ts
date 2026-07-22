@@ -297,6 +297,7 @@ function integrationReceipt(
 class FakeWorkspaceSession implements ProductionWorkspaceSession {
 	#binding = binding();
 	#dirty = true;
+	#integrationMutationCount = 0;
 	#verificationFailures: number;
 	readonly calls: string[];
 
@@ -306,6 +307,7 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 	}
 
 	get binding(): ProductionWorkspaceBinding { return structuredClone(this.#binding); }
+	get integrationMutationCount(): number { return this.#integrationMutationCount; }
 	setRecoveredHead(head: string): void { this.#binding.head = head; this.#dirty = false; }
 
 	async implement() {
@@ -394,6 +396,8 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 		assert.equal(request.baseSha, this.#binding.baseHead);
 		assert.equal(request.headSha, this.#binding.head);
 		assert.match(request.effectKey, /^[0-9a-f]{64}$/u);
+		const reused = this.#integrationMutationCount > 0;
+		if (!reused) this.#integrationMutationCount += 1;
 		return {
 			schemaVersion: 1 as const,
 			authority: "git" as const,
@@ -402,7 +406,7 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 			headSha: request.headSha,
 			mergeCommitSha: SHA_B,
 			parentHead: SHA_B,
-			reused: false,
+			reused,
 		};
 	}
 
@@ -465,6 +469,7 @@ interface HarnessOptions {
 	pullRequest?: Partial<GitHubPullRequestEvidence>;
 	integration?: ChildIntegrationDecision;
 	integrationBlockedOnce?: Extract<ChildIntegrationDecision, { kind: "blocked" }>["blockers"][number];
+	integrationCrashAfterGitOnce?: boolean;
 	childHeadMoveOnce?: boolean;
 	publicationTimeoutOnce?: boolean;
 	verificationFailures?: number;
@@ -489,6 +494,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	let receipt: ChildIntegrationReceipt | undefined;
 	let childHeadMovePending = options.childHeadMoveOnce === true;
 	let integrationBlockPending = options.integrationBlockedOnce;
+	let integrationCrashAfterGitPending = options.integrationCrashAfterGitOnce === true;
 	const github: ProductionChildGitHubPort = {
 		async createPlan(_value: unknown, _context?: OrchestrationCallContext) { calls.push("plan"); return parent; },
 		async ensureChildIssue(value) { calls.push("issue"); return childIssue(value); },
@@ -529,8 +535,12 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 				idempotencyKey: "integration-501",
 				intentDigest: DIGEST,
 			});
-			receipt = integrationReceipt(value, child, evidence);
 			currentParentHead = SHA_B;
+			if (integrationCrashAfterGitPending) {
+				integrationCrashAfterGitPending = false;
+				throw new Error("simulated crash after Git CAS before receipt");
+			}
+			receipt = integrationReceipt(value, child, evidence);
 			return { kind: "integrated", receipt, reused: false };
 		},
 		async stop() { calls.push("github-stop"); return { kind: "joined", active: 0, unacknowledged: 0 }; },
@@ -969,6 +979,31 @@ test("a blocked integration stays prepared and an exact retry can integrate with
 	await persistAndAcknowledge(h.pipeline, h.state, integrated);
 	assert.equal((await h.effects.load(prepared[0].key))?.phase, "applied");
 	assert.equal(h.calls.filter((entry) => entry === "integrate").length, 2);
+});
+
+test("a fresh process recovers an exact Git CAS after crashing before the integration receipt", async (t) => {
+	const h = await harness(t, { integrationCrashAfterGitOnce: true });
+	for (const stage of ["workspace", "implement", "verify", "publish", "review"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	await assert.rejects(
+		h.pipeline.integrate(contextFor(h.state)),
+		/simulated crash after Git CAS before receipt/u,
+	);
+	const prepared = (await h.effects.listNonApplied()).filter((record) => record.kind === "child_integration");
+	assert.equal(prepared.length, 1);
+	assert.equal(prepared[0].phase, "prepared");
+	assert.equal(h.session.integrationMutationCount, 1);
+
+	const restarted = h.restartPipeline();
+	const integrated = await restarted.integrate(contextFor(h.state));
+	assert.match(integrated.integrationReceiptDigest ?? "", /^[0-9a-f]{64}$/u);
+	assert.equal(integrated.parentHead, SHA_B);
+	assert.equal(h.session.integrationMutationCount, 1);
+	assert.equal(h.calls.filter((entry) => entry === "git-integrate").length, 2);
+	await persistAndAcknowledge(restarted, h.state, integrated);
+	assert.equal((await h.effects.load(prepared[0].key))?.phase, "applied");
 });
 
 test("reclaims an authoritatively moved child head and requires fresh verification and exact-head review", async (t) => {
