@@ -8,10 +8,10 @@ form the phase-equivalent requirement source.
 
 | Required outcome | RED boundary | Cycle 14 status |
 |---|---|---|
-| Every post-create Pi callback is followed by a lifecycle barrier | abort/close/shutdown x result/session validation/getter/active-tool/subscription seam matrix | planned C14-01 |
-| Host capability authority is a closed typed safe registry | exact two-entry registry/union, legitimate access-mode table, broad unknown and forged identity/mutability table across policy/prompt/run | planned C14-02 |
-| Structured assignments use a closed public grammar | exact sensitive/unknown/public-path tables through every redaction consumer with bounded work | planned C14-03 |
-| Cycle 13 and all prior behavior remains intact | all focused authority, lifecycle, parser, Pi, error, path, tool, and handoff rows | 131 retained baseline passes |
+| Every post-create Pi callback is followed by a lifecycle barrier | abort/close/shutdown x result/session validation/getter/active-tool/subscription seam matrix | C14-01 focused GREEN |
+| Host capability authority is a closed typed safe registry | exact two-entry registry/union, legitimate access-mode table, broad unknown and forged identity/mutability table across policy/prompt/run | C14-02 focused GREEN |
+| Structured assignments use a closed public grammar | exact sensitive/unknown/public-path tables through every redaction consumer with bounded work | C14-03 focused GREEN |
+| Cycle 13 and all prior behavior remains intact | all focused authority, lifecycle, parser, Pi, error, path, tool, and handoff rows | 131 retained passes within focused 134/134 |
 
 Finite semantic blacklists are intentionally abandoned: an open string namespace cannot prove
 least authority, while a complete registry of safe operations can. The only current/#479 host
@@ -24,6 +24,15 @@ metadata terminal/path controls remain unchanged.
 The checkpoint order is artifact PLAN, exactly three-row test-only RED, one cohesive GREEN,
 REFACTOR, and exact terminal evidence. No synonym expansion, piecemeal production freeze, #479 file
 edit, parent/shared artifact change, external mutation, or out-of-scope gate is permitted.
+
+Ordered evidence is PLAN `62af2bbe`, test-only RED `229217f4`, RED evidence `da3a45bf`, cohesive
+GREEN `9af22e72`, and no-contract-widening REFACTOR `27c07eec`. Focused verification is 134/134;
+both strict TypeScript scopes, explicit pinned Pi 0.80.6 offline RPC, retained actual no-tool and
+one-tool rows, and 197/197 safe isolation pass. The terminal serialized suite executes 271 tests:
+240 pass and the unchanged 31 controller/state-store process-identity rows fail with managed-
+sandbox `spawn EPERM`; it is environment-blocked rather than green. Both complete source reports
+were re-read after implementation and every accepted row remains represented by a passing C14
+test. The exact same 20 issue-owned paths and every no-external-mutation boundary are preserved.
 
 ## Cycle 13 Consolidated Review Coverage
 

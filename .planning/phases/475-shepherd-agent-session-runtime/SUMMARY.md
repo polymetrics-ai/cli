@@ -1,5 +1,27 @@
 # Summary — Issue #475
 
+Status: Cycle 14 is locally complete at cohesive GREEN `9af22e72` and REFACTOR `27c07eec`
+against frozen start `67050a4a` and immutable base `e659d6f1`. Every post-create Pi/session
+callback now has a cancellation/closure barrier before any later subscription or prompt side
+effect, while the cleanup root remains acquired for exact disposal. Host authority is the exact
+immutable typed registry `host_inspect`/`host_verify`; every unknown identity or mutability drift
+fails before SDK work, and #479 controller ports remain outside AgentSession. Structured
+assignment redaction uses canonical exact paths, preserves only the narrow public controls
+`api.key.version`, `private.key.algorithm`, and `database.url.scheme`, and fails every unknown
+assignment closed.
+
+The ordered chain is PLAN `62af2bbe`, test-only RED `229217f4`, RED evidence `da3a45bf`, GREEN
+`9af22e72`, and REFACTOR `27c07eec`. RED retained all 131 prior passes and exposed exactly three
+intended behavior failures with production frozen. GREEN/refactor passes 134/134 focused, 197/197
+safe isolation, both strict Pi 0.80.6 TypeScript scopes, retained actual offline no-tool/one-tool
+sessions, and explicit offline RPC registration. Complete Shepherd executes 271 tests with 240
+passes and only the unchanged 31 managed-sandbox `spawn EPERM` failures in controller/state-store;
+it remains environment-blocked rather than green. Diff, ancestry, JSON, credential/dependency/Go/
+connector, exact same 20-path scope, and clean-worktree gates pass at the artifact boundary. Both
+Cycle 13 reports were re-read after implementation with no unhandled finding. No push, network,
+GitHub, live model/auth, credential, service, Go/connector, `make`, main, parent, #478, or #479
+mutation occurred.
+
 Status: Cycle 13 is locally complete at refactor `e50b5f97` against frozen start `5dafc572` and
 immutable base `e659d6f1`. Cohesive GREEN `48f546a5` closes all seven blockers from the two complete
 Cycle 12 reports: bounded indexed authority capture, post-SDK-seam lifecycle terminality, intrinsic

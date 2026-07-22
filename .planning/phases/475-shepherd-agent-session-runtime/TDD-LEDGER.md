@@ -1194,3 +1194,48 @@ three families; no family is frozen separately and no semantic synonym list may 
 
 All observed failures are behavior assertions from the three declared rows; no setup, compile,
 retention, skip, timeout, or infrastructure failure remains. Production unlocks as one C14 GREEN.
+
+### GREEN
+
+- First cohesive GREEN: `9af22e72`.
+- All three C14 behavior rows and all 131 retained rows pass: 134 executed, 134 passed, zero
+  failed/skipped/cancelled/todo.
+- C14-01 uses a staged mandatory cleanup-root capture and a lifecycle barrier after every
+  post-create re-entrant callback plus immediately before subscription and prompt.
+- C14-02 replaces semantic denylists with the exact frozen typed registry `host_inspect` (read)
+  and `host_verify` (mutating); policy, prompt, and runtime reject all unknown/mismatched values.
+- C14-03 canonicalizes structured paths, recognizes exact sensitive/public schemas, and classifies
+  every other assignment as unknown-sensitive while leaving non-assignment prose outside grammar.
+- Focused strict TypeScript passed before the GREEN checkpoint.
+
+### REFACTOR / VERIFY
+
+- Refactor checkpoint: `27c07eec`; repeated mandatory/optional operation capture and canonical
+  assignment-key state are centralized without weakening a RED row or adding authority.
+- Focused: 134/134. Safe isolation: 197/197. Both have zero failed/skipped/cancelled/todo.
+- Complete serialized Shepherd: 271 executed, 240 passed, 31 environment-classified failures only
+  in `controller.test.ts` and `state-store.test.ts`; every failure remains rooted in managed-
+  sandbox `spawn EPERM`. Zero skipped/cancelled/todo. The suite is not called green.
+- Strict no-emit TypeScript passes for focused source/tests and all 12 non-test production files
+  against explicit Pi 0.80.6 roots. Explicit pinned Pi offline RPC registers `pm-shepherd` and
+  exits 0. Retained actual no-tool and one-tool AgentSession rows pass inside focused verification.
+- Both Cycle 13 reports were re-read in full after implementation. Their complete unique union is
+  covered by C14-01 through C14-03 with no declined, deferred, or narrowed row.
+- Diff, base/start ancestry, RUN-STATE JSON, credential/dependency/Go/connector, exact same 20-path
+  scope, and clean-worktree checks pass at artifact freeze. No external or parent-owned mutation
+  was attempted.
+
+## Cycle 14 Gate History
+
+| Checkpoint | Result | Evidence |
+|---|---|---|
+| PLAN | pass | artifact `62af2bbe`; exact start/base and three-family matrix recorded before tests |
+| RED | expected fail | test-only `229217f4`; 131 retained pass plus exactly 3 intended failures; production frozen |
+| RED evidence | pass | artifact `da3a45bf`; behavior failures and frozen blobs recorded |
+| GREEN | pass | `9af22e72`; all 134 focused rows pass |
+| REFACTOR | pass | `27c07eec`; closed-state centralization; 134/134 retained |
+| Strict TypeScript | pass | focused source/tests and all 12 production files, TypeScript 5.9.3 / Pi 0.80.6 roots |
+| Offline RPC | pass | explicit Pi 0.80.6 `get_commands`; `pm-shepherd` registered |
+| Safe isolation | pass | 197 passed, 0 failed/skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 271 executed; 240 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
+| Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector scans; exact same 20 paths |

@@ -8,7 +8,7 @@ Both reports are accepted completely. Review 1's three blockers and Review 2's b
 consolidated into three architecture families; no finding is declined, deferred, or answered with
 another semantic synonym list.
 
-| Cycle 14 group | Review findings | Planned disposition / proof boundary |
+| Cycle 14 group | Review findings | Disposition / proof boundary |
 |---|---|---|
 | Post-create lifecycle barriers | R1-F1 | ordered cleanup-root/validation/subscription acquisition with an active-scope assertion after every callback and before every later side effect; abort/close/shutdown matrix proves exact cleanup and zero residue |
 | Closed host capability registry | R1-F2, R2-B1 | replace all pattern/token semantic denial with an exported exact safe registry/literal union; reject every unknown string and forged mutability/identity through policy, prompt, and runtime |
@@ -26,6 +26,16 @@ review, and integration authority stays in #479's controller-owned adapters. The
 host-name extension mechanism. Status: exact three-row RED captured at `229217f4` with 131 retained
 passes and three intended failures; strict TypeScript passes and production is frozen at its
 pre-GREEN boundary.
+
+Status after GREEN/refactor: cohesive GREEN `9af22e72` and REFACTOR `27c07eec` close every accepted
+finding without adding a dynamic capability escape or a semantic alias list. All three C14 rows
+pass with all 131 retained rows (134/134). Both strict TypeScript scopes, the explicit pinned Pi
+0.80.6 offline RPC, retained actual no-tool/one-tool sessions, and safe isolation 197/197 pass.
+The serialized complete suite executes 271 tests with 240 passes and only the unchanged 31
+controller/state-store `spawn EPERM` environment failures. Both complete Cycle 13 reports were
+re-read in full after implementation; no blocker or warning is omitted, deferred, or silently
+narrowed. Parent orchestration retains the process-capable rerun, exact-head review, integration,
+and delivery boundary.
 
 # Review Disposition — Issue #475 Cycle 13
 

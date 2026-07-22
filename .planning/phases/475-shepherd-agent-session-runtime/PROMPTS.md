@@ -364,5 +364,16 @@
 - RED `229217f4`: exactly three new top-level rows; 134 executed / 131 retained passes / exactly
   three intended behavior failures / zero skipped, cancelled, or todo. Focused strict TypeScript
   passes and all runtime/policy/prompt production blobs remain frozen.
+- GREEN `9af22e72` closes all three families together: staged post-create callback barriers,
+  exported exact typed host registry admission, and canonical exact structured-field grammar.
+  REFACTOR `27c07eec` centralizes mandatory/optional operation capture and the unknown-sensitive
+  assignment state without widening either authority surface.
+- Terminal local evidence: focused 134/134; safe isolation 197/197; focused and all-production
+  strict TypeScript pass against explicit Pi 0.80.6 roots; pinned offline RPC registers
+  `pm-shepherd`; retained actual no-tool/one-tool rows pass. Complete Shepherd executes 271 with
+  240 passes and only the unchanged 31 controller/state-store `spawn EPERM` rows.
+- Both complete Cycle 13 reports were re-read after GREEN/refactor. Their three-family union is
+  closed by C14-01 through C14-03; exact same 20 paths and all external-ownership boundaries remain
+  preserved.
 - No push, network, GitHub, live model/auth, credential, service, Go/connectors, `make`, main,
   parent, #478, or #479 mutation.

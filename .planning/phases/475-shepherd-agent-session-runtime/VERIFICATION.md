@@ -1,19 +1,42 @@
 # Verification — Issue #475
 
-Current result: Cycle 13 issue-owned verification is complete at implementation/refactor
-checkpoints `48f546a5` / `e50b5f97`; see **Cycle 13 Exact-Head Verification** below. The
+Current result: Cycle 14 issue-owned verification is complete at implementation/refactor
+checkpoints `9af22e72` / `27c07eec`; see **Cycle 14 Exact-Head Verification** below. The
 complete-suite status remains environment-blocked, not green, because the managed sandbox denies
 the unchanged controller/state-store process-identity children with `spawn EPERM`.
 
-## Cycle 14 Verification Contract
+## Cycle 14 Exact-Head Verification
 
-Cycle 14 starts at exact frozen candidate `67050a4a3cf62d0d40660de76938ab72ac68ee96` and immutable
-base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Baseline focused is 131/131. Verification may not
-freeze until one comprehensive three-row RED is followed by one cohesive GREEN and refactor, both
-Cycle 13 reports are re-read, and focused 134/134, safe isolation, both strict Pi 0.80.6 TypeScript
-scopes, explicit offline RPC, serialized complete-suite classification, diff/ancestry/JSON/scans,
-exact same 20 paths, and clean-head gates are recorded. The unchanged 31 controller/state-store
-`spawn EPERM` rows may be classified only as an environment block, never as a green full suite.
+Cycle 14 was executed against exact frozen candidate
+`67050a4a3cf62d0d40660de76938ab72ac68ee96` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 13 reports were read before PLAN
+and re-read after implementation. Their three architecture families map exactly to C14-01 through
+C14-03; no blocker or warning is omitted, deferred, or narrowed.
+
+The ordered checkpoints are PLAN `62af2bbe`, test-only RED `229217f4`, RED evidence `da3a45bf`,
+cohesive GREEN `9af22e72`, and no-contract-widening REFACTOR `27c07eec`. RED executed all 134
+focused rows: every one of the 131 retained rows passed and exactly three intended C14 rows failed
+while focused strict TypeScript passed and all three production blobs stayed frozen. GREEN and
+REFACTOR pass all 134 focused rows.
+
+| Cycle 14 gate | Status | Evidence |
+|---|---|---|
+| RED integrity | pass | 134 executed; 131 retained pass; exactly 3 intended behavior failures; strict TS pass; all production blobs frozen |
+| Focused GREEN | pass | 134 passed, 0 failed/skipped/cancelled/todo; includes retained actual pinned no-tool/one-tool sessions |
+| Complete Shepherd | environment-blocked | 271 executed; 240 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Environment isolation | pass | excluding only controller/state-store, 197 passed, 0 failed/skipped/cancelled/todo |
+| Strict TypeScript | pass | focused production/tests and all 12 non-test Shepherd `.ts`, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Pi offline boundary | pass | explicit Pi 0.80.6 RPC `get_commands` registers `pm-shepherd` and exits 0; expected sandbox settings-lock warnings only |
+| Repository integrity | pass | diff, JSON, immutable-base/frozen-start ancestry, exact same 20 paths, credential/dependency/Go/connector scans, clean worktree |
+| External mutation | not attempted | no push, network, GitHub, review bot, merge, live model/auth, credential, service, Go, connector, `make`, main, parent, #478, or #479 action |
+
+Production blobs after REFACTOR are runtime `e37078faaae0f1afb9583a6a3dbcd114acd92040`, tool policy
+`f8dfcdd32b5f559b9d3ac409ac37f66bd42a88f0`, and role prompts
+`b762787b2a63b5b02f9591c7bf3fff46394738cc`. Lifecycle callbacks are barriered before later side
+effects while mandatory cleanup remains owned; host authority is an exact two-member typed
+registry; and structured fields use exact canonical paths with unknown-sensitive fail-closed
+classification. Parent orchestration owns the process-capable complete-suite rerun, fresh
+independent exact-head review, integration, and delivery.
 
 ## Cycle 13 Exact-Head Verification
 

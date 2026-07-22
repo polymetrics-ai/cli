@@ -1349,3 +1349,32 @@ connector, exact same 20-path scope, and clean-head checks. The known 31 control
 `spawn EPERM` rows remain an honest environment classification only. Both Cycle 13 reports must be
 re-read after GREEN before evidence freeze. No push, network, GitHub, live model/auth, credential,
 service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorized.
+
+### GREEN / REFACTOR / exact verification evidence
+
+- Cohesive GREEN `9af22e72` closes all three C14 families together. Post-create session/result,
+  operation, route, metadata, active-tool, and subscription callbacks are barriered before later
+  work; the mandatory cleanup root remains owned. Policy, prompt, and runtime use the exported
+  exact `host_inspect`/`host_verify` registry and reject unknown or forged authority before SDK
+  creation. Structured assignment classification uses canonical exact paths, narrow public
+  controls, and an unknown-sensitive default.
+- No-contract-widening REFACTOR `27c07eec` centralizes mandatory/optional session-operation capture
+  and canonical assignment classification. It adds no capability, public field, secret synonym,
+  dependency, or authority seam.
+- Focused verification passes 134/134 with zero fail/skip/cancel/todo, including the retained actual
+  pinned Pi no-tool/one-tool sessions. Focused production/tests and all 12 non-test Shepherd files
+  pass strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots. Explicit offline RPC exits 0 and
+  registers `pm-shepherd`; only the expected managed-filesystem settings-lock warnings occur.
+- Safe isolation excluding only `controller.test.ts` and `state-store.test.ts` passes 197/197. The
+  terminal serialized complete suite executes 271 tests: 240 pass and the unchanged 31 failures
+  are confined to those two files' managed-sandbox process-identity `spawn EPERM` family. The full
+  suite remains environment-blocked, not green.
+- Both complete Cycle 13 reports were re-read after GREEN/refactor. R1-F1, R1-F2/R2-B1, and
+  R1-F3/R2-W1 each map to a passing C14 row with no deferred or weakened finding.
+- Production blobs at REFACTOR are runtime `e37078faaae0f1afb9583a6a3dbcd114acd92040`, policy
+  `f8dfcdd32b5f559b9d3ac409ac37f66bd42a88f0`, and role prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`.
+- Diff, immutable-base/frozen-start ancestry, RUN-STATE JSON, credential-pattern,
+  dependency/Go/connector, exact same 20-path issue scope, and clean-worktree checks pass at the
+  terminal artifact boundary. No push, network, GitHub, live model/auth, credential, service,
+  Go/connector, `make`, main, parent, #478, or #479 mutation was attempted.
