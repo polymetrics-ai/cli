@@ -62,3 +62,14 @@ The correction retains one broad historical caveat: missing-module RED alone is 
 each new module, the test was rerun against a compiling throwing scaffold and failed for the intended
 behavior before the implementation replaced it. Command output was captured in the active session;
 the durable ledger records exact counts because those RED states were intentionally not committed.
+
+## 2026-07-23 merge-readiness closure ledger
+
+| Slice | RED evidence | GREEN target | Status |
+|---|---|---|---|
+| Complete-suite CI gate | `rg` over `.github/workflows` returned no complete Shepherd inventory command and exited 1 with `RED: no workflow runs the complete Shepherd test inventory`. | A pull-request/main-push workflow runs the exact sequential inventory on ordinary GitHub-hosted infrastructure, with read-only contents permission and no secrets. | RED captured; implementation pending. |
+| Diff hygiene | `git diff --check 69a1a988..HEAD` exited 2 on one added blank EOF line in each of six production-matrix artifacts. | The same range check and working-tree `git diff --check` pass. | RED captured; docs-only correction pending. |
+| Phase summary | File existence check exited 1 because `479-shepherd-production-matrix/SUMMARY.md` was absent. | A concise summary records delivered scope, exact verification limits, remaining CI/review/integration gates, and the no-main-merge boundary. | RED captured; docs-only correction pending. |
+
+The CI workflow is the only behavior-changing slice in this closure. The whitespace and summary
+changes are documentation-only, so a runtime behavior RED is not applicable to them.

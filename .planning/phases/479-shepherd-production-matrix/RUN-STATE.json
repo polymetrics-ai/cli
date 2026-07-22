@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
   "phase": "479-shepherd-production-matrix",
-  "status": "verified_waiting_external_gates",
-  "checkpoint": "release-blockers-corrected-17-of-17-functional-pass",
+  "status": "merge_readiness_closure_in_progress",
+  "checkpoint": "ci_gate_red_captured",
   "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "verificationTestHead": "78708cbef64b33e54ed32078bf2a107d81126236",
   "matrix": {
@@ -23,11 +23,13 @@
     },
     "strictProductionTypeScript": "pass",
     "offlinePiRpc": "pass",
-    "reviewDisposition": "bounded_correction_pass"
+    "reviewDisposition": "exact_head_review_pending",
+    "ciCompleteInventory": "pending"
   },
   "manualGsdFallback": true,
   "reviewRoundsAllowed": 1,
-  "reviewRoundsUsed": 1,
+  "reviewRoundsUsed": 0,
+  "orchestrationDecision": "local_critical_path",
   "remainingExternalGates": [
     "fresh_ci_outside_managed_sandbox",
     "human_parent_integration"
