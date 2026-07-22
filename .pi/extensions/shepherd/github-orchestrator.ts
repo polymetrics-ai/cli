@@ -3878,27 +3878,32 @@ export class GitHubParentOrchestrator {
 			});
 			const outcome = await Promise.race([guarded, timedOut]);
 			if (timer !== undefined) clearTimeout(timer);
-			if (outcome.kind === "timeout") timedOutAttempts.add(guarded);
-			if (outcome.kind === "value") try {
-				const result = validateDurableMutationResult(
-					outcome.value,
-					request.mutation,
-					validateGitHubPullRequestEvidence,
-				);
-				if (!result.value.draft
-					|| result.value.repository !== request.repository
-					|| result.value.number !== request.pullRequest
-					|| result.value.marker !== request.marker
-					|| result.value.generation !== request.generation
-					|| result.value.headSha !== request.headSha
-					|| result.value.revision < operation.authorization.pullRequestRevision) {
-					throw new Error("parent-ready quarantine did not restore the exact draft");
+			if (outcome.kind === "timeout") {
+				// Retain ownership of abandoned invocations until a newer durable fence succeeds.
+				timedOutAttempts.add(guarded);
+			}
+			if (outcome.kind === "value") {
+				try {
+					const result = validateDurableMutationResult(
+						outcome.value,
+						request.mutation,
+						validateGitHubPullRequestEvidence,
+					);
+					if (!result.value.draft
+						|| result.value.repository !== request.repository
+						|| result.value.number !== request.pullRequest
+						|| result.value.marker !== request.marker
+						|| result.value.generation !== request.generation
+						|| result.value.headSha !== request.headSha
+						|| result.value.revision < operation.authorization.pullRequestRevision) {
+						throw new Error("parent-ready quarantine did not restore the exact draft");
+					}
+					timedOutAttempts.clear();
+					this.releaseParentReadyQuarantine(plan, operation.authorization);
+					return;
+				} catch {
+					// A malformed response cannot release the fence; a newer ordered attempt must supersede it.
 				}
-				timedOutAttempts.clear();
-				this.releaseParentReadyQuarantine(plan, operation.authorization);
-				return;
-			} catch {
-				// A malformed response cannot release the fence; a newer ordered attempt must supersede it.
 			}
 			await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
 		}

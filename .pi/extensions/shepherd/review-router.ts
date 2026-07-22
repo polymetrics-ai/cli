@@ -181,38 +181,41 @@ function exactRecord(value: unknown, required: readonly string[], optional: read
 	return readBoundedExactRecord(value, required, optional, "independent review record");
 }
 
+const CREDENTIAL_ASSIGNMENT_SUFFIXES = [
+	"AUTHORIZATION",
+	"TOKEN",
+	"ACCESS_TOKEN",
+	"REFRESH_TOKEN",
+	"API_KEY",
+	"PASSWORD",
+	"SECRET",
+	"CLIENT_SECRET",
+	"PRIVATE_KEY",
+	"DATABASE_URL",
+	"CREDENTIAL",
+	"CREDENTIALS",
+	"COOKIE",
+	"COOKIES",
+	"SET_COOKIE",
+	"SESSION",
+	"SESSION_ID",
+	"SESSION_TOKEN",
+	"SESSION_COOKIE",
+	"CSRF_TOKEN",
+] as const;
+
+const PUBLIC_CREDENTIAL_SHAPED_ASSIGNMENT_NAMES: ReadonlySet<string> = new Set(["FEATURE_TOKEN"]);
+
+function redactCredentialAssignment(match: string, prefix: string, name: string, separator: string): string {
+	const classified = CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => name === suffix || name.endsWith(`_${suffix}`));
+	if (!classified || PUBLIC_CREDENTIAL_SHAPED_ASSIGNMENT_NAMES.has(name)) return match;
+	return `${prefix}${name}${separator}[REDACTED]`;
+}
+
 export function redactSensitiveText(input: string): string {
 	const secretName = "(?:authorization|token|access[_-]?token|refresh[_-]?token|api[_-]?key|password|secret|client[_-]?secret|private[_-]?key|database[_-]?url|credentials?|cookies?|set[_-]?cookie|session(?:[_ -]?(?:id|token|cookie))?|csrf[_-]?token)";
 	const credentialEnvironmentName = "(?:OPENAI_API_KEY|ANTHROPIC_API_KEY|GOOGLE_API_KEY|GITHUB_TOKEN|GH_TOKEN|NPM_TOKEN|AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY|AWS_SESSION_TOKEN|AZURE_CLIENT_SECRET|GOOGLE_APPLICATION_CREDENTIALS|DATABASE_URL)";
-	const credentialAssignmentSuffixes = [
-		"AUTHORIZATION",
-		"TOKEN",
-		"ACCESS_TOKEN",
-		"REFRESH_TOKEN",
-		"API_KEY",
-		"PASSWORD",
-		"SECRET",
-		"CLIENT_SECRET",
-		"PRIVATE_KEY",
-		"DATABASE_URL",
-		"CREDENTIAL",
-		"CREDENTIALS",
-		"COOKIE",
-		"COOKIES",
-		"SET_COOKIE",
-		"SESSION",
-		"SESSION_ID",
-		"SESSION_TOKEN",
-		"SESSION_COOKIE",
-		"CSRF_TOKEN",
-	] as const;
-	const publicCredentialShapedAssignmentNames = new Set(["FEATURE_TOKEN"]);
 	const credentialAssignment = /(^|[^A-Za-z0-9_])([A-Z][A-Z0-9_]{0,127})([ \t]*=[ \t]*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gmu;
-	const redactCredentialAssignment = (match: string, prefix: string, name: string, separator: string): string => {
-		const classified = credentialAssignmentSuffixes.some((suffix) => name === suffix || name.endsWith(`_${suffix}`));
-		if (!classified || publicCredentialShapedAssignmentNames.has(name)) return match;
-		return `${prefix}${name}${separator}[REDACTED]`;
-	};
 	return input
 		.replace(/-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/giu, "[REDACTED]")
 		.replace(/\b((?:Set-Cookie|Cookie|X-(?:Session|Auth|CSRF)(?:-Id|-Token)?))\s*:\s*[^\r\n]+/giu, "$1: [REDACTED]")
