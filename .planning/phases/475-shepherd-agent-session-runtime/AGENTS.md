@@ -56,3 +56,16 @@ informed the bounded canonical-influence disposition; all production, test, veri
 commit decisions remained with the issue worker. Focused 131/131 and safe isolation 194/194 pass;
 the complete suite is environment-blocked only by the unchanged 31 controller/state-store
 `spawn EPERM` rows.
+
+## Cycle 14 Agent Delegation
+
+The issue worker owns every write in Cycle 14. One read-only explorer maps the frozen post-create
+Pi lifecycle, current/planned-#479 host capability inventory, and structured-field consumers.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle14-boundary-map` | read-only | post-create callbacks/cleanup order; complete legitimate host registry; redaction consumers/public controls | Cycle 14 appendices in the existing Cycle 12 agent map and trace |
+
+The explorer has no edit, commit, network, credential, service, verification, parent, #478, or
+#479 authority. Its result is advisory; the issue worker retains the complete PLAN, three-row RED,
+cohesive GREEN, REFACTOR, verification, commit, and handoff path.

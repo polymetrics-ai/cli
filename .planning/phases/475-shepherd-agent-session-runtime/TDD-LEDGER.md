@@ -1144,3 +1144,38 @@ parent-owned integration gate is permitted.
 | Safe isolation | pass | 194 passed, 0 failed/skipped/cancelled/todo |
 | Complete Shepherd | environment-blocked | 268 executed; 237 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
 | Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector scans; exact same 20 paths |
+
+## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
+
+### PLAN / baseline
+
+- Frozen start: `67050a4a3cf62d0d40660de76938ab72ac68ee96`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; clean worktree and exact same 20-path allowlist.
+- Complete inputs: `/tmp/475-REVIEW-CYCLE13-1.md` and `/tmp/475-REVIEW-CYCLE13-2.md`.
+  Their unique union is three behavior rows: post-create barriers, a closed capability registry,
+  and a closed structured-field grammar. C14-04 retains every prior row.
+- Baseline focused command executes 131/131 with zero skip/cancel/todo. Frozen production blobs:
+  runtime `cd5c05411933c1a1f1b239d8ac85112e47e10b8b`, policy
+  `5a7f91b863f3a3eba3b489e79944c17a6511a776`, role prompts
+  `d4365dd2e32854589a7d1bee91439e5cb0a17fe0`.
+- The healthy adapter still lacks `programming-loop`; recorded manual-GSD fallback and all required
+  architecture/TypeScript/testing/issue-delivery skills remain active.
+- Execution decision: `read_only_spawned`; one bounded mapper is advisory and this worker alone
+  owns every mutation and checkpoint.
+
+### RED contract
+
+One test-only commit adds exactly three top-level rows:
+
+1. C14-01 tables abort/close/shutdown at every post-create re-entrant validation/subscription seam
+   and proves no later callback/prompt, exact cleanup/join, and zero listener/timer/lease residue.
+2. C14-02 proves the exported literal/runtime capability registry is the complete safe domain,
+   validates both legitimate members across both access modes, and rejects arbitrary unknown names
+   and identity/mutability mismatches through direct policy, prompt, and runtime admission.
+3. C14-03 proves exact sensitive paths and arbitrary unknown assignment aliases redact while
+   explicitly public qualified metadata leaves remain unchanged through every shared consumer.
+
+RED acceptance: 134 executed, 131 retained passes, exactly 3 intended C14 failures, zero
+skip/cancel/todo; focused strict TypeScript green; production blobs exact. Production remains
+locked until that evidence is committed. GREEN is one cohesive architecture change across all
+three families; no family is frozen separately and no semantic synonym list may be expanded.

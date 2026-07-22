@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_13_summary",
+  "currentCycle": "correction_cycle_14_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -338,6 +338,11 @@
       "cycle": "correction_cycle_13_summary",
       "decision": "local_critical_path",
       "reason": "Both Cycle 12 reports were re-read after implementation and their complete seven-blocker union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_14_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer maps post-create Pi callbacks, the complete current/planned-#479 host capability inventory, and structured-field consumers while this issue worker owns the sole artifact, RED, production, verification, and commit path. Finite semantic blacklists are abandoned in favor of closed safe registries."
     }
   ],
   "gates": {

@@ -55,3 +55,30 @@ modified.
    execution end discards result identity; tool-result messages and `turn_end.toolResults` are only
    shape-checked. Add a one-to-one per-turn ledger from authorized assistant call through execution,
    result message, turn result, next turn, and final handoff.
+
+## Cycle 14 Boundary-Map Appendix
+
+Assignment: read-only mapping of the unique correction families in the two complete Cycle 13
+reports against frozen candidate `67050a4a`, including post-create Pi callbacks, the complete
+current/#479 host-capability inventory, and every structured-redaction consumer. No file, test,
+network, credential, service, model, or external state was modified.
+
+1. The post-create sequence is `created.session`; independent operation getters (`abort`,
+   `waitForIdle`, `dispose`, `prompt`, `subscribe`, `getActiveToolNames`); result/extension shape;
+   `model` plus provider/id; thinking level; session file; `getActiveToolNames()`; claim;
+   subscription; and prompt. The mandatory cleanup root must be retained before optional
+   validation can fail, and every later re-entrant callback needs a closure-aware barrier.
+2. A synchronous `close()` sets runtime closing state before its asynchronous cancellation work,
+   so the existing scope-only assertion does not prevent prompt. Reuse the combined runtime/scope
+   barrier after ownership acquisition and after subscription returns. A terminating subscription
+   must return first so its unsubscriber can be captured; then captured failure/closure is checked
+   before prompt.
+3. Current source has no production-created arbitrary host capability. The two existing positive
+   contract identities are `host_inspect` (non-mutating) and `host_verify` (mutating);
+   `host_publish` is only an undeclared negative fixture. #479 scheduler, Git/worktree, GitHub,
+   review, decision, and integration ports remain controller-owned and outside AgentSession.
+4. `sensitiveAssignmentKind` is private to assignment parsing. All external consumers converge on
+   `redactSensitiveText`: role task/context, workspace read/edit/write, host output/reference,
+   handoff summary/finding/verification, and policy/runtime public errors. Qualified controls such
+   as `api.key.version`, `private.key.algorithm`, and `database.url.scheme` expose the fuzzy
+   ancestor-matching defect without weakening their paired terminal-secret cases.

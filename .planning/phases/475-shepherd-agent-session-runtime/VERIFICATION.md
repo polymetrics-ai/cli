@@ -5,6 +5,16 @@ checkpoints `48f546a5` / `e50b5f97`; see **Cycle 13 Exact-Head Verification** be
 complete-suite status remains environment-blocked, not green, because the managed sandbox denies
 the unchanged controller/state-store process-identity children with `spawn EPERM`.
 
+## Cycle 14 Verification Contract
+
+Cycle 14 starts at exact frozen candidate `67050a4a3cf62d0d40660de76938ab72ac68ee96` and immutable
+base `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Baseline focused is 131/131. Verification may not
+freeze until one comprehensive three-row RED is followed by one cohesive GREEN and refactor, both
+Cycle 13 reports are re-read, and focused 134/134, safe isolation, both strict Pi 0.80.6 TypeScript
+scopes, explicit offline RPC, serialized complete-suite classification, diff/ancestry/JSON/scans,
+exact same 20 paths, and clean-head gates are recorded. The unchanged 31 controller/state-store
+`spawn EPERM` rows may be classified only as an environment block, never as a green full suite.
+
 ## Cycle 13 Exact-Head Verification
 
 Cycle 13 was executed against frozen reviewed candidate

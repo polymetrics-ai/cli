@@ -344,3 +344,22 @@
 - Both Cycle 12 review reports were re-read after implementation. Their full seven-blocker union
   remains closed by C13-01 through C13-07; exact same 20 paths and all no-external-mutation
   boundaries are preserved.
+
+## Consolidated Stable-Head Correction Cycle 14 Snapshot
+
+- Frozen start: `67050a4a3cf62d0d40660de76938ab72ac68ee96`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; same exact 20 issue-owned paths.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE13-1.md` and
+  `/tmp/475-REVIEW-CYCLE13-2.md`; their three-blocker plus blocker/warning union is consolidated
+  into post-create barriers, closed host capability authority, and closed structured-field grammar.
+- Architectural direction: abandon finite semantic denylists. Export the complete safe capability
+  registry/union (`host_inspect`, `host_verify`) and reject every other name; keep all #479
+  controller ports outside AgentSession. Parse canonical assignment paths, preserve only explicit
+  public metadata grammar, and redact every unknown assignment.
+- Method: manual-GSD artifact PLAN -> exactly three top-level test-only RED rows -> one cohesive
+  GREEN across all families -> REFACTOR -> exact evidence. No piecemeal production freeze or
+  synonym-list expansion is allowed.
+- Baseline: focused 131/131; strict production lock blobs recorded in PLAN/TDD. Execution decision
+  `read_only_spawned`; one mapper is advisory and the issue worker owns every mutation.
+- No push, network, GitHub, live model/auth, credential, service, Go/connectors, `make`, main,
+  parent, #478, or #479 mutation.

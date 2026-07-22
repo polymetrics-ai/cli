@@ -1,3 +1,30 @@
+# Review Disposition — Issue #475 Cycle 14
+
+Frozen reviewed candidate: `67050a4a3cf62d0d40660de76938ab72ac68ee96`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+Sources: `/tmp/475-REVIEW-CYCLE13-1.md`, `/tmp/475-REVIEW-CYCLE13-2.md`
+
+Both reports are accepted completely. Review 1's three blockers and Review 2's blocker/warning are
+consolidated into three architecture families; no finding is declined, deferred, or answered with
+another semantic synonym list.
+
+| Cycle 14 group | Review findings | Planned disposition / proof boundary |
+|---|---|---|
+| Post-create lifecycle barriers | R1-F1 | ordered cleanup-root/validation/subscription acquisition with an active-scope assertion after every callback and before every later side effect; abort/close/shutdown matrix proves exact cleanup and zero residue |
+| Closed host capability registry | R1-F2, R2-B1 | replace all pattern/token semantic denial with an exported exact safe registry/literal union; reject every unknown string and forged mutability/identity through policy, prompt, and runtime |
+| Closed structured-field grammar | R1-F3, R2-W1 | canonical segment parser; exact sensitive paths/terminal compounds, explicit public metadata terminals/paths, every unknown assignment fail-closed through all consumers |
+
+The Cycle 13 C13-01, C13-03, C13-06, and C13-07 closures remain accepted. C13-02 is extended from
+pre-create SDK callbacks to every post-create session seam. C13-04 is replaced architecturally
+rather than extended enumeratively. C13-05's declared secret cases remain, while ancestor
+subsequence matching is removed to close the public-leaf fidelity warning. All 131 retained rows
+remain mandatory.
+
+The #479 handoff is closed and narrow: AgentSession host tools are exactly `host_inspect` and
+`host_verify`; scoped workspace tools remain separate; scheduler, Git/worktree, GitHub, decision,
+review, and integration authority stays in #479's controller-owned adapters. There is no arbitrary
+host-name extension mechanism. Status: PLAN captured; production frozen pending one three-row RED.
+
 # Review Disposition — Issue #475 Cycle 13
 
 Frozen reviewed candidate: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`

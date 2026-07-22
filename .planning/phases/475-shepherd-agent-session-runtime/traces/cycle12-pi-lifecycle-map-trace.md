@@ -132,3 +132,22 @@ must add per-role message/tool lifecycles, select the last assistant from the fi
   handoff must close the same one-to-one identity.
 - Ownership: advisory map only. The issue worker retains every artifact edit, behavior RED,
   production edit, gate, commit, and handoff.
+
+## Cycle 14 Read-Only Trace
+
+- Agent: `/root/issue_475_agent_session_runtime/cycle14_boundary_map`.
+- Input: three unique correction families from both complete Cycle 13 reports; frozen candidate
+  `67050a4a`; same issue-owned source/tests and existing artifact paths only.
+- Lifecycle result: map every post-create getter/method callback through claim and subscription;
+  acquire cleanup ownership before optional validation, capture a synchronous subscription's
+  unsubscriber, then enforce closure/scope/capture-failure barriers before any later callback or
+  prompt. The existing close race is specifically visible to the combined execution barrier, not
+  the scope-only assertion.
+- Capability result: the exact closed host domain is `host_inspect` and `host_verify`; workspace
+  tools remain separate and #479 controller/Git/GitHub/review/integration ports remain outside the
+  AgentSession surface. Unknown host strings require rejection, not semantic synonym matching.
+- Redaction result: every production consumer reaches `redactSensitiveText`; replace fuzzy
+  ancestor subsequences with a bounded canonical path grammar, exact secret schema/terminal rules,
+  narrow public-metadata controls, and fail-closed unknown assignments.
+- Ownership: advisory map only; no file or external state changed. The issue worker owns all plan,
+  test, production, commit, and verification actions.

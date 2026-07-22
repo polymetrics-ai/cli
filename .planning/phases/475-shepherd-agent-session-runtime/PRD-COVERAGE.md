@@ -1,5 +1,30 @@
 # PRD Coverage — Issue #475
 
+## Cycle 14 Consolidated Review Coverage
+
+Frozen candidate: `67050a4a3cf62d0d40660de76938ab72ac68ee96`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 13 reports and the issue contract
+form the phase-equivalent requirement source.
+
+| Required outcome | RED boundary | Cycle 14 status |
+|---|---|---|
+| Every post-create Pi callback is followed by a lifecycle barrier | abort/close/shutdown x result/session validation/getter/active-tool/subscription seam matrix | planned C14-01 |
+| Host capability authority is a closed typed safe registry | exact two-entry registry/union, legitimate access-mode table, broad unknown and forged identity/mutability table across policy/prompt/run | planned C14-02 |
+| Structured assignments use a closed public grammar | exact sensitive/unknown/public-path tables through every redaction consumer with bounded work | planned C14-03 |
+| Cycle 13 and all prior behavior remains intact | all focused authority, lifecycle, parser, Pi, error, path, tool, and handoff rows | 131 retained baseline passes |
+
+Finite semantic blacklists are intentionally abandoned: an open string namespace cannot prove
+least authority, while a complete registry of safe operations can. The only current/#479 host
+members are `host_inspect` (non-mutating) and `host_verify` (mutating); workspace tools are separate,
+and #479 controller/Git/GitHub/scheduler ports do not enter the AgentSession registry. Structured
+fields likewise enumerate public-safe grammar and fail every unknown assignment closed instead of
+chasing secret aliases. Exact sensitive terminal/path rules override, while qualified public
+metadata terminal/path controls remain unchanged.
+
+The checkpoint order is artifact PLAN, exactly three-row test-only RED, one cohesive GREEN,
+REFACTOR, and exact terminal evidence. No synonym expansion, piecemeal production freeze, #479 file
+edit, parent/shared artifact change, external mutation, or out-of-scope gate is permitted.
+
 ## Cycle 13 Consolidated Review Coverage
 
 Frozen candidate: `5dafc5725167bb74ce88a723073b8c4ceb8314e0`. Immutable base:

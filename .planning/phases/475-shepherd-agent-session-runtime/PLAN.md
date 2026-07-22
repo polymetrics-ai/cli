@@ -1225,3 +1225,110 @@ GitHub, live model/auth, Go/connectors, `make`, runtime service, or credential a
 - `git diff --check`, immutable-base/frozen-start ancestry, RUN-STATE JSON, credential-pattern,
   dependency/Go/connector, and exact 20-path issue-scope checks pass. No push, network, GitHub,
   live model/auth, credential, service, Go/connector, `make`, parent, or #478 mutation occurred.
+
+## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
+
+### PLAN
+
+- Immutable comparison base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; frozen Cycle 14
+  start: `67050a4a3cf62d0d40660de76938ab72ac68ee96`; initial worktree clean.
+- Review sources read completely: `/tmp/475-REVIEW-CYCLE13-1.md` and
+  `/tmp/475-REVIEW-CYCLE13-2.md`. Review 1's three blockers and Review 2's blocker/warning reduce
+  to three architecture families, C14-01 through C14-03; all 131 Cycle 13 focused rows are retained.
+- Baseline focused result: 131 passed, 0 failed/skipped/cancelled/todo. Frozen production Git blobs
+  are runtime `cd5c05411933c1a1f1b239d8ac85112e47e10b8b`, policy
+  `5a7f91b863f3a3eba3b489e79944c17a6511a776`, and role prompts
+  `d4365dd2e32854589a7d1bee91439e5cb0a17fe0`.
+- GSD adapter health passes, but
+  `scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run`
+  still returns `unknown GSD command: programming-loop`; the recorded manual-GSD
+  PLAN -> comprehensive RED -> one cohesive GREEN -> REFACTOR -> verify fallback remains active.
+- Required skills loaded completely: `gsd-programming-loop`, `architecture-patterns`,
+  `javascript-testing-patterns`, `typescript-advanced-types`, and
+  `github-issue-first-delivery`, including their required workflows and all repo Pi/runtime/GSD/
+  issue contracts.
+- Execution decision: `read_only_spawned`. One no-write explorer maps the post-creation Pi seams,
+  current/#479 capability inventory, and structured-field consumers; this issue worker owns all
+  artifacts, tests, production, verification, and commits.
+
+### Why semantic blacklists are abandoned
+
+A finite denylist cannot close an open string namespace: every added action/resource synonym still
+leaves another spelling with the same authority. Cycle 13 proved only its sampled vocabulary, and
+Review 2 admitted seven independently chosen semantic variants. Cycle 14 therefore stops trying to
+name every unsafe operation. It enumerates the complete safe host capability domain instead. Any
+string outside that finite registry is invalid regardless of spelling, order, plurality, or
+meaning; generic shell/process/terminal, transport write, database write, secret export, and agent
+spawn authority are absent because no registry member can represent them.
+
+The same inversion applies to structured fields. An endless secret-alias list cannot be complete,
+while fuzzy ancestor subsequences modify public leaves. The scanner will parse one bounded
+canonical segment path, recognize exact sensitive terminal compounds/schema paths, preserve only
+explicit public metadata terminal/path forms, and treat every other assignment-shaped key as
+unknown-sensitive. Unknown assignments fail closed; ordinary non-assignment prose remains outside
+the structured grammar.
+
+### Closed capability registry and #479 handoff
+
+The complete legitimate `HostCapability` inventory visible to current Shepherd and the planned
+#479 integration is:
+
+| Registry identity | Mutates | AgentSession availability | Contract |
+|---|---:|---|---|
+| `host_inspect` | false | read-only and mutating | inspect bounded host-owned evidence through a supplied typed adapter |
+| `host_verify` | true | mutating only | execute/assess only a declared bounded verification adapter |
+
+`workspace_read`, `workspace_edit`, and `workspace_write` remain separately implemented scoped
+workspace tools, not host registry members. #479's scheduler, Git/worktree, GitHub, review,
+decision, and integration adapters remain controller-owned ports outside the AgentSession tool
+surface. #479 may pass only the two registered host identities above; it cannot invent an arbitrary
+string or expose its controller ports as dynamic capabilities. A future legitimate host operation
+requires an explicit reviewed registry/type change in this contract, not an extension escape hatch.
+
+The registry will be exported as an immutable runtime record and a compile-time literal union. The
+`HostCapability` union is discriminated by exact registry name and exact mutability. Public
+`createToolPolicy`, direct prompt construction, and runtime requests accept only registered tool
+identities; runtime validation rejects forged JavaScript values before SDK work. Authority and
+supplied capability names must match each other and the registry exactly.
+
+### Post-creation barrier map
+
+After `createAgentSession` fulfills and before `prompt`, all host/Pi-controlled callbacks are one
+ordered acquisition state machine: result-session acquisition and mandatory cleanup root;
+independent abort/wait/dispose/prompt/subscribe/active-tool operation capture; model/provider/id,
+thinking, session-file, and active-tool validation; subscription acquisition; then the prompt
+side effect. The cleanup root is acquired before optional validation so cancellation at any later
+seam still owns disposal. An active-scope barrier follows every re-entrant callback. A final barrier
+immediately precedes each next subscription or prompt side effect. Cancellation/close/shutdown may
+short-circuit validation but may not skip exactly-once unsubscribe/dispose/join cleanup.
+
+### Comprehensive test-only RED matrix
+
+| ID | Review source | Behavior required to fail at frozen head |
+|---|---|---|
+| C14-01 | R1-F1 | Table abort/close/shutdown at every post-create result/session operation getter, model/provider/id/thinking/session-file getter, active-tool callback, and subscribe callback. No later validation/subscription/prompt side effect runs; unsubscribe/dispose/join are exactly once as acquired; abort/wait ownership is truthful; request listener, reservation/lease, and long timer accounting returns to zero. |
+| C14-02 | R1-F2, R2-B1 | Exported immutable registry and literal union contain exactly `host_inspect`/`host_verify` with exact mutability. Every legitimate entry behaves correctly for read-only/mutating policy, while broad unknown semantic/syntactic variants reject through direct policy, prompt construction, and runtime admission before SDK work. Capability/authority identity or mutability mismatch rejects; no arbitrary-string extension path exists. |
+| C14-03 | R1-F3, R2-W1 | Exact sensitive schema paths/terminal compounds and arbitrary unknown aliases redact through direct, both prompts, workspace read/edit/write, capability result/reference, handoff summary/finding/verification, and public-error graphs. Qualified public metadata terminal/path controls remain byte-identical through every consumer. Scanner work stays bounded and no synthetic value is reflected in a public failure. |
+| C14-04 | retention | All 131 Cycle 13 focused behaviors, including real pinned Pi no-tool/one-tool sessions and prior lifecycle/authority/parser/path/security closures, remain green throughout RED and GREEN. |
+
+RED acceptance is one test-only commit adding exactly three top-level C14 rows. The augmented suite
+must execute 134 rows: all 131 retained rows pass and exactly C14-01 through C14-03 fail their
+intended behavior assertions, with zero skip/cancel/todo. Focused strict TypeScript must pass and
+all three frozen production blobs must remain exact. No production edit may enter RED.
+
+### Cohesive GREEN / REFACTOR / verification contract
+
+The three families freeze together, not piecemeal: one architecture-level implementation replaces
+the lifecycle acquisition sequence, capability string namespace, and structured-field classifier;
+only after all 134 rows pass may refactoring begin. Refactor may remove obsolete semantic token/
+regex sets and centralize schema tables, but may not reintroduce open strings, synonym expansion,
+or weaken any RED row.
+
+Declared gates are focused runtime/tool-policy/role-prompt behavior; focused and all 12 production
+strict TypeScript 5.9.3 against explicit Pi 0.80.6 roots; retained actual pinned no-tool/one-tool
+rows; explicit Pi 0.80.6 offline RPC; serialized complete Shepherd classification; safe isolation;
+`git diff --check`; immutable-base/frozen-start ancestry; JSON, credential, dependency, Go/
+connector, exact same 20-path scope, and clean-head checks. The known 31 controller/state-store
+`spawn EPERM` rows remain an honest environment classification only. Both Cycle 13 reports must be
+re-read after GREEN before evidence freeze. No push, network, GitHub, live model/auth, credential,
+service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorized.
