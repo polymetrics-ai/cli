@@ -331,7 +331,27 @@ Cycle 18's quote ownership, candidate reset, and multiword sensitive-scalar corr
 closed for the reported cases. Prompt settlement/adoption, lease ownership, route/model authority,
 lifecycle cleanup, and role prompt bytes remain frozen because neither report found a new defect.
 
-No GREEN disposition is claimed. Acceptance requires the artifact PLAN followed by one test-only
-five-row RED executing 164 rows with all 159 retained passes and exactly five intended failures
-while all production blobs remain frozen. Independent review of a later implementation remains
-parent-owned; `verificationPassed` stays false.
+The required order is complete: artifact PLAN `337cba1731178d1b7ef51c62ec45b15159b3cca3`, one
+test-only five-row RED `8519df27dc0617332f2273ac38ff6d82e59a813e`, cohesive GREEN
+`6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17`, and review fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a`. RED executed 164 rows, retained all 159 prior
+passes, and failed exactly C19-01 through C19-05 while production remained frozen.
+
+The post-GREEN read-only audit did not rubber-stamp the first passing state. It identified and the
+review-fix dispositioned four concrete gaps:
+
+- whitespace-only integer/number strings: fixed to match Pi's trimmed nonempty requirement;
+- astral `maxLength`: fixed by allocation-free Unicode code-point counting;
+- runtime success/error reflection and hostile `message` accessors: fixed through captured
+  intrinsics and own data-descriptor extraction;
+- omission matrix: fixed by copying actual metrics, zeroing each positive category, and
+  independently recomputing the total.
+
+The direct-caller runtime reflection filter is mutation-proven: a temporary ambient
+`Object.freeze` sentinel failed C19-02 once in each runtime phase, then the clean implementation
+re-passed after removal. Final focused evidence is five Cycle 19 rows passing, exact retained
+164/164, safe isolation 227/227, focused and all-production strict TypeScript passing, pinned Pi
+0.80.6 offline registration, and exact integrity. Broad execution is 301 total, 270 passed, and 31
+unchanged controller/state-store `spawn EPERM` failures. This remains the implementing lane's
+review disposition, not either parent-owned independent exact-head review. Those reviews and the
+process-capable broad replay remain pending; `verificationPassed` stays false.

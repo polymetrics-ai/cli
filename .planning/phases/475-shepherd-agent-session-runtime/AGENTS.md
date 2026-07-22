@@ -184,9 +184,29 @@ boundary, exact terminal handoff arrays, an independently checkable category wor
 shared incremental projection budget. The four-agent runtime is saturated by the parent program,
 so the bounded read-only mapper cannot be spawned. Cycle 19 records
 `not_spawned_runtime_capability_missing`; the issue worker retains the only PLAN and five-row RED
-path, and production remains frozen through committed RED.
+path through committed RED. After that checkpoint, a bounded child worker owned only the runtime
+terminal-handoff implementation; the issue worker retained policy/reflection ownership, integrated
+the cohesive GREEN, ran the declared gates, and made every commit.
 
 The worker may change only the existing issue-owned runtime/policy source, tests, and nine phase
 artifacts. Prompt, lease, route, lifecycle, dependency, parent, #478, network, push, integration,
 live model/auth, credential, service, Go/connector, `make`, main, and external delivery contracts
 remain frozen or outside authority.
+
+The ordered Cycle 19 chain is PLAN `337cba1731178d1b7ef51c62ec45b15159b3cca3`, test-only RED
+`8519df27dc0617332f2273ac38ff6d82e59a813e`, cohesive GREEN
+`6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17`, and review fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a`. RED executed 164 rows, retained all 159 prior passes,
+and failed exactly the five declared Cycle 19 rows with production frozen. Final focused replay is
+164/164 and strict TypeScript passes. A post-GREEN read-only audit exposed whitespace numeric and
+astral-string Pi parity, direct runtime ambient reflection, hostile message-getter, and vacuous
+omission-test gaps; the review-fix commit closes them, including a mutation-tested direct-reflection
+probe. Parent-owned independent exact-head review and process-capable broad replay remain pending,
+so `verificationPassed` remains false and no integration or delivery claim is made.
+
+Terminal artifact gates pass safe isolation 227/227 (retained 222 plus five), strict TypeScript over
+all 12 Shepherd production files, explicit pinned Pi 0.80.6 offline RPC registration, and exact
+diff/JSON/ancestry/source/blob/20-path integrity. The serialized broad suite executes 301 rows:
+270 pass and the unchanged 31 controller/state-store process-identity rows fail with managed-
+sandbox `spawn EPERM`; zero rows are skipped/cancelled/todo. That gate is environment-blocked, not
+green, and is why the process-capable replay remains parent-owned.

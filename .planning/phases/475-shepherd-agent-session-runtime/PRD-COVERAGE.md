@@ -6,19 +6,29 @@ Frozen candidate: `a0cd1057a0da642185f10b4ddfe72263602c7513`; immutable base:
 `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 authorized paths. Both complete Cycle
 18 reports are accepted as one five-contract correction.
 
-| Required outcome | Executable RED boundary | Pre-execution status |
+| Required outcome | Executable boundary | Final local status |
 |---|---|---|
-| One finite Pi/direct/callback/event/lifecycle contract | explicit Pi 0.80.6 coercion table; safe integer bounds; explicit 512 array ceiling; canonical `-0` -> `+0`; canonical enums and frozen DTO identity | C19-01 blocked |
-| Reflection authority is captured once | schema/raw/event/result/reference/error success and rejection after awaited callbacks; all post-import ambient poison counters remain zero | C19-02 blocked |
-| Terminal handoff arrays are exact snapshots | all three vectors reject proxy/proxy-prototype/accessor/sparse inputs before callbacks and map only fresh frozen dense copies | C19-03 blocked |
-| Work accounting has an independent exact oracle | public per-category trace, hard-coded fixture tuples, one-category omission checks, exact total, retained affine ceiling | C19-04 blocked |
-| Projection is incrementally bounded | one shared 4,096-node/key/item/DAG, depth-64, exact-byte budget rejects cycles/shared fanout before second descent/allocation; expressible limits canonicalized to Pi | C19-05 blocked |
+| One finite Pi/direct/callback/event/lifecycle contract | explicit Pi 0.80.6 coercion table; whitespace-only numeric rejection; Unicode code-point string bounds; safe integer bounds; explicit 512 array ceiling; canonical `-0` -> `+0`; canonical enums and frozen DTO identity | C19-01 pass |
+| Reflection authority is captured once | schema/raw/event/result/reference/error success and rejection after awaited callbacks; all post-import ambient poison counters remain zero; hostile message getter remains uncalled | C19-02 pass |
+| Terminal handoff arrays are exact snapshots | all three vectors reject proxy/proxy-prototype/accessor/sparse inputs before callbacks and map only fresh frozen dense copies | C19-03 pass |
+| Work accounting has an independent exact oracle | public per-category trace, hard-coded fixture tuples, copied-trace one-category zeroing/recomputation, exact total, retained affine ceiling | C19-04 pass |
+| Projection is incrementally bounded | one shared 4,096-node/key/item/DAG, depth-64, exact-byte budget rejects cycles/shared fanout before second descent/allocation; expressible limits canonicalized to Pi | C19-05 pass |
 
 Baseline is focused 159/159 and focused strict TypeScript passing. Expected RED is 164 executed,
 159 retained pass, exactly five named failures, zero skipped/cancelled/todo, strict TypeScript
 passing, and all production blobs frozen. `verificationPassed` remains false. No dependency,
 prompt/lease drift, parent, #478, network, push, integration, live model/auth, credential, service,
 Go/connector, `make`, main, or scope expansion is authorized.
+
+Ordered evidence is PLAN `337cba1731178d1b7ef51c62ec45b15159b3cca3`, five-row test-only RED
+`8519df27dc0617332f2273ac38ff6d82e59a813e` (159 retained pass plus exactly five intended
+failures), cohesive GREEN `6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17`, and review fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a`. Final focused replay is 164/164 and strict focused
+TypeScript passes. Safe isolation is 227/227; all 12 production modules pass strict TypeScript;
+explicit pinned Pi 0.80.6 offline RPC registers `pm-shepherd`; integrity retains exactly 20 paths.
+The broad suite is environment-blocked at 270/301 only by the unchanged 31 controller/state-store
+`spawn EPERM` rows. Parent-owned independent exact-head reviews and process-capable replay keep
+`verificationPassed` false.
 
 ## Cycle 18 Exact-Head Coverage Contract
 

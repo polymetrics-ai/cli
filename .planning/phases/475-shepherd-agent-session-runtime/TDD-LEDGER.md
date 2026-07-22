@@ -1318,6 +1318,54 @@ RED acceptance is 164 executed: all 159 retained rows pass and exactly C19-01 th
 zero skipped/cancelled/todo, focused strict TypeScript green, and all production blobs exact. No
 production edit is authorized before the RED checkpoint commits.
 
+### RED evidence
+
+- PLAN committed first at `337cba1731178d1b7ef51c62ec45b15159b3cca3`.
+- Test-only RED `8519df27dc0617332f2273ac38ff6d82e59a813e` changes only
+  `agent-session-runtime.test.ts` and adds exactly the five declared top-level rows.
+- RED executes 164 rows: all 159 retained rows pass and exactly C19-01 through C19-05 fail, with
+  zero skipped/cancelled/todo. Focused strict TypeScript exits 0.
+- Production stays frozen at runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+  `efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, and prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. RED runtime-test blob is
+  `8bbe1143cae474e647866a5fe6c04b020da39cc1`; policy test stays
+  `39fb20e0dc4667b9743c5acc4f87223b01128788`.
+
+### GREEN / post-GREEN review
+
+- Cohesive GREEN `6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17` implements one finite compiled
+  normalization/projector, complete category trace, shared incremental projection budget,
+  captured policy reflection, captured JSON handoff decode, and exact indexed terminal arrays. All
+  five Cycle 19 rows and the complete 164-row focused replay pass; strict TypeScript passes.
+- The post-GREEN read-only audit finds four actionable gaps rather than accepting a merely green
+  suite: whitespace-only numeric strings, astral Unicode length parity, runtime ambient reflection
+  plus hostile `message` getter access, and a vacuous omission recomputation.
+- Review fix `e9bdddd03e2fee4e4db791eec17a63233698e67a` rejects trimmed-empty numeric
+  strings, counts Unicode code points, captures all direct runtime reflection primitives, reads
+  error messages from own data descriptors only, and zeroes/recomputes copied metric traces.
+- C19-02's direct-caller filter is mutation-tested: a temporary ambient `Object.freeze` sentinel
+  fails once in both runtime phases; after removal the row re-passes. The sentinel is absent from
+  every commit.
+
+### VERIFY result
+
+- Cycle 19 named rows: 5/5 pass. Exact focused replay: 164/164 pass, with zero
+  failed/skipped/cancelled/todo. Focused strict TypeScript passes with explicit Pi 0.80.6 roots.
+- Pre-artifact final blobs are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, policy
+  `499f5a0b6cd0730c1279b1d33728604cb06c09c9`, unchanged prompts
+  `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+  `d25a8e1b25df3b80058e54f5ad3e7072d1362ad0`, and unchanged policy test
+  `c744c7d3d1ea798a30a214d94c9f44165cf25d84`.
+- Safe isolation passes 227/227, exactly retained 222 plus five Cycle 19 rows. All 12 production
+  modules pass strict TypeScript. Explicit pinned Pi 0.80.6 offline RPC registers `pm-shepherd` and
+  exits 0 from a writable temporary agent directory.
+- Serialized broad executes 301: 270 pass and only the unchanged 31 controller/state-store
+  process-identity rows fail with managed-sandbox `spawn EPERM`; zero skipped/cancelled/todo. The
+  broad gate is environment-blocked, not green.
+- Diff, JSON, ancestry, source/blob guards, exact five-row count, and the same 20 immutable-base
+  paths pass. Two parent-owned independent exact-head reviews and the process-capable broad replay
+  remain pending, so `verificationPassed` stays false.
+
 ## Cycle 15 — Default-Deny Assignment Parsing And Own-Descriptor Pi Capture
 
 ### PLAN / baseline

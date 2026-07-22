@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_19_plan",
+  "currentCycle": "correction_cycle_19_local_complete",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -493,16 +493,36 @@
       "cycle": "correction_cycle_19_plan",
       "decision": "not_spawned_runtime_capability_missing",
       "reason": "Both complete Cycle 18 reports block exact candidate a0cd1057 with five consolidated contracts. All four runtime slots are occupied, so no read-only mapper output is claimed; this worker owns the artifact-only PLAN and five-row test-only RED while all production stays frozen."
+    },
+    {
+      "cycle": "correction_cycle_19_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only 8519df27 executes 164 rows, retains all 159 prior passes, and fails exactly the five declared Cycle 19 rows with runtime, policy, and prompts byte-frozen; strict TypeScript remains green."
+    },
+    {
+      "cycle": "correction_cycle_19_green",
+      "decision": "bounded_delegation",
+      "reason": "A child worker owns only exact terminal-handoff array snapshots while the issue worker owns policy and reflection, integrates cohesive GREEN 6edb1d5b, verifies 164/164, and makes the commit."
+    },
+    {
+      "cycle": "correction_cycle_19_review_fix",
+      "decision": "local_critical_path",
+      "reason": "Post-GREEN review finds whitespace numeric and Unicode code-point Pi parity, direct runtime reflection/message getter, and vacuous omission-test gaps. Fix e9bdddd0 closes all findings; the reflection row is mutation-proven and 164/164 plus strict TypeScript pass."
+    },
+    {
+      "cycle": "correction_cycle_19_verify",
+      "decision": "blocked_external_environment",
+      "reason": "Focused 164/164, safe isolation 227/227, strict all 12 production files, pinned Pi 0.80.6 offline RPC, and exact integrity pass. Broad executes 301 with 270 passes and only 31 unchanged controller/state-store spawn EPERM failures; verificationPassed remains false pending process-capable replay and two parent-owned independent exact-head reviews."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_19_baseline_159_executed_159_passed_0_failed_cancelled_skipped_todo; red_pending_exactly_5_named_rows_164_executed_159_retained_pass_expected",
-    "fullShepherdTests": "safe_isolation_222_passed_0_failed_cancelled_skipped_todo_exact_retained_215_plus_cycle_18_7; complete_296_executed_265_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
-    "strictTypeScriptPi0806": "cycle_19_baseline_passed_focused_source_tests_typescript_5_9_3_explicit_pi_0_80_6_roots; red_replay_pending",
-    "offlineRpcSmoke": "passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_exit_0_with_writable_temporary_pi_directory",
-    "diffCheck": "cycle_19_exact_start_a0cd1057_tree_d428be42_base_e659d6f1_reports_sha256_48144b90_and_13b3b492_plan_in_progress; frozen_blobs_runtime_e952557d_policy_efc7564e_prompts_c5b6c27f_runtime_test_d9189302_policy_test_39fb20e0",
+    "focusedTests": "cycle_19_red_164_executed_159_retained_passed_exactly_5_named_failures_0_skipped_cancelled_todo; final_164_executed_164_passed_0_failed_skipped_cancelled_todo",
+    "fullShepherdTests": "cycle_19_safe_isolation_227_passed_0_failed_cancelled_skipped_todo_exact_retained_222_plus_5; complete_301_executed_270_passed_31_unchanged_controller_state_store_spawn_eperm_0_skipped_cancelled_todo_environment_blocked_not_green",
+    "strictTypeScriptPi0806": "cycle_19_baseline_red_final_focused_and_all_12_production_passed_typescript_5_9_3_explicit_pi_0_80_6_roots",
+    "offlineRpcSmoke": "cycle_19_passed_explicit_pi_0_80_6_get_commands_registered_pm_shepherd_exit_0_with_writable_temporary_pi_directory",
+    "diffCheck": "cycle_19_exact_start_a0cd1057_tree_d428be42_base_e659d6f1_reports_sha256_48144b90_and_13b3b492; ordered_plan_337cba17_red_8519df27_green_6edb1d5b_review_fix_e9bdddd0; final_blobs_runtime_e678193e_policy_499f5a0b_prompts_c5b6c27f_runtime_test_d25a8e1b_policy_test_c744c7d3; diff_json_ancestry_source_blob_exact_20_path_integrity_passed",
     "ownedScope": "exact_same_20_issue_owned_paths; no_dependency_connector_go_cmd_internal_paths; no_prompt_lease_route_parent_478_or_479_mutation; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_mutation",
-    "independentExactHeadReviews": "cycle_18_review_1_blocking_accepted; cycle_18_review_2_blocking_accepted; cycle_19_verification_passed_false",
+    "independentExactHeadReviews": "cycle_18_review_1_blocking_accepted; cycle_18_review_2_blocking_accepted; post_green_internal_review_findings_fixed_e9bdddd0; two_cycle_19_parent_owned_exact_head_reviews_pending; verification_passed_false",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -552,7 +572,9 @@
     "cycle_19 read-only mapper was not spawned because all four runtime slots are occupied; recorded as not_spawned_runtime_capability_missing without claiming agent output",
     "cycle_19 finite normalization mirrors Pi 0.80.6 primitive conversion, canonicalizes signed zero, emits safe integer and array limits, and rejects any primitive whose exact parity cannot be proven",
     "cycle_19 projection uses one pre-descent 4096-node/key/item/DAG depth-64 exact-byte budget with cycles and repeated identities denied; category work traces require hard-coded independent oracle tuples and omission checks",
-    "cycle_19 production and tests remain frozen through the artifact-only PLAN; RED must add exactly five top-level rows",
+    "cycle_19 production and tests remained frozen through PLAN 337cba17 and test-only RED 8519df27; RED retained all 159 prior passes and failed exactly five named rows before GREEN 6edb1d5b and review fix e9bdddd0",
+    "cycle_19 post-GREEN audit found and fixed whitespace-only numeric coercion, Unicode code-point length parity, direct runtime ambient reflection and hostile message getter access, and the vacuous omission matrix; the direct reflection probe is mutation-proven",
+    "cycle_19 final focused 164/164, safe isolation 227/227, all-production strict TypeScript, pinned offline Pi 0.80.6 RPC, and exact integrity pass; broad is environment-blocked at 270/301 by only 31 unchanged controller/state-store spawn EPERM rows",
     "cycle_19 external mutation, dependency, prompt/lease/route, parent, #478, Go/connector/make, network, push, integration, live model/auth, credentials, and services are outside this lane"
   ]
 }

@@ -1,11 +1,11 @@
 # Summary — Issue #475
 
-Status: both complete Cycle 18 exact-head reports block candidate
-`a0cd1057a0da642185f10b4ddfe72263602c7513`. Cycle 19 is planned against immutable base
-`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; no Cycle 18 local-completion claim remains current.
-Their overlap is exactly five contracts: finite Pi/direct normalization, captured reflection,
-terminal handoff array snapshots, independent category work accounting, and one incremental
-projection budget.
+Status: Cycle 19 is locally implemented at review-fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a` against exact blocked start
+`a0cd1057a0da642185f10b4ddfe72263602c7513` and immutable base
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 18 reports were accepted as
+exactly five contracts: finite Pi/direct normalization, captured reflection, terminal handoff
+array snapshots, independent category work accounting, and one incremental projection budget.
 
 The selected schema contract mirrors Pi 0.80.6's finite primitive conversions, canonicalizes all
 numeric signed zero to `+0`, emits safe-integer and 512-item array ceilings, and feeds one frozen
@@ -14,20 +14,30 @@ cannot satisfy the real-Pi matrix must reject at registration. Projection shares
 budget for 4,096 nodes, keys, items, and container encounters, depth 64, exact encoded bytes, and
 immediate cycle/repeated-DAG denial.
 
-The pre-execution baseline is focused 159/159 with zero skipped/cancelled/todo and focused strict
-TypeScript 5.9.3 passing against explicit Pi 0.80.6 roots. Cycle 19 requires one artifact-only PLAN
-checkpoint followed by exactly five top-level test-only RED rows. Expected RED is 164 executed,
-159 retained pass, exactly five named failures, zero skipped/cancelled/todo, strict TypeScript
-passing, and production frozen.
+The ordered chain is PLAN `337cba1731178d1b7ef51c62ec45b15159b3cca3`, test-only RED
+`8519df27dc0617332f2273ac38ff6d82e59a813e`, cohesive GREEN
+`6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17`, and review fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a`. RED executed 164 rows, retained 159 passes, and
+failed exactly the five named rows with production frozen. Final focused replay passes 164/164 and
+strict TypeScript passes.
 
-Frozen blobs are runtime `e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
-`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, prompts
+The post-GREEN audit found real whitespace-numeric, Unicode code-point, runtime reflection/message
+getter, and omission-oracle defects; the review-fix closes all four without widening the five
+contracts. Final pre-artifact blobs are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, policy
+`499f5a0b6cd0730c1279b1d33728604cb06c09c9`, unchanged prompts
 `c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
-`d918930205120d6a491a6288a95ee14550a0c567`, and policy test
-`39fb20e0dc4667b9743c5acc4f87223b01128788`. The exact 20-path scope remains fixed and
-`verificationPassed` remains false. No dependency, prompt/lease/route change, parent, #478,
-network, push, integration, live model/auth, credential, service, Go/connector, `make`, main, or
-external mutation is authorized.
+`d25a8e1b25df3b80058e54f5ad3e7072d1362ad0`, and unchanged policy test
+`c744c7d3d1ea798a30a214d94c9f44165cf25d84`. The exact 20-path scope remains fixed and
+`verificationPassed` remains false pending process-capable broad replay and two parent-owned
+independent exact-head reviews. No dependency, prompt/lease/route change, parent, #478, network,
+push, integration, live model/auth, credential, service, Go/connector, `make`, main, or external
+mutation is authorized.
+
+Terminal gates pass focused 164/164, safe isolation 227/227 (retained 222 plus five), strict all 12
+production modules, explicit pinned Pi 0.80.6 offline registration, and exact
+diff/JSON/ancestry/source/blob/20-path integrity. The serialized broad suite is honestly
+environment-blocked at 270/301 only by the unchanged 31 controller/state-store `spawn EPERM`
+rows; zero rows are skipped/cancelled/todo. It is not called green.
 
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full

@@ -1,10 +1,12 @@
 # Verification — Issue #475
 
-Current result: both independent Cycle 18 reports block exact candidate `a0cd1057a0da642185f10b4ddfe72263602c7513`.
-Cycle 19 is at its artifact-only PLAN gate; production and tests remain frozen and
-`verificationPassed` is false.
+Current result: Cycle 19 is locally implemented at review-fix
+`e9bdddd03e2fee4e4db791eec17a63233698e67a` against exact blocked candidate
+`a0cd1057a0da642185f10b4ddfe72263602c7513`. Focused evidence is green; parent-owned independent
+exact-head review and process-capable broad replay remain pending, so `verificationPassed` is
+false.
 
-## Cycle 19 Pre-Execution Verification Contract
+## Cycle 19 Local Verification
 
 Both complete reports were read before PLAN and accepted without deferral. Their union maps exactly
 to C19-01 through C19-05.
@@ -14,16 +16,29 @@ to C19-01 through C19-05.
 | Exact start / report replay | pass | exact `a0cd1057`; tree `d428be42e`; both full reports and recorded SHA-256 values |
 | Baseline focused tests | pass | 159 passed, 0 failed/skipped/cancelled/todo |
 | Baseline focused strict TypeScript | pass | TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
-| PLAN / frozen blobs | in progress | artifact-only commit; exact runtime/policy/prompt/runtime-test/policy-test blobs |
-| Comprehensive RED | pending | exactly five top-level rows; 164 executed; 159 retained pass; exactly five named failures; 0 skipped/cancelled/todo |
-| Production freeze | pending | runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f` exact after RED |
-| Scope / integrity | pending | exact same 20 paths, clean diff, ancestry and JSON gates |
-| GREEN / REFACTOR / terminal verification | blocked by order | no production edit before committed RED and parent checkpoint report |
+| PLAN / frozen blobs | pass | artifact PLAN `337cba17`; exact runtime/policy/prompt/runtime-test/policy-test blobs |
+| Comprehensive RED | expected fail | test-only `8519df27`; exactly five rows; 164 executed; 159 retained pass; exactly five named failures; 0 skipped/cancelled/todo |
+| Production freeze | pass | runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f` exact after RED |
+| GREEN / review fix | pass | cohesive `6edb1d5b`; actionable post-GREEN findings closed by `e9bdddd0`; direct reflection probe mutation-proven |
+| Focused final | pass | all five Cycle 19 rows pass; exact retained replay 164/164; strict focused TypeScript pass |
+| Safe isolation | pass | 227/227, exact retained 222 plus five Cycle 19 rows; 0 failed/skipped/cancelled/todo |
+| All-production strict TypeScript | pass | all 12 Shepherd production files, TypeScript 5.9.3 with explicit Pi 0.80.6 roots |
+| Complete serialized Shepherd | environment-blocked | 301 executed; 270 passed; unchanged 31 controller/state-store `spawn EPERM` failures; 0 skipped/cancelled/todo |
+| Pinned offline Pi | pass | explicit binary reports 0.80.6; writable temporary agent directory; RPC `get_commands` registers `pm-shepherd`; exit 0 |
+| Scope / integrity | pass | exact same 20 paths; clean diff; JSON, ancestry, source/blob, five-row, no-dependency/Go/connector guards |
+| Independent exact-head review | blocked | two fresh parent-owned reviews of final evidence candidate |
 | External mutation | not attempted | no push, network, GitHub, integration, model/auth, service, Go/connector, `make`, parent, or #478 action |
 
-The finite normalization, exact reflection/handoff boundaries, independent category trace, and
-shared projection-budget definitions are fixed in PLAN before RED. No Cycle 19 completion or GREEN
-claim is made here.
+The post-GREEN audit found and closed whitespace-only numeric parity, Unicode code-point length,
+direct runtime reflection/message-getter, and omission-recomputation gaps. Final source/test blobs
+before this artifact gate are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, policy
+`499f5a0b6cd0730c1279b1d33728604cb06c09c9`, prompts `c5b6c27f`, runtime test `d25a8e1b`, and policy
+test `c744c7d3`.
+
+The broad nonzero result is confined to the unchanged process-identity family excluded by the
+227-row safe-isolation gate. It is not called green. Parent orchestration owns the process-capable
+replay and two independent exact-head reviews; no push, network, integration, live model/auth,
+credential, service, Go/connector, `make`, main, parent, or #478 mutation was attempted.
 
 ## Cycle 18 Terminal Verification
 

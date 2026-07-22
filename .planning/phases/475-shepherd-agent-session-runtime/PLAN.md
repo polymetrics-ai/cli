@@ -1956,13 +1956,16 @@ exact-type semantics Pi does not provide:
 
 - `string`: a string remains exact; `null` becomes `""`; a finite number or boolean becomes its
   JavaScript string form. The canonical schema always emits `minLength` (default 0) and a bounded
-  `maxLength` no wider than the active policy write ceiling.
-- `integer`: `null` becomes 0, booleans become 0/1, and a non-empty string is admitted only when
-  `Number(value)` is integral. The normalized value must be a safe integer. Every canonical integer
+  `maxLength` no wider than the active policy write ceiling; both bounds count Unicode code points,
+  matching Pi/JSON Schema rather than UTF-16 code units.
+- `integer`: `null` becomes 0, booleans become 0/1, and a string containing at least one
+  non-whitespace character is admitted only when `Number(value)` is integral. The normalized value
+  must be a safe integer. Every canonical integer
   schema emits the author bounds intersected with
   `[-9007199254740991, 9007199254740991]`.
-- `number`: `null` becomes 0, booleans become 0/1, and a non-empty string is admitted only when
-  `Number(value)` is finite. The normalized value must remain finite.
+- `number`: `null` becomes 0, booleans become 0/1, and a string containing at least one
+  non-whitespace character is admitted only when `Number(value)` is finite. The normalized value
+  must remain finite.
 - `boolean`: `null` becomes false; only exact strings `"true"`/`"false"` and numbers 1/0 convert;
   every other non-boolean rejects.
 - Every normalized numeric `-0` becomes canonical `+0` before bounds, enum comparison, callback,
@@ -2064,3 +2067,46 @@ critical path.
 No production edit precedes committed RED. No dependency, prompt/lease/route contract, parent,
 #478, network, push, integration, live model/auth, credential, service, Go/connector, `make`, main,
 or path-scope change is authorized.
+
+### Cycle 19 execution and correction evidence
+
+The ordered implementation chain is:
+
+1. artifact PLAN `337cba1731178d1b7ef51c62ec45b15159b3cca3`;
+2. test-only RED `8519df27dc0617332f2273ac38ff6d82e59a813e`;
+3. cohesive GREEN `6edb1d5bcdb3ccf780e2153cbef238eb4f00cf17`;
+4. post-GREEN review fix `e9bdddd03e2fee4e4db791eec17a63233698e67a`.
+
+RED changed only `agent-session-runtime.test.ts`. It executed 164 rows, retained all 159 prior
+passes, and failed exactly C19-01 through C19-05, with zero skipped/cancelled/todo. Strict
+TypeScript passed, and production stayed byte-exact at runtime
+`e952557d987ef6bcba3e99ac4a7820fefc0a0ce3`, policy
+`efc7564ec0adc8a424c30d62cab97f1f4fca7a53`, and prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`. The RED runtime-test blob was
+`8bbe1143cae474e647866a5fe6c04b020da39cc1`.
+
+Initial GREEN made all five rows and the complete 164-row focused suite pass. The required
+post-GREEN read-only audit then found four real correction points: whitespace-only numeric strings
+were accepted directly but rejected by Pi; UTF-16 length rejected a one-code-point astral string;
+runtime event/error paths still reached ambient reflection and invoked an untrusted message getter;
+and the category-omission matrix did not actually recompute a copied trace. The review-fix commit
+requires trimmed numeric source, counts Unicode code points allocation-free, captures every direct
+runtime reflection primitive, reads Error messages only from captured own data descriptors, and
+zeros each positive category in a copied metric trace before recomputing the total. A temporary
+ambient `Object.freeze` mutation sentinel made C19-02 fail exactly once in each runtime phase, then
+was removed and the row returned green, proving the direct-caller poison probe is non-vacuous.
+
+Terminal evidence is five Cycle 19 rows passing, exact retained replay 164/164, safe isolation
+227/227 (the retained 222 plus five), focused and all-12-production strict TypeScript passing with
+explicit Pi 0.80.6 roots, and explicit pinned Pi 0.80.6 offline RPC registration. The serialized
+broad suite executes 301 rows: 270 pass and only the unchanged 31 controller/state-store process-
+identity rows fail because the managed sandbox returns `spawn EPERM`; zero rows are
+skipped/cancelled/todo, so the gate is environment-blocked and not green. `git diff --check`, JSON,
+source/blob guards, exact-start/PLAN/RED/GREEN/review-fix ancestry, and the same 20 immutable-base
+paths pass. Final blobs before the
+artifact summary commit are runtime `e678193e5ff6022b0ac40628dfd9fc07a928bb2a`, policy
+`499f5a0b6cd0730c1279b1d33728604cb06c09c9`, unchanged prompts
+`c5b6c27fc1ba6f738fbfd36d49d38c94c7b13b73`, runtime test
+`d25a8e1b25df3b80058e54f5ad3e7072d1362ad0`, and unchanged policy test
+`c744c7d3d1ea798a30a214d94c9f44165cf25d84`. Parent-owned independent exact-head reviews and the
+process-capable broad replay are still pending, so `verificationPassed` remains false.

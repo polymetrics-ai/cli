@@ -27,6 +27,20 @@
   No agent output is claimed; the issue worker retains the only mutating path.
 - Frozen blobs through RED: runtime `e952557d`, policy `efc7564e`, prompts `c5b6c27f`, runtime test
   `d9189302`, policy test `39fb20e0` before RED.
+- Ordered execution: PLAN `337cba17`; test-only RED `8519df27` executed 164 rows, retained 159
+  passes, and failed exactly the five named rows; cohesive GREEN `6edb1d5b` made 164/164 pass;
+  post-GREEN review fix `e9bdddd0` closes the final parity/reflection/oracle findings.
+- Review feedback changed implementation details without changing the five contracts: numeric
+  strings must remain nonempty after trim; JSON Schema string lengths count Unicode code points;
+  direct runtime reflection is captured after awaited success and error paths; Error messages are
+  own data descriptors only; and omission checks zero/recompute a copied category trace.
+- The direct runtime reflection poison test was mutation-checked with a temporary ambient
+  `Object.freeze` sentinel: it failed with exactly one call in each runtime phase, then passed after
+  sentinel removal. Final focused replay is 164/164 and strict TypeScript is clean.
+- Terminal gates: safe isolation 227/227; strict all 12 production modules; pinned Pi 0.80.6
+  offline RPC registration; exact JSON/diff/ancestry/source/blob/20-path integrity. Serialized
+  broad is environment-blocked at 270/301 only by the unchanged 31 controller/state-store
+  `spawn EPERM` rows, with zero skipped/cancelled/todo.
 - No dependency, prompt/lease/route change, parent, #478, network, push, integration, live
   auth/model, credential, service, Go/connector, `make`, main, or out-of-scope mutation.
 
