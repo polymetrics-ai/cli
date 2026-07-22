@@ -16,6 +16,7 @@ import {
 	type GitMutationLeaseRequest,
 	type GitPushEvidence,
 	type GitPushRequest,
+	type GitReconcileIssueHeadEvidence,
 	type GitRefreshIssueEvidence,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
@@ -111,6 +112,17 @@ export interface WorkspaceParentRefreshEvidence extends GitRefreshIssueEvidence 
 	reviewInvalidated: true;
 }
 
+export interface WorkspaceChildHeadReconciliationRequest {
+	previousHead: string;
+	effectKey: string;
+}
+
+export interface WorkspaceChildHeadReconciliationEvidence extends GitReconcileIssueHeadEvidence {
+	verificationInvalidated: true;
+	reviewInvalidated: true;
+	integrationInvalidated: true;
+}
+
 export interface WorkspaceAdapterOptions {
 	leaseOptions?: Omit<FileStateStoreOptions, "trustedRoot">;
 }
@@ -149,6 +161,17 @@ interface WorkspaceRefreshRecord {
 	previousHead: string;
 	head: string;
 	outcome: "unchanged" | "rebased" | "reclaimed";
+}
+
+interface WorkspaceChildHeadRecord {
+	schemaVersion: 1;
+	claimId: string;
+	effectKeyHash: string;
+	branch: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	changedScope: string[];
 }
 
 interface ActiveClaimContext {
@@ -340,6 +363,45 @@ function serializedRefresh(record: WorkspaceRefreshRecord): string {
 	});
 }
 
+function parseChildHead(raw: string): WorkspaceChildHeadRecord {
+	const record = parseJsonRecord(raw, "workspace child-head reconciliation record");
+	assertOnlyFields(record, new Set([
+		"schemaVersion", "claimId", "effectKeyHash", "branch", "baseHead", "previousHead", "head",
+		"changedScope",
+	]), "workspace child-head reconciliation record");
+	let changedScope: string[];
+	try {
+		if (!Array.isArray(record.changedScope) || record.changedScope.some((path) => typeof path !== "string")) throw new Error();
+		changedScope = record.changedScope.length === 0 ? [] : canonicalGitScopes(record.changedScope as string[]);
+		if (!equalStrings(changedScope, record.changedScope as string[])) throw new Error();
+	} catch (error) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation record is malformed", { cause: error });
+	}
+	if (record.schemaVersion !== 1
+		|| typeof record.claimId !== "string" || !IDENTITY_PATTERN.test(record.claimId)
+		|| typeof record.effectKeyHash !== "string" || !IDENTITY_PATTERN.test(record.effectKeyHash)
+		|| !safeText(record.branch, 240) || !SAFE_PARENT_REF.test(record.branch)
+		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
+		|| typeof record.previousHead !== "string" || !SHA_PATTERN.test(record.previousHead)
+		|| typeof record.head !== "string" || !SHA_PATTERN.test(record.head)) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation record is malformed");
+	}
+	return { ...record, changedScope } as unknown as WorkspaceChildHeadRecord;
+}
+
+function serializedChildHead(record: WorkspaceChildHeadRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		claimId: record.claimId,
+		effectKeyHash: record.effectKeyHash,
+		branch: record.branch,
+		baseHead: record.baseHead,
+		previousHead: record.previousHead,
+		head: record.head,
+		changedScope: record.changedScope,
+	});
+}
+
 function claimIdentity(record: WorkspaceClaimRecord): string {
 	return hash(["shepherd-workspace-claim-v4", serializedClaim(record)]);
 }
@@ -439,6 +501,14 @@ async function acquireRefresh(path: string, expected: WorkspaceRefreshRecord): P
 	const current = parseRefresh(await readImmutable(path, "workspace parent refresh record"));
 	if (serializedRefresh(current) !== serializedRefresh(expected)) {
 		throw new WorkspaceAdapterError("workspace parent refresh retry does not match its exact prepared effect");
+	}
+}
+
+async function acquireChildHead(path: string, expected: WorkspaceChildHeadRecord): Promise<void> {
+	await publishImmutable(path, `${serializedChildHead(expected)}\n`, "workspace child-head reconciliation record");
+	const current = parseChildHead(await readImmutable(path, "workspace child-head reconciliation record"));
+	if (serializedChildHead(current) !== serializedChildHead(expected)) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation retry does not match its exact prepared effect");
 	}
 }
 
@@ -856,6 +926,48 @@ export class WorkspaceAdapter {
 		workspace.status = await this.#git.status(this.#worktreeBinding(context));
 		workspace.changedScope = changedPaths(workspace.status);
 		return { ...evidence, verificationInvalidated: true, reviewInvalidated: true };
+	}
+
+	async reconcileChildHead(
+		workspace: ClaimedWorkspace,
+		request: WorkspaceChildHeadReconciliationRequest,
+	): Promise<WorkspaceChildHeadReconciliationEvidence> {
+		const context = this.#mutationContext(workspace);
+		if (typeof request !== "object" || request === null
+			|| typeof request.previousHead !== "string" || !SHA_PATTERN.test(request.previousHead)
+			|| !safeText(request.effectKey, MAX_OWNERSHIP_BYTES) || !SAFE_OWNERSHIP.test(request.effectKey)) {
+			throw new WorkspaceAdapterError("child-head reconciliation request is invalid");
+		}
+		const evidence = await this.#git.reconcileIssueBranchHead(context.lease, this.#worktreeBinding(context), {
+			issue: context.claim.issue,
+			slug: context.claim.slug,
+			branch: context.claim.branch,
+			baseHead: context.effectiveBaseHead,
+			previousHead: request.previousHead,
+		});
+		const effectKeyHash = hash(["shepherd-workspace-child-head-effect-v1", request.effectKey]);
+		await acquireChildHead(
+			join(dirname(context.claimPath), `issue-${context.claim.issue}.child-head-${effectKeyHash}.json`),
+			{
+				schemaVersion: 1,
+				claimId: context.binding.claimId,
+				effectKeyHash,
+				branch: evidence.branch,
+				baseHead: evidence.baseHead,
+				previousHead: evidence.previousHead,
+				head: evidence.head,
+				changedScope: evidence.changedScope,
+			},
+		);
+		workspace.head = evidence.head;
+		workspace.status = await this.#git.status(this.#worktreeBinding(context));
+		workspace.changedScope = [...evidence.changedScope];
+		return {
+			...evidence,
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+			integrationInvalidated: true,
+		};
 	}
 
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: VerificationState): Promise<WorkspaceHandoffEvidence> {

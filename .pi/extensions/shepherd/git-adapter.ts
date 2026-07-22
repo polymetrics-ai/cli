@@ -156,6 +156,24 @@ export interface GitRefreshIssueEvidence {
 	head: string;
 }
 
+export interface GitReconcileIssueHeadRequest {
+	issue: number;
+	slug: string;
+	branch: string;
+	baseHead: string;
+	/** Exact durable head that was reviewed before the remote child branch moved. */
+	previousHead: string;
+}
+
+export interface GitReconcileIssueHeadEvidence {
+	outcome: "reclaimed" | "reused";
+	branch: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	changedScope: string[];
+}
+
 export interface GitAddWorktreeRequest {
 	trustedRoot: string;
 	path: string;
@@ -1144,6 +1162,100 @@ export class GitAdapter {
 			}
 			const evidence = await reconcile();
 			if (evidence === undefined) throw new GitAdapterError("parent refresh completed without authoritative exact-head evidence");
+			return evidence;
+		});
+	}
+
+	/**
+	 * Reclaims a canonical child worktree to the exact authoritative remote child head.
+	 * The mutation is lease-bound, accepts only a clean worktree, and validates the full
+	 * base-to-head history against the immutable write scopes before changing local state.
+	 */
+	async reconcileIssueBranchHead(
+		capability: GitMutationLease,
+		binding: GitBinding,
+		request: GitReconcileIssueHeadRequest,
+	): Promise<GitReconcileIssueHeadEvidence> {
+		return this.#enqueueMutation(capability, async (state) => {
+			this.#assertLeaseRequest(state, request.issue, request.slug, request.branch);
+			assertSha(request.baseHead, "child reconciliation base head");
+			assertSha(request.previousHead, "previous child head");
+			if (request.baseHead !== state.baseHead) {
+				throw new GitAdapterError("child-head reconciliation does not match the immutable current lease base");
+			}
+			const actual = await this.#assertMutationBinding(state, binding, "worktree");
+			await this.#assertSafeMutationConfiguration(actual.cwd);
+			if (await this.currentBranch(actual) !== request.branch) {
+				throw new GitAdapterError("current branch does not match canonical issue branch");
+			}
+			const previousLocalHead = await this.resolveBranchHead(actual, request.branch);
+			if (!(await this.status(actual)).clean) {
+				throw new GitAdapterError("child-head reconciliation requires a clean issue worktree");
+			}
+
+			const endpoint = (await this.#effectiveRemote(actual.cwd)).fetch;
+			if (endpoint.value === undefined || endpoint.identity !== state.coordinator.fetchEndpointIdentity) {
+				throw new GitAdapterError("origin fetch endpoint no longer matches the immutable lease claim");
+			}
+			await this.#assertEndpointRewriteStable(actual.cwd, endpoint.value, false);
+			await this.#assertLeaseOwnedForMutation(state);
+			await this.#runMutation(actual.cwd, [
+				"fetch", "--no-tags", "--", endpoint.value, `refs/heads/${request.branch}`,
+			]);
+			const fetchedHead = stripLineEnding((await this.#run(actual.cwd, [
+				"rev-parse", "--verify", "FETCH_HEAD^{commit}",
+			])).toString("utf8"));
+			assertSha(fetchedHead, "fetched child head");
+			if (fetchedHead === request.previousHead) {
+				throw new GitAdapterError("authoritative remote child branch did not move from the durable reviewed head");
+			}
+			if (previousLocalHead !== request.previousHead && previousLocalHead !== fetchedHead) {
+				throw new GitAdapterError("local child head moved outside the durable reconciliation coordinates");
+			}
+			await this.#assertCommitObject(actual, request.baseHead, "child reconciliation base head");
+			if (!(await this.isAncestor(actual, request.baseHead, fetchedHead))) {
+				throw new GitAdapterError("authoritative remote child head does not descend from the exact parent base");
+			}
+			const changedScope = await this.#assertHistoryWithinScopes(
+				actual,
+				request.baseHead,
+				fetchedHead,
+				state.allowedScopes,
+			);
+
+			const reconcile = async (): Promise<GitReconcileIssueHeadEvidence | undefined> => {
+				if (await this.currentBranch(actual) !== request.branch) return undefined;
+				const head = await this.resolveBranchHead(actual, request.branch);
+				if (head !== fetchedHead || !(await this.status(actual)).clean) return undefined;
+				if (!(await this.isAncestor(actual, request.baseHead, head))) return undefined;
+				const exactScope = await this.#assertHistoryWithinScopes(actual, request.baseHead, head, state.allowedScopes);
+				if (JSON.stringify(exactScope) !== JSON.stringify(changedScope)) return undefined;
+				return {
+					outcome: previousLocalHead === fetchedHead ? "reused" : "reclaimed",
+					branch: request.branch,
+					baseHead: request.baseHead,
+					previousHead: request.previousHead,
+					head,
+					changedScope: exactScope,
+				};
+			};
+			if (previousLocalHead !== fetchedHead) {
+				await this.#assertLeaseOwnedForMutation(state);
+				try {
+					await this.#runMutation(actual.cwd, ["reset", "--hard", fetchedHead, "--"]);
+				} catch (error) {
+					const recovered = await reconcile().catch(() => undefined);
+					if (recovered !== undefined) return recovered;
+					throw new GitAdapterError(
+						"typed child-head reconciliation failed; unique local state was preserved",
+						{ cause: error },
+					);
+				}
+			}
+			const evidence = await reconcile();
+			if (evidence === undefined) {
+				throw new GitAdapterError("child-head reconciliation completed without authoritative exact-head evidence");
+			}
 			return evidence;
 		});
 	}

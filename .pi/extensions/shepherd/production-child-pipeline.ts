@@ -35,7 +35,7 @@ import {
 	type GitHubChildIssue,
 	type GitHubParentOrchestrator,
 	type MaterializedChildRecord,
-	type OrchestrationCallContext,
+	type ExternalCallContext,
 	type ParentDecisionBroker,
 	type ParentOrchestrationPlan,
 } from "./github-orchestrator.ts";
@@ -125,6 +125,17 @@ export interface ProductionChildPipelineOptions {
 	now?: () => Date;
 }
 
+export interface ProductionChildHeadReconciliationResult {
+	checkpoint: ProductionStageCheckpoint;
+	previousHead: string;
+	head: string;
+	invalidated: {
+		verification: true;
+		review: true;
+		integration: true;
+	};
+}
+
 interface EffectExecution<T> {
 	kind: ProductionEffectKind;
 	key: string;
@@ -173,9 +184,7 @@ function throwIfAborted(signal: AbortSignal): void {
 	}
 }
 
-function externalContext(signal: AbortSignal, timeoutMs: number): OrchestrationCallContext & {
-	acknowledgeAbort(): void;
-} {
+function externalContext(signal: AbortSignal, timeoutMs: number): ExternalCallContext {
 	throwIfAborted(signal);
 	return {
 		signal,
@@ -293,7 +302,14 @@ function validateInterventionRecord(
 
 function classifyIntegration(blockers: readonly string[]): ProductionLifecycleError {
 	const values = [...new Set(blockers)];
-	if (values.some((value) => value === "head_moved" || value === "topology_mismatch"
+	if (values.includes("head_moved")) {
+		return new ProductionLifecycleError(
+			"correction_required",
+			"authoritative child pull request head moved and must be reclaimed, reverified, and rereviewed",
+			["child_head_moved", ...values.filter((value) => value !== "head_moved")],
+		);
+	}
+	if (values.some((value) => value === "topology_mismatch"
 		|| value === "policy_moved" || value === "policy_mismatch" || value === "stale_evidence")) {
 		return new ProductionLifecycleError("stale_parent", "child integration evidence moved", values);
 	}
@@ -409,7 +425,11 @@ export class ProductionChildPipeline implements
 			childId: fence.childId,
 			intentDigest,
 		};
-		const intent: ProductionEffectIntent = { ...coordinates, key: productionEffectKey(coordinates) };
+		const intent: ProductionEffectIntent = {
+			...coordinates,
+			key: productionEffectKey(coordinates),
+			recoveryDescriptor: descriptor,
+		};
 		await this.#effects.prepare(intent, this.#now());
 		throwIfAborted(fence.signal);
 		const value = await operation(intent.key);
@@ -575,17 +595,20 @@ export class ProductionChildPipeline implements
 			attempt: context.runtime.attempts,
 			corrections: context.runtime.corrections,
 			commands: context.child.verification,
-		}, async () => entry.session.verify(context.signal));
-		if (effect.value.length < 1 || effect.value.length > context.child.verification.length
-			|| effect.value.some((result, index) => result.id !== context.child.verification[index]?.id)
-			|| effect.value.some((result) => result.status === "failed" && result.failureKind === undefined)) {
-			throw new ProductionLifecycleError("terminal", "bounded verification returned malformed command evidence", ["verification_evidence_invalid"]);
-		}
-		const commands = effect.value.map((result) => ({
-			id: result.id,
-			status: result.status,
-			...(result.failureKind === undefined ? {} : { failureKind: result.failureKind }),
-		}));
+		}, async () => {
+			const results = await entry.session.verify(context.signal);
+			if (results.length < 1 || results.length > context.child.verification.length
+				|| results.some((result, index) => result.id !== context.child.verification[index]?.id)
+				|| results.some((result) => result.status === "failed" && result.failureKind === undefined)) {
+				throw new ProductionLifecycleError("terminal", "bounded verification returned malformed command evidence", ["verification_evidence_invalid"]);
+			}
+			return results.map((result) => ({
+				id: result.id,
+				status: result.status,
+				...(result.failureKind === undefined ? {} : { failureKind: result.failureKind }),
+			}));
+		});
+		const commands = effect.value;
 		const passed = commands.length === context.child.verification.length
 			&& commands.every((command) => command.status === "passed");
 		return this.#checkpoint(context, effect, {
@@ -805,6 +828,89 @@ export class ProductionChildPipeline implements
 			summary: "workspace refreshed to the authoritative parent head; verification and review required",
 			workspace: entry.session.binding,
 		});
+	}
+
+	/**
+	 * Reclaims an externally moved canonical child branch. The controller must persist the
+	 * returned checkpoint while deleting the invalidated verification, review, and integration
+	 * fields before acknowledging the effect, then rerun verification and exact-head review.
+	 */
+	async reconcileChildHead(
+		context: ProductionChildPipelineContext,
+	): Promise<ProductionChildHeadReconciliationResult> {
+		const durable = context.runtime.checkpoint?.workspace ?? context.runtime.ownership;
+		const pullRequest = context.runtime.checkpoint?.pullRequest;
+		if (durable === undefined || !SHA.test(durable.head) || !Number.isSafeInteger(pullRequest)
+			|| (pullRequest as number) < 1) {
+			throw new ProductionLifecycleError(
+				"terminal",
+				"child-head reconciliation requires exact durable workspace and pull request coordinates",
+				["child_head_reconciliation_binding_missing"],
+			);
+		}
+		if (context.runtime.checkpoint?.integrationReceiptDigest !== undefined) {
+			throw new ProductionLifecycleError(
+				"terminal",
+				"an already integrated child cannot reclaim a later pull request head",
+				["integrated_child_head_moved"],
+			);
+		}
+		const review = context.runtime.checkpoint?.review;
+		if (review?.status !== "clean" || review.head !== durable.head || review.baseHead !== durable.baseHead) {
+			throw new ProductionLifecycleError(
+				"terminal",
+				"child-head reconciliation is not bound to the displaced exact-head review",
+				["child_head_reconciliation_review_missing"],
+			);
+		}
+		const entry = await this.#session(context);
+		const before = entry.session.binding;
+		if (before.branch !== durable.branch || before.baseBranch !== durable.baseBranch
+			|| before.baseHead !== durable.baseHead
+			|| !sameStrings(before.writeScopes, durable.writeScopes)) {
+			throw new ProductionLifecycleError(
+				"terminal",
+				"active child workspace moved outside the durable reconciliation coordinates",
+				["child_head_reconciliation_workspace_mismatch"],
+			);
+		}
+		const effect = await this.#effect(context, "child_head_reconciliation", {
+			operation: "child_head_reconciliation",
+			repository: context.plan.repository,
+			childId: context.child.id,
+			pullRequest: pullRequest as number,
+			branch: durable.branch,
+			baseHead: durable.baseHead,
+			previousHead: durable.head,
+			reviewResultDigest: review.resultDigest,
+		}, async (effectKey) => entry.session.reconcileChildHead({
+			previousHead: durable.head,
+			effectKey,
+		}, context.signal));
+		const after = entry.session.binding;
+		if (effect.value.previousHead !== durable.head || effect.value.branch !== durable.branch
+			|| effect.value.baseHead !== durable.baseHead || !SHA.test(effect.value.head)
+			|| effect.value.head === durable.head || after.head !== effect.value.head
+			|| after.baseHead !== durable.baseHead || after.branch !== durable.branch
+			|| effect.value.verificationInvalidated !== true || effect.value.reviewInvalidated !== true
+			|| effect.value.integrationInvalidated !== true) {
+			throw new ProductionLifecycleError(
+				"terminal",
+				"child-head reconciliation evidence is incomplete or mismatched",
+				["child_head_reconciliation_mismatch"],
+			);
+		}
+		const checkpoint = this.#checkpoint(context, effect, {
+			summary: "authoritative child head reclaimed; verification and exact-head review required",
+			workspace: after,
+			pullRequest: pullRequest as number,
+		});
+		return {
+			checkpoint,
+			previousHead: durable.head,
+			head: effect.value.head,
+			invalidated: { verification: true, review: true, integration: true },
+		};
 	}
 
 	async integrate(context: ProductionChildPipelineContext): Promise<ProductionStageCheckpoint> {

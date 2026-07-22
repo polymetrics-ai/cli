@@ -114,6 +114,113 @@ test("reconciles an exact crash retry without creating a duplicate branch or wor
 	await second.release();
 });
 
+test("reclaims the exact remote child head through the active mutation lease", async (t) => {
+	const fixture = await createLocalGitFixture();
+	t.after(fixture.cleanup);
+	const gitAdapter = new GitAdapter();
+	const adapter = new WorkspaceAdapter(gitAdapter, { leaseOptions: {
+		processId: 22_101,
+		processIdentity: "child-head-reclaim-success",
+		isProcessAlive: () => true,
+		tokenFactory: () => "child-head-reclaim-success-token",
+	} });
+	const workspace = await adapter.claim(await requestFor(fixture, {
+		allowedScopes: ["owned/child"],
+	}));
+	await write(workspace.cwd, "owned/child/local.ts", "export const local = true;\n");
+	const local = await adapter.commitIssueChanges(workspace, {
+		issue: workspace.issue,
+		slug: workspace.slug,
+		branch: workspace.branch,
+		expectedHead: workspace.head,
+		message: "test: local child head",
+		scopes: ["owned/child"],
+	});
+	workspace.head = local.head;
+	await adapter.pushIssueBranch(workspace, {
+		issue: workspace.issue,
+		slug: workspace.slug,
+		branch: workspace.branch,
+		expectedHead: local.head,
+		defaultBranch: "main",
+	});
+
+	const external = join(fixture.root, "external-child-writer");
+	await git(fixture.root, "clone", fixture.remote, external);
+	await git(external, "config", "user.name", "External Child Test");
+	await git(external, "config", "user.email", "external-child@example.invalid");
+	await git(external, "switch", workspace.branch);
+	await write(external, "owned/child/remote.ts", "export const remote = true;\n");
+	await git(external, "add", "--", "owned/child/remote.ts");
+	await git(external, "commit", "-m", "test: move child head");
+	await git(external, "push", "origin", workspace.branch);
+	const remoteHead = (await git(external, "rev-parse", "HEAD")).trim();
+
+	const evidence = await adapter.reconcileChildHead(workspace, {
+		previousHead: local.head,
+		effectKey: "child-head:476:1",
+	});
+	assert.equal(evidence.outcome, "reclaimed");
+	assert.equal(evidence.previousHead, local.head);
+	assert.equal(evidence.head, remoteHead);
+	assert.equal(evidence.branch, workspace.branch);
+	assert.equal(evidence.verificationInvalidated, true);
+	assert.equal(evidence.reviewInvalidated, true);
+	assert.equal(evidence.integrationInvalidated, true);
+	assert.deepEqual(evidence.changedScope, ["owned/child/local.ts", "owned/child/remote.ts"]);
+	assert.equal((await git(workspace.cwd, "rev-parse", "HEAD")).trim(), remoteHead);
+	assert.equal(await readFile(join(workspace.cwd, "owned/child/remote.ts"), "utf8"), "export const remote = true;\n");
+	const retried = await adapter.reconcileChildHead(workspace, {
+		previousHead: local.head,
+		effectKey: "child-head:476:1",
+	});
+	assert.equal(retried.outcome, "reused");
+	assert.equal(retried.head, remoteHead);
+	await workspace.release();
+});
+
+test("child-head reclaim preserves local state and fails closed on dirty or scope-escaped remote work", async (t) => {
+	for (const scenario of ["dirty", "scope-escaped"] as const) {
+		await t.test(scenario, async (childTest) => {
+			const fixture = await createLocalGitFixture();
+			childTest.after(fixture.cleanup);
+			const gitAdapter = new GitAdapter();
+			const adapter = new WorkspaceAdapter(gitAdapter, { leaseOptions: {
+				processId: scenario === "dirty" ? 22_102 : 22_103,
+				processIdentity: `child-head-reclaim-${scenario}`,
+				isProcessAlive: () => true,
+				tokenFactory: () => `child-head-reclaim-${scenario}-token`,
+			} });
+			const workspace = await adapter.claim(await requestFor(fixture, { allowedScopes: ["owned/child"] }));
+			await adapter.pushIssueBranch(workspace, {
+				issue: workspace.issue, slug: workspace.slug, branch: workspace.branch,
+				expectedHead: workspace.head, defaultBranch: "main",
+			});
+			const previousHead = workspace.head;
+			const external = join(fixture.root, `external-${scenario}`);
+			await git(fixture.root, "clone", fixture.remote, external);
+			await git(external, "config", "user.name", "External Child Test");
+			await git(external, "config", "user.email", "external-child@example.invalid");
+			await git(external, "switch", workspace.branch);
+			const path = scenario === "scope-escaped" ? "outside.ts" : "owned/child/remote.ts";
+			await write(external, path, "remote movement\n");
+			await git(external, "add", "--", path);
+			await git(external, "commit", "-m", `test: ${scenario} child movement`);
+			await git(external, "push", "origin", workspace.branch);
+			if (scenario === "dirty") await write(workspace.cwd, "owned/child/local-dirty.ts", "preserve me\n");
+			await assert.rejects(adapter.reconcileChildHead(workspace, {
+				previousHead,
+				effectKey: `child-head:476:${scenario}`,
+			}), /clean|dirty|scope|outside/i);
+			assert.equal((await git(workspace.cwd, "rev-parse", "HEAD")).trim(), previousHead);
+			if (scenario === "dirty") {
+				assert.equal(await readFile(join(workspace.cwd, "owned/child/local-dirty.ts"), "utf8"), "preserve me\n");
+			}
+			await workspace.release();
+		});
+	}
+});
+
 test("fails closed for a second owner and preserves the first owner's workspace", async (t) => {
 	const fixture = await createLocalGitFixture();
 	t.after(fixture.cleanup);

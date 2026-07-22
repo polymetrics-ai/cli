@@ -90,6 +90,8 @@ class FakeWorkspace implements ProductionWorkspaceAdapterPort {
 	pushes = 0;
 	handoffs = 0;
 	refreshes = 0;
+	childHeadReconciliations = 0;
+	forgeChildHeadBranch = false;
 
 	async claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace> {
 		this.claims.push(request);
@@ -144,6 +146,22 @@ class FakeWorkspace implements ProductionWorkspaceAdapterPort {
 		return {
 			outcome: "reclaimed", previousBaseHead, baseHead: workspace.baseHead,
 			previousHead, head: workspace.head, verificationInvalidated: true, reviewInvalidated: true,
+		};
+	}
+	async reconcileChildHead(workspace: ClaimedWorkspace, request: { previousHead: string }) {
+		this.childHeadReconciliations += 1;
+		workspace.head = SHA_C;
+		workspace.changedScope = [`.pi/extensions/shepherd/lane-b/remote.ts`];
+		return {
+			outcome: "reclaimed" as const,
+			branch: this.forgeChildHeadBranch ? "feat/999-forged" : workspace.branch,
+			baseHead: workspace.baseHead,
+			previousHead: request.previousHead,
+			head: workspace.head,
+			changedScope: [...workspace.changedScope],
+			verificationInvalidated: true as const,
+			reviewInvalidated: true as const,
+			integrationInvalidated: true as const,
 		};
 	}
 }
@@ -249,6 +267,36 @@ test("verification failure blocks commit and refresh invalidates previously pass
 	await assert.rejects(session.commit("feat: stale evidence"), /verification/i);
 	await session.verify();
 	await session.commit("feat: refreshed evidence");
+	await session.join();
+});
+
+test("authoritative child-head reclaim invalidates verification until the moved exact head is reverified", async (t) => {
+	const f = await fixture(t);
+	const session = await f.claim();
+	await session.verify();
+	const evidence = await session.reconcileChildHead({ previousHead: SHA_A, effectKey: "child-head:lane-b:1" });
+	assert.equal(evidence.outcome, "reclaimed");
+	assert.equal(evidence.previousHead, SHA_A);
+	assert.equal(evidence.head, SHA_C);
+	assert.equal(evidence.integrationInvalidated, true);
+	assert.equal(session.binding.head, SHA_C);
+	await assert.rejects(session.captureHandoff(), /unverified|verification/i);
+	await session.verify();
+	assert.equal((await session.captureHandoff()).head, SHA_C);
+	assert.equal(f.workspaceAdapter.childHeadReconciliations, 1);
+	await session.join();
+});
+
+test("mismatched child-head adapter evidence still invalidates stale verification fail-closed", async (t) => {
+	const f = await fixture(t);
+	const session = await f.claim();
+	await session.verify();
+	f.workspaceAdapter.forgeChildHeadBranch = true;
+	await assert.rejects(
+		session.reconcileChildHead({ previousHead: SHA_A, effectKey: "child-head:lane-b:forged" }),
+		/authoritative evidence|mismatch/i,
+	);
+	await assert.rejects(session.captureHandoff(), /unverified|verification/i);
 	await session.join();
 });
 

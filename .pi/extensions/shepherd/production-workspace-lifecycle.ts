@@ -56,12 +56,33 @@ export interface ProductionParentRefreshEvidence {
 	reviewInvalidated: true;
 }
 
+export interface ProductionChildHeadReconciliationRequest {
+	previousHead: string;
+	effectKey: string;
+}
+
+export interface ProductionChildHeadReconciliationEvidence {
+	outcome: "reclaimed" | "reused";
+	branch: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	changedScope: string[];
+	verificationInvalidated: true;
+	reviewInvalidated: true;
+	integrationInvalidated: true;
+}
+
 export interface ProductionWorkspaceAdapterPort {
 	claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace>;
 	commitIssueChanges(workspace: ClaimedWorkspace, request: GitCommitRequest): Promise<GitCommitEvidence>;
 	pushIssueBranch(workspace: ClaimedWorkspace, request: GitPushRequest): Promise<GitPushEvidence>;
 	captureHandoff(workspace: ClaimedWorkspace, verificationState: "pending" | "passed" | "failed"): Promise<WorkspaceHandoffEvidence>;
 	refreshParent(workspace: ClaimedWorkspace, request: ProductionParentRefreshRequest): Promise<ProductionParentRefreshEvidence>;
+	reconcileChildHead(
+		workspace: ClaimedWorkspace,
+		request: ProductionChildHeadReconciliationRequest,
+	): Promise<ProductionChildHeadReconciliationEvidence>;
 }
 
 export interface ProductionWorkspaceLifecycleOptions {
@@ -99,6 +120,10 @@ export interface ProductionWorkspaceSession {
 	push(signal?: AbortSignal): Promise<GitPushEvidence>;
 	captureHandoff(signal?: AbortSignal): Promise<WorkspaceHandoffEvidence>;
 	refreshParent(request: ProductionParentRefreshRequest, signal?: AbortSignal): Promise<ProductionParentRefreshEvidence>;
+	reconcileChildHead(
+		request: ProductionChildHeadReconciliationRequest,
+		signal?: AbortSignal,
+	): Promise<ProductionChildHeadReconciliationEvidence>;
 	join(): Promise<void>;
 }
 
@@ -127,6 +152,7 @@ export class ProductionWorkspaceLifecycle {
 			|| typeof options.workspaceAdapter?.pushIssueBranch !== "function"
 			|| typeof options.workspaceAdapter?.captureHandoff !== "function"
 			|| typeof options.workspaceAdapter?.refreshParent !== "function"
+			|| typeof options.workspaceAdapter?.reconcileChildHead !== "function"
 			|| typeof options.verification?.runAll !== "function"
 			|| typeof options.agentSession?.run !== "function"
 			|| typeof options.agentSession?.abort !== "function") {
@@ -410,6 +436,48 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 			this.#workspace.head = evidence.head;
 			this.#verificationState = "pending";
 			this.#reviewValid = false;
+			return evidence;
+		});
+	}
+
+	reconcileChildHead(
+		request: ProductionChildHeadReconciliationRequest,
+		signal?: AbortSignal,
+	): Promise<ProductionChildHeadReconciliationEvidence> {
+		return this.#enqueue(async () => {
+			if (typeof request !== "object" || request === null || !SHA_PATTERN.test(request.previousHead)
+				|| typeof request.effectKey !== "string" || !SAFE_IDENTIFIER.test(request.effectKey)
+				|| Buffer.byteLength(request.effectKey) > 256) {
+				throw new LifecycleError("terminal", "child-head reconciliation request is invalid");
+			}
+			assertNotAborted(signal);
+			await this.#workspace.assertOwned();
+			const expectedBranch = this.#workspace.branch;
+			const expectedBase = this.#workspace.baseHead;
+			const evidence = await this.#workspaceAdapter.reconcileChildHead(this.#workspace, request);
+			// Once the adapter may have changed the local head, old evidence is never reusable,
+			// including when the returned adapter evidence later fails validation.
+			this.#verificationState = "pending";
+			this.#reviewValid = false;
+			assertNotAborted(signal);
+			let changedScope: string[];
+			try {
+				if (!Array.isArray(evidence.changedScope) || evidence.changedScope.length > 4_096) throw new Error();
+				changedScope = evidence.changedScope.map((path) => validateScopedPath(path, this.#request.child.writeScopes));
+			} catch {
+				throw new LifecycleError("terminal", "child-head reconciliation returned invalid scope evidence", ["scope_mismatch"]);
+			}
+			const canonicalScope = [...new Set(changedScope)].sort();
+			if ((evidence.outcome !== "reclaimed" && evidence.outcome !== "reused")
+				|| evidence.branch !== expectedBranch || evidence.baseHead !== expectedBase
+				|| evidence.previousHead !== request.previousHead || !SHA_PATTERN.test(evidence.head)
+				|| evidence.head === request.previousHead || this.#workspace.head !== evidence.head
+				|| JSON.stringify(canonicalScope) !== JSON.stringify(evidence.changedScope)
+				|| evidence.verificationInvalidated !== true || evidence.reviewInvalidated !== true
+				|| evidence.integrationInvalidated !== true) {
+				throw new LifecycleError("terminal", "child-head reconciliation returned mismatched authoritative evidence", ["child_head_reconciliation_mismatch"]);
+			}
+			this.#workspace.head = evidence.head;
 			return evidence;
 		});
 	}

@@ -394,6 +394,23 @@ class FakeWorkspaceSession implements ProductionWorkspaceSession {
 		};
 	}
 
+	async reconcileChildHead(request: { previousHead: string; effectKey: string }) {
+		this.calls.push("reconcile-child-head");
+		const previousHead = request.previousHead;
+		this.#binding.head = SHA_D;
+		return {
+			outcome: "reclaimed" as const,
+			branch: this.#binding.branch,
+			baseHead: this.#binding.baseHead,
+			previousHead,
+			head: this.#binding.head,
+			changedScope: ["owned/child/file.ts"],
+			verificationInvalidated: true as const,
+			reviewInvalidated: true as const,
+			integrationInvalidated: true as const,
+		};
+	}
+
 	async join() { this.calls.push("join"); }
 }
 
@@ -401,6 +418,7 @@ interface HarnessOptions {
 	findings?: IndependentReviewFinding[];
 	pullRequest?: Partial<GitHubPullRequestEvidence>;
 	integration?: ChildIntegrationDecision;
+	childHeadMoveOnce?: boolean;
 	publicationTimeoutOnce?: boolean;
 	verificationFailures?: number;
 }
@@ -422,6 +440,7 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 	let publicationAttempts = 0;
 	let published: GitHubPullRequestEvidence | undefined;
 	let receipt: ChildIntegrationReceipt | undefined;
+	let childHeadMovePending = options.childHeadMoveOnce === true;
 	const github: ProductionChildGitHubPort = {
 		async createPlan(_value: unknown, _context?: OrchestrationCallContext) { calls.push("plan"); return parent; },
 		async ensureChildIssue(value) { calls.push("issue"); return childIssue(value); },
@@ -437,8 +456,12 @@ async function harness(t: { after(fn: () => void | Promise<void>): void }, optio
 		},
 		async integrateChild(value, child, handoff) {
 			calls.push("integrate");
+			if (childHeadMovePending) {
+				childHeadMovePending = false;
+				return { kind: "blocked", blockers: ["head_moved"] };
+			}
 			if (options.integration !== undefined) return options.integration;
-			const evidence = published ?? pullRequestEvidence(value, child, handoff);
+			const evidence = pullRequestEvidence(value, child, handoff);
 			receipt = integrationReceipt(value, child, evidence);
 			currentParentHead = SHA_B;
 			return { kind: "integrated", receipt, reused: false };
@@ -765,7 +788,7 @@ test("classifies untrusted CI/review blockers and head movement without integrat
 		["ci_not_green", "retryable"],
 		["review_missing", "correction_required"],
 		["undispositioned_finding", "correction_required"],
-		["head_moved", "stale_parent"],
+		["head_moved", "correction_required"],
 	] as const) {
 		await t.test(blocker, async (childTest) => {
 			const h = await harness(childTest, { integration: { kind: "blocked", blockers: [blocker] } });
@@ -775,13 +798,59 @@ test("classifies untrusted CI/review blockers and head movement without integrat
 			}
 			await assert.rejects(
 				h.pipeline.integrate(contextFor(h.state)),
-				(error: unknown) => error instanceof ProductionLifecycleError && error.kind === kind,
+				(error: unknown) => error instanceof ProductionLifecycleError && error.kind === kind
+					&& (blocker !== "head_moved" || error.blockers.includes("child_head_moved")),
 			);
 			const pending = (await h.effects.listNonApplied()).filter((record) => record.kind === "child_integration");
 			assert.equal(pending.length, 1);
 			assert.equal(pending[0].phase, "observed");
 		});
 	}
+});
+
+test("reclaims an authoritatively moved child head and requires fresh verification and exact-head review", async (t) => {
+	const h = await harness(t, { childHeadMoveOnce: true });
+	for (const stage of ["workspace", "implement", "verify", "publish", "review"] as const) {
+		const checkpoint = await h.pipeline[stage](contextFor(h.state));
+		await persistAndAcknowledge(h.pipeline, h.state, checkpoint);
+	}
+	await assert.rejects(
+		h.pipeline.integrate(contextFor(h.state)),
+		(error: unknown) => error instanceof ProductionLifecycleError
+			&& error.kind === "correction_required"
+			&& error.blockers.includes("child_head_moved"),
+	);
+	const reconciled = await h.pipeline.reconcileChildHead(contextFor(h.state));
+	assert.equal(reconciled.previousHead, SHA_C);
+	assert.equal(reconciled.head, SHA_D);
+	assert.deepEqual(reconciled.invalidated, { verification: true, review: true, integration: true });
+	assert.equal(reconciled.checkpoint.workspace?.head, SHA_D);
+	delete h.state.children[0].checkpoint?.verification;
+	delete h.state.children[0].checkpoint?.review;
+	delete h.state.children[0].checkpoint?.integrationReceiptDigest;
+	await persistAndAcknowledge(h.pipeline, h.state, reconciled.checkpoint);
+
+	const verified = await h.pipeline.verify(contextFor(h.state));
+	await persistAndAcknowledge(h.pipeline, h.state, verified);
+	const reviewed = await h.pipeline.review(contextFor(h.state));
+	assert.equal(reviewed.review?.head, SHA_D);
+	await persistAndAcknowledge(h.pipeline, h.state, reviewed);
+	const integrated = await h.pipeline.integrate(contextFor(h.state));
+	assert.equal(integrated.workspace?.head, SHA_D);
+	assert.match(integrated.integrationReceiptDigest ?? "", /^[0-9a-f]{64}$/u);
+	assert.equal(h.calls.filter((call) => call === "reconcile-child-head").length, 1);
+	const journal = JSON.parse(await readFile(join(h.root, "production-effects.json"), "utf8")) as {
+		records: Array<{ kind: string; resultDigest?: string; recoveryDescriptor?: Record<string, unknown> }>;
+	};
+	const reconciliation = journal.records.filter((record) => record.kind === "child_head_reconciliation");
+	assert.equal(reconciliation.length, 1);
+	assert.equal(reconciliation[0].recoveryDescriptor?.operation, "child_head_reconciliation");
+	const normalizedVerificationDigest = createHash("sha256")
+		.update(JSON.stringify([{ id: "tests", status: "passed" }]))
+		.digest("hex");
+	assert.equal(journal.records.filter((record) => record.kind === "shell_verification")
+		.every((record) => record.resultDigest === normalizedVerificationDigest), true);
+	assert.doesNotMatch(JSON.stringify(journal), /durationMs|stdout|stderr|outputTruncated/u);
 });
 
 test("delegates prepared/observed crash recovery and makes close/abort idempotent", async (t) => {
