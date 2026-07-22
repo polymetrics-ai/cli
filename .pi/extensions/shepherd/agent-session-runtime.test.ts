@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { getEventListeners } from "node:events";
+import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { pathToFileURL } from "node:url";
@@ -6933,4 +6934,686 @@ test("cycle 16 prompt settlement is owned before synchronous abort close and shu
 		process.emit = originalEmit;
 	}
 	assert.deepEqual({ problems, unhandled: unhandled.length }, { problems: [], unhandled: 0 });
+});
+
+test("cycle 17 dense failed flow candidates remain linear and protect a terminal sibling", () => {
+	type DenseVariant = "plain" | "quoted" | "whitespace";
+	const variants = ["plain", "quoted", "whitespace"] as const satisfies readonly DenseVariant[];
+	const sizes = [128, 256, 512, 1_024];
+	const problems: string[] = [];
+	for (const variant of variants) {
+		for (const count of sizes) {
+			const failedMember = variant === "plain" ? "a," : variant === "quoted" ? '"a",' : "  a  ,";
+			const marker = `C17_DENSE_${variant}_${count}`;
+			const sample = `{${failedMember.repeat(count)}\nclient_secret: ${marker}\nsafe: retained`;
+			const metrics = emptyRedactionScanMetrics();
+			let measuredWork = 0;
+			Object.defineProperty(metrics, "totalWork", {
+				configurable: true,
+				enumerable: true,
+				get() { return measuredWork; },
+				set(value: number) {
+					measuredWork = value;
+					if (value > (8 * sample.length) + 64) {
+						throw new Error("cycle 17 dense-candidate work ceiling exceeded");
+					}
+				},
+			});
+			let rendered = "";
+			try {
+				rendered = redactSensitiveText(sample, metrics);
+			} catch (error) {
+				problems.push(`${variant}:${count}:threw-${error instanceof Error ? error.message : String(error)}`);
+			}
+			if (rendered.includes(marker)) problems.push(`${variant}:${count}:terminal-secret-leaked`);
+			if (rendered && !rendered.includes("safe: retained")) problems.push(`${variant}:${count}:public-control-changed`);
+			if (metrics.sourceLength !== sample.length) problems.push(`${variant}:${count}:source-${metrics.sourceLength}`);
+			if (metrics.cursorRegressions !== 0) problems.push(`${variant}:${count}:regressions-${metrics.cursorRegressions}`);
+			if (metrics.totalWork > (8 * sample.length) + 64) problems.push(`${variant}:${count}:work-${metrics.totalWork}`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 malformed public quotes stop at their proven line or container boundary", async () => {
+	const publicKeys = ["message", "safe", "api.version"] as const;
+	const quotes = ['"', "'"] as const;
+	const problems: string[] = [];
+	for (const key of publicKeys) {
+		for (const quote of quotes) {
+			const marker = `C17_PUBLIC_QUOTE_${key.replaceAll(".", "_")}_${quote === '"' ? "DOUBLE" : "SINGLE"}`;
+			const payload = `${key}: ${quote}open\nclient_secret: ${marker}\n${quote}`;
+			const outputs = await cycle14ConsumerOutputs(`cycle17-public-quote-${key}-${quote === '"' ? "d" : "s"}`, payload);
+			if (Object.keys(outputs).length !== 13) problems.push(`${key}:${quote}:consumer-count-${Object.keys(outputs).length}`);
+			for (const [consumer, rendered] of Object.entries(outputs)) {
+				if (rendered.includes(marker)) problems.push(`${key}:${quote}:${consumer}:leak`);
+			}
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 host schemas validate and project the same arguments used by lifecycle identity", async () => {
+	const parameters = {
+		type: "object",
+		additionalProperties: false,
+		properties: {
+			target: { type: "string", maxLength: 32 },
+			mode: { type: "string", enum: ["brief", "deep"] },
+			depth: { type: "integer", minimum: 1, maximum: 3 },
+		},
+		required: ["target", "mode", "depth"],
+	} as const;
+	const callbackInputs: Readonly<Record<string, unknown>>[] = [];
+	const capability = {
+		name: "host_inspect",
+		description: "Inspect one closed projected target",
+		mutates: false,
+		parameters,
+		async execute(input: Readonly<Record<string, unknown>>) {
+			callbackInputs.push(input);
+			return { status: "ok" as const, summary: "projected inspection complete", references: [] };
+		},
+	} as unknown as HostCapability;
+	const input = policyInputForRuntime(false);
+	input.capabilities = [capability];
+	const hostTool = createToolPolicy(input).tools.find((tool) => tool.name === "host_inspect")!;
+	const invalid = [
+		{ target: "owned", mode: "brief", depth: 1, undeclaredAuthority: "deny" },
+		{ target: "owned", mode: "brief" },
+		{ target: "owned", mode: "brief", depth: "2" },
+		{ target: "owned", mode: "brief", depth: 4 },
+		{ target: "owned", mode: "wide", depth: 2 },
+	] as const;
+	const problems: string[] = [];
+	for (const [index, raw] of invalid.entries()) {
+		const outcome = await observeSettlement(hostTool.execute(`cycle17-schema-invalid-${index}`, raw, undefined), 150);
+		if (outcome.status !== "rejected") problems.push(`direct-invalid-${index}:${outcome.status}`);
+	}
+	const valid = { target: "owned", mode: "deep", depth: 2 } as const;
+	const validOutcome = await observeSettlement(hostTool.execute("cycle17-schema-valid", valid, undefined), 150);
+	if (validOutcome.status !== "resolved") problems.push(`direct-valid:${validOutcome.status}`);
+	if (callbackInputs.length !== 1) problems.push(`callback-count-${callbackInputs.length}`);
+	if (callbackInputs.length === 1) {
+		if (!Object.isFrozen(callbackInputs[0])) problems.push("callback-dto-not-frozen");
+		if (JSON.stringify(callbackInputs[0]) !== JSON.stringify(valid)) problems.push("callback-dto-not-projected");
+	}
+
+	const sdk = new FakeSdk();
+	const harness = runtime(sdk);
+	const req = request({
+		capabilities: [capability],
+		binding: {
+			...request().binding,
+			runId: "cycle17-schema-event-identity",
+			laneId: "cycle17-schema-event-identity",
+		},
+	});
+	Object.defineProperty(sdk.session, "prompt", {
+		configurable: true,
+		async value() {
+			sdk.session.promptCalls += 1;
+			const user = piUserMessage("cycle 17 schema event identity");
+			emitSessionEvent(sdk.session, { type: "agent_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_start", message: user } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: user } as AgentSessionEvent);
+			const announcedArguments = { target: "owned", mode: "brief", depth: 1 };
+			const executedArguments = { target: "owned", mode: "deep", depth: 1 };
+			const intermediate = emitPiToolAssistant(sdk.session, {
+				id: "cycle17-schema-call",
+				name: "host_inspect",
+				arguments: announcedArguments,
+			});
+			const result = {
+				content: [{ type: "text" as const, text: "bounded schema result" }],
+				details: null,
+			};
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_start",
+				toolCallId: "cycle17-schema-call",
+				toolName: "host_inspect",
+				args: executedArguments,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "tool_execution_end",
+				toolCallId: "cycle17-schema-call",
+				toolName: "host_inspect",
+				result,
+				isError: false,
+			} as AgentSessionEvent);
+			const toolResult: PiToolResultMessage = {
+				role: "toolResult",
+				toolCallId: "cycle17-schema-call",
+				toolName: "host_inspect",
+				content: result.content,
+				details: result.details,
+				isError: false,
+				timestamp: 476,
+			};
+			emitSessionEvent(sdk.session, { type: "message_start", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "message_end", message: toolResult } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "turn_end", message: intermediate, toolResults: [toolResult],
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "turn_start" } as AgentSessionEvent);
+			const finalAssistant = emitPiTextAssistant(sdk.session, handoffFor(req));
+			emitSessionEvent(sdk.session, { type: "turn_end", message: finalAssistant, toolResults: [] } as AgentSessionEvent);
+			emitSessionEvent(sdk.session, {
+				type: "agent_end", messages: [user, intermediate, toolResult, finalAssistant], willRetry: false,
+			} as AgentSessionEvent);
+			emitSessionEvent(sdk.session, { type: "agent_settled" } as AgentSessionEvent);
+		},
+	});
+	const identityOutcome = await observeSettlement(harness.runtime.run(req), 300);
+	if (!isTypedOwnCause(identityOutcome)) problems.push(`event-identity:${identityOutcome.status}`);
+	await observeSettlement(harness.runtime.close(), 150);
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 prompt ownership is total across every synchronous lifecycle barrier", async () => {
+	type Control = "abort" | "close" | "shutdown";
+	type Outcome =
+		| "native-fulfilled"
+		| "native-rejected"
+		| "foreign-fulfilled"
+		| "foreign-rejected"
+		| "synchronous-throw"
+		| "foreign-then-getter-throw"
+		| "foreign-then-callback-throw"
+		| "foreign-double-settle";
+	const controls = ["abort", "close", "shutdown"] as const satisfies readonly Control[];
+	const outcomes = [
+		"native-fulfilled",
+		"native-rejected",
+		"foreign-fulfilled",
+		"foreign-rejected",
+		"synchronous-throw",
+		"foreign-then-getter-throw",
+		"foreign-then-callback-throw",
+		"foreign-double-settle",
+	] as const satisfies readonly Outcome[];
+	const problems: string[] = [];
+	const unhandled: unknown[] = [];
+	const originalEmit = process.emit;
+	process.emit = ((event: string | symbol, ...args: unknown[]) => {
+		if (event === "unhandledRejection") {
+			unhandled.push(args[0]);
+			return true;
+		}
+		return Reflect.apply(originalEmit, process, [event, ...args]);
+	}) as typeof process.emit;
+	try {
+		for (const control of controls) {
+			for (const promptOutcome of outcomes) {
+				const sdk = new FakeSdk();
+				const harness = runtime(sdk, { cleanupTimeoutMs: 35 });
+				const req = request({
+					timeoutMs: 60_000,
+					binding: {
+						...request().binding,
+						runId: `cycle17-adoption-${control}-${promptOutcome}`,
+						laneId: `cycle17-adoption-${control}-${promptOutcome}`,
+					},
+				});
+				let controlPromise: Promise<void> | undefined;
+				const rejection = new Error(`cycle17 prompt ${control} ${promptOutcome}`);
+				const adoptionFailure = new Error(`cycle17 adoption ${control} ${promptOutcome}`);
+				sdk.session.prompt = (() => {
+					sdk.session.promptCalls += 1;
+					controlPromise = control === "abort"
+						? harness.runtime.abort(req.binding.runId)
+						: control === "close" ? harness.runtime.close() : harness.runtime.shutdown();
+					if (promptOutcome === "native-fulfilled") return Promise.resolve();
+					if (promptOutcome === "native-rejected") return Promise.reject(rejection);
+					if (promptOutcome === "foreign-fulfilled") {
+						return { then(resolve: () => void): void { queueMicrotask(resolve); } } as unknown as Promise<void>;
+					}
+					if (promptOutcome === "foreign-rejected") {
+						return {
+							then(_resolve: () => void, reject: (reason: unknown) => void): void {
+								queueMicrotask(() => reject(rejection));
+							},
+						} as unknown as Promise<void>;
+					}
+					if (promptOutcome === "synchronous-throw") throw rejection;
+					if (promptOutcome === "foreign-then-getter-throw") {
+						const foreign = Object.create(null) as Record<PropertyKey, unknown>;
+						Object.defineProperty(foreign, "then", {
+							get() { throw adoptionFailure; },
+						});
+						return foreign as unknown as Promise<void>;
+					}
+					if (promptOutcome === "foreign-then-callback-throw") {
+						return { then(): void { throw adoptionFailure; } } as unknown as Promise<void>;
+					}
+					return {
+						then(resolve: () => void, reject: (reason: unknown) => void): void {
+							resolve();
+							reject(rejection);
+							throw adoptionFailure;
+						},
+					} as unknown as Promise<void>;
+				}) as RuntimeAgentSession["prompt"];
+				const controller = new AbortController();
+				const timers = captureLongTimers();
+				try {
+					const runOutcome = await observeSettlement(harness.runtime.run({ ...req, signal: controller.signal }), 650);
+					const lifecycleOutcome = controlPromise
+						? await observeSettlement(controlPromise, 650)
+						: { status: "missing" as const };
+					const closeOutcome = await observeSettlement(harness.runtime.close(), 300);
+					await new Promise<void>((resolve) => setImmediate(resolve));
+					await new Promise<void>((resolve) => setImmediate(resolve));
+					const label = `${control}:${promptOutcome}`;
+					if (runOutcome.status !== "rejected") problems.push(`${label}:run-${runOutcome.status}`);
+					if (lifecycleOutcome.status !== "resolved") problems.push(`${label}:control-${lifecycleOutcome.status}`);
+					if (closeOutcome.status !== "resolved") problems.push(`${label}:close-${closeOutcome.status}`);
+					if (sdk.session.promptCalls !== 1) problems.push(`${label}:prompt-${sdk.session.promptCalls}`);
+					if (sdk.session.abortCalls !== 1) problems.push(`${label}:abort-${sdk.session.abortCalls}`);
+					if (sdk.session.waitCalls !== 1) problems.push(`${label}:wait-${sdk.session.waitCalls}`);
+					if (sdk.session.disposeCalls !== 1) problems.push(`${label}:dispose-${sdk.session.disposeCalls}`);
+					if (sdk.session.listeners.size !== 0) problems.push(`${label}:listeners-${sdk.session.listeners.size}`);
+					if (getEventListeners(controller.signal, "abort").length !== 0) problems.push(`${label}:signal-listener`);
+					if (timers.referenced() !== 0) problems.push(`${label}:timers-${timers.referenced()}`);
+				} finally {
+					timers.restoreAndClear();
+				}
+			}
+		}
+
+		for (const unsupported of ["own-constructor", "own-then", "subclass"] as const) {
+			const sdk = new FakeSdk();
+			const harness = runtime(sdk, { cleanupTimeoutMs: 35 });
+			const req = request({
+				binding: {
+					...request().binding,
+					runId: `cycle17-adapter-contract-${unsupported}`,
+					laneId: `cycle17-adapter-contract-${unsupported}`,
+				},
+			});
+			Object.defineProperty(sdk.session, "prompt", {
+				configurable: true,
+				value() {
+					sdk.session.promptCalls += 1;
+					drivePiLifecycle(sdk.session, handoffFor(req));
+					if (unsupported === "subclass") {
+						class UnsupportedPromptPromise extends Promise<void> {}
+						return new UnsupportedPromptPromise((resolve) => resolve());
+					}
+					const native = Promise.resolve();
+					if (unsupported === "own-constructor") {
+						Object.defineProperty(native, "constructor", {
+							configurable: true,
+							value: Promise,
+						});
+					} else {
+						Object.defineProperty(native, "then", {
+							configurable: true,
+							value: Promise.prototype.then,
+						});
+					}
+					return native;
+				},
+			});
+			const outcome = await observeSettlement(harness.runtime.run(req), 300);
+			if (!isTypedOwnCause(outcome)) problems.push(`adapter-contract:${unsupported}:${outcome.status}`);
+			const closeOutcome = await observeSettlement(harness.runtime.close(), 150);
+			if (closeOutcome.status !== "resolved") problems.push(`adapter-contract:${unsupported}:close-${closeOutcome.status}`);
+		}
+	} finally {
+		process.emit = originalEmit;
+	}
+	assert.deepEqual({ problems, unhandled: unhandled.length }, { problems: [], unhandled: 0 });
+});
+
+test("cycle 17 prompt construction binds route system user and handoff to one descriptor snapshot", () => {
+	const base = request();
+	const authority = {
+		issue: base.authority.issue,
+		branch: base.authority.branch,
+		workspaceId: base.authority.workspaceId,
+		readOnly: base.authority.readOnly,
+		readPrefixes: [...base.authority.readPrefixes],
+		writePrefixes: [...base.authority.writePrefixes],
+		toolNames: ["workspace_read", "workspace_edit", "workspace_write", "host_inspect"] as SessionToolName[],
+		binding: { ...base.binding },
+	};
+	let roleAccessorCalls = 0;
+	const roleAccessorInput = {
+		task: "bounded role accessor task",
+		context: ["bounded role accessor context"],
+		authority,
+	} as Record<PropertyKey, unknown>;
+	Object.defineProperty(roleAccessorInput, "role", {
+		enumerable: true,
+		get() {
+			roleAccessorCalls += 1;
+			return roleAccessorCalls % 2 === 1 ? "implementation" : "verification";
+		},
+	});
+	let roleAccessorRejected = false;
+	try {
+		buildRolePrompts(roleAccessorInput as unknown as Parameters<typeof buildRolePrompts>[0]);
+	} catch {
+		roleAccessorRejected = true;
+	}
+
+	let bindingAccessorCalls = 0;
+	const accessorBinding = { ...base.binding } as Record<PropertyKey, unknown>;
+	Object.defineProperty(accessorBinding, "runId", {
+		enumerable: true,
+		get() {
+			bindingAccessorCalls += 1;
+			return `cycle17-binding-${bindingAccessorCalls}`;
+		},
+	});
+	let bindingAccessorRejected = false;
+	try {
+		buildRolePrompts({
+			role: "implementation",
+			task: "bounded binding accessor task",
+			context: ["bounded binding accessor context"],
+			authority: { ...authority, binding: accessorBinding as unknown as typeof base.binding },
+		});
+	} catch {
+		bindingAccessorRejected = true;
+	}
+	let throwingAccessorCalls = 0;
+	const throwingBinding = { ...base.binding } as Record<PropertyKey, unknown>;
+	Object.defineProperty(throwingBinding, "validationNonce", {
+		enumerable: true,
+		get() {
+			throwingAccessorCalls += 1;
+			throw new Error("cycle 17 prompt accessor must remain inert");
+		},
+	});
+	let throwingAccessorRejected = false;
+	try {
+		buildRolePrompts({
+			role: "implementation",
+			task: "bounded throwing accessor task",
+			context: ["bounded throwing accessor context"],
+			authority: { ...authority, binding: throwingBinding as unknown as typeof base.binding },
+		});
+	} catch {
+		throwingAccessorRejected = true;
+	}
+
+	let directProxyTraps = 0;
+	const directProxyInput = new Proxy({
+		role: "implementation" as const,
+		task: "bounded direct proxy task",
+		context: ["bounded direct proxy context"],
+		authority,
+	}, {
+		get(target, key, receiver) {
+			directProxyTraps += 1;
+			return Reflect.get(target, key, receiver);
+		},
+	});
+	let directProxyRejected = false;
+	try {
+		buildRolePrompts(directProxyInput);
+	} catch {
+		directProxyRejected = true;
+	}
+
+	let prototypeProxyTraps = 0;
+	const prototypeProxyBinding = { ...base.binding };
+	Object.setPrototypeOf(prototypeProxyBinding, new Proxy(Object.prototype, {
+		ownKeys(target) { prototypeProxyTraps += 1; return Reflect.ownKeys(target); },
+		getOwnPropertyDescriptor(target, key) {
+			prototypeProxyTraps += 1;
+			return Reflect.getOwnPropertyDescriptor(target, key);
+		},
+	}));
+	let prototypeProxyRejected = false;
+	try {
+		buildRolePrompts({
+			role: "implementation",
+			task: "bounded prototype proxy task",
+			context: ["bounded prototype proxy context"],
+			authority: { ...authority, binding: prototypeProxyBinding },
+		});
+	} catch {
+		prototypeProxyRejected = true;
+	}
+
+	const mutableBinding = { ...base.binding, runId: "cycle17-stable-binding", laneId: "cycle17-stable-binding" };
+	const mutableInput = {
+		role: "implementation" as const,
+		task: "bounded stable prompt task",
+		context: ["bounded stable prompt context"],
+		authority: { ...authority, binding: mutableBinding },
+	};
+	const prompts = buildRolePrompts(mutableInput);
+	const originalSystem = prompts.systemPrompt;
+	const originalUser = prompts.userPrompt;
+	mutableBinding.runId = "cycle17-mutated-binding";
+	mutableBinding.laneId = "cycle17-mutated-binding";
+	(mutableInput as { role: string }).role = "verification";
+	const parsed = JSON.parse(prompts.userPrompt) as {
+		role: string;
+		binding: { runId: string; laneId: string };
+		handoffSchema: { role: string; runId: string; laneId: string };
+	};
+	assert.deepEqual({
+		roleAccessorRejected,
+		roleAccessorCalls,
+		bindingAccessorRejected,
+		bindingAccessorCalls,
+		throwingAccessorRejected,
+		throwingAccessorCalls,
+		directProxyRejected,
+		directProxyTraps,
+		prototypeProxyRejected,
+		prototypeProxyTraps,
+		frozen: Object.isFrozen(prompts),
+		stableSystem: prompts.systemPrompt === originalSystem,
+		stableUser: prompts.userPrompt === originalUser,
+		systemRole: prompts.systemPrompt.includes("Implement the declared issue slice with strict test-first evidence.") &&
+			prompts.systemPrompt.includes("binding run=cycle17-stable-binding") &&
+			prompts.systemPrompt.includes("lane=cycle17-stable-binding"),
+		userRole: parsed.role,
+		userRun: parsed.binding.runId,
+		userLane: parsed.binding.laneId,
+		schemaRole: parsed.handoffSchema.role,
+		schemaRun: parsed.handoffSchema.runId,
+		schemaLane: parsed.handoffSchema.laneId,
+	}, {
+		roleAccessorRejected: true,
+		roleAccessorCalls: 0,
+		bindingAccessorRejected: true,
+		bindingAccessorCalls: 0,
+		throwingAccessorRejected: true,
+		throwingAccessorCalls: 0,
+		directProxyRejected: true,
+		directProxyTraps: 0,
+		prototypeProxyRejected: true,
+		prototypeProxyTraps: 0,
+		frozen: true,
+		stableSystem: true,
+		stableUser: true,
+		systemRole: true,
+		userRole: "implementation",
+		userRun: "cycle17-stable-binding",
+		userLane: "cycle17-stable-binding",
+		schemaRole: "implementation",
+		schemaRun: "cycle17-stable-binding",
+		schemaLane: "cycle17-stable-binding",
+	});
+});
+
+test("cycle 17 public composite values traverse protected descendants and fail closed when malformed", async () => {
+	const cases = [
+		["line-object", "safe: { client_secret: C17_PUBLIC_LINE_OBJECT }", "C17_PUBLIC_LINE_OBJECT"],
+		["flow-object", "{ safe: { client_secret: C17_PUBLIC_FLOW_OBJECT } }", "C17_PUBLIC_FLOW_OBJECT"],
+		["flow-sequence", "{ message: [client_secret: C17_PUBLIC_FLOW_SEQUENCE] }", "C17_PUBLIC_FLOW_SEQUENCE"],
+		["nested-path", "{ api.version: { nested: { client_secret: C17_PUBLIC_NESTED_PATH } } }", "C17_PUBLIC_NESTED_PATH"],
+		["malformed-sequence", "{ safe: [retained, client_secret: C17_PUBLIC_MALFORMED_SEQUENCE }", "C17_PUBLIC_MALFORMED_SEQUENCE"],
+	] as const;
+	const problems: string[] = [];
+	for (const [label, payload, marker] of cases) {
+		const outputs = await cycle14ConsumerOutputs(`cycle17-public-composite-${label}`, payload);
+		if (Object.keys(outputs).length !== 13) problems.push(`${label}:consumer-count-${Object.keys(outputs).length}`);
+		for (const [consumer, rendered] of Object.entries(outputs)) {
+			if (rendered.includes(marker)) problems.push(`${label}:${consumer}:leak`);
+		}
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 typed nesting preserves or conservatively contains mixed delimiter overflow", () => {
+	const cases: Array<{ label: string; value: string; marker: string }> = [];
+	for (const depth of [255, 256]) {
+		const marker = `C17_TYPED_DEPTH_${depth}`;
+		cases.push({
+			label: String(depth),
+			marker,
+			value: `${"{".repeat(depth - 1)}[]${"}".repeat(depth - 2)}, client_secret: ${marker} }`,
+		});
+	}
+	const overflowMarker = "C17_TYPED_DEPTH_257_MISMATCH";
+	cases.push({
+		label: "257-mismatch",
+		marker: overflowMarker,
+		value: `${"{".repeat(256)}[${"}".repeat(257)}, client_secret: ${overflowMarker}`,
+	});
+	const problems: string[] = [];
+	for (const { label, value, marker } of cases) {
+		const metrics = emptyRedactionScanMetrics();
+		const rendered = redactSensitiveText(value, metrics);
+		if (rendered.includes(marker)) problems.push(`${label}:terminal-secret-leaked`);
+		if (metrics.cursorRegressions !== 0) problems.push(`${label}:regressions-${metrics.cursorRegressions}`);
+		if (metrics.sourceLength !== value.length) problems.push(`${label}:source-${metrics.sourceLength}`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 redaction metrics measure one original coordinate space and every charged work unit", () => {
+	const samples = [
+		["expanding-basic", "http://u:x@h", "x"],
+		["expanding-query", "x?api_key=z", "z"],
+		["shrinking-private", "-----BEGIN PRIVATE KEY-----\nC17_PRIVATE_BLOCK\n-----END PRIVATE KEY-----", "C17_PRIVATE_BLOCK"],
+		["structured", "{ safe: retained, client_secret: C17_STRUCTURED_METRIC }", "C17_STRUCTURED_METRIC"],
+	] as const;
+	const problems: string[] = [];
+	for (const [label, sample, marker] of samples) {
+		const metrics = emptyRedactionScanMetrics();
+		const rendered = redactSensitiveText(sample, metrics);
+		if (rendered.includes(marker)) problems.push(`${label}:leak`);
+		if (metrics.sourceLength !== sample.length) problems.push(`${label}:source-${metrics.sourceLength}`);
+		if (metrics.cursorAdvances !== sample.length) problems.push(`${label}:advances-${metrics.cursorAdvances}`);
+		if (metrics.cursorRegressions !== 0) problems.push(`${label}:regressions-${metrics.cursorRegressions}`);
+		if (metrics.maxMainCursorVisits !== 1) problems.push(`${label}:main-visits-${metrics.maxMainCursorVisits}`);
+		if (metrics.totalWork < sample.length * 2 || metrics.totalWork > (8 * sample.length) + 64) {
+			problems.push(`${label}:complete-work-${metrics.totalWork}`);
+		}
+		if (metrics.keyCharacterVisits + metrics.boundaryCharacterVisits > metrics.totalWork) {
+			problems.push(`${label}:unaccounted-helper-work`);
+		}
+	}
+
+	const measured = emptyRedactionScanMetrics();
+	let actualMaximum = 0;
+	Object.defineProperty(measured, "maxMainCursorVisits", {
+		configurable: true,
+		enumerable: true,
+		get() { return actualMaximum; },
+		set(value: number) {
+			if (value > 0 && measured.cursorAdvances === 0) {
+				throw new Error("cycle 17 main-visit maximum was assigned before a source visit");
+			}
+			actualMaximum = value;
+		},
+	});
+	try {
+		redactSensitiveText("safe: retained", measured);
+	} catch (error) {
+		problems.push(`measured-main-visits:${error instanceof Error ? error.message : String(error)}`);
+	}
+	assert.deepEqual(problems, []);
+});
+
+test("cycle 17 capture rejects proxy prototypes before descriptor projection and never uses for in", async () => {
+	const problems: string[] = [];
+	let schemaTraps = 0;
+	const required = ["target"];
+	Object.setPrototypeOf(required, new Proxy(Array.prototype, {
+		ownKeys(target) { schemaTraps += 1; return Reflect.ownKeys(target); },
+		getOwnPropertyDescriptor(target, key) {
+			schemaTraps += 1;
+			return Reflect.getOwnPropertyDescriptor(target, key);
+		},
+	}));
+	const schemaInput = policyInputForRuntime(false);
+	schemaInput.capabilities = [{
+		...inspectCapability(),
+		parameters: {
+			type: "object",
+			additionalProperties: false,
+			properties: { target: { type: "string", maxLength: 128 } },
+			required,
+		},
+	}];
+	let schemaRejected = false;
+	try {
+		createToolPolicy(schemaInput);
+	} catch {
+		schemaRejected = true;
+	}
+	if (!schemaRejected) problems.push("schema-prototype-accepted");
+	if (schemaTraps !== 0) problems.push(`schema-prototype-traps-${schemaTraps}`);
+
+	let capabilityTraps = 0;
+	const capabilityPrototype = new Proxy(Object.prototype, {
+		ownKeys(target) { capabilityTraps += 1; return Reflect.ownKeys(target); },
+		getOwnPropertyDescriptor(target, key) {
+			capabilityTraps += 1;
+			return Reflect.getOwnPropertyDescriptor(target, key);
+		},
+	});
+	const inheritedCapabilityResult = Object.create(capabilityPrototype) as Record<string, unknown>;
+	Object.assign(inheritedCapabilityResult, { status: "ok", summary: "bounded capability", references: [] });
+	const capabilityInput = policyInputForRuntime(false);
+	capabilityInput.capabilities = [{
+		...inspectCapability(),
+		async execute() { return inheritedCapabilityResult as unknown as Awaited<ReturnType<HostCapability["execute"]>>; },
+	}];
+	const capabilityTool = createToolPolicy(capabilityInput).tools.find((tool) => tool.name === "host_inspect")!;
+	const capabilityOutcome = await observeSettlement(capabilityTool.execute(
+		"cycle17-prototype-capability", { target: "owned" }, undefined,
+	), 150);
+	if (capabilityOutcome.status !== "rejected") problems.push(`capability-prototype-${capabilityOutcome.status}`);
+	if (capabilityTraps !== 0) problems.push(`capability-prototype-traps-${capabilityTraps}`);
+
+	let workspaceTraps = 0;
+	const workspacePrototype = new Proxy(Object.prototype, {
+		ownKeys(target) { workspaceTraps += 1; return Reflect.ownKeys(target); },
+		getOwnPropertyDescriptor(target, key) {
+			workspaceTraps += 1;
+			return Reflect.getOwnPropertyDescriptor(target, key);
+		},
+	});
+	const inheritedWorkspaceResult = Object.create(workspacePrototype) as Record<string, unknown>;
+	Object.assign(inheritedWorkspaceResult, { changed: true, summary: "bounded workspace" });
+	const workspaceInput = policyInputForRuntime(false);
+	workspaceInput.workspace.editText = async () => inheritedWorkspaceResult as unknown as { changed: boolean; summary: string };
+	const workspaceTool = createToolPolicy(workspaceInput).tools.find((tool) => tool.name === "workspace_edit")!;
+	const workspaceOutcome = await observeSettlement(workspaceTool.execute(
+		"cycle17-prototype-workspace",
+		{ path: ".pi/extensions/shepherd/tool-policy.ts", oldText: "a", newText: "b" },
+		undefined,
+	), 150);
+	if (workspaceOutcome.status !== "rejected") problems.push(`workspace-prototype-${workspaceOutcome.status}`);
+	if (workspaceTraps !== 0) problems.push(`workspace-prototype-traps-${workspaceTraps}`);
+
+	const source = [
+		readFileSync(join(process.cwd(), ".pi/extensions/shepherd/tool-policy.ts"), "utf8"),
+		readFileSync(join(process.cwd(), ".pi/extensions/shepherd/agent-session-runtime.ts"), "utf8"),
+	].join("\n");
+	const forInMatches = source.match(/\bfor\s*\([^)]*\s+in\s+[^)]*\)/g) ?? [];
+	if (forInMatches.length > 0) problems.push(`for-in-source-${forInMatches.length}`);
+	assert.deepEqual(problems, []);
 });
