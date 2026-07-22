@@ -104,6 +104,18 @@ func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) 
 	}
 }
 
+func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
+	for _, flag := range []string{"--plan=", "--approve=", "--confirm="} {
+		t.Run(flag, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run([]string{"github", "issue", "create", flag}, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "requires a value") {
+				t.Fatalf("Run(github issue create %s) code = %d stdout=%s stderr=%s", flag, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
 func TestDynamicConnectorHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"help", "gong", "--json"}, &stdout, &stderr)

@@ -634,6 +634,9 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if len(path) == 0 {
 		return usageErrorf("missing connector command path")
 	}
+	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
+		return err
+	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
@@ -791,6 +794,15 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	for _, row := range rows {
 		b, _ := json.Marshal(row)
 		fmt.Fprintln(stdout, string(b))
+	}
+	return nil
+}
+
+func validateConnectorLifecycleFlagValues(flags parsedFlags) error {
+	for _, name := range []string{"plan", "approve", "confirm"} {
+		if _, ok := flags.values[name]; ok && strings.TrimSpace(flags.first(name)) == "" {
+			return usageErrorf("--%s requires a value", name)
+		}
 	}
 	return nil
 }
