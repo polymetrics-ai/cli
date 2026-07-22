@@ -399,3 +399,25 @@
   `SUMMARY.md` and `VERIFICATION.md` exact evidence.
 - No self-review/integration, push, network, GitHub, live model/auth, credential, service,
   Go/connectors, `make`, main, parent, #478, or #479 mutation.
+- Adapter disposition: `scripts/gsd doctor` passed, but the adapter did not expose the requested
+  programming-loop prompt command, so the documented manual-GSD fallback was used and the complete
+  TDD sequence remained explicit.
+- Ordered checkpoints: PLAN `b8b68412`, comprehensive test-only RED `5d83d519`, cohesive GREEN
+  `38e95460`, and REFACTOR `ee4943f4`. RED executed 137 focused rows with 134 retained passes and
+  exactly the three named Cycle 15 failures; strict focused TypeScript passed and production blobs
+  stayed frozen at runtime `e37078fa`, policy `f8dfcdd3`, prompts `b762787b`.
+- GREEN/refactor result: the bounded candidate parser whole-redacts every uncertain assignment
+  value without routing quoted unknown values through auth parsing, resumes later flow siblings,
+  and the runtime uses intrinsic direct-prototype/own-descriptor capture plus an immediate
+  closure-aware barrier at each split post-create callback seam. Remaining runtime `for...in`
+  enumeration was removed.
+- Terminal local evidence: focused 137/137; safe isolation 200/200; focused and all-production
+  strict TypeScript pass against explicit Pi 0.80.6 roots; pinned offline RPC registers
+  `pm-shepherd`; diff, ancestry, JSON, credential-pattern, dependency, Go/connector, exact 20-path,
+  and clean-worktree checks pass. Complete Shepherd executes 274 with 243 passes and only the
+  unchanged 31 controller/state-store `spawn EPERM` rows, so that broad gate is classified solely
+  as environment-blocked.
+- Both complete Cycle 14 review reports were re-read after GREEN/refactor; their three-blocker union
+  remains closed. Final production blobs are runtime `0cee613a`, policy `5750d989`, and unchanged
+  prompts `b762787b`; parent orchestration owns process-capable rerun, exact-head review,
+  integration, and delivery.

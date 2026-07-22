@@ -1177,6 +1177,46 @@ skipped/cancelled/todo, focused strict TypeScript passes, and all frozen product
 exact. Production stays locked until this evidence is committed. GREEN must close all three rows
 together; no scanner-only or runtime-only production checkpoint is allowed.
 
+### RED evidence
+
+- Test-only checkpoint `5d83d519` changes only `agent-session-runtime.test.ts` and adds exactly the
+  three declared top-level rows. Focused RED executes 137: 134 retained pass, exactly C15-01 through
+  C15-03 fail, and zero skip/cancel/todo. Focused strict TypeScript passes.
+- Frozen production blobs remain runtime `e37078faaae0f1afb9583a6a3dbcd114acd92040`, policy
+  `f8dfcdd32b5f559b9d3ac409ac37f66bd42a88f0`, and prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`.
+- C15-01 leaks every quoted multi-component marker through all 13 consumers; C15-02 leaks the
+  length-66, spaced, `@`, Unicode, overlong, unclosed, and later-sibling markers while its work
+  counters remain bounded; C15-03 executes 13/40 prototype-trap callbacks, reaches prompt on all
+  five structural cases, and decodes once after active-tool abort/close/shutdown.
+
+### GREEN / REFACTOR / VERIFY
+
+- Cohesive GREEN `38e95460` closes all three rows together. The scanner uses a total bounded
+  candidate result and exact-public classification; unknown/uncertain quoted and scalar values
+  redact whole, and flow recovery resumes at proven sibling separators. Runtime cleanup ownership
+  precedes approved-prototype/own-descriptor capture, and active-tool/prompt callbacks have explicit
+  immediate execution barriers.
+- REFACTOR `ee4943f4` removes the superseded quoted-key decoder and every remaining runtime
+  `for...in`, centralizing Pi record/array processing on approved direct prototypes plus intrinsic
+  own descriptors/canonical indexes without weakening a RED row.
+- Both complete Cycle 14 reports were re-read after GREEN. C14-R1-01, C14-R1-02, and C14-R2-B1 are
+  closed with no declined, deferred, or narrowed condition.
+
+| Cycle 15 gate | Status | Evidence |
+|---|---|---|
+| Focused | pass | 137 passed, 0 failed/skipped/cancelled/todo |
+| Safe isolation | pass | 200 passed, 0 failed/skipped/cancelled/todo |
+| Complete Shepherd | environment-blocked | 274 executed; 243 pass; unchanged 31 controller/state-store `spawn EPERM` failures |
+| Strict TypeScript | pass | focused source/tests and all 12 production files, TypeScript 5.9.3 / explicit Pi 0.80.6 roots |
+| Offline RPC | pass | explicit Pi 0.80.6 `get_commands`; `pm-shepherd` registered; expected settings-lock warnings only |
+| Integrity / scope | pass | diff, ancestry, JSON, credential/dependency/Go/connector and runtime-`for...in` scans; exact same 20 paths |
+
+Final production blobs are runtime `0cee613ac4aabae2c7eb0fbaa58ae590f3bf0cb0`, policy
+`5750d989c25557f802d44a83a31cb349888bc948`, and unchanged prompts
+`b762787b2a63b5b02f9591c7bf3fff46394738cc`. No external, parent, #478, or #479 mutation was
+attempted; parent orchestration owns exact-head review, integration, and delivery.
+
 ## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
 
 ### PLAN / baseline

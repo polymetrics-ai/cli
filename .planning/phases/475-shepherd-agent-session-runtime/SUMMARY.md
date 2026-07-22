@@ -1,19 +1,22 @@
 # Summary — Issue #475
 
-Status: Cycle 15 correction planning is frozen against blocked start `f41cde91` and immutable base
-`e659d6f1`. Both Cycle 14 reports are accepted in full as three unique blockers: quoted
-unknown-sensitive values must redact whole content, assignment recognition must fail closed at
-spaces/unsupported characters/cutoffs/malformed flow boundaries without hiding later siblings,
-and post-create Pi validation must remove prototype-chain enumeration plus callback batching.
+Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
+blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full
+and re-read after implementation. Their complete three-blocker union is closed: quoted unknowns
+whole-redact; spaced, extended, unsupported, overlong, malformed, and cutoff assignments fail
+closed without hiding later flow siblings; and Pi result/event capture never traverses prototypes
+or batches a returned-structure callback behind a later lifecycle barrier.
 
-The planned architecture uses one bounded default-deny assignment candidate parser with exact
-public metadata as the only exception, and an own-descriptor/canonical-index post-create capture
-pipeline with approved direct prototypes and an immediate closure-aware barrier after every
-unavoidable callback. Baseline focused is 134/134 with strict focused TypeScript green; production
-blobs are frozen. One read-only mapper is advisory; this worker owns the exact PLAN -> three-row
-test-only RED -> cohesive GREEN -> REFACTOR -> evidence chain. No push, network, GitHub, live
-model/auth, credential, service, Go/connector, `make`, main, parent, #478, or #479 mutation is
-authorized.
+The ordered chain is PLAN `b8b68412`, comprehensive test-only RED `5d83d519`, GREEN `38e95460`,
+and REFACTOR `ee4943f4`. RED retained all 134 prior passes and exposed exactly three intended
+behavior failures with production frozen. GREEN/refactor passes 137/137 focused, 200/200 safe
+isolation, both strict Pi 0.80.6 TypeScript scopes, retained actual offline no-tool/one-tool
+sessions, and explicit offline RPC registration. Complete Shepherd executes 274 tests with 243
+passes and only the unchanged 31 managed-sandbox `spawn EPERM` failures in controller/state-store;
+it remains environment-blocked rather than green. Diff, ancestry, JSON, credential/dependency/Go/
+connector, zero-runtime-`for...in`, exact same 20-path scope, and clean-worktree gates pass at the
+artifact boundary. No push, network, GitHub, live model/auth, credential, service, Go/connector,
+`make`, main, parent, #478, or #479 mutation occurred.
 
 Status: Cycle 14 is locally complete at cohesive GREEN `9af22e72` and REFACTOR `27c07eec`
 against frozen start `67050a4a` and immutable base `e659d6f1`. Every post-create Pi/session

@@ -8,17 +8,17 @@ Both reports are accepted completely. Review 1's two blockers and Review 2's one
 unique behavior families; none is declined, deferred, or answered with a case-by-case key/prototype
 patch.
 
-| Cycle 15 group | Review findings | Planned disposition / proof boundary |
+| Cycle 15 group | Review findings | Implemented disposition / proof boundary |
 |---|---|---|
-| Quoted unknown whole-value closure | C14-R1-01 | route every unknown-sensitive quote style directly to complete value redaction; never Authorization component parsing; every shared consumer and exact public controls |
-| Conservative assignment/flow grammar | C14-R2-B1 | one bounded candidate parser recognizes assignment syntax independently of canonical eligibility; uncertainty/cutoff/malformed state redacts bounded value/container and resumes later siblings |
-| Own-descriptor post-create capture | C14-R1-02 | reject non-approved direct prototypes; remove prototype-chain enumeration; capture expected own fields/indexes in split steps with an immediate closure-aware barrier after every getter/method callback |
+| Quoted unknown whole-value closure | C14-R1-01 | CLOSED at `38e95460`: every unknown-sensitive quote style goes directly to complete value redaction, never Authorization component parsing; all 13 shared consumers and exact public controls pass |
+| Conservative assignment/flow grammar | C14-R2-B1 | CLOSED at `38e95460`: one bounded total candidate parser separates assignment syntax from canonical eligibility; uncertain/cutoff/malformed fields redact and resume later siblings under 25/50/100-KiB work bounds |
+| Own-descriptor post-create capture | C14-R1-02 | CLOSED at `38e95460`/`ee4943f4`: non-approved direct prototypes reject without traps; no runtime `for...in` remains; own fields/indexes and callback/barrier seams are split while cleanup stays owned |
 
-The Cycle 14 exact host-capability registry remains closed and retained. C14-01 is reopened only at
-the nested prototype-reflection batching seam. C14-03 is reopened for quoted unknown routing and
-plain/flow admission boundaries; its exact public controls remain required. Planned RED is exactly
-three new top-level rows on top of the 134/134 baseline, with production frozen until all three
-fail as intended.
+The Cycle 14 exact host-capability registry remains closed and retained. Test-only RED `5d83d519`
+executed 137 rows with all 134 retained passes and exactly three intended failures while production
+remained frozen. Cohesive GREEN `38e95460` and REFACTOR `ee4943f4` pass 137/137 focused and every
+declared terminal gate except the unchanged environment-blocked complete-suite process family.
+Both source reports were re-read in full after GREEN; no blocker was omitted or narrowed.
 
 # Review Disposition — Issue #475 Cycle 14
 

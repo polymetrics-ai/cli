@@ -88,3 +88,11 @@ parent, #478, or #479 authority.
 
 Its findings are advisory. The issue worker retains the sole PLAN, RED, cohesive GREEN, REFACTOR,
 verification, commit, and handoff path.
+
+Cycle 15 completed through PLAN `b8b68412`, test-only RED `5d83d519`, cohesive GREEN `38e95460`,
+and REFACTOR `ee4943f4`. The mapper's bounded-candidate and own-descriptor inventory informed the
+three-row contract, but every production, test, verification, and commit decision remained with
+the issue worker. Focused 137/137 and safe isolation 200/200 pass; both strict Pi 0.80.6 scopes and
+the pinned offline RPC pass. The complete suite remains environment-blocked only by the unchanged
+31 controller/state-store `spawn EPERM` rows. Both Cycle 14 reports were re-read after GREEN, the
+same exact 20 paths remain enforced, and no external mutation or disallowed gate was attempted.

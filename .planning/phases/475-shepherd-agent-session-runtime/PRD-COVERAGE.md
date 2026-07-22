@@ -8,10 +8,10 @@ form the phase-equivalent source.
 
 | Required outcome | RED boundary | Cycle 15 status |
 |---|---|---|
-| Unknown-sensitive quoted values always redact whole content | both quotes, line/flow, multi-component/malformed keys, every shared consumer, exact public controls | planned C15-01 |
-| Assignment recognition fails closed at every grammar boundary | spaces/extended characters, unsupported characters, both sides of key cutoff, malformed keys, later flow siblings, bounded metrics | planned C15-02 |
-| Post-create Pi validation never traverses prototype chains or batches callbacks | approved direct prototypes, expected own descriptors/indexes, proxy-prototype traps, abort/close/shutdown seam matrix, exact cleanup | planned C15-03 |
-| Cycle 14 and all prior authority/lifecycle/tool/parser behavior remains intact | all retained focused rows including actual pinned Pi no-tool/one-tool sessions | 134 retained baseline passes |
+| Unknown-sensitive quoted values always redact whole content | both quotes, line/flow, multi-component/malformed keys, every shared consumer, exact public controls | C15-01 focused GREEN |
+| Assignment recognition fails closed at every grammar boundary | spaces/extended characters, unsupported characters, both sides of key cutoff, malformed keys, later flow siblings, bounded metrics | C15-02 focused GREEN |
+| Post-create Pi validation never traverses prototype chains or batches callbacks | approved direct prototypes, expected own descriptors/indexes, proxy-prototype traps, abort/close/shutdown seam matrix, exact cleanup | C15-03 focused GREEN |
+| Cycle 14 and all prior authority/lifecycle/tool/parser behavior remains intact | all retained focused rows including actual pinned Pi no-tool/one-tool sessions | 134 retained passes within focused 137/137 |
 
 The scanner architecture is default-deny rather than alias-driven: exact unambiguous public
 metadata is the sole structured exception; exact sensitive rules override; uncertainty is
@@ -20,6 +20,14 @@ approved direct prototypes and expected own descriptors/canonical indexes only, 
 after every unavoidable callback. Ordered execution is artifact PLAN, exactly three-row test-only
 RED, one cohesive GREEN, REFACTOR, and exact evidence. No piecemeal freeze or scope expansion is
 permitted.
+
+Ordered evidence is PLAN `b8b68412`, test-only RED `5d83d519`, cohesive GREEN `38e95460`, and
+REFACTOR `ee4943f4`. Focused verification is 137/137; both strict TypeScript scopes, explicit pinned
+Pi 0.80.6 offline RPC, retained actual no-tool/one-tool rows, and 200/200 safe isolation pass. The
+serialized complete suite executes 274 tests: 243 pass and the unchanged 31 controller/state-store
+process-identity rows fail with managed-sandbox `spawn EPERM`; it is environment-blocked rather
+than green. Both complete source reports were re-read after implementation, the exact same 20
+issue-owned paths remain, and every no-external-mutation boundary is preserved.
 
 ## Cycle 14 Consolidated Review Coverage
 

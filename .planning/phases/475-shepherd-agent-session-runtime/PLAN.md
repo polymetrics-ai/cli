@@ -1473,3 +1473,21 @@ classification; `git diff --check`; immutable-base/frozen-start ancestry; RUN-ST
 credential/dependency/Go/connector scans; exact same 20 paths; and clean head. Both Cycle 14 reports
 must be re-read after GREEN. No self-review/integration, push, network, GitHub, live model/auth,
 credential, service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorized.
+
+### Cycle 15 execution result
+
+- PLAN `b8b68412`; comprehensive test-only RED `5d83d519`; cohesive GREEN `38e95460`; REFACTOR
+  `ee4943f4`. RED is exactly 137 executed / 134 retained pass / 3 intended fail / zero
+  skip-cancel-todo with all production blobs frozen. GREEN/refactor is 137/137.
+- C15-01 closes quoted unknown whole-value routing through all 13 consumers. C15-02 closes both
+  sides of the key cutoff plus spaced, extended, unsupported, overlong, unclosed, line/flow, later
+  sibling, exact-public, and 25/50/100-KiB bounded-work cases. C15-03 closes creation, extension,
+  array, active-tool, and synchronous abort/close/shutdown prototype/barrier seams with exact
+  cleanup and zero post-transition prototype callbacks.
+- REFACTOR removes all runtime `for...in` and the superseded scanner decoder. Focused 137/137,
+  safe isolation 200/200, both strict TypeScript scopes, and explicit pinned offline RPC pass.
+  Complete Shepherd remains environment-blocked at 243/274 only by the unchanged 31
+  controller/state-store `spawn EPERM` failures.
+- Both Cycle 14 reports were re-read in full after GREEN. Diff/ancestry/JSON, exact same 20 paths,
+  credential/dependency/Go/connector, runtime prototype-enumeration, and clean-worktree gates pass.
+  Parent orchestration owns fresh exact-head review, integration, and delivery.
