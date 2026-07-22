@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
-import { link, lstat, mkdir, open, realpath, rm, stat } from "node:fs/promises";
+import { link, lstat, mkdir, open, readdir, realpath, rm, stat } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 import {
@@ -136,6 +136,17 @@ interface WorkspaceBindingRecord {
 	schemaVersion: 1;
 	claimId: string;
 	worktreeIdentity: string;
+}
+
+interface WorkspaceRefreshRecord {
+	schemaVersion: 1;
+	claimId: string;
+	effectKeyHash: string;
+	previousBaseHead: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	outcome: "unchanged" | "rebased" | "reclaimed";
 }
 
 interface ActiveClaimContext {
@@ -295,6 +306,38 @@ function serializedBinding(record: WorkspaceBindingRecord): string {
 	});
 }
 
+function parseRefresh(raw: string): WorkspaceRefreshRecord {
+	const record = parseJsonRecord(raw, "workspace parent refresh record");
+	assertOnlyFields(record, new Set([
+		"schemaVersion", "claimId", "effectKeyHash", "previousBaseHead", "baseHead",
+		"previousHead", "head", "outcome",
+	]), "workspace parent refresh record");
+	if (record.schemaVersion !== 1
+		|| typeof record.claimId !== "string" || !IDENTITY_PATTERN.test(record.claimId)
+		|| typeof record.effectKeyHash !== "string" || !IDENTITY_PATTERN.test(record.effectKeyHash)
+		|| typeof record.previousBaseHead !== "string" || !SHA_PATTERN.test(record.previousBaseHead)
+		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
+		|| typeof record.previousHead !== "string" || !SHA_PATTERN.test(record.previousHead)
+		|| typeof record.head !== "string" || !SHA_PATTERN.test(record.head)
+		|| !new Set(["unchanged", "rebased", "reclaimed"]).has(record.outcome as string)) {
+		throw new WorkspaceAdapterError("workspace parent refresh record is malformed; existing state was preserved");
+	}
+	return record as unknown as WorkspaceRefreshRecord;
+}
+
+function serializedRefresh(record: WorkspaceRefreshRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		claimId: record.claimId,
+		effectKeyHash: record.effectKeyHash,
+		previousBaseHead: record.previousBaseHead,
+		baseHead: record.baseHead,
+		previousHead: record.previousHead,
+		head: record.head,
+		outcome: record.outcome,
+	});
+}
+
 function claimIdentity(record: WorkspaceClaimRecord): string {
 	return hash(["shepherd-workspace-claim-v4", serializedClaim(record)]);
 }
@@ -341,6 +384,59 @@ async function publishImmutable(path: string, payload: string, description: stri
 	} finally {
 		await handle?.close().catch(() => undefined);
 		await rm(temporary, { force: true }).catch(() => undefined);
+	}
+}
+
+async function readExistingClaim(path: string): Promise<WorkspaceClaimRecord | undefined> {
+	try {
+		await lstat(path);
+	} catch (error) {
+		if (fileErrorCode(error) === "ENOENT") return undefined;
+		throw new WorkspaceAdapterError("failed to inspect existing workspace ownership claim", { cause: error });
+	}
+	return parseClaim(await readImmutable(path, "workspace ownership claim"));
+}
+
+async function loadEffectiveBase(
+	claimDirectory: string,
+	issue: number,
+	claimId: string,
+	initialBaseHead: string,
+): Promise<string> {
+	const prefix = `issue-${issue}.refresh-`;
+	const names = (await readdir(claimDirectory)).filter((name) => name.startsWith(prefix) && name.endsWith(".json"));
+	if (names.length > 64) throw new WorkspaceAdapterError("workspace parent refresh history exceeds its bound");
+	const remaining: WorkspaceRefreshRecord[] = [];
+	for (const name of names.sort()) {
+		const suffix = name.slice(prefix.length, -".json".length);
+		if (!IDENTITY_PATTERN.test(suffix)) throw new WorkspaceAdapterError("workspace parent refresh filename is malformed");
+		const record = parseRefresh(await readImmutable(join(claimDirectory, name), "workspace parent refresh record"));
+		if (record.claimId !== claimId || record.effectKeyHash !== suffix) {
+			throw new WorkspaceAdapterError("workspace parent refresh record does not match its immutable claim or effect key");
+		}
+		remaining.push(record);
+	}
+	let baseHead = initialBaseHead;
+	while (remaining.length > 0) {
+		const matching = remaining.filter((record) => record.previousBaseHead === baseHead);
+		if (matching.length !== 1) {
+			throw new WorkspaceAdapterError("workspace parent refresh history is disconnected or ambiguous");
+		}
+		const next = matching[0];
+		if (next.baseHead === baseHead && next.outcome !== "unchanged") {
+			throw new WorkspaceAdapterError("workspace parent refresh history contains an invalid no-op transition");
+		}
+		baseHead = next.baseHead;
+		remaining.splice(remaining.indexOf(next), 1);
+	}
+	return baseHead;
+}
+
+async function acquireRefresh(path: string, expected: WorkspaceRefreshRecord): Promise<void> {
+	await publishImmutable(path, `${serializedRefresh(expected)}\n`, "workspace parent refresh record");
+	const current = parseRefresh(await readImmutable(path, "workspace parent refresh record"));
+	if (serializedRefresh(current) !== serializedRefresh(expected)) {
+		throw new WorkspaceAdapterError("workspace parent refresh retry does not match its exact prepared effect");
 	}
 }
 
@@ -513,13 +609,16 @@ export class WorkspaceAdapter {
 				}
 			}
 
+			const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
+			const existingClaim = await readExistingClaim(claimPath);
+			const initialBaseHead = existingClaim?.baseHead ?? request.parentHead;
 			const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
 			const requestHash = hash([
 				"shepherd-workspace-request-v4",
 				branch,
 				target,
 				prBase,
-				request.parentHead,
+				initialBaseHead,
 				allowedScopes.join("\0"),
 				coordinator.fetchEndpointIdentity,
 				coordinator.pushEndpointIdentity,
@@ -533,7 +632,7 @@ export class WorkspaceAdapter {
 				path: target,
 				trustedWorktreeRoot: trustedRoot,
 				prBase,
-				baseHead: request.parentHead,
+				baseHead: initialBaseHead,
 				allowedScopes,
 				repositoryIdentity: coordinator.repositoryIdentity,
 				remoteIdentity: coordinator.remoteIdentity,
@@ -543,9 +642,17 @@ export class WorkspaceAdapter {
 				ownerHash,
 				requestHash,
 			};
-			const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
 			const persistedClaim = await acquireClaim(claimPath, requestedClaim);
 			const claimId = claimIdentity(persistedClaim);
+			const effectiveBaseHead = await loadEffectiveBase(
+				claimDirectory,
+				request.issue,
+				claimId,
+				persistedClaim.baseHead,
+			);
+			if (effectiveBaseHead !== request.parentHead) {
+				throw new WorkspaceAdapterError("workspace resume parent base does not match its durable typed refresh history");
+			}
 
 			const rootAfterClaim = await stat(trustedRoot);
 			if (rootAfterClaim.dev !== rootMetadata.dev || rootAfterClaim.ino !== rootMetadata.ino) {
@@ -618,7 +725,7 @@ export class WorkspaceAdapter {
 				slug: request.slug,
 				branch,
 				prBase,
-				baseHead: request.parentHead,
+				baseHead: effectiveBaseHead,
 				head,
 				trustedWorktreeRoot: trustedRoot,
 				allowedScopes: [...allowedScopes],
@@ -636,7 +743,7 @@ export class WorkspaceAdapter {
 				binding: persistedBinding,
 				coordinator,
 				lease,
-				effectiveBaseHead: persistedClaim.baseHead,
+				effectiveBaseHead,
 			});
 			return workspace;
 		} catch (error) {
@@ -722,6 +829,22 @@ export class WorkspaceAdapter {
 			newBaseHead: request.newParentHead,
 			expectedHead: workspace.head,
 		});
+		if (evidence.baseHead !== evidence.previousBaseHead) {
+			const effectKeyHash = hash(["shepherd-workspace-refresh-effect-v1", request.effectKey]);
+			await acquireRefresh(
+				join(dirname(context.claimPath), `issue-${context.claim.issue}.refresh-${effectKeyHash}.json`),
+				{
+					schemaVersion: 1,
+					claimId: context.binding.claimId,
+					effectKeyHash,
+					previousBaseHead: evidence.previousBaseHead,
+					baseHead: evidence.baseHead,
+					previousHead: evidence.previousHead,
+					head: evidence.head,
+					outcome: evidence.outcome,
+				},
+			);
+		}
 		context.effectiveBaseHead = evidence.baseHead;
 		workspace.baseHead = evidence.baseHead;
 		workspace.head = evidence.head;

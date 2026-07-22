@@ -383,6 +383,28 @@ test("real workspace refresh reclaims an untouched child and rebases unique chil
 		assert.equal(await git(workspace.cwd, "merge-base", "--is-ancestor", advancedParent, evidence.head).then(() => true), true);
 		if (uniqueCommit) assert.equal(await import("node:fs/promises").then(({ readFile }) => readFile(join(workspace.cwd, "child.txt"), "utf8")), "unique child change\n");
 		await workspace.release();
+		const resumedGit = new GitAdapter();
+		const resumedAdapter = new WorkspaceAdapter(resumedGit, { leaseOptions: {
+			processId: 21_000 + (uniqueCommit ? 1 : 0),
+			processIdentity: `production-refresh-resume-${uniqueCommit ? "rebase" : "reclaim"}`,
+			isProcessAlive: () => true,
+			tokenFactory: () => `production-refresh-resume-token-${uniqueCommit ? "rebase" : "reclaim"}`,
+		} });
+		const resumed = await resumedAdapter.claim({
+			coordinator: await resumedGit.inspect(fixture.coordinator),
+			trustedWorktreeRoot: fixture.worktreeRoot,
+			issue: workspace.issue,
+			slug: workspace.slug,
+			parentIssue: 471,
+			parentSlug: "pi-agent-session-shepherd",
+			parentHead: advancedParent,
+			ownershipId: `production-refresh-${uniqueCommit ? "rebase" : "reclaim"}`,
+			allowedScopes: ["child.txt"],
+			leaseMode: "resume",
+		});
+		assert.equal(resumed.baseHead, advancedParent);
+		assert.equal(resumed.head, evidence.head);
+		await resumed.release();
 	}
 });
 
