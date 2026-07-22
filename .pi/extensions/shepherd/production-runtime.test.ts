@@ -244,6 +244,7 @@ test("composition reconciles an already-checkpointed crash effect once before sc
 			async close() {},
 		},
 		parentGate: {
+			prepare() { return { requestId: "parent-gate-479" }; },
 			async request() { return { requestId: "parent-gate-479" }; },
 			async observe() { return { status: "pending" as const }; },
 			async close() {},
