@@ -177,7 +177,7 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
   `make`, dependency, parent/main worktree, #475, push/network/GitHub, reviewer, integration, or
   merge action is authorized
 
-## Cycle 9 consolidated-review correction (planned)
+## Cycle 9 consolidated-review correction
 
 - frozen reviewed candidate/base: `f97a698df90010ae072554e04563a8134a8e5f6e` /
   `3addb1f48be1afe8b1e2b59b54247679d7293805`; both blocked Cycle 8 reports were read completely
@@ -196,5 +196,10 @@ Push and live PR-body update are blocked by GitHub DNS resolution in the worker 
 - the #479 trajectory uses a public typed decision broker and canonical `unknown` decoding for
   decision, prepared, journal, authority, recovery, fence, mutation, and settlement snapshots;
   `any`, casts, fake projection, private shortcuts, and same-object restart are forbidden
-- PLAN -> comprehensive five-file RED -> coherent GREEN -> bounded REFACTOR -> exact evidence is
-  mandatory; at this checkpoint no Cycle 9 test/production edit or prohibited/external action ran
+- PLAN `7ad23ed4` -> comprehensive five-file RED `9278e97e` -> coherent GREEN `593ba1cf` -> exact
+  evidence is complete; no standalone production refactor was necessary after focused/strict
+  inspection. Focused is 450 total / 449 pass / 0 fail / 1 intentional skip; serialized is 670
+  total / 604 pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip. Strict owned and
+  all 20 production modules, pinned offline RPC, immutable-base/diff/exact-21-path/JSON/marker
+  gates, and both report replays pass. No prohibited or external action ran; fresh review is
+  parent-owned.

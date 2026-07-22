@@ -1,8 +1,8 @@
 # Verification: #478
 
-Status: Cycle 9 consolidated correction is planned against frozen blocked-review candidate
-`f97a698df90010ae072554e04563a8134a8e5f6e`; no Cycle 9 test, production, or verification action
-has run. Two fresh exact-head reviews remain parent-owned.
+Status: Cycle 9 consolidated correction is locally verified at coherent GREEN
+`593ba1cf977bdfd9f193b3d7883882b96f99a189`; final evidence remains non-self-referential `HEAD`.
+Two fresh exact-head reviews remain parent-owned.
 Earlier cycle gate sections below are retained as historical evidence and do not supersede the
 current Cycle 9 contract.
 
@@ -159,18 +159,22 @@ parent-owned exact-head reviews remain pending.
 - [x] Both complete Cycle 8 reports are read and mapped to one 69-row, four-family correction.
 - [x] Frozen candidate/base, exact 21 paths, clean start, and five production blob IDs are recorded.
 - [x] The five-state authority-owned protocol and original-writer fence are frozen before RED.
-- [ ] Artifact-only PLAN commit precedes all Cycle 9 test and production changes.
-- [ ] Test-only RED fails every new row while retaining 374 focused cases and frozen production.
-- [ ] GREEN/REFACTOR pass result consistency, dangerous-point restart, total assignment parsing,
+- [x] Artifact-only PLAN `7ad23ed4` precedes all Cycle 9 test and production changes.
+- [x] Test-only RED `9278e97e` fails every new row while retaining prior cases and frozen production.
+- [x] GREEN `593ba1cf` passes result consistency, dangerous-point restart, total assignment parsing,
       and the exact typed value-serialized #479 fixture as one indivisible architecture.
-- [ ] Focused, strict owned/all-production TypeScript, pinned offline RPC, exact scope/base/data,
+- [x] Focused, strict owned/all-production TypeScript, pinned offline RPC, exact scope/base/data,
       report replay, serialized classification, and integrity gates are recorded truthfully.
-- [ ] No Go, connector, `make`, runtime service, dependency, parent/main/#475, network/GitHub, push,
+- [x] No Go, connector, `make`, runtime service, dependency, parent/main/#475, network/GitHub, push,
       reviewer, integration, merge, or human-gate action runs.
 
-Cycle 9 is intentionally not verified at plan time. `verificationPassed` and
-`reviewCoveragePassed` remain false until implementation evidence and two parent-owned fresh
-exact-head reviews respectively exist.
+Cycle 9 focused evidence is 450 total / 449 pass / 0 fail / 1 intentional skip. Strict owned and
+all-production TypeScript pass; pinned Pi 0.80.6 offline discovery returns `true`; exact immutable
+base/ancestry/merge-base/diff/21-path, three-JSON, and marker-confinement gates pass. A standalone
+REFACTOR was not required after the coherent GREEN inspection. Serialized Shepherd is 670 total /
+604 pass / 65 unchanged managed-sandbox process-identity `spawn EPERM` failures / 1 intentional
+skip. `verificationPassed` is true; `reviewCoveragePassed` remains false until two parent-owned
+fresh exact-head reviews complete.
 
 ## Cycle 8 verification contract
 

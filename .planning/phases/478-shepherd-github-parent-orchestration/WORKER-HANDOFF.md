@@ -16,9 +16,10 @@ Base branch: `feat/471-pi-agent-session-shepherd`
 
 Worker directory: `/tmp/shepherd-478-correction`
 
-Frozen reviewed candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`
+Prior frozen reviewed candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`
 
-Cycle 9 status: artifact PLAN in progress; no Cycle 9 test or production edit has occurred
+Cycle 9 status: locally verified at GREEN `593ba1cf977bdfd9f193b3d7883882b96f99a189`;
+final candidate is non-self-referential `HEAD`, awaiting parent-owned exact-head reviews
 
 ## Scope Delivered
 
@@ -329,7 +330,7 @@ session-attestation contract and fixtures required to verify independent-review 
   integration, or merge action ran. Parent owns publication, two fresh exact-head reviews,
   dispositions, integration, and all human gates.
 
-## Cycle 9 plan handoff
+## Cycle 9 completion handoff
 
 - Frozen reviewed candidate `f97a698df90010ae072554e04563a8134a8e5f6e`; exact base `3addb1f4`;
   clean exact 21-path scope; both Cycle 8 reports read completely; all five production blobs frozen.
@@ -349,3 +350,10 @@ session-attestation contract and fixtures required to verify independent-review 
 - Doctor passes; missing programming-loop command records `manual_gsd_fallback`. All runtime slots
   are occupied, so the isolated worker owns `local_critical_path`. Parent owns publication/reviews/
   integration/human gates; every prohibited or external action remains excluded.
+- Checkpoints: artifact PLAN `7ad23ed4`, test-only RED `9278e97e`, coherent GREEN `593ba1cf`.
+  Focused five-file evidence is 450 total / 449 pass / 0 fail / 1 intentional skip; strict owned
+  and all-production TypeScript and pinned Pi 0.80.6 offline RPC pass. Serialized Shepherd is 670
+  total / 604 pass / 65 unchanged managed-sandbox process-identity `spawn EPERM` failures / 1 skip.
+  Immutable base, exact merge base, full-range diff, exact 21 paths, three JSON parses, Cycle 9
+  marker confinement, and both complete Cycle 8 report replays pass. No post-GREEN production edit
+  or standalone refactor ran.

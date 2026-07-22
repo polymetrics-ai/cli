@@ -1,8 +1,8 @@
 # Summary: #478
 
-Status: Cycle 9 correction is planned against frozen candidate `f97a698d`, which received two
-blocked Cycle 8 reports. No Cycle 9 test or production edit has occurred; fresh exact-head review
-remains parent-owned. Earlier delivery status below is retained as historical context.
+Status: Cycle 9 correction is locally verified at coherent GREEN `593ba1cf`; its final evidence
+candidate remains non-self-referential `HEAD`. Fresh exact-head review remains parent-owned.
+Earlier delivery status below is retained as historical context.
 
 The plan-first checkpoint fixes the immutable base, owned file boundary, strict RED→GREEN→REFACTOR
 sequence, fake-only transport policy, exact-head review policy, human gates, and coordinator-bounded
@@ -179,7 +179,7 @@ publication, two fresh exact-head reviews, dispositions, integration, and every 
 
 ## Cycle 9 correction status
 
-Both Cycle 8 reports against `f97a698d` are consolidated into one planned 69-row correction. The
+Both Cycle 8 reports against `f97a698d` were consolidated into one completed 69-row correction. The
 four families are uncertain-result consistency (8), durable dangerous-point restart and
 original-writer fencing (13), total assignment parsing across five consumers (40), and the exact
 typed/value-serialized #479 production-role fixture (8).
@@ -191,8 +191,16 @@ the original writer and older attempts stale, and ends only at exact `draft_rest
 commit, and reconcile consult this truth before ready reuse; visible non-draft state cannot override
 an unsettled record. Stop/key ownership lasts through terminal draft settlement.
 
-The provider-neutral parser consumes the complete uppercase shell assignment name, including a
+The provider-neutral parser now consumes the complete uppercase shell assignment name, including a
 leading underscore, before suffix classification; 127/128/129/256/largest-in-field/over-field
-boundaries and the exact safe exception are planned through every shared durable/outbound consumer.
-The #479 fixture will decode serialized values into `unknown` and apply exported production
+boundaries and the exact safe exception pass through every shared durable/outbound consumer.
+The #479 fixture decodes serialized values into `unknown` and applies exported production
 validators without `any`, casts, fake projection, private shortcuts, or object-identity restart.
+
+PLAN `7ad23ed4` preceded test-only RED `9278e97e` and coherent GREEN `593ba1cf`. RED recorded
+398 pass / 43 intended fail / 1 skip with frozen production; GREEN records 449 pass / 0 fail / 1
+skip across 450 focused cases. Strict owned/all-production TypeScript, pinned offline RPC, exact
+base/ancestry/merge-base/diff/21-path ownership, three JSON parses, marker confinement, and both
+Cycle 8 report replays pass. Serialized Shepherd is 670 total / 604 pass / 65 unchanged
+managed-sandbox process-identity `spawn EPERM` failures / 1 skip. No standalone production
+refactor was necessary and no prohibited or external action ran.

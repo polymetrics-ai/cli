@@ -444,10 +444,10 @@ Frozen exact candidate: `f97a698df90010ae072554e04563a8134a8e5f6e`; immutable ba
 
 | ID | Rows | RED contract | State |
 | --- | ---: | --- | --- |
-| C9-RESULT | 8 | an applied-then-rejected uncertain result can only be blocked/quarantined; visibility cannot report ready; keyed recovery, reentry, stop/join, draft restoration, and blocked settlement stay consistent | planned |
-| C9-DURABLE | 13 | one canonically queryable authority record implements `ready_invoking -> ready_effect_applied -> ready_settled` or fenced `recovery_claimed -> draft_restored`; restart occurs at visible-ready/unsettled state and fences the original writer | planned |
-| C9-ASSIGN | 40 | eight boundary/control shapes run through each of five shared consumers: leading underscore, 127, 128, 129, 256, largest in-field, over-field, and exact safe exception; full-name suffix classification fails closed without marker reflection | planned |
-| C9-479 | 8 | a public typed broker and canonical unknown decoders reconstruct all five roles and validate decision/prepared/journal/authority/recovery/fence/mutation/settlement values across the exact #479 lifecycle | planned |
+| C9-RESULT | 8 | an applied-then-rejected uncertain result can only be blocked/quarantined; visibility cannot report ready; keyed recovery, reentry, stop/join, draft restoration, and blocked settlement stay consistent | red_then_green |
+| C9-DURABLE | 13 | one canonically queryable authority record implements `ready_invoking -> ready_effect_applied -> ready_settled` or fenced `recovery_claimed -> draft_restored`; restart occurs at visible-ready/unsettled state and fences the original writer | red_then_green |
+| C9-ASSIGN | 40 | eight boundary/control shapes run through each of five shared consumers: leading underscore, 127, 128, 129, 256, largest in-field, over-field, and exact safe exception; full-name suffix classification fails closed without marker reflection | red_then_green |
+| C9-479 | 8 | a public typed broker and canonical unknown decoders reconstruct all five roles and validate decision/prepared/journal/authority/recovery/fence/mutation/settlement values across the exact #479 lifecycle | red_then_green |
 
 Frozen production blobs before RED: orchestrator `ab9b2c0ed254ecdbffa10c4ca2b13420de01268a`,
 broker `7be6785190176a8c15660fb180fc95c207b76d5b`, human decision
@@ -460,3 +460,12 @@ exact `ready_invoking` CAS; a recovery claim moves to fence >=1 before rollback 
 fence-0/older writer stale. Only explicit applied-result settlement can produce `ready_settled`;
 only exact fenced draft proof can produce `draft_restored`. Any other state forces a public blocked
 outcome and retains lifecycle ownership.
+
+Cycle 9 followed artifact PLAN `7ad23ed4` -> complete test-only RED `9278e97e` -> coherent GREEN
+`593ba1cf`. RED executed 442 cases: 398 pass, 43 intended fail, and 1 intentional skip, with the
+five production blobs unchanged. GREEN executes 450 cases: 449 pass, 0 fail, and 1 intentional
+skip. Strict owned/all-production TypeScript and the exact public value-serialized #479 fixture
+pass. Serialized Shepherd is 670 total / 604 pass / 65 unchanged managed-sandbox process-identity
+`spawn EPERM` failures / 1 skip. Post-RED test edits align retained uncertain-result expectations
+with the stronger typed blocked contract and teach only public fake/port implementations the
+canonical authority state; no Cycle 9 assertion was removed, skipped, or weakened.

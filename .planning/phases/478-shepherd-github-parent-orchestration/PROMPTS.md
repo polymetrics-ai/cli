@@ -212,3 +212,9 @@
 - Adapter remains `manual_gsd_fallback`; all slots are occupied so execution is
   `local_critical_path`. Exclude Go/connectors/`make`, runtime/services, dependencies, parent/main/
   #475, network/GitHub, push, reviewers, integration, merge, and human-gate actions.
+- Outcome: PLAN `7ad23ed4`, RED `9278e97e`, and GREEN `593ba1cf` complete the prompt. The focused
+  five-file route is 450 total / 449 pass / 0 fail / 1 intentional skip; strict owned and
+  all-production TypeScript plus pinned offline RPC pass. Serialized Shepherd is 670 total / 604
+  pass / 65 unchanged managed-sandbox `spawn EPERM` failures / 1 skip. A separate production
+  refactor was not needed; final artifact edits record evidence only. Parent retains fresh-review
+  ownership.

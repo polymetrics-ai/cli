@@ -977,7 +977,23 @@ the journal and recovery truth from serialized authority values; no object ident
 - [x] Both Cycle 8 reports read completely and frozen candidate/base/scope/blobs confirmed clean.
 - [x] Required skills/contracts loaded; doctor passes, unavailable programming-loop command records
       `manual_gsd_fallback`; all agent slots are occupied so execution records `local_critical_path`.
-- [ ] Artifact-only Cycle 9 PLAN commit precedes tests and production.
-- [ ] Comprehensive five-file RED preserves all prior behavior and freezes production blobs.
-- [ ] Coherent GREEN and bounded REFACTOR close all 69 rows.
-- [ ] Exact local evidence and both-report replay are recorded; fresh reviews remain parent-owned.
+- [x] Artifact-only Cycle 9 PLAN `7ad23ed476c0ae60eaa783a9dae29dabb4ea8844` precedes tests and production.
+- [x] Comprehensive five-file RED `9278e97e0ef1b318bfd794dc0e52e4f31f58c542` preserves retained behavior,
+      records 43 intended failures, and keeps every production blob frozen.
+- [x] Coherent GREEN `593ba1cf977bdfd9f193b3d7883882b96f99a189` closes all 69 rows. A separate
+      production REFACTOR was not needed after strict/focused inspection; final docs are the only
+      post-GREEN changes.
+- [x] Exact local evidence and both-report replay are recorded; fresh reviews remain parent-owned.
+
+### Cycle 9 local evidence
+
+- Focused five-file route: 450 total / 449 pass / 0 fail / 1 intentional live-sandbox skip.
+- Serialized Shepherd route: 670 total / 604 pass / 65 unchanged managed-sandbox
+  process-identity `spawn EPERM` failures / 1 intentional skip; all Cycle 9 focused cases pass.
+- Strict TypeScript 5.9.3 passes for all five production/test pairs and all 20 Shepherd production
+  modules against pinned Pi 0.80.6 declarations. Pinned offline RPC discovers `pm-shepherd` from
+  `extension` (with only expected managed-settings lock warnings).
+- Immutable base ancestry and exact merge base, full-range diff check, exact 21-path ownership,
+  three JSON parses, Cycle 9 marker confinement, and both complete Cycle 8 report replays pass.
+- No Go, connector, `make`, runtime-service, dependency, parent/main/#475, network/GitHub, push,
+  self-review, reviewer-dispatch, integration, or merge action ran.

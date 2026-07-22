@@ -377,3 +377,22 @@
   `31234c70ade7341a2af01aeac2d81a015b696e6b`, evidence
   `23efd2c51280ba83836feef4fcb459e7da4571c0`. No Cycle 9 test, production, external, or prohibited
   action ran before the artifact checkpoint.
+
+## 2026-07-22 Cycle 9 RED, GREEN, and evidence
+
+- Artifact PLAN `7ad23ed476c0ae60eaa783a9dae29dabb4ea8844` preceded test-only RED
+  `9278e97e0ef1b318bfd794dc0e52e4f31f58c542`. RED executed 442 cases: 398 pass, 43 intended
+  fail, 1 intentional skip; all five production blobs remained frozen.
+- Coherent GREEN `593ba1cf977bdfd9f193b3d7883882b96f99a189` implements authority-owned query/settlement,
+  five exact phases, invocation/recovery identity, monotonic recovery fences, blocked uncertainty,
+  full assignment parsing, and canonical value-serialized #479 restart. No standalone production
+  refactor was needed and no production file changed after GREEN.
+- Focused five-file route: 450 total / 449 pass / 0 fail / 1 intentional live-sandbox skip.
+  Strict TypeScript 5.9.3 passes for the five production/test pairs and all 20 Shepherd production
+  modules against pinned Pi 0.80.6. Offline RPC returns `true` for `pm-shepherd` from `extension`.
+  Serialized Shepherd is 670 total / 604 pass / 65 unchanged managed-sandbox process-identity
+  `spawn EPERM` failures / 1 intentional skip.
+- Exact immutable base ancestry and merge base `3addb1f4`, full-range diff check, exact 21 paths,
+  three JSON parses, Cycle 9 production-marker confinement, and both complete Cycle 8 report
+  replays pass. No Go, connector, `make`, service, dependency, parent/main/#475, network/GitHub,
+  push, self-review, reviewer, integration, merge, or human-gate action ran.

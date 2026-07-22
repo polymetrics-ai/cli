@@ -5,7 +5,7 @@
   "parentIssue": 471,
   "parentPr": 472,
   "status": "in_progress",
-  "reason": "Cycle 9 is planned as one 69-row four-family correction against frozen blocked-review candidate f97a698d; authority-owned dangerous-point recovery, result consistency, total assignment parsing, and exact typed value-serialized #479 proof remain unimplemented, so verification and review coverage remain false.",
+  "reason": "Cycle 9 is locally verified at coherent GREEN 593ba1cf with all 69 four-family rows closed; verification passes and two fresh exact-head reviews remain parent-owned, so review coverage and integration remain pending.",
   "details": {
     "branch": "feat/478-shepherd-github-parent-orchestration",
     "baseBranch": "feat/471-pi-agent-session-shepherd",
@@ -17,7 +17,7 @@
     "adapter": "manual_gsd_fallback",
     "adapterHealth": "doctor_passed_programming_loop_unavailable",
     "modelPolicy": "openai-codex/gpt-5.6-sol:high",
-    "verificationPassed": false,
+    "verificationPassed": true,
     "reviewCoveragePassed": false,
     "priorReviewState": {
       "cycle": 8,
@@ -74,7 +74,10 @@
       "cycle8Green": "013bdc8b264e1ce8808d4af2558e2ec40b85ee49",
       "cycle8Refactor": "26a7d476bdfaa4e263196fb76f7f43b5a3ad799e",
       "cycle8Evidence": "f97a698df90010ae072554e04563a8134a8e5f6e",
-      "cycle9PlanRef": "HEAD"
+      "cycle9Plan": "7ad23ed476c0ae60eaa783a9dae29dabb4ea8844",
+      "cycle9Red": "9278e97e0ef1b318bfd794dc0e52e4f31f58c542",
+      "cycle9Green": "593ba1cf977bdfd9f193b3d7883882b96f99a189",
+      "cycle9EvidenceRef": "HEAD"
     },
     "verification": {
       "cycle4Focused": "68/68 pass",
@@ -85,7 +88,8 @@
       "cycle5": "focused 109/109 pass; strict owned and all-production TypeScript pass; offline RPC pass; serialized 373 total, 307 pass, 65 unrelated managed-sandbox spawn EPERM failures, 1 intentional skip; immutable base, ancestry, full-range diff, exact 17-path scope, JSON, and credential scans pass",
       "cycle6": "focused five-file suite: 207 total, 206 pass, 0 fail, 1 intentional live-GitHub skip; retained Cycle 5 109/109; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized 427 total, 361 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base, ancestry, full-range diff, exact 21-path scope, JSON, and synthetic credential scans pass",
       "cycle7": "focused five-file suite: 297 total, 296 pass, 0 fail, 1 intentional live-GitHub skip; architecture-audit RED: 297 total, 294 pass, 2 intentional fail, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure: 517 total, 451 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, full-range diff, exact 21-path scope, 3 JSON parses, and explicit test-synthetic credential marker scan pass",
-      "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass"
+      "cycle8": "RED 374 total, 314 pass, 59 intended fail, 1 skip with 4 intended strict diagnostics and all 5 production blobs frozen; targeted Cycle 8 46/46; focused five-file 374 total, 373 pass, 0 fail, 1 intentional live-sandbox skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; serialized environmental failure 594 total, 528 pass, 65 unchanged unrelated managed-sandbox spawn EPERM failures, 1 skip; immutable base and reviewed-candidate ancestry, exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, synthetic-marker confinement, report replay, and clean pre-evidence status pass",
+      "cycle9": "PLAN 7ad23ed4; RED 442 total, 398 pass, 43 intended fail, 1 skip with all 5 production blobs frozen; GREEN 593ba1cf; focused five-file 450 total, 449 pass, 0 fail, 1 intentional live-sandbox skip; serialized 670 total, 604 pass, 65 unchanged managed-sandbox process-identity spawn EPERM failures, 1 skip; strict owned and all 20 production TypeScript pass; pinned Pi 0.80.6 offline RPC pass; immutable base and exact merge base, full-range diff, exact 21-path scope, 3 JSON parses, Cycle 9 marker confinement, and both Cycle 8 report replays pass"
     },
     "orchestrationDecisions": [
       {
@@ -139,6 +143,16 @@
         "reason": "All four agent slots are occupied. This isolated worker owns one 69-row PLAN, RED, GREEN/refactor, and evidence path with a five-state durable authority record and monotonic fence; exact scope remains 21 paths."
       },
       {
+        "cycle": "cycle-9-verification",
+        "decision": "locally_verified_awaiting_parent_reviews",
+        "reason": "All 69 Cycle 9 rows, retained focused tests, strict TypeScript, pinned offline extension, immutable-base, exact-scope, JSON, marker, report-replay, and integrity gates pass; no standalone production refactor was required."
+      },
+      {
+        "cycle": "cycle-9-publish",
+        "decision": "not_authorized",
+        "reason": "Cycle 9 excludes push, network, live GitHub mutation, self-review, reviewer dispatch, integration, and merge; the parent owns publication and two fresh exact-head reviews."
+      },
+      {
         "cycle": "cycle-8-plan",
         "decision": "read_only_spawned_and_local_critical_path",
         "reason": "One read-only explorer maps the seven coupled contracts while this isolated worker owns the artifact, test-only RED, coherent GREEN/refactor, and evidence path; exact scope remains 21 paths."
@@ -175,5 +189,5 @@
       "main_branch_merge"
     ]
   },
-  "updatedAt": "2026-07-22T02:40:31.000Z"
+  "updatedAt": "2026-07-22T03:31:51.000Z"
 }
