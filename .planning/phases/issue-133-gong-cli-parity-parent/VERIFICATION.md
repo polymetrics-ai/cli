@@ -48,12 +48,12 @@ Result: pass for all four commands on 2026-07-09.
 
 Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector metadata/docs only unless CLI-rendered metadata changes.
 
-- [ ] `pm help <topic>` checked when CLI topics change.
-- [ ] Bare namespace behavior checked when command groups change.
-- [ ] `pm <command> --help` checked when command help changes.
-- [ ] `docs/cli/**` updated or exemption recorded.
-- [ ] `website/**` updated or exemption recorded.
-- [ ] Generated help/manual artifacts updated or exemption recorded.
+- [x] `pm help gong` and `pm help gong --json` checked.
+- [x] Bare and passive-flag namespace behavior checked; invalid/action-only flag forms return usage errors.
+- [x] `pm gong --help` and `pm gong calls transcript --help` checked.
+- [x] `docs/cli/**` exemption: connector manuals are generated from connector definitions; no static command page changed.
+- [x] Gong website connector data updated and validated.
+- [x] Gong `MANUAL.md`, `SKILL.md`, and website generated artifacts updated.
 
 ## Safety verification
 
@@ -128,9 +128,11 @@ Applies to later CLI-visible lanes (#141-#143, #145-#147). #144 is connector met
 - [x] `go mod verify`, `go vet ./...`, `go test -timeout 20m ./...`, and `go build ./cmd/pm` after the dependency upgrade.
 - [x] Targeted race checks: multipart/engine, payload identity, CLI help/transcript.
 - [x] Public OpenAPI 3.0.1 re-fetch confirmed 57 paths and the ten POST request schemas; every non-deprecated local schema leaf has a typed CLI flag. Deprecated `pointsOfInterest` remains intentionally unavailable.
-- [ ] Local Codex review covers final head with no unresolved actionable findings.
-- [ ] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
+- [x] Local Codex review covers the final implementation head with no unresolved actionable findings.
+- [x] Parent PR uses closing keywords and is ready for human approval; parent merge remains human-gated.
+- [x] Final implementation-head `make verify` passed at `798af7f7`.
+- [x] Pushed-head CI passed at `798af7f7`: verify, govulncheck, CodeQL, dependency review, website checks/image, Snyk, GSD evidence, branch/title, and linked-issue checks.
 
-Local Codex review of `b6534b8b` completed and all three actionable findings were reproduced, fixed, and covered by focused tests: approval token metadata, JSON dynamic help, and flag-only namespace help. Follow-up review of the fix commit is pending.
+Local Codex reviewed the feature and each fix commit. Actionable findings were reproduced, fixed, and covered by focused tests: operation response caps, help tokens used as flag values, approval-token metadata, JSON dynamic help, passive/unknown/action-only namespace flags, false-y preview semantics, and empty/bare/repeated lifecycle values. Final review of implementation commit `798af7f7` reported no actionable regressions.
 
-Review route: local Codex only per user direction. CodeRabbit, Claude, and Copilot review requests are intentionally skipped.
+Review route: local Codex only per user direction. CodeRabbit, Claude, and Copilot review requests were intentionally skipped.

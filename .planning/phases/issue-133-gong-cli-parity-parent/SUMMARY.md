@@ -1,6 +1,6 @@
 # Summary — Gong CLI parity parent (#133)
 
-Status: implementation complete; final local Codex review and CI readiness in progress.
+Status: human-review ready; implementation, local Codex review, local gates, and pushed-head CI are complete.
 
 ## Implemented
 
@@ -27,7 +27,7 @@ Passed locally:
 
 The first local Codex review found and drove fixes for the CLI's accidental 1 MiB operation pre-clamp and `help` used as a legitimate flag value. Its legacy-upload-plan compatibility observation was dispositioned fail-closed: approvals created before SHA-256 binding must be invalidated rather than execute without content-bound approval.
 
-Local Codex review of `b6534b8b` found three final parity issues: approval token metadata was boolean, dynamic `help` ignored JSON output, and flag-only namespaces did not render help. All three were reproduced with focused tests, fixed, regenerated, and passed full verification. A follow-up local Codex review will cover the fix commit. Per user direction, CodeRabbit, Claude, and Copilot review requests are skipped.
+Later local Codex reviews found approval-token metadata, JSON help, and nuanced flag-only/lifecycle validation issues. Every finding was reproduced and fixed with focused tests, including passive shared flags, unknown/action-only invocations, false-y preview, and empty/bare/repeated lifecycle values. Final review of implementation commit `798af7f7` reported no actionable regressions. Per user direction, CodeRabbit, Claude, and Copilot review requests were skipped.
 
 ## Orchestration
 
@@ -37,6 +37,4 @@ Local Codex review of `b6534b8b` found three final parity issues: approval token
 
 ## Remaining
 
-1. Receive and disposition the final local Codex review.
-2. Record final review/CI evidence, update PR #232 with closing keywords, and mark it ready.
-3. Human approval and merge to `main` remain mandatory.
+1. Human approval and merge of PR #232 to `main` remain mandatory.

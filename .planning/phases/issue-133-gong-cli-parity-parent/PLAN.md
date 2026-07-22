@@ -2,7 +2,7 @@
 
 Parent issue: #133
 Parent branch: `feat/133-gong-cli-parity`
-Parent PR: https://github.com/polymetrics-ai/cli/pull/232 (draft, base `main`)
+Parent PR: https://github.com/polymetrics-ai/cli/pull/232 (ready for human review, base `main`)
 Default branch: `main`
 
 ## GSD command path
@@ -17,7 +17,7 @@ Default branch: `main`
 ## Required skills loaded
 
 - GSD/runtime: `gsd-core`, `caveman`.
-- Go/CLI/connector: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`.
+- Go/CLI/connector: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-documentation`, `golang-lint`, `golang-dependency-management`.
 - Repo references: `required-skills-routing.md`, `gsd-pi-adapter.md`, `cli-help-docs-website-parity.md`, connector migration handoff/conventions/design docs.
 
 ## Mission

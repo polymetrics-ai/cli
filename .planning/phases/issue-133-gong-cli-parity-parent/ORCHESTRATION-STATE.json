@@ -10,14 +10,14 @@
     "url": "https://github.com/polymetrics-ai/cli/pull/232",
     "base": "main",
     "head": "feat/133-gong-cli-parity",
-    "draft": true,
+    "draft": false,
     "state": "OPEN"
   },
   "default_branch": "main",
   "orchestrator": {
     "mode": "active_owner",
     "runtime": "pi-api",
-    "status": "finalizing_local_review_and_ci"
+    "status": "human_gate"
   },
   "ready_queue": [
     {
@@ -199,13 +199,13 @@
       "verification": "targeted local checks passed: go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1; go test ./cmd/connectorgen -count=1; go test ./internal/connectors/conformance -run TestConformance/gong|Static -count=1; go run ./cmd/connectorgen validate internal/connectors/defs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -220,13 +220,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -241,13 +241,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -262,13 +262,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -283,13 +283,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -304,13 +304,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -325,13 +325,13 @@
       "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -346,13 +346,13 @@
       "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -367,13 +367,13 @@
       "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     },
     {
@@ -388,13 +388,13 @@
       "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json; go test ./internal/app -run PayloadIdentities -count=1",
       "automated_review": {
         "primary_route": "local_codex",
-        "status": "pending_final_local_review",
-        "head_sha": "b6534b8b",
-        "reviewed_range": "pending",
-        "coverage_route": "parent_local_codex_commit_review",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
         "fallback_route": "none_per_user_direction",
-        "disposition_summary": "Local Codex review only; CodeRabbit, Claude, and Copilot skipped per user direction. Final commit review running.",
-        "disposition_url": "pending"
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
       }
     }
   ],
@@ -407,7 +407,7 @@
     "reverse ETL execution",
     "quality gate reductions"
   ],
-  "updated_at": "2026-07-22T10:37:13Z",
+  "updated_at": "2026-07-22T13:09:49Z",
   "integration_notes": [
     {
       "timestamp": "2026-07-10T00:00:00Z",
@@ -429,6 +429,24 @@
       ],
       "status": "worker_in_progress",
       "summary": "Completion cycle started: dynamic Gong help, content-bound approval identities, stream-time multipart byte enforcement, and all remaining POST direct reads including transcript. Verification reset to pending."
+    },
+    {
+      "timestamp": "2026-07-22T13:09:49Z",
+      "issues": [
+        133,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        252,
+        253,
+        254
+      ],
+      "status": "human_review_ready",
+      "summary": "Implementation head 798af7f7 passed local make verify, pushed-head CI, and final local Codex review with no unresolved actionable findings. PR #232 contains closing keywords and is ready; merge to main remains human-gated."
     }
   ]
 }
