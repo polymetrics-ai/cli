@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "phase": "479-shepherd-production-matrix",
+  "status": "planning",
+  "checkpoint": "contracts-and-red-matrix",
+  "manualGsdFallback": true,
+  "reviewRoundsAllowed": 1
+}
