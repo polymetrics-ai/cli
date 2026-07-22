@@ -1,5 +1,27 @@
 # PRD Coverage — Issue #475
 
+## Cycle 16 Consolidated Review Coverage
+
+Frozen candidate: `df930d62adbf85af88cebbdf66e5eefaab587f4b`. Immutable base:
+`e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`. Both complete Cycle 15 reports and the retained issue
+contract form the phase-equivalent source.
+
+| Required outcome | Comprehensive RED boundary | Planned proof |
+|---|---|---|
+| One monotonic assignment lexer | dense flow openers, malformed flows, terminal siblings, exact exported visit/work metric | C16-03; zero regressions, one main visit/offset, `totalWork <= 8n + 64` |
+| Default-deny assignment admission | punctuation, spaces, extended/overlong/quoted keys, ambiguous whole-line/container recovery, all 13 consumers | C16-01 |
+| Malformed quote containment | both quote styles, false internal closes, line/container/EOF bounds, later siblings | C16-02 |
+| Finite public scalar fidelity | exact public paths with locator/query-`=`, time-like, and closed quoted scalar controls adjacent to protected fields, all 13 consumers | C16-04 |
+| Zero untrusted whole-key capture | all seven key materializers instrumented over 4,096 hidden peers at creation/request/event/handoff boundaries | C16-05 |
+| Prompt settlement owned before barrier | native promise/foreign thenable fulfillment, rejection, and synchronous throw x abort/close/shutdown; exact cleanup and zero unhandled | C16-06 |
+| All prior behavior retained | full focused Cycle 15 suite including actual pinned Pi no-tool/one-tool sessions | 137 retained passes in RED; 143/143 GREEN |
+
+The architecture is deliberately finite and closed: syntax is admitted independently of key
+classification, only explicit public field/scalar pairs pass, untrusted records are projected by
+known schema or made opaque, and prompt rejection observation is installed synchronously. The
+ordered chain is artifact-only PLAN, exactly six-row test-only RED, one cohesive GREEN, REFACTOR,
+report replay, and exact verification. Production remains frozen through RED.
+
 ## Cycle 15 Consolidated Review Coverage
 
 Frozen candidate: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`. Immutable base:

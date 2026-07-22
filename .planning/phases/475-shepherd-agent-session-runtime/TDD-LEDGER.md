@@ -1217,6 +1217,52 @@ Final production blobs are runtime `0cee613ac4aabae2c7eb0fbaa58ae590f3bf0cb0`, p
 `b762787b2a63b5b02f9591c7bf3fff46394738cc`. No external, parent, #478, or #479 mutation was
 attempted; parent orchestration owns exact-head review, integration, and delivery.
 
+## Cycle 16 — Monotonic Lexer, Closed DTOs, Owned Prompt Settlement
+
+### PLAN / baseline
+
+- Frozen blocked start `df930d62adbf85af88cebbdf66e5eefaab587f4b`; immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; clean exact 20-path issue scope.
+- Both complete Cycle 15 reports were read. Their ten observations deduplicate to six accepted
+  families: punctuation admission, malformed quotes, monotonic work, finite public fidelity,
+  zero whole-key capture, and prompt-settlement ownership.
+- Baseline focused 137/137 and focused strict TypeScript pass. Frozen blobs: runtime `0cee613a`,
+  policy `5750d989`, prompts `b762787b`, runtime test `f3fbdc58`, policy test `548f6681`.
+- Manual-GSD fallback is explicit because the healthy adapter lacks `programming-loop`. Required
+  programming, architecture, testing, TypeScript, and issue-delivery skills are loaded. Execution
+  decision is `read_only_spawned`; the mapper is advisory and no-write.
+
+### Comprehensive RED contract
+
+| ID | Exact top-level row | Frozen-head failure / GREEN proof |
+|---|---|---|
+| C16-01 | `cycle 16 punctuation-bearing assignments fail closed and preserve later siblings through every shared consumer` | punctuation/spaced/extended/overlong/quoted candidates cannot be abandoned; ambiguous members redact their proven container and all 13 consumers hide protected markers |
+| C16-02 | `cycle 16 malformed quoted values resynchronize quoted siblings across line flow and quote styles` | false interior quote closes are forbidden; line/container/EOF bounds protect later siblings for both quote styles |
+| C16-03 | `cycle 16 assignment lexer is one-pass monotonic across dense openers malformed flows and terminal siblings` | exported exact metric proves zero regressions, one main visit per offset, and `totalWork <= 8n + 64` without flow/line/quote rescans |
+| C16-04 | `cycle 16 finite public scalar grammar remains byte-identical while adjacent assignments fail closed` | exact finite locator/time/closed-quote public controls survive byte-identically through all 13 consumers while adjacent unknown/protected fields redact |
+| C16-05 | `cycle 16 schema captures avoid every whole-key primitive across creation request event and handoff boundaries` | all seven whole-key primitives have zero calls over 4,096 hidden peers; fixed descriptors and length/index capture retain known DTO behavior; arbitrary records are opaque |
+| C16-06 | `cycle 16 prompt settlement is owned before synchronous abort close and shutdown barriers` | native promise/thenable fulfillment/rejection/throw are observed before abort/close/shutdown barrier; exact cleanup and zero unhandled rejection |
+
+RED acceptance: exactly 143 executed, 137 retained pass, exactly C16-01 through C16-06 fail their
+intended assertions, zero skip/cancel/todo, focused strict TypeScript green, and production frozen.
+Rows C16-01, C16-02, and C16-04 exercise direct, prompt task/context, workspace read/edit/write,
+capability summary/reference, handoff summary/finding/verification, policy error, and runtime error.
+
+### GREEN / REFACTOR ledger
+
+| Checkpoint | Status | Required evidence |
+|---|---|---|
+| PLAN | in progress | artifact-only architecture and six-row ledger before test edits |
+| RED | pending | one test-only commit; 137 retained passes plus exactly six failures; frozen production |
+| GREEN | pending | one lexer + fixed projectors + owned prompt settlement; 143/143 |
+| REFACTOR | pending | delete rescans, whole-key helpers, generic walkers, and obsolete metric compatibility without weakening rows |
+| Report replay | pending | both Cycle 15 reports re-read in full after GREEN/refactor |
+| Local verification | pending | focused/safe isolation/strict TS/offline RPC/integrity/exact-scope gates and honest complete-suite classification |
+
+No family may freeze separately. Production remains locked through RED. No synonym expansion,
+generic-record enumeration, self-review/integration, external mutation, or scope widening is
+permitted.
+
 ## Cycle 14 — Closed Authority Schemas And Post-Creation Barriers
 
 ### PLAN / baseline

@@ -6,8 +6,8 @@
   "gsdMode": "manual_gsd_fallback",
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
-  "verificationPassed": true,
-  "currentCycle": "correction_cycle_15_summary",
+  "verificationPassed": false,
+  "currentCycle": "correction_cycle_16_plan",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -398,15 +398,20 @@
       "cycle": "correction_cycle_15_summary",
       "decision": "local_critical_path",
       "reason": "Both Cycle 14 reports were re-read after GREEN/refactor and their complete three-blocker union is closed locally; parent orchestration owns the process-capable rerun, exact-head review, integration, and delivery."
+    },
+    {
+      "cycle": "correction_cycle_16_plan",
+      "decision": "read_only_spawned",
+      "reason": "One bounded no-write explorer deduplicated both complete Cycle 15 reports into six architecture families and mapped lexer, capture, prompt, and test seams while this isolated issue worker owns the sole artifact, RED, cohesive GREEN, REFACTOR, verification, and commit path."
     }
   ],
   "gates": {
-    "focusedTests": "cycle_15_137_passed_0_failed_cancelled_skipped_todo; red_134_retained_passes_exactly_3_named_failures",
-    "fullShepherdTests": "cycle_15_environment_blocked_274_executed_243_passed_31_spawn_eperm_failures_only_controller_and_state_store; isolation_200_passed_0_failed_cancelled_skipped_todo",
-    "strictTypeScriptPi0806": "cycle_15_passed_focused_source_tests_and_all_12_non_test_production_typescript_5_9_3_explicit_pi_0_80_6_roots",
-    "offlineRpcSmoke": "cycle_15_passed_explicit_pinned_pi_0_80_6_get_commands_registered_pm_shepherd; expected_global_settings_lock_eperm_warnings_only",
-    "diffCheck": "cycle_15_start_f41cde91_plan_b8b68412_red_5d83d519_green_38e95460_refactor_ee4943f4; final_blobs_runtime_0cee613a_policy_5750d989_prompts_b762787b_test_f3fbdc58; diff_check_passed",
-    "ownedScope": "cycle_15_start_f41cde91_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths_passed; no_dependency_connector_go_cmd_internal_paths; no_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
+    "focusedTests": "cycle_16_baseline_137_passed_0_failed_cancelled_skipped_todo; planned_red_137_retained_passes_exactly_6_named_failures_143_executed",
+    "fullShepherdTests": "cycle_16_pending_after_green; cycle_15_environment_classification_retained_as_baseline",
+    "strictTypeScriptPi0806": "cycle_16_baseline_passed_focused_typescript_5_9_3_explicit_pi_0_80_6_roots; green_scopes_pending",
+    "offlineRpcSmoke": "cycle_16_pending_after_green; cycle_15_pinned_rpc_baseline_retained",
+    "diffCheck": "cycle_16_frozen_start_df930d62; blobs_runtime_0cee613a_policy_5750d989_prompts_b762787b_runtime_test_f3fbdc58_policy_test_548f6681; production_locked_through_red",
+    "ownedScope": "cycle_16_start_df930d62_and_immutable_base_e659d6f1_exact_same_20_issue_owned_paths; no_dependency_connector_go_cmd_internal_paths; no_self_review_integration_push_network_github_live_model_auth_credentials_services_make_main_parent_478_or_479_mutation",
     "parentGoConnectorGates": "not_run_parent_integration_boundary"
   },
   "deviations": [
@@ -431,6 +436,8 @@
     "cycle_15 complete Shepherd suite environment-blocked where the managed sandbox denies the unchanged controller/state-store process-identity children with spawn EPERM; safe isolation passes 200/200",
     "cycle_15 pinned offline RPC exits 0 but emits managed-filesystem warnings because the sandbox denies the global Pi settings lock; command registration succeeds",
     "cycle_15 credential-pattern scan passes with only two intentional BEGIN PRIVATE KEY parser/test grammar literals and no credential values",
-    "cycle_15 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, exact-head review, integration, and delivery"
+    "cycle_15 external mutation and Go/connector/make gates intentionally not attempted by explicit lane policy; parent owns process-capable rerun, exact-head review, integration, and delivery",
+    "cycle_16 manual-GSD fallback: scripts/gsd doctor passes for 69 commands but the adapter does not expose programming-loop; PLAN-RED-GREEN-REFACTOR-VERIFY remains explicit",
+    "cycle_16 production and focused tests remain frozen at artifact-only PLAN; comprehensive RED and all GREEN gates are pending"
   ]
 }

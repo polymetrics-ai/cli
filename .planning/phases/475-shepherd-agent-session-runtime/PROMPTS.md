@@ -421,3 +421,25 @@
   remains closed. Final production blobs are runtime `0cee613a`, policy `5750d989`, and unchanged
   prompts `b762787b`; parent orchestration owns process-capable rerun, exact-head review,
   integration, and delivery.
+
+## Consolidated Stable-Head Correction Cycle 16 Snapshot
+
+- Frozen blocked start `df930d62adbf85af88cebbdf66e5eefaab587f4b`; immutable base
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; exact same 20 paths.
+- Inputs: complete `/tmp/475-REVIEW-CYCLE15-1.md` and
+  `/tmp/475-REVIEW-CYCLE15-2.md`; duplicate observations deduplicate to exactly six accepted
+  families.
+- Objective: replace repeated structured-text scans with one metered forward lexer; fail all
+  uncertain assignments closed while preserving a finite exact public grammar; replace every
+  untrusted whole-key operation with fixed DTO projection/dense indexing or opaque summary; and
+  own prompt fulfillment/rejection synchronously before any lifecycle barrier.
+- Method: manual-GSD artifact PLAN -> exactly six named top-level test-only RED rows -> one cohesive
+  GREEN -> REFACTOR -> report replay -> terminal evidence. Production stays frozen through RED.
+- Baseline: focused 137/137 and focused strict TypeScript pass. Planned RED: 143 executed, all 137
+  retained passes, exactly six intended failures, zero skip/cancel/todo, exact frozen production.
+- Exact work proof: main cursor never regresses or revisits an offset; exported metrics charge key
+  and boundary work and require `totalWork <= 8 * sourceLength + 64`.
+- Execution decision: `read_only_spawned`; one bounded no-write mapper is advisory and this worker
+  owns every write, test, gate, and commit.
+- No self-review/integration, push, network, GitHub, model/auth, credential, service, Go/connector,
+  `make`, main, parent, #478, or #479 mutation.

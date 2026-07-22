@@ -1491,3 +1491,154 @@ credential, service, Go/connector, `make`, main, parent, #478, or #479 mutation 
 - Both Cycle 14 reports were re-read in full after GREEN. Diff/ancestry/JSON, exact same 20 paths,
   credential/dependency/Go/connector, runtime prototype-enumeration, and clean-worktree gates pass.
   Parent orchestration owns fresh exact-head review, integration, and delivery.
+
+## Cycle 16 — Monotonic Redaction, Closed DTO Capture, And Owned Prompt Settlement
+
+### Frozen baseline and complete review input
+
+- Frozen blocked start: `df930d62adbf85af88cebbdf66e5eefaab587f4b`; immutable base:
+  `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`; clean worktree and the exact same 20 issue-owned
+  paths as Cycle 15.
+- Complete inputs: `/tmp/475-REVIEW-CYCLE15-1.md` and `/tmp/475-REVIEW-CYCLE15-2.md`. Both were
+  read in full. Their duplicated observations consolidate to exactly six architecture families:
+  punctuation/default-deny assignment admission, malformed quote bounds, monotonic scanner work,
+  finite public-scalar fidelity, zero whole-key capture, and synchronous prompt-settlement
+  ownership.
+- Baseline focused result: 137 passed, 0 failed/skipped/cancelled/todo. Focused strict TypeScript
+  passes. Frozen blobs are runtime `0cee613ac4aabae2c7eb0fbaa58ae590f3bf0cb0`, policy
+  `5750d989c25557f802d44a83a31cb349888bc948`, prompts
+  `b762787b2a63b5b02f9591c7bf3fff46394738cc`, runtime test
+  `f3fbdc5899820c9c59dff5bbe8f806163ac0a3be`, and tool-policy test
+  `548f6681a0d579b413dae11a4cc17b32f9814c30`.
+- Required skills loaded: `gsd-programming-loop`, `architecture-patterns`,
+  `javascript-testing-patterns`, `typescript-advanced-types`, and
+  `github-issue-first-delivery`. `scripts/gsd doctor` passes for the 69-command adapter, but
+  `scripts/gsd prompt programming-loop ...` is unavailable; Cycle 16 therefore records the
+  permitted manual-GSD fallback and keeps PLAN -> RED -> GREEN -> REFACTOR -> VERIFY exact.
+- Execution decision: `read_only_spawned`. One no-write mapper deduplicated review families and
+  mapped scanner, capture, prompt, and test seams. This issue worker owns all artifact, test,
+  production, gate, and commit mutations.
+
+### One streaming monotonic assignment lexer
+
+`redactStructuredAssignments` will use one forward cursor and an explicit finite mode/state record
+for line members, flow members, quoted/unquoted keys, delimiter admission, plain/quoted/block
+values, comments, and malformed recovery. Opening `{` and `[` updates the bounded flow stack when
+the cursor reaches the opener; no suffix lookahead decides whether a flow should open. Line,
+quoted-value, and container ends are discovered by this same cursor, not by `findLineEnd`,
+`findQuotedValueEnd`, `looksLikeFlowMapping`, `looksLikeFlowSequence`, or any equivalent rescan.
+The cursor never regresses and a source offset is visited by the main lexer at most once.
+
+The exported `RedactionScanMetrics` contract will report exactly `sourceLength`,
+`cursorAdvances`, `cursorRegressions`, `maxMainCursorVisits`, `keyCharacterVisits`,
+`boundaryCharacterVisits`, and `totalWork`. For every input, `cursorRegressions === 0`,
+`maxMainCursorVisits <= 1`, `cursorAdvances <= sourceLength`, and
+`totalWork <= (8 * sourceLength) + 64`. Key/path classification is charged to the same metric and
+may inspect only the bounded candidate retained by the lexer. Dense opener, malformed-flow, and
+terminal-sibling fixtures at 25/50/100 KiB must satisfy the exact ceiling and linear-growth
+controls; a large family may not be hidden behind a separately quadratic helper.
+
+### Default-deny admission, malformed quote bounds, and finite fidelity
+
+Assignment syntax admission is independent from key classification. At a proven line/member start,
+unquoted, quoted, spaced, punctuation-bearing, extended-character, overlong, escaped, or malformed
+key candidates remain assignment candidates once `:` or `=` is reached. Only an exact,
+unambiguous reviewed public field is emitted unchanged; exact protected fields and every other
+recognized/uncertain assignment are redacted. If member separation is ambiguous, the lexer may
+redact the whole proven flow container or remaining line rather than exposing a value or later
+sibling. It may never abandon a candidate because its key is outside a preferred alphabet.
+
+Quoted values have one proven bound: a syntactically closed quote followed by an admitted scalar
+boundary, otherwise the current line, containing flow container, or EOF. A quote-like character
+inside malformed content does not become a close merely because it precedes punctuation. When no
+safe sibling boundary is knowable, the larger proven line/container is redacted. Subsequent
+line-level or post-container siblings must still be parsed and protected. Both quote styles,
+escape variants, flow/line forms, and malformed values are one table.
+
+The public scalar grammar is finite and explicit, not inferred from “looks harmless.” It preserves
+byte-identically only exact reviewed public paths/terminals and these complete scalar forms:
+scheme/locator values (including query `=` characters), time-like/RFC3339 values, booleans and
+finite numerics already admitted by the exact public field, and syntactically closed single- or
+double-quoted scalar lines with no delimiter outside the closing quote. The reviewed public field
+set remains `safe`, `enabled`, `retained`, `flavor`, `message`, `api.version`,
+`api.key.version`, `private.key.algorithm`, and `database.url.scheme`. Every consumer receives the
+same classification and exact bytes; adjacency to an uncertain/protected assignment never changes
+the public scalar.
+
+### Schema-known capture with zero whole-key primitives
+
+Untrusted Pi/session/event/request/handoff capture will call none of `Reflect.ownKeys`,
+`Object.keys`, `Object.getOwnPropertyNames`, `Object.getOwnPropertySymbols`,
+`Object.getOwnPropertyDescriptors`, `Object.values`, or `Object.entries`. Each known boundary gets
+an explicit projector whose field names are fixed by its schema and read with direct intrinsic own
+descriptor lookup. Dense arrays are captured from a bounded own `length` plus canonical indexed
+descriptors only. Known lifecycle envelopes, creation/session records, request authority,
+workspace/tool arguments, assistant/tool-result/turn fields, and handoff DTOs each use their own
+fixed field table. Inert undeclared fields are ignored without being discovered or invoked.
+
+Arbitrary records such as provider diagnostics, tool `details`, generic host arguments/results, or
+unknown JSON objects do not become traversable public evidence. They reduce to a fixed opaque or
+redacted summary. Registered workspace tools may project only their declared argument/result DTO;
+runtime-owned identity records use a separate trusted canonical serializer. Tests instrument all
+seven whole-key primitives over records with 4,096 enumerable, non-enumerable, symbol, and accessor
+peers and require exactly zero calls, zero peer getter/proxy influence, bounded canonical reads,
+and retained known-field behavior at creation, request, event, result, and handoff boundaries.
+
+### Prompt settlement ownership before the barrier
+
+The return or synchronous throw from `session.prompt` becomes an owned settlement record before
+the first post-prompt lifecycle barrier. Native promises and foreign thenables are immediately
+assimilated with both fulfillment and rejection handlers into an always-fulfilled internal record:
+`{ status: "fulfilled" } | { status: "rejected"; reason: unknown }`. A synchronous throw is stored
+as the same rejected settlement form. Only after this record is stored may abort, close, or shutdown
+win the execution barrier. Await/race logic consumes the owned record and normalizes its rejected
+reason through the existing bounded public-error path.
+
+Cleanup retains that observation even when cancellation wins, so a late native/thenable rejection
+cannot become unhandled. The RED table covers native promise, native rejection, foreign thenable,
+and synchronous throw under abort/close/shutdown, with zero post-transition prompt effects,
+exactly-once acquired unsubscribe/dispose/join ownership, and zero listeners, leases, referenced
+timers, or `unhandledRejection` observations.
+
+### Comprehensive test-only RED matrix
+
+One test-only checkpoint adds exactly these six top-level rows and no artifact or production edit:
+
+1. `cycle 16 punctuation-bearing assignments fail closed and preserve later siblings through every shared consumer`
+2. `cycle 16 malformed quoted values resynchronize quoted siblings across line flow and quote styles`
+3. `cycle 16 assignment lexer is one-pass monotonic across dense openers malformed flows and terminal siblings`
+4. `cycle 16 finite public scalar grammar remains byte-identical while adjacent assignments fail closed`
+5. `cycle 16 schema captures avoid every whole-key primitive across creation request event and handoff boundaries`
+6. `cycle 16 prompt settlement is owned before synchronous abort close and shutdown barriers`
+
+Rows 1, 2, and 4 route every protected marker through all 13 shared consumers: direct redaction;
+task/context prompts; workspace read/edit/write; capability summary/reference; handoff
+summary/finding/verification; policy error; and runtime error. Row 3 proves the exact exported work
+metric on dense and retained controls. Row 5 includes known-schema positive controls and hidden-peer
+instrumentation. Row 6 tables each termination cause against each return/rejection style and exact
+cleanup/unhandled accounting.
+
+RED acceptance is 143 executed: all 137 retained rows pass and exactly the six rows above fail only
+their intended behavior assertions, with zero skip/cancel/todo. Focused strict TypeScript passes;
+all five frozen production/test-control blobs remain exact except the single intended test file.
+No production edit is allowed before that evidence is committed.
+
+### Cohesive GREEN, REFACTOR, and verification contract
+
+GREEN closes all six rows as one architecture change: a single lexer replaces rescans, fixed DTO
+projectors replace whole-key capture, and prompt settlement is owned before the barrier. It may not
+grow secret/public synonym lists, reintroduce speculative lookahead, enumerate unknown records, or
+weaken cleanup ownership. After 143/143, REFACTOR removes superseded scanners, enumeration helpers,
+and compatibility paths; any retained legacy metric field or generic record walker is a failed
+refactor, not a harmless shim. If retained Cycle 10 fixtures expect rejection of inert undeclared
+creation/extension peers, they will be aligned only after RED to the stricter non-discovery
+contract: ignored peers are safer than enumerating them.
+
+Declared gates are focused 143/143 behavior; focused and all 12 production strict TypeScript 5.9.3
+against explicit Pi 0.80.6 roots; retained actual pinned no-tool/one-tool rows; explicit Pi 0.80.6
+offline RPC; safe isolation excluding only controller/state-store; serialized complete Shepherd
+classification; `git diff --check`; immutable-base/frozen-start ancestry; RUN-STATE JSON;
+credential/dependency/Go/connector scans; source/instrumented zero whole-key capture; exact same 20
+paths; and clean head. Both Cycle 15 reports must be re-read in full after GREEN/refactor before
+evidence freeze. No self-review/integration, push, network, GitHub, live model/auth, credential,
+service, Go/connector, `make`, main, parent, #478, or #479 mutation is authorized.

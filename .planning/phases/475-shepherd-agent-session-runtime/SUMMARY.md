@@ -1,5 +1,18 @@
 # Summary — Issue #475
 
+Status: Cycle 16 PLAN is active against blocked start `df930d62` and immutable base `e659d6f1`;
+production and focused tests remain frozen. Both Cycle 15 reports were read in full and consolidate
+to six accepted families: punctuation/default-deny assignment admission, malformed quote bounds,
+one-pass work, finite public-scalar fidelity, zero whole-key untrusted capture, and prompt
+settlement ownership before the lifecycle barrier.
+
+The planned comprehensive RED adds exactly six named top-level rows: 143 executed, all 137 retained
+rows passing, exactly six intended failures, zero skip/cancel/todo, focused strict TypeScript green,
+and exact frozen production. One cohesive GREEN will replace suffix rescans with a forward lexer,
+generic record enumeration with fixed schema projectors/opaque summaries, and orphanable prompt
+awaiting with an immediately observed settlement record. No external or parent-owned mutation is
+authorized.
+
 Status: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR `ee4943f4` against
 blocked start `f41cde91` and immutable base `e659d6f1`. Both Cycle 14 reports were accepted in full
 and re-read after implementation. Their complete three-blocker union is closed: quoted unknowns

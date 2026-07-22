@@ -96,3 +96,17 @@ the issue worker. Focused 137/137 and safe isolation 200/200 pass; both strict P
 the pinned offline RPC pass. The complete suite remains environment-blocked only by the unchanged
 31 controller/state-store `spawn EPERM` rows. Both Cycle 14 reports were re-read after GREEN, the
 same exact 20 paths remain enforced, and no external mutation or disallowed gate was attempted.
+
+## Cycle 16 Agent Delegation
+
+The issue worker owns every write in Cycle 16. One read-only explorer mapped the six deduplicated
+Cycle 15 report families without edit, commit, test-gate, network, model, credential, service,
+parent, #478, or #479 authority.
+
+| Role | Mode | Scope | Trace |
+|---|---|---|---|
+| `cycle16-architecture-map` | read-only | monotonic lexer/work metric; punctuation/quote/public-scalar grammar; all untrusted capture materializers; prompt settlement/cleanup seams; exact six-row RED | Cycle 16 appendices in the existing Cycle 12 map and trace |
+
+Its findings are advisory. The issue worker retains the sole artifact-only PLAN, comprehensive RED,
+cohesive GREEN, REFACTOR, report replay, verification, commit, and handoff path. No production or
+test edit is authorized before the PLAN checkpoint; no family may freeze independently.

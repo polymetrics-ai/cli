@@ -1,5 +1,32 @@
 # Verification — Issue #475
 
+Current result: Cycle 16 is at artifact-only PLAN against frozen start `df930d62` and immutable
+base `e659d6f1`. Production and tests are locked until the plan checkpoint; parent orchestration
+retains independent review, integration, and delivery.
+
+## Cycle 16 Verification Contract
+
+Both complete Cycle 15 reports were read before PLAN. Their exact six-family union maps to C16-01
+through C16-06 with all 137 prior focused rows retained. RED must execute 143 rows with the retained
+137 passing and exactly the six named behavior rows failing, zero skip/cancel/todo, focused strict
+TypeScript passing, and all frozen production blobs exact.
+
+GREEN/refactor must prove: one main lexer visit per offset and exported `totalWork <= 8n + 64`;
+default-deny punctuation/malformed quote handling through all 13 consumers; byte-identical finite
+public scalars; zero calls to all seven whole-key primitives over hostile peers; and synchronously
+owned native/thenable prompt settlement across abort/close/shutdown with exact cleanup and zero
+unhandled rejection. Both reports must be re-read after GREEN/refactor.
+
+| Cycle 16 gate | Status | Required evidence |
+|---|---|---|
+| PLAN / frozen baseline | pass | exact start/base, focused 137/137, strict focused TS, frozen source/test blobs, six-family matrix |
+| RED integrity | pending | 143 executed; 137 retained pass; exactly 6 intended failures; production frozen |
+| Focused GREEN | pending | 143/143 including actual pinned no-tool/one-tool sessions |
+| Safe isolation / complete classification | pending | isolation green; unchanged managed-sandbox family classified honestly |
+| Strict TypeScript / offline Pi | pending | focused plus all 12 production files at TS 5.9.3/Pi 0.80.6; explicit RPC registration |
+| Integrity / report replay | pending | both reports re-read; diff/ancestry/JSON/scans/exact 20 paths/clean head |
+| External mutation | not authorized | no self-review/integration, push, network, GitHub, live model/auth, service, Go/connector, `make`, main, parent, #478, or #479 mutation |
+
 Current result: Cycle 15 is locally complete at cohesive GREEN `38e95460` and REFACTOR
 `ee4943f4` against frozen start `f41cde91` and immutable base `e659d6f1`. Parent orchestration owns
 fresh exact-head review, process-capable complete-suite replay, integration, and delivery.

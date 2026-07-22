@@ -1,3 +1,26 @@
+# Review Disposition — Issue #475 Cycle 16
+
+Frozen reviewed candidate: `df930d62adbf85af88cebbdf66e5eefaab587f4b`
+Immutable base: `e659d6f1b666f58748e2d8c86599ceb4bbc62ff8`
+Sources: `/tmp/475-REVIEW-CYCLE15-1.md`, `/tmp/475-REVIEW-CYCLE15-2.md`
+
+Both reports are accepted completely. Duplicate punctuation, monotonic-work, and key-materializing
+findings are represented once; the exact union is six architecture families and none is declined,
+deferred, or answered with a larger synonym parser.
+
+| Cycle 16 group | Review findings | Planned architectural disposition / proof boundary |
+|---|---|---|
+| Default-deny admission | R1-01, R2-B1 | one total member/key state machine retains uncertainty through delimiter/container and routes every consumer through closed classification; C16-01 |
+| Malformed quote bounds | R1-02 | close only at a proven scalar boundary, otherwise redact line/container/EOF and resume at a proven outer sibling; C16-02 |
+| Monotonic scanner work | R1-03, R2-B2 | delete flow, line, and quote suffix rescans; one forward cursor plus exact exported `8n + 64` metric; C16-03 |
+| Finite public fidelity | R2-W1 | explicit exact public field/scalar grammar preserves byte-identical locators, times, and closed quoted scalars through every consumer; C16-04 |
+| Zero whole-key capture | R1-04, R2-B3 | fixed descriptor projectors and dense length/index capture; arbitrary records opaque; instrumentation of all seven primitives stays zero; C16-05 |
+| Prompt settlement ownership | R2-B4 | store an always-fulfilled fulfillment/rejection settlement before the first post-prompt barrier; abort/close/shutdown matrix proves cleanup and zero unhandled; C16-06 |
+
+All 137 Cycle 15 focused rows are retained. Planned RED is exactly 143 executed with those 137
+passes and exactly six intended failures while production is frozen. GREEN is cohesive across the
+lexer, DTO capture, and prompt ownership; both complete reports will be re-read after refactor.
+
 # Review Disposition — Issue #475 Cycle 15
 
 Frozen reviewed candidate: `f41cde91e01e439a5ebbbaa4867729e0fa80b371`

@@ -169,3 +169,18 @@ must add per-role message/tool lifecycles, select the last assistant from the fi
   test-first expectation of 137 executed / 134 passed / 3 failed with frozen production.
 - Ownership: advisory map only. The issue worker retains every artifact edit, RED, production edit,
   refactor, verification gate, commit, and handoff; the mapper changed no file or external state.
+
+## Cycle 16 Read-Only Trace
+
+- Agent: `/root/issue_475_agent_session_runtime/cycle16_architecture_map`.
+- Input: both complete Cycle 15 reports, frozen candidate `df930d62`, immutable base `e659d6f1`,
+  and the same exact 20 issue-owned paths.
+- Actions: deduplicated all report observations; inspected structured-assignment cursor/rescan
+  helpers and consumer coverage; enumerated eight runtime whole-key capture sites; mapped schema
+  projectors/opaque boundaries; inspected the post-prompt barrier and rejection ownership seam;
+  proposed exactly six aggregate RED rows. No command changed files or external state.
+- Architecture result: one forward metered lexer, closed public scalar grammar, schema-known DTOs
+  with no whole-key primitive, and an always-fulfilled prompt settlement stored before the barrier
+  close the complete union without synonym/parser growth.
+- Ownership: advisory map only. The issue worker owns all planning edits, the single comprehensive
+  RED, cohesive production change, refactor, report replay, gates, commits, and handoff.

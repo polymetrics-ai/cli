@@ -108,3 +108,31 @@ network, credential, service, model, or external state was modified.
    every shared consumer; uncertain key/cutoff/flow recovery with public controls and bounded work;
    and prototype-safe post-create decoding plus immediate lifecycle barriers. Expected frozen-head
    result is 137 executed, 134 retained passes, and exactly three intended failures.
+
+## Cycle 16 Architecture-Map Appendix
+
+Assignment: read-only consolidation of both complete Cycle 15 reports against frozen candidate
+`df930d62`, with the exact scanner, untrusted DTO, prompt-settlement, and focused-test seams. No
+file, test, network, credential, service, model, or external state was modified.
+
+1. R1-01/R2-B1, R1-03/R2-B2, and R1-04/R2-B3 are duplicates. The six unique families are
+   default-deny assignment admission, malformed quote bounds, monotonic scanner work, finite public
+   scalar fidelity, zero whole-key capture, and prompt settlement ownership.
+2. The scanner's `looksLikeFlowMapping`/`looksLikeFlowSequence`, line-end discovery, and global
+   quote-end search rescan suffixes. Replace them with one cursor and explicit member/key/value/
+   flow/comment/malformed modes. Unsupported key characters retain uncertainty rather than
+   abandoning assignment admission.
+3. Export one exact work record: source length, cursor advances/regressions, maximum main visits,
+   key/boundary visits, and total work. Charge all helpers; require zero regressions, one main visit
+   per offset, and `totalWork <= 8n + 64`.
+4. Public fidelity is a finite exact field/scalar grammar: locator/query-`=`, time-like/RFC3339,
+   and syntactically closed quoted scalar lines stay byte-identical only at reviewed public fields.
+5. Eight runtime call sites use captured whole-key materialization for result fields, arrays,
+   events, record fields, JSON, and handoff validation. Replace every untrusted site with a fixed
+   field projector, dense length/index capture, or opaque/redacted summary. Instrument all seven
+   JavaScript whole-key primitives with 4,096 hidden peers and require zero calls/influence.
+6. Convert prompt return/throw synchronously into an always-fulfilled settlement record with both
+   rejection handlers installed before the next barrier. Table native promises and foreign
+   thenables against abort/close/shutdown and exact cleanup/unhandled accounting.
+7. Retain 137 rows and add exactly the six named Cycle 16 aggregate rows. Frozen-head acceptance is
+   143 executed, 137 retained passes, exactly six intended failures, and frozen production.
