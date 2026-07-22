@@ -289,7 +289,7 @@ function gateTargetKind(gate: HumanDecisionGate): HumanDecisionTarget["kind"] {
 	return gate === "requirements" || gate === "scope" ? "issue" : "pull_request";
 }
 
-function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecisionRequestSpec {
+function normalizeSpecStructure(spec: HumanDecisionRequestSpec): HumanDecisionRequestSpec {
 	const candidate = decisionRecord(spec, [
 		"requestId", "gate", "binding", "allowedOptions", "actorAllowlist", "expiresAt", "question",
 	], [], "request specification");
@@ -305,9 +305,6 @@ function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecision
 		throw new Error(`human decision gate ${gate} is bound to the wrong target kind`);
 	}
 	const expiresAt = canonicalTimestamp(candidate.expiresAt, "expiry");
-	if (!Number.isFinite(now.valueOf()) || new Date(expiresAt).valueOf() <= now.valueOf()) {
-		throw new Error("human decision request is already expired");
-	}
 	const allowedOptions = gate === "parent_merge"
 		? normalizeParentMergeOptions(candidate.allowedOptions)
 		: normalizeOptions(candidate.allowedOptions);
@@ -320,6 +317,18 @@ function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecision
 		expiresAt,
 		question: normalizeQuestion(candidate.question),
 	} as HumanDecisionRequestSpec;
+}
+
+function assertNewRequestLifetime(spec: HumanDecisionRequestSpec, now: Date): void {
+	if (!Number.isFinite(now.valueOf()) || new Date(spec.expiresAt).valueOf() <= now.valueOf()) {
+		throw new Error("human decision request is already expired");
+	}
+}
+
+function normalizeSpec(spec: HumanDecisionRequestSpec, now: Date): HumanDecisionRequestSpec {
+	const normalized = normalizeSpecStructure(spec);
+	assertNewRequestLifetime(normalized, now);
+	return normalized;
 }
 
 function markerFor(spec: HumanDecisionRequestSpec): string {
@@ -406,10 +415,26 @@ export async function persistHumanDecisionRequest(
 	spec: HumanDecisionRequestSpec,
 	now = new Date(),
 ): Promise<HumanDecisionRecord> {
-	const proposed = createHumanDecisionRecord(spec, now);
-	return repository.transact(proposed.requestId, (existing) => {
-		if (existing === null) return { state: proposed, value: proposed };
-		if (JSON.stringify(immutableProjection(existing)) !== JSON.stringify(immutableProjection(proposed))) {
+	const normalized = normalizeSpecStructure(spec);
+	canonicalNow(now);
+	const proposedProjection = {
+		requestId: normalized.requestId,
+		gate: normalized.gate,
+		binding: normalized.binding,
+		allowedOptions: normalized.allowedOptions,
+		actorAllowlist: normalized.actorAllowlist,
+		expiresAt: normalized.expiresAt,
+		question: normalized.question,
+		idempotencyMarker: markerFor(normalized),
+	};
+	return repository.transact(normalized.requestId, (existingValue) => {
+		if (existingValue === null) {
+			assertNewRequestLifetime(normalized, now);
+			const proposed = createHumanDecisionRecord(normalized, now);
+			return { state: proposed, value: proposed };
+		}
+		const existing = validateHumanDecisionRecord(existingValue, now);
+		if (JSON.stringify(immutableProjection(existing)) !== JSON.stringify(proposedProjection)) {
 			throw new Error("persisted human decision request conflicts with retry specification");
 		}
 		return { state: existing, value: existing };

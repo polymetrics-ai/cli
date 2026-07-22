@@ -484,11 +484,20 @@ export interface ParentReadySettlementRecord extends ParentReadyJournalQuery {
 	settledAt: string;
 }
 
+export interface ParentReadyRecoveryFence {
+	schemaVersion: 1;
+	recoveryId: string;
+	attempt: number;
+	supersedesAttempt: number | null;
+	readyMutation: DurableMutationIntent;
+}
+
 export interface RollbackParentReadyRequest extends GitHubPullRequestQuery {
 	marker: string;
 	headSha: string;
 	generation: number;
 	authorizationDigest: string;
+	recovery: ParentReadyRecoveryFence;
 	mutation: DurableMutationIntent;
 }
 
@@ -524,6 +533,11 @@ export interface ParentReadyDurableAuthorityBoundary {
 		request: MarkParentReadyRequest,
 		context: ExternalCallContext,
 	): Promise<ParentReadyCompareEffectResult>;
+	/**
+	 * Durably claim the ordered recovery attempt before returning. Claiming a newer attempt fences
+	 * every predecessor from applying or settling. The only permitted effect is an idempotent
+	 * restoration of the exact draft owned by recovery.readyMutation.
+	 */
 	quarantineAndRollbackParentReady(
 		request: RollbackParentReadyRequest,
 		context: ExternalCallContext,
@@ -2272,6 +2286,77 @@ export function validateMarkParentReadyRequest(value: unknown): MarkParentReadyR
 	return request;
 }
 
+function parentReadyRecoveryId(
+	request: Omit<RollbackParentReadyRequest, "recovery" | "mutation">,
+	readyMutation: DurableMutationIntent,
+): string {
+	return canonicalDigest({
+		schemaVersion: 1,
+		repository: request.repository,
+		pullRequest: request.pullRequest,
+		marker: request.marker,
+		headSha: request.headSha,
+		generation: request.generation,
+		authorizationDigest: request.authorizationDigest,
+		readyMutation,
+	});
+}
+
+export function validateRollbackParentReadyRequest(value: unknown): RollbackParentReadyRequest {
+	const candidate = exactRecord(value, [
+		"repository", "pullRequest", "marker", "headSha", "generation", "authorizationDigest", "recovery", "mutation",
+	]);
+	const request = {
+		repository: repository(candidate.repository),
+		pullRequest: githubNumber(candidate.pullRequest, "parent-ready rollback pull request"),
+		marker: inlineText(candidate.marker, "parent-ready rollback marker", 512),
+		headSha: sha(candidate.headSha, "parent-ready rollback head SHA"),
+		generation: generation(candidate.generation),
+		authorizationDigest: typeof candidate.authorizationDigest === "string" && IDENTITY.test(candidate.authorizationDigest)
+			? candidate.authorizationDigest
+			: "",
+	};
+	if (request.authorizationDigest.length === 0) throw new Error("invalid parent-ready rollback authorization digest");
+	const recoveryCandidate = exactRecord(candidate.recovery, [
+		"schemaVersion", "recoveryId", "attempt", "supersedesAttempt", "readyMutation",
+	]);
+	const readyMutation = validateDurableMutationIntent(recoveryCandidate.readyMutation);
+	const attempt = generation(recoveryCandidate.attempt);
+	const supersedesAttempt = recoveryCandidate.supersedesAttempt === null
+		? null
+		: generation(recoveryCandidate.supersedesAttempt);
+	if (recoveryCandidate.schemaVersion !== 1
+		|| typeof recoveryCandidate.recoveryId !== "string"
+		|| !IDENTITY.test(recoveryCandidate.recoveryId)
+		|| readyMutation.operation !== "parent_ready"
+		|| (attempt === 1 ? supersedesAttempt !== null : supersedesAttempt !== attempt - 1)) {
+		throw new Error("invalid parent-ready recovery fence");
+	}
+	const recovery: ParentReadyRecoveryFence = {
+		schemaVersion: 1,
+		recoveryId: recoveryCandidate.recoveryId,
+		attempt,
+		supersedesAttempt,
+		readyMutation,
+	};
+	if (recovery.recoveryId !== parentReadyRecoveryId(request, readyMutation)) {
+		throw new Error("parent-ready recovery identity does not match its original ready mutation");
+	}
+	const mutation = validateDurableMutationIntent(candidate.mutation);
+	const expectedMutation = createDurableMutationIntent(
+		"parent_ready_rollback",
+		[recovery.recoveryId, recovery.attempt],
+		{ ...request, recovery },
+		null,
+	);
+	if (mutation.operation !== "parent_ready_rollback"
+		|| mutation.expectedResourceRevision !== null
+		|| !canonicalDataEqual(mutation, expectedMutation)) {
+		throw new Error("parent-ready rollback mutation does not match its recovery fence");
+	}
+	return { ...request, recovery, mutation };
+}
+
 export function validateParentReadyCompareEffectResult(
 	value: unknown,
 	requestValue: MarkParentReadyRequest,
@@ -2422,8 +2507,6 @@ export interface GitHubParentOrchestratorOptions {
 	now?: () => Date;
 }
 
-const quarantinedParentReadyKeys = new WeakMap<ParentReadyDurableAuthorityBoundary, Set<string>>();
-
 export class ExternalPortError extends Error {
 	readonly code: "external_timeout" | "external_cancelled" | "external_port_failed";
 	readonly operation: string;
@@ -2452,6 +2535,7 @@ export class GitHubParentOrchestrator {
 	readonly #externalCallTimeoutMs: number;
 	readonly #shutdownTimeoutMs: number;
 	readonly #ensureLocks = new Map<string, Promise<void>>();
+	readonly #quarantinedParentReadyKeys = new Set<string>();
 	readonly #lifecycleScope = new AsyncLocalStorage<OrchestrationCallContext>();
 	readonly #ensureCallScope = new AsyncLocalStorage<Set<Promise<void>>>();
 	readonly #activeCalls = new Map<symbol, {
@@ -2645,7 +2729,7 @@ export class GitHubParentOrchestrator {
 			return outcome.value;
 		}
 		if (outcome.kind === "failed") {
-			finalize(false);
+			finalize(uncertain);
 			throw new ExternalPortError("external_port_failed", operation, uncertain);
 		}
 		finalize(uncertain);
@@ -3526,51 +3610,26 @@ export class GitHubParentOrchestrator {
 		ready: GitHubPullRequestEvidence,
 		authorization: ParentReadyAuthorization,
 	): Promise<void> {
-		this.quarantineParentReady(plan, authorization);
-		const intent = {
-			repository: plan.repository,
-			pullRequest: ready.number,
-			marker: plan.markers.parentPullRequest,
-			headSha: ready.headSha,
-			generation: plan.generation,
-			authorizationDigest: authorization.digest,
-		};
-		const mutation = createDurableMutationIntent(
-			"parent_ready_rollback",
-			[plan.repository, plan.markers.parentPullRequest, ready.headSha, authorization.digest],
-			intent,
-			ready.revision,
-		);
-		const request: RollbackParentReadyRequest = { ...intent, mutation };
-		let mutationError: unknown;
-		let rollbackRevision: number | undefined;
-		try {
-			const result = validateDurableMutationResult(
-				await this.callExternal(
-					"quarantineAndRollbackParentReady",
-					(context) => this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context),
-					true,
-				),
-				mutation,
-				validateGitHubPullRequestEvidence,
-			);
-			rollbackRevision = result.value.revision;
-			if (!result.value.draft || result.value.number !== ready.number || result.value.headSha !== ready.headSha
-				|| result.value.revision <= ready.revision) {
-				throw new Error("parent ready rollback did not restore a newer exact draft");
-			}
-		} catch (error) {
-			mutationError = error;
+		if (ready.repository !== plan.repository
+			|| ready.number !== authorization.pullRequest
+			|| ready.marker !== plan.markers.parentPullRequest
+			|| ready.headSha !== authorization.headSha) {
+			throw new Error("parent ready rollback target does not match the original authorization");
 		}
-		const restored = await this.reconcileVisible(async () => {
-			const current = await this.singlePullRequest({ repository: plan.repository, marker: plan.markers.parentPullRequest });
-			return current !== null && current.draft && parentPullRequestMatches(current, plan)
-				&& current.headSha === ready.headSha && current.revision > ready.revision
-				&& (rollbackRevision === undefined || current.revision >= rollbackRevision) ? current : null;
-		});
-		if (restored !== null) return;
-		if (mutationError !== undefined) throw mutationError;
-		throw new Error("parent ready rollback was not durably visible");
+		const mutation = createDurableMutationIntent(
+			"parent_ready",
+			[authorization.repository, plan.markers.parentPullRequest, authorization.headSha],
+			{
+				repository: authorization.repository,
+				pullRequest: authorization.pullRequest,
+				headSha: authorization.headSha,
+				generation: authorization.generation,
+				decisionRequestId: authorization.decisionRequestId,
+				authorization,
+			},
+			authorization.pullRequestRevision,
+		);
+		await this.quarantineUncertainParentReady(plan, { authorization, mutation });
 	}
 
 	private async prepareParentReadinessUnlocked(
@@ -3745,11 +3804,7 @@ export class GitHubParentOrchestrator {
 	}
 
 	private parentReadyQuarantineSet(): Set<string> {
-		const current = quarantinedParentReadyKeys.get(this.#parentReadyAuthority);
-		if (current !== undefined) return current;
-		const created = new Set<string>();
-		quarantinedParentReadyKeys.set(this.#parentReadyAuthority, created);
-		return created;
+		return this.#quarantinedParentReadyKeys;
 	}
 
 	private isParentReadyQuarantined(plan: ParentOrchestrationPlan, authorization: ParentReadyAuthorization): boolean {
@@ -3761,18 +3816,15 @@ export class GitHubParentOrchestrator {
 	}
 
 	private releaseParentReadyQuarantine(plan: ParentOrchestrationPlan, authorization: ParentReadyAuthorization): void {
-		const current = quarantinedParentReadyKeys.get(this.#parentReadyAuthority);
-		if (current === undefined) return;
-		current.delete(this.parentReadyQuarantineKey(plan, authorization));
-		if (current.size === 0) quarantinedParentReadyKeys.delete(this.#parentReadyAuthority);
+		this.#quarantinedParentReadyKeys.delete(this.parentReadyQuarantineKey(plan, authorization));
 	}
 
 	private parentReadyRollbackRequest(
 		plan: ParentOrchestrationPlan,
-		operation: PreparedParentReadyOperation,
-		expectedResourceRevision: number,
+		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
+		attempt: number,
 	): RollbackParentReadyRequest {
-		const intent = {
+		const intent: Omit<RollbackParentReadyRequest, "recovery" | "mutation"> = {
 			repository: plan.repository,
 			pullRequest: operation.authorization.pullRequest,
 			marker: plan.markers.parentPullRequest,
@@ -3780,47 +3832,75 @@ export class GitHubParentOrchestrator {
 			generation: plan.generation,
 			authorizationDigest: operation.authorization.digest,
 		};
+		const recovery: ParentReadyRecoveryFence = {
+			schemaVersion: 1,
+			recoveryId: parentReadyRecoveryId(intent, operation.mutation),
+			attempt,
+			supersedesAttempt: attempt === 1 ? null : attempt - 1,
+			readyMutation: operation.mutation,
+		};
 		const mutation = createDurableMutationIntent(
 			"parent_ready_rollback",
-			[plan.repository, plan.markers.parentPullRequest, operation.authorization.headSha, operation.authorization.digest],
-			intent,
-			expectedResourceRevision,
+			[recovery.recoveryId, recovery.attempt],
+			{ ...intent, recovery },
+			null,
 		);
-		return { ...intent, mutation };
+		return validateRollbackParentReadyRequest({ ...intent, recovery, mutation });
 	}
 
 	private async quarantineUncertainParentReady(
 		plan: ParentOrchestrationPlan,
-		operation: PreparedParentReadyOperation,
+		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
 	): Promise<void> {
 		this.quarantineParentReady(plan, operation.authorization);
-		for (let attempt = 0; ; attempt += 1) {
-			const expectedRevision = attempt % 2 === 0
-				? operation.authorization.pullRequestRevision + 1
-				: operation.authorization.pullRequestRevision;
-			const request = this.parentReadyRollbackRequest(plan, operation, expectedRevision);
+		const timedOutAttempts = new Set<Promise<unknown>>();
+		for (let attempt = 1; ; attempt += 1) {
+			const request = this.parentReadyRollbackRequest(plan, operation, attempt);
 			const controller = new AbortController();
+			const deadline = Date.now() + this.#externalCallTimeoutMs;
 			const context: ExternalCallContext = {
 				signal: controller.signal,
-				deadlineAt: new Date(Date.now() + 120_000).toISOString(),
+				deadlineAt: new Date(deadline).toISOString(),
 				acknowledgeAbort: () => {},
 			};
-			try {
+			const invocation = Promise.resolve().then(() =>
+				this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context));
+			const guarded = invocation.then(
+				(value) => ({ kind: "value" as const, value }),
+				() => ({ kind: "failed" as const }),
+			);
+			let timer: ReturnType<typeof setTimeout> | undefined;
+			const timedOut = new Promise<{ kind: "timeout" }>((resolve) => {
+				timer = setTimeout(() => {
+					controller.abort();
+					resolve({ kind: "timeout" });
+				}, Math.max(0, deadline - Date.now()));
+			});
+			const outcome = await Promise.race([guarded, timedOut]);
+			if (timer !== undefined) clearTimeout(timer);
+			if (outcome.kind === "timeout") timedOutAttempts.add(guarded);
+			if (outcome.kind === "value") try {
 				const result = validateDurableMutationResult(
-					await this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context),
+					outcome.value,
 					request.mutation,
 					validateGitHubPullRequestEvidence,
 				);
 				if (!result.value.draft
+					|| result.value.repository !== request.repository
 					|| result.value.number !== request.pullRequest
-					|| result.value.headSha !== request.headSha) {
+					|| result.value.marker !== request.marker
+					|| result.value.generation !== request.generation
+					|| result.value.headSha !== request.headSha
+					|| result.value.revision < operation.authorization.pullRequestRevision) {
 					throw new Error("parent-ready quarantine did not restore the exact draft");
 				}
+				timedOutAttempts.clear();
 				this.releaseParentReadyQuarantine(plan, operation.authorization);
 				return;
 			} catch {
-				await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * (attempt + 1), 25)));
+				// A malformed response cannot release the fence; a newer ordered attempt must supersede it.
 			}
+			await new Promise<void>((resolve) => setTimeout(resolve, Math.min(10 * attempt, 25)));
 		}
 	}
 
@@ -3918,6 +3998,7 @@ export class GitHubParentOrchestrator {
 		revalidate: boolean,
 	): Promise<ParentReadinessDecision> {
 		const operation = validatePreparedParentReadyOperation(operationValue, plan);
+		let freshness = operation.freshness;
 		if (this.isParentReadyQuarantined(plan, operation.authorization)) {
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
@@ -3929,6 +4010,7 @@ export class GitHubParentOrchestrator {
 				|| current.operation.mutation.intentDigest !== operation.mutation.intentDigest) {
 				return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
 			}
+			freshness = current.operation.freshness;
 		}
 		const request = validateMarkParentReadyRequest({
 			repository: operation.authorization.repository,
@@ -3938,7 +4020,7 @@ export class GitHubParentOrchestrator {
 			generation: operation.authorization.generation,
 			decisionRequestId: operation.authorization.decisionRequestId,
 			authorization: operation.authorization,
-			freshness: operation.freshness,
+			freshness,
 			mutation: operation.mutation,
 		});
 		let mutationError: unknown;
