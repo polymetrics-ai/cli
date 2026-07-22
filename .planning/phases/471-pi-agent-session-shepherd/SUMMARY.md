@@ -15,22 +15,25 @@ Status: `parent_pr_open`
 - The parent workflow, phase context/plan, prompt contract, docs, and human-decision protocol now
   describe a complete autonomous replacement rather than a read-only companion.
 
-## Aggregate implementation now present
+## Aggregate implementation available on the child branch
 
 The #479 production-matrix branch contains the capabilities originally decomposed across #473-#478:
 the durable control plane, policy scheduler, scoped in-process `AgentSession` runtime, isolated
 workspace/Git lifecycle, GitHub decision broker, parent orchestration, and production composition.
-All 17 production rows functionally pass at code head `91692415`. This branch-local aggregation
-does not claim that every independent child issue or stacked PR is closed; reconcile those records
-as part of non-default parent integration.
+The original 17-row matrix is `91692415`, current production code is `78708cbe`, the deterministic
+Pi-family CI correction is `a594be98`, and child evidence is `d895dc38`. This branch-local
+aggregation does not claim current review/CI readiness or that every independent child issue or
+stacked PR is closed.
 
 ## Remaining critical path
 
-1. Run the complete Shepherd inventory in fresh CI outside the managed sandbox.
-2. Integrate the verified #479 aggregate into the non-default parent branch and reconcile the
-   #473-#478 issue/stacked-PR records without replaying already aggregated code.
-3. Complete #480 recovery/audit/reversible-cutover preparation.
-4. Run #481 against #397/#438; only after it passes, activate legacy-shell deprecation, then run
+1. Publish/fetch the reconciled parent branch, then push/open the #479 child PR against that exact
+   non-default base.
+2. Run the complete Shepherd inventory in fresh CI, complete exact-head internal Codex review, and
+   obtain repository-policy review coverage or an allowed recorded fallback.
+3. Integrate #479 into the non-default parent and reconcile #473-#478 lifecycle records.
+4. Complete #480 recovery/audit/reversible-cutover preparation.
+5. Run #481 against #397/#438; only after it passes, activate legacy-shell deprecation, then run
    full local/CI gates, exact-head independent review, and the durable parent merge decision.
 
 Overall verification remains false until those steps complete. #472 stays draft and cannot merge

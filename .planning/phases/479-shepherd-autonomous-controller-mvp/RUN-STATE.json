@@ -1,7 +1,9 @@
 {
   "schemaVersion": 1,
   "issue": 479,
-  "status": "ready_for_parent_integration",
+  "status": "historical_superseded_integrated",
+  "integratedParentHead": "69a1a9884325d227652afdc8632bbce8c019ed1b",
+  "supersededBy": "479-shepherd-production-matrix",
   "baseHead": "c958d7e608eac4afedceea953408a8fd4cfcb566",
   "implementationHead": "e6ef3b3221890260c37bc82439bc47be1f461cfb",
   "manualGsdFallback": true,

@@ -27,10 +27,10 @@ First end-to-end consumer: #397 and draft PR #438 (CLI Architecture v2).
   one PR base, and bounded tools. They never share the coordinator checkout.
 - Implementation workers use `openai-codex/gpt-5.6-sol` with `high`; planning, research, review,
   validation, and orchestration workers use the same model with `xhigh`. No 5.5 route is allowed.
-- Automated quality review for this program is an independent controller-owned Codex
-  `gpt-5.6-sol`/`xhigh` AgentSession. Claude and Copilot are intentionally skipped; Shepherd records
-  exact base/head/range, stable-head observation, changed paths, findings, dispositions, and a fresh
-  rerun after movement. This never substitutes for exact-head human parent-merge approval.
+- Internal quality review for this program includes an independent controller-owned Codex
+  `gpt-5.6-sol`/`xhigh` AgentSession. Repository review policy separately requires
+  `claude_auto` coverage or an allowed recorded fallback; Codex evidence must not be mislabeled as
+  that route. Neither review substitutes for exact-head human parent-merge approval.
 - Agent prose is untrusted evidence. Git, GitHub, test, CI, review, and persisted state are the
   authoritative sources for transitions.
 - Persist bounded redacted state and an append-only decision/audit trail. Never persist prompts,
@@ -79,13 +79,13 @@ reconciled when #479 is integrated into the non-default parent branch.
 
 | Wave | Issue | Branch | Depends on | Primary scope | Aggregate capability state |
 |---|---|---|---|---|---|
-| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `present_in_verified_479_aggregate` |
-| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `present_in_verified_479_aggregate` |
-| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `present_in_verified_479_aggregate` |
-| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `present_in_verified_479_aggregate` |
-| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `present_in_verified_479_aggregate` |
-| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `present_in_verified_479_aggregate` |
-| 4 | #479 | `feat/479-shepherd-production-matrix` | #474-#478 | scheduler/controller/command integration and 17-row production matrix | `verified_child_branch` |
+| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `capability_present_lifecycle_reconciliation_pending` |
+| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `capability_present_lifecycle_reconciliation_pending` |
+| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `capability_present_lifecycle_reconciliation_pending` |
+| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `capability_present_lifecycle_reconciliation_pending` |
+| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `capability_present_lifecycle_reconciliation_pending` |
+| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `capability_present_lifecycle_reconciliation_pending` |
+| 4 | #479 | `feat/479-shepherd-production-matrix` | #474-#478 | scheduler/controller/command integration and 17-row production matrix | `local_correction_complete_external_gates_pending` |
 | 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `waiting_479_parent_integration` |
 | 6 | #481 | `test/481-shepherd-cli-architecture-canary` | #480 | #397/#438 canary, post-pass deprecation activation, and final evidence | `planned` |
 
@@ -94,10 +94,12 @@ original topology made #474-#477 disjoint parallel lanes after #473, followed by
 shared wiring point. The production-matrix branch now contains and verifies those capabilities as
 one aggregate; this does not silently settle the independent GitHub issue/PR lifecycle records.
 
-Current #479 disposition: all 17 production rows pass at code head `91692415`; the consolidated
-review findings are closed. Its combined release suite passes 808/808. Fresh CI must rerun the 64
-process/lease tests blocked locally by the managed sandbox before #479 is integrated into the
-non-default parent branch and #480 is released.
+Current #479 disposition: the original matrix is `91692415`, current production code is
+`78708cbe`, deterministic Pi-family CI correction is `a594be98`, and current child evidence is
+`d895dc38`. Focused release tests pass 767/767. The complete local inventory is 1,647 pass, 64
+managed-sandbox process-identity failures before assertions, and one skip. Parent-first
+publication, the child PR, remote complete-suite CI, final exact-head internal review, policy
+review coverage, and non-default-parent integration remain pending.
 
 ## Human-decision contract
 
@@ -160,8 +162,7 @@ cost, external production state, or the parent merge.
 ## Verification
 
 ```bash
-node --test .pi/extensions/shepherd/*.test.ts
-node --test .pi/extensions/shepherd/**/*.test.ts
+node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
 pi --list-extensions
 git diff --check
 gofmt -w cmd internal

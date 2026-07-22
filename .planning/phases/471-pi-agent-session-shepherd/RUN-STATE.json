@@ -1,55 +1,324 @@
 {
-  "schemaVersion": "2.0",
-  "phase": "471-pi-agent-session-shepherd",
-  "issue": 471,
-  "parentPr": 472,
-  "status": "parent_pr_open",
-  "reason": "Autonomous replacement topology is live; #473 is the only dependency-ready implementation issue.",
-  "details": {
-    "parentBranch": "feat/471-pi-agent-session-shepherd",
-    "baseBranch": "main",
-    "currentParentHead": "d2b52a75",
-    "agentMode": "autonomous_in_process_target",
-    "adapter": "manual_gsd_fallback",
-    "modelPolicy": {
-      "implementation": "openai-codex/gpt-5.6-sol:high",
-      "planningReviewOrchestration": "openai-codex/gpt-5.6-sol:xhigh"
-    },
-    "verificationPassed": false,
-    "reviewCoveragePassed": false,
-    "children": [
-      {"issue": 473, "branch": "feat/473-shepherd-control-plane-foundation", "dependencies": [], "state": "worker_ready"},
-      {"issue": 474, "branch": "feat/474-shepherd-dependency-policy", "dependencies": [473], "state": "planned"},
-      {"issue": 475, "branch": "feat/475-shepherd-agent-session-runtime", "dependencies": [473], "state": "planned"},
-      {"issue": 476, "branch": "feat/476-shepherd-worktree-git-adapter", "dependencies": [473], "state": "planned"},
-      {"issue": 477, "branch": "feat/477-shepherd-github-decision-broker", "dependencies": [473], "state": "planned"},
-      {"issue": 478, "branch": "feat/478-shepherd-github-parent-orchestration", "dependencies": [474, 476, 477], "state": "planned"},
-      {"issue": 479, "branch": "feat/479-shepherd-autonomous-controller", "dependencies": [474, 475, 476, 477, 478], "state": "planned"},
-      {"issue": 480, "branch": "feat/480-shepherd-recovery-cutover", "dependencies": [479], "state": "planned"},
-      {"issue": 481, "branch": "test/481-shepherd-cli-architecture-canary", "dependencies": [480], "state": "planned"}
-    ],
-    "orchestrationDecisions": [
-      {
-        "cycle": "autonomous-replacement-pivot",
-        "decision": "local_critical_path",
-        "reason": "Reframed #471, opened #472, created #473-#481, and closed the abandoned Go records before worker dispatch."
-      },
-      {
-        "cycle": "ready-queue",
-        "decision": "not_spawned_dependency_blocked",
-        "reason": "#474-#481 depend directly or transitively on #473; the coordinator is completing #473's existing uncommitted foundation remediation first."
-      }
-    ],
-    "humanGates": [
-      "scope_or_authority_change",
-      "new_dependency",
-      "auth_scope_or_secret_access",
-      "destructive_external_action",
-      "production_change",
-      "quality_gate_reduction",
-      "correction_budget_exhausted",
-      "exact_head_parent_merge"
-    ]
+  "schema_version": "polymetrics.ai/orchestration-state/v1",
+  "parent_issue": {
+    "number": 471,
+    "url": "https://github.com/polymetrics-ai/cli/issues/471",
+    "title": "Autonomous in-process Pi AgentSession Shepherd",
+    "state": "open"
   },
-  "updatedAt": "2026-07-21T11:08:31Z"
+  "parent_branch": "feat/471-pi-agent-session-shepherd",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/472",
+    "base": "main",
+    "head": "feat/471-pi-agent-session-shepherd",
+    "draft": true,
+    "state": "open"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "codex-desktop",
+    "status": "blocked"
+  },
+  "reconciliation_base_head": "69a1a9884325d227652afdc8632bbce8c019ed1b",
+  "cached_remote_parent_head": "2a89142e1514de0ce1481164d99f21c7f89acadb",
+  "verificationPassed": false,
+  "reviewCoveragePassed": false,
+  "ready_queue": [
+    {
+      "number": 479,
+      "status": "local_correction_complete_external_gates_pending",
+      "dependencies": [474, 475, 476, 477, 478],
+      "write_scope": [
+        ".pi/extensions/shepherd/**",
+        ".pi/README.md",
+        ".github/**",
+        ".planning/phases/479-shepherd-production-matrix/**"
+      ],
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 480,
+      "status": "dependency_blocked",
+      "dependencies": [479],
+      "write_scope": [
+        ".pi/extensions/shepherd/**",
+        ".planning/phases/480-shepherd-recovery-cutover/**"
+      ],
+      "decision": "not_spawned_dependency_blocked"
+    },
+    {
+      "number": 481,
+      "status": "dependency_blocked",
+      "dependencies": [480],
+      "write_scope": [
+        ".planning/phases/481-shepherd-cli-architecture-canary/**"
+      ],
+      "decision": "not_spawned_verification_blocked"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-23T02:30:31+05:30",
+      "decision": "read_only_spawned",
+      "issue_numbers": [479],
+      "reason": "Independent parent-state and exact-head review audits were isolated from production mutation."
+    },
+    {
+      "timestamp": "2026-07-23T02:30:31+05:30",
+      "decision": "local_critical_path",
+      "issue_numbers": [479],
+      "reason": "The coordinator completed the bounded CI, deterministic Pi-runtime assertion, evidence, and parent-reconciliation slice locally."
+    },
+    {
+      "timestamp": "2026-07-23T02:30:31+05:30",
+      "decision": "not_spawned_dependency_blocked",
+      "issue_numbers": [480],
+      "reason": "#480 cannot begin until #479 is published, remotely verified, reviewed, and integrated into the non-default parent."
+    },
+    {
+      "timestamp": "2026-07-23T02:30:31+05:30",
+      "decision": "not_spawned_verification_blocked",
+      "issue_numbers": [481],
+      "reason": "#481 remains blocked by #480 and the exact-head parent verification sequence."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 473,
+      "url": "https://github.com/polymetrics-ai/cli/issues/473",
+      "branch": "feat/473-shepherd-control-plane-foundation",
+      "pr_url": null,
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/473-shepherd-control-plane-foundation/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 474,
+      "url": "https://github.com/polymetrics-ai/cli/issues/474",
+      "branch": "feat/474-shepherd-dependency-policy",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/483",
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/474-shepherd-dependency-policy/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 475,
+      "url": "https://github.com/polymetrics-ai/cli/issues/475",
+      "branch": "feat/475-shepherd-agent-session-runtime",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/486",
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/475-shepherd-agent-session-runtime/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 476,
+      "url": "https://github.com/polymetrics-ai/cli/issues/476",
+      "branch": "feat/476-shepherd-worktree-git-adapter",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/484",
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/476-shepherd-worktree-git-adapter/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 477,
+      "url": "https://github.com/polymetrics-ai/cli/issues/477",
+      "branch": "feat/477-shepherd-github-decision-broker",
+      "pr_url": null,
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/477-shepherd-github-decision-broker/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 478,
+      "url": "https://github.com/polymetrics-ai/cli/issues/478",
+      "branch": "feat/478-shepherd-github-parent-orchestration",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/487",
+      "worker": "historical worker record pending GitHub reconciliation",
+      "status": "blocked",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/478-shepherd-github-parent-orchestration/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "capability_present_in_479_aggregate",
+        "summary": "Independent issue and PR lifecycle state requires authoritative GitHub reconciliation."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Authoritative lifecycle and policy-review records must be reconciled before final parent readiness.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 479,
+      "url": "https://github.com/polymetrics-ai/cli/issues/479",
+      "branch": "feat/479-shepherd-production-matrix",
+      "pr_url": null,
+      "worker": "coordinator local critical path",
+      "status": "worker_in_progress",
+      "write_scope": [
+        ".pi/extensions/shepherd/**",
+        ".pi/README.md",
+        ".github/**",
+        ".planning/phases/479-shepherd-production-matrix/**"
+      ],
+      "worker_directory": "/private/tmp/shepherd-479-production-matrix",
+      "verification": {
+        "status": "local_functional_pass_external_gates_pending",
+        "implementation_head": "78708cbe",
+        "ci_correction_head": "a594be98b9722a8d183584a27832cd88af8702f9",
+        "evidence_head": "d895dc38",
+        "focused_tests": "767/767 pass",
+        "complete_inventory": "1,647 pass, 64 managed-sandbox process-identity failures, 1 skip"
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": "ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
+        "reviewed_range": "79e51f5629a93d212c5a5e8f578475cc02481a1c..ca3f6c6f2ef07c26365f1cfedba894b147b9ac0e",
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "Independent Codex xhigh review found two blockers. The complete Pi-family pin is corrected at a594be98; parent-first publication, exact-head follow-up, and source-policy review coverage remain.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 480,
+      "url": "https://github.com/polymetrics-ai/cli/issues/480",
+      "branch": "feat/480-shepherd-recovery-cutover",
+      "pr_url": null,
+      "worker": "not spawned",
+      "status": "planned",
+      "write_scope": [".pi/extensions/shepherd/**", ".planning/phases/480-shepherd-recovery-cutover/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "dependency_blocked",
+        "summary": "Waiting for #479 remote verification, review, and non-default-parent integration."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "No review is valid before implementation and exact-head verification.",
+        "disposition_url": null
+      }
+    },
+    {
+      "number": 481,
+      "url": "https://github.com/polymetrics-ai/cli/issues/481",
+      "branch": "test/481-shepherd-cli-architecture-canary",
+      "pr_url": null,
+      "worker": "not spawned",
+      "status": "planned",
+      "write_scope": [".planning/phases/481-shepherd-cli-architecture-canary/**"],
+      "worker_directory": null,
+      "verification": {
+        "status": "dependency_blocked",
+        "summary": "Waiting for #480 and the exact-head parent verification sequence."
+      },
+      "automated_review": {
+        "primary_route": "blocked",
+        "status": "blocked",
+        "head_sha": null,
+        "reviewed_range": null,
+        "coverage_route": "blocked",
+        "fallback_route": "human",
+        "disposition_summary": "No review is valid before implementation and exact-head verification.",
+        "disposition_url": null
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "secret access",
+    "destructive external actions",
+    "production deployments",
+    "quality-gate reductions",
+    "scope or authority changes"
+  ],
+  "updated_at": "2026-07-23T02:30:31+05:30"
 }

@@ -40,11 +40,21 @@ Every in-process implementation/correction session receives all of the following
 Planning, research, issue proposal, verification, review, disposition, and orchestration sessions
 use `openai-codex/gpt-5.6-sol`/`xhigh` and cannot mutate outside their explicit role.
 
-For #471, automated quality review specifically means an independent controller-owned Codex
-`gpt-5.6-sol`/`xhigh` AgentSession bound to the exact base/head/range. Claude and Copilot are
-intentionally skipped for this program and must not be claimed in evidence. Any head change
-invalidates the record and requires a fresh stable-head review; parent merge remains a separate
+For #471, an independent controller-owned Codex `gpt-5.6-sol`/`xhigh` AgentSession bound to the
+exact base/head/range is mandatory internal review. It does not replace the source-policy
+`claude_auto` route or an allowed recorded fallback. Never label Codex evidence as Claude,
+Copilot, or human coverage. Any head change invalidates the record; parent merge remains a separate
 exact-head human decision.
+
+## 2026-07-23 #479 reconciliation snapshot
+
+`feat/479-shepherd-production-matrix` currently records production `78708cbe`, deterministic
+Pi-family CI correction `a594be98`, and child evidence `d895dc38`. Focused release tests pass
+767/767. The complete local inventory is non-green at 1,647 pass, 64 managed-sandbox
+process-identity failures, and one skip. Parent-first publication, the child PR, remote CI, final
+exact-head internal review, source-policy review coverage, and parent integration remain pending.
+The single merge-readiness review is a bounded CI/evidence correction follow-up; it does not
+replace the historical production stable-head campaigns.
 
 ## Shepherd sub-worker verification boundary
 
@@ -52,7 +62,7 @@ Every Shepherd implementation, correction, and independent-review prompt must ke
 verification proportional to that TypeScript lane:
 
 1. run the child issue's focused RED/GREEN tests;
-2. run the complete `.pi/extensions/shepherd/*.test.ts` suite;
+2. run `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts`;
 3. run strict no-emit TypeScript against the repository-pinned Pi `0.80.6` declarations;
 4. run the Shepherd extension through offline Pi RPC; and
 5. run `git diff --check` plus changed-path/write-scope checks.
