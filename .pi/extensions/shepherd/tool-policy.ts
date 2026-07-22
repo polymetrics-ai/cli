@@ -29,35 +29,40 @@ const INTRINSIC_OBJECT_KEYS = Object.keys;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
 const INTRINSIC_DEFINE_PROPERTY = Object.defineProperty;
+const INTRINSIC_OBJECT_CREATE = Object.create;
+const INTRINSIC_OBJECT_FREEZE = Object.freeze;
+const INTRINSIC_OBJECT_HAS_OWN = Object.hasOwn;
+const INTRINSIC_OBJECT_VALUES = Object.values;
 const INTRINSIC_IS_ARRAY = Array.isArray;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
 const INTRINSIC_REFLECT_APPLY = Reflect.apply;
-const NATIVE_ABORTED_GETTER = Object.getOwnPropertyDescriptor(AbortSignal.prototype, "aborted")?.get;
+const INTRINSIC_JSON_STRINGIFY = JSON.stringify;
+const NATIVE_ABORTED_GETTER = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(AbortSignal.prototype, "aborted")?.get;
 
 /** The complete reviewed host-tool domain. Unknown strings have no extension path. */
-export const HOST_CAPABILITY_REGISTRY = Object.freeze({
-	host_inspect: Object.freeze({ mutates: false as const }),
-	host_verify: Object.freeze({ mutates: true as const }),
+export const HOST_CAPABILITY_REGISTRY = INTRINSIC_OBJECT_FREEZE({
+	host_inspect: INTRINSIC_OBJECT_FREEZE({ mutates: false as const }),
+	host_verify: INTRINSIC_OBJECT_FREEZE({ mutates: true as const }),
 } as const);
 
 export type HostCapabilityName = keyof typeof HOST_CAPABILITY_REGISTRY;
 
-const WORKSPACE_TOOL_REGISTRY = Object.freeze({
-	workspace_read: Object.freeze({ mutates: false as const }),
-	workspace_edit: Object.freeze({ mutates: true as const }),
-	workspace_write: Object.freeze({ mutates: true as const }),
+const WORKSPACE_TOOL_REGISTRY = INTRINSIC_OBJECT_FREEZE({
+	workspace_read: INTRINSIC_OBJECT_FREEZE({ mutates: false as const }),
+	workspace_edit: INTRINSIC_OBJECT_FREEZE({ mutates: true as const }),
+	workspace_write: INTRINSIC_OBJECT_FREEZE({ mutates: true as const }),
 } as const);
 
 export type WorkspaceToolName = keyof typeof WORKSPACE_TOOL_REGISTRY;
 export type SessionToolName = WorkspaceToolName | HostCapabilityName;
 
 export function isHostCapabilityName(value: unknown): value is HostCapabilityName {
-	return typeof value === "string" && Object.hasOwn(HOST_CAPABILITY_REGISTRY, value);
+	return typeof value === "string" && INTRINSIC_OBJECT_HAS_OWN(HOST_CAPABILITY_REGISTRY, value);
 }
 
 export function isSessionToolName(value: unknown): value is SessionToolName {
 	return typeof value === "string" &&
-		(Object.hasOwn(WORKSPACE_TOOL_REGISTRY, value) || Object.hasOwn(HOST_CAPABILITY_REGISTRY, value));
+		(INTRINSIC_OBJECT_HAS_OWN(WORKSPACE_TOOL_REGISTRY, value) || INTRINSIC_OBJECT_HAS_OWN(HOST_CAPABILITY_REGISTRY, value));
 }
 
 export function sessionToolMutates(name: SessionToolName): boolean {
@@ -91,6 +96,13 @@ const sensitivePathPatterns = [
 	/(?:^|\/)pip\/pip\.conf$/i,
 	/(?:^|\/)nuget\.config$/i,
 ] as const;
+
+function matchesSensitivePathPattern(value: string): boolean {
+	for (const pattern of sensitivePathPatterns) {
+		if (pattern.test(value)) return true;
+	}
+	return false;
+}
 
 export interface WorkspaceMutationResult {
 	changed: boolean;
@@ -193,7 +205,7 @@ function captureFixedOwnDataFields(
 	if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
 		throw new ToolPolicyError(`${description} must use an exact approved prototype`);
 	}
-	const captured = Object.create(null) as Record<string, unknown>;
+	const captured = INTRINSIC_OBJECT_CREATE(null) as Record<string, unknown>;
 	for (const field of fields) {
 		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, field);
 		if (!descriptor) {
@@ -210,7 +222,7 @@ function captureFixedOwnDataFields(
 			configurable: false,
 		});
 	}
-	return Object.freeze(captured);
+	return INTRINSIC_OBJECT_FREEZE(captured);
 }
 
 function captureToolPolicyOptions(options: ToolPolicyOptions): ToolPolicyOptions {
@@ -237,7 +249,7 @@ function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 		["workspaceId", "readPrefixes", "writePrefixes", "capabilityNames"],
 		"tool authority",
 	);
-	const authority = Object.freeze({
+	const authority = INTRINSIC_OBJECT_FREEZE({
 		workspaceId: authoritySource.workspaceId,
 		readPrefixes: capturePolicyArray<string>(authoritySource.readPrefixes, "read prefixes", 64, false),
 		writePrefixes: capturePolicyArray<string>(authoritySource.writePrefixes, "write prefixes", 64, readOnly),
@@ -276,7 +288,7 @@ function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 				Promise<WorkspaceMutationResult>;
 		},
 	} satisfies ScopedWorkspace;
-	Object.freeze(workspace);
+	INTRINSIC_OBJECT_FREEZE(workspace);
 
 	const capabilitySources = capturePolicyArray<HostCapability>(
 		root.capabilities,
@@ -284,7 +296,9 @@ function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 		MAX_CAPABILITIES,
 		true,
 	);
-	const capabilities = capabilitySources.map((capabilitySource) => {
+	const capabilities: HostCapability[] = [];
+	for (let index = 0; index < capabilitySources.length; index += 1) {
+		const capabilitySource = capabilitySources[index]!;
 		const fields = captureFixedOwnDataFields(
 			capabilitySource,
 			["name", "description", "mutates", "parameters", "execute"],
@@ -301,11 +315,11 @@ function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 				return INTRINSIC_REFLECT_APPLY(execute, capabilitySource, [arguments_, signal]);
 			},
 		} as unknown as HostCapability;
-		return Object.freeze(capturedCapability);
-	});
-	Object.freeze(capabilities);
+		capabilities[index] = INTRINSIC_OBJECT_FREEZE(capturedCapability);
+	}
+	INTRINSIC_OBJECT_FREEZE(capabilities);
 
-	return Object.freeze({ readOnly, workspace, authority, capabilities });
+	return INTRINSIC_OBJECT_FREEZE({ readOnly, workspace, authority, capabilities });
 }
 
 export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOptions = {}): ToolPolicy {
@@ -328,7 +342,7 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 		),
 	};
 	const capturedInput = captureToolPolicyInput(input);
-	const capabilities = validatePolicyInput(capturedInput);
+	const capabilities = validatePolicyInput(capturedInput, limits.maxWriteCharacters);
 
 	const readPrefixes = normalizeScopedPrefixes(capturedInput.authority.readPrefixes, "read");
 	const writePrefixes = capturedInput.readOnly && capturedInput.authority.writePrefixes.length === 0
@@ -346,21 +360,23 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 	const hostContracts = new Map<HostCapabilityName, CompiledToolArgumentContract>();
 	for (const capability of capabilities) {
 		if (!declared.has(capability.name)) {
-			throw new ToolPolicyError(`undeclared capability ${JSON.stringify(capability.name)} cannot expand authority`);
+			throw new ToolPolicyError(`undeclared capability ${INTRINSIC_JSON_STRINGIFY(capability.name)} cannot expand authority`);
 		}
 		if (capturedInput.readOnly && capability.mutates) continue;
 		tools.push(hostCapabilityTool(capability, limits));
 		hostContracts.set(capability.name, capability.argumentContract);
 	}
 
-	for (const tool of tools) Object.freeze(tool);
-	const names = tools.map((tool) => {
+	for (const tool of tools) INTRINSIC_OBJECT_FREEZE(tool);
+	const names: SessionToolName[] = [];
+	for (let index = 0; index < tools.length; index += 1) {
+		const tool = tools[index]!;
 		if (!isSessionToolName(tool.name)) throw new ToolPolicyError("tool policy constructed an unregistered tool identity");
-		return tool.name;
-	});
-	Object.freeze(names);
-	Object.freeze(tools);
-	return Object.freeze({
+		names[index] = tool.name;
+	}
+	INTRINSIC_OBJECT_FREEZE(names);
+	INTRINSIC_OBJECT_FREEZE(tools);
+	return INTRINSIC_OBJECT_FREEZE({
 		names,
 		tools,
 		projectArguments(name: string, raw: unknown, maximumBytes = MAX_TOOL_INPUT_BYTES) {
@@ -384,7 +400,7 @@ interface CompiledToolArgumentContract {
 	project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>>;
 }
 
-function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
+function validatePolicyInput(input: ToolPolicyInput, maximumStringLength: number): CompiledHostCapability[] {
 	if (!input || typeof input !== "object") throw new ToolPolicyError("tool policy input is required");
 	if (typeof input.readOnly !== "boolean") throw new ToolPolicyError("readOnly must be boolean");
 	if (!input.workspace || typeof input.workspace !== "object") throw new ToolPolicyError("workspace capability is required");
@@ -396,17 +412,17 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 			throw new ToolPolicyError(`workspace capability is missing ${method}`);
 		}
 	}
-	if (!Array.isArray(input.capabilities) || input.capabilities.length > MAX_CAPABILITIES) {
+	if (!INTRINSIC_IS_ARRAY(input.capabilities) || input.capabilities.length > MAX_CAPABILITIES) {
 		throw new ToolPolicyError("typed host capabilities must be a bounded array");
 	}
-	if (!Array.isArray(input.authority.capabilityNames) || input.authority.capabilityNames.length > MAX_CAPABILITIES) {
+	if (!INTRINSIC_IS_ARRAY(input.authority.capabilityNames) || input.authority.capabilityNames.length > MAX_CAPABILITIES) {
 		throw new ToolPolicyError("capability authority must be a bounded array");
 	}
 
 	const declared = new Set<HostCapabilityName>();
 	for (const name of input.authority.capabilityNames) {
 		if (!isHostCapabilityName(name)) {
-			throw new ToolPolicyError(`capability ${JSON.stringify(name)} is not in the closed host registry`);
+			throw new ToolPolicyError(`capability ${INTRINSIC_JSON_STRINGIFY(name)} is not in the closed host registry`);
 		}
 		if (declared.has(name)) throw new ToolPolicyError(`duplicate declared capability ${name}`);
 		declared.add(name);
@@ -421,7 +437,7 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 		const parameterSource = capability.parameters;
 		const execute = capability.execute;
 		if (!isHostCapabilityName(name)) {
-			throw new ToolPolicyError(`capability ${JSON.stringify(name)} is not in the closed host registry`);
+			throw new ToolPolicyError(`capability ${INTRINSIC_JSON_STRINGIFY(name)} is not in the closed host registry`);
 		}
 		if (supplied.has(name)) throw new ToolPolicyError(`duplicate supplied capability ${name}`);
 		supplied.add(name);
@@ -436,8 +452,8 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 			throw new ToolPolicyError(`capability ${name} has an invalid typed contract`);
 		}
 		const parameterSnapshot = snapshotCapabilitySchema(parameterSource, name);
-		const argumentContract = compileToolArgumentContract(parameterSnapshot, name);
-		capabilities.push(Object.freeze({
+		const argumentContract = compileToolArgumentContract(parameterSnapshot, name, maximumStringLength);
+		capabilities.push(INTRINSIC_OBJECT_FREEZE({
 			name,
 			description,
 			mutates,
@@ -454,27 +470,57 @@ function validatePolicyInput(input: ToolPolicyInput): CompiledHostCapability[] {
 	return capabilities;
 }
 
-type CompiledSchemaProjector = (value: unknown, description: string, depth: number) => JsonData;
+const MAX_PROJECTED_NODES = 4_096;
+const MAX_PROJECTED_KEYS = 4_096;
+const MAX_PROJECTED_ITEMS = 4_096;
+const MAX_PROJECTED_DEPTH = 64;
+const MAX_PROJECTED_CONTAINER_ENCOUNTERS = 4_096;
+
+interface ProjectionBudget {
+	nodes: number;
+	keys: number;
+	items: number;
+	containers: number;
+	bytes: number;
+	maximumBytes: number;
+	seen: WeakSet<object>;
+}
+
+type CompiledSchemaProjector = (
+	value: unknown,
+	description: string,
+	depth: number,
+	budget: ProjectionBudget,
+) => JsonData;
 
 interface CompiledSchemaNode {
 	readonly schema: PlainJsonSchema;
 	readonly project: CompiledSchemaProjector;
 }
 
-function compileToolArgumentContract(schema: PlainJsonSchema, name: string): CompiledToolArgumentContract {
-	const compiled = compileSchemaNode(schema, `${name} parameters`, 0);
-	return Object.freeze({
+function compileToolArgumentContract(
+	schema: PlainJsonSchema,
+	name: string,
+	maximumStringLength: number,
+): CompiledToolArgumentContract {
+	const compiled = compileSchemaNode(schema, `${name} parameters`, 0, maximumStringLength);
+	return INTRINSIC_OBJECT_FREEZE({
 		schema: compiled.schema,
 		project(raw: unknown, maximumBytes: number): Readonly<Record<string, unknown>> {
 			if (!Number.isSafeInteger(maximumBytes) || maximumBytes < 1) {
 				throw new ToolPolicyError(`${name} input has an invalid byte bound`);
 			}
 			const effectiveMaximum = Math.min(maximumBytes, MAX_TOOL_INPUT_BYTES);
-			const projected = compiled.project(raw, `${name} input`, 0);
+			const projected = compiled.project(raw, `${name} input`, 0, {
+				nodes: 0,
+				keys: 0,
+				items: 0,
+				containers: 0,
+				bytes: 0,
+				maximumBytes: effectiveMaximum,
+				seen: new WeakSet<object>(),
+			});
 			if (!isRecord(projected)) throw new ToolPolicyError(`${name} input must be an object`);
-			if (byteLength(JSON.stringify(projected)) > effectiveMaximum) {
-				throw new ToolPolicyError(`${name} input exceeded its bound`);
-			}
 			return projected;
 		},
 	});
@@ -484,37 +530,54 @@ function compileSchemaNode(
 	schema: PlainJsonSchema,
 	description: string,
 	depth: number,
+	maximumStringLength: number,
 ): CompiledSchemaNode {
 	if (depth > MAX_CAPABILITY_SCHEMA_DEPTH) throw new ToolPolicyError(`${description} exceeded its depth bound`);
 	const type = ownSchemaField(schema, "type", description);
 	if (type === "string") {
 		assertSchemaVocabulary(schema, ["type"], ["minLength", "maxLength", "enum"], description);
-		const minimum = optionalSchemaInteger(schema, "minLength", 0, MAX_WRITE_CHARACTERS, description);
-		const maximum = optionalSchemaInteger(schema, "maxLength", 0, MAX_WRITE_CHARACTERS, description);
+		const minimum = optionalSchemaInteger(schema, "minLength", 0, maximumStringLength, description) ?? 0;
+		const authoredMaximum = optionalSchemaInteger(schema, "maxLength", 0, MAX_WRITE_CHARACTERS, description);
+		const maximum = Math.min(authoredMaximum ?? maximumStringLength, maximumStringLength);
 		const enumSource = optionalOwnSchemaField(schema, "enum", description);
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "string", description);
-		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
+		if (minimum > maximum) {
 			throw new ToolPolicyError(`${description} has inverted string bounds`);
 		}
-		const entries: Array<readonly [string, JsonData]> = [["type", type]];
-		if (minimum !== undefined) entries.push(["minLength", minimum]);
-		if (maximum !== undefined) entries.push(["maxLength", maximum]);
+		const entries: Array<readonly [string, JsonData]> = [
+			["type", type], ["minLength", minimum], ["maxLength", maximum],
+		];
 		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
-		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
+			valueDepth: number,
+			budget: ProjectionBudget,
 		) => {
-			if (typeof value !== "string" || (minimum !== undefined && value.length < minimum) ||
-				(maximum !== undefined && value.length > maximum) || !enumAccepts(enumValues, value)) {
+			chargeProjectionNode(budget, valueDepth, valueDescription);
+			const normalized = normalizeSchemaString(value, valueDescription);
+			if (normalized.length < minimum || normalized.length > maximum || !enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its string schema`);
 			}
-			return value;
+			chargeProjectedScalarBytes(budget, normalized, valueDescription);
+			return normalized;
 		} });
 	}
 	if (type === "integer" || type === "number") {
 		assertSchemaVocabulary(schema, ["type"], ["minimum", "maximum", "enum"], description);
-		const minimum = optionalSchemaFiniteNumber(schema, "minimum", description);
-		const maximum = optionalSchemaFiniteNumber(schema, "maximum", description);
+		const authoredMinimum = optionalSchemaFiniteNumber(schema, "minimum", description);
+		const authoredMaximum = optionalSchemaFiniteNumber(schema, "maximum", description);
+		if (type === "integer" &&
+			((authoredMinimum !== undefined && !Number.isInteger(authoredMinimum)) ||
+				(authoredMaximum !== undefined && !Number.isInteger(authoredMaximum)))) {
+			throw new ToolPolicyError(`${description} integer bounds must be integral`);
+		}
+		const minimum = type === "integer"
+			? Math.max(authoredMinimum ?? Number.MIN_SAFE_INTEGER, Number.MIN_SAFE_INTEGER)
+			: authoredMinimum;
+		const maximum = type === "integer"
+			? Math.min(authoredMaximum ?? Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER)
+			: authoredMaximum;
 		const enumSource = optionalOwnSchemaField(schema, "enum", description);
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, type, description);
 		if (minimum !== undefined && maximum !== undefined && minimum > maximum) {
@@ -524,16 +587,21 @@ function compileSchemaNode(
 		if (minimum !== undefined) entries.push(["minimum", minimum]);
 		if (maximum !== undefined) entries.push(["maximum", maximum]);
 		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
-		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
+			valueDepth: number,
+			budget: ProjectionBudget,
 		) => {
-			if (typeof value !== "number" || !Number.isFinite(value) || (type === "integer" && !Number.isSafeInteger(value)) ||
-				(minimum !== undefined && value < minimum) || (maximum !== undefined && value > maximum) ||
-				!enumAccepts(enumValues, value)) {
+			chargeProjectionNode(budget, valueDepth, valueDescription);
+			const normalized = normalizeSchemaNumber(value, type, valueDescription);
+			if ((type === "integer" && !Number.isSafeInteger(normalized)) ||
+				(minimum !== undefined && normalized < minimum) || (maximum !== undefined && normalized > maximum) ||
+				!enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its numeric schema`);
 			}
-			return value;
+			chargeProjectedScalarBytes(budget, normalized, valueDescription);
+			return normalized;
 		} });
 	}
 	if (type === "boolean") {
@@ -542,48 +610,58 @@ function compileSchemaNode(
 		const enumValues = enumSource === undefined ? undefined : captureCompiledEnum(enumSource, "boolean", description);
 		const entries: Array<readonly [string, JsonData]> = [["type", type]];
 		if (enumValues !== undefined) entries.push(["enum", enumValues as JsonData[]]);
-		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
+			valueDepth: number,
+			budget: ProjectionBudget,
 		) => {
-			if (typeof value !== "boolean" || !enumAccepts(enumValues, value)) {
+			chargeProjectionNode(budget, valueDepth, valueDescription);
+			const normalized = normalizeSchemaBoolean(value, valueDescription);
+			if (!enumAccepts(enumValues, normalized)) {
 				throw new ToolPolicyError(`${valueDescription} violates its boolean schema`);
 			}
-			return value;
+			chargeProjectedScalarBytes(budget, normalized, valueDescription);
+			return normalized;
 		} });
 	}
 	if (type === "array") {
 		assertSchemaVocabulary(schema, ["type", "items"], ["minItems", "maxItems"], description);
 		const items = ownSchemaField(schema, "items", description);
 		if (!isRecord(items)) throw new ToolPolicyError(`${description} requires an array item schema`);
-		const item = compileSchemaNode(items, `${description} items`, depth + 1);
+		const item = compileSchemaNode(items, `${description} items`, depth + 1, maximumStringLength);
 		const minimum = optionalSchemaInteger(schema, "minItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ?? 0;
 		const maximum = optionalSchemaInteger(schema, "maxItems", 0, MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS, description) ??
 			MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS;
 		if (minimum > maximum) throw new ToolPolicyError(`${description} has inverted array bounds`);
-		const entries: Array<readonly [string, JsonData]> = [["type", type], ["items", item.schema as JsonData]];
-		if (optionalOwnSchemaField(schema, "minItems", description) !== undefined) entries.push(["minItems", minimum]);
-		if (optionalOwnSchemaField(schema, "maxItems", description) !== undefined) entries.push(["maxItems", maximum]);
-		return Object.freeze({ schema: canonicalSchemaRecord(entries), project: (
+		const entries: Array<readonly [string, JsonData]> = [
+			["type", type], ["items", item.schema as JsonData], ["minItems", minimum], ["maxItems", maximum],
+		];
+		return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchemaRecord(entries), project: (
 			value: unknown,
 			valueDescription: string,
 			valueDepth: number,
+			budget: ProjectionBudget,
 		) => {
+			chargeProjectionNode(budget, valueDepth, valueDescription);
 			if (!INTRINSIC_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value) ||
 				INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
 				throw new ToolPolicyError(`${valueDescription} must be an exact array`);
 			}
+			chargeProjectionContainer(budget, value, valueDescription);
 			const length = ownArrayLength(value, valueDescription);
 			if (length < minimum || length > maximum) throw new ToolPolicyError(`${valueDescription} violates its array bounds`);
+			chargeProjectionItems(budget, length, valueDescription);
+			chargeProjectionBytes(budget, 2 + Math.max(0, length - 1), valueDescription);
 			const projected: JsonData[] = [];
 			for (let index = 0; index < length; index += 1) {
 				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new ToolPolicyError(`${valueDescription} contains a sparse or accessor item`);
 				}
-				projected.push(item.project(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1));
+				projected.push(item.project(descriptor.value, `${valueDescription}[${index}]`, valueDepth + 1, budget));
 			}
-			return Object.freeze(projected) as JsonData[];
+			return INTRINSIC_OBJECT_FREEZE(projected) as JsonData[];
 		} });
 	}
 	if (type !== "object") {
@@ -621,18 +699,27 @@ function compileSchemaNode(
 		requiredNames.push(propertyName);
 	}
 	const names = INTRINSIC_OBJECT_KEYS(properties);
-	if (names.length !== requiredNames.length || names.some((field) => !unique.has(field))) {
+	let propertySetMatches = names.length === requiredNames.length;
+	for (let index = 0; propertySetMatches && index < names.length; index += 1) {
+		propertySetMatches = unique.has(names[index]!);
+	}
+	if (!propertySetMatches) {
 		throw new ToolPolicyError(`${description} cannot contain optional or undeclared properties`);
 	}
 	const projectors: CompiledSchemaProjector[] = [];
-	const canonicalProperties = Object.create(null) as Record<string, JsonData>;
+	const canonicalProperties = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonData>;
 	for (const propertyName of names) {
 		const propertyDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(properties, propertyName);
 		if (!propertyDescriptor?.enumerable || propertyDescriptor.get || propertyDescriptor.set ||
 			!("value" in propertyDescriptor) || !isRecord(propertyDescriptor.value)) {
-			throw new ToolPolicyError(`${description} property ${JSON.stringify(propertyName)} is invalid`);
+			throw new ToolPolicyError(`${description} property ${INTRINSIC_JSON_STRINGIFY(propertyName)} is invalid`);
 		}
-		const property = compileSchemaNode(propertyDescriptor.value, `${description}.${propertyName}`, depth + 1);
+		const property = compileSchemaNode(
+			propertyDescriptor.value,
+			`${description}.${propertyName}`,
+			depth + 1,
+			maximumStringLength,
+		);
 		projectors.push(property.project);
 		INTRINSIC_DEFINE_PROPERTY(canonicalProperties, propertyName, {
 			value: property.schema,
@@ -641,32 +728,48 @@ function compileSchemaNode(
 			configurable: false,
 		});
 	}
-	Object.freeze(requiredNames);
-	Object.freeze(names);
-	Object.freeze(projectors);
-	Object.freeze(canonicalProperties);
-	const canonicalRequired = Object.freeze([...requiredNames]);
+	INTRINSIC_OBJECT_FREEZE(requiredNames);
+	INTRINSIC_OBJECT_FREEZE(names);
+	INTRINSIC_OBJECT_FREEZE(projectors);
+	INTRINSIC_OBJECT_FREEZE(canonicalProperties);
+	const canonicalRequired = INTRINSIC_OBJECT_FREEZE([...requiredNames]);
 	const canonicalSchema = canonicalSchemaRecord([
 		["type", type],
 		["additionalProperties", false],
 		["properties", canonicalProperties],
 		["required", canonicalRequired as JsonData[]],
 	]);
-	return Object.freeze({ schema: canonicalSchema, project: (
+	return INTRINSIC_OBJECT_FREEZE({ schema: canonicalSchema, project: (
 		value: unknown,
 		valueDescription: string,
 		valueDepth: number,
+		budget: ProjectionBudget,
 	) => {
+		chargeProjectionNode(budget, valueDepth, valueDescription);
 		if (!isRecord(value) || INTRINSIC_IS_PROXY(value)) throw new ToolPolicyError(`${valueDescription} must be an object`);
 		const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
 		if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
 			throw new ToolPolicyError(`${valueDescription} must use an exact approved prototype`);
 		}
+		chargeProjectionContainer(budget, value, valueDescription);
 		const suppliedNames = INTRINSIC_OBJECT_KEYS(value);
-		if (suppliedNames.length !== names.length || suppliedNames.some((field) => !unique.has(field))) {
+		let suppliedSetMatches = suppliedNames.length === names.length;
+		for (let index = 0; suppliedSetMatches && index < suppliedNames.length; index += 1) {
+			suppliedSetMatches = unique.has(suppliedNames[index]!);
+		}
+		if (!suppliedSetMatches) {
 			throw new ToolPolicyError(`${valueDescription} contains unknown or missing fields`);
 		}
-		const projected = Object.create(null) as Record<string, JsonData>;
+		chargeProjectionKeys(budget, names.length, valueDescription);
+		chargeProjectionBytes(budget, 2 + Math.max(0, names.length - 1), valueDescription);
+		for (const field of names) {
+			chargeProjectionBytes(
+				budget,
+				byteLength(INTRINSIC_JSON_STRINGIFY(field)) + 1,
+				valueDescription,
+			);
+		}
+		const projected = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonData>;
 		for (let index = 0; index < names.length; index += 1) {
 			const field = names[index]!;
 			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, field);
@@ -674,13 +777,13 @@ function compileSchemaNode(
 				throw new ToolPolicyError(`${valueDescription}.${field} must be an own data field`);
 			}
 			INTRINSIC_DEFINE_PROPERTY(projected, field, {
-				value: projectors[index]!(descriptor.value, `${valueDescription}.${field}`, valueDepth + 1),
+				value: projectors[index]!(descriptor.value, `${valueDescription}.${field}`, valueDepth + 1, budget),
 				enumerable: true,
 				writable: false,
 				configurable: false,
 			});
 		}
-		return Object.freeze(projected);
+		return INTRINSIC_OBJECT_FREEZE(projected);
 	} });
 }
 
@@ -692,14 +795,18 @@ function assertSchemaVocabulary(
 ): void {
 	const allowed = new Set([...required, ...optional]);
 	const keys = INTRINSIC_OBJECT_KEYS(schema);
-	if (keys.length < required.length || keys.some((field) => !allowed.has(field))) {
+	let supported = keys.length >= required.length;
+	for (let index = 0; supported && index < keys.length; index += 1) {
+		supported = allowed.has(keys[index]!);
+	}
+	if (!supported) {
 		throw new ToolPolicyError(`${description} uses unsupported schema keywords`);
 	}
 	for (const field of required) ownSchemaField(schema, field, description);
 }
 
 function canonicalSchemaRecord(entries: readonly (readonly [string, JsonData])[]): PlainJsonSchema {
-	const schema = Object.create(null) as Record<string, JsonData>;
+	const schema = INTRINSIC_OBJECT_CREATE(null) as Record<string, JsonData>;
 	for (const [field, value] of entries) {
 		INTRINSIC_DEFINE_PROPERTY(schema, field, {
 			value,
@@ -708,7 +815,7 @@ function canonicalSchemaRecord(entries: readonly (readonly [string, JsonData])[]
 			configurable: false,
 		});
 	}
-	return Object.freeze(schema);
+	return INTRINSIC_OBJECT_FREEZE(schema);
 }
 
 function ownSchemaField(schema: PlainJsonSchema, field: string, description: string): unknown {
@@ -749,7 +856,7 @@ function optionalSchemaFiniteNumber(schema: PlainJsonSchema, field: string, desc
 	if (typeof value !== "number" || !Number.isFinite(value)) {
 		throw new ToolPolicyError(`${description} has an invalid ${field}`);
 	}
-	return value;
+	return value === 0 ? 0 : value;
 }
 
 function captureCompiledEnum(
@@ -768,19 +875,104 @@ function captureCompiledEnum(
 	const values: JsonData[] = [];
 	for (let index = 0; index < length; index += 1) {
 		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(source, String(index));
-		const value = descriptor && "value" in descriptor ? descriptor.value : undefined;
+		const sourceValue = descriptor && "value" in descriptor ? descriptor.value : undefined;
 		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor) ||
-			typeof value !== (type === "integer" || type === "number" ? "number" : type) ||
-			(typeof value === "number" && (!Number.isFinite(value) || (type === "integer" && !Number.isSafeInteger(value))))) {
+			typeof sourceValue !== (type === "integer" || type === "number" ? "number" : type) ||
+			(typeof sourceValue === "number" &&
+				(!Number.isFinite(sourceValue) || (type === "integer" && !Number.isSafeInteger(sourceValue))))) {
 			throw new ToolPolicyError(`${description} enum contains an unsupported value`);
 		}
-		values.push(value as JsonData);
+		const value = typeof sourceValue === "number" && sourceValue === 0 ? 0 : sourceValue as JsonData;
+		for (const existing of values) {
+			if (existing === value) throw new ToolPolicyError(`${description} enum contains a canonical duplicate`);
+		}
+		values.push(value);
 	}
-	return Object.freeze(values);
+	return INTRINSIC_OBJECT_FREEZE(values);
 }
 
 function enumAccepts(values: readonly JsonData[] | undefined, value: JsonData): boolean {
-	return values === undefined || values.some((candidate) => Object.is(candidate, value));
+	if (values === undefined) return true;
+	for (const candidate of values) {
+		if (candidate === value) return true;
+	}
+	return false;
+}
+
+function normalizeSchemaString(value: unknown, description: string): string {
+	if (typeof value === "string") return value;
+	if (value === null) return "";
+	if (typeof value === "boolean") return String(value);
+	if (typeof value === "number" && Number.isFinite(value)) return String(value);
+	throw new ToolPolicyError(`${description} violates its string schema`);
+}
+
+function normalizeSchemaNumber(
+	value: unknown,
+	type: "integer" | "number",
+	description: string,
+): number {
+	let normalized: number;
+	if (value === null) normalized = 0;
+	else if (typeof value === "boolean") normalized = value ? 1 : 0;
+	else if (typeof value === "number") normalized = value;
+	else if (typeof value === "string" && value.length > 0) normalized = Number(value);
+	else throw new ToolPolicyError(`${description} violates its numeric schema`);
+	if (!Number.isFinite(normalized) || (type === "integer" && !Number.isInteger(normalized))) {
+		throw new ToolPolicyError(`${description} violates its numeric schema`);
+	}
+	return normalized === 0 ? 0 : normalized;
+}
+
+function normalizeSchemaBoolean(value: unknown, description: string): boolean {
+	if (typeof value === "boolean") return value;
+	if (value === null) return false;
+	if (value === "true" || value === 1) return true;
+	if (value === "false" || (typeof value === "number" && value === 0)) return false;
+	throw new ToolPolicyError(`${description} violates its boolean schema`);
+}
+
+function chargeProjectionNode(budget: ProjectionBudget, depth: number, description: string): void {
+	budget.nodes += 1;
+	if (budget.nodes > MAX_PROJECTED_NODES || depth > MAX_PROJECTED_DEPTH) {
+		throw new ToolPolicyError(`${description} exceeded its shared node or depth bound`);
+	}
+}
+
+function chargeProjectionContainer(budget: ProjectionBudget, value: object, description: string): void {
+	budget.containers += 1;
+	if (budget.containers > MAX_PROJECTED_CONTAINER_ENCOUNTERS) {
+		throw new ToolPolicyError(`${description} exceeded its shared container bound`);
+	}
+	if (budget.seen.has(value)) throw new ToolPolicyError(`${description} repeats an object or array identity`);
+	budget.seen.add(value);
+}
+
+function chargeProjectionKeys(budget: ProjectionBudget, count: number, description: string): void {
+	if (count > MAX_PROJECTED_KEYS - budget.keys) {
+		throw new ToolPolicyError(`${description} exceeded its shared object-key bound`);
+	}
+	budget.keys += count;
+}
+
+function chargeProjectionItems(budget: ProjectionBudget, count: number, description: string): void {
+	if (count > MAX_PROJECTED_ITEMS - budget.items) {
+		throw new ToolPolicyError(`${description} exceeded its shared array-item bound`);
+	}
+	budget.items += count;
+}
+
+function chargeProjectionBytes(budget: ProjectionBudget, count: number, description: string): void {
+	if (count > budget.maximumBytes - budget.bytes) {
+		throw new ToolPolicyError(`${description} exceeded its incremental encoded-byte bound`);
+	}
+	budget.bytes += count;
+}
+
+function chargeProjectedScalarBytes(budget: ProjectionBudget, value: JsonData, description: string): void {
+	const encoded = INTRINSIC_JSON_STRINGIFY(value);
+	if (typeof encoded !== "string") throw new ToolPolicyError(`${description} contains a non-JSON scalar`);
+	chargeProjectionBytes(budget, byteLength(encoded), description);
 }
 
 function ownArrayLength(value: readonly unknown[], description: string): number {
@@ -815,7 +1007,7 @@ function snapshotCapabilitySchema(source: unknown, name: string): PlainJsonSchem
 	if (snapshot.type !== "object" || snapshot.additionalProperties !== false) {
 		throw new ToolPolicyError(`capability ${name} parameter schema must be a closed object`);
 	}
-	const serialized = JSON.stringify(snapshot);
+	const serialized = INTRINSIC_JSON_STRINGIFY(snapshot);
 	if (byteLength(serialized) > MAX_CAPABILITY_SCHEMA_BYTES) {
 		throw new ToolPolicyError(`capability ${name} parameter schema exceeded its byte bound`);
 	}
@@ -851,20 +1043,20 @@ function snapshotJsonData(
 		return value;
 	}
 	if (typeof value !== "object") throw new ToolPolicyError(`${description} contains a non-JSON value`);
-	if (nodeTypes.isProxy(value)) throw new ToolPolicyError(`${description} cannot be a Proxy`);
+	if (INTRINSIC_IS_PROXY(value)) throw new ToolPolicyError(`${description} cannot be a Proxy`);
 	if (ancestors.has(value)) throw new ToolPolicyError(`${description} contains a cycle`);
 	ancestors.add(value);
 	addSchemaBytes(budget, 2, description);
 
 	try {
-		if (Array.isArray(value)) {
-			if (Object.getPrototypeOf(value) !== Array.prototype) {
+		if (INTRINSIC_IS_ARRAY(value)) {
+			if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
 				throw new ToolPolicyError(`${description} array must use the exact Array prototype`);
 			}
 			if (value.length > MAX_CAPABILITY_SCHEMA_ARRAY_ITEMS) {
 				throw new ToolPolicyError(`${description} array exceeded its bound`);
 			}
-			const lengthDescriptor = Object.getOwnPropertyDescriptor(value, "length");
+			const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
 			if (!lengthDescriptor || !("value" in lengthDescriptor) || lengthDescriptor.value !== value.length ||
 				lengthDescriptor.enumerable || lengthDescriptor.get || lengthDescriptor.set) {
 				throw new ToolPolicyError(`${description} array must be dense, plain, and bounded`);
@@ -873,22 +1065,22 @@ function snapshotJsonData(
 			if (budget.keys > MAX_CAPABILITY_SCHEMA_KEYS) throw new ToolPolicyError(`${description} exceeded its key bound`);
 			const result: JsonData[] = [];
 			for (let index = 0; index < value.length; index += 1) {
-				const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+				const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, String(index));
 				if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 					throw new ToolPolicyError(`${description} array contains an accessor or sparse item`);
 				}
 				result.push(snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description));
 			}
-			return Object.freeze(result) as JsonData[];
+			return INTRINSIC_OBJECT_FREEZE(result) as JsonData[];
 		}
 
-		const prototype = Object.getPrototypeOf(value);
-		if (prototype !== Object.prototype && prototype !== null) {
+		const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+		if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
 			throw new ToolPolicyError(`${description} must contain plain JSON objects only`);
 		}
 		// Prototype safety is established before bounded own-name discovery. Hidden peers stay
 		// opaque; enumerable JSON fields are then captured descriptor by descriptor.
-		const result = Object.create(null) as { [key: string]: JsonData };
+		const result = INTRINSIC_OBJECT_CREATE(null) as { [key: string]: JsonData };
 		const keys = INTRINSIC_OBJECT_KEYS(value);
 		if (keys.length > MAX_CAPABILITY_SCHEMA_KEYS - budget.keys) {
 			throw new ToolPolicyError(`${description} exceeded its key bound`);
@@ -899,18 +1091,18 @@ function snapshotJsonData(
 				throw new ToolPolicyError(`${description} exceeded its key bound`);
 			}
 			addSchemaBytes(budget, byteLength(key) + 3, description);
-			const descriptor = Object.getOwnPropertyDescriptor(value, key);
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, key);
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new ToolPolicyError(`${description} contains an accessor field`);
 			}
-			Object.defineProperty(result, key, {
+			INTRINSIC_DEFINE_PROPERTY(result, key, {
 				value: snapshotJsonData(descriptor.value, depth + 1, budget, ancestors, description),
 				enumerable: true,
 				writable: false,
 				configurable: false,
 			});
 		}
-		return Object.freeze(result);
+		return INTRINSIC_OBJECT_FREEZE(result);
 	} finally {
 		ancestors.delete(value);
 	}
@@ -1031,10 +1223,14 @@ function hostCapabilityTool(
 				assertSignal(signal);
 				const params = capability.argumentContract.project(rawParams, limits.maxWriteCharacters);
 				const result = captureCapabilityResult(capability.name, await capability.execute(params, signal));
-				return textResult(JSON.stringify({
+				const references: string[] = [];
+				for (let index = 0; index < result.references.length; index += 1) {
+					references[index] = redactSensitiveText(result.references[index]!);
+				}
+				return textResult(INTRINSIC_JSON_STRINGIFY({
 					status: result.status,
 					summary: redactSensitiveText(result.summary),
-					references: result.references.map(redactSensitiveText),
+					references,
 				}), limits.maxToolOutputBytes);
 			});
 		},
@@ -1057,7 +1253,7 @@ function projectWorkspaceArguments(
 			: ["path", "content"] as const;
 	const projected = recordParams(raw, name);
 	assertOnlyKeys(projected, allowed, name);
-	if (byteLength(JSON.stringify(projected)) > effectiveMaximum) {
+	if (byteLength(INTRINSIC_JSON_STRINGIFY(projected)) > effectiveMaximum) {
 		throw new ToolPolicyError(`${name} arguments exceeded their byte bound`);
 	}
 	return projected;
@@ -1074,7 +1270,7 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 	if (normalized === ".." || normalized.startsWith("../") || normalized === ".") {
 		throw new ToolPolicyError("workspace path traversal or workspace-root access is forbidden");
 	}
-	if (sensitivePathPatterns.some((pattern) => pattern.test(normalized))) {
+	if (matchesSensitivePathPattern(normalized)) {
 		throw new ToolPolicyError("sensitive workspace paths are outside agent authority");
 	}
 	let allowed = false;
@@ -1086,7 +1282,7 @@ export function validateScopedPath(path: string, prefixes: readonly string[]): s
 		}
 	}
 	if (!allowed) {
-		throw new ToolPolicyError(`workspace path ${JSON.stringify(normalized)} is outside the declared scope`);
+		throw new ToolPolicyError(`workspace path ${INTRINSIC_JSON_STRINGIFY(normalized)} is outside the declared scope`);
 	}
 	return normalized;
 }
@@ -1098,6 +1294,16 @@ export interface RedactionScanMetrics {
 	maxMainCursorVisits: number;
 	keyCharacterVisits: number;
 	boundaryCharacterVisits: number;
+	recognizerCharacterVisits: number;
+	lexicalTransitions: number;
+	frameOperations: number;
+	recoveryTransitions: number;
+	rangeEmissions: number;
+	rangeExaminations: number;
+	rangeInsertions: number;
+	rangeCoalescences: number;
+	replacementEmissions: number;
+	renderedSourceUnits: number;
 	totalWork: number;
 }
 
@@ -1387,6 +1593,16 @@ function initializeStreamingMetrics(metrics: RedactionScanMetrics | undefined, s
 	metrics.maxMainCursorVisits = 0;
 	metrics.keyCharacterVisits = 0;
 	metrics.boundaryCharacterVisits = 0;
+	metrics.recognizerCharacterVisits = 0;
+	metrics.lexicalTransitions = 0;
+	metrics.frameOperations = 0;
+	metrics.recoveryTransitions = 0;
+	metrics.rangeEmissions = 0;
+	metrics.rangeExaminations = 0;
+	metrics.rangeInsertions = 0;
+	metrics.rangeCoalescences = 0;
+	metrics.replacementEmissions = 0;
+	metrics.renderedSourceUnits = 0;
 	metrics.totalWork = 0;
 }
 
@@ -1400,6 +1616,24 @@ function chargeWork(metrics?: RedactionScanMetrics): void {
 	if (metrics) metrics.totalWork += 1;
 }
 
+type RedactionWorkCategory =
+	| "recognizerCharacterVisits"
+	| "lexicalTransitions"
+	| "frameOperations"
+	| "recoveryTransitions"
+	| "rangeEmissions"
+	| "rangeExaminations"
+	| "rangeInsertions"
+	| "rangeCoalescences"
+	| "replacementEmissions"
+	| "renderedSourceUnits";
+
+function chargeCategorizedWork(metrics: RedactionScanMetrics | undefined, category: RedactionWorkCategory): void {
+	if (!metrics) return;
+	metrics[category] += 1;
+	metrics.totalWork += 1;
+}
+
 function emitPlannedRange(
 	state: RedactionStreamingState,
 	start: number,
@@ -1411,7 +1645,7 @@ function emitPlannedRange(
 ): PlannedRedactionRange {
 	const range = { start, end, replacement, priority, active } satisfies PlannedRedactionRange;
 	state.ranges.push(range);
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "rangeEmissions");
 	return range;
 }
 
@@ -1837,7 +2071,7 @@ function finishOneStreamingAssignment(
 	malformed: boolean,
 	metrics?: RedactionScanMetrics,
 ): void {
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "lexicalTransitions");
 	assignment.valueEnd = Math.max(assignment.valueStart ?? end, end);
 	if (assignment.range) assignment.range.end = assignment.valueEnd;
 	const prefix = assignment.valuePrefix.trim();
@@ -1923,7 +2157,7 @@ function pushStreamingFrameOrRecover(
 			? assignment
 			: undefined,
 	});
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "frameOperations");
 	state.flowCandidateSlot = true;
 	state.lineCandidateSlot = false;
 }
@@ -1943,7 +2177,7 @@ function closeStreamingFrameOrRecover(
 	}
 	const closingDepth = state.frames.length;
 	state.frames.pop();
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "frameOperations");
 	while (true) {
 		const assignment = state.assignments.at(-1);
 		if (!assignment || assignment.compositeDepth !== closingDepth) break;
@@ -1957,7 +2191,7 @@ function latestPublicRecoveryRange(
 	metrics?: RedactionScanMetrics,
 ): PlannedRedactionRange | undefined {
 	for (let index = state.assignments.length - 1; index >= 0; index -= 1) {
-		chargeWork(metrics);
+		chargeCategorizedWork(metrics, "recoveryTransitions");
 		const assignment = state.assignments[index]!;
 		if (assignment.kind === "public" && assignment.range) return assignment.range;
 	}
@@ -1976,7 +2210,7 @@ function beginStreamingRecovery(
 	range.priority = priority;
 	range.end = Math.max(range.end, state.i);
 	state.recovery = { range };
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recoveryTransitions");
 	state.candidate = undefined;
 	state.assignments.length = 0;
 }
@@ -1987,7 +2221,7 @@ function finishRecoveryAtLine(
 	metrics?: RedactionScanMetrics,
 ): void {
 	if (state.recovery) state.recovery.range.end = position;
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recoveryTransitions");
 	state.recovery = undefined;
 	state.frames.length = 0;
 	state.assignments.length = 0;
@@ -2022,7 +2256,7 @@ function finishStreamingEof(
 ): void {
 	if (state.recovery) {
 		state.recovery.range.end = end;
-		chargeWork(metrics);
+		chargeCategorizedWork(metrics, "recoveryTransitions");
 	}
 	if (state.candidate?.quoted && !state.candidate.quoteClosed) {
 		// The delimiter-adjacent span has already been consumed and is bounded by EOF.
@@ -2046,7 +2280,7 @@ function finishStreamingEof(
 		finishOneStreamingAssignment(state, assignment, end, malformed, metrics);
 	}
 	for (const frame of state.frames) {
-		chargeWork(metrics);
+		chargeCategorizedWork(metrics, "frameOperations");
 		if (frame.publicOwner?.range) {
 			frame.publicOwner.range.active = true;
 			frame.publicOwner.range.end = end;
@@ -2068,15 +2302,15 @@ function feedStrongCredentialRecognizers(
 	position: number,
 	metrics?: RedactionScanMetrics,
 ): void {
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recognizerCharacterVisits");
 	feedPrivateKeyRecognizer(state, character, position, metrics);
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recognizerCharacterVisits");
 	feedUrlCredentialRecognizer(state, character, position, metrics);
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recognizerCharacterVisits");
 	feedQueryCredentialRecognizer(state, character, position, metrics);
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recognizerCharacterVisits");
 	feedPasswordCredentialRecognizer(state, character, position, metrics);
-	chargeWork(metrics);
+	chargeCategorizedWork(metrics, "recognizerCharacterVisits");
 	feedCookieCredentialRecognizer(state, character, position, metrics);
 	if (isPhysicalLineEnding(character)) {
 		state.strong.password.word = "";
@@ -2371,21 +2605,21 @@ function applyRedactionPlan(
 ): string {
 	const ranges: PlannedRedactionRange[] = [];
 	for (const candidate of planned) {
-		chargeWork(metrics);
+		chargeCategorizedWork(metrics, "rangeExaminations");
 		if (!candidate.active || candidate.end <= candidate.start) continue;
 		const start = Math.max(0, Math.min(source.length, candidate.start));
 		const end = Math.max(start, Math.min(source.length, candidate.end));
 		if (end <= start) continue;
 		const previous = ranges.at(-1);
 		if (previous && start <= previous.end) {
-			chargeWork(metrics);
+			chargeCategorizedWork(metrics, "rangeCoalescences");
 			previous.end = Math.max(previous.end, end);
 			if (rangePriority(candidate.priority) > rangePriority(previous.priority)) {
 				previous.priority = candidate.priority;
 				previous.replacement = candidate.replacement;
 			}
 		} else {
-			chargeWork(metrics);
+			chargeCategorizedWork(metrics, "rangeInsertions");
 			ranges.push({ ...candidate, start, end });
 		}
 	}
@@ -2395,7 +2629,7 @@ function applyRedactionPlan(
 	for (const range of ranges) {
 		appendRenderedSource(chunks, source, cursor, range.start, metrics);
 		chunks.push(range.replacement);
-		chargeWork(metrics);
+		chargeCategorizedWork(metrics, "replacementEmissions");
 		cursor = range.end;
 	}
 	appendRenderedSource(chunks, source, cursor, source.length, metrics);
@@ -2410,7 +2644,9 @@ function appendRenderedSource(
 	metrics?: RedactionScanMetrics,
 ): void {
 	if (end <= start) return;
-	for (let position = start; position < end; position += 1) chargeWork(metrics);
+	for (let position = start; position < end; position += 1) {
+		chargeCategorizedWork(metrics, "renderedSourceUnits");
+	}
 	chunks.push(source.slice(start, end));
 }
 
@@ -2479,7 +2715,11 @@ function canonicalAssignmentKey(key: string): {
 	path: string;
 	terminal: string;
 } {
-	const segments = key.toLowerCase().split(".").map((segment) => segment.replace(/[-_]/g, ""));
+	const sourceSegments = key.toLowerCase().split(".");
+	const segments: string[] = [];
+	for (let index = 0; index < sourceSegments.length; index += 1) {
+		segments[index] = sourceSegments[index]!.replace(/[-_]/g, "");
+	}
 	return { segments, path: segments.join("."), terminal: segments.at(-1) ?? "" };
 }
 
@@ -2528,13 +2768,13 @@ export function normalizeScopedPrefixes(prefixes: unknown, description: string):
 			throw new ToolPolicyError(`${description} prefix is invalid`);
 		}
 		const value = posix.normalize(prefix).replace(/\/$/, "");
-		if (value === "." || sensitivePathPatterns.some((pattern) => pattern.test(value))) {
+		if (value === "." || matchesSensitivePathPattern(value)) {
 			throw new ToolPolicyError(`${description} prefix grants sensitive or workspace-root authority`);
 		}
 		normalized.push(value);
 	}
 	if (new Set(normalized).size !== normalized.length) throw new ToolPolicyError(`duplicate ${description} prefix`);
-	Object.freeze(normalized);
+	INTRINSIC_OBJECT_FREEZE(normalized);
 	return normalized;
 }
 
@@ -2565,16 +2805,16 @@ function capturePolicyArray<T>(
 		}
 		captured[index] = descriptor.value as T;
 	}
-	Object.freeze(captured);
+	INTRINSIC_OBJECT_FREEZE(captured);
 	return captured;
 }
 
 function captureCapabilityResult(name: string, result: CapabilityResult): Readonly<Required<CapabilityResult>> {
-	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
+	if (!result || typeof result !== "object" || INTRINSIC_IS_PROXY(result)) {
 		throw new ToolPolicyError(`${name} returned an invalid result`);
 	}
-	const resultPrototype = Object.getPrototypeOf(result);
-	if (resultPrototype !== Object.prototype && resultPrototype !== null) {
+	const resultPrototype = INTRINSIC_GET_PROTOTYPE_OF(result);
+	if (resultPrototype !== INTRINSIC_OBJECT_PROTOTYPE && resultPrototype !== null) {
 		throw new ToolPolicyError(`${name} result must use an exact approved prototype`);
 	}
 	const fields = captureOwnResultFields(result, ["status", "summary", "references"], `${name} result`);
@@ -2587,14 +2827,14 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 	const summary = boundedString(summarySource, `${name} summary`, MAX_CAPABILITY_SUMMARY_CHARACTERS, false);
 	const references: string[] = [];
 	if (referencesSource !== undefined) {
-		if (!Array.isArray(referencesSource) || nodeTypes.isProxy(referencesSource) || referencesSource.length > MAX_REFERENCES) {
+		if (!INTRINSIC_IS_ARRAY(referencesSource) || INTRINSIC_IS_PROXY(referencesSource) || referencesSource.length > MAX_REFERENCES) {
 			throw new ToolPolicyError(`${name} returned too many references`);
 		}
-		if (Object.getPrototypeOf(referencesSource) !== Array.prototype) {
+		if (INTRINSIC_GET_PROTOTYPE_OF(referencesSource) !== INTRINSIC_ARRAY_PROTOTYPE) {
 			throw new ToolPolicyError(`${name} references must use the exact Array prototype`);
 		}
 		for (let index = 0; index < referencesSource.length; index += 1) {
-			const descriptor = Object.getOwnPropertyDescriptor(referencesSource, String(index));
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(referencesSource, String(index));
 			if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
 				throw new ToolPolicyError(`${name} returned sparse or accessor references`);
 			}
@@ -2602,16 +2842,16 @@ function captureCapabilityResult(name: string, result: CapabilityResult): Readon
 			references.push(boundedString(reference, `${name} reference`, MAX_REFERENCE_CHARACTERS, false));
 		}
 	}
-	Object.freeze(references);
-	return Object.freeze({ status: status as CapabilityResult["status"], summary, references });
+	INTRINSIC_OBJECT_FREEZE(references);
+	return INTRINSIC_OBJECT_FREEZE({ status: status as CapabilityResult["status"], summary, references });
 }
 
 function mutationResult(result: WorkspaceMutationResult, maxBytes: number): SessionToolResult {
-	if (!result || typeof result !== "object" || nodeTypes.isProxy(result)) {
+	if (!result || typeof result !== "object" || INTRINSIC_IS_PROXY(result)) {
 		throw new ToolPolicyError("workspace mutation returned an invalid result");
 	}
-	const resultPrototype = Object.getPrototypeOf(result);
-	if (resultPrototype !== Object.prototype && resultPrototype !== null) {
+	const resultPrototype = INTRINSIC_GET_PROTOTYPE_OF(result);
+	if (resultPrototype !== INTRINSIC_OBJECT_PROTOTYPE && resultPrototype !== null) {
 		throw new ToolPolicyError("workspace mutation result must use an exact approved prototype");
 	}
 	const fields = captureOwnResultFields(result, ["changed", "summary"], "workspace mutation result");
@@ -2619,7 +2859,7 @@ function mutationResult(result: WorkspaceMutationResult, maxBytes: number): Sess
 	const summarySource = fields.get("summary");
 	if (typeof changed !== "boolean") throw new ToolPolicyError("workspace mutation returned an invalid result");
 	const summary = boundedString(summarySource, "workspace mutation summary", MAX_CAPABILITY_SUMMARY_CHARACTERS, false);
-	return textResult(JSON.stringify({ changed, summary: redactSensitiveText(summary) }), maxBytes);
+	return textResult(INTRINSIC_JSON_STRINGIFY({ changed, summary: redactSensitiveText(summary) }), maxBytes);
 }
 
 function captureOwnResultFields(
@@ -2654,8 +2894,12 @@ function captureOwnResultFields(
 function sanitizedToolBoundaryError(operation: string, error: unknown): ToolPolicyError {
 	let source = "external operation failed";
 	try {
-		if (error instanceof Error && typeof error.message === "string" && error.message.length > 0) {
-			source = error.message.slice(0, 4_096);
+		if (!INTRINSIC_IS_PROXY(error) && error instanceof Error) {
+			const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(error, "message");
+			const message = descriptor && "value" in descriptor ? descriptor.value : undefined;
+			if (descriptor && !descriptor.get && !descriptor.set && typeof message === "string" && message.length > 0) {
+				source = message.slice(0, 4_096);
+			}
 		}
 	} catch {
 		// Hostile error accessors are reduced to the stable fallback.
@@ -2678,25 +2922,25 @@ async function toolBoundary(operation: string, execute: () => Promise<SessionToo
 function textResult(value: string, maxBytes: number): SessionToolResult {
 	if (byteLength(value) > maxBytes) throw new ToolPolicyError("tool output exceeded the bounded output limit");
 	const content = [{ type: "text" as const, text: value }];
-	Object.freeze(content[0]);
-	Object.freeze(content);
-	return Object.freeze({ content, details: null });
+	INTRINSIC_OBJECT_FREEZE(content[0]);
+	INTRINSIC_OBJECT_FREEZE(content);
+	return INTRINSIC_OBJECT_FREEZE({ content, details: null });
 }
 
 function closedObject(properties: Record<string, unknown>, required: string[]): Readonly<Record<string, unknown>> {
-	for (const value of Object.values(properties)) {
-		if (value && typeof value === "object") Object.freeze(value);
+	for (const value of INTRINSIC_OBJECT_VALUES(properties)) {
+		if (value && typeof value === "object") INTRINSIC_OBJECT_FREEZE(value);
 	}
-	Object.freeze(properties);
-	Object.freeze(required);
-	return Object.freeze({ type: "object", additionalProperties: false, properties, required });
+	INTRINSIC_OBJECT_FREEZE(properties);
+	INTRINSIC_OBJECT_FREEZE(required);
+	return INTRINSIC_OBJECT_FREEZE({ type: "object", additionalProperties: false, properties, required });
 }
 
 function assertOnlyKeys(value: Readonly<Record<string, unknown>>, allowed: readonly string[], description: string): void {
 	if (!isRecord(value)) throw new ToolPolicyError(`${description} input must be an object`);
-	if (nodeTypes.isProxy(value)) throw new ToolPolicyError(`${description} input cannot be a Proxy`);
-	const prototype = Object.getPrototypeOf(value);
-	if (prototype !== Object.prototype && prototype !== null) {
+	if (INTRINSIC_IS_PROXY(value)) throw new ToolPolicyError(`${description} input cannot be a Proxy`);
+	const prototype = INTRINSIC_GET_PROTOTYPE_OF(value);
+	if (prototype !== INTRINSIC_OBJECT_PROTOTYPE && prototype !== null) {
 		throw new ToolPolicyError(`${description} input must use an exact approved prototype`);
 	}
 	const allowedSet = new Set(allowed);
@@ -2704,7 +2948,7 @@ function assertOnlyKeys(value: Readonly<Record<string, unknown>>, allowed: reado
 	if (keys.length > allowed.length) throw new ToolPolicyError(`${description} input contains too many fields`);
 	for (const key of keys) {
 		if (!allowedSet.has(key)) {
-			throw new ToolPolicyError(`${description} input contains unknown field ${JSON.stringify(key)}`);
+			throw new ToolPolicyError(`${description} input contains unknown field ${INTRINSIC_JSON_STRINGIFY(key)}`);
 		}
 	}
 }
@@ -2750,10 +2994,10 @@ function boundedPositiveInteger(value: number, name: string, maximum: number): n
 
 function assertSignal(signal: AbortSignal | undefined): void {
 	if (signal === undefined) return;
-	if (!(signal instanceof AbortSignal) || Object.hasOwn(signal, "aborted") || typeof NATIVE_ABORTED_GETTER !== "function") {
+	if (!(signal instanceof AbortSignal) || INTRINSIC_OBJECT_HAS_OWN(signal, "aborted") || typeof NATIVE_ABORTED_GETTER !== "function") {
 		throw new ToolPolicyError("tool execution signal is invalid");
 	}
-	if (Reflect.apply(NATIVE_ABORTED_GETTER, signal, [])) throw new ToolPolicyError("tool execution was cancelled");
+	if (INTRINSIC_REFLECT_APPLY(NATIVE_ABORTED_GETTER, signal, [])) throw new ToolPolicyError("tool execution was cancelled");
 }
 
 function validIdentifier(value: unknown): value is string {
@@ -2761,7 +3005,7 @@ function validIdentifier(value: unknown): value is string {
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === "object" && value !== null && !Array.isArray(value);
+	return typeof value === "object" && value !== null && !INTRINSIC_IS_ARRAY(value);
 }
 
 function byteLength(value: string): number {

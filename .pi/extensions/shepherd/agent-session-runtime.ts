@@ -49,9 +49,15 @@ const MAX_HANDOFF_ARRAY_ITEMS = 32;
 const MAX_HANDOFF_ITEM_CHARACTERS = 2 * 1024;
 const INTRINSIC_OBJECT_PROTOTYPE = Object.prototype;
 const INTRINSIC_ARRAY_PROTOTYPE = Array.prototype;
+const INTRINSIC_ARRAY_IS_ARRAY = Array.isArray;
 const INTRINSIC_GET_PROTOTYPE_OF = Object.getPrototypeOf;
 const INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR = Object.getOwnPropertyDescriptor;
+const INTRINSIC_OBJECT_FREEZE = Object.freeze;
+const INTRINSIC_NUMBER_IS_SAFE_INTEGER = Number.isSafeInteger;
 const INTRINSIC_IS_PROXY = nodeTypes.isProxy;
+const INTRINSIC_REFLECT_APPLY = Reflect.apply;
+const INTRINSIC_JSON = JSON;
+const INTRINSIC_JSON_PARSE = JSON.parse;
 const INTRINSIC_PROMISE = Promise;
 const INTRINSIC_PROMISE_PROTOTYPE = Promise.prototype;
 const INTRINSIC_PROMISE_THEN = Promise.prototype.then;
@@ -2407,7 +2413,7 @@ function captureKnownRecordFields(
 	description: string,
 	knownFields: readonly string[],
 ): ReadonlyMap<string, unknown> {
-	if (!value || typeof value !== "object" || Array.isArray(value) || nodeTypes.isProxy(value)) {
+	if (!value || typeof value !== "object" || INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value)) {
 		throw new AgentSessionRuntimeError(`${description} must be a plain non-proxy record`);
 	}
 	assertApprovedRecordPrototype(value, description);
@@ -2992,7 +2998,7 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 	if (!text || byteLength(text) > maxBytes) throw new AgentSessionRuntimeError("AgentSession assistant output is empty or exceeds its bound");
 	let candidate: unknown;
 	try {
-		candidate = JSON.parse(text);
+		candidate = INTRINSIC_REFLECT_APPLY(INTRINSIC_JSON_PARSE, INTRINSIC_JSON, [text]) as unknown;
 	} catch (error) {
 		throw new AgentSessionRuntimeError("AgentSession handoff must be exactly one JSON object", { cause: error });
 	}
@@ -3028,26 +3034,40 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 	if (request.authority.readOnly && observedMutation) {
 		throw new AgentSessionRuntimeError("read-only handoff reported a mutation");
 	}
-	const changedPaths = boundedArray(fields.get("changedPaths"), "handoff changedPaths").map((path) => {
+	const changedPathValues = captureHandoffArray(fields.get("changedPaths"), "handoff changedPaths");
+	const changedPaths: string[] = [];
+	for (let index = 0; index < changedPathValues.length; index += 1) {
+		const path = changedPathValues[index];
 		if (typeof path !== "string") throw new AgentSessionRuntimeError("handoff changed path is invalid");
-		return validateScopedPath(path, request.authority.writePrefixes);
-	});
+		changedPaths[index] = validateScopedPath(path, request.authority.writePrefixes);
+	}
+	INTRINSIC_OBJECT_FREEZE(changedPaths);
 	if (request.authority.readOnly && changedPaths.length > 0) throw new AgentSessionRuntimeError("read-only handoff contains changed paths");
-	const verification = boundedArray(fields.get("verification"), "handoff verification").map((entry) => {
+	const verificationValues = captureHandoffArray(fields.get("verification"), "handoff verification");
+	const verification: HandoffVerification[] = [];
+	for (let index = 0; index < verificationValues.length; index += 1) {
+		const entry = verificationValues[index];
 		if (!isRecord(entry)) throw new AgentSessionRuntimeError("handoff verification entry is invalid");
 		const verificationFields = captureKnownRecordFields(entry, "handoff verification", ["name", "status", "summary"]);
 		const status = String(verificationFields.get("status"));
 		if (!["passed", "failed", "blocked", "not_run"].includes(status)) {
 			throw new AgentSessionRuntimeError("handoff verification status is invalid");
 		}
-		return {
+		verification[index] = {
 			name: redactedBoundedString(verificationFields.get("name"), "handoff verification name", 128, false),
 			status: status as HandoffVerification["status"],
 			summary: redactedBoundedString(verificationFields.get("summary"), "handoff verification summary", MAX_HANDOFF_ITEM_CHARACTERS, false),
 		};
-	});
-	const findings = boundedArray(fields.get("findings"), "handoff findings").map((finding) =>
-		redactedBoundedString(finding, "handoff finding", MAX_HANDOFF_ITEM_CHARACTERS, false));
+	}
+	INTRINSIC_OBJECT_FREEZE(verification);
+	const findingValues = captureHandoffArray(fields.get("findings"), "handoff findings");
+	const findings: string[] = [];
+	for (let index = 0; index < findingValues.length; index += 1) {
+		findings[index] = redactedBoundedString(
+			findingValues[index], "handoff finding", MAX_HANDOFF_ITEM_CHARACTERS, false,
+		);
+	}
+	INTRINSIC_OBJECT_FREEZE(findings);
 	return {
 		schemaVersion: 1,
 		runId: request.binding.runId,
@@ -3065,11 +3085,27 @@ function parseHandoff(text: string, request: RoleRunRequest, maxBytes: number): 
 	};
 }
 
-function boundedArray(value: unknown, description: string): unknown[] {
-	if (!Array.isArray(value) || value.length > MAX_HANDOFF_ARRAY_ITEMS) {
-		throw new AgentSessionRuntimeError(`${description} must be a bounded array`);
+function captureHandoffArray(value: unknown, description: string): readonly unknown[] {
+	if (!INTRINSIC_ARRAY_IS_ARRAY(value) || INTRINSIC_IS_PROXY(value) ||
+		INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
+		throw new AgentSessionRuntimeError(`${description} must be an exact bounded dense non-proxy array`);
 	}
-	return value;
+	const lengthDescriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, "length");
+	const length = lengthDescriptor && "value" in lengthDescriptor ? lengthDescriptor.value : undefined;
+	if (!lengthDescriptor || lengthDescriptor.get || lengthDescriptor.set ||
+		typeof length !== "number" || !INTRINSIC_NUMBER_IS_SAFE_INTEGER(length) ||
+		length < 0 || length > MAX_HANDOFF_ARRAY_ITEMS) {
+		throw new AgentSessionRuntimeError(`${description} must be an exact bounded dense non-proxy array`);
+	}
+	const snapshot: unknown[] = [];
+	for (let index = 0; index < length; index += 1) {
+		const descriptor = INTRINSIC_GET_OWN_PROPERTY_DESCRIPTOR(value, `${index}`);
+		if (!descriptor?.enumerable || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentSessionRuntimeError(`${description} contains a sparse or accessor element`);
+		}
+		snapshot[index] = descriptor.value;
+	}
+	return INTRINSIC_OBJECT_FREEZE(snapshot);
 }
 
 function redactedBoundedString(value: unknown, description: string, max: number, allowEmpty: boolean): string {
@@ -3105,7 +3141,7 @@ function validIdentifier(value: unknown): value is string {
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
-	return typeof value === "object" && value !== null && !Array.isArray(value);
+	return typeof value === "object" && value !== null && !INTRINSIC_ARRAY_IS_ARRAY(value);
 }
 
 function boundedPositiveInteger(value: number, description: string, maximum: number): number {

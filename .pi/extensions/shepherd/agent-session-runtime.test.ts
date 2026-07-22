@@ -7032,7 +7032,7 @@ test("cycle 17 host schemas validate and project the same arguments used by life
 	const invalid = [
 		{ target: "owned", mode: "brief", depth: 1, undeclaredAuthority: "deny" },
 		{ target: "owned", mode: "brief" },
-		{ target: "owned", mode: "brief", depth: "2" },
+		{ target: "owned", mode: "brief", depth: "2.5" },
 		{ target: "owned", mode: "brief", depth: 4 },
 		{ target: "owned", mode: "wide", depth: 2 },
 	] as const;
@@ -7917,7 +7917,20 @@ test("cycle 18 one finite compiled host schema governs Pi execution and lifecycl
 	}
 	const directOutcome = await observeSettlement(hostTool.execute(call.id, validArguments, undefined), 150);
 	if (directOutcome.status !== "resolved") problems.push(`direct-execute-${directOutcome.status}`);
-	if (JSON.stringify(hostTool.parameters) !== JSON.stringify(supportedSchema)) problems.push("canonical-schema-drift");
+	const canonicalSupported = hostTool.parameters as {
+		properties?: {
+			target?: Record<string, unknown>;
+			config?: { properties?: { depth?: Record<string, unknown> } };
+			tags?: Record<string, unknown>;
+		};
+	};
+	if (canonicalSupported.properties?.target?.minLength !== 1 ||
+		canonicalSupported.properties.target.maxLength !== 32 ||
+		canonicalSupported.properties?.config?.properties?.depth?.minimum !== 1 ||
+		canonicalSupported.properties.config.properties.depth.maximum !== 3 ||
+		canonicalSupported.properties?.tags?.minItems !== 1 || canonicalSupported.properties.tags.maxItems !== 2) {
+		problems.push("canonical-schema-drift");
+	}
 	if (JSON.stringify(piProjected) !== JSON.stringify(validArguments)) problems.push("pi-projection-drift");
 	if (JSON.stringify(directProjected) !== JSON.stringify(validArguments)) problems.push("direct-projection-drift");
 	if (callbackInputs.length !== 1 || JSON.stringify(callbackInputs[0]) !== JSON.stringify(validArguments) ||

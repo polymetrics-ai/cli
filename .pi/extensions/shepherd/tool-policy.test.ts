@@ -24,6 +24,16 @@ function emptyRedactionScanMetrics(): RedactionScanMetrics {
 		maxMainCursorVisits: 0,
 		keyCharacterVisits: 0,
 		boundaryCharacterVisits: 0,
+		recognizerCharacterVisits: 0,
+		lexicalTransitions: 0,
+		frameOperations: 0,
+		recoveryTransitions: 0,
+		rangeEmissions: 0,
+		rangeExaminations: 0,
+		rangeInsertions: 0,
+		rangeCoalescences: 0,
+		replacementEmissions: 0,
+		renderedSourceUnits: 0,
 		totalWork: 0,
 	};
 }
@@ -1154,6 +1164,9 @@ test("cycle 10 schema and result snapshots preserve own prototype-named data fie
 	assert.ok(inspect);
 	const snapshot = inspect.parameters as Record<string, unknown>;
 	const snapshotProperties = snapshot.properties as Record<string, unknown>;
+	const prototypeKeySchema = snapshotProperties.__proto__ as Record<string, unknown>;
+	const constructorSchema = snapshotProperties["constructor"] as Record<string, unknown>;
+	const constructorProperties = constructorSchema.properties as Record<string, Record<string, unknown>>;
 
 	const inheritedSchema = Object.create(null) as Record<PropertyKey, unknown>;
 	defineData(inheritedSchema, "__proto__", {
@@ -1200,14 +1213,18 @@ test("cycle 10 schema and result snapshots preserve own prototype-named data fie
 
 	assert.deepEqual({
 		ownPrototypeKeys: ["__proto__", "prototype", "constructor"].map((key) => Object.hasOwn(snapshotProperties, key)),
-		serializedIdentically: JSON.stringify(snapshot) === JSON.stringify(schema),
+		canonicalizedSafely: JSON.stringify(snapshot) !== JSON.stringify(schema) &&
+			prototypeKeySchema.type === "string" && prototypeKeySchema.minLength === 0 &&
+			typeof prototypeKeySchema.maxLength === "number" &&
+			constructorProperties.prototype?.type === "boolean" &&
+			constructorProperties["constructor"]?.type === "number",
 		frozen: Object.isFrozen(snapshot) && Object.isFrozen(snapshotProperties),
 		inheritedAccepted,
 		editStatus: editOutcome.status,
 		capabilityStatus: capabilityOutcome.status,
 	}, {
 		ownPrototypeKeys: [true, true, true],
-		serializedIdentically: true,
+		canonicalizedSafely: true,
 		frozen: true,
 		inheritedAccepted: false,
 		editStatus: "rejected",
