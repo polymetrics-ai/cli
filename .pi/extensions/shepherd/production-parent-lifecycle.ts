@@ -308,7 +308,7 @@ function exactTransitionReceipt(
 	if (receipt.repository !== request.repository || receipt.parentIssue !== request.parentIssue
 		|| receipt.pullRequest !== request.pullRequest || receipt.generation !== request.generation
 		|| receipt.branch !== request.branch || receipt.headSha !== request.headSha
-		|| receipt.expectedRevision !== request.expectedRevision || receipt.appliedRevision <= receipt.expectedRevision
+		|| receipt.expectedRevision !== request.expectedRevision || receipt.appliedRevision < receipt.expectedRevision
 		|| !SHA.test(receipt.headSha)) {
 		throw new Error("existing-draft-to-ready transition receipt moved from the exact parent authority");
 	}

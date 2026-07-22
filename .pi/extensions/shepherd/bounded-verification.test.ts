@@ -1,10 +1,14 @@
 import assert from "node:assert/strict";
 import { chmod, mkdir, mkdtemp, realpath, symlink, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { delimiter, dirname, join } from "node:path";
 import { tmpdir } from "node:os";
 import test from "node:test";
 
-import { BoundedVerificationRunner } from "./bounded-verification.ts";
+import {
+	BoundedVerificationRunner,
+	resolveTrustedVerificationExecutables,
+	trustedVerificationPath,
+} from "./bounded-verification.ts";
 import type { ProductionVerificationCommand } from "./autonomous-production-contract.ts";
 
 function command(overrides: Partial<ProductionVerificationCommand> = {}): ProductionVerificationCommand {
@@ -93,6 +97,28 @@ test("terminates timed-out and aborted processes and preserves the authoritative
 	assert.equal(aborted.failureKind, "aborted");
 });
 
+test("timeout terminates the inherited process tree and settles within the hard kill bound", async (t) => {
+	if (process.platform === "win32") return;
+	const root = await repositoryFixture(t);
+	const runner = new BoundedVerificationRunner({
+		executables: { node: process.execPath },
+		terminationGraceMs: 20,
+	});
+	const marker = join(root, "escaped-descendant");
+	const descendant = `setTimeout(()=>require('node:fs').writeFileSync(${JSON.stringify(marker)},'alive'),250);setTimeout(()=>{},1500)`;
+	const script = [
+		"const {spawn}=require('node:child_process')",
+		`spawn(process.execPath,['-e',${JSON.stringify(descendant)}],{stdio:['ignore','inherit','inherit']})`,
+		"setInterval(()=>{},1000)",
+	].join(";");
+	const startedAt = Date.now();
+	const result = await runner.run(root, command({ args: ["-e", script], timeoutMs: 30 }));
+	assert.equal(result.failureKind, "timeout");
+	assert.ok(Date.now() - startedAt < 500, `process tree settled too slowly: ${Date.now() - startedAt}ms`);
+	await import("node:timers/promises").then(({ setTimeout }) => setTimeout(350));
+	await assert.rejects(import("node:fs/promises").then(({ access }) => access(marker)));
+});
+
 test("runAll is ordered, fail-fast, and never launches work after a failed command", async (t) => {
 	const root = await repositoryFixture(t);
 	const marker = join(root, "should-not-run");
@@ -115,4 +141,15 @@ test("rejects a non-executable allowlist target before starting a child", async 
 		() => new BoundedVerificationRunner({ executables: { node: file } }),
 		/executable/i,
 	);
+});
+
+test("production test tools resolve to canonical files and publish only their owning directories", async () => {
+	const executables = resolveTrustedVerificationExecutables(process.env.PATH ?? "");
+	assert.equal(executables.node, await realpath(process.execPath));
+	assert.deepEqual(
+		trustedVerificationPath(executables).split(delimiter),
+		[...new Set(Object.values(executables).map((value) => dirname(value)))],
+	);
+	assert.equal(Object.hasOwn(executables, "sh"), false);
+	assert.throws(() => resolveTrustedVerificationExecutables("/safe\u0000/unsafe"), /PATH/i);
 });

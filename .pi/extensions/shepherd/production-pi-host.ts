@@ -16,6 +16,7 @@ import {
 	type GhCliOrchestrationTransportOptions,
 	type GhOrchestrationExecutor,
 } from "./gh-orchestration-transport.ts";
+import { GhProductionPlanningIssueSource } from "./gh-planning-issue-source.ts";
 import {
 	GitHubParentOrchestrator,
 	type ExternalCallContext,
@@ -29,6 +30,11 @@ import {
 } from "./github-orchestrator.ts";
 import { GitAdapter, type GitBinding } from "./git-adapter.ts";
 import { ProductionRepositoryPlanIntake } from "./production-intake.ts";
+import {
+	AgentSessionProductionPlanSession,
+	ProductionPlanBootstrapper,
+	type ProductionPlanAuthoritySource,
+} from "./production-plan-bootstrap.ts";
 import { productionOrchestrationObjective } from "./production-orchestration-plan.ts";
 import {
 	EmbeddedAgentSessionProductionReviewSession,
@@ -54,12 +60,14 @@ const DEFAULT_GITHUB_TIMEOUT_MS = 30_000;
 const DEFAULT_GITHUB_OUTPUT_BYTES = 2 * 1024 * 1024;
 
 type ClosableAgentRuntime = ProductionAgentSessionPort & Pick<ShepherdAgentSessionRuntime, "close">;
+type PlanEnsurer = (issue: number, signal: AbortSignal) => Promise<void>;
 type ParentDraftEnsurer = (issue: number, signal: AbortSignal) => Promise<void>;
 type ParentAuthorityValidator = (issue: number, signal: AbortSignal) => Promise<void>;
 
 export interface ProductionPiEntrypointControllerOptions {
 	issue: number;
 	delegate: AutonomousShepherdControllerPort;
+	ensurePlan: PlanEnsurer;
 	validateAuthority: ParentAuthorityValidator;
 	ensureParentDraft: ParentDraftEnsurer;
 	resources: Array<{ close(): Promise<void> }>;
@@ -73,6 +81,7 @@ export interface ProductionPiEntrypointControllerOptions {
 export class ProductionPiEntrypointController implements AutonomousShepherdControllerPort {
 	readonly #issue: number;
 	readonly #delegate: AutonomousShepherdControllerPort;
+	readonly #ensurePlan: PlanEnsurer;
 	readonly #validateAuthority: ParentAuthorityValidator;
 	readonly #ensureParentDraft: ParentDraftEnsurer;
 	readonly #resources: Array<{ close(): Promise<void> }>;
@@ -87,6 +96,7 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 			|| typeof options.delegate.resume !== "function"
 			|| typeof options.delegate.stop !== "function"
 			|| typeof options.delegate.shutdown !== "function"
+			|| typeof options.ensurePlan !== "function"
 			|| typeof options.validateAuthority !== "function"
 			|| typeof options.ensureParentDraft !== "function"
 			|| !Array.isArray(options.resources)
@@ -95,6 +105,7 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		}
 		this.#issue = options.issue;
 		this.#delegate = options.delegate;
+		this.#ensurePlan = options.ensurePlan;
 		this.#validateAuthority = options.validateAuthority;
 		this.#ensureParentDraft = options.ensureParentDraft;
 		this.#resources = [...options.resources];
@@ -110,10 +121,11 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		return this.#delegate.status(issue) as Promise<ProductionAutonomousState | undefined>;
 	}
 
-	async #runPreflight(issue: number, prepareDraft: boolean): Promise<void> {
+	async #runPreflight(issue: number, preparePlan: boolean, prepareDraft: boolean): Promise<void> {
 		if (this.#preflight !== undefined) throw new Error("production authority preflight is already active");
 		const controller = new AbortController();
 		const promise = (async () => {
+			if (preparePlan) await this.#ensurePlan(issue, controller.signal);
 			await this.#validateAuthority(issue, controller.signal);
 			if (prepareDraft) await this.#ensureParentDraft(issue, controller.signal);
 		})();
@@ -130,13 +142,13 @@ export class ProductionPiEntrypointController implements AutonomousShepherdContr
 		if (await this.#delegate.status(command.issue)) {
 			throw new Error(`production Shepherd state already exists for issue #${command.issue}; use resume`);
 		}
-		await this.#runPreflight(command.issue, true);
+		await this.#runPreflight(command.issue, true, true);
 		return this.#delegate.start(command) as Promise<ProductionAutonomousState>;
 	}
 
 	async resume(command: ShepherdResumeCommand): Promise<ProductionAutonomousState> {
 		this.#assertIssue(command.issue);
-		await this.#runPreflight(command.issue, false);
+		await this.#runPreflight(command.issue, false, false);
 		return this.#delegate.resume(command) as Promise<ProductionAutonomousState>;
 	}
 
@@ -332,7 +344,7 @@ export class DurableGhParentReadiness implements ProductionParentReadyTransition
 				} catch (error) { mutationFailure = error; }
 				observed = await this.#observe(request, context);
 			}
-			if (observed.draft || observed.revision <= request.expectedRevision) {
+			if (observed.draft || observed.revision < request.expectedRevision) {
 				if (mutationFailure !== undefined) throw mutationFailure;
 				throw new Error("parent pull request was not authoritatively marked ready");
 			}
@@ -355,7 +367,7 @@ export class DurableGhParentReadiness implements ProductionParentReadyTransition
 export interface ProductionPiHostDependencies {
 	git: GitAdapter;
 	inspectCoordinator(git: GitAdapter, repositoryRoot: string): Promise<GitBinding>;
-	createAgentRuntime(role: "implementation" | "review", sdk: AgentSessionRuntimeSdk): ClosableAgentRuntime;
+	createAgentRuntime(role: "implementation" | "review" | "planning", sdk: AgentSessionRuntimeSdk): ClosableAgentRuntime;
 	createReviewSession(
 		runtime: ClosableAgentRuntime,
 		requestFactory: ProductionReviewRoleRequestFactory,
@@ -383,12 +395,49 @@ export interface ProductionPiHostOptions {
 	runtimeSdk: AgentSessionRuntimeSdk;
 	dispositionActor?: string;
 	github?: GhCliOrchestrationTransportOptions;
+	now?: () => Date;
 	/** Optional test/advanced override; production composes the exhaustive recovery authority. */
 	effectRecovery?: ProductionEffectRecoveryPort;
 	dependencies?: Partial<ProductionPiHostDependencies> & Pick<ProductionPiHostDependencies, "git">;
 }
 
 const FORBIDDEN_PARENT_INTEGRATION_TARGETS = new Set(["main", "master", "trunk"]);
+
+function defaultPlanAuthoritySource(options: {
+	repositoryRoot: string;
+	git: GitAdapter;
+	coordinator: GitBinding;
+	inspectCoordinator(git: GitAdapter, repositoryRoot: string): Promise<GitBinding>;
+}): ProductionPlanAuthoritySource {
+	return {
+		async observe(issue, facts, signal) {
+			if (signal.aborted) throw signal.reason ?? new Error("production plan authority observation aborted");
+			const live = await options.inspectCoordinator(options.git, options.repositoryRoot);
+			if (signal.aborted) throw signal.reason ?? new Error("production plan authority observation aborted");
+			if (live.repositoryIdentity !== options.coordinator.repositoryIdentity
+				|| live.worktreeIdentity !== options.coordinator.worktreeIdentity
+				|| live.remoteIdentity !== options.coordinator.remoteIdentity
+				|| live.fetchEndpointIdentity !== options.coordinator.fetchEndpointIdentity
+				|| live.pushEndpointIdentity !== options.coordinator.pushEndpointIdentity
+				|| live.defaultBranch === undefined) {
+				throw new Error("production coordinator or remote identity changed before planning");
+			}
+			const parentBranch = await options.git.currentBranch(live);
+			if (parentBranch === live.defaultBranch || FORBIDDEN_PARENT_INTEGRATION_TARGETS.has(parentBranch)) {
+				throw new Error("production plan parent branch targets a protected default branch alias");
+			}
+			const candidateHead = await options.git.resolveBranchHead(live, parentBranch);
+			if (signal.aborted) throw signal.reason ?? new Error("production plan authority observation aborted");
+			return {
+				repository: facts.repository,
+				parentIssue: issue,
+				parentBranch,
+				parentBaseBranch: live.defaultBranch,
+				candidateHead,
+			};
+		},
+	};
+}
 
 function defaultParentAuthorityValidator(options: {
 	repositoryRoot: string;
@@ -511,6 +560,8 @@ export async function createProductionPiHostController(
 	if (coordinator.defaultBranch === undefined) throw new Error("production coordinator has no authoritative default branch");
 	const implementation = dependencies.createAgentRuntime("implementation", options.runtimeSdk);
 	const review = dependencies.createAgentRuntime("review", options.runtimeSdk);
+	const planning = dependencies.createAgentRuntime("planning", options.runtimeSdk);
+	let bootstrap: ProductionPlanBootstrapper | undefined;
 	try {
 		const reviewSession = dependencies.createReviewSession(
 			review,
@@ -522,6 +573,42 @@ export async function createProductionPiHostController(
 		);
 		const readyAuthority = dependencies.createParentReadyAuthority(options.stateRoot);
 		const github = options.github ?? {};
+		const planningFacade = createProductionGitHubOrchestrationFacade(github);
+		const planningGitHub = new GitHubParentOrchestrator(
+			planningFacade.transport,
+			undefined,
+			undefined,
+			planningFacade.policySource,
+			{ parentReadyAuthority: readyAuthority },
+		);
+		const planningExecute = github.execute === undefined
+			? undefined
+			: ((args: readonly string[], execution: {
+				signal: AbortSignal;
+				timeoutMs: number;
+				maxOutputBytes: number;
+			}) => github.execute!("gh", args, execution));
+		bootstrap = new ProductionPlanBootstrapper({
+			repositoryRoot: options.repositoryRoot,
+			stateRoot: options.stateRoot,
+			intake: new ProductionRepositoryPlanIntake(options.repositoryRoot),
+			issueSource: new GhProductionPlanningIssueSource({
+				...(planningExecute === undefined ? {} : { execute: planningExecute }),
+				now: options.now,
+			}),
+			authoritySource: defaultPlanAuthoritySource({
+				repositoryRoot: options.repositoryRoot,
+				git: dependencies.git,
+				coordinator,
+				inspectCoordinator: dependencies.inspectCoordinator,
+			}),
+			planSession: new AgentSessionProductionPlanSession({
+				repositoryRoot: options.repositoryRoot,
+				agentSession: planning,
+			}),
+			github: planningGitHub,
+			now: options.now,
+		});
 		const validateAuthority = defaultParentAuthorityValidator({
 			repositoryRoot: options.repositoryRoot,
 			git: dependencies.git,
@@ -546,6 +633,7 @@ export async function createProductionPiHostController(
 		return new ProductionPiEntrypointController({
 			issue: options.issue,
 			delegate,
+			ensurePlan: async (issue, signal) => { await bootstrap!.ensure(issue, signal); },
 			validateAuthority,
 			ensureParentDraft: dependencies.createParentDraftEnsurer({
 				repositoryRoot: options.repositoryRoot,
@@ -554,10 +642,15 @@ export async function createProductionPiHostController(
 				github,
 				parentReadyAuthority: readyAuthority,
 			}),
-			resources: [implementation, review],
+			resources: [implementation, review, planning, bootstrap],
 		});
 	} catch (error) {
-		await Promise.allSettled([implementation.close(), review.close()]);
+		await Promise.allSettled([
+			implementation.close(),
+			review.close(),
+			planning.close(),
+			...(bootstrap === undefined ? [] : [bootstrap.close()]),
+		]);
 		throw error;
 	}
 }

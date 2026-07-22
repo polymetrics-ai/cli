@@ -87,23 +87,28 @@ parent PR #472. It uses Pi 0.80.6 public `createAgentSession` APIs inside the cu
 it does not start another `pi` process, use tmux as transport, or rely on the abandoned standalone
 Go Shepherd.
 
-The production path starts from a reviewed schema-2 plan, creates or reconciles child issues,
-runs dependency-ready children in isolated worktrees, executes fixed bounded verification, opens
-stacked child PRs, requires a clean independent review of each exact head, applies bounded
-corrections, and integrates accepted child PRs into the non-default parent branch. It then verifies
-and reviews the exact parent head, publishes one durable human decision request, and waits. It has
-no operation that merges the parent PR into the default branch.
+The production path establishes a reviewed schema-2 plan, creates or reconciles child issues, runs
+dependency-ready children in isolated worktrees, executes fixed bounded verification, opens stacked
+child PRs, requires a clean independent review of each exact head, applies bounded corrections, and
+integrates accepted child PRs into the non-default parent branch. If the plan is absent, a read-only
+xhigh planning AgentSession reads bounded authoritative GitHub issue facts and proposes semantic
+children without issue numbers or host authority. The host validates that proposal, creates or
+reconciles marker-bound child issues, inserts only the returned GitHub issue numbers, and atomically
+publishes the ignored plan file. It then verifies and reviews the exact parent head, publishes one
+durable human decision request, and waits. It has no operation that merges the parent PR into the
+default branch.
 
 Before starting:
 
-- Launch Pi 0.80.6 from the canonical Git worktree for the repository named by the plan. Authenticate
-  Pi's configured models and `gh` in the host environment; never put credentials in the plan or a
-  prompt.
-- Ensure the plan's parent branch and its marker-bound parent PR to `parentBaseBranch` already
-  exist. The finalizer fails closed when that PR is absent or ambiguous; it may transition the one
-  matching draft PR to ready, but it does not create the parent PR.
-- Save the reviewed plan as `.planning/shepherd/issue-<N>.json`, where `<N>` is `parentIssue`.
-  `start` refuses an existing run; use `resume` for persisted work.
+- Launch Pi 0.80.6 from the clean canonical Git worktree on the intended non-default parent branch.
+  Authenticate Pi's configured models and `gh` in the host environment; never put credentials in a
+  plan or prompt. Plan bootstrap requires authoritative `admin` or `maintain` repository permission.
+- Ensure the parent GitHub issue and non-default parent branch exist. On `start`, the host creates or
+  reconciles the one marker-bound draft parent PR to the authoritative default branch before durable
+  controller state is created; ambiguous or conflicting PR evidence fails closed.
+- A valid existing `.planning/shepherd/issue-<N>.json` is reused. When it is absent, `start` generates
+  it through the bounded planning flow above. An existing invalid or conflicting file is never
+  overwritten automatically. `start` refuses an existing run; use `resume` for persisted work.
 
 The command surface is:
 
@@ -230,10 +235,11 @@ command, and declares its own attempt and correction budgets. This three-child e
 
 The validator permits at most 64 children, 1–10 attempts, and 1–5 corrections. It rejects dependency
 cycles, traversal, absolute paths, backslashes, control text, sparse or oversized payloads, and
-top-level read-only children. Verification is not an agent-provided shell string: production allows
-only the configured `node` executable, passes a fixed argv without a shell, canonicalizes `cwd`
-inside the worktree, sanitizes the environment, caps each command at 120 seconds and 4 MiB, and
-honors cancellation.
+top-level read-only children. Verification is not an agent-provided shell string: production accepts
+only closed Node test-runner, Go test/vet/build, or allowlisted Make quality-gate recipes; resolves
+canonical host-owned executables; passes fixed argv without a shell; canonicalizes `cwd` inside the
+worktree; sanitizes the environment; caps each command at 120 seconds and 4 MiB; terminates the
+POSIX process group on timeout/cancellation; and hard-bounds settlement.
 
 At each scheduling boundary, Shepherd selects a deterministic dependency-ready set subject to the
 concurrency cap and canonical write-scope collisions. Disjoint mutating worktrees may coexist; an
@@ -284,8 +290,11 @@ human merges that exact parent head through the normal GitHub process. A later
 complete. A moved head invalidates the gate and requires fresh verification, review, and approval.
 
 Mutating workers receive one issue, one branch, one isolated worktree, one declared write scope,
-and bounded workspace/host capabilities. The schema-2 input may contain task text and verification
-argv, so neither may contain secret material. Persisted production state remains schema version 1
+bounded workspace edit/write tools, and an ID-only `host_verify` capability for RED→GREEN reruns.
+The independent verification session receives repository reads plus the same ID-only capability,
+but no workspace mutation tool, and must request every immutable verification ID in exact order.
+The schema-2 input may contain task text and validated verification argv, so neither may contain
+secret material. Persisted production state remains schema version 1
 with kind `production_autonomous`; it records bounded summaries, digests, receipts, counters, and
 gate bindings, never the plan task text, prompts, reasoning, raw model output, credentials, or
 unrestricted tool output. GitHub authentication remains host-only and is never passed into a worker

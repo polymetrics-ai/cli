@@ -46,7 +46,12 @@ import {
 	type ProductionParentHeadSource,
 	type ProductionWorkspaceLifecyclePort,
 } from "./production-child-pipeline.ts";
-import { BoundedVerificationRunner } from "./bounded-verification.ts";
+import {
+	BoundedVerificationRunner,
+	resolveTrustedVerificationExecutables,
+	trustedVerificationPath,
+} from "./bounded-verification.ts";
+import { AgentSessionVerificationRunner } from "./agent-session-verification.ts";
 import { GitAdapter, type GitBinding } from "./git-adapter.ts";
 import { WorkspaceAdapter } from "./workspace-adapter.ts";
 import {
@@ -689,7 +694,15 @@ export function createProductionRecoveryProbeTable(
 			|| !Array.isArray(commands) || commands.length === 0) {
 			throw new ProductionLifecycleError("terminal", "shell recovery descriptor is incomplete", ["recovery_descriptor_invalid"]);
 		}
-		const results = await options.verification.runAll(workspace.cwd, commands, request.signal);
+		const child = recoveryChild(request.currentState, request.record.childId, "verification recovery");
+		const results = await options.verification.runAll(workspace.cwd, commands, request.signal, {
+			issue: child.issue,
+			branch: workspace.branch,
+			runId: request.currentState.runId,
+			generation: request.currentState.generation,
+			laneId: `${child.id}-verification`,
+			candidateHead: workspace.head,
+		});
 		if (results.length < 1 || results.length > commands.length
 			|| results.some((result, index) => result.id !== commands[index]?.id)
 			|| results.some((result) => result.status === "failed" && result.failureKind === undefined)) {
@@ -1615,7 +1628,20 @@ export function createProductionShepherdController(
 		githubFacade.policySource,
 		{ parentReadyAuthority: options.parentReadyAuthority, now },
 	);
-	const verification = new BoundedVerificationRunner({ executables: { node: process.execPath } });
+	const verificationExecutables = resolveTrustedVerificationExecutables();
+	const commandExecutor = new BoundedVerificationRunner({
+		executables: verificationExecutables,
+		environment: {
+			PATH: trustedVerificationPath(verificationExecutables),
+			HOME: join(stateRoot, "verification-home"),
+			GOCACHE: join(stateRoot, "verification-cache", "go-build"),
+			GOPATH: join(stateRoot, "verification-cache", "go-path"),
+		},
+	});
+	const verification = new AgentSessionVerificationRunner({
+		agentSession: options.agentSession,
+		executor: commandExecutor,
+	});
 	const workspaceAdapter = new WorkspaceAdapter(options.git);
 	const agentEffects = new ProductionAgentEffectReceiptRepository(trustedWorktreeRoot);
 	const workspaceLifecycle = new ProductionWorkspaceLifecycle({

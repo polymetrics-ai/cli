@@ -23,11 +23,17 @@ import type {
 	WorkspaceHandoffEvidence,
 } from "./workspace-adapter.ts";
 import type { ProductionVerificationResult } from "./bounded-verification.ts";
+import type { ProductionVerificationSessionBinding } from "./agent-session-verification.ts";
 import {
 	ProductionAgentEffectReceiptRepository,
 	productionAgentEffectResultDigest,
 } from "./production-agent-effect-receipts.ts";
-import { validateScopedPath, type ScopedWorkspace, type WorkspaceMutationResult } from "./tool-policy.ts";
+import {
+	validateScopedPath,
+	type HostCapability,
+	type ScopedWorkspace,
+	type WorkspaceMutationResult,
+} from "./tool-policy.ts";
 
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
 const SAFE_IDENTIFIER = /^[A-Za-z0-9](?:[A-Za-z0-9._:-]*[A-Za-z0-9])?$/;
@@ -43,7 +49,16 @@ export interface ProductionVerificationPort {
 		worktreeRoot: string,
 		commands: ProductionChildSpec["verification"],
 		signal?: AbortSignal,
+		binding?: ProductionVerificationSessionBinding,
 	): Promise<ProductionVerificationResult[]>;
+}
+
+export interface ProductionInteractiveVerificationPort extends ProductionVerificationPort {
+	createAgentCapability(
+		worktreeRoot: string,
+		commands: ProductionChildSpec["verification"],
+		signal?: AbortSignal,
+	): Promise<HostCapability>;
 }
 
 export interface ProductionParentRefreshRequest {
@@ -97,7 +112,7 @@ export interface ProductionWorkspaceAdapterPort {
 
 export interface ProductionWorkspaceLifecycleOptions {
 	workspaceAdapter: ProductionWorkspaceAdapterPort;
-	verification: ProductionVerificationPort;
+	verification: ProductionInteractiveVerificationPort;
 	agentSession: ProductionAgentSessionPort;
 }
 
@@ -163,7 +178,7 @@ export function productionWorkspaceOwnershipId(parentIssue: number, childIssue: 
 
 export class ProductionWorkspaceLifecycle {
 	readonly #workspaceAdapter: ProductionWorkspaceAdapterPort;
-	readonly #verification: ProductionVerificationPort;
+	readonly #verification: ProductionInteractiveVerificationPort;
 	readonly #agentSession: ProductionAgentSessionPort;
 	readonly #sessions = new Set<OwnedProductionWorkspaceSession>();
 	#closed = false;
@@ -179,6 +194,7 @@ export class ProductionWorkspaceLifecycle {
 			|| typeof options.workspaceAdapter?.refreshParent !== "function"
 			|| typeof options.workspaceAdapter?.reconcileChildHead !== "function"
 			|| typeof options.verification?.runAll !== "function"
+			|| typeof options.verification.createAgentCapability !== "function"
 			|| typeof options.agentSession?.run !== "function"
 			|| typeof options.agentSession?.abort !== "function") {
 			throw new Error("production workspace lifecycle ports are invalid");
@@ -251,7 +267,7 @@ interface OwnedSessionOptions {
 	ownershipId: string;
 	request: ProductionWorkspaceClaim;
 	workspaceAdapter: ProductionWorkspaceAdapterPort;
-	verification: ProductionVerificationPort;
+	verification: ProductionInteractiveVerificationPort;
 	agentSession: ProductionAgentSessionPort;
 	onJoined(): void;
 }
@@ -262,7 +278,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 	readonly #ownershipId: string;
 	readonly #request: ProductionWorkspaceClaim;
 	readonly #workspaceAdapter: ProductionWorkspaceAdapterPort;
-	readonly #verification: ProductionVerificationPort;
+	readonly #verification: ProductionInteractiveVerificationPort;
 	readonly #agentSession: ProductionAgentSessionPort;
 	readonly #agentEffects: ProductionAgentEffectReceiptRepository;
 	readonly #onJoined: () => void;
@@ -356,8 +372,15 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 				`Declared write scopes: ${binding.writeScopes.join(", ")}.`,
 				`Required skills: ${this.#request.child.requiredSkills.join(", ")}.`,
 				"Use strict RED GREEN REFACTOR and return only the typed handoff.",
+				`Declared host verification IDs: ${this.#request.child.verification.map((command) => command.id).join(", ")}.`,
+				"Use host_verify with those IDs to reproduce failures and confirm fixes; the host owns every command tuple.",
 				...(request.context ?? []),
 			];
+			const verificationCapability = await this.#verification.createAgentCapability(
+				this.#workspace.cwd,
+				this.#request.child.verification,
+				request.signal,
+			);
 			const handoff = await this.#agentSession.run({
 				role,
 				task,
@@ -365,7 +388,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 				timeoutMs: request.timeoutMs,
 				...(request.signal ? { signal: request.signal } : {}),
 				workspace: createLeaseBoundWorkspace(this.#workspace),
-				capabilities: [],
+				capabilities: [verificationCapability],
 				authority: {
 					issue: this.#request.child.issue,
 					branch: binding.branch,
@@ -373,7 +396,7 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 					workspaceId: `production-${this.#request.child.issue}-${this.#request.child.id}`,
 					readPrefixes: ["."],
 					writePrefixes: [...binding.writeScopes],
-					capabilityNames: [],
+					capabilityNames: ["host_verify"],
 				},
 				binding: promptBinding,
 			});
@@ -404,6 +427,14 @@ class OwnedProductionWorkspaceSession implements ProductionWorkspaceSession {
 				this.#workspace.cwd,
 				this.#request.child.verification,
 				signal,
+				{
+					issue: this.#request.child.issue,
+					branch: this.#workspace.branch,
+					runId: this.runId,
+					generation: this.#request.generation,
+					laneId: `${this.#request.child.id}-verification`,
+					candidateHead: this.#workspace.head,
+				},
 			);
 			assertNotAborted(signal);
 			this.#verificationState = results.length === this.#request.child.verification.length

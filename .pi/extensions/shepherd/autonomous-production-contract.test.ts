@@ -73,3 +73,65 @@ test("top-level read-only work, shell commands, traversal, controls, and hostile
 	Object.defineProperty(accessor, "title", { enumerable: true, get: () => "surprise" });
 	assert.throws(() => validateProductionParentPlan(accessor), /shape|data propert|plain data|exact/i);
 });
+
+test("verification recipes reject arbitrary code and default-branch mutation before orchestration", () => {
+	for (const [executable, args] of [
+		["node", ["-e", "require('node:child_process').execSync('rm -rf .')"]],
+		["git", ["push", "origin", "HEAD:main", "--force"]],
+		["go", ["env", "-w", "GOPROXY=https://hostile.invalid"]],
+		["make", ["deploy"]],
+	] as const) {
+		const unsafe = plan();
+		unsafe.children[0]!.verification[0] = {
+			...unsafe.children[0]!.verification[0]!, executable, args: [...args],
+		};
+		assert.throws(() => validateProductionParentPlan(unsafe), /verification recipe|test recipe/i);
+	}
+});
+
+test("verification identifiers and output bounds are executable by the downstream host verifier", () => {
+	const unsafeId = plan();
+	unsafeId.children[0]!.verification[0]!.id = "unit tests";
+	assert.throws(() => validateProductionParentPlan(unsafeId), /verification ID/i);
+
+	const undersizedOutput = plan();
+	undersizedOutput.children[0]!.verification[0]!.maxOutputBytes = 1;
+	assert.throws(() => validateProductionParentPlan(undersizedOutput), /verification output limit/i);
+});
+
+test("every production child declares at least one implementation skill", () => {
+	const missingSkills = plan();
+	missingSkills.children[0]!.requiredSkills = [];
+	assert.throws(() => validateProductionParentPlan(missingSkills), /required skills/i);
+});
+
+test("plan intake enforces GitHub-inline fields, scheduler scopes, unique slugs, and unique verification IDs", () => {
+	for (const mutate of [
+		(value: ProductionParentPlanDocument) => { value.title = " padded"; },
+		(value: ProductionParentPlanDocument) => { value.objective = "line one\nline two"; },
+		(value: ProductionParentPlanDocument) => { value.children[0]!.title = "Lane "; },
+		(value: ProductionParentPlanDocument) => { value.children[0]!.task = "line one\nline two"; },
+		(value: ProductionParentPlanDocument) => { value.children[0]!.writeScopes = ["owned/./lane"]; },
+		(value: ProductionParentPlanDocument) => { value.children[0]!.writeScopes = ["owned/*"]; },
+	]) {
+		const invalid = plan();
+		mutate(invalid);
+		assert.throws(() => validateProductionParentPlan(invalid), /inline|scope|safe text/i);
+	}
+
+	const duplicateVerification = plan();
+	duplicateVerification.children[0]!.verification.push({
+		...duplicateVerification.children[0]!.verification[0]!,
+		args: ["--test", ".pi/extensions/shepherd/other.test.ts"],
+	});
+	assert.throws(() => validateProductionParentPlan(duplicateVerification), /duplicate verification/i);
+
+	const duplicateSlug = plan();
+	duplicateSlug.children.push({
+		...structuredClone(duplicateSlug.children[0]!),
+		id: "pipeline",
+		issue: 502,
+		writeScopes: [".pi/extensions/shepherd/pipeline"],
+	});
+	assert.throws(() => validateProductionParentPlan(duplicateSlug), /duplicate child slug/i);
+});

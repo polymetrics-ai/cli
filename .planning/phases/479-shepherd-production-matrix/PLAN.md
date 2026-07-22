@@ -44,13 +44,17 @@ Pi /pm-shepherd
   -> production extension composition
      -> canonical repository/worktree and immutable plan binding
      -> ProductionRepositoryPlanIntake (schema 2 + canonical digest)
+        -> when absent: bounded GitHub issue facts
+        -> xhigh planning AgentSession proposes issue-less semantic children
+        -> host materializes canonical child issues and atomically publishes the plan
      -> ProductionShepherdController (one generation + CAS state)
         -> ProductionEffectRecoveryBarrier before scheduling
         -> deterministic scheduler (dependencies, capacity, canonical scope collisions)
         -> ProductionChildPipeline
            -> ProductionWorkspaceLifecycle + typed GitAdapter
-           -> embedded implementation/correction AgentSession roles
-           -> BoundedVerificationRunner (configured executable + argv, never a shell)
+           -> embedded implementation/correction AgentSession roles with ID-only host_verify
+           -> xhigh verification AgentSession selects immutable IDs in exact order
+           -> BoundedVerificationRunner executes host-owned executable + argv, never a shell
            -> typed commit/push and authoritative timeout reconciliation
            -> GitHub child issue/PR, exact-head review, dispositions, integration
         -> ProductionParentFinalizer (receipts, CI, clean exact-head review, draft -> ready)
@@ -59,8 +63,9 @@ Pi /pm-shepherd
 
 The model receives bounded scoped workspace capabilities, not generic shell, Git, GitHub, or
 merge-main tools. External effects are typed, cancellable, idempotency-keyed, journaled, and
-reconciled against authoritative Git/GitHub state. The parent workflow must already have created the
-marker-bound parent PR; absence or ambiguity fails closed.
+reconciled against authoritative Git/GitHub state. Before controller state is created, the host
+creates or reconciles the marker-bound parent draft PR; ambiguity or conflicting evidence fails
+closed.
 
 ## Workstream ownership used
 
@@ -118,6 +123,21 @@ authority (`06e50e21` → `a8104613`), and exact integration CAS (`5ef7ba15` →
 correction exposed one follow-on crash window, fixed test-first in `32a0d50e` → `91692415`. No
 second broad hardening review ran.
 
+## 2026-07-22 bounded release-blocker correction
+
+Human testing found four remaining release blockers after the earlier freeze. This correction is limited
+to issue-driven plan bootstrap, AgentSession-driven trusted-local verification, the explicit trusted-local
+authority decision, and same-second draft-to-ready reconciliation. It uses one behavior RED/GREEN cycle per
+slice, one focused regression pass, and one independent exact-head review; it will not reopen the broad
+17-row hardening loop. The parent issue orchestrator remains the integration owner. #479 may integrate only
+into non-default parent branch `feat/471-pi-agent-session-shepherd`; #472/main remain human-gated.
+
+8. [x] Add behavior RED tests for issue-less planning and canonical issue materialization.
+9. [x] Implement typed GitHub facts, xhigh planning AgentSession, and atomic ignored plan publication.
+10. [x] Add behavior RED tests and implement ID-only AgentSession verification with a real Go fixture.
+11. [x] Add behavior RED tests and accept exact non-draft equal-second readiness evidence.
+12. [x] Run focused/full Shepherd gates, update evidence, and obtain one independent correction review.
+
 ## Proportional verification commands
 
 ```bash
@@ -127,7 +147,7 @@ node /Users/karthiksivadas/.npm/_npx/a322a253dbd59f36/node_modules/typescript/li
   --noEmit --strict --target ES2024 --module NodeNext --moduleResolution NodeNext \
   --allowImportingTsExtensions --skipLibCheck \
   --baseUrl /Users/karthiksivadas/.nvm/versions/node/v24.13.1/lib/node_modules \
-  --typeRoots /Users/karthiksivadas/.nvm/versions/node/v24.13.1/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@types \
+  --typeRoots /Users/karthiksivadas/.nvm/versions/node/v24.13.1/lib/node_modules/@types \
 printf '{"id":"commands","type":"get_commands"}\n' | \
   PI_OFFLINE=1 PI_CODING_AGENT_DIR=/tmp/pm-shepherd-rpc \
   /Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi \
@@ -139,3 +159,20 @@ git diff --check
 Do not run broad Go/connector certification in this TypeScript/Pi issue slice. Live GitHub checks
 are optional and use only an explicitly designated sandbox with healthy ambient `gh` authentication;
 tokens are never printed, stored, or passed in prompts.
+
+The independent correction review found three concrete boundary defects in one pass: planner-defined
+arbitrary command authority, direct-child-only timeout termination, and a post-test AgentSession
+exception path that could bypass protocol validation. The bounded correction pass now restricts plans
+to closed Node/Go/Make verification recipes, terminates the POSIX process group with a hard settlement
+bound, and propagates every AgentSession runtime/cleanup exception. Review RED was 17 pass plus four
+intended failures; GREEN is 21/21. No second broad hardening review was opened.
+
+A final bounded cross-layer confirmation then checked only the newly connected bootstrap → GitHub →
+verification path. It moved downstream-only invariants to plan intake: safe unique verification IDs,
+the 1 KiB output floor, non-empty required skills, intentionally optional child human gates, inline-safe
+GitHub fields, unique child slugs, and the shared scheduler dependency/scope graph. This prevents an
+unusable proposal from being journaled or published. The three behavior checkpoints moved 6/8 → 8/8,
+8/11 → 11/11, and 11/13 → 13/13. This was closure of the correction path, not another broad review.
+The final planning-policy check also caught unsupported JSON-schema keywords before release; the actual
+`host_inspect` capability now compiles through the closed tool policy using supported enum/length shape
+constraints, while the semantic validator remains authoritative (3/4 RED → 4/4 GREEN).

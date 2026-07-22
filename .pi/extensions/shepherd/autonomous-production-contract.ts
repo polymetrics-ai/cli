@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
 
+import { validateDependencyGraph } from "./dependency-graph.ts";
 import type { HumanDecisionGate } from "./human-decision.ts";
-import { readBoundedExactRecord } from "./review-router.ts";
+import { assertNoSensitiveText, readBoundedExactRecord } from "./review-router.ts";
 
 const MAX_CHILDREN = 64;
 const MAX_LIST = 64;
@@ -12,6 +13,9 @@ const SAFE_REPOSITORY = /^[A-Za-z0-9][A-Za-z0-9._-]{0,99}\/[A-Za-z0-9][A-Za-z0-9
 const SAFE_REF = /^(?!\/|.*(?:\.\.|\s|[~^:?*\\\[\]])|.*\/$)[A-Za-z0-9][A-Za-z0-9._\/-]{0,239}$/;
 const SAFE_EXECUTABLE = /^[A-Za-z0-9][A-Za-z0-9._+-]{0,127}$/;
 const UNSAFE_TEXT = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
+const SAFE_RECIPE_PATH = /^[A-Za-z0-9@+._/-]+$/u;
+const SAFE_MAKE_TARGETS = new Set(["check", "ci", "lint", "test", "typecheck", "unit", "verify"]);
+const UNSAFE_INLINE = /[\u0000-\u001f\u007f-\u009f\u00ad\u061c\u200b-\u200f\u2028-\u202e\u2060-\u206f\ufeff]/u;
 
 export type ProductionEffectKind =
 	| "workspace_claim"
@@ -167,6 +171,15 @@ function text(value: unknown, description: string, maximum = MAX_TEXT_BYTES): st
 	return value;
 }
 
+function inlineText(value: unknown, description: string, maximum: number): string {
+	const result = text(value, description, maximum);
+	if (result.trim() !== result || UNSAFE_INLINE.test(result)) {
+		throw new Error(`${description} must be bounded inline safe text`);
+	}
+	assertNoSensitiveText(result, description);
+	return result;
+}
+
 function positiveInteger(value: unknown, description: string, maximum = Number.MAX_SAFE_INTEGER): number {
 	if (!Number.isSafeInteger(value) || (value as number) < 1 || (value as number) > maximum) {
 		throw new Error(`${description} must be a bounded positive integer`);
@@ -197,7 +210,7 @@ function uniqueStrings(value: unknown, description: string, pattern?: RegExp, al
 }
 
 function validateRelativePath(value: unknown, description: string, allowDot = false): string {
-	const path = text(value, description, 4_096);
+	const path = inlineText(value, description, 4_096);
 	if (path.includes("\\") || path.startsWith("/") || path.endsWith("/")
 		|| (!allowDot && path === ".") || path.split("/").some((part) => part === "" || part === "..")) {
 		throw new Error(`${description} must remain inside the worktree`);
@@ -220,14 +233,75 @@ function validateVerification(value: unknown): ProductionVerificationCommand {
 	if (args.some((argument) => argument.length > 4_096 || UNSAFE_TEXT.test(argument))) {
 		throw new Error("verification argv contains unsafe text");
 	}
-	return {
-		id: text(candidate.id, "verification ID", 128),
+	const id = text(candidate.id, "verification ID", 64);
+	if (!SAFE_ID.test(id)) throw new Error("invalid verification ID");
+	const maxOutputBytes = positiveInteger(
+		candidate.maxOutputBytes,
+		"verification output limit",
+		4 * 1024 * 1024,
+	);
+	if (maxOutputBytes < 1_024) throw new Error("verification output limit must be at least 1024 bytes");
+	const verification = {
+		id,
 		executable,
 		args,
 		cwd: validateRelativePath(candidate.cwd, "verification cwd", true),
 		timeoutMs: positiveInteger(candidate.timeoutMs, "verification timeout", 120_000),
-		maxOutputBytes: positiveInteger(candidate.maxOutputBytes, "verification output limit", 4 * 1024 * 1024),
+		maxOutputBytes,
 	};
+	assertProductionVerificationRecipe(verification);
+	return verification;
+}
+
+/** Closed trusted-local quality-gate recipes; issue or model text cannot invent command authority. */
+export function assertProductionVerificationRecipe(
+	command: Pick<ProductionVerificationCommand, "executable" | "args">,
+): void {
+	if (typeof command !== "object" || command === null || typeof command.executable !== "string"
+		|| !Array.isArray(command.args) || command.args.some((argument) => typeof argument !== "string")) {
+		throw new Error("verification recipe is malformed");
+	}
+	const args = command.args;
+	if (command.executable === "node") {
+		if (args[0] !== "--test" || args.slice(1).some((argument) =>
+			!((safeRecipePath(argument) && !argument.startsWith("-")) || /^--test-concurrency=[1-9][0-9]?$/u.test(argument)
+				|| argument === "--test-only" || argument === "--test-force-exit"))) {
+			throw new Error("node verification recipe must be the built-in test runner with bounded repository selectors");
+		}
+		return;
+	}
+	if (command.executable === "go") {
+		const action = args[0];
+		const operands = args.slice(1);
+		if (action === "test" && operands.every((argument) => safeGoTestArgument(argument))) return;
+		if ((action === "vet" || action === "build")
+			&& operands.every((argument) => safeGoPackage(argument) || (action === "vet" && argument === "-json"))) return;
+		throw new Error("go verification recipe must be a bounded test, vet, or build quality gate");
+	}
+	if (command.executable === "make" && args.length === 1 && SAFE_MAKE_TARGETS.has(args[0]!)) return;
+	throw new Error("verification recipe must use a closed Node, Go, or Make quality gate");
+}
+
+function safeRecipePath(value: string): boolean {
+	return value.length > 0 && value.length <= 4_096 && SAFE_RECIPE_PATH.test(value)
+		&& !value.startsWith("/") && !value.includes("\\")
+		&& value.split("/").every((part) => part.length > 0 && part !== "..");
+}
+
+function safeGoPackage(value: string): boolean {
+	return value === "." || value === "./..."
+		|| (value.startsWith("./") && safeRecipePath(value) && !value.includes("../"));
+}
+
+function safeGoTestArgument(value: string): boolean {
+	if (safeGoPackage(value)) return true;
+	return value === "-cover" || value === "-failfast" || value === "-json" || value === "-race"
+		|| value === "-short" || value === "-v" || value === "-vet=all"
+		|| /^-count=[1-9][0-9]*$/u.test(value)
+		|| /^-parallel=[1-9][0-9]*$/u.test(value)
+		|| /^-timeout=[1-9][0-9]*(?:ms|s|m)$/u.test(value)
+		|| /^-shuffle=(?:on|off|[1-9][0-9]*)$/u.test(value)
+		|| /^-run=[A-Za-z0-9_.$^|*+?()[\]{}-]{1,512}$/u.test(value);
 }
 
 function validateChild(value: unknown): ProductionChildSpec {
@@ -245,17 +319,26 @@ function validateChild(value: unknown): ProductionChildSpec {
 	const humanGates = uniqueStrings(candidate.humanGates, "child human gates") as HumanDecisionGate[];
 	const allowedGates: HumanDecisionGate[] = ["requirements", "scope", "review", "head", "merge", "parent_merge"];
 	if (humanGates.some((gate) => !allowedGates.includes(gate))) throw new Error("invalid child human gate");
+	const verification = denseArray(candidate.verification, "verification commands", MAX_LIST, false).map(validateVerification);
+	if (new Set(verification.map((command) => command.id)).size !== verification.length) {
+		throw new Error("duplicate verification command ID");
+	}
 	return {
 		id,
 		issue: positiveInteger(candidate.issue, "child issue"),
-		title: text(candidate.title, "child title", 256),
-		task: text(candidate.task, "child task", 4_096),
+		title: inlineText(candidate.title, "child title", 256),
+		task: inlineText(candidate.task, "child task", 4_096),
 		slug,
 		dependsOn: uniqueStrings(candidate.dependsOn, "child dependencies", SAFE_ID),
 		access: "mutating",
 		writeScopes: scopes,
-		requiredSkills: uniqueStrings(candidate.requiredSkills, "required skills", /^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$/),
-		verification: denseArray(candidate.verification, "verification commands", MAX_LIST, false).map(validateVerification),
+		requiredSkills: uniqueStrings(
+			candidate.requiredSkills,
+			"required skills",
+			/^[A-Za-z0-9][A-Za-z0-9:._-]{0,127}$/,
+			false,
+		),
+		verification,
 		humanGates,
 		maxAttempts: positiveInteger(candidate.maxAttempts, "maximum attempts", 10),
 		maxCorrections: positiveInteger(candidate.maxCorrections, "maximum corrections", 5),
@@ -297,19 +380,21 @@ export function validateProductionParentPlan(value: unknown, expectedIssue?: num
 	const children = denseArray(candidate.children, "production children", MAX_CHILDREN, false).map(validateChild);
 	if (new Set(children.map((child) => child.id)).size !== children.length) throw new Error("duplicate child ID");
 	if (new Set(children.map((child) => child.issue)).size !== children.length) throw new Error("duplicate child issue");
-	const ids = new Set(children.map((child) => child.id));
-	for (const child of children) {
-		if (child.dependsOn.includes(child.id) || child.dependsOn.some((dependency) => !ids.has(dependency))) {
-			throw new Error(`invalid dependencies for ${child.id}`);
-		}
-	}
+	if (new Set(children.map((child) => child.slug)).size !== children.length) throw new Error("duplicate child slug");
+	validateDependencyGraph(children.map((child) => ({
+		id: child.id,
+		dependsOn: child.dependsOn,
+		status: "pending" as const,
+		access: child.access,
+		writeScopes: child.writeScopes,
+	})));
 	return canonicalPlan({
 		schemaVersion: 2,
 		planId: text(candidate.planId, "plan ID", 256),
 		parentIssue,
 		repository,
-		title: text(candidate.title, "parent title", 256),
-		objective: text(candidate.objective, "parent objective", 4_096),
+		title: inlineText(candidate.title, "parent title", 256),
+		objective: inlineText(candidate.objective, "parent objective", 4_096),
 		parentBranch,
 		parentBaseBranch,
 		actorAllowlist: uniqueStrings(candidate.actorAllowlist, "actor allowlist", /^[a-z\d](?:[a-z\d-]{0,37}[a-z\d])?$/, false),

@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import test from "node:test";
 
 import type { AgentSessionHandoff, RoleRunRequest } from "./agent-session-runtime.ts";
+import type { ProductionVerificationSessionBinding } from "./agent-session-verification.ts";
 import type { ProductionChildSpec } from "./autonomous-production-contract.ts";
 import { GitAdapter, type GitCommandExecutor } from "./git-adapter.ts";
 import { createLocalGitFixture, git, write } from "./issue-476-git-fixture.ts";
@@ -200,14 +201,18 @@ async function fixture(t: test.TestContext) {
 	t.after(() => rm(root, { recursive: true, force: true }));
 	const workspaceAdapter = new FakeWorkspace();
 	const agentSession = new FakeAgent();
-	const verificationCalls: Array<{ cwd: string; signal?: AbortSignal }> = [];
+	const verificationCalls: Array<{
+		cwd: string;
+		signal?: AbortSignal;
+		binding?: ProductionVerificationSessionBinding;
+	}> = [];
 	let verificationPassed = true;
 	const lifecycle = new ProductionWorkspaceLifecycle({
 		workspaceAdapter,
 		agentSession,
 		verification: {
-			async runAll(cwd, commands, signal) {
-				verificationCalls.push({ cwd, ...(signal ? { signal } : {}) });
+			async runAll(cwd, commands, signal, binding) {
+				verificationCalls.push({ cwd, ...(signal ? { signal } : {}), ...(binding ? { binding } : {}) });
 				return commands.map((entry) => ({
 					id: entry.id,
 					status: verificationPassed ? "passed" as const : "failed" as const,
@@ -218,6 +223,18 @@ async function fixture(t: test.TestContext) {
 					durationMs: 1,
 					...(verificationPassed ? {} : { failureKind: "exit" as const }),
 				}));
+			},
+			async createAgentCapability() {
+				return {
+					name: "host_verify" as const,
+					description: "Run one fixture verification ID",
+					mutates: true as const,
+					parameters: {
+						type: "object", additionalProperties: false, required: ["id"],
+						properties: { id: { type: "string", enum: ["focused"] } },
+					},
+					async execute() { return { status: "ok" as const, summary: "fixture passed" }; },
+				};
 			},
 		},
 	});
@@ -271,12 +288,22 @@ test("runs implementation in the claimed workspace then verifies, commits, pushe
 	assert.equal(request.workspace.cwd, session.binding.cwd);
 	assert.equal(request.authority.readOnly, false);
 	assert.deepEqual(request.authority.writePrefixes, session.binding.writeScopes);
+	assert.deepEqual(request.authority.capabilityNames, ["host_verify"]);
+	assert.equal(request.capabilities[0]?.name, "host_verify");
 	assert.match(request.context.join("\n"), /javascript-testing-patterns|RED GREEN/);
 	const receipt = await new ProductionAgentEffectReceiptRepository(f.root).find(IMPLEMENT_EFFECT);
 	assert.equal(receipt?.completion?.resultDigest, productionAgentEffectResultDigest(session.binding));
 	assert.deepEqual(receipt?.completion?.completedBinding, session.binding);
 
 	assert.equal((await session.verify()).every((result) => result.status === "passed"), true);
+	assert.deepEqual(f.verificationCalls[0]?.binding, {
+		issue: 502,
+		branch: session.binding.branch,
+		runId: "run-479",
+		generation: 1,
+		laneId: "lane-b-verification",
+		candidateHead: SHA_A,
+	});
 	const commit = await session.commit("feat(shepherd): complete lane B");
 	assert.equal(commit.head, SHA_B);
 	assert.equal((await session.push()).head, SHA_B);

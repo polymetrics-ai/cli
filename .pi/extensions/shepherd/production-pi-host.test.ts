@@ -93,7 +93,8 @@ test("entrypoint ensures one exact marker-bound parent draft before starting pro
 	const controller = new ProductionPiEntrypointController({
 		issue: 479,
 		delegate: delegate(479, calls),
-		async validateAuthority() {},
+		async ensurePlan() { calls.push("ensure-plan"); },
+		async validateAuthority() { calls.push("validate-authority"); },
 		async ensureParentDraft(issue, signal) {
 			assert.equal(issue, 479);
 			assert.equal(signal.aborted, false);
@@ -110,7 +111,7 @@ test("entrypoint ensures one exact marker-bound parent draft before starting pro
 		timeoutMs: 30_000,
 	});
 	assert.equal(result.kind, "production_autonomous");
-	assert.deepEqual(calls, ["status", "ensure-parent-draft", "start"]);
+	assert.deepEqual(calls, ["status", "ensure-plan", "validate-authority", "ensure-parent-draft", "start"]);
 
 	await controller.resume({
 		action: "resume",
@@ -119,7 +120,10 @@ test("entrypoint ensures one exact marker-bound parent draft before starting pro
 		maxConcurrency: 2,
 		timeoutMs: 30_000,
 	});
-	assert.deepEqual(calls, ["status", "ensure-parent-draft", "start", "resume"]);
+	assert.deepEqual(calls, [
+		"status", "ensure-plan", "validate-authority", "ensure-parent-draft", "start",
+		"validate-authority", "resume",
+	]);
 	await controller.shutdown();
 });
 
@@ -128,6 +132,7 @@ test("entrypoint fails closed before production state when parent draft preparat
 	const controller = new ProductionPiEntrypointController({
 		issue: 479,
 		delegate: delegate(479, calls),
+		async ensurePlan() {},
 		async validateAuthority() {},
 		async ensureParentDraft() { throw new Error("parent draft evidence is ambiguous"); },
 		resources: [],
@@ -140,6 +145,30 @@ test("entrypoint fails closed before production state when parent draft preparat
 		timeoutMs: 30_000,
 	}), /parent draft evidence is ambiguous/);
 	assert.deepEqual(calls, ["status"]);
+	assert.equal(await controller.status(479), undefined);
+});
+
+test("entrypoint plan bootstrap failure creates no state and performs no authority or draft mutation", async () => {
+	const calls: string[] = [];
+	const controller = new ProductionPiEntrypointController({
+		issue: 479,
+		delegate: delegate(479, calls),
+		async ensurePlan() {
+			calls.push("ensure-plan");
+			throw new Error("planning issue facts are ambiguous");
+		},
+		async validateAuthority() { calls.push("validate-authority"); },
+		async ensureParentDraft() { calls.push("ensure-parent-draft"); },
+		resources: [],
+	});
+	await assert.rejects(controller.start({
+		action: "start",
+		issue: 479,
+		backend: "sdk-inproc",
+		maxConcurrency: 2,
+		timeoutMs: 30_000,
+	}), /planning issue facts are ambiguous/);
+	assert.deepEqual(calls, ["status", "ensure-plan"]);
 	assert.equal(await controller.status(479), undefined);
 });
 
@@ -242,7 +271,7 @@ test("production host rejects a conventional default alias as the parent integra
 	await controller.shutdown();
 });
 
-test("production Pi host composes separate implementation and review AgentSession runtimes at the issue boundary", async (t) => {
+test("production Pi host composes separate implementation, review, and planning AgentSession runtimes", async (t) => {
 	const root = await mkdtemp(join(tmpdir(), "production-pi-host-"));
 	t.after(() => rm(root, { recursive: true, force: true }));
 	await writeProductionPlan(root);
@@ -303,7 +332,7 @@ test("production Pi host composes separate implementation and review AgentSessio
 		},
 	});
 
-	assert.deepEqual(runtimeRoles, ["implementation", "review"]);
+	assert.deepEqual(runtimeRoles, ["implementation", "review", "planning"]);
 	assert.equal(captured.length, 1);
 	assert.equal(captured[0].parentIssue, 479);
 	assert.equal(captured[0].coordinator, coordinator);
@@ -320,6 +349,7 @@ test("production Pi host composes separate implementation and review AgentSessio
 	await controller.shutdown();
 	assert.ok(calls.includes("close-implementation"));
 	assert.ok(calls.includes("close-review"));
+	assert.ok(calls.includes("close-planning"));
 });
 
 test("durable parent readiness reconciles timeout-after-apply and replays no mutation after restart", async (t) => {
@@ -370,6 +400,148 @@ test("durable parent readiness reconciles timeout-after-apply and replays no mut
 	const restarted = new DurableGhParentReadiness(root, { execute });
 	assert.deepEqual(await restarted.markExistingDraftReady(request, context), receipt);
 	assert.equal(calls.length, 3);
+});
+
+test("durable parent readiness accepts an exact non-draft observation in the expected revision second", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "production-parent-ready-same-second-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const updatedAt = "2026-07-22T10:00:00.000Z";
+	const expectedRevision = Math.floor(new Date(updatedAt).valueOf() / 1_000);
+	const calls: string[][] = [];
+	const adapter = new DurableGhParentReadiness(root, {
+		execute: async (_file, args) => {
+			calls.push([...args]);
+			assert.notEqual(args[1], "graphql");
+			return JSON.stringify({
+				number: 438,
+				state: "open",
+				draft: false,
+				node_id: "PR_kwDOSameSecond",
+				updated_at: updatedAt,
+				head: { ref: "feat/471-parent", sha: "a".repeat(40) },
+			});
+		},
+	});
+	const receipt = await adapter.markExistingDraftReady({
+		repository: "acme/widgets",
+		parentIssue: 479,
+		pullRequest: 438,
+		generation: 1,
+		branch: "feat/471-parent",
+		headSha: "a".repeat(40),
+		expectedRevision,
+	}, {
+		signal: new AbortController().signal,
+		deadlineAt: "2099-07-22T10:10:00.000Z",
+		acknowledgeAbort() {},
+	});
+	assert.equal(receipt.appliedRevision, expectedRevision);
+	assert.equal(calls.length, 1);
+});
+
+test("durable parent readiness never accepts an equal revision while the exact parent stays draft", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "production-parent-ready-still-draft-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const updatedAt = "2026-07-22T10:00:00.000Z";
+	const expectedRevision = Math.floor(new Date(updatedAt).valueOf() / 1_000);
+	let reads = 0;
+	let mutations = 0;
+	const adapter = new DurableGhParentReadiness(root, {
+		execute: async (_file, args) => {
+			if (args[1] === "graphql") {
+				mutations += 1;
+				return "{}";
+			}
+			reads += 1;
+			return JSON.stringify({
+				number: 438,
+				state: "open",
+				draft: true,
+				node_id: "PR_kwDOStillDraft",
+				updated_at: updatedAt,
+				head: { ref: "feat/471-parent", sha: "a".repeat(40) },
+			});
+		},
+	});
+	await assert.rejects(adapter.markExistingDraftReady({
+		repository: "acme/widgets",
+		parentIssue: 479,
+		pullRequest: 438,
+		generation: 1,
+		branch: "feat/471-parent",
+		headSha: "a".repeat(40),
+		expectedRevision,
+	}, {
+		signal: new AbortController().signal,
+		deadlineAt: "2099-07-22T10:10:00.000Z",
+		acknowledgeAbort() {},
+	}), /not authoritatively marked ready/);
+	assert.equal(reads, 2);
+	assert.equal(mutations, 1);
+});
+
+test("durable parent readiness reconciles a prepared same-second restart and duplicate without another mutation", async (t) => {
+	const root = await mkdtemp(join(tmpdir(), "production-parent-ready-prepared-restart-"));
+	t.after(() => rm(root, { recursive: true, force: true }));
+	const updatedAt = "2026-07-22T10:00:00.000Z";
+	const expectedRevision = Math.floor(new Date(updatedAt).valueOf() / 1_000);
+	const request = {
+		repository: "acme/widgets",
+		parentIssue: 479,
+		pullRequest: 438,
+		generation: 1,
+		branch: "feat/471-parent",
+		headSha: "a".repeat(40),
+		expectedRevision,
+	};
+	const context = {
+		signal: new AbortController().signal,
+		deadlineAt: "2099-07-22T10:10:00.000Z",
+		acknowledgeAbort() {},
+	};
+	let firstReads = 0;
+	let mutations = 0;
+	const first = new DurableGhParentReadiness(root, {
+		execute: async (_file, args) => {
+			if (args[1] === "graphql") {
+				mutations += 1;
+				throw new Error("response lost while parent still appeared draft");
+			}
+			firstReads += 1;
+			return JSON.stringify({
+				number: 438,
+				state: "open",
+				draft: true,
+				node_id: "PR_kwDOPreparedRestart",
+				updated_at: updatedAt,
+				head: { ref: "feat/471-parent", sha: "a".repeat(40) },
+			});
+		},
+	});
+	await assert.rejects(first.markExistingDraftReady(request, context), /response lost/);
+	assert.equal(firstReads, 2);
+	assert.equal(mutations, 1);
+
+	let restartReads = 0;
+	const restarted = new DurableGhParentReadiness(root, {
+		execute: async (_file, args) => {
+			assert.notEqual(args[1], "graphql");
+			restartReads += 1;
+			return JSON.stringify({
+				number: 438,
+				state: "open",
+				draft: false,
+				node_id: "PR_kwDOPreparedRestart",
+				updated_at: updatedAt,
+				head: { ref: "feat/471-parent", sha: "a".repeat(40) },
+			});
+		},
+	});
+	const reconciled = await restarted.markExistingDraftReady(request, context);
+	assert.equal(reconciled.appliedRevision, expectedRevision);
+	assert.deepEqual(await restarted.markExistingDraftReady(request, context), reconciled);
+	assert.equal(restartReads, 1);
+	assert.equal(mutations, 1);
 });
 
 test("durable parent readiness rejects a moved exact head before mutation", async (t) => {

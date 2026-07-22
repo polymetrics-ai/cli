@@ -44,3 +44,21 @@ gap remains open in the phase record even if every final functional gate passes.
 - No future test-only commit should be described as the original RED for already implemented
   behavior. Any additional correction must add a genuinely failing behavior test first, capture its
   failure, then implement the smallest GREEN change and rerun the stable-head gates.
+
+## 2026-07-22 correction ledger
+
+| Slice | RED evidence | GREEN evidence | Status |
+|---|---|---|---|
+| Issue-driven plan bootstrap | Missing-module RED, then compiling throwing scaffolds: bootstrap 4/4 intended failures, GitHub facts 3/3 intended failures, and host start 2 intended failures/1 pass because no plan session ran. | Bootstrap/intake 7/7, GitHub facts 3/3, and host entrypoint/bootstrap focused cases all pass. Returned GitHub issue numbers, not planner-invented numbers, enter the canonical schema-2 plan. | GREEN |
+| AgentSession trusted-local verification | Missing-module RED, then compiling scaffold 4/4 intended failures. A separate tool-policy behavior RED proved host-only mutation still exposed workspace edit/write authority. | ID-only ordered verification, omitted/out-of-order fail-closed behavior, bounded diagnostics, implementation/correction RED→GREEN reruns, real `go test ./...`, isolated environment, lifecycle binding, and recovery binding pass. | GREEN |
+| Same-second ready reconciliation | Focused host/lifecycle RED: 24 pass and 3 intended equal-second failures. | Focused host/lifecycle GREEN: 27/27; non-draft equality succeeds, draft equality and moved head fail, restart/duplicate remain idempotent. | GREEN |
+| One-pass independent correction review | Focused review RED: 17 pass and 4 intended failures proved arbitrary recipes were accepted, bootstrap could authorize `git push`, a descendant retained the verification process beyond timeout, and a cleanup exception after a failed test did not reject. | Focused GREEN: 21/21; only closed Node/Go/Make recipes pass, bootstrap rejects mutating Git, POSIX process groups are terminated within the hard bound, and AgentSession exceptions always propagate through protocol validation. | GREEN |
+| Plan-to-runtime identifier and output parity | Focused RED: 6/8; plan/proposal validation accepted a space-bearing verification ID and a one-byte output limit that the AgentSession/host verifier rejected later. | Focused GREEN: 8/8; safe IDs and the 1 KiB output floor are enforced before bootstrap publication and represented in the proposal tool schema. | GREEN |
+| Real GitHub orchestration parity | Focused RED: 8/11; real orchestration rejected intentionally empty child human gates, while plan intake accepted an empty required-skill list. | Focused GREEN: 11/11; empty exceptional gates map through real orchestration and every child declares at least one implementation skill. | GREEN |
+| Unified plan topology/scope parity | Focused RED: 11/13; durable plan intake accepted inline-unsafe fields, duplicate verification IDs/slugs, and scheduler-invalid scopes. | Focused GREEN: 13/13; plan intake uses inline-safe GitHub fields and the shared dependency-graph validator, and rejects duplicate command IDs/slugs before journaling. | GREEN |
+| Real planning tool-policy compilation | Focused RED: 3/4; the actual `host_inspect` proposal schema used unsupported `const`/`pattern` keywords and could not be compiled by the closed Pi tool policy. | Focused GREEN: 4/4; the complete real capability compiles using supported enum/length constraints and semantic proposal validation still enforces exact values. | GREEN |
+
+The correction retains one broad historical caveat: missing-module RED alone is not sufficient. For
+each new module, the test was rerun against a compiling throwing scaffold and failed for the intended
+behavior before the implementation replaced it. Command output was captured in the active session;
+the durable ledger records exact counts because those RED states were intentionally not committed.

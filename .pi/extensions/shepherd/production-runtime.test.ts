@@ -733,11 +733,11 @@ test("default shell recovery reruns only the bounded read-only commands and proj
 		corrections: 0,
 		commands,
 	};
-	const calls: Array<{ cwd: string; commands: unknown }> = [];
+	const calls: Array<{ cwd: string; commands: unknown; binding: unknown }> = [];
 	const probes = createProductionRecoveryProbeTable(recoveryProbeOptions({
 		verification: {
-			async runAll(cwd, value) {
-				calls.push({ cwd, commands: value });
+			async runAll(cwd, value, _signal, binding) {
+				calls.push({ cwd, commands: value, binding });
 				return [{
 					id: "focused-test",
 					status: "passed",
@@ -759,7 +759,14 @@ test("default shell recovery reruns only the bounded read-only commands and proj
 
 	assert.equal(evidence.status, "applied");
 	if (evidence.status !== "applied") return;
-	assert.deepEqual(calls, [{ cwd: workspace.cwd, commands }]);
+	assert.deepEqual(calls, [{ cwd: workspace.cwd, commands, binding: {
+		issue: state.children[0].issue,
+		branch: workspace.branch,
+		runId: state.runId,
+		generation: state.generation,
+		laneId: "runtime-verification",
+		candidateHead: workspace.head,
+	} }]);
 	assert.equal(evidence.projectedState.revision, state.revision + 1);
 	assert.equal(evidence.projectedState.children[0].checkpoint?.effectKey, DIGEST_B);
 	assert.deepEqual(evidence.projectedState.children[0].checkpoint?.verification?.commands, [{

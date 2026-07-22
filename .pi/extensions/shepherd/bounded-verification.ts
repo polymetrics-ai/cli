@@ -1,6 +1,6 @@
 import { spawn, type ChildProcessByStdio } from "node:child_process";
 import { lstatSync, realpathSync, statSync } from "node:fs";
-import { isAbsolute, relative, resolve, sep } from "node:path";
+import { delimiter, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 import type { Readable } from "node:stream";
 
 import type { ProductionVerificationCommand } from "./autonomous-production-contract.ts";
@@ -14,6 +14,7 @@ const MAX_OUTPUT_BYTES = 4 * 1024 * 1024;
 const SAFE_NAME = /^[A-Za-z0-9][A-Za-z0-9._+-]{0,127}$/;
 const SAFE_ENVIRONMENT_NAME = /^[A-Za-z_][A-Za-z0-9_]{0,127}$/;
 const UNSAFE_TEXT = /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/u;
+const DEFAULT_TRUSTED_EXECUTABLES = ["node", "go", "make"] as const;
 
 export interface ProductionVerificationResult {
 	id: string;
@@ -32,6 +33,43 @@ export interface BoundedVerificationRunnerOptions {
 	terminationGraceMs?: number;
 }
 
+/**
+ * Resolves a deliberately small test-tool allowlist to canonical executable files. Relative PATH
+ * entries, non-files, and non-executables are ignored. A plan can select only one of the returned
+ * names; it can never supply an executable path.
+ */
+export function resolveTrustedVerificationExecutables(
+	pathValue = process.env.PATH ?? "",
+): Readonly<Record<string, string>> {
+	if (typeof pathValue !== "string" || UNSAFE_TEXT.test(pathValue) || Buffer.byteLength(pathValue) > 64 * 1024) {
+		throw new Error("verification PATH is invalid");
+	}
+	const result = Object.create(null) as Record<string, string>;
+	const node = canonicalExecutable(process.execPath);
+	if (node !== undefined) result.node = node;
+	for (const name of DEFAULT_TRUSTED_EXECUTABLES) {
+		if (name === "node") continue;
+		for (const directory of pathValue.split(delimiter)) {
+			if (!isAbsolute(directory) || UNSAFE_TEXT.test(directory)) continue;
+			const candidate = canonicalExecutable(join(directory, name));
+			if (candidate === undefined) continue;
+			result[name] = candidate;
+			break;
+		}
+	}
+	if (result.node === undefined) throw new Error("the trusted Node executable is unavailable");
+	return Object.freeze(result);
+}
+
+/** PATH containing only the directories that own the canonical trusted test tools. */
+export function trustedVerificationPath(executables: Readonly<Record<string, string>>): string {
+	const directories = [...new Set(Object.values(executables).map((value) => dirname(value)))];
+	if (directories.length < 1 || directories.some((value) => !isAbsolute(value) || UNSAFE_TEXT.test(value))) {
+		throw new Error("trusted verification executable set is invalid");
+	}
+	return directories.join(delimiter);
+}
+
 export class BoundedVerificationRunner {
 	readonly #executables: ReadonlyMap<string, string>;
 	readonly #environment: Readonly<Record<string, string>>;
@@ -39,6 +77,9 @@ export class BoundedVerificationRunner {
 
 	constructor(options: BoundedVerificationRunnerOptions = {}) {
 		if (typeof options !== "object" || options === null) throw new Error("verification runner options are invalid");
+		if ((process.platform as string) === "win32") {
+			throw new Error("trusted-local verification requires POSIX process-group containment");
+		}
 		const configured = options.executables ?? { node: process.execPath };
 		const entries = Object.entries(configured);
 		if (entries.length < 1 || entries.length > MAX_EXECUTABLES) {
@@ -104,6 +145,7 @@ export class BoundedVerificationRunner {
 				child = spawn(executable, [...command.args], {
 					cwd,
 					env: this.#environment,
+					detached: true,
 					shell: false,
 					stdio: ["ignore", "pipe", "pipe"],
 					windowsHide: true,
@@ -119,12 +161,28 @@ export class BoundedVerificationRunner {
 			let failureKind: ProductionVerificationResult["failureKind"];
 			let finished = false;
 			let forceTimer: ReturnType<typeof setTimeout> | undefined;
+			let settlementTimer: ReturnType<typeof setTimeout> | undefined;
+			const killTree = (treeSignal: NodeJS.Signals): void => {
+				if (child.pid !== undefined && child.pid > 0) {
+					try {
+						process.kill(-child.pid, treeSignal);
+						return;
+					} catch (error) {
+						if (!(typeof error === "object" && error !== null && "code" in error && error.code === "ESRCH")) {
+							// Fall through to the direct-child signal; completion still remains hard-bounded.
+						}
+					}
+				}
+				if (child.exitCode === null && child.signalCode === null) child.kill(treeSignal);
+			};
 			const terminate = (kind: NonNullable<ProductionVerificationResult["failureKind"]>): void => {
 				failureKind ??= kind;
-				if (child.exitCode !== null || child.signalCode !== null) return;
-				child.kill("SIGTERM");
+				killTree("SIGTERM");
 				forceTimer ??= setTimeout(() => {
-					if (child.exitCode === null && child.signalCode === null) child.kill("SIGKILL");
+					killTree("SIGKILL");
+					settlementTimer ??= setTimeout(() => {
+						finish(child.exitCode, child.signalCode, true);
+					}, this.#terminationGraceMs);
 				}, this.#terminationGraceMs);
 				forceTimer.unref?.();
 			};
@@ -145,12 +203,22 @@ export class BoundedVerificationRunner {
 			signal?.addEventListener("abort", onAbort, { once: true });
 			if (signal?.aborted) terminate("aborted");
 
-			const finish = (exitCode: number | null, processSignal: NodeJS.Signals | null): void => {
+			const finish = (
+				exitCode: number | null,
+				processSignal: NodeJS.Signals | null,
+				forcedSettlement = false,
+			): void => {
 				if (finished) return;
 				finished = true;
 				clearTimeout(timeout);
 				if (forceTimer) clearTimeout(forceTimer);
+				if (settlementTimer) clearTimeout(settlementTimer);
 				signal?.removeEventListener("abort", onAbort);
+				if (forcedSettlement) {
+					child.stdout.destroy();
+					child.stderr.destroy();
+					child.unref();
+				}
 				const kind = failureKind ?? (exitCode === 0 ? undefined : "exit");
 				resolveResult({
 					id: command.id,
@@ -257,4 +325,16 @@ function failedBeforeSpawn(
 		durationMs: 0,
 		failureKind,
 	};
+}
+
+function canonicalExecutable(path: string): string | undefined {
+	try {
+		const canonical = realpathSync(path);
+		const metadata = lstatSync(canonical);
+		if (!isAbsolute(canonical) || UNSAFE_TEXT.test(canonical) || !metadata.isFile() || metadata.isSymbolicLink()
+			|| (process.platform !== "win32" && (metadata.mode & 0o111) === 0)) return undefined;
+		return canonical;
+	} catch {
+		return undefined;
+	}
 }

@@ -284,6 +284,8 @@ export interface ToolPolicy {
 
 export interface ToolPolicyInput {
 	readOnly: boolean;
+	/** False grants only explicitly declared host mutation capabilities, never workspace edit/write tools. */
+	workspaceMutation?: boolean;
 	workspace: ScopedWorkspace;
 	authority: ToolAuthority;
 	capabilities: HostCapability[];
@@ -348,11 +350,16 @@ function captureToolPolicyOptions(options: ToolPolicyOptions): ToolPolicyOptions
 function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 	const root = captureFixedOwnDataFields(
 		input,
-		["readOnly", "workspace", "authority", "capabilities"],
+		["readOnly", "workspaceMutation", "workspace", "authority", "capabilities"],
 		"tool policy input",
+		new Set(["workspaceMutation"]),
 	);
 	const readOnly = root.readOnly;
 	if (typeof readOnly !== "boolean") throw new ToolPolicyError("readOnly must be boolean");
+	const workspaceMutation = root.workspaceMutation === undefined ? !readOnly : root.workspaceMutation;
+	if (typeof workspaceMutation !== "boolean" || (readOnly && workspaceMutation)) {
+		throw new ToolPolicyError("workspaceMutation conflicts with readOnly authority");
+	}
 
 	const authoritySource = captureFixedOwnDataFields(
 		root.authority,
@@ -429,7 +436,7 @@ function captureToolPolicyInput(input: ToolPolicyInput): ToolPolicyInput {
 	}
 	INTRINSIC_OBJECT_FREEZE(capabilities);
 
-	return INTRINSIC_OBJECT_FREEZE({ readOnly, workspace, authority, capabilities });
+	return INTRINSIC_OBJECT_FREEZE({ readOnly, workspaceMutation, workspace, authority, capabilities });
 }
 
 export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOptions = {}): ToolPolicy {
@@ -459,7 +466,7 @@ export function createToolPolicy(input: ToolPolicyInput, options: ToolPolicyOpti
 		? capturedInput.authority.writePrefixes
 		: normalizeScopedPrefixes(capturedInput.authority.writePrefixes, "write");
 	const tools: SessionTool[] = [workspaceReadTool(capturedInput.workspace, readPrefixes, limits)];
-	if (!capturedInput.readOnly) {
+	if (!capturedInput.readOnly && capturedInput.workspaceMutation !== false) {
 		arrayPush(tools, workspaceEditTool(capturedInput.workspace, writePrefixes, limits));
 		arrayPush(tools, workspaceWriteTool(capturedInput.workspace, writePrefixes, limits));
 	}
@@ -511,6 +518,12 @@ interface CompiledToolArgumentContract {
 function validatePolicyInput(input: ToolPolicyInput, maximumStringLength: number): CompiledHostCapability[] {
 	if (!input || typeof input !== "object") throw new ToolPolicyError("tool policy input is required");
 	if (typeof input.readOnly !== "boolean") throw new ToolPolicyError("readOnly must be boolean");
+	if (input.workspaceMutation !== undefined && typeof input.workspaceMutation !== "boolean") {
+		throw new ToolPolicyError("workspaceMutation must be boolean");
+	}
+	if (input.readOnly && input.workspaceMutation === true) {
+		throw new ToolPolicyError("read-only authority cannot mutate the workspace");
+	}
 	if (!input.workspace || typeof input.workspace !== "object") throw new ToolPolicyError("workspace capability is required");
 	if (!validIdentifier(input.workspace.id) || input.workspace.id !== input.authority?.workspaceId) {
 		throw new ToolPolicyError("workspace identity does not match the immutable authority envelope");

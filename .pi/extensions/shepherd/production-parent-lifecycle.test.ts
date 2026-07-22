@@ -486,9 +486,13 @@ test("parent finalization fails closed for incomplete child, forged receipt, inc
 
 class ReadyTransition implements ProductionParentReadyTransitionPort {
 	readonly transport: FinalizationTransport;
+	readonly revisionIncrement: number;
 	calls: Parameters<ProductionParentReadyTransitionPort["markExistingDraftReady"]>[0][] = [];
 
-	constructor(transport: FinalizationTransport) { this.transport = transport; }
+	constructor(transport: FinalizationTransport, revisionIncrement = 1) {
+		this.transport = transport;
+		this.revisionIncrement = revisionIncrement;
+	}
 
 	async markExistingDraftReady(
 		request: Parameters<ProductionParentReadyTransitionPort["markExistingDraftReady"]>[0],
@@ -496,7 +500,7 @@ class ReadyTransition implements ProductionParentReadyTransitionPort {
 	): Promise<ProductionParentReadyTransitionReceipt> {
 		this.calls.push(structuredClone(request));
 		this.transport.parent.draft = false;
-		this.transport.parent.revision += 1;
+		this.transport.parent.revision += this.revisionIncrement;
 		return {
 			...request,
 			schemaVersion: 1,
@@ -535,6 +539,22 @@ test("a parent draft requires the explicit bounded existing-draft-to-ready port 
 		expectedRevision: 11,
 	}]);
 	assert.equal(harness.transport.parent.draft, false);
+});
+
+test("parent finalization accepts an exact non-draft transition receipt applied in the expected revision second", async () => {
+	const harness = finalizationHarness();
+	harness.transport.parent.draft = true;
+	const readiness = new ReadyTransition(harness.transport, 0);
+	const result = await new ProductionParentFinalizer({
+		transport: harness.transport,
+		policies: harness.policyAuthority,
+		reviews: harness.reviews,
+		readiness,
+	}).finalize(harness.value, harness.state, new AbortController().signal);
+	assert.equal(result.head, PARENT_HEAD);
+	assert.equal(readiness.calls.length, 1);
+	assert.equal(harness.transport.parent.draft, false);
+	assert.equal(harness.transport.parent.revision, readiness.calls[0].expectedRevision);
 });
 
 function decisionRecord(request: GitHubDecisionRequest, status: "pending" | "decided" | "consumed", option?: "approve-merge" | "reject") {

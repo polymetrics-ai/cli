@@ -980,7 +980,7 @@ function validateChildIntent(value: unknown): ChildIntent {
 	const skills = validateStringList(candidate.requiredSkills, "required skills", SKILL);
 	const verification = boundedArray(candidate.verification, "verification requirements").map(validateVerification);
 	unique(verification, (requirement) => requirement.id, "verification requirement ID");
-	const humanGates = validateStringList(candidate.humanGates, "human gates") as HumanDecisionGate[];
+	const humanGates = validateStringList(candidate.humanGates, "human gates", undefined, true) as HumanDecisionGate[];
 	if (humanGates.some((gate) => !HUMAN_GATES.includes(gate))) throw new Error("invalid human gate");
 	return {
 		id,
