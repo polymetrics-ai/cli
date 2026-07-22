@@ -6,18 +6,20 @@ Phase: `471-pi-agent-session-shepherd`
 
 The entries below preserve RED/GREEN/refactor evidence for the earlier read-only control-plane
 foundation. They do **not** establish completion of the autonomous Shepherd now required by #471.
-The replacement TDD queue is issue-scoped:
+The replacement TDD queue was issue-scoped. The current-gate column below records whether each
+capability is present in the verified #479 aggregate; it does not claim independent GitHub
+issue/PR closure. Historical per-issue artifacts retain their own process and review gates.
 
 | Issue | RED target | Current gate |
 |---|---|---|
-| #473 | cancellation ordering, epoch cleanup/acquisition race, root identity, state invariants, epoch bounds | in progress |
-| #474 | DAG cycles/readiness/collisions/retry/reconciliation | blocked by #473 |
-| #475 | exact role routing, least authority, abort/close, bounded handoffs | blocked by #473 |
-| #476 | worktree identity, safe Git operations, crash/idempotency | blocked by #473 |
-| #477 | idempotent comments, actor/head binding, consume-once decisions | blocked by #473 |
-| #478 | issue/PR idempotency, review coverage, scoped integration | blocked by #474/#476/#477 |
-| #479 | full fake-port autonomous trajectories and command UX | blocked by #474-#478 |
-| #480 | fault-injected restart/audit/reversible cutover preparation | blocked by #479 |
+| #473 | cancellation ordering, epoch cleanup/acquisition race, root identity, state invariants, epoch bounds | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #474 | DAG cycles/readiness/collisions/retry/reconciliation | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #475 | exact role routing, least authority, abort/close, bounded handoffs | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #476 | worktree identity, safe Git operations, crash/idempotency | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #477 | idempotent comments, actor/head binding, consume-once decisions | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #478 | issue/PR idempotency, review coverage, scoped integration | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
+| #479 | full production trajectories, command UX, exact-effect recovery, and parent-base CAS | functional PASS at `91692415`; original all-row RED evidence remains historically incomplete |
+| #480 | fault-injected restart/audit/reversible cutover preparation | waiting #479 fresh CI and non-default parent integration |
 | #481 | sandbox/live canary, post-pass deprecation activation, and exact-head parent readiness | blocked by #480 |
 
 Every child must append its exact failing command/output summary before production changes, then

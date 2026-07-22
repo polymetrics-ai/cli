@@ -242,6 +242,13 @@ Persisted status explains whether work is idle for capacity, dependencies, or a 
 collision. When an integrated sibling advances the parent, stale children refresh/reclaim their
 workspace and must repeat verification and exact-head review before integration.
 
+Child integration never calls GitHub's head-only pull-request merge mutation. Shepherd builds one
+deterministic two-parent merge from the exact reviewed base/head, rechecks the live remote default,
+and advances only the non-default parent ref with an exact `--force-with-lease` old-SHA guard.
+GitHub is then used only to observe the exact merge/parent ref and publish the durable receipt. A
+restart after the Git ref update but before that receipt reuses the same proven merge; an unrelated
+parent advance is preserved and sends the child through refresh, verification, and review again.
+
 Retryable failures consume `maxAttempts`; failed verification or review findings consume
 `maxCorrections`, and review findings require recorded dispositions plus a clean review of the
 resulting exact head. Exhaustion creates a durable issue-bound child gate instead of treating prose

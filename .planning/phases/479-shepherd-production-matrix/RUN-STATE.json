@@ -1,8 +1,35 @@
 {
   "schemaVersion": 1,
   "phase": "479-shepherd-production-matrix",
-  "status": "planning",
-  "checkpoint": "contracts-and-red-matrix",
+  "status": "verified_waiting_external_gates",
+  "checkpoint": "17-of-17-functional-pass",
+  "productionCodeHead": "9169241531dc0f88710bcfc637a272dd379dec99",
+  "verificationTestHead": "7e02778e3552c4efe83567e990e099b18dce8eac",
+  "matrix": {
+    "pass": 17,
+    "open": 0
+  },
+  "verification": {
+    "focused": {
+      "pass": 808,
+      "fail": 0
+    },
+    "completeInventory": {
+      "total": 1685,
+      "pass": 1620,
+      "fail": 64,
+      "skipped": 1,
+      "localFailureClass": "managed_sandbox_spawn_eperm"
+    },
+    "strictProductionTypeScript": "pass",
+    "offlinePiRpc": "pass",
+    "reviewDisposition": "verified"
+  },
   "manualGsdFallback": true,
-  "reviewRoundsAllowed": 1
+  "reviewRoundsAllowed": 1,
+  "reviewRoundsUsed": 1,
+  "remainingExternalGates": [
+    "fresh_ci_outside_managed_sandbox",
+    "human_parent_integration"
+  ]
 }

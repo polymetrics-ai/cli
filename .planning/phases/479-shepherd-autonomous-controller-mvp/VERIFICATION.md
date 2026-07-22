@@ -1,7 +1,8 @@
 # Verification
 
-Status: passed for the bounded MVP at implementation head
-`e6ef3b3221890260c37bc82439bc47be1f461cfb`.
+Status: historical bounded-MVP pass at `e6ef3b3221890260c37bc82439bc47be1f461cfb`.
+The authoritative current result is the production-matrix verification: 17/17 functional PASS at
+production code head `91692415`.
 
 ## Results
 

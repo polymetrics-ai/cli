@@ -58,7 +58,7 @@ reconcile persisted intent with current Git/GitHub truth before any new mutation
 - Sub-PR base: `feat/471-pi-agent-session-shepherd`
 - Closing policy: sub-PRs use `Refs #<child>` and `Refs #471`; only the final parent PR closes #471.
 
-Planned dependency waves:
+Original dependency waves, now represented by the #479 aggregate implementation:
 
 1. Harden the durable control-plane foundation already present on the parent branch.
 2. In parallel, implement the dependency policy/reconciler, scoped in-process worker runtime,
@@ -72,21 +72,32 @@ Planned dependency waves:
 
 ## Sub-issue roster and dependency queue
 
-| Wave | Issue | Branch | Depends on | Primary scope | Initial state |
+This table preserves the issue topology and dependency design. Its last column is the capability
+disposition in the current #479 aggregate branch, not a claim that the corresponding GitHub issue
+or stacked PR has been closed or integrated independently. Those lifecycle states must be
+reconciled when #479 is integrated into the non-default parent branch.
+
+| Wave | Issue | Branch | Depends on | Primary scope | Aggregate capability state |
 |---|---|---|---|---|---|
-| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `worker_ready` |
-| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `planned` |
-| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `planned` |
-| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `planned` |
-| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `planned` |
-| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `planned` |
-| 4 | #479 | `feat/479-shepherd-autonomous-controller` | #474-#478 | scheduler/controller/command integration | `planned` |
-| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `planned` |
+| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `present_in_verified_479_aggregate` |
+| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `present_in_verified_479_aggregate` |
+| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `present_in_verified_479_aggregate` |
+| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `present_in_verified_479_aggregate` |
+| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `present_in_verified_479_aggregate` |
+| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `present_in_verified_479_aggregate` |
+| 4 | #479 | `feat/479-shepherd-production-matrix` | #474-#478 | scheduler/controller/command integration and 17-row production matrix | `verified_child_branch` |
+| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `waiting_479_parent_integration` |
 | 6 | #481 | `test/481-shepherd-cli-architecture-canary` | #480 | #397/#438 canary, post-pass deprecation activation, and final evidence | `planned` |
 
-Each issue body owns its exact write scope, required skills, verification, and human gates. #474,
-#475, #476, and #477 are intentionally disjoint and launch in parallel after #473 is integrated.
-#478 waits for the policy, Git, and decision ports; #479 is the deliberate shared wiring point.
+Each issue body owns its exact write scope, required skills, verification, and human gates. The
+original topology made #474-#477 disjoint parallel lanes after #473, followed by #478 and the #479
+shared wiring point. The production-matrix branch now contains and verifies those capabilities as
+one aggregate; this does not silently settle the independent GitHub issue/PR lifecycle records.
+
+Current #479 disposition: all 17 production rows pass at code head `91692415`; the consolidated
+review findings are closed. Its combined release suite passes 808/808. Fresh CI must rerun the 64
+process/lease tests blocked locally by the managed sandbox before #479 is integrated into the
+non-default parent branch and #480 is released.
 
 ## Human-decision contract
 

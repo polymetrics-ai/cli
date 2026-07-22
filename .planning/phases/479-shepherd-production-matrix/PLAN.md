@@ -79,47 +79,55 @@ production composition does not use that helper.
 
 | # | Required behavior | Primary final-head evidence source | Disposition |
 |---:|---|---|---|
-| 1 | Intake → parallel children → PR → review/correction → integration → exact parent wait | production runtime/controller/child-pipeline/parent-lifecycle trajectory tests | Pending final-head freeze |
-| 2 | Dependencies, canonical collisions, cap, deterministic idle | `production-scheduler.test.ts`; controller trajectory | Pending final-head freeze |
-| 3 | Disjoint mutators coexist; collisions denied; own-lease release | workspace lifecycle and AgentSession lease tests | Pending final-head freeze |
-| 4 | Parent movement refresh/rebase/reclaim then reverify/rereview | controller stale-parent and real workspace refresh tests | Pending final-head freeze |
-| 5 | Per-stage budgets, durable exhaustion wait, no prose success | production state, controller, and child-pipeline tests | Pending final-head freeze |
-| 6 | Crash-safe prepare/publish/observe/consume/apply/persist without duplicates | effect journal, recovery, runtime composition, pipeline, and parent-gate tests | Pending final-head freeze |
-| 7 | Human replies fail closed unless exact, current, unique, unedited, allowlisted | GitHub decision broker and production human-gate tests | Pending final-head freeze |
-| 8 | Stop at every stage aborts and joins before stopped state/lease release | production controller, parent lifecycle, extension, and runtime cancellation tests | Pending final-head freeze |
-| 9 | Stop/shutdown race, stale generation, sibling abort, persistence failure | controller/state/AgentSession/extension race tests | Pending final-head freeze |
-| 10 | Timeout-after-publication reconciliation for commit/push/PR/integration | workspace lifecycle, child pipeline, GitHub orchestrator tests | Pending final-head freeze |
-| 11 | Stable resume ownership and typed durable refresh/reclaim | production state/workspace/controller/finalizer tests | Pending final-head freeze |
-| 12 | Findings/dispositions and fresh clean exact-head rereview after movement | production review adapter, pipeline, and controller tests | Pending final-head freeze |
-| 13 | Dirty/scope/wrong coordinates/draft/untrusted CI/prose fail closed | workspace handoff, child pipeline, GitHub evidence, parent finalizer tests | Pending final-head freeze |
-| 14 | Parent head invalidates gate; no main merge; completion only after observed merge | parent lifecycle, controller, pipeline, and extension tests | Pending final-head freeze |
-| 15 | Hostile shapes/paths/controls and bounded argv/output/timeout/cancel | contract/intake/verification/tool/Git/GitHub tests | Pending final-head freeze |
-| 16 | Bare/help/invalid/status and unresolved-initialization stop | argument and extension tests plus offline RPC | Pending final-head freeze |
-| 17 | Top-level read-only rejected; internal read-only never integrates | contract/intake/orchestrator/AgentSession/tool-policy tests | Pending final-head freeze |
+| 1 | Intake → parallel children → PR → review/correction → integration → exact parent wait | production runtime/controller/child-pipeline/parent-lifecycle trajectory tests | **PASS** |
+| 2 | Dependencies, canonical collisions, cap, deterministic idle | `production-scheduler.test.ts`; controller trajectory | **PASS** |
+| 3 | Disjoint mutators coexist; collisions denied; own-lease release | workspace lifecycle and AgentSession lease tests | **PASS** |
+| 4 | Parent movement refresh/rebase/reclaim then reverify/rereview | controller stale-parent, exact integration CAS, and real workspace refresh tests | **PASS** |
+| 5 | Per-stage budgets, durable exhaustion wait, no prose success | production state, controller, child-pipeline, and generation-2 intervention recovery tests | **PASS** |
+| 6 | Crash-safe prepare/publish/observe/consume/apply/persist without duplicates | exhaustive 14-effect/four-window recovery plus Git-CAS-before-receipt and parent-gate tests | **PASS** |
+| 7 | Human replies fail closed unless exact, current, unique, unedited, allowlisted | GitHub decision broker and production human-gate tests | **PASS** |
+| 8 | Stop at every stage aborts and joins before stopped state/lease release | production controller, parent lifecycle, extension, and runtime cancellation tests | **PASS** |
+| 9 | Stop/shutdown race, stale generation, sibling abort, persistence failure | controller/state/AgentSession/extension race tests | **PASS** |
+| 10 | Timeout-after-publication reconciliation for commit/push/PR/integration | workspace lifecycle, child pipeline, GitHub orchestrator, and CAS retry tests | **PASS** |
+| 11 | Stable resume ownership and typed durable refresh/reclaim | production state/workspace/controller/finalizer and generation-2 recovery tests | **PASS** |
+| 12 | Findings/dispositions and fresh clean exact-head rereview after movement | production review adapter, pipeline, controller, and unrelated-parent-race tests | **PASS** |
+| 13 | Dirty/scope/wrong coordinates/draft/untrusted CI/prose fail closed | workspace handoff, child pipeline, GitHub evidence, parent finalizer, and CAS tests | **PASS** |
+| 14 | Parent head invalidates gate; no main merge; completion only after observed merge | parent lifecycle, host start/resume authority, mutation-boundary default fencing, and extension tests | **PASS** |
+| 15 | Hostile shapes/paths/controls and bounded argv/output/timeout/cancel | contract/intake/verification/tool/Git/GitHub tests | **PASS** |
+| 16 | Bare/help/invalid/status and unresolved-initialization stop | argument/extension tests plus real offline Pi RPC | **PASS** |
+| 17 | Top-level read-only rejected; internal read-only never integrates | contract/intake/orchestrator/AgentSession/tool-policy tests | **PASS** |
 
-The final status and exact open rows are frozen in `VERIFICATION.md` and projected into
-`RUN-STATE.json`; this plan must not be interpreted as a claim that pending rows passed.
+The final 17/17 functional status, historical TDD-process caveat, and remaining external gates are
+frozen in `VERIFICATION.md` and projected into `RUN-STATE.json`.
 
 ## Checkpoints
 
 1. [x] Plan, contracts, intake, scheduler, durable state/effect/recovery primitives.
 2. [x] Isolated workspace lifecycle, bounded verification, typed Git and GitHub adapters.
 3. [x] Controller, child pipeline, review/correction, integration, and parent lifecycle candidate.
-4. [ ] Final production runtime/index composition at one stable head.
-5. [ ] Focused matrix, full Shepherd suite, strict TypeScript, offline Pi RPC, docs/diff/scope gates.
-6. [ ] One consolidated stable-head blocker review and one correction pass when required.
-7. [ ] Commit the exact evidence artifacts; leave parent/default-branch integration human-gated.
+4. [x] Final production runtime/index composition at code head `91692415`.
+5. [x] Focused matrix, complete Shepherd inventory, production strict TypeScript, offline Pi RPC, and diff gates.
+6. [x] One consolidated blocker review, one bounded correction pass, and finding-disposition verification.
+7. [x] Freeze the exact evidence artifacts in this documentation checkpoint; leave
+   parent/default-branch integration human-gated.
+
+The consolidated Codex 5.6 Sol xhigh review returned three blockers. All were corrected with
+behavior RED → GREEN pairs and the same reviewer marked each finding **CLOSED** at code head
+`91692415`: generation-2 intervention recovery (`0fe22e9e` → `e2dedad7`), live default-branch
+authority (`06e50e21` → `a8104613`), and exact integration CAS (`5ef7ba15` → `37dbc42c`). The CAS
+correction exposed one follow-on crash window, fixed test-first in `32a0d50e` → `91692415`. No
+second broad hardening review ran.
 
 ## Proportional verification commands
 
 ```bash
 node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
+rg --files .pi/extensions/shepherd -g '*.ts' -g '!*.test.ts' -0 | xargs -0 \
 node /Users/karthiksivadas/.npm/_npx/a322a253dbd59f36/node_modules/typescript/lib/tsc.js \
   --noEmit --strict --target ES2024 --module NodeNext --moduleResolution NodeNext \
   --allowImportingTsExtensions --skipLibCheck \
   --baseUrl /Users/karthiksivadas/.nvm/versions/node/v24.13.1/lib/node_modules \
   --typeRoots /Users/karthiksivadas/.nvm/versions/node/v24.13.1/lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@types \
-  .pi/extensions/shepherd/*.ts
 printf '{"id":"commands","type":"get_commands"}\n' | \
   PI_OFFLINE=1 PI_CODING_AGENT_DIR=/tmp/pm-shepherd-rpc \
   /Users/karthiksivadas/.nvm/versions/node/v24.13.1/bin/pi \
