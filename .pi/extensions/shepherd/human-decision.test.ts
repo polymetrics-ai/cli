@@ -47,7 +47,7 @@ function spec(overrides: {
 		binding: issueBinding,
 		allowedOptions: ["approve", "reject"],
 		actorAllowlist: ["maintainer-one", "Maintainer-Two"],
-		expiresAt: "2026-07-22T10:00:00.000Z",
+		expiresAt: "2099-07-22T10:00:00.000Z",
 		question: "Approve the exact requirements for issue #471?",
 		...overrides,
 	} as HumanDecisionRequestSpec;

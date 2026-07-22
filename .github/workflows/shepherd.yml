@@ -1,0 +1,59 @@
+name: Shepherd
+
+on:
+  pull_request:
+    paths:
+      - ".pi/extensions/shepherd/**"
+      - ".pi/README.md"
+      - ".planning/phases/479-shepherd-production-matrix/**"
+      - ".github/scripts/verify-shepherd-pi-runtime.mjs"
+      - ".github/workflows/shepherd.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - ".pi/extensions/shepherd/**"
+      - ".pi/README.md"
+      - ".planning/phases/479-shepherd-production-matrix/**"
+      - ".github/scripts/verify-shepherd-pi-runtime.mjs"
+      - ".github/workflows/shepherd.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: shepherd-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  complete-suite:
+    name: Complete Shepherd suite
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Configure git defaults
+        run: git config --global init.defaultBranch main
+
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: "1.25.12"
+          cache: false
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24.13.1"
+
+      - name: Install pinned Pi test runtime
+        run: npm install --global --ignore-scripts --no-audit --no-fund @earendil-works/pi-coding-agent@0.80.6
+
+      - name: Verify pinned Pi runtime family
+        run: node .github/scripts/verify-shepherd-pi-runtime.mjs
+
+      - name: Run complete Shepherd inventory
+        run: node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts

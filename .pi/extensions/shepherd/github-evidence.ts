@@ -182,6 +182,7 @@ export type GitHubPullRequestDecision =
 interface PullRequestEvaluationOptions {
 	allowDraft?: boolean;
 	allowIntegrated?: boolean;
+	allowIntegratedBaseMovement?: boolean;
 }
 
 type ExactRecord = Record<string, unknown>;
@@ -636,7 +637,10 @@ export function evaluateGitHubPullRequestEvidence(
 	}
 	if (evidence.draft && options.allowDraft !== true) blockers.add("draft");
 	if (evidence.baseBranch !== expected.baseBranch || evidence.headBranch !== expected.headBranch
-		|| evidence.baseSha !== expected.baseSha) blockers.add("topology_mismatch");
+		|| (evidence.baseSha !== expected.baseSha
+			&& !(options.allowIntegratedBaseMovement === true && evidence.state === "merged"))) {
+		blockers.add("topology_mismatch");
+	}
 	if (evidence.headSha !== expected.headSha) blockers.add("head_moved");
 	if (!sameStrings(evidence.changedPaths, expected.changedPathEvidence.paths)) blockers.add("resource_mismatch");
 	if (!sameStrings(evidence.allowedScopes, expected.reviewTarget.allowedScopes)) blockers.add("resource_mismatch");

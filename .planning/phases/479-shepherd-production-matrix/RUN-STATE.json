@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "phase": "479-shepherd-production-matrix",
+  "issue": 479,
+  "parentIssue": 471,
+  "parentPr": 472,
+  "branch": "feat/479-shepherd-production-matrix",
+  "baseBranch": "feat/471-pi-agent-session-shepherd",
+  "artifactHead": "52866972891c5d794f90f4be8254520434e6b4ef",
+  "artifactHeadSemantics": "last_behavior_changing_ci_commit_not_publication_authority",
+  "ciCorrectionHead": "a594be98b9722a8d183584a27832cd88af8702f9",
+  "parentReconciliationHead": "387d41fd0e3e0b1d2855d689a25bb151b1fe1880",
+  "parentReconciliationMergeHead": "57ca31aeb552946a1c65602e2b2590a3de88b836",
+  "worker": "codex-gpt-5.6-sol",
+  "workerDirectory": "/private/tmp/shepherd-479-production-matrix",
+  "subPrUrl": "https://github.com/polymetrics-ai/cli/pull/489",
+  "status": "local_ci_repair_complete_remote_green_pending",
+  "checkpoint": "parent_baseline_and_go_toolchain_corrected",
+  "reason": "The fixed main dependency baseline and exact Go 1.25.12 workflow are synchronized locally; ordinary-host complete-suite and security reruns remain authoritative.",
+  "mainBaselineHead": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "parentMainSyncHead": "383fcf93f9bc220be89fef1636e84fbecec2485a",
+  "parentCiRepairHead": "387d41fd0e3e0b1d2855d689a25bb151b1fe1880",
+  "ciRepairWorkflowHead": "52866972891c5d794f90f4be8254520434e6b4ef",
+  "childParentSyncHead": "57ca31aeb552946a1c65602e2b2590a3de88b836",
+  "productionCodeHead": "78708cbef64b33e54ed32078bf2a107d81126236",
+  "verificationTestHead": "307ea409648e2f293c8a48cc957ffc312cc44542",
+  "matrix": {
+    "pass": 17,
+    "open": 0
+  },
+  "verification": {
+    "focused": {
+      "pass": 767,
+      "fail": 0
+    },
+    "realGoFixture": {
+      "pass": 1,
+      "fail": 0,
+      "toolchain": "go1.25.12"
+    },
+    "completeInventory": {
+      "total": 1712,
+      "pass": 1647,
+      "fail": 64,
+      "skipped": 1,
+      "localFailureClass": "managed_sandbox_spawn_eperm"
+    },
+    "strictProductionTypeScript": "pass",
+    "offlinePiRpc": "pass",
+    "exactPiRuntimeFamily": "pass",
+    "workflowYaml": "pass",
+    "goModVerify": "pass",
+    "govulncheck": "remote_rerun_pending_local_advisory_dns_blocked",
+    "reviewDisposition": "exact_head_followup_pending",
+    "ciCompleteInventory": "first_remote_run_failed_cleanup_ci_repair_rerun_pending"
+  },
+  "manualGsdFallback": true,
+  "verificationPassed": false,
+  "reviewCoveragePassed": false,
+  "reviewRoundsAllowed": 1,
+  "reviewRoundsUsed": 1,
+  "historicalReviewRoundsUsed": 1,
+  "mergeReadinessReviewRoundsUsed": 1,
+  "orchestrationDecisions": [
+    {
+      "cycle": "merge-readiness-implementation",
+      "decision": "local_critical_path",
+      "reason": "Tightly coupled issue-479 CI and evidence closure in the isolated child worktree."
+    },
+    {
+      "cycle": "parent-topology-audit",
+      "decision": "read_only_spawned",
+      "reason": "Parent orchestrator audited topology, parent-owned scope, review policy, and publication order without mutation."
+    },
+    {
+      "cycle": "parent-reconciliation",
+      "decision": "local_critical_path",
+      "reason": "The parent ledger was reconciled at 45c27b9d and merged into the child at 766709b3 without rewriting the child history."
+    },
+    {
+      "cycle": "remote-publication",
+      "decision": "not_spawned_human_gate",
+      "reason": "GitHub DNS is unavailable and the configured gh token is invalid; no auth mutation was authorized."
+    },
+    {
+      "cycle": "remote-ci-repair-plan",
+      "decision": "read_only_spawned",
+      "reason": "A parent orchestrator audits stacked-branch topology while the coordinator owns the tightly coupled parent baseline and child workflow critical path."
+    },
+    {
+      "cycle": "remote-ci-repair-execute",
+      "decision": "local_critical_path",
+      "reason": "The coordinator synchronized main into the parent, pinned Go 1.25.12 in child CI, and reconciled the parent state without changing Shepherd behavior."
+    },
+    {
+      "cycle": "remote-ci-repair-verify",
+      "decision": "not_spawned_verification_blocked",
+      "reason": "Targeted local gates pass; the managed sandbox blocks process identity and vulnerability-database DNS, so ordinary-host CI is the authoritative remaining verifier."
+    }
+  ],
+  "blockers": [
+    "parent_first_republication",
+    "child_republication",
+    "fresh_ci_outside_managed_sandbox",
+    "automated_review_coverage_or_recorded_fallback"
+  ],
+  "automatedReview": {
+    "primary_route": "blocked",
+    "status": "blocked",
+    "head_sha": "d2f2036674c6f2b6e8307e2466705c6ca12376c0",
+    "reviewed_range": "e2f2b62edf263b2b8487b59d64abc967c8ebf37c..d2f2036674c6f2b6e8307e2466705c6ca12376c0",
+    "coverage_route": "blocked",
+    "fallback_route": "human",
+    "disposition_summary": "The bounded d2f20366 review found only stale resume/publication evidence. It is corrected to repaired parent 387d41fd and existing PR #489; a final exact-head follow-up and policy coverage remain.",
+    "disposition_url": null,
+    "internal_codex": {
+      "model": "openai-codex/gpt-5.6-sol",
+      "reasoning": "xhigh",
+      "reviewed_head": "d2f2036674c6f2b6e8307e2466705c6ca12376c0",
+      "verdict": "blocked"
+    }
+  },
+  "remainingExternalGates": [
+    "fresh_ci_outside_managed_sandbox",
+    "codex_xhigh_exact_head_review",
+    "parent_first_republication",
+    "child_republication_to_existing_pr_489",
+    "automated_review_coverage_or_recorded_fallback",
+    "parent_orchestrator_child_integration",
+    "human_parent_pr_merge"
+  ],
+  "updatedAt": "2026-07-23T03:50:57+05:30"
+}

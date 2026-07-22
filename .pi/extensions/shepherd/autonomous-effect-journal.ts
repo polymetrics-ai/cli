@@ -1,0 +1,532 @@
+import { createHash, randomUUID } from "node:crypto";
+import { constants } from "node:fs";
+import { lstat, mkdir, open, readFile, rename, rm } from "node:fs/promises";
+import { join } from "node:path";
+import { types as nodeTypes } from "node:util";
+
+import type {
+	ProductionEffectKind,
+	ProductionEffectRecord,
+} from "./autonomous-production-contract.ts";
+import { readBoundedExactRecord } from "./review-router.ts";
+
+const DIGEST = /^[0-9a-f]{64}$/;
+const SAFE_ID = /^[a-z0-9][a-z0-9_.:-]{0,255}$/;
+const MAX_JOURNAL_BYTES = 4 * 1024 * 1024;
+const MAX_EFFECTS = 4_096;
+const MAX_DESCRIPTOR_BYTES = 64 * 1024;
+const MAX_DESCRIPTOR_DEPTH = 16;
+const MAX_DESCRIPTOR_NODES = 4_096;
+const LOCK_ATTEMPTS = 2_000;
+const LOCK_RETRY_MS = 5;
+
+export interface ProductionEffectIntentCoordinates {
+	kind: ProductionEffectKind;
+	runId: string;
+	generation: number;
+	childId?: string;
+	intentDigest: string;
+}
+
+export interface ProductionEffectIntent extends ProductionEffectIntentCoordinates {
+	key: string;
+	recoveryDescriptor?: unknown;
+}
+
+export interface ProductionEffectFence {
+	runId: string;
+	generation: number;
+}
+
+export interface ProductionEffectJournalPort {
+	prepare(intent: ProductionEffectIntent, now?: Date): Promise<ProductionEffectRecord>;
+	load(key: string): Promise<ProductionEffectRecord | undefined>;
+	listNonApplied(): Promise<ProductionEffectRecord[]>;
+	/**
+	 * Remove a prepared intent only after an authoritative recovery probe proves the
+	 * external effect never happened. The fence makes the reset safe across resumes.
+	 */
+	abandon?(key: string, fence: ProductionEffectFence, preparedAt: string): Promise<void>;
+	observe(key: string, fence: ProductionEffectFence, resultDigest: string, now?: Date): Promise<ProductionEffectRecord>;
+	apply(key: string, fence: ProductionEffectFence, now?: Date): Promise<ProductionEffectRecord>;
+}
+
+interface ProductionJournalDocument {
+	schemaVersion: 1;
+	records: ProductionEffectRecord[];
+}
+
+function exact(value: unknown, required: readonly string[], optional: readonly string[] = [], description = "production effect") {
+	return readBoundedExactRecord(value, required, optional, description);
+}
+
+function safeId(value: unknown, description: string): string {
+	if (typeof value !== "string" || !SAFE_ID.test(value)) throw new Error(`invalid ${description}`);
+	return value;
+}
+
+function positive(value: unknown, description: string): number {
+	if (!Number.isSafeInteger(value) || (value as number) < 1) throw new Error(`${description} must be a positive integer`);
+	return value as number;
+}
+
+function digest(value: unknown, description: string): string {
+	if (typeof value !== "string" || !DIGEST.test(value)) throw new Error(`${description} must be a SHA-256 digest`);
+	return value;
+}
+
+function timestamp(value: unknown, description: string): string {
+	if (typeof value !== "string" || value.length > 64) throw new Error(`${description} must be a canonical timestamp`);
+	const parsed = new Date(value);
+	if (!Number.isFinite(parsed.valueOf()) || parsed.toISOString() !== value) throw new Error(`${description} must be a canonical timestamp`);
+	return value;
+}
+
+function canonicalRecoveryDescriptor(value: unknown): unknown {
+	let nodes = 0;
+	const visit = (candidate: unknown, depth: number): unknown => {
+		nodes += 1;
+		if (nodes > MAX_DESCRIPTOR_NODES || depth > MAX_DESCRIPTOR_DEPTH) {
+			throw new Error("production effect recovery descriptor exceeds its structural bound");
+		}
+		if (candidate === null || typeof candidate === "boolean") return candidate;
+		if (typeof candidate === "number") {
+			if (!Number.isFinite(candidate)) throw new Error("production effect recovery descriptor contains a non-finite number");
+			return candidate;
+		}
+		if (typeof candidate === "string") {
+			if (Buffer.byteLength(candidate) > MAX_DESCRIPTOR_BYTES || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f-\u009f]/u.test(candidate)) {
+				throw new Error("production effect recovery descriptor contains unsafe text");
+			}
+			return candidate;
+		}
+		if (typeof candidate === "object" && candidate !== null && nodeTypes.isProxy(candidate)) {
+			throw new Error("production effect recovery descriptor cannot be a proxy");
+		}
+		if (Array.isArray(candidate)) {
+			const output: unknown[] = [];
+			for (let index = 0; index < candidate.length; index += 1) {
+				const descriptor = Object.getOwnPropertyDescriptor(candidate, index);
+				if (!descriptor || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+					throw new Error("production effect recovery descriptor arrays must be dense data");
+				}
+				output.push(visit(descriptor.value, depth + 1));
+			}
+			return output;
+		}
+		if (typeof candidate !== "object" || Object.getPrototypeOf(candidate) !== Object.prototype) {
+			throw new Error("production effect recovery descriptor must contain only plain data");
+		}
+		const output: Record<string, unknown> = {};
+		for (const key of Object.keys(candidate as Record<string, unknown>).sort()) {
+			if (/^(?:token|secret|password|credentials?|authorization|cookie|api_?key|private_?key)$/iu.test(key)) {
+				throw new Error("production effect recovery descriptor contains a secret-shaped field");
+			}
+			const descriptor = Object.getOwnPropertyDescriptor(candidate, key);
+			if (!descriptor || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+				throw new Error("production effect recovery descriptor objects must contain only data fields");
+			}
+			if (descriptor.value !== undefined) output[key] = visit(descriptor.value, depth + 1);
+		}
+		return output;
+	};
+	const result = visit(value, 0);
+	if (Buffer.byteLength(JSON.stringify(result)) > MAX_DESCRIPTOR_BYTES) {
+		throw new Error("production effect recovery descriptor exceeds its byte bound");
+	}
+	return result;
+}
+
+function descriptorDigest(value: unknown): string {
+	return createHash("sha256").update(JSON.stringify(canonicalRecoveryDescriptor(value))).digest("hex");
+}
+
+function kind(value: unknown): ProductionEffectKind {
+	const kinds: ProductionEffectKind[] = [
+		"workspace_claim", "agent_implementation", "agent_correction", "shell_verification", "git_commit", "git_push",
+		"child_pull_request", "independent_review", "child_integration", "parent_refresh", "child_head_reconciliation",
+		"human_request", "human_consume",
+		"parent_merge_observation",
+	];
+	if (!kinds.includes(value as ProductionEffectKind)) throw new Error("invalid production effect kind");
+	return value as ProductionEffectKind;
+}
+
+function canonicalIntent(value: ProductionEffectIntentCoordinates): ProductionEffectIntentCoordinates {
+	const candidate = exact(
+		value,
+		["kind", "runId", "generation", "intentDigest"],
+		["childId"],
+		"production effect intent coordinates",
+	);
+	return {
+		kind: kind(candidate.kind),
+		runId: safeId(candidate.runId, "effect run ID"),
+		generation: positive(candidate.generation, "effect generation"),
+		...(candidate.childId === undefined ? {} : { childId: safeId(candidate.childId, "effect child ID") }),
+		intentDigest: digest(candidate.intentDigest, "effect intent digest"),
+	};
+}
+
+export function productionEffectKey(value: ProductionEffectIntentCoordinates): string {
+	return createHash("sha256").update(JSON.stringify(canonicalIntent(value))).digest("hex");
+}
+
+function validateIntent(value: unknown): ProductionEffectIntent {
+	const candidate = exact(
+		value,
+		["key", "kind", "runId", "generation", "intentDigest"],
+		["childId", "recoveryDescriptor"],
+		"production effect intent",
+	);
+	const coordinates = canonicalIntent({
+		kind: candidate.kind as ProductionEffectKind,
+		runId: candidate.runId as string,
+		generation: candidate.generation as number,
+		...(candidate.childId === undefined ? {} : { childId: candidate.childId as string }),
+		intentDigest: candidate.intentDigest as string,
+	});
+	const key = digest(candidate.key, "effect key");
+	if (key !== productionEffectKey(coordinates)) throw new Error("effect key conflicts with its exact intent");
+	const recoveryDescriptor = candidate.recoveryDescriptor === undefined
+		? undefined
+		: canonicalRecoveryDescriptor(candidate.recoveryDescriptor);
+	if (recoveryDescriptor !== undefined && descriptorDigest(recoveryDescriptor) !== coordinates.intentDigest) {
+		throw new Error("production effect recovery descriptor conflicts with its intent digest");
+	}
+	return { key, ...coordinates, ...(recoveryDescriptor === undefined ? {} : { recoveryDescriptor }) };
+}
+
+export function validateProductionEffectRecord(value: unknown): ProductionEffectRecord {
+	const candidate = exact(
+		value,
+		["schemaVersion", "key", "kind", "phase", "runId", "generation", "intentDigest", "preparedAt"],
+		["childId", "recoveryDescriptor", "observedAt", "appliedAt", "resultDigest"],
+		"production effect record",
+	);
+	if (candidate.schemaVersion !== 1) throw new Error("unsupported production effect schema");
+	if (candidate.phase !== "prepared" && candidate.phase !== "observed" && candidate.phase !== "applied") {
+		throw new Error("invalid production effect phase");
+	}
+	const intent = validateIntent({
+		key: candidate.key,
+		kind: candidate.kind,
+		runId: candidate.runId,
+		generation: candidate.generation,
+		...(candidate.childId === undefined ? {} : { childId: candidate.childId }),
+		intentDigest: candidate.intentDigest,
+		...(candidate.recoveryDescriptor === undefined ? {} : { recoveryDescriptor: candidate.recoveryDescriptor }),
+	});
+	const preparedAt = timestamp(candidate.preparedAt, "effect preparation time");
+	const observedAt = candidate.observedAt === undefined ? undefined : timestamp(candidate.observedAt, "effect observation time");
+	const appliedAt = candidate.appliedAt === undefined ? undefined : timestamp(candidate.appliedAt, "effect application time");
+	const resultDigest = candidate.resultDigest === undefined ? undefined : digest(candidate.resultDigest, "effect result digest");
+	if (candidate.phase === "prepared" && (observedAt || appliedAt || resultDigest)) {
+		throw new Error("prepared effect cannot contain observation or application truth");
+	}
+	if (candidate.phase === "observed" && (!observedAt || appliedAt || !resultDigest)) {
+		throw new Error("observed effect requires only observation truth");
+	}
+	if (candidate.phase === "applied" && (!observedAt || !appliedAt || !resultDigest)) {
+		throw new Error("applied effect requires observation and application truth");
+	}
+	if ((observedAt && observedAt < preparedAt) || (appliedAt && observedAt && appliedAt < observedAt)) {
+		throw new Error("production effect chronology is invalid");
+	}
+	return {
+		schemaVersion: 1,
+		...intent,
+		phase: candidate.phase,
+		preparedAt,
+		...(observedAt === undefined ? {} : { observedAt }),
+		...(appliedAt === undefined ? {} : { appliedAt }),
+		...(resultDigest === undefined ? {} : { resultDigest }),
+	};
+}
+
+function validateDocument(value: unknown): ProductionJournalDocument {
+	const candidate = exact(value, ["schemaVersion", "records"], [], "production effect journal");
+	if (candidate.schemaVersion !== 1 || !Array.isArray(candidate.records) || candidate.records.length > MAX_EFFECTS) {
+		throw new Error("invalid production effect journal");
+	}
+	const records: ProductionEffectRecord[] = [];
+	for (let index = 0; index < candidate.records.length; index += 1) {
+		const descriptor = Object.getOwnPropertyDescriptor(candidate.records, index);
+		if (!descriptor || !Object.hasOwn(descriptor, "value") || descriptor.enumerable !== true) {
+			throw new Error("production effect journal must contain dense data records");
+		}
+		records.push(validateProductionEffectRecord(descriptor.value));
+	}
+	if (new Set(records.map((record) => record.key)).size !== records.length) throw new Error("duplicate production effect key");
+	return { schemaVersion: 1, records: records.sort((left, right) => left.key.localeCompare(right.key)) };
+}
+
+function isErrno(error: unknown, code: string): boolean {
+	return typeof error === "object" && error !== null && "code" in error && (error as { code?: unknown }).code === code;
+}
+
+interface JournalLock { path: string; token: string }
+
+export class ProductionEffectJournal implements ProductionEffectJournalPort {
+	readonly #root: string;
+
+	constructor(root: string) {
+		if (typeof root !== "string" || root.length === 0) throw new Error("production effect journal root is required");
+		this.#root = root;
+	}
+
+	#path(): string { return join(this.#root, "production-effects.json"); }
+	#lockPath(): string { return join(this.#root, ".production-effects.lock"); }
+
+	async #ensureRoot(): Promise<void> {
+		await mkdir(this.#root, { recursive: true, mode: 0o700 });
+		const metadata = await lstat(this.#root);
+		if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new Error("effect journal root must be a trusted directory");
+	}
+
+	async #syncRoot(): Promise<void> {
+		if (process.platform === "win32") return;
+		const handle = await open(this.#root, constants.O_RDONLY);
+		try { await handle.sync(); } finally { await handle.close(); }
+	}
+
+	#processIsAlive(pid: number): boolean {
+		try {
+			process.kill(pid, 0);
+			return true;
+		} catch (error) {
+			return !isErrno(error, "ESRCH");
+		}
+	}
+
+	async #reclaimDeadLock(path: string): Promise<boolean> {
+		let value: unknown;
+		try { value = JSON.parse(await readFile(join(path, "owner.json"), "utf8")); } catch (error) {
+			if (isErrno(error, "ENOENT")) return false;
+			return false;
+		}
+		let owner: ReturnType<typeof exact>;
+		try { owner = exact(value, ["schemaVersion", "pid", "token"], [], "effect journal lock owner"); } catch { return false; }
+		if (owner.schemaVersion !== 1 || !Number.isSafeInteger(owner.pid) || (owner.pid as number) < 1
+			|| typeof owner.token !== "string" || !/^[0-9a-f-]{36}$/.test(owner.token)) return false;
+		if (this.#processIsAlive(owner.pid as number)) return false;
+		const quarantine = `${path}.stale.${randomUUID()}`;
+		try { await rename(path, quarantine); } catch (error) {
+			if (isErrno(error, "ENOENT")) return true;
+			throw error;
+		}
+		try {
+			const moved = exact(
+				JSON.parse(await readFile(join(quarantine, "owner.json"), "utf8")),
+				["schemaVersion", "pid", "token"],
+				[],
+				"effect journal lock owner",
+			);
+			if (moved.token !== owner.token || moved.pid !== owner.pid) {
+				throw new Error("effect journal stale lock identity changed during reclamation");
+			}
+		} finally { await rm(quarantine, { recursive: true, force: true }); }
+		return true;
+	}
+
+	async #acquire(): Promise<JournalLock> {
+		await this.#ensureRoot();
+		const path = this.#lockPath();
+		for (let attempt = 0; attempt < LOCK_ATTEMPTS; attempt += 1) {
+			const token = randomUUID();
+			try {
+				await mkdir(path, { mode: 0o700 });
+				const owner = await open(join(path, "owner.json"), "wx", 0o600);
+				try {
+					await owner.writeFile(JSON.stringify({ schemaVersion: 1, pid: process.pid, token }), "utf8");
+					await owner.sync();
+				} finally { await owner.close(); }
+				return { path, token };
+			} catch (error) {
+				if (!isErrno(error, "EEXIST")) {
+					await rm(path, { recursive: true, force: true });
+					throw error;
+				}
+				if (await this.#reclaimDeadLock(path)) continue;
+				await new Promise((resolve) => setTimeout(resolve, LOCK_RETRY_MS));
+			}
+		}
+		throw new Error("timed out acquiring production effect journal lock");
+	}
+
+	async #release(lock: JournalLock): Promise<void> {
+		let owner: unknown;
+		try { owner = JSON.parse(await readFile(join(lock.path, "owner.json"), "utf8")); } catch {
+			throw new Error("effect journal lock ownership disappeared before release");
+		}
+		const candidate = exact(owner, ["schemaVersion", "pid", "token"], [], "effect journal lock owner");
+		if (candidate.schemaVersion !== 1 || candidate.pid !== process.pid || candidate.token !== lock.token) {
+			throw new Error("effect journal lock ownership changed before release");
+		}
+		await rm(lock.path, { recursive: true });
+	}
+
+	async #read(): Promise<ProductionJournalDocument> {
+		let handle: Awaited<ReturnType<typeof open>>;
+		try { handle = await open(this.#path(), constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0)); } catch (error) {
+			if (isErrno(error, "ENOENT")) return { schemaVersion: 1, records: [] };
+			throw error;
+		}
+		try {
+			const metadata = await handle.stat();
+			if (!metadata.isFile() || metadata.size > MAX_JOURNAL_BYTES) throw new Error("effect journal is not a bounded regular file");
+			let value: unknown;
+			try { value = JSON.parse(await handle.readFile("utf8")); } catch { throw new Error("invalid production effect journal JSON"); }
+			return validateDocument(value);
+		} finally { await handle.close(); }
+	}
+
+	async #write(documentValue: ProductionJournalDocument): Promise<void> {
+		const document = validateDocument(documentValue);
+		const serialized = `${JSON.stringify(document, null, 2)}\n`;
+		if (Buffer.byteLength(serialized) > MAX_JOURNAL_BYTES) throw new Error("production effect journal exceeds its byte limit");
+		const temporary = join(this.#root, `.production-effects.${randomUUID()}.tmp`);
+		const handle = await open(temporary, "wx", 0o600);
+		try {
+			await handle.writeFile(serialized, "utf8");
+			await handle.sync();
+		} finally { await handle.close(); }
+		try {
+			await rename(temporary, this.#path());
+			await this.#syncRoot();
+		} catch (error) {
+			await rm(temporary, { force: true });
+			throw error;
+		}
+	}
+
+	async #transact<T>(operation: (records: ProductionEffectRecord[]) => T): Promise<T> {
+		const lock = await this.#acquire();
+		try {
+			const document = await this.#read();
+			const result = operation(document.records);
+			await this.#write({ schemaVersion: 1, records: document.records });
+			return structuredClone(result);
+		} finally { await this.#release(lock); }
+	}
+
+	async prepare(intentValue: ProductionEffectIntent, now = new Date()): Promise<ProductionEffectRecord> {
+		return this.#transact((records) => {
+			const existingByKey = records.find((record) => record.key === intentValue.key);
+			let intent: ProductionEffectIntent;
+			try { intent = validateIntent(intentValue); } catch (error) {
+				if (existingByKey) throw new Error("production effect key conflicts with a different exact intent");
+				throw error;
+			}
+			const existing = records.find((record) => record.key === intent.key);
+			if (existing) {
+				const identity = ({ key, kind: effectKind, runId, generation, childId, intentDigest, recoveryDescriptor }: ProductionEffectRecord) =>
+					({ key, kind: effectKind, runId, generation, ...(childId === undefined ? {} : { childId }), intentDigest,
+						...(recoveryDescriptor === undefined ? {} : { recoveryDescriptor }) });
+				if (JSON.stringify(identity(existing)) !== JSON.stringify(intent)) {
+					throw new Error("production effect key conflicts with a different exact intent");
+				}
+				return existing;
+			}
+			if (records.length >= MAX_EFFECTS) throw new Error("production effect journal is full");
+			const record = validateProductionEffectRecord({
+				schemaVersion: 1,
+				...intent,
+				phase: "prepared",
+				preparedAt: now.toISOString(),
+			});
+			records.push(record);
+			return record;
+		});
+	}
+
+	async load(keyValue: string): Promise<ProductionEffectRecord | undefined> {
+		const key = digest(keyValue, "effect key");
+		await this.#ensureRoot();
+		const record = (await this.#read()).records.find((candidate) => candidate.key === key);
+		return record === undefined ? undefined : structuredClone(record);
+	}
+
+	async listNonApplied(): Promise<ProductionEffectRecord[]> {
+		await this.#ensureRoot();
+		return (await this.#read()).records
+			.filter((record) => record.phase !== "applied")
+			.map((record) => structuredClone(record));
+	}
+
+	async abandon(keyValue: string, fence: ProductionEffectFence, preparedAtValue: string): Promise<void> {
+		const key = digest(keyValue, "effect key");
+		const preparedAt = timestamp(preparedAtValue, "effect preparation time");
+		await this.#transact((records) => {
+			const index = records.findIndex((record) => record.key === key);
+			if (index < 0) {
+				// A concurrent/fresh recovery process may already have completed the same
+				// authoritative reset. Treat that exact absence as idempotent.
+				return;
+			}
+			const current = records[index];
+			if (current.runId !== fence.runId || current.generation !== fence.generation) {
+				throw new Error("stale production effect fence");
+			}
+			if (current.phase !== "prepared") {
+				throw new Error("only an authoritatively absent prepared effect can be abandoned");
+			}
+			if (current.preparedAt !== preparedAt) {
+				throw new Error("stale production effect reset lost its exact preparation fence");
+			}
+			records.splice(index, 1);
+			return;
+		});
+	}
+
+	async observe(
+		keyValue: string,
+		fence: ProductionEffectFence,
+		resultDigestValue: string,
+		now = new Date(),
+	): Promise<ProductionEffectRecord> {
+		const key = digest(keyValue, "effect key");
+		const resultDigest = digest(resultDigestValue, "effect result digest");
+		return this.#transact((records) => {
+			const index = records.findIndex((record) => record.key === key);
+			if (index < 0) throw new Error("production effect was not prepared");
+			const current = records[index];
+			if (current.runId !== fence.runId || current.generation !== fence.generation) {
+				throw new Error("stale production effect fence");
+			}
+			if (current.phase !== "prepared") {
+				if (current.resultDigest !== resultDigest) throw new Error("production effect result conflicts with its observation");
+				return current;
+			}
+			const next = validateProductionEffectRecord({
+				...current,
+				phase: "observed",
+				observedAt: now.toISOString(),
+				resultDigest,
+			});
+			records[index] = next;
+			return next;
+		});
+	}
+
+	async apply(keyValue: string, fence: ProductionEffectFence, now = new Date()): Promise<ProductionEffectRecord> {
+		const key = digest(keyValue, "effect key");
+		return this.#transact((records) => {
+			const index = records.findIndex((record) => record.key === key);
+			if (index < 0) throw new Error("production effect was not prepared");
+			const current = records[index];
+			if (current.runId !== fence.runId || current.generation !== fence.generation) {
+				throw new Error("stale production effect fence");
+			}
+			if (current.phase === "prepared") throw new Error("production effect must be observed before it is applied");
+			if (current.phase === "applied") return current;
+			const next = validateProductionEffectRecord({
+				...current,
+				phase: "applied",
+				appliedAt: now.toISOString(),
+			});
+			records[index] = next;
+			return next;
+		});
+	}
+}

@@ -1,6 +1,8 @@
 # Summary
 
-Status: accepted MVP, ready for local parent integration.
+Status: historical MVP; superseded by
+`../479-shepherd-production-matrix/VERIFICATION.md` (17/17 functional PASS at code head
+`91692415`).
 
 Issue #479 now delivers the bounded in-process Shepherd controller. `/pm-shepherd start` and
 `resume` load a repository manifest, schedule dependency-safe non-colliding children at bounded
@@ -18,7 +20,7 @@ the concurrency test no longer depends on subprocess completion order, and statu
 active canary instead of stale autonomous state. A child failure also aborts and joins live
 siblings before settlement.
 
-Deliberately remaining for the next bounded slice: GitHub issue/PR publication, child branch and
-worktree integration, a production GitHub human-decision adapter, and observation of the final
-human merge. Exhaustive crash/CAS/quorum/security matrices remain backlog. No parent-to-main merge
-was attempted.
+The items that were deliberately deferred from this historical MVP—GitHub issue/PR publication,
+isolated child worktrees, exact child integration, the production human-decision adapter, final
+human-merge observation, and exhaustive crash/CAS coverage—are implemented and verified in the
+production-matrix phase. No parent-to-main merge was attempted.

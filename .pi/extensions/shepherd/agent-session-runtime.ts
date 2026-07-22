@@ -212,6 +212,8 @@ export interface RoleRunRequest {
 	deadlineAt?: number;
 	signal?: AbortSignal;
 	workspace: ScopedWorkspace;
+	/** False permits only explicitly declared host mutation capabilities, not workspace edits. */
+	workspaceMutation?: boolean;
 	capabilities: HostCapability[];
 	authority: RoleAuthority;
 	binding: PromptBinding;
@@ -988,6 +990,7 @@ export class ShepherdAgentSessionRuntime {
 			// Capability schemas become bounded immutable Pi tools before any SDK lookup or await.
 			toolPolicy = createToolPolicy({
 				readOnly: normalizedRequest.authority.readOnly,
+				workspaceMutation: normalizedRequest.workspaceMutation,
 				workspace: normalizedRequest.workspace,
 				authority: normalizedRequest.authority,
 				capabilities: normalizedRequest.capabilities,
@@ -1506,12 +1509,12 @@ function captureAdmissionRunId(request: RoleRunRequest): string {
 
 function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const requestFields = captureKnownRecordFields(request, "AgentSession request", [
-		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
+		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "workspaceMutation", "capabilities", "authority", "binding",
 		// Recognized legacy authority aliases are explicitly denied without discovering arbitrary peers.
 		"provider", "model", "thinking", "tools", "issue", "workspaceId",
 	]);
 	assertAllowedCapturedFields(requestFields, [
-		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "capabilities", "authority", "binding",
+		"role", "task", "context", "timeoutMs", "deadlineAt", "signal", "workspace", "workspaceMutation", "capabilities", "authority", "binding",
 	], ["role", "task", "context", "timeoutMs", "workspace", "capabilities", "authority", "binding"], "request");
 	const role = requestFields.get("role") as ShepherdAgentRole;
 	const task = requestFields.get("task") as string;
@@ -1520,6 +1523,7 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	const deadlineAt = requestFields.get("deadlineAt") as number | undefined;
 	const signal = requestFields.get("signal") as AbortSignal | undefined;
 	const workspaceSource = requestFields.get("workspace");
+	const workspaceMutationSource = requestFields.get("workspaceMutation");
 	const capabilitiesSource = requestFields.get("capabilities");
 	const authoritySource = requestFields.get("authority");
 	const bindingSource = requestFields.get("binding");
@@ -1557,6 +1561,10 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 	}
 	if (!validIdentifier(authorityWorkspaceId)) throw new AgentSessionRuntimeError("authority workspace identity is invalid");
 	if (typeof readOnly !== "boolean") throw new AgentSessionRuntimeError("authority readOnly is invalid");
+	const workspaceMutation = workspaceMutationSource === undefined ? !readOnly : workspaceMutationSource;
+	if (typeof workspaceMutation !== "boolean" || (readOnly && workspaceMutation)) {
+		throw new AgentSessionRuntimeError("workspaceMutation conflicts with authority readOnly");
+	}
 	const readPrefixes = frozenArray(normalizeScopedPrefixes(readPrefixesSource, "read"));
 	const writePrefixes = readOnly && writePrefixesSource.length === 0
 		? frozenArray<string>([])
@@ -1645,6 +1653,7 @@ function normalizeRunRequest(request: RoleRunRequest): RoleRunRequest {
 		deadlineAt,
 		signal,
 		workspace,
+		workspaceMutation,
 		capabilities,
 		authority,
 		binding,

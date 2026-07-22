@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
 import { constants } from "node:fs";
-import { link, lstat, mkdir, open, realpath, rm, stat } from "node:fs/promises";
+import { link, lstat, mkdir, open, readdir, realpath, rm, stat } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
 
 import {
@@ -12,10 +12,14 @@ import {
 	type GitBinding,
 	type GitCommitEvidence,
 	type GitCommitRequest,
+	type GitIntegrateReviewedChildRequest,
 	type GitMutationLease,
 	type GitMutationLeaseRequest,
 	type GitPushEvidence,
 	type GitPushRequest,
+	type GitReconcileIssueHeadEvidence,
+	type GitRefreshIssueEvidence,
+	type GitReviewedChildIntegrationEvidence,
 	type GitStatusEvidence,
 } from "./git-adapter.ts";
 import type { FileStateStoreOptions } from "./state-store.ts";
@@ -27,6 +31,7 @@ const MAX_CLAIM_BYTES = 32_768;
 const MAX_PATH_BYTES = 4_096;
 const MAX_OWNERSHIP_BYTES = 256;
 const SAFE_OWNERSHIP = /^[A-Za-z0-9](?:[A-Za-z0-9._:-]*[A-Za-z0-9])?$/;
+const SAFE_PARENT_REF = /^(?!\/|.*(?:\.\.|\s|[~^:?*\\\[\]])|.*\/$)[A-Za-z0-9][A-Za-z0-9._\/-]{0,239}$/;
 const SHA_PATTERN = /^[0-9a-f]{40}$/;
 const IDENTITY_PATTERN = /^[0-9a-f]{64}$/;
 
@@ -60,7 +65,8 @@ export interface WorkspaceClaimRequest {
 	issue: number;
 	slug: string;
 	parentIssue: number;
-	parentSlug: string;
+	/** Exact non-default parent branch from the immutable production plan. */
+	parentBranch: string;
 	parentHead: string;
 	ownershipId: string;
 	allowedScopes: readonly string[];
@@ -97,6 +103,42 @@ export interface WorkspaceHandoffEvidence {
 	dirty: boolean;
 }
 
+export interface WorkspaceParentRefreshRequest {
+	previousParentHead: string;
+	newParentHead: string;
+	effectKey: string;
+}
+
+export interface WorkspaceParentRefreshEvidence extends GitRefreshIssueEvidence {
+	verificationInvalidated: true;
+	reviewInvalidated: true;
+}
+
+export interface WorkspaceChildHeadReconciliationRequest {
+	previousHead: string;
+	effectKey: string;
+}
+
+export interface WorkspaceChildHeadReconciliationEvidence extends GitReconcileIssueHeadEvidence {
+	verificationInvalidated: true;
+	reviewInvalidated: true;
+	integrationInvalidated: true;
+}
+
+export interface WorkspaceClaimRecoveryEvidence {
+	claimId: string;
+	repositoryIdentity: string;
+	worktreeIdentity: string;
+	cwd: string;
+	branch: string;
+	baseBranch: string;
+	baseHead: string;
+	head: string;
+	writeScopes: string[];
+	clean: boolean;
+	changedScope: string[];
+}
+
 export interface WorkspaceAdapterOptions {
 	leaseOptions?: Omit<FileStateStoreOptions, "trustedRoot">;
 }
@@ -126,6 +168,28 @@ interface WorkspaceBindingRecord {
 	worktreeIdentity: string;
 }
 
+interface WorkspaceRefreshRecord {
+	schemaVersion: 1;
+	claimId: string;
+	effectKeyHash: string;
+	previousBaseHead: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	outcome: "unchanged" | "rebased" | "reclaimed";
+}
+
+interface WorkspaceChildHeadRecord {
+	schemaVersion: 1;
+	claimId: string;
+	effectKeyHash: string;
+	branch: string;
+	baseHead: string;
+	previousHead: string;
+	head: string;
+	changedScope: string[];
+}
+
 interface ActiveClaimContext {
 	claimPath: string;
 	bindingPath: string;
@@ -133,6 +197,7 @@ interface ActiveClaimContext {
 	binding: WorkspaceBindingRecord;
 	coordinator: GitBinding;
 	lease: GitMutationLease;
+	effectiveBaseHead: string;
 }
 
 export class WorkspaceAdapterError extends Error {
@@ -282,6 +347,77 @@ function serializedBinding(record: WorkspaceBindingRecord): string {
 	});
 }
 
+function parseRefresh(raw: string): WorkspaceRefreshRecord {
+	const record = parseJsonRecord(raw, "workspace parent refresh record");
+	assertOnlyFields(record, new Set([
+		"schemaVersion", "claimId", "effectKeyHash", "previousBaseHead", "baseHead",
+		"previousHead", "head", "outcome",
+	]), "workspace parent refresh record");
+	if (record.schemaVersion !== 1
+		|| typeof record.claimId !== "string" || !IDENTITY_PATTERN.test(record.claimId)
+		|| typeof record.effectKeyHash !== "string" || !IDENTITY_PATTERN.test(record.effectKeyHash)
+		|| typeof record.previousBaseHead !== "string" || !SHA_PATTERN.test(record.previousBaseHead)
+		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
+		|| typeof record.previousHead !== "string" || !SHA_PATTERN.test(record.previousHead)
+		|| typeof record.head !== "string" || !SHA_PATTERN.test(record.head)
+		|| !new Set(["unchanged", "rebased", "reclaimed"]).has(record.outcome as string)) {
+		throw new WorkspaceAdapterError("workspace parent refresh record is malformed; existing state was preserved");
+	}
+	return record as unknown as WorkspaceRefreshRecord;
+}
+
+function serializedRefresh(record: WorkspaceRefreshRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		claimId: record.claimId,
+		effectKeyHash: record.effectKeyHash,
+		previousBaseHead: record.previousBaseHead,
+		baseHead: record.baseHead,
+		previousHead: record.previousHead,
+		head: record.head,
+		outcome: record.outcome,
+	});
+}
+
+function parseChildHead(raw: string): WorkspaceChildHeadRecord {
+	const record = parseJsonRecord(raw, "workspace child-head reconciliation record");
+	assertOnlyFields(record, new Set([
+		"schemaVersion", "claimId", "effectKeyHash", "branch", "baseHead", "previousHead", "head",
+		"changedScope",
+	]), "workspace child-head reconciliation record");
+	let changedScope: string[];
+	try {
+		if (!Array.isArray(record.changedScope) || record.changedScope.some((path) => typeof path !== "string")) throw new Error();
+		changedScope = record.changedScope.length === 0 ? [] : canonicalGitScopes(record.changedScope as string[]);
+		if (!equalStrings(changedScope, record.changedScope as string[])) throw new Error();
+	} catch (error) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation record is malformed", { cause: error });
+	}
+	if (record.schemaVersion !== 1
+		|| typeof record.claimId !== "string" || !IDENTITY_PATTERN.test(record.claimId)
+		|| typeof record.effectKeyHash !== "string" || !IDENTITY_PATTERN.test(record.effectKeyHash)
+		|| !safeText(record.branch, 240) || !SAFE_PARENT_REF.test(record.branch)
+		|| typeof record.baseHead !== "string" || !SHA_PATTERN.test(record.baseHead)
+		|| typeof record.previousHead !== "string" || !SHA_PATTERN.test(record.previousHead)
+		|| typeof record.head !== "string" || !SHA_PATTERN.test(record.head)) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation record is malformed");
+	}
+	return { ...record, changedScope } as unknown as WorkspaceChildHeadRecord;
+}
+
+function serializedChildHead(record: WorkspaceChildHeadRecord): string {
+	return JSON.stringify({
+		schemaVersion: record.schemaVersion,
+		claimId: record.claimId,
+		effectKeyHash: record.effectKeyHash,
+		branch: record.branch,
+		baseHead: record.baseHead,
+		previousHead: record.previousHead,
+		head: record.head,
+		changedScope: record.changedScope,
+	});
+}
+
 function claimIdentity(record: WorkspaceClaimRecord): string {
 	return hash(["shepherd-workspace-claim-v4", serializedClaim(record)]);
 }
@@ -328,6 +464,67 @@ async function publishImmutable(path: string, payload: string, description: stri
 	} finally {
 		await handle?.close().catch(() => undefined);
 		await rm(temporary, { force: true }).catch(() => undefined);
+	}
+}
+
+async function readExistingClaim(path: string): Promise<WorkspaceClaimRecord | undefined> {
+	try {
+		await lstat(path);
+	} catch (error) {
+		if (fileErrorCode(error) === "ENOENT") return undefined;
+		throw new WorkspaceAdapterError("failed to inspect existing workspace ownership claim", { cause: error });
+	}
+	return parseClaim(await readImmutable(path, "workspace ownership claim"));
+}
+
+async function loadEffectiveBase(
+	claimDirectory: string,
+	issue: number,
+	claimId: string,
+	initialBaseHead: string,
+): Promise<string> {
+	const prefix = `issue-${issue}.refresh-`;
+	const names = (await readdir(claimDirectory)).filter((name) => name.startsWith(prefix) && name.endsWith(".json"));
+	if (names.length > 64) throw new WorkspaceAdapterError("workspace parent refresh history exceeds its bound");
+	const remaining: WorkspaceRefreshRecord[] = [];
+	for (const name of names.sort()) {
+		const suffix = name.slice(prefix.length, -".json".length);
+		if (!IDENTITY_PATTERN.test(suffix)) throw new WorkspaceAdapterError("workspace parent refresh filename is malformed");
+		const record = parseRefresh(await readImmutable(join(claimDirectory, name), "workspace parent refresh record"));
+		if (record.claimId !== claimId || record.effectKeyHash !== suffix) {
+			throw new WorkspaceAdapterError("workspace parent refresh record does not match its immutable claim or effect key");
+		}
+		remaining.push(record);
+	}
+	let baseHead = initialBaseHead;
+	while (remaining.length > 0) {
+		const matching = remaining.filter((record) => record.previousBaseHead === baseHead);
+		if (matching.length !== 1) {
+			throw new WorkspaceAdapterError("workspace parent refresh history is disconnected or ambiguous");
+		}
+		const next = matching[0];
+		if (next.baseHead === baseHead && next.outcome !== "unchanged") {
+			throw new WorkspaceAdapterError("workspace parent refresh history contains an invalid no-op transition");
+		}
+		baseHead = next.baseHead;
+		remaining.splice(remaining.indexOf(next), 1);
+	}
+	return baseHead;
+}
+
+async function acquireRefresh(path: string, expected: WorkspaceRefreshRecord): Promise<void> {
+	await publishImmutable(path, `${serializedRefresh(expected)}\n`, "workspace parent refresh record");
+	const current = parseRefresh(await readImmutable(path, "workspace parent refresh record"));
+	if (serializedRefresh(current) !== serializedRefresh(expected)) {
+		throw new WorkspaceAdapterError("workspace parent refresh retry does not match its exact prepared effect");
+	}
+}
+
+async function acquireChildHead(path: string, expected: WorkspaceChildHeadRecord): Promise<void> {
+	await publishImmutable(path, `${serializedChildHead(expected)}\n`, "workspace child-head reconciliation record");
+	const current = parseChildHead(await readImmutable(path, "workspace child-head reconciliation record"));
+	if (serializedChildHead(current) !== serializedChildHead(expected)) {
+		throw new WorkspaceAdapterError("workspace child-head reconciliation retry does not match its exact prepared effect");
 	}
 }
 
@@ -384,6 +581,151 @@ export class WorkspaceAdapter {
 		this.#leaseOptions = { ...(options.leaseOptions ?? {}) };
 	}
 
+	/** Read-only crash recovery of the exact immutable claim/binding; never acquires a mutation lease. */
+	async findClaim(request: WorkspaceClaimRequest): Promise<WorkspaceClaimRecoveryEvidence | undefined> {
+		if (typeof request !== "object" || request === null || !validIssue(request.issue)
+			|| !safeText(request.slug, 100) || !safeText(request.ownershipId, MAX_OWNERSHIP_BYTES)
+			|| !SAFE_OWNERSHIP.test(request.ownershipId) || !safeText(request.trustedWorktreeRoot, MAX_PATH_BYTES)
+			|| !isAbsolute(request.trustedWorktreeRoot) || !SAFE_PARENT_REF.test(request.parentBranch)
+			|| !SHA_PATTERN.test(request.parentHead)) {
+			throw new WorkspaceAdapterError("workspace recovery claim request is invalid");
+		}
+		let allowedScopes: string[];
+		try { allowedScopes = canonicalGitScopes(request.allowedScopes); }
+		catch (error) { throw new WorkspaceAdapterError("workspace recovery scopes are invalid", { cause: error }); }
+		const coordinator = await this.#git.assertBinding(request.coordinator);
+		if (coordinator.defaultBranch === undefined) throw new WorkspaceAdapterError("workspace recovery requires default branch evidence");
+		let trustedRoot: string;
+		try {
+			const metadata = await lstat(request.trustedWorktreeRoot);
+			if (!metadata.isDirectory() || metadata.isSymbolicLink()) throw new WorkspaceAdapterError("workspace recovery root is unsafe");
+			trustedRoot = await realpath(request.trustedWorktreeRoot);
+		} catch (error) {
+			if (fileErrorCode(error) === "ENOENT") return undefined;
+			throw error;
+		}
+		const claimDirectory = join(trustedRoot, CLAIM_DIRECTORY);
+		try {
+			const metadata = await lstat(claimDirectory);
+			if (!metadata.isDirectory() || metadata.isSymbolicLink() || await realpath(claimDirectory) !== claimDirectory
+				|| (metadata.mode & 0o077) !== 0) throw new WorkspaceAdapterError("workspace recovery claim directory is unsafe");
+		} catch (error) {
+			if (fileErrorCode(error) === "ENOENT") return undefined;
+			throw error;
+		}
+		const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
+		const claim = await readExistingClaim(claimPath);
+		if (claim === undefined) return undefined;
+		const branch = canonicalIssueBranch(request.issue, request.slug);
+		const target = resolve(trustedRoot, canonicalIssueWorktreeName(request.issue, request.slug));
+		const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
+		const requestHash = hash([
+			"shepherd-workspace-request-v4", branch, target, request.parentBranch, claim.baseHead,
+			allowedScopes.join("\0"), coordinator.fetchEndpointIdentity, coordinator.pushEndpointIdentity,
+			coordinator.defaultBranch,
+		]);
+		if (claim.issue !== request.issue || claim.slug !== request.slug || claim.branch !== branch
+			|| claim.path !== target || claim.trustedWorktreeRoot !== trustedRoot || claim.prBase !== request.parentBranch
+			|| claim.ownerHash !== ownerHash || claim.requestHash !== requestHash
+			|| claim.repositoryIdentity !== coordinator.repositoryIdentity || claim.remoteIdentity !== coordinator.remoteIdentity
+			|| claim.fetchEndpointIdentity !== coordinator.fetchEndpointIdentity
+			|| claim.pushEndpointIdentity !== coordinator.pushEndpointIdentity
+			|| claim.defaultBranch !== coordinator.defaultBranch || !equalStrings(claim.allowedScopes, allowedScopes)) {
+			throw new WorkspaceAdapterError("workspace recovery claim conflicts with exact requested coordinates");
+		}
+		const claimId = claimIdentity(claim);
+		const bindingPath = join(claimDirectory, `issue-${request.issue}.binding.json`);
+		let bindingRecord: WorkspaceBindingRecord;
+		try { bindingRecord = parseBinding(await readImmutable(bindingPath, "workspace identity binding")); }
+		catch (error) {
+			if (fileErrorCode((error as { cause?: unknown }).cause) === "ENOENT") return undefined;
+			throw error;
+		}
+		if (bindingRecord.claimId !== claimId) throw new WorkspaceAdapterError("workspace recovery binding moved from its claim");
+		const binding = await this.#git.inspect(target);
+		if (binding.repositoryIdentity !== coordinator.repositoryIdentity || binding.worktreeIdentity !== bindingRecord.worktreeIdentity
+			|| binding.remoteIdentity !== coordinator.remoteIdentity
+			|| binding.fetchEndpointIdentity !== coordinator.fetchEndpointIdentity
+			|| binding.pushEndpointIdentity !== coordinator.pushEndpointIdentity
+			|| await this.#git.currentBranch(binding) !== branch) {
+			throw new WorkspaceAdapterError("workspace recovery worktree identity moved");
+		}
+		const baseHead = await loadEffectiveBase(claimDirectory, request.issue, claimId, claim.baseHead);
+		if (baseHead !== request.parentHead) throw new WorkspaceAdapterError("workspace recovery base moved from requested parent head");
+		const head = await this.#git.resolveBranchHead(binding, branch);
+		if (!(await this.#git.isAncestor(binding, baseHead, head))) throw new WorkspaceAdapterError("workspace recovery head is outside its parent ancestry");
+		const status = await this.#git.status(binding);
+		const changedScope = changedPaths(status);
+		if (changedScope.some((path) => !allowedScopes.some((scope) => scope === "." || path === scope || path.startsWith(`${scope}/`)))) {
+			throw new WorkspaceAdapterError("workspace recovery found scope-escaped changes");
+		}
+		return {
+			claimId,
+			repositoryIdentity: binding.repositoryIdentity,
+			worktreeIdentity: binding.worktreeIdentity,
+			cwd: binding.cwd,
+			branch,
+			baseBranch: claim.prBase,
+			baseHead,
+			head,
+			writeScopes: [...allowedScopes],
+			clean: status.clean,
+			changedScope,
+		};
+	}
+
+	async findParentRefreshReceipt(input: {
+		trustedWorktreeRoot: string;
+		issue: number;
+		claimId: string;
+		effectKey: string;
+	}): Promise<WorkspaceParentRefreshEvidence | undefined> {
+		if (!validIssue(input.issue) || !IDENTITY_PATTERN.test(input.claimId) || !SAFE_OWNERSHIP.test(input.effectKey)
+			|| !isAbsolute(input.trustedWorktreeRoot)) throw new WorkspaceAdapterError("workspace refresh recovery query is invalid");
+		const root = await realpath(input.trustedWorktreeRoot);
+		const key = hash(["shepherd-workspace-refresh-effect-v1", input.effectKey]);
+		const path = join(root, CLAIM_DIRECTORY, `issue-${input.issue}.refresh-${key}.json`);
+		try { await lstat(path); } catch (error) { if (fileErrorCode(error) === "ENOENT") return undefined; throw error; }
+		const record = parseRefresh(await readImmutable(path, "workspace parent refresh record"));
+		if (record.claimId !== input.claimId || record.effectKeyHash !== key) throw new WorkspaceAdapterError("workspace refresh recovery receipt conflicts");
+		return {
+			outcome: record.outcome,
+			previousBaseHead: record.previousBaseHead,
+			baseHead: record.baseHead,
+			previousHead: record.previousHead,
+			head: record.head,
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+		};
+	}
+
+	async findChildHeadReceipt(input: {
+		trustedWorktreeRoot: string;
+		issue: number;
+		claimId: string;
+		effectKey: string;
+	}): Promise<WorkspaceChildHeadReconciliationEvidence | undefined> {
+		if (!validIssue(input.issue) || !IDENTITY_PATTERN.test(input.claimId) || !SAFE_OWNERSHIP.test(input.effectKey)
+			|| !isAbsolute(input.trustedWorktreeRoot)) throw new WorkspaceAdapterError("workspace child-head recovery query is invalid");
+		const root = await realpath(input.trustedWorktreeRoot);
+		const key = hash(["shepherd-workspace-child-head-effect-v1", input.effectKey]);
+		const path = join(root, CLAIM_DIRECTORY, `issue-${input.issue}.child-head-${key}.json`);
+		try { await lstat(path); } catch (error) { if (fileErrorCode(error) === "ENOENT") return undefined; throw error; }
+		const record = parseChildHead(await readImmutable(path, "workspace child-head reconciliation record"));
+		if (record.claimId !== input.claimId || record.effectKeyHash !== key) throw new WorkspaceAdapterError("workspace child-head recovery receipt conflicts");
+		return {
+			outcome: record.head === record.previousHead ? "reused" : "reclaimed",
+			branch: record.branch,
+			baseHead: record.baseHead,
+			previousHead: record.previousHead,
+			head: record.head,
+			changedScope: [...record.changedScope],
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+			integrationInvalidated: true,
+		};
+	}
+
 	async #acquireLease(
 		coordinator: GitBinding,
 		claimDirectory: string,
@@ -421,7 +763,10 @@ export class WorkspaceAdapter {
 	async claim(request: WorkspaceClaimRequest): Promise<ClaimedWorkspace> {
 		if (typeof request !== "object" || request === null) throw new WorkspaceAdapterError("workspace claim request is required");
 		const branch = canonicalIssueBranch(request.issue, request.slug);
-		const prBase = canonicalIssueBranch(request.parentIssue, request.parentSlug);
+		if (typeof request.parentBranch !== "string" || !SAFE_PARENT_REF.test(request.parentBranch)) {
+			throw new WorkspaceAdapterError("parent branch must be an exact bounded Git ref");
+		}
+		const prBase = request.parentBranch;
 		if (request.issue === request.parentIssue) throw new WorkspaceAdapterError("issue and parent issue must be distinct");
 		if (typeof request.parentHead !== "string" || !SHA_PATTERN.test(request.parentHead)) {
 			throw new WorkspaceAdapterError("parent head must be an exact lowercase commit SHA");
@@ -500,13 +845,16 @@ export class WorkspaceAdapter {
 				}
 			}
 
+			const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
+			const existingClaim = await readExistingClaim(claimPath);
+			const initialBaseHead = existingClaim?.baseHead ?? request.parentHead;
 			const ownerHash = hash(["shepherd-workspace-owner-v1", request.ownershipId]);
 			const requestHash = hash([
 				"shepherd-workspace-request-v4",
 				branch,
 				target,
 				prBase,
-				request.parentHead,
+				initialBaseHead,
 				allowedScopes.join("\0"),
 				coordinator.fetchEndpointIdentity,
 				coordinator.pushEndpointIdentity,
@@ -520,7 +868,7 @@ export class WorkspaceAdapter {
 				path: target,
 				trustedWorktreeRoot: trustedRoot,
 				prBase,
-				baseHead: request.parentHead,
+				baseHead: initialBaseHead,
 				allowedScopes,
 				repositoryIdentity: coordinator.repositoryIdentity,
 				remoteIdentity: coordinator.remoteIdentity,
@@ -530,9 +878,17 @@ export class WorkspaceAdapter {
 				ownerHash,
 				requestHash,
 			};
-			const claimPath = join(claimDirectory, `issue-${request.issue}.json`);
 			const persistedClaim = await acquireClaim(claimPath, requestedClaim);
 			const claimId = claimIdentity(persistedClaim);
+			const effectiveBaseHead = await loadEffectiveBase(
+				claimDirectory,
+				request.issue,
+				claimId,
+				persistedClaim.baseHead,
+			);
+			if (effectiveBaseHead !== request.parentHead) {
+				throw new WorkspaceAdapterError("workspace resume parent base does not match its durable typed refresh history");
+			}
 
 			const rootAfterClaim = await stat(trustedRoot);
 			if (rootAfterClaim.dev !== rootMetadata.dev || rootAfterClaim.ino !== rootMetadata.ino) {
@@ -605,7 +961,7 @@ export class WorkspaceAdapter {
 				slug: request.slug,
 				branch,
 				prBase,
-				baseHead: request.parentHead,
+				baseHead: effectiveBaseHead,
 				head,
 				trustedWorktreeRoot: trustedRoot,
 				allowedScopes: [...allowedScopes],
@@ -623,6 +979,7 @@ export class WorkspaceAdapter {
 				binding: persistedBinding,
 				coordinator,
 				lease,
+				effectiveBaseHead,
 			});
 			return workspace;
 		} catch (error) {
@@ -643,7 +1000,7 @@ export class WorkspaceAdapter {
 			|| workspace.cwd !== context.claim.path
 			|| workspace.trustedWorktreeRoot !== context.claim.trustedWorktreeRoot
 			|| workspace.prBase !== context.claim.prBase
-			|| workspace.baseHead !== context.claim.baseHead
+			|| workspace.baseHead !== context.effectiveBaseHead
 			|| !equalStrings(workspace.allowedScopes, context.claim.allowedScopes)
 			|| workspace.repositoryIdentity !== context.claim.repositoryIdentity
 			|| workspace.remoteIdentity !== context.claim.remoteIdentity
@@ -684,6 +1041,104 @@ export class WorkspaceAdapter {
 		return this.#git.pushIssueBranch(context.lease, this.#worktreeBinding(context), request);
 	}
 
+	async integrateReviewedChild(
+		workspace: ClaimedWorkspace,
+		request: GitIntegrateReviewedChildRequest,
+	): Promise<GitReviewedChildIntegrationEvidence> {
+		const context = this.#mutationContext(workspace);
+		return this.#git.integrateReviewedChild(context.lease, context.coordinator, request);
+	}
+
+	async refreshParent(
+		workspace: ClaimedWorkspace,
+		request: WorkspaceParentRefreshRequest,
+	): Promise<WorkspaceParentRefreshEvidence> {
+		const context = this.#mutationContext(workspace);
+		if (typeof request !== "object" || request === null
+			|| typeof request.previousParentHead !== "string" || !SHA_PATTERN.test(request.previousParentHead)
+			|| typeof request.newParentHead !== "string" || !SHA_PATTERN.test(request.newParentHead)
+			|| !safeText(request.effectKey, MAX_OWNERSHIP_BYTES) || !SAFE_OWNERSHIP.test(request.effectKey)
+			|| request.previousParentHead !== context.effectiveBaseHead) {
+			throw new WorkspaceAdapterError("parent refresh request does not match the active exact workspace base");
+		}
+		const parentHead = await this.#git.resolveBranchHead(context.coordinator, context.claim.prBase);
+		if (parentHead !== request.newParentHead) {
+			throw new WorkspaceAdapterError("new parent head is not the authoritative local parent branch head");
+		}
+		const evidence = await this.#git.refreshIssueBranch(context.lease, this.#worktreeBinding(context), {
+			issue: context.claim.issue,
+			slug: context.claim.slug,
+			branch: context.claim.branch,
+			previousBaseHead: request.previousParentHead,
+			newBaseHead: request.newParentHead,
+			expectedHead: workspace.head,
+		});
+		if (evidence.baseHead !== evidence.previousBaseHead) {
+			const effectKeyHash = hash(["shepherd-workspace-refresh-effect-v1", request.effectKey]);
+			await acquireRefresh(
+				join(dirname(context.claimPath), `issue-${context.claim.issue}.refresh-${effectKeyHash}.json`),
+				{
+					schemaVersion: 1,
+					claimId: context.binding.claimId,
+					effectKeyHash,
+					previousBaseHead: evidence.previousBaseHead,
+					baseHead: evidence.baseHead,
+					previousHead: evidence.previousHead,
+					head: evidence.head,
+					outcome: evidence.outcome,
+				},
+			);
+		}
+		context.effectiveBaseHead = evidence.baseHead;
+		workspace.baseHead = evidence.baseHead;
+		workspace.head = evidence.head;
+		workspace.status = await this.#git.status(this.#worktreeBinding(context));
+		workspace.changedScope = changedPaths(workspace.status);
+		return { ...evidence, verificationInvalidated: true, reviewInvalidated: true };
+	}
+
+	async reconcileChildHead(
+		workspace: ClaimedWorkspace,
+		request: WorkspaceChildHeadReconciliationRequest,
+	): Promise<WorkspaceChildHeadReconciliationEvidence> {
+		const context = this.#mutationContext(workspace);
+		if (typeof request !== "object" || request === null
+			|| typeof request.previousHead !== "string" || !SHA_PATTERN.test(request.previousHead)
+			|| !safeText(request.effectKey, MAX_OWNERSHIP_BYTES) || !SAFE_OWNERSHIP.test(request.effectKey)) {
+			throw new WorkspaceAdapterError("child-head reconciliation request is invalid");
+		}
+		const evidence = await this.#git.reconcileIssueBranchHead(context.lease, this.#worktreeBinding(context), {
+			issue: context.claim.issue,
+			slug: context.claim.slug,
+			branch: context.claim.branch,
+			baseHead: context.effectiveBaseHead,
+			previousHead: request.previousHead,
+		});
+		const effectKeyHash = hash(["shepherd-workspace-child-head-effect-v1", request.effectKey]);
+		await acquireChildHead(
+			join(dirname(context.claimPath), `issue-${context.claim.issue}.child-head-${effectKeyHash}.json`),
+			{
+				schemaVersion: 1,
+				claimId: context.binding.claimId,
+				effectKeyHash,
+				branch: evidence.branch,
+				baseHead: evidence.baseHead,
+				previousHead: evidence.previousHead,
+				head: evidence.head,
+				changedScope: evidence.changedScope,
+			},
+		);
+		workspace.head = evidence.head;
+		workspace.status = await this.#git.status(this.#worktreeBinding(context));
+		workspace.changedScope = [...evidence.changedScope];
+		return {
+			...evidence,
+			verificationInvalidated: true,
+			reviewInvalidated: true,
+			integrationInvalidated: true,
+		};
+	}
+
 	async captureHandoff(workspace: ClaimedWorkspace, verificationState: VerificationState): Promise<WorkspaceHandoffEvidence> {
 		assertVerificationState(verificationState);
 		const context = this.#activeClaims.get(workspace);
@@ -705,7 +1160,7 @@ export class WorkspaceAdapter {
 			|| workspace.cwd !== persistedClaim.path
 			|| workspace.trustedWorktreeRoot !== persistedClaim.trustedWorktreeRoot
 			|| workspace.prBase !== persistedClaim.prBase
-			|| workspace.baseHead !== persistedClaim.baseHead
+			|| workspace.baseHead !== context.effectiveBaseHead
 			|| !equalStrings(workspace.allowedScopes, persistedClaim.allowedScopes)
 			|| workspace.repositoryIdentity !== persistedClaim.repositoryIdentity
 			|| workspace.remoteIdentity !== persistedClaim.remoteIdentity
@@ -733,13 +1188,13 @@ export class WorkspaceAdapter {
 			throw new WorkspaceAdapterError("handoff current branch is not canonical");
 		}
 		const head = await this.#git.resolveBranchHead(binding, canonicalBranch);
-		if (!(await this.#git.isAncestor(binding, persistedClaim.baseHead, head))) {
+		if (!(await this.#git.isAncestor(binding, context.effectiveBaseHead, head))) {
 			throw new WorkspaceAdapterError("handoff exact base is not an ancestor of exact head");
 		}
 		const [status, diff] = await Promise.all([
 			this.#git.status(binding),
 			this.#git.diff(binding, {
-				baseHead: persistedClaim.baseHead,
+				baseHead: context.effectiveBaseHead,
 				head,
 				scopes: persistedClaim.allowedScopes,
 			}),
@@ -756,7 +1211,7 @@ export class WorkspaceAdapter {
 			issue: persistedClaim.issue,
 			branch: canonicalBranch,
 			prBase: persistedClaim.prBase,
-			baseHead: persistedClaim.baseHead,
+			baseHead: context.effectiveBaseHead,
 			head,
 			changedScope,
 			verificationState,

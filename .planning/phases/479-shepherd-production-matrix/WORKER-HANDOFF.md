@@ -1,0 +1,120 @@
+## Worker Handoff
+
+Sub-issue: #479
+
+Parent issue: #471
+
+Worker agent: Codex `gpt-5.6-sol` / high implementation; xhigh verification/review
+
+Branch: `feat/479-shepherd-production-matrix`
+
+Sub-PR: #489
+
+Parent PR: #472
+
+Base branch: `feat/471-pi-agent-session-shepherd`
+
+Worker directory: `/private/tmp/shepherd-479-production-matrix`
+
+CI correction head: `a594be98b9722a8d183584a27832cd88af8702f9`
+
+Parent reconciliation head: `45c27b9d`
+
+Parent reconciliation merge head: `766709b3`
+
+Parent main-sync head: `383fcf93f9bc220be89fef1636e84fbecec2485a`
+
+Parent CI-repair ledger head: `387d41fd0e3e0b1d2855d689a25bb151b1fe1880`
+
+Go toolchain correction head: `52866972891c5d794f90f4be8254520434e6b4ef`
+
+Child parent-sync head: `57ca31aeb552946a1c65602e2b2590a3de88b836`
+
+## Scope Delivered
+
+- Complete production Shepherd matrix and the bounded release-blocker correction described in
+  `PLAN.md`.
+- Complete-suite GitHub Actions gate using Node 24.13.1 and Pi 0.80.6.
+- Deterministic post-install verification of Pi's published shrinkwrap and installed
+  `pi-coding-agent`, `pi-agent-core`, `pi-ai`, and `pi-tui` versions.
+- Merge-readiness summary, exact local evidence, and parent/child publication blockers.
+
+## Files Changed
+
+- `.pi/extensions/shepherd/**`: production controller, session, workspace/Git/GitHub, recovery,
+  review, human-gate, and tests.
+- `.pi/README.md`: production command/runtime contract.
+- `.github/workflows/shepherd.yml`: complete sequential Shepherd CI gate.
+- `.github/scripts/verify-shepherd-pi-runtime.mjs`: exact shrinkwrap/runtime-family assertion.
+- `.planning/phases/479-shepherd-production-matrix/**`: GSD, TDD, verification, review, and
+  handoff evidence.
+- `.planning/phases/471-pi-agent-session-shepherd/**`: parent-owned reconciliation adopted at
+  `45c27b9d` and merged into the child at `766709b3`.
+
+## GSD / TDD / Skill Evidence
+
+- GSD mode: manual fallback.
+- GSD command: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase
+  479-shepherd-production-matrix --dry-run` returned `unknown GSD command: programming-loop`.
+- GSD adapter source: `.agents/agentic-delivery/references/gsd-pi-adapter.md`.
+- Required skills source: `.agents/agentic-delivery/references/required-skills-routing.md`.
+- Required Go skills loaded for proportional verification/docs: `golang-how-to`,
+  `golang-testing`, `golang-continuous-integration`, `golang-documentation`, `golang-lint`,
+  and `golang-security`.
+- Other required skills: `gsd-programming-loop`, `github-issue-first-delivery`,
+  `architecture-patterns`, and `javascript-testing-patterns`.
+- RED evidence: no complete-suite workflow; six committed diff-hygiene failures; missing summary;
+  no deterministic post-install Pi-family assertion.
+- GREEN evidence: workflow/YAML/permission/pin checks, exact Pi-family assertion, strict production
+  TypeScript, offline Pi RPC, GSD/TDD evidence validation, summary, and range/worktree diff checks.
+- Refactor evidence: documentation-only reconciliation; production Shepherd behavior remains frozen
+  at `78708cbef64b33e54ed32078bf2a107d81126236`.
+
+## CLI Help / Docs / Website Parity
+
+- Applies: no new Go `pm` command or user-visible command behavior in this closure.
+- Runtime help checked: existing offline Pi RPC exposes `pm-shepherd`.
+- Bare namespace behavior checked: not applicable to the CI/evidence correction.
+- `docs/cli/**` updated: not applicable.
+- `website/**` updated: not applicable.
+- Generated help/manual artifacts updated: not applicable.
+- Parity exemptions: `/pm-shepherd` is a Pi extension command; this slice changes CI/evidence only.
+
+## Verification
+
+```bash
+node .github/scripts/verify-shepherd-pi-runtime.mjs
+node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts
+# strict no-emit TypeScript for all 49 non-test Shepherd modules
+# pinned Pi 0.80.6 offline RPC get_commands
+scripts/verify-gsd-workflow origin/main
+git diff --check 387d41fd...HEAD
+```
+
+Result: the focused real-Go fixture passes 1/1 with Go 1.25.12; exact Pi-family verification,
+strict TypeScript, workflow YAML, and `go mod verify` pass. The complete local inventory reproduces
+only the known managed-sandbox `/bin/ps` `spawn EPERM` class. Local `govulncheck` cannot fetch its
+advisory database because sandbox DNS is blocked. Fresh ordinary-host CI remains authoritative.
+
+## Automated Review
+
+- Requested internal review: Codex `gpt-5.6-sol` / xhigh at `d2f20366`.
+- Internal result: BLOCKED only on stale resume/publication evidence; the workflow, dependency
+  baseline, and stack topology passed. This handoff corrects the durable state to repaired parent
+  `387d41fd` and existing PR #489; exact-head follow-up remains external.
+- Primary schema route: blocked pending `claude_auto` or an allowed recorded fallback.
+- Fallback route: human.
+- Coverage route: blocked.
+- Coverage status: blocked.
+- Review URL: https://github.com/polymetrics-ai/cli/pull/489
+- Disposition summary: stale resume state accepted and corrected; parent-first republication plus
+  authoritative remote-range verification remain.
+- Unresolved findings: remote parent base, remote CI, and policy review coverage.
+
+## Merge Recommendation
+
+- Recommended state: local repair complete; remote verification blocked.
+- Reason: parent-first publication, fresh CI, and an exact-head review remain before integration.
+- Human gates: parent PR #472 merge to `main`, auth changes, new dependencies, destructive actions,
+  and quality-gate reductions.
+- Follow-up issues: #480 after #479 parent integration; #481 after #480.

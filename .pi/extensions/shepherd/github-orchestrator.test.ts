@@ -11,6 +11,7 @@ import {
 	materializeChildRecord,
 	selectReadyChildren,
 	type ChildIntegrationReceipt,
+	type ChildIntegrationMutation,
 	type CreateChildIssueRequest,
 	type CreatePullRequestRequest,
 	type AgentSessionAttestationSource,
@@ -88,6 +89,23 @@ import type {
 } from "./workspace-adapter.ts";
 
 const objectivePath = ".pi/extensions/shepherd/fixtures/issue-478/parent-objective.json";
+
+const successfulIntegrationMutation: ChildIntegrationMutation = async (authorization) => {
+	const mergeCommitSha = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+		.map((digit) => digit.repeat(40))
+		.find((candidate) => candidate !== authorization.baseSha && candidate !== authorization.headSha);
+	if (mergeCommitSha === undefined) throw new Error("test integration SHA fixture exhausted");
+	return {
+		schemaVersion: 1,
+		authority: "git",
+		parentBranch: authorization.parentBranch,
+		baseSha: authorization.baseSha,
+		headSha: authorization.headSha,
+		mergeCommitSha,
+		parentHead: mergeCommitSha,
+		reused: false,
+	};
+};
 const baseSha = "a".repeat(40);
 const headSha = "b".repeat(40);
 type PullRequestFixtureRequest = Omit<CreatePullRequestRequest, "mutation" | "policyDigest">
@@ -743,8 +761,9 @@ function orchestratorFor(
 					&& pullRequest.repository === target.repository
 					&& pullRequest.workItemId === target.workItemId
 					&& pullRequest.generation === target.generation
-					&& pullRequest.baseSha === target.baseSha
-					&& pullRequest.headSha === target.headSha)
+					&& pullRequest.headSha === target.headSha
+					&& pullRequest.reviews.some((review) => review.baseSha === target.baseSha
+						&& review.headSha === target.headSha))
 				.map((pullRequest) => ({
 					schemaVersion: 1,
 					authority: "controller",
@@ -1421,7 +1440,12 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 		allowedScopes: child.writeScopes,
 	};
 	transport.pullRequests.push(cleanPullRequest(request));
-	const integrated = await orchestrator.integrateChild(candidate, child, handoff);
+	await assert.rejects(
+		orchestrator.integrateChild(candidate, child, handoff, undefined as never),
+		/lease-bound Git mutation authority/i,
+	);
+	assert.equal(transport.integrateCalls, 0);
+	const integrated = await orchestrator.integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 	assert.equal(integrated.kind, "integrated");
 	assert.equal(transport.integrateCalls, 1);
 
@@ -1431,13 +1455,58 @@ test("integrates only green reviewed exact-head scoped children and rechecks hea
 	movedTransport.onPullRequestRead = (_query, matches, read) => read < 2
 		? matches
 		: matches.map((candidatePr) => ({ ...candidatePr, headSha: "c".repeat(40) }));
-	const moved = await orchestratorFor(movedTransport).integrateChild(candidate, child, handoff);
+	const moved = await orchestratorFor(movedTransport).integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 	assert.equal(moved.kind, "blocked");
 	if (moved.kind === "blocked") assert.ok(moved.blockers.includes("head_moved"));
 	assert.equal(movedTransport.integrateCalls, 0);
 
-	const outside = await orchestratorFor(transport).integrateChild(candidate, child, { ...handoff, changedScope: ["cmd/pm/main.go"] });
+	const outside = await orchestratorFor(transport).integrateChild(
+		candidate,
+		child,
+		{ ...handoff, changedScope: ["cmd/pm/main.go"] },
+		successfulIntegrationMutation,
+	);
 	assert.equal(outside.kind, "blocked");
+});
+
+test("recovers a receipt-less exact Git CAS after GitHub reports the merged parent base movement", async () => {
+	const candidate = await plan();
+	const transport = new FakeTransport();
+	const issue = issueFrom({
+		repository: candidate.repository,
+		parentIssue: candidate.parentIssue,
+		marker: candidate.children[0].markers.issue,
+		title: candidate.children[0].title,
+		body: candidate.children[0].issueBody,
+	}, 811);
+	const child = materializeChildRecord(candidate, "evidence", issue);
+	const handoff = childHandoff(issue.number, child.branch, child.prBase);
+	transport.issues.push(issue);
+	transport.pullRequests.push(cleanPullRequest({
+		repository: candidate.repository,
+		workItemId: child.id,
+		generation: candidate.generation,
+		marker: child.markers.pullRequest,
+		title: child.title,
+		body: `Refs #${issue.number}\nRefs #${candidate.parentIssue}\n\n${child.markers.pullRequest}`,
+		draft: false,
+		baseBranch: child.prBase,
+		headBranch: child.branch,
+		baseSha: handoff.baseHead,
+		headSha: handoff.head,
+		changedPaths: handoff.changedScope,
+		allowedScopes: child.writeScopes,
+	}, { state: "merged", baseSha: "d".repeat(40) }));
+	let mutationAttempts = 0;
+	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff, async (authorization) => {
+		mutationAttempts += 1;
+		return { ...(await successfulIntegrationMutation(authorization)), reused: true };
+	});
+	assert.equal(result.kind, "integrated");
+	assert.equal(mutationAttempts, 1);
+	assert.equal(transport.integrateCalls, 1);
+	assert.equal(transport.integrations[0].baseSha, handoff.baseHead);
+	assert.equal(transport.integrations[0].pullRequestSnapshot.baseSha, handoff.baseHead);
 });
 
 test("integration recovers timeout and malformed mutation responses, but incomplete receipt lookup fails closed", async () => {
@@ -1472,7 +1541,7 @@ test("integration recovers timeout and malformed mutation responses, but incompl
 		transport.pullRequests.push(cleanPullRequest(request));
 		if (mode === "timeout") transport.throwAfterIntegration = true;
 		else transport.malformedIntegrationResponse = true;
-		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 		assert.equal(result.kind, "integrated", mode);
 		if (result.kind === "integrated") assert.equal(result.reused, true, mode);
 		assert.equal(transport.integrateCalls, 1, mode);
@@ -1483,7 +1552,10 @@ test("integration recovers timeout and malformed mutation responses, but incompl
 	incomplete.issues.push(issue);
 	incomplete.pullRequests.push(cleanPullRequest(request));
 	incomplete.incompleteIntegrationLookup = true;
-	await assert.rejects(orchestratorFor(incomplete).integrateChild(candidate, child, handoff), /complete|pagination|authoritative/i);
+	await assert.rejects(
+		orchestratorFor(incomplete).integrateChild(candidate, child, handoff, successfulIntegrationMutation),
+		/complete|pagination|authoritative/i,
+	);
 	assert.equal(incomplete.integrateCalls, 0);
 });
 
@@ -1542,7 +1614,7 @@ test("review coverage must bind the planned repository, child, generation, paths
 			findings: [],
 		}];
 		transport.pullRequests.push(pr);
-		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 		assert.equal(result.kind, "blocked", JSON.stringify(targetChanges));
 		assert.equal(transport.integrateCalls, 0);
 	}
@@ -1626,7 +1698,7 @@ test("restart reuses stable integration identity after a later merged-PR observa
 		revision: mergedPullRequest.revision + 1,
 		observedAt: "2026-07-21T12:06:00.000Z",
 	};
-	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+	const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 	assert.equal(result.kind, "integrated");
 	if (result.kind === "integrated") assert.equal(result.reused, true);
 	assert.equal(transport.integrateCalls, 0);
@@ -2021,8 +2093,10 @@ test("cycle 3 durable mutation metadata deduplicates issue, PR, roster, integrat
 	};
 	transport.pullRequests[0] = cleanPullRequest(request, {}, firstPr.number);
 	const [firstIntegration, secondIntegration] = await Promise.all([
-		firstOrchestrator.integrateChild(candidate, child, handoff),
-		secondOrchestrator.integrateChild(JSON.parse(JSON.stringify(candidate)), child, handoff),
+		firstOrchestrator.integrateChild(candidate, child, handoff, successfulIntegrationMutation),
+		secondOrchestrator.integrateChild(
+			JSON.parse(JSON.stringify(candidate)), child, handoff, successfulIntegrationMutation,
+		),
 	]);
 	assert.equal(firstIntegration.kind, "integrated");
 	assert.equal(secondIntegration.kind, "integrated");
@@ -2123,7 +2197,7 @@ test("cycle 3 retries authoritative visibility after every timeout-after-effect 
 	transport.pullRequests[pullRequestIndex] = cleanPullRequest(request, {}, pullRequest.number);
 	transport.integrationVisibilityLag = 2;
 	transport.throwAfterIntegration = true;
-	const integrated = await orchestrator.integrateChild(candidate, child, handoff);
+	const integrated = await orchestrator.integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 	assert.equal(integrated.kind, "integrated");
 	assert.equal(transport.integrateCalls, 1);
 	if (integrated.kind !== "integrated") throw new Error("integration visibility recovery failed");
@@ -2207,7 +2281,7 @@ test("cycle 3 requires an exact literal-true ancestry proof and rejects truthy o
 			allowedScopes: child.writeScopes,
 		};
 		transport.pullRequests.push(cleanPullRequest(childRequest));
-		const integrated = await orchestrator.integrateChild(candidate, child, handoff);
+		const integrated = await orchestrator.integrateChild(candidate, child, handoff, successfulIntegrationMutation);
 		assert.equal(integrated.kind, "integrated");
 		if (integrated.kind !== "integrated") throw new Error("setup integration failed");
 		transport.pullRequests.push(cleanPullRequest({
@@ -2343,7 +2417,9 @@ test("cycle 4 re-reads one complete current required-check policy before integra
 				return response(query);
 			},
 		};
-		const result = await orchestratorFor(transport, undefined, source).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport, undefined, source).integrateChild(
+			candidate, child, handoff, successfulIntegrationMutation,
+		);
 		assert.equal(result.kind, "blocked", name);
 		assert.equal(transport.integrateCalls, 0, name);
 	}
@@ -2689,7 +2765,9 @@ test("cycle 5 refreshes every plan-bound policy for receipt reuse and each readi
 				}], complete: true };
 			},
 		};
-		const result = await orchestratorFor(transport, undefined, source).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport, undefined, source).integrateChild(
+			candidate, child, handoff, successfulIntegrationMutation,
+		);
 		assert.equal(result.kind, "blocked");
 		assert.deepEqual(new Set(queries), new Set(candidate.requiredCheckPolicies.map((policy) => policy.baseBranch)));
 	});
@@ -2867,7 +2945,9 @@ test("cycle 5 binds CAS preconditions while keeping volatile child observations 
 			mutations.push(request.mutation);
 			throw new Error("synthetic integration boundary failure");
 		}) as never;
-		await assert.rejects(orchestratorFor(transport).integrateChild(candidate, child, handoff));
+		await assert.rejects(orchestratorFor(transport).integrateChild(
+			candidate, child, handoff, successfulIntegrationMutation,
+		));
 	}
 	assert.equal(mutations.length, 2);
 	assert.equal(mutations[0].idempotencyKey, mutations[1].idempotencyKey);
@@ -3269,7 +3349,9 @@ test("cycle 6 keeps exact-head review authority ordered and integration identity
 				mutations.push(request.mutation);
 				throw new Error("synthetic capture-only integration failure");
 			}) as never;
-			await assert.rejects(orchestratorFor(transport).integrateChild(candidate, child, handoff));
+			await assert.rejects(orchestratorFor(transport).integrateChild(
+				candidate, child, handoff, successfulIntegrationMutation,
+			));
 		}
 		assert.equal(mutations.length, 2);
 		assert.equal(mutations[0].idempotencyKey, mutations[1].idempotencyKey);
@@ -3285,7 +3367,9 @@ test("cycle 6 keeps exact-head review authority ordered and integration identity
 		assert.ok(pullRequest);
 		pullRequest.reviews.push({ ...pullRequest.reviews[0], completedAt: "2026-07-21T12:02:00.000Z" });
 		const { child, handoff } = handoffForReceipt(candidate, transport, receipt);
-		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport).integrateChild(
+			candidate, child, handoff, successfulIntegrationMutation,
+		);
 		assert.equal(result.kind, "integrated");
 		if (result.kind === "integrated") assert.equal(result.reused, true);
 		assert.equal(transport.integrateCalls, 0);
@@ -3312,7 +3396,9 @@ test("cycle 6 applies receipt chronology before reuse and parent readiness", asy
 		const child = materializeChildRecord(candidate, "evidence", issue);
 		const handoff = childHandoff(issue.number, child.branch, child.prBase);
 		transport.pullRequests.push(cleanPullRequest(childPullRequestRequest(candidate, child, handoff)));
-		const result = await orchestratorFor(transport).integrateChild(candidate, child, handoff);
+		const result = await orchestratorFor(transport).integrateChild(
+			candidate, child, handoff, successfulIntegrationMutation,
+		);
 		assert.equal(result.kind, "integrated");
 		if (result.kind !== "integrated") return;
 		const integratedAt = new Date(result.receipt.integratedAt).valueOf();

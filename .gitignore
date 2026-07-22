@@ -24,3 +24,6 @@ __pycache__/
 
 # Pi autonomous loop runtime state (durable resume lives on disk; not committed)
 .planning/auto-loop/
+
+# Production Shepherd plans are generated from authoritative GitHub issue facts.
+.planning/shepherd/

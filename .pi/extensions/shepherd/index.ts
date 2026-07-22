@@ -12,14 +12,7 @@ import {
 	type ExtensionAPI,
 } from "@earendil-works/pi-coding-agent";
 
-import { ShepherdAgentSessionRuntime, type AgentSessionRuntimeSdk } from "./agent-session-runtime.ts";
-import { AutonomousShepherdController } from "./autonomous-controller.ts";
-import {
-	AgentSessionMvpLifecycle,
-	LocalParentMergeGate,
-	RepositoryManifestIntake,
-} from "./autonomous-local-adapters.ts";
-import { AutonomousFileStateStore } from "./autonomous-state.ts";
+import type { AgentSessionRuntimeSdk } from "./agent-session-runtime.ts";
 import { ShepherdController } from "./controller.ts";
 import {
 	canonicalizeGitWorktree,
@@ -35,6 +28,7 @@ import {
 } from "./sdk-runner.ts";
 import { FileStateStore } from "./state-store.ts";
 import { captureTargetEvidence } from "./target-evidence.ts";
+import { createProductionPiHostController } from "./production-pi-host.ts";
 
 function stateFingerprint(worktreeIdentity: string): string {
 	return createHash("sha256").update(worktreeIdentity).digest("hex").slice(0, 24);
@@ -103,7 +97,7 @@ export default function shepherdExtension(pi: ExtensionAPI): void {
 				},
 			});
 		},
-		createAutonomousController(context: ShepherdCommandContext, worktree) {
+		createAutonomousController(context: ShepherdCommandContext, worktree, issue) {
 			const root = join(
 				getAgentDir(),
 				"shepherd",
@@ -111,14 +105,12 @@ export default function shepherdExtension(pi: ExtensionAPI): void {
 			);
 			const registry = context.modelRegistry as ShepherdModelRegistry;
 			const runtimeSdk = embeddedRuntimeSdk(registry);
-			return new AutonomousShepherdController({
-				store: new AutonomousFileStateStore(root),
-				intake: new RepositoryManifestIntake(context.cwd),
-				lifecycle: new AgentSessionMvpLifecycle(
-					() => new ShepherdAgentSessionRuntime(runtimeSdk, { maxConcurrency: 1 }),
-					context.cwd,
-				),
-				humanGate: new LocalParentMergeGate(),
+			return createProductionPiHostController({
+				issue,
+				repositoryRoot: context.cwd,
+				stateRoot: root,
+				trustedWorktreeRoot: join(root, "worktrees"),
+				runtimeSdk,
 			});
 		},
 	});

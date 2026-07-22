@@ -87,81 +87,218 @@ parent PR #472. It uses Pi 0.80.6 public `createAgentSession` APIs inside the cu
 it does not start another `pi` process, use tmux as transport, or rely on the abandoned standalone
 Go Shepherd.
 
-The target release owns the whole issue-to-merge loop: research, parent planning, dependency-linked
-sub-issues, parent/sub-branches and PRs, isolated parallel implementation workers, GSD
-red-green-refactor, verification, review/correction, sub-PR integration, crash reconciliation, and
-an exact-head human decision before the parent merge. Implementation roles use
-`openai-codex/gpt-5.6-sol`/`high`; planning, research, verification, review, and orchestration roles
-use the same model/`xhigh`.
+The production path establishes a reviewed schema-2 plan, creates or reconciles child issues, runs
+dependency-ready children in isolated worktrees, executes fixed bounded verification, opens stacked
+child PRs, requires a clean independent review of each exact head, applies bounded corrections, and
+integrates accepted child PRs into the non-default parent branch. If the plan is absent, a read-only
+xhigh planning AgentSession reads bounded authoritative GitHub issue facts and proposes semantic
+children without issue numbers or host authority. The host validates that proposal, creates or
+reconciles marker-bound child issues, inserts only the returned GitHub issue numbers, and atomically
+publishes the ignored plan file. It then verifies and reviews the exact parent head, publishes one
+durable human decision request, and waits. It has no operation that merges the parent PR into the
+default branch.
 
-Current branch status: #479 now provides the first bounded autonomous MVP. It schedules disjoint
-children at concurrency two, honors dependencies and write-scope collisions, runs implementation
-(`high`), verification/review (`xhigh`) as embedded Pi AgentSessions, persists schema-v2 status,
-joins stop, resumes unfinished children, and ends at a durable local parent-merge wait. The hardened
-schema-v1 read-only canary remains available separately.
+Before starting:
 
-Operator flow:
+- Launch Pi 0.80.6 from the clean canonical Git worktree on the intended non-default parent branch.
+  Authenticate Pi's configured models and `gh` in the host environment; never put credentials in a
+  plan or prompt. Plan bootstrap requires authoritative `admin` or `maintain` repository permission.
+- Ensure the parent GitHub issue and non-default parent branch exist. On `start`, the host creates or
+  reconciles the one marker-bound draft parent PR to the authoritative default branch before durable
+  controller state is created; ambiguous or conflicting PR evidence fails closed.
+- A valid existing `.planning/shepherd/issue-<N>.json` is reused. When it is absent, `start` generates
+  it through the bounded planning flow above. An existing invalid or conflicting file is never
+  overwritten automatically. `start` refuses an existing run; use `resume` for persisted work.
+
+The command surface is:
 
 ~~~text
-/pm-shepherd start --issue 471
+/pm-shepherd
+/pm-shepherd help
+/pm-shepherd start --issue 471 --backend sdk-inproc --max-concurrency 2 --timeout-seconds 900
 /pm-shepherd status --issue 471
 /pm-shepherd stop --issue 471
-/pm-shepherd resume --issue 471
+/pm-shepherd resume --issue 471 --backend sdk-inproc --max-concurrency 2 --timeout-seconds 900
 /pm-shepherd canary --issue 471 --pr 472 --read-only --backend sdk-inproc --experimental
 ~~~
 
-The MVP intake reads `.planning/shepherd/issue-<N>.json` from the current repository. Example:
+`--max-concurrency` is limited to 1 or 2 and defaults to 2. `--timeout-seconds` is limited to
+30–3600 and defaults to 900. Resume must repeat any non-default concurrency and timeout values from
+the original start. `start` and `resume` still accept `--pr N` as a compatibility input, but the
+production controller does not use it as authority; the plan and authoritative GitHub evidence bind
+the parent PR. Only one extension run may be active in the Pi process. Bare/help and `status` are
+read-only; `status` renders persisted state and never dispatches an AgentSession or consumes a human
+decision. Use `resume` after a human action.
+
+The schema-2 plan has exact fields: unknown or missing fields fail validation. Every top-level child
+is mutating, has a non-empty repository-relative write scope and at least one fixed verification
+command, and declares its own attempt and correction budgets. This three-child example permits
+`state` and `pipeline` to run together; `controller` waits for both:
 
 ~~~json
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
+  "planId": "issue-471-production",
   "parentIssue": 471,
-  "planId": "cli-shepherd-mvp-1",
+  "repository": "owner/repository",
+  "title": "Complete the production Shepherd",
+  "objective": "Deliver and verify the reviewed issue 471 production plan.",
+  "parentBranch": "feat/471-pi-agent-session-shepherd",
+  "parentBaseBranch": "main",
+  "actorAllowlist": ["maintainer"],
+  "decisionExpiresAt": "2027-12-31T23:59:59Z",
   "children": [
     {
-      "id": "help",
+      "id": "state",
       "issue": 501,
-      "title": "Improve help",
-      "task": "Add the accepted contextual help behavior and its tests.",
+      "title": "Persist production state",
+      "task": "Implement the reviewed production state slice and its tests.",
+      "slug": "production-state",
       "dependsOn": [],
       "access": "mutating",
-      "writeScopes": ["cmd/help"]
+      "writeScopes": [
+        ".pi/extensions/shepherd/autonomous-production-state.ts",
+        ".pi/extensions/shepherd/autonomous-production-state.test.ts"
+      ],
+      "requiredSkills": ["architecture-patterns", "javascript-testing-patterns"],
+      "verification": [
+        {
+          "id": "state-tests",
+          "executable": "node",
+          "args": ["--test", ".pi/extensions/shepherd/autonomous-production-state.test.ts"],
+          "cwd": ".",
+          "timeoutMs": 30000,
+          "maxOutputBytes": 1048576
+        }
+      ],
+      "humanGates": [],
+      "maxAttempts": 2,
+      "maxCorrections": 1
     },
     {
-      "id": "tui",
+      "id": "pipeline",
       "issue": 502,
-      "title": "Improve TUI",
-      "task": "Implement the accepted TUI slice and its tests.",
+      "title": "Compose the child pipeline",
+      "task": "Implement the reviewed child lifecycle and exact-head review tests.",
+      "slug": "production-child-pipeline",
       "dependsOn": [],
       "access": "mutating",
-      "writeScopes": ["internal/tui"]
+      "writeScopes": [
+        ".pi/extensions/shepherd/production-child-pipeline.ts",
+        ".pi/extensions/shepherd/production-child-pipeline.test.ts"
+      ],
+      "requiredSkills": ["architecture-patterns", "javascript-testing-patterns"],
+      "verification": [
+        {
+          "id": "pipeline-tests",
+          "executable": "node",
+          "args": ["--test", ".pi/extensions/shepherd/production-child-pipeline.test.ts"],
+          "cwd": ".",
+          "timeoutMs": 30000,
+          "maxOutputBytes": 1048576
+        }
+      ],
+      "humanGates": [],
+      "maxAttempts": 2,
+      "maxCorrections": 1
+    },
+    {
+      "id": "controller",
+      "issue": 503,
+      "title": "Wire the production controller",
+      "task": "Integrate the reviewed production state and child lifecycle through the controller.",
+      "slug": "production-controller",
+      "dependsOn": ["state", "pipeline"],
+      "access": "mutating",
+      "writeScopes": [
+        ".pi/extensions/shepherd/production-controller.ts",
+        ".pi/extensions/shepherd/production-controller.test.ts"
+      ],
+      "requiredSkills": ["architecture-patterns", "javascript-testing-patterns"],
+      "verification": [
+        {
+          "id": "controller-tests",
+          "executable": "node",
+          "args": ["--test", ".pi/extensions/shepherd/production-controller.test.ts"],
+          "cwd": ".",
+          "timeoutMs": 30000,
+          "maxOutputBytes": 1048576
+        }
+      ],
+      "humanGates": [],
+      "maxAttempts": 2,
+      "maxCorrections": 1
     }
   ]
 }
 ~~~
 
-This first cut intentionally records an integration checkpoint and a local human wait; it does not
-yet publish GitHub issues/PRs, integrate child branches, post the human-gate comment, or observe the
-human merge. Those production adapters remain the next bounded slice. There is no parent-to-main
-merge capability in the controller.
+The validator permits at most 64 children, 1–10 attempts, and 1–5 corrections. It rejects dependency
+cycles, traversal, absolute paths, backslashes, control text, sparse or oversized payloads, and
+top-level read-only children. Verification is not an agent-provided shell string: production accepts
+only closed Node test-runner, Go test/vet/build, or allowlisted Make quality-gate recipes; resolves
+canonical host-owned executables; passes fixed argv without a shell; canonicalizes `cwd` inside the
+worktree; sanitizes the environment; caps each command at 120 seconds and 4 MiB; terminates the
+POSIX process group on timeout/cancellation; and hard-bounds settlement.
 
-Mutating workers receive one issue, one branch, one isolated worktree, one declared write scope,
-and bounded workspace/host capabilities. Raw prompts, reasoning, credentials, and unrestricted tool
-output are never persisted. GitHub authentication remains in the host environment/keychain and is
-used only by typed host actions; a token is never passed into a worker prompt.
+At each scheduling boundary, Shepherd selects a deterministic dependency-ready set subject to the
+concurrency cap and canonical write-scope collisions. Disjoint mutating worktrees may coexist; an
+overlapping scope waits, and each completed, failed, or stopped child releases only its own lease.
+Persisted status explains whether work is idle for capacity, dependencies, or a write-scope
+collision. When an integrated sibling advances the parent, stale children refresh/reclaim their
+workspace and must repeat verification and exact-head review before integration.
 
-When a genuine human gate is reached, Shepherd posts one idempotent request on the parent issue
-(requirements/scope/authority) or relevant PR (head-specific review/merge) and waits for an
-allowlisted response:
+Child integration never calls GitHub's head-only pull-request merge mutation. Shepherd builds one
+deterministic two-parent merge from the exact reviewed base/head, rechecks the live remote default,
+and advances only the non-default parent ref with an exact `--force-with-lease` old-SHA guard.
+GitHub is then used only to observe the exact merge/parent ref and publish the durable receipt. A
+restart after the Git ref update but before that receipt reuses the same proven merge; an unrelated
+parent advance is preserved and sends the child through refresh, verification, and review again.
+
+Retryable failures consume `maxAttempts`; failed verification or review findings consume
+`maxCorrections`, and review findings require recorded dispositions plus a clean review of the
+resulting exact head. Exhaustion creates a durable issue-bound child gate instead of treating prose
+or partial output as success. An allowlisted human answers the exact, unedited child-issue comment
+with one of:
 
 ~~~text
-/shepherd decide <request-id> <option>
+/shepherd decide <request-id> authorize-one-retry
+/shepherd decide <request-id> abort-child
 ~~~
 
-The request is bound to its issue/PR, run generation, allowed options, actor, and exact head when
-applicable. Silence, emoji, CI success, review prose, or an agent score is not approval. A parent PR
-may merge only after a fresh `approve-merge` decision for its exact verified head and immediate
-gate revalidation.
+`stop` cancels and joins accepted intake, workspace, AgentSession, verification, Git/GitHub,
+decision, and backoff work before persisting the resumable boundary. `resume` validates the original
+plan digest, repository/branch/scope ownership, policy, generation fences, and unfinished effect
+journal before scheduling anything new. Prepared or observed commit, push, PR, integration, and
+decision effects are reconciled against authoritative Git/GitHub state so a timeout or restart does
+not publish the same effect twice.
+
+After all exact child receipts and parent evidence pass, Shepherd posts one idempotent exact-head
+request on the parent PR and waits for an allowlisted response:
+
+~~~text
+/shepherd decide <request-id> approve-merge
+/shepherd decide <request-id> reject
+~~~
+
+The command must be the entire body of one unedited comment from an allowlisted non-bot actor and is
+bound to its issue/PR, run generation, allowed options, and exact head. Silence, emoji, CI success,
+review prose, duplicate commands, an edited comment, or an agent score is not approval. An
+`approve-merge` decision authorizes only the human-owned merge: Shepherd remains waiting until a
+human merges that exact parent head through the normal GitHub process. A later
+`/pm-shepherd resume --issue N` observes authoritative merge evidence and only then marks the run
+complete. A moved head invalidates the gate and requires fresh verification, review, and approval.
+
+Mutating workers receive one issue, one branch, one isolated worktree, one declared write scope,
+bounded workspace edit/write tools, and an ID-only `host_verify` capability for RED→GREEN reruns.
+The independent verification session receives repository reads plus the same ID-only capability,
+but no workspace mutation tool, and must request every immutable verification ID in exact order.
+The schema-2 input may contain task text and validated verification argv, so neither may contain
+secret material. Persisted production state remains schema version 1
+with kind `production_autonomous`; it records bounded summaries, digests, receipts, counters, and
+gate bindings, never the plan task text, prompts, reasoning, raw model output, credentials, or
+unrestricted tool output. GitHub authentication remains host-only and is never passed into a worker
+prompt.
 
 Embedded sessions share the parent Pi process, event loop, heap, environment, and crash domain.
 Durability comes from bounded persisted intent plus reconciliation with Git/GitHub truth after

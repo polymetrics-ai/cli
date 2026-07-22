@@ -429,6 +429,25 @@ test("read-only policy exposes workspace reads and non-mutating typed capabiliti
 	assert.deepEqual(input.workspace.reads, [".pi/extensions/shepherd/controller.ts"]);
 });
 
+test("host-only mutation policy exposes host_verify without workspace edit or write tools", () => {
+	const workspace = fakeWorkspace();
+	const policy = createToolPolicy({
+		readOnly: false,
+		workspaceMutation: false,
+		workspace,
+		authority: {
+			workspaceId: workspace.id,
+			readPrefixes: ["."],
+			writePrefixes: [".shepherd-verification/lane-a"],
+			capabilityNames: ["host_verify"],
+		},
+		capabilities: [capability("host_verify", { mutates: true })],
+	});
+	assert.deepEqual(policy.names, ["workspace_read", "host_verify"]);
+	assert.equal(policy.tools.some((tool) => tool.name === "workspace_edit"), false);
+	assert.equal(policy.tools.some((tool) => tool.name === "workspace_write"), false);
+});
+
 test("workspace reads redact multiline nested and punctuation-apostrophe sibling secrets", async () => {
 	const multilineSecret = ["synthetic", "workspace-multiline-nested", "issue-475"].join("-");
 	const apostropheSecret = ["synthetic", "workspace-punctuation-apostrophe", "issue-475"].join("-");
