@@ -1089,3 +1089,16 @@ extra-field influence. The fresh captured array is the only accepted downstream 
 No RED assertion may be weakened. Production remains locked until the compiled seven-row RED is
 captured. No push/network/GitHub/live model, Go/connectors, `make`, credentials, services, or
 parent-owned integration gate is permitted.
+
+### RED evidence
+
+- Test-only checkpoint: `974d2e795038d5531c9aca39fbdcfbe73b2caf8a`.
+- Focused command: exit 1; 131 executed, 124 retained passes, exactly 7 intended Cycle 13 failures,
+  0 skipped/cancelled/todo.
+- Exact failing rows: bounded indexed request influence; SDK-seam cancellation terminality;
+  intrinsic public policy arrays; structural capability names; split-qualified sensitive keys;
+  intrinsic immutable prompt arrays; complete authorized Pi tool lifecycle correlation.
+- No fixture/load/timeout failure occurred. Focused strict TypeScript passes with the explicit Pi
+  0.80.6 roots and TypeScript 5.9.3.
+- Production Git blobs remain exactly frozen at Cycle 13 start. The test-only commit changes only
+  `agent-session-runtime.test.ts` and `tool-policy.test.ts`; `git diff --check` passes.

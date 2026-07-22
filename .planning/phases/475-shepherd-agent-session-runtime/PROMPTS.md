@@ -328,6 +328,9 @@
   -> cohesive GREEN -> REFACTOR -> terminal evidence. Production is frozen through RED.
 - Baseline: focused 124/124. Planned RED: 124 retained passes plus exactly seven intended C13
   failures, strict focused TypeScript green, and exact production blobs frozen.
+- RED captured at `974d2e79`: focused 131 executed / 124 retained passes / exactly seven intended
+  failures / 0 skipped, cancelled, or todo; strict focused TypeScript passes and all three
+  production blobs remain exact. The checkpoint contains only the two focused test files.
 - Execution decision: `read_only_spawned`; a bounded no-write seam mapper assists while the issue
   worker owns the sole mutating path.
 - No push, network, GitHub, live model/auth, Go/connectors, `make`, services, credentials, or

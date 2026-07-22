@@ -7,7 +7,7 @@
   "gsdCommand": "scripts/gsd prompt programming-loop init --phase 475-shepherd-agent-session-runtime --dry-run",
   "verificationPolicy": "issue_focused_shepherd_typescript_only",
   "verificationPassed": false,
-  "currentCycle": "correction_cycle_13_plan",
+  "currentCycle": "correction_cycle_13_red",
   "orchestrationDecisions": [
     {
       "cycle": "plan",
@@ -313,6 +313,11 @@
       "cycle": "correction_cycle_13_plan",
       "decision": "read_only_spawned",
       "reason": "One bounded no-write explorer maps all seven exact-head blockers and installed Pi tool-lifecycle seams while this issue worker retains the sole mutating PLAN, RED, GREEN, REFACTOR, verification, commit, and handoff path."
+    },
+    {
+      "cycle": "correction_cycle_13_red",
+      "decision": "local_critical_path",
+      "reason": "Test-only RED 974d2e79 executed 131 focused tests with all 124 retained passes and exactly seven intended Cycle 13 behavior failures; strict focused TypeScript passed and all three production blobs remained frozen."
     }
   ],
   "gates": {

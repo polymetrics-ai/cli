@@ -21,8 +21,9 @@ Prior-family disposition is explicit: Cycle 7 and 9–10 remain retained; R1-F1 
 the direct-boundary extension of Cycle 8/12 immutable snapshot coverage; R2-F2/F3 reopen the Cycle
 11 capability and qualified-key grammar at semantically equivalent forms; R2-F5 extends Cycle
 11/12 ordered lifecycle evidence to one complete tool identity. All 124 Cycle 12 rows remain
-mandatory. Status is PLAN: production stays frozen until exactly seven compiled behavior rows fail
-at their intended boundaries.
+mandatory. Status is RED captured at test-only checkpoint `974d2e79`: all 124 retained rows pass,
+exactly seven compiled behavior rows fail at their intended boundaries, strict focused TypeScript
+passes, and production remains frozen.
 
 R1-F1 cannot literally prove absence of arbitrary hidden strings/symbols under a bounded-work
 contract: ECMAScript offers only whole-key materializers for those fields. Cycle 13 therefore

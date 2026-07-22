@@ -1166,3 +1166,21 @@ pinned offline RPC, serialized complete Shepherd classification, safe isolation,
 20-path issue scope, and a clean head. The known 31 controller/state-store `/bin/ps` `spawn EPERM`
 rows remain an honest environment classification, never a green complete suite. No push, network,
 GitHub, live model/auth, Go/connectors, `make`, runtime service, or credential action is authorized.
+
+### RED evidence
+
+- Status: captured in test-only commit
+  `974d2e795038d5531c9aca39fbdcfbe73b2caf8a`.
+- Focused result: exit 1; 131 executed, all 124 retained tests passed, exactly seven intended Cycle
+  13 behavior rows failed, and 0 skipped/cancelled/todo. Each failure is one named C13-01 through
+  C13-07 row with its intended assertion evidence.
+- Focused strict TypeScript: exit 0 with TypeScript 5.9.3 against explicit Pi 0.80.6 package/type
+  roots for runtime, policy, role prompts, and both focused tests.
+- Production lock remains exact: runtime `62851ca6bb4b4a7bd0b65d4d1415f992b1455603`, policy
+  `fd6a0e8db7f06ade82b852141eb2a497614aea79`, role prompts
+  `cfc2d253c323ad01f34b8c9688b3bad0acd16171`.
+- Failure evidence is behavior-specific: one forbidden whole-key call; three second-agent-dir
+  create calls across abort/close/shutdown; four split-qualified secret markers; ten prompt caller
+  method calls/two accessor reads/mutable result; nine accepted corrupt tool lifecycles; six policy
+  caller behavior calls; and all 30 role/name combinations admitted from the forbidden capability
+  table. `git diff --check` passes.
