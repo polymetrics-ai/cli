@@ -3613,6 +3613,9 @@ function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly
 		["input process substitution", `<(printf ${marker})`],
 		["output process substitution", `>(printf ${marker})`],
 		["brace composite", `{alpha,${marker}}`],
+		["ANSI-C escaped quote", `$'alpha\\' ${marker}'`],
+		["case-pattern command substitution", `$(case x in x) printf ${marker} ;; esac)`],
+		["heredoc command substitution", `$(cat <<'CYCLE12_EOF'\n)\n${marker}\nCYCLE12_EOF\n)`],
 	];
 	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
 		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));
@@ -5452,8 +5455,11 @@ function decodeCycle9AuthoritySnapshot(value: unknown): PortOnlyParentReadyAutho
 		}
 		if (state.rollbackMutation !== null) {
 			const rollbackMutation = rollbackMutationByKey.get(state.rollbackMutation.idempotencyKey);
-			if (rollbackMutation === undefined || rollbackMutation.digest !== state.rollbackMutation.intentDigest) {
+			if (rollbackMutation !== undefined && rollbackMutation.digest !== state.rollbackMutation.intentDigest) {
 				throw new Error("cycle 9 recovery state is missing its rollback mutation");
+			}
+			if (state.phase === "draft_restored" && rollbackMutation === undefined) {
+				throw new Error("cycle 9 restored recovery state is missing its rollback mutation");
 			}
 			if (recoveryAttemptById.get(state.recoveryId) !== state.fence) {
 				throw new Error("cycle 9 recovery state is missing its exact recovery attempt");
@@ -5507,6 +5513,8 @@ function decodeCycle9RestartSnapshot(
 		settlements: snapshot.journal.settlements,
 		readyMutations: snapshot.authority.readyMutations,
 		rollbackMutations: snapshot.authority.rollbackMutations,
+		recoveryAttempts: snapshot.authority.recoveryAttempts,
+		mutationRevision: snapshot.authority.mutationRevision,
 		states: snapshot.authority.states,
 		decision: snapshot.decision,
 	}, planValue);
@@ -6884,7 +6892,14 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	readonly #foreignGate = new Promise<void>((resolve) => { this.#releaseForeign = resolve; });
 	beginCalls = 0;
 	readyEffectCalls = 0;
-	readonly rollbackTargets: Array<{ pullRequest: number; authorizationDigest: string; invocationId: string }> = [];
+	readonly rollbackTargets: Array<{
+		repository: string;
+		pullRequest: number;
+		marker: string;
+		generation: number;
+		authorizationDigest: string;
+		invocationId: string;
+	}> = [];
 
 	constructor(requested: ParentReadyDurableAuthorityBoundary, requestedBacking: PortOnlyReadinessBacking) {
 		this.#requested = requested;
@@ -6892,18 +6907,27 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	}
 
 	configure(
-		planValue: ParentOrchestrationPlan,
+		_planValue: ParentOrchestrationPlan,
 		operation: PreparedParentReadyOperation,
 		phase: Cycle12ForeignBeginPhase,
 	): void {
 		const requestedPullRequest = this.#requestedBacking.pullRequests.find((entry) =>
 			entry.number === operation.authorization.pullRequest);
 		if (requestedPullRequest === undefined) throw new Error("cycle 12 requested parent PR is absent");
+		const foreignMarker = requestedPullRequest.marker.replace(
+			`:${requestedPullRequest.generation}:`,
+			`:${requestedPullRequest.generation + 1}:`,
+		);
+		if (foreignMarker === requestedPullRequest.marker) throw new Error("cycle 12 foreign marker did not advance");
 		const foreignPullRequest = {
 			...structuredClone(requestedPullRequest),
+			repository: "polymetrics-ai/cycle-12-foreign",
 			number: requestedPullRequest.number + 1_000,
 			headSha: "c".repeat(40),
 			workItemId: "parent-foreign-cycle-12",
+			marker: foreignMarker,
+			body: requestedPullRequest.body.replace(requestedPullRequest.marker, foreignMarker),
+			generation: requestedPullRequest.generation + 1,
 		};
 		const foreignBacking = new PortOnlyReadinessBacking({
 			issues: [],
@@ -6919,13 +6943,15 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 		void _discardedDigest;
 		const authorization = githubOrchestratorApi.canonicalizeParentReadyAuthorization({
 			...authorizationPayload,
+			repository: foreignPullRequest.repository,
+			generation: foreignPullRequest.generation,
 			pullRequest: foreignPullRequest.number,
 			headSha: foreignPullRequest.headSha,
 			pullRequestRevision: foreignPullRequest.revision,
 		});
 		const mutation = createDurableMutationIntent(
 			"parent_ready",
-			[authorization.repository, planValue.markers.parentPullRequest, authorization.headSha],
+			[authorization.repository, foreignPullRequest.marker, authorization.headSha],
 			{
 				repository: authorization.repository,
 				pullRequest: authorization.pullRequest,
@@ -6939,7 +6965,7 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 		const request = githubOrchestratorApi.validateMarkParentReadyRequest({
 			repository: authorization.repository,
 			pullRequest: authorization.pullRequest,
-			marker: planValue.markers.parentPullRequest,
+			marker: foreignPullRequest.marker,
 			headSha: authorization.headSha,
 			generation: authorization.generation,
 			decisionRequestId: authorization.decisionRequestId,
@@ -7076,7 +7102,10 @@ class Cycle12DualBeginAuthority implements ParentReadyDurableAuthorityBoundary {
 	): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
 		const foreign = this.#foreignState?.pullRequest === request.pullRequest;
 		this.rollbackTargets.push({
+			repository: request.repository,
 			pullRequest: request.pullRequest,
+			marker: request.marker,
+			generation: request.generation,
 			authorizationDigest: request.authorizationDigest,
 			invocationId: request.recovery.invocationId,
 		});
@@ -7150,8 +7179,8 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 						? authority.foreignRecoverySettled
 						: authority.requestedRecoverySettled;
 					assert.notEqual(await settleWithin(secondSettlement, 100), "hung");
-					assert.equal((await scenario.orchestrator.stop()).kind, "joined");
-					await queued;
+					assert.equal(await settleWithin(queued, 100), "rejected",
+						"same-key reentry remains excluded after the explicit stop request");
 
 					const requestedState = await authority.readParentReadyState(
 						cycle11AuthorityQuery(scenario.candidate, scenario.operation),
@@ -7164,6 +7193,16 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 					assert.equal(new Set(authority.rollbackTargets.map((entry) => entry.pullRequest)).size, 2);
 					assert.notEqual(authority.rollbackTargets[0].authorizationDigest,
 						authority.rollbackTargets[1].authorizationDigest);
+					const foreignQuery = authority.foreignQuery();
+					const foreignTarget = authority.rollbackTargets.find((entry) =>
+						entry.pullRequest === foreignQuery.pullRequest);
+					assert.deepEqual(foreignTarget === undefined ? undefined : {
+						repository: foreignTarget.repository,
+						pullRequest: foreignTarget.pullRequest,
+						marker: foreignTarget.marker,
+						headSha: foreignQuery.headSha,
+						generation: foreignTarget.generation,
+					}, foreignQuery, "observed recovery must preserve its own durable query coordinates");
 					assert.deepEqual(
 						scenario.backing.pullRequests.find((entry) => entry.number === requestedBefore?.number),
 						requestedBefore,
@@ -7177,6 +7216,11 @@ test("cycle 12 valid mismatched begin results retain requested and observed dura
 					assert.equal(foreignAfter.marker, foreignBefore.marker);
 					assert.equal(foreignAfter.revision,
 						phase === "ready_invoking" ? foreignBefore.revision : foreignBefore.revision + 1);
+					assert.deepEqual(await scenario.orchestrator.stop(), {
+						kind: "joined",
+						active: 0,
+						unacknowledged: 0,
+					});
 				} finally {
 					authority.releaseRequestedRecovery();
 					authority.releaseForeignRecovery();

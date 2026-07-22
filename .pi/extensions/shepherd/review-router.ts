@@ -220,18 +220,31 @@ function isCredentialAssignmentBase(name: string): boolean {
 	return CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => canonical === suffix || canonical.endsWith(`_${suffix}`));
 }
 
-type AssignmentValueTerminator = "\"" | "'" | "`" | ")" | "}";
+type AssignmentValueTerminator = "\"" | "'" | "ansi-single" | "`" | ")" | "}";
 
 function assignmentValueEnd(input: string, start: number): number {
 	const terminators: AssignmentValueTerminator[] = [];
+	let minimumCompositeEnd = start;
+	const retainThroughLast = (closing: ")" | "}"): void => {
+		const lastClosing = input.lastIndexOf(closing);
+		minimumCompositeEnd = lastClosing < start ? input.length : Math.max(minimumCompositeEnd, lastClosing + 1);
+	};
 	let cursor = start;
 	while (cursor < input.length) {
 		const value = input[cursor];
 		const terminator = terminators[terminators.length - 1];
 		if (terminator === "'") {
-			if (value === "\r" || value === "\n") break;
 			cursor += 1;
 			if (value === terminator) terminators.pop();
+			continue;
+		}
+		if (terminator === "ansi-single") {
+			if (value === "\\") {
+				cursor += Math.min(2, input.length - cursor);
+			} else {
+				cursor += 1;
+				if (value === "'") terminators.pop();
+			}
 			continue;
 		}
 		if (value === "\\") {
@@ -242,19 +255,36 @@ function assignmentValueEnd(input: string, start: number): number {
 			}
 			continue;
 		}
-		if (value === "\r" || value === "\n") break;
+		if (value === "\r" || value === "\n") {
+			if (terminator === undefined && cursor >= minimumCompositeEnd) break;
+			cursor += 1;
+			continue;
+		}
 		if (terminator !== undefined && value === terminator) {
 			terminators.pop();
 			cursor += 1;
 			continue;
 		}
 		if (input.startsWith("$(", cursor)) {
+			retainThroughLast(")");
 			terminators.push(")");
 			cursor += 2;
 			continue;
 		}
 		if (input.startsWith("${", cursor)) {
+			retainThroughLast("}");
 			terminators.push("}");
+			cursor += 2;
+			continue;
+		}
+		if (input.startsWith("<(", cursor) || input.startsWith(">(", cursor)) {
+			retainThroughLast(")");
+			terminators.push(")");
+			cursor += 2;
+			continue;
+		}
+		if (input.startsWith("$'", cursor)) {
+			terminators.push("ansi-single");
 			cursor += 2;
 			continue;
 		}
@@ -263,17 +293,19 @@ function assignmentValueEnd(input: string, start: number): number {
 			cursor += 1;
 			continue;
 		}
-		if (terminator === ")" && value === "(") {
+		if ((terminator === undefined || terminator === ")") && value === "(") {
+			retainThroughLast(")");
 			terminators.push(")");
 			cursor += 1;
 			continue;
 		}
-		if (terminator === "}" && value === "{") {
+		if ((terminator === undefined || terminator === "}") && value === "{") {
+			retainThroughLast("}");
 			terminators.push("}");
 			cursor += 1;
 			continue;
 		}
-		if (terminator === undefined && /[\s,;]/u.test(value)) break;
+		if (terminator === undefined && cursor >= minimumCompositeEnd && /[\s,;]/u.test(value)) break;
 		cursor += 1;
 	}
 	return cursor;

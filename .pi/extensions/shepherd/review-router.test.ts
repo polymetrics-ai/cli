@@ -664,6 +664,9 @@ function cycle12SensitiveAssignmentTails(marker: string): ReadonlyArray<readonly
 		["input process substitution", `<(printf ${marker})`],
 		["output process substitution", `>(printf ${marker})`],
 		["brace composite", `{prefix,${marker}}`],
+		["ANSI-C escaped quote", `$'prefix\\' ${marker}'`],
+		["case-pattern command substitution", `$(case x in x) printf ${marker} ;; esac)`],
+		["heredoc command substitution", `$(cat <<'CYCLE12_EOF'\n)\n${marker}\nCYCLE12_EOF\n)`],
 	];
 	return ["=", "+="].flatMap((operator) => values.map(([name, value]) =>
 		[`${operator} ${name}`, `ACME_API_KEY${operator}${value}`] as const));

@@ -2813,11 +2813,44 @@ function parentReadyRestartMutationRecords(value: unknown, description: string):
 	});
 }
 
+interface ParentReadyRestartRecoveryAttempt {
+	recoveryId: string;
+	attempt: number;
+}
+
+function parentReadyRestartRecoveryAttempts(value: unknown): ParentReadyRestartRecoveryAttempt[] {
+	const recoveryIds = new Set<string>();
+	return boundedArray(value, "restart recovery attempts", 32, true).map((entry) => {
+		if (!Array.isArray(entry) || entry.length !== 2) throw new Error("recovery attempt tuple is invalid");
+		if (typeof entry[0] !== "string" || !IDENTITY.test(entry[0])) {
+			throw new Error("recovery attempt ID is invalid");
+		}
+		if (recoveryIds.has(entry[0])) throw new Error("recovery attempt ID is duplicated");
+		recoveryIds.add(entry[0]);
+		return { recoveryId: entry[0], attempt: generation(entry[1]) };
+	});
+}
+
+interface ParentReadyRestartAuthorityRecord {
+	key: string;
+	state: ParentReadyAuthorityState;
+}
+
+interface ParentReadyRestartGraphNode {
+	operation: PreparedParentReadyOperation;
+	settlement?: ParentReadySettlementRecord;
+	current?: GitHubPullRequestEvidence;
+	state?: ParentReadyAuthorityState;
+	ready?: ParentReadyRestartMutationRecord;
+	rollback?: ParentReadyRestartMutationRecord;
+	recovery?: ParentReadyRestartRecoveryAttempt;
+}
+
 function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrchestrationPlan): void {
 	const plan = validateParentOrchestrationPlan(planValue);
 	const record = exactRecord(value, [
 		"schemaVersion", "pullRequests", "prepared", "settlements", "readyMutations", "rollbackMutations",
-		"states", "decision",
+		"recoveryAttempts", "mutationRevision", "states", "decision",
 	]);
 	if (record.schemaVersion !== 1) throw new Error("restart history schema is invalid");
 	const pullRequests = boundedArray(record.pullRequests, "restart pull requests", MAX_LIST, true)
@@ -2828,41 +2861,38 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 		.map(validateParentReadySettlementRecord);
 	const readyMutations = parentReadyRestartMutationRecords(record.readyMutations, "ready mutation");
 	const rollbackMutations = parentReadyRestartMutationRecords(record.rollbackMutations, "rollback mutation");
-	const states = boundedArray(record.states, "restart authority states", 16, true).map((entry) => {
+	const recoveryAttempts = parentReadyRestartRecoveryAttempts(record.recoveryAttempts);
+	const mutationRevision = record.mutationRevision;
+	if (!Number.isSafeInteger(mutationRevision) || (mutationRevision as number) < 0
+		|| (mutationRevision as number) > MAX_GITHUB_NUMBER) {
+		throw new Error("restart mutation high-water revision is invalid");
+	}
+	const stateKeys = new Set<string>();
+	const states: ParentReadyRestartAuthorityRecord[] = boundedArray(
+		record.states,
+		"restart authority states",
+		16,
+		true,
+	).map((entry) => {
 		if (!Array.isArray(entry) || entry.length !== 2) throw new Error("authority state tuple is invalid");
-		return validateParentReadyAuthorityState(entry[1]);
+		const state = validateParentReadyAuthorityState(entry[1]);
+		const key = `${state.repository}\u0000${state.pullRequest}\u0000${state.marker}\u0000${state.generation}\u0000${state.headSha}`;
+		if (entry[0] !== key) throw new Error("authority state key does not match its durable coordinates");
+		if (stateKeys.has(key)) throw new Error("authority state key is duplicated");
+		stateKeys.add(key);
+		return { key, state };
 	});
 	const decision = validateHumanDecisionRecord(record.decision);
-	const settlementByKey = new Map(settlements.map((settlement) => [
-		`${settlement.planDigest}\u0000${settlement.authorizationDigest}\u0000${settlement.mutationIdempotencyKey}`,
-		settlement,
-	]));
-	const readyByKey = new Map(readyMutations.map((mutation) => [mutation.key, mutation]));
-	const rollbackByKey = new Map(rollbackMutations.map((mutation) => [mutation.key, mutation]));
-
-	for (const operation of prepared) {
+	const settlementKey = (entry: ParentReadyJournalQuery): string =>
+		`${entry.planDigest}\u0000${entry.authorizationDigest}\u0000${entry.mutationIdempotencyKey}`;
+	const nodes = prepared.map((operation): ParentReadyRestartGraphNode => ({ operation }));
+	const nodeBySettlementKey = new Map<string, ParentReadyRestartGraphNode>();
+	const nodeByInvocation = new Map<string, ParentReadyRestartGraphNode>();
+	const nodeByReadyKey = new Map<string, ParentReadyRestartGraphNode>();
+	for (const node of nodes) {
+		const operation = node.operation;
 		if (!canonicalDataEqual(decision, operation.decision)) {
 			throw new Error("top-level decision diverges from its prepared operation");
-		}
-		const settlementKey = `${operation.planDigest}\u0000${operation.authorization.digest}\u0000${operation.mutation.idempotencyKey}`;
-		const settlement = settlementByKey.get(settlementKey);
-		if (settlement !== undefined) {
-			if (operation.decision.status !== "consumed" || operation.decision.consumedAt === undefined
-				|| new Date(settlement.settledAt).valueOf() < new Date(operation.decision.consumedAt).valueOf()) {
-				throw new Error("settlement is not causally after its consumed decision");
-			}
-		}
-		const currentPullRequests = pullRequests.filter((pullRequest) =>
-			pullRequest.repository === operation.authorization.repository
-			&& pullRequest.number === operation.authorization.pullRequest);
-		if (currentPullRequests.length !== 1) {
-			throw new Error("restart history requires exactly one current parent pull request");
-		}
-		const current = currentPullRequests[0];
-		if (current.marker !== plan.markers.parentPullRequest
-			|| current.generation !== operation.authorization.generation
-			|| current.headSha !== operation.authorization.headSha) {
-			throw new Error("current parent pull request visibility diverges from authority coordinates");
 		}
 		const query: ParentReadyAuthorityQuery = {
 			repository: operation.authorization.repository,
@@ -2872,17 +2902,130 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 			generation: operation.authorization.generation,
 		};
 		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
-		const matchingStates = states.filter((state) => state.invocationId === invocationId);
-		if (matchingStates.length > 1) throw new Error("restart authority invocation is duplicated");
-		const state = matchingStates[0];
-		if (state === undefined) {
-			if (states.some((candidate) => candidate.repository === query.repository
-				&& candidate.pullRequest === query.pullRequest)) {
-				throw new Error("restart authority state diverges from its prepared operation");
+		const key = settlementKey({
+			planDigest: operation.planDigest,
+			authorizationDigest: operation.authorization.digest,
+			mutationIdempotencyKey: operation.mutation.idempotencyKey,
+		});
+		if (nodeBySettlementKey.has(key) || nodeByInvocation.has(invocationId)
+			|| nodeByReadyKey.has(operation.mutation.idempotencyKey)) {
+			throw new Error("prepared restart history is duplicated or ambiguously owned");
+		}
+		nodeBySettlementKey.set(key, node);
+		nodeByInvocation.set(invocationId, node);
+		nodeByReadyKey.set(operation.mutation.idempotencyKey, node);
+	}
+
+	for (const settlement of settlements) {
+		const node = nodeBySettlementKey.get(settlementKey(settlement));
+		if (node === undefined || node.settlement !== undefined) {
+			throw new Error("settlement role is orphaned from exactly one prepared history");
+		}
+		node.settlement = settlement;
+	}
+	for (const authority of states) {
+		const node = nodeByInvocation.get(authority.state.invocationId);
+		if (node === undefined || node.state !== undefined) {
+			throw new Error("authority role is orphaned from exactly one prepared history");
+		}
+		node.state = authority.state;
+	}
+	for (const mutation of readyMutations) {
+		const node = nodeByReadyKey.get(mutation.key);
+		if (node === undefined || node.state === undefined || node.ready !== undefined) {
+			throw new Error("ready receipt is orphaned from exactly one prepared history");
+		}
+		node.ready = mutation;
+	}
+	const nodeByRollbackKey = new Map<string, ParentReadyRestartGraphNode>();
+	const nodeByRecoveryId = new Map<string, ParentReadyRestartGraphNode>();
+	for (const node of nodes) {
+		const state = node.state;
+		if (state?.rollbackMutation !== null && state?.rollbackMutation !== undefined) {
+			if (nodeByRollbackKey.has(state.rollbackMutation.idempotencyKey)) {
+				throw new Error("rollback intent is ambiguously owned by prepared histories");
 			}
-			if (settlement?.outcome === "ready"
-				|| (settlement?.outcome === "blocked"
-					&& (!current.draft || current.revision !== operation.authorization.pullRequestRevision))) {
+			nodeByRollbackKey.set(state.rollbackMutation.idempotencyKey, node);
+		}
+		if (state !== undefined && ["recovery_claimed", "draft_restored"].includes(state.phase)) {
+			if (nodeByRecoveryId.has(state.recoveryId)) {
+				throw new Error("recovery identity is ambiguously owned by prepared histories");
+			}
+			nodeByRecoveryId.set(state.recoveryId, node);
+		}
+	}
+	for (const mutation of rollbackMutations) {
+		const node = nodeByRollbackKey.get(mutation.key);
+		if (node === undefined || node.rollback !== undefined) {
+			throw new Error("rollback receipt is orphaned from exactly one prepared history");
+		}
+		node.rollback = mutation;
+	}
+	for (const recovery of recoveryAttempts) {
+		const node = nodeByRecoveryId.get(recovery.recoveryId);
+		if (node === undefined || node.recovery !== undefined) {
+			throw new Error("recovery attempt is orphaned from exactly one prepared history");
+		}
+		node.recovery = recovery;
+	}
+
+	const pullRequestOwners = new Array<number>(pullRequests.length).fill(0);
+	for (const node of nodes) {
+		const operation = node.operation;
+		const currentPullRequests = pullRequests
+			.map((pullRequest, index) => ({ pullRequest, index }))
+			.filter(({ pullRequest }) =>
+			pullRequest.repository === operation.authorization.repository
+			&& pullRequest.number === operation.authorization.pullRequest);
+		if (currentPullRequests.length !== 1) {
+			throw new Error("restart history requires exactly one current parent pull request");
+		}
+		const { pullRequest: current, index: currentIndex } = currentPullRequests[0];
+		pullRequestOwners[currentIndex] += 1;
+		node.current = current;
+		if (current.marker !== plan.markers.parentPullRequest
+			|| current.generation !== operation.authorization.generation
+			|| current.headSha !== operation.authorization.headSha) {
+			throw new Error("current parent pull request visibility diverges from authority coordinates");
+		}
+	}
+	for (let index = 0; index < pullRequests.length; index += 1) {
+		const current = pullRequests[index];
+		if (current.repository === plan.repository && current.marker === plan.markers.parentPullRequest
+			&& current.generation === plan.generation && pullRequestOwners[index] !== 1) {
+			throw new Error("current pull request role is orphaned from exactly one prepared history");
+		}
+	}
+
+	const sequenceRevisions = new Set<number>();
+	for (const mutation of [...readyMutations, ...rollbackMutations]) {
+		if (sequenceRevisions.has(mutation.revision)) {
+			throw new Error("global causal mutation revisions must be globally unique");
+		}
+		sequenceRevisions.add(mutation.revision);
+	}
+	const greatestStoredRevision = [...sequenceRevisions].reduce((greatest, revision) =>
+		Math.max(greatest, revision), 0);
+	if ((mutationRevision as number) < greatestStoredRevision) {
+		throw new Error("mutation high-water regresses behind the causal mutation sequence");
+	}
+
+	for (const node of nodes) {
+		const operation = node.operation;
+		const current = node.current!;
+		const settlement = node.settlement;
+		const state = node.state;
+		if (settlement !== undefined
+			&& (operation.decision.status !== "consumed" || operation.decision.consumedAt === undefined
+				|| new Date(settlement.settledAt).valueOf() < new Date(operation.decision.consumedAt).valueOf())) {
+			throw new Error("settlement is not causally after its consumed decision");
+		}
+		if (state === undefined) {
+			if (node.ready !== undefined || node.rollback !== undefined || node.recovery !== undefined) {
+				throw new Error("authority-free history retains an orphan mutation or recovery role");
+			}
+			if (settlement?.outcome === "ready" || !current.draft
+				|| current.revision !== operation.authorization.pullRequestRevision) {
 				throw new Error("authority-free settlement has incoherent parent visibility or revision");
 			}
 			continue;
@@ -2891,47 +3034,73 @@ function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrches
 			|| !canonicalDataEqual(state.readyMutation, operation.mutation)) {
 			throw new Error("restart authority does not own its prepared operation");
 		}
-		if (state.phase === "ready_settled") {
-			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
-			if (settlement?.outcome !== "ready" || readyMutation === undefined
-				|| readyMutation.digest !== state.readyMutation.intentDigest
-				|| current.revision !== state.appliedRevision
-				|| !canonicalDataEqual(current, readyMutation.value)) {
-				throw new Error("ready settlement, authority, mutation, and visibility history diverge");
+		const readyMutation = node.ready;
+		const rollbackMutation = node.rollback;
+		const recoveryAttempt = node.recovery;
+		if (readyMutation !== undefined) {
+			if (state.appliedRevision === null || readyMutation.digest !== state.readyMutation.intentDigest
+				|| readyMutation.value.draft || readyMutation.value.repository !== state.repository
+				|| readyMutation.value.number !== state.pullRequest || readyMutation.value.marker !== state.marker
+				|| readyMutation.value.generation !== state.generation || readyMutation.value.headSha !== state.headSha
+				|| readyMutation.value.revision !== state.appliedRevision) {
+				throw new Error("ready receipt and authority visibility diverge");
 			}
-			continue;
+		} else if (state.appliedRevision !== null) {
+			throw new Error("applied authority is missing its exact ready receipt");
 		}
-		if (state.phase === "draft_restored") {
-			const rollbackMutation = state.rollbackMutation === null
-				? undefined
-				: rollbackByKey.get(state.rollbackMutation.idempotencyKey);
-			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
+		if (rollbackMutation !== undefined) {
 			const expectedRestoredRevision = state.appliedRevision === null
 				? state.originalRevision
 				: state.appliedRevision + 1;
-			if (settlement?.outcome !== "blocked" || rollbackMutation === undefined
-				|| rollbackMutation.digest !== state.rollbackMutation?.intentDigest
-				|| current.revision !== expectedRestoredRevision
-				|| !canonicalDataEqual(current, rollbackMutation.value)
-				|| (readyMutation !== undefined && readyMutation.revision >= rollbackMutation.revision)) {
-				throw new Error("blocked restoration authority, mutation, and visibility history diverge");
+			if (state.rollbackMutation === null
+				|| rollbackMutation.digest !== state.rollbackMutation.intentDigest
+				|| !rollbackMutation.value.draft || rollbackMutation.value.repository !== state.repository
+				|| rollbackMutation.value.number !== state.pullRequest || rollbackMutation.value.marker !== state.marker
+				|| rollbackMutation.value.generation !== state.generation || rollbackMutation.value.headSha !== state.headSha
+				|| rollbackMutation.value.revision !== expectedRestoredRevision
+				|| !canonicalDataEqual(current, rollbackMutation.value)) {
+				throw new Error("rollback receipt and restored visibility diverge");
+			}
+			if (readyMutation !== undefined && readyMutation.revision >= rollbackMutation.revision) {
+				throw new Error("causal mutation sequence places rollback before its ready receipt");
+			}
+		}
+		if (state.phase !== "ready_settled" && settlement?.outcome === "ready") {
+			throw new Error("unsettled authority cannot have a ready journal settlement");
+		}
+		if (state.phase === "ready_invoking") {
+			if (!current.draft || current.revision !== state.originalRevision
+				|| readyMutation !== undefined || rollbackMutation !== undefined || recoveryAttempt !== undefined) {
+				throw new Error("invoking authority has incoherent receipt or draft visibility");
 			}
 			continue;
 		}
-		if (settlement?.outcome === "ready") {
-			throw new Error("unsettled authority cannot have a ready journal settlement");
-		}
-		if (state.phase === "ready_invoking"
-			&& (!current.draft || current.revision !== state.originalRevision)) {
-			throw new Error("invoking authority has incoherent draft visibility");
-		}
-		if (state.phase === "ready_effect_applied") {
-			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
-			if (readyMutation === undefined || readyMutation.digest !== state.readyMutation.intentDigest
-				|| current.revision !== state.appliedRevision
-				|| !canonicalDataEqual(current, readyMutation.value)) {
+		if (state.phase === "ready_effect_applied" || state.phase === "ready_settled") {
+			if (readyMutation === undefined || rollbackMutation !== undefined || recoveryAttempt !== undefined
+				|| !canonicalDataEqual(current, readyMutation.value)
+				|| (state.phase === "ready_settled" && settlement?.outcome !== "ready")) {
 				throw new Error("applied unsettled authority has incoherent mutation visibility");
 			}
+			continue;
+		}
+		if (recoveryAttempt === undefined || recoveryAttempt.attempt !== state.fence) {
+			throw new Error("recovery authority is missing its exact recovery fence attempt");
+		}
+		if (rollbackMutation === undefined) {
+			if (state.phase === "draft_restored") {
+				throw new Error("restored recovery authority is missing its rollback receipt");
+			}
+			if (state.appliedRevision === null) {
+				if (readyMutation !== undefined || !current.draft || current.revision !== state.originalRevision) {
+					throw new Error("recovery claim-before-effect has incoherent draft visibility or receipt");
+				}
+			} else if (readyMutation === undefined || !canonicalDataEqual(current, readyMutation.value)) {
+				throw new Error("applied recovery claim-before-effect has incoherent visibility or receipt");
+			}
+			continue;
+		}
+		if (state.phase === "draft_restored" && settlement?.outcome !== "blocked") {
+			throw new Error("restored recovery authority is missing its blocked settlement");
 		}
 	}
 }
@@ -4113,7 +4282,10 @@ export class GitHubParentOrchestrator {
 			},
 			authorization.pullRequestRevision,
 		);
-		await this.quarantineUncertainParentReady(plan, { authorization, mutation });
+		await this.quarantineUncertainParentReady(
+			{ authorization, mutation },
+			this.parentReadyAuthorityQuery(plan, authorization),
+		);
 	}
 
 	private async prepareParentReadinessUnlocked(
@@ -4351,13 +4523,27 @@ export class GitHubParentOrchestrator {
 		return { authorization: state.authorization, mutation: state.readyMutation };
 	}
 
+	private parentReadyAuthorityQueryFromState(state: ParentReadyAuthorityState): ParentReadyAuthorityQuery {
+		return validateParentReadyAuthorityQuery({
+			repository: state.repository,
+			pullRequest: state.pullRequest,
+			marker: state.marker,
+			headSha: state.headSha,
+			generation: state.generation,
+		});
+	}
+
 	private parentReadyRestartBlock(
 		plan: ParentOrchestrationPlan,
 		pullRequest: GitHubPullRequestEvidence,
 		state: ParentReadyAuthorityState | null,
 	): Extract<ParentReadinessDecision, { kind: "blocked" }> | null {
 		if (state !== null && ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(state.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(state));
+			this.startTrackedParentReadyRecovery(
+				plan,
+				this.parentReadyOperationFromState(state),
+				this.parentReadyAuthorityQueryFromState(state),
+			);
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
 		if (state?.phase === "ready_settled"
@@ -4375,12 +4561,13 @@ export class GitHubParentOrchestrator {
 	private parentReadyRecovery(
 		plan: ParentOrchestrationPlan,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
+		queryValue?: ParentReadyAuthorityQuery,
 	): Promise<void> {
-		const query = this.parentReadyAuthorityQuery(plan, operation.authorization);
+		const query = queryValue ?? this.parentReadyAuthorityQuery(plan, operation.authorization);
 		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
 		const existing = this.#parentReadyRecoveries.get(invocationId);
 		if (existing !== undefined) return existing;
-		const settlement = this.quarantineUncertainParentReady(plan, operation).finally(() => {
+		const settlement = this.quarantineUncertainParentReady(operation, query).finally(() => {
 			if (this.#parentReadyRecoveries.get(invocationId) === settlement) {
 				this.#parentReadyRecoveries.delete(invocationId);
 			}
@@ -4392,24 +4579,24 @@ export class GitHubParentOrchestrator {
 	private startTrackedParentReadyRecovery(
 		plan: ParentOrchestrationPlan,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
+		query?: ParentReadyAuthorityQuery,
 	): void {
-		this.trackBackgroundSettlement("parent-ready recovery", this.parentReadyRecovery(plan, operation));
+		this.trackBackgroundSettlement("parent-ready recovery", this.parentReadyRecovery(plan, operation, query));
 	}
 
 	private parentReadyRollbackRequest(
-		plan: ParentOrchestrationPlan,
+		query: ParentReadyAuthorityQuery,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
 		attempt: number,
 	): RollbackParentReadyRequest {
 		const intent: Omit<RollbackParentReadyRequest, "recovery" | "mutation"> = {
-			repository: plan.repository,
+			repository: query.repository,
 			pullRequest: operation.authorization.pullRequest,
-			marker: plan.markers.parentPullRequest,
+			marker: query.marker,
 			headSha: operation.authorization.headSha,
-			generation: plan.generation,
+			generation: query.generation,
 			authorizationDigest: operation.authorization.digest,
 		};
-		const query = this.parentReadyAuthorityQuery(plan, operation.authorization);
 		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
 		const recovery: ParentReadyRecoveryFence = {
 			schemaVersion: 1,
@@ -4461,11 +4648,10 @@ export class GitHubParentOrchestrator {
 	}
 
 	private async quarantineUncertainParentReady(
-		plan: ParentOrchestrationPlan,
 		operation: Pick<PreparedParentReadyOperation, "authorization" | "mutation">,
+		query: ParentReadyAuthorityQuery,
 	): Promise<void> {
 		const abandonedSettlements = new Set<Promise<void>>();
-		const query = this.parentReadyAuthorityQuery(plan, operation.authorization);
 		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
 		const recoveryId = parentReadyRecoveryId(query, invocationId, operation.authorization.digest, operation.mutation);
 		let minimumReleaseFence = 0;
@@ -4509,7 +4695,7 @@ export class GitHubParentOrchestrator {
 				return;
 			}
 			attempt = Math.max(attempt, authorityState.fence + 1, minimumReleaseFence);
-			const request = this.parentReadyRollbackRequest(plan, operation, attempt);
+			const request = this.parentReadyRollbackRequest(query, operation, attempt);
 			const outcome = await this.boundedParentReadyRecoveryCall((context) =>
 				this.#parentReadyAuthority.quarantineAndRollbackParentReady(request, context));
 			if (outcome.kind === "timeout") abandonedSettlements.add(outcome.settlement);
@@ -4655,7 +4841,11 @@ export class GitHubParentOrchestrator {
 			&& canonicalDataEqual(state.readyMutation, operation.mutation);
 		const initialState = await this.readParentReadyAuthorityState(plan, operation.authorization);
 		if (initialState !== null && ["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(initialState.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(initialState));
+			this.startTrackedParentReadyRecovery(
+				plan,
+				this.parentReadyOperationFromState(initialState),
+				this.parentReadyAuthorityQueryFromState(initialState),
+			);
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
 		if (initialState?.phase === "ready_settled" && sameOperation(initialState)) {
@@ -4708,10 +4898,23 @@ export class GitHubParentOrchestrator {
 			throw error;
 		}
 		if (!sameOperation(begun)) {
+			this.startTrackedParentReadyRecovery(plan, operation);
+			if (["ready_invoking", "ready_effect_applied", "recovery_claimed"].includes(begun.phase)) {
+				this.startTrackedParentReadyRecovery(
+					plan,
+					this.parentReadyOperationFromState(begun),
+					this.parentReadyAuthorityQueryFromState(begun),
+				);
+				return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
+			}
 			return { kind: "blocked", blockers: ["parent_ready_authority_moved"] };
 		}
 		if (["ready_effect_applied", "recovery_claimed"].includes(begun.phase)) {
-			this.startTrackedParentReadyRecovery(plan, this.parentReadyOperationFromState(begun));
+			this.startTrackedParentReadyRecovery(
+				plan,
+				this.parentReadyOperationFromState(begun),
+				this.parentReadyAuthorityQueryFromState(begun),
+			);
 			return { kind: "blocked", blockers: ["parent_ready_quarantined"] };
 		}
 		if (begun.phase === "ready_settled") {
