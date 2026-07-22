@@ -460,6 +460,15 @@ export const PARENT_READY_AUTHORITY_COORDINATES = [
 
 export type ParentReadyAuthorityCoordinate = typeof PARENT_READY_AUTHORITY_COORDINATES[number];
 
+export interface ParentReadyConflictTombstone extends ParentReadyAuthorityQuery {
+	schemaVersion: 1;
+	kind: "tombstoned";
+	invocationId: string;
+	authorizationDigest: string;
+	mutationIdempotencyKey: string;
+	mutationIntentDigest: string;
+}
+
 export type ParentReadyCompareEffectResult =
 	| {
 		schemaVersion: 1;
@@ -470,6 +479,7 @@ export type ParentReadyCompareEffectResult =
 		schemaVersion: 1;
 		kind: "conflict";
 		coordinate: ParentReadyAuthorityCoordinate;
+		terminal: ParentReadyConflictTombstone;
 	};
 
 export interface ParentReadyJournalQuery {
@@ -2527,6 +2537,50 @@ export function createParentReadyInvokingAuthorityState(
 	});
 }
 
+export function createParentReadyConflictTombstone(
+	requestValue: MarkParentReadyRequest,
+): ParentReadyConflictTombstone {
+	const request = validateMarkParentReadyRequest(requestValue);
+	const query = validateParentReadyAuthorityQuery({
+		repository: request.repository,
+		pullRequest: request.pullRequest,
+		marker: request.marker,
+		headSha: request.headSha,
+		generation: request.generation,
+	});
+	return {
+		schemaVersion: 1,
+		kind: "tombstoned",
+		...query,
+		invocationId: parentReadyInvocationId(query, request.authorization.digest, request.mutation),
+		authorizationDigest: request.authorization.digest,
+		mutationIdempotencyKey: request.mutation.idempotencyKey,
+		mutationIntentDigest: request.mutation.intentDigest,
+	};
+}
+
+export function validateParentReadyConflictTombstone(
+	value: unknown,
+	requestValue: MarkParentReadyRequest,
+): ParentReadyConflictTombstone {
+	const request = validateMarkParentReadyRequest(requestValue);
+	let candidate: Record<string, unknown>;
+	try {
+		candidate = exactRecord(value, [
+			"schemaVersion", "kind", "repository", "pullRequest", "marker", "headSha", "generation",
+			"invocationId", "authorizationDigest", "mutationIdempotencyKey", "mutationIntentDigest",
+		]);
+	} catch {
+		throw new Error("parent-ready conflict lacks exact atomic invocation tombstone proof");
+	}
+	const expected = createParentReadyConflictTombstone(request);
+	if (candidate.schemaVersion !== 1 || candidate.kind !== "tombstoned"
+		|| !canonicalDataEqual(candidate, expected)) {
+		throw new Error("parent-ready conflict lacks exact atomic invocation tombstone proof");
+	}
+	return expected;
+}
+
 export function validateSettleParentReadyAuthorityRequest(value: unknown): SettleParentReadyAuthorityRequest {
 	const candidate = exactRecord(value, [
 		"repository", "pullRequest", "marker", "headSha", "generation", "invocationId", "authorizationDigest",
@@ -2606,7 +2660,7 @@ export function validateParentReadyCompareEffectResult(
 	requestValue: MarkParentReadyRequest,
 ): ParentReadyCompareEffectResult {
 	const request = validateMarkParentReadyRequest(requestValue);
-	const candidate = exactRecord(value, ["schemaVersion", "kind"], ["mutation", "coordinate"]);
+	const candidate = exactRecord(value, ["schemaVersion", "kind"], ["mutation", "coordinate", "terminal"]);
 	if (candidate.schemaVersion !== 1) throw new Error("invalid parent-ready compare/effect result schema");
 	if (candidate.kind === "conflict") {
 		if (candidate.mutation !== undefined
@@ -2614,13 +2668,15 @@ export function validateParentReadyCompareEffectResult(
 			|| !PARENT_READY_AUTHORITY_COORDINATES.includes(candidate.coordinate as ParentReadyAuthorityCoordinate)) {
 			throw new Error("invalid parent-ready non-applied conflict result");
 		}
+		const terminal = validateParentReadyConflictTombstone(candidate.terminal, request);
 		return {
 			schemaVersion: 1,
 			kind: "conflict",
 			coordinate: candidate.coordinate as ParentReadyAuthorityCoordinate,
+			terminal,
 		};
 	}
-	if (candidate.kind !== "applied" || candidate.coordinate !== undefined) {
+	if (candidate.kind !== "applied" || candidate.coordinate !== undefined || candidate.terminal !== undefined) {
 		throw new Error("invalid parent-ready compare/effect result");
 	}
 	const mutation = validateDurableMutationResult(
@@ -2728,6 +2784,166 @@ export function validatePreparedParentReadyOperation(
 		freshness,
 		mutation,
 	};
+}
+
+interface ParentReadyRestartMutationRecord {
+	key: string;
+	digest: string;
+	value: GitHubPullRequestEvidence;
+	revision: number;
+}
+
+function parentReadyRestartMutationRecords(value: unknown, description: string): ParentReadyRestartMutationRecord[] {
+	const keys = new Set<string>();
+	return boundedArray(value, `${description} collection`, 32, true).map((entry) => {
+		if (!Array.isArray(entry) || entry.length !== 2) throw new Error(`${description} tuple is invalid`);
+		const key = inlineText(entry[0], `${description} key`, 512);
+		if (keys.has(key)) throw new Error(`${description} key is duplicated`);
+		keys.add(key);
+		const record = exactRecord(entry[1], ["digest", "value", "revision"]);
+		if (typeof record.digest !== "string" || !IDENTITY.test(record.digest)) {
+			throw new Error(`${description} digest is invalid`);
+		}
+		return {
+			key,
+			digest: record.digest,
+			value: validateGitHubPullRequestEvidence(record.value),
+			revision: generation(record.revision),
+		};
+	});
+}
+
+function assertParentReadyRestartHistory(value: unknown, planValue: ParentOrchestrationPlan): void {
+	const plan = validateParentOrchestrationPlan(planValue);
+	const record = exactRecord(value, [
+		"schemaVersion", "pullRequests", "prepared", "settlements", "readyMutations", "rollbackMutations",
+		"states", "decision",
+	]);
+	if (record.schemaVersion !== 1) throw new Error("restart history schema is invalid");
+	const pullRequests = boundedArray(record.pullRequests, "restart pull requests", MAX_LIST, true)
+		.map(validateGitHubPullRequestEvidence);
+	const prepared = boundedArray(record.prepared, "restart prepared operations", 16, true)
+		.map((entry) => validatePreparedParentReadyOperation(entry, plan));
+	const settlements = boundedArray(record.settlements, "restart settlements", 16, true)
+		.map(validateParentReadySettlementRecord);
+	const readyMutations = parentReadyRestartMutationRecords(record.readyMutations, "ready mutation");
+	const rollbackMutations = parentReadyRestartMutationRecords(record.rollbackMutations, "rollback mutation");
+	const states = boundedArray(record.states, "restart authority states", 16, true).map((entry) => {
+		if (!Array.isArray(entry) || entry.length !== 2) throw new Error("authority state tuple is invalid");
+		return validateParentReadyAuthorityState(entry[1]);
+	});
+	const decision = validateHumanDecisionRecord(record.decision);
+	const settlementByKey = new Map(settlements.map((settlement) => [
+		`${settlement.planDigest}\u0000${settlement.authorizationDigest}\u0000${settlement.mutationIdempotencyKey}`,
+		settlement,
+	]));
+	const readyByKey = new Map(readyMutations.map((mutation) => [mutation.key, mutation]));
+	const rollbackByKey = new Map(rollbackMutations.map((mutation) => [mutation.key, mutation]));
+
+	for (const operation of prepared) {
+		if (!canonicalDataEqual(decision, operation.decision)) {
+			throw new Error("top-level decision diverges from its prepared operation");
+		}
+		const settlementKey = `${operation.planDigest}\u0000${operation.authorization.digest}\u0000${operation.mutation.idempotencyKey}`;
+		const settlement = settlementByKey.get(settlementKey);
+		if (settlement !== undefined) {
+			if (operation.decision.status !== "consumed" || operation.decision.consumedAt === undefined
+				|| new Date(settlement.settledAt).valueOf() < new Date(operation.decision.consumedAt).valueOf()) {
+				throw new Error("settlement is not causally after its consumed decision");
+			}
+		}
+		const currentPullRequests = pullRequests.filter((pullRequest) =>
+			pullRequest.repository === operation.authorization.repository
+			&& pullRequest.number === operation.authorization.pullRequest);
+		if (currentPullRequests.length !== 1) {
+			throw new Error("restart history requires exactly one current parent pull request");
+		}
+		const current = currentPullRequests[0];
+		if (current.marker !== plan.markers.parentPullRequest
+			|| current.generation !== operation.authorization.generation
+			|| current.headSha !== operation.authorization.headSha) {
+			throw new Error("current parent pull request visibility diverges from authority coordinates");
+		}
+		const query: ParentReadyAuthorityQuery = {
+			repository: operation.authorization.repository,
+			pullRequest: operation.authorization.pullRequest,
+			marker: plan.markers.parentPullRequest,
+			headSha: operation.authorization.headSha,
+			generation: operation.authorization.generation,
+		};
+		const invocationId = parentReadyInvocationId(query, operation.authorization.digest, operation.mutation);
+		const matchingStates = states.filter((state) => state.invocationId === invocationId);
+		if (matchingStates.length > 1) throw new Error("restart authority invocation is duplicated");
+		const state = matchingStates[0];
+		if (state === undefined) {
+			if (states.some((candidate) => candidate.repository === query.repository
+				&& candidate.pullRequest === query.pullRequest)) {
+				throw new Error("restart authority state diverges from its prepared operation");
+			}
+			if (settlement?.outcome === "ready"
+				|| (settlement?.outcome === "blocked"
+					&& (!current.draft || current.revision !== operation.authorization.pullRequestRevision))) {
+				throw new Error("authority-free settlement has incoherent parent visibility or revision");
+			}
+			continue;
+		}
+		if (state.authorization.digest !== operation.authorization.digest
+			|| !canonicalDataEqual(state.readyMutation, operation.mutation)) {
+			throw new Error("restart authority does not own its prepared operation");
+		}
+		if (state.phase === "ready_settled") {
+			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
+			if (settlement?.outcome !== "ready" || readyMutation === undefined
+				|| readyMutation.digest !== state.readyMutation.intentDigest
+				|| current.revision !== state.appliedRevision
+				|| !canonicalDataEqual(current, readyMutation.value)) {
+				throw new Error("ready settlement, authority, mutation, and visibility history diverge");
+			}
+			continue;
+		}
+		if (state.phase === "draft_restored") {
+			const rollbackMutation = state.rollbackMutation === null
+				? undefined
+				: rollbackByKey.get(state.rollbackMutation.idempotencyKey);
+			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
+			const expectedRestoredRevision = state.appliedRevision === null
+				? state.originalRevision
+				: state.appliedRevision + 1;
+			if (settlement?.outcome !== "blocked" || rollbackMutation === undefined
+				|| rollbackMutation.digest !== state.rollbackMutation?.intentDigest
+				|| current.revision !== expectedRestoredRevision
+				|| !canonicalDataEqual(current, rollbackMutation.value)
+				|| (readyMutation !== undefined && readyMutation.revision >= rollbackMutation.revision)) {
+				throw new Error("blocked restoration authority, mutation, and visibility history diverge");
+			}
+			continue;
+		}
+		if (settlement?.outcome === "ready") {
+			throw new Error("unsettled authority cannot have a ready journal settlement");
+		}
+		if (state.phase === "ready_invoking"
+			&& (!current.draft || current.revision !== state.originalRevision)) {
+			throw new Error("invoking authority has incoherent draft visibility");
+		}
+		if (state.phase === "ready_effect_applied") {
+			const readyMutation = readyByKey.get(state.readyMutation.idempotencyKey);
+			if (readyMutation === undefined || readyMutation.digest !== state.readyMutation.intentDigest
+				|| current.revision !== state.appliedRevision
+				|| !canonicalDataEqual(current, readyMutation.value)) {
+				throw new Error("applied unsettled authority has incoherent mutation visibility");
+			}
+		}
+	}
+}
+
+/** Validate causal consistency across decoded restart-store roles before any role is reconstructed. */
+export function validateParentReadyRestartHistory(value: unknown, planValue: ParentOrchestrationPlan): void {
+	try {
+		assertParentReadyRestartHistory(value, planValue);
+	} catch (error) {
+		const detail = error instanceof Error ? error.message : "unknown inconsistency";
+		throw new Error(`invalid parent-ready restart history: ${detail}`);
+	}
 }
 
 export function validateRunStateCandidateSemantics(value: unknown): void {
@@ -2889,6 +3105,7 @@ export class GitHubParentOrchestrator {
 		invoke: (context: ExternalCallContext) => Promise<T>,
 		uncertain = false,
 		onUncertainInterruption?: () => Promise<void>,
+		recoverAfterInvocationSettlement = false,
 	): Promise<T> {
 		const caller = this.#lifecycleScope.getStore();
 		if (intrinsicSignalAborted(this.#stopController.signal)
@@ -2922,9 +3139,12 @@ export class GitHubParentOrchestrator {
 		let recovery: Promise<void> | undefined;
 		const startRecovery = (): Promise<void> => {
 			if (recovery === undefined) {
-				recovery = onUncertainInterruption === undefined
-					? Promise.resolve()
-					: Promise.resolve().then(onUncertainInterruption).catch(() => new Promise<void>(() => {}));
+				const recover = onUncertainInterruption === undefined
+					? (): Promise<void> => Promise.resolve()
+					: onUncertainInterruption;
+				recovery = (recoverAfterInvocationSettlement ? invocationSettlement : Promise.resolve())
+					.then(recover)
+					.catch(() => new Promise<void>(() => {}));
 			}
 			return recovery;
 		};
@@ -4477,6 +4697,9 @@ export class GitHubParentOrchestrator {
 				async (context) => validateParentReadyAuthorityState(
 					await this.#parentReadyAuthority.beginParentReady(request, context),
 				),
+				true,
+				() => this.parentReadyRecovery(plan, operation),
+				true,
 			);
 		} catch (error) {
 			if (error instanceof ExternalPortError) {

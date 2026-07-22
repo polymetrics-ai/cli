@@ -3132,8 +3132,13 @@ test("cycle 6 makes parent-ready one conditional authorization effect with rollb
 		const { candidate, transport, receipts } = await cycle5ReadinessScenario();
 		const authority: ParentReadyDurableAuthorityBoundary = {
 			...fakeAuthorityStateMethods(transport),
-			async compareConsumeAndMarkParentReady() {
-				return { schemaVersion: 1, kind: "conflict", coordinate: "policy" };
+			async compareConsumeAndMarkParentReady(request) {
+				return {
+					schemaVersion: 1,
+					kind: "conflict",
+					coordinate: "policy",
+					terminal: githubOrchestratorApi.createParentReadyConflictTombstone(request),
+				};
 			},
 			async quarantineAndRollbackParentReady() {
 				throw new Error("rollback must not authorize a pre-effect conflict");
@@ -3749,7 +3754,12 @@ async function captureCycle7ReadyRequest(options: {
 		...fakeAuthorityStateMethods(transport),
 		async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest, _context: ExternalCallContext) {
 			captured = request;
-			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			return {
+				schemaVersion: 1,
+				kind: "conflict",
+				coordinate: "authorization_state",
+				terminal: githubOrchestratorApi.createParentReadyConflictTombstone(request),
+			};
 		},
 		async quarantineAndRollbackParentReady() {
 			throw new Error("cycle 7 capture boundary should not recover a pre-effect failure");
@@ -4334,7 +4344,12 @@ async function captureCycle8PublicPreparedCommit(
 		...fakeAuthorityStateMethods(transport),
 		async compareConsumeAndMarkParentReady(request): Promise<ParentReadyCompareEffectResult> {
 			captured = structuredClone(request);
-			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			return {
+				schemaVersion: 1,
+				kind: "conflict",
+				coordinate: "authorization_state",
+				terminal: githubOrchestratorApi.createParentReadyConflictTombstone(request),
+			};
 		},
 		async quarantineAndRollbackParentReady(): Promise<DurableMutationResult<GitHubPullRequestEvidence>> {
 			throw new Error("freshness capture must not invoke rollback");
@@ -4779,6 +4794,25 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 		return `${query.repository}\u0000${query.pullRequest}\u0000${query.marker}\u0000${query.generation}\u0000${query.headSha}`;
 	}
 
+	private terminalConflict(
+		request: MarkParentReadyRequest,
+		coordinate: ParentReadyAuthorityCoordinate,
+	): ParentReadyCompareEffectResult {
+		const invoking = githubOrchestratorApi.createParentReadyInvokingAuthorityState(request);
+		const key = this.stateKey(invoking);
+		const current = this.#authorityBacking.states.get(key);
+		if (current?.invocationId === invoking.invocationId
+			&& current.phase === "ready_invoking" && current.fence === 0) {
+			this.#authorityBacking.states.delete(key);
+		}
+		return {
+			schemaVersion: 1,
+			kind: "conflict",
+			coordinate,
+			terminal: githubOrchestratorApi.createParentReadyConflictTombstone(request),
+		};
+	}
+
 	async readParentReadyState(
 		queryValue: ParentReadyAuthorityQuery,
 		_context: ExternalCallContext,
@@ -4841,10 +4875,7 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 			|| prepared.authorization.digest !== request.authorization.digest
 			|| prepared.mutation.idempotencyKey !== request.mutation.idempotencyKey
 			|| prepared.mutation.intentDigest !== request.mutation.intentDigest) {
-			this.#authorityBacking.states.delete(this.stateKey(
-				githubOrchestratorApi.createParentReadyInvokingAuthorityState(request),
-			));
-			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			return this.terminalConflict(request, "authorization_state");
 		}
 		const authorityQuery: ParentReadyAuthorityQuery = {
 			repository: request.repository,
@@ -4855,17 +4886,17 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 		};
 		const stateKey = this.stateKey(authorityQuery);
 		let state = this.#authorityBacking.states.get(stateKey);
-		if (state === undefined) return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+		if (state === undefined) return this.terminalConflict(request, "authorization_state");
 		if (state.authorization.digest !== request.authorization.digest
 			|| state.readyMutation.idempotencyKey !== request.mutation.idempotencyKey
 			|| state.readyMutation.intentDigest !== request.mutation.intentDigest
 			|| state.phase !== "ready_invoking" || state.fence !== 0) {
-			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			return this.terminalConflict(request, "authorization_state");
 		}
 		const existing = this.#authorityBacking.readyMutations.get(request.mutation.idempotencyKey);
 		if (existing !== undefined) {
 			if (existing.digest !== request.mutation.intentDigest) {
-				return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+				return this.terminalConflict(request, "authorization_state");
 			}
 			this.#authorityBacking.states.set(stateKey, githubOrchestratorApi.validateParentReadyAuthorityState({
 				...state,
@@ -4888,10 +4919,10 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 		const index = this.#backing.pullRequests.findIndex((entry) => entry.number === request.pullRequest);
 		const current = this.#backing.pullRequests[index];
 		if (index < 0 || current === undefined || current.headSha !== request.headSha) {
-			return { schemaVersion: 1, kind: "conflict", coordinate: "head" };
+			return this.terminalConflict(request, "head");
 		}
 		if (!current.draft || current.revision !== request.authorization.pullRequestRevision) {
-			return { schemaVersion: 1, kind: "conflict", coordinate: "pull_request_revision" };
+			return this.terminalConflict(request, "pull_request_revision");
 		}
 		const updated = { ...current, draft: false, revision: current.revision + 1 };
 		this.#backing.pullRequests.splice(index, 1, updated);
@@ -4903,7 +4934,7 @@ class PortOnlyParentReadyAuthority implements ParentReadyDurableAuthorityBoundar
 		});
 		state = this.#authorityBacking.states.get(stateKey);
 		if (state?.phase !== "ready_invoking" || state.fence !== 0) {
-			return { schemaVersion: 1, kind: "conflict", coordinate: "authorization_state" };
+			return this.terminalConflict(request, "authorization_state");
 		}
 		this.#authorityBacking.states.set(stateKey, githubOrchestratorApi.validateParentReadyAuthorityState({
 			...state,
@@ -5428,12 +5459,23 @@ function decodeCycle9RestartSnapshot(
 		[],
 		"cycle 9 restart snapshot",
 	);
-	return {
+	const snapshot = {
 		readiness: decodeCycle9ReadinessSnapshot(record.readiness),
 		journal: decodeCycle9JournalSnapshot(record.journal, planValue),
 		authority: decodeCycle9AuthoritySnapshot(record.authority),
 		decision: validateHumanDecisionRecord(record.decision),
 	};
+	githubOrchestratorApi.validateParentReadyRestartHistory({
+		schemaVersion: 1,
+		pullRequests: snapshot.readiness.pullRequests,
+		prepared: snapshot.journal.prepared,
+		settlements: snapshot.journal.settlements,
+		readyMutations: snapshot.authority.readyMutations,
+		rollbackMutations: snapshot.authority.rollbackMutations,
+		states: snapshot.authority.states,
+		decision: snapshot.decision,
+	}, planValue);
+	return snapshot;
 }
 
 function portOnlyAttestations(backing: PortOnlyReadinessBacking): AgentSessionAttestationSource {
@@ -5930,6 +5972,7 @@ test("cycle 8 reconstructs every readiness role from serialized durable state", 
 			schemaVersion: 1,
 			kind: "conflict",
 			coordinate: "authorization_state",
+			terminal: githubOrchestratorApi.createParentReadyConflictTombstone(staleOriginalRequest),
 		});
 	});
 
@@ -7406,7 +7449,12 @@ test("cycle 7 atomic authority boundary rejects every moved coordinate without r
 				async compareConsumeAndMarkParentReady(request: MarkParentReadyRequest) {
 					readsAtCompare = backing.pullRequestReadCalls;
 					if (quarantined || current?.digest !== request.authorization.digest) {
-						return { schemaVersion: 1, kind: "conflict", coordinate };
+						return {
+							schemaVersion: 1,
+							kind: "conflict",
+							coordinate,
+							terminal: githubOrchestratorApi.createParentReadyConflictTombstone(request),
+						};
 					}
 					throw new Error("atomic movement case unexpectedly retained current authority");
 				},

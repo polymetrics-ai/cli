@@ -220,17 +220,62 @@ function isCredentialAssignmentBase(name: string): boolean {
 	return CREDENTIAL_ASSIGNMENT_SUFFIXES.some((suffix) => canonical === suffix || canonical.endsWith(`_${suffix}`));
 }
 
+type AssignmentValueTerminator = "\"" | "'" | "`" | ")" | "}";
+
 function assignmentValueEnd(input: string, start: number): number {
-	const quote = input[start];
-	if (quote === "\"" || quote === "'") {
-		let cursor = start + 1;
-		while (cursor < input.length && input[cursor] !== quote && input[cursor] !== "\r" && input[cursor] !== "\n") {
-			cursor += 1;
-		}
-		return cursor < input.length && input[cursor] === quote ? cursor + 1 : cursor;
-	}
+	const terminators: AssignmentValueTerminator[] = [];
 	let cursor = start;
-	while (cursor < input.length && !/[\s,;]/u.test(input[cursor])) cursor += 1;
+	while (cursor < input.length) {
+		const value = input[cursor];
+		const terminator = terminators[terminators.length - 1];
+		if (terminator === "'") {
+			if (value === "\r" || value === "\n") break;
+			cursor += 1;
+			if (value === terminator) terminators.pop();
+			continue;
+		}
+		if (value === "\\") {
+			if (input[cursor + 1] === "\r" && input[cursor + 2] === "\n") {
+				cursor += 3;
+			} else {
+				cursor += Math.min(2, input.length - cursor);
+			}
+			continue;
+		}
+		if (value === "\r" || value === "\n") break;
+		if (terminator !== undefined && value === terminator) {
+			terminators.pop();
+			cursor += 1;
+			continue;
+		}
+		if (input.startsWith("$(", cursor)) {
+			terminators.push(")");
+			cursor += 2;
+			continue;
+		}
+		if (input.startsWith("${", cursor)) {
+			terminators.push("}");
+			cursor += 2;
+			continue;
+		}
+		if ((terminator !== "\"" && (value === "\"" || value === "'")) || value === "`") {
+			terminators.push(value);
+			cursor += 1;
+			continue;
+		}
+		if (terminator === ")" && value === "(") {
+			terminators.push(")");
+			cursor += 1;
+			continue;
+		}
+		if (terminator === "}" && value === "{") {
+			terminators.push("}");
+			cursor += 1;
+			continue;
+		}
+		if (terminator === undefined && /[\s,;]/u.test(value)) break;
+		cursor += 1;
+	}
 	return cursor;
 }
 
