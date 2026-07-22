@@ -199,7 +199,7 @@ export function registerShepherdExtension(
 					{ signal: abortController.signal },
 				);
 			} catch (error) {
-				if (shuttingDown && abortController.signal.aborted) return;
+				if (abortController.signal.aborted) return;
 				throw error;
 			}
 			if (shuttingDown || abortController.signal.aborted) return;
@@ -287,6 +287,13 @@ export function registerShepherdExtension(
 				return;
 			}
 			if (command.action === "stop") {
+				const setup = launchSetup?.issue === issue ? launchSetup : undefined;
+				if (setup) {
+					setup.abortController.abort(new Error("Shepherd initialization stop requested"));
+					await setup.promise;
+					context.ui.notify(`Shepherd initialization stopped for issue #${issue}.`, "info");
+					return;
+				}
 				const running = activeRun?.issue === issue ? activeRun : undefined;
 				if (running?.mode === "canary") {
 					context.ui.notify(renderState(await (running.controller as ShepherdControllerPort).stop(issue)), "info");

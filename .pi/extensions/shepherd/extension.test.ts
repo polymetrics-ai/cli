@@ -443,6 +443,37 @@ test("shutdown aborts and joins pre-controller worktree resolution", async () =>
 	assert.equal(h.controllers.length, 0);
 });
 
+test("explicit stop aborts and joins matching unresolved controller initialization", { timeout: 2_000 }, async () => {
+	const h = harness();
+	let resolutionStarted;
+	const started = new Promise((resolve) => { resolutionStarted = resolve; });
+	let observedAbort = false;
+	let creates = 0;
+	h.register(
+		() => {
+			creates += 1;
+			throw new Error("controller must not be created after initialization stop");
+		},
+		async (_ctx, options) => {
+			resolutionStarted();
+			await new Promise((resolve, reject) => {
+				options.signal.addEventListener("abort", () => {
+					observedAbort = true;
+					reject(options.signal.reason);
+				}, { once: true });
+			});
+			throw new Error("unreachable");
+		},
+	);
+	const starting = h.command.handler("start --issue 479", h.context);
+	await started;
+	await h.command.handler("stop --issue 479", h.context);
+	await starting;
+	assert.equal(observedAbort, true);
+	assert.equal(creates, 0);
+	assert.match(h.notifications.at(-1).message, /initialization.*stopped/i);
+});
+
 test("shutdown closes a controller created late by an abort-ignoring resolver", async () => {
 	const h = harness();
 	let releaseResolution;
