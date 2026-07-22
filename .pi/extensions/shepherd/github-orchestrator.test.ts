@@ -1699,8 +1699,8 @@ test("cycle 3 persists an opaque canonical plan and revalidates every cloned pub
 		assert.throws(
 			() => selectReadyChildren(tampered as ParentOrchestrationPlan, { evidence: "pending", orchestrator: "pending" }, 1),
 			/canonical|digest|plan|provenance|tamper/i,
-		);
-	}
+	);
+}
 
 	const transport = new FakeTransport();
 	await assert.rejects(
@@ -3550,6 +3550,88 @@ test("cycle 7 stable parent-ready identity excludes volatile freshness metadata"
 	}
 });
 
+test("cycle 7 timeout retry reuses one intent after harmless authority refresh", async () => {
+	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
+	let policyObservedAt = "2026-07-21T12:06:00.000Z";
+	let ancestryObservedAt = "2026-07-21T12:06:00.000Z";
+	let ancestryRevision = 1;
+	transport.ancestryProof = async (query) => ({
+		schemaVersion: 1,
+		authority: "transport",
+		...query,
+		result: true,
+		revision: ancestryRevision,
+		observedAt: ancestryObservedAt,
+	});
+	const baselinePolicySource = defaultPolicySource(transport);
+	const policySource: RequiredCheckPolicySource = {
+		async findRequiredCheckPolicies(query, context) {
+			const result = await baselinePolicySource.findRequiredCheckPolicies(query, context) as {
+				items: Array<Record<string, unknown>>;
+				complete: boolean;
+			};
+			return {
+				...result,
+				items: result.items.map((item) => ({ ...item, observedAt: policyObservedAt })),
+			};
+		},
+	};
+	const requests: MarkParentReadyRequest[] = [];
+	let first = true;
+	const authority: ParentReadyDurableAuthorityBoundary = {
+		async compareConsumeAndMarkParentReady(request, context): Promise<any> {
+			requests.push(structuredClone(request));
+			if (first) {
+				first = false;
+				await new Promise<void>((resolve) => setTimeout(resolve, 120));
+				throw new Error("synthetic pre-effect settlement without mutation");
+			}
+			return {
+				schemaVersion: 1,
+				kind: "applied",
+				mutation: await transport.markParentReady(request, context),
+			};
+		},
+		async quarantineAndRollbackParentReady(request): Promise<any> {
+			const parent = transport.pullRequests.find((entry) => entry.number === request.pullRequest);
+			if (parent === undefined || !parent.draft) throw new Error("unexpected parent state");
+			return {
+				schemaVersion: 1,
+				idempotencyKey: request.mutation.idempotencyKey,
+				intentDigest: request.mutation.intentDigest,
+				revision: 1,
+				applied: true,
+				value: structuredClone(parent),
+			};
+		},
+	};
+	const orchestrator = orchestratorFor(
+		transport,
+		new FakeDecisionBroker(),
+		policySource,
+		30,
+		authority,
+	);
+	await assert.rejects(
+		orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy),
+		/timeout|external|ready/i,
+	);
+	await new Promise<void>((resolve) => setTimeout(resolve, 180));
+	policyObservedAt = "2026-07-21T12:08:00.000Z";
+	ancestryObservedAt = "2026-07-21T12:08:00.000Z";
+	ancestryRevision = 2;
+	const parent = transport.pullRequests.find((entry) => entry.number === 900);
+	assert.ok(parent);
+	parent.reviews.push({ ...parent.reviews[0], completedAt: "2026-07-21T12:03:00.000Z" });
+	const retried = await orchestrator.reconcileParentReadiness(candidate, receipts, decisionPolicy);
+	assert.equal(retried.kind, "ready");
+	assert.equal(requests.length, 2);
+	assert.equal(requests[1].mutation.idempotencyKey, requests[0].mutation.idempotencyKey);
+	assert.equal(requests[1].mutation.intentDigest, requests[0].mutation.intentDigest);
+	assert.equal(requests[1].authorization.digest, requests[0].authorization.digest);
+	assert.notEqual(requests[1].freshness.digest, requests[0].freshness.digest);
+});
+
 test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", async () => {
 	const { candidate, transport, receipts } = await cycle5ReadinessScenario();
 	const orchestrator = orchestratorFor(transport, new FakeDecisionBroker());
@@ -3564,6 +3646,17 @@ test("cycle 7 exposes a journalable prepare and commit boundary for issue 479", 
 	assert.equal(settled.kind, "ready");
 	assert.equal(transport.markReadyCalls, 1);
 	assert.equal((await orchestrator.stop()).kind, "joined");
+});
+
+test("cycle 7 production contract requires atomic authority and exports canonical validators", () => {
+	const transport: GitHubOrchestrationTransport = new FakeTransport();
+	assert.throws(
+		() => Reflect.construct(GitHubParentOrchestrator, [transport, undefined, undefined, undefined, {}]),
+		/parent.ready.*authority|authority.*required/i,
+	);
+	const api = githubOrchestratorApi as unknown as Record<string, unknown>;
+	assert.equal(typeof api.validateParentReadyAuthorization, "function");
+	assert.equal(typeof api.validateParentReadyCompareEffectResult, "function");
 });
 
 test("cycle 7 issue 479-shaped wiring uses only public production ports", async () => {
