@@ -98,7 +98,11 @@ After the first corrected exact-head re-review, make the PR #493 post-Wave1 migr
 
 After correction-round-2 re-review, close remaining canonical state inconsistencies: update every #408 authoritative representation and replacement-branch identity; align local-review status/disposition enums; and classify correction-cap `human_gate` as a blocked human decision in both drivers through one tested helper. Keep the second current-main-identical Gong product defect deferred pending separate captain authority. Add RED assertions before guidance/driver edits.
 
-### 6. VERIFY
+### 6. Correction round 4 — producer terminal shape and exact disposition enum
+
+Use the fourth and maximum permitted correction round to close end-to-end machine enforcement: canonical producers must emit terminal `human_gate` plus sibling kind for correction-cap exceed, canonical missing-kind records fail closed while detected legacy records remain readable, and the six finding dispositions become an exact schema enum compared across applicable guidance/templates. Add RED fixtures/assertions before implementation. Any further accepted correction would exceed the budget and require a human blocker.
+
+### 7. VERIFY
 
 Run the focused contract first, then:
 
@@ -118,7 +122,7 @@ make verify
 
 Also verify YAML/JSON parsing, PR #493 path disjointness, no dependency delta, no CLI/help/docs/website product applicability, and no historical phase rewrite.
 
-### 7. REVIEW / INTEGRATE
+### 8. REVIEW / INTEGRATE
 
 Commit and push coherent additive checkpoints. At the final exact head, run a fresh-context read-only local Codex review bound to parent base and task head, disposition every finding, rerun affected gates/review after any change, then run independent Shepherd trajectory validation. Update draft PR #495 title/body and inspect checks/reviews. Never request Claude/Copilot, mark ready, merge PR #495, or edit/merge PR #438.
 

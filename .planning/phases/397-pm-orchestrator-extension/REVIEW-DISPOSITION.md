@@ -2,7 +2,7 @@
 
 Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
 Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
-Status: correction round 3 in progress; exact-head re-review required
+Status: correction round 4 in progress (maximum permitted round); exact-head re-review required
 
 | ID | Severity | Disposition | Reason / action |
 |---|---|---|---|
@@ -19,6 +19,8 @@ Status: correction round 3 in progress; exact-head re-review required
 | N3 | medium | accepted | Align canonical local-review status/disposition enums across schema, workflow, prompt, parent contract, and both PM templates. Add `duplicate` and assert enum parity in the focused contract. |
 | N4 | medium | accepted_with_modification | Keep terminal `human_gate`, add a structured `human_gate_kind`, and route both drivers through one classifier so `correction_cap_exceeded` stops as a blocked human decision while normal/legacy readiness remains human-ready. Exercise the cap fixture through that classifier. |
 | N5 | medium | accepted | Replace stale `mainSync.taskBranch` with the convention-compliant PR #495 branch, preserve the old ref only as a historical field, update post-integration text, and assert machine branch consistency. |
+| N4-R | medium | accepted | Require canonical producers to emit sibling `human_gate_kind: correction_cap_exceeded` with terminal `human_gate`; distinguish canonical missing-kind records from legacy records in the classifier; add a negative fixture. Keep other structured detail in orchestration state. |
+| N3-R | medium | accepted | Add the six-value canonical `finding_disposition_values` enum to the schema and every applicable PM workflow/prompt/contract/template, then parse and compare exact sets in the focused test instead of checking token presence. |
 
 ## Residual human/program gates
 

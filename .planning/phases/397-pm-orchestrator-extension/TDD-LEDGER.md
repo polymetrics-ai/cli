@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension TDD Ledger
 
-Status: correction round 3 GREEN; full VERIFY/re-review pending
+Status: correction round 4 RED planned (maximum permitted round); GREEN/VERIFY/re-review pending
 Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE because the 69-command GSD registry has no `programming-loop`.
 
 | Risk | RED contract | GREEN target | Status |
@@ -19,6 +19,8 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 | review enum drift | focused script compares canonical status/disposition values across schema/workflow/prompt/templates | one machine-valid status/disposition vocabulary | green |
 | correction cap misclassified ready | cap-lineage fixture is passed through the shared terminal classifier | exceeded cap remains `human_gate` but drivers stop as blocked human decision | green |
 | stale replacement branch | focused script parses #397 run state and rejects old `fm/...` as current `taskBranch` | current branch is `chore/...`; old ref is explicitly historical | green |
+| missing canonical human-gate kind | classifier test passes a canonical `human_gate` record without the sibling kind | canonical missing/unknown kind fails closed; only detected legacy missing-kind remains human-ready | red planned |
+| disposition enum only implied | focused script parses exact `finding_disposition_values` sets across schema/workflow/prompt/contracts/templates | all applicable PM records use the same exact six-value enum | red planned |
 
 ## Evidence log
 
@@ -38,3 +40,4 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 - REVIEW at `3af7910528d234d1a1d886a6778d7817495e6321`: fresh-context exact-head re-review found N1–N5. N1 is a second current-main-identical Gong product defect deferred under the no-product boundary pending separate captain authorization. N2–N5 are accepted for bounded correction round 3: scoped #408 record, review enums, terminal classification, and current replacement branch identity.
 - Correction round 3 RED: the extended focused contract exited 1. It reported the scoped #408 subissue's missing PR #493 gate, stale current `mainSync.taskBranch` and missing historical field, enum drift across schema/workflow/prompt/templates, absent shared terminal classifier/driver integration, and missing `correction_cap_exceeded` fixture kind.
 - Correction round 3 GREEN: focused contract, Pi routing, both Shepherd guards, shell syntax, JSON/YAML parsing, diff, and PR #493 path-disjointness pass. The shared classifier returns `blocked_human_decision` for cap exceed and `human_ready` only for parent readiness/legacy readiness; both drivers consume it.
+- REVIEW at `1d4acf4f633e4f8940ba637f2099723369b2ed30`: fresh-context exact-head re-review confirmed earlier dispositions and returned N4-R/N3-R. Both are accepted for the fourth and maximum permitted correction round: producer/classifier versioned human-gate semantics and exact machine disposition-enum parity.
