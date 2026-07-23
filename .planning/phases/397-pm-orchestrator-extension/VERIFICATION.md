@@ -1,7 +1,7 @@
 # Issue #397 PM Orchestrator Extension Verification
 
-Status: local verification green at implementation head `d72a93018933541d390884f96b285856e269a1ab`; final evidence head review pending
-`verificationPassed`: true
+Status: correction round 2 implemented at `906257c2045ebc269bbd51e1f2cea34c27779e52`; final evidence-head verification/re-review pending
+`verificationPassed`: false (latest implementation head has not yet completed the full exact-head gate)
 
 ## Identity and scope
 
@@ -22,14 +22,17 @@ Status: local verification green at implementation head `d72a93018933541d390884f
 - [x] Shepherd is independent and required after review/before integration.
 - [x] Claude/Copilot are not required, requested, or fallback coverage in current/future PM route.
 - [x] Legacy Claude/Copilot docs/agent remain discoverable only with migration/deprecation pointers.
-- [x] Historical phase evidence remains unchanged; only this current extension and narrow Wave 1 evidence are updated.
+- [x] Historical completed evidence remains unchanged; only current extension, authoritative #397 queue/run state/summary, and narrow Wave 1 evidence are updated.
+- [x] Authoritative #397 state blocks #408 until Wave 1 and PR #493's canonical PM routing migration both integrate.
+- [x] Current PM dependency paths use PM-specific handoff/disposition templates with `local_codex`, Shepherd, correction-budget, and human-gate fields.
+- [x] Autonomous state uses stable exact-base/candidate-lineage counters across replacement heads; the old counter is read-only migration input.
 
 ## Focused validation
 
 - [x] RED captured before canonical guidance changes.
 - [x] `scripts/tests/pm-orchestrator-contract.sh`.
 - [x] `scripts/tests/pi-model-routing.sh`.
-- [x] YAML/JSON parse checks.
+- [x] YAML/JSON parse checks, including replacement-head/correction-cap fixture.
 - [x] PR #493 changed-path disjointness.
 - [x] no dependency delta.
 
@@ -48,8 +51,10 @@ Status: local verification green at implementation head `d72a93018933541d390884f
 ## Review and delivery
 
 - [x] Initial fresh-context local Codex review completed at `3c88fc78062ba0a3437f79bc88c395286c228c65`; five findings dispositioned in `REVIEW-DISPOSITION.md`.
-- [ ] Fresh exact-head local Codex re-review clean after correction round 1.
-- [ ] Every finding dispositioned; changed heads re-reviewed.
+- [x] Fresh exact-head local Codex re-review at `0665ad7aad1ec083f4bb0572a88ac1a38f417a35`; F2/F3/F5 confirmed and F6–F8 accepted for correction round 2.
+- [x] Captain-authorized Gong follow-up created at https://github.com/polymetrics-ai/cli/issues/497 without product changes here.
+- [ ] Fresh exact-head local Codex re-review clean after correction round 2.
+- [ ] Every finding dispositioned; final changed head re-reviewed.
 - [ ] Exact-head Shepherd/trajectory validation passes.
 - [ ] Branch pushed normally without force.
 - [ ] PR #495 title/body updated with extension scope and exact head.

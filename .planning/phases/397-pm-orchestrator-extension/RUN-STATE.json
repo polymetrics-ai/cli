@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "review_findings_correction_round_2_planned",
+  "status": "review_findings_correction_round_2_implemented_verification_pending",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -45,11 +45,17 @@
       "cycle": "review_round_2",
       "decision": "read_only_spawned",
       "reason": "Fresh-context project pm-reviewer inspected verified exact head 0665ad7aad1ec083f4bb0572a88ac1a38f417a35, confirmed the scoped Gong follow-up, and returned three accepted orchestration findings: authoritative PR #493 gate drift, transitive bot-era templates, and autonomous correction-counter drift."
+    },
+    {
+      "cycle": "correct_round_2",
+      "decision": "local_critical_path",
+      "reason": "Accepted F6-F8 corrections are implemented at 906257c2045ebc269bbd51e1f2cea34c27779e52: durable #397/PR #493 gate, PM-specific transitive templates, and stable autonomous correction-lineage state. Full exact-head verification and re-review remain pending."
     }
   ],
-  "verificationPassed": true,
+  "verificationPassed": false,
   "verifiedImplementationHead": "d72a93018933541d390884f96b285856e269a1ab",
   "verifiedEvidenceHead": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+  "correctionRound2ImplementationHead": "906257c2045ebc269bbd51e1f2cea34c27779e52",
   "correctionBudget": {
     "maxCorrectionRounds": 4,
     "roundsByRange": {
@@ -64,5 +70,5 @@
     "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
   },
   "shepherd": "pending_after_clean_rereview",
-  "updatedAt": "2026-07-23T14:43:24Z"
+  "updatedAt": "2026-07-23T14:50:44Z"
 }
