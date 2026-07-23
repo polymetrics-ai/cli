@@ -30,6 +30,7 @@ interface EmbeddedSession {
 	model: SessionModel;
 	thinkingLevel: string;
 	sessionFile: string | undefined;
+	messages: unknown;
 	getActiveToolNames(): string[];
 	getLastAssistantText(): string | undefined;
 	subscribe(listener: (event: AgentSessionEvent) => void): () => void;
@@ -387,11 +388,18 @@ export class SdkAgentRunner implements AgentRunner {
 				}),
 			);
 			this.#assertRunActive(request);
-			if (created.session.model?.provider !== request.provider || created.session.model?.id !== request.model) {
+			const terminal = captureFinalAssistantMessage(created.session.messages, this.#options.maxAssistantBytes);
+			if (terminal.stopReason !== "stop") {
+				throw new AgentRunnerError(`AgentSession terminal stop reason ${terminal.stopReason} is not accepted`);
+			}
+			if (terminal.provider !== request.provider || terminal.model !== request.model) {
 				throw new AgentRunnerError("AgentSession terminal model routing mismatch");
 			}
 			const assistantText = created.session.getLastAssistantText();
-			result = parseEvidence(assistantText, this.#options.maxAssistantBytes, this.#options.maxSummaryCharacters);
+			if (assistantText !== terminal.text) {
+				throw new AgentRunnerError("AgentSession final message and assistant evidence disagree");
+			}
+			result = parseEvidence(terminal.text, this.#options.maxAssistantBytes, this.#options.maxSummaryCharacters);
 		} catch (error) {
 			primaryFailed = true;
 			throw error;
@@ -685,7 +693,7 @@ function validateCreatedSession(
 	if (!session || typeof session.prompt !== "function" || typeof session.abort !== "function" ||
 		typeof session.waitForIdle !== "function" || typeof session.subscribe !== "function" ||
 		typeof session.dispose !== "function" || typeof session.getActiveToolNames !== "function" ||
-		typeof session.getLastAssistantText !== "function") {
+		typeof session.getLastAssistantText !== "function" || !Array.isArray(session.messages)) {
 		throw new AgentRunnerError("Pi returned an incomplete AgentSession surface");
 	}
 	if (session.model?.provider !== request.provider || session.model?.id !== request.model) {
@@ -737,6 +745,43 @@ function captureProgressEvent(
 	} catch {
 		// Unknown or malformed progress telemetry is not result authority.
 	}
+}
+
+function captureFinalAssistantMessage(
+	value: unknown,
+	maximumBytes: number,
+): { provider: string; model: string; stopReason: string; text: string } {
+	if (!Array.isArray(value) || value.length > 4_096) {
+		throw new AgentRunnerError("AgentSession public message state is invalid or exceeds its bound");
+	}
+	for (let index = value.length - 1; index >= 0; index -= 1) {
+		const descriptor = Object.getOwnPropertyDescriptor(value, String(index));
+		if (!descriptor || descriptor.get || descriptor.set || !("value" in descriptor)) {
+			throw new AgentRunnerError("AgentSession public message state is sparse or accessor-backed");
+		}
+		const message = descriptor.value;
+		if (!isRecord(message) || message.role !== "assistant") continue;
+		if (typeof message.provider !== "string" || typeof message.model !== "string" ||
+			typeof message.stopReason !== "string" || !Array.isArray(message.content)) {
+			throw new AgentRunnerError("AgentSession final assistant message is invalid");
+		}
+		let text = "";
+		for (const part of message.content) {
+			if (!isRecord(part) || typeof part.type !== "string") {
+				throw new AgentRunnerError("AgentSession final assistant content is invalid");
+			}
+			if (part.type !== "text") continue;
+			if (typeof part.text !== "string") {
+				throw new AgentRunnerError("AgentSession final assistant text is invalid");
+			}
+			text += part.text;
+			if (byteLength(text) > maximumBytes) {
+				throw new AgentRunnerError("AgentSession assistant evidence exceeded the output limit");
+			}
+		}
+		return { provider: message.provider, model: message.model, stopReason: message.stopReason, text: text.trim() };
+	}
+	throw new AgentRunnerError("AgentSession completed without a final assistant message");
 }
 
 function parseEvidence(

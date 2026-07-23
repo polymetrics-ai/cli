@@ -109,7 +109,11 @@ function makeSdk(overrides = {}) {
 	let sessionOptions;
 	let listener;
 	let lastAssistantText = evidenceText();
-	const emit = (event) => listener?.(event);
+	const messages = [terminalMessage()];
+	const emit = (event) => {
+		if (event?.type === "message_end" && event.message?.role === "assistant") messages.push(event.message);
+		listener?.(event);
+	};
 	const emitTerminal = (stopReason = "stop", text = evidenceText()) => {
 		lastAssistantText = text;
 		const message = terminalMessage(stopReason, text);
@@ -119,6 +123,7 @@ function makeSdk(overrides = {}) {
 	};
 	const session = {
 		model: { provider: "openai-codex", id: "gpt-5.6-sol" },
+		messages,
 		thinkingLevel: "xhigh",
 		sessionFile: undefined,
 		getActiveToolNames: () => [],
@@ -237,7 +242,7 @@ test("fails closed on SDK, model, extension, tool, and persistence drift", async
 	await assert.rejects(new SdkAgentRunner(persistent.sdk, persistent.modelRegistry).run(request()), /unexpectedly enabled persistence/);
 });
 
-test("ignores drifted raw terminal events when the typed result and session route are valid", async () => {
+test("rejects typed evidence from a drifted final producing route", async () => {
 	const harness = makeSdk();
 	harness.session.prompt = async () => {
 		const message = {
@@ -248,9 +253,9 @@ test("ignores drifted raw terminal events when the typed result and session rout
 		harness.emit({ type: "message_end", message });
 		harness.emit({ type: "agent_end", messages: [message], willRetry: false });
 	};
-	assert.equal(
-		(await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request())).summary,
-		"read-only inspection passed",
+	await assert.rejects(
+		new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request()),
+		/terminal.*model|routing mismatch|provider/i,
 	);
 });
 
@@ -290,11 +295,15 @@ test("fails closed on malformed and oversized assistant evidence", async () => {
 
 
 for (const stopReason of ["stop", "error", "aborted", "length", "toolUse"]) {
-	test(`${stopReason} raw terminal telemetry cannot override valid typed evidence`, async () => {
+	test(`${stopReason} final public Pi message status is enforced`, async () => {
 		const harness = makeSdk();
 		harness.session.prompt = async () => { harness.emitTerminal(stopReason, evidenceText({ summary: `${stopReason} terminal` })); };
-		const outcome = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
-		assert.equal(outcome.summary, `${stopReason} terminal`);
+		const outcome = new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+		if (stopReason === "stop") {
+			assert.equal((await outcome).summary, "stop terminal");
+		} else {
+			await assert.rejects(outcome, /terminal|stop reason|error|aborted|length|toolUse/i);
+		}
 		assert.equal(harness.calls.dispose, 1);
 	});
 }

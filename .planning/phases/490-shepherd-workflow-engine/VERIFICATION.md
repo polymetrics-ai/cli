@@ -26,8 +26,9 @@ Verdict: **BOUNDED MERGE-READINESS PASS IN PROGRESS — PR #491 is published and
 - [x] branch pushed and PR #491 targets `feat/471-pi-agent-session-shepherd`
 - [x] PR #491 is open, non-draft, mergeable/CLEAN, and references #490 and #471
 - [x] workflow-engine boundary distinguishes Shepherd production from explicitly invoked developer tooling
-- [ ] bounded two-lane Codex 5.6-sol xhigh review covers the complete current base...HEAD diff
-- [ ] every new finding is dispositioned and the exact final pushed SHA is reviewed
+- [x] bounded two-lane Codex 5.6-sol xhigh review covers the complete current base...HEAD diff
+- [x] two accepted P1 terminal-snapshot findings are corrected with focused RED/GREEN and conditional local gates
+- [ ] dispositions are verified on the exact final pushed SHA without another broad review
 - [ ] final PR checks are green after the bounded artifact/correction commit
 
 ## Excluded child-worktree gates
@@ -46,7 +47,20 @@ Per the #471 Shepherd boundary, do not run Go, connector, certification, runtime
 - Offline RPC: isolated Shepherd, isolated workflow-engine, and co-loaded Pi 0.80.10 command surfaces passed. Pi 0.80.10 does not expose the old `--list-extensions` flag; machine-readable RPC command enumeration supplied the equivalent load evidence.
 - Source/scope: no `pi-workflow-engine` production import or deep import; local `.pi/.workflow-runs/**` and `.pi/npm/**` remain excluded.
 
-## Exact-head review and dispositions
+## Bounded merge-readiness review
+
+Workflow run `29165c4c-c62c-405d-a6b0-78010dcc5a82` reviewed exact `daaa22637e54de87ce5e0c0f5876a19ddf7fb274...7c5f927f0d970f1b38536f94b61e857bf7e51a68` using two parallel read-only `openai-codex/gpt-5.6-sol` xhigh lanes and one xhigh synthesis. The host-captured material digest was `297306d7f3f0afe9da886de3dfdb62ad9d3b43e619df24df39f2675b74fff38b`; agents had `tools: []`, no skills, and no GitHub mutation authority. The CI/delivery lane was clean. The runtime/security lane found two P1 blockers:
+
+| Finding | Disposition |
+|---|---|
+| `P1-terminal-status-erased`: text-only completion accepted error/aborted/length/toolUse final messages | **Accepted with modification.** Preserve event-agnostic completion, but require the final public Pi session-message snapshot to have `stopReason: "stop"` before parsing its typed handoff. |
+| `P1-terminal-route-unbound`: configured session route substituted for actual producing route | **Accepted with modification.** Validate provider/model on the final public Pi session-message snapshot and reconcile its text with `getLastAssistantText()`. |
+
+The one allowed correction pass is complete. The selected RED command produced the six intended status/route failures with the unchanged `stop` control passing. GREEN passed 9/9 selected tests and 163/163 complete affected runtime tests. Production now reads the final assistant message from Pi's documented public `session.messages` state after `prompt()` settles, requires `stopReason: "stop"` and exact producing provider/model, reconciles its text with `getLastAssistantText()`, and only then validates the typed handoff. Unknown/reordered events remain inert bounded telemetry.
+
+Post-correction gates passed: strict TypeScript 5.9.3 source typecheck against Pi 0.80.10; exact Pi-family verifier; workflow-engine provenance verifier; offline isolated/co-loaded RPC verifier; `git diff --check`; and exactly one final sequential complete Shepherd suite with 1718 pass, 0 fail, and 1 intentional skip (1719 total) in 159.6 seconds. Independent Codex review is not human approval and authorizes no merge.
+
+## Prior exact-head review and dispositions
 
 The one substantive comprehensive review used `openai-codex/gpt-5.6-sol` at xhigh against exact parent `daaa22637e54de87ce5e0c0f5876a19ddf7fb274` and exact child `23345f26cfa78d7648c31fd11cbe595ecf1b9d1d`: workflow run `8e04bba9-012b-422f-89cb-4d845f340e3e`. Run `abaefcd2-90cf-4569-9ac6-b7e58d0428e9` was a failed preflight only: a mistyped nonexistent child SHA caused the agent to stop before inspecting code or assessing 16/17 rows. It is not a second substantive review. Per the bounded single-review policy, fixes were dispositioned with affected tests and the final complete gate rather than another model review.
 

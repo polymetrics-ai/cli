@@ -171,6 +171,7 @@ export interface RuntimeAgentSession {
 	model: RuntimeSessionModel | undefined;
 	thinkingLevel: ShepherdAgentThinking | string;
 	sessionFile: string | undefined;
+	messages: unknown;
 	getActiveToolNames(): string[];
 	getLastAssistantText(): string | undefined;
 	subscribe(listener: (event: AgentSessionEvent) => void): () => void | PromiseLike<void>;
@@ -479,8 +480,8 @@ class OwnedSession {
 		return INTRINSIC_REFLECT_APPLY(this.#getLastAssistantText.operation!, this.#session, []);
 	}
 
-	modelRoute(): RuntimeSessionModel | undefined {
-		return this.#session.model;
+	sessionMessages(): unknown {
+		return this.#session.messages;
 	}
 
 	startPrompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<PromptSettlement> {
@@ -1319,15 +1320,25 @@ export class ShepherdAgentSessionRuntime {
 			progress.frozen = true;
 			await scope.race(bounded(owned.unsubscribeOnce(), this.#options.cleanupTimeoutMs, "session unsubscribe"));
 			assertExecutionActive();
-			const terminalText = owned.lastAssistantText();
-			const terminalRoute = owned.modelRoute();
-			if (terminalRoute?.provider !== REQUIRED_PROVIDER || terminalRoute.id !== REQUIRED_MODEL) {
+			const terminal = captureFinalAssistantMessage(
+				owned.sessionMessages(),
+				this.#options.maxAssistantBytes,
+				(name, raw, maximumBytes) => toolPolicy.projectArguments(name, raw, maximumBytes),
+			);
+			assertExecutionActive();
+			if (terminal.stopReason !== "stop") {
+				throw new AgentSessionRuntimeError(`AgentSession terminal stop reason ${terminal.stopReason} is not accepted`);
+			}
+			if (terminal.provider !== REQUIRED_PROVIDER || terminal.model !== REQUIRED_MODEL) {
 				throw new AgentSessionRuntimeError("AgentSession terminal model routing mismatch; fallback is forbidden");
 			}
-			if (typeof terminalText !== "string") {
-				throw new AgentSessionRuntimeError("AgentSession completed without a typed terminal handoff");
+			const terminalText = owned.lastAssistantText();
+			assertExecutionActive();
+			const capturedText = assistantText(terminal);
+			if (typeof terminalText !== "string" || terminalText !== capturedText) {
+				throw new AgentSessionRuntimeError("AgentSession final message and typed terminal handoff disagree");
 			}
-			result = parseHandoff(terminalText, request, this.#options.maxAssistantBytes);
+			result = parseHandoff(capturedText, request, this.#options.maxAssistantBytes);
 		} catch (error) {
 			primaryFailurePresent = true;
 			primaryFailure = error;
@@ -3208,6 +3219,19 @@ function verifyTerminalCapture(capture: TerminalCapture): AssistantTerminal {
 
 function sameTerminal(left: AssistantTerminal, right: AssistantTerminal): boolean {
 	return left.identity === right.identity;
+}
+
+function captureFinalAssistantMessage(
+	value: unknown,
+	maximum: number,
+	projectArguments: ToolArgumentProjector,
+): AssistantTerminal {
+	const messages = captureDenseArray(value, "AgentSession public message state");
+	for (let index = messages.length - 1; index >= 0; index -= 1) {
+		const terminal = captureAssistantTerminal(messages[index], false, maximum, projectArguments);
+		if (terminal) return terminal;
+	}
+	throw new AgentSessionRuntimeError("AgentSession completed without a final assistant message");
 }
 
 function assistantText(terminal: AssistantTerminal): string {

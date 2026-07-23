@@ -15,6 +15,20 @@
 - If either read-only review lane identifies an actionable production/CI blocker, add the smallest focused failing regression before the one allowed correction pass, then run the full conditional gate set from PLAN.md. Otherwise run only `git diff --check` and delivery/scope checks.
 - Parent orchestration decision for preflight: `local_critical_path` — existing child PR #491 needs only bounded artifact correction and exact-diff review; no mutating implementation worker is ready or required. The required review lanes will be recorded as `read_only_spawned` after dispatch.
 
+## Merge-readiness review findings and correction RED
+
+- Review run `29165c4c-c62c-405d-a6b0-78010dcc5a82` used two parallel read-only `openai-codex/gpt-5.6-sol`/`xhigh` lanes plus one xhigh synthesis. Both lanes received host capture `297306d7f3f0afe9da886de3dfdb62ad9d3b43e619df24df39f2675b74fff38b` for exact `daaa22637e54de87ce5e0c0f5876a19ddf7fb274...7c5f927f0d970f1b38536f94b61e857bf7e51a68` and had `tools: []`, no skills, and no GitHub authority.
+- CI/delivery lane: CLEAN. Runtime/security lane: two P1 blockers, one root terminal-snapshot contract.
+- `P1-terminal-status-erased`: **accepted with modification** — retain event-agnostic completion, but validate the final public Pi session-message snapshot has `stopReason: "stop"` before parsing its typed handoff.
+- `P1-terminal-route-unbound`: **accepted with modification** — validate the final public Pi session-message snapshot's provider/model and reconcile its text with `getLastAssistantText()`; do not use configured session route as terminal identity.
+- Correction RED: add focused cases in both production runtimes proving valid-looking bound JSON is rejected for final `error`, `aborted`, `length`, or `toolUse` status and for a mismatched final provider/model, while an event-free final public message with `stop` remains accepted. These tests must fail against `7c5f927f` before production edits.
+- One correction pass only. The implementation now snapshots the final assistant message from Pi's documented public `session.messages` state after `prompt()` settles, requires `stopReason: "stop"` and the exact producing provider/model, reconciles that message text with `getLastAssistantText()`, then validates the typed handoff. Unknown/reordered events remain inert bounded telemetry.
+- Correction RED: the selected seven-test command passed the unchanged `stop` case and failed the six intended status/route assertions (1 pass, 6 fail); no load, compile, timeout, or unrelated assertion established RED.
+- Correction GREEN: selected terminal/event-free tests passed 9/9; complete affected runtime suites passed 163/163.
+- Strict source typecheck: TypeScript 5.9.3 `--noEmit --strict --skipLibCheck --target ES2024 --module NodeNext --moduleResolution NodeNext --allowImportingTsExtensions` over all 50 production Shepherd files against the pinned Pi 0.80.10 base URL passed. The initial no-`skipLibCheck` invocation reached unresolved optional third-party declaration packages (`undici-types` and MCP SDK), not Shepherd source errors.
+- Pi-family, workflow-engine provenance, and offline isolated/co-loaded RPC verifiers passed.
+- Exactly one final post-correction sequential complete Shepherd suite passed: 1718 pass, 0 fail, 1 intentional skip (1719 total) in 159.6 seconds.
+
 ## Baseline and provenance
 
 - Issue: #490, parent #471, parent PR #472.
