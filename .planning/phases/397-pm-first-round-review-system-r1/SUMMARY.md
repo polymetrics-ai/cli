@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: captain algorithm research complete; impact-graph and hypothesis-lab RED→GREEN pending on the same 0/5 correction lineage; prior verification is historical.
+Status: captain algorithm research complete and correction RED captured; impact-graph/hypothesis-lab GREEN pending on the same 0/5 lineage; prior verification is historical.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.
@@ -18,4 +18,5 @@ Status: captain algorithm research complete; impact-graph and hypothesis-lab RED
 - Captain added bidirectional impact-chain and efficient-human-style counterfactual-lab requirements. No production graph/lab edit began before the required research checkpoint.
 - `ALGORITHM-RESEARCH.md` compares primary build/query/index/test-impact/graph sources and a disposable exact-head benchmark: 1,669 nodes/5,039 edges; indexed BFS 21/21 oracle nodes versus 14/21 outgoing-only; synthetic 63.735 ms indexed versus 10,479.531 ms repeated scan. Unrestricted depth-3 traversal still hit a frontier, so typed relation policy and explicit blocking were selected.
 - Selected v1: typed directed multigraph, materialized forward/reverse adjacency, deterministic multi-source relation-policy BFS, authoritative `go list`, three-valued certainty, complete discovery before packets, no persistent cache/SCC/new dependency.
-- Focused/full gates at `7f1b2d8fe` are historical. Correction corpus RED, graph GREEN, lab RED/GREEN, fresh full gates, exact-head packet review/labs, Shepherd, no-mistakes, PR, and CI remain pending.
+- Correction RED: 17/17 defect fixtures escaped old treatment, four clean controls stayed clean, and real tests proved absent impact v2, graph-bound/schema fail-open, absent lab runner, and missing migration/inconclusive synthesis rules.
+- Focused/full gates at `7f1b2d8fe` are historical. Graph/lab GREEN, fresh full gates, exact-head packet review/labs, Shepherd, no-mistakes, PR, and CI remain pending.

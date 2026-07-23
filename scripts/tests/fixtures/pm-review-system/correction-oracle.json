@@ -1,0 +1,26 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-correction-oracle/v1",
+  "cases": {
+    "impact-reverse-leaf-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-script-both-directions-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-authority-neighborhood-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-generated-chain-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-go-importer-test-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-unknown-platform-dropped-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-cycle-bound-ready-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-active-missing-target-opaque": {"expected": "finding", "category": "impact_graph_contract"},
+    "impact-clean-bidirectional-control": {"expected": "clean", "category": "impact_graph_contract"},
+    "impact-unrelated-clean-control": {"expected": "clean", "category": "impact_graph_contract"},
+    "lab-candidate-write-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-outside-symlink-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-network-command-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-secret-capture-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-limit-clean-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-cleanup-identity-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-inconclusive-clean-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-forbidden-git-install-live-opaque": {"expected": "finding", "category": "hypothesis_lab_contract"},
+    "lab-clean-experiment-control": {"expected": "clean", "category": "hypothesis_lab_contract"},
+    "lab-clean-static-control": {"expected": "clean", "category": "hypothesis_lab_contract"},
+    "contract-v1-migration-opaque": {"expected": "finding", "category": "review_contract_version"}
+  }
+}

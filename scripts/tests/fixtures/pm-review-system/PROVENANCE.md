@@ -27,3 +27,17 @@ and one opaque `case_id`. `corpus-manifest.json` freezes both hashes before GREE
 This is process-level fixture blinding, not a secret benchmark: all files become public after commit.
 It measures deterministic preflight behavior only. It does not establish hosted-model recall,
 token/cost improvement, or prospective production performance.
+
+## Captain correction corpus (frozen 2026-07-24)
+
+`correction-inputs.json` and separate `correction-oracle.json` were frozen before bidirectional
+impact-graph or counterfactual-lab treatment implementation. The detector receives only the inputs
+and opaque case id; scoring receives the oracle afterward. The corpus covers upstream-only leaf
+references, both-direction script/package impact, authority neighborhoods, generator chains, Go
+importer/tests, unknown variants, cycles/bounds, missing targets, unrelated controls, candidate/
+outside writes, forbidden effect categories, secret capture, resource limits, cleanup/identity,
+inconclusive hypotheses, clean experiment/static controls, and contract migration.
+
+`correction-corpus-manifest.json` freezes content hashes/sizes. Real disposable-repository and OS
+sandbox integration tests remain necessary because the detector corpus cannot prove parser,
+subprocess, filesystem, sandbox, process, or cleanup enforcement.

@@ -57,7 +57,7 @@
 
 ## Bidirectional practical impact graph
 
-- [ ] Separate correction inputs/oracle are frozen and hashed before GREEN; old root/outgoing behavior fails intended RED assertions.
+- [x] Separate correction inputs/oracle are frozen and hashed before GREEN; old root/outgoing behavior failed 17 defect fixtures and real integration assertions while four clean controls stayed clean.
 - [ ] Union of every changed file and canonical roots forms seeds; declared universe is indexed before traversal.
 - [ ] Every edge records stable id, source, target, relation/direction, parser, provenance reason/location, and `active|inactive|unknown` certainty.
 - [ ] Markdown/frontmatter/JSON/YAML, shell, Python, authoritative Go package/test/import/current-build, authority, generator/generated, lateral, mirror, and temporal edges are covered.
@@ -70,7 +70,7 @@
 
 ## Counterfactual hypothesis lab
 
-- [ ] Old system's absent lab support is captured as RED before production lab code.
+- [x] Old system's absent lab support and missing response/synthesis semantics are captured as RED before production lab code.
 - [ ] Every experiment uses a detached disposable exact-head copy under a private temporary root; canonical candidate stays clean/read-only.
 - [ ] Environment/config/credentials are scrubbed; captured artifacts contain no secret sentinel.
 - [ ] Canonical/outside/symlink writes and cross-lab access are denied.

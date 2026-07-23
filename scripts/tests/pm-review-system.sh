@@ -31,6 +31,66 @@ then
   fail "frozen corpus hash/size mismatch"
 fi
 
+# Captain correction corpus is separately frozen before impact-graph/lab treatment. The detector
+# sees only correction-inputs.json and one case id; the oracle is read after each subprocess exits.
+if ! python3 - "$fixture_root" <<'PY'
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+root = Path(sys.argv[1])
+manifest = json.loads((root / "correction-corpus-manifest.json").read_text())
+for name, expected in manifest["files"].items():
+    path = root / name
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    if digest != expected["sha256"] or path.stat().st_size != expected["bytes"]:
+        raise SystemExit(f"frozen captain correction corpus drift: {name}")
+PY
+then
+  fail "frozen captain correction corpus hash/size mismatch"
+fi
+
+if ! python3 - "$repo_root" "$fixture_root" <<'PY'
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+repo = Path(sys.argv[1])
+fixtures = Path(sys.argv[2])
+inputs_path = fixtures / "correction-inputs.json"
+cases = json.loads(inputs_path.read_text())["cases"]
+oracle = json.loads((fixtures / "correction-oracle.json").read_text())["cases"]
+script = repo / "scripts" / "pm-review-system.py"
+errors = []
+for case in cases:
+    case_id = case["case_id"]
+    proc = subprocess.run(
+        [sys.executable, str(script), "detect", "--mode", "treatment", "--input", str(inputs_path), "--case-id", case_id],
+        cwd=repo,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        errors.append(f"{case_id}: detector exited {proc.returncode}: {proc.stderr.strip()}")
+        continue
+    observation = json.loads(proc.stdout)
+    expected = oracle[case_id]
+    findings = observation.get("findings", [])
+    if expected["expected"] == "finding" and not findings:
+        errors.append(f"{case_id}: missed captain correction mutation ({case['source_identity']})")
+    elif expected["expected"] == "clean" and findings:
+        errors.append(f"{case_id}: false positive on captain correction clean control")
+if errors:
+    print("\n".join(errors), file=sys.stderr)
+    raise SystemExit(1)
+PY
+then
+  fail "captain impact-graph/lab detector did not satisfy the pre-frozen correction oracle"
+fi
+
 # Accepted PR #495 finding 1: an explicit current-schema noncanonical gate kind must not be ready.
 classification="$({
   bash "$repo_root/scripts/pm-terminal-classifier.sh" \
@@ -234,6 +294,301 @@ if [[ $malformed_status -eq 0 || -s "$usage_stdout" ]] || ! grep -Fq 'cannot cla
 fi
 rm -f "$usage_stdout" "$usage_stderr" "$malformed"
 
+# Captain impact-graph integration fixture: index the declared universe before traversal from all
+# changed files and canonical roots. This real Git/Go fixture is separate from the detector corpus.
+impact_repo="$test_tmp/impact-repo"
+mkdir -p \
+  "$impact_repo/.agents/templates" "$impact_repo/.agents/schema" "$impact_repo/.agents/generated" \
+  "$impact_repo/.agents/cycle" "$impact_repo/.pi/prompts" "$impact_repo/.planning" \
+  "$impact_repo/scripts" "$impact_repo/internal/lib" "$impact_repo/cmd/app"
+git -C "$impact_repo" init -q
+cat >"$impact_repo/go.mod" <<'EOF'
+module example.test/impact
+
+go 1.24
+EOF
+cat >"$impact_repo/.pi/prompts/canonical.md" <<'EOF'
+# Canonical root
+EOF
+cat >"$impact_repo/.pi/prompts/upstream.md" <<'EOF'
+Required template: `.agents/templates/leaf.md`
+EOF
+cat >"$impact_repo/.agents/templates/leaf.md" <<'EOF'
+leaf v1
+EOF
+cat >"$impact_repo/.pi/prompts/script-user.md" <<'EOF'
+Run `python3 scripts/tool.py` for the review input.
+EOF
+cat >"$impact_repo/scripts/tool.py" <<'EOF'
+from helper import value
+print(value)
+EOF
+cat >"$impact_repo/scripts/helper.py" <<'EOF'
+value = "helper"
+EOF
+cat >"$impact_repo/.agents/schema/state.yaml" <<'EOF'
+schema_version: v1
+EOF
+cat >"$impact_repo/.pi/prompts/state-writer.md" <<'EOF'
+Writes `.agents/schema/state.yaml`.
+EOF
+cat >"$impact_repo/scripts/state_reader.py" <<'EOF'
+from pathlib import Path
+STATE = Path('.agents/schema/state.yaml')
+EOF
+cat >"$impact_repo/.planning/state-mirror.json" <<'EOF'
+{"schema_version":"v1"}
+EOF
+cat >"$impact_repo/scripts/generate.py" <<'EOF'
+print("fixture generator")
+EOF
+cat >"$impact_repo/.agents/generated/data.json" <<'EOF'
+{"version":1}
+EOF
+cat >"$impact_repo/.pi/prompts/generated-user.md" <<'EOF'
+Consumes `.agents/generated/data.json`.
+EOF
+cat >"$impact_repo/internal/lib/lib.go" <<'EOF'
+package lib
+func Value() string { return "v1" }
+EOF
+cat >"$impact_repo/internal/lib/lib_test.go" <<'EOF'
+package lib
+import "testing"
+func TestValue(t *testing.T) { if Value() == "" { t.Fatal("empty") } }
+EOF
+cat >"$impact_repo/internal/lib/impl_darwin.go" <<'EOF'
+package lib
+const Platform = "darwin"
+EOF
+cat >"$impact_repo/internal/lib/impl_linux.go" <<'EOF'
+package lib
+const Platform = "linux"
+EOF
+cat >"$impact_repo/cmd/app/main.go" <<'EOF'
+package main
+import "example.test/impact/internal/lib"
+func main() { _ = lib.Value() }
+EOF
+cat >"$impact_repo/.agents/cycle/a.md" <<'EOF'
+Requires `.agents/cycle/b.md`.
+EOF
+cat >"$impact_repo/.agents/cycle/b.md" <<'EOF'
+Requires `.agents/cycle/a.md`.
+EOF
+cat >"$impact_repo/.agents/unrelated.md" <<'EOF'
+unrelated control
+EOF
+cat >"$impact_repo/behavior.txt" <<'EOF'
+reject
+EOF
+cat >"$impact_repo/scripts/check_behavior.py" <<'EOF'
+from pathlib import Path
+raise SystemExit(0 if Path("behavior.txt").read_text().strip() == "reject" else 23)
+EOF
+cat >"$impact_repo/scripts/check_env.py" <<'EOF'
+import os
+raise SystemExit(99 if any("SECRET_SENTINEL" in key or "do-not-copy" in value for key, value in os.environ.items()) else 0)
+EOF
+cat >"$impact_repo/scripts/sleep.py" <<'EOF'
+import time
+time.sleep(5)
+EOF
+cat >"$impact_repo/scripts/output.py" <<'EOF'
+print("x" * 200000)
+EOF
+cat >"$impact_repo/scripts/disk.py" <<'EOF'
+from pathlib import Path
+for index in range(200): Path(f"disk-{index}.bin").write_bytes(b"x" * 65536)
+EOF
+cat >"$impact_repo/scripts/processes.py" <<'EOF'
+import subprocess, sys, time
+children = [subprocess.Popen([sys.executable, "-c", "import time; time.sleep(5)"]) for _ in range(12)]
+time.sleep(5)
+EOF
+ln -s /tmp/pm-review-lab-outside "$impact_repo/escape-link"
+cat >"$impact_repo/.agents/review-config.json" <<'JSON'
+{
+  "schema_version":"polymetrics.ai/pm-review-system/v2",
+  "owner":"parent_orchestrator",
+  "canonical_roots":[".pi/prompts/canonical.md"],
+  "reference_prefixes":[".agents/",".pi/",".planning/","scripts/","cmd/","internal/"],
+  "ignored_reference_prefixes":[],
+  "prohibited_active_targets":[],
+  "impact_graph":{
+    "index_prefixes":[".agents/",".pi/",".planning/","scripts/","cmd/","internal/"],
+    "max_index_files":200,"max_index_bytes":2000000,"max_nodes":300,"max_edges":1000,
+    "max_traversal_states":1000,"max_depth":12,"max_impact_files":200,"max_impact_edges":1000,
+    "go_command_timeout_seconds":20,"packet_max_impact_files":10,"packet_max_impact_edges":40
+  },
+  "configured_relationships":[
+    {"source":"scripts/generate.py","target":".agents/generated/data.json","relation":"generates","certainty":"active"},
+    {"source":".pi/prompts/generated-user.md","target":".agents/generated/data.json","relation":"generated_consumer","certainty":"active"},
+    {"source":".agents/schema/state.yaml","target":".planning/state-mirror.json","relation":"temporal_state_mirror","certainty":"active"}
+  ],
+  "authorities":[{
+    "id":"fixture_state","authoritative_path":".agents/schema/state.yaml",
+    "writers":[".pi/prompts/state-writer.md"],"readers":["scripts/state_reader.py"],
+    "mirrors":[".planning/state-mirror.json"],"invariants":["fixture_authority_complete"]
+  }],
+  "thresholds":{
+    "combined_max_files":20,"combined_max_non_generated_lines":600,"combined_max_domains":1,
+    "mandatory_split_files":25,"mandatory_split_non_generated_lines":800,"mandatory_split_domains":2,
+    "packet_max_changed_files":20,"packet_max_context_files":10,"packet_target_tokens":30000,
+    "estimated_tokens_per_changed_line":4,"estimated_tokens_per_context_file":200
+  },
+  "domain_rules":[
+    {"domain":"implementation_test","patterns":["scripts/**","cmd/**","internal/**"]},
+    {"domain":"architecture_reference","patterns":[".agents/**",".pi/**"]},
+    {"domain":"authority_workflow_state","patterns":[".planning/**"]}
+  ],
+  "packet_invariants":{
+    "architecture_reference":["impact_complete"],"authority_workflow_state":["impact_complete"],
+    "implementation_test":["impact_complete"],"impact_graph":["impact_complete"],"combined":["impact_complete"]
+  },
+  "allowed_changed_paths":["**"],"forbidden_changed_paths":[]
+}
+JSON
+python3 - "$impact_repo/.agents/review-config.json" "$impact_repo/.agents/bound-config.json" "$impact_repo/.agents/legacy-config.json" <<'PY'
+import json,sys
+normal=json.load(open(sys.argv[1]))
+bound=json.loads(json.dumps(normal)); bound["impact_graph"]["max_impact_files"]=3
+open(sys.argv[2],"w").write(json.dumps(bound,indent=2)+"\n")
+legacy=json.loads(json.dumps(normal)); legacy["schema_version"]="polymetrics.ai/pm-review-system/v1"
+open(sys.argv[3],"w").write(json.dumps(legacy,indent=2)+"\n")
+PY
+git -C "$impact_repo" add .
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm base
+impact_base="$(git -C "$impact_repo" rev-parse HEAD)"
+printf 'leaf v2\n' >"$impact_repo/.agents/templates/leaf.md"
+printf 'schema_version: v2\n' >"$impact_repo/.agents/schema/state.yaml"
+printf '{"version":2}\n' >"$impact_repo/.agents/generated/data.json"
+printf 'from helper import value\nprint(value.upper())\n' >"$impact_repo/scripts/tool.py"
+printf 'package lib\nfunc Value() string { return "v2" }\n' >"$impact_repo/internal/lib/lib.go"
+cat >"$impact_repo/.agents/cycle/a.md" <<'EOF'
+Requires `.agents/cycle/b.md`.
+Changed cycle seed.
+EOF
+git -C "$impact_repo" add .
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm head
+impact_head="$(git -C "$impact_repo" rev-parse HEAD)"
+impact_manifest="$test_tmp/impact-manifest.json"
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$impact_base" --head "$impact_head" >"$impact_manifest"
+impact_status=$?
+if [[ $impact_status -ne 0 ]] || ! python3 - "$impact_manifest" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["schema_version"] == "polymetrics.ai/pm-review-compile/v2"
+graph=value["impact_graph"]
+files=set(value["coverage_manifest"]["impact_files"])
+required={
+ ".agents/templates/leaf.md", ".pi/prompts/upstream.md", "scripts/tool.py", "scripts/helper.py",
+ ".pi/prompts/script-user.md", ".agents/schema/state.yaml", ".pi/prompts/state-writer.md",
+ "scripts/state_reader.py", ".planning/state-mirror.json", "scripts/generate.py",
+ ".agents/generated/data.json", ".pi/prompts/generated-user.md", "internal/lib/lib.go",
+ "internal/lib/lib_test.go", "internal/lib/impl_darwin.go", "internal/lib/impl_linux.go",
+ "cmd/app/main.go", ".agents/cycle/a.md", ".agents/cycle/b.md"
+}
+assert required <= files, sorted(required-files)
+assert ".agents/unrelated.md" not in files
+assert not graph["bounds"]["hit"]
+assert {"active", "unknown"} <= {edge["certainty"] for edge in graph["edges"]}
+relations={edge["relation"] for edge in graph["edges"]}
+assert {"required_reference","python_import","authority_writes","authority_reads","authority_mirror","generates","go_imports","go_test","platform_variant"} <= relations
+packet_files={path for packet in value["packets"] for path in packet["impact_files"]}
+packet_edges={edge for packet in value["packets"] for edge in packet["impact_edge_ids"]}
+assert packet_files == files
+assert packet_edges == set(value["coverage_manifest"]["impact_edge_ids"])
+PY
+then
+  fail "changed-file-seeded bidirectional typed impact graph or exact packet coverage is absent"
+fi
+for config_case in bound-config legacy-config; do
+  python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+    --config ".agents/$config_case.json" --base "$impact_base" --head "$impact_head" \
+    >"$test_tmp/$config_case-result.json"
+  config_status=$?
+  if [[ $config_status -eq 0 ]] || ! python3 - "$test_tmp/$config_case-result.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"] == "blocked"; assert value["findings"]
+PY
+  then
+    fail "$config_case did not fail closed for graph bound or incompatible schema migration"
+  fi
+done
+
+# Counterfactual lab integration is authored before the runner. Each experiment must create and
+# destroy its own exact-head copy; the candidate is never the writable experiment root.
+lab_script="$repo_root/scripts/pm-review-lab.py"
+if [[ ! -f "$lab_script" ]]; then
+  fail "counterfactual lab runner is absent; safety/identity/cleanup RED is expected"
+elif ! python3 - "$lab_script" "$impact_repo" "$impact_base" "$impact_head" "$test_tmp" <<'PY'
+import json, os, pathlib, subprocess, sys
+from concurrent.futures import ThreadPoolExecutor
+
+script, repo, base, head, tmp = sys.argv[1:]
+root=pathlib.Path(tmp); labs=root/'labs'; labs.mkdir()
+
+def request(name, **overrides):
+    value={
+      "schema_version":"polymetrics.ai/pm-review-lab-request/v1","hypothesis_id":name,
+      "claim":"temporary accept behavior must make the targeted check fail",
+      "alternative":"the behavior change is irrelevant to the targeted check",
+      "impact_edges_examined":["edge-fixture-1"],
+      "temporary_change":"replace reject with accept in the disposable copy",
+      "changes":[{"path":"behavior.txt","find":"reject\n","replace":"accept\n"}],
+      "command":["python3","scripts/check_behavior.py"],
+      "expected_discriminator":{"exit_code":23}
+    }
+    value.update(overrides); path=root/f"{name}.json"; path.write_text(json.dumps(value)); return path
+
+def run(path, extra_env=None):
+    env=os.environ.copy(); env.update(extra_env or {})
+    proc=subprocess.run([sys.executable,script,"run","--repo-root",repo,"--base",base,"--head",head,"--packet-id",path.stem,"--request",str(path),"--temp-root",str(labs)],text=True,capture_output=True,env=env)
+    try: value=json.loads(proc.stdout)
+    except Exception as exc: raise AssertionError((path.name,proc.returncode,proc.stdout,proc.stderr)) from exc
+    return proc.returncode,value
+
+code,safe=run(request('safe'))
+assert code==0 and safe["status"]=="evidence" and safe["candidate_unchanged"] and safe["lab_cleanup_verified"]
+assert safe["experiment"]["discriminator_matched"] and safe["experiment"]["exit_code"]==23
+assert safe["experiment"]["temporary_diff"]["sha256"] and safe["experiment"]["duration_ms"] is not None
+assert not any(labs.iterdir())
+
+def blocked(name, **changes):
+    code,value=run(request(name,**changes)); assert code!=0 and value["status"]=="blocked"; return value
+blocked('candidate-write', change_scope='candidate')
+blocked('outside-write', changes=[{"path":"../outside","find":"x","replace":"y"}])
+blocked('symlink-write', changes=[{"path":"escape-link","find":"x","replace":"y"}])
+for name,command in {
+  'network':['curl','https://example.invalid'], 'commit':['git','commit','-am','x'],
+  'push':['git','push','origin','HEAD'], 'install':['python3','-m','pip','install','x'],
+  'generic-shell':['bash','-c','true'], 'live-connector':['pm','etl','run','--connection','live'],
+  'deploy':['kubectl','apply','-f','x']
+}.items(): blocked(name,changes=[],command=command,expected_discriminator={"exit_code":0})
+code,envsafe=run(request('env-safe',changes=[],command=['python3','scripts/check_env.py'],expected_discriminator={'exit_code':0}),{'PM_REVIEW_SECRET_SENTINEL':'do-not-copy'})
+assert code==0 and envsafe['status']=='evidence' and 'do-not-copy' not in json.dumps(envsafe)
+for name,script_name,limit in (
+ ('timeout','sleep.py',{'timeout_seconds':0.2}),('output','output.py',{'max_output_bytes':4096}),
+ ('disk','disk.py',{'max_disk_bytes':131072}),('processes','processes.py',{'max_processes':4})
+): blocked(name,changes=[],command=['python3',f'scripts/{script_name}'],expected_discriminator={'exit_code':0},limits=limit)
+blocked('cleanup-failure',changes=[],extra='ignored') if False else None
+code,cleanup=run(request('cleanup-failure',changes=[]),{'PM_REVIEW_LAB_TEST_FORCE_CLEANUP_FAILURE':'1'})
+assert code!=0 and cleanup['status']=='blocked'
+code,drift=run(request('identity-drift',changes=[]),{'PM_REVIEW_LAB_TEST_FORCE_IDENTITY_DRIFT':'1'})
+assert code!=0 and drift['status']=='blocked'
+with ThreadPoolExecutor(max_workers=2) as pool:
+    rows=list(pool.map(lambda p: run(p),[request('parallel-a'),request('parallel-b',changes=[{"path":"behavior.txt","find":"reject\n","replace":"other\n"}],expected_discriminator={"exit_code":23})]))
+assert all(code==0 and value['status']=='evidence' for code,value in rows)
+assert not any(labs.iterdir())
+assert subprocess.check_output(['git','-C',repo,'rev-parse','HEAD'],text=True).strip()==head
+assert not subprocess.check_output(['git','-C',repo,'status','--porcelain'],text=True)
+PY
+then
+  fail "counterfactual lab did not enforce exact-head isolation, denial, bounds, evidence, concurrency, and cleanup"
+fi
+
 # Compile the exact committed range. Output must be one non-TTY JSON envelope containing paths and
 # metadata only, with complete packet assignment and no environment-value leakage.
 head_sha="$(git -C "$repo_root" rev-parse HEAD)"
@@ -253,7 +608,7 @@ import json
 import sys
 
 document = json.load(open(sys.argv[1]))
-assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v1"
+assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v2"
 assert document["status"] == "ready"
 assert document["selection"] in {"combined", "split"}
 assert document["content_policy"].startswith("paths and metadata only")
@@ -263,12 +618,22 @@ assert changed == assigned
 closure = set(document["coverage_manifest"]["closure_files"])
 covered_closure = {path for packet in document["packets"] for path in packet["closure_files"]}
 assert closure == covered_closure
+impact = set(document["coverage_manifest"]["impact_files"])
+covered_impact = {path for packet in document["packets"] for path in packet["impact_files"]}
+assert impact == covered_impact
+impact_edges = set(document["coverage_manifest"]["impact_edge_ids"])
+covered_edges = {edge for packet in document["packets"] for edge in packet["impact_edge_ids"]}
+assert impact_edges == covered_edges
+assert document["impact_graph"]["seed_files"]
+assert not document["impact_graph"]["bounds"]["hit"]
 for packet in document["packets"]:
     assert packet["exact_base_sha"] == document["exact_base_sha"]
     assert packet["exact_head_sha"] == document["exact_head_sha"]
     assert len(packet["changed_files"]) <= 20
     assert len(packet["closure_files"]) <= 10
     assert len(packet["authority_files"]) <= 10
+    assert len(packet["impact_files"]) <= 10
+    assert len(packet["impact_edge_ids"]) <= 40
     assert not packet["context"]["overflow"]
     assert not packet["context"]["truncated"]
 PY
@@ -317,7 +682,7 @@ manifest = json.load(open(sys.argv[1]))
 root = pathlib.Path(sys.argv[2])
 for packet in manifest["packets"]:
     response = {
-        "schema_version": "polymetrics.ai/pm-review-packet-response/v1",
+        "schema_version": "polymetrics.ai/pm-review-packet-response/v2",
         "packet_id": packet["packet_id"],
         "exact_base_sha": manifest["exact_base_sha"],
         "exact_head_sha": manifest["exact_head_sha"],
@@ -325,11 +690,23 @@ for packet in manifest["packets"]:
         "reviewed_files": packet["changed_files"],
         "closure_files": packet["closure_files"],
         "authority_files": packet["authority_files"],
+        "impact_files": packet.get("impact_files", []),
+        "impact_edge_ids": packet.get("impact_edge_ids", []),
         "invariants": [
             {"id": item, "status": "pass", "evidence_paths": []}
             for item in packet["invariants"]
         ],
         "unreviewed_files": [],
+        "review_behaviors": {
+            "impact_model_built_first": True,
+            "directions_traced": ["upstream", "downstream", "lateral", "temporal"],
+            "history_inspected": {"status": "not_needed", "reason": "fixture evidence is unambiguous"},
+            "sibling_paths_compared": {"status": "not_needed", "reason": "fixture has no divergent sibling"},
+            "hypotheses": [],
+            "disconfirming_evidence": "fixture contract and exact manifest agree"
+        },
+        "experiments": [],
+        "no_experiment_reason": "static fixture evidence is decisive",
         "findings": [],
         "context": {"input_tokens": None, "output_tokens": None, "cost": None, "overflow": False, "truncated": False},
         "wall_clock_ms": None,
@@ -369,6 +746,48 @@ for path in sorted(pathlib.Path(sys.argv[1]).glob('*.json')):
         break
 PY
 )"
+cp "$first_response" "$first_response.clean"
+python3 - "$first_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["schema_version"]="polymetrics.ai/pm-review-packet-response/v1"; open(path,"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+v1_status=$?
+if [[ $v1_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any("migration" in item["claim"] for item in value["blockers"])
+PY
+then
+  fail "incompatible v1 packet response did not require explicit migration"
+fi
+mv "$first_response.clean" "$first_response"
+python3 - "$first_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["no_experiment_reason"]=None
+value["experiments"]=[{"hypothesis_id":"H-inconclusive","claim":"suspected defect","alternative":"safe behavior","impact_edges_examined":[],"temporary_change":"fixture change","command":["python3","fixture.py"],"expected_discriminator":"different exits","observed":"same exit","supports":"inconclusive","candidate_unchanged":True,"lab_cleanup_verified":True}]
+open(path,"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+inconclusive_status=$?
+if [[ $inconclusive_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any(item["category"]=="hypothesis_evidence" for item in value["blockers"])
+PY
+then
+  fail "inconclusive counterfactual experiment was allowed to prove clean"
+fi
+cp "$first_response.clean" "$first_response" 2>/dev/null || true
+if [[ ! -f "$first_response.clean" ]]; then
+  python3 - "$compile_output" "$first_response" <<'PY'
+# Restore is regenerated from the manifest because the clean backup was moved above.
+import json,sys
+manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v2","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[],"disconfirming_evidence":"fixture"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+open(sys.argv[2],"w").write(json.dumps(value))
+PY
+fi
 python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]

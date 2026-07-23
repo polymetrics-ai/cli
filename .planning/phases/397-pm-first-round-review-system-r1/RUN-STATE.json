@@ -18,7 +18,7 @@
       "5601be8d01f9f0044a5e7e875be5669f7d6fc280"
     ]
   },
-  "status": "algorithm_research_complete_impact_lab_red_pending",
+  "status": "captain_impact_lab_red_captured_green_pending",
   "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
@@ -85,6 +85,11 @@
       "cycle": "captain_correction_research",
       "decision": "local_critical_path",
       "reason": "Production graph/lab work paused. Primary sources and a disposable exact-head real/synthetic benchmark selected typed forward/reverse adjacency plus deterministic multi-source relation-policy BFS, authoritative go list, fail-closed bounds, no persistent v1 cache/SCC, and no new dependency. Read-only scout/security runs failed due WebSocket/provider authentication, so inline GSD fallback was recorded."
+    },
+    {
+      "cycle": "captain_correction_red",
+      "decision": "local_critical_path",
+      "reason": "Separate correction inputs/oracle were frozen. Focused test exited 1 for 17 missed defect fixtures plus absent v2 impact graph, bound/migration fail-open, absent safe lab runner, and missing hypothesis/migration synthesis checks; four clean controls stayed clean."
     }
   ],
   "measurement": {
