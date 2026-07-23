@@ -59,6 +59,7 @@ Result: <pass | fail | blocked>
 - local_codex.exact_base_sha:
 - local_codex.exact_head_sha:
 - local_codex.findings_artifact:
+- local_codex.finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]
 - local_codex.disposition_artifact:
 - shepherd.status: <pending | proceed | retry | revert | halt | blocked>
 - shepherd.exact_head_sha:

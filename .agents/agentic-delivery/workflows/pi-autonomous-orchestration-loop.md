@@ -81,6 +81,7 @@ Run-level state lives in `.planning/auto-loop/RUN.json`:
 
 ```json
 {
+  "schema_version": "canonical_v2",
   "prompt": "<original problem prompt>",
   "problem_type": "connector | implementation",
   "stage": "INTAKE | RESEARCH | PARENT_PLAN | ISSUE_CREATE | PARENT_SETUP | TASK_LOOP | PARENT_FINALIZE | done | blocked | human_gate",
@@ -91,7 +92,8 @@ Run-level state lives in `.planning/auto-loop/RUN.json`:
   "subissues": [{ "number": 0, "title": "", "stage": "not_started", "branch": "", "sub_pr": 0, "deps": [], "write_scope": "", "candidate_lineage": "" }],
   "correction_budget": { "max_correction_rounds": 4, "rounds_by_range": {} },
   "guards": { "iteration": 0, "max_iterations": 200 },
-  "terminal": null
+  "terminal": null,
+  "human_gate_kind": null
 }
 ```
 
@@ -132,7 +134,9 @@ nothing is double-applied (issue creation and merges are checked for idempotency
   exact-base/candidate lineage key in `correction_budget.rounds_by_range`. Create the candidate
   lineage identifier once when adopting the first candidate and preserve it across replacement PRs
   and changed heads; append head history instead of resetting the counter. On exceed, mark the
-  sub-issue `blocked` with the outstanding findings and stop for human review — never loop forever.
+  sub-issue `blocked` with the outstanding findings, write `RUN.json.terminal = "human_gate"` plus
+  sibling `RUN.json.human_gate_kind = "correction_cap_exceeded"`, and stop for a blocked human
+  decision — never loop forever.
   A resumed pre-v2 record may read `guards.correction_rounds` once as read-only legacy input, map it
   into the stable lineage counter, and then write only the canonical `correction_budget` shape.
 - **Iteration cap**: `max_iterations` (default 200) orchestrator turns per run as a hard backstop.
@@ -151,8 +155,11 @@ nothing is double-applied (issue creation and merges are checked for idempotency
 ## Termination
 
 The run ends only when: all sub-issues are `complete` and the parent reaches the human-ready gate
-(`terminal: "human_gate"`), or a hard stop/block is hit (`terminal: "blocked"`), or the budget
-ceiling is reached (`terminal: "budget"`, resumable). Success is not assumed from a missing error —
+(`terminal: "human_gate"`, `human_gate_kind: "parent_ready"`); the correction cap is exceeded
+(`terminal: "human_gate"`, `human_gate_kind: "correction_cap_exceeded"`, blocked human decision);
+another hard stop/block is hit (`terminal: "blocked"`); or the budget ceiling is reached
+(`terminal: "budget"`, resumable). Canonical producers always write `schema_version: "canonical_v2"`
+and both human-gate fields. Success is not assumed from a missing error —
 it is asserted from `ORCHESTRATION-STATE.json` + GitHub + git agreeing that every sub-issue is
 integrated and verified.
 

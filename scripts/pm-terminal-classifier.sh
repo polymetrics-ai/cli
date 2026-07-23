@@ -22,10 +22,13 @@ if record.get("terminal") != "human_gate":
     raise SystemExit(0)
 
 kind = record.get("human_gate_kind", "")
+schema = record.get("schema_version", record.get("schemaVersion", ""))
 if kind == "correction_cap_exceeded":
     print("blocked_human_decision")
-elif kind in {"", "parent_ready", "final_parent_readiness"}:
-    # Empty kind is the read-only legacy human-ready shape.
+elif kind in {"parent_ready", "final_parent_readiness"}:
+    print("human_ready")
+elif not kind and schema != "canonical_v2":
+    # Empty kind is human-ready only for detected read-only legacy records.
     print("human_ready")
 else:
     # Unknown human gates fail closed rather than implying merge readiness.

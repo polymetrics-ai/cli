@@ -191,6 +191,7 @@ For every sub-issue, record:
 - reviewed commit range
 - primary route: `local_codex`, `human`, or `blocked`
 - review status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`
+- `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
 - fresh-context reviewer identity and findings/disposition artifact
 - Shepherd status, verdict, trajectory score, and evidence artifact
 - CI status and remaining human gates

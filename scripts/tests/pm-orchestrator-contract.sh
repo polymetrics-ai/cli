@@ -310,6 +310,7 @@ fixtures = {
     "canonical_missing_kind": fixture_root / "canonical-missing-human-gate-kind.json",
     "parent_ready": fixture_root / "parent-ready.json",
     "historical": fixture_root / "historical-local-codex.json",
+    "historical_human_gate": fixture_root / "historical-human-gate.json",
 }
 for name, path in fixtures.items():
     if not path.is_file():
@@ -372,5 +373,11 @@ classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
     "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/parent-ready.json")"
 if [[ "$classification" != "human_ready" ]]; then
   printf 'PM orchestrator contract violation: parent-ready classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/historical-human-gate.json")"
+if [[ "$classification" != "human_ready" ]]; then
+  printf 'PM orchestrator contract violation: historical human-gate classifier returned %s\n' "$classification" >&2
   exit 1
 fi

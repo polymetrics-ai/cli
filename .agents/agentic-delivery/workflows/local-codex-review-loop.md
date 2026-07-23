@@ -35,9 +35,11 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
 
 ## Disposition and correction
 
-The parent orchestrator owns disposition. For every actionable finding, record one of `accepted`,
-`accepted_with_modification`, `declined`, `duplicate`, `deferred`, or `needs_human`, with a reason
-and follow-up reference where applicable.
+The parent orchestrator owns disposition. Use this exact machine vocabulary:
+
+`finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
+
+For every actionable finding, record one value with a reason and follow-up reference where applicable.
 
 Accepted corrections return to the isolated implementation worker, then repeat affected tests and
 exact-head verification. Every changed head requires a fresh-context re-review against the new

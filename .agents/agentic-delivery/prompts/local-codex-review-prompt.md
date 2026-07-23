@@ -20,9 +20,8 @@ Follow `.agents/agentic-delivery/workflows/local-codex-review-loop.md`.
    impact, and smallest safe correction. Separate residual risk from actionable findings.
 6. Report `local_codex.status` as exactly one of `pending`, `findings_correction_required`, `clean`,
    `comments_addressed`, or `blocked`.
-7. Include a disposition table seed so the orchestrator can record `accepted`,
-   `accepted_with_modification`, `declined`, `duplicate`, `deferred`, or `needs_human` for every
-   finding.
+7. Include a disposition table seed for every finding using this exact machine vocabulary:
+   `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`.
 
 This review does not self-approve integration. A changed head requires fresh-context re-review.
 Independent Shepherd validation remains required after review and before integration.

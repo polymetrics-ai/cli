@@ -1,0 +1,7 @@
+{
+  "automated_review": {
+    "status": "complete_no_unresolved_findings",
+    "head_sha": "2222222222222222222222222222222222222222"
+  },
+  "terminal": "human_gate"
+}

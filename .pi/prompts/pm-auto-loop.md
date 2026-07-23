@@ -94,7 +94,9 @@ state. Claude and GitHub Copilot are not required, requested, or fallback PM rev
   heads; append head history and increment the same counter instead of resetting it. A resumed pre-v2
   record may read `guards.correction_rounds` once as read-only legacy input, map it to the stable
   lineage counter, and thereafter write only the canonical shape. On exceed, mark the sub-issue
-  `blocked` with outstanding findings and stop for human review.
+  `blocked` with outstanding findings, set `RUN.json.schema_version = "canonical_v2"`,
+  `RUN.json.terminal = "human_gate"`, and sibling
+  `RUN.json.human_gate_kind = "correction_cap_exceeded"`, then stop for a blocked human decision.
 - Respect the run budget: when the driver signals the budget ceiling, finish the current durable
   transition, set `RUN.json.terminal = "budget"`, and exit — resume continues from the reconciler.
 - Iteration backstop `max_iterations` (default 200) turns.
@@ -110,8 +112,10 @@ state. Claude and GitHub Copilot are not required, requested, or fallback PM rev
 ## Output
 
 Use compact caveman-style status for progress and handoffs; keep commands, paths, tests, code,
-security warnings, destructive-action warnings, and human gates exact. End each turn by writing the
-reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage plus the next action.
+security warnings, destructive-action warnings, and human gates exact. Canonical runs always write
+`RUN.json.schema_version = "canonical_v2"`; normal final readiness writes terminal `human_gate` plus
+sibling `human_gate_kind = "parent_ready"`. End each turn by writing the reconciled
+`RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage plus the next action.
 
 ## Shepherd supervision contract (when driven by scripts/pi-shepherd-loop.sh)
 
@@ -120,8 +124,10 @@ reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage p
   (your ledger is restored to the last good checkpoint and `REVERT-CLEANUP.json` tells you what to
   undo), or HALT. Persist honestly; never claim progress ground truth cannot corroborate.
 - `RUN.json.terminal` MUST be one of the plain strings `human_gate | done | blocked | budget` —
-  the driver string-matches it. Put structured gate detail (reason, options, evidence) in
-  `ORCHESTRATION-STATE.json` and the relevant GitHub issue, not in the terminal field.
+  the driver string-matches it. For `human_gate`, write the required sibling discriminator
+  `RUN.json.human_gate_kind` (`parent_ready` or `correction_cap_exceeded`). Put all other structured
+  gate detail (reason, options, evidence) in `ORCHESTRATION-STATE.json` and the relevant GitHub
+  issue, not in the terminal string.
 - Credentials PRE-PROVISIONED in the loop environment are standing operator authorization for
   transient, env-only, read-only use; check `[ -n "$VAR" ]` before declaring a secret_change gate.
   Printing, storing, or committing a secret value remains forbidden.

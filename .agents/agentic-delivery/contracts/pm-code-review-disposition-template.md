@@ -7,7 +7,8 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 ## Finding <ID>
 
 - severity: <critical | high | medium | low>
-- disposition: <accepted | accepted_with_modification | declined | duplicate | deferred | needs_human>
+- finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]
+- disposition: <one finding_disposition_values value>
 - exact_base_sha:
 - exact_head_sha:
 - candidate_lineage:
