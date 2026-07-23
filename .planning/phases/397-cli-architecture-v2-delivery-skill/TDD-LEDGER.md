@@ -23,7 +23,7 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 
 ## Red: Program Delivery Skill Contract
 
-- Status: ready after audit/adoption approval; execute before skill production files.
+- Status: RED recorded 2026-07-23 before skill production files.
 - Test: `scripts/tests/cli-architecture-v2-delivery-skill.sh`, invoked directly and through the
   focused `make cli-architecture-v2-skill-check` target. It MUST remain outside global
   `make verify` in this change.
@@ -36,6 +36,8 @@ Phase: `397-cli-architecture-v2-delivery-skill`
   - local links cannot validate;
   - specialist-boundary and volatile-state contradiction markers are absent.
 - RED command: `scripts/tests/cli-architecture-v2-delivery-skill.sh`.
+- RED evidence: exit 1 with
+  `AssertionError: missing required CLI Architecture v2 delivery skill file: .../SKILL.md`.
 
 ## Green: Program Router And References
 

@@ -43,7 +43,7 @@
 
 ## Automated Validation
 
-- [ ] Focused RED fails before skill/routing implementation.
+- [x] Focused RED failed before skill/routing implementation (missing `SKILL.md`, exit 1).
 - [ ] Focused GREEN passes directly and through `make cli-architecture-v2-skill-check`.
 - [ ] Frontmatter, trigger terms, Markdown/local links, YAML routing, and contradiction markers are
   validated without a new dependency.
