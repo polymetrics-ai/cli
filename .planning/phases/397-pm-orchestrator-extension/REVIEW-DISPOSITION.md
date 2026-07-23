@@ -2,7 +2,7 @@
 
 Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
 Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
-Status: captain-authorized correction round 5 in progress for R1–R3 only; exact-head re-review required; no round 6
+Status: captain-authorized correction round 5 implemented for R1–R3 only; exact-version re-review required; no round 6
 
 | ID | Severity | Disposition | Reason / action |
 |---|---|---|---|

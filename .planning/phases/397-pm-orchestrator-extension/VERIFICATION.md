@@ -1,7 +1,7 @@
 # Issue #397 PM Orchestrator Extension Verification
 
-Status: captain-authorized correction round 5 planned for R1–R3 only; implementation/verification/re-review pending; no round 6
-`verificationPassed`: false (round-5 candidate does not exist yet)
+Status: captain-authorized correction round 5 implemented at `fa6054c07cfd4a43e0c03d262681df37ce8565d4` for R1–R3 only; exact-version verification/re-review pending; no round 6
+`verificationPassed`: false (final evidence head has not completed the full exact-version gate)
 
 ## Identity and scope
 
