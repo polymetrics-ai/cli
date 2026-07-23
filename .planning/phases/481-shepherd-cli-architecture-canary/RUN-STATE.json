@@ -16,7 +16,12 @@
       "cycle": "live-canary-generation-1",
       "decision": "read_only_spawned",
       "reason": "Run run-689079d0-089c-4d72-ab78-3dd1b213923e reconciled exact #438 head without mutation; scout completed and validator exposed the parent-owned concurrent embedded OAuth initialization defect."
+    },
+    {
+      "cycle": "live-canary-generation-2",
+      "decision": "read_only_spawned",
+      "reason": "Run run-ae39456f-e034-4204-b23b-bd8e076b251e completed both model lanes without OAuth failure and failed closed only because unchanged external #438 remains draft and GitHub DIRTY."
     }
   ],
-  "updatedAt": "2026-07-23T07:10:00.000Z"
+  "updatedAt": "2026-07-23T08:05:00.000Z"
 }

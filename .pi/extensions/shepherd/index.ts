@@ -15,6 +15,12 @@ import {
 
 import type { AgentSessionRuntimeSdk } from "./agent-session-runtime.ts";
 import { ShepherdController } from "./controller.ts";
+import {
+	applyRegisteredProviderConfigs,
+	assertEmbeddedModelAuth,
+	ExtensionModelRuntimeOwner,
+	type RegisteredProviderRuntime,
+} from "./embedded-model-runtime.ts";
 import { assertShepherdPiCompatibility } from "./pi-compatibility.ts";
 import {
 	canonicalizeGitWorktree,
@@ -37,33 +43,35 @@ function stateFingerprint(worktreeIdentity: string): string {
 }
 
 async function createEmbeddedAgentSession(
+	modelRuntimeOwner: ExtensionModelRuntimeOwner<ModelRuntime>,
 	modelRegistry: ShepherdModelRegistry,
 	options: CreateAgentSessionOptions,
 ): ReturnType<typeof createAgentSession> {
 	const agentDir = options.agentDir ?? getAgentDir();
-	const modelRuntime = await ModelRuntime.create({ authPath: join(agentDir, "auth.json") });
-	for (const provider of modelRegistry.getRegisteredProviderIds()) {
-		const config = modelRegistry.getRegisteredProviderConfig(provider);
-		if (config === undefined) continue;
-		modelRuntime.unregisterProvider(provider);
-		modelRuntime.registerProvider(provider, config as never);
-	}
+	const modelRuntime = await modelRuntimeOwner.acquire(
+		agentDir,
+		() => ModelRuntime.create({ authPath: join(agentDir, "auth.json") }),
+	);
+	applyRegisteredProviderConfigs(
+		modelRuntime as unknown as RegisteredProviderRuntime,
+		modelRegistry,
+	);
 	const selected = options.model;
 	if (selected) {
-		const hostAuth = modelRegistry.getProviderAuthStatus(selected.provider);
-		const childAuth = modelRuntime.getProviderAuthStatus(selected.provider);
-		if (hostAuth.configured && !childAuth.configured && modelRegistry.isUsingOAuth(selected as never)) {
-			throw new Error(`embedded AgentSession cannot inherit host-only OAuth for ${selected.provider}`);
-		}
-		if (hostAuth.source === "runtime" || (hostAuth.configured && !childAuth.configured)) {
-			const apiKey = await modelRegistry.getApiKeyForProvider(selected.provider);
-			if (apiKey !== undefined) await modelRuntime.setRuntimeApiKey(selected.provider, apiKey);
-		}
+		assertEmbeddedModelAuth(
+			selected.provider,
+			modelRegistry.isUsingOAuth(selected as never),
+			modelRegistry.getProviderAuthStatus(selected.provider),
+			modelRuntime.getProviderAuthStatus(selected.provider),
+		);
 	}
 	return createAgentSession({ ...options, modelRuntime });
 }
 
-function embeddedSdk(modelRegistry: ShepherdModelRegistry): ShepherdSdk {
+function embeddedSdk(
+	modelRuntimeOwner: ExtensionModelRuntimeOwner<ModelRuntime>,
+	modelRegistry: ShepherdModelRegistry,
+): ShepherdSdk {
 	return {
 		version: VERSION,
 		requiredVersion: REQUIRED_PI_VERSION,
@@ -73,12 +81,18 @@ function embeddedSdk(modelRegistry: ShepherdModelRegistry): ShepherdSdk {
 		createSessionManager: (cwd) => SessionManager.inMemory(cwd),
 		createResourceLoader: (options) => new DefaultResourceLoader(options as never),
 		createSession: (options) =>
-			createEmbeddedAgentSession(modelRegistry, options as CreateAgentSessionOptions) as unknown as
-				ReturnType<ShepherdSdk["createSession"]>,
+			createEmbeddedAgentSession(
+				modelRuntimeOwner,
+				modelRegistry,
+				options as CreateAgentSessionOptions,
+			) as unknown as ReturnType<ShepherdSdk["createSession"]>,
 	};
 }
 
-function embeddedRuntimeSdk(modelRegistry: ShepherdModelRegistry): AgentSessionRuntimeSdk {
+function embeddedRuntimeSdk(
+	modelRuntimeOwner: ExtensionModelRuntimeOwner<ModelRuntime>,
+	modelRegistry: ShepherdModelRegistry,
+): AgentSessionRuntimeSdk {
 	return {
 		version: VERSION,
 		requiredVersion: REQUIRED_PI_VERSION,
@@ -88,25 +102,34 @@ function embeddedRuntimeSdk(modelRegistry: ShepherdModelRegistry): AgentSessionR
 		createSettingsManager: (settings, options) => SettingsManager.inMemory(settings as never, options as never),
 		createSessionManager: (cwd) => SessionManager.inMemory(cwd),
 		createResourceLoader: (options) => new DefaultResourceLoader(options as never),
-		createAgentSession: (options) => createEmbeddedAgentSession(modelRegistry, options) as unknown as
-			ReturnType<AgentSessionRuntimeSdk["createAgentSession"]>,
+		createAgentSession: (options) => createEmbeddedAgentSession(
+			modelRuntimeOwner,
+			modelRegistry,
+			options,
+		) as unknown as ReturnType<AgentSessionRuntimeSdk["createAgentSession"]>,
 	};
 }
 
 export default function shepherdExtension(pi: ExtensionAPI): void {
 	assertShepherdPiCompatibility(VERSION, REQUIRED_PI_VERSION);
+	const agentDir = getAgentDir();
+	const modelRuntimeOwner = new ExtensionModelRuntimeOwner<ModelRuntime>(agentDir);
 	registerShepherdExtension(pi as unknown as ShepherdExtensionHost, {
 		resolveWorktree: (context, options) => canonicalizeGitWorktree(context.cwd, options),
 		createController(context: ShepherdCommandContext, worktree) {
 			const root = join(
-				getAgentDir(),
+				agentDir,
 				"shepherd",
 				stateFingerprint(worktree.worktreeIdentity),
 			);
 			const registry = context.modelRegistry as unknown as ShepherdModelRegistry;
 			return new ShepherdController({
 				store: new FileStateStore(root),
-				runner: new SdkAgentRunner(embeddedSdk(registry), registry, { maxConcurrency: 2 }),
+				runner: new SdkAgentRunner(
+					embeddedSdk(modelRuntimeOwner, registry),
+					registry,
+					{ maxConcurrency: 2 },
+				),
 				targetEvidence: {
 					capture: async (command) => {
 						const current = await canonicalizeGitWorktree(context.cwd);
@@ -127,12 +150,12 @@ export default function shepherdExtension(pi: ExtensionAPI): void {
 		},
 		createAutonomousController(context: ShepherdCommandContext, worktree, issue) {
 			const root = join(
-				getAgentDir(),
+				agentDir,
 				"shepherd",
 				stateFingerprint(worktree.worktreeIdentity),
 			);
 			const registry = context.modelRegistry as ShepherdModelRegistry;
-			const runtimeSdk = embeddedRuntimeSdk(registry);
+			const runtimeSdk = embeddedRuntimeSdk(modelRuntimeOwner, registry);
 			return createProductionPiHostController({
 				issue,
 				repositoryRoot: context.cwd,

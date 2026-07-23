@@ -57,12 +57,23 @@ pass for a mutating autonomous path.
   generation 1 (`run-689079d0-089c-4d72-ab78-3dd1b213923e`) halted: the scout completed exact
   read-only reconciliation, while the concurrent validator failed with `embedded AgentSession
   cannot inherit host-only OAuth for openai-codex`. #438 stayed open/draft/unmerged and unchanged.
-- Intended GREEN: one lazily initialized public Pi `ModelRuntime` is shared by all embedded legacy
-  and production session adapters for the extension host. Concurrent callers await the same
-  initialization; a different agent directory or genuinely unavailable child auth fails closed.
-  The runtime reads the normal mode-0600 credential store itself; Shepherd never reads, copies,
-  logs, stores, or forwards a credential value. Focused concurrency/auth tests and a new live
-  canary generation must pass before dispatch.
+- GREEN: one lazily initialized public Pi `ModelRuntime` is shared by all embedded legacy and
+  production session adapters for the extension host. Concurrent callers await the same
+  initialization; rejected initialization is shared and retryable; a different agent directory or
+  genuinely unavailable child auth fails closed. Provider registration is re-applied from the
+  current host registry before each session. The runtime reads the normal mode-0600 credential
+  store itself; Shepherd never reads, copies, logs, stores, or forwards a credential value.
+- Exact green evidence: 5/5 focused coordinator tests; 168/168 affected coordinator/SDK/production
+  runtime tests with `SHEPHERD_PI_PACKAGE_ROOT` bound to Pi 0.80.10; strict TypeScript 5.9.3 no-emit
+  over 51 production Shepherd files; exact Pi-family verifier; offline isolated/co-loaded RPC; and
+  `git diff --check`/three-path scope. An earlier affected invocation omitted the required pinned-Pi
+  environment and failed only its two real-Pi fixture setups (`ModelRuntime` unavailable); the exact
+  rerun corrected the command and passed 168/168.
+- Live canary generation 2 (`run-ae39456f-e034-4204-b23b-bd8e076b251e`) completed both model lanes
+  without the OAuth initialization error. It failed closed, rather than halting, because exact
+  external target #438 remains draft and GitHub `DIRTY`; both lanes reported the same merge-conflict
+  blocker and safe next action. #438 remained unchanged. This proves the parent auth preflight fix,
+  not a passing #481 canary receipt.
 - Orchestration decision: `local_critical_path`. A core embedded-session preflight defect blocks the
   controller that would dispatch #480, so the parent owner performs only this bounded TDD
   correction. Workflow-engine run `93478be5-f7af-41d7-abf1-494a67cdaebf` supplied two read-only

@@ -8,7 +8,7 @@ Verdict: **DEPENDENCY-BLOCKED — waiting for #480 integration**.
 - [ ] Focused deterministic canary RED fails for intended assertions.
 - [ ] Focused GREEN passes.
 - [x] Generation 1 attempted supported read-only live #397/#438 reconciliation at exact head `21d195aff`; #438 stayed unchanged and scout evidence completed.
-- [ ] A later generation completes after the parent-owned embedded OAuth runtime preflight is green.
+- [x] Generation 2 completes both model lanes after the parent-owned embedded OAuth runtime preflight turns green; it fails closed only on unchanged #438 draft/`DIRTY` state and is not a passing receipt.
 - [ ] #438 remains open, draft, and unmerged; no branch or issue mutation is attributed to the canary.
 - [ ] Complete sequential Shepherd suite passes in the child lane.
 - [ ] Strict no-emit TypeScript passes against exact Pi 0.80.10 declarations.

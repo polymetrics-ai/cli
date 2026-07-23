@@ -36,9 +36,17 @@ value was requested/read/printed, and deprecation remains inactive. The parent o
 single-flight runtime correction because it blocks Shepherd dispatch itself; this does not count as
 #481 production implementation or satisfy R1-R6.
 
+## Parent-preflight GREEN / live canary generation 2
+
+Parent preflight tests passed 5/5 focused and 168/168 affected with strict pinned-Pi typecheck,
+family verification, and offline RPC. Generation 2
+(`run-ae39456f-e034-4204-b23b-bd8e076b251e`) then completed both model lanes without the OAuth
+initialization error. Both independently classified exact #438 as not merge-ready because it is
+still draft and GitHub `DIRTY`; the run failed closed with score 0.000 rather than halting. It did
+not mutate #438 and it is not a passing canary/deprecation receipt.
+
 ## GREEN / live canary / review
 
-Pending #480 integration and worker handoff. After the parent preflight fix, create the next durable
-canary generation from the same clean checkout rather than deleting prior evidence. The live
-read-only canary is supplementary exact-state evidence, not a replacement for deterministic
-RED/GREEN or human approval.
+Pending #480 integration and worker handoff. Keep both durable generations as evidence. The live
+read-only reconciliation is supplementary exact-state evidence, not a replacement for deterministic
+R1-R6 RED/GREEN, a passing bound synthetic canary receipt, or human approval.
