@@ -171,6 +171,76 @@ func TestRequesterDoEmitsPRDMetricsAtHTTPRetrySeams(t *testing.T) {
 	assertConnSDKNotContains(t, data, "request.body")
 }
 
+func TestRequesterDoMultipartRetryPreservesTelemetryAndSecretSafety(t *testing.T) {
+	const marker = "wave1_multipart_secret_marker"
+	filePath := filepath.Join(t.TempDir(), "payload.txt")
+	if err := os.WriteFile(filePath, []byte(marker), 0o600); err != nil {
+		t.Fatal(err)
+	}
+
+	calls := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		calls++
+		if err := r.ParseMultipartForm(1 << 20); err != nil {
+			t.Errorf("ParseMultipartForm: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		file, _, err := r.FormFile("mediaFile")
+		if err != nil {
+			t.Errorf("FormFile: %v", err)
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		raw, err := io.ReadAll(file)
+		_ = file.Close()
+		if err != nil {
+			t.Errorf("ReadAll: %v", err)
+		}
+		if string(raw) != marker {
+			t.Errorf("multipart body = %q, want marker", string(raw))
+		}
+		if calls == 1 {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			return
+		}
+		_, _ = w.Write([]byte(`{"ok":true}`))
+	}))
+	defer server.Close()
+
+	root := t.TempDir()
+	dir := filepath.Join(root, ".polymetrics", "telemetry")
+	ctx, handle := telemetry.Init(context.Background(), telemetry.Config{
+		Exporter:    telemetry.ExporterFile,
+		ProjectRoot: root,
+		Directory:   filepath.Join(".polymetrics", "telemetry"),
+		RunID:       "wave1-multipart",
+	}, func(string) {})
+	requester := &Requester{Client: server.Client(), BaseURL: server.URL, MaxRetries: 1, Sleep: noSleep}
+	_, err := requester.DoMultipart(ctx, http.MethodPost, "/upload", nil, MultipartForm{
+		Fields: map[string]string{"source": "gong"},
+		Files:  []MultipartFile{{FieldName: "mediaFile", Path: filePath, MaxBytes: 1024}},
+	})
+	if err != nil {
+		t.Fatalf("DoMultipart: %v", err)
+	}
+	telemetry.Shutdown(context.Background(), handle, func(string) {})
+
+	data := readConnSDKTelemetry(t, dir)
+	if got := connSDKMetricSum(t, data, "pm.api.calls"); got != 2 {
+		t.Fatalf("pm.api.calls = %d, want 2", got)
+	}
+	if got := connSDKMetricSum(t, data, "pm.api.retries"); got != 1 {
+		t.Fatalf("pm.api.retries = %d, want 1", got)
+	}
+	if got := connSDKMetricSum(t, data, "pm.bytes.written"); got <= 2*len(marker) {
+		t.Fatalf("pm.bytes.written = %d, want encoded multipart bytes for both attempts", got)
+	}
+	assertConnSDKContains(t, data, "pm.connector.http")
+	assertConnSDKNotContains(t, data, marker)
+	assertConnSDKNotContains(t, data, filePath)
+}
+
 func readConnSDKTelemetry(t *testing.T, dir string) []byte {
 	t.Helper()
 	entries, err := os.ReadDir(dir)

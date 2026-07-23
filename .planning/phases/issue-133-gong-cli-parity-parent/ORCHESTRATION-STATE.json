@@ -1,0 +1,460 @@
+{
+  "parent_issue": {
+    "number": 133,
+    "url": "https://github.com/polymetrics-ai/cli/issues/133",
+    "title": "Gong CLI feature parity parent roadmap",
+    "state": "OPEN"
+  },
+  "parent_branch": "feat/133-gong-cli-parity",
+  "parent_pr": {
+    "url": "https://github.com/polymetrics-ai/cli/pull/232",
+    "base": "main",
+    "head": "feat/133-gong-cli-parity",
+    "draft": false,
+    "state": "OPEN"
+  },
+  "default_branch": "main",
+  "orchestrator": {
+    "mode": "active_owner",
+    "runtime": "pi-api",
+    "status": "running"
+  },
+  "ready_queue": [
+    {
+      "number": 144,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "internal/connectors/defs/gong/api_surface.json; internal/connectors/defs/gong/docs.md; cmd/connectorgen connector-specific tests; planning artifacts",
+      "decision": "local_critical_path"
+    },
+    {
+      "number": 141,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "internal/connectors/defs/gong/cli_surface.json; validation/tests",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 142,
+      "status": "sub_pr_green",
+      "dependencies": [
+        141
+      ],
+      "write_scope": "help/docs/website/generated artifacts",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 143,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "Gong stream definitions, schemas, fixtures, stream runner tests",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 145,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "Gong direct-read metadata/executor/tests",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 146,
+      "status": "sub_pr_green",
+      "dependencies": [],
+      "write_scope": "bounded body/binary policy and fixtures",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 147,
+      "status": "sub_pr_green",
+      "dependencies": [
+        146
+      ],
+      "write_scope": "Gong writes.json, sensitive/admin policy, preview/redaction tests",
+      "decision": "local_critical_path_runtime_capability_missing"
+    },
+    {
+      "number": 252,
+      "status": "sub_pr_green",
+      "dependencies": [
+        146
+      ],
+      "write_scope": "operation direct-read executor; commandrunner body.* flags; validator/tests",
+      "decision": "local_critical_path_runtime_capability_missing_completed"
+    },
+    {
+      "number": 253,
+      "status": "sub_pr_green",
+      "dependencies": [
+        146
+      ],
+      "write_scope": "write action json_array body mode; validation/redaction/tests",
+      "decision": "local_critical_path_runtime_capability_missing_completed"
+    },
+    {
+      "number": 254,
+      "status": "sub_pr_green",
+      "dependencies": [
+        146
+      ],
+      "write_scope": "connsdk multipart; write action multipart body mode; validation/redaction/tests",
+      "decision": "local_critical_path_runtime_capability_missing_completed"
+    }
+  ],
+  "spawn_decisions": [
+    {
+      "timestamp": "2026-07-09T19:33:27Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        144
+      ],
+      "reason": "No subagent tool exposed in this Pi API session; #144 executed inline as local critical path."
+    },
+    {
+      "timestamp": "2026-07-09T19:33:27Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        144
+      ],
+      "reason": "Executed #144 inline because no subagent tool is available; targeted local gates passed, PR/review coverage pending."
+    },
+    {
+      "timestamp": "2026-07-09T20:26:15Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        141,
+        143,
+        145,
+        146
+      ],
+      "reason": "After #144 local slice, several lanes are worker-ready, but this Pi API session still has no subagent tool; remaining Gong defs write scopes also collide, so continue sequentially in a future local critical path or isolated worker session."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path_runtime_capability_missing",
+      "issue_numbers": [
+        141,
+        142,
+        143,
+        145,
+        146,
+        147
+      ],
+      "reason": "No subagent tool exposed in this Pi API session; remaining Gong definition write scopes collided, so the lanes were integrated inline with targeted red/green verification."
+    },
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "decision": "local_critical_path_runtime_capability_missing",
+      "issue_numbers": [
+        252,
+        253,
+        254
+      ],
+      "reason": "User requested creating issues and implementing the remaining Gong engine-shape gaps. This Pi API session still has no subagent tool, and the write scopes collide in engine/commandrunner/defs, so execute sequentially inline on the parent branch."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "decision": "not_spawned_runtime_capability_missing",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "reason": "Project pm-gsd-worker, pm-scout, and pm-reviewer agents were reviewed, but the current Pi harness does not expose the subagent tool. Next unblock action: relaunch Pi with read,bash,edit,write,grep,find,ls,subagent; current requested delivery continues as local critical path."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "reason": "Completion changes overlap across dynamic CLI help, upload approval safety, Gong operation metadata, generated docs, and parent artifacts; execute sequential TDD slices in the parent checkout."
+    },
+    {
+      "timestamp": "2026-07-22T11:43:30Z",
+      "decision": "parallel_read_test_lanes_local_critical_path_writes",
+      "issue_numbers": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "reason": "No subagent tool is exposed. Parent orchestrator ran CLI, upload, OpenAPI/schema, race-test, docs, CI, and local Codex review lanes concurrently; production edits remained serialized to avoid collisions."
+    },
+    {
+      "timestamp": "2026-07-22T13:30:30Z",
+      "decision": "not_spawned_verification_blocked",
+      "issue_numbers": [
+        133
+      ],
+      "reason": "Implementation review and CI are complete. Parent orchestration remains running only to confirm required checks on the artifact-only final PR head before entering the human merge gate."
+    }
+  ],
+  "subissues": [
+    {
+      "number": 144,
+      "url": "https://github.com/polymetrics-ai/cli/issues/144",
+      "branch": "feat/144-gong-operation-ledger",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "internal/connectors/defs/gong/api_surface.json; internal/connectors/defs/gong/docs.md; cmd/connectorgen connector-specific tests; .planning/phases/issue-144-gong-operation-ledger/**",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "targeted local checks passed: go test ./cmd/connectorgen -run GongAPISurfaceOperationLedger -count=1; go test ./cmd/connectorgen -count=1; go test ./internal/connectors/conformance -run TestConformance/gong|Static -count=1; go run ./cmd/connectorgen validate internal/connectors/defs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 141,
+      "url": "https://github.com/polymetrics-ai/cli/issues/141",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 142,
+      "url": "https://github.com/polymetrics-ai/cli/issues/142",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 143,
+      "url": "https://github.com/polymetrics-ai/cli/issues/143",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 145,
+      "url": "https://github.com/polymetrics-ai/cli/issues/145",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 146,
+      "url": "https://github.com/polymetrics-ai/cli/issues/146",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 147,
+      "url": "https://github.com/polymetrics-ai/cli/issues/147",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "integrated Gong cli_surface/streams/direct-read/operations/writes/docs/website/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/engine -run DirectRead -count=1; go test ./internal/connectors/commandrunner -count=1; go test ./cmd/connectorgen -run Gong -count=1; go test ./cmd/connectorgen -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 252,
+      "url": "https://github.com/polymetrics-ai/cli/issues/252",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "operation direct-read executor; commandrunner body.* flags; validator/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 253,
+      "url": "https://github.com/polymetrics-ai/cli/issues/253",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "write action json_array body mode; validation/redaction/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    },
+    {
+      "number": 254,
+      "url": "https://github.com/polymetrics-ai/cli/issues/254",
+      "branch": "feat/133-gong-cli-parity",
+      "pr_url": "https://github.com/polymetrics-ai/cli/pull/232",
+      "worker": "local_critical_path",
+      "status": "sub_pr_green",
+      "write_scope": "connsdk multipart; write action multipart body mode; validation/redaction/tests",
+      "worker_directory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-133-gong-cli-parity",
+      "verification": "go test ./internal/connectors/connsdk -run Multipart -count=1; go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1; go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1; go test ./cmd/connectorgen -run 'Operation|Gong' -count=1; go run ./cmd/connectorgen validate internal/connectors/defs; go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1; go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs; go vet ./...; go build ./cmd/pm; go test -timeout 20m ./...; make verify; go run ./cmd/pm connectors inspect gong --json; go test ./internal/app -run PayloadIdentities -count=1",
+      "automated_review": {
+        "primary_route": "local_codex",
+        "status": "complete_no_unresolved_findings",
+        "head_sha": "798af7f7",
+        "reviewed_range": "feature and fix commits through 798af7f7",
+        "coverage_route": "parent_local_codex_commit_reviews",
+        "fallback_route": "none_per_user_direction",
+        "disposition_summary": "Local Codex reviewed the feature and every fix commit; all actionable findings were reproduced and fixed. Final implementation review reported no actionable regressions. CodeRabbit, Claude, and Copilot were skipped per user direction.",
+        "disposition_url": "recorded_in_VERIFICATION.md"
+      }
+    }
+  ],
+  "human_gates": [
+    "parent PR merge to main",
+    "auth scope changes",
+    "new dependencies",
+    "credentialed Gong checks",
+    "destructive external actions",
+    "reverse ETL execution",
+    "quality gate reductions"
+  ],
+  "updated_at": "2026-07-22T13:30:30Z",
+  "integration_notes": [
+    {
+      "timestamp": "2026-07-10T00:00:00Z",
+      "issues": [
+        252,
+        253,
+        254
+      ],
+      "status": "sub_pr_green",
+      "summary": "Engine-shape subissues implemented inline because no subagent tool is available: typed POST read-query direct reads, json_array write bodies, multipart write bodies, Gong safe availability flips, docs/website updates, and make verify passed. Local file upload approvals bind path hash plus size/mtime identity."
+    },
+    {
+      "timestamp": "2026-07-22T10:37:13Z",
+      "issues": [
+        133,
+        142,
+        252,
+        254
+      ],
+      "status": "worker_in_progress",
+      "summary": "Completion cycle started: dynamic Gong help, content-bound approval identities, stream-time multipart byte enforcement, and all remaining POST direct reads including transcript. Verification reset to pending."
+    },
+    {
+      "timestamp": "2026-07-22T13:15:30Z",
+      "issues": [
+        133,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        252,
+        253,
+        254
+      ],
+      "status": "review_ready_pending_artifact_head_ci",
+      "summary": "Implementation head 798af7f7 passed local make verify, pushed-head CI, and final local Codex review with no unresolved actionable findings. PR #232 is non-draft with closing keywords. Terminal human-gate state is deferred because this artifact-only update creates a newer head whose required checks must complete."
+    }
+  ]
+}

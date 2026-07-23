@@ -3,11 +3,18 @@ package connsdk
 import (
 	"bytes"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
+	"net/textproto"
 	"net/url"
+	"os"
+	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -58,6 +65,48 @@ func (e *HTTPError) TelemetryErrorClass() string { return "http" }
 
 // TelemetryErrorCode returns a stable error code for secret-safe tracing.
 func (e *HTTPError) TelemetryErrorCode() string { return "http_status" }
+
+// MultipartForm describes bounded fields and files for a multipart request.
+type MultipartForm struct {
+	Fields   map[string]string
+	Files    []MultipartFile
+	MaxBytes int64
+}
+
+// MultipartFile describes one file part and its approval-time identity.
+type MultipartFile struct {
+	FieldName      string
+	Path           string
+	FileName       string
+	ContentType    string
+	MaxBytes       int64
+	ExpectedSHA256 string
+}
+
+type requestBody struct {
+	Reader      io.Reader
+	ContentType string
+	Cleanup     func() error
+}
+
+type countingReader struct {
+	reader io.Reader
+	bytes  int64
+}
+
+func (r *countingReader) Read(p []byte) (int, error) {
+	n, err := r.reader.Read(p)
+	r.bytes += int64(n)
+	return n, err
+}
+
+func metricByteCount(n int64) int {
+	maxInt := int64(^uint(0) >> 1)
+	if n > maxInt {
+		return int(maxInt)
+	}
+	return int(n)
+}
 
 // Requester performs JSON HTTP requests with auth, retry, and rate-limit handling.
 // The zero value is usable once Client/BaseURL are set; sensible defaults are
@@ -222,10 +271,281 @@ func (r *Requester) DoForm(ctx context.Context, method, path string, query, form
 	return r.do(ctx, method, path, query, payload, contentType, defaultMaxResponseBody)
 }
 
+// DoMultipart performs an HTTP request with a multipart/form-data body. File
+// parts are opened for each retry attempt, so callers may use it with the same
+// retry policy as JSON/form requests without reusing a consumed reader.
+func (r *Requester) DoMultipart(ctx context.Context, method, path string, query url.Values, form MultipartForm) (*Response, error) {
+	if err := validateMultipartForm(form); err != nil {
+		return nil, err
+	}
+	prepared, cleanup, err := snapshotApprovedMultipartFiles(ctx, form)
+	if err != nil {
+		return nil, err
+	}
+	defer cleanup()
+	return r.doWithBody(ctx, method, path, query, defaultMaxResponseBody, func() (*requestBody, error) {
+		return multipartBody(prepared)
+	})
+}
+
+func validateMultipartForm(form MultipartForm) error {
+	var total int64
+	for i, file := range form.Files {
+		if strings.TrimSpace(file.FieldName) == "" {
+			return fmt.Errorf("multipart file %d field name is required", i)
+		}
+		if strings.TrimSpace(file.Path) == "" {
+			return fmt.Errorf("multipart file %q path is required", file.FieldName)
+		}
+		if file.ExpectedSHA256 != "" {
+			digest, err := hex.DecodeString(file.ExpectedSHA256)
+			if err != nil || len(digest) != sha256.Size {
+				return fmt.Errorf("multipart file %q expected SHA-256 is invalid", file.FieldName)
+			}
+		}
+		info, err := os.Stat(file.Path)
+		if err != nil {
+			return fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+		}
+		if !info.Mode().IsRegular() {
+			return fmt.Errorf("multipart file %q must be a regular file", file.FieldName)
+		}
+		if file.MaxBytes > 0 && info.Size() > file.MaxBytes {
+			return fmt.Errorf("multipart file %q too large: %d bytes exceeds limit %d", file.FieldName, info.Size(), file.MaxBytes)
+		}
+		total += info.Size()
+		if form.MaxBytes > 0 && total > form.MaxBytes {
+			return fmt.Errorf("multipart files too large: %d bytes exceeds limit %d", total, form.MaxBytes)
+		}
+	}
+	return nil
+}
+
+func snapshotApprovedMultipartFiles(ctx context.Context, form MultipartForm) (MultipartForm, func(), error) {
+	prepared := form
+	prepared.Files = append([]MultipartFile(nil), form.Files...)
+	tempPaths := make([]string, 0, len(form.Files))
+	cleanup := func() {
+		for _, path := range tempPaths {
+			_ = os.Remove(path)
+		}
+	}
+	var total int64
+	for i, file := range form.Files {
+		if file.ExpectedSHA256 == "" {
+			info, err := os.Stat(file.Path)
+			if err != nil {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+			}
+			total += info.Size()
+			continue
+		}
+		limit := file.MaxBytes
+		if limit <= 0 {
+			limit = -1
+		}
+		if form.MaxBytes > 0 {
+			remaining := form.MaxBytes - total
+			if remaining < 0 {
+				cleanup()
+				return MultipartForm{}, func() {}, fmt.Errorf("multipart files too large: exceeds limit %d", form.MaxBytes)
+			}
+			if limit < 0 || remaining < limit {
+				limit = remaining
+			}
+		}
+		tempPath, size, digest, err := snapshotMultipartFile(ctx, file, limit)
+		if err != nil {
+			cleanup()
+			return MultipartForm{}, func() {}, err
+		}
+		tempPaths = append(tempPaths, tempPath)
+		expected, _ := hex.DecodeString(file.ExpectedSHA256)
+		if !bytes.Equal(digest, expected) {
+			cleanup()
+			return MultipartForm{}, func() {}, fmt.Errorf("multipart file %q changed since approval", file.FieldName)
+		}
+		if prepared.Files[i].FileName == "" {
+			prepared.Files[i].FileName = filepath.Base(file.Path)
+		}
+		prepared.Files[i].Path = tempPath
+		total += size
+	}
+	return prepared, cleanup, nil
+}
+
+func snapshotMultipartFile(ctx context.Context, file MultipartFile, maxBytes int64) (string, int64, []byte, error) {
+	source, err := os.Open(file.Path)
+	if err != nil {
+		return "", 0, nil, fmt.Errorf("multipart file %q: %w", file.FieldName, err)
+	}
+	defer source.Close()
+	temp, err := os.CreateTemp("", "polymetrics-upload-*")
+	if err != nil {
+		return "", 0, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	tempPath := temp.Name()
+	removeTemp := true
+	defer func() {
+		_ = temp.Close()
+		if removeTemp {
+			_ = os.Remove(tempPath)
+		}
+	}()
+
+	hash := sha256.New()
+	reader := io.Reader(&contextReader{ctx: ctx, reader: source})
+	if maxBytes >= 0 {
+		reader = io.LimitReader(reader, maxBytes)
+	}
+	written, err := io.Copy(io.MultiWriter(temp, hash), reader)
+	if err != nil {
+		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	if maxBytes >= 0 && written == maxBytes {
+		var extra [1]byte
+		n, readErr := (&contextReader{ctx: ctx, reader: source}).Read(extra[:])
+		if n > 0 {
+			return "", written, nil, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+		}
+		if readErr != nil && readErr != io.EOF {
+			return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, readErr)
+		}
+	}
+	if err := temp.Close(); err != nil {
+		return "", written, nil, fmt.Errorf("snapshot multipart file %q: %w", file.FieldName, err)
+	}
+	removeTemp = false
+	return tempPath, written, hash.Sum(nil), nil
+}
+
+type contextReader struct {
+	ctx    context.Context
+	reader io.Reader
+}
+
+func (r *contextReader) Read(p []byte) (int, error) {
+	select {
+	case <-r.ctx.Done():
+		return 0, r.ctx.Err()
+	default:
+		return r.reader.Read(p)
+	}
+}
+
+func multipartBody(form MultipartForm) (*requestBody, error) {
+	pr, pw := io.Pipe()
+	mw := multipart.NewWriter(pw)
+	done := make(chan error, 1)
+	go func() {
+		err := writeMultipartForm(mw, form)
+		if closeErr := mw.Close(); err == nil {
+			err = closeErr
+		}
+		if err != nil {
+			_ = pw.CloseWithError(err)
+		} else {
+			_ = pw.Close()
+		}
+		done <- err
+	}()
+	return &requestBody{
+		Reader:      pr,
+		ContentType: mw.FormDataContentType(),
+		Cleanup: func() error {
+			_ = pr.Close()
+			return <-done
+		},
+	}, nil
+}
+
+func writeMultipartForm(mw *multipart.Writer, form MultipartForm) error {
+	keys := make([]string, 0, len(form.Fields))
+	for key := range form.Fields {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	for _, key := range keys {
+		if err := mw.WriteField(key, form.Fields[key]); err != nil {
+			return err
+		}
+	}
+	var total int64
+	for _, file := range form.Files {
+		limit := file.MaxBytes
+		if limit <= 0 {
+			limit = -1
+		}
+		if form.MaxBytes > 0 {
+			remaining := form.MaxBytes - total
+			if limit < 0 || remaining < limit {
+				limit = remaining
+			}
+		}
+		written, err := writeMultipartFile(mw, file, limit)
+		if err != nil {
+			return err
+		}
+		total += written
+	}
+	return nil
+}
+
+func writeMultipartFile(mw *multipart.Writer, file MultipartFile, maxBytes int64) (int64, error) {
+	name := file.FileName
+	if strings.TrimSpace(name) == "" {
+		name = filepath.Base(file.Path)
+	}
+	header := make(textproto.MIMEHeader)
+	header.Set("Content-Disposition", fmt.Sprintf(`form-data; name=%q; filename=%q`, file.FieldName, name))
+	if file.ContentType != "" {
+		header.Set("Content-Type", file.ContentType)
+	}
+	part, err := mw.CreatePart(header)
+	if err != nil {
+		return 0, err
+	}
+	f, err := os.Open(file.Path)
+	if err != nil {
+		return 0, err
+	}
+	defer f.Close()
+	if maxBytes < 0 {
+		written, err := io.Copy(part, f)
+		return written, err
+	}
+	written, err := io.CopyN(part, f, maxBytes)
+	if err != nil && err != io.EOF {
+		return written, err
+	}
+	if written < maxBytes {
+		return written, nil
+	}
+	var extra [1]byte
+	n, readErr := f.Read(extra[:])
+	if n > 0 {
+		return written, fmt.Errorf("multipart file %q too large: exceeds limit %d", file.FieldName, maxBytes)
+	}
+	if readErr != nil && readErr != io.EOF {
+		return written, readErr
+	}
+	return written, nil
+}
+
 // do is the shared request core for Do/DoForm. payload is the already-encoded
 // body (nil for none) and contentType is the Content-Type to set when a body is
 // present.
 func (r *Requester) do(ctx context.Context, method, path string, query url.Values, payload []byte, contentType string, maxBodyBytes int) (*Response, error) {
+	return r.doWithBody(ctx, method, path, query, maxBodyBytes, func() (*requestBody, error) {
+		if payload == nil {
+			return nil, nil
+		}
+		return &requestBody{Reader: bytes.NewReader(payload), ContentType: contentType}, nil
+	})
+}
+
+func (r *Requester) doWithBody(ctx context.Context, method, path string, query url.Values, maxBodyBytes int, bodyFactory func() (*requestBody, error)) (*Response, error) {
 	fullURL, err := r.resolveURL(path, query)
 	if err != nil {
 		return nil, err
@@ -252,26 +572,44 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			return nil, err
 		}
 
+		body, err := bodyFactory()
+		if err != nil {
+			return nil, err
+		}
 		var reader io.Reader
-		if payload != nil {
-			reader = bytes.NewReader(payload)
+		var contentType string
+		var sent *countingReader
+		if body != nil {
+			sent = &countingReader{reader: body.Reader}
+			reader = sent
+			contentType = body.ContentType
 		}
 		req, err := http.NewRequestWithContext(ctx, method, fullURL, reader)
 		if err != nil {
+			cleanupRequestBody(body)
 			return nil, fmt.Errorf("build request: %w", err)
 		}
-		r.applyHeaders(req, payload != nil, contentType)
+		r.applyHeaders(req, body != nil, contentType)
 		if r.Auth != nil {
 			if err := r.Auth.Apply(ctx, req); err != nil {
+				cleanupRequestBody(body)
 				return nil, fmt.Errorf("apply auth: %w", err)
 			}
 		}
 
-		telemetry.RecordAPICall(ctx, method, len(payload))
 		resp, err := r.client().Do(req)
+		bodyErr := cleanupRequestBody(body)
+		requestBytes := 0
+		if sent != nil {
+			requestBytes = metricByteCount(sent.bytes)
+		}
+		telemetry.RecordAPICall(ctx, method, requestBytes)
 		if err != nil {
 			lastErr = fmt.Errorf("send request: %w", err)
 			span.AddEvent("pm.connector.http.error", attemptAttr)
+			if bodyErr != nil {
+				lastErr = fmt.Errorf("send request body: %w", bodyErr)
+			}
 			if attempt < attempts-1 {
 				telemetry.RecordAPIRetry(ctx, method)
 				if werr := r.sleep(ctx, r.backoff(attempt, "")); werr != nil {
@@ -281,6 +619,10 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 			}
 			span.RecordError(lastErr)
 			return nil, lastErr
+		}
+		if bodyErr != nil {
+			resp.Body.Close()
+			return nil, fmt.Errorf("send request body: %w", bodyErr)
 		}
 
 		respBody, _ := io.ReadAll(io.LimitReader(resp.Body, int64(maxBodyBytes)))
@@ -316,6 +658,13 @@ func (r *Requester) do(ctx context.Context, method, path string, query url.Value
 	}
 	span.RecordError(lastErr)
 	return nil, lastErr
+}
+
+func cleanupRequestBody(body *requestBody) error {
+	if body == nil || body.Cleanup == nil {
+		return nil
+	}
+	return body.Cleanup()
 }
 
 // DoJSON performs a request and decodes a successful response into out (which may
