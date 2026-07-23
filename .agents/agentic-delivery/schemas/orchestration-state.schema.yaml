@@ -107,6 +107,7 @@ field_contract:
         - status
         - exact_base_sha
         - exact_head_sha
+        - exact_head_tree
         - reviewed_range
         - disposition_summary
         - review_compiler
@@ -117,18 +118,19 @@ field_contract:
       status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
       finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]
       review_compiler:
-        required: [status, exact_base_sha, exact_head_sha, manifest_artifact, packet_ids, coverage]
+        required: [status, exact_base_sha, exact_head_sha, exact_head_tree, manifest_artifact, packet_ids, coverage, impact_graph]
         status_values: [pending, ready, blocked]
-        coverage_required: [changed_files, closure_files, authority_files, unassigned_files]
-        invariant: blocked when any active target is missing or prohibited, authority state disagrees, a changed file is unassigned, or a packet cannot fit without truncation
+        coverage_required: [changed_files, closure_files, authority_files, impact_files, impact_edge_ids, unassigned_files]
+        impact_graph_required: [schema_version, status, seed_files, indexed_edge_counts, files, edges, bounds, precision_scope]
+        invariant: blocked when any active or unresolved unknown target is missing/prohibited, authority state disagrees, graph/index/traversal/packet bounds hit, a changed/impact item is unassigned, or a packet cannot fit without truncation
       review_packets:
-        item_required: [packet_id, role, exact_base_sha, exact_head_sha, raw_response_artifact, status, reviewed_files, closure_files, authority_files, invariants, unreviewed_files, findings, context]
-        role_values: [combined, architecture_reference, authority_workflow_state, implementation_test]
+        item_required: [packet_id, role, exact_base_sha, exact_head_sha, exact_head_tree, raw_response_artifact, status, reviewed_files, closure_files, authority_files, impact_files, impact_edge_ids, invariants, review_behaviors, experiments, no_experiment_reason, unreviewed_files, findings, context]
+        role_values: [combined, architecture_reference, authority_workflow_state, implementation_test, impact_graph]
         status_values: [pending, clean, findings, blocked]
         context_required: [overflow, truncated]
-        clean_invariant: no missing response, stale identity, unreviewed item, overflow, truncation, or finding
+        clean_invariant: no missing response, stale identity, unreviewed changed/impact item, graph/lab blocker, unsafe or inconclusive experiment, overflow, truncation, or finding
       local_codex:
-        required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, synthesis_artifact, findings_artifact]
+        required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, exact_head_tree, status, synthesis_artifact, findings_artifact, lab_evidence_artifacts]
         status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
         synthesis_owner: parent_orchestrator
         finding_count_limit: none

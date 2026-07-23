@@ -13,6 +13,8 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 - exact_head_sha:
 - candidate_lineage:
 - local_codex.packet_id:
+- local_codex.impact_edge_ids:
+- local_codex.hypothesis_or_lab_evidence:
 - local_codex.reviewer_identity:
 - local_codex.raw_response_path_or_hash:
 - local_codex.synthesis_artifact:
@@ -48,7 +50,8 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 
 - Validate every disposition table data row independent of finding-ID prefix. Identifiers such as
   `SEC1`, `UX-22`, `F1`, `N4-R`, and future nonempty ids use the same exact disposition enum.
-- Verify the finding against the exact range and compiled packet before accepting or declining it.
+- Verify the finding against the exact base/head/tree, compiled impact packet, and any bounded lab
+  evidence before accepting or declining it. Inconclusive or unsafe experiments never prove clean.
 - Do not silently dismiss a finding; record evidence and the smallest safe action.
 - Create or reference a focused follow-up issue for valid out-of-scope work.
 - Accepted changes create a new `exact_head_sha`; rerun affected verification, deterministic

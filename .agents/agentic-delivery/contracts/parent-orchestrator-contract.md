@@ -65,10 +65,12 @@ The orchestrator owns:
 - owning PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE when the registry lacks `programming-loop`, without inventing that command
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
-- compiling exact-base/head changed-file coverage, active reference closure, authority inventory,
-  semantic gates, and bounded review packets with `scripts/pm-review-system.py`
-- dispatching fresh-context read-only local Codex packet review and synthesizing exactly one PM-owned
-  result; packet reviewers never become lifecycle owners
+- compiling exact-base/head/tree changed-file coverage, active reference closure, authority
+  inventory, typed bidirectional practical impact graph, semantic gates, and bounded review packets
+  with `scripts/pm-review-system.py`
+- dispatching fresh-context read-only-candidate local Codex packet review, authorizing only bounded
+  disposable `pm-review-lab.py` counterfactual experiments, and synthesizing exactly one PM-owned
+  result; packet reviewers and labs never become lifecycle owners
 - dispositioning every actionable finding and re-running verification, compilation, packet review,
   and synthesis after head changes
 - persisting correction rounds by exact review range and blocking for a human when the configured
@@ -179,8 +181,9 @@ A sub-PR may merge into the parent branch only when:
 - no human gate is triggered
 
 Review is bound to commit identity, not PR base behavior. A stacked sub-PR is review-complete only
-when deterministic compilation is ready, every bounded packet has complete fresh-context coverage,
-the single PM local-Codex synthesis is clean for its exact base/head range, and independent
+when deterministic compilation is ready, its practical impact graph is complete within explicit
+bounds, every bounded packet has exact changed/impact coverage and safe hypothesis evidence, the
+single PM local-Codex synthesis is clean for its exact base/head/tree range, and independent
 Shepherd validation passes. Any head change invalidates the manifest, packet responses, synthesis,
 and Shepherd result and requires verification, recompilation, packet re-review, synthesis, and
 revalidation.
@@ -197,12 +200,13 @@ For every sub-issue, record:
 - exact base branch and SHA
 - exact head branch and SHA
 - reviewed commit range
-- compiler manifest, packet ids, changed/closure/authority coverage, and any blocked/truncated input
+- compiler manifest, packet ids, changed/closure/authority/impact-file/impact-edge coverage,
+  practical-impact bounds/provenance, and any blocked/truncated input
 - primary route: `local_codex`, `human`, or `blocked`
 - review status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`
 - `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
-- fresh-context packet reviewer identities, raw response paths/hashes, one synthesis artifact, and
-  findings/disposition artifact
+- fresh-context packet reviewer identities, raw response and hypothesis-lab evidence paths/hashes,
+  experiment/safety/cleanup outcomes, one synthesis artifact, and findings/disposition artifact
 - Shepherd status, verdict, trajectory score, and evidence artifact
 - CI status and remaining human gates
 

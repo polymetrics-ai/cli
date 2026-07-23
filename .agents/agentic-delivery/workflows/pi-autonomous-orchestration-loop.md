@@ -44,8 +44,8 @@ PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT paren
   EXECUTE       (Codex  / pm-gsd-worker) → implement minimal green slices, commit per slice, push
   SUB_PR_OPEN   open sub-PR (base = parent branch; body: Refs #<sub> + Refs #<N>). Record sub_pr number.
   VERIFY        (Orchestrator / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
-  REVIEW        (Orchestrator) compile semantic gates + bounded exact-base/head packets;
-                fresh-context pm-reviewer per packet; one PM synthesis                 ── GATE: clean ──
+  REVIEW        (Orchestrator) compile semantic + typed impact gates and exact-base/head/tree packets;
+                impact-first pm-reviewer + bounded lab evidence; one PM synthesis      ── GATE: clean ──
   CORRECT       (Codex  / pm-gsd-worker) if findings → fix → verify → push  ┐
                 (fresh-context pm-reviewer) exact-head re-review             ┘ repeat ≤ max_correction_rounds
                 independent driver Shepherd validates the clean REVIEW transition: PROCEED required
@@ -59,7 +59,8 @@ RESEARCH is skipped entirely for a fully-specified `implementation` task (no ext
 `complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; fresh-context local Codex
 `REVIEW` must be clean (every finding fixed or dispositioned per
 `pm-code-review-disposition-template.md`) after `scripts/pm-review-system.py compile` returns ready,
-every packet response is complete, and `synthesize` returns clean. Independent Shepherd must then
+every changed/impact item is packet-covered, every response/lab proof is complete and safe, and
+`synthesize` returns clean. Independent Shepherd must then
 return `PROCEED` before `INTEGRATE`. Branch
 and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent — check `gh pr list`/`gh
 issue list`/`git branch` and reuse what exists. Merges to `main` and final human-ready are human
@@ -177,9 +178,12 @@ agent frontmatter. Requires the project `pi-sub-agent` extension.
 
 If the GSD registry lacks `programming-loop`, `/pm-orchestrate` owns the stage machine above; never
 invent the command or downgrade to an advisory fallback. Local code review follows
-`local-codex-review-loop.md`: compile deterministic closure/authority/semantic gates, create bounded
-packets only when thresholds require them, obtain complete packet responses, and synthesize one PM
-verdict. Trajectory validation remains separate and follows `shepherd-validator.md`.
+`local-codex-review-loop.md`: compile deterministic closure/authority/semantic gates plus a typed
+bidirectional practical impact graph from every changed file and canonical root; discover completely
+before bounded packetization; obtain complete impact-first responses and safe disposable hypothesis-
+lab evidence when needed; and synthesize one PM verdict. Candidate code remains read-only and any
+graph/lab bound, cleanup failure, inconclusive evidence, or identity drift blocks. Trajectory
+validation remains separate and follows `shepherd-validator.md`.
 
 The old `scripts/claude-auto-loop.sh` driver remains only for historical trace replay and is not a
 current or forward PM orchestration or review route. Do not request GitHub-hosted AI reviewers.

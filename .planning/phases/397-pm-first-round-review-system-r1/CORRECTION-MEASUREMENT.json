@@ -1,0 +1,85 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-correction-measurement/v1",
+  "exact_lineage_base": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+  "corpus": {
+    "inputs_sha256": "8b78b7ce1692f4b1fd3088393aaf9e14268b196e7f7901a3ffc11880b964b93d",
+    "oracle_sha256": "93bef77f4a6ad8d69d2deaf84a5fc665959abba0b397c967eee3dc67bcaab2dd",
+    "detector_receives_oracle": false,
+    "public_fixture_limitation": "Committed regression fixtures are not a secret benchmark."
+  },
+  "baseline": {
+    "true_positive": 0,
+    "false_positive": 0,
+    "false_negative": 17,
+    "true_negative": 4,
+    "first_round_recall": 0.0,
+    "first_round_precision": null,
+    "escaped_defects": 17,
+    "wall_clock_ms_observed": 0.022416
+  },
+  "treatment": {
+    "true_positive": 17,
+    "false_positive": 0,
+    "false_negative": 0,
+    "true_negative": 4,
+    "first_round_recall": 1.0,
+    "first_round_precision": 1.0,
+    "escaped_defects": 0,
+    "wall_clock_ms_observed": 0.079417,
+    "categories": {
+      "impact_graph_contract": {"true_positive": 8, "false_negative": 0, "clean_controls": 2, "false_positive": 0},
+      "hypothesis_lab_contract": {"true_positive": 8, "false_negative": 0, "clean_controls": 2, "false_positive": 0},
+      "review_contract_version": {"true_positive": 1, "false_negative": 0}
+    }
+  },
+  "algorithm_benchmark": {
+    "exact_head": "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
+    "real_nodes": 1669,
+    "real_edges": 5039,
+    "certainty": {"active": 5001, "inactive": 6, "unknown": 32},
+    "cold_index_ms": 2004.212,
+    "go_list_ms": 1653.95,
+    "python_peak_allocated_bytes": 51118867,
+    "go_subprocess_peak_rss": {"status": "unavailable", "reason": "disposable prototype used Python tracemalloc only"},
+    "fixture_oracle": {
+      "outgoing_only": {"true_positive_nodes": 14, "expected_nodes": 21, "recall": 0.6667, "false_positive": 0},
+      "indexed_bidirectional": {"true_positive_nodes": 21, "expected_nodes": 21, "recall": 1.0, "precision": 1.0}
+    },
+    "synthetic": {
+      "nominal_nodes": 20000,
+      "edges": 30197,
+      "indexed_bfs_median_ms": 63.735,
+      "repeated_reverse_scan_ms": 10479.531
+    },
+    "unrestricted_depth_three": {
+      "pm_impact_nodes": 201,
+      "go_impact_nodes": 213,
+      "bound_hit": true,
+      "decision": "reject unrestricted closure; use typed relation policy and fail closed on a genuine configured frontier"
+    },
+    "deterministic_digest": "539a4fb6bbede9842e386f04ee6e3c820c1c86e2bc8cab2629b24d8c263f3c68",
+    "exact_head_invalidation": true
+  },
+  "lab_safety_integration": {
+    "local_backend": "macos_sandbox_exec",
+    "safe_counterfactual": "passed",
+    "candidate_and_outside_write_denials": "passed",
+    "symlink_denial": "passed",
+    "network_git_install_shell_live_deploy_denials": "passed",
+    "secret_scrub_sentinel": "passed",
+    "timeout_process_output_disk_limits": "passed",
+    "cleanup_and_identity_failure_blockers": "passed",
+    "two_packet_concurrency_isolation": "passed",
+    "unsupported_backend_policy": "block; policy-only execution cannot authorize evidence"
+  },
+  "reporting_scope": {
+    "static_semantic_findings": "deterministic fixture only",
+    "impact_graph_coverage": "deterministic practical file/package integration; not symbol-level call/data-flow",
+    "counterfactual_experiments": "local safety integration only; actual local-Codex packet experiments unavailable",
+    "actual_model_packet_metrics": {"status": "unavailable", "reason": "exact-head model packet review has not run"},
+    "tokens": {"status": "unavailable", "reason": "deterministic detector/lab integration does not expose model tokens"},
+    "cost": {"status": "unavailable", "reason": "no hosted model or billed service in deterministic measurement"},
+    "review_rounds": {"status": "unavailable", "reason": "captain requirements preceded first exact-head packet review"},
+    "prospective_observation": {"status": "unavailable", "required_future_work": ["PR #493", "issue #408", "later Architecture v2 work"]}
+  }
+}

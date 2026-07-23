@@ -277,6 +277,37 @@ then
   fail "committed measurement report does not reproduce from frozen inputs and separate oracle"
 fi
 
+for mode in baseline treatment; do
+  python3 "$repo_root/scripts/pm-review-system.py" observe --mode "$mode" \
+    --input "$fixture_root/correction-inputs.json" >"$test_tmp/correction-$mode-observations.json" || \
+    fail "captain correction $mode observation failed"
+  python3 "$repo_root/scripts/pm-review-system.py" score \
+    --observations "$test_tmp/correction-$mode-observations.json" \
+    --oracle "$fixture_root/correction-oracle.json" >"$test_tmp/correction-$mode-score.json" || \
+    fail "captain correction $mode scoring failed"
+done
+if ! python3 - "$repo_root" "$test_tmp" <<'PY'
+import json,sys
+from pathlib import Path
+repo=Path(sys.argv[1]); tmp=Path(sys.argv[2])
+report=json.loads((repo/'.planning/phases/397-pm-first-round-review-system-r1/CORRECTION-MEASUREMENT.json').read_text())
+for mode in ('baseline','treatment'):
+    score=json.loads((tmp/f'correction-{mode}-score.json').read_text()); expected=report[mode]
+    counts=score['counts']
+    assert counts['true_positive']==expected['true_positive']
+    assert counts['false_positive']==expected['false_positive']
+    assert counts['false_negative']==expected['false_negative']
+    assert counts['true_negative']==expected['true_negative']
+    assert score['first_round_recall']==expected['first_round_recall']
+    assert score['first_round_precision']==expected['first_round_precision']
+    assert score['escaped_defects']==expected['escaped_defects']
+assert report['reporting_scope']['actual_model_packet_metrics']['status']=='unavailable'
+assert report['reporting_scope']['prospective_observation']['status']=='unavailable'
+PY
+then
+  fail "captain correction measurement does not reproduce from frozen inputs and separate oracle"
+fi
+
 # Preserve terminal-classifier command behavior as current enum handling is hardened.
 usage_stdout="$test_tmp/usage.stdout"
 usage_stderr="$test_tmp/usage.stderr"
@@ -405,6 +436,26 @@ cat >"$impact_repo/scripts/processes.py" <<'EOF'
 import subprocess, sys, time
 children = [subprocess.Popen([sys.executable, "-c", "import time; time.sleep(5)"]) for _ in range(12)]
 time.sleep(5)
+EOF
+cat >"$impact_repo/scripts/outside_write.py" <<'EOF'
+from pathlib import Path
+Path('/tmp/pm-review-lab-outside').write_text('escaped')
+EOF
+cat >"$impact_repo/scripts/outside_read.py" <<'EOF'
+from pathlib import Path
+print(Path('/tmp/pm-review-lab-outside').read_text())
+EOF
+cat >"$impact_repo/scripts/network.py" <<'EOF'
+import socket
+socket.create_connection(('127.0.0.1', 9), timeout=0.2)
+EOF
+cat >"$impact_repo/scripts/check_isolation.py" <<'EOF'
+from pathlib import Path
+try:
+    list(Path.cwd().parents[1].iterdir())
+except PermissionError:
+    raise SystemExit(0)
+raise SystemExit(77)
 EOF
 ln -s /tmp/pm-review-lab-outside "$impact_repo/escape-link"
 cat >"$impact_repo/.agents/review-config.json" <<'JSON'
@@ -550,9 +601,16 @@ def run(path, extra_env=None):
     except Exception as exc: raise AssertionError((path.name,proc.returncode,proc.stdout,proc.stderr)) from exc
     return proc.returncode,value
 
+probe=subprocess.run([sys.executable,script,"probe"],text=True,capture_output=True)
+probe_value=json.loads(probe.stdout)
+if probe_value["status"]=="blocked":
+    code,safe=run(request('safe'))
+    assert code!=0 and safe["status"]=="blocked" and safe["candidate_unchanged"] and safe["lab_cleanup_verified"]
+    assert "policy-only" in json.dumps(safe)
+    raise SystemExit(0)
 code,safe=run(request('safe'))
 assert code==0 and safe["status"]=="evidence" and safe["candidate_unchanged"] and safe["lab_cleanup_verified"]
-assert safe["experiment"]["discriminator_matched"] and safe["experiment"]["exit_code"]==23
+assert safe["experiment"]["discriminator_matched"] and safe["experiment"]["exit_code"]==23, safe
 assert safe["experiment"]["temporary_diff"]["sha256"] and safe["experiment"]["duration_ms"] is not None
 assert not any(labs.iterdir())
 
@@ -561,6 +619,12 @@ def blocked(name, **changes):
 blocked('candidate-write', change_scope='candidate')
 blocked('outside-write', changes=[{"path":"../outside","find":"x","replace":"y"}])
 blocked('symlink-write', changes=[{"path":"escape-link","find":"x","replace":"y"}])
+outside=pathlib.Path('/tmp/pm-review-lab-outside'); outside.write_text('sentinel')
+blocked('nested-outside-write',changes=[],command=['python3','scripts/outside_write.py'],expected_discriminator={'exit_code':0})
+assert outside.read_text()=='sentinel'
+blocked('nested-outside-read',changes=[],command=['python3','scripts/outside_read.py'],expected_discriminator={'exit_code':0})
+blocked('nested-network',changes=[],command=['python3','scripts/network.py'],expected_discriminator={'exit_code':0})
+outside.unlink()
 for name,command in {
   'network':['curl','https://example.invalid'], 'commit':['git','commit','-am','x'],
   'push':['git','push','origin','HEAD'], 'install':['python3','-m','pip','install','x'],
@@ -579,7 +643,10 @@ assert code!=0 and cleanup['status']=='blocked'
 code,drift=run(request('identity-drift',changes=[]),{'PM_REVIEW_LAB_TEST_FORCE_IDENTITY_DRIFT':'1'})
 assert code!=0 and drift['status']=='blocked'
 with ThreadPoolExecutor(max_workers=2) as pool:
-    rows=list(pool.map(lambda p: run(p),[request('parallel-a'),request('parallel-b',changes=[{"path":"behavior.txt","find":"reject\n","replace":"other\n"}],expected_discriminator={"exit_code":23})]))
+    rows=list(pool.map(lambda p: run(p),[
+      request('parallel-a'),
+      request('parallel-b',changes=[],command=['python3','scripts/check_isolation.py'],expected_discriminator={"exit_code":0})
+    ]))
 assert all(code==0 and value['status']=='evidence' for code,value in rows)
 assert not any(labs.iterdir())
 assert subprocess.check_output(['git','-C',repo,'rev-parse','HEAD'],text=True).strip()==head
@@ -629,11 +696,13 @@ assert not document["impact_graph"]["bounds"]["hit"]
 for packet in document["packets"]:
     assert packet["exact_base_sha"] == document["exact_base_sha"]
     assert packet["exact_head_sha"] == document["exact_head_sha"]
+    assert packet["exact_head_tree"] == document["exact_head_tree"]
     assert len(packet["changed_files"]) <= 20
     assert len(packet["closure_files"]) <= 10
     assert len(packet["authority_files"]) <= 10
     assert len(packet["impact_files"]) <= 10
     assert len(packet["impact_edge_ids"]) <= 40
+    assert set(packet["impact_edge_ids"]) == {edge["id"] for edge in packet["impact_edges"]}
     assert not packet["context"]["overflow"]
     assert not packet["context"]["truncated"]
 PY
@@ -686,6 +755,7 @@ for packet in manifest["packets"]:
         "packet_id": packet["packet_id"],
         "exact_base_sha": manifest["exact_base_sha"],
         "exact_head_sha": manifest["exact_head_sha"],
+        "exact_head_tree": manifest["exact_head_tree"],
         "status": "clean",
         "reviewed_files": packet["changed_files"],
         "closure_files": packet["closure_files"],
@@ -784,7 +854,7 @@ if [[ ! -f "$first_response.clean" ]]; then
 # Restore is regenerated from the manifest because the clean backup was moved above.
 import json,sys
 manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
-value={"schema_version":"polymetrics.ai/pm-review-packet-response/v2","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[],"disconfirming_evidence":"fixture"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v2","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[],"disconfirming_evidence":"fixture"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
 open(sys.argv[2],"w").write(json.dumps(value))
 PY
 fi
@@ -817,4 +887,4 @@ if [[ $failures -ne 0 ]]; then
   exit 1
 fi
 
-printf 'pm review system ok: semantic gates, bounded exact-head packets, one PM synthesis, measured fixtures\n'
+printf 'pm review system ok: semantic gates, bidirectional impact, disposable labs, bounded exact-head packets, one PM synthesis, measured fixtures\n'

@@ -1,5 +1,5 @@
 {
-  "schema_version": "polymetrics.ai/pm-review-system/v1",
+  "schema_version": "polymetrics.ai/pm-review-system/v2",
   "owner": "parent_orchestrator",
   "canonical_roots": [
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
@@ -24,6 +24,69 @@
   "prohibited_active_targets": [
     ".agents/agentic-delivery/contracts/worker-handoff-template.md",
     ".agents/agentic-delivery/contracts/code-review-disposition-template.md"
+  ],
+  "impact_graph": {
+    "index_prefixes": [
+      ".agents/",
+      ".pi/",
+      "scripts/",
+      ".planning/phases/397-pm-first-round-review-system-r1/",
+      ".planning/phases/397-cli-architecture-v2-orchestration/",
+      ".planning/phases/397-pm-orchestrator-extension/",
+      ".planning/traces/cli-architecture-v2-orchestration-state.yaml",
+      ".planning/config.json",
+      ".planning/PROJECT.md",
+      ".planning/ROADMAP.md",
+      ".planning/STATE.md"
+    ],
+    "go_index_prefixes": [
+      "cmd/",
+      "internal/"
+    ],
+    "max_index_files": 1600,
+    "max_index_bytes": 20000000,
+    "max_nodes": 2600,
+    "max_edges": 12000,
+    "max_traversal_states": 5000,
+    "max_depth": 12,
+    "max_impact_files": 400,
+    "max_impact_edges": 2400,
+    "go_command_timeout_seconds": 60,
+    "packet_max_impact_files": 10,
+    "packet_max_impact_edges": 40,
+    "max_packets": 64,
+    "default_relation_policy": {
+      "upstream": 1,
+      "downstream": 1,
+      "lateral": 1,
+      "temporal": 1
+    },
+    "relation_policy": {
+      "required_reference": {"upstream": 6, "downstream": 6, "lateral": 0, "temporal": 0},
+      "descriptive_reference": {"upstream": 1, "downstream": 1, "lateral": 0, "temporal": 0},
+      "script_invokes": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "python_import": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "authority_writes": {"upstream": 3, "downstream": 3, "lateral": 0, "temporal": 0},
+      "authority_reads": {"upstream": 3, "downstream": 3, "lateral": 0, "temporal": 0},
+      "authority_mirror": {"upstream": 0, "downstream": 0, "lateral": 3, "temporal": 0},
+      "generates": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "generated_consumer": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "go_member_of": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "go_contains": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
+      "go_imports": {"upstream": 4, "downstream": 3, "lateral": 0, "temporal": 0},
+      "go_test": {"upstream": 0, "downstream": 0, "lateral": 4, "temporal": 0},
+      "platform_variant": {"upstream": 0, "downstream": 0, "lateral": 4, "temporal": 0},
+      "temporal_schema_instance": {"upstream": 0, "downstream": 0, "lateral": 0, "temporal": 4}
+    }
+  },
+  "configured_relationships": [
+    {
+      "source": ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+      "target": ".planning/phases/397-pm-first-round-review-system-r1/RUN-STATE.json",
+      "relation": "temporal_schema_instance",
+      "certainty": "active",
+      "reason": "current review-state schema governs correction lineage and exact-version transition state"
+    }
   ],
   "authorities": [
     {
@@ -101,7 +164,8 @@
     "packet_max_context_files": 10,
     "packet_target_tokens": 30000,
     "estimated_tokens_per_changed_line": 4,
-    "estimated_tokens_per_context_file": 200
+    "estimated_tokens_per_context_file": 200,
+    "estimated_tokens_per_impact_edge": 40
   },
   "domain_rules": [
     {
@@ -139,6 +203,15 @@
       "stale_evidence_invalidated",
       "human_merge_authority"
     ],
+    "impact_graph": [
+      "changed_and_canonical_multisource",
+      "forward_reverse_adjacency_indexed_first",
+      "typed_edge_provenance_and_certainty",
+      "upstream_downstream_lateral_temporal_coverage",
+      "graph_bounds_fail_closed",
+      "practical_not_symbol_level_scope",
+      "exact_version_binding"
+    ],
     "implementation_test": [
       "semantic_negative_fixtures",
       "stdout_stderr_json_exit_compatibility",
@@ -159,6 +232,7 @@
   },
   "allowed_changed_paths": [
     "scripts/pm-review-system.py",
+    "scripts/pm-review-lab.py",
     "scripts/pm-terminal-classifier.sh",
     "scripts/tests/pm-review-system.sh",
     "scripts/tests/pm-orchestrator-contract.sh",

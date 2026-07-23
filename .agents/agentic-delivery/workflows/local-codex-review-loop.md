@@ -24,35 +24,47 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
 
 1. Confirm the candidate worktree and remote head equal the supplied exact head SHA. Confirm the
    comparison base equals the supplied exact base SHA. Stop on drift.
-2. Run `scripts/pm-review-system.py compile` for that exact base/head. It must return `ready` before
-   model review. Treat its changed-path assignment, active reference closure with edge reasons,
-   authority/writer/reader inventory, and semantic findings as review inputs. Missing active
-   targets, prohibited reachable templates, authoritative-state disagreement, unsafe paths,
-   unassigned files, or an over-budget packet block review.
+2. Run `scripts/pm-review-system.py compile` for that exact base/head/tree. It must return `ready`
+   before model review. Treat its changed-path assignment, active reference closure, authority
+   inventory, and versioned practical impact graph as review inputs. The graph indexes its declared
+   universe before traversal, seeds canonical roots plus every changed file, and follows a typed
+   bidirectional upstream/downstream/lateral/temporal relation policy with edge provenance and
+   `active|inactive|unknown` certainty. Missing/unresolved edges, unsafe paths, incomplete impact,
+   authoritative-state disagreement, or any graph/index/traversal/packet bound block review. This is
+   file/package impact, not a symbol-level call/data-flow claim.
 3. The compiler emits paths and metadata only. It must not copy file contents, environment values,
    or credentials into packet artifacts.
-4. For a small coherent range, use one combined packet only when all configured file/line/domain
-   limits pass. Otherwise use bounded architecture/reference, authority/workflow-state, and
-   implementation/test packets. If a packet cannot fit without truncation, stop as blocked.
+4. Complete impact discovery before packetization. For a small coherent range, use one combined
+   diff packet only when all configured file/line/domain limits pass; otherwise split architecture,
+   authority, and implementation packets. Always assign complete impact files/edge ids to bounded
+   impact packets. If discovery or a packet cannot fit without truncation, stop as blocked.
 
 ## Fresh-context packet review and synthesis
 
 1. Spawn a fresh-context local Codex reviewer for each compiled packet using the read-only
    `pm-reviewer` role (Sol/xhigh) or the runtime's equivalent. Packet reviewers are analytical
    inputs; the parent orchestrator remains the only lifecycle and disposition owner.
-2. Give reviewers read-only tools. `bash` is allowed only for non-mutating identity, diff, log,
-   assigned tests, and read-only `gh-axi` inspection. No edit/write, commit, push, PR mutation, or
-   merge is allowed.
-3. Each response follows `pm-review-packet-template.md`: exact base/head, reviewed changed files,
-   closure files, authority files, invariant results, unreviewed files, context overflow/truncation,
-   and findings. Finding count is unlimited. Missing token/cost/latency data stays explicitly null.
-4. Preserve raw responses outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`
+2. Keep the canonical candidate and review source read-only. `bash` is allowed only for non-mutating
+   identity, diff, log, assigned tests, and read-only `gh-axi` inspection. Temporary hypothesis
+   changes are allowed only through `scripts/pm-review-lab.py` in a private disposable exact-head
+   copy. No candidate edit/write, generic shell, network, commit, push, PR mutation, install,
+   credentialed/live call, deployment, destructive external effect, or merge is allowed.
+3. Build an impact model before judging lines. Trace all four directions, inspect history and
+   divergent siblings when relevant, state falsifiable claim/alternative hypotheses, seek
+   disconfirming evidence, and use the smallest discriminating lab experiment only when static
+   evidence is insufficient. An unavailable sandbox, denial, timeout/bound, cleanup failure,
+   candidate drift, or inconclusive experiment blocks clean review.
+4. Each v2 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
+   authority, impact-file, impact-edge, invariant, and behavior coverage; experiment/no-experiment
+   evidence; unreviewed files; context overflow/truncation; and findings. Finding count is unlimited.
+   Missing token/cost/latency data stays explicitly null.
+5. Preserve raw responses and lab evidence outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`
    to produce one PM-owned result. Missing responses/coverage, stale identities, any unreviewed file,
    or overflow/truncation cannot synthesize clean.
-5. Review correctness, security, safety, regressions, test adequacy, evidence truthfulness,
+6. Review correctness, security, safety, regressions, test adequacy, evidence truthfulness,
    write-scope violations, machine contracts, and human gates. Return findings with severity,
    file/line evidence, impact, and smallest safe correction. List residual risk separately.
-6. The synthesized result is `clean`, `findings_correction_required`, or `blocked`. Only complete
+7. The synthesized result is `clean`, `findings_correction_required`, or `blocked`. Only complete
    clean packet responses with zero findings produce `clean`.
 
 ## Disposition and correction
@@ -90,9 +102,11 @@ Record for every candidate range:
 
 - exact base branch and SHA;
 - exact head branch and SHA;
-- compiler manifest identity, active closure/authority findings, packet selection, and coverage;
-- packet ids, reviewer runtime/model/fresh-context identities, raw-response paths or hashes, and
-  any unavailable token/cost/latency fields;
+- compiler manifest identity, active closure/authority findings, typed practical impact graph
+  counts/bounds/provenance, packet selection, and exact changed/impact coverage;
+- packet ids, reviewer runtime/model/fresh-context identities, raw-response and hypothesis-lab
+  evidence paths/hashes, observable behavior/experiment outcomes, safety/cleanup proofs, and any
+  unavailable token/cost/latency fields;
 - local Codex synthesized status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`;
 - findings and disposition artifact;
 - Shepherd status, verdict, score, and evidence artifact;

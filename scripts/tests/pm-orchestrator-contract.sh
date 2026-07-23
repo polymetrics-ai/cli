@@ -49,7 +49,31 @@ require(
     "re-review",
     "Shepherd",
 )
-require(local_prompt, "exact base", "exact head", "read-only", "disposition")
+require(local_prompt, "exact base", "exact head", "read-only", "disposition", "impact", "pm-review-lab.py", "hypotheses")
+require(local_review, "bidirectional", "upstream", "downstream", "lateral", "temporal", "pm-review-lab.py", "disconfirming")
+require(
+    ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
+    "pm-review-packet/v2",
+    "pm-review-packet-response/v2",
+    "pm-review-impact-graph/v1",
+    "pm-review-lab-request/v1",
+    "candidate_unchanged",
+    "lab_cleanup_verified",
+)
+review_config = json.loads(read(".agents/agentic-delivery/contracts/pm-review-system.json"))
+if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v2":
+    errors.append("pm-review-system config: expected explicit v2 schema")
+impact_config = review_config.get("impact_graph", {})
+for key in (
+    "max_index_files", "max_index_bytes", "max_nodes", "max_edges", "max_traversal_states",
+    "max_depth", "max_impact_files", "max_impact_edges", "packet_max_impact_files",
+    "packet_max_impact_edges", "max_packets", "relation_policy",
+):
+    if key not in impact_config:
+        errors.append(f"pm-review-system config: missing impact bound/policy {key}")
+if "scripts/pm-review-lab.py" not in review_config.get("allowed_changed_paths", []):
+    errors.append("pm-review-system config: lab runner is outside the positive write-scope allowlist")
+require("scripts/pm-review-lab.py", "policy-only execution cannot authorize clean evidence", "network", "outside_write", "candidate_unchanged", "lab_cleanup_verified")
 
 forward_paths = [
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",

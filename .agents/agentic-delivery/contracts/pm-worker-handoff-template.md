@@ -58,18 +58,27 @@ Result: <pass | fail | blocked>
 - review_compiler.manifest:
 - review_compiler.exact_base_sha:
 - review_compiler.exact_head_sha:
+- review_compiler.exact_head_tree:
 - review_compiler.status: <pending | ready | blocked>
 - review_compiler.packet_ids:
 - review_compiler.changed_files:
 - review_compiler.closure_files:
 - review_compiler.authority_files:
+- review_compiler.impact_files:
+- review_compiler.impact_edge_ids:
+- review_compiler.impact_graph_bounds:
+- review_compiler.precision_scope: <practical_file_package; symbol_call_data_flow_unavailable>
 - review_compiler.unassigned_or_overflowed_files:
 - review_measurement.fixture_report:
 - review_measurement.prospective_status: <unavailable | observing | measured>
 - local_codex.status: <pending | findings_correction_required | clean | comments_addressed | blocked>
 - local_codex.exact_base_sha:
 - local_codex.exact_head_sha:
+- local_codex.exact_head_tree:
 - local_codex.raw_packet_response_paths_or_hashes:
+- local_codex.lab_evidence_paths_or_hashes:
+- local_codex.hypothesis_outcomes:
+- local_codex.lab_safety_cleanup_status:
 - local_codex.synthesis_artifact:
 - local_codex.findings_artifact:
 - local_codex.finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]
@@ -93,10 +102,11 @@ Result: <pass | fail | blocked>
 ## Rules
 
 - Do not include secrets or credential values.
-- Bind verification, compiler manifest, packet responses, synthesis, and Shepherd to
-  `exact_head_sha`; any head change invalidates all of them.
-- Missing packet coverage, unreviewed files, or overflow/truncation blocks synthesis rather than
-  returning clean. Keep unavailable token/cost values explicit.
+- Bind verification, impact graph, compiler manifest, packet/lab responses, synthesis, and Shepherd
+  to exact base/head/tree; any identity change invalidates all of them.
+- Missing changed/impact coverage, unreviewed files/edges, graph/lab bound, unsafe or inconclusive
+  experiment, cleanup failure, or overflow/truncation blocks synthesis rather than returning clean.
+  Keep unavailable token/cost and prospective values explicit.
 - A pending or blocked Shepherd record has no invented verdict.
 - Only the parent orchestrator may integrate a sub-PR into the parent branch.
 - Integration to the default branch, parent readiness, and final release remain human-only.

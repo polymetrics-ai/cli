@@ -37,12 +37,16 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
   sidecars.
 - Dispatch `pm-verifier` (read-only, `model: openai-codex/gpt-5.6-sol:xhigh`) for exact-head
   verification.
-- After verification, run `scripts/pm-review-system.py compile` for exact-base/head closure,
-  authority, semantic, scope, and packet coverage. Stop on deterministic findings or unsplittable
-  context. Dispatch a fresh-context `pm-reviewer` (read-only,
+- After verification, run `scripts/pm-review-system.py compile` for exact-base/head/tree closure,
+  authority, typed bidirectional practical impact, semantic, scope, and packet coverage. Stop on
+  unresolved impact, any graph/packet bound, or unsplittable context. Dispatch a fresh-context
+  `pm-reviewer` (candidate read-only,
   `model: openai-codex/gpt-5.6-sol:xhigh`) per bounded packet, require complete responses, and run
-  `synthesize` for exactly one PM-owned local-Codex result. Disposition every finding; any changed
-  head requires verification, recompilation, fresh packet review, and synthesis.
+  `synthesize` for exactly one PM-owned local-Codex result. Reviewers build impact first and may
+  test hypotheses only through bounded disposable `scripts/pm-review-lab.py` copies; lab ambiguity,
+  denial, inconclusive evidence, cleanup failure, or candidate drift blocks. Disposition every
+  finding; any changed head requires verification, recompilation, fresh packet/lab evidence, and
+  synthesis.
 - Run independent Shepherd validation through `shepherd-validator.md` after review is clean and
   before integration.
 - Run coupled/critical-path slices that cannot be isolated as `local_critical_path` in the main
