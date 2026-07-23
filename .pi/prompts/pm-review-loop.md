@@ -16,7 +16,7 @@ Required reading:
 - `AGENTS.md`
 - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
-- `.agents/agentic-delivery/contracts/code-review-disposition-template.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
 
 Confirm the supplied exact base and exact head match local/remote ground truth. Spawn a
 fresh-context read-only `pm-reviewer` on that range. Treat findings as review input, not

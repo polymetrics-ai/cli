@@ -78,7 +78,9 @@ Current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` has been merged normally
 
 PR #438 has not changed: it remains draft at the old parent head until the Wave 1 stacked PR is reviewed and human-integrated. #462 now has exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`; historical #425–#436 waiver/review work remains pending. #408 remains excluded at branch head `6c643f5c971d1fac4a83e4ffe653b83847c2fceb`.
 
-Post-integration: fetch `origin/feat/cli-architecture-v2`, record the actual resulting parent/PR #438 head, verify current main is an ancestor, refresh parent CI/body evidence, and only then reconcile #408. Do not copy the Wave 1 task head into parent state before that merge occurs.
+### PR #493 canonical PM migration gate
+
+Post-integration: fetch `origin/feat/cli-architecture-v2`, record the actual resulting parent/PR #438 head, verify current main is an ancestor, and refresh parent CI/body evidence. Then PR #493 must merge that resulting parent normally, reconcile only its owned routing/skill/Makefile guidance to the canonical PM route, rerun its gates, and integrate before another CLI Architecture v2 implementation worker starts. Until both Wave 1 and PR #493 integrate, #408 remains `not_spawned_dependency_blocked`; do not copy the Wave 1 task head into parent state or start another implementation worker.
 
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 

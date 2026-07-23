@@ -29,7 +29,8 @@ The orchestrator must also read:
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
 
 ## Activation
@@ -150,8 +151,11 @@ gates in worker prompts or handoffs.
 ## Correction Budget
 
 Every canonical PM parent run records `max_correction_rounds` (default 4) and
-`rounds_by_range`. A correction range is the exact base SHA plus the candidate head lineage. Increment
-the counter when accepted findings produce a new head. When a range exceeds the cap, set the
+`rounds_by_range`. A correction range is the exact base SHA plus a candidate lineage identifier
+created once when the first candidate is adopted. Preserve that lineage across changed heads and
+replacement PRs, append head history, and increment the same counter when accepted findings produce
+a new head. A pre-v2 `guards.correction_rounds` value is read-only legacy input: map it once into the
+stable lineage and thereafter write only `correction_budget`. When a range exceeds the cap, set the
 candidate/sub-issue to `blocked`, record the outstanding findings, and stop for a human decision.
 Never reset the counter by relabeling the same correction or by opening a replacement PR.
 

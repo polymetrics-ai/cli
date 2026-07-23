@@ -67,8 +67,11 @@ field_contract:
       default: 4
     rounds_by_range:
       type: map
-      key: exact base SHA plus candidate lineage
+      key: exact base SHA plus stable candidate lineage identifier
       value: non-negative integer
+    lineage_invariant: created once for the first candidate and retained across changed heads or replacement PRs
+    lineage_head_history: append-only exact head SHAs for the stable candidate lineage
+    legacy_input: guards.correction_rounds may be read once and mapped forward but must not be written by canonical_v2
     exceeded_transition: blocked human gate with outstanding findings
   subissues:
     type: list

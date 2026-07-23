@@ -20,7 +20,8 @@ Required reading before action:
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
 - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
 
 Operate as the live parent orchestrator in the main Pi session. Build the ready queue, create or

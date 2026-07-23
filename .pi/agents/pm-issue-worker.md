@@ -19,4 +19,4 @@ Before production edits, capture red test or validation evidence. After each coh
 run the assigned verification commands and commit to the active issue branch. Never push to `main`.
 
 Return the worker handoff required by
-`.agents/agentic-delivery/contracts/worker-handoff-template.md`.
+`.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`.

@@ -27,8 +27,8 @@ Required reading before acting:
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
-- `.agents/agentic-delivery/contracts/code-review-disposition-template.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
+- `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
 - `.agents/skills/caveman/SKILL.md`
 
 ## Every turn, in order
@@ -60,7 +60,7 @@ Required reading before acting:
    - SUB_PR_OPEN → after the worker's first push, open the sub-PR (base = parent branch; body `Refs #<sub>` + `Refs #<N>`). Idempotent — adopt an existing matching PR. Record `sub_pr`.
    - VERIFY → `pm-verifier` (gate: must pass before review).
    - REVIEW → fresh-context read-only `pm-reviewer` on the exact base/head range; disposition every
-     finding through `local-codex-review-loop.md` and `code-review-disposition-template.md`. The
+     finding through `local-codex-review-loop.md` and `pm-code-review-disposition-template.md`. The
      independent driver follows `shepherd-validator.md` and must return `PROCEED` for this clean
      REVIEW transition.
    - INTEGRATE → merge the exact reviewed head only after verify is green, review is clean, and the
@@ -88,8 +88,13 @@ state. Claude and GitHub Copilot are not required, requested, or fallback PM rev
 
 ## Guards (enforce; do not bypass)
 
-- Correction sub-loop capped at `max_correction_rounds` (default 4) per sub-issue; on exceed, mark
-  the sub-issue `blocked` with outstanding findings and stop for human review.
+- Persist `correction_budget.max_correction_rounds` (default 4) and
+  `correction_budget.rounds_by_range`, keyed by the stable exact-base/candidate lineage created when
+  the first candidate is adopted. Preserve that candidate lineage across replacement PRs and changed
+  heads; append head history and increment the same counter instead of resetting it. A resumed pre-v2
+  record may read `guards.correction_rounds` once as read-only legacy input, map it to the stable
+  lineage counter, and thereafter write only the canonical shape. On exceed, mark the sub-issue
+  `blocked` with outstanding findings and stop for human review.
 - Respect the run budget: when the driver signals the budget ceiling, finish the current durable
   transition, set `RUN.json.terminal = "budget"`, and exit — resume continues from the reconciler.
 - Iteration backstop `max_iterations` (default 200) turns.

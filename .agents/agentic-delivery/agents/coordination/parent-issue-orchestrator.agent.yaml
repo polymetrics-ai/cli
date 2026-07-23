@@ -92,7 +92,8 @@ workflow:
 state:
   schema: .agents/agentic-delivery/schemas/orchestration-state.schema.yaml
 handoffs:
-  worker_template: .agents/agentic-delivery/contracts/worker-handoff-template.md
+  worker_template: .agents/agentic-delivery/contracts/pm-worker-handoff-template.md
+  review_disposition_template: .agents/agentic-delivery/contracts/pm-code-review-disposition-template.md
 concurrency:
   allowed_when:
   - sub-issue dependencies are satisfied

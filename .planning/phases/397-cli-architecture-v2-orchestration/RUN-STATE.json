@@ -3,7 +3,7 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "worker_in_progress",
+  "status": "worker_blocked_wave1_and_pr493_migration",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
   "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
   "verificationPassed": false,
@@ -12,7 +12,7 @@
     "list": "passed_69_commands",
     "planPhase397": "passed_prompt_generated_10688_bytes",
     "programmingLoop": "blocked_unknown_command",
-    "fallback": "manual_gsd_universal_runtime_loop"
+    "fallback": "pm_orchestrator_owned_manual_lifecycle"
   },
   "orchestrator": {
     "model": "openai-codex/gpt-5.6-sol",
@@ -684,17 +684,28 @@
       }
     }
   ],
+  "postWave1RoutingMigrationGate": {
+    "pullRequest": 493,
+    "status": "parent_sync_then_canonical_pm_reconciliation_pending",
+    "decision": "not_spawned_dependency_blocked",
+    "blocksWorkerStart": true,
+    "requiredAction": "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
+  },
   "readyQueue": [
     {
       "issue": 408,
-      "status": "active_ready_parent_sync_pending",
+      "status": "active_ready_parent_sync_and_pr_493_migration_pending",
       "dependencies": [
         405,
         462
       ],
+      "integrationGates": [
+        "wave1_parent_sync",
+        "pr_493_canonical_pm_migration"
+      ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
       "decision": "not_spawned_dependency_blocked",
-      "reason": "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization must integrate before #408 reconciliation. Wave 1 does not implement or open #408.",
+      "reason": "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization and the subsequent PR #493 canonical PM routing migration must integrate before #408 reconciliation. Wave 1 does not implement or open #408.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
       "branch": "feat/408-flow-etl-dashboards",
       "head": "6c643f5c971d1fac4a83e4ffe653b83847c2fceb"

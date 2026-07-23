@@ -59,7 +59,7 @@ Hard stops (human gates):
 - Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools.
 - Stop for strict TDD failure, repeated verification failure, or any human gate.
 
-Handoff back to the orchestrator using `.agents/agentic-delivery/contracts/worker-handoff-template.md`:
+Handoff back to the orchestrator using `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`:
 branch, commits pushed, tests added/changed, local-gate results, follow-ups, and the exact
 `spawned`/`local_critical_path`/`not_spawned_*` decision for this run. The orchestrator then runs
 exact-head verification, fresh-context `local-codex-review-loop.md`, and independent

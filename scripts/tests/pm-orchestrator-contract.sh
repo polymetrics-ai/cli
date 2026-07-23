@@ -213,7 +213,7 @@ for relative in (
     ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
     ".pi/prompts/pm-auto-loop.md",
 ):
-    forbid(relative, {"active per-subissue correction counter": r"guards\.correction_rounds"})
+    forbid(relative, {"active per-subissue correction counter": r'"correction_rounds"\s*:'})
 
 reviewer = read(".pi/agents/pm-reviewer.md")
 if not re.search(r"^tools:.*\bbash\b", reviewer, flags=re.MULTILINE):

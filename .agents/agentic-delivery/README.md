@@ -13,12 +13,16 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 
 - `contracts/issue-agent-contract.md`: generic contract every implementation agent must follow.
 - `contracts/issue-prompt-template.md`: issue section template that points at the generic contract.
-- `contracts/code-review-disposition-template.md`: required reply format for automated review
-  findings.
+- `contracts/pm-code-review-disposition-template.md`: canonical PM exact-head local review
+  disposition and gate-state format.
+- `contracts/code-review-disposition-template.md`: legacy hosted-review reply format retained for
+  historical and explicitly authorized non-PM use.
 - `contracts/parent-issue-roadmap-template.md`: parent issue format for epic-sized work with
   sub-issues and stacked PRs.
 - `contracts/parent-orchestrator-contract.md`: runtime contract for parent issue orchestration.
-- `contracts/worker-handoff-template.md`: required worker-to-orchestrator handoff format.
+- `contracts/pm-worker-handoff-template.md`: canonical PM worker-to-orchestrator handoff with
+  exact-head local review, Shepherd, correction-budget, and human-gate fields.
+- `contracts/worker-handoff-template.md`: legacy generic handoff retained for historical records.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
 - `workflows/local-codex-review-loop.md`: canonical PM fresh-context exact-head code review and
   disposition loop.

@@ -9,7 +9,7 @@ and resumed at any point (including token exhaustion) without losing work.
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
 `parent-issue-orchestration-loop.md`, `pi-active-orchestration-loop.md`, `gsd-universal-runtime-loop.md`,
-`local-codex-review-loop.md`, `shepherd-validator.md`, and `code-review-disposition-template.md`.
+`local-codex-review-loop.md`, `shepherd-validator.md`, and `pm-code-review-disposition-template.md`.
 
 ## Roles → agents → models
 
@@ -56,7 +56,7 @@ RESEARCH is skipped entirely for a fully-specified `implementation` task (no ext
 `implementation` path stays first-class and light. Gates are hard: RESEARCH (connector) must be
 `complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; fresh-context local Codex
 `REVIEW` must be clean (every finding fixed or dispositioned per
-`code-review-disposition-template.md`) and independent Shepherd must return `PROCEED` before
+`pm-code-review-disposition-template.md`) and independent Shepherd must return `PROCEED` before
 `INTEGRATE`. Branch
 and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent — check `gh pr list`/`gh
 issue list`/`git branch` and reuse what exists. Merges to `main` and final human-ready are human
@@ -88,8 +88,9 @@ Run-level state lives in `.planning/auto-loop/RUN.json`:
   "parent_issue": 0,
   "parent_branch": "",
   "parent_pr": 0,
-  "subissues": [{ "number": 0, "title": "", "stage": "not_started", "branch": "", "sub_pr": 0, "deps": [], "write_scope": "" }],
-  "guards": { "iteration": 0, "max_iterations": 200, "correction_rounds": {}, "max_correction_rounds": 4 },
+  "subissues": [{ "number": 0, "title": "", "stage": "not_started", "branch": "", "sub_pr": 0, "deps": [], "write_scope": "", "candidate_lineage": "" }],
+  "correction_budget": { "max_correction_rounds": 4, "rounds_by_range": {} },
+  "guards": { "iteration": 0, "max_iterations": 200 },
   "terminal": null
 }
 ```
@@ -127,8 +128,13 @@ nothing is double-applied (issue creation and merges are checked for idempotency
 - **Budget**: `scripts/pi-auto-loop.sh` runs under a per-run token/cost ceiling. When the ceiling
   is hit the orchestrator finishes the current durable transition, writes `terminal: "budget"`, and
   exits cleanly; re-running resumes from the reconciler.
-- **Correction cap**: `max_correction_rounds` (default 4) per sub-issue. On exceed, mark the
+- **Correction cap**: `correction_budget.max_correction_rounds` (default 4) applies to each stable
+  exact-base/candidate lineage key in `correction_budget.rounds_by_range`. Create the candidate
+  lineage identifier once when adopting the first candidate and preserve it across replacement PRs
+  and changed heads; append head history instead of resetting the counter. On exceed, mark the
   sub-issue `blocked` with the outstanding findings and stop for human review — never loop forever.
+  A resumed pre-v2 record may read `guards.correction_rounds` once as read-only legacy input, map it
+  into the stable lineage counter, and then write only the canonical `correction_budget` shape.
 - **Iteration cap**: `max_iterations` (default 200) orchestrator turns per run as a hard backstop.
 - **Loop safety**: stalled or repeating workers are detected via the reconciler's commit/stall
   check and re-dispatched or escalated, not silently retried.

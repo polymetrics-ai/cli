@@ -107,7 +107,7 @@ gate is triggered.
 For parent issues with multiple workers, use
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The parent orchestrator owns
 shared parent artifacts and default sub-PR merge decisions. Worker agents implement one sub-issue
-and report back with `.agents/agentic-delivery/contracts/worker-handoff-template.md` unless the
+and report back with `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md` unless the
 orchestrator explicitly delegates additional authority.
 
 The parent PR into `main` always requires human approval.

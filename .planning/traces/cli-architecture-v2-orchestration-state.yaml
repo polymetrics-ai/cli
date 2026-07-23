@@ -20,7 +20,8 @@ orchestrator:
   status: running
 wave1_parent_sync:
   status: stacked_pr_pending_parent_unchanged
-  task_branch: fm/cli-architecture-v2-wave1-parent-sync-r1
+  task_branch: chore/cli-architecture-v2-wave1-parent-sync-r1
+  pull_request: 495
   parent_before_sync: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
   parent_pr_head_before_sync: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
   origin_main: 873cd7b251f70c4a35a607a0d4e86051ea0fbd15
@@ -33,15 +34,22 @@ wave1_parent_sync:
   issue_419: deferred_by_human
   historical_425_436_waiver: pending_out_of_scope
   issue_408_head: 6c643f5c971d1fac4a83e4ffe653b83847c2fceb
-  issue_408_action: excluded_until_wave1_parent_sync_integrates
-  post_integration: "Fetch parent; record the actual resulting parent/PR #438 head; verify current main ancestry; refresh CI/body. Do not assume task head equals parent head."
+  issue_408_action: excluded_until_wave1_parent_sync_and_pr_493_routing_migration_integrate
+  post_wave1_routing_migration:
+    pull_request: 493
+    status: parent_sync_then_canonical_pm_reconciliation_pending
+    decision: not_spawned_dependency_blocked
+    blocks_worker_start: true
+    required_action: "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
+  post_integration: "Fetch parent; record the actual resulting parent/PR #438 head; verify current main ancestry; refresh CI/body; then complete and integrate the PR #493 canonical PM migration gate before reconciling #408. Do not assume task head equals parent head."
 ready_queue:
   - number: 408
-    status: active_ready_parent_sync_pending
+    status: active_ready_parent_sync_and_pr_493_migration_pending
     dependencies: [405, 462]
+    integration_gates: [wave1_parent_sync, pr_493_canonical_pm_migration]
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
     decision: not_spawned_dependency_blocked
-    reason: "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization must integrate before #408 reconciliation. Wave 1 does not implement or open #408."
+    reason: "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization and the subsequent PR #493 canonical PM routing migration must integrate before #408 reconciliation. Wave 1 does not implement or open #408."
   - number: 413
     status: worker_ready_deferred
     dependencies: [407]
