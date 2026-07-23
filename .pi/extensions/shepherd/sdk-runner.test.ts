@@ -108,8 +108,10 @@ function makeSdk(overrides = {}) {
 	let resourceOptions;
 	let sessionOptions;
 	let listener;
+	let lastAssistantText = evidenceText();
 	const emit = (event) => listener?.(event);
 	const emitTerminal = (stopReason = "stop", text = evidenceText()) => {
+		lastAssistantText = text;
 		const message = terminalMessage(stopReason, text);
 		emit({ type: "message_end", message });
 		emit({ type: "agent_end", messages: [message], willRetry: false });
@@ -132,16 +134,20 @@ function makeSdk(overrides = {}) {
 		async waitForIdle() { calls.idle += 1; },
 		async abort() { calls.abort += 1; },
 		dispose() { calls.dispose += 1; },
-		getLastAssistantText: () => evidenceText(),
+		getLastAssistantText: () => lastAssistantText,
 	};
 	const modelRegistry = {
-		authStorage: { opaque: true },
 		find: (provider, model) => provider === "openai-codex" && model === "gpt-5.6-sol" ? session.model : undefined,
 		hasConfiguredAuth: () => true,
+		getProviderAuthStatus: () => ({ configured: true, source: "runtime" }),
+		getApiKeyForProvider: async () => "offline-test-marker",
+		isUsingOAuth: () => false,
+		getRegisteredProviderConfig: () => undefined,
+		getRegisteredProviderIds: () => [],
 	};
 	const sdk = {
-		version: "0.80.6",
-		requiredVersion: "0.80.6",
+		version: "0.80.10",
+		requiredVersion: "0.80.10",
 		getAgentDir: () => "/tmp/pi-agent",
 		createSettingsManager: (settings, options) => ({ settings, options, kind: "settings" }),
 		createSessionManager: (cwd) => ({ cwd, kind: "session" }),
@@ -210,7 +216,10 @@ test("typed assistant evidence remains authoritative without lifecycle events", 
 
 test("fails closed on SDK, model, extension, tool, and persistence drift", async () => {
 	const badVersion = makeSdk({ version: "0.81.0" });
-	await assert.rejects(new SdkAgentRunner(badVersion.sdk, badVersion.modelRegistry).run(request()), /requires Pi 0.80.6/);
+	await assert.rejects(
+		new SdkAgentRunner(badVersion.sdk, badVersion.modelRegistry).run(request()),
+		/bounded Pi compatibility|requires Pi/i,
+	);
 
 	const nested = makeSdk({
 		async createSession() {
@@ -228,7 +237,7 @@ test("fails closed on SDK, model, extension, tool, and persistence drift", async
 	await assert.rejects(new SdkAgentRunner(persistent.sdk, persistent.modelRegistry).run(request()), /unexpectedly enabled persistence/);
 });
 
-test("rejects terminal events emitted by a drifted provider or model", async () => {
+test("ignores drifted raw terminal events when the typed result and session route are valid", async () => {
 	const harness = makeSdk();
 	harness.session.prompt = async () => {
 		const message = {
@@ -239,9 +248,9 @@ test("rejects terminal events emitted by a drifted provider or model", async () 
 		harness.emit({ type: "message_end", message });
 		harness.emit({ type: "agent_end", messages: [message], willRetry: false });
 	};
-	await assert.rejects(
-		new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request()),
-		/terminal.*model|routing mismatch/i,
+	assert.equal(
+		(await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request())).summary,
+		"read-only inspection passed",
 	);
 });
 
@@ -263,7 +272,6 @@ test("rejects every requested built-in or custom child tool before session creat
 
 test("fails closed on malformed and oversized assistant evidence", async () => {
 	const malformed = makeSdk();
-	malformed.session.getLastAssistantText = () => evidenceText({ summary: "stale accessor must not be trusted" });
 	malformed.session.prompt = async () => { malformed.emitTerminal("stop", "not-json"); };
 	await assert.rejects(
 		new SdkAgentRunner(malformed.sdk, malformed.modelRegistry).run(request()),
@@ -282,41 +290,36 @@ test("fails closed on malformed and oversized assistant evidence", async () => {
 
 
 for (const stopReason of ["stop", "error", "aborted", "length", "toolUse"]) {
-	test(`${stopReason} terminal evidence is ${stopReason === "stop" ? "accepted" : "rejected"}`, async () => {
+	test(`${stopReason} raw terminal telemetry cannot override valid typed evidence`, async () => {
 		const harness = makeSdk();
-		harness.session.getLastAssistantText = () => evidenceText({ summary: "unverified accessor text" });
 		harness.session.prompt = async () => { harness.emitTerminal(stopReason, evidenceText({ summary: `${stopReason} terminal` })); };
-		const outcome = new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
-		if (stopReason === "stop") {
-			assert.equal((await outcome).summary, "stop terminal");
-		} else {
-			await assert.rejects(outcome, new RegExp(`terminal.*${stopReason}`, "i"));
-		}
+		const outcome = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+		assert.equal(outcome.summary, `${stopReason} terminal`);
 		assert.equal(harness.calls.dispose, 1);
 	});
 }
 
-test("rejects incomplete or inconsistent terminal event sequences", async () => {
+test("accepts typed evidence without a complete raw terminal event sequence", async () => {
 	const noAgentEnd = makeSdk();
 	noAgentEnd.session.prompt = async () => {
 		noAgentEnd.emit({ type: "message_end", message: terminalMessage() });
 	};
-	await assert.rejects(
-		new SdkAgentRunner(noAgentEnd.sdk, noAgentEnd.modelRegistry).run(request()),
-		/terminal event sequence/i,
+	assert.equal(
+		(await new SdkAgentRunner(noAgentEnd.sdk, noAgentEnd.modelRegistry).run(request())).summary,
+		"read-only inspection passed",
 	);
 });
 
-test("aborts and cleans up when the event budget is exceeded", async () => {
+test("saturates non-authoritative progress accounting without invalidating typed evidence", async () => {
 	const harness = makeSdk();
 	harness.session.prompt = async () => {
 		harness.emit({ type: "first" });
 		harness.emit({ type: "second" });
 		harness.emitTerminal();
 	};
-	await assert.rejects(
-		new SdkAgentRunner(harness.sdk, harness.modelRegistry, { maxEvents: 1 }).run(request()),
-		/event limit exceeded/,
+	assert.equal(
+		(await new SdkAgentRunner(harness.sdk, harness.modelRegistry, { maxEvents: 1 }).run(request())).summary,
+		"read-only inspection passed",
 	);
 	assert.equal(harness.calls.abort, 1);
 	assert.equal(harness.calls.unsubscribe, 1);

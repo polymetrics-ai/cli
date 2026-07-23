@@ -41,11 +41,12 @@ Production files stay unchanged until R1–R4 execute and fail for their intende
 | parallel analysis | workflow run `43dc4d81-66bf-4642-bed2-207a00d5fec0` | PASS; typed partial-adoption synthesis |
 | baseline focused | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/sdk-runner.test.ts` | PASS — 158/158 before #490 RED |
 | RED | focused `--test-name-pattern` over the five #490 contracts | EXPECTED FAIL — 0/5 passed; Pi 0.80.10 rejected in both runtimes, event-free typed results rejected in both runtimes, harmless unknown event rejected |
-| GREEN focused | pending | pending |
-| full Shepherd | pending | pending |
-| strict Pi 0.80.10 typecheck | pending | pending |
-| offline RPC/canary | pending | pending |
-| exact-head review | pending | exactly one round required |
+| GREEN focused | compatibility + runtime + SDK + tool-policy suites with `SHEPHERD_PI_PACKAGE_ROOT` bound to exact Pi 0.80.10 | PASS — 170/170 |
+| full Shepherd before review | `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts` with exact Pi root | PASS — 1717 pass, 0 fail, 1 intentional skip |
+| strict Pi 0.80.10 typecheck | TypeScript 5.9.3 `--noEmit --strict --target ES2024 --module NodeNext`, production Shepherd sources, exact Pi 0.80.10 base URL | PASS |
+| exact Pi family verifier | `SHEPHERD_PI_PACKAGE_ROOT=...pi-coding-agent node .github/scripts/verify-shepherd-pi-runtime.mjs` | PASS — coding-agent/core/ai/tui all exact 0.80.10 |
+| offline RPC | isolated AgentSession command load, workflow-engine package load, and co-load through Pi 0.80.10 RPC | PASS — `pm-shepherd` plus `workflow`, `workflow:dynamax`, `workflow:inspector`, `workflow:models`, `workflow:results`, and `workflow:runs` |
+| exact-head review | pending | exactly one round required after the implementation checkpoint is committed |
 | final full Shepherd | pending | run once after review disposition |
 
 ## RED checkpoint detail

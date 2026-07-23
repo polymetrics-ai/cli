@@ -5,7 +5,9 @@ on:
     paths:
       - ".pi/extensions/shepherd/**"
       - ".pi/README.md"
+      - ".pi/settings.json"
       - ".planning/phases/479-shepherd-production-matrix/**"
+      - ".planning/phases/490-shepherd-workflow-engine/**"
       - ".github/scripts/verify-shepherd-pi-runtime.mjs"
       - ".github/workflows/shepherd.yml"
   push:
@@ -14,7 +16,9 @@ on:
     paths:
       - ".pi/extensions/shepherd/**"
       - ".pi/README.md"
+      - ".pi/settings.json"
       - ".planning/phases/479-shepherd-production-matrix/**"
+      - ".planning/phases/490-shepherd-workflow-engine/**"
       - ".github/scripts/verify-shepherd-pi-runtime.mjs"
       - ".github/workflows/shepherd.yml"
   workflow_dispatch:
@@ -50,7 +54,7 @@ jobs:
           node-version: "24.13.1"
 
       - name: Install pinned Pi test runtime
-        run: npm install --global --ignore-scripts --no-audit --no-fund @earendil-works/pi-coding-agent@0.80.6
+        run: npm install --global --ignore-scripts --no-audit --no-fund @earendil-works/pi-coding-agent@0.80.10
 
       - name: Verify pinned Pi runtime family
         run: node .github/scripts/verify-shepherd-pi-runtime.mjs

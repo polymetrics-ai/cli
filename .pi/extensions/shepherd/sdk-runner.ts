@@ -2,6 +2,10 @@ import { posix, win32 } from "node:path";
 
 import type { AgentSessionEvent } from "@earendil-works/pi-coding-agent";
 
+import {
+	assertShepherdPiCompatibility,
+	REQUIRED_PI_VERSION,
+} from "./pi-compatibility.ts";
 import type {
 	AgentRunner,
 	AgentRunRequest,
@@ -9,7 +13,6 @@ import type {
 	DimensionScores,
 } from "./runner.ts";
 
-const REQUIRED_PI_VERSION = "0.80.6";
 const REQUIRED_PROVIDER = "openai-codex";
 const REQUIRED_MODEL = "gpt-5.6-sol";
 const DIMENSION_NAMES = [
@@ -22,14 +25,13 @@ const DIMENSION_NAMES = [
 ] as const;
 
 type SessionModel = { provider: string; id: string };
-type MessageEndEvent = Extract<AgentSessionEvent, { type: "message_end" }>;
-type AssistantTerminalMessage = Extract<MessageEndEvent["message"], { role: "assistant" }>;
 
 interface EmbeddedSession {
 	model: SessionModel;
 	thinkingLevel: string;
 	sessionFile: string | undefined;
 	getActiveToolNames(): string[];
+	getLastAssistantText(): string | undefined;
 	subscribe(listener: (event: AgentSessionEvent) => void): () => void;
 	prompt(prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void>;
 	waitForIdle(): Promise<void>;
@@ -60,9 +62,13 @@ export interface ShepherdSdk {
 }
 
 export interface ShepherdModelRegistry {
-	authStorage: unknown;
 	find(provider: string, model: string): SessionModel | undefined;
 	hasConfiguredAuth(model: SessionModel): boolean;
+	getProviderAuthStatus(provider: string): { configured: boolean; source?: string };
+	getApiKeyForProvider(provider: string): Promise<string | undefined>;
+	isUsingOAuth(model: SessionModel): boolean;
+	getRegisteredProviderConfig(provider: string): unknown;
+	getRegisteredProviderIds(): readonly string[];
 }
 
 export interface SdkAgentRunnerOptions {
@@ -330,8 +336,6 @@ export class SdkAgentRunner implements AgentRunner {
 			const creationPromise = Promise.resolve().then(() => this.#sdk.createSession({
 				cwd: request.cwd,
 				agentDir: this.#sdk.getAgentDir(),
-				authStorage: this.#modelRegistry.authStorage,
-				modelRegistry: this.#modelRegistry,
 				model,
 				thinkingLevel: request.thinking,
 				noTools: "all",
@@ -370,35 +374,9 @@ export class SdkAgentRunner implements AgentRunner {
 			this.#assertRunActive(request);
 			validateCreatedSession(created, request);
 
-			let eventCount = 0;
-			let eventBytes = 0;
-			let eventFailure: AgentRunnerError | undefined;
-			let messageEndTerminal: AssistantTerminalMessage | undefined;
-			let agentEndTerminal: AssistantTerminalMessage | undefined;
-			let agentEndCount = 0;
-			let agentEndWillRetry = false;
+			const progress = { count: 0, bytes: 0, saturated: false };
 			child.unsubscribe = created.session.subscribe((event) => {
-				if (eventFailure) return;
-				eventCount += 1;
-				try {
-					eventBytes += byteLength(JSON.stringify(event));
-				} catch (error) {
-					eventFailure = new AgentRunnerError("AgentSession emitted an unserializable event", { cause: error });
-				}
-				if (eventCount > this.#options.maxEvents || eventBytes > this.#options.maxEventBytes) {
-					eventFailure = new AgentRunnerError("AgentSession event limit exceeded");
-				}
-				if (!eventFailure && event.type === "message_end" && event.message.role === "assistant") {
-					messageEndTerminal = event.message;
-				}
-				if (!eventFailure && event.type === "agent_end") {
-					agentEndCount += 1;
-					agentEndWillRetry ||= event.willRetry;
-					agentEndTerminal = [...event.messages].reverse().find(
-						(message): message is AssistantTerminalMessage => message.role === "assistant",
-					);
-				}
-				if (eventFailure) void child?.abortOnce().catch(() => undefined);
+				captureProgressEvent(event, progress, this.#options.maxEvents, this.#options.maxEventBytes);
 			});
 
 			this.#assertRunActive(request);
@@ -409,17 +387,10 @@ export class SdkAgentRunner implements AgentRunner {
 				}),
 			);
 			this.#assertRunActive(request);
-			if (eventFailure) throw eventFailure;
-			const terminal = verifyTerminalEvents({
-				messageEndTerminal,
-				agentEndTerminal,
-				agentEndCount,
-				agentEndWillRetry,
-			});
-			if (terminal.provider !== request.provider || terminal.model !== request.model) {
+			if (created.session.model?.provider !== request.provider || created.session.model?.id !== request.model) {
 				throw new AgentRunnerError("AgentSession terminal model routing mismatch");
 			}
-			const assistantText = assistantTextFromTerminal(terminal);
+			const assistantText = created.session.getLastAssistantText();
 			result = parseEvidence(assistantText, this.#options.maxAssistantBytes, this.#options.maxSummaryCharacters);
 		} catch (error) {
 			primaryFailed = true;
@@ -502,9 +473,13 @@ export class SdkAgentRunner implements AgentRunner {
 	}
 
 	#assertSdkContract(): void {
-		if (this.#sdk.version !== REQUIRED_PI_VERSION ||
-			(this.#sdk.requiredVersion !== undefined && this.#sdk.requiredVersion !== REQUIRED_PI_VERSION)) {
-			throw new AgentRunnerError(`AgentSession Shepherd requires Pi ${REQUIRED_PI_VERSION}; found ${this.#sdk.version}`);
+		try {
+			assertShepherdPiCompatibility(this.#sdk.version, this.#sdk.requiredVersion);
+		} catch (error) {
+			throw new AgentRunnerError(
+				error instanceof Error ? error.message : "AgentSession Shepherd Pi compatibility check failed",
+				{ cause: error },
+			);
 		}
 		for (const name of [
 			"getAgentDir",
@@ -709,7 +684,8 @@ function validateCreatedSession(
 	const session = created.session;
 	if (!session || typeof session.prompt !== "function" || typeof session.abort !== "function" ||
 		typeof session.waitForIdle !== "function" || typeof session.subscribe !== "function" ||
-		typeof session.dispose !== "function" || typeof session.getActiveToolNames !== "function") {
+		typeof session.dispose !== "function" || typeof session.getActiveToolNames !== "function" ||
+		typeof session.getLastAssistantText !== "function") {
 		throw new AgentRunnerError("Pi returned an incomplete AgentSession surface");
 	}
 	if (session.model?.provider !== request.provider || session.model?.id !== request.model) {
@@ -727,37 +703,30 @@ function validateCreatedSession(
 	}
 }
 
-function verifyTerminalEvents(events: {
-	messageEndTerminal: AssistantTerminalMessage | undefined;
-	agentEndTerminal: AssistantTerminalMessage | undefined;
-	agentEndCount: number;
-	agentEndWillRetry: boolean;
-}): AssistantTerminalMessage {
-	const { messageEndTerminal, agentEndTerminal, agentEndCount, agentEndWillRetry } = events;
-	if (agentEndCount !== 1 || agentEndWillRetry || !messageEndTerminal || !agentEndTerminal ||
-		!sameTerminalMessage(messageEndTerminal, agentEndTerminal)) {
-		throw new AgentRunnerError("AgentSession returned an invalid terminal event sequence");
+function captureProgressEvent(
+	event: unknown,
+	progress: { count: number; bytes: number; saturated: boolean },
+	maxEvents: number,
+	maxBytes: number,
+): void {
+	if (progress.saturated || typeof event !== "object" || event === null) return;
+	try {
+		const type = Object.getOwnPropertyDescriptor(event, "type");
+		if (!type || type.get || type.set || !("value" in type) || type.value !== "tool_execution_start") return;
+		const tool = Object.getOwnPropertyDescriptor(event, "toolName");
+		const toolName = tool && !tool.get && !tool.set && "value" in tool && typeof tool.value === "string"
+			? tool.value
+			: "";
+		const charge = byteLength(toolName) + 32;
+		progress.count += 1;
+		if (progress.count > maxEvents || progress.bytes + charge > maxBytes) {
+			progress.saturated = true;
+			return;
+		}
+		progress.bytes += charge;
+	} catch {
+		// Unknown or malformed progress telemetry is not result authority.
 	}
-	if (agentEndTerminal.stopReason !== "stop") {
-		throw new AgentRunnerError(`AgentSession terminal stop reason ${agentEndTerminal.stopReason} is not accepted`);
-	}
-	return agentEndTerminal;
-}
-
-function sameTerminalMessage(left: AssistantTerminalMessage, right: AssistantTerminalMessage): boolean {
-	return left.stopReason === right.stopReason &&
-		left.timestamp === right.timestamp &&
-		left.provider === right.provider &&
-		left.model === right.model &&
-		assistantTextFromTerminal(left) === assistantTextFromTerminal(right);
-}
-
-function assistantTextFromTerminal(message: AssistantTerminalMessage): string | undefined {
-	let text = "";
-	for (const content of message.content) {
-		if (content.type === "text") text += content.text;
-	}
-	return text.trim() || undefined;
 }
 
 function parseEvidence(

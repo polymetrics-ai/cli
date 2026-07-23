@@ -1053,7 +1053,7 @@ test("cycle 9 capability names deny sensitive noun and acquisition verb permutat
 	assert.deepEqual(accepted, []);
 });
 
-test("cycle 9 Pi 0.80.6 validates a real custom-tool call and receives required result details offline", async () => {
+test("cycle 9 Pi 0.80.10 validates a real custom-tool call and receives required result details offline", async () => {
 	type PiValidationTool = {
 		name: string;
 		description: string;
@@ -1068,13 +1068,16 @@ test("cycle 9 Pi 0.80.6 validates a real custom-tool call and receives required 
 	type PiValidationModule = {
 		validateToolArguments(tool: PiValidationTool, toolCall: PiValidationCall): Readonly<Record<string, unknown>>;
 	};
-	const piAiPath = join(
+	const piPackageRoot = process.env.SHEPHERD_PI_PACKAGE_ROOT ?? join(
 		dirname(process.execPath),
 		"..",
 		"lib",
 		"node_modules",
 		"@earendil-works",
 		"pi-coding-agent",
+	);
+	const piAiPath = join(
+		piPackageRoot,
 		"node_modules",
 		"@earendil-works",
 		"pi-ai",

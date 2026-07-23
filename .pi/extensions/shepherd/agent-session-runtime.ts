@@ -6,6 +6,7 @@ import type {
 	CreateAgentSessionOptions,
 } from "@earendil-works/pi-coding-agent";
 
+import { assertShepherdPiCompatibility } from "./pi-compatibility.ts";
 import {
 	buildRolePrompts,
 	routeForRole,
@@ -27,7 +28,6 @@ import {
 	type ToolAuthority,
 } from "./tool-policy.ts";
 
-const REQUIRED_PI_VERSION = "0.80.6";
 const REQUIRED_PROVIDER = "openai-codex";
 const REQUIRED_MODEL = "gpt-5.6-sol";
 const DEFAULT_MAX_CONCURRENCY = 4;
@@ -172,6 +172,7 @@ export interface RuntimeAgentSession {
 	thinkingLevel: ShepherdAgentThinking | string;
 	sessionFile: string | undefined;
 	getActiveToolNames(): string[];
+	getLastAssistantText(): string | undefined;
 	subscribe(listener: (event: AgentSessionEvent) => void): () => void | PromiseLike<void>;
 	prompt(prompt: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<void>;
 	abort(): Promise<void>;
@@ -185,7 +186,7 @@ interface RuntimeSessionResult {
 	modelFallbackMessage: string | undefined;
 }
 
-/** Injected adapter over the public Pi 0.80.6 createAgentSession API and in-memory services. */
+/** Injected adapter over the bounded compatible public Pi createAgentSession API and in-memory services. */
 export interface AgentSessionRuntimeSdk {
 	version: string;
 	requiredVersion?: string;
@@ -414,6 +415,7 @@ class OwnedSession {
 	readonly #subscribe: CapturedSessionOperation;
 	readonly #waitForIdle: CapturedSessionOperation;
 	readonly #getActiveToolNames: CapturedSessionOperation;
+	readonly #getLastAssistantText: CapturedSessionOperation;
 	#abortPromise: Promise<void> | undefined;
 	#disposePromise: Promise<void> | undefined;
 	#promptCell: OwnedSettlementCell | undefined;
@@ -447,10 +449,19 @@ class OwnedSession {
 		this.#prompt = captureOptional("prompt");
 		this.#subscribe = captureOptional("subscribe");
 		this.#getActiveToolNames = captureOptional("getActiveToolNames");
+		this.#getLastAssistantText = captureOptional("getLastAssistantText");
 	}
 
 	validationFailures(): readonly unknown[] {
-		const captured = [this.#abort, this.#waitForIdle, this.#dispose, this.#prompt, this.#subscribe, this.#getActiveToolNames];
+		const captured = [
+			this.#abort,
+			this.#waitForIdle,
+			this.#dispose,
+			this.#prompt,
+			this.#subscribe,
+			this.#getActiveToolNames,
+			this.#getLastAssistantText,
+		];
 		const failures: unknown[] = [];
 		for (let index = 0; index < captured.length; index += 1) {
 			if (captured[index]!.failurePresent) arrayPush(failures, captured[index]!.failure);
@@ -461,6 +472,15 @@ class OwnedSession {
 	activeToolNames(): unknown {
 		if (!this.#getActiveToolNames.available) throw this.#getActiveToolNames.failure;
 		return INTRINSIC_REFLECT_APPLY(this.#getActiveToolNames.operation!, this.#session, []);
+	}
+
+	lastAssistantText(): unknown {
+		if (!this.#getLastAssistantText.available) throw this.#getLastAssistantText.failure;
+		return INTRINSIC_REFLECT_APPLY(this.#getLastAssistantText.operation!, this.#session, []);
+	}
+
+	modelRoute(): RuntimeSessionModel | undefined {
+		return this.#session.model;
 	}
 
 	startPrompt(value: string, options: { expandPromptTemplates: false; source: "extension" }): Promise<PromptSettlement> {
@@ -847,6 +867,15 @@ class RunAdmissionOwnership {
 		this.#finished = true;
 		this.#resolveDone();
 	}
+}
+
+interface ProgressCapture {
+	readonly authorizedToolNames: ReadonlySet<string>;
+	readonly observedToolNames: Set<string>;
+	eventCount: number;
+	eventBytes: number;
+	saturated: boolean;
+	frozen: boolean;
 }
 
 interface TerminalCapture {
@@ -1275,17 +1304,9 @@ export class ShepherdAgentSessionRuntime {
 			claim.validate();
 			assertExecutionActive();
 
-			const capture = newTerminalCapture(
-				expectedToolNames,
-				(name, raw, maximumBytes) => toolPolicy.projectArguments(name, raw, maximumBytes),
-			);
+			const progress = newProgressCapture(expectedToolNames);
 			assertExecutionActive();
-			owned.subscribe((event) => {
-				captureEvent(capture, event, this.#options);
-				if (capture.failure) void owned?.abortOnce().catch(() => undefined);
-			});
-			assertExecutionActive();
-			if (capture.failure) throw capture.failure;
+			owned.subscribe((event) => captureProgressEvent(progress, event, this.#options));
 			assertExecutionActive();
 			const promptSettlement = owned.startPrompt(prompts.userPrompt, {
 				expandPromptTemplates: false,
@@ -1295,18 +1316,20 @@ export class ShepherdAgentSessionRuntime {
 			const promptResult = await scope.race(promptSettlement);
 			if (promptResult.status === "rejected") throw promptResult.reason;
 			assertExecutionActive();
-			// Prompt settlement follows Pi's synchronous agent_settled dispatch. Freeze before
-			// releasing the listener, then await release so idle/dispose callbacks cannot mutate
-			// evidence that is about to be verified.
-			capture.frozen = true;
+			// Pi documents prompt() as settling only after the accepted run finishes. Raw
+			// lifecycle events are progress telemetry, never success or failure authority.
+			progress.frozen = true;
 			await scope.race(bounded(owned.unsubscribeOnce(), this.#options.cleanupTimeoutMs, "session unsubscribe"));
 			assertExecutionActive();
-			if (capture.failure) throw capture.failure;
-			const terminal = verifyTerminalCapture(capture);
-			if (terminal.provider !== REQUIRED_PROVIDER || terminal.model !== REQUIRED_MODEL) {
+			const terminalText = owned.lastAssistantText();
+			const terminalRoute = owned.modelRoute();
+			if (terminalRoute?.provider !== REQUIRED_PROVIDER || terminalRoute.id !== REQUIRED_MODEL) {
 				throw new AgentSessionRuntimeError("AgentSession terminal model routing mismatch; fallback is forbidden");
 			}
-			result = parseHandoff(assistantText(terminal), request, this.#options.maxAssistantBytes);
+			if (typeof terminalText !== "string") {
+				throw new AgentSessionRuntimeError("AgentSession completed without a typed terminal handoff");
+			}
+			result = parseHandoff(terminalText, request, this.#options.maxAssistantBytes);
 		} catch (error) {
 			primaryFailurePresent = true;
 			primaryFailure = error;
@@ -1419,9 +1442,13 @@ export class ShepherdAgentSessionRuntime {
 	}
 
 	#assertSdk(): void {
-		if (this.#sdk.version !== REQUIRED_PI_VERSION ||
-			(this.#sdk.requiredVersion !== undefined && this.#sdk.requiredVersion !== REQUIRED_PI_VERSION)) {
-			throw new AgentSessionRuntimeError(`AgentSession Shepherd requires Pi ${REQUIRED_PI_VERSION}; found ${this.#sdk.version}`);
+		try {
+			assertShepherdPiCompatibility(this.#sdk.version, this.#sdk.requiredVersion);
+		} catch (error) {
+			throw new AgentSessionRuntimeError(
+				error instanceof Error ? error.message : "AgentSession Shepherd Pi compatibility check failed",
+				{ cause: error },
+			);
 		}
 		for (const method of [
 			"getAgentDir",
@@ -1938,6 +1965,42 @@ function assertApprovedRecordPrototype(value: object, description: string): void
 function assertApprovedArrayPrototype(value: unknown[], description: string): void {
 	if (INTRINSIC_GET_PROTOTYPE_OF(value) !== INTRINSIC_ARRAY_PROTOTYPE) {
 		throw new AgentSessionRuntimeError(`${description} has a non-approved direct prototype`);
+	}
+}
+
+function newProgressCapture(expectedToolNames: readonly string[]): ProgressCapture {
+	return {
+		authorizedToolNames: new Set(expectedToolNames),
+		observedToolNames: new Set(),
+		eventCount: 0,
+		eventBytes: 0,
+		saturated: false,
+		frozen: false,
+	};
+}
+
+function captureProgressEvent(
+	capture: ProgressCapture,
+	event: unknown,
+	options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>,
+): void {
+	if (capture.frozen || capture.saturated) return;
+	try {
+		const fields = captureKnownRecordFields(event, "AgentSession progress event", ["type", "toolName"]);
+		if (fields.get("type") !== "tool_execution_start") return;
+		capture.eventCount += 1;
+		const toolName = fields.get("toolName");
+		const charge = typeof toolName === "string" ? byteLength(toolName) + 32 : 32;
+		if (capture.eventCount > options.maxEvents || capture.eventBytes + charge > options.maxEventBytes) {
+			capture.saturated = true;
+			return;
+		}
+		capture.eventBytes += charge;
+		if (typeof toolName === "string" && capture.authorizedToolNames.has(toolName)) {
+			capture.observedToolNames.add(toolName);
+		}
+	} catch {
+		// Unknown, malformed, or accessor-backed telemetry is non-authoritative and inert.
 	}
 }
 
