@@ -26,6 +26,8 @@ Required reading before acting:
 - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+- `.agents/agentic-delivery/contracts/pm-review-system.json`
+- `.agents/agentic-delivery/contracts/pm-review-packet-template.md`
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
 - `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
 - `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
@@ -59,10 +61,12 @@ Required reading before acting:
    - EXECUTE / CORRECT → `pm-gsd-worker`, each with its own `cwd` (sibling checkout or worktree) and one write scope.
    - SUB_PR_OPEN → after the worker's first push, open the sub-PR (base = parent branch; body `Refs #<sub>` + `Refs #<N>`). Idempotent — adopt an existing matching PR. Record `sub_pr`.
    - VERIFY → `pm-verifier` (gate: must pass before review).
-   - REVIEW → fresh-context read-only `pm-reviewer` on the exact base/head range; disposition every
+   - REVIEW → run `scripts/pm-review-system.py compile`; stop on semantic/closure/authority/scope
+     findings or unsplittable context. Dispatch fresh-context read-only `pm-reviewer` once per
+     bounded exact-base/head packet, then run `synthesize` for one PM-owned result. Disposition every
      finding through `local-codex-review-loop.md` and `pm-code-review-disposition-template.md`. The
-     independent driver follows `shepherd-validator.md` and must return `PROCEED` for this clean
-     REVIEW transition.
+     independent driver follows `shepherd-validator.md` and must return `PROCEED` only after clean
+     synthesis for this REVIEW transition.
    - INTEGRATE → merge the exact reviewed head only after verify is green, review is clean, and the
      REVIEW transition received Shepherd `PROCEED`.
    - PARENT_FINALIZE → parent PR coverage; stop at the human-ready gate.
@@ -73,7 +77,9 @@ Required reading before acting:
 
 Registry discovery is mandatory. If `programming-loop` is absent, do not invoke or invent it; this
 PM orchestrator owns PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE with durable
-state. Claude and GitHub Copilot are not required, requested, or fallback PM review coverage.
+state. Packet reviewers are bounded inputs, never additional owners; missing coverage or silent
+truncation blocks synthesis. Claude and GitHub Copilot are not required, requested, or fallback PM
+review coverage.
 
 ## Subagent dispatch rules (Pi runtime)
 

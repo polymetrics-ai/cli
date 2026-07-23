@@ -109,14 +109,33 @@ field_contract:
         - exact_head_sha
         - reviewed_range
         - disposition_summary
+        - review_compiler
+        - review_packets
         - local_codex
         - shepherd
       primary_route_values: [local_codex, human, blocked]
       status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
       finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]
+      review_compiler:
+        required: [status, exact_base_sha, exact_head_sha, manifest_artifact, packet_ids, coverage]
+        status_values: [pending, ready, blocked]
+        coverage_required: [changed_files, closure_files, authority_files, unassigned_files]
+        invariant: blocked when any active target is missing or prohibited, authority state disagrees, a changed file is unassigned, or a packet cannot fit without truncation
+      review_packets:
+        item_required: [packet_id, role, exact_base_sha, exact_head_sha, raw_response_artifact, status, reviewed_files, closure_files, authority_files, invariants, unreviewed_files, findings, context]
+        role_values: [combined, architecture_reference, authority_workflow_state, implementation_test]
+        status_values: [pending, clean, findings, blocked]
+        context_required: [overflow, truncated]
+        clean_invariant: no missing response, stale identity, unreviewed item, overflow, truncation, or finding
       local_codex:
-        required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, findings_artifact]
+        required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, synthesis_artifact, findings_artifact]
         status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
+        synthesis_owner: parent_orchestrator
+        finding_count_limit: none
+      measurement:
+        optional: true
+        fields: [fixture_recall, fixture_precision, escaped_defects, false_positives, exact_version_invalidations, review_rounds, context_overflows, wall_clock_ms, tokens, cost, prospective_status]
+        rule: deterministic fixture metrics and prospective observations are reported separately; unavailable fields remain explicit
       shepherd:
         required: [status, exact_head_sha, evidence_artifact]
         status_values: [pending, proceed, retry, revert, halt, blocked]

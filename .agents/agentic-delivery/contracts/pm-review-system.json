@@ -1,0 +1,194 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-system/v1",
+  "owner": "parent_orchestrator",
+  "canonical_roots": [
+    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
+    ".pi/prompts/pm-orchestrate.md",
+    ".pi/prompts/pm-auto-loop.md",
+    ".pi/prompts/pm-review-loop.md",
+    ".pi/agents/pm-reviewer.md"
+  ],
+  "reference_prefixes": [
+    ".agents/",
+    ".pi/",
+    "scripts/",
+    ".planning/"
+  ],
+  "ignored_reference_prefixes": [
+    ".planning/auto-loop/",
+    ".planning/traces/phase-437-pending-intake/"
+  ],
+  "prohibited_active_targets": [
+    ".agents/agentic-delivery/contracts/worker-handoff-template.md",
+    ".agents/agentic-delivery/contracts/code-review-disposition-template.md"
+  ],
+  "authorities": [
+    {
+      "id": "canonical_review_state",
+      "authoritative_path": ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+      "writers": [
+        ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+        ".pi/prompts/pm-auto-loop.md",
+        ".pi/prompts/pm-orchestrate.md"
+      ],
+      "readers": [
+        "scripts/pm-terminal-classifier.sh",
+        ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+        ".agents/agentic-delivery/workflows/shepherd-validator.md"
+      ],
+      "mirrors": [
+        ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
+        ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md"
+      ],
+      "invariants": [
+        "current_schema_enum_exact",
+        "exact_version_invalidation",
+        "stable_candidate_lineage",
+        "one_pm_owner",
+        "shepherd_after_clean_review",
+        "human_merge_authority"
+      ]
+    },
+    {
+      "id": "issue_397_dispatch",
+      "authoritative_path": ".planning/phases/397-cli-architecture-v2-orchestration/RUN-STATE.json",
+      "writers": [
+        ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+        ".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md",
+        ".pi/prompts/pm-orchestrate.md"
+      ],
+      "readers": [
+        ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+        ".pi/prompts/pm-auto-loop.md"
+      ],
+      "mirrors": [
+        ".planning/traces/cli-architecture-v2-orchestration-state.yaml",
+        ".planning/phases/397-cli-architecture-v2-orchestration/SUMMARY.md"
+      ],
+      "invariants": [
+        "dependency_gate_in_authoritative_state",
+        "blocked_dependency_cannot_dispatch"
+      ],
+      "live_dispatch_check": {
+        "gate_object": "postWave1RoutingMigrationGate",
+        "gate_id": "pr_493_canonical_pm_migration",
+        "queue_object": "readyQueue",
+        "issue_field": "issue",
+        "issue": 408,
+        "integration_gates_field": "integrationGates",
+        "decision_field": "decision",
+        "blocked_decision": "not_spawned_dependency_blocked",
+        "blocks_field": "blocksWorkerStart",
+        "integrated_statuses": [
+          "integrated",
+          "complete",
+          "parent_review_clean"
+        ]
+      }
+    }
+  ],
+  "thresholds": {
+    "combined_max_files": 20,
+    "combined_max_non_generated_lines": 600,
+    "combined_max_domains": 1,
+    "mandatory_split_files": 25,
+    "mandatory_split_non_generated_lines": 800,
+    "mandatory_split_domains": 2,
+    "packet_max_changed_files": 20,
+    "packet_max_context_files": 10,
+    "packet_target_tokens": 30000,
+    "estimated_tokens_per_changed_line": 4,
+    "estimated_tokens_per_context_file": 200
+  },
+  "domain_rules": [
+    {
+      "domain": "implementation_test",
+      "patterns": [
+        "scripts/**"
+      ]
+    },
+    {
+      "domain": "architecture_reference",
+      "patterns": [
+        ".agents/**",
+        ".pi/**"
+      ]
+    },
+    {
+      "domain": "authority_workflow_state",
+      "patterns": [
+        ".planning/**"
+      ]
+    }
+  ],
+  "packet_invariants": {
+    "architecture_reference": [
+      "one_pm_owner",
+      "active_reference_closure",
+      "no_prohibited_active_target",
+      "required_targets_exist",
+      "exact_version_binding"
+    ],
+    "authority_workflow_state": [
+      "authoritative_state_consistency",
+      "exact_current_schema_enums",
+      "stable_candidate_lineage",
+      "stale_evidence_invalidated",
+      "human_merge_authority"
+    ],
+    "implementation_test": [
+      "semantic_negative_fixtures",
+      "stdout_stderr_json_exit_compatibility",
+      "non_tty_compatibility",
+      "path_and_identity_safety",
+      "measurement_without_overclaim",
+      "exact_version_binding"
+    ],
+    "combined": [
+      "one_pm_owner",
+      "active_reference_closure",
+      "authoritative_state_consistency",
+      "semantic_negative_fixtures",
+      "exact_version_binding",
+      "shepherd_after_clean_review",
+      "human_merge_authority"
+    ]
+  },
+  "allowed_changed_paths": [
+    "scripts/pm-review-system.py",
+    "scripts/pm-terminal-classifier.sh",
+    "scripts/tests/pm-review-system.sh",
+    "scripts/tests/pm-orchestrator-contract.sh",
+    "scripts/tests/pi-model-routing.sh",
+    "scripts/tests/fixtures/pm-review-system/**",
+    "scripts/tests/fixtures/pm-orchestrator-review-state/**",
+    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+    ".agents/agentic-delivery/contracts/pm-review-system.json",
+    ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
+    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
+    ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
+    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
+    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+    ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+    ".pi/agents/pm-reviewer.md",
+    ".pi/prompts/pm-review-loop.md",
+    ".pi/prompts/pm-auto-loop.md",
+    ".pi/prompts/pm-orchestrate.md",
+    ".planning/phases/397-pm-first-round-review-system-r1/**"
+  ],
+  "forbidden_changed_paths": [
+    "AGENTS.md",
+    "Makefile",
+    ".agents/agentic-delivery/matrices/task-skill-matrix.yaml",
+    ".agents/agentic-delivery/references/required-skills-routing.md",
+    ".agents/skills/cli-architecture-v2-delivery/**",
+    ".planning/phases/397-cli-architecture-v2-delivery-skill/**",
+    "scripts/tests/cli-architecture-v2-delivery-skill.sh",
+    "go.mod",
+    "go.sum"
+  ]
+}

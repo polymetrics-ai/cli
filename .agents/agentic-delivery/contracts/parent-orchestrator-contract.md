@@ -31,6 +31,8 @@ The orchestrator must also read:
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
 - `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
+- `.agents/agentic-delivery/contracts/pm-review-system.json`
+- `.agents/agentic-delivery/contracts/pm-review-packet-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
 
 ## Activation
@@ -63,8 +65,12 @@ The orchestrator owns:
 - owning PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE when the registry lacks `programming-loop`, without inventing that command
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
-- dispatching fresh-context read-only local Codex review against exact base/head identities
-- dispositioning every actionable finding and re-running verification/re-review after head changes
+- compiling exact-base/head changed-file coverage, active reference closure, authority inventory,
+  semantic gates, and bounded review packets with `scripts/pm-review-system.py`
+- dispatching fresh-context read-only local Codex packet review and synthesizing exactly one PM-owned
+  result; packet reviewers never become lifecycle owners
+- dispositioning every actionable finding and re-running verification, compilation, packet review,
+  and synthesis after head changes
 - persisting correction rounds by exact review range and blocking for a human when the configured
   cap is exceeded
 - running independent Shepherd trajectory validation after clean review and before integration
@@ -173,9 +179,11 @@ A sub-PR may merge into the parent branch only when:
 - no human gate is triggered
 
 Review is bound to commit identity, not PR base behavior. A stacked sub-PR is review-complete only
-when fresh-context local Codex review is clean for its exact base/head range and independent
-Shepherd validation passes. Any head change invalidates both results and requires verification,
-re-review, and revalidation.
+when deterministic compilation is ready, every bounded packet has complete fresh-context coverage,
+the single PM local-Codex synthesis is clean for its exact base/head range, and independent
+Shepherd validation passes. Any head change invalidates the manifest, packet responses, synthesis,
+and Shepherd result and requires verification, recompilation, packet re-review, synthesis, and
+revalidation.
 
 The parent PR into `main` always requires human approval.
 
@@ -189,10 +197,12 @@ For every sub-issue, record:
 - exact base branch and SHA
 - exact head branch and SHA
 - reviewed commit range
+- compiler manifest, packet ids, changed/closure/authority coverage, and any blocked/truncated input
 - primary route: `local_codex`, `human`, or `blocked`
 - review status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`
 - `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
-- fresh-context reviewer identity and findings/disposition artifact
+- fresh-context packet reviewer identities, raw response paths/hashes, one synthesis artifact, and
+  findings/disposition artifact
 - Shepherd status, verdict, trajectory score, and evidence artifact
 - CI status and remaining human gates
 

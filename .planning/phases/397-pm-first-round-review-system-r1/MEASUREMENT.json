@@ -1,0 +1,87 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-system-report/v1",
+  "captured_at": "2026-07-23",
+  "claim_scope": "deterministic fixture preflight only; not hosted-model or prospective production recall",
+  "corpus": {
+    "inputs_sha256": "21048975abdaac5be8a6f9335c3c5e32b28ffb1d6b718f38ef591271d0aed436",
+    "oracle_sha256": "5fc03b6ed1faddc51eec011894753e9481575db5ff8f6f55fd3ef93b3194b0e3",
+    "detector_received_oracle": false,
+    "historical_pr495_cases": 3,
+    "captain_accepted_pr495_cases": 2,
+    "opaque_mutation_cases": 10,
+    "paired_clean_controls": 10,
+    "threshold_boundary_cases": 7,
+    "blinding": "process-level separate detector input and scorer oracle",
+    "limitation": "committed public fixture corpus; not a secret model benchmark"
+  },
+  "historical_sources": [
+    {
+      "identity": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+      "findings": ["F6", "F7", "F8"],
+      "replay": "compact source-faithful semantic snapshots"
+    },
+    {
+      "identity": "fc7167990c92292625493f05b495c70e2c7ce886",
+      "findings": ["noncanonical final_parent_readiness", "arbitrary SEC1 disposition bypass"],
+      "replay": "captain-accepted follow-up fixtures"
+    },
+    {
+      "identity": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+      "role": "post-PR #495 parent base"
+    }
+  ],
+  "baseline": {
+    "true_positive": 0,
+    "false_positive": 0,
+    "false_negative": 15,
+    "true_negative": 10,
+    "first_round_recall": 0.0,
+    "first_round_precision": null,
+    "precision_reason": "undefined because baseline emitted no positive findings",
+    "escaped_defects": 15,
+    "escaped_defect_rate": 1.0,
+    "false_positive_rate": 0.0,
+    "threshold_decisions_correct": 1,
+    "threshold_decisions_total": 7,
+    "threshold_accuracy": 0.142857,
+    "wall_clock_ms": 0.089584
+  },
+  "treatment": {
+    "true_positive": 15,
+    "false_positive": 0,
+    "false_negative": 0,
+    "true_negative": 10,
+    "first_round_recall": 1.0,
+    "first_round_precision": 1.0,
+    "escaped_defects": 0,
+    "escaped_defect_rate": 0.0,
+    "false_positive_rate": 0.0,
+    "threshold_decisions_correct": 7,
+    "threshold_decisions_total": 7,
+    "threshold_accuracy": 1.0,
+    "historical_pr495": {"true_positive": 3, "false_negative": 0},
+    "captain_accepted_pr495": {"true_positive": 2, "false_negative": 0},
+    "opaque_mutations": {"true_positive": 10, "false_negative": 0},
+    "clean_controls": {"true_negative": 10, "false_positive": 0},
+    "exact_version_invalidations_detected": 1,
+    "context_overflow_cases_detected": 1,
+    "wall_clock_ms": 0.108041
+  },
+  "review_rounds": {
+    "status": "unavailable",
+    "reason": "deterministic fixture detector does not execute correction loops"
+  },
+  "tokens": {
+    "status": "unavailable",
+    "reason": "deterministic detector made no model call"
+  },
+  "cost": {
+    "status": "unavailable",
+    "reason": "deterministic detector made no model call"
+  },
+  "prospective_observation": {
+    "status": "unavailable",
+    "reason": "no later #493/#408 or other Architecture v2 change has been observed through the shipped packet system yet"
+  },
+  "conclusion": "The deterministic treatment killed all 15 frozen defect fixtures with zero false positives on 10 clean controls. This does not establish local-Codex or prospective production recall improvement."
+}

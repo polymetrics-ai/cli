@@ -12,7 +12,10 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 - exact_base_sha:
 - exact_head_sha:
 - candidate_lineage:
+- local_codex.packet_id:
 - local_codex.reviewer_identity:
+- local_codex.raw_response_path_or_hash:
+- local_codex.synthesis_artifact:
 - local_codex.finding_artifact:
 
 ### Action
@@ -43,11 +46,13 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 
 ## Rules
 
-- Verify the finding against the exact range before accepting or declining it.
+- Validate every disposition table data row independent of finding-ID prefix. Identifiers such as
+  `SEC1`, `UX-22`, `F1`, `N4-R`, and future nonempty ids use the same exact disposition enum.
+- Verify the finding against the exact range and compiled packet before accepting or declining it.
 - Do not silently dismiss a finding; record evidence and the smallest safe action.
 - Create or reference a focused follow-up issue for valid out-of-scope work.
-- Accepted changes create a new `exact_head_sha`; rerun affected verification and fresh-context
-  local review before requesting independent Shepherd validation.
+- Accepted changes create a new `exact_head_sha`; rerun affected verification, deterministic
+  compilation, fresh packet review, and one synthesis before independent Shepherd validation.
 - Do not invent a Shepherd verdict while it is pending or blocked.
 - If the correction budget is exceeded or the disposition is `needs_human`, persist the blocker and
   stop for a human decision.

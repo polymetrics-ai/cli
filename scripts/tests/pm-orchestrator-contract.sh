@@ -286,14 +286,31 @@ disposition_relative = os.environ.get(
 )
 disposition_artifact = read(disposition_relative)
 actual_disposition_rows = 0
+disposition_column = None
 for line in disposition_artifact.splitlines():
-    if not re.match(r"^\| (?:F|N|R)[A-Za-z0-9-]* \|", line):
+    if not line.startswith("|"):
+        disposition_column = None
         continue
-    cells = [cell.strip() for cell in line.split("|")]
-    disposition = cells[3] if len(cells) > 3 else ""
+    cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+    lowered = [cell.lower() for cell in cells]
+    if "id" in lowered and "disposition" in lowered:
+        disposition_column = lowered.index("disposition")
+        continue
+    if disposition_column is None or all(re.fullmatch(r":?-+:?", cell) for cell in cells):
+        continue
+    if disposition_column >= len(cells):
+        errors.append(f"review disposition row is missing the disposition column: {line}")
+        continue
+    identifier = cells[0]
+    disposition = cells[disposition_column]
+    if not identifier:
+        errors.append(f"review disposition row has an empty finding identifier: {line}")
+        continue
     actual_disposition_rows += 1
     if disposition not in expected_dispositions:
-        errors.append(f"review disposition row uses noncanonical value {disposition!r}: {line}")
+        errors.append(
+            f"review disposition row {identifier!r} uses noncanonical value {disposition!r}: {line}"
+        )
 if actual_disposition_rows == 0:
     errors.append("review disposition artifact has no parsed finding rows")
 

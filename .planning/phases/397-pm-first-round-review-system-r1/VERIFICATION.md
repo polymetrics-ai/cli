@@ -27,35 +27,35 @@
 - [x] RED: cross-format graph, cycle, and missing-target semantics are exercised in the frozen corpus; real file-parser integration RED remains pending.
 - [x] RED: stale packet identity, incomplete coverage, overflow, threshold boundaries, replacement/resume, and cap boundary fail semantically; one-way legacy migration/append-only integration RED remains pending.
 - [x] RED: opaque corpus and separate oracle are frozen and hashed before treatment implementation.
-- [ ] GREEN: all five concrete cases and pre-frozen mutation cases are detected for the intended semantic reason.
-- [ ] GREEN: unknown schema/kind, stale evidence, cap exceeded, arbitrary IDs, and missing active targets block.
-- [ ] GREEN: clean/metamorphic controls do not produce findings.
+- [x] GREEN: all five concrete cases and pre-frozen mutation cases are detected for the intended semantic reason.
+- [x] GREEN: unknown schema/kind, stale evidence, cap exceeded, arbitrary IDs, and missing active targets block.
+- [x] GREEN: clean/metamorphic controls do not produce findings.
 
 ## Review compiler
 
-- [ ] Active required-reference closure records source, target, and edge reason.
-- [ ] Missing active targets and prohibited reachable targets fail.
-- [ ] Authority registry records authoritative state plus writers/readers/mirrors.
-- [ ] Dispatch/readiness checks parse relationships rather than trust prose.
-- [ ] Exact base/head are verified and embedded in each packet.
-- [ ] Small coherent changes stay one packet only at ≤20 files, ≤600 lines, one domain.
-- [ ] 21–25 files, 601–800 lines, or exactly two domains split conservatively; >25 files, >800 lines, or >2 domains split mandatorily.
-- [ ] Any partition that cannot meet ≤20 changed, ≤10 closure/authority, and declared 30K-token packet caps blocks rather than truncates.
-- [ ] Every changed file is assigned; each response declares reviewed, closure, invariants, unreviewed, findings, and overflow/truncation.
-- [ ] Missing response/coverage, stale identity, overflow, or silent truncation cannot synthesize clean.
-- [ ] Findings are unlimited and synthesize to one PM-owned local-Codex disposition.
-- [ ] Shepherd remains independent and runs only after clean synthesis.
+- [x] Active required-reference closure records source, target, and edge reason.
+- [x] Missing active targets and prohibited reachable targets fail.
+- [x] Authority registry records authoritative state plus writers/readers/mirrors.
+- [x] Dispatch/readiness checks parse relationships rather than trust prose.
+- [x] Exact base/head are verified and embedded in each packet.
+- [x] Small coherent changes stay one packet only at ≤20 files, ≤600 lines, one domain.
+- [x] 21–25 files, 601–800 lines, or exactly two domains split conservatively; >25 files, >800 lines, or >2 domains split mandatorily.
+- [x] Any partition that cannot meet ≤20 changed, ≤10 closure/authority, and declared 30K-token packet caps blocks rather than truncates.
+- [x] Every changed file is assigned; each response declares reviewed, closure, invariants, unreviewed, findings, and overflow/truncation.
+- [x] Missing response/coverage, stale identity, overflow, or silent truncation cannot synthesize clean.
+- [x] Findings are unlimited and synthesize to one PM-owned local-Codex disposition.
+- [x] Shepherd remains independent and runs only after clean synthesis.
 
 ## Measurement
 
-- [ ] Historical source identities are retained for PR #495 replays.
-- [ ] Detector execution does not receive the separate oracle.
-- [ ] Opaque held-out mutations and clean/metamorphic controls run.
-- [ ] Machine report captures recall, precision, escapes, false positives, exact invalidations, rounds, overflows, wall time, and available token/cost fields.
-- [ ] Deterministic fixture results are not described as model-review or prospective production results.
-- [ ] Corpus provenance/hash and fixture-level blinding limitation are explicit.
-- [ ] Unavailable token/cost/prospective evidence is explicit.
-- [ ] Packet artifacts contain paths/metadata only; no environment values, file contents, or secret-like fixture values leak.
+- [x] Historical source identities are retained for PR #495 replays.
+- [x] Detector execution does not receive the separate oracle.
+- [x] Opaque held-out mutations and clean/metamorphic controls run.
+- [x] Machine report captures recall, precision, escapes, false positives, exact invalidations, rounds, overflows, wall time, and available token/cost fields.
+- [x] Deterministic fixture results are not described as model-review or prospective production results.
+- [x] Corpus provenance/hash and fixture-level blinding limitation are explicit.
+- [x] Unavailable token/cost/prospective evidence is explicit.
+- [x] Packet artifacts contain paths/metadata only; environment-sentinel regression proves no environment-value copy.
 
 ## Focused commands
 
@@ -67,8 +67,8 @@ bash -n scripts/pm-terminal-classifier.sh scripts/tests/pm-review-system.sh scri
 # focused test additionally exercises classifier usage/malformed JSON/legacy stdout+stderr+exit compatibility,
 # JSON envelope fields, non-TTY execution, unsafe paths and symlinks, closure formats/cycles,
 # threshold boundaries, state transitions, and stale evidence
-ruby -e 'require "yaml"; YAML.load_file(".agents/agentic-delivery/schemas/orchestration-state.schema.yaml")'
-ruby -e 'require "yaml"; YAML.load_file(".planning/traces/cli-architecture-v2-orchestration-state.yaml")'
+ruby -e 'require "psych"; Psych.parse_file(ARGV.fetch(0))' .agents/agentic-delivery/schemas/orchestration-state.schema.yaml
+ruby -e 'require "psych"; Psych.parse_file(ARGV.fetch(0))' .planning/traces/cli-architecture-v2-orchestration-state.yaml
 python3 -m py_compile scripts/pm-review-system.py
 python3 -m json.tool .agents/agentic-delivery/contracts/pm-review-system.json >/dev/null
 python3 -m json.tool .planning/phases/397-pm-first-round-review-system-r1/MEASUREMENT.json >/dev/null

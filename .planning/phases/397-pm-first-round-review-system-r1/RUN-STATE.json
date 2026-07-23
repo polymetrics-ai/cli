@@ -14,7 +14,7 @@
     },
     "headHistory": []
   },
-  "status": "red_captured_green_pending",
+  "status": "focused_green_full_verification_pending",
   "verificationPassed": false,
   "localCodex": {
     "status": "pending",
@@ -54,8 +54,21 @@
       "cycle": "tdd_red",
       "decision": "local_critical_path",
       "reason": "Frozen corpus and semantic tests reproduced the two accepted PR #495 findings, all three original misses, ten opaque mutations, and threshold gaps before treatment implementation; focused test exited 1 for intended behavior."
+    },
+    {
+      "cycle": "execute_green",
+      "decision": "local_critical_path",
+      "reason": "Dependency-free compiler, semantic treatment, safe closure/authority inventory, bounded packet synthesis, current-schema fixes, machine measurement, and active PM route updates pass focused tests; full exact-head verification remains pending."
     }
   ],
+  "measurement": {
+    "artifact": ".planning/phases/397-pm-first-round-review-system-r1/MEASUREMENT.json",
+    "baselineRecall": 0.0,
+    "treatmentFixtureRecall": 1.0,
+    "treatmentFixturePrecision": 1.0,
+    "claimScope": "deterministic fixture preflight only",
+    "prospectiveStatus": "unavailable"
+  },
   "readyQueue": [
     {
       "work": "pm-first-round-review-system-r1",

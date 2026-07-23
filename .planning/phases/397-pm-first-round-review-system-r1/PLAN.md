@@ -70,8 +70,10 @@ No CLI command/help surface changes; CLI help/manual/website parity is not appli
 - `scripts/pm-terminal-classifier.sh`
 - `scripts/tests/pm-review-system.sh`
 - `scripts/tests/pm-orchestrator-contract.sh`
+- `scripts/tests/pi-model-routing.sh`
 - `scripts/tests/fixtures/pm-review-system/**`
 - `scripts/tests/fixtures/pm-orchestrator-review-state/**` only for focused terminal fixtures.
+- `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 - `.agents/agentic-delivery/contracts/pm-review-system.json`
 - `.agents/agentic-delivery/contracts/pm-review-packet-template.md`
 - `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`

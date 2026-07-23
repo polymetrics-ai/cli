@@ -14,24 +14,46 @@ The parent orchestrator supplies:
 - exact head branch and exact head SHA;
 - issue scope, allowed paths, acceptance criteria, and human gates;
 - `max_correction_rounds` (default 4) and `rounds_by_range` for this exact review lineage;
-- completed verification commands and their results.
+- completed verification commands and their results;
+- the active review-system contract at
+  `.agents/agentic-delivery/contracts/pm-review-system.json`.
 
 A branch name, mutable PR ref, prior review, or session memory is not an exact identity.
 
-## Fresh-context reviewer
+## Deterministic review compilation
 
 1. Confirm the candidate worktree and remote head equal the supplied exact head SHA. Confirm the
    comparison base equals the supplied exact base SHA. Stop on drift.
-2. Spawn a fresh-context local Codex reviewer using the read-only `pm-reviewer` role (Sol/xhigh) or
-   the runtime's equivalent read-only Codex context. The reviewer must not inherit implementation
-   reasoning as authority.
-3. Give the reviewer read-only tools. `bash` is allowed only for non-mutating commands such as
-   `git status`, `git rev-parse`, `git diff`, `git log`, tests explicitly assigned to review, and
-   read-only `gh-axi` inspection. No edit/write, commit, push, PR mutation, or merge is allowed.
-4. Review the exact `base...head` range for correctness, security, safety, regressions, test
-   adequacy, evidence truthfulness, write-scope violations, machine contracts, and human gates.
-5. Return `CLEAN_NO_ACTIONABLE_FINDINGS` or findings with severity, file/line evidence, impact,
-   and the smallest safe correction. List residual risk separately from actionable findings.
+2. Run `scripts/pm-review-system.py compile` for that exact base/head. It must return `ready` before
+   model review. Treat its changed-path assignment, active reference closure with edge reasons,
+   authority/writer/reader inventory, and semantic findings as review inputs. Missing active
+   targets, prohibited reachable templates, authoritative-state disagreement, unsafe paths,
+   unassigned files, or an over-budget packet block review.
+3. The compiler emits paths and metadata only. It must not copy file contents, environment values,
+   or credentials into packet artifacts.
+4. For a small coherent range, use one combined packet only when all configured file/line/domain
+   limits pass. Otherwise use bounded architecture/reference, authority/workflow-state, and
+   implementation/test packets. If a packet cannot fit without truncation, stop as blocked.
+
+## Fresh-context packet review and synthesis
+
+1. Spawn a fresh-context local Codex reviewer for each compiled packet using the read-only
+   `pm-reviewer` role (Sol/xhigh) or the runtime's equivalent. Packet reviewers are analytical
+   inputs; the parent orchestrator remains the only lifecycle and disposition owner.
+2. Give reviewers read-only tools. `bash` is allowed only for non-mutating identity, diff, log,
+   assigned tests, and read-only `gh-axi` inspection. No edit/write, commit, push, PR mutation, or
+   merge is allowed.
+3. Each response follows `pm-review-packet-template.md`: exact base/head, reviewed changed files,
+   closure files, authority files, invariant results, unreviewed files, context overflow/truncation,
+   and findings. Finding count is unlimited. Missing token/cost/latency data stays explicitly null.
+4. Preserve raw responses outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`
+   to produce one PM-owned result. Missing responses/coverage, stale identities, any unreviewed file,
+   or overflow/truncation cannot synthesize clean.
+5. Review correctness, security, safety, regressions, test adequacy, evidence truthfulness,
+   write-scope violations, machine contracts, and human gates. Return findings with severity,
+   file/line evidence, impact, and smallest safe correction. List residual risk separately.
+6. The synthesized result is `clean`, `findings_correction_required`, or `blocked`. Only complete
+   clean packet responses with zero findings produce `clean`.
 
 ## Disposition and correction
 
@@ -42,7 +64,8 @@ The parent orchestrator owns disposition. Use this exact machine vocabulary:
 For every actionable finding, record one value with a reason and follow-up reference where applicable.
 
 Accepted corrections return to the isolated implementation worker, then repeat affected tests and
-exact-head verification. Every changed head requires a fresh-context re-review against the new
+exact-head verification. Every changed head invalidates the prior manifest, packet responses,
+synthesis, and Shepherd result; compile fresh packets and run fresh-context review against the new
 exact head. Increment `rounds_by_range` for the exact base/candidate lineage. When it exceeds
 `max_correction_rounds` (default 4), mark the range blocked with outstanding findings and stop for a
 human; never continue indefinitely or reset the count through a replacement PR.
@@ -67,11 +90,15 @@ Record for every candidate range:
 
 - exact base branch and SHA;
 - exact head branch and SHA;
-- reviewer runtime/model and fresh-context identity;
-- local Codex status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`;
+- compiler manifest identity, active closure/authority findings, packet selection, and coverage;
+- packet ids, reviewer runtime/model/fresh-context identities, raw-response paths or hashes, and
+  any unavailable token/cost/latency fields;
+- local Codex synthesized status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`;
 - findings and disposition artifact;
 - Shepherd status, verdict, score, and evidence artifact;
-- CI status and residual human gates.
+- CI status and residual human gates;
+- measured fixture/replay scope separately from prospective review outcomes, without claiming
+  unmeasured improvement.
 
 ## Prohibited PM coverage routes
 

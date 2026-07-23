@@ -19,6 +19,8 @@ Required reading before action:
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+- `.agents/agentic-delivery/contracts/pm-review-system.json`
+- `.agents/agentic-delivery/contracts/pm-review-packet-template.md`
 - `.agents/agentic-delivery/workflows/shepherd-validator.md`
 - `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
 - `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
@@ -35,9 +37,12 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
   sidecars.
 - Dispatch `pm-verifier` (read-only, `model: openai-codex/gpt-5.6-sol:xhigh`) for exact-head
   verification.
-- Dispatch a fresh-context `pm-reviewer` (read-only, `model: openai-codex/gpt-5.6-sol:xhigh`) for
-  exact-base/head local Codex review after verification. Disposition every finding and re-review
-  every changed head.
+- After verification, run `scripts/pm-review-system.py compile` for exact-base/head closure,
+  authority, semantic, scope, and packet coverage. Stop on deterministic findings or unsplittable
+  context. Dispatch a fresh-context `pm-reviewer` (read-only,
+  `model: openai-codex/gpt-5.6-sol:xhigh`) per bounded packet, require complete responses, and run
+  `synthesize` for exactly one PM-owned local-Codex result. Disposition every finding; any changed
+  head requires verification, recompilation, fresh packet review, and synthesis.
 - Run independent Shepherd validation through `shepherd-validator.md` after review is clean and
   before integration.
 - Run coupled/critical-path slices that cannot be isolated as `local_critical_path` in the main
@@ -67,7 +72,8 @@ security warnings, destructive-action warnings, and human gates exact.
 Run `scripts/gsd doctor`, `scripts/gsd list`, and source discovery. If `programming-loop` is absent,
 do not invoke or invent it. This `/pm-orchestrate` owner executes PLAN → RED → GREEN → REFACTOR →
 VERIFY → REVIEW → INTEGRATE with durable state. Local review follows
-`local-codex-review-loop.md`; independent trajectory validation follows `shepherd-validator.md`.
+`local-codex-review-loop.md` plus the deterministic packet compiler/synthesis contract; independent
+trajectory validation remains separate and follows `shepherd-validator.md`.
 Claude and GitHub Copilot are not required, requested, or fallback PM coverage.
 
 Hard stops:

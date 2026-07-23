@@ -22,15 +22,20 @@ if record.get("terminal") != "human_gate":
     raise SystemExit(0)
 
 kind = record.get("human_gate_kind", "")
-schema_present = "schema_version" in record or "schemaVersion" in record
-if kind == "correction_cap_exceeded":
+schema = record.get("schema_version", record.get("schemaVersion"))
+if schema is None:
+    # Missing schema is detected read-only legacy input. Its historical empty kind represented
+    # final parent readiness; current producers must never write this shape.
+    if not kind:
+        print("human_ready")
+    else:
+        print("blocked_human_decision")
+elif schema != "canonical_v2":
+    # Any explicit unsupported schema stops safely, regardless of a familiar kind.
     print("blocked_human_decision")
-elif kind in {"parent_ready", "final_parent_readiness"}:
-    print("human_ready")
-elif not kind and not schema_present:
-    # Empty kind is human-ready only for detected read-only legacy records with no schema field.
+elif kind == "parent_ready":
     print("human_ready")
 else:
-    # Unknown human gates fail closed rather than implying merge readiness.
+    # correction_cap_exceeded and every missing/unknown current kind require a human decision.
     print("blocked_human_decision")
 PY

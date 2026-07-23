@@ -9,7 +9,8 @@ and resumed at any point (including token exhaustion) without losing work.
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
 `parent-issue-orchestration-loop.md`, `pi-active-orchestration-loop.md`, `gsd-universal-runtime-loop.md`,
-`local-codex-review-loop.md`, `shepherd-validator.md`, and `pm-code-review-disposition-template.md`.
+`local-codex-review-loop.md`, `shepherd-validator.md`, `pm-review-system.json`,
+`pm-review-packet-template.md`, and `pm-code-review-disposition-template.md`.
 
 ## Roles → agents → models
 
@@ -43,7 +44,8 @@ PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT paren
   EXECUTE       (Codex  / pm-gsd-worker) → implement minimal green slices, commit per slice, push
   SUB_PR_OPEN   open sub-PR (base = parent branch; body: Refs #<sub> + Refs #<N>). Record sub_pr number.
   VERIFY        (Orchestrator / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
-  REVIEW        (Orchestrator / fresh-context pm-reviewer) → exact-base/head findings   ── GATE: clean ──
+  REVIEW        (Orchestrator) compile semantic gates + bounded exact-base/head packets;
+                fresh-context pm-reviewer per packet; one PM synthesis                 ── GATE: clean ──
   CORRECT       (Codex  / pm-gsd-worker) if findings → fix → verify → push  ┐
                 (fresh-context pm-reviewer) exact-head re-review             ┘ repeat ≤ max_correction_rounds
                 independent driver Shepherd validates the clean REVIEW transition: PROCEED required
@@ -56,8 +58,9 @@ RESEARCH is skipped entirely for a fully-specified `implementation` task (no ext
 `implementation` path stays first-class and light. Gates are hard: RESEARCH (connector) must be
 `complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; fresh-context local Codex
 `REVIEW` must be clean (every finding fixed or dispositioned per
-`pm-code-review-disposition-template.md`) and independent Shepherd must return `PROCEED` before
-`INTEGRATE`. Branch
+`pm-code-review-disposition-template.md`) after `scripts/pm-review-system.py compile` returns ready,
+every packet response is complete, and `synthesize` returns clean. Independent Shepherd must then
+return `PROCEED` before `INTEGRATE`. Branch
 and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent — check `gh pr list`/`gh
 issue list`/`git branch` and reuse what exists. Merges to `main` and final human-ready are human
 gates — the loop stops and reports there.
@@ -117,7 +120,9 @@ where it stopped (including after token exhaustion mid-task):
    - sub-issue `executing` with commits pushed but no recorded `sub_pr` and none found via `gh pr list`
      → resume `SUB_PR_OPEN`; if a matching sub-PR already exists, adopt its number.
    - `verify_pending` with a passing `VERIFICATION.md` → advance to `REVIEW`.
-   - `review_pending` with all review threads dispositioned and clean → advance to `INTEGRATE`.
+   - `review_pending` advances only when the exact-head compiler manifest is ready, every bounded
+     packet response is present and complete, one PM synthesis is clean, all findings are
+     dispositioned, and independent Shepherd returned `PROCEED` for that review transition.
    - `integrating` with the sub-PR already merged → mark `complete`.
 3. Write the reconciled state back, then continue the loop from the earliest non-complete stage.
 
@@ -172,7 +177,9 @@ agent frontmatter. Requires the project `pi-sub-agent` extension.
 
 If the GSD registry lacks `programming-loop`, `/pm-orchestrate` owns the stage machine above; never
 invent the command or downgrade to an advisory fallback. Local code review follows
-`local-codex-review-loop.md`; trajectory validation follows `shepherd-validator.md`.
+`local-codex-review-loop.md`: compile deterministic closure/authority/semantic gates, create bounded
+packets only when thresholds require them, obtain complete packet responses, and synthesize one PM
+verdict. Trajectory validation remains separate and follows `shepherd-validator.md`.
 
 The old `scripts/claude-auto-loop.sh` driver remains only for historical trace replay and is not a
 current or forward PM orchestration or review route. Do not request GitHub-hosted AI reviewers.
