@@ -41,7 +41,7 @@ Given one objective or parent issue, Shepherd must:
 
 ## Pi SDK boundary
 
-- Installed Pi version: `0.80.6`.
+- Supported and installed Pi version: stable `0.80.10` under policy `>=0.80.10 <0.80.11`.
 - Use the public `createAgentSession` API with explicit resource loading and in-memory child session
   and settings managers.
 - Do not spawn another `pi` process, use tmux as transport, or give child sessions recursive
@@ -69,7 +69,8 @@ Given one objective or parent issue, Shepherd must:
 
 ## Workflow adapter status
 
-The repository-local GSD adapter on this base does not expose `programming-loop`; the previously
-recorded manual-GSD fallback remains active for #473 until the adapter is available. Every child
-still records plan, RED, GREEN, refactor, verification, review, and handoff evidence. The parent
-orchestrator contract and issue bodies #473-#481 are authoritative for scheduling.
+The repository-local GSD adapter remains healthy but does not expose `programming-loop`; the
+previously recorded manual-GSD fallback remains active and the unavailable command is not retried.
+Every child still records plan, RED, GREEN, refactor, verification, review, and handoff evidence.
+After #491 integration, #480 is worker-ready and #481 remains dependency-blocked; both are encoded
+in the single durable Shepherd plan rather than bootstrapped as duplicate issues.

@@ -93,15 +93,29 @@ For each child:
   waits for a human-owned merge, and reaches `COMPLETE` only after authoritative GitHub/default-
   branch observation proves that exact merge.
 
-## Current critical path
+## Reconciliation-to-human-readiness critical path (2026-07-23)
 
-#479 contains the aggregate production implementation. The original matrix is `91692415`, current
-production code is `78708cbe`, the deterministic Pi-family CI correction is `a594be98`, and child
-evidence is `d895dc38`. Focused release tests pass 767/767; the complete local inventory is 1,647
-pass, 64 managed-sandbox process-identity failures, and one skip. Publish the reconciled parent
-before opening the child PR, then require remote complete-suite CI, final exact-head internal Codex
-review, source-policy automated review coverage or fallback, and parent-orchestrator integration.
-#480 remains dependency-blocked and #481 remains blocked by #480.
+Authoritative reconciliation after merged PRs #489 and #491 freezes the clean parent at
+`c3f4f683e60ac52bcedae04b2e9448e4523b5234`; local HEAD, the remote parent ref, and PR #472 agree.
+PR #491 integrated as parent merge commit `c3f4f683e`. Its earlier child review is stale as parent
+approval evidence after integration and does not cover the parent seam.
+
+Children #473-#479 and #490 are integrated. Their stacked issues remain open until #472 reaches
+`main`; #473, #474, #476, and #477 were reopened because parent-branch integration is provisional,
+not default-branch completion. Deleted remote child branches and retained local historical
+worktrees are stale evidence only and will not be reused as active workers.
+
+#480 is now the only implementation-ready child. It owns restart/fault recovery closure, bounded
+redacted audit evidence, operator behavior, and reversible cutover preparation. #481 remains
+dependency-blocked until #480 integrates, then owns the deterministic plus read-only live #397/#438
+canary and post-pass deprecation activation. Both run through `/pm-shepherd` from one ignored,
+validated schema-2 plan with persistent child worktrees; the controller serializes them by
+`canary` depending on `recovery`. There was no persisted Shepherd run at reconciliation, so `start`
+may create the single durable run; subsequent turns must use `resume`.
+
+After #481 integrates, freeze the exact parent SHA, review only the unreviewed range from the last
+accepted parent baseline plus all cross-child seams, run one four-domain Codex 5.6-sol xhigh round,
+apply at most one correction pass, and run the final parent verification matrix exactly once.
 
 ## Verification
 

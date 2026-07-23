@@ -46,15 +46,19 @@ exact base/head/range is mandatory internal review. It does not replace the sour
 Copilot, or human coverage. Any head change invalidates the record; parent merge remains a separate
 exact-head human decision.
 
-## 2026-07-23 #479 reconciliation snapshot
+## 2026-07-23 reconciliation after #491
 
-`feat/479-shepherd-production-matrix` currently records production `78708cbe`, deterministic
-Pi-family CI correction `a594be98`, and child evidence `d895dc38`. Focused release tests pass
-767/767. The complete local inventory is non-green at 1,647 pass, 64 managed-sandbox
-process-identity failures, and one skip. Parent-first publication, the child PR, remote CI, final
-exact-head internal review, source-policy review coverage, and parent integration remain pending.
-The single merge-readiness review is a bounded CI/evidence correction follow-up; it does not
-replace the historical production stable-head campaigns.
+PR #489 is integrated as parent `daaa2263`; PR #491 is integrated as parent
+`c3f4f683e60ac52bcedae04b2e9448e4523b5234`. #479's 17/17 matrix remains the functional baseline
+and #490 adds exact Pi 0.80.10 compatibility plus the bounded workflow-engine developer-tool
+boundary. The child review records do not approve the parent seam and all stale parent approval
+must be invalidated.
+
+#480 is the only worker-ready child. #481 depends on #480 and must use deterministic fixtures plus
+the supported read-only #397/#438 canary without mutating or merging #438. A single ignored schema-2
+plan drives persistent Shepherd worktrees; no persisted run existed at preflight, so use `start`
+once and `resume` thereafter. Final review is one four-domain Codex 5.6-sol xhigh parent round with
+at most one correction pass.
 
 ## Shepherd sub-worker verification boundary
 
@@ -63,7 +67,7 @@ verification proportional to that TypeScript lane:
 
 1. run the child issue's focused RED/GREEN tests;
 2. run `node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts`;
-3. run strict no-emit TypeScript against the repository-pinned Pi `0.80.6` declarations;
+3. run strict no-emit TypeScript against the repository-pinned Pi `0.80.10` declarations;
 4. run the Shepherd extension through offline Pi RPC; and
 5. run `git diff --check` plus changed-path/write-scope checks.
 

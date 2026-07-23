@@ -12,19 +12,38 @@ issue/PR closure. Historical per-issue artifacts retain their own process and re
 
 | Issue | RED target | Current gate |
 |---|---|---|
-| #473 | cancellation ordering, epoch cleanup/acquisition race, root identity, state invariants, epoch bounds | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #474 | DAG cycles/readiness/collisions/retry/reconciliation | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #475 | exact role routing, least authority, abort/close, bounded handoffs | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #476 | worktree identity, safe Git operations, crash/idempotency | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #477 | idempotent comments, actor/head binding, consume-once decisions | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #478 | issue/PR idempotency, review coverage, scoped integration | capability present in verified #479 aggregate; independent lifecycle reconciliation remains |
-| #479 | full production trajectories, command UX, exact-effect recovery, and parent-base CAS | functional PASS at `91692415`; original all-row RED evidence remains historically incomplete |
-| #480 | fault-injected restart/audit/reversible cutover preparation | waiting #479 fresh CI and non-default parent integration |
-| #481 | sandbox/live canary, post-pass deprecation activation, and exact-head parent readiness | blocked by #480 |
+| #473 | cancellation ordering, epoch cleanup/acquisition race, root identity, state invariants, epoch bounds | integrated through PR #482; issue reopened pending #472→`main` |
+| #474 | DAG cycles/readiness/collisions/retry/reconciliation | integrated through PR #483; issue reopened pending #472→`main` |
+| #475 | exact role routing, least authority, abort/close, bounded handoffs | integrated through PR #486; stale blocked child review is superseded by #479/#490 and final parent review |
+| #476 | worktree identity, safe Git operations, crash/idempotency | integrated through PR #484; issue reopened pending #472→`main` |
+| #477 | idempotent comments, actor/head binding, consume-once decisions | integrated through PR #485; issue reopened pending #472→`main` |
+| #478 | issue/PR idempotency, review coverage, scoped integration | integrated through PR #487; issue remains open pending #472→`main` |
+| #479 | full production trajectories, command UX, exact-effect recovery, and parent-base CAS | 17/17 functional matrix and remote CI integrated through PR #489 at parent `daaa2263` |
+| #490 | Pi 0.80.10/event-agnostic completion and bounded workflow-engine developer-tool boundary | integrated through PR #491 at parent `c3f4f683`; child review does not approve the parent seam |
+| #480 | fault-injected restart/audit/reversible cutover preparation | worker-ready; behavior RED required before production edits |
+| #481 | deterministic + read-only live #397/#438 canary and post-pass deprecation activation | dependency-blocked by #480; behavior RED required before harness/docs edits |
 
 Every child must append its exact failing command/output summary before production changes, then
 record GREEN/refactor commits and verification. Historical canary success cannot be reused as a
 pass for a mutating autonomous path.
+
+## Reconciliation plan-first checkpoint (2026-07-23)
+
+- GSD path: `scripts/gsd doctor` passed; `scripts/gsd prompt plan-phase 471 --skip-research`
+  generated the official Pi planning contract. The already-recorded manual programming-loop fallback
+  remains active because the absent command was checked once and not retried.
+- Required skills/references: `gsd-core`, parent-orchestrator contracts, Pi/runtime routing, and the
+  complete #490 workflow-engine boundary. No Go implementation skill applies before final parent
+  verification.
+- Shepherd preflight: help was inspected through offline Pi 0.80.10 RPC; read-only status reported
+  `No persisted Shepherd run exists for this issue.` This authorizes one `start`, not a duplicate
+  run; all later execution uses `resume`.
+- GitHub reconciliation: PRs #482-#489 and #491 are merged only into the parent branch. #480 is the
+  sole ready implementation and #481 is blocked by it. Stale/deleted remote child branches and
+  retained historical worktrees will not be dispatched.
+- TDD decision: seed #480/#481 PLAN, TDD ledger, and verification checklists before the ignored
+  production plan is started. Each child gets one behavior-level RED→GREEN→refactor cycle and at
+  most one comprehensive review/correction round.
 
 ## Historical read-only foundation ledger
 

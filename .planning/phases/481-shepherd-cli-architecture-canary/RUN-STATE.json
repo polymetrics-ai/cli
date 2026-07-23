@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "phase": "481-shepherd-cli-architecture-canary",
+  "issue": 481,
+  "parentIssue": 471,
+  "status": "dependency_blocked",
+  "verificationPassed": false,
+  "manualGsdFallback": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Issue #481 cannot mutate until #480 is integrated; only planning and exact read-only #397/#438 reconciliation are allowed."
+    }
+  ],
+  "updatedAt": "2026-07-23T05:38:00.000Z"
+}

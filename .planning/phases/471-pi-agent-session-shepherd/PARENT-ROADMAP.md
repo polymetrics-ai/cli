@@ -19,7 +19,7 @@ First end-to-end consumer: #397 and draft PR #438 (CLI Architecture v2).
 
 ## Background and architecture decision
 
-- Use the Pi 0.80.6 public `createAgentSession` API. Do not launch a second `pi` process and do not
+- Use the bounded stable Pi 0.80.10 public `createAgentSession` API. Do not launch a second `pi` process and do not
   use tmux as the orchestration transport.
 - Keep the framework-independent controller behind explicit ports for policy, workers, state,
   workspaces/Git, GitHub, evidence, review, decisions, and time.
@@ -79,27 +79,28 @@ reconciled when #479 is integrated into the non-default parent branch.
 
 | Wave | Issue | Branch | Depends on | Primary scope | Aggregate capability state |
 |---|---|---|---|---|---|
-| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `capability_present_lifecycle_reconciliation_pending` |
-| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `capability_present_lifecycle_reconciliation_pending` |
-| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `capability_present_lifecycle_reconciliation_pending` |
-| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `capability_present_lifecycle_reconciliation_pending` |
-| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `capability_present_lifecycle_reconciliation_pending` |
-| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `capability_present_lifecycle_reconciliation_pending` |
-| 4 | #479 | `feat/479-shepherd-production-matrix` | #474-#478 | scheduler/controller/command integration and 17-row production matrix | `local_correction_complete_external_gates_pending` |
-| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `waiting_479_parent_integration` |
-| 6 | #481 | `test/481-shepherd-cli-architecture-canary` | #480 | #397/#438 canary, post-pass deprecation activation, and final evidence | `planned` |
+| 1 | #473 | `feat/473-shepherd-control-plane-foundation` | none | durable control plane and adversarial hardening | `provisionally_integrated_issue_open` |
+| 2 | #474 | `feat/474-shepherd-dependency-policy` | #473 | pure DAG/policy/reconciler | `provisionally_integrated_issue_open` |
+| 2 | #475 | `feat/475-shepherd-agent-session-runtime` | #473 | scoped in-process worker runtime | `provisionally_integrated_issue_open` |
+| 2 | #476 | `feat/476-shepherd-worktree-git-adapter` | #473 | isolated worktree and typed Git operations | `provisionally_integrated_issue_open` |
+| 2 | #477 | `feat/477-shepherd-github-decision-broker` | #473 | durable authenticated human decisions | `provisionally_integrated_issue_open` |
+| 3 | #478 | `feat/478-shepherd-github-parent-orchestration` | #474, #476, #477 | parent/sub-issue/PR/review orchestration | `provisionally_integrated_issue_open` |
+| 4 | #479 | `feat/479-shepherd-production-matrix` | #474-#478 | scheduler/controller/command integration and 17-row production matrix | `provisionally_integrated_17_of_17` |
+| 5 | #480 | `feat/480-shepherd-recovery-cutover` | #479 | recovery, auditability, operator UX, reversible cutover preparation | `worker_ready` |
+| 6 | #481 | `feat/481-shepherd-cli-architecture-canary` | #480 | #397/#438 canary, post-pass deprecation activation, and final evidence | `dependency_blocked` |
+| 4b | #490 | `refactor/490-shepherd-workflow-engine` | #479 | Pi 0.80.10 compatibility and bounded workflow-engine developer tooling | `provisionally_integrated_issue_open` |
 
 Each issue body owns its exact write scope, required skills, verification, and human gates. The
 original topology made #474-#477 disjoint parallel lanes after #473, followed by #478 and the #479
 shared wiring point. The production-matrix branch now contains and verifies those capabilities as
 one aggregate; this does not silently settle the independent GitHub issue/PR lifecycle records.
 
-Current #479 disposition: the original matrix is `91692415`, current production code is
-`78708cbe`, deterministic Pi-family CI correction is `a594be98`, and current child evidence is
-`d895dc38`. Focused release tests pass 767/767. The complete local inventory is 1,647 pass, 64
-managed-sandbox process-identity failures before assertions, and one skip. Parent-first
-publication, the child PR, remote complete-suite CI, final exact-head internal review, policy
-review coverage, and non-default-parent integration remain pending.
+Current reconciliation: #479 PR #489 integrated as parent `daaa2263` after hosted complete-suite
+and security gates; its 17/17 matrix remains the functional baseline. #490 PR #491 then integrated
+Pi 0.80.10 and the bounded workflow-engine developer-tool boundary as parent `c3f4f683`. Local,
+remote, and GitHub parent heads matched at that reconciliation point. Integration invalidates stale
+parent approval evidence; the final parent round must review the unreviewed range and cross-child
+seams. #480 is worker-ready and #481 remains serialized behind it.
 
 ## Human-decision contract
 

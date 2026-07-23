@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "phase": "480-shepherd-recovery-cutover",
+  "issue": 480,
+  "parentIssue": 471,
+  "status": "worker_ready",
+  "verificationPassed": false,
+  "manualGsdFallback": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "worker_ready",
+      "reason": "Issue #479 is integrated; #480 is the sole dependency-ready implementation and will run through the single durable Shepherd plan."
+    }
+  ],
+  "updatedAt": "2026-07-23T05:38:00.000Z"
+}

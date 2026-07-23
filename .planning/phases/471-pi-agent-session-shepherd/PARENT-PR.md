@@ -8,8 +8,9 @@ scheduling, isolated in-process implementation workers, typed Git/GitHub operati
 decision gates, verification/review/correction loops, recovery, and an end-to-end CLI Architecture
 v2 canary.
 
-The local parent contains the earlier control-plane and aggregate MVP inputs. The production #479
-child remains outside the parent until its publication, CI, review, and integration gates pass.
+The parent contains integrated PRs #482-#489 and #491. The exact reconciled parent after #491 is
+`c3f4f683e60ac52bcedae04b2e9448e4523b5234`; local, remote, and GitHub heads matched. Integration
+invalidated stale parent review evidence. #480 is worker-ready and #481 is dependency-blocked.
 
 Refs #471
 Supersedes #372
@@ -27,13 +28,19 @@ Supersedes #470
 
 ## Current state
 
-- #479 production matrix: PR #489 is open against the parent. Nine checks pass; its bounded Go
-  toolchain and inherited `x/text` CI repairs are implemented locally and awaiting parent-first
-  publication plus fresh CI/review.
-- Autonomous child roster: #473-#481, dependency-linked from #471; lifecycle reconciliation pending.
-- #480 and #481: dependency-blocked.
-- Final parent verification: not started.
-- Human merge gate: pending after all implementation, CI, review, and canary gates.
+- #473-#479 and #490: provisionally integrated into the non-default parent. Their issues stay open
+  until this PR lands on `main`; prematurely closed #473/#474/#476/#477 were reopened.
+- #479: PR #489 merged as parent `daaa2263`; hosted checks passed and the complete 17-row matrix is
+  preserved.
+- #490: PR #491 merged as parent `c3f4f683`; Pi 0.80.10, strict family/provenance/RPC checks, and the
+  bounded workflow-engine developer-tool boundary are integrated.
+- #480: worker-ready through the single durable `/pm-shepherd` plan.
+- #481: dependency-blocked by #480; its read-only live #397/#438 canary must not merge or mutate
+  draft PR #438.
+- Final parent verification/review: pending after #481.
+- Review override: one Codex 5.6-sol xhigh parent round replaces Claude/Copilot for this program but
+  is not human approval.
+- Human merge gate: pending after all exact-head gates.
 
 ## Verification
 

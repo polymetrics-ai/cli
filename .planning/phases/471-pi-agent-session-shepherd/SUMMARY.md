@@ -1,7 +1,7 @@
 # Summary
 
 Phase: `471-pi-agent-session-shepherd`
-Status: `parent_pr_open`
+Status: `worker_ready` (#480); #481 dependency-blocked
 
 ## Completed in the replacement pivot
 
@@ -36,15 +36,31 @@ The focused fixture, exact Pi family, strict TypeScript, YAML, and module-integr
 locally. The complete inventory and `govulncheck` still require their ordinary-host CI rerun because
 the managed sandbox blocks `/bin/ps` and external advisory-database DNS respectively.
 
+## Reconciled state after #491
+
+- Clean local, remote, and GitHub parent head: `c3f4f683e60ac52bcedae04b2e9448e4523b5234`.
+- #473-#479 and #490: integrated into the non-default parent branch. Their issues remain open until
+  the default-branch parent lands; previously closed #473/#474/#476/#477 were reopened.
+- #480: `worker_ready`; its dependency #479 is integrated and all retained child branches/worktrees
+  are historical rather than active authority.
+- #481: `dependency_blocked` on #480. PR #438 is open/draft at `21d195af`, but currently conflicts
+  with `main`; the #481 canary must reconcile that exact state read-only and must not merge #438.
+- `/pm-shepherd status --issue 471` reported no persisted run. One validated ignored schema-2 plan
+  will start #480 and then #481 in persistent child worktrees; after state exists, only `resume` is
+  allowed.
+- The user-selected review route is one independent Codex 5.6-sol xhigh parent round, not
+  Claude/Copilot and not human approval.
+
 ## Remaining critical path
 
-1. Publish the main-synchronized parent first, then the repaired #479 child head.
-2. Rerun the complete Shepherd inventory and security scan in fresh CI, complete exact-head internal Codex review, and
-   obtain repository-policy review coverage or an allowed recorded fallback.
-3. Integrate #479 into the non-default parent and reconcile #473-#478 lifecycle records.
-4. Complete #480 recovery/audit/reversible-cutover preparation.
-5. Run #481 against #397/#438; only after it passes, activate legacy-shell deprecation, then run
-   full local/CI gates, exact-head independent review, and the durable parent merge decision.
+1. Commit/push this reconciliation plan and start the single durable Shepherd run for #480/#481.
+2. Integrate each exact-head child only after focused/full Shepherd gates, CI, and one bounded
+   review/correction round.
+3. Freeze the final parent SHA, review the unreviewed range and cross-child seams in four parallel
+   domains, and apply at most one concrete blocker correction pass.
+4. Run the strict Pi-family/typecheck/provenance/RPC gates and the complete sequential Shepherd suite
+   exactly once on the final head, then require exact-head GitHub CI green.
+5. Update #471/#472, mark #472 ready, and request only the human merge of the exact SHA.
 
-Overall verification remains false until those steps complete. #472 stays draft and cannot merge
-without a fresh allowlisted human `approve-merge` decision for its exact verified head.
+Overall verification remains false until those steps complete. #472 cannot merge without the final
+human gate and the orchestrator never merges it to `main`.
