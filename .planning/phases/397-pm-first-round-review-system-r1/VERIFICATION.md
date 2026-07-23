@@ -18,15 +18,15 @@
 
 ## RED/GREEN requirements
 
-- [ ] RED: canonical `final_parent_readiness` incorrectly classifies `human_ready`.
-- [ ] RED: valid identifier `SEC1` with noncanonical disposition is not rejected by current parser.
-- [ ] RED: prose-only dependency mutation escapes baseline.
-- [ ] RED: transitive prohibited-template mutation escapes direct-file baseline.
-- [ ] RED: replacement-head lineage reset/fragmentation escapes shape-only baseline.
-- [ ] RED: unsafe absolute/parent/symlink/control/option-like references and malformed SHAs are rejected.
-- [ ] RED: Markdown/JSON/YAML/frontmatter/script references, cycles, missing/ambiguous targets are exercised.
-- [ ] RED: stale packet identity, incomplete coverage, overflow/truncation, threshold boundaries, restart/migration/head-history/cap boundaries fail semantically.
-- [ ] RED: opaque corpus and separate oracle are frozen and hashed before treatment implementation.
+- [x] RED: canonical `final_parent_readiness` incorrectly classifies `human_ready`.
+- [x] RED: valid identifier `SEC1` with noncanonical disposition is not rejected by current parser.
+- [x] RED: prose-only dependency mutation escapes baseline.
+- [x] RED: transitive prohibited-template mutation escapes direct-file baseline.
+- [x] RED: replacement-head lineage reset/fragmentation escapes shape-only baseline.
+- [x] RED: unsafe absolute/parent/control/option-like references are rejected at the semantic corpus layer; real symlink/identity integration RED remains pending.
+- [x] RED: cross-format graph, cycle, and missing-target semantics are exercised in the frozen corpus; real file-parser integration RED remains pending.
+- [x] RED: stale packet identity, incomplete coverage, overflow, threshold boundaries, replacement/resume, and cap boundary fail semantically; one-way legacy migration/append-only integration RED remains pending.
+- [x] RED: opaque corpus and separate oracle are frozen and hashed before treatment implementation.
 - [ ] GREEN: all five concrete cases and pre-frozen mutation cases are detected for the intended semantic reason.
 - [ ] GREEN: unknown schema/kind, stale evidence, cap exceeded, arbitrary IDs, and missing active targets block.
 - [ ] GREEN: clean/metamorphic controls do not produce findings.

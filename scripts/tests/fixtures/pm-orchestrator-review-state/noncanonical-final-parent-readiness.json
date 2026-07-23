@@ -1,0 +1,8 @@
+{
+  "schema_version": "canonical_v2",
+  "terminal": "human_gate",
+  "human_gate_kind": "final_parent_readiness",
+  "automated_review": {
+    "status": "clean"
+  }
+}

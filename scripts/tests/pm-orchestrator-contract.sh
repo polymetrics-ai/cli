@@ -7,6 +7,7 @@ python3 - "$repo_root" <<'PY'
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import sys
@@ -279,7 +280,11 @@ for relative in canonical_contract_paths:
     if actual != expected_dispositions:
         errors.append(f"{relative}: disposition enum drift: {actual!r}")
 
-disposition_artifact = read(".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md")
+disposition_relative = os.environ.get(
+    "PM_DISPOSITION_ARTIFACT",
+    ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md",
+)
+disposition_artifact = read(disposition_relative)
 actual_disposition_rows = 0
 for line in disposition_artifact.splitlines():
     if not re.match(r"^\| (?:F|N|R)[A-Za-z0-9-]* \|", line):

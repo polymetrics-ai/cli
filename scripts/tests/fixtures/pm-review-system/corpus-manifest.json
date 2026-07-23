@@ -1,0 +1,23 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-corpus-manifest/v1",
+  "frozen_before_treatment": true,
+  "frozen_at": "2026-07-23",
+  "provenance": "historical PR #495 evidence, captain-accepted findings, audit plan-check, and preimplementation read-only scout mutation families",
+  "files": {
+    "inputs.json": {
+      "sha256": "21048975abdaac5be8a6f9335c3c5e32b28ffb1d6b718f38ef591271d0aed436",
+      "bytes": 13320,
+      "detector_visible": true
+    },
+    "oracle.json": {
+      "sha256": "5fc03b6ed1faddc51eec011894753e9481575db5ff8f6f55fd3ef93b3194b0e3",
+      "bytes": 2601,
+      "detector_visible": false
+    }
+  },
+  "limitations": [
+    "The corpus is committed and therefore public after this checkpoint; blinding is process-level separation, not secrecy from future models.",
+    "Historical cases are compact source-faithful semantic snapshots, not full hosted-model replay.",
+    "Prospective observation evidence is unavailable at freeze time."
+  ]
+}

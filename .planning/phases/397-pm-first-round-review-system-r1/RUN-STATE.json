@@ -14,7 +14,7 @@
     },
     "headHistory": []
   },
-  "status": "plan_checked_red_pending",
+  "status": "red_captured_green_pending",
   "verificationPassed": false,
   "localCodex": {
     "status": "pending",
@@ -49,6 +49,11 @@
       "cycle": "plan_check",
       "decision": "read_only_spawned",
       "reason": "Independent read-only plan checker returned BLOCKED with active-owner, TDD-order, path-security, corpus-provenance, scope, threshold, delivery, and state-evidence gaps; planning artifacts were corrected before RED."
+    },
+    {
+      "cycle": "tdd_red",
+      "decision": "local_critical_path",
+      "reason": "Frozen corpus and semantic tests reproduced the two accepted PR #495 findings, all three original misses, ten opaque mutations, and threshold gaps before treatment implementation; focused test exited 1 for intended behavior."
     }
   ],
   "readyQueue": [

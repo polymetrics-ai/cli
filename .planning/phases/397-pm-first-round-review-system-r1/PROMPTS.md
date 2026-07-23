@@ -13,4 +13,4 @@
 - Safety: no secrets, dependencies, credentialed checks, raw generic write tools, reverse ETL execution, Claude, Copilot, or parent/main merge.
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SETUP-EVIDENCE.md`.
 - Plan-check result: initial BLOCKED; gaps corrected before RED.
-- Verification result: pending.
+- RED result: focused semantic test exited 1 for intended classifier, disposition, mutation, and threshold failures; treatment GREEN pending.

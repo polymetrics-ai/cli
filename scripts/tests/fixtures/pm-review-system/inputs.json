@@ -1,0 +1,311 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-corpus-input/v1",
+  "blinding": "detector receives this file and one opaque case_id; oracle is a separate input to scoring",
+  "cases": [
+    {
+      "case_id": "h-71c6e8a1",
+      "suite": "historical_pr495",
+      "source_identity": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+      "family": "dependency_consistency",
+      "input": {
+        "authority": {"gate_id": "routing_migration", "integrated": false, "blocks_worker_start": false},
+        "ready_item": {"status": "worker_ready", "decision": "spawned", "integration_gates": ["wave1_sync"]},
+        "prose": {"required_gates": ["routing_migration"]}
+      }
+    },
+    {
+      "case_id": "h-84bd29f3",
+      "suite": "historical_pr495",
+      "source_identity": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+      "family": "reference_closure",
+      "input": {
+        "roots": ["pm-root.md"],
+        "nodes": [
+          {"path": "pm-root.md", "prohibited": false, "references": [{"target": "current-contract.md", "reason": "required_document"}]},
+          {"path": "current-contract.md", "prohibited": false, "references": [{"target": "legacy-review-template.md", "reason": "handoff_template"}]},
+          {"path": "legacy-review-template.md", "prohibited": true, "references": []}
+        ]
+      }
+    },
+    {
+      "case_id": "h-a10f54d9",
+      "suite": "historical_pr495",
+      "source_identity": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+      "family": "lineage_monotonicity",
+      "input": {
+        "exact_base_sha": "1111111111111111111111111111111111111111",
+        "candidate_lineage": "candidate-kite",
+        "replacement_heads": ["2222222222222222222222222222222222222222", "3333333333333333333333333333333333333333"],
+        "correction_budget": {
+          "max_correction_rounds": 4,
+          "rounds_by_range": {
+            "1111111111111111111111111111111111111111...2222222222222222222222222222222222222222": 3,
+            "1111111111111111111111111111111111111111...3333333333333333333333333333333333333333": 1
+          }
+        }
+      }
+    },
+    {
+      "case_id": "a-27e19c44",
+      "suite": "accepted_pr495",
+      "source_identity": "fc7167990c92292625493f05b495c70e2c7ce886",
+      "family": "terminal_kind",
+      "input": {"schema_version": "canonical_v2", "terminal": "human_gate", "human_gate_kind": "final_parent_readiness"}
+    },
+    {
+      "case_id": "a-c0915bd7",
+      "suite": "accepted_pr495",
+      "source_identity": "fc7167990c92292625493f05b495c70e2c7ce886",
+      "family": "disposition_rows",
+      "input": {"rows": [{"id": "SEC1", "disposition": "deferred_out_of_scope"}]}
+    },
+    {
+      "case_id": "o-018ec7b2",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/dependency-integrity",
+      "family": "dependency_consistency",
+      "input": {
+        "authority": {"gate_id": "delta_owl", "integrated": false, "blocks_worker_start": true},
+        "ready_item": {"status": "ready", "decision": "local_critical_path", "integration_gates": ["alpha_fox"]},
+        "prose": {"required_gates": ["delta_owl"]}
+      }
+    },
+    {
+      "case_id": "o-1f6a039d",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/transitive-route",
+      "family": "reference_closure",
+      "input": {
+        "roots": ["entry.yaml"],
+        "nodes": [
+          {"path": "entry.yaml", "format": "yaml", "prohibited": false, "references": [{"target": "bridge.json", "reason": "config_path"}]},
+          {"path": "bridge.json", "format": "json", "prohibited": false, "references": [{"target": "role.md", "reason": "agent_role"}]},
+          {"path": "role.md", "format": "markdown", "prohibited": false, "references": [{"target": "retired-contract.md", "reason": "required_document"}]},
+          {"path": "retired-contract.md", "format": "markdown", "prohibited": true, "references": []}
+        ]
+      }
+    },
+    {
+      "case_id": "o-2b4c95e1",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/candidate-continuity",
+      "family": "lineage_events",
+      "input": {
+        "exact_base_sha": "4444444444444444444444444444444444444444",
+        "candidate_lineage": "river-stone",
+        "replacement_heads": ["5555555555555555555555555555555555555555", "6666666666666666666666666666666666666666"],
+        "events": [
+          {"event": "adopt", "head": "5555555555555555555555555555555555555555", "rounds": 3},
+          {"event": "replace_head", "head": "6666666666666666666666666666666666666666", "rounds": 0},
+          {"event": "resume", "head": "6666666666666666666666666666666666666666", "rounds": 1}
+        ],
+        "correction_budget": {"max_correction_rounds": 5, "rounds_by_range": {"4444444444444444444444444444444444444444...river-stone": 1}}
+      }
+    },
+    {
+      "case_id": "o-3107df85",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/exact-version",
+      "family": "stale_evidence",
+      "input": {
+        "candidate": {"exact_base_sha": "7777777777777777777777777777777777777777", "exact_head_sha": "8888888888888888888888888888888888888888"},
+        "packet": {"exact_base_sha": "7777777777777777777777777777777777777777", "exact_head_sha": "9999999999999999999999999999999999999999", "status": "clean"}
+      }
+    },
+    {
+      "case_id": "o-486fe2a0",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/schema-enum",
+      "family": "schema_kind",
+      "input": {"schema_version": "canonical_v9", "terminal": "human_gate", "human_gate_kind": "operator_finished"}
+    },
+    {
+      "case_id": "o-5a91c47e",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-plan-check/path-boundary",
+      "family": "path_safety",
+      "input": {"root": "pm-entry.md", "references": ["../../outside/private.env", "/tmp/absolute.md", "-option.md", "bad\u0001path.md"]}
+    },
+    {
+      "case_id": "o-62de81b3",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/missing-target",
+      "family": "missing_target",
+      "input": {
+        "roots": ["entry.md"],
+        "nodes": [{"path": "entry.md", "references": [{"target": "absent-contract.md", "reason": "required_document"}]}]
+      }
+    },
+    {
+      "case_id": "o-7c03a5f8",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-plan-check/coverage",
+      "family": "packet_coverage",
+      "input": {
+        "changed_files": ["one.md", "two.md"],
+        "packet": {"status": "clean", "reviewed_files": ["one.md"], "closure_files": [], "invariants": ["exact_identity"], "unreviewed_files": [], "findings": []}
+      }
+    },
+    {
+      "case_id": "o-805db1c6",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-plan-check/context-overflow",
+      "family": "packet_overflow",
+      "input": {"packet": {"status": "clean", "context": {"overflow": true, "truncated": false}, "unreviewed_files": [], "findings": []}}
+    },
+    {
+      "case_id": "o-9ee41720",
+      "suite": "opaque_mutation",
+      "source_identity": "preimplementation-scout-family/correction-cap",
+      "family": "cap_transition",
+      "input": {
+        "max_correction_rounds": 5,
+        "rounds": 6,
+        "terminal": "human_gate",
+        "human_gate_kind": "parent_ready",
+        "review_status": "clean",
+        "outstanding_findings": ["opaque-finding"]
+      }
+    },
+    {
+      "case_id": "c-09af83de",
+      "suite": "clean_control",
+      "source_identity": "paired/dependency-integrity",
+      "family": "dependency_consistency",
+      "input": {
+        "authority": {"gate_id": "delta_owl", "integrated": false, "blocks_worker_start": true},
+        "ready_item": {"status": "blocked", "decision": "not_spawned_dependency_blocked", "integration_gates": ["alpha_fox", "delta_owl"]},
+        "prose": {"required_gates": ["delta_owl"]}
+      }
+    },
+    {
+      "case_id": "c-17b5d042",
+      "suite": "clean_control",
+      "source_identity": "paired/reference-closure",
+      "family": "reference_closure",
+      "input": {
+        "roots": ["entry.md"],
+        "nodes": [
+          {"path": "entry.md", "prohibited": false, "references": [{"target": "contract.md", "reason": "required_document"}]},
+          {"path": "contract.md", "prohibited": false, "references": [{"target": "entry.md", "reason": "cycle"}]}
+        ]
+      }
+    },
+    {
+      "case_id": "c-265e19ab",
+      "suite": "clean_control",
+      "source_identity": "paired/lineage",
+      "family": "lineage_monotonicity",
+      "input": {
+        "exact_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "candidate_lineage": "river-stone",
+        "replacement_heads": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", "cccccccccccccccccccccccccccccccccccccccc"],
+        "correction_budget": {"max_correction_rounds": 5, "rounds_by_range": {"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...river-stone": 4}}
+      }
+    },
+    {
+      "case_id": "c-34f8017c",
+      "suite": "clean_control",
+      "source_identity": "paired/terminal-kind",
+      "family": "terminal_kind",
+      "input": {"schema_version": "canonical_v2", "terminal": "human_gate", "human_gate_kind": "parent_ready"}
+    },
+    {
+      "case_id": "c-423d96e1",
+      "suite": "clean_control",
+      "source_identity": "paired/disposition",
+      "family": "disposition_rows",
+      "input": {"rows": [{"id": "SEC1", "disposition": "deferred"}, {"id": "UX-22", "disposition": "accepted"}]}
+    },
+    {
+      "case_id": "c-51a7e4bd",
+      "suite": "clean_control",
+      "source_identity": "paired/exact-version",
+      "family": "stale_evidence",
+      "input": {
+        "candidate": {"exact_base_sha": "dddddddddddddddddddddddddddddddddddddddd", "exact_head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"},
+        "packet": {"exact_base_sha": "dddddddddddddddddddddddddddddddddddddddd", "exact_head_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "status": "clean"}
+      }
+    },
+    {
+      "case_id": "c-608d2f39",
+      "suite": "clean_control",
+      "source_identity": "paired/path-boundary",
+      "family": "path_safety",
+      "input": {"root": "pm-entry.md", "references": [".agents/contracts/current.md", ".pi/prompts/review.md"]}
+    },
+    {
+      "case_id": "c-7ab41305",
+      "suite": "clean_control",
+      "source_identity": "paired/packet-coverage",
+      "family": "packet_coverage",
+      "input": {
+        "changed_files": ["one.md", "two.md"],
+        "packet": {"status": "clean", "reviewed_files": ["one.md", "two.md"], "closure_files": ["contract.md"], "invariants": ["exact_identity", "active_closure"], "unreviewed_files": [], "findings": []}
+      }
+    },
+    {
+      "case_id": "c-8d03ce72",
+      "suite": "clean_control",
+      "source_identity": "paired/packet-overflow",
+      "family": "packet_overflow",
+      "input": {"packet": {"status": "clean", "context": {"overflow": false, "truncated": false}, "unreviewed_files": [], "findings": []}}
+    },
+    {
+      "case_id": "c-93e5a618",
+      "suite": "clean_control",
+      "source_identity": "paired/cap-transition",
+      "family": "cap_transition",
+      "input": {"max_correction_rounds": 5, "rounds": 5, "terminal": null, "human_gate_kind": null, "review_status": "findings_correction_required", "outstanding_findings": ["last-allowed-round"]}
+    },
+    {
+      "case_id": "t-01e9b37a",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 20, "changed_lines": 600, "domains": 1, "partitionable": true}
+    },
+    {
+      "case_id": "t-15c2a8f4",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 21, "changed_lines": 600, "domains": 1, "partitionable": true}
+    },
+    {
+      "case_id": "t-2a761d90",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 20, "changed_lines": 601, "domains": 1, "partitionable": true}
+    },
+    {
+      "case_id": "t-3f08c5be",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 20, "changed_lines": 600, "domains": 2, "partitionable": true}
+    },
+    {
+      "case_id": "t-47bd6132",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 25, "changed_lines": 800, "domains": 2, "partitionable": true}
+    },
+    {
+      "case_id": "t-5c94e0a7",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 26, "changed_lines": 801, "domains": 3, "partitionable": true}
+    },
+    {
+      "case_id": "t-6e21b895",
+      "suite": "threshold_boundary",
+      "source_identity": "audit-pilot-thresholds",
+      "family": "packet_threshold",
+      "input": {"review_files": 26, "changed_lines": 801, "domains": 3, "partitionable": false}
+    }
+  ]
+}
