@@ -66,7 +66,7 @@ Record for every candidate range:
 - exact base branch and SHA;
 - exact head branch and SHA;
 - reviewer runtime/model and fresh-context identity;
-- local Codex status: `pending`, `clean`, `comments_addressed`, or `blocked`;
+- local Codex status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`;
 - findings and disposition artifact;
 - Shepherd status, verdict, score, and evidence artifact;
 - CI status and residual human gates.

@@ -852,13 +852,14 @@
     "parentPRHeadBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
     "originMain": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
     "mergeBase": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
-    "taskBranch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
+    "taskBranch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
+    "historicalTaskBranch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
     "taskMergeCommit": "c545c3740c71b889fd2f1f64cec5491003f7b654",
     "verifiedTaskHeadBeforeEvidence": "2a2e964b17144939b0a42f297de0d2b1c87383e1",
     "strategy": "git merge --no-ff origin/main",
     "forcePush": "not_used",
     "status": "stacked_pr_pending_parent_unchanged",
-    "postIntegration": "fetch origin/feat/cli-architecture-v2; record the actual resulting parent and PR #438 head; verify origin/main ancestry; refresh parent CI/body evidence; do not predeclare the task head as the parent head"
+    "postIntegration": "fetch origin/feat/cli-architecture-v2; record the actual resulting parent and PR #438 head; verify origin/main ancestry; refresh parent CI/body evidence; then complete and integrate PR #493's canonical PM migration before #408; do not predeclare the task head as the parent head"
   },
   "automatedReviewAvailability": {
     "claudeWorkflow": "disabled_manually",

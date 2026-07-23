@@ -289,6 +289,7 @@ fixtures = {
     "clean": fixture_root / "clean.json",
     "blocked": fixture_root / "blocked.json",
     "cap_lineage": fixture_root / "correction-cap-lineage.json",
+    "parent_ready": fixture_root / "parent-ready.json",
     "historical": fixture_root / "historical-local-codex.json",
 }
 for name, path in fixtures.items():
@@ -340,5 +341,11 @@ classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
     "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/correction-cap-lineage.json")"
 if [[ "$classification" != "blocked_human_decision" ]]; then
   printf 'PM orchestrator contract violation: cap classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/parent-ready.json")"
+if [[ "$classification" != "human_ready" ]]; then
+  printf 'PM orchestrator contract violation: parent-ready classifier returned %s\n' "$classification" >&2
   exit 1
 fi

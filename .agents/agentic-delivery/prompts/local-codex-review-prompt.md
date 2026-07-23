@@ -18,7 +18,9 @@ Follow `.agents/agentic-delivery/workflows/local-codex-review-loop.md`.
    contracts, credential handling, and human gates.
 5. Return either `CLEAN_NO_ACTIONABLE_FINDINGS` or findings with severity, file/line evidence,
    impact, and smallest safe correction. Separate residual risk from actionable findings.
-6. Include a disposition table seed so the orchestrator can record `accepted`,
+6. Report `local_codex.status` as exactly one of `pending`, `findings_correction_required`, `clean`,
+   `comments_addressed`, or `blocked`.
+7. Include a disposition table seed so the orchestrator can record `accepted`,
    `accepted_with_modification`, `declined`, `duplicate`, `deferred`, or `needs_human` for every
    finding.
 

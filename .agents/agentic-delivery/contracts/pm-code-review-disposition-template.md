@@ -7,7 +7,7 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 ## Finding <ID>
 
 - severity: <critical | high | medium | low>
-- disposition: <accepted | accepted_with_modification | declined | deferred | needs_human>
+- disposition: <accepted | accepted_with_modification | declined | duplicate | deferred | needs_human>
 - exact_base_sha:
 - exact_head_sha:
 - candidate_lineage:
@@ -32,7 +32,7 @@ record in the issue phase artifact and summarize it truthfully in the PR body wh
 
 ### Gate state
 
-- local_codex.status: <findings_correction_required | clean | blocked>
+- local_codex.status: <pending | findings_correction_required | clean | comments_addressed | blocked>
 - local_codex.disposition_artifact:
 - shepherd.status: <pending | proceed | retry | revert | halt | blocked>
 - shepherd.exact_head_sha:

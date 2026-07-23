@@ -55,7 +55,7 @@ Result: <pass | fail | blocked>
 
 ## Canonical Review Gates
 
-- local_codex.status: <pending | findings_correction_required | clean | blocked>
+- local_codex.status: <pending | findings_correction_required | clean | comments_addressed | blocked>
 - local_codex.exact_base_sha:
 - local_codex.exact_head_sha:
 - local_codex.findings_artifact:

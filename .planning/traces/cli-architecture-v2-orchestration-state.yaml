@@ -490,10 +490,10 @@ subissues:
     branch: feat/408-flow-etl-dashboards
     pr_url: ""
     worker: pm-gsd-worker
-    status: active_ready_parent_sync_pending
+    status: active_ready_parent_sync_and_pr_493_migration_pending
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
-    verification: "Branch-only implementation is preserved at current fetched head 6c643f5c971d1fac4a83e4ffe653b83847c2fceb; do not reconcile or open until Wave 1 parent sync is integrated."
+    verification: "Branch-only implementation is preserved at current fetched head 6c643f5c971d1fac4a83e4ffe653b83847c2fceb; do not reconcile, open, or start another implementation worker until both Wave 1 parent sync and the subsequent PR #493 canonical PM migration integrate."
     automated_review: {primary_route: blocked, status: pending, head_sha: "6c643f5c971d1fac4a83e4ffe653b83847c2fceb", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No Wave 1 action; #408 remains outside the parent-sync scope.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409

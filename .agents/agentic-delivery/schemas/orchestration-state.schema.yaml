@@ -112,10 +112,10 @@ field_contract:
         - local_codex
         - shepherd
       primary_route_values: [local_codex, human, blocked]
-      status_values: [pending, clean, comments_addressed, blocked]
+      status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
       local_codex:
         required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, findings_artifact]
-        status_values: [pending, clean, comments_addressed, blocked]
+        status_values: [pending, findings_correction_required, clean, comments_addressed, blocked]
       shepherd:
         required: [status, exact_head_sha, evidence_artifact]
         status_values: [pending, proceed, retry, revert, halt, blocked]

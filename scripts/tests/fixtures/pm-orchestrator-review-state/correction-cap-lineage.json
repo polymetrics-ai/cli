@@ -35,5 +35,6 @@
       "evidence_artifact": "blocked-before-validation"
     }
   },
-  "terminal": "human_gate"
+  "terminal": "human_gate",
+  "human_gate_kind": "correction_cap_exceeded"
 }

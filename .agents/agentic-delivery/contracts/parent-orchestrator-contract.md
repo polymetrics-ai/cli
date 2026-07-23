@@ -190,7 +190,7 @@ For every sub-issue, record:
 - exact head branch and SHA
 - reviewed commit range
 - primary route: `local_codex`, `human`, or `blocked`
-- review status: `pending`, `clean`, `comments_addressed`, or `blocked`
+- review status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`
 - fresh-context reviewer identity and findings/disposition artifact
 - Shepherd status, verdict, trajectory score, and evidence artifact
 - CI status and remaining human gates

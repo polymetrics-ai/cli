@@ -432,7 +432,12 @@ VALIDATOR CORRECTION (apply first): $correction"
   log "turn $i: stage=${stage:-?} terminal=${terminal:-none}"
   if terminal_is_authoritative "$verdict"; then
     case "$terminal" in
-      human_gate) log "DONE: human-ready gate reached (human review before merge to main)."; exit 0 ;;
+      human_gate)
+        gate_class="$(bash "$REPO_ROOT/scripts/pm-terminal-classifier.sh" "$RUN_JSON" 2>/dev/null || printf 'blocked_human_decision')"
+        if [[ "$gate_class" == "human_ready" ]]; then
+          log "DONE: human-ready gate reached (human review before merge to main)."; exit 0
+        fi
+        log "STOP: blocked human decision (see RUN.json and ORCHESTRATION-STATE.json for the gate kind)."; exit 4 ;;
       done)       log "DONE: all sub-issues complete and verified."; exit 0 ;;
       blocked)    log "STOP: blocked (see ORCHESTRATION-STATE.json / VALIDATION.jsonl)."; exit 4 ;;
       budget)     log "STOP: budget ceiling; re-run --resume."; exit 3 ;;

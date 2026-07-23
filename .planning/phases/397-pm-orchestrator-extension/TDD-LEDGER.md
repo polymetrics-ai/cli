@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension TDD Ledger
 
-Status: correction round 3 RED planned; GREEN/VERIFY/re-review pending
+Status: correction round 3 GREEN; full VERIFY/re-review pending
 Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE because the 69-command GSD registry has no `programming-loop`.
 
 | Risk | RED contract | GREEN target | Status |
@@ -15,10 +15,10 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 | authoritative PR #493 migration gate | focused script rejects #408 readiness unless durable trace, machine state, and summary require PR #493 integration after Wave 1 | #408 remains `not_spawned_dependency_blocked` until both Wave 1 and PR #493 routing migration integrate | green |
 | transitive legacy review route | focused script rejects current PM references to generic bot-era handoff/disposition templates | PM-specific templates represent exact-head local Codex plus independent Shepherd only | green |
 | correction counter split/reset | focused script rejects active `guards.correction_rounds` shape and requires replacement-head/cap fixture | canonical autonomous state persists stable exact-base/candidate-lineage counters and human block on exceed | green |
-| duplicated #408 authoritative record | focused script scopes the #408 subissue block and rejects Wave1-only readiness | every authoritative #408 representation requires Wave 1 plus PR #493 integration | red planned |
-| review enum drift | focused script compares canonical status/disposition values across schema/workflow/prompt/templates | one machine-valid status/disposition vocabulary | red planned |
-| correction cap misclassified ready | cap-lineage fixture is passed through the shared terminal classifier | exceeded cap remains `human_gate` but drivers stop as blocked human decision | red planned |
-| stale replacement branch | focused script parses #397 run state and rejects old `fm/...` as current `taskBranch` | current branch is `chore/...`; old ref is explicitly historical | red planned |
+| duplicated #408 authoritative record | focused script scopes the #408 subissue block and rejects Wave1-only readiness | every authoritative #408 representation requires Wave 1 plus PR #493 integration | green |
+| review enum drift | focused script compares canonical status/disposition values across schema/workflow/prompt/templates | one machine-valid status/disposition vocabulary | green |
+| correction cap misclassified ready | cap-lineage fixture is passed through the shared terminal classifier | exceeded cap remains `human_gate` but drivers stop as blocked human decision | green |
+| stale replacement branch | focused script parses #397 run state and rejects old `fm/...` as current `taskBranch` | current branch is `chore/...`; old ref is explicitly historical | green |
 
 ## Evidence log
 
@@ -37,3 +37,4 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 - Correction round 2 GREEN: the focused contract and Pi routing check pass. Authoritative #397 state blocks #408 on Wave 1 plus PR #493 integration; all current PM dependency edges use PM-specific exact-head handoff/disposition templates; the autonomous run shape and prompt persist stable candidate-lineage counters, map the old field only as read-only legacy input, and block on cap exceed.
 - REVIEW at `3af7910528d234d1a1d886a6778d7817495e6321`: fresh-context exact-head re-review found N1–N5. N1 is a second current-main-identical Gong product defect deferred under the no-product boundary pending separate captain authorization. N2–N5 are accepted for bounded correction round 3: scoped #408 record, review enums, terminal classification, and current replacement branch identity.
 - Correction round 3 RED: the extended focused contract exited 1. It reported the scoped #408 subissue's missing PR #493 gate, stale current `mainSync.taskBranch` and missing historical field, enum drift across schema/workflow/prompt/templates, absent shared terminal classifier/driver integration, and missing `correction_cap_exceeded` fixture kind.
+- Correction round 3 GREEN: focused contract, Pi routing, both Shepherd guards, shell syntax, JSON/YAML parsing, diff, and PR #493 path-disjointness pass. The shared classifier returns `blocked_human_decision` for cap exceed and `human_ready` only for parent readiness/legacy readiness; both drivers consume it.
