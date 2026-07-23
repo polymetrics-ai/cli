@@ -72,6 +72,7 @@ PR #493 files in PR #495, or claim the routing migration is complete.
 - relevant `.pi/agents/pm-*.md` role corrections
 - `docs/prompts/universal-programming-loop-prompts.md`
 - `scripts/tests/pi-model-routing.sh`
+- bounded terminal classification correction in `scripts/{pi-auto-loop,pi-shepherd-loop,pm-terminal-classifier}.sh`
 - new `scripts/tests/pm-orchestrator-contract.sh` and focused review-state fixtures
 - this phase directory, authoritative `.planning/traces/cli-architecture-v2-orchestration-state.yaml`, and narrow #397/Wave 1 machine-state/summary evidence updates
 
@@ -93,7 +94,11 @@ Update PM prompts/agents/operator docs and state schema consistently. Retain Cla
 
 After the first corrected exact-head re-review, make the PR #493 post-Wave1 migration gate durable in the authoritative #397 queue, route all current PM required-reading to PM-specific handoff/disposition templates, and align the autonomous driver with stable exact-base/candidate-lineage correction counters. Add RED assertions for each finding before guidance/state edits. Preserve legacy fields/templates as read-only input and do not edit PR #493-owned paths.
 
-### 5. VERIFY
+### 5. Correction round 3 — scoped state, enum parity, safe terminal classification
+
+After correction-round-2 re-review, close remaining canonical state inconsistencies: update every #408 authoritative representation and replacement-branch identity; align local-review status/disposition enums; and classify correction-cap `human_gate` as a blocked human decision in both drivers through one tested helper. Keep the second current-main-identical Gong product defect deferred pending separate captain authority. Add RED assertions before guidance/driver edits.
+
+### 6. VERIFY
 
 Run the focused contract first, then:
 
@@ -113,7 +118,7 @@ make verify
 
 Also verify YAML/JSON parsing, PR #493 path disjointness, no dependency delta, no CLI/help/docs/website product applicability, and no historical phase rewrite.
 
-### 6. REVIEW / INTEGRATE
+### 7. REVIEW / INTEGRATE
 
 Commit and push coherent additive checkpoints. At the final exact head, run a fresh-context read-only local Codex review bound to parent base and task head, disposition every finding, rerun affected gates/review after any change, then run independent Shepherd trajectory validation. Update draft PR #495 title/body and inspect checks/reviews. Never request Claude/Copilot, mark ready, merge PR #495, or edit/merge PR #438.
 

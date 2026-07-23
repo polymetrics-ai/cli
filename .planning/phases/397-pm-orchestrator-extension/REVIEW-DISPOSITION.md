@@ -2,7 +2,7 @@
 
 Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
 Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
-Status: correction round 2 in progress; exact-head re-review required
+Status: correction round 3 in progress; exact-head re-review required
 
 | ID | Severity | Disposition | Reason / action |
 |---|---|---|---|
@@ -14,6 +14,11 @@ Status: correction round 2 in progress; exact-head re-review required
 | F6 | high | accepted | Add PR #493 as an explicit dependency/blocker in the authoritative #397 trace, machine run state, and summary. Extend the contract test to reject a ready #408 before this post-Wave1 routing migration integrates. Do not edit PR #493-owned paths. |
 | F7 | high | accepted | Add PM-specific handoff/disposition templates with exact-head local Codex and independent Shepherd fields. Route every current PM prompt/agent/workflow reference to them and make the focused contract reject transitive legacy bot templates. Preserve the generic historical templates unchanged. |
 | F8 | medium | accepted | Align the autonomous run/prompt with canonical `correction_budget.max_correction_rounds` plus durable `rounds_by_range` lineage counters. Accept old `guards.correction_rounds` only as read-only legacy input and add a replacement-head/cap-exceeded fixture assertion. |
+| N1 | high | deferred_out_of_scope | Gong's default-base/write-path `/v2/v2` defect is byte-identical to current `origin/main` across every cited file and is unrelated to Wave 1 or canonical PM guidance. Product edits remain forbidden. Record as residual work needing a separate captain-authorized focused issue; do not broaden #497 or mutate product code here. |
+| N2 | high | accepted | Update the authoritative trace's scoped #408 `subissues` record, not only the ready queue/top-level gate, so every consumer requires both Wave 1 and PR #493. Add a section-scoped regression assertion. |
+| N3 | medium | accepted | Align canonical local-review status/disposition enums across schema, workflow, prompt, parent contract, and both PM templates. Add `duplicate` and assert enum parity in the focused contract. |
+| N4 | medium | accepted_with_modification | Keep terminal `human_gate`, add a structured `human_gate_kind`, and route both drivers through one classifier so `correction_cap_exceeded` stops as a blocked human decision while normal/legacy readiness remains human-ready. Exercise the cap fixture through that classifier. |
+| N5 | medium | accepted | Replace stale `mainSync.taskBranch` with the convention-compliant PR #495 branch, preserve the old ref only as a historical field, update post-integration text, and assert machine branch consistency. |
 
 ## Residual human/program gates
 

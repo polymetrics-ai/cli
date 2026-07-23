@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "review_findings_correction_round_2_implemented_verification_pending",
+  "status": "review_findings_correction_round_3_planned",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -50,25 +50,31 @@
       "cycle": "correct_round_2",
       "decision": "local_critical_path",
       "reason": "Accepted F6-F8 corrections are implemented at 906257c2045ebc269bbd51e1f2cea34c27779e52: durable #397/PR #493 gate, PM-specific transitive templates, and stable autonomous correction-lineage state. Full exact-head verification and re-review remain pending."
+    },
+    {
+      "cycle": "review_round_3",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected verified exact head 3af7910528d234d1a1d886a6778d7817495e6321 and returned N1-N5. The current-main-identical Gong product defect is deferred pending separate captain authority; scoped #408 state, review enums, cap terminal classification, and branch identity are accepted for correction round 3."
     }
   ],
   "verificationPassed": false,
   "verifiedImplementationHead": "d72a93018933541d390884f96b285856e269a1ab",
-  "verifiedEvidenceHead": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+  "verifiedEvidenceHead": "3af7910528d234d1a1d886a6778d7817495e6321",
   "correctionRound2ImplementationHead": "906257c2045ebc269bbd51e1f2cea34c27779e52",
+  "correctionRound3ReviewedHead": "3af7910528d234d1a1d886a6778d7817495e6321",
   "correctionBudget": {
     "maxCorrectionRounds": 4,
     "roundsByRange": {
-      "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65": 2
+      "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65": 3
     }
   },
   "localCodexReview": {
     "status": "findings_correction_required",
     "exactBase": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-    "exactHead": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
-    "findings": 3,
+    "exactHead": "3af7910528d234d1a1d886a6778d7817495e6321",
+    "findings": 5,
     "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
   },
   "shepherd": "pending_after_clean_rereview",
-  "updatedAt": "2026-07-23T14:50:44Z"
+  "updatedAt": "2026-07-23T15:37:44Z"
 }
