@@ -116,7 +116,9 @@ Commit all evidence, push normally, open one draft stacked PR to `feat/cli-archi
   - connector runtime: retained both requester/events/metrics policy and parent logger/telemetry policy;
   - HTTP: retained JSON/query requests, Gong multipart semantics, parent retry body cleanup, and retry metrics/log redaction.
 - Full required commands and focused races are green. Representative help, bare namespace, native command, Gong command, and invalid-action contracts are green.
-- PR #438 remains unchanged. #408 remains excluded. REVIEW and INTEGRATE checkpoints remain pending.
+- Original synchronization review/Shepherd passed at exact head `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`; draft PR #495 is open on the identical convention-compliant branch head.
+- Captain then authorized an additive PM-orchestrator correction in PR #495. Its separate evidence lives in `.planning/phases/397-pm-orchestrator-extension/`; prior exact-head review/check results are historical and final REVIEW/INTEGRATE gates must be rerun after the extension.
+- PR #438 remains unchanged. #408 remains excluded.
 
 ## Checkpoints
 

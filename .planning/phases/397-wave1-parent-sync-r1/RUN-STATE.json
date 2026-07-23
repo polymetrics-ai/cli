@@ -2,12 +2,13 @@
   "schemaVersion": 1,
   "phase": "397-wave1-parent-sync-r1",
   "issue": 397,
-  "status": "verify_complete_review_pending",
-  "branch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
+  "status": "extension_verify_complete_review_pending",
+  "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
+  "originalBranch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
   "remote": "origin",
   "pullRequestBase": "feat/cli-architecture-v2",
-  "pullRequestHead": "fm/cli-architecture-v2-wave1-parent-sync-r1",
-  "pullRequest": null,
+  "pullRequestHead": "chore/cli-architecture-v2-wave1-parent-sync-r1",
+  "pullRequest": 495,
   "draft": true,
   "isolation": {
     "physicalWorkingDirectory": "/Users/karthiksivadas/.treehouse/cli-83d592/1/cli",
@@ -64,10 +65,21 @@
     "initialCodeReview": "clean_no_actionable_wave1_findings",
     "initialSecurityDisposition": "broader observations pre-existing and not worsened; escalated for captain follow-up",
     "initialEvidenceReview": "two findings corrected: stale issue 462 review state and base-to-head whitespace errors",
-    "freshExactHeadCodex": "pending_after_review_fix_commit",
-    "trajectoryShepherd": "pending_after_final_exact_head_review",
+    "freshExactHeadCodex": "clean_at_original_sync_head_3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
+    "trajectoryShepherd": "proceed_at_original_sync_head_3fd63fbe0f526873fa3adb8a75fa5f20342d52a6_geomean_4.87",
+    "scopeExtensionReview": "pending_after_evidence_commit",
+    "scopeExtensionShepherd": "pending_after_final_exact_head_review",
     "claudeRequested": false,
     "copilotRequested": false
+  },
+  "scopeExtension": {
+    "authorized": true,
+    "phase": ".planning/phases/397-pm-orchestrator-extension",
+    "verifiedImplementationHead": "d72a93018933541d390884f96b285856e269a1ab",
+    "pr493Head": "e21e56339390c5e1946eb4cfaf276eb80a889f29",
+    "pr493PathsUntouched": true,
+    "localCodexReview": "pending_final_evidence_head",
+    "shepherd": "pending_final_evidence_head"
   },
   "dependencyTruth": {
     "issue462": "human_approved_exact_head",
@@ -82,5 +94,5 @@
     "postIntegration": "fetch parent; record actual resulting head; verify current main ancestry; refresh parent CI/body/state; do not assume task head equals parent head"
   },
   "statusFile": "/Users/karthiksivadas/karthik-agent-workspace/state/cli-architecture-v2-wave1-parent-sync-r1.status",
-  "updatedAt": "2026-07-23T05:50:00Z"
+  "updatedAt": "2026-07-23T13:08:41Z"
 }

@@ -1,7 +1,7 @@
 # Issue #397 PM Orchestrator Extension Verification
 
-Status: pending
-`verificationPassed`: false
+Status: local verification green at implementation head `d72a93018933541d390884f96b285856e269a1ab`; final evidence head review pending
+`verificationPassed`: true
 
 ## Identity and scope
 
@@ -22,7 +22,7 @@ Status: pending
 - [x] Shepherd is independent and required after review/before integration.
 - [x] Claude/Copilot are not required, requested, or fallback coverage in current/future PM route.
 - [x] Legacy Claude/Copilot docs/agent remain discoverable only with migration/deprecation pointers.
-- [x] Historical phase evidence remains unchanged so far; final range check remains in VERIFY.
+- [x] Historical phase evidence remains unchanged; only this current extension and narrow Wave 1 evidence are updated.
 
 ## Focused validation
 
@@ -35,15 +35,15 @@ Status: pending
 
 ## Full gates
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `git diff --exit-code -- cmd internal`
-- [ ] `git diff --check`
-- [ ] `go vet ./...`
-- [ ] `go test -timeout 20m ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `go mod verify`
-- [ ] `go mod tidy -diff`
-- [ ] `make verify`
+- [x] `gofmt -w cmd internal`
+- [x] `git diff --exit-code -- cmd internal`
+- [x] `git diff --check`
+- [x] `go vet ./...`
+- [x] `go test -timeout 20m ./...`
+- [x] `go build ./cmd/pm`
+- [x] `go mod verify`
+- [x] `go mod tidy -diff`
+- [x] `make verify`
 
 ## Review and delivery
 

@@ -70,12 +70,22 @@ Status: local verification green; exact-head review and delivery pending
 
 - [x] Fresh-context read-only Codex review passed at `f3df1b169625891b60dce15e332c7b535dd6ff21`; no Wave 1 code findings.
 - [x] Initial evidence findings dispositioned: stale #462 state corrected and base-to-head whitespace errors removed; broad security observations confirmed pre-existing/not worsened and escalated for captain follow-up.
-- [ ] Fresh exact-head re-review after the review-fix commit.
-- [ ] Trajectory/Shepherd validation passed against exact evidence.
-- [x] Branch pushed normally through pre-evidence head.
-- [ ] Draft stacked PR targets `feat/cli-architecture-v2` and uses `Refs #397`.
-- [x] No Claude/Copilot requested; any automatic activity will be observed but not counted.
-- [ ] Required PR checks green at exact head.
+- [x] Fresh exact-head review passed at original synchronization head `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`.
+- [x] Original synchronization trajectory/Shepherd validation returned `PROCEED` (geomean 4.87) at `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`.
+- [x] Branch pushed normally without force.
+- [x] Draft stacked PR #495 targets `feat/cli-architecture-v2` and uses `Refs #397`.
+- [x] No Claude/Copilot requested; any automatic activity is observed but not counted.
+- [x] Original synchronization required branch-specific workflows passed.
 - [x] Parent PR #438 not edited, marked ready, or merged.
+
+## Captain-approved PM-orchestrator extension
+
+- [x] Extension PLAN/TDD/VERIFY artifacts created before canonical guidance edits.
+- [x] Focused RED and GREEN contract evidence recorded.
+- [x] PR #493 skill/routing/Makefile paths remain untouched.
+- [x] Full credential-free gates passed at implementation head `d72a93018933541d390884f96b285856e269a1ab`.
+- [ ] Final evidence-head local Codex review passes.
+- [ ] Final evidence-head independent Shepherd validation passes.
+- [ ] PR #495 required checks green at the final extension head.
 
 Runtime-backed, credentialed, external-mutation, deployment, and live connector checks: not applicable and forbidden for this Wave 1 slice. `make verify` exercised only its local temporary smoke, including reverse plan → preview → approval → execute.
