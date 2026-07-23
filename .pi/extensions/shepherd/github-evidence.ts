@@ -339,7 +339,6 @@ function normalizePolicyInput(value: unknown, withDigest: boolean): RequiredGitH
 	if (candidate.schemaVersion !== 1) throw new Error("unsupported required-check policy schema");
 	const requiredChecks = boundedArray(candidate.requiredChecks, "required checks").map(validateRequiredCheck)
 		.sort((left, right) => left.name.localeCompare(right.name) || left.producerId.localeCompare(right.producerId));
-	if (requiredChecks.length === 0) throw new Error("required checks must not be empty");
 	unique(requiredChecks, (check) => `${check.name}\u0000${check.producerId}`, "required check context");
 	const normalized = {
 		schemaVersion: 1 as const,

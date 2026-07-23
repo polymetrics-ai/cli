@@ -3,7 +3,7 @@
   "phase": "480-shepherd-recovery-cutover",
   "issue": 480,
   "parentIssue": 471,
-  "status": "preflight_red_captured",
+  "status": "preflight_green",
   "verificationPassed": false,
   "manualGsdFallback": true,
   "orchestrationDecisions": [
@@ -15,8 +15,13 @@
     {
       "cycle": "preflight-tdd-red",
       "decision": "local_critical_path",
-      "reason": "The focused unprotected-parent required-check test executed and failed 0/1 because production calls the absent required-status resource before observing branch protection."
+      "reason": "Protected/unprotected and nullable-app tests executed and failed 0/2 for the intended policy-source assertions."
+    },
+    {
+      "cycle": "preflight-tdd-green",
+      "decision": "local_critical_path",
+      "reason": "Selected policy tests passed 3/3, affected suites passed 660/660, and live read-only canonical policy construction produced exact empty parent checks plus protected main checks."
     }
   ],
-  "updatedAt": "2026-07-23T05:45:00.000Z"
+  "updatedAt": "2026-07-23T06:05:00.000Z"
 }

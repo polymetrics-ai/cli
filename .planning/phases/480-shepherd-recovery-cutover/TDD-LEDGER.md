@@ -33,10 +33,22 @@ node --test --test-name-pattern='records an exact empty policy' \
   .pi/extensions/shepherd/gh-orchestration-transport.test.ts
 ```
 
-Result: **expected RED — 0 pass / 1 fail**. The assertion executed against compiling production and
-failed because `GhRequiredCheckPolicySource` called the absent required-status-check resource before
-observing that the non-default parent branch is unprotected. No load, compile, timeout, skip, or
-unrelated assertion contributed.
+Result: **expected RED — 0 pass / 1 fail**, then expanded to **0 pass / 2 fail** when the live
+`main` response exposed nullable `app_id` values. Both assertions executed against compiling
+production: the first failed because the source called the absent required-status-check resource
+before observing an unprotected branch; the second failed because GitHub's documented null app
+binding was rejected. No load, compile, timeout, skip, or unrelated assertion contributed.
+
+### R0 GREEN evidence
+
+- Selected protected/unprotected/null-app cases: **3/3 pass**.
+- Affected transport/evidence/orchestrator/plan suites: **660/660 pass** sequentially.
+- Live read-only policy construction: parent branch has an exact empty check set; protected `main`
+  retains `branch-name`, `CodeQL`, `govulncheck`, `pr-title`, and `verify` with exact producer
+  semantics. Canonical plan digest: `f699d43e5522da1377b86a923cc548919a81f8c50be951ef18538b77dccc42b4`.
+- Production now observes the branch `protected` flag before querying the protected-only endpoint,
+  accepts a closed empty policy for unprotected branches, and maps a null GitHub app binding to the
+  existing `legacy` producer contract. Unknown/malformed observations still fail closed.
 
 ## GREEN / refactor / review
 

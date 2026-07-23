@@ -5,8 +5,10 @@ Verdict: **PLANNED — implementation RED pending**.
 - [x] Parent #479 and PR #489 are integrated into the non-default parent.
 - [x] Plan, TDD ledger, and verification checklist exist before production edits.
 - [x] Manual-GSD fallback and required skills/references recorded.
-- [ ] Unprotected-parent policy-source RED fails for the intended preflight assertion.
-- [ ] Protected/unprotected policy-source GREEN passes and `/pm-shepherd start` reaches durable state.
+- [x] Unprotected-parent/null-app policy-source RED fails for the intended preflight assertions.
+- [x] Protected/unprotected policy-source GREEN passes: selected 3/3 and affected 660/660.
+- [x] Live read-only canonical policy/plan construction passes with empty parent checks and exact protected `main` checks.
+- [ ] `/pm-shepherd start` reaches durable state.
 - [ ] Focused recovery/audit RED executes and fails for intended assertions.
 - [ ] Focused GREEN passes.
 - [ ] Complete sequential Shepherd suite passes in the child lane.

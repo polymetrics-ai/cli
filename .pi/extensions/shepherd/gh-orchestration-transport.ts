@@ -243,25 +243,49 @@ export class GhRequiredCheckPolicySource implements RequiredCheckPolicySource {
 	async #policy(repositoryValue: string, branch: string, context: ExternalCallContext) {
 		const repo = repository(repositoryValue);
 		const deadline = new Date(context.deadlineAt).valueOf();
-		let output: string;
+		const endpoint = `/repos/${repo}/branches/${encodeURIComponent(branch)}`;
+		let protectedBranch: boolean;
+		let policyOutput: string | undefined;
 		try {
-			output = await this.#execute("gh", ["api", "--method", "GET",
-				`/repos/${repo}/branches/${encodeURIComponent(branch)}/protection/required_status_checks`], {
+			const branchOutput = await this.#execute("gh", ["api", "--method", "GET", endpoint], {
 				signal: context.signal,
 				timeoutMs: Math.max(1, Math.min(this.#timeoutMs, deadline - Date.now())),
 				maxOutputBytes: this.#maxOutputBytes,
 			});
+			const branchRecord = record(
+				parseJson(branchOutput, "branch protection observation", this.#maxOutputBytes),
+				"branch protection observation",
+			);
+			if (typeof branchRecord.protected !== "boolean") {
+				throw new Error("GitHub branch protection observation is missing its protected flag");
+			}
+			protectedBranch = branchRecord.protected;
+			if (protectedBranch) {
+				policyOutput = await this.#execute("gh", ["api", "--method", "GET",
+					`${endpoint}/protection/required_status_checks`], {
+					signal: context.signal,
+					timeoutMs: Math.max(1, Math.min(this.#timeoutMs, deadline - Date.now())),
+					maxOutputBytes: this.#maxOutputBytes,
+				});
+			}
 		} finally {
 			if (context.signal.aborted) context.acknowledgeAbort();
 		}
-		const raw = record(parseJson(output, "required-check policy", this.#maxOutputBytes), "required-check policy");
+		const raw = protectedBranch
+			? record(parseJson(policyOutput!, "required-check policy", this.#maxOutputBytes), "required-check policy")
+			: { contexts: [], checks: [] };
 		const checks: RequiredGitHubCheck[] = [];
 		const modernContexts = new Set<string>();
 		for (const item of array(raw.checks ?? [], "required-check app contexts")) {
 			const check = record(item, "required-check app context");
 			const name = text(check.context, "required-check context", 256);
 			modernContexts.add(name);
-			checks.push({ name, producerId: String(positiveInteger(check.app_id, "required-check app ID")) });
+			checks.push({
+				name,
+				producerId: check.app_id === null
+					? "legacy"
+					: String(positiveInteger(check.app_id, "required-check app ID")),
+			});
 		}
 		for (const item of array(raw.contexts ?? [], "required-check legacy contexts")) {
 			const name = text(item, "required-check context", 256);

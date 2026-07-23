@@ -88,7 +88,8 @@ test("production facade exposes the real transport and explicitly refuses to fak
 
 test("reads stable authoritative required-check policies for parent and base branches", async () => {
 	const execute: GhOrchestrationExecutor = async (_file, args) => {
-		assert.match(args[3], /required_status_checks$/);
+		const endpoint = String(args[3]);
+		if (!endpoint.endsWith("/required_status_checks")) return JSON.stringify({ protected: true });
 		return JSON.stringify({
 			strict: true,
 			contexts: ["legacy-ci"],
@@ -124,15 +125,61 @@ test("records an exact empty policy for an unprotected non-default parent branch
 		if (endpoint === "/repos/acme/widgets/branches/feat%2Fparent") {
 			return JSON.stringify({ protected: false });
 		}
+		if (endpoint === "/repos/acme/widgets/branches/main") return JSON.stringify({ protected: true });
+		if (endpoint.endsWith("/branches/main/protection/required_status_checks")) {
+			return JSON.stringify({ strict: true, contexts: ["verify"], checks: [] });
+		}
 		throw new Error("an unprotected branch has no required-status-check resource");
 	};
 	const source = new GhRequiredCheckPolicySource({ execute });
-	const observation = await source.findRequiredCheckPolicies({
+	const bundle = await source.findParentOrchestrationPolicyBundle!({
 		repository: "acme/widgets",
-		baseBranch: "feat/parent",
+		parentIssue: 471,
+		generation: 1,
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
 	}, context());
-	assert.deepEqual(observation.items[0].requiredChecks, []);
-	assert.deepEqual(calls, ["/repos/acme/widgets/branches/feat%2Fparent"]);
+	const parentPolicy = bundle.items[0].policyBundle.requiredCheckPolicies.find(
+		(policy) => policy.baseBranch === "feat/parent",
+	);
+	assert.deepEqual(parentPolicy?.requiredChecks, []);
+	assert.deepEqual(calls, [
+		"/repos/acme/widgets/branches/feat%2Fparent",
+		"/repos/acme/widgets/branches/main",
+		"/repos/acme/widgets/branches/main/protection/required_status_checks",
+	]);
+});
+
+test("preserves required contexts whose GitHub app binding is intentionally null", async () => {
+	const calls: string[] = [];
+	const execute: GhOrchestrationExecutor = async (_file, args) => {
+		const endpoint = String(args[3] ?? "");
+		calls.push(endpoint);
+		if (!endpoint.endsWith("/protection/required_status_checks")) return JSON.stringify({ protected: true });
+		return JSON.stringify({
+			strict: true,
+			contexts: ["verify", "branch-name"],
+			checks: [
+				{ context: "verify", app_id: null },
+				{ context: "branch-name", app_id: 15368 },
+			],
+		});
+	};
+	const source = new GhRequiredCheckPolicySource({ execute });
+	const bundle = await source.findParentOrchestrationPolicyBundle!({
+		repository: "acme/widgets",
+		parentIssue: 471,
+		generation: 1,
+		parentBranch: "feat/parent",
+		parentBaseBranch: "main",
+	}, context());
+	for (const policy of bundle.items[0].policyBundle.requiredCheckPolicies) {
+		assert.deepEqual(policy.requiredChecks, [
+			{ name: "branch-name", producerId: "15368" },
+			{ name: "verify", producerId: "legacy" },
+		]);
+	}
+	assert.equal(calls.length, 4);
 });
 
 test("reads checks from the authoritative live head and fails closed on bounded pagination", async () => {

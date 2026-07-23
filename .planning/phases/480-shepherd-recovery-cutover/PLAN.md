@@ -26,6 +26,7 @@ Allowed:
 
 - `.pi/extensions/shepherd/gh-orchestration-transport.ts`
 - `.pi/extensions/shepherd/gh-orchestration-transport.test.ts`
+- `.pi/extensions/shepherd/github-evidence.ts`
 - `.pi/extensions/shepherd/recovery.ts`
 - `.pi/extensions/shepherd/recovery.test.ts`
 - `.pi/extensions/shepherd/audit-log.ts`
