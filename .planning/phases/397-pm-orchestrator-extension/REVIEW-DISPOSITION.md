@@ -2,7 +2,7 @@
 
 Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
 Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
-Status: correction round 4 in progress (maximum permitted round); exact-head re-review required
+Status: captain-authorized correction round 5 in progress for R1–R3 only; exact-head re-review required; no round 6
 
 | ID | Severity | Disposition | Reason / action |
 |---|---|---|---|
@@ -21,6 +21,9 @@ Status: correction round 4 in progress (maximum permitted round); exact-head re-
 | N5 | medium | accepted | Replace stale `mainSync.taskBranch` with the convention-compliant PR #495 branch, preserve the old ref only as a historical field, update post-integration text, and assert machine branch consistency. |
 | N4-R | medium | accepted | Require canonical producers to emit sibling `human_gate_kind: correction_cap_exceeded` with terminal `human_gate`; distinguish canonical missing-kind records from legacy records in the classifier; add a negative fixture. Keep other structured detail in orchestration state. |
 | N3-R | medium | accepted | Add the six-value canonical `finding_disposition_values` enum to the schema and every applicable PM workflow/prompt/contract/template, then parse and compare exact sets in the focused test instead of checking token presence. |
+| R1 | high | accepted | Under captain-authorized round 5, remove the three nonexistent `.pi/skills/**` requirements from `pm-gsd-worker`, retain `required-skills-routing.md` as the stack router, instruct loading only skills advertised by the active harness, and make transitive required-reference traversal reject missing files. |
+| R2 | medium | accepted | Under captain-authorized round 5, treat only an absent schema field as legacy; any explicit unsupported schema version with missing/unknown gate kind fails closed. Add explicit unknown-schema and unknown-kind classifier fixtures. |
+| R3 | medium | accepted | Under captain-authorized round 5, change F2/N1 dispositions to canonical `deferred` without changing their rationale, and parse every actual disposition row against the exact six-value enum. |
 
 ## Residual human/program gates
 

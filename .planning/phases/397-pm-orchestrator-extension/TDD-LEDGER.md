@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension TDD Ledger
 
-Status: correction round 4 GREEN (maximum permitted round); full VERIFY/re-review pending
+Status: captain-authorized correction round 5 RED planned; GREEN/VERIFY/re-review pending; no round 6
 Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE because the 69-command GSD registry has no `programming-loop`.
 
 | Risk | RED contract | GREEN target | Status |
@@ -21,6 +21,9 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 | stale replacement branch | focused script parses #397 run state and rejects old `fm/...` as current `taskBranch` | current branch is `chore/...`; old ref is explicitly historical | green |
 | missing canonical human-gate kind | classifier test passes a canonical `human_gate` record without the sibling kind | canonical missing/unknown kind fails closed; only detected legacy missing-kind remains human-ready | green |
 | disposition enum only implied | focused script parses exact `finding_disposition_values` sets across schema/workflow/prompt/contracts/templates | all applicable PM records use the same exact six-value enum | green |
+| nonexistent required worker skills | transitive dependency traversal rejects missing `.agents/**`/`.pi/**` references and forbidden old skill paths | worker loads task skills only through `required-skills-routing.md` and available harness skills; every required reference exists | red planned |
+| explicit unknown schema treated as legacy | classifier fixture uses `schema_version: canonical_v3`, terminal `human_gate`, and no kind | explicit unsupported schema fails closed; only absent schema is legacy-readable | red planned |
+| actual disposition rows invalid | focused parser validates every review-disposition table row against the exact canonical enum | F2/N1 use `deferred`; all actual rows are machine-valid while rationale remains unchanged | red planned |
 
 ## Evidence log
 
@@ -43,3 +46,6 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 - REVIEW at `1d4acf4f633e4f8940ba637f2099723369b2ed30`: fresh-context exact-head re-review confirmed earlier dispositions and returned N4-R/N3-R. Both are accepted for the fourth and maximum permitted correction round: producer/classifier versioned human-gate semantics and exact machine disposition-enum parity.
 - Correction round 4 RED: the focused contract exited 1. It reported no exact `finding_disposition_values` enum in all six applicable schema/guidance/template files and no canonical producer `schema_version`/`human_gate_kind: correction_cap_exceeded` markers. A canonical missing-kind negative fixture was added before implementation.
 - Correction round 4 GREEN: exact enum parsing passes across all six applicable files. Producer workflow/prompt require canonical schema plus terminal/kind siblings. Classifier fixtures prove cap exceed and canonical missing-kind stop as blocked human decisions, while explicit parent readiness and detected legacy missing-kind remain human-ready. Focused route, Pi routing, Shepherd guards, syntax/parse/diff, and PR #493 disjointness pass.
+- REVIEW at `32dbda9daf432a5c3f45e7b7753a41eaa96bd915`: fresh-context exact-head Codex review returned R1 nonexistent mandatory worker skills/missing-reference traversal, R2 unsupported explicit schema misclassified legacy-ready, and R3 noncanonical actual F2/N1 dispositions. Review status is blocked after round 4/4; Shepherd correctly did not run.
+- CAPTAIN OVERRIDE: decision `pm-correction-budget-exceeded` authorizes exactly round 5 on the existing lineage for R1–R3 only. Durable decision: `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-round5-override-2026-07-23.md`. No reset, expansion, audit-backed review-system implementation, or round 6.
+- Round 5 GSD discovery: `scripts/gsd doctor` passes, 69 commands remain registered, `plan-phase` prompt/source resolves, and `programming-loop` remains absent; canonical PM-owned manual lifecycle continues. Required references consulted: `gsd-core`, `required-skills-routing.md`, `gsd-pi-adapter.md`, and runtime/Pi-agent integration guidance. No Go, CLI/help, website, connector, dependency, credential, or product change applies.

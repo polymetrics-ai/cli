@@ -1,7 +1,7 @@
 # Issue #397 PM Orchestrator Extension Verification
 
-Status: correction round 4 implemented at `42ddf3debcad3298d56583ebbdd219e2dbcd8596` (maximum permitted round); final evidence-head verification/re-review pending
-`verificationPassed`: false (latest implementation head has not yet completed the full exact-head gate)
+Status: captain-authorized correction round 5 planned for R1–R3 only; implementation/verification/re-review pending; no round 6
+`verificationPassed`: false (round-5 candidate does not exist yet)
 
 ## Identity and scope
 
@@ -32,6 +32,17 @@ Status: correction round 4 implemented at `42ddf3debcad3298d56583ebbdd219e2dbcd8
 - [x] Canonical producers persist `schema_version`, plain `human_gate`, and the required sibling kind; all other structured gate detail remains outside the terminal string.
 - [x] Exact six-value finding-disposition enum is machine-specified and parsed identically across all applicable PM files.
 
+## Round 5 authorization and scope
+
+- [x] Durable decision read: `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-round5-override-2026-07-23.md`.
+- [x] Existing lineage retained; counter advances from 4 to 5 without reset.
+- [x] Scope limited to R1 missing worker skill references/traversal, R2 unsupported schema fail-closed classification, and R3 actual canonical disposition rows.
+- [x] Audit-backed PM review system, product changes, PR #493 files, and round 6 excluded.
+- [ ] `pm-gsd-worker` references only existing required files and harness-available skills through `required-skills-routing.md`.
+- [ ] Active dependency traversal rejects missing required references.
+- [ ] Explicit unknown schema plus missing kind is a blocked human decision; unknown kind remains blocked; absent-schema legacy remains readable.
+- [ ] Every actual `REVIEW-DISPOSITION.md` row uses the exact canonical enum; F2/N1 remain deferred with rationale.
+
 ## Focused validation
 
 - [x] RED captured before canonical guidance changes.
@@ -61,8 +72,9 @@ Status: correction round 4 implemented at `42ddf3debcad3298d56583ebbdd219e2dbcd8
 - [x] Captain-authorized Gong follow-up created at https://github.com/polymetrics-ai/cli/issues/497 without product changes here.
 - [x] Fresh exact-head local Codex re-review at `3af7910528d234d1a1d886a6778d7817495e6321`; N2–N5 accepted and N1 deferred under the no-product boundary.
 - [x] Fresh exact-head local Codex re-review at `1d4acf4f633e4f8940ba637f2099723369b2ed30`; N4-R/N3-R accepted for maximum correction round 4.
-- [ ] Fresh exact-head local Codex re-review clean after correction round 4.
-- [ ] Every finding dispositioned; final changed head re-reviewed. Further accepted correction is a human blocker.
+- [x] Fresh exact-head local Codex review at `32dbda9daf432a5c3f45e7b7753a41eaa96bd915` returned R1–R3 and blocked after round 4/4; Shepherd did not run.
+- [ ] Fresh exact-head local Codex re-review clean after authorized correction round 5.
+- [ ] Every finding dispositioned; final changed head re-reviewed. Any new actionable finding is a human blocker; no round 6.
 - [ ] Exact-head Shepherd/trajectory validation passes.
 - [ ] Branch pushed normally without force.
 - [ ] PR #495 title/body updated with extension scope and exact head.

@@ -12,6 +12,8 @@ Scope: canonical current/forward PM/Pi parent orchestration documentation, promp
 
 Captain approved an additive extension to PR #495. Preserve the reviewed synchronization history and use ordinary commits only: no amend, rebase, reset, stash, force-push, or merge. Keep parent PR #438 draft/human-only and PR #493 separate.
 
+After exact-head review at `32dbda9daf432a5c3f45e7b7753a41eaa96bd915` exhausted the four-round default, the captain authorized exactly one bounded round 5 on the existing lineage. Durable authority: `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-round5-override-2026-07-23.md`. Round 5 is restricted to R1–R3: valid worker skill routing plus missing-reference rejection, fail-closed explicit unknown schema classification, and canonical actual disposition rows plus validation. There is no counter reset, scope expansion, review-system/compiler implementation, or round 6. Any new actionable finding returns to the captain.
+
 The canonical forward route must have one owner and one review chain:
 
 1. `/pm-orchestrate` is the active parent owner when the repo-local GSD registry lacks `programming-loop`.
@@ -102,7 +104,17 @@ After correction-round-2 re-review, close remaining canonical state inconsistenc
 
 Use the fourth and maximum permitted correction round to close end-to-end machine enforcement: canonical producers must emit terminal `human_gate` plus sibling kind for correction-cap exceed, canonical missing-kind records fail closed while detected legacy records remain readable, and the six finding dispositions become an exact schema enum compared across applicable guidance/templates. Add RED fixtures/assertions before implementation. Any further accepted correction would exceed the budget and require a human blocker.
 
-### 7. VERIFY
+### 7. Captain-authorized correction round 5 — R1–R3 only
+
+On the existing exact-base/candidate lineage, use the one-round override to:
+
+1. remove the three nonexistent `.pi/skills/**` requirements from `pm-gsd-worker`, route skill loading only through `required-skills-routing.md` plus available harness skills, and make active dependency traversal reject any missing required reference;
+2. classify an explicit unsupported review schema with missing `human_gate_kind` as a blocked human decision while preserving only truly absent-schema legacy readability, with unknown-schema and unknown-kind fixtures;
+3. change F2/N1 to canonical `deferred` while retaining their out-of-scope rationale, and parse every actual disposition row against the exact enum.
+
+Capture focused RED before these edits and GREEN after. Do not implement the separately planned audit-backed PM review system. Do not use or authorize round 6.
+
+### 8. VERIFY
 
 Run the focused contract first, then:
 
@@ -122,7 +134,7 @@ make verify
 
 Also verify YAML/JSON parsing, PR #493 path disjointness, no dependency delta, no CLI/help/docs/website product applicability, and no historical phase rewrite.
 
-### 8. REVIEW / INTEGRATE
+### 9. REVIEW / INTEGRATE
 
 Commit and push coherent additive checkpoints. At the final exact head, run a fresh-context read-only local Codex review bound to parent base and task head, disposition every finding, rerun affected gates/review after any change, then run independent Shepherd trajectory validation. Update draft PR #495 title/body and inspect checks/reviews. Never request Claude/Copilot, mark ready, merge PR #495, or edit/merge PR #438.
 
