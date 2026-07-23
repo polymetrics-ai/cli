@@ -83,6 +83,9 @@ Phase: `397-cli-architecture-v2-delivery-skill`
   gate remains open for the no-mistakes lifecycle.
 - Fresh exact-head review of `2ba47dc3036a2b063bd051d66d60b37ccea96bf6` passed with no
   actionable findings. A bounded Shepherd trajectory validation independently reproduced RED/GREEN,
-  ran exact-head `make verify`, scored 4.52, and returned `PROCEED`.
-- Shepherd authorized a final planning-only artifact refresh. Final-head review, push, stacked PR,
-  and CI remain owned by the no-mistakes lifecycle.
+  ran exact-head `make verify`, scored 4.52, returned `PROCEED`, and is persisted in
+  `SHEPHERD-VALIDATION-2BA47DC.json`.
+- Review of the subsequent artifact-only head found three medium issues: incomplete frontmatter and
+  Make recipe negative validation, missing universal-loop decision fields, and overstated final-head
+  Shepherd evidence. All are corrected in this slice. A fresh exact-head Codex review and Shepherd
+  rerun are required after this fix commit; their results belong in the draft stacked PR evidence.

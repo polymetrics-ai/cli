@@ -11,6 +11,33 @@
     "programming_loop": "unavailable: unknown GSD command or prompt",
     "fallback": "PLAN -> RED -> GREEN -> REFACTOR -> VERIFY -> REVIEW -> Shepherd -> stacked delivery"
   },
+  "orchestrationDecisions": [
+    {
+      "cycle": "scope-correction",
+      "decision": "retarget_to_parent_program",
+      "reason": "CLI Architecture v2 issue #397 and feat/cli-architecture-v2 are authoritative; a generic Go TUI skill would duplicate issue #462."
+    },
+    {
+      "cycle": "skill-gap-audit",
+      "decision": "add_narrow_delivery_router",
+      "reason": "The independent audit found a program delivery gap and approved reuse of bubble-tea-tui-design for detailed TUI doctrine."
+    },
+    {
+      "cycle": "manual-tdd",
+      "decision": "use_manual_universal_loop",
+      "reason": "The healthy 69-command GSD registry does not expose programming-loop."
+    },
+    {
+      "cycle": "review-fixes",
+      "decision": "fix_all_actionable_findings",
+      "reason": "Conditional performance routing and Darwin-concurrent temporary-file safety were corrected before broad verification."
+    },
+    {
+      "cycle": "stacked-delivery",
+      "decision": "captain_approved_direct_stack",
+      "reason": "The no-mistakes version hardcodes origin/main; direct draft delivery to feat/cli-architecture-v2 was explicitly approved."
+    }
+  ],
   "scope": {
     "program_delivery_skill_only": true,
     "product_behavior_changed": false,
@@ -27,9 +54,11 @@
     "go_test_all": "passed",
     "go_build_pm": "passed",
     "make_verify": "passed",
-    "independent_review": "passed with no actionable findings after two fixes",
-    "shepherd": "PROCEED; trajectory geometric mean 4.52"
+    "independent_review": "pre-artifact head passed after two fixes; final-head rerun required after evidence changes",
+    "shepherd": "pre-artifact head 2ba47dc30: PROCEED; trajectory geometric mean 4.52; final-head rerun required"
   },
+  "verificationPassed": true,
+  "verificationScope": "focused skill/YAML/link/routing checks, go vet, go test ./..., go build ./cmd/pm, and make verify passed at the submitted head before final review fixes",
   "review_constraints": {
     "active_external_bot_exclusions_obeyed": true,
     "final_head_review": "owned by no-mistakes stacked delivery",

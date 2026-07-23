@@ -33,11 +33,18 @@ manual universal loop was recorded and followed:
 4. independent findings fixed at `2ba47dc30`;
 5. focused, broad, independent exact-head, and Shepherd verification.
 
-Independent review found two defects: omitted conditional benchmark/performance routing for Track C
-and a Darwin-concurrent `mktemp` collision. Both were fixed; eight concurrent checker invocations
-subsequently passed. Fresh review of `2ba47dc30` reported no actionable findings. A bounded
-Shepherd-style trajectory review scored 4.52 and returned `PROCEED`, explicitly authorizing this
-artifact refresh before handoff.
+Independent review found two initial defects: omitted conditional benchmark/performance routing for
+Track C and a Darwin-concurrent `mktemp` collision. Both were fixed; eight concurrent checker
+invocations subsequently passed. Fresh review of `2ba47dc30` reported no actionable findings. A
+bounded Shepherd-style trajectory review scored 4.52, returned `PROCEED`, and is persisted in
+`SHEPHERD-VALIDATION-2BA47DC.json`, explicitly authorizing the planning-artifact refresh.
+
+A later final-head review found incomplete negative validation, missing universal-loop decision
+fields, and an overstated exact-head Shepherd claim. This fix round parses skill frontmatter as YAML,
+checks the complete Make `verify` rule including recipes, records each orchestration decision and
+verification state, and limits the persisted Shepherd claim to the head actually reviewed. Final
+Codex and trajectory reruns are required on the immutable fix head and will be recorded in the draft
+stacked PR.
 
 ## Verification
 
@@ -60,6 +67,8 @@ and shared parent #397 orchestration artifacts remained unchanged from the paren
 
 ## Delivery state
 
-The worker branch remains based on `feat/cli-architecture-v2`. The final no-mistakes lifecycle owns
-final-head review, push, stacked PR creation with `Refs #397`, and CI. Parent PR #438 remains draft
-and must not be merged by an agent.
+The worker branch remains based on `feat/cli-architecture-v2`. Because the installed no-mistakes
+version hardcodes `origin/main`, the captain approved direct stacked delivery after equivalent green
+checks, fresh Codex review, and exact-head trajectory validation. The draft PR must use `Refs #397`,
+exclude configured review bots, and target only the parent. Parent PR #438 remains draft and must not
+be merged by an agent.

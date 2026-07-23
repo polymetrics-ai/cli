@@ -64,8 +64,10 @@
   reverse ETL execution outside the repository's credential-free sample smoke gate.
 - [x] #419 remains deferred and no dependency approval is implied.
 - [x] Active Claude/GitHub Copilot exclusions obeyed; independent local review and Shepherd used.
-- [x] Independent exact-head review found no actionable findings after fixes.
-- [x] Shepherd trajectory validation returned `PROCEED` at 4.52.
+- [x] Pre-artifact exact-head review found no actionable findings after the first fix round.
+- [x] Pre-artifact Shepherd trajectory validation returned `PROCEED` at 4.52 and is persisted.
+- [ ] Final-head Codex re-review after the validation/evidence fix round.
+- [ ] Final-head Shepherd trajectory rerun after the validation/evidence fix round.
 - [x] Changes committed on the worker branch.
 - [x] Firstmate instructed the no-mistakes shipping stage after focused implementation/validation.
 - [ ] Final stacked PR targets `feat/cli-architecture-v2`, uses `Refs #397`, and remains unmerged.

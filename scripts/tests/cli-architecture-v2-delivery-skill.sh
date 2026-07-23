@@ -146,11 +146,28 @@ makefile = (root / "Makefile").read_text()
 assert re.search(r"(?m)^cli-architecture-v2-skill-check:\s*$", makefile), (
     "Makefile missing focused cli-architecture-v2-skill-check target"
 )
-verify_match = re.search(r"(?m)^verify:\s*(.*)$", makefile)
-assert verify_match, "Makefile missing verify target"
-assert "cli-architecture-v2-skill-check" not in verify_match.group(1), (
-    "focused skill check must not join global make verify without separate approval"
+def make_rule(text: str, target: str) -> str:
+    lines = text.splitlines()
+    start = next(
+        (index for index, line in enumerate(lines) if re.match(rf"^{re.escape(target)}\s*:", line)),
+        None,
+    )
+    assert start is not None, f"Makefile missing {target} target"
+    block = [lines[start]]
+    for line in lines[start + 1 :]:
+        if line and not line[0].isspace() and re.match(r"^[A-Za-z0-9_.-]+\s*:", line):
+            break
+        block.append(line)
+    return "\n".join(block)
+
+verify_rule = make_rule(makefile, "verify")
+assert "cli-architecture-v2-skill-check" not in verify_rule, (
+    "focused skill check must not join the complete global make verify rule without approval"
 )
+# Regression: recipe-line wiring must be visible, not only same-line prerequisites.
+assert "cli-architecture-v2-skill-check" in make_rule(
+    "verify: test\n\t$(MAKE) cli-architecture-v2-skill-check\nnext:\n\ttrue\n", "verify"
+), "Make rule parser must include recipe lines"
 
 for path in [skill_path, *(skill_dir / "references" / name for name in reference_names)]:
     text = path.read_text()
@@ -173,8 +190,10 @@ cat >"$tmp_go" <<'GO'
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
+	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -184,6 +203,18 @@ func main() {
 		data, err := os.ReadFile(path)
 		if err != nil {
 			panic(err)
+		}
+		if strings.HasSuffix(path, "SKILL.md") {
+			const opening = "---\n"
+			if !bytes.HasPrefix(data, []byte(opening)) {
+				panic(fmt.Errorf("parse %s: missing frontmatter", path))
+			}
+			rest := data[len(opening):]
+			end := bytes.Index(rest, []byte("\n---\n"))
+			if end < 0 {
+				panic(fmt.Errorf("parse %s: unterminated frontmatter", path))
+			}
+			data = rest[:end]
 		}
 		var value any
 		if err := yaml.Unmarshal(data, &value); err != nil {
@@ -195,6 +226,7 @@ GO
 (
     cd "$repo_root"
     go run "$tmp_go" \
+        .agents/skills/cli-architecture-v2-delivery/SKILL.md \
         .agents/skills/cli-architecture-v2-delivery/agents/openai.yaml \
         .agents/agentic-delivery/matrices/task-skill-matrix.yaml
 )
