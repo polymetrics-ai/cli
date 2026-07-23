@@ -19,21 +19,22 @@
       "9d9b8ea2167ce534289bc48204ffafb3d3670c18",
       "813f1d14661e4a2ee73fd2719956deaf83468dd7",
       "2809c677c8da996932fb2b2738fcc8dbf74aaa56",
-      "0e210d1819f2642ee600aa6921873997101ba7bd"
+      "0e210d1819f2642ee600aa6921873997101ba7bd",
+      "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f"
     ]
   },
-  "status": "captain_impact_lab_focused_green_full_verification_pending",
-  "verificationPassed": false,
+  "status": "post_correction_full_verification_passed_review_pending",
+  "verificationPassed": true,
   "verificationEvidence": {
-    "exactImplementationHead": "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
-    "focused": "passed",
-    "goVet": "passed",
-    "goTest20m": "passed",
-    "goBuild": "passed",
-    "goModVerify": "passed",
-    "goModTidyDiff": "passed",
-    "makeVerify": "passed_historical_before_captain_corrections",
-    "finalEvidenceCommitRerun": "superseded_full_post_correction_rerun_required"
+    "exactImplementationHead": "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
+    "focused": "passed_post_correction",
+    "goVet": "passed_post_correction",
+    "goTest20m": "passed_post_correction",
+    "goBuild": "passed_post_correction",
+    "goModVerify": "passed_post_correction",
+    "goModTidyDiff": "passed_post_correction",
+    "makeVerify": "passed_post_correction",
+    "finalEvidenceCommitRerun": "pending_before_exact_head_review"
   },
   "localCodex": {
     "status": "pending",
@@ -104,6 +105,11 @@
       "cycle": "conditional_merge_authorization",
       "decision": "not_spawned_human_gate",
       "reason": "Captain conditionally authorized Firstmate to merge this stacked PR into feat/cli-architecture-v2 only after every implementation, measurement, exact-head Codex, Shepherd, no-mistakes, and CI gate is green. This execution remains no-merge and reports the green open PR; parent PR #438 remains draft/human-only."
+    },
+    {
+      "cycle": "post_correction_verify",
+      "decision": "local_critical_path",
+      "reason": "At exact head e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f, focused graph/lab/PM gates, Python/Shellcheck/JSON/YAML checks, Go format no-diff, vet, 20-minute tests, build, module checks, and make verify all passed. Final evidence-commit rerun remains before exact-head review."
     }
   ],
   "measurement": {

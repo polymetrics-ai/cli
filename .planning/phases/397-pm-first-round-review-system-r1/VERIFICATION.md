@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** algorithm research selected; captain impact-graph/lab RED→GREEN and all post-correction gates pending; earlier verification is historical
+**Status:** captain impact-graph/lab corrections and full local gates passed at `e4ca19ce8`; final evidence-head rerun/review pending
 
 ## Identity and scope
 
@@ -134,20 +134,20 @@ The pre-correction passes at `7f1b2d8fe`/`5601be8d0` are historical and do not s
 After both correction GREENs on one committed exact head:
 
 - [x] Focused graph/lab/PM gates pass at exact implementation head `0e210d1819f2642ee600aa6921873997101ba7bd`.
-- [ ] Shellcheck is available and passes for all changed shell scripts.
-- [ ] JSON/YAML parsing passes.
-- [ ] Go formatting produces no product diff.
-- [ ] `go vet ./...` passes.
-- [ ] `go test -timeout 20m ./...` passes.
-- [ ] `go build ./cmd/pm` passes.
-- [ ] `go mod verify` passes.
-- [ ] `go mod tidy -diff` passes.
-- [ ] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
+- [x] Shellcheck is available and passes for all changed shell scripts.
+- [x] JSON/YAML parsing passes.
+- [x] Go formatting produces no product diff.
+- [x] `go vet ./...` passes.
+- [x] `go test -timeout 20m ./...` passes (`internal/cli` observed 472.174s).
+- [x] `go build ./cmd/pm` passes.
+- [x] `go mod verify` passes.
+- [x] `go mod tidy -diff` passes.
+- [x] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
 
 ## Review and delivery
 
 - [x] Captain's 2026-07-24 conditional Firstmate merge authorization is recorded; this agent remains no-merge, parent PR #438 remains draft/human-only, and the deliverable is a green open stacked PR.
-- [ ] Exact corrected implementation commit exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
+- [x] Exact corrected verified commit `e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f` exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
 - [ ] Every finding has a canonical disposition.

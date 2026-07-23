@@ -26,3 +26,4 @@
 - Required next RED: separate frozen graph/lab correction corpus plus real integration failures for reverse leaf, both-direction script/package, authority, generator, Go test/importer/variant, cycle/bound, unknown, unrelated control, exact coverage, lab denial/limits/cleanup/identity/concurrency/hypothesis/migration.
 - Same stable lineage and `0/5` budget continue; captain requirements do not reset the lineage.
 - 2026-07-24 decision: Firstmate may conditionally merge the all-green stacked PR into `feat/cli-architecture-v2`; this agent remains no-merge and must report the green open PR. PR #438 into `main` remains separately human-gated.
+- Post-correction verification: focused graph/lab/PM gates and all full repository gates including `make verify` passed at exact head `e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f`; final evidence-commit exact-head rerun remains before packet review.
