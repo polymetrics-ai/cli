@@ -1,0 +1,77 @@
+{
+  "phase": "397-cli-architecture-v2-delivery-skill",
+  "status": "ready_for_stacked_delivery",
+  "parent_issue": 397,
+  "parent_pr": 438,
+  "parent_branch": "feat/cli-architecture-v2",
+  "workflow": "manual-universal-loop",
+  "gsd": {
+    "doctor": "passed",
+    "registered_commands": 69,
+    "programming_loop": "unavailable: unknown GSD command or prompt",
+    "fallback": "PLAN -> RED -> GREEN -> REFACTOR -> VERIFY -> REVIEW -> Shepherd -> stacked delivery"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The worker corrected the task to CLI Architecture v2 issue #397, incorporated the independent skill-gap audit and adoption decision, and declared the isolated write scope before production edits."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "The focused contract was committed and reproduced RED for the missing delivery skill before GREEN implementation."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "The worker added only the approved delivery router, three references, routing cross-links, dated evidence, and focused validation."
+    },
+    {
+      "cycle": "verify",
+      "decision": "read_only_spawned",
+      "reason": "Fresh independent Codex verifier contexts reviewed exact heads while the worker ran focused and full repository gates."
+    },
+    {
+      "cycle": "gap-loop",
+      "decision": "local_critical_path",
+      "reason": "Every actionable review finding was fixed and rechecked without expanding product or dependency scope."
+    },
+    {
+      "cycle": "summary",
+      "decision": "local_critical_path",
+      "reason": "The worker recorded scope, checks, review limitations, human gates, and the approved stacked delivery path in phase artifacts."
+    }
+  ],
+  "deliveryDecision": {
+    "decision": "captain_approved_direct_stack",
+    "reason": "The installed no-mistakes version hardcodes origin/main; direct draft delivery to feat/cli-architecture-v2 was explicitly approved."
+  },
+  "scope": {
+    "program_delivery_skill_only": true,
+    "product_behavior_changed": false,
+    "runtime_dependency_changed": false,
+    "shared_parent_state_changed": false,
+    "global_verify_wiring_changed": false
+  },
+  "evidence": {
+    "red_commit": "8a459be64",
+    "green_commit": "d81163f70",
+    "review_fix_commit": "2ba47dc30",
+    "focused_checks": "passed",
+    "go_vet": "passed",
+    "go_test_all": "passed",
+    "go_build_pm": "passed",
+    "make_verify": "passed",
+    "independent_review": "pre-artifact head passed after two fixes; final-head rerun required after evidence changes",
+    "shepherd": "pre-artifact head 2ba47dc30: PROCEED; trajectory geometric mean 4.52; final-head rerun required"
+  },
+  "verificationPassed": true,
+  "verificationScope": "focused skill/YAML/link/routing checks, go vet, go test ./..., go build ./cmd/pm, and make verify passed at the submitted head before final review fixes",
+  "review_constraints": {
+    "active_external_bot_exclusions_obeyed": true,
+    "final_head_review": "owned by no-mistakes stacked delivery",
+    "parent_merge": "human-only"
+  },
+  "last_updated": "2026-07-23"
+}
