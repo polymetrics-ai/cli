@@ -60,6 +60,25 @@
     "deterministic_digest": "539a4fb6bbede9842e386f04ee6e3c820c1c86e2bc8cab2629b24d8c263f3c68",
     "exact_head_invalidation": true
   },
+  "measured_implementation_head": {
+    "head": "0e210d1819f2642ee600aa6921873997101ba7bd",
+    "tree": "bf08d2fa5ff25758950d2f5e90b9227fbd3aa167",
+    "compile_status": "ready",
+    "changed_files": 38,
+    "changed_lines": 6061,
+    "index_files": 759,
+    "index_bytes": 5770151,
+    "indexed_edges": 798,
+    "certainty": {"active": 670, "inactive": 109, "unknown": 19},
+    "impact_files": 116,
+    "impact_edges": 439,
+    "graph_bound_hit": false,
+    "packets": 17,
+    "manifest_bytes": 988290,
+    "compile_runs_ms": [742.359, 744.057, 742.801],
+    "compile_median_ms": 742.801,
+    "claim": "deterministic practical file/package context only; actual model review has not run"
+  },
   "lab_safety_integration": {
     "local_backend": "macos_sandbox_exec",
     "safe_counterfactual": "passed",

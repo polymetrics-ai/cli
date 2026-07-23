@@ -36,6 +36,7 @@ independent/downstream; and publish only measured fixture/replay claims.
 - `.planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-one-time-review-waiver-and-merge-2026-07-23.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-snyk-deferral-2026-07-23.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-review-system-conditional-merge-authorization-2026-07-24.md`
 - PR #495 accepted source head `fc7167990c92292625493f05b495c70e2c7ce886`; squash on parent `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 
 Historical PR #495 findings and pending review/Shepherd records remain historical evidence. This
@@ -292,7 +293,10 @@ cannot authorize clean. Commit/push GREEN additively.
   authorizing it.
 - Open a Conventional Commit PR title, target `feat/cli-architecture-v2`, use `Refs #397`, and report
   full PR URL, exact source/head, risk, metrics, limitations, and 0–5 correction-round usage.
-- Do not merge.
+- Do not merge in this execution. The 2026-07-24 decision conditionally authorizes Firstmate—not
+  this agent—to use the guarded parent-branch merge path only after implementation, measurement,
+  exact-head packet review, independent Shepherd, no-mistakes, and CI are all green. Report the green
+  open PR and landed-commit verification remains Firstmate-owned if that authorization is exercised.
 
 ## Human and safety gates
 
@@ -300,7 +304,8 @@ cannot authorize clean. Commit/push GREEN additively.
 - No dependency additions.
 - No generic shell/HTTP/SQL write tools.
 - Reverse ETL remains plan → preview → approval → execute.
-- No parent/default-branch merge.
+- No merge by this agent. Firstmate has conditional authority for this stacked PR into the parent
+  branch only after every gate; parent PR #438 into `main` remains draft/human-only.
 - No Claude or Copilot. The captain ship instructions and current canonical PM route supersede the
   legacy generic automated-review language in `AGENTS.md` for this task.
 - Quality gates are not reduced.

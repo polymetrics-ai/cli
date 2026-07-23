@@ -15,10 +15,14 @@
     "headHistory": [
       "cb6b2c771347133e35e369efbb381b3a024476e0",
       "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
-      "5601be8d01f9f0044a5e7e875be5669f7d6fc280"
+      "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
+      "9d9b8ea2167ce534289bc48204ffafb3d3670c18",
+      "813f1d14661e4a2ee73fd2719956deaf83468dd7",
+      "2809c677c8da996932fb2b2738fcc8dbf74aaa56",
+      "0e210d1819f2642ee600aa6921873997101ba7bd"
     ]
   },
-  "status": "captain_impact_lab_red_captured_green_pending",
+  "status": "captain_impact_lab_focused_green_full_verification_pending",
   "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
@@ -90,6 +94,16 @@
       "cycle": "captain_correction_red",
       "decision": "local_critical_path",
       "reason": "Separate correction inputs/oracle were frozen. Focused test exited 1 for 17 missed defect fixtures plus absent v2 impact graph, bound/migration fail-open, absent safe lab runner, and missing hypothesis/migration synthesis checks; four clean controls stayed clean."
+    },
+    {
+      "cycle": "captain_correction_green",
+      "decision": "local_critical_path",
+      "reason": "At exact implementation head 0e210d1819f2642ee600aa6921873997101ba7bd, the typed bidirectional practical impact graph, complete impact packets, versioned synthesis, and fail-closed disposable hypothesis lab pass focused detector, real Git/Go/parser, sandbox denial, limit, cleanup, identity, concurrency, PM-contract, and model-routing tests. Full post-correction verification remains pending."
+    },
+    {
+      "cycle": "conditional_merge_authorization",
+      "decision": "not_spawned_human_gate",
+      "reason": "Captain conditionally authorized Firstmate to merge this stacked PR into feat/cli-architecture-v2 only after every implementation, measurement, exact-head Codex, Shepherd, no-mistakes, and CI gate is green. This execution remains no-merge and reports the green open PR; parent PR #438 remains draft/human-only."
     }
   ],
   "measurement": {
@@ -101,7 +115,12 @@
     "prospectiveStatus": "unavailable",
     "algorithmResearchArtifact": ".planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md",
     "algorithmBenchmarkExactHead": "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
-    "algorithmSelection": "typed directed multigraph; materialized forward/reverse adjacency; deterministic multi-source relation-policy BFS; exact-head cold rebuild; authoritative go list; fail-closed bounds"
+    "algorithmSelection": "typed directed multigraph; materialized forward/reverse adjacency; deterministic multi-source relation-policy BFS; exact-head cold rebuild; authoritative go list; fail-closed bounds",
+    "correctionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/CORRECTION-MEASUREMENT.json",
+    "correctionBaselineRecall": 0.0,
+    "correctionTreatmentFixtureRecall": 1.0,
+    "correctionTreatmentFixturePrecision": 1.0,
+    "measuredImplementationHead": "0e210d1819f2642ee600aa6921873997101ba7bd"
   },
   "readyQueue": [
     {
@@ -120,12 +139,12 @@
       "reason": "All 18 PR #493-owned paths are forbidden for this branch."
     }
   ],
-  "terminalHumanGate": "correction rounds greater than 5; any dependency/secret/auth/destructive/quality-gate decision; any merge of this stacked PR into feat/cli-architecture-v2; or any parent PR merge to main",
+  "terminalHumanGate": "correction rounds greater than 5; any dependency/secret/auth/destructive/quality-gate decision; agent merge prohibited; Firstmate may conditionally merge this stacked PR into feat/cli-architecture-v2 only after every named gate; parent PR #438 merge to main remains separately human-gated",
   "humanGates": [
     "new dependencies",
     "secrets or credentialed checks",
     "quality-gate reduction",
-    "merge this stacked PR into feat/cli-architecture-v2",
-    "parent PR merge to main"
+    "agent must not merge; report green stacked PR for conditionally authorized Firstmate path",
+    "parent PR #438 merge to main requires separate explicit instruction"
   ]
 }

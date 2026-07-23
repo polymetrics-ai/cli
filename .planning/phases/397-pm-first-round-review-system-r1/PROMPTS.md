@@ -25,3 +25,4 @@
 - Evidence-selected graph: typed directed multigraph, materialized forward/reverse adjacency, deterministic multi-source relation-policy BFS, three-valued certainty, authoritative `go list`, fail-closed graph/packet bounds, exact-head cold rebuild, no new dependency.
 - Required next RED: separate frozen graph/lab correction corpus plus real integration failures for reverse leaf, both-direction script/package, authority, generator, Go test/importer/variant, cycle/bound, unknown, unrelated control, exact coverage, lab denial/limits/cleanup/identity/concurrency/hypothesis/migration.
 - Same stable lineage and `0/5` budget continue; captain requirements do not reset the lineage.
+- 2026-07-24 decision: Firstmate may conditionally merge the all-green stacked PR into `feat/cli-architecture-v2`; this agent remains no-merge and must report the green open PR. PR #438 into `main` remains separately human-gated.

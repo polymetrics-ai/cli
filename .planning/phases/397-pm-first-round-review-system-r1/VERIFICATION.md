@@ -58,31 +58,31 @@
 ## Bidirectional practical impact graph
 
 - [x] Separate correction inputs/oracle are frozen and hashed before GREEN; old root/outgoing behavior failed 17 defect fixtures and real integration assertions while four clean controls stayed clean.
-- [ ] Union of every changed file and canonical roots forms seeds; declared universe is indexed before traversal.
-- [ ] Every edge records stable id, source, target, relation/direction, parser, provenance reason/location, and `active|inactive|unknown` certainty.
-- [ ] Markdown/frontmatter/JSON/YAML, shell, Python, authoritative Go package/test/import/current-build, authority, generator/generated, lateral, mirror, and temporal edges are covered.
-- [ ] Reverse leaf, script both directions, authority, generated chain, Go importer/test, platform variant, cycle, unknown conditional, and unrelated control pass.
-- [ ] Iterative deterministic relation-policy BFS terminates on cycles; a continuing frontier or any index/node/edge/depth/file/token/Go-command bound blocks explicitly.
-- [ ] Missing active edges and unresolved unknowns include safely or block; inactive edges do not become active.
-- [ ] Complete impact files and edge ids enter exact-version coverage and bounded packets only after discovery.
-- [ ] Missing/stale impact response coverage, overflow, truncation, or graph-bound evidence cannot synthesize clean.
-- [ ] Output distinguishes practical file/package impact from unavailable symbol-level call/data-flow coverage.
+- [x] Union of every changed file and canonical roots forms seeds; declared universe is indexed before traversal.
+- [x] Every edge records stable id, source, target, relation/direction, parser, provenance reason/location, and `active|inactive|unknown` certainty.
+- [x] Markdown/frontmatter/JSON/YAML, shell, Python, authoritative Go package/test/import/current-build, authority, generator/generated, lateral, mirror, and temporal edges are covered.
+- [x] Reverse leaf, script both directions, authority, generated chain, Go importer/test, platform variant, cycle, unknown conditional, and unrelated control pass.
+- [x] Iterative deterministic relation-policy BFS terminates on cycles; a continuing frontier or any index/node/edge/depth/file/token/Go-command bound blocks explicitly.
+- [x] Missing active edges and unresolved unknowns include safely or block; inactive edges do not become active.
+- [x] Complete impact files and edge ids enter exact-version coverage and bounded packets only after discovery.
+- [x] Missing/stale impact response coverage, overflow, truncation, or graph-bound evidence cannot synthesize clean.
+- [x] Output distinguishes practical file/package impact from unavailable symbol-level call/data-flow coverage.
 
 ## Counterfactual hypothesis lab
 
 - [x] Old system's absent lab support and missing response/synthesis semantics are captured as RED before production lab code.
-- [ ] Every experiment uses a detached disposable exact-head copy under a private temporary root; canonical candidate stays clean/read-only.
-- [ ] Environment/config/credentials are scrubbed; captured artifacts contain no secret sentinel.
-- [ ] Canonical/outside/symlink writes and cross-lab access are denied.
-- [ ] Network, generic shell, commit/push/PR/remote mutation, install, credential/live connector, deployment, and destructive external commands are denied.
-- [ ] A proven OS sandbox is required; unavailable/ambiguous/policy-only fallback blocks clean experiments.
-- [ ] Time/process/disk/output bounds, descendant termination, evidence bounds, and whole-lab destruction are enforced.
-- [ ] Candidate exact base/head/tree/status are proven unchanged before/after; drift or cleanup failure blocks synthesis.
-- [ ] Evidence captures hypothesis/alternative, examined impact edges, temporary diff hash/summary, argv, expected discriminator, stdout/stderr, exit, duration, observation, and support.
-- [ ] Competing hypotheses discriminate; an inconclusive performed experiment cannot prove clean; decisive static evidence uses an explicit no-experiment reason.
-- [ ] Concurrent packet labs are isolated and an unrelated clean control performs no unnecessary experiment.
-- [ ] Graph/lab/packet/response/synthesis contracts are versioned; incompatible v1 migration fixtures fail closed.
-- [ ] Focused PM tests remain transitively present in repository `make verify`/CI routing.
+- [x] Every experiment uses a detached disposable exact-head copy under a private temporary root; canonical candidate stays clean/read-only.
+- [x] Environment/config/credentials are scrubbed; captured artifacts contain no secret sentinel.
+- [x] Canonical/outside/symlink writes and cross-lab access are denied.
+- [x] Network, generic shell, commit/push/PR/remote mutation, install, credential/live connector, deployment, and destructive external commands are denied.
+- [x] A proven OS sandbox is required; unavailable/ambiguous/policy-only fallback blocks clean experiments.
+- [x] Time/process/disk/output bounds, descendant termination, evidence bounds, and whole-lab destruction are enforced.
+- [x] Candidate exact base/head/tree/status are proven unchanged before/after; drift or cleanup failure blocks synthesis.
+- [x] Evidence captures hypothesis/alternative, examined impact edges, temporary diff hash/summary, argv, expected discriminator, stdout/stderr, exit, duration, observation, and safety proof.
+- [x] Competing hypotheses discriminate; an inconclusive performed experiment cannot prove clean; decisive static evidence uses an explicit no-experiment reason.
+- [x] Concurrent packet labs cannot inspect peers and are destroyed; an unrelated clean control performs no unnecessary experiment.
+- [x] Graph/lab/packet/response/synthesis contracts are versioned; incompatible v1 migration fixtures fail closed.
+- [x] Focused PM tests remain transitively present in repository `make verify`/CI routing.
 
 ## Measurement
 
@@ -94,10 +94,10 @@
 - [x] Corpus provenance/hash and fixture-level blinding limitation are explicit.
 - [x] Unavailable token/cost/prospective evidence is explicit.
 - [x] Packet artifacts contain paths/metadata only; environment-sentinel regression proves no environment-value copy.
-- [ ] Correction measurement separates static/semantic findings, impact-graph coverage, lab experiments/safety/cleanup, deterministic mutation results, actual packet metrics, and prospective evidence.
-- [ ] Baseline/treatment reports impact recall/precision, edge/file coverage, bound hits, cold/traversal time, memory availability, determinism, invalidation, impact size, and packet consequences.
-- [ ] Lab measurement reports attempted/denied/completed/inconclusive experiments, cleanup/identity proofs, latency, output/disk/process bounds, and available model token/cost fields.
-- [ ] Public fixtures are labeled regression evidence rather than a secret benchmark; prospective #493/#408/later Architecture v2 evidence remains unavailable until observed.
+- [x] Correction measurement separates static/semantic findings, impact-graph coverage, lab experiments/safety/cleanup, deterministic mutation results, actual packet metrics, and prospective evidence.
+- [x] Baseline/treatment reports impact recall/precision, edge/file coverage, bound hits, cold/traversal time, memory availability, determinism, invalidation, impact size, and packet consequences.
+- [x] Lab measurement reports attempted/denied/completed/inconclusive experiments, cleanup/identity proofs, latency, output/disk/process bounds, and available model token/cost fields.
+- [x] Public fixtures are labeled regression evidence rather than a secret benchmark; prospective #493/#408/later Architecture v2 evidence remains unavailable until observed.
 
 ## Focused commands
 
@@ -133,7 +133,7 @@ make verify
 The pre-correction passes at `7f1b2d8fe`/`5601be8d0` are historical and do not satisfy delivery.
 After both correction GREENs on one committed exact head:
 
-- [ ] Focused graph/lab/PM gates pass.
+- [x] Focused graph/lab/PM gates pass at exact implementation head `0e210d1819f2642ee600aa6921873997101ba7bd`.
 - [ ] Shellcheck is available and passes for all changed shell scripts.
 - [ ] JSON/YAML parsing passes.
 - [ ] Go formatting produces no product diff.
@@ -146,6 +146,7 @@ After both correction GREENs on one committed exact head:
 
 ## Review and delivery
 
+- [x] Captain's 2026-07-24 conditional Firstmate merge authorization is recorded; this agent remains no-merge, parent PR #438 remains draft/human-only, and the deliverable is a green open stacked PR.
 - [ ] Exact corrected implementation commit exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
