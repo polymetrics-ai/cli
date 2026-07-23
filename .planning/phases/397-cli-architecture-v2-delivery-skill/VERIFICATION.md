@@ -10,7 +10,7 @@
   `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`.
 - [x] Existing `bubble-tea-tui-design`, design docs, ADRs, #397 artifacts, and routing inspected.
 - [x] Direct parent-orchestrator agent absence and bounded advisory fallback recorded.
-- [ ] Separate `skill-gap-spec.md` audit read before skill design freezes.
+- [x] Separate `skill-gap-spec.md` audit and adoption decision read before skill design froze.
 - [ ] No generic `go-tui-development` skill added.
 
 ## Program Research
@@ -36,17 +36,19 @@
 - [ ] Track B routes to ADR 0003 and `bubble-tea-tui-design` without duplicating it.
 - [ ] Track C routes to ADR 0004 and observability/performance/security skills.
 - [ ] Parent queue/integration/readiness ownership remains with the live parent orchestrator.
-- [ ] Five focused references cover routing, invariants, stacked integration, evidence, and final
-  readiness.
+- [ ] Three focused references cover state/dependencies, per-phase delivery, and parent
+  integration/review without duplicating specialist implementation.
 - [ ] Required routing and task matrix select the skill for #397 work.
 - [ ] MUST/SHOULD/MAY and a program-slice definition of done are explicit.
 
 ## Automated Validation
 
 - [ ] Focused RED fails before skill/routing implementation.
-- [ ] Focused GREEN passes.
-- [ ] Frontmatter, trigger terms, Markdown/local links, YAML parsing, routing, and contradiction
-  markers are validated without a new dependency.
+- [ ] Focused GREEN passes directly and through `make cli-architecture-v2-skill-check`.
+- [ ] Frontmatter, trigger terms, Markdown/local links, YAML routing, and contradiction markers are
+  validated without a new dependency.
+- [ ] Focused target is not wired into global `make verify`.
+- [ ] `scripts/tests/pi-model-routing.sh`
 - [ ] `go test ./...`
 - [ ] `go vet ./...`
 - [ ] `go build ./cmd/pm`
@@ -63,5 +65,5 @@
 - [ ] #419 remains deferred and no dependency approval is implied.
 - [ ] No Claude or GitHub Copilot review invoked.
 - [ ] Changes committed on the worker branch.
-- [ ] Final no-mistakes run is deferred until firstmate instructs the shipping stage.
+- [x] Firstmate instructed the no-mistakes shipping stage after focused implementation/validation.
 - [ ] Final stacked PR targets `feat/cli-architecture-v2`, uses `Refs #397`, and remains unmerged.

@@ -23,31 +23,35 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 
 ## Red: Program Delivery Skill Contract
 
-- Status: planned.
-- Test: test-only Go package, disjoint from product CLI/UI packages.
+- Status: ready after audit/adoption approval; execute before skill production files.
+- Test: `scripts/tests/cli-architecture-v2-delivery-skill.sh`, invoked directly and through the
+  focused `make cli-architecture-v2-skill-check` target. It MUST remain outside global
+  `make verify` in this change.
 - Required failures before implementation:
-  - `cli-architecture-v2-delivery/SKILL.md` and focused references do not exist;
+  - `cli-architecture-v2-delivery/SKILL.md`, three references, and `agents/openai.yaml` do not exist;
   - force triggers do not cover #397/PR #438, Cobra/Viper, events/TUI, observability, stacked
-    orchestration, GSD/TDD, exact-head review, and parent readiness;
-  - routing does not name the new skill or task group;
-  - YAML and local links cannot validate;
+    orchestration, GSD/TDD, exact-head review, Shepherd, and parent readiness;
+  - `AGENTS.md`, required-skills routing, task matrix, and Bubble Tea cross-link do not route the
+    new skill;
+  - local links cannot validate;
   - specialist-boundary and volatile-state contradiction markers are absent.
-- Command: `go test ./internal/agentdocs` (or the final disjoint test-only package selected before
-  RED).
+- RED command: `scripts/tests/cli-architecture-v2-delivery-skill.sh`.
 
 ## Green: Program Router And References
 
 - Status: pending.
 - Target:
-  - concise `cli-architecture-v2-delivery/SKILL.md`;
-  - phase/track routing and dependency rules;
-  - machine-readable CLI/parity invariants;
-  - stacked branch/write-scope/integration procedure;
-  - GSD/TDD/exact-head evidence contract;
-  - final parent readiness/human-gate checklist;
-  - dated #397 research/gap artifact;
-  - required routing and task matrix entries.
-- Focused command: `go test ./internal/agentdocs`.
+  - concise `cli-architecture-v2-delivery/SKILL.md` and `agents/openai.yaml`;
+  - `state-and-dependency-model.md`;
+  - `phase-delivery-checklist.md`;
+  - `parent-integration-and-review.md`;
+  - dated #397 source/gap evidence outside evergreen rules;
+  - force-trigger, required routing, task matrix, and Bubble Tea cross-link entries;
+  - focused shell validation plus focused Make target only.
+- Focused commands:
+  - `scripts/tests/cli-architecture-v2-delivery-skill.sh`;
+  - `make cli-architecture-v2-skill-check`;
+  - `scripts/tests/pi-model-routing.sh`.
 
 ## Refactor
 
@@ -55,5 +59,6 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 - Remove any copied queue, SHA, model, bot availability, or issue-status prose from the evergreen
   skill.
 - Keep TUI implementation guidance in `bubble-tea-tui-design` and Go mechanics in routed Go skills.
-- Verify #419 remains deferred, parent/main merge remains human-gated, and review-bot exclusions for
-  this task are recorded only in dated delivery evidence.
+- Verify #419-like human deferrals use `deferred_by_human`, parent/main merge remains human-gated,
+  and active review constraints override configured reviewer routes without being hard-coded into
+  evergreen prose.

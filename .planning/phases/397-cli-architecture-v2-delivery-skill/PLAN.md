@@ -58,48 +58,56 @@ behavior.
 
 1. Audit the live parent branch, PR #438, issue #397/subissues, integrated phase artifacts, current
    code/dependencies, routing, and existing skills.
-2. Incorporate the separate read-only #397 audit's `skill-gap-spec.md` before freezing design.
+2. Incorporate the separate read-only #397 audit's `skill-gap-spec.md` and the dated adoption
+   decision before freezing design. Both were received and approved on 2026-07-23.
 3. Retain only research that informs #397 delivery; compare alternative TUI frameworks only to
    verify that issue #462's existing Bubble Tea decision does not need reopening.
-4. Add `.agents/skills/cli-architecture-v2-delivery/` only if the audit confirms no equivalent.
+4. Add the approved `.agents/skills/cli-architecture-v2-delivery/` router with exactly three stable
+   references and an OpenAI discovery manifest; do not add a generic TUI skill.
 5. Keep volatile queue/head/review status in a dated project artifact, never evergreen skill prose.
-6. Route any #397 phase through the delivery skill and then to track specialists in
-   `required-skills-routing.md` and `task-skill-matrix.yaml`.
-7. Add a focused test-only contract for frontmatter, force triggers, internal links, YAML routing,
-   contradiction markers, and non-duplication of `bubble-tea-tui-design`.
-8. Run focused and repository gates, update evidence, commit, and hand off to firstmate before the
-   no-mistakes shipping stage.
+6. Route any #397 phase through the delivery skill and then to track specialists in `AGENTS.md`,
+   `required-skills-routing.md`, and `task-skill-matrix.yaml`; add only a cross-link to
+   `bubble-tea-tui-design`.
+7. Add the approved focused shell contract and focused Make target for frontmatter, force triggers,
+   internal links, YAML routing, contradiction markers, and specialist boundaries. Do not add this
+   temporary program check to global `make verify`.
+8. Run focused and repository gates, update evidence, commit, then use the no-mistakes stacked-PR
+   lifecycle with `feat/cli-architecture-v2` as the base and active no-Claude/no-Copilot constraint.
 
 ## Red / Green / Refactor
 
-- **Red:** contract test expects `cli-architecture-v2-delivery`, its five focused references,
-  required #397/PR #438/track triggers, routing entries, resolvable links, and preserved specialist
-  boundaries before those files exist.
-- **Green:** add the smallest complete orchestration/router skill, references, dated gap artifact,
-  and two routing updates.
+- **Red:** focused shell contract expects `cli-architecture-v2-delivery`, its three stable
+  references and agent manifest, required #397/PR #438/track triggers, routing entries, resolvable
+  links, and preserved specialist boundaries before those files exist.
+- **Green:** add the smallest complete orchestration/router skill, three references, routing,
+  Bubble Tea cross-link, focused Make target, and dated evidence artifact.
 - **Refactor:** remove copied queue/head/status and specialist implementation detail; verify no
   contradiction with ADRs, parent contracts, `bubble-tea-tui-design`, or captain's no-review-bot
-  route.
+  route. Keep the focused check out of global `make verify`.
 
 ## Write Scope
 
 Expected:
 
 - `.agents/skills/cli-architecture-v2-delivery/**`
+- `.agents/skills/bubble-tea-tui-design/SKILL.md` (cross-link only)
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - `.agents/agentic-delivery/matrices/task-skill-matrix.yaml`
-- one disjoint test-only validation package
+- `scripts/tests/cli-architecture-v2-delivery-skill.sh`
+- `Makefile` (focused target only)
+- `AGENTS.md` (required-skill force trigger only)
 - `.planning/phases/397-cli-architecture-v2-delivery-skill/**`
 
 Do not edit shared `.planning/phases/397-cli-architecture-v2-orchestration/**`, parent queue/state,
-`AGENTS.md`, product CLI/UI code, help/manual/website surfaces, dependencies, or GitHub issues.
+product CLI/UI code, help/manual/website surfaces, dependencies, or GitHub issues.
 
 ## Hard Boundaries
 
 - No product feature or runtime dependency.
-- No duplicate generic TUI skill and no rewrite of `bubble-tea-tui-design` without a verified gap.
+- No duplicate generic TUI skill and no `bubble-tea-tui-design` change beyond the approved
+  program-delivery cross-link.
 - No queue arbitration, worker spawning, sub-PR integration, parent PR readiness, or parent-branch
-  push owned by this worker.
+  push owned by this worker; the worker may create only its validated stacked PR.
 - No secrets, credentialed connector checks, runtime lifecycle, generic write tools, or reverse ETL
   execution.
 - #419 remains explicitly deferred; this task grants no dependency approval.
