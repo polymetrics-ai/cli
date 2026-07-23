@@ -1,0 +1,39 @@
+{
+  "schema_version": "canonical_v2",
+  "candidate_lineage": {
+    "id": "1111111111111111111111111111111111111111...pr-42-lineage",
+    "exact_base_sha": "1111111111111111111111111111111111111111",
+    "replacement_heads": [
+      "2222222222222222222222222222222222222222",
+      "3333333333333333333333333333333333333333"
+    ]
+  },
+  "correction_budget": {
+    "max_correction_rounds": 4,
+    "rounds_by_range": {
+      "1111111111111111111111111111111111111111...pr-42-lineage": 5
+    }
+  },
+  "automated_review": {
+    "primary_route": "blocked",
+    "status": "blocked",
+    "exact_base_sha": "1111111111111111111111111111111111111111",
+    "exact_head_sha": "3333333333333333333333333333333333333333",
+    "reviewed_range": "1111111111111111111111111111111111111111...3333333333333333333333333333333333333333",
+    "disposition_summary": "stable candidate lineage exceeded correction cap; human decision required",
+    "local_codex": {
+      "reviewer_identity": "fresh-review-5",
+      "fresh_context": true,
+      "exact_base_sha": "1111111111111111111111111111111111111111",
+      "exact_head_sha": "3333333333333333333333333333333333333333",
+      "status": "blocked",
+      "findings_artifact": "review.md"
+    },
+    "shepherd": {
+      "status": "blocked",
+      "exact_head_sha": "3333333333333333333333333333333333333333",
+      "evidence_artifact": "blocked-before-validation"
+    }
+  },
+  "terminal": "human_gate"
+}

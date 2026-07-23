@@ -80,6 +80,54 @@ for relative in forward_paths:
     forbid(relative, legacy_review_patterns)
     forbid(relative, unavailable_command_patterns)
 
+
+def markdown_dependencies(seeds: list[str]) -> set[str]:
+    pending = list(seeds)
+    seen: set[str] = set()
+    reference = re.compile(r"(?:\.agents|\.pi)/[A-Za-z0-9_./-]+\.md")
+    while pending:
+        relative = pending.pop()
+        if relative in seen:
+            continue
+        seen.add(relative)
+        for dependency in reference.findall(read(relative)):
+            if dependency not in seen and (root / dependency).is_file():
+                pending.append(dependency)
+    return seen
+
+
+pm_entry_paths = forward_paths + [
+    ".pi/prompts/pm-review-loop.md",
+    ".pi/agents/pm-gsd-worker.md",
+    ".pi/agents/pm-issue-worker.md",
+    ".agents/agentic-delivery/agents/coordination/parent-issue-orchestrator.agent.yaml",
+]
+pm_dependencies = markdown_dependencies(pm_entry_paths)
+for deprecated_template in (
+    ".agents/agentic-delivery/contracts/worker-handoff-template.md",
+    ".agents/agentic-delivery/contracts/code-review-disposition-template.md",
+):
+    for relative in sorted(pm_dependencies):
+        if deprecated_template in read(relative):
+            errors.append(
+                f"{relative}: current PM dependency graph reaches bot-era template {deprecated_template}"
+            )
+for canonical_template in (
+    ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
+    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
+):
+    if canonical_template not in pm_dependencies:
+        errors.append(f"PM dependency graph does not reach canonical template: {canonical_template}")
+    require(
+        canonical_template,
+        "exact_base_sha",
+        "exact_head_sha",
+        "local_codex",
+        "shepherd",
+        "human",
+    )
+    forbid(canonical_template, legacy_review_patterns)
+
 require(
     ".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md",
     "Canonical PM fallback",
@@ -127,6 +175,45 @@ require(
     "Subsequent PR #493 migration gate",
     "not_spawned_dependency_blocked",
 )
+require(
+    ".planning/traces/cli-architecture-v2-orchestration-state.yaml",
+    "post_wave1_routing_migration",
+    "pull_request: 493",
+    "blocks_worker_start: true",
+    "not_spawned_dependency_blocked",
+)
+require(
+    ".planning/phases/397-cli-architecture-v2-orchestration/RUN-STATE.json",
+    '"postWave1RoutingMigrationGate"',
+    '"pullRequest": 493',
+    '"blocksWorkerStart": true',
+    "not_spawned_dependency_blocked",
+)
+require(
+    ".planning/phases/397-cli-architecture-v2-orchestration/SUMMARY.md",
+    "PR #493 canonical PM migration gate",
+    "before another CLI Architecture v2 implementation worker starts",
+    "not_spawned_dependency_blocked",
+)
+require(
+    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+    '"correction_budget"',
+    '"rounds_by_range"',
+    "candidate lineage",
+    "read-only legacy input",
+)
+require(
+    ".pi/prompts/pm-auto-loop.md",
+    "correction_budget.max_correction_rounds",
+    "correction_budget.rounds_by_range",
+    "candidate lineage",
+    "read-only legacy input",
+)
+for relative in (
+    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+    ".pi/prompts/pm-auto-loop.md",
+):
+    forbid(relative, {"active per-subissue correction counter": r"guards\.correction_rounds"})
 
 reviewer = read(".pi/agents/pm-reviewer.md")
 if not re.search(r"^tools:.*\bbash\b", reviewer, flags=re.MULTILINE):
@@ -155,6 +242,7 @@ fixtures = {
     "pending": fixture_root / "pending.json",
     "clean": fixture_root / "clean.json",
     "blocked": fixture_root / "blocked.json",
+    "cap_lineage": fixture_root / "correction-cap-lineage.json",
     "historical": fixture_root / "historical-local-codex.json",
 }
 for name, path in fixtures.items():
@@ -176,6 +264,19 @@ for name, path in fixtures.items():
             errors.append(f"{name}: completed Shepherd record lacks verdict")
     elif review.get("status") != "complete_no_unresolved_findings" or "head_sha" not in review:
         errors.append(f"{name}: historical local Codex fixture is not recognized read-only evidence")
+
+cap_fixture = fixtures["cap_lineage"]
+if cap_fixture.is_file():
+    record = json.loads(cap_fixture.read_text())
+    budget = record.get("correction_budget", {})
+    rounds = budget.get("rounds_by_range", {})
+    lineage = record.get("candidate_lineage", {})
+    if len(lineage.get("replacement_heads", [])) < 2:
+        errors.append("cap_lineage: replacement head history is missing")
+    if not rounds or max(rounds.values()) <= budget.get("max_correction_rounds", 0):
+        errors.append("cap_lineage: correction cap is not exceeded on the stable lineage")
+    if record.get("terminal") != "human_gate" or record.get("automated_review", {}).get("status") != "blocked":
+        errors.append("cap_lineage: cap exceed does not persist a blocked human gate")
 
 if errors:
     raise SystemExit("PM orchestrator contract violations:\n- " + "\n- ".join(errors))
