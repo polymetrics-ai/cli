@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension Verification
 
-Status: correction round 3 implemented at `1cd43caacc05d9f6955a614144d6772210248afb`; final evidence-head verification/re-review pending
+Status: correction round 4 implemented at `42ddf3debcad3298d56583ebbdd219e2dbcd8596` (maximum permitted round); final evidence-head verification/re-review pending
 `verificationPassed`: false (latest implementation head has not yet completed the full exact-head gate)
 
 ## Identity and scope
@@ -28,15 +28,17 @@ Status: correction round 3 implemented at `1cd43caacc05d9f6955a614144d6772210248
 - [x] Autonomous state uses stable exact-base/candidate-lineage counters across replacement heads; the old counter is read-only migration input.
 - [x] Scoped #408 subissue, ready queue, top-level gate, summary, and machine branch identity all require the same Wave1-plus-PR #493 transition.
 - [x] Canonical review statuses/dispositions are aligned across schema/workflow/prompt/contracts/templates.
-- [x] Both autonomous drivers use one classifier: correction-cap `human_gate` stops as a blocked human decision; parent readiness remains human-ready.
+- [x] Both autonomous drivers use one classifier: correction-cap and canonical missing/unknown-kind `human_gate` stop as blocked human decisions; explicit parent readiness and detected legacy missing-kind remain human-ready.
+- [x] Canonical producers persist `schema_version`, plain `human_gate`, and the required sibling kind; all other structured gate detail remains outside the terminal string.
+- [x] Exact six-value finding-disposition enum is machine-specified and parsed identically across all applicable PM files.
 
 ## Focused validation
 
 - [x] RED captured before canonical guidance changes.
 - [x] `scripts/tests/pm-orchestrator-contract.sh`.
 - [x] `scripts/tests/pi-model-routing.sh`.
-- [x] YAML/JSON parse checks, including replacement-head/correction-cap and parent-ready fixtures.
-- [x] Shell syntax and terminal-classifier behavior for blocked and ready human gates.
+- [x] YAML/JSON parse checks, including replacement-head/correction-cap, parent-ready, canonical-missing-kind, and historical human-gate fixtures.
+- [x] Shell syntax and terminal-classifier behavior for canonical blocked, canonical ready, and detected legacy human gates.
 - [x] PR #493 changed-path disjointness.
 - [x] no dependency delta.
 
@@ -58,8 +60,9 @@ Status: correction round 3 implemented at `1cd43caacc05d9f6955a614144d6772210248
 - [x] Fresh exact-head local Codex re-review at `0665ad7aad1ec083f4bb0572a88ac1a38f417a35`; F2/F3/F5 confirmed and F6–F8 accepted for correction round 2.
 - [x] Captain-authorized Gong follow-up created at https://github.com/polymetrics-ai/cli/issues/497 without product changes here.
 - [x] Fresh exact-head local Codex re-review at `3af7910528d234d1a1d886a6778d7817495e6321`; N2–N5 accepted and N1 deferred under the no-product boundary.
-- [ ] Fresh exact-head local Codex re-review clean after correction round 3.
-- [ ] Every finding dispositioned; final changed head re-reviewed.
+- [x] Fresh exact-head local Codex re-review at `1d4acf4f633e4f8940ba637f2099723369b2ed30`; N4-R/N3-R accepted for maximum correction round 4.
+- [ ] Fresh exact-head local Codex re-review clean after correction round 4.
+- [ ] Every finding dispositioned; final changed head re-reviewed. Further accepted correction is a human blocker.
 - [ ] Exact-head Shepherd/trajectory validation passes.
 - [ ] Branch pushed normally without force.
 - [ ] PR #495 title/body updated with extension scope and exact head.

@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "review_findings_correction_round_4_planned_maximum",
+  "status": "review_findings_correction_round_4_implemented_verification_pending_maximum",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -65,6 +65,11 @@
       "cycle": "review_round_4",
       "decision": "read_only_spawned",
       "reason": "Fresh-context project pm-reviewer inspected verified exact head 1d4acf4f633e4f8940ba637f2099723369b2ed30, confirmed prior dispositions, and returned two accepted machine-enforcement findings: canonical missing-kind terminal classification and exact disposition-enum parity. Round 4 is the maximum permitted correction round."
+    },
+    {
+      "cycle": "correct_round_4",
+      "decision": "local_critical_path",
+      "reason": "Accepted N4-R/N3-R corrections are implemented at 42ddf3debcad3298d56583ebbdd219e2dbcd8596: canonical producer terminal/kind contract, version-aware fail-closed classifier fixtures, and exact six-value disposition-enum parsing. Further accepted correction would exceed the budget and require a human blocker."
     }
   ],
   "verificationPassed": false,
@@ -74,6 +79,7 @@
   "correctionRound3ReviewedHead": "3af7910528d234d1a1d886a6778d7817495e6321",
   "correctionRound3ImplementationHead": "1cd43caacc05d9f6955a614144d6772210248afb",
   "correctionRound4ReviewedHead": "1d4acf4f633e4f8940ba637f2099723369b2ed30",
+  "correctionRound4ImplementationHead": "42ddf3debcad3298d56583ebbdd219e2dbcd8596",
   "correctionBudget": {
     "maxCorrectionRounds": 4,
     "roundsByRange": {
@@ -88,5 +94,5 @@
     "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
   },
   "shepherd": "pending_after_clean_rereview",
-  "updatedAt": "2026-07-23T16:22:05Z"
+  "updatedAt": "2026-07-23T16:26:31Z"
 }
