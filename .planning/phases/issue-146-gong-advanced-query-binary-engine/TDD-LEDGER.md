@@ -30,4 +30,3 @@ Green:
 - Implemented operation direct-read, top-level JSON array writes, and bounded multipart writes without raw body/upload escape hatches.
 - Flipped only safe Gong engine-shape commands; broad arbitrary-filter POST reads remain planned until safe typed filter flags are authored.
 - Docs/manual/skill/website generated artifacts were updated.
-

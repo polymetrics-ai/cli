@@ -60,8 +60,12 @@
     "representativeCLI": "pass"
   },
   "review": {
-    "freshExactHeadCodex": "pending_after_final_evidence_commit",
-    "trajectoryShepherd": "pending_after_exact_head_review",
+    "initialExactHead": "f3df1b169625891b60dce15e332c7b535dd6ff21",
+    "initialCodeReview": "clean_no_actionable_wave1_findings",
+    "initialSecurityDisposition": "broader observations pre-existing and not worsened; escalated for captain follow-up",
+    "initialEvidenceReview": "two findings corrected: stale issue 462 review state and base-to-head whitespace errors",
+    "freshExactHeadCodex": "pending_after_review_fix_commit",
+    "trajectoryShepherd": "pending_after_final_exact_head_review",
     "claudeRequested": false,
     "copilotRequested": false
   },
@@ -78,5 +82,5 @@
     "postIntegration": "fetch parent; record actual resulting head; verify current main ancestry; refresh parent CI/body/state; do not assume task head equals parent head"
   },
   "statusFile": "/Users/karthiksivadas/karthik-agent-workspace/state/cli-architecture-v2-wave1-parent-sync-r1.status",
-  "updatedAt": "2026-07-23T05:10:00Z"
+  "updatedAt": "2026-07-23T05:50:00Z"
 }

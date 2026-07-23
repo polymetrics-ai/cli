@@ -37,4 +37,3 @@ Model Gong JSON mutations as typed reverse-ETL write actions with schemas, flags
 - `go test ./cmd/connectorgen -run Gong -count=1`
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
-

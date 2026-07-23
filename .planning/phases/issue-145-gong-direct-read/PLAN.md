@@ -37,4 +37,3 @@ Implement bounded JSON GET direct reads with generic redaction policy and comman
 - `go test ./cmd/connectorgen -run Gong -count=1`
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
-

@@ -15,4 +15,3 @@
 ## Skills
 
 gsd-core, golang-how-to, golang-cli, golang-design-patterns, golang-structs-interfaces, golang-error-handling, golang-security, golang-safety, golang-testing, golang-documentation
-

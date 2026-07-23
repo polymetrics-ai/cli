@@ -632,16 +632,16 @@
       ],
       "pullRequestHead": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
       "status": "provisionally_integrated",
-      "verification": "pr_467_ci_green_pr_468_ci_green_parent_pr_438_ci_green_at_c3d8a757_before_main_sync",
+      "verification": "pr_467_ci_green_pr_468_ci_green_parent_pr_438_ci_green_at_c3d8a757_before_main_sync; exact PR #468 head later human-approved",
       "automatedReview": {
-        "primaryRoute": "blocked",
-        "status": "pending",
-        "headSha": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
-        "reviewedRange": "PR #467/#468 local sidecars only; no Claude/Copilot/human review record",
-        "coverageRoute": "parent_pr_fallback",
+        "primaryRoute": "human",
+        "status": "clean",
+        "headSha": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+        "reviewedRange": "PR #468 exact head a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+        "coverageRoute": "sub_pr",
         "fallbackRoute": "human",
-        "dispositionSummary": "accepted design and TTY-gate findings corrected and merged; external review coverage still absent",
-        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468"
+        "dispositionSummary": "Human reviewed implementation, tests, and artifacts and explicitly APPROVED the exact head.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561"
       }
     },
     {

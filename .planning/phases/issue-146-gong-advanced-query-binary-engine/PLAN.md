@@ -70,4 +70,3 @@ No production code changes are in scope for this planning slice.
 - No raw arbitrary filter object for broad Gong POST reads unless every accepted field is typed and schema-validated.
 - No credentialed Gong execution in local gates.
 - No top-level array execution for schemas that remain `additionalProperties: true` without a tighter connector-owned schema or a bounded schema-validated file input.
-

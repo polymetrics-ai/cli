@@ -68,8 +68,9 @@ Status: local verification green; exact-head review and delivery pending
 
 ## Review and delivery
 
-- [ ] Fresh-context read-only exact-head Codex review passed.
-- [ ] Every finding dispositioned; exact-head re-review after any changes.
+- [x] Fresh-context read-only Codex review passed at `f3df1b169625891b60dce15e332c7b535dd6ff21`; no Wave 1 code findings.
+- [x] Initial evidence findings dispositioned: stale #462 state corrected and base-to-head whitespace errors removed; broad security observations confirmed pre-existing/not worsened and escalated for captain follow-up.
+- [ ] Fresh exact-head re-review after the review-fix commit.
 - [ ] Trajectory/Shepherd validation passed against exact evidence.
 - [x] Branch pushed normally through pre-evidence head.
 - [ ] Draft stacked PR targets `feat/cli-architecture-v2` and uses `Refs #397`.

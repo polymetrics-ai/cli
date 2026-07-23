@@ -37,4 +37,3 @@ Build validated cli_surface.json covering streams, GET direct reads, typed write
 - `go test ./cmd/connectorgen -run Gong -count=1`
 - `go run ./cmd/connectorgen validate internal/connectors/defs`
 - `go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1`
-

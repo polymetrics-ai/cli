@@ -31,12 +31,12 @@ Status: not yet run at final HEAD
 - [x] #434 implemented/corrected at `8177e342ad03b5fbf3750f2c0ecf9aa11f695f92`; exact-head Sol/xhigh re-review `65f48296-b24a-498a-8b25-6c4a3143d9c9` clean; fake-only integration race passed; promoted in parent `96680756`.
 - [x] #435 implemented/evidence-corrected at `f712e696e075792492397ab1d556d1dfceadba04`; exact-head Sol/xhigh re-review `d549e7cf-50bc-4d9d-94ff-04734f048d3b` clean; fake-only integration race passed; promoted in parent `afd765e9`.
 - [x] #436 implemented/corrected at `7da245b8da2b8590766d99ca9e967d366e50cfcc`; exact-head Sol/xhigh re-review `19fd2452-9b9b-4479-bbba-2bf9f13a1bbb` clean; temp-only integration race passed; promoted in parent `b28e67fb`.
-- [x] #462 / PR #465 CI green and integrated at `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; automated review did not complete. Historical notes recorded Copilot quota exhaustion; current recheck reports Claude disabled and Copilot unavailable in this session.
+- [x] #462 / PR #465 CI green and integrated at `a5474bcb9efdbaddcd6d2c83a96a29be03b20bfa`; automated review did not complete at that checkpoint. Historical notes recorded Copilot quota exhaustion; Wave 1 later verified exact-head human approval for the final follow-up.
 - [x] #462 first accepted correction batch integrated through PR #467 at parent `93a117100c6421955262aa32794a91a158d267e1`.
-- [x] #462 follow-up PR #468 opened at current head `5092e115d4aa35ab4595a9b9537f64d3f63e6406`; local docs checks and exact-file closure review pass.
+- [x] #462 follow-up PR #468 merged from exact head `a4ca9813d44c79bbbc0a8c499b74253f38265aa8`; local docs checks and exact-file closure review passed.
 - [x] #462 GitHub blocked-by metadata directly updated for #408/#409/#411/#412/#414/#416/#418/#463.
 - [x] #462 PR #468 current-head CI green, including `verify` in 18m19s, and merged into parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`.
-- [ ] #462 external review coverage; local `pm-reviewer` is not substitute coverage, and Claude remains disabled.
+- [x] #462 exact-head human review coverage: https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
 - [x] #437 / PR #466 phase planning/TDD/verification refreshed before every correction; current PR head `26f98a72419010b961b5b8378ef4a695b0c0a06f`.
 - [x] #437 local focused, repeated, race, full package, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certify, and connectorgen 547/0 gates passed.
 - [x] #437 remote CI timing failure reproduced as exact evidence and corrected with deterministic concurrency proof; all current GitHub checks pass.
@@ -72,7 +72,7 @@ Status: not yet run at final HEAD
 ## Current live blockers
 
 - [x] #462 accepted design/safety findings corrected in isolated stacked PRs #467/#468 and integrated into parent.
-- [ ] #462 external review coverage recorded; local `pm-reviewer` is not substitute coverage.
+- [x] #462 exact-head human review coverage recorded at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
 - [x] #437 external/human review coverage recorded and PR #466 integrated.
 - [x] #408 exactly-one TUI worker resume in the preserved worktree; implementation/artifact heads pushed through `ff7be3bd`.
 - [ ] #408 evidence correction and unresolved full-race timeout disposition before `SUB_PR_OPEN`/independent VERIFY.
