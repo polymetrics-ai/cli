@@ -1,8 +1,10 @@
 # Issue #397 PM First-Round Review System TDD Ledger
 
-**Status:** plan-check correction applied; RED not yet captured  
-**Lifecycle:** active `/pm-orchestrate` owner because `programming-loop` is absent from the 69-command registry  
-**Stable lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`  
+**Status:** plan-check correction applied; RED not yet captured
+
+**Lifecycle:** active `/pm-orchestrate` owner because `programming-loop` is absent from the 69-command registry
+
+**Stable lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`
 **Correction budget:** 0/5
 
 | ID | Risk / required behavior | RED evidence | GREEN target | State |

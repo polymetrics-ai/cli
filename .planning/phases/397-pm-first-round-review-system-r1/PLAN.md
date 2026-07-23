@@ -1,12 +1,18 @@
 # Issue #397 PM First-Round Review System Plan
 
-**Phase:** `397-pm-first-round-review-system-r1`  
-**Parent issue:** https://github.com/polymetrics-ai/cli/issues/397  
-**Parent PR:** https://github.com/polymetrics-ai/cli/pull/438 (draft, human-only)  
-**Sub-PR base:** `feat/cli-architecture-v2`  
-**Branch:** `chore/pm-first-round-review-system-r1`  
-**Exact starting base:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`  
-**Stable candidate lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`  
+**Phase:** `397-pm-first-round-review-system-r1`
+
+**Parent issue:** https://github.com/polymetrics-ai/cli/issues/397
+
+**Parent PR:** https://github.com/polymetrics-ai/cli/pull/438 (draft, human-only)
+
+**Sub-PR base:** `feat/cli-architecture-v2`
+
+**Branch:** `chore/pm-first-round-review-system-r1`
+
+**Exact starting base:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`
+
+**Stable candidate lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`
 **Correction budget:** 0/5 used; changed heads retain this lineage.
 
 ## Objective
