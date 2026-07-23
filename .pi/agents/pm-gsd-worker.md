@@ -17,11 +17,11 @@ Required reading before any edit:
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - the assigned issue body and its acceptance criteria
 - the phase `PLAN.md`, `TDD-LEDGER.md`, and `VERIFICATION.md` for the current phase
-- the implementation skill for your stack (per
-  `.agents/agentic-delivery/references/required-skills-routing.md`): Go work →
-  `.pi/skills/go-implementation/SKILL.md`; `website/**` TS work → `.pi/skills/ts-website/SKILL.md`;
-  website UI/UX → `.pi/skills/design-ui/SKILL.md`. Record loaded skills in the TDD ledger and cite
-  rule numbers in the handoff.
+- `.agents/agentic-delivery/references/required-skills-routing.md`, then only available skills advertised by the active harness. Load advertised skills by their harness-provided
+  locations; do not invent repo-local skill paths. For any Go task start with `golang-how-to`, then
+  load the routed CLI/testing/security/safety/documentation skills as applicable. For website or UI
+  work load only the routed design/React skills that the active harness actually advertises. Record
+  loaded skill names and applicability in the TDD ledger and handoff.
 
 Follow the PM-owned universal lifecycle strictly. Run GSD registry discovery; if
 `programming-loop` is absent, do not invoke or invent it. The parent `/pm-orchestrate` owner retains

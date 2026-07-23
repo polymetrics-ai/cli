@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension TDD Ledger
 
-Status: captain-authorized correction round 5 RED planned; GREEN/VERIFY/re-review pending; no round 6
+Status: captain-authorized correction round 5 GREEN; full VERIFY/re-review pending; no round 6
 Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE because the 69-command GSD registry has no `programming-loop`.
 
 | Risk | RED contract | GREEN target | Status |
@@ -21,9 +21,9 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 | stale replacement branch | focused script parses #397 run state and rejects old `fm/...` as current `taskBranch` | current branch is `chore/...`; old ref is explicitly historical | green |
 | missing canonical human-gate kind | classifier test passes a canonical `human_gate` record without the sibling kind | canonical missing/unknown kind fails closed; only detected legacy missing-kind remains human-ready | green |
 | disposition enum only implied | focused script parses exact `finding_disposition_values` sets across schema/workflow/prompt/contracts/templates | all applicable PM records use the same exact six-value enum | green |
-| nonexistent required worker skills | transitive dependency traversal rejects missing `.agents/**`/`.pi/**` references and forbidden old skill paths | worker loads task skills only through `required-skills-routing.md` and available harness skills; every required reference exists | red planned |
-| explicit unknown schema treated as legacy | classifier fixture uses `schema_version: canonical_v3`, terminal `human_gate`, and no kind | explicit unsupported schema fails closed; only absent schema is legacy-readable | red planned |
-| actual disposition rows invalid | focused parser validates every review-disposition table row against the exact canonical enum | F2/N1 use `deferred`; all actual rows are machine-valid while rationale remains unchanged | red planned |
+| nonexistent required worker skills | transitive dependency traversal rejects missing `.agents/**`/`.pi/**` references and forbidden old skill paths | worker loads task skills only through `required-skills-routing.md` and available harness skills; every required reference exists | green |
+| explicit unknown schema treated as legacy | classifier fixture uses `schema_version: canonical_v3`, terminal `human_gate`, and no kind | explicit unsupported schema fails closed; only absent schema is legacy-readable | green |
+| actual disposition rows invalid | focused parser validates every review-disposition table row against the exact canonical enum | F2/N1 use `deferred`; all actual rows are machine-valid while rationale remains unchanged | green |
 
 ## Evidence log
 
@@ -50,3 +50,4 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 - CAPTAIN OVERRIDE: decision `pm-correction-budget-exceeded` authorizes exactly round 5 on the existing lineage for R1–R3 only. Durable decision: `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-round5-override-2026-07-23.md`. No reset, expansion, audit-backed review-system implementation, or round 6.
 - Round 5 GSD discovery: `scripts/gsd doctor` passes, 69 commands remain registered, `plan-phase` prompt/source resolves, and `programming-loop` remains absent; canonical PM-owned manual lifecycle continues. Required references consulted: `gsd-core`, `required-skills-routing.md`, `gsd-pi-adapter.md`, and runtime/Pi-agent integration guidance. No Go, CLI/help, website, connector, dependency, credential, or product change applies.
 - Correction round 5 RED: the focused PM contract exited 1 with exactly the scoped defects: three missing `.pi/skills/**` dependency references plus forbidden paths/missing harness guidance, and F2/N1 `deferred_out_of_scope` rows outside the canonical enum. Direct classifier RED returned `human_ready` for explicit `schema_version: canonical_v3` with missing kind; the canonical unknown-kind baseline already returned `blocked_human_decision`. Tests were committed before production fixes.
+- Correction round 5 GREEN: focused PM contract and Pi routing pass. `pm-gsd-worker` now routes through `required-skills-routing.md` and only harness-advertised skills; transitive traversal records any missing required markdown reference. Explicit unknown schema, unknown kind, canonical missing kind, and cap exceed all classify `blocked_human_decision`; parent-ready and absent-schema historical fixtures classify `human_ready`. Every actual review-disposition row parses to the exact enum, with F2/N1 now canonical `deferred` and unchanged rationale. PR #493 overlap and dependency delta remain empty.

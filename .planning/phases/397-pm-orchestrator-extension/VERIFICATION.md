@@ -38,10 +38,10 @@ Status: captain-authorized correction round 5 planned for R1–R3 only; implemen
 - [x] Existing lineage retained; counter advances from 4 to 5 without reset.
 - [x] Scope limited to R1 missing worker skill references/traversal, R2 unsupported schema fail-closed classification, and R3 actual canonical disposition rows.
 - [x] Audit-backed PM review system, product changes, PR #493 files, and round 6 excluded.
-- [ ] `pm-gsd-worker` references only existing required files and harness-available skills through `required-skills-routing.md`.
-- [ ] Active dependency traversal rejects missing required references.
-- [ ] Explicit unknown schema plus missing kind is a blocked human decision; unknown kind remains blocked; absent-schema legacy remains readable.
-- [ ] Every actual `REVIEW-DISPOSITION.md` row uses the exact canonical enum; F2/N1 remain deferred with rationale.
+- [x] `pm-gsd-worker` references only existing required files and harness-available skills through `required-skills-routing.md`.
+- [x] Active dependency traversal rejects missing required references.
+- [x] Explicit unknown schema plus missing kind is a blocked human decision; unknown kind remains blocked; absent-schema legacy remains readable.
+- [x] Every actual `REVIEW-DISPOSITION.md` row uses the exact canonical enum; F2/N1 remain deferred with rationale.
 
 ## Focused validation
 
