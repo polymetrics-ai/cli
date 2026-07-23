@@ -54,6 +54,9 @@ Pi runtime constraints:
 - Parallel mode is capped at 8 total tasks and 4 concurrent subprocesses per `subagent` call.
 - Chain mode is capped at 8 sequential steps.
 - Recursive subagent calls are blocked; the orchestrator is the only spawner.
+- Persist `max_correction_rounds: 4` unless the parent contract supplies another bound, plus
+  `rounds_by_range` keyed by exact base/candidate lineage. Exceeding the cap is
+  `not_spawned_review_blocked` and a human gate; never reset it through a replacement PR.
 - Read-only agents (`pm-scout`, `pm-reviewer`) request `grep`/`find`/`ls`. The parent Pi session
   must enable those tools with `--tools read,bash,edit,write,grep,find,ls,subagent`.
 

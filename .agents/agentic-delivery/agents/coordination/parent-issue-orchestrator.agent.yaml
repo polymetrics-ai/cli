@@ -35,6 +35,7 @@ inputs:
   required:
   - parent issue URL
   - parent issue body with sub-issue roster
+  - correction budget (default max_correction_rounds 4 plus rounds_by_range)
   - AGENTS.md
   - .agents/agentic-delivery/references/gsd-pi-adapter.md
   - .agents/agentic-delivery/references/required-skills-routing.md
@@ -82,6 +83,7 @@ workflow:
 - verify_sub_pr_scope_and_exact_head_checks
 - dispatch_fresh_context_local_codex_review
 - disposition_every_local_codex_finding
+- increment_and_enforce_correction_budget
 - run_independent_shepherd_validation
 - merge_or_block_sub_prs_to_parent_branch
 - update_orchestration_state
@@ -110,6 +112,8 @@ coverage_policy:
   exact_head_required: true
   shepherd_required: true
   changed_head_requires_revalidation: true
+  default_max_correction_rounds: 4
+  correction_cap_transition: blocked_human_gate
   github_ai_reviewers: prohibited_for_pm_coverage
   fallback: human blocker; never substitute an unreviewed or unvalidated head
 guardrails:

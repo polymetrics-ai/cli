@@ -1,0 +1,28 @@
+{
+  "schema_version": "canonical_v2",
+  "correction_budget": {
+    "max_correction_rounds": 4,
+    "rounds_by_range": {}
+  },
+  "automated_review": {
+    "primary_route": "local_codex",
+    "status": "pending",
+    "exact_base_sha": "1111111111111111111111111111111111111111",
+    "exact_head_sha": "2222222222222222222222222222222222222222",
+    "reviewed_range": "1111111...2222222",
+    "disposition_summary": "pending",
+    "local_codex": {
+      "reviewer_identity": "pending",
+      "fresh_context": true,
+      "exact_base_sha": "1111111111111111111111111111111111111111",
+      "exact_head_sha": "2222222222222222222222222222222222222222",
+      "status": "pending",
+      "findings_artifact": "pending"
+    },
+    "shepherd": {
+      "status": "pending",
+      "exact_head_sha": "2222222222222222222222222222222222222222",
+      "evidence_artifact": "pending"
+    }
+  }
+}

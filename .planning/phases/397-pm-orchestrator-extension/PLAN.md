@@ -48,6 +48,14 @@ Do not edit any PR #493-owned path:
 
 Those routing/skill files were inspected. PR #495 owns the canonical orchestration route they may reference after Wave 1 integrates.
 
+### Subsequent PR #493 migration gate
+
+After Wave 1 lands, PR #493 must merge the resulting parent normally, reconcile its owned
+`AGENTS.md`/required-skills/task-matrix/skill guidance to this canonical PM route, rerun its focused
+validation, and integrate before another CLI Architecture v2 implementation worker starts. Until
+then, record `not_spawned_dependency_blocked`; do not follow contradictory legacy routing, duplicate
+PR #493 files in PR #495, or claim the routing migration is complete.
+
 ## Allowed write scope
 
 - `.agents/agentic-delivery/README.md`

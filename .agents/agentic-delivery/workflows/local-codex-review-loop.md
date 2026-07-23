@@ -13,6 +13,7 @@ The parent orchestrator supplies:
 - exact base branch and exact base SHA;
 - exact head branch and exact head SHA;
 - issue scope, allowed paths, acceptance criteria, and human gates;
+- `max_correction_rounds` (default 4) and `rounds_by_range` for this exact review lineage;
 - completed verification commands and their results.
 
 A branch name, mutable PR ref, prior review, or session memory is not an exact identity.
@@ -40,8 +41,9 @@ and follow-up reference where applicable.
 
 Accepted corrections return to the isolated implementation worker, then repeat affected tests and
 exact-head verification. Every changed head requires a fresh-context re-review against the new
-exact head. Cap correction rounds using the parent run's bounded correction budget; exceeding the
-cap is a human blocker, not permission to self-certify.
+exact head. Increment `rounds_by_range` for the exact base/candidate lineage. When it exceeds
+`max_correction_rounds` (default 4), mark the range blocked with outstanding findings and stop for a
+human; never continue indefinitely or reset the count through a replacement PR.
 
 Review is clean only when no actionable finding remains and every prior finding has a disposition.
 Local Codex review is review evidence, not merge approval.

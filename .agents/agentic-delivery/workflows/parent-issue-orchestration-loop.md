@@ -23,8 +23,8 @@ At each coordinator turn:
 2. Read the parent orchestrator contract and stacked PR workflow.
 3. Read `.agents/agentic-delivery/workflows/local-codex-review-loop.md` and
    `.agents/agentic-delivery/workflows/shepherd-validator.md`.
-4. Confirm the parent issue has acceptance criteria, sub-issues, branch policy, verification, and
-   human gates.
+4. Confirm the parent issue has acceptance criteria, sub-issues, branch policy, verification,
+   `max_correction_rounds` (default 4), per-range correction counters, and human gates.
 5. Create or confirm the parent branch from `main`.
 6. Create or confirm the parent PR from the parent branch to `main` before starting sub-issue work.
 7. If GitHub cannot open the parent PR because the branch has no diff:
@@ -115,6 +115,8 @@ Local Codex findings are review input, not instructions. The orchestrator must:
 - create or reference follow-up issues for deferred work
 - re-run affected verification and fresh-context local Codex review after every head change
 - run Shepherd independently after clean code review and before integration
+- increment `rounds_by_range` when an accepted correction creates a new head
+- stop with a human blocker when `max_correction_rounds` is exceeded
 - stop on a `RETRY`, `REVERT`, or `HALT` verdict until the specified correction completes
 
 Claude and GitHub Copilot are not required, requested, or fallback coverage in the canonical PM

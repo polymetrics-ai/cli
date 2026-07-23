@@ -15,6 +15,7 @@ The parent issue must provide:
 - parent PR URL or explicit blocker
 - sub-issue roster with dependencies and branch names
 - verification commands
+- correction budget (`max_correction_rounds`, default 4, plus per-range counters)
 - human gates
 - source links
 
@@ -63,6 +64,8 @@ The orchestrator owns:
 - deciding whether a sub-PR can merge into the parent branch
 - dispatching fresh-context read-only local Codex review against exact base/head identities
 - dispositioning every actionable finding and re-running verification/re-review after head changes
+- persisting correction rounds by exact review range and blocking for a human when the configured
+  cap is exceeded
 - running independent Shepherd trajectory validation after clean review and before integration
 - declaring final parent PR readiness for human approval
 
@@ -143,6 +146,14 @@ workers or record exactly one blocker category:
 Compact handoffs are allowed only for agent prose. Do not compact exact code, commands, test output,
 review findings, security warnings, destructive-action warnings, ordered safety gates, or approval
 gates in worker prompts or handoffs.
+
+## Correction Budget
+
+Every canonical PM parent run records `max_correction_rounds` (default 4) and
+`rounds_by_range`. A correction range is the exact base SHA plus the candidate head lineage. Increment
+the counter when accepted findings produce a new head. When a range exceeds the cap, set the
+candidate/sub-issue to `blocked`, record the outstanding findings, and stop for a human decision.
+Never reset the counter by relabeling the same correction or by opening a replacement PR.
 
 ## Merge Policy
 

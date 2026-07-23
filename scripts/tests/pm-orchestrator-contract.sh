@@ -6,6 +6,7 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 python3 - "$repo_root" <<'PY'
 from __future__ import annotations
 
+import json
 import pathlib
 import re
 import sys
@@ -56,6 +57,7 @@ forward_paths = [
     ".agents/agentic-delivery/workflows/pi-active-orchestration-loop.md",
     ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
     ".agents/agentic-delivery/workflows/codex-active-orchestration-loop.md",
+    ".agents/agentic-delivery/references/gsd-pi-adapter.md",
     ".pi/prompts/pm-orchestrate.md",
     ".pi/prompts/pm-auto-loop.md",
     ".pi/prompts/pm-gsd-loop.md",
@@ -94,9 +96,36 @@ require(
 )
 require(
     ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+    "canonical_v2",
     "local_codex",
     "shepherd",
+    "verdict_required_when",
+    "verdict_must_be_absent_when",
     "legacy_review_route",
+    "legacy_local_codex_v1",
+    "correction_budget",
+    "max_correction_rounds",
+    "rounds_by_range",
+)
+require(
+    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+    "max_correction_rounds",
+    "rounds_by_range",
+)
+require(
+    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+    "max_correction_rounds",
+    "rounds_by_range",
+)
+require(
+    ".pi/prompts/pm-orchestrate.md",
+    "max_correction_rounds: 4",
+    "rounds_by_range",
+)
+require(
+    ".planning/phases/397-pm-orchestrator-extension/PLAN.md",
+    "Subsequent PR #493 migration gate",
+    "not_spawned_dependency_blocked",
 )
 
 reviewer = read(".pi/agents/pm-reviewer.md")
@@ -121,11 +150,39 @@ model_test = read("scripts/tests/pi-model-routing.sh")
 if "scripts/tests/pm-orchestrator-contract.sh" not in model_test:
     errors.append("scripts/tests/pi-model-routing.sh: focused PM contract is not in make verify path")
 
+fixture_root = root / "scripts" / "tests" / "fixtures" / "pm-orchestrator-review-state"
+fixtures = {
+    "pending": fixture_root / "pending.json",
+    "clean": fixture_root / "clean.json",
+    "blocked": fixture_root / "blocked.json",
+    "historical": fixture_root / "historical-local-codex.json",
+}
+for name, path in fixtures.items():
+    if not path.is_file():
+        errors.append(f"missing review-state fixture: {path.relative_to(root)}")
+        continue
+    record = json.loads(path.read_text())
+    review = record.get("automated_review", {})
+    if record.get("schema_version") == "canonical_v2":
+        budget = record.get("correction_budget", {})
+        if budget.get("max_correction_rounds", 0) < 1 or not isinstance(budget.get("rounds_by_range"), dict):
+            errors.append(f"{name}: invalid canonical correction budget")
+        shepherd = review.get("shepherd", {})
+        status = shepherd.get("status")
+        verdict = shepherd.get("verdict")
+        if status in {"pending", "blocked"} and verdict is not None:
+            errors.append(f"{name}: {status} Shepherd record invents a verdict")
+        if status in {"proceed", "retry", "revert", "halt"} and not verdict:
+            errors.append(f"{name}: completed Shepherd record lacks verdict")
+    elif review.get("status") != "complete_no_unresolved_findings" or "head_sha" not in review:
+        errors.append(f"{name}: historical local Codex fixture is not recognized read-only evidence")
+
 if errors:
     raise SystemExit("PM orchestrator contract violations:\n- " + "\n- ".join(errors))
 
 print(
-    "pm orchestrator contract ok: one owner; unavailable-command fallback; "
-    "exact-head local Codex review; independent Shepherd; no Claude/Copilot PM coverage"
+    "pm orchestrator contract ok: one canonical owner; PR #493 routing migration gate; "
+    "unavailable-command fallback; exact-head local Codex review; independent Shepherd; "
+    "no Claude/Copilot PM coverage"
 )
 PY

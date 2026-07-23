@@ -39,16 +39,18 @@ scripts/gsd prompt new-project --from-existing --non-interactive
 scripts/gsd prompt plan-phase <phase> --skip-research
 ```
 
-In Pi after project trust/reload, use the interactive equivalents:
+In Pi after project trust/reload, use only interactive equivalents shown by registry discovery:
 
 ```text
 /gsd doctor
 /gsd map-codebase --fast
 /gsd new-project --from-existing --non-interactive
 /gsd plan-phase <phase> --skip-research
-/gsd-programming-loop init --phase <phase-or-issue> --dry-run
-/gsd-code-review <phase-or-issue>
+/gsd code-review <phase-or-issue>
 ```
+
+Do not copy documented examples into execution without confirming the command exists in
+`scripts/gsd list`.
 
 ## Agent requirements
 

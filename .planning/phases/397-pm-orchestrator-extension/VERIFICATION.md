@@ -47,7 +47,8 @@ Status: local verification green at implementation head `d72a93018933541d390884f
 
 ## Review and delivery
 
-- [ ] Fresh exact-head local Codex review clean.
+- [x] Initial fresh-context local Codex review completed at `3c88fc78062ba0a3437f79bc88c395286c228c65`; five findings dispositioned in `REVIEW-DISPOSITION.md`.
+- [ ] Fresh exact-head local Codex re-review clean after correction round 1.
 - [ ] Every finding dispositioned; changed heads re-reviewed.
 - [ ] Exact-head Shepherd/trajectory validation passes.
 - [ ] Branch pushed normally without force.

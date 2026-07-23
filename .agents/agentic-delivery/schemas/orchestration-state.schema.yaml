@@ -1,6 +1,14 @@
 apiVersion: polymetrics.ai/orchestration-state/v1
 kind: OrchestrationStateSchema
 description: Machine-readable state ledger shape for parent issue orchestration.
+schema_versions:
+  canonical_v2:
+    write_default: true
+    required_additions: [correction_budget]
+  legacy_v1:
+    read_only: true
+    detection: missing schema_version or legacy review fields
+    rule: preserve truthful historical records; do not rewrite them into canonical evidence
 required_fields:
   - parent_issue
   - parent_branch
@@ -50,6 +58,18 @@ field_contract:
   spawn_decisions:
     type: list
     item_required: [timestamp, decision, issue_numbers, reason]
+  correction_budget:
+    type: object
+    canonical_v2_required: true
+    required: [max_correction_rounds, rounds_by_range]
+    max_correction_rounds:
+      type: positive integer
+      default: 4
+    rounds_by_range:
+      type: map
+      key: exact base SHA plus candidate lineage
+      value: non-negative integer
+    exceeded_transition: blocked human gate with outstanding findings
   subissues:
     type: list
     item_required:
@@ -78,32 +98,40 @@ field_contract:
   automated_review:
     type: object
     canonical_name: review_coverage
-    required:
-      - primary_route
-      - status
-      - exact_base_sha
-      - exact_head_sha
-      - reviewed_range
-      - disposition_summary
-      - local_codex
-      - shepherd
-    primary_route_values: [local_codex, human, blocked]
-    status_values: [pending, clean, comments_addressed, blocked]
-    local_codex:
-      required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, findings_artifact]
+    canonical_v2:
+      required:
+        - primary_route
+        - status
+        - exact_base_sha
+        - exact_head_sha
+        - reviewed_range
+        - disposition_summary
+        - local_codex
+        - shepherd
+      primary_route_values: [local_codex, human, blocked]
       status_values: [pending, clean, comments_addressed, blocked]
-    shepherd:
-      required: [status, verdict, exact_head_sha, evidence_artifact]
-      status_values: [pending, proceed, retry, revert, halt, blocked]
-      verdict_values: [PROCEED, RETRY, REVERT, HALT]
+      local_codex:
+        required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, findings_artifact]
+        status_values: [pending, clean, comments_addressed, blocked]
+      shepherd:
+        required: [status, exact_head_sha, evidence_artifact]
+        status_values: [pending, proceed, retry, revert, halt, blocked]
+        verdict_values: [PROCEED, RETRY, REVERT, HALT]
+        verdict_required_when: [proceed, retry, revert, halt]
+        verdict_must_be_absent_when: [pending, blocked]
     legacy_review_route:
       read_only: true
-      purpose: preserve truthful historical GitHub-bot records; never write these values for current PM coverage
-      primary_route_values: [claude_auto, claude_manual, claude_manual_fallback, copilot_backup, human, blocked]
-      fallback_route_values: [copilot_backup, human, none]
-      coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
+      inference: any pre-canonical record without schema_version or canonical_v2 fields
+      purpose: preserve truthful historical review records; never write these values for current PM coverage
+      github_bot_v1:
+        primary_route_values: [claude_auto, claude_manual, claude_manual_fallback, copilot_backup, human, blocked]
+        fallback_route_values: [copilot_backup, human, none]
+        coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
+      legacy_local_codex_v1:
+        accepted_fields: [status, head_sha, reviewed_range, reviewer, findings, disposition_summary]
+        status_values: [pending, clean, comments_addressed, complete_no_unresolved_findings, skipped, blocked]
   claude:
-    deprecated_alias_for: automated_review.legacy_review_route
+    deprecated_alias_for: automated_review.legacy_review_route.github_bot_v1
   human_gates:
     type: list
     examples:
