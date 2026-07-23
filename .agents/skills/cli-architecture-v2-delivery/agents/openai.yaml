@@ -1,0 +1,7 @@
+interface:
+  display_name: "CLI Architecture v2 Delivery"
+  short_description: "Deliver issue #397 safely across stacked phases"
+  default_prompt: >-
+    Use $cli-architecture-v2-delivery to read current parent state, plan and test before editing,
+    preserve machine and human gates, and prepare an exact-head stacked handoff without merging the
+    parent to main.

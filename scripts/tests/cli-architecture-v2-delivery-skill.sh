@@ -48,6 +48,23 @@ for trigger in (
     "#462",
     "#463",
     "#469",
+    "Cobra",
+    "Viper",
+    "typed configuration",
+    "event bus",
+    "TTY",
+    "NDJSON",
+    "Bubble Tea",
+    "accessibility",
+    "slog",
+    "OpenTelemetry",
+    "plain/JSON",
+    "stacked PRs",
+    "GSD",
+    "TDD",
+    "exact-head review",
+    "Shepherd",
+    "parent readiness",
 ):
     assert trigger in frontmatter, f"frontmatter description missing force trigger {trigger}"
 

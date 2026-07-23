@@ -41,7 +41,7 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 
 ## Green: Program Router And References
 
-- Status: pending.
+- Status: GREEN recorded 2026-07-23.
 - Target:
   - concise `cli-architecture-v2-delivery/SKILL.md` and `agents/openai.yaml`;
   - `state-and-dependency-model.md`;
@@ -51,13 +51,15 @@ Phase: `397-cli-architecture-v2-delivery-skill`
   - force-trigger, required routing, task matrix, and Bubble Tea cross-link entries;
   - focused shell validation plus focused Make target only.
 - Focused commands:
-  - `scripts/tests/cli-architecture-v2-delivery-skill.sh`;
-  - `make cli-architecture-v2-skill-check`;
-  - `scripts/tests/pi-model-routing.sh`.
+  - `scripts/tests/cli-architecture-v2-delivery-skill.sh` — pass;
+  - `make cli-architecture-v2-skill-check` — pass;
+  - `scripts/tests/pi-model-routing.sh` — pass.
+- GREEN evidence: content/link contract and YAML parsing passed; all 10 routed Pi agent model checks
+  passed; focused check remains outside global `make verify`.
 
 ## Refactor
 
-- Status: pending.
+- Status: in progress after focused GREEN.
 - Remove any copied queue, SHA, model, bot availability, or issue-status prose from the evergreen
   skill.
 - Keep TUI implementation guidance in `bubble-tea-tui-design` and Go mechanics in routed Go skills.
