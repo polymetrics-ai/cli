@@ -236,21 +236,39 @@ for relative in (
     forbid(relative, {"active per-subissue correction counter": r'"correction_rounds"\s*:'})
 
 local_statuses = ("pending", "findings_correction_required", "clean", "comments_addressed", "blocked")
-for relative in (
+canonical_contract_paths = (
     ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
     ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
     ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
     ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
     ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
-):
+)
+for relative in canonical_contract_paths:
     require(relative, *local_statuses)
+
+expected_dispositions = [
+    "accepted",
+    "accepted_with_modification",
+    "declined",
+    "duplicate",
+    "deferred",
+    "needs_human",
+]
+for relative in canonical_contract_paths:
+    match = re.search(r"finding_disposition_values:\s*\[([^\]]+)\]", read(relative))
+    if match is None:
+        errors.append(f"{relative}: missing exact finding_disposition_values enum")
+        continue
+    actual = [value.strip().strip("`") for value in match.group(1).split(",")]
+    if actual != expected_dispositions:
+        errors.append(f"{relative}: disposition enum drift: {actual!r}")
+
 for relative in (
-    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
-    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
-    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
+    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
+    ".pi/prompts/pm-auto-loop.md",
 ):
-    require(relative, "accepted", "accepted_with_modification", "declined", "duplicate", "deferred", "needs_human")
+    require(relative, "schema_version", "human_gate", "human_gate_kind", "correction_cap_exceeded")
 
 require(
     "scripts/pm-terminal-classifier.sh",
@@ -289,6 +307,7 @@ fixtures = {
     "clean": fixture_root / "clean.json",
     "blocked": fixture_root / "blocked.json",
     "cap_lineage": fixture_root / "correction-cap-lineage.json",
+    "canonical_missing_kind": fixture_root / "canonical-missing-human-gate-kind.json",
     "parent_ready": fixture_root / "parent-ready.json",
     "historical": fixture_root / "historical-local-codex.json",
 }
@@ -341,6 +360,12 @@ classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
     "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/correction-cap-lineage.json")"
 if [[ "$classification" != "blocked_human_decision" ]]; then
   printf 'PM orchestrator contract violation: cap classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/canonical-missing-human-gate-kind.json")"
+if [[ "$classification" != "blocked_human_decision" ]]; then
+  printf 'PM orchestrator contract violation: canonical missing-kind classifier returned %s\n' "$classification" >&2
   exit 1
 fi
 classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
