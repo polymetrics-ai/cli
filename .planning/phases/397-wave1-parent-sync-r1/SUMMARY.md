@@ -1,9 +1,13 @@
 # Issue #397 Wave 1 Parent Synchronization Summary
 
-Status: ACTIVE — planning complete; merge not yet performed.
+Status: VERIFY GREEN — exact-head review, trajectory validation, stacked PR, and remote checks pending.
 
-This bounded Wave 1 slice starts from parent `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` and will ordinarily merge current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` on a separate integration branch. PR #438 remains draft and unchanged. Issue #408 and all downstream product work are excluded.
+Wave 1 started from parent/PR #438 head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` and ordinarily merged current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` on isolated branch `fm/cli-architecture-v2-wave1-parent-sync-r1`. Merge commit `c545c3740c71b889fd2f1f64cec5491003f7b654` has main as its second parent and uses no rebase, reset, stash, force push, or history rewrite.
 
-The pre-merge conflict inventory includes `go.mod`, `go.sum`, `internal/cli/cli.go`, `internal/connectors/connectors.go`, and `internal/connectors/connsdk/http.go`. Resolution must preserve both the Gong parity work from main and CLI Architecture v2 routing/config/events/telemetry/reverse contracts.
+Five conflicts were manually reconciled: `go.mod`, `go.sum`, `internal/cli/cli.go`, `internal/connectors/connectors.go`, and `internal/connectors/connsdk/http.go`. The result preserves current main's Gong help/direct-read/multipart behavior and parent Cobra/config/events/logging/telemetry/certify/reverse behavior. Focused regressions and races, full Go gates, module checks, representative CLI routes, and `make verify` are green at pre-evidence task head `2a2e964b17144939b0a42f297de0d2b1c87383e1`.
 
-Human review for #462 is now recorded at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`. Historical #425–#436 exact-range review/process-waiver work remains pending and is not performed here.
+Human review for #462 is complete at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`. Historical #425–#436 exact-range review/process-waiver work remains pending and was not performed. #408 remains excluded and branch-only at fetched head `6c643f5c971d1fac4a83e4ffe653b83847c2fceb`.
+
+PR #438 remains draft and unchanged at `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`. After the Wave 1 stacked PR is human-integrated, fetch `origin/feat/cli-architecture-v2`, record GitHub's actual resulting parent/PR head, verify current main ancestry, and refresh parent CI/body/state. Do not assume the task head becomes the parent head.
+
+No credentials, live connector calls, external mutations, deployments, production access, Claude request, Copilot request, #408 implementation, or parent PR edits occurred.

@@ -7,7 +7,7 @@
       alias.
 - [x] GitHub and local planning encode #409/#462 → #469 → #417/#418 and #411 → #463.
 - [x] Phase 18 UI contract passed the GSD UI checker.
-- [x] PR #468 parent integration at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; external review coverage remains absent and recorded as human/enabled-automation fallback.
+- [x] PR #468 parent integration at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; coverage was absent at that checkpoint, and Wave 1 later verified exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
 
 Status: not yet run at final HEAD
 `verificationPassed`: false
@@ -114,6 +114,24 @@ Status: not yet run at final HEAD
   `PROCEED`.
 - [x] Full `make verify`: all Go tests, build, docs validation, smoke, lint, connectorgen 547/0,
   Pi routing, and Shepherd guard targets passed.
+
+## Wave 1 parent sync gate — 2026-07-23
+
+- [x] Current main, parent, PR #438, #408, and merge base fetched and pinned.
+- [x] Ordinary no-ff merge commit `c545c3740c71b889fd2f1f64cec5491003f7b654`; no rebase, reset, stash, force push, or history rewrite.
+- [x] Five conflicts manually reconciled with focused combined regressions.
+- [x] Gong dynamic help/direct reads/multipart and Architecture v2 Cobra/config/events/telemetry/certify/reverse contracts pass together.
+- [x] `gofmt -w cmd internal`; clean `git diff --exit-code -- cmd internal`; `git diff --check`.
+- [x] `go vet ./...`; `go test -timeout 20m ./...`; `go build ./cmd/pm`; `go mod verify`; `go mod tidy -diff`; `make verify`.
+- [x] Focused race tests for Wave 1 CLI, connector runtime, multipart telemetry, and reverse/payload identities.
+- [x] Representative `pm help gong`, bare `pm connectors`, `pm connectors --help`, native `version`, bare Gong, and invalid-action exit 2 behavior.
+- [x] #462 human approval recorded: https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
+- [x] #419 truth corrected to `deferred_by_human`; #425–#436 waiver remains pending.
+- [ ] Fresh exact-head Codex/reviewer pass after final evidence commit.
+- [ ] Trajectory/Shepherd validation after exact-head review.
+- [ ] Draft stacked PR checks green; parent PR #438 remains unchanged/draft.
+
+`verificationPassed` remains false in the parent campaign because Wave 1 is not yet integrated and the full program is unfinished. The Wave 1 slice's own verification is green at its recorded task head.
 
 ## Per-unit gate
 

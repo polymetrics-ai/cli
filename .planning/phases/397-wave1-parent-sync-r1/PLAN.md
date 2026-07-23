@@ -106,6 +106,18 @@ Run a fresh-context read-only Codex/reviewer against exact base `21d195aff0c7bd6
 
 Commit all evidence, push normally, open one draft stacked PR to `feat/cli-architecture-v2` with `Refs #397`, inspect checks/reviews, wait for required checks green, and do not merge or mark ready.
 
+## Execution outcome
+
+- Merge commit: `c545c3740c71b889fd2f1f64cec5491003f7b654` (`origin/main` is the second parent and an ancestor).
+- Reconciliation commit after the full-test RED: `2a2e964b17144939b0a42f297de0d2b1c87383e1`.
+- Conflict decisions:
+  - modules: retained parent CLI/TUI/OTel dependencies and main Gong dependency graph;
+  - CLI: retained parent Cobra shell/config/events/telemetry and delegated unknown connector paths plus connector help to Gong;
+  - connector runtime: retained both requester/events/metrics policy and parent logger/telemetry policy;
+  - HTTP: retained JSON/query requests, Gong multipart semantics, parent retry body cleanup, and retry metrics/log redaction.
+- Full required commands and focused races are green. Representative help, bare namespace, native command, Gong command, and invalid-action contracts are green.
+- PR #438 remains unchanged. #408 remains excluded. REVIEW and INTEGRATE checkpoints remain pending.
+
 ## Checkpoints
 
 1. plan-only checkpoint;

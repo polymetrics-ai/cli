@@ -1,45 +1,82 @@
 {
+  "schemaVersion": 1,
   "phase": "397-wave1-parent-sync-r1",
-  "parentIssue": 397,
-  "parentBranch": "feat/cli-architecture-v2",
-  "taskBranch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
-  "parentPR": 438,
-  "status": "planned",
-  "verificationPassed": false,
-  "startingHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-  "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-  "remoteTruth": {
-    "main": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
-    "parent": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-    "parentPRHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+  "issue": 397,
+  "status": "verify_complete_review_pending",
+  "branch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
+  "remote": "origin",
+  "pullRequestBase": "feat/cli-architecture-v2",
+  "pullRequestHead": "fm/cli-architecture-v2-wave1-parent-sync-r1",
+  "pullRequest": null,
+  "draft": true,
+  "isolation": {
+    "physicalWorkingDirectory": "/Users/karthiksivadas/.treehouse/cli-83d592/1/cli",
+    "gitTopLevel": "/Users/karthiksivadas/.treehouse/cli-83d592/1/cli",
+    "primaryCheckout": false
+  },
+  "pinned": {
+    "originMain": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+    "originParent": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+    "parentPullRequest": 438,
+    "parentPullRequestHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
     "mergeBase": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
-    "mainAncestorBeforeMerge": false
+    "issue408Head": "6c643f5c971d1fac4a83e4ffe653b83847c2fceb"
   },
-  "gsdAdapter": {
-    "doctor": "passed",
-    "list": "passed_69_commands",
-    "sourcesDiscovery": "bare_sources_requires_command; plan-phase_execute-phase_verify-work_code-review_resolved",
-    "planPhase397": "passed_prompt_generated_10536_bytes",
-    "programmingLoop": "blocked_unknown_command",
-    "fallback": "manual_gsd_universal_runtime_loop"
+  "merge": {
+    "strategy": "git merge --no-ff origin/main",
+    "mergeCommit": "c545c3740c71b889fd2f1f64cec5491003f7b654",
+    "preEvidenceVerifiedHead": "2a2e964b17144939b0a42f297de0d2b1c87383e1",
+    "originMainIsAncestor": true,
+    "forcePush": false,
+    "rebase": false,
+    "reset": false,
+    "stash": false,
+    "conflicts": [
+      "go.mod",
+      "go.sum",
+      "internal/cli/cli.go",
+      "internal/connectors/connectors.go",
+      "internal/connectors/connsdk/http.go"
+    ]
   },
-  "orchestrationDecisions": [
-    {
-      "cycle": "wave1_plan",
-      "timestamp": "2026-07-23T04:36:41Z",
-      "decision": "local_critical_path",
-      "reason": "Captain authorized a single isolated Wave 1 integration worker; no downstream implementation worker is in scope. The worker pinned remote truth, created pre-merge GSD/TDD artifacts, and inventoried merge conflicts."
-    }
-  ],
-  "reviewDebt": {
-    "issue462": {
-      "status": "human_review_complete",
-      "url": "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561",
-      "reviewedHead": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8"
-    },
-    "issues425Through436": "pending_out_of_scope"
+  "gsd": {
+    "doctor": "pass",
+    "registryCommands": 69,
+    "programmingLoop": "absent",
+    "workflow": "manual PLAN -> RED -> GREEN -> REFACTOR -> VERIFY -> REVIEW -> INTEGRATE"
   },
-  "issue419": "deferred_by_human",
-  "issue408": "excluded_not_implemented",
-  "updatedAt": "2026-07-23T04:36:41Z"
+  "verification": {
+    "status": "green_at_pre_evidence_head",
+    "gofmt": "pass",
+    "formattingDiff": "clean",
+    "gitDiffCheck": "pass",
+    "goVet": "pass",
+    "goTestTimeout20m": "pass",
+    "goBuild": "pass",
+    "goModVerify": "pass",
+    "goModTidyDiff": "pass",
+    "makeVerify": "pass",
+    "focusedRaces": "pass",
+    "representativeCLI": "pass"
+  },
+  "review": {
+    "freshExactHeadCodex": "pending_after_final_evidence_commit",
+    "trajectoryShepherd": "pending_after_exact_head_review",
+    "claudeRequested": false,
+    "copilotRequested": false
+  },
+  "dependencyTruth": {
+    "issue462": "human_approved_exact_head",
+    "issue462ApprovalURL": "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561",
+    "issue419": "deferred_by_human",
+    "issues425Through436Waiver": "pending_out_of_scope",
+    "issue408": "excluded_parent_sync_pending"
+  },
+  "parentState": {
+    "remoteHeadUnchanged": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+    "pullRequest438": "draft_unchanged",
+    "postIntegration": "fetch parent; record actual resulting head; verify current main ancestry; refresh parent CI/body/state; do not assume task head equals parent head"
+  },
+  "statusFile": "/Users/karthiksivadas/karthik-agent-workspace/state/cli-architecture-v2-wave1-parent-sync-r1.status",
+  "updatedAt": "2026-07-23T05:10:00Z"
 }

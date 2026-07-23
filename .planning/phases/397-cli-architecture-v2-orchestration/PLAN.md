@@ -79,7 +79,7 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 
 - GSD evidence: `scripts/gsd doctor`, `scripts/gsd list`, and `scripts/gsd prompt plan-phase 397 --skip-research`; `programming-loop` remains absent from the 69-command registry, so the recorded manual universal-loop fallback continues.
 - Parent branch/PR reconciled at live head `c3d8a7573bfaf661bdcab737db84e3497929cdff`, then locally merged `origin/main` at safe checkpoint `19fe02ec900aba548a997165014624197b451a33`; PR #438 remains draft and targets `main`.
-- #462 / PR #465 was provisionally integrated at `a5474bcb`. Accepted design/safety corrections were integrated through PR #467 at `93a11710`; PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. Local sidecars are still not external review coverage.
+- #462 / PR #465 was provisionally integrated at `a5474bcb`. Accepted design/safety corrections were integrated through PR #467 at `93a11710`; PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`. Local sidecars were not external review coverage at that checkpoint; Wave 1 later verified exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
 - #437 / PR #466 is open at head `26f98a72419010b961b5b8378ef4a695b0c0a06f`. Full local gates and all current GitHub checks pass. The CI timing flake was replaced by a deterministic concurrency proof without weakening the parallelism gate. Human/parent fallback review remains pending.
 - GitHub blocked-by metadata now directly encodes #462 for #408, #409, #411, #412, #414, #416, #418, and #463.
 - Actual Pi worker runtime used project `pm-gsd-worker` with `openai-codex/gpt-5.5:xhigh`; the project agent currently declares `thinking: xhigh`, while the requested routing policy says implementation `high`. The subagent API has no per-call model override; this mismatch is recorded rather than hidden.
@@ -117,6 +117,16 @@ Then run independent Sol/xhigh correctness, security, architecture, issue-covera
 - PR #466 and PR #438 have no GitHub review records and no requested reviewers.
 - Copilot backup was probed non-mutatingly and is unavailable in this session (`@copilot` collaborator
   probe returned HTTP 404); no Copilot review was requested.
+
+## 2026-07-23 Wave 1 parent synchronization
+
+- Current remote truth before integration: `main=873cd7b251f70c4a35a607a0d4e86051ea0fbd15`, parent/PR #438 head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`, merge base `74ab381eb8236305170ffd44d5aed74f8d0d2936`.
+- Isolated branch `fm/cli-architecture-v2-wave1-parent-sync-r1` contains ordinary no-ff merge commit `c545c3740c71b889fd2f1f64cec5491003f7b654`; current verified pre-evidence task head is `2a2e964b17144939b0a42f297de0d2b1c87383e1`.
+- Conflict resolution preserves parent Cobra/config/events/logging/telemetry/certify contracts and current main's Gong command surfaces, operation reads, multipart writes, payload approvals, and module graph. Dedicated evidence: `.planning/phases/397-wave1-parent-sync-r1/`.
+- #462 exact-head human approval is complete: https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
+- #419 is `deferred_by_human`. Historical #425–#436 exact-range review/process-waiver work remains pending and is not performed in Wave 1.
+- #408 remains branch-only at `6c643f5c971d1fac4a83e4ffe653b83847c2fceb`; Wave 1 does not implement, merge, or open #408.
+- PR #438 remains draft at `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`. After the Wave 1 stacked PR is human-integrated, fetch the parent, record GitHub's resulting parent head (do not assume it equals the task head), verify `origin/main` ancestry, and then refresh PR #438/state tables.
 
 ## Human gates
 
