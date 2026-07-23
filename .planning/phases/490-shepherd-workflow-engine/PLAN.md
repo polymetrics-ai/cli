@@ -15,6 +15,18 @@ Parent: #471. Branch: `refactor/490-shepherd-workflow-engine`. PR base: `feat/47
 - Required references loaded: skill routing, runtime/RLM/Pi integration, GSD Pi adapter, universal runtime loop, and issue-agent contract.
 - No Go or website task-specific skill applies. TypeScript/Pi behavior is governed by the issue, #471 phase contracts, and the package's local public documentation.
 
+## Bounded merge-readiness continuation
+
+This continuation is one review-and-correction round for PR #491, not a new implementation or general hardening campaign.
+
+- Verified starting topology: local, remote, and GitHub head `dceef7ffc4193b9251e2b2159abd03c876174b39`; open non-draft PR #491 from `refactor/490-shepherd-workflow-engine` to `feat/471-pi-agent-session-shepherd`; GitHub reports `MERGEABLE`/`CLEAN` with all current checks green.
+- Parent orchestrator mode: active owner for the bounded child-readiness critical path. No implementation worker is ready or needed; the only delegated work is the required read-only exact-diff review.
+- Review override: the user selected independent `openai-codex/gpt-5.6-sol` at `xhigh` instead of Claude or Copilot. This is review input, not human approval, and does not authorize parent or default-branch merge.
+- Before review, correct the workflow-engine developer-tool boundary and stale PR-publication artifacts. Shepherd production must not import, invoke, or accept workflow-engine state as authority or evidence. Explicitly developer-invoked built-ins may retain normal Pi coding-agent authority outside Shepherd production.
+- Freeze the complete parent-base...candidate diff and host-captured topology/evidence. Dispatch exactly two parallel read-only workflow-engine lanes with no tools or GitHub mutation authority: runtime/security and CI/delivery. Synthesize once and classify only concrete correctness, security, contract, or CI blockers.
+- Apply at most one correction pass and only for actionable merge blockers. If production, settings, verifier, or CI behavior changes, add focused regression evidence and run the declared Pi/typecheck/verifier/RPC/final-suite gates. Documentation-only changes require `git diff --check` and retain the existing exact-code-head evidence.
+- After any correction, verify only the recorded dispositions and exact final head; do not start another broad issue-discovery review. Record the final reviewed SHA and dispositions in the immutable PR/issue delivery record after the final commit.
+
 ## Package provenance and adoption decision
 
 - Approved dependency: `npm:pi-workflow-engine@0.12.0` (the user explicitly requested this exact adoption).

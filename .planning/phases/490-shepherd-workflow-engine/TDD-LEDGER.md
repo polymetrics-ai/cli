@@ -6,6 +6,15 @@
 - Required execution decision, planning cycle: `read_only_spawned` — workflow run `43dc4d81-66bf-4642-bed2-207a00d5fec0` used four read-only analysis lanes and one typed synthesis lane. The issue worker retains the only mutating path in this dedicated worktree.
 - Required skill used: `gsd-core`; required Pi/runtime and issue-first references loaded.
 
+## Bounded merge-readiness continuation
+
+- GSD path: `scripts/gsd doctor` passed; `scripts/gsd prompt code-review 490` generated the repo-local `/gsd-code-review 490` contract.
+- Starting Git/GitHub evidence: clean local worktree; local, remote branch, and PR head all equal `dceef7ffc4193b9251e2b2159abd03c876174b39`; PR #491 is open, non-draft, correctly based, mergeable/CLEAN, and all current checks pass.
+- Review route override: independent Codex `openai-codex/gpt-5.6-sol`/`xhigh`, explicitly selected instead of Claude or Copilot. It is not human approval.
+- This round starts documentation-only. No new production behavior is planned, so no new RED is required for the known artifact and authority-wording corrections. Existing exact-code-head evidence is retained.
+- If either read-only review lane identifies an actionable production/CI blocker, add the smallest focused failing regression before the one allowed correction pass, then run the full conditional gate set from PLAN.md. Otherwise run only `git diff --check` and delivery/scope checks.
+- Parent orchestration decision for preflight: `local_critical_path` — existing child PR #491 needs only bounded artifact correction and exact-diff review; no mutating implementation worker is ready or required. The required review lanes will be recorded as `read_only_spawned` after dispatch.
+
 ## Baseline and provenance
 
 - Issue: #490, parent #471, parent PR #472.

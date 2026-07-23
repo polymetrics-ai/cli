@@ -97,13 +97,17 @@ Shepherd does not import workflow-engine or its undocumented internals. It retai
 `ProductionAgentSessionPort` and uses public Pi APIs directly with claimed cwd, exact scoped host
 tools, prompt completion, typed bound handoffs, cancellation, and abort/join-before-release.
 
-The package's built-in advisory workflows include generic `bash`, so they are not approved for
-Shepherd analysis or review. The host must capture and bound the exact reviewed material first;
-approved inline analysis, verification, and synthesis agents all use `tools: []`, omit dynamic tool
-hints and skills, and receive only that material in their prompts. Run the workflow process without
-GitHub credentials, then revalidate the clean exact head afterward. Workflow agents must never
-receive filesystem reads, edit/write, generic shell, GitHub, human-decision, publication,
-integration, or merge tools.
+Shepherd production does not import the package, register workflow-engine commands, or route any
+`pm-shepherd` stage through its built-ins. A developer may explicitly invoke the package's built-in
+workflows with the normal authority of that Pi coding-agent session, including their documented
+`bash` access. That explicit developer-tool execution is outside Shepherd production: its output,
+commands, journals, patches, disposable worktrees, and run IDs are never Shepherd verification
+evidence or durable authority.
+
+For Shepherd's bounded independent review evidence, the host must capture and bound the exact
+reviewed material first. Inline analysis, verification, and synthesis agents use `tools: []`, omit
+dynamic tool hints and skills, receive only that material in their prompts, and receive no GitHub
+mutation authority. The host revalidates the clean exact head afterward.
 
 ### Autonomous in-process Shepherd
 

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "phase": "490-shepherd-workflow-engine",
   "issue": 490,
-  "status": "verified",
+  "status": "review_in_progress",
   "verificationPassed": true,
   "verificationBlocker": null,
   "manualGsdFallback": {
@@ -14,6 +14,11 @@
       "cycle": "plan",
       "decision": "read_only_spawned",
       "reason": "workflow-engine run 43dc4d81-66bf-4642-bed2-207a00d5fec0 performed four bounded read-only analyses and typed synthesis; this issue worker retains the only mutating path"
+    },
+    {
+      "cycle": "merge-readiness-preflight",
+      "decision": "local_critical_path",
+      "reason": "existing child PR #491 needs one bounded artifact correction and exact-diff review round; no mutating implementation worker is ready or required"
     }
   ],
   "workflowAnalysisRunId": "43dc4d81-66bf-4642-bed2-207a00d5fec0",
