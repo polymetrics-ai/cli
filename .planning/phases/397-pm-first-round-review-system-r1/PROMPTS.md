@@ -15,4 +15,13 @@
 - Plan-check result: initial BLOCKED; gaps corrected before RED.
 - RED result: focused semantic test exited 1 for intended classifier, disposition, mutation, threshold, one-way migration, and append-only-history failures.
 - GREEN result: focused semantic/compiler/synthesis/measurement tests, canonical PM contract, model routing, shell syntax, Shellcheck, JSON, YAML syntax, and diff checks passed.
-- Verification result: full local gates and `make verify` passed at exact implementation head `7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839`; final evidence-commit rerun remains pending before review.
+- Historical verification result: full local gates and `make verify` passed at `7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839`; captain's later graph/lab requirements invalidate this as delivery evidence.
+
+## Captain correction and research snapshot
+
+- Requirements read in full: `impact-graph-correction.md`, `counterfactual-review-lab-requirement.md`, and `impact-graph-algorithm-research-requirement.md`.
+- GSD command: `scripts/gsd prompt plan-phase 397-pm-first-round-review-system-r1 --research`; read-only scout/security attempts produced no usable result due WebSocket/provider authentication, so inline fallback is recorded.
+- Research stop respected: no production graph/lab edits before `.planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md`.
+- Evidence-selected graph: typed directed multigraph, materialized forward/reverse adjacency, deterministic multi-source relation-policy BFS, three-valued certainty, authoritative `go list`, fail-closed graph/packet bounds, exact-head cold rebuild, no new dependency.
+- Required next RED: separate frozen graph/lab correction corpus plus real integration failures for reverse leaf, both-direction script/package, authority, generator, Go test/importer/variant, cycle/bound, unknown, unrelated control, exact coverage, lab denial/limits/cleanup/identity/concurrency/hypothesis/migration.
+- Same stable lineage and `0/5` budget continue; captain requirements do not reset the lineage.

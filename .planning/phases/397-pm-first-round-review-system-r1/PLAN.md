@@ -13,21 +13,27 @@
 **Exact starting base:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`
 
 **Stable candidate lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`
-**Correction budget:** 0/5 used; changed heads retain this lineage.
+**Correction budget:** 0/5 used; changed heads retain this lineage. Captain pre-delivery requirements continue this exact lineage and do not reset it.
 
 ## Objective
 
 Implement the captain-authorized, audit-backed first-round PM review system as a separate measured
 stacked PR. Deterministic preflight must catch the two accepted PR #495 findings and the three
-original preventable misses, compile bounded exact-version review packets, synthesize one local
-Codex verdict under one PM owner, keep Shepherd independent/downstream, and publish only measured
-fixture/replay claims.
+original preventable misses; build an evidence-selected, bounded bidirectional practical
+file/package impact graph from every changed file plus canonical roots; provide fail-closed
+per-packet disposable hypothesis labs without mutating the exact candidate; compile bounded
+exact-version review packets; synthesize one local Codex verdict under one PM owner; keep Shepherd
+independent/downstream; and publish only measured fixture/replay claims.
 
 ## Authority and source material
 
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/report.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/blog-source-notes.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/ship-instructions.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/impact-graph-correction.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/counterfactual-review-lab-requirement.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/impact-graph-algorithm-research-requirement.md`
+- `.planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-one-time-review-waiver-and-merge-2026-07-23.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-snyk-deferral-2026-07-23.md`
 - PR #495 accepted source head `fc7167990c92292625493f05b495c70e2c7ce886`; squash on parent `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
@@ -46,6 +52,7 @@ phase does not rewrite them as clean.
 - Parent queue for this turn: this promoted review-system follow-up is the selected local critical path; #408/TUI remains out of scope; PR #493-owned paths remain collision-blocked for this branch; parent PR #438 remains draft/human-only.
 - Planning-cycle execution decision: `read_only_spawned`; one read-only measurement scout completed, three read-only scouts failed to start because their isolated provider lacked authentication. No mutating worker was spawned. The single cohesive/shared PM-system write scope remains `local_critical_path` in this isolated task worktree.
 - Durable setup/fetch/branch evidence: `SETUP-EVIDENCE.md`. Every later cycle appends an explicit decision to `RUN-STATE.json`.
+- 2026-07-24 correction/research cycle: `scripts/gsd prompt plan-phase 397-pm-first-round-review-system-r1 --research` generated the official prompt. Read-only scout/security architecture calls failed to return usable results (WebSocket/provider authentication), so the active PM performed the documented inline GSD fallback. Primary-source research and a disposable exact-head benchmark were completed before graph design; selection is in `ALGORITHM-RESEARCH.md`. Prior verification is historical.
 
 ## Required skills loaded
 
@@ -66,12 +73,14 @@ No CLI command/help surface changes; CLI help/manual/website parity is not appli
 ### Positive path allowlist
 
 - `scripts/pm-review-system.py`: standard-library deterministic compiler, semantic detectors,
-  packet synthesis, observations, and scorer.
+  typed bidirectional practical impact graph, packet synthesis, observations, and scorer.
+- `scripts/pm-review-lab.py`: standard-library fail-closed exact-head disposable hypothesis-lab runner.
 - `scripts/pm-terminal-classifier.sh`
 - `scripts/tests/pm-review-system.sh`
 - `scripts/tests/pm-orchestrator-contract.sh`
 - `scripts/tests/pi-model-routing.sh`
 - `scripts/tests/fixtures/pm-review-system/**`
+- `scripts/tests/fixtures/pm-review-lab/**`
 - `scripts/tests/fixtures/pm-orchestrator-review-state/**` only for focused terminal fixtures.
 - `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
 - `.agents/agentic-delivery/contracts/pm-review-system.json`
@@ -113,33 +122,55 @@ credentials, connector runtime, raw generic write tools, and reverse ETL behavio
    repository-relative allowlisted roots only, no absolute/`..`/control-character/option-like
    paths, no symlink escape, and subprocess argument vectors without shell evaluation. Packets carry
    paths/metadata, never file contents or environment/credential values.
-3. Compile changed-file/domain manifest, active transitive required-reference closure with edge
-   reasons, and authoritative state/writer/reader registry. Handle cycles. Parse Markdown links and
-   required paths plus JSON/YAML/frontmatter/script path references; reject missing or ambiguous
-   active targets.
-4. Run semantic negative gates for current-schema terminal enums, disposition rows independent of
+3. Apply the evidence-selected design in `ALGORITHM-RESEARCH.md`: enumerate the declared tracked
+   universe, then materialize a typed directed multigraph with stable forward and reverse adjacency
+   before traversal. Seed canonical roots plus every changed file. Parse Markdown/frontmatter,
+   JSON/YAML, shell source/exec, Python AST imports/run paths, configured authority/generator/mirror/
+   temporal/lateral edges, and authoritative `go list -json -deps -test` package/test/import data.
+   Every edge records source, target, relation, direction, parser, reason/location, and
+   `active|inactive|unknown` certainty.
+4. Compute deterministic cycle-safe multi-source BFS under an explicit relation policy. Include
+   bounded unknown context or block when unresolved; do not traverse inactive edges. Configure
+   index-byte/file, graph-node/edge, traversal-state/depth, impact-file/edge, Go-command, and packet
+   bounds. A continuing frontier, unresolved active/unknown edge, missing target, overflow, or
+   truncation blocks. No full symbol-level call/data-flow claim is made. Do not add persistent cache
+   or SCC condensation in v1; the measured ~2-second cold rebuild and iterative visited traversal
+   were selected over cache invalidation complexity.
+5. Run semantic negative gates for current-schema terminal enums, disposition rows independent of
    finding-ID prefix, dependency/dispatch consistency, transitive prohibited targets, stable
    correction lineage, restart/one-way legacy migration, stale evidence, append-only head history,
    off-by-one correction caps, and authoritative-state disagreement.
-5. Pilot packet thresholds are test hypotheses with deterministic boundaries: combine only when
-   all three hold—≤20 review-relevant files, ≤600 non-generated changed lines, exactly one domain.
-   If any combined limit is exceeded (21–25 files, 601–800 lines, or two domains included), split
-   conservatively. More than 25 files, more than 800 lines, or more than two domains is a mandatory
-   split. Each split packet allows ≤20 changed files, ≤10 closure/authority files, and a declared
-   30K-token target; if safe partitioning cannot satisfy those caps, compilation returns blocked
-   rather than truncating. Boundary cases are measured; thresholds are not claimed optimal.
-6. Require packet responses to bind exact base/head, list reviewed/closure/invariant/unreviewed
-   coverage, disclose overflow/truncation, and report unlimited findings. Missing coverage cannot
-   synthesize clean. Preserve raw packet responses and the coverage manifest beside synthesis.
-7. PM synthesizes exactly one local-Codex status/disposition. Any changed head invalidates packet
-   responses and synthesis.
-8. Shepherd independently validates the clean review transition and trajectory; it does not repeat
-   code review. Human authority remains final.
-9. Detection and scoring run in separate commands so the detector does not receive the oracle.
-   Freeze and hash the opaque mutation inputs plus separate oracle in RED before implementing the
-   treatment detector. Historical source identities, opaque cases, and clean/metamorphic controls
-   produce a machine-readable measurement report. This fixture-level blinding is not a private
-   model benchmark; token/cost/prospective data remain explicitly unavailable until captured.
+6. Pilot packet thresholds remain test hypotheses. Discovery completes before packetization.
+   Partition changed, closure, authority, impact-file, and impact-edge coverage stably; each packet
+   remains within configured file/edge/token limits. If complete policy impact cannot fit, block
+   rather than select a top-K subset or truncate.
+7. Require versioned packet responses to bind exact base/head/tree; list reviewed changed, closure,
+   authority, impact-file, impact-edge, invariant, hypothesis, and unreviewed coverage; disclose
+   graph/packet bounds and overflow/truncation; and report unlimited findings. Missing coverage
+   cannot synthesize clean.
+8. Require observable expert-review behaviors: impact model before line judgment, upstream/
+   downstream/lateral/temporal tracing, history/sibling comparison where relevant, explicit
+   falsifiable hypotheses and strongest alternatives, disconfirming evidence, smallest useful
+   experiment, and honest limitations. Do not claim equivalence to an ideal human reviewer.
+9. Run any experiment only with `scripts/pm-review-lab.py`: an exact-head detached disposable copy
+   under a private temporary root, scrubbed environment/config, no candidate writes, no generic
+   shell, no network/Git mutation/push/install/credential/live/deploy command, proven OS sandbox or
+   blocked, time/process/disk/output bounds, bounded evidence, descendant kill, whole-lab
+   destruction, and before/after candidate head/tree/status proof. Setup ambiguity, denial, timeout,
+   cleanup failure, identity drift, missing evidence, or inconclusive performed experiment blocks
+   clean synthesis. Static decisive evidence must state why no experiment was needed.
+10. Version impact, packet/response, synthesis, and lab contracts. Explicit migration fixtures reject
+    incompatible v1 inputs. The existing `make verify` path already reaches the focused PM tests via
+    `scripts/tests/pi-model-routing.sh`; preserve that durable CI route without touching PR
+    #493-owned `Makefile`.
+11. PM synthesizes exactly one local-Codex status/disposition. Any changed head invalidates packet
+    responses, experiments, and synthesis.
+12. Shepherd independently validates the clean trajectory after synthesis; it does not edit code or
+    repeat code review. Human authority remains final.
+13. Detection and scoring remain separate so the detector does not receive the oracle. Freeze a new
+    correction corpus/oracle before GREEN and report semantic findings, practical impact coverage,
+    lab safety/cleanup, deterministic mutation results, actual packet metrics when available, and
+    prospective evidence separately. Fixture evidence is not a private model benchmark.
 
 ## TDD slices and checkpoints
 
@@ -198,9 +229,46 @@ Only after all corresponding RED evidence exists:
 - Label deterministic preflight results only; do not claim local-Codex or prospective improvement.
 - Commit and normally push the measurement artifact and updated GSD evidence.
 
-### Slice 5 — verification, review, delivery
+### Slice 5 — captain algorithm research checkpoint
 
-- Run focused and full gates.
+- Pause production graph/lab edits; read all three additive captain requirements.
+- Compare primary-source build/query/index/test-impact/graph alternatives capability by capability.
+- Benchmark outgoing-only, reverse scan, forward/reverse adjacency BFS, SCC construction, real PM
+  and Go seeds, exact-head invalidation, adversarial fixtures, and a large synthetic graph.
+- Record selected/rejected algorithms, measured complexity, invariants, gaps, implementation REDs,
+  and no-dependency decision in `ALGORITHM-RESEARCH.md`; update plan/TDD/checklist before production.
+
+### Slice 6 — captain impact-graph correction RED/GREEN
+
+Before impact implementation, freeze a separate correction corpus/oracle and add integration REDs
+for: an upstream-only template referencer; script/Python downstream+upstream chains; an authority's
+writers/readers/mirrors; generator/generated/consumer relations; Go same-package tests and importing
+packages; a platform sibling/build-tag unknown; cycles; explicit graph-bound blocking; exact-head
+invalidation; and an unrelated control. The old root-only compiler must fail these intended
+assertions. Commit/push RED before GREEN.
+
+Then implement the selected typed index, authoritative Go discovery, three-valued certainty,
+relation-policy BFS, complete impact manifest, impact packet assignment, migration contract, and
+synthesis checks. Measure baseline/treatment impact recall, clean precision, graph coverage, bound
+hits, cold/traversal time, memory availability, determinism, and packet consequences. Commit/push
+GREEN additively.
+
+### Slice 7 — captain counterfactual-lab correction RED/GREEN
+
+Before lab implementation, add RED tests proving the prior system cannot safely support labs. Cover
+a known-defect temporary change, canonical/outside/symlink denial, network/Git mutation/install/
+credential/live/deploy denial, scrubbed secrets, timeout/process/output/disk bounds, cleanup and
+identity proof, cleanup/identity failure blockers, competing hypotheses, inconclusive blocking,
+concurrent isolation, no-experiment clean control, and v1 migration failure. Commit/push RED.
+
+Then implement the fail-closed versioned lab runner and packet response/synthesis contract. An OS
+sandbox must prove network/write containment or the experiment stays blocked; a policy-only fallback
+cannot authorize clean. Commit/push GREEN additively.
+
+### Slice 8 — verification, review, delivery
+
+- Treat all verification before the captain corrections as historical. Run focused and full gates
+  only after both correction GREENs on one exact committed head.
 - Commit every tracked implementation, measurement, and GSD evidence artifact and normally push the
   exact green head. No tracked write may follow the final exact-head review gates.
 - Compile packets, run the fresh-context packet reviewers, preserve raw responses/coverage outside

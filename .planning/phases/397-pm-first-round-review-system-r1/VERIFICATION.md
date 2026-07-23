@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** full local gates passed at implementation head `7f1b2d8fe`; final evidence-commit exact-head rerun pending before review
+**Status:** algorithm research selected; captain impact-graph/lab RED→GREEN and all post-correction gates pending; earlier verification is historical
 
 ## Identity and scope
 
@@ -46,6 +46,44 @@
 - [x] Findings are unlimited and synthesize to one PM-owned local-Codex disposition.
 - [x] Shepherd remains independent and runs only after clean synthesis.
 
+## Algorithm research checkpoint
+
+- [x] All three additive captain requirements were read in full before production graph/lab edits.
+- [x] `ALGORITHM-RESEARCH.md` records primary title, author/organization, date/version, stable URL/DOI, mechanism, and limits.
+- [x] Every required capability compares at least two credible alternatives.
+- [x] Disposable exact-head benchmark covers real graph shape, cold/traversal/incremental timing, memory availability, oracle precision/recall, synthetic fan-in/fan-out/cycles, determinism, invalidation, and packet consequences.
+- [x] Candidate baseline was explicitly revised: typed directed multigraph + forward/reverse adjacency + multi-source relation-policy BFS selected; v1 SCC condensation, unrestricted traversal, persistent cache, and new dependencies rejected with measured reasons.
+- [x] Selected design adds no shipped dependency.
+
+## Bidirectional practical impact graph
+
+- [ ] Separate correction inputs/oracle are frozen and hashed before GREEN; old root/outgoing behavior fails intended RED assertions.
+- [ ] Union of every changed file and canonical roots forms seeds; declared universe is indexed before traversal.
+- [ ] Every edge records stable id, source, target, relation/direction, parser, provenance reason/location, and `active|inactive|unknown` certainty.
+- [ ] Markdown/frontmatter/JSON/YAML, shell, Python, authoritative Go package/test/import/current-build, authority, generator/generated, lateral, mirror, and temporal edges are covered.
+- [ ] Reverse leaf, script both directions, authority, generated chain, Go importer/test, platform variant, cycle, unknown conditional, and unrelated control pass.
+- [ ] Iterative deterministic relation-policy BFS terminates on cycles; a continuing frontier or any index/node/edge/depth/file/token/Go-command bound blocks explicitly.
+- [ ] Missing active edges and unresolved unknowns include safely or block; inactive edges do not become active.
+- [ ] Complete impact files and edge ids enter exact-version coverage and bounded packets only after discovery.
+- [ ] Missing/stale impact response coverage, overflow, truncation, or graph-bound evidence cannot synthesize clean.
+- [ ] Output distinguishes practical file/package impact from unavailable symbol-level call/data-flow coverage.
+
+## Counterfactual hypothesis lab
+
+- [ ] Old system's absent lab support is captured as RED before production lab code.
+- [ ] Every experiment uses a detached disposable exact-head copy under a private temporary root; canonical candidate stays clean/read-only.
+- [ ] Environment/config/credentials are scrubbed; captured artifacts contain no secret sentinel.
+- [ ] Canonical/outside/symlink writes and cross-lab access are denied.
+- [ ] Network, generic shell, commit/push/PR/remote mutation, install, credential/live connector, deployment, and destructive external commands are denied.
+- [ ] A proven OS sandbox is required; unavailable/ambiguous/policy-only fallback blocks clean experiments.
+- [ ] Time/process/disk/output bounds, descendant termination, evidence bounds, and whole-lab destruction are enforced.
+- [ ] Candidate exact base/head/tree/status are proven unchanged before/after; drift or cleanup failure blocks synthesis.
+- [ ] Evidence captures hypothesis/alternative, examined impact edges, temporary diff hash/summary, argv, expected discriminator, stdout/stderr, exit, duration, observation, and support.
+- [ ] Competing hypotheses discriminate; an inconclusive performed experiment cannot prove clean; decisive static evidence uses an explicit no-experiment reason.
+- [ ] Concurrent packet labs are isolated and an unrelated clean control performs no unnecessary experiment.
+- [ ] Graph/lab/packet/response/synthesis contracts are versioned; incompatible v1 migration fixtures fail closed.
+- [ ] Focused PM tests remain transitively present in repository `make verify`/CI routing.
+
 ## Measurement
 
 - [x] Historical source identities are retained for PR #495 replays.
@@ -56,6 +94,10 @@
 - [x] Corpus provenance/hash and fixture-level blinding limitation are explicit.
 - [x] Unavailable token/cost/prospective evidence is explicit.
 - [x] Packet artifacts contain paths/metadata only; environment-sentinel regression proves no environment-value copy.
+- [ ] Correction measurement separates static/semantic findings, impact-graph coverage, lab experiments/safety/cleanup, deterministic mutation results, actual packet metrics, and prospective evidence.
+- [ ] Baseline/treatment reports impact recall/precision, edge/file coverage, bound hits, cold/traversal time, memory availability, determinism, invalidation, impact size, and packet consequences.
+- [ ] Lab measurement reports attempted/denied/completed/inconclusive experiments, cleanup/identity proofs, latency, output/disk/process bounds, and available model token/cost fields.
+- [ ] Public fixtures are labeled regression evidence rather than a secret benchmark; prospective #493/#408/later Architecture v2 evidence remains unavailable until observed.
 
 ## Focused commands
 
@@ -88,20 +130,23 @@ go mod tidy -diff
 make verify
 ```
 
-- [x] Focused gates pass.
-- [x] Shellcheck is available and passes for all changed shell scripts.
-- [x] JSON/YAML parsing passes.
-- [x] Go formatting produces no product diff.
-- [x] `go vet ./...` passes.
-- [x] `go test -timeout 20m ./...` passes (slowest observed packages: `internal/cli` 468.189s; `internal/connectors/certify` 354.296s).
-- [x] `go build ./cmd/pm` passes.
-- [x] `go mod verify` passes.
-- [x] `go mod tidy -diff` passes.
-- [x] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
+The pre-correction passes at `7f1b2d8fe`/`5601be8d0` are historical and do not satisfy delivery.
+After both correction GREENs on one committed exact head:
+
+- [ ] Focused graph/lab/PM gates pass.
+- [ ] Shellcheck is available and passes for all changed shell scripts.
+- [ ] JSON/YAML parsing passes.
+- [ ] Go formatting produces no product diff.
+- [ ] `go vet ./...` passes.
+- [ ] `go test -timeout 20m ./...` passes.
+- [ ] `go build ./cmd/pm` passes.
+- [ ] `go mod verify` passes.
+- [ ] `go mod tidy -diff` passes.
+- [ ] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
 
 ## Review and delivery
 
-- [x] Exact implementation commit `7f1b2d8fe` exists and coherent plan/RED/GREEN/refactor checkpoints were pushed additively.
+- [ ] Exact corrected implementation commit exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
 - [ ] Every finding has a canonical disposition.

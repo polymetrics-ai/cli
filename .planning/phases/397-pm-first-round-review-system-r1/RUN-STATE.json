@@ -14,11 +14,12 @@
     },
     "headHistory": [
       "cb6b2c771347133e35e369efbb381b3a024476e0",
-      "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839"
+      "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
+      "5601be8d01f9f0044a5e7e875be5669f7d6fc280"
     ]
   },
-  "status": "full_verification_passed_review_pending",
-  "verificationPassed": true,
+  "status": "algorithm_research_complete_impact_lab_red_pending",
+  "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
     "focused": "passed",
@@ -27,8 +28,8 @@
     "goBuild": "passed",
     "goModVerify": "passed",
     "goModTidyDiff": "passed",
-    "makeVerify": "passed",
-    "finalEvidenceCommitRerun": "pending"
+    "makeVerify": "passed_historical_before_captain_corrections",
+    "finalEvidenceCommitRerun": "superseded_full_post_correction_rerun_required"
   },
   "localCodex": {
     "status": "pending",
@@ -45,6 +46,7 @@
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase": "generated_and_executed_via_pi_tools",
+    "researchPlanPhase": "generated_and_executed_inline_fallback_after_subagent_provider_failures",
     "programmingLoop": "unavailable_unknown_command",
     "lifecycleOwner": "/pm-orchestrate"
   },
@@ -77,7 +79,12 @@
     {
       "cycle": "verify",
       "decision": "local_critical_path",
-      "reason": "At implementation head 7f1b2d8fe, focused gates, Shellcheck, JSON/YAML syntax, Go formatting no-diff, vet, 20-minute test suite, build, module verification/tidy diff, and make verify all passed. Final evidence-commit exact-head rerun remains before review."
+      "reason": "At implementation head 7f1b2d8fe, focused gates, Shellcheck, JSON/YAML syntax, Go formatting no-diff, vet, 20-minute test suite, build, module verification/tidy diff, and make verify all passed. This evidence became historical when captain added impact-graph and hypothesis-lab requirements."
+    },
+    {
+      "cycle": "captain_correction_research",
+      "decision": "local_critical_path",
+      "reason": "Production graph/lab work paused. Primary sources and a disposable exact-head real/synthetic benchmark selected typed forward/reverse adjacency plus deterministic multi-source relation-policy BFS, authoritative go list, fail-closed bounds, no persistent v1 cache/SCC, and no new dependency. Read-only scout/security runs failed due WebSocket/provider authentication, so inline GSD fallback was recorded."
     }
   ],
   "measurement": {
@@ -86,7 +93,10 @@
     "treatmentFixtureRecall": 1.0,
     "treatmentFixturePrecision": 1.0,
     "claimScope": "deterministic fixture preflight only",
-    "prospectiveStatus": "unavailable"
+    "prospectiveStatus": "unavailable",
+    "algorithmResearchArtifact": ".planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md",
+    "algorithmBenchmarkExactHead": "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
+    "algorithmSelection": "typed directed multigraph; materialized forward/reverse adjacency; deterministic multi-source relation-policy BFS; exact-head cold rebuild; authoritative go list; fail-closed bounds"
   },
   "readyQueue": [
     {
