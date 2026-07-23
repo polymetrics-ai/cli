@@ -20,8 +20,8 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
    - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
    - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-   - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-   - `.agents/agentic-delivery/workflows/claude-review-loop.md`
+   - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+   - `.agents/agentic-delivery/workflows/shepherd-validator.md`
    - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
    - `.agents/skills/caveman/SKILL.md`
 4. Build ready queue from parent issue and orchestration state.
@@ -33,7 +33,8 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    mutating worker without its own `cwd` must be recorded as `not_spawned_isolation_missing`.
 6. Spawn one worker per independent ready subissue through the `subagent` tool, up to the Pi
    runtime limits. Dispatch `pm-gsd-worker` for mutating implementation, `pm-scout` for
-   read-only reconnaissance, and `pm-reviewer` for read-only adversarial review. The coordinator
+   read-only reconnaissance, `pm-verifier` for exact-head verification, and a fresh-context
+   `pm-reviewer` for exact-base/head local Codex review. The coordinator
    must call `subagent` in the current turn; writing a plan that says a worker should exist is
    not a spawn decision. Inline role passes are `local_critical_path` or
    `not_spawned_runtime_capability_missing`, never `spawned`.
@@ -44,14 +45,25 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    agents.
 8. While workers run, the main coordinator does non-overlapping work only:
    - parent PR status
-   - review routing
+   - exact-head verification/review/Shepherd preparation
    - state ledger updates
    - merge eligibility checks
 9. When workers finish, integrate handoffs, verify scope, and close completed agent threads.
-10. Merge eligible sub-PRs into parent branch.
-11. Wait for parent PR automatic review coverage for integrated ranges when required.
+10. After verification passes, run fresh-context local Codex review and disposition findings.
+11. Run independent Shepherd validation; integrate eligible sub-PRs only after `PROCEED`.
 12. Repeat until all subissues are complete, deferred with issue links, or blocked.
-13. Mark parent PR human-ready only after final verification and automated review disposition.
+13. Mark the parent PR human-ready only after final exact-head verification, local Codex review,
+    Shepherd validation, CI, and remaining human-gate review.
+
+## Canonical PM fallback
+
+Run `scripts/gsd doctor`, `scripts/gsd list`, and source discovery before implementation. If the
+registry lacks `programming-loop`, do not invoke or invent it and do not stop at an advisory manual
+fallback. `/pm-orchestrate` remains the active owner and executes PLAN → RED → GREEN → REFACTOR →
+VERIFY → REVIEW → INTEGRATE with durable state and the same gates.
+
+Claude and GitHub Copilot are not required, requested, or fallback review coverage for this route.
+Use `local-codex-review-loop.md` followed by `shepherd-validator.md`.
 
 ## Pi Runtime Constraints
 
@@ -75,7 +87,7 @@ At every parent orchestration turn, write one of:
 - `not_spawned_human_gate`: human approval needed.
 - `not_spawned_isolation_missing`: safe worker worktree or working directory is unavailable.
 - `not_spawned_runtime_capability_missing`: subagent tooling unavailable.
-- `not_spawned_review_blocked`: Claude/Copilot/human review route blocks integration.
+- `not_spawned_review_blocked`: exact-head local Codex, Shepherd, or human gate blocks integration.
 - `not_spawned_verification_blocked`: checks or local gates block integration.
 
 Missing this decision is a workflow defect. The decision must include evidence: agent id(s),

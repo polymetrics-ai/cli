@@ -17,13 +17,15 @@ Required reading before any edit:
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
 - the assigned issue body and its acceptance criteria
 - the phase `PLAN.md`, `TDD-LEDGER.md`, and `VERIFICATION.md` for the current phase
-- the implementation skill for your stack (per
-  `.agents/agentic-delivery/references/required-skills-routing.md`): Go work →
-  `.pi/skills/go-implementation/SKILL.md`; `website/**` TS work → `.pi/skills/ts-website/SKILL.md`;
-  website UI/UX → `.pi/skills/design-ui/SKILL.md`. Record loaded skills in the TDD ledger and cite
-  rule numbers in the handoff.
+- `.agents/agentic-delivery/references/required-skills-routing.md`, then only available skills advertised by the active harness. Load advertised skills by their harness-provided
+  locations; do not invent repo-local skill paths. For any Go task start with `golang-how-to`, then
+  load the routed CLI/testing/security/safety/documentation skills as applicable. For website or UI
+  work load only the routed design/React skills that the active harness actually advertises. Record
+  loaded skill names and applicability in the TDD ledger and handoff.
 
-Follow the GSD universal programming loop strictly:
+Follow the PM-owned universal lifecycle strictly. Run GSD registry discovery; if
+`programming-loop` is absent, do not invoke or invent it. The parent `/pm-orchestrate` owner retains
+REVIEW/Shepherd/INTEGRATE authority while you execute these worker stages:
 
 1. Plan before coding. Update the issue's GSD plan, TDD ledger, and verification checklist before
    production edits, and keep them current as the implementation changes.
@@ -57,9 +59,11 @@ Hard stops (human gates):
 - Do not expose or invent generic shell, generic HTTP write, or generic SQL write tools.
 - Stop for strict TDD failure, repeated verification failure, or any human gate.
 
-Handoff back to the orchestrator using `.agents/agentic-delivery/contracts/worker-handoff-template.md`:
-branch, commits pushed, tests added/changed, local-gate results, review disposition status,
-follow-ups, and the exact `spawned`/`local_critical_path`/`not_spawned_*` decision for this run.
+Handoff back to the orchestrator using `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`:
+branch, commits pushed, tests added/changed, local-gate results, follow-ups, and the exact
+`spawned`/`local_critical_path`/`not_spawned_*` decision for this run. The orchestrator then runs
+exact-head verification, fresh-context `local-codex-review-loop.md`, and independent
+`shepherd-validator.md`; this worker does not self-review or integrate.
 
 Handoff economy: your final handoff is a CONDENSED digest (branch, SHAs, artifacts, gate results,
 gaps) — never a transcript or full diff; reviewers pull detail from the branch and the trace

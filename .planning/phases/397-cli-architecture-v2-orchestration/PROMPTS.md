@@ -1,5 +1,13 @@
 # Issue #397 orchestration prompt snapshots
 
+## Wave 1 parent synchronization — 2026-07-23
+
+Source contract: ordinarily merge current `main` into a separate branch from `feat/cli-architecture-v2`, preserve Gong and CLI Architecture v2 behavior, validate exact head, and open a draft stacked PR. Do not implement #408, change PR #438, request Claude/Copilot, or perform the #425–#436 waiver.
+
+Runtime: `scripts/gsd doctor`, `list`, source discovery, and `plan-phase 397` succeeded; `programming-loop` remains absent, so manual PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE applies. Dedicated artifacts: `.planning/phases/397-wave1-parent-sync-r1/`.
+
+Verification result: local full credential-free gates green at pre-evidence task head `2a2e964b17144939b0a42f297de0d2b1c87383e1`; exact-head review, trajectory validation, and stacked PR checks pending.
+
 ## Pi 5.6 Sol routing correction — 2026-07-21
 
 Source directive:

@@ -1,0 +1,32 @@
+# PM Orchestrator Extension Local Codex Review Disposition
+
+Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
+Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
+Status: captain-authorized correction round 5 implemented for R1–R3 only; exact-version re-review required; no round 6
+
+| ID | Severity | Disposition | Reason / action |
+|---|---|---|---|
+| F1 | high | accepted_with_modification | PR #495 will remove the unconditional unavailable Pi command example, extend focused validation to the adapter, and make PR #493's subsequent routing reconciliation a hard pre-worker gate. `AGENTS.md` and required-skills routing remain untouched because captain explicitly assigned those paths to PR #493; PR #495 must not duplicate or absorb them. |
+| F2 | medium | deferred | The three Gong definitions and validator/runtime behavior are byte-identical to current `origin/main` commit `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` (`git diff --quiet origin/main..3fd63fbe --` on all cited files). This is a pre-existing Gong product defect, not introduced or worsened by Wave 1 or the docs/workflow extension. Original scope forbids product behavior beyond conflict preservation. Focused follow-up: https://github.com/polymetrics-ai/cli/issues/497. |
+| F3 | medium | accepted | Make the current review schema versioned and conditional: canonical pending/blocked Shepherd records need no invented verdict; completed statuses require one. Preserve legacy bot and local-Codex shapes read-only. Add pending/clean/blocked/historical fixtures to focused validation. |
+| F4 | medium | accepted | Add a required default correction budget (4), per-range counters, and human-block transition to the parent contract, `/pm-orchestrate`, local review workflow, state schema/spec, and focused validation. |
+| F5 | medium | accepted | Update PR #495 title/body after correction commits to distinguish historical `3fd63fbe...` evidence from the new exact head and mark/reconcile current review, Shepherd, and CI state truthfully. Body-only updates do not alter Git head. |
+| F6 | high | accepted | Add PR #493 as an explicit dependency/blocker in the authoritative #397 trace, machine run state, and summary. Extend the contract test to reject a ready #408 before this post-Wave1 routing migration integrates. Do not edit PR #493-owned paths. |
+| F7 | high | accepted | Add PM-specific handoff/disposition templates with exact-head local Codex and independent Shepherd fields. Route every current PM prompt/agent/workflow reference to them and make the focused contract reject transitive legacy bot templates. Preserve the generic historical templates unchanged. |
+| F8 | medium | accepted | Align the autonomous run/prompt with canonical `correction_budget.max_correction_rounds` plus durable `rounds_by_range` lineage counters. Accept old `guards.correction_rounds` only as read-only legacy input and add a replacement-head/cap-exceeded fixture assertion. |
+| N1 | high | deferred | Gong's default base, write definitions, and write runner are byte-identical to current `origin/main`; `connsdk/http.go` differs for the intentional Wave 1 telemetry merge, but its complete `resolveURL` function is current-main-identical. The resulting `/v2/v2` defect is pre-existing and unrelated to canonical PM guidance. Product edits remain forbidden. Record as residual work needing a separate captain-authorized focused issue; do not broaden #497 or mutate product code here. |
+| N2 | high | accepted | Update the authoritative trace's scoped #408 `subissues` record, not only the ready queue/top-level gate, so every consumer requires both Wave 1 and PR #493. Add a section-scoped regression assertion. |
+| N3 | medium | accepted | Align canonical local-review status/disposition enums across schema, workflow, prompt, parent contract, and both PM templates. Add `duplicate` and assert enum parity in the focused contract. |
+| N4 | medium | accepted_with_modification | Keep terminal `human_gate`, add a structured `human_gate_kind`, and route both drivers through one classifier so `correction_cap_exceeded` stops as a blocked human decision while normal/legacy readiness remains human-ready. Exercise the cap fixture through that classifier. |
+| N5 | medium | accepted | Replace stale `mainSync.taskBranch` with the convention-compliant PR #495 branch, preserve the old ref only as a historical field, update post-integration text, and assert machine branch consistency. |
+| N4-R | medium | accepted | Require canonical producers to emit sibling `human_gate_kind: correction_cap_exceeded` with terminal `human_gate`; distinguish canonical missing-kind records from legacy records in the classifier; add a negative fixture. Keep other structured detail in orchestration state. |
+| N3-R | medium | accepted | Add the six-value canonical `finding_disposition_values` enum to the schema and every applicable PM workflow/prompt/contract/template, then parse and compare exact sets in the focused test instead of checking token presence. |
+| R1 | high | accepted | Under captain-authorized round 5, remove the three nonexistent `.pi/skills/**` requirements from `pm-gsd-worker`, retain `required-skills-routing.md` as the stack router, instruct loading only skills advertised by the active harness, and make transitive required-reference traversal reject missing files. |
+| R2 | medium | accepted | Under captain-authorized round 5, treat only an absent schema field as legacy; any explicit unsupported schema version with missing/unknown gate kind fails closed. Add explicit unknown-schema and unknown-kind classifier fixtures. |
+| R3 | medium | accepted | Under captain-authorized round 5, change F2/N1 dispositions to canonical `deferred` without changing their rationale, and parse every actual disposition row against the exact six-value enum. |
+
+## Residual human/program gates
+
+- PR #493 must reconcile its owned `AGENTS.md`, required-skills routing, task-skill matrix, skill, and Makefile changes to the canonical PM route after Wave 1 lands and before another CLI Architecture v2 worker starts.
+- The Gong operation direct-read defect is tracked at https://github.com/polymetrics-ai/cli/issues/497; no credentialed or live call is needed to reproduce its local preflight failure.
+- Parent PR #438 and PR #495 remain draft/human-only and unmerged.

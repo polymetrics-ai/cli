@@ -3,16 +3,16 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "worker_in_progress",
+  "status": "worker_blocked_wave1_and_pr493_migration",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "74c1766de7bc369905a1ea3e25e3bd983e3b3ac6",
+  "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
     "list": "passed_69_commands",
     "planPhase397": "passed_prompt_generated_10688_bytes",
     "programmingLoop": "blocked_unknown_command",
-    "fallback": "manual_gsd_universal_runtime_loop"
+    "fallback": "pm_orchestrator_owned_manual_lifecycle"
   },
   "orchestrator": {
     "model": "openai-codex/gpt-5.6-sol",
@@ -632,16 +632,16 @@
       ],
       "pullRequestHead": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
       "status": "provisionally_integrated",
-      "verification": "pr_467_ci_green_pr_468_ci_green_parent_pr_438_ci_green_at_c3d8a757_before_main_sync",
+      "verification": "pr_467_ci_green_pr_468_ci_green_parent_pr_438_ci_green_at_c3d8a757_before_main_sync; exact PR #468 head later human-approved",
       "automatedReview": {
-        "primaryRoute": "blocked",
-        "status": "pending",
-        "headSha": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
-        "reviewedRange": "PR #467/#468 local sidecars only; no Claude/Copilot/human review record",
-        "coverageRoute": "parent_pr_fallback",
+        "primaryRoute": "human",
+        "status": "clean",
+        "headSha": "a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+        "reviewedRange": "PR #468 exact head a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+        "coverageRoute": "sub_pr",
         "fallbackRoute": "human",
-        "dispositionSummary": "accepted design and TTY-gate findings corrected and merged; external review coverage still absent",
-        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468"
+        "dispositionSummary": "Human reviewed implementation, tests, and artifacts and explicitly APPROVED the exact head.",
+        "dispositionUrl": "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561"
       }
     },
     {
@@ -684,20 +684,31 @@
       }
     }
   ],
+  "postWave1RoutingMigrationGate": {
+    "pullRequest": 493,
+    "status": "parent_sync_then_canonical_pm_reconciliation_pending",
+    "decision": "not_spawned_dependency_blocked",
+    "blocksWorkerStart": true,
+    "requiredAction": "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
+  },
   "readyQueue": [
     {
       "issue": 408,
-      "status": "correction_pending",
+      "status": "active_ready_parent_sync_and_pr_493_migration_pending",
       "dependencies": [
         405,
         462
       ],
+      "integrationGates": [
+        "wave1_parent_sync",
+        "pr_493_canonical_pm_migration"
+      ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
-      "decision": "spawned",
-      "reason": "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE implementation is complete; stale/contradictory phase evidence, unresolved full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require a separate correction/verification stage before SUB_PR_OPEN.",
+      "decision": "not_spawned_dependency_blocked",
+      "reason": "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization and the subsequent PR #493 canonical PM routing migration must integrate before #408 reconciliation. Wave 1 does not implement or open #408.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
       "branch": "feat/408-flow-etl-dashboards",
-      "head": "ff7be3bd8509684257f7d7a73e6fb9735f4baf80"
+      "head": "6c643f5c971d1fac4a83e4ffe653b83847c2fceb"
     },
     {
       "issue": 413,
@@ -802,7 +813,7 @@
     },
     {
       "issue": 419,
-      "status": "complete",
+      "status": "deferred_by_human",
       "dependencies": [
         404,
         410
@@ -835,23 +846,31 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-20T23:17:08Z",
+  "updatedAt": "2026-07-23T05:10:00Z",
   "mainSync": {
-    "baseBeforeSync": "c3d8a7573bfaf661bdcab737db84e3497929cdff",
-    "originMain": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
-    "mergeCommit": "19fe02ec900aba548a997165014624197b451a33",
+    "parentBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+    "parentPRHeadBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+    "originMain": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+    "mergeBase": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+    "taskBranch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
+    "historicalTaskBranch": "fm/cli-architecture-v2-wave1-parent-sync-r1",
+    "taskMergeCommit": "c545c3740c71b889fd2f1f64cec5491003f7b654",
+    "verifiedTaskHeadBeforeEvidence": "2a2e964b17144939b0a42f297de0d2b1c87383e1",
     "strategy": "git merge --no-ff origin/main",
     "forcePush": "not_used",
-    "status": "local_merge_complete_state_commit_push_pending_at_artifact_time"
+    "status": "stacked_pr_pending_parent_unchanged",
+    "postIntegration": "fetch origin/feat/cli-architecture-v2; record the actual resulting parent and PR #438 head; verify origin/main ancestry; refresh parent CI/body evidence; then complete and integrate PR #493's canonical PM migration before #408; do not predeclare the task head as the parent head"
   },
   "automatedReviewAvailability": {
     "claudeWorkflow": "disabled_manually",
     "claudeWorkflowId": 310534134,
-    "latestClaudeRuns": "last runs from 2026-07-11 only; no completed review for PR #438/#466/#468 current ranges",
-    "copilotProbe": "unavailable: gh collaborator probe for @copilot returned HTTP 404; no backup review requested",
-    "pr466Reviews": "none",
+    "claudeRequestedForWave1": false,
+    "copilotRequestedForWave1": false,
+    "issue462HumanReview": "complete at PR #468 exact head a4ca9813d44c79bbbc0a8c499b74253f38265aa8",
+    "issue462ReviewURL": "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561",
+    "issues425Through436Waiver": "pending_out_of_scope",
     "pr438Reviews": "none",
-    "reviewDecision": "blocked_human_or_enabled_automation_required"
+    "wave1ReviewDecision": "fresh exact-head Codex plus trajectory validation pending"
   },
   "lastIntegration": {
     "issue": 437,

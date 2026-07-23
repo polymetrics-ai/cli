@@ -10,7 +10,7 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 74c1766de7bc369905a1ea3e25e3bd983e3b3ac6
+  head_sha: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
   draft: true
   state: open
 default_branch: main
@@ -18,13 +18,38 @@ orchestrator:
   mode: active_owner
   runtime: pi
   status: running
+wave1_parent_sync:
+  status: stacked_pr_pending_parent_unchanged
+  task_branch: chore/cli-architecture-v2-wave1-parent-sync-r1
+  pull_request: 495
+  parent_before_sync: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
+  parent_pr_head_before_sync: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
+  origin_main: 873cd7b251f70c4a35a607a0d4e86051ea0fbd15
+  merge_base: 74ab381eb8236305170ffd44d5aed74f8d0d2936
+  merge_commit: c545c3740c71b889fd2f1f64cec5491003f7b654
+  verified_task_head_before_evidence: 2a2e964b17144939b0a42f297de0d2b1c87383e1
+  strategy: git merge --no-ff origin/main
+  force_push: not_used
+  issue_462_approval: https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561
+  issue_419: deferred_by_human
+  historical_425_436_waiver: pending_out_of_scope
+  issue_408_head: 6c643f5c971d1fac4a83e4ffe653b83847c2fceb
+  issue_408_action: excluded_until_wave1_parent_sync_and_pr_493_routing_migration_integrate
+  post_wave1_routing_migration:
+    pull_request: 493
+    status: parent_sync_then_canonical_pm_reconciliation_pending
+    decision: not_spawned_dependency_blocked
+    blocks_worker_start: true
+    required_action: "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
+  post_integration: "Fetch parent; record the actual resulting parent/PR #438 head; verify current main ancestry; refresh CI/body; then complete and integrate the PR #493 canonical PM migration gate before reconciling #408. Do not assume task head equals parent head."
 ready_queue:
   - number: 408
-    status: correction_pending
+    status: active_ready_parent_sync_and_pr_493_migration_pending
     dependencies: [405, 462]
+    integration_gates: [wave1_parent_sync, pr_493_canonical_pm_migration]
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity"
-    decision: spawned
-    reason: "Exactly one Sol/high worker resumed the preserved cwd and pushed ff7be3bd. EXECUTE is delivered; phase-evidence defects, full-race timeouts, and the recorded make-verify reverse-smoke boundary deviation require separate correction/verification before SUB_PR_OPEN."
+    decision: not_spawned_dependency_blocked
+    reason: "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization and the subsequent PR #493 canonical PM routing migration must integrate before #408 reconciliation. Wave 1 does not implement or open #408."
   - number: 413
     status: worker_ready_deferred
     dependencies: [407]
@@ -68,7 +93,7 @@ ready_queue:
     decision: not_spawned_dependency_blocked
     reason: "Blocked by #409."
   - number: 419
-    status: complete
+    status: deferred_by_human
     dependencies: [404, 410]
     write_scope: "optional OTel log bridge"
     decision: not_spawned_human_gate
@@ -465,11 +490,11 @@ subissues:
     branch: feat/408-flow-etl-dashboards
     pr_url: ""
     worker: pm-gsd-worker
-    status: worker_in_progress
+    status: active_ready_parent_sync_and_pr_493_migration_pending
     write_scope: "flow/ETL dashboards, TUI event bridge, command wiring, tests, generated docs/goldens/website parity"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards
-    verification: "Implementation and artifacts pushed at ff7be3bd; focused race, full non-race, vet, build, parity, local dual-TTY fixtures, and make verify pass. Full race timed out at 10m and CLI race retry at 20m without findings; phase evidence correction remains."
-    automated_review: {primary_route: blocked, status: pending, head_sha: "ff7be3bd8509684257f7d7a73e6fb9735f4baf80", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No review yet; correction is required before SUB_PR_OPEN and #413 remains collision-deferred.", disposition_url: ""}
+    verification: "Branch-only implementation is preserved at current fetched head 6c643f5c971d1fac4a83e4ffe653b83847c2fceb; do not reconcile, open, or start another implementation worker until both Wave 1 parent sync and the subsequent PR #493 canonical PM migration integrate."
+    automated_review: {primary_route: blocked, status: pending, head_sha: "6c643f5c971d1fac4a83e4ffe653b83847c2fceb", reviewed_range: "", coverage_route: blocked, fallback_route: human, disposition_summary: "No Wave 1 action; #408 remains outside the parent-sync scope.", disposition_url: ""}
   - number: 409
     url: https://github.com/polymetrics-ai/cli/issues/409
     branch: pending
@@ -585,7 +610,7 @@ subissues:
     branch: pending
     pr_url: ""
     worker: unassigned
-    status: complete
+    status: deferred_by_human
     write_scope: "optional pinned OpenTelemetry log bridge"
     worker_directory: ""
     verification: "Human explicitly chose SKIP/DEFER for parent campaign #397; no beta dependency or implementation is authorized."
@@ -779,8 +804,8 @@ subissues:
     status: provisionally_integrated
     write_scope: "terminal UI design skill, docs, planning, and interaction contract"
     worker_directory: /Users/karthiksivadas/Development/polymetrics-cli-agents/wt-462-terminal-ui-tty-gate-follow-up
-    verification: "PR #467 and #468 merged; parent contains c3d8a757 before main sync; PR #438 checks were green at c3d8a757."
-    automated_review: {primary_route: blocked, status: pending, head_sha: c3d8a7573bfaf661bdcab737db84e3497929cdff, reviewed_range: "local sidecar only; no Claude/Copilot/human review record", coverage_route: parent_pr_fallback, fallback_route: human, disposition_summary: "Design findings corrected and merged; external review coverage still absent.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/468"}
+    verification: "PR #467 and #468 merged; exact PR #468 head a4ca9813d44c79bbbc0a8c499b74253f38265aa8 received explicit human APPROVE after local verification."
+    automated_review: {primary_route: human, status: clean, head_sha: a4ca9813d44c79bbbc0a8c499b74253f38265aa8, reviewed_range: "PR #468 exact head a4ca9813d44c79bbbc0a8c499b74253f38265aa8", coverage_route: sub_pr, fallback_route: human, disposition_summary: "Human reviewed the implementation, tests, and artifacts and explicitly APPROVED exact head.", disposition_url: "https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561"}
   - number: 453
     url: https://github.com/polymetrics-ai/cli/issues/453
     branch: fix/453-reverse-smoke-preview
@@ -802,4 +827,4 @@ human_gates:
   - reverse ETL execution outside plan, preview, approval, execute
   - quality-gate reductions
   - Phase 437 pending intake implementation or GitHub issue edits without explicit authorization
-updated_at: 2026-07-20T23:17:08Z
+updated_at: 2026-07-23T05:10:00Z

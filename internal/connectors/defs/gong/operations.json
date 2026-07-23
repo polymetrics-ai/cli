@@ -1,0 +1,950 @@
+{
+  "operations": [
+    {
+      "id": "gong.calls_media_upload",
+      "kind": "rest_write",
+      "summary": "Add call media (/v2/calls/{id}/media)",
+      "description": "Typed Gong multipart media upload operation. Executable through the `upload_call_media` reverse-ETL write action; no generic upload command is exposed.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "update",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "mediaFile"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/v2/calls/{id}/media",
+        "content_type": "multipart/form-data",
+        "max_bytes": 1610612736,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "mediaFile": {
+              "type": "string",
+              "description": "The media file of the recording. You may attach files up to 1.5GB in size."
+            }
+          },
+          "required": [
+            "mediaFile"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.calls_extensive",
+      "kind": "rest_read",
+      "summary": "Retrieve detailed call data by various filters (/v2/calls/extensive)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/extensive",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                },
+                "fromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 call start lower bound."
+                },
+                "toDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 call start upper bound."
+                },
+                "primaryUserIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Primary Gong user IDs."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Gong workspace ID."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
+            },
+            "contentSelector": {
+              "type": "object",
+              "properties": {
+                "context": {
+                  "type": "string",
+                  "description": "Context expansion level.",
+                  "enum": [
+                    "None",
+                    "Basic",
+                    "Extended"
+                  ]
+                },
+                "contextTiming": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "Now",
+                      "TimeOfCall"
+                    ]
+                  },
+                  "description": "Context timing values."
+                },
+                "exposedFields": {
+                  "type": "object",
+                  "properties": {
+                    "parties": {
+                      "type": "boolean",
+                      "description": "Include call party information."
+                    },
+                    "media": {
+                      "type": "boolean",
+                      "description": "Include temporary media URLs; URL fields are redacted from CLI output."
+                    },
+                    "collaboration": {
+                      "type": "object",
+                      "properties": {
+                        "publicComments": {
+                          "type": "boolean",
+                          "description": "Include public comments."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "content": {
+                      "type": "object",
+                      "properties": {
+                        "brief": {
+                          "type": "boolean"
+                        },
+                        "callOutcome": {
+                          "type": "boolean"
+                        },
+                        "highlights": {
+                          "type": "boolean"
+                        },
+                        "keyPoints": {
+                          "type": "boolean"
+                        },
+                        "outline": {
+                          "type": "boolean"
+                        },
+                        "structure": {
+                          "type": "boolean"
+                        },
+                        "topics": {
+                          "type": "boolean"
+                        },
+                        "trackers": {
+                          "type": "boolean"
+                        },
+                        "trackerOccurrences": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "interaction": {
+                      "type": "object",
+                      "properties": {
+                        "personInteractionStats": {
+                          "type": "boolean"
+                        },
+                        "questions": {
+                          "type": "boolean"
+                        },
+                        "speakers": {
+                          "type": "boolean"
+                        },
+                        "video": {
+                          "type": "boolean"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.calls_users_access_get",
+      "kind": "rest_read",
+      "summary": "Retrieve users that have specific individual access to calls (/v2/calls/users-access)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/users-access",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "object",
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                }
+              },
+              "required": [
+                "callIds"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.users_extensive",
+      "kind": "rest_read",
+      "summary": "List users by filter (/v2/users/extensive)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/users/extensive",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 user creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 user creation upper bound."
+                },
+                "includeAvatars": {
+                  "type": "boolean",
+                  "description": "Include Gong avatar users."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        },
+        "body": {
+          "filter": {}
+        }
+      }
+    },
+    {
+      "id": "gong.tasks_list",
+      "kind": "rest_read",
+      "summary": "List user's tasks (/v2/tasks)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/tasks",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "filter": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "OPEN",
+                      "DONE",
+                      "DISMISSED"
+                    ]
+                  },
+                  "description": "Task statuses."
+                },
+                "taskAction": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "CALL"
+                    ]
+                  },
+                  "description": "Task actions."
+                },
+                "types": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "FLOW",
+                      "MANUAL"
+                    ]
+                  },
+                  "description": "Task creation types."
+                },
+                "userId": {
+                  "type": "string",
+                  "description": "Owning Gong user ID."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Optional workspace ID."
+                }
+              },
+              "required": [
+                "status",
+                "taskAction",
+                "types",
+                "userId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.stats_interaction",
+      "kind": "rest_read",
+      "summary": "Retrieve interaction stats for applicable users by date (/v2/stats/interaction)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/interaction",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_scorecards",
+      "kind": "rest_read",
+      "summary": "Retrieve answered scorecards for applicable reviewed users or scorecards for a date range (/v2/stats/activity/scorecards)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/scorecards",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "callFromDate": {
+                  "type": "string",
+                  "description": "Inclusive call date in YYYY-MM-DD format."
+                },
+                "callToDate": {
+                  "type": "string",
+                  "description": "Exclusive call date in YYYY-MM-DD format."
+                },
+                "reviewFromDate": {
+                  "type": "string",
+                  "description": "Inclusive review date in YYYY-MM-DD format."
+                },
+                "reviewToDate": {
+                  "type": "string",
+                  "description": "Exclusive review date in YYYY-MM-DD format."
+                },
+                "reviewMethod": {
+                  "type": "string",
+                  "description": "Review method.",
+                  "enum": [
+                    "AUTOMATIC",
+                    "MANUAL",
+                    "BOTH"
+                  ]
+                },
+                "reviewedUserIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Reviewed Gong user IDs."
+                },
+                "scorecardIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Scorecard IDs."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_day_by_day",
+      "kind": "rest_read",
+      "summary": "Retrieve daily activity for applicable users for a date range (/v2/stats/activity/day-by-day)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/day-by-day",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_aggregate",
+      "kind": "rest_read",
+      "summary": "Retrieve aggregated activity for defined users by date (/v2/stats/activity/aggregate)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.stats_activity_aggregate_by_period",
+      "kind": "rest_read",
+      "summary": "Retrieve aggregated activity for defined users by a date range with grouping in time periods (/v2/stats/activity/aggregate-by-period)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/stats/activity/aggregate-by-period",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "aggregationPeriod": {
+              "type": "string",
+              "description": "Aggregation period.",
+              "enum": [
+                "DAY",
+                "WEEK",
+                "MONTH",
+                "QUARTER",
+                "YEAR"
+              ]
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "fromDate": {
+                  "type": "string",
+                  "description": "Inclusive date in YYYY-MM-DD format."
+                },
+                "toDate": {
+                  "type": "string",
+                  "description": "Exclusive date in YYYY-MM-DD format."
+                },
+                "userIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong user IDs."
+                },
+                "createdFromDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation lower bound."
+                },
+                "createdToDateTime": {
+                  "type": "string",
+                  "description": "Optional ISO-8601 creation upper bound."
+                }
+              },
+              "required": [
+                "fromDate",
+                "toDate"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "aggregationPeriod",
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.meetings_integration_status",
+      "kind": "rest_read",
+      "summary": "Validate Gong meeting Integration (/v2/meetings/integration/status)",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/meetings/integration/status",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "emails": {
+              "type": "array",
+              "description": "String array of emails of users (max 100)",
+              "items": {
+                "type": "string",
+                "description": "String array of emails of users (max 100)"
+              }
+            }
+          },
+          "required": [
+            "emails"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.flows_steps",
+      "kind": "rest_read",
+      "summary": "Get flow details and steps for one or more Engage flows (/v2/flows/steps)",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/flows/steps",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Request parameters for retrieving steps of one or more flows.",
+          "properties": {
+            "flowIds": {
+              "type": "array",
+              "description": "List of Engage Flow IDs to retrieve steps for. Maximum 20 flow IDs per request.",
+              "items": {
+                "type": "string",
+                "description": "List of Engage Flow IDs to retrieve steps for. Maximum 20 flow IDs per request."
+              }
+            }
+          },
+          "required": [
+            "flowIds"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.flows_prospects",
+      "kind": "rest_read",
+      "summary": "List prospects assigned flows (/v2/flows/prospects)",
+      "description": "Executable typed Gong POST read-query operation with schema-gated JSON body and redacted bounded JSON output.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "medium",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/flows/prospects",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "description": "Prospects assigned flows request",
+          "properties": {
+            "crmProspectsIds": {
+              "type": "array",
+              "description": "CRM IDs of the prospects to list assigned flows for.",
+              "items": {
+                "type": "string",
+                "description": "CRM IDs of the prospects to list assigned flows for."
+              }
+            },
+            "flowInstanceIds": {
+              "type": "array",
+              "description": "Assigned flow instance IDs.",
+              "items": {
+                "type": "string",
+                "description": "Assigned flow instance IDs."
+              }
+            }
+          },
+          "minProperties": 1,
+          "additionalProperties": false
+        }
+      }
+    },
+    {
+      "id": "gong.crm_upload_entity_schema",
+      "kind": "rest_write",
+      "summary": "Upload Object Schema (/v2/crm/entity-schema)",
+      "description": "Typed Gong top-level JSON array CRM entity-schema upload operation. Executable through the `upload_crm_entity_schema` reverse-ETL write action for reviewed table mappings; no raw JSON CLI flag is exposed.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": false,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "items"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/crm/entity-schema",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "description": "selectedFields",
+            "additionalProperties": true
+          }
+        }
+      }
+    },
+    {
+      "id": "gong.crm_upload_entities",
+      "kind": "rest_write",
+      "summary": "Upload CRM objects (/v2/crm/entities)",
+      "description": "Typed Gong multipart CRM entities upload operation. Executable through the `upload_crm_entities` reverse-ETL write action; no generic upload command is exposed.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "reverse ETL plan, preview, approval, execute; destructive confirmation required",
+      "output_policy": "gong_bounded_input_redacted",
+      "mutation_class": "create",
+      "secret_sensitive": true,
+      "sensitive_policy": {
+        "input_mode": "file",
+        "redact_fields": [
+          "dataFile"
+        ],
+        "transform": "none",
+        "approval_mode": "typed_confirmation"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/v2/crm/entities",
+        "content_type": "multipart/form-data",
+        "max_bytes": 209715200,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "dataFile": {
+              "type": "string",
+              "description": "The CRM data file. You may attach files up to 200MB in size"
+            }
+          },
+          "required": [
+            "dataFile"
+          ]
+        }
+      }
+    },
+    {
+      "id": "gong.calls_transcript",
+      "kind": "rest_read",
+      "summary": "Retrieve transcripts of calls (/v2/calls/transcript)",
+      "description": "Executable typed Gong POST read-query with connector-authored flags, schema-gated JSON body, bounded response capture, and recursive sensitive-field redaction.",
+      "source_url": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
+      "risk": "high",
+      "approval": "none: read-only POST query with schema-gated body and bounded redacted output",
+      "output_policy": "json_redacted",
+      "rest": {
+        "method": "POST",
+        "path": "/v2/calls/transcript",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "cursor": {
+              "type": "string",
+              "description": "Pagination cursor."
+            },
+            "filter": {
+              "type": "object",
+              "properties": {
+                "callIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "description": "Gong call IDs."
+                },
+                "fromDateTime": {
+                  "type": "string",
+                  "description": "Inclusive ISO-8601 call start lower bound."
+                },
+                "toDateTime": {
+                  "type": "string",
+                  "description": "Exclusive ISO-8601 call start upper bound."
+                },
+                "workspaceId": {
+                  "type": "string",
+                  "description": "Gong workspace ID."
+                }
+              },
+              "minProperties": 1,
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "filter"
+          ],
+          "additionalProperties": false
+        }
+      }
+    }
+  ]
+}

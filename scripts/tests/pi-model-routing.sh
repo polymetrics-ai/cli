@@ -128,10 +128,13 @@ active_policy_paths = [
     root / ".pi" / "README.md",
     root / ".pi" / "prompts" / "pm-auto-loop.md",
     root / ".pi" / "prompts" / "pm-orchestrate.md",
-    root / ".agents" / "agentic-delivery" / "prompts" / "claude-orchestrator.md",
+    root / ".pi" / "prompts" / "pm-review-loop.md",
+    root / ".agents" / "agentic-delivery" / "contracts" / "parent-orchestrator-contract.md",
+    root / ".agents" / "agentic-delivery" / "prompts" / "local-codex-review-prompt.md",
+    root / ".agents" / "agentic-delivery" / "workflows" / "local-codex-review-loop.md",
+    root / ".agents" / "agentic-delivery" / "workflows" / "pi-active-orchestration-loop.md",
     root / ".agents" / "agentic-delivery" / "workflows" / "pi-autonomous-orchestration-loop.md",
     root / "docs" / "prompts" / "universal-programming-loop-prompts.md",
-    root / "scripts" / "claude-auto-loop.sh",
     root / "scripts" / "pi-auto-loop.sh",
     root / "scripts" / "pi-shepherd-loop.sh",
 ]
@@ -146,3 +149,5 @@ print(
     "implementation=sol/high; all other roles=sol/xhigh; concurrency=4"
 )
 PY
+
+"$repo_root/scripts/tests/pm-orchestrator-contract.sh"

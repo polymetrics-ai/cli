@@ -1,0 +1,10 @@
+{
+  "automated_review": {
+    "status": "complete_no_unresolved_findings",
+    "head_sha": "3333333333333333333333333333333333333333",
+    "reviewed_range": "legacy-parent...3333333",
+    "reviewer": "historical-local-sol-review",
+    "findings": [],
+    "disposition_summary": "historical record preserved without invented Shepherd evidence"
+  }
+}

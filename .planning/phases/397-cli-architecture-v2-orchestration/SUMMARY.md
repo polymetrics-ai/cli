@@ -41,7 +41,7 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #436 nativized hidden extract, added project-rooted RLM warehouse scope, and preserved parser/help/output behavior with generated docs parity. Exact-head review and integration race checks passed.
 
-#462 / PR #465 added the terminal interaction design system. Five accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A follow-up local review tightened activation to stdin+stdout TTY, made `--plain`/`--json`/`--no-input` unconditional prompt bypasses, and expanded fallback RED coverage. PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; its exact-head checks were green before merge. GitHub blocked-by edges now directly link #462 to all affected TUI issues, but local sidecar review is not external coverage.
+#462 / PR #465 added the terminal interaction design system. Five accepted design/safety corrections were integrated through PR #467 at parent commit `93a11710`. A follow-up local review tightened activation to stdin+stdout TTY, made `--plain`/`--json`/`--no-input` unconditional prompt bypasses, and expanded fallback RED coverage. PR #468 was merged into the parent at `c3d8a7573bfaf661bdcab737db84e3497929cdff`; its exact-head checks were green before merge. GitHub blocked-by edges now directly link #462 to all affected TUI issues. Local sidecars were not external coverage at that checkpoint; Wave 1 later verified exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561.
 
 #437 / PR #466 contains the final serialized Phase 9 connectors/certify migration. After safety/correctness correction cycles, remote CI exposed a wall-clock concurrency-test flake. The worker replaced it with a deterministic barrier/counter proof without raising or removing the gate. Head `26f98a72` passes focused/repeated/race tests, full CLI/certify packages, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certification, connectorgen 547/0, and all current GitHub checks. Exact-path local re-review found no remaining actionable runtime/code issue.
 
@@ -71,6 +71,16 @@ Human explicitly chose SKIP/DEFER for the optional OpenTelemetry beta log bridge
 No live process owned the preserved #408 worktree, so exactly one Sol/high `pm-gsd-worker` resumed its existing committed plan and 19 dirty entries. The worker preserved all work, delivered the flow/ETL dashboard slice, and pushed clean synchronized heads `eb3c84cb` and `ff7be3bd`. Focused RED/GREEN/refactor, focused race, full non-race, vet, build, parity, local dual-TTY fixture, and `make verify` evidence is recorded with no dependency delta.
 
 The 10-minute full race and 20-minute CLI race retry timed out without race findings. The worker also left stale/contradictory phase evidence and reported that mandatory `make verify` ran its local temporary reverse smoke in plan → preview → approval → execute order despite the narrower no-execution dispatch boundary. These are correction/verification blockers; no PR was opened and #413 remains collision-deferred.
+
+## Wave 1 parent synchronization — 2026-07-23
+
+Current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` has been merged normally into isolated branch `fm/cli-architecture-v2-wave1-parent-sync-r1` from parent/PR head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`. Merge commit `c545c3740c71b889fd2f1f64cec5491003f7b654` preserves Gong parity and CLI Architecture v2 contracts; full credential-free verification is green at pre-evidence task head `2a2e964b17144939b0a42f297de0d2b1c87383e1`.
+
+PR #438 has not changed: it remains draft at the old parent head until the Wave 1 stacked PR is reviewed and human-integrated. #462 now has exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`; historical #425–#436 waiver/review work remains pending. #408 remains excluded at branch head `6c643f5c971d1fac4a83e4ffe653b83847c2fceb`.
+
+### PR #493 canonical PM migration gate
+
+Post-integration: fetch `origin/feat/cli-architecture-v2`, record the actual resulting parent/PR #438 head, verify current main is an ancestor, and refresh parent CI/body evidence. Then PR #493 must merge that resulting parent normally, reconcile only its owned routing/skill/Makefile guidance to the canonical PM route, rerun its gates, and integrate before another CLI Architecture v2 implementation worker starts. Until both Wave 1 and PR #493 integrate, #408 remains `not_spawned_dependency_blocked`; do not copy the Wave 1 task head into parent state or start another implementation worker.
 
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 

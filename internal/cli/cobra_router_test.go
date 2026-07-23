@@ -609,21 +609,22 @@ func TestCobraRouterShellMapsGenuineCobraParseErrorsToUsage(t *testing.T) {
 	}
 }
 
-func TestCobraRouterShellPreservesLegacyHelpInterceptionForFallback(t *testing.T) {
+func TestCobraRouterShellPreservesHelpInterceptionForFallbackAndDynamicConnectors(t *testing.T) {
 	tests := []struct {
-		name string
-		args []string
-		want string
+		name     string
+		args     []string
+		wantCode int
+		want     string
 	}{
-		{name: "unknown command help", args: []string{"nosuch", "--help", "--json"}, want: `"message": "help topic \"nosuch\" not found"`},
-		{name: "dynamic connector help", args: []string{"github", "help", "--json"}, want: `"message": "help topic \"github\" not found"`},
+		{name: "unknown command help", args: []string{"nosuch", "--help", "--json"}, wantCode: 1, want: `"message": "help topic \"nosuch\" not found"`},
+		{name: "dynamic connector help", args: []string{"github", "help", "--json"}, wantCode: 0, want: `"kind": "CommandManual"`},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			var stdout, stderr bytes.Buffer
 			code := Run(tt.args, &stdout, &stderr)
-			if code != 1 {
-				t.Fatalf("Run(%v) code = %d, want 1; stdout=%s stderr=%s", tt.args, code, stdout.String(), stderr.String())
+			if code != tt.wantCode {
+				t.Fatalf("Run(%v) code = %d, want %d; stdout=%s stderr=%s", tt.args, code, tt.wantCode, stdout.String(), stderr.String())
 			}
 			if !strings.Contains(stdout.String(), tt.want) {
 				t.Fatalf("stdout missing %q:\n%s", tt.want, stdout.String())

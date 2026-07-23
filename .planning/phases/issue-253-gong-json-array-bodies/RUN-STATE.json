@@ -1,0 +1,37 @@
+{
+  "issue": 253,
+  "parent_issue": 133,
+  "phase": "issue-253-gong-json-array-bodies",
+  "status": "green_local_integrated",
+  "updated_at": "2026-07-10T00:00:00Z",
+  "branch": "feat/133-gong-cli-parity",
+  "pr": "https://github.com/polymetrics-ai/cli/pull/232",
+  "gsd": {
+    "doctor": "passed",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase 253 --skip-research --tdd",
+    "programming_loop": "manual_fallback_unknown_command"
+  },
+  "human_gates": [
+    "credentialed Gong checks",
+    "reverse ETL execution",
+    "destructive external actions",
+    "new dependencies",
+    "parent PR merge to main"
+  ],
+  "verification_passed": true,
+  "verification": [
+    "go test ./internal/connectors/connsdk -run Multipart -count=1",
+    "go test ./internal/connectors/engine -run 'OperationDirectRead|WriteJSONArray|WriteMultipart|DirectRead|Write' -count=1",
+    "go test ./internal/connectors/commandrunner -run 'OperationDirectRead|DirectRead|RedactRecord' -count=1",
+    "go test ./cmd/connectorgen -run 'Operation|Gong' -count=1",
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "go test ./internal/connectors/conformance -run 'TestConformance/gong|Static' -count=1",
+    "go run ./cmd/pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs",
+    "go test -timeout 20m ./...",
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "make verify"
+  ],
+  "implementation_summary": "Implemented schema-gated top-level JSON array write bodies; Gong CRM entity-schema write action is available through typed reverse-ETL records/table mappings without raw JSON CLI flags.",
+  "review_status": "pending_parent_pr_draft_review_skipped"
+}

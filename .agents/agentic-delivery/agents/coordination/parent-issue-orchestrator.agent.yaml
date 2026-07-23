@@ -4,15 +4,15 @@ metadata:
   id: parent-issue-orchestrator
   name: Parent Issue Orchestrator
   version: 1
-  summary: Owns parent issue execution across parent PRs, sub-issue workers, sub-PR integration, and automated review coverage.
+  summary: Owns parent issue execution, isolated workers, exact-head local Codex review, Shepherd validation, and human readiness.
   tags:
   - github
   - orchestration
   - parent-issue
   - sub-issues
   - stacked-pr
-  - claude
-  - copilot
+  - local-codex
+  - shepherd
 role: orchestration
 objective: Drive a large parent issue from parent PR creation through worker execution, integrated review, and human-ready
   final PR state.
@@ -26,7 +26,6 @@ skills:
   - github-issue-first-delivery
   - golang-how-to
   preferred_local_skills:
-  - gsd-programming-loop
   - gsd-plan-phase
   - gsd-code-review
   - golang-how-to
@@ -36,6 +35,7 @@ inputs:
   required:
   - parent issue URL
   - parent issue body with sub-issue roster
+  - correction budget (default max_correction_rounds 4 plus rounds_by_range)
   - AGENTS.md
   - .agents/agentic-delivery/references/gsd-pi-adapter.md
   - .agents/agentic-delivery/references/required-skills-routing.md
@@ -44,8 +44,8 @@ inputs:
   - .agents/agentic-delivery/contracts/parent-orchestrator-contract.md
   - .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md
   - .agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md
-  - .agents/agentic-delivery/workflows/automated-review-routing-loop.md
-  - .agents/agentic-delivery/workflows/claude-review-loop.md
+  - .agents/agentic-delivery/workflows/local-codex-review-loop.md
+  - .agents/agentic-delivery/workflows/shepherd-validator.md
 outputs:
   required:
   - parent branch and parent PR URL
@@ -53,7 +53,7 @@ outputs:
   - worker assignment prompts or subagent task summaries
   - worker handoff records
   - sub-PR merge decisions
-  - automated review coverage records
+  - exact-head local Codex and Shepherd coverage records
   - final readiness or blocker summary
 permissions:
   allowed_paths:
@@ -80,18 +80,20 @@ workflow:
 - build_dependency_and_write_scope_queue
 - spawn_or_assign_independent_workers
 - receive_worker_handoffs
-- verify_sub_pr_scope_checks_and_review_route
+- verify_sub_pr_scope_and_exact_head_checks
+- dispatch_fresh_context_local_codex_review
+- disposition_every_local_codex_finding
+- increment_and_enforce_correction_budget
+- run_independent_shepherd_validation
 - merge_or_block_sub_prs_to_parent_branch
-- observe_parent_pr_claude_coverage_or_record_fallback
-- route_copilot_backup_when_claude_is_blocked
-- dispatch_automated_review_disposition_work
 - update_orchestration_state
 - run_final_parent_verification
 - mark_parent_pr_ready_for_human_or_record_blocker
 state:
   schema: .agents/agentic-delivery/schemas/orchestration-state.schema.yaml
 handoffs:
-  worker_template: .agents/agentic-delivery/contracts/worker-handoff-template.md
+  worker_template: .agents/agentic-delivery/contracts/pm-worker-handoff-template.md
+  review_disposition_template: .agents/agentic-delivery/contracts/pm-code-review-disposition-template.md
 concurrency:
   allowed_when:
   - sub-issue dependencies are satisfied
@@ -107,10 +109,14 @@ merge_policy:
   parent_pr_target: main
   parent_pr_merge: human approval required
 coverage_policy:
-  claude_required: true
-  skipped_review_is_approval: false
-  fallback: parent PR review coverage after provisional integration, then Copilot backup when a Claude run errors, its quota is
-    exhausted, or Claude is otherwise unavailable
+  local_codex_required: true
+  exact_head_required: true
+  shepherd_required: true
+  changed_head_requires_revalidation: true
+  default_max_correction_rounds: 4
+  correction_cap_transition: blocked_human_gate
+  github_ai_reviewers: prohibited_for_pm_coverage
+  fallback: human blocker; never substitute an unreviewed or unvalidated head
 guardrails:
   input:
   - parent PR must exist before sub-issue execution is considered ready
@@ -127,16 +133,16 @@ guardrails:
   output:
   - shared parent artifacts are orchestrator-owned
   - no closing keywords in sub-PRs targeting parent branches
-  - skipped Claude review status is not approval
-  - Claude run failures or quota exhaustion are blockers unless a fallback route is recorded
-  - Copilot backup review is not approval
-  - parent PR review coverage is required for integrated batches skipped on sub-PRs
+  - local Codex review must be fresh-context and bound to exact base/head identities
+  - every actionable finding requires a written disposition
+  - independent Shepherd PROCEED is required before integration
+  - any changed head invalidates prior verification, review, and Shepherd evidence
 verification:
   required:
   - YAML parse checks for agent specs
   - parent issue or state ledger updated
   - sub-PR gate decisions recorded
-  - automated review coverage records present or blocker recorded
+  - exact-head local Codex and Shepherd records present or blocker recorded
   - final parent verification summary before human approval
 adapters:
   codex:
@@ -147,6 +153,7 @@ adapters:
   pi:
     note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
       runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      before GSD work; use only registered commands. When programming-loop is absent, /pm-orchestrate owns PLAN -> RED -> GREEN -> REFACTOR -> VERIFY -> REVIEW -> INTEGRATE. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      and use local-codex-review-loop.md followed by shepherd-validator.md before integration
       and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
       and keep runtime-backed services optional unless explicitly in scope.

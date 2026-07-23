@@ -123,7 +123,12 @@ for (( i=1; i<=MAX_ITERATIONS; i++ )); do
   log "turn $i: stage=${stage:-?} terminal=${terminal:-none}"
 
   case "$terminal" in
-    human_gate) log "DONE: reached human-ready gate. Human review required before merge to main."; exit 0 ;;
+    human_gate)
+      gate_class="$(bash "$REPO_ROOT/scripts/pm-terminal-classifier.sh" "$RUN_JSON" 2>/dev/null || printf 'blocked_human_decision')"
+      if [[ "$gate_class" == "human_ready" ]]; then
+        log "DONE: reached human-ready gate. Human review required before merge to main."; exit 0
+      fi
+      log "STOP: blocked human decision (see RUN.json and ORCHESTRATION-STATE.json for the gate kind)."; exit 4 ;;
     done)       log "DONE: all sub-issues complete and verified."; exit 0 ;;
     blocked)    log "STOP: run blocked (see ORCHESTRATION-STATE.json for the blocker)."; exit 4 ;;
     budget)     log "STOP: budget ceiling hit. Re-run 'scripts/pi-auto-loop.sh --resume' to continue."; exit 3 ;;

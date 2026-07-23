@@ -749,7 +749,11 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		return ReversePlan{}, err
 	}
 	created := time.Now().UTC()
-	planHash, err := reversePlanHash(req.Name, req.SourceTable, req.DestinationConnector, req.DestinationCredential, req.Action, req.DestinationConfig, req.Mappings, mapped)
+	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mapped)
+	if err != nil {
+		return ReversePlan{}, err
+	}
+	planHash, err := reversePlanHash(req.Name, req.SourceTable, req.DestinationConnector, req.DestinationCredential, req.Action, req.DestinationConfig, req.Mappings, mapped, payloadIdentity)
 	if err != nil {
 		return ReversePlan{}, err
 	}
@@ -764,6 +768,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		DestinationConfig:     cloneStringMap(req.DestinationConfig),
 		Action:                req.Action,
 		Mappings:              cloneStringMap(req.Mappings),
+		PayloadIdentity:       payloadIdentity,
 		ConfirmationChallenge: a.confirmationChallengeForAction(req.DestinationConnector, req.Action),
 		RecordCount:           len(records),
 		Sample:                cloneRecords(mapped[:sampleCount]),
@@ -811,7 +816,11 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 	if name == "" {
 		name = strings.ReplaceAll(writeCommand.Command, " ", "_")
 	}
-	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record)
+	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{writeCommand.Record})
+	if err != nil {
+		return ReversePlan{}, nil, err
+	}
+	planHash, err := connectorCommandPlanHash(name, req.Connector, req.Credential, req.Config, writeCommand.Command, req.Path, writeCommand.Write, writeCommand.Record, payloadIdentity)
 	if err != nil {
 		return ReversePlan{}, nil, err
 	}
@@ -829,6 +838,7 @@ func (a *App) PlanConnectorCommand(ctx context.Context, req PlanConnectorCommand
 		ConnectorCommand:       writeCommand.Command,
 		ConnectorCommandPath:   append([]string(nil), req.Path...),
 		ConnectorCommandRecord: cloneRecord(writeCommand.Record),
+		PayloadIdentity:        payloadIdentity,
 		ConfirmationChallenge:  writeCommand.ConfirmationChallenge,
 		RecordCount:            1,
 		Sample:                 []connectors.Record{cloneRecord(writeCommand.RedactedRecord)},
@@ -979,7 +989,16 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		return ReverseRun{}, err
 	}
 	mappedForHash := mapReverseRecords(records, plan.Mappings, "")
-	planHash, err := reversePlanHash(plan.Name, plan.SourceTable, plan.DestinationConnector, plan.DestinationCredential, plan.Action, plan.DestinationConfig, plan.Mappings, mappedForHash)
+	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
+	writer, runtime, err := a.resolveEndpoint(ctx, dest)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, mappedForHash)
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	planHash, err := reversePlanHash(plan.Name, plan.SourceTable, plan.DestinationConnector, plan.DestinationCredential, plan.Action, plan.DestinationConfig, plan.Mappings, mappedForHash, payloadIdentity)
 	if err != nil {
 		return ReverseRun{}, err
 	}
@@ -988,14 +1007,10 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 		a.state.ReversePlans[planIndex].ApprovalTokenHash = ""
 		a.state.ReversePlans[planIndex].ApprovalConsumedAt = time.Now().UTC()
 		_ = a.save()
-		return ReverseRun{}, errors.New("reverse plan source rows changed since approval")
+		return ReverseRun{}, errors.New("reverse plan source rows or payload files changed since approval")
 	}
+	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	mapped := mapReverseRecords(records, plan.Mappings, plan.ID)
-	dest := EndpointConfig{Connector: plan.DestinationConnector, Credential: plan.DestinationCredential, Config: plan.DestinationConfig}
-	writer, runtime, err := a.resolveEndpoint(ctx, dest)
-	if err != nil {
-		return ReverseRun{}, err
-	}
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err
@@ -1040,6 +1055,18 @@ func (a *App) RunReverseETL(ctx context.Context, req RunReverseETLRequest) (Reve
 }
 
 func (a *App) runConnectorCommandPlan(ctx context.Context, planIndex int, plan ReversePlan) (ReverseRun, error) {
+	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
+		Connector:  plan.DestinationConnector,
+		Credential: plan.DestinationCredential,
+		Config:     plan.DestinationConfig,
+	})
+	if err != nil {
+		return ReverseRun{}, err
+	}
+	payloadIdentity, err := payloadIdentitiesForRecords(runtime.ProjectDir, []connectors.Record{plan.ConnectorCommandRecord})
+	if err != nil {
+		return ReverseRun{}, err
+	}
 	planHash, err := connectorCommandPlanHash(
 		plan.Name,
 		plan.DestinationConnector,
@@ -1049,6 +1076,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, planIndex int, plan R
 		plan.ConnectorCommandPath,
 		plan.Action,
 		plan.ConnectorCommandRecord,
+		payloadIdentity,
 	)
 	if err != nil {
 		return ReverseRun{}, err
@@ -1060,14 +1088,7 @@ func (a *App) runConnectorCommandPlan(ctx context.Context, planIndex int, plan R
 		_ = a.save()
 		return ReverseRun{}, errors.New("reverse plan command payload changed since approval")
 	}
-	writer, runtime, err := a.resolveEndpoint(ctx, EndpointConfig{
-		Connector:  plan.DestinationConnector,
-		Credential: plan.DestinationCredential,
-		Config:     plan.DestinationConfig,
-	})
-	if err != nil {
-		return ReverseRun{}, err
-	}
+	runtime.ApprovedPayloadSHA256 = approvedPayloadSHA256(plan.PayloadIdentity)
 	runID, err := prefixedID("rrun")
 	if err != nil {
 		return ReverseRun{}, err

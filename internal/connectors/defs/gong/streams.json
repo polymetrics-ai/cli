@@ -3,26 +3,50 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "basic", "username": "{{ secrets.access_key }}", "password": "{{ secrets.access_key_secret }}" }
+      {
+        "mode": "basic",
+        "username": "{{ secrets.access_key }}",
+        "password": "{{ secrets.access_key_secret }}"
+      }
     ],
     "pagination": {
       "type": "cursor",
       "cursor_param": "cursor",
       "token_path": "records.cursor"
     },
-    "check": { "method": "GET", "path": "/users", "query": { "limit": "1" } },
+    "check": {
+      "method": "GET",
+      "path": "/users",
+      "query": {
+        "limit": "1"
+      }
+    },
     "error_map": [
-      { "status": 401, "hint": "gong access_key/access_key_secret are missing or invalid; re-run pm credentials add gong" },
-      { "status": 403, "hint": "gong account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "gong rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "gong access_key/access_key_secret are missing or invalid; re-run pm credentials add gong"
+      },
+      {
+        "status": 403,
+        "hint": "gong account lacks access for this request"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "gong rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "users",
       "path": "/users",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "users" },
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "users"
+      },
       "incremental": {
         "cursor_field": "created",
         "request_param": "fromDateTime",
@@ -40,8 +64,12 @@
     {
       "name": "calls",
       "path": "/calls",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "calls" },
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "calls"
+      },
       "incremental": {
         "cursor_field": "started",
         "request_param": "fromDateTime",
@@ -55,14 +83,99 @@
     {
       "name": "scorecards",
       "path": "/settings/scorecards",
-      "query": { "limit": "{{ config.page_size }}" },
-      "records": { "path": "scorecards" },
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "records": {
+        "path": "scorecards"
+      },
       "incremental": {
         "cursor_field": "updated",
         "request_param": "fromDateTime",
         "start_config_key": "start_date"
       },
       "schema": "schemas/scorecards.json"
+    },
+    {
+      "name": "crm_integrations",
+      "path": "/crm/integrations",
+      "query": {},
+      "records": {
+        "path": "integrations"
+      },
+      "schema": "schemas/crm_integrations.json"
+    },
+    {
+      "name": "workspaces",
+      "path": "/workspaces",
+      "query": {},
+      "records": {
+        "path": "workspaces"
+      },
+      "schema": "schemas/workspaces.json"
+    },
+    {
+      "name": "trackers",
+      "path": "/settings/trackers",
+      "query": {},
+      "records": {
+        "path": "keywordTrackers"
+      },
+      "schema": "schemas/trackers.json"
+    },
+    {
+      "name": "briefs",
+      "path": "/settings/briefs",
+      "query": {},
+      "records": {
+        "path": "briefs"
+      },
+      "schema": "schemas/briefs.json"
+    },
+    {
+      "name": "library_folders",
+      "path": "/library/folders",
+      "query": {},
+      "records": {
+        "path": "folders"
+      },
+      "schema": "schemas/library_folders.json"
+    },
+    {
+      "name": "flows",
+      "path": "/flows",
+      "query": {},
+      "records": {
+        "path": "flows"
+      },
+      "schema": "schemas/flows.json"
+    },
+    {
+      "name": "flow_folders",
+      "path": "/flows/folders",
+      "query": {},
+      "records": {
+        "path": "flows"
+      },
+      "schema": "schemas/flow_folders.json"
+    },
+    {
+      "name": "call_outcomes",
+      "path": "/call-outcomes",
+      "query": {},
+      "records": {
+        "path": "outcomes"
+      },
+      "schema": "schemas/call_outcomes.json"
+    },
+    {
+      "name": "permission_profiles",
+      "path": "/all-permission-profiles",
+      "query": {},
+      "records": {
+        "path": "profiles"
+      },
+      "schema": "schemas/permission_profiles.json"
     }
   ]
 }

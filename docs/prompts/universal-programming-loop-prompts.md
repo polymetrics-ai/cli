@@ -13,13 +13,15 @@ Runtime adapters:
   Codex subagents are explicit, so parent issue prompts must say to spawn the orchestrator/workers.
 - OpenCode: `.opencode/agents/gsd-loop-orchestrator.md` and
   `.opencode/commands/gsd-programming-loop.md` mirror the same loop with project-local agents.
-- Pi: `.pi/prompts/pm-orchestrate.md`, `.pi/prompts/pm-gsd-loop.md`, and
-  `.pi/prompts/pm-review-loop.md` mirror the same loop, with `.pi/agents/pm-scout.md`,
-  `.pi/agents/pm-reviewer.md`, and `.pi/agents/pm-gsd-worker.md` as the subagent roster. Launch
-  with `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`.
+- Pi/PM: `.pi/prompts/pm-orchestrate.md` is the active parent owner. It uses
+  `.pi/prompts/pm-gsd-loop.md` for implementation and `.pi/prompts/pm-review-loop.md` for
+  fresh-context exact-head local Codex review, with independent Shepherd validation before
+  integration. Launch with `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`.
 - All runtimes: `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` is the shared
   contract. Use `.agents/skills/caveman/SKILL.md` for compact status and handoffs.
   The GSD helper scripts are preflight/gate tools only; they never count as worker orchestration.
+  When registry discovery shows `programming-loop` is absent, `/pm-orchestrate` owns the equivalent
+  lifecycle; do not invent the missing command.
 
 ## Base Prompt
 
@@ -100,10 +102,13 @@ Record an eval baseline note in the phase `VERIFICATION.md` before downgrading a
 
 ## Runtime policy
 
-The GSD loop is runtime-neutral. Claude, Codex, OpenCode, and Pi adapters must point back to
+The GSD loop is runtime-neutral. Runtime adapters must point back to
 `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` instead of forking policy. For
-parent issues, the active parent orchestrator is mandatory when subagent tools are available and
-ready sub-issues have disjoint write scopes.
+current and forward PM parent issues, `/pm-orchestrate` is mandatory when subagent tools are
+available and ready sub-issues have disjoint write scopes. Exact-head code review follows
+`.agents/agentic-delivery/workflows/local-codex-review-loop.md`; independent trajectory review
+follows `.agents/agentic-delivery/workflows/shepherd-validator.md`. Claude and GitHub Copilot are
+not required, requested, or fallback PM review coverage.
 
 Use `caveman` compact mode for orchestration status, worker prompts, and handoffs. Do not compress
 safety gates, code, commands, exact test output, or security warnings past clarity.
@@ -162,7 +167,7 @@ REPORT: structured JSON per docs/migration/result.schema.json. Report honestly; 
 ## Template: adversarial reviewer
 
 ```text
-ROLE: Adversarial reviewer (gsd-loop-reviewer, model=openai-codex/gpt-5.6-sol:xhigh). READ-ONLY. Review connectors <list> against docs/migration/conventions.md and each API's
+ROLE: Fresh-context local Codex adversarial reviewer (gsd-loop-reviewer, model=openai-codex/gpt-5.6-sol:xhigh). READ-ONLY. Bind the review to supplied exact base/head SHAs. Review connectors <list> against docs/migration/conventions.md and each API's
 documentation_url (fetch it; spot-check 3 streams' schemas and EVERY write action's
 method/path/required fields). Apply cc-skills-golang GOLANG-AI-DRIVEN-REVIEW.md, golang-lint,
 golang-modernize. Check: schema fidelity, write-action correctness, fixture realism (not

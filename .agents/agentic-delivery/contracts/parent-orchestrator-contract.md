@@ -1,8 +1,8 @@
 # Parent Issue Orchestrator Contract
 
 Use this contract when a parent issue owns multiple sub-issues and stacked PRs. The orchestrator is
-the single owner for shared parent artifacts, merge arbitration, automated review coverage routing,
-and final human approval readiness.
+the single owner for shared parent artifacts, merge arbitration, exact-head verification, local
+Codex review, independent Shepherd validation, and final human approval readiness.
 
 ## Required Input
 
@@ -15,6 +15,7 @@ The parent issue must provide:
 - parent PR URL or explicit blocker
 - sub-issue roster with dependencies and branch names
 - verification commands
+- correction budget (`max_correction_rounds`, default 4, plus per-range counters)
 - human gates
 - source links
 
@@ -24,11 +25,12 @@ The orchestrator must also read:
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-- `.agents/agentic-delivery/workflows/claude-review-loop.md`
-- `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+- `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+- `.agents/agentic-delivery/workflows/shepherd-validator.md`
 - `.agents/agentic-delivery/references/gsd-pi-adapter.md`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
 - `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml`
 
 ## Activation
@@ -43,9 +45,9 @@ Triggers:
 
 - user references a parent issue with sub-issues
 - user references stacked PRs, parent branch, or parent PR
-- parent PR is missing or lacks review coverage
+- parent PR is missing or lacks exact-head local review and Shepherd coverage
 - sub-PR merge arbitration is needed
-- Claude/Copilot review coverage gap blocks integration
+- local Codex review or Shepherd trajectory coverage blocks integration
 - remaining sub-issues are ready or need dependency scheduling
 
 ## Responsibilities
@@ -57,12 +59,15 @@ The orchestrator owns:
 - creating a deliberate parent seed commit when GitHub needs a diff to open the parent PR
 - maintaining the parent issue status and orchestration state ledger
 - selecting sub-issues that can run in parallel without write-scope collisions
-- spawning or assigning worker agents with bounded prompts that name the `/gsd ...` or `scripts/gsd prompt ...` command path and required Go/design skills from `required-skills-routing.md`
+- spawning or assigning worker agents with bounded prompts that name available `/gsd ...` or `scripts/gsd prompt ...` preflight commands and required Go/design skills from `required-skills-routing.md`
+- owning PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE when the registry lacks `programming-loop`, without inventing that command
 - receiving worker handoffs
 - deciding whether a sub-PR can merge into the parent branch
-- requesting or observing parent PR Claude coverage after integrated batches
-- routing Copilot backup review when Claude is blocked by rate limits or unavailability
-- launching or assigning automated review disposition work
+- dispatching fresh-context read-only local Codex review against exact base/head identities
+- dispositioning every actionable finding and re-running verification/re-review after head changes
+- persisting correction rounds by exact review range and blocking for a human when the configured
+  cap is exceeded
+- running independent Shepherd trajectory validation after clean review and before integration
 - declaring final parent PR readiness for human approval
 
 The orchestrator must not stop after describing next steps when all required inputs are available,
@@ -100,13 +105,14 @@ Use these states in the parent issue, parent PR, or durable state ledger:
 - `worker_in_progress`: a worker is implementing the sub-issue.
 - `sub_pr_open`: worker opened a sub-PR against the parent branch.
 - `sub_pr_green`: sub-PR local and remote checks are green.
-- `sub_pr_reviewed`: automated review coverage exists on the sub-PR, or an explicit fallback is
-  planned.
-- `provisionally_integrated`: sub-PR merged into parent branch, but parent PR review coverage is
-  still pending.
-- `parent_review_pending`: automatic parent PR review is running, coverage is waiting for the
-  parent PR to leave draft, or an allowed fallback review route is recorded for an integrated batch.
-- `parent_review_clean`: integrated batch has no unresolved actionable automated review findings.
+- `sub_pr_reviewed`: exact-head local Codex review is clean and the independent Shepherd review
+  transition received `PROCEED`.
+- `provisionally_integrated`: sub-PR merged into the parent branch, but exact integrated-range
+  verification/review/trajectory evidence is still pending.
+- `parent_review_pending`: exact-head parent verification, local Codex review, or Shepherd
+  validation is running for an integrated batch.
+- `parent_review_clean`: the integrated batch has no unresolved actionable local Codex findings and
+  its Shepherd validation passed.
 - `final_verification`: all sub-issues are integrated and full parent verification is running.
 - `ready_for_human`: parent PR is ready, but merge to `main` still needs human approval.
 - `blocked`: a human gate, failed verification, review blocker, or dependency blocks progress.
@@ -142,6 +148,17 @@ Compact handoffs are allowed only for agent prose. Do not compact exact code, co
 review findings, security warnings, destructive-action warnings, ordered safety gates, or approval
 gates in worker prompts or handoffs.
 
+## Correction Budget
+
+Every canonical PM parent run records `max_correction_rounds` (default 4) and
+`rounds_by_range`. A correction range is the exact base SHA plus a candidate lineage identifier
+created once when the first candidate is adopted. Preserve that lineage across changed heads and
+replacement PRs, append head history, and increment the same counter when accepted findings produce
+a new head. A pre-v2 `guards.correction_rounds` value is read-only legacy input: map it once into the
+stable lineage and thereafter write only `correction_budget`. When a range exceeds the cap, set the
+candidate/sub-issue to `blocked`, record the outstanding findings, and stop for a human decision.
+Never reset the counter by relabeling the same correction or by opening a replacement PR.
+
 ## Merge Policy
 
 A sub-PR may merge into the parent branch only when:
@@ -150,35 +167,37 @@ A sub-PR may merge into the parent branch only when:
 - it uses `Refs #<sub-issue>` and `Refs #<parent-issue>`, not closing keywords
 - targeted and issue-level verification pass
 - CI checks pass or an infrastructure blocker is recorded
-- automated review findings on the sub-PR are resolved, or the parent PR fallback path is recorded
+- exact-head local Codex findings are resolved and independent Shepherd validation passed
 - the diff is within the sub-issue scope
 - no requested-changes review is open
 - no human gate is triggered
 
-If Claude skips a non-`main` sub-PR, merge into the parent branch is only provisional. The
-orchestrator must observe automatic parent PR review, or record an allowed fallback route such as
-Copilot backup or human review, for the integrated commit range before marking that sub-issue
-review-complete.
+Review is bound to commit identity, not PR base behavior. A stacked sub-PR is review-complete only
+when fresh-context local Codex review is clean for its exact base/head range and independent
+Shepherd validation passes. Any head change invalidates both results and requires verification,
+re-review, and revalidation.
 
 The parent PR into `main` always requires human approval.
 
-## Automated Review Coverage Record
+## Exact-Head Review And Trajectory Record
 
 For every sub-issue, record:
 
 - sub-issue number
 - sub-PR URL
 - parent PR URL
-- base branch
-- head branch
-- head SHA
-- reviewed commit or commit range
-- primary route: `claude_auto`, `claude_auto_incremental`,
-  `claude_manual_fallback`, `copilot_backup`, `human`, or `blocked`
-- coverage route: `sub_pr`, `parent_pr_fallback`, `copilot_backup`, or `blocked`
-- fallback route: `copilot_backup`, `human`, or `none`
-- review status: `pending`, `clean`, `comments_addressed`, `skipped`, or `blocked`
-- disposition summary URL or comment
+- exact base branch and SHA
+- exact head branch and SHA
+- reviewed commit range
+- primary route: `local_codex`, `human`, or `blocked`
+- review status: `pending`, `findings_correction_required`, `clean`, `comments_addressed`, or `blocked`
+- `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
+- fresh-context reviewer identity and findings/disposition artifact
+- Shepherd status, verdict, trajectory score, and evidence artifact
+- CI status and remaining human gates
+
+Claude and GitHub Copilot are not required, requested, or fallback coverage for the canonical PM
+route. Preserve legacy values only when reading truthful historical records.
 
 ## Output Requirements
 
@@ -188,6 +207,6 @@ The orchestrator must leave a reviewer able to answer:
 - which worker owned each sub-issue
 - which branches and PRs were used
 - which checks ran
-- which automated review route covered each sub-issue
+- which exact-head local Codex and Shepherd evidence covered each sub-issue
 - why any sub-issue was deferred or blocked
 - whether the parent PR is ready for human approval

@@ -25,9 +25,10 @@ Required reading before acting:
 - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/pi-active-orchestration-loop.md`
 - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
-- `.agents/agentic-delivery/workflows/claude-review-loop.md`
-- `.agents/agentic-delivery/contracts/code-review-disposition-template.md`
-- `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+- `.agents/agentic-delivery/workflows/shepherd-validator.md`
+- `.agents/agentic-delivery/contracts/pm-code-review-disposition-template.md`
+- `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
 - `.agents/skills/caveman/SKILL.md`
 
 ## Every turn, in order
@@ -58,14 +59,21 @@ Required reading before acting:
    - EXECUTE / CORRECT → `pm-gsd-worker`, each with its own `cwd` (sibling checkout or worktree) and one write scope.
    - SUB_PR_OPEN → after the worker's first push, open the sub-PR (base = parent branch; body `Refs #<sub>` + `Refs #<N>`). Idempotent — adopt an existing matching PR. Record `sub_pr`.
    - VERIFY → `pm-verifier` (gate: must pass before review).
-   - REVIEW → `pm-reviewer` on the sub-PR; disposition every finding via `pm-claude-review-disposition` and
-     `code-review-disposition-template.md` (a reply on EVERY finding, fixed or not, with a reason).
-   - INTEGRATE → merge the sub-PR into the parent branch after verify+review are clean.
+   - REVIEW → fresh-context read-only `pm-reviewer` on the exact base/head range; disposition every
+     finding through `local-codex-review-loop.md` and `pm-code-review-disposition-template.md`. The
+     independent driver follows `shepherd-validator.md` and must return `PROCEED` for this clean
+     REVIEW transition.
+   - INTEGRATE → merge the exact reviewed head only after verify is green, review is clean, and the
+     REVIEW transition received Shepherd `PROCEED`.
    - PARENT_FINALIZE → parent PR coverage; stop at the human-ready gate.
 3. **Persist the transition** to `RUN.json` and `ORCHESTRATION-STATE.json` immediately, so this
    exact point is a safe resume.
 4. **Record the spawn decision** (`spawned` with agent ids / issue numbers, or a `not_spawned_*`
    reason with the next unblock action) — a turn with ready work and no spawn and no reason is a defect.
+
+Registry discovery is mandatory. If `programming-loop` is absent, do not invoke or invent it; this
+PM orchestrator owns PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE with durable
+state. Claude and GitHub Copilot are not required, requested, or fallback PM review coverage.
 
 ## Subagent dispatch rules (Pi runtime)
 
@@ -80,8 +88,15 @@ Required reading before acting:
 
 ## Guards (enforce; do not bypass)
 
-- Correction sub-loop capped at `max_correction_rounds` (default 4) per sub-issue; on exceed, mark
-  the sub-issue `blocked` with outstanding findings and stop for human review.
+- Persist `correction_budget.max_correction_rounds` (default 4) and
+  `correction_budget.rounds_by_range`, keyed by the stable exact-base/candidate lineage created when
+  the first candidate is adopted. Preserve that candidate lineage across replacement PRs and changed
+  heads; append head history and increment the same counter instead of resetting it. A resumed pre-v2
+  record may read `guards.correction_rounds` once as read-only legacy input, map it to the stable
+  lineage counter, and thereafter write only the canonical shape. On exceed, mark the sub-issue
+  `blocked` with outstanding findings, set `RUN.json.schema_version = "canonical_v2"`,
+  `RUN.json.terminal = "human_gate"`, and sibling
+  `RUN.json.human_gate_kind = "correction_cap_exceeded"`, then stop for a blocked human decision.
 - Respect the run budget: when the driver signals the budget ceiling, finish the current durable
   transition, set `RUN.json.terminal = "budget"`, and exit — resume continues from the reconciler.
 - Iteration backstop `max_iterations` (default 200) turns.
@@ -97,8 +112,10 @@ Required reading before acting:
 ## Output
 
 Use compact caveman-style status for progress and handoffs; keep commands, paths, tests, code,
-security warnings, destructive-action warnings, and human gates exact. End each turn by writing the
-reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage plus the next action.
+security warnings, destructive-action warnings, and human gates exact. Canonical runs always write
+`RUN.json.schema_version = "canonical_v2"`; normal final readiness writes terminal `human_gate` plus
+sibling `human_gate_kind = "parent_ready"`. End each turn by writing the reconciled
+`RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage plus the next action.
 
 ## Shepherd supervision contract (when driven by scripts/pi-shepherd-loop.sh)
 
@@ -107,8 +124,10 @@ reconciled `RUN.json`/`ORCHESTRATION-STATE.json` and stating the current stage p
   (your ledger is restored to the last good checkpoint and `REVERT-CLEANUP.json` tells you what to
   undo), or HALT. Persist honestly; never claim progress ground truth cannot corroborate.
 - `RUN.json.terminal` MUST be one of the plain strings `human_gate | done | blocked | budget` —
-  the driver string-matches it. Put structured gate detail (reason, options, evidence) in
-  `ORCHESTRATION-STATE.json` and the relevant GitHub issue, not in the terminal field.
+  the driver string-matches it. For `human_gate`, write the required sibling discriminator
+  `RUN.json.human_gate_kind` (`parent_ready` or `correction_cap_exceeded`). Put all other structured
+  gate detail (reason, options, evidence) in `ORCHESTRATION-STATE.json` and the relevant GitHub
+  issue, not in the terminal string.
 - Credentials PRE-PROVISIONED in the loop environment are standing operator authorization for
   transient, env-only, read-only use; check `[ -n "$VAR" ]` before declaring a secret_change gate.
   Printing, storing, or committing a secret value remains forbidden.

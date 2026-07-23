@@ -379,9 +379,12 @@ type WriteAction struct {
 	Method       string              `json:"method"`
 	Path         string              `json:"path"`
 	PathFields   []string            `json:"path_fields,omitempty"`
-	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql
+	BodyType     string              `json:"body_type,omitempty"` // json (default) | form | none | graphql | json_array | multipart
 	BodyFields   []string            `json:"body_fields,omitempty"`
+	BodyField    string              `json:"body_field,omitempty"`
+	BodySchema   json.RawMessage     `json:"body_schema,omitempty"`
 	GraphQL      *GraphQLRequestSpec `json:"graphql,omitempty"`
+	Multipart    *MultipartSpec      `json:"multipart,omitempty"`
 	RecordSchema json.RawMessage     `json:"record_schema"`
 	Delete       *DeleteSpec         `json:"delete,omitempty"`
 	Risk         string              `json:"risk"`
@@ -399,6 +402,20 @@ type GraphQLRequestSpec struct {
 }
 
 // DeleteSpec describes idempotent-delete semantics for a delete write action.
+type MultipartSpec struct {
+	MaxBytes int64               `json:"max_bytes,omitempty"`
+	Parts    []MultipartPartSpec `json:"parts,omitempty"`
+}
+
+type MultipartPartSpec struct {
+	Name        string `json:"name"`
+	Type        string `json:"type"`
+	Field       string `json:"field"`
+	ContentType string `json:"content_type,omitempty"`
+	Required    bool   `json:"required,omitempty"`
+	MaxBytes    int64  `json:"max_bytes,omitempty"`
+}
+
 type DeleteSpec struct {
 	Idempotent      bool  `json:"idempotent,omitempty"`
 	MissingOkStatus []int `json:"missing_ok_status,omitempty"`
@@ -480,9 +497,13 @@ type OperationSpec struct {
 }
 
 type RESTOperationSpec struct {
-	Method string            `json:"method"`
-	Path   string            `json:"path"`
-	Query  map[string]string `json:"query,omitempty"`
+	Method      string            `json:"method"`
+	Path        string            `json:"path"`
+	ContentType string            `json:"content_type,omitempty"`
+	MaxBytes    int               `json:"max_bytes,omitempty"`
+	Query       map[string]string `json:"query,omitempty"`
+	Body        map[string]any    `json:"body,omitempty"`
+	BodySchema  json.RawMessage   `json:"body_schema,omitempty"`
 }
 
 // SensitivePolicySpec is the reverse-ETL sensitive/admin policy for an operation
@@ -924,7 +945,7 @@ func loadWrites(sub fs.FS, dirName string) ([]WriteAction, error) {
 	if err := strictDecode(raw, &doc); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
-	if err := validateWriteGraphQL(doc.Actions); err != nil {
+	if err := validateWriteBodies(doc.Actions); err != nil {
 		return nil, fmt.Errorf("load bundle %s: writes.json: %w", dirName, err)
 	}
 	return doc.Actions, nil
@@ -948,26 +969,50 @@ func validateStreamGraphQL(streams []StreamSpec) error {
 	return nil
 }
 
-func validateWriteGraphQL(actions []WriteAction) error {
+func validateWriteBodies(actions []WriteAction) error {
 	for i, action := range actions {
 		bodyType := bodyTypeOf(action)
 		if action.GraphQL != nil && bodyType != "graphql" {
 			return fmt.Errorf("action %d (%q) declares graphql but body_type is %q", i, action.Name, bodyType)
 		}
-		if bodyType != "graphql" {
-			continue
+		if action.Multipart != nil && bodyType != "multipart" {
+			return fmt.Errorf("action %d (%q) declares multipart but body_type is %q", i, action.Name, bodyType)
 		}
-		if action.GraphQL == nil {
-			return fmt.Errorf("action %d (%q) body_type graphql requires graphql", i, action.Name)
-		}
-		if len(action.BodyFields) > 0 {
-			return fmt.Errorf("action %d (%q) body_type graphql cannot declare body_fields", i, action.Name)
-		}
-		if method := strings.ToUpper(methodOrDefault(action.Method)); method != "POST" {
-			return fmt.Errorf("action %d (%q) graphql action method must be POST, got %s", i, action.Name, method)
-		}
-		if err := validateGraphQLSpec(action.GraphQL, "mutation"); err != nil {
-			return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+		switch bodyType {
+		case "graphql":
+			if action.GraphQL == nil {
+				return fmt.Errorf("action %d (%q) body_type graphql requires graphql", i, action.Name)
+			}
+			if len(action.BodyFields) > 0 {
+				return fmt.Errorf("action %d (%q) body_type graphql cannot declare body_fields", i, action.Name)
+			}
+			if method := strings.ToUpper(methodOrDefault(action.Method)); method != "POST" {
+				return fmt.Errorf("action %d (%q) graphql action method must be POST, got %s", i, action.Name, method)
+			}
+			if err := validateGraphQLSpec(action.GraphQL, "mutation"); err != nil {
+				return fmt.Errorf("action %d (%q): %w", i, action.Name, err)
+			}
+		case "json_array":
+			if strings.TrimSpace(action.BodyField) == "" {
+				return fmt.Errorf("action %d (%q) body_type json_array requires body_field", i, action.Name)
+			}
+			if len(action.BodySchema) == 0 {
+				return fmt.Errorf("action %d (%q) body_type json_array requires body_schema", i, action.Name)
+			}
+		case "multipart":
+			if action.Multipart == nil || len(action.Multipart.Parts) == 0 {
+				return fmt.Errorf("action %d (%q) body_type multipart requires multipart.parts", i, action.Name)
+			}
+			for j, part := range action.Multipart.Parts {
+				if strings.TrimSpace(part.Name) == "" || strings.TrimSpace(part.Field) == "" {
+					return fmt.Errorf("action %d (%q) multipart part %d requires name and field", i, action.Name, j)
+				}
+				switch part.Type {
+				case "field", "file":
+				default:
+					return fmt.Errorf("action %d (%q) multipart part %d has unsupported type %q", i, action.Name, j, part.Type)
+				}
+			}
 		}
 	}
 	return nil
@@ -1193,8 +1238,15 @@ func expectedOperationBlock(kind string) string {
 func validateOperationSemantics(i int, op OperationSpec) error {
 	switch op.Kind {
 	case "rest_read":
-		if method := strings.ToUpper(strings.TrimSpace(op.REST.Method)); method != "GET" {
-			return fmt.Errorf("operation %d (%q) rest_read method must be GET, got %s", i, op.ID, method)
+		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))
+		if method != "GET" && method != "POST" {
+			return fmt.Errorf("operation %d (%q) rest_read method must be GET or POST, got %s", i, op.ID, method)
+		}
+		if method == "POST" && len(op.REST.BodySchema) == 0 {
+			return fmt.Errorf("operation %d (%q) rest_read POST must declare body_schema", i, op.ID)
+		}
+		if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
+			return fmt.Errorf("operation %d (%q) rest_read must not declare mutating mutation_class %q", i, op.ID, op.MutationClass)
 		}
 	case "rest_write":
 		method := strings.ToUpper(strings.TrimSpace(op.REST.Method))

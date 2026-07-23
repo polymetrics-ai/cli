@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "phase": "397-pm-orchestrator-extension",
+  "issue": 397,
+  "pullRequest": 495,
+  "status": "captain_authorized_correction_round_5_implemented_verification_pending",
+  "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
+  "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
+  "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+  "mainHead": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "pr493Head": "e21e56339390c5e1946eb4cfaf276eb80a889f29",
+  "gsd": {
+    "doctor": "pass",
+    "registryCommands": 69,
+    "programmingLoop": "absent",
+    "route": "pm_orchestrator_owned_manual_lifecycle"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Captain explicitly extended the existing Wave 1 worker/PR; one read-only collision scout ran, while the coordinator owns the coupled canonical workflow edits and PR #493 path boundary."
+    },
+    {
+      "cycle": "tdd_gate",
+      "decision": "local_critical_path",
+      "reason": "Focused PM orchestrator contract validation failed against the old canonical route before guidance changes, proving the unavailable-command and review-owner defects."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "The extension is a coupled canonical workflow/adapter correction on the already assigned PR #495 branch; focused contract, model routing, Shepherd guards, parse checks, dependency check, and PR #493 path-disjointness are green."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Focused PM route checks, parse/scope/dependency gates, gofmt/diff, vet, full tests, build, module checks, and make verify passed at implementation head d72a93018933541d390884f96b285856e269a1ab and again at evidence head 3c88fc78062ba0a3437f79bc88c395286c228c65."
+    },
+    {
+      "cycle": "review",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected exact base 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f and head 3c88fc78062ba0a3437f79bc88c395286c228c65, returning five findings; four are corrected or modified in scope and one pre-existing Gong product defect is deferred by the explicit non-product scope."
+    },
+    {
+      "cycle": "review_round_2",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected verified exact head 0665ad7aad1ec083f4bb0572a88ac1a38f417a35, confirmed the scoped Gong follow-up, and returned three accepted orchestration findings: authoritative PR #493 gate drift, transitive bot-era templates, and autonomous correction-counter drift."
+    },
+    {
+      "cycle": "correct_round_2",
+      "decision": "local_critical_path",
+      "reason": "Accepted F6-F8 corrections are implemented at 906257c2045ebc269bbd51e1f2cea34c27779e52: durable #397/PR #493 gate, PM-specific transitive templates, and stable autonomous correction-lineage state. Full exact-head verification and re-review remain pending."
+    },
+    {
+      "cycle": "review_round_3",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected verified exact head 3af7910528d234d1a1d886a6778d7817495e6321 and returned N1-N5. The current-main-identical Gong product defect is deferred pending separate captain authority; scoped #408 state, review enums, cap terminal classification, and branch identity are accepted for correction round 3."
+    },
+    {
+      "cycle": "correct_round_3",
+      "decision": "local_critical_path",
+      "reason": "Accepted N2-N5 corrections are implemented at 1cd43caacc05d9f6955a614144d6772210248afb: all #408 authoritative records, enum parity, shared terminal classification, and current/historical branch identity. N1 remains deferred under the no-product boundary."
+    },
+    {
+      "cycle": "review_round_4",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected verified exact head 1d4acf4f633e4f8940ba637f2099723369b2ed30, confirmed prior dispositions, and returned two accepted machine-enforcement findings: canonical missing-kind terminal classification and exact disposition-enum parity. Round 4 is the maximum permitted correction round."
+    },
+    {
+      "cycle": "correct_round_4",
+      "decision": "local_critical_path",
+      "reason": "Accepted N4-R/N3-R corrections are implemented at 42ddf3debcad3298d56583ebbdd219e2dbcd8596: canonical producer terminal/kind contract, version-aware fail-closed classifier fixtures, and exact six-value disposition-enum parsing. Further accepted correction would exceed the budget and require a human blocker."
+    },
+    {
+      "cycle": "captain_override_round_5",
+      "decision": "local_critical_path",
+      "reason": "Captain decision pm-correction-budget-exceeded authorizes exactly one fifth correction round on the existing lineage for R1-R3 only: valid worker skills plus missing-reference rejection, explicit unsupported schema fail-closed classification, and canonical actual disposition rows. No reset, expansion, audit-backed review system, or round 6."
+    },
+    {
+      "cycle": "correct_round_5",
+      "decision": "local_critical_path",
+      "reason": "Authorized R1-R3 corrections are implemented at fa6054c07cfd4a43e0c03d262681df37ce8565d4 with focused GREEN: harness-routed worker skills and missing-reference rejection, explicit unknown-schema fail-closed classification, and canonical actual disposition rows. Full exact-version verification and fresh review remain pending."
+    }
+  ],
+  "verificationPassed": false,
+  "verifiedImplementationHead": "d72a93018933541d390884f96b285856e269a1ab",
+  "verifiedEvidenceHead": "32dbda9daf432a5c3f45e7b7753a41eaa96bd915",
+  "correctionRound2ImplementationHead": "906257c2045ebc269bbd51e1f2cea34c27779e52",
+  "correctionRound3ReviewedHead": "3af7910528d234d1a1d886a6778d7817495e6321",
+  "correctionRound3ImplementationHead": "1cd43caacc05d9f6955a614144d6772210248afb",
+  "correctionRound4ReviewedHead": "1d4acf4f633e4f8940ba637f2099723369b2ed30",
+  "correctionRound4ImplementationHead": "42ddf3debcad3298d56583ebbdd219e2dbcd8596",
+  "correctionRound5ImplementationHead": "fa6054c07cfd4a43e0c03d262681df37ce8565d4",
+  "correctionBudget": {
+    "defaultMaxCorrectionRounds": 4,
+    "maxCorrectionRounds": 5,
+    "override": {
+      "decisionKey": "pm-correction-budget-exceeded",
+      "decisionPath": "/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-round5-override-2026-07-23.md",
+      "authorizedRound": 5,
+      "scope": ["R1", "R2", "R3"],
+      "noCounterReset": true,
+      "round6Authorized": false
+    },
+    "roundsByRange": {
+      "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65": 5
+    }
+  },
+  "localCodexReview": {
+    "status": "blocked_round_5_authorized",
+    "exactBase": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+    "exactHead": "32dbda9daf432a5c3f45e7b7753a41eaa96bd915",
+    "findings": 3,
+    "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
+  },
+  "shepherd": "blocked_until_round_5_codex_clean",
+  "updatedAt": "2026-07-23T18:34:58Z"
+}

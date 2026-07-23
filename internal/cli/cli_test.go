@@ -49,6 +49,138 @@ func TestRootHelpAliasesShowManual(t *testing.T) {
 	}
 }
 
+func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{name: "help topic", args: []string{"help", "gong"}},
+		{name: "bare connector", args: []string{"gong"}},
+		{name: "connector help flag", args: []string{"gong", "--help"}},
+		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}},
+		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}},
+		{name: "false preview is passive", args: []string{"gong", "--preview=false"}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
+			}
+			out := stdout.String()
+			for _, want := range []string{"pm gong", "calls transcript", "Gong"} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("Run(%v) help missing %q:\n%s", tt.args, want, out)
+				}
+			}
+		})
+	}
+}
+
+func TestDynamicConnectorSharedPassiveFlagRendersHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"github", "--credential", "github-local"}, &stdout, &stderr)
+	if code != 0 || !strings.Contains(stdout.String(), "pm github") {
+		t.Fatalf("Run(github --credential) code = %d stdout=%s stderr=%s", code, stdout.String(), stderr.String())
+	}
+}
+
+func TestDynamicConnectorInvalidFlagOnlyInvocationsAreUsageErrors(t *testing.T) {
+	for _, args := range [][]string{
+		{"gong", "--bogus"},
+		{"gong", "--plan", "rplan_fixture", "--preview"},
+		{"gong", "--plan="},
+		{"gong", "--approve="},
+		{"gong", "--confirm="},
+	} {
+		t.Run(strings.Join(args[1:], "_"), func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(args, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "missing connector command path") {
+				t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestDynamicConnectorEmptyLifecycleFlagsWithCommandAreUsageErrors(t *testing.T) {
+	for _, flag := range []string{"--plan=", "--approve=", "--confirm=", "--plan", "--approve", "--confirm"} {
+		t.Run(flag, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run([]string{"github", "issue", "create", flag}, &stdout, &stderr)
+			if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "requires a value") {
+				t.Fatalf("Run(github issue create %s) code = %d stdout=%s stderr=%s", flag, code, stdout.String(), stderr.String())
+			}
+		})
+	}
+
+	t.Run("bare flag before repeated value", func(t *testing.T) {
+		var stdout, stderr bytes.Buffer
+		args := []string{"github", "issue", "create", "--plan", "--plan", "rplan_fixture"}
+		code := cli.Run(args, &stdout, &stderr)
+		if code != 2 || !strings.Contains(stdout.String()+stderr.String(), "requires a value") {
+			t.Fatalf("Run(%v) code = %d stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+		}
+	})
+}
+
+func TestDynamicConnectorHelpJSONIsAgentReadable(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "gong", "--json"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help gong --json) code = %d stderr = %s", code, stderr.String())
+	}
+	var env struct {
+		Kind    string `json:"kind"`
+		Command string `json:"command"`
+		Manual  string `json:"manual"`
+	}
+	if err := json.Unmarshal(stdout.Bytes(), &env); err != nil {
+		t.Fatalf("decode JSON help: %v\n%s", err, stdout.String())
+	}
+	if env.Kind != "CommandManual" || env.Command != "gong" || !strings.Contains(env.Manual, "calls transcript") {
+		t.Fatalf("help envelope = %+v", env)
+	}
+}
+
+func TestGongTranscriptCommandAllowsDeclaredResponseCap(t *testing.T) {
+	response := `{"transcript":"` + strings.Repeat("x", (1<<20)+1024) + `"}`
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodPost || r.URL.Path != "/v2/calls/transcript" {
+			t.Errorf("request = %s %s, want POST /v2/calls/transcript", r.Method, r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(response))
+	}))
+	t.Cleanup(server.Close)
+
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	t.Setenv("PM_TEST_GONG_ACCESS_KEY", "fixture-access-key")
+	t.Setenv("PM_TEST_GONG_ACCESS_KEY_SECRET", "fixture-access-key-secret")
+	runCLI(t, []string{
+		"credentials", "add", "gong-local",
+		"--connector", "gong",
+		"--from-env", "access_key=PM_TEST_GONG_ACCESS_KEY",
+		"--from-env", "access_key_secret=PM_TEST_GONG_ACCESS_KEY_SECRET",
+		"--config", "base_url=" + server.URL,
+		"--root", root,
+		"--json",
+	})
+
+	stdout, _ := runCLI(t, []string{
+		"gong", "calls", "transcript",
+		"--credential", "gong-local",
+		"--call-id", "call-fixture",
+		"--root", root,
+		"--json",
+	})
+	if !strings.Contains(stdout, `"kind": "ConnectorCommandDirectRead"`) {
+		t.Fatalf("output missing direct-read envelope: %.200s", stdout)
+	}
+}
+
 func TestRootHelpJSONIsAgentReadable(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"--json", "--help"}, &stdout, &stderr)
@@ -506,6 +638,18 @@ func TestGitHubCommandSurfaceRunsDirectReadFile(t *testing.T) {
 	}
 	if env.Response["content_redacted"] != true || env.Response["download_url_redacted"] != true {
 		t.Fatalf("response redaction markers = %+v, want content and download_url redacted", env.Response)
+	}
+
+	gotPath = ""
+	runCLI(t, []string{
+		"github", "repo", "read-file",
+		"--credential", "github-local",
+		"--path", "help",
+		"--root", root,
+		"--json",
+	})
+	if gotPath != "/repos/octocat/hello-world/contents/help" {
+		t.Fatalf("request path for help-valued flag = %q, want contents/help", gotPath)
 	}
 }
 

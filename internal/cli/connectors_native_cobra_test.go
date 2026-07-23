@@ -212,7 +212,7 @@ func TestNativeConnectorsAndCertifyHelpDiscoveryGlobalsAndMalformedInputs(t *tes
 			var code int
 			if tt.name == "topic" {
 				var out bytes.Buffer
-				err := runHelp([]string{"connectors"}, &out)
+				err := runHelp([]string{"connectors"}, &out, false)
 				stdout = out.String()
 				if err != nil {
 					code = 1
