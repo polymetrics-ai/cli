@@ -66,8 +66,9 @@ Useful prompt templates:
   Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
 - `/pm-gsd-loop`: issue-first GSD/TDD implementation loop.
   Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
-- `/pm-review-loop`: Claude/Copilot review disposition loop.
-  Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
+- `/pm-review-loop`: fresh-context exact-head local Codex review and disposition, followed by
+  independent Shepherd validation.
+  Example: `/pm-review-loop 74 <exact-base-sha> <exact-head-sha>`.
 - `/pm-auto-loop`: fully automated, resumable delivery loop. The orchestrator model comes from the
   driver, and worker models come from `.pi/agents/*.md` frontmatter. Given one problem prompt it
   (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent draft PR
@@ -95,11 +96,12 @@ LOOP_CMD=/pm-connector-loop scripts/pi-auto-loop.sh "twenty (Twenty CRM, https:/
 scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ```
 
-### Codex-only driver + Shepherd validator (recommended)
+### Canonical PM driver + Shepherd validator
 
 Use this for unattended, independently validated Pi orchestration. The driver advances one durable
-stage per turn, runs a separate Sol/xhigh validator after every turn, replays rejected transitions,
-and stops at the final human gate. Implementation subagents use Sol/high from project frontmatter.
+stage per turn, runs exact-head verification and fresh-context local Codex review, runs a separate
+Sol/xhigh Shepherd validator after every turn, replays rejected transitions, and stops at the final
+human gate. Implementation subagents use Sol/high from project frontmatter.
 
 ```bash
 scripts/pi-shepherd-loop.sh "<problem or existing parent issue continuation>"
@@ -110,25 +112,20 @@ scripts/pi-shepherd-loop.sh --resume
 as `AUTO_LOOP_STATE_DIR`, `ORCH_MODEL`, `ORCH_THINKING`, and `VALIDATOR_ARGS` must be repeated on
 resume because the prompt file does not persist them.
 
-### Claude-orchestrated driver + Shepherd validator (alternative)
+### Legacy driver migration
 
-Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
-usage" gate) as the orchestrator and **Codex**
-(`pi --model openai-codex/gpt-5.6-sol --thinking high`) for
-implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
-bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
-
-```bash
-export SEARXNG_BASE=http://localhost:8888
-# headless autonomy needs a permission posture; safest is acceptEdits, fully unattended is skip:
-export CLAUDE_ARGS="--output-format text --permission-mode acceptEdits"
-scripts/claude-auto-loop.sh "twenty (Twenty CRM, https://twenty.com, GraphQL + REST) — full all-ops CLI parity"
-scripts/claude-auto-loop.sh --resume
-```
+`scripts/claude-auto-loop.sh` remains only for historical trace replay. It is not a current or
+forward PM orchestration or review route. Do not request Claude or GitHub Copilot as required,
+fallback, or substitute PM coverage. Use `scripts/pi-shepherd-loop.sh`,
+`.agents/agentic-delivery/workflows/local-codex-review-loop.md`, and
+`.agents/agentic-delivery/workflows/shepherd-validator.md` instead.
 
 The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) and
-`VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
-`claude` CLI to be logged in (`claude -p "ok"` should work).
+`VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`).
+
+Run `scripts/gsd doctor` and `scripts/gsd list` before implementation. If `programming-loop` is
+absent, `/pm-orchestrate` owns PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE; never
+invent the unavailable command.
 
 Model routing is per-agent in `.pi/agents/*.md`; every Codex-only Shepherd role uses
 `openai-codex/gpt-5.6-sol`. Implementation agents use `high`; the coordinator, Shepherd validator,

@@ -19,8 +19,8 @@ orchestrator context and workers. This file is a Codex adapter for the runtime-g
    - `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
    - `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
-   - `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
-   - `.agents/agentic-delivery/workflows/claude-review-loop.md`
+   - `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+   - `.agents/agentic-delivery/workflows/shepherd-validator.md`
    - `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`
    - `.agents/skills/caveman/SKILL.md`
 4. Build ready queue from parent issue and orchestration state.
@@ -34,14 +34,16 @@ orchestrator context and workers. This file is a Codex adapter for the runtime-g
    template.
 8. While workers run, the main coordinator does non-overlapping work only:
    - parent PR status
-   - review routing
+   - exact-head verification/review/Shepherd preparation
    - state ledger updates
    - merge eligibility checks
 9. When workers finish, integrate handoffs, verify scope, and close completed agent threads.
-10. Merge eligible sub-PRs into parent branch.
-11. Wait for parent PR automatic review coverage for integrated ranges when required.
+10. After verification passes, spawn a fresh-context read-only Codex reviewer for the exact
+    base/head range and disposition every finding.
+11. Run independent Shepherd validation and require `PROCEED` before integration.
 12. Repeat until all subissues are complete, deferred with issue links, or blocked.
-13. Mark parent PR human-ready only after final verification and automated review disposition.
+13. Mark parent PR human-ready only after final exact-head verification, local Codex review,
+    Shepherd validation, CI, and remaining human gates.
 
 ## Required Spawn Decision
 
@@ -53,7 +55,7 @@ At every parent orchestration turn, write one of:
 - `not_spawned_human_gate`: human approval needed.
 - `not_spawned_isolation_missing`: safe worker worktree or working directory is unavailable.
 - `not_spawned_runtime_capability_missing`: subagent tooling unavailable.
-- `not_spawned_review_blocked`: Claude/Copilot/human review route blocks integration.
+- `not_spawned_review_blocked`: exact-head local Codex, Shepherd, or human gate blocks integration.
 - `not_spawned_verification_blocked`: checks or local gates block integration.
 
 Missing this decision is a workflow defect.
@@ -63,7 +65,11 @@ exact blocker reason.
 ## Codex Adapter
 
 If a named custom agent is exposed, use it. If not, spawn `default` with the parent orchestrator YAML
-and this workflow pasted as the task contract.
+and this workflow pasted as the task contract. Code review must use a separate fresh-context,
+read-only Codex agent following `local-codex-review-loop.md`; the implementation context cannot
+self-review. Shepherd remains a second independent validator under `shepherd-validator.md`.
+
+Claude and GitHub Copilot are not required, requested, or fallback coverage for this route.
 
 Do not give a code-writing worker the coordinator's current repository path. Codex subagents can
 share the same filesystem context unless the prompt and setup give them a separate worktree or

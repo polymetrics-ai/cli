@@ -9,7 +9,7 @@ and resumed at any point (including token exhaustion) without losing work.
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
 `parent-issue-orchestration-loop.md`, `pi-active-orchestration-loop.md`, `gsd-universal-runtime-loop.md`,
-`claude-review-loop.md`, and `code-review-disposition-template.md`.
+`local-codex-review-loop.md`, `shepherd-validator.md`, and `code-review-disposition-template.md`.
 
 ## Roles → agents → models
 
@@ -21,7 +21,8 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 | Issue creation | `pm-issue-creator` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
 | Execute / correct | `pm-gsd-worker` | `openai-codex/gpt-5.6-sol` (high) | Codex |
 | Verify | `pm-verifier` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
-| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Fresh-context exact-head review | `pm-reviewer` | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
+| Independent trajectory validation | Shepherd validator context | `openai-codex/gpt-5.6-sol` (xhigh) | Codex |
 
 The orchestrator is the only spawner (recursive `subagent` calls are blocked). The loop is driven
 turn-by-turn by the orchestrator, which persists state after every transition so any turn is a
@@ -42,18 +43,21 @@ PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT paren
   EXECUTE       (Codex  / pm-gsd-worker) → implement minimal green slices, commit per slice, push
   SUB_PR_OPEN   open sub-PR (base = parent branch; body: Refs #<sub> + Refs #<N>). Record sub_pr number.
   VERIFY        (Orchestrator / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
-  REVIEW        (Orchestrator / pm-reviewer, on the sub-PR) → adversarial findings   ── GATE: must be clean ──
-  CORRECT       (Codex  / pm-gsd-worker) if findings → fix → push  ┐
-                (Orchestrator / pm-reviewer) re-review                    ┘ repeat ≤ max_correction_rounds
-  INTEGRATE     merge sub-PR → parent branch; mark sub-issue complete
+  REVIEW        (Orchestrator / fresh-context pm-reviewer) → exact-base/head findings   ── GATE: clean ──
+  CORRECT       (Codex  / pm-gsd-worker) if findings → fix → verify → push  ┐
+                (fresh-context pm-reviewer) exact-head re-review             ┘ repeat ≤ max_correction_rounds
+                independent driver Shepherd validates the clean REVIEW transition: PROCEED required
+  INTEGRATE     merge reviewed+validated exact head → parent branch; mark sub-issue complete
 ─────────────────────────────────────────────────────────────────────────────────────────
 PARENT_FINALIZE (Orchestrator) parent PR coverage + disposition → human-ready gate (stop for human)
 ```
 
 RESEARCH is skipped entirely for a fully-specified `implementation` task (no external unknown) — the
 `implementation` path stays first-class and light. Gates are hard: RESEARCH (connector) must be
-`complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; `REVIEW` must be clean (every
-finding fixed or dispositioned per `code-review-disposition-template.md`) before `INTEGRATE`. Branch
+`complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; fresh-context local Codex
+`REVIEW` must be clean (every finding fixed or dispositioned per
+`code-review-disposition-template.md`) and independent Shepherd must return `PROCEED` before
+`INTEGRATE`. Branch
 and PR creation (`PARENT_SETUP`, `SUB_BRANCH`, `SUB_PR_OPEN`) are idempotent — check `gh pr list`/`gh
 issue list`/`git branch` and reuse what exists. Merges to `main` and final human-ready are human
 gates — the loop stops and reports there.
@@ -146,26 +150,20 @@ ceiling is reached (`terminal: "budget"`, resumable). Success is not assumed fro
 it is asserted from `ORCHESTRATION-STATE.json` + GitHub + git agreeing that every sub-issue is
 integrated and verified.
 
-## Runtimes: two ways to drive this loop
+## Canonical PM driver
 
-The stage machine, durable state, and reconciler above are runtime-agnostic. Two supported drivers:
+Use the Codex-only PM route: `scripts/pi-shepherd-loop.sh` with `.pi/prompts/pm-auto-loop.md` (or
+`/pm-connector-loop` for connector specialization). The orchestrator, isolated workers,
+fresh-context local reviewer, and independent validator run on Codex through `pi` and the project
+agent frontmatter. Requires the project `pi-sub-agent` extension.
 
-- **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
-  `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
-  (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches **Codex** (`pi --model openai-codex/gpt-5.6-sol --thinking high`, your ChatGPT subscription) for
-  implementation, with the Shepherd supervisor layer below. When this driver is used, the Claude
-  roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
+If the GSD registry lacks `programming-loop`, `/pm-orchestrate` owns the stage machine above; never
+invent the command or downgrade to an advisory fallback. Local code review follows
+`local-codex-review-loop.md`; trajectory validation follows `shepherd-validator.md`.
 
-- **Codex-only + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
-  or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on Codex via
-  `pi` (`openai-codex/*`, your ChatGPT subscription). Requires `pi install npm:pi-sub-agent` once.
-  The role tags above map to the pi orchestrator session; models come from `.pi/agents/*`
-  frontmatter (all `openai-codex/*`).
-
-Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
-pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI; Codex roles
-stay on `openai-codex/*` via the ChatGPT plan.
+The old `scripts/claude-auto-loop.sh` driver remains only for historical trace replay and is not a
+current or forward PM orchestration or review route. Do not request GitHub-hosted AI reviewers.
+Never route a PM role through OpenRouter or another pay-per-token gateway.
 
 ## Validator layer (Shepherd supervisor meta-agent)
 

@@ -20,10 +20,13 @@ skills, guardrails, YAML agent definitions, and handoff rules.
 - `contracts/parent-orchestrator-contract.md`: runtime contract for parent issue orchestration.
 - `contracts/worker-handoff-template.md`: required worker-to-orchestrator handoff format.
 - `matrices/task-skill-matrix.yaml`: required skills and capabilities by task type.
-- `workflows/claude-review-loop.md`: post-implementation Claude review and disposition
-  loop.
-- `workflows/automated-review-routing-loop.md`: routing policy for Claude primary review,
-  Copilot backup review, and human fallback.
+- `workflows/local-codex-review-loop.md`: canonical PM fresh-context exact-head code review and
+  disposition loop.
+- `workflows/shepherd-validator.md`: independent orchestration trajectory validation after code
+  review and before integration.
+- `workflows/claude-review-loop.md` and `workflows/automated-review-routing-loop.md`: legacy
+  GitHub-bot routes retained for truthful historical records and explicitly authorized non-PM work;
+  they are not current PM coverage.
 - `workflows/parent-issue-orchestration-loop.md`: full parent issue execution loop across workers,
   sub-PRs, parent PR review, and human readiness.
 - `workflows/gsd-universal-runtime-loop.md`: cross-runtime GSD loop contract for Claude, Codex,
@@ -54,7 +57,7 @@ same schema and issue-to-PR contract.
 
 Runtime-specific files, such as `.codex/agents/*.toml` and `.opencode/agents/*.md`, are thin
 activation adapters. They must point back to the `.agents/` YAML and Markdown contracts instead of
-copying GSD/TDD, Claude, or human-gate policy.
+copying GSD/TDD, local review, Shepherd, or human-gate policy.
 
 ## Design principles
 
@@ -73,10 +76,10 @@ copying GSD/TDD, Claude, or human-gate policy.
   the parent PR thread.
 - Skills are declared by capability, with preferred local skill names when available.
 - Guardrails are explicit hard stops, not prose suggestions.
-- Production behavior changes require `gsd-programming-loop` through the repo-local Pi adapter:
-  use `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...` from shell. If
-  the adapter is unavailable, agents must record a manual-GSD fallback and still provide test-first
-  evidence.
+- Run repo-local GSD registry discovery before production behavior changes. For parent/stacked
+  work, `/pm-orchestrate` is the active owner. When `programming-loop` is absent, the PM owner runs
+  PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE with durable evidence; agents must
+  not invent the missing command or weaken test-first delivery.
 - Implementation agents must plan before production edits, keep GSD/TDD/verification artifacts
   current, record the GSD command path used, record required Go/design skills loaded from
   `references/required-skills-routing.md`, and commit/push coherent green slices to the active
@@ -85,21 +88,13 @@ copying GSD/TDD, Claude, or human-gate policy.
   generated help/manual artifacts, and tests in parity; follow
   `references/cli-help-docs-website-parity.md`.
 - Runtime/RLM/Pi-agent work must preserve the dependency-free default, treat Podman/PostgreSQL/DragonflyDB/Temporal as optional runtime-backed services unless explicitly in scope, and follow `references/runtime-rlm-website-integration.md`.
-- Claude review is a post-implementation gate. Every actionable review item must receive a
-  reasoned disposition before it is resolved. Non-draft PRs targeting `main` from trusted authors
-  are reviewed automatically on open, reopen, or ready-for-review. Follow-up fix commits need a
-  single `@claude review` to re-review the new unreviewed commits; do not comment `@claude review`
-  after every push. A manual `@claude review` is also required when the automatic review did not
-  run, such as for an untrusted or first-time author.
-- Claude automatic review is the primary automated review route. GitHub Copilot review is
-  fallback-only when a Claude run errors, its quota is exhausted, the automatic review did not run,
-  or Claude is otherwise unavailable and review coverage is blocking progress.
-- A skipped Claude review is not approval. For sub-PRs whose base is not `main`, the
-  orchestrator must record sub-PR review coverage or route the integrated commit range through the
-  parent PR review fallback.
-- GitHub Copilot review is a backup route when a Claude run errors, its quota is exhausted, the
-  review did not run, or Claude is otherwise unavailable. Copilot comments must be dispositioned
-  like Claude comments, but Copilot review is not approval and must not bypass human gates.
+- Current and forward PM code review uses a fresh-context read-only local Codex reviewer bound to
+  exact base/head identities. Every actionable finding receives a reasoned disposition; changed
+  heads require affected verification and fresh-context re-review.
+- Independent Shepherd trajectory validation follows clean code review and precedes integration.
+  Reviewer and Shepherd evidence are separate; neither can self-certify the other.
+- Claude and GitHub Copilot are not required, requested, or fallback PM review coverage. Their
+  legacy workflow files remain only for historical records or separately authorized non-PM routes.
 - Secrets, auth scope changes, destructive actions, dependencies, and quality-gate reductions are
   human-gated.
 - Parent PRs into `main` are always human-gated.

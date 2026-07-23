@@ -9,29 +9,29 @@ Status: pending
 - [x] Additive branch/PR #495 starts at reviewed head `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`.
 - [x] Current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` and parent `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` pinned after fetch.
 - [x] PR #493 head/file ownership inspected at `e21e56339390c5e1946eb4cfaf276eb80a889f29`.
-- [ ] No PR #493-owned path changed.
-- [ ] No #408/TUI/product/runtime/dependency change.
+- [x] No PR #493-owned path changed.
+- [x] No #408/TUI/product/runtime/dependency change.
 
 ## Forward route
 
-- [ ] `/pm-orchestrate` is the required owner for parent/stacked work when `programming-loop` is absent.
-- [ ] PM route preserves PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE.
-- [ ] State reconciliation, worker isolation, bounded correction, machine contracts, credential safety, and human merge authority remain explicit.
-- [ ] Fresh-context local Codex review binds exact base/head and dispositions every finding.
-- [ ] Any head change requires re-verification and fresh local Codex re-review.
-- [ ] Shepherd is independent and required after review/before integration.
-- [ ] Claude/Copilot are not required, requested, or fallback coverage in current/future PM route.
-- [ ] Legacy Claude/Copilot docs/agent remain discoverable only with migration/deprecation pointers.
-- [ ] Historical phase evidence remains unchanged.
+- [x] `/pm-orchestrate` is the required owner for parent/stacked work when `programming-loop` is absent.
+- [x] PM route preserves PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE.
+- [x] State reconciliation, worker isolation, bounded correction, machine contracts, credential safety, and human merge authority remain explicit.
+- [x] Fresh-context local Codex review binds exact base/head and dispositions every finding.
+- [x] Any head change requires re-verification and fresh local Codex re-review.
+- [x] Shepherd is independent and required after review/before integration.
+- [x] Claude/Copilot are not required, requested, or fallback coverage in current/future PM route.
+- [x] Legacy Claude/Copilot docs/agent remain discoverable only with migration/deprecation pointers.
+- [x] Historical phase evidence remains unchanged so far; final range check remains in VERIFY.
 
 ## Focused validation
 
-- [ ] RED captured before canonical guidance changes.
-- [ ] `scripts/tests/pm-orchestrator-contract.sh`.
-- [ ] `scripts/tests/pi-model-routing.sh`.
-- [ ] YAML/JSON parse checks.
-- [ ] PR #493 changed-path disjointness.
-- [ ] no dependency delta.
+- [x] RED captured before canonical guidance changes.
+- [x] `scripts/tests/pm-orchestrator-contract.sh`.
+- [x] `scripts/tests/pi-model-routing.sh`.
+- [x] YAML/JSON parse checks.
+- [x] PR #493 changed-path disjointness.
+- [x] no dependency delta.
 
 ## Full gates
 

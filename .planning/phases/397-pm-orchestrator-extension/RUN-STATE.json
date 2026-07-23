@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "red_captured_green_pending",
+  "status": "green_complete_verify_pending",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -25,10 +25,15 @@
       "cycle": "tdd_gate",
       "decision": "local_critical_path",
       "reason": "Focused PM orchestrator contract validation failed against the old canonical route before guidance changes, proving the unavailable-command and review-owner defects."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "The extension is a coupled canonical workflow/adapter correction on the already assigned PR #495 branch; focused contract, model routing, Shepherd guards, parse checks, dependency check, and PR #493 path-disjointness are green."
     }
   ],
   "verificationPassed": false,
   "localCodexReview": "pending",
   "shepherd": "pending",
-  "updatedAt": "2026-07-23T00:00:00Z"
+  "updatedAt": "2026-07-23T12:48:19Z"
 }

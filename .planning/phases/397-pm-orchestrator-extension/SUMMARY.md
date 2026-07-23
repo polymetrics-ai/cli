@@ -1,7 +1,11 @@
 # Issue #397 PM Orchestrator Extension Summary
 
-Status: active — PLAN complete; RED pending.
+Status: GREEN — full verification, exact-head local Codex review, Shepherd, and PR checks pending.
 
-Captain authorized additive canonical orchestration corrections on draft PR #495. The extension starts from reviewed synchronization head `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`, keeps PR #493's skill/routing/Makefile paths untouched, and adds no product behavior or dependency.
+Captain authorized additive canonical orchestration corrections on draft PR #495. The extension starts from reviewed synchronization head `3fd63fbe0f526873fa3adb8a75fa5f20342d52a6`, keeps PR #493 head `e21e56339390c5e1946eb4cfaf276eb80a889f29` path-disjoint, and adds no product behavior or dependency.
 
-Target route: `/pm-orchestrate` owns the manual universal lifecycle when the local GSD registry lacks `programming-loop`; exact-head `pm-verifier` and fresh-context local Codex `pm-reviewer` gates precede independent Shepherd validation and human integration authority. Claude/Copilot are legacy/non-PM routes, not required or fallback coverage.
+The canonical route now has one owner: `/pm-orchestrate` runs the universal lifecycle when registry discovery shows `programming-loop` is absent. It preserves durable reconciliation, isolated workers, bounded correction, machine/credential contracts, and human merge authority. Exact-head verification is followed by a fresh-context read-only local Codex review with written dispositions, then independent Shepherd validation before integration. Every changed head invalidates prior exact-head evidence.
+
+Current/future PM instructions no longer require or route fallback coverage through Claude or GitHub Copilot. Legacy bot workflow documents and the old disposition role remain only with explicit migration/deprecation pointers; historical phase records were not globally rewritten.
+
+Focused RED failed against the old route. Focused GREEN passes for the PM contract, Pi model routing, Shepherd guards, JSON/YAML parsing, dependency invariance, and PR #493 path disjointness. Full gates and final review are next.

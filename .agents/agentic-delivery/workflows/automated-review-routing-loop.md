@@ -1,5 +1,10 @@
 # Automated Review Routing Loop
 
+> **Legacy GitHub-bot route.** This document is retained for historical records and explicitly
+> authorized non-PM workflows. It is not part of the canonical PM parent-orchestrator route.
+> Current and forward PM work uses `local-codex-review-loop.md` followed by independent Shepherd
+> validation; do not request Claude or GitHub Copilot for PM review coverage.
+
 Use this workflow to choose the automated review route for a PR without wasting the Claude
 subscription quota or creating noisy duplicate reviews.
 

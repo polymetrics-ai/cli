@@ -12,9 +12,9 @@ The issue must provide:
 - non-goals or exclusions
 - acceptance criteria
 - required reading
-- required skills or task type, including `gsd-programming-loop` through the repo-local GSD/Pi
-  adapter for implementation or behavior-changing work and required Go/design skills from
-  `.agents/agentic-delivery/references/required-skills-routing.md`
+- required skills or task type, including the repo-local GSD/Pi preflight plus the PM-owned
+  universal lifecycle for implementation or behavior-changing work and required Go/design skills
+  from `.agents/agentic-delivery/references/required-skills-routing.md`
 - TDD plan
 - verification commands
 - safety notes
@@ -35,11 +35,11 @@ before implementation.
    `golang-how-to`; for CLI work include `golang-cli`; for website/design work include the relevant
    design skills such as `frontend-design`, `web-design-guidelines`, and
    `vercel-react-best-practices`.
-5. For implementation or behavior-changing work, load and follow `gsd-programming-loop` before
-   coding through `/gsd-programming-loop ...` in Pi or `scripts/gsd prompt programming-loop ...`
-   from shell. Read `.agents/agentic-delivery/references/gsd-pi-adapter.md` first. If the adapter is
-   unavailable, run the manual GSD loop and record the fallback in the phase, handoff, planning
-   trace, or PR artifacts; do not skip TDD evidence.
+5. For implementation or behavior-changing work, read
+   `.agents/agentic-delivery/references/gsd-pi-adapter.md`, run registry discovery, and use only
+   commands that exist. For parent/stacked work, `/pm-orchestrate` owns the universal lifecycle. If
+   `programming-loop` is absent, the PM owner explicitly runs PLAN → RED → GREEN → REFACTOR →
+   VERIFY → REVIEW → INTEGRATE and records the unavailable command; never invent it or reduce TDD.
 6. Create or update the GSD plan, TDD ledger, and verification checklist for the issue before
    production edits. The plan must name the slice boundaries, expected red/green/refactor evidence,
    verification commands, and commit/push checkpoints. For CLI command, flag, output, connector
@@ -68,24 +68,19 @@ before implementation.
 14. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
     - Use `Refs #N` for sub-PRs that target a parent branch.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
-15. After implementation and local verification, choose the automated review route using
-    `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the Claude
-    review loop in
-    `.agents/agentic-delivery/workflows/claude-review-loop.md`.
-16. Confirm that Claude actually produced review records or that the stacked-PR parent-review
-    fallback covers the sub-issue. A skipped-review status, rate-limit notice, or processing-only
-    comment is not approval.
-17. If Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
-    blocking progress, request GitHub Copilot review once as a backup when enabled. Copilot
-    comments are dispositioned like Claude comments, but Copilot review is not approval.
-18. Reply to every actionable automated review item with the disposition template before resolving
-    it.
-19. Ensure accepted fix commits have been reviewed. Prefer Claude's automatic incremental review
-    when active; request manual `@claude review` only when automatic review is paused,
-    disabled, skipped, rate-limit retry is due, or the configured automatic pause threshold was
-    reached.
-20. Ping the human coordinator only after no actionable automated review findings remain or a
-    recorded human review blocker remains.
+15. After exact-head verification, run
+    `.agents/agentic-delivery/workflows/local-codex-review-loop.md` with a fresh-context read-only
+    Codex reviewer bound to the exact base/head range.
+16. Record a disposition for every actionable finding. Accepted fixes require affected gates and a
+    fresh-context re-review at the new exact head.
+17. After local Codex review is clean, run independent Shepherd trajectory validation using
+    `.agents/agentic-delivery/workflows/shepherd-validator.md`.
+18. Treat any head change after review or Shepherd as invalidating both exact-head results; repeat
+    verification, local Codex review, and Shepherd.
+19. Do not request or count Claude or GitHub Copilot as required, fallback, or substitute PM review
+    coverage.
+20. Ping the human coordinator only after no actionable finding remains, Shepherd passes, and only
+    recorded human gates remain.
 
 ## Hard stops
 
@@ -105,9 +100,9 @@ Stop and ask for human approval before:
 ## Parent/subissue work
 
 Use `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md` when the issue belongs
-to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after
-all automated checks pass, automated review comments are resolved, review coverage exists through
-the sub-PR, main-targeted parent PR, or an approved fallback route, and no human gate is triggered.
+to a parent roadmap. A sub-PR may be merged into the parent branch without human approval only after all checks pass,
+exact-head local Codex findings are resolved, independent Shepherd validation passes, and no human
+gate is triggered.
 
 For parent issues with multiple workers, use
 `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`. The parent orchestrator owns
@@ -124,8 +119,8 @@ Every implementation PR must include:
 - issue link
 - summary of changes
 - red/green/refactor evidence when behavior changed
-- GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
-  or an explicit manual-GSD fallback note
+- GSD registry/preflight evidence and the `/pm-orchestrate` lifecycle decision, including an
+  explicit unavailable-command record when `programming-loop` is absent
 - Required Go/design skills loaded, with task-specific notes from
   `.agents/agentic-delivery/references/required-skills-routing.md`
 - CLI help/manual/website parity evidence for CLI feature work, including bare namespace behavior
@@ -134,5 +129,4 @@ Every implementation PR must include:
 - verification commands and results
 - safety notes for auth, secrets, writes, or data movement
 - follow-up issues for work intentionally deferred
-- automated review disposition summary, including accepted, declined, deferred, and human-gated
-  findings, plus the Claude and Copilot route status
+- exact-head local Codex disposition summary, Shepherd verdict/evidence, and remaining human gates

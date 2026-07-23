@@ -77,21 +77,33 @@ field_contract:
     - complete
   automated_review:
     type: object
+    canonical_name: review_coverage
     required:
       - primary_route
       - status
-      - head_sha
+      - exact_base_sha
+      - exact_head_sha
       - reviewed_range
-      - coverage_route
-      - fallback_route
       - disposition_summary
-      - disposition_url
-    primary_route_values: [claude_auto, claude_manual, claude_manual_fallback, copilot_backup, human, blocked]
-    fallback_route_values: [copilot_backup, human, none]
-    coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
-    status_values: [pending, clean, comments_addressed, skipped, blocked]
+      - local_codex
+      - shepherd
+    primary_route_values: [local_codex, human, blocked]
+    status_values: [pending, clean, comments_addressed, blocked]
+    local_codex:
+      required: [reviewer_identity, fresh_context, exact_base_sha, exact_head_sha, status, findings_artifact]
+      status_values: [pending, clean, comments_addressed, blocked]
+    shepherd:
+      required: [status, verdict, exact_head_sha, evidence_artifact]
+      status_values: [pending, proceed, retry, revert, halt, blocked]
+      verdict_values: [PROCEED, RETRY, REVERT, HALT]
+    legacy_review_route:
+      read_only: true
+      purpose: preserve truthful historical GitHub-bot records; never write these values for current PM coverage
+      primary_route_values: [claude_auto, claude_manual, claude_manual_fallback, copilot_backup, human, blocked]
+      fallback_route_values: [copilot_backup, human, none]
+      coverage_route_values: [sub_pr, parent_pr_fallback, copilot_backup, blocked]
   claude:
-    deprecated_alias_for: automated_review
+    deprecated_alias_for: automated_review.legacy_review_route
   human_gates:
     type: list
     examples:

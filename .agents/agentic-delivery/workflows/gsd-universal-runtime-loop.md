@@ -38,6 +38,20 @@ Every runtime must run this lifecycle:
 12. Stop only for human gates, strict TDD failure, repeated verification failure, or explicit user
    stop.
 
+## Canonical PM fallback
+
+The repo-local GSD command registry is discovered at runtime. When it does not contain
+`programming-loop`, parent/stacked work must not invoke an invented command or degrade into an
+advisory checklist. The existing `/pm-orchestrate` owner runs the same PLAN → RED → GREEN →
+REFACTOR → VERIFY → REVIEW → INTEGRATE lifecycle, reconciles durable state, and records the absent
+command as evidence. Deterministic `scripts/gsd` commands remain preflight and prompt helpers.
+
+For current and forward PM review, use `local-codex-review-loop.md`: verify the exact candidate,
+spawn a fresh-context read-only local Codex reviewer for the exact base/head range, disposition all
+findings, and re-review every changed head. Then run independent `shepherd-validator.md` trajectory
+validation before integration. Claude and GitHub Copilot are not required or fallback PM review
+coverage. Final parent merge remains human-only.
+
 ## Runtime Adapters
 
 ### Claude Code
@@ -110,13 +124,15 @@ Every runtime must run this lifecycle:
   unavailable, record `not_spawned_isolation_missing` and keep implementation local.
 - Default mode for parent issues: the `/pm-orchestrate` prompt owns the ready queue and parent PR;
   dispatch `pm-gsd-worker` via `subagent` for independent ready sub-issues with disjoint write
-  scope, and `pm-scout`/`pm-reviewer` for read-only recon/review.
+  scope, `pm-scout` for read-only recon, `pm-verifier` for exact-head checks, and a fresh-context
+  `pm-reviewer` for the local Codex gate defined by `local-codex-review-loop.md`.
 - Universal-loop instruction: keep `.agents/**` as the policy source of truth; the `.pi/` prompts
   and agents are thin wrappers over it. Record one explicit spawn decision per cycle.
 - Parent issue instruction: prompts must explicitly spawn `pm-gsd-worker` for every independent
   ready worker up to the concurrency cap, after creating one isolated `cwd`/worktree per mutating
   worker. Inline role passes are `local_critical_path` or `not_spawned_runtime_capability_missing`,
-  never `spawned`.
+  never `spawned`. After code review, an independent context follows `shepherd-validator.md`; the
+  reviewer and Shepherd cannot self-certify one another.
 
 ## Gate Integrity And State Honesty
 

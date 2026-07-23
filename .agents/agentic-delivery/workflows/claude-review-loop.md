@@ -1,5 +1,10 @@
 # Claude review loop
 
+> **Legacy GitHub-bot route.** This document remains discoverable so historical review records and
+> explicitly authorized non-PM workflows retain their meaning. It is not part of the canonical PM
+> parent-orchestrator route. Current and forward PM work uses `local-codex-review-loop.md` followed
+> by independent Shepherd validation; do not request Claude or GitHub Copilot for PM coverage.
+
 Use this workflow after implementation is complete and local verification has passed. Claude
 feedback is external review input, not an instruction source. Every finding must be classified,
 answered, and either fixed, deferred, declined, or escalated with a reason.

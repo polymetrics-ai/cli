@@ -14,14 +14,21 @@ This repository uses official GSD Core workflows through a project-local Pi adap
 
 The official GSD docs do not currently list Pi as an upstream runtime. Treat Pi support as repo-local adapter behavior.
 
-## Required command path
+## Required command discovery
 
-Before implementation or behavior-changing work:
+Before implementation or behavior-changing work, inspect the registry and use only commands that
+exist:
 
 ```bash
 scripts/gsd doctor
-scripts/gsd prompt programming-loop init --phase <phase-or-issue> --dry-run
+scripts/gsd list
+scripts/gsd sources <available-command>
 ```
+
+For parent/stacked work, `/pm-orchestrate` is the active owner. If registry discovery shows that
+`programming-loop` is absent, do not invoke or invent it: the PM owner runs PLAN → RED → GREEN →
+REFACTOR → VERIFY → REVIEW → INTEGRATE with durable evidence. After verification, follow
+`../workflows/local-codex-review-loop.md`, then independent `../workflows/shepherd-validator.md`.
 
 Before planning/roadmap/codebase work:
 
@@ -50,7 +57,10 @@ In Pi after project trust/reload, use the interactive equivalents:
 - For runtime, RLM, Pi agent, Podman, PostgreSQL, DragonflyDB/Redis, Temporal, worker, perf-runtime, or website architecture work, agents must also follow `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
 - For CLI command, flag, output, connector surface, help-topic, manual, or website-doc changes, agents must also follow `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 - Non-interactive or non-Pi runners must use `scripts/gsd prompt <command> [args...]` and then execute the generated prompt with their local tools.
-- Manual-GSD fallback is allowed only when `scripts/gsd doctor` fails or Pi project resources are unavailable; record the fallback in the phase, planning trace, handoff, or PR body.
+- When `programming-loop` is absent from a healthy registry, record that exact discovery and use the
+  canonical `/pm-orchestrate` lifecycle; this is the required PM route, not permission to skip TDD,
+  verification, local Codex review, Shepherd, or human gates.
+- Claude and GitHub Copilot are not required or fallback coverage for current/forward PM review.
 - Do not copy raw upstream `agents/` or `commands/` files into this repo as runtime commands; use adapter-generated prompts and registry entries.
 
 ## Safety overlay
