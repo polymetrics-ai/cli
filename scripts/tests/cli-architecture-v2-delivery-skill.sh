@@ -146,28 +146,42 @@ makefile = (root / "Makefile").read_text()
 assert re.search(r"(?m)^cli-architecture-v2-skill-check:\s*$", makefile), (
     "Makefile missing focused cli-architecture-v2-skill-check target"
 )
-def make_rule(text: str, target: str) -> str:
+def make_rules(text: str, target: str) -> list[str]:
     lines = text.splitlines()
-    start = next(
-        (index for index, line in enumerate(lines) if re.match(rf"^{re.escape(target)}\s*:", line)),
-        None,
-    )
-    assert start is not None, f"Makefile missing {target} target"
-    block = [lines[start]]
-    for line in lines[start + 1 :]:
-        if line and not line[0].isspace() and re.match(r"^[A-Za-z0-9_.-]+\s*:", line):
-            break
-        block.append(line)
-    return "\n".join(block)
+    starts = [
+        index
+        for index, line in enumerate(lines)
+        if re.match(rf"^{re.escape(target)}\s*:", line)
+    ]
+    assert starts, f"Makefile missing {target} target"
+    blocks: list[str] = []
+    for start in starts:
+        block = [lines[start]]
+        for line in lines[start + 1 :]:
+            if line and not line[0].isspace() and re.match(r"^[A-Za-z0-9_.-]+\s*:", line):
+                break
+            block.append(line)
+        blocks.append("\n".join(block))
+    return blocks
 
-verify_rule = make_rule(makefile, "verify")
-assert "cli-architecture-v2-skill-check" not in verify_rule, (
-    "focused skill check must not join the complete global make verify rule without approval"
+verify_rules = make_rules(makefile, "verify")
+assert all("cli-architecture-v2-skill-check" not in rule for rule in verify_rules), (
+    "focused skill check must not join any global make verify declaration or recipe without approval"
 )
-# Regression: recipe-line wiring must be visible, not only same-line prerequisites.
-assert "cli-architecture-v2-skill-check" in make_rule(
-    "verify: test\n\t$(MAKE) cli-architecture-v2-skill-check\nnext:\n\ttrue\n", "verify"
-), "Make rule parser must include recipe lines"
+# Regressions: recipe-line and duplicate-target wiring must both be visible.
+recipe_probe = "verify: test\n\t$(MAKE) cli-architecture-v2-skill-check\nnext:\n\ttrue\n"
+assert "cli-architecture-v2-skill-check" in "\n".join(make_rules(recipe_probe, "verify")), (
+    "Make rule parser must include recipe lines"
+)
+duplicate_probe = (
+    "verify: test\n\ttrue\nother:\n\ttrue\n"
+    "verify: cli-architecture-v2-skill-check\n\t$(MAKE) cli-architecture-v2-skill-check\n"
+)
+duplicate_rules = make_rules(duplicate_probe, "verify")
+assert len(duplicate_rules) == 2, "Make rule parser must inspect duplicate target declarations"
+assert "cli-architecture-v2-skill-check" in "\n".join(duplicate_rules), (
+    "Make rule parser must include duplicate-target prerequisites and recipes"
+)
 
 for path in [skill_path, *(skill_dir / "references" / name for name in reference_names)]:
     text = path.read_text()

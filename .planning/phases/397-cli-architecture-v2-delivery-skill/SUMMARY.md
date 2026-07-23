@@ -44,7 +44,9 @@ fields, and an overstated exact-head Shepherd claim. This fix round parses skill
 checks the complete Make `verify` rule including recipes, records each orchestration decision and
 verification state, and limits the persisted Shepherd claim to the head actually reviewed. Final
 Codex and trajectory reruns are required on the immutable fix head and will be recorded in the draft
-stacked PR.
+stacked PR. A subsequent re-review found that duplicate Make `verify` declarations and the required
+universal-loop cycle vocabulary still needed coverage; the final fix round inspects all duplicate
+rules and records the six required cycles with allowed decisions.
 
 ## Verification
 

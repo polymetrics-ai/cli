@@ -87,5 +87,10 @@ Phase: `397-cli-architecture-v2-delivery-skill`
   `SHEPHERD-VALIDATION-2BA47DC.json`.
 - Review of the subsequent artifact-only head found three medium issues: incomplete frontmatter and
   Make recipe negative validation, missing universal-loop decision fields, and overstated final-head
-  Shepherd evidence. All are corrected in this slice. A fresh exact-head Codex review and Shepherd
-  rerun are required after this fix commit; their results belong in the draft stacked PR evidence.
+  Shepherd evidence. The first fix round corrected those surfaces.
+- Exact-head re-review then found two remaining medium gaps: duplicate Make `verify` declarations
+  escaped the focused exclusion guard, and the run-state decisions did not use the universal loop's
+  required cycles/decision vocabulary. The guard now inspects every declaration with duplicate-rule
+  regressions, and run state records plan, tdd-gate, execute, verify, gap-loop, and summary using
+  allowed execution decisions. A final exact-head Codex review and Shepherd rerun are required after
+  this fix commit; their results belong in the draft stacked PR evidence.
