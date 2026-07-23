@@ -15,6 +15,7 @@ import {
 
 import type { AgentSessionRuntimeSdk } from "./agent-session-runtime.ts";
 import { ShepherdController } from "./controller.ts";
+import { assertShepherdPiCompatibility } from "./pi-compatibility.ts";
 import {
 	canonicalizeGitWorktree,
 	registerShepherdExtension,
@@ -93,6 +94,7 @@ function embeddedRuntimeSdk(modelRegistry: ShepherdModelRegistry): AgentSessionR
 }
 
 export default function shepherdExtension(pi: ExtensionAPI): void {
+	assertShepherdPiCompatibility(VERSION, REQUIRED_PI_VERSION);
 	registerShepherdExtension(pi as unknown as ShepherdExtensionHost, {
 		resolveWorktree: (context, options) => canonicalizeGitWorktree(context.cwd, options),
 		createController(context: ShepherdCommandContext, worktree) {

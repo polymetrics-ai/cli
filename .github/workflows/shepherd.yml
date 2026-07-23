@@ -3,23 +3,25 @@ name: Shepherd
 on:
   pull_request:
     paths:
+      - ".gitignore"
       - ".pi/extensions/shepherd/**"
       - ".pi/README.md"
       - ".pi/settings.json"
       - ".planning/phases/479-shepherd-production-matrix/**"
       - ".planning/phases/490-shepherd-workflow-engine/**"
-      - ".github/scripts/verify-shepherd-pi-runtime.mjs"
+      - ".github/scripts/verify-shepherd-*.mjs"
       - ".github/workflows/shepherd.yml"
   push:
     branches:
       - main
     paths:
+      - ".gitignore"
       - ".pi/extensions/shepherd/**"
       - ".pi/README.md"
       - ".pi/settings.json"
       - ".planning/phases/479-shepherd-production-matrix/**"
       - ".planning/phases/490-shepherd-workflow-engine/**"
-      - ".github/scripts/verify-shepherd-pi-runtime.mjs"
+      - ".github/scripts/verify-shepherd-*.mjs"
       - ".github/workflows/shepherd.yml"
   workflow_dispatch:
 
@@ -58,6 +60,15 @@ jobs:
 
       - name: Verify pinned Pi runtime family
         run: node .github/scripts/verify-shepherd-pi-runtime.mjs
+
+      - name: Install exact workflow-engine artifact
+        run: npm install --prefix .pi/npm --ignore-scripts --no-audit --no-fund --legacy-peer-deps --omit=dev --save-exact pi-workflow-engine@0.12.0
+
+      - name: Verify workflow-engine provenance
+        run: node .github/scripts/verify-shepherd-workflow-engine.mjs
+
+      - name: Verify offline isolated and co-loaded RPC surfaces
+        run: node .github/scripts/verify-shepherd-offline-rpc.mjs
 
       - name: Run complete Shepherd inventory
         run: node --test --test-concurrency=1 .pi/extensions/shepherd/*.test.ts

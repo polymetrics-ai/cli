@@ -310,17 +310,26 @@ test("accepts typed evidence without a complete raw terminal event sequence", as
 	);
 });
 
-test("saturates non-authoritative progress accounting without invalidating typed evidence", async () => {
+test("saturates all non-authoritative callbacks before inspecting later telemetry", async () => {
 	const harness = makeSdk();
+	let descriptorReads = 0;
+	const ignoredAfterSaturation = new Proxy({}, {
+		getOwnPropertyDescriptor() {
+			descriptorReads += 1;
+			return undefined;
+		},
+	});
 	harness.session.prompt = async () => {
 		harness.emit({ type: "first" });
 		harness.emit({ type: "second" });
+		harness.emit(ignoredAfterSaturation);
 		harness.emitTerminal();
 	};
 	assert.equal(
 		(await new SdkAgentRunner(harness.sdk, harness.modelRegistry, { maxEvents: 1 }).run(request())).summary,
 		"read-only inspection passed",
 	);
+	assert.equal(descriptorReads, 0);
 	assert.equal(harness.calls.abort, 1);
 	assert.equal(harness.calls.unsubscribe, 1);
 	assert.equal(harness.calls.dispose, 1);

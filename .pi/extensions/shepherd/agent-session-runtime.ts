@@ -870,8 +870,6 @@ class RunAdmissionOwnership {
 }
 
 interface ProgressCapture {
-	readonly authorizedToolNames: ReadonlySet<string>;
-	readonly observedToolNames: Set<string>;
 	eventCount: number;
 	eventBytes: number;
 	saturated: boolean;
@@ -1304,7 +1302,7 @@ export class ShepherdAgentSessionRuntime {
 			claim.validate();
 			assertExecutionActive();
 
-			const progress = newProgressCapture(expectedToolNames);
+			const progress = newProgressCapture();
 			assertExecutionActive();
 			owned.subscribe((event) => captureProgressEvent(progress, event, this.#options));
 			assertExecutionActive();
@@ -1968,10 +1966,8 @@ function assertApprovedArrayPrototype(value: unknown[], description: string): vo
 	}
 }
 
-function newProgressCapture(expectedToolNames: readonly string[]): ProgressCapture {
+function newProgressCapture(): ProgressCapture {
 	return {
-		authorizedToolNames: new Set(expectedToolNames),
-		observedToolNames: new Set(),
 		eventCount: 0,
 		eventBytes: 0,
 		saturated: false,
@@ -1985,20 +1981,29 @@ function captureProgressEvent(
 	options: Required<Omit<AgentSessionRuntimeOptions, "parentSignal">>,
 ): void {
 	if (capture.frozen || capture.saturated) return;
+	capture.eventCount += 1;
+	const baseCharge = 16;
+	if (capture.eventCount > options.maxEvents || capture.eventBytes + baseCharge > options.maxEventBytes) {
+		capture.saturated = true;
+		return;
+	}
+	capture.eventBytes += baseCharge;
 	try {
 		const fields = captureKnownRecordFields(event, "AgentSession progress event", ["type", "toolName"]);
 		if (fields.get("type") !== "tool_execution_start") return;
-		capture.eventCount += 1;
 		const toolName = fields.get("toolName");
-		const charge = typeof toolName === "string" ? byteLength(toolName) + 32 : 32;
-		if (capture.eventCount > options.maxEvents || capture.eventBytes + charge > options.maxEventBytes) {
+		if (typeof toolName !== "string") return;
+		const remaining = options.maxEventBytes - capture.eventBytes;
+		if (toolName.length > remaining) {
+			capture.saturated = true;
+			return;
+		}
+		const charge = byteLength(toolName);
+		if (charge > remaining) {
 			capture.saturated = true;
 			return;
 		}
 		capture.eventBytes += charge;
-		if (typeof toolName === "string" && capture.authorizedToolNames.has(toolName)) {
-			capture.observedToolNames.add(toolName);
-		}
 	} catch {
 		// Unknown, malformed, or accessor-backed telemetry is non-authoritative and inert.
 	}

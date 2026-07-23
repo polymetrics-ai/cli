@@ -13,6 +13,7 @@ poly
 .pi/npm/
 .pi/git/
 .pi/sessions/
+.pi/.workflow-runs/
 
 .polymetrics/
 deploy/compose/.env

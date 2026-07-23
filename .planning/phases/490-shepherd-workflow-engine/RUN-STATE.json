@@ -2,9 +2,9 @@
   "schemaVersion": 1,
   "phase": "490-shepherd-workflow-engine",
   "issue": 490,
-  "status": "in_progress",
-  "verificationPassed": false,
-  "verificationBlocker": "RED/GREEN and declared Shepherd gates are pending",
+  "status": "verified",
+  "verificationPassed": true,
+  "verificationBlocker": null,
   "manualGsdFallback": {
     "active": true,
     "reason": "scripts/gsd doctor passed but programming-loop is absent from the command registry"
@@ -17,6 +17,7 @@
     }
   ],
   "workflowAnalysisRunId": "43dc4d81-66bf-4642-bed2-207a00d5fec0",
-  "reviewRunId": null,
-  "updatedAt": "2026-07-23T00:00:00.000Z"
+  "reviewRunId": "8e04bba9-012b-422f-89cb-4d845f340e3e",
+  "reviewPreflightRunId": "abaefcd2-90cf-4569-9ac6-b7e58d0428e9",
+  "updatedAt": "2026-07-23T01:32:00.000Z"
 }

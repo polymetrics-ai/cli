@@ -709,17 +709,27 @@ function captureProgressEvent(
 	maxEvents: number,
 	maxBytes: number,
 ): void {
-	if (progress.saturated || typeof event !== "object" || event === null) return;
+	if (progress.saturated) return;
+	progress.count += 1;
+	const baseCharge = 16;
+	if (progress.count > maxEvents || progress.bytes + baseCharge > maxBytes) {
+		progress.saturated = true;
+		return;
+	}
+	progress.bytes += baseCharge;
+	if (typeof event !== "object" || event === null) return;
 	try {
 		const type = Object.getOwnPropertyDescriptor(event, "type");
 		if (!type || type.get || type.set || !("value" in type) || type.value !== "tool_execution_start") return;
 		const tool = Object.getOwnPropertyDescriptor(event, "toolName");
-		const toolName = tool && !tool.get && !tool.set && "value" in tool && typeof tool.value === "string"
-			? tool.value
-			: "";
-		const charge = byteLength(toolName) + 32;
-		progress.count += 1;
-		if (progress.count > maxEvents || progress.bytes + charge > maxBytes) {
+		if (!tool || tool.get || tool.set || !("value" in tool) || typeof tool.value !== "string") return;
+		const remaining = maxBytes - progress.bytes;
+		if (tool.value.length > remaining) {
+			progress.saturated = true;
+			return;
+		}
+		const charge = byteLength(tool.value);
+		if (charge > remaining) {
 			progress.saturated = true;
 			return;
 		}

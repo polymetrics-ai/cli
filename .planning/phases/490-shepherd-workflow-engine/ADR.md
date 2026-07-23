@@ -14,7 +14,7 @@ Shepherd's production port additionally requires caller-claimed persistent cwd/w
 
 Adopt `pi-workflow-engine@0.12.0` as the project-local development/review orchestrator only. Keep the existing `ProductionAgentSessionPort` implementation and reuse the engine's documented public Pi pattern conceptually: await prompt completion, treat custom typed terminal capture as result authority, and use raw events only for bounded non-authoritative progress.
 
-Do not deep-import engine internals. Do not treat `.pi/.workflow-runs`, engine run IDs, resume journals, patches, disposable worktrees, retries, or background state as Shepherd evidence. Do not grant engine workflows Git/GitHub publication, human-decision, integration, or merge authority.
+Do not deep-import engine internals. Do not treat `.pi/.workflow-runs`, engine run IDs, resume journals, patches, disposable worktrees, retries, or background state as Shepherd evidence. Do not grant engine workflows Git/GitHub publication, human-decision, integration, or merge authority. The built-in advisory workflows are outside this adoption because they grant generic `bash`. The host binds and bounds the exact Git material before dispatch; approved inline analysis, verification, and synthesis agents all receive only that material with `tools: []`, no dynamic tool hints, and no skills. The host revalidates the range afterward, and the workflow process runs without GitHub credentials.
 
 ## Why production embedding is rejected
 
@@ -32,7 +32,9 @@ The package manifest also has wildcard Pi peer dependencies and no package-root 
 ## Consequences
 
 - Shepherd durability, worktrees, effects, recovery, retries, reviews, approvals, and no-main-merge policy remain unchanged.
-- Workflow-engine is immediately useful for bounded read-only analysis and the one independent exact-head review.
+- Workflow-engine is immediately useful for bounded read-only analysis and the one independent exact-head review through the restricted inline policy above.
+- `.pi/.workflow-runs/` is ignored local state and cannot dirty Shepherd's canonical target evidence.
+- CI installs the exact artifact, verifies lock integrity/public entry provenance, and exercises isolated plus co-loaded offline RPC command discovery.
 - Production remains on public Pi SDK APIs behind its existing port.
 - Reconsider production embedding only after upstream documents and exports every missing authority primitive in a separately reviewed issue.
 

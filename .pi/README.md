@@ -90,12 +90,20 @@ The package requires Pi 0.80.10 or newer; this repository deliberately narrows S
 stable interval `>=0.80.10 <0.80.11` until another release is explicitly tested.
 
 This is a partial adoption. Workflow-engine runs are non-authoritative development/review
-orchestration. Their `.pi/.workflow-runs` records, journals, run IDs, isolated patches, retries,
-background state, and disposable worktrees never replace Shepherd state, external-effect receipts,
-recovery, persistent issue worktrees, exact-head evidence, or human gates. Production Shepherd does
-not import workflow-engine or its undocumented internals. It retains `ProductionAgentSessionPort`
-and uses public Pi APIs directly with claimed cwd, exact scoped host tools, prompt completion,
-typed bound handoffs, cancellation, and abort/join-before-release.
+orchestration. Their ignored `.pi/.workflow-runs` records, journals, run IDs, isolated patches,
+retries, background state, and disposable worktrees never replace Shepherd state, external-effect
+receipts, recovery, persistent issue worktrees, exact-head evidence, or human gates. Production
+Shepherd does not import workflow-engine or its undocumented internals. It retains
+`ProductionAgentSessionPort` and uses public Pi APIs directly with claimed cwd, exact scoped host
+tools, prompt completion, typed bound handoffs, cancellation, and abort/join-before-release.
+
+The package's built-in advisory workflows include generic `bash`, so they are not approved for
+Shepherd analysis or review. The host must capture and bound the exact reviewed material first;
+approved inline analysis, verification, and synthesis agents all use `tools: []`, omit dynamic tool
+hints and skills, and receive only that material in their prompts. Run the workflow process without
+GitHub credentials, then revalidate the clean exact head afterward. Workflow agents must never
+receive filesystem reads, edit/write, generic shell, GitHub, human-decision, publication,
+integration, or merge tools.
 
 ### Autonomous in-process Shepherd
 

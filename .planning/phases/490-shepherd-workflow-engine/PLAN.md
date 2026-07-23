@@ -48,7 +48,9 @@ Analysis workflow evidence: `43dc4d81-66bf-4642-bed2-207a00d5fec0` (resumed from
 - `.pi/extensions/shepherd/role-prompts.ts` and `.test.ts` only if the typed terminal tool contract requires it
 - `.pi/extensions/shepherd/tool-policy.ts` and `.test.ts` only if Pi 0.80.10 public tool types require a compatibility alignment
 - `.github/scripts/verify-shepherd-pi-runtime.mjs`
+- `.github/scripts/verify-shepherd-workflow-engine.mjs` and `verify-shepherd-offline-rpc.mjs` for review-disposition reproducibility
 - `.github/workflows/shepherd.yml`
+- `.gitignore` for workflow-engine's local non-authoritative run records
 - `.pi/README.md`
 - `.planning/phases/490-shepherd-workflow-engine/**`
 
