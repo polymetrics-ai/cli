@@ -789,7 +789,7 @@ def command_compile(args: argparse.Namespace) -> int:
         findings.extend(authority_findings)
         domains = {path: classify_domain(path, config) for path in files}
         closure_context = sorted(set(closure) - set(files))
-        authority_context = sorted(set(authority_files) - set(files) - set(closure_context))
+        authority_context = sorted(set(authority_files) - set(files))
         selection, packets, packet_findings = build_packets(
             base,
             head,
