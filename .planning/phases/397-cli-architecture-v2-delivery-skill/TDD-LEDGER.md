@@ -59,7 +59,7 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 
 ## Refactor
 
-- Status: in progress after focused GREEN.
+- Status: complete; broad and independent verification passed.
 - Remove any copied queue, SHA, model, bot availability, or issue-status prose from the evergreen
   skill.
 - Keep TUI implementation guidance in `bubble-tea-tui-design` and Go mechanics in routed Go skills.
@@ -81,4 +81,8 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 - Disposition: added conditional benchmark/performance routing and assertions; changed the checker
   to use a unique temporary directory; proved simultaneous direct and Make invocations pass. The PR
   gate remains open for the no-mistakes lifecycle.
-- A fresh exact-head review is required after the fix commit.
+- Fresh exact-head review of `2ba47dc3036a2b063bd051d66d60b37ccea96bf6` passed with no
+  actionable findings. A bounded Shepherd trajectory validation independently reproduced RED/GREEN,
+  ran exact-head `make verify`, scored 4.52, and returned `PROCEED`.
+- Shepherd authorized a final planning-only artifact refresh. Final-head review, push, stacked PR,
+  and CI remain owned by the no-mistakes lifecycle.

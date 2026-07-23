@@ -49,21 +49,23 @@
   validated without a new dependency.
 - [x] Focused target is not wired into global `make verify`.
 - [x] `scripts/tests/pi-model-routing.sh`
-- [ ] `go test ./...`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
-- [ ] `git diff --check`
-- [ ] `go.mod` and `go.sum` unchanged from the corrected parent base.
+- [x] `go test -timeout 20m ./...`
+- [x] `go vet ./...`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
+- [x] `git diff --check`
+- [x] `go.mod` and `go.sum` unchanged from the corrected parent base.
 
 ## Safety And Delivery
 
 - [x] No product CLI/TUI behavior, help/manual/website output, runtime dependency, or shared parent
   artifact changed.
-- [ ] No secret, credentialed connector check, runtime lifecycle action, generic write tool, or
-  reverse ETL execution.
-- [ ] #419 remains deferred and no dependency approval is implied.
-- [ ] No Claude or GitHub Copilot review invoked.
-- [ ] Changes committed on the worker branch.
+- [x] No secret, credentialed connector check, runtime lifecycle action, generic write tool, or
+  reverse ETL execution outside the repository's credential-free sample smoke gate.
+- [x] #419 remains deferred and no dependency approval is implied.
+- [x] Active Claude/GitHub Copilot exclusions obeyed; independent local review and Shepherd used.
+- [x] Independent exact-head review found no actionable findings after fixes.
+- [x] Shepherd trajectory validation returned `PROCEED` at 4.52.
+- [x] Changes committed on the worker branch.
 - [x] Firstmate instructed the no-mistakes shipping stage after focused implementation/validation.
 - [ ] Final stacked PR targets `feat/cli-architecture-v2`, uses `Refs #397`, and remains unmerged.
