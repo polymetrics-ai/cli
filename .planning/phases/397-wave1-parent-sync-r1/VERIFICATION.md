@@ -85,7 +85,7 @@ Status: local verification green; exact-head review and delivery pending
 - [x] PR #493 skill/routing/Makefile paths remain untouched.
 - [x] Full credential-free gates passed at implementation head `d72a93018933541d390884f96b285856e269a1ab` and corrected evidence head `0665ad7aad1ec083f4bb0572a88ac1a38f417a35`.
 - [x] Captain-authorized Gong follow-up created at https://github.com/polymetrics-ai/cli/issues/497 without product changes in PR #495.
-- [x] Correction round 2 closes authoritative PR #493 queue-gate, transitive PM-template, and stable correction-lineage findings without touching PR #493-owned paths.
+- [x] Correction rounds 2–3 close every authoritative #408/PR #493 gate, transitive PM-template, stable correction-lineage, enum, terminal-classification, and branch-identity finding without touching PR #493-owned paths.
 - [ ] Final evidence-head full verification and local Codex review pass.
 - [ ] Final evidence-head independent Shepherd validation passes.
 - [ ] PR #495 required checks green at the final extension head.

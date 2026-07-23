@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "review_findings_correction_round_3_planned",
+  "status": "review_findings_correction_round_3_implemented_verification_pending",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -55,6 +55,11 @@
       "cycle": "review_round_3",
       "decision": "read_only_spawned",
       "reason": "Fresh-context project pm-reviewer inspected verified exact head 3af7910528d234d1a1d886a6778d7817495e6321 and returned N1-N5. The current-main-identical Gong product defect is deferred pending separate captain authority; scoped #408 state, review enums, cap terminal classification, and branch identity are accepted for correction round 3."
+    },
+    {
+      "cycle": "correct_round_3",
+      "decision": "local_critical_path",
+      "reason": "Accepted N2-N5 corrections are implemented at 1cd43caacc05d9f6955a614144d6772210248afb: all #408 authoritative records, enum parity, shared terminal classification, and current/historical branch identity. N1 remains deferred under the no-product boundary."
     }
   ],
   "verificationPassed": false,
@@ -62,6 +67,7 @@
   "verifiedEvidenceHead": "3af7910528d234d1a1d886a6778d7817495e6321",
   "correctionRound2ImplementationHead": "906257c2045ebc269bbd51e1f2cea34c27779e52",
   "correctionRound3ReviewedHead": "3af7910528d234d1a1d886a6778d7817495e6321",
+  "correctionRound3ImplementationHead": "1cd43caacc05d9f6955a614144d6772210248afb",
   "correctionBudget": {
     "maxCorrectionRounds": 4,
     "roundsByRange": {
@@ -76,5 +82,5 @@
     "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
   },
   "shepherd": "pending_after_clean_rereview",
-  "updatedAt": "2026-07-23T15:37:44Z"
+  "updatedAt": "2026-07-23T15:43:11Z"
 }
