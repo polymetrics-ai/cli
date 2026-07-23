@@ -102,6 +102,8 @@ required_skill_terms = (
     "golang-spf13-cobra",
     "golang-spf13-viper",
     "golang-observability",
+    "golang-benchmark",
+    "golang-performance",
     "caveman",
 )
 for term in required_skill_terms:
@@ -164,8 +166,9 @@ for path in [skill_path, *(skill_dir / "references" / name for name in reference
 print("CLI Architecture v2 delivery skill content and links ok")
 PY
 
-tmp_go="$(mktemp "${TMPDIR:-/tmp}/cli-architecture-v2-skill-yaml.XXXXXX.go")"
-trap 'rm -f "$tmp_go"' EXIT
+tmp_dir="$(mktemp -d "${TMPDIR:-/tmp}/cli-architecture-v2-skill-yaml.XXXXXX")"
+tmp_go="$tmp_dir/main.go"
+trap 'rm -rf "$tmp_dir"' EXIT
 cat >"$tmp_go" <<'GO'
 package main
 

@@ -69,7 +69,8 @@ Use the [phase delivery checklist](references/phase-delivery-checklist.md).
   context, concurrency, safety, security, testing, and documentation. That skill remains the sole
   detailed authority for models, key maps, layout, charts, accessibility, and TUI tests.
 - **slog/OpenTelemetry (ADR-0004):** load `golang-observability`, context, security,
-  error-handling, and testing. A new or beta library always requires dependency approval.
+  error-handling, and testing. Load `golang-benchmark` and `golang-performance` when a phase
+  measures or optimizes telemetry overhead. A new or beta library always requires dependency approval.
 - **Compact handoffs:** [caveman](../caveman/SKILL.md) MAY reduce prose but MUST NOT compress gates,
   evidence, commands, or warnings.
 

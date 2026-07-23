@@ -66,3 +66,19 @@ Phase: `397-cli-architecture-v2-delivery-skill`
 - Verify #419-like human deferrals use `deferred_by_human`, parent/main merge remains human-gated,
   and active review constraints override configured reviewer routes without being hard-coded into
   evergreen prose.
+
+## Independent Exact-Head Review And Fixes
+
+- Reviewed head: `d81163f703c25266481a67e1072ab1fe5b09b7aa` against parent
+  `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`.
+- A dedicated reviewer process could not start because its isolated provider lacked authentication;
+  no external review bot was substituted.
+- A fresh independent verifier completed the diff/acceptance review and found:
+  1. Track C verification claimed performance routing, but the skill omitted `golang-benchmark` and
+     `golang-performance`.
+  2. The focused script's Darwin `mktemp` template was not concurrency-safe.
+  3. Stacked push/PR delivery remained pending, as expected before shipping.
+- Disposition: added conditional benchmark/performance routing and assertions; changed the checker
+  to use a unique temporary directory; proved simultaneous direct and Make invocations pass. The PR
+  gate remains open for the no-mistakes lifecycle.
+- A fresh exact-head review is required after the fix commit.

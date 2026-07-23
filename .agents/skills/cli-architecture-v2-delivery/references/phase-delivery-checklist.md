@@ -41,7 +41,8 @@ checks. Do not duplicate those mechanics here.
 
 ### Logging and OpenTelemetry
 
-Load observability, context, security, error-handling, and testing. Preserve opt-in/disabled behavior,
+Load observability, context, security, error-handling, and testing. Add benchmarking and performance
+skills when measuring or optimizing telemetry overhead. Preserve opt-in/disabled behavior,
 redaction, bounded attributes, exporter shutdown, and stable stdout/stderr. Beta or additional
 modules remain human-gated.
 
