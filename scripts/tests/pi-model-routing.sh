@@ -146,3 +146,5 @@ print(
     "implementation=sol/high; all other roles=sol/xhigh; concurrency=4"
 )
 PY
+
+"$repo_root/scripts/tests/pm-orchestrator-contract.sh"

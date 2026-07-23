@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "planned_red_pending",
+  "status": "red_captured_green_pending",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -20,6 +20,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Captain explicitly extended the existing Wave 1 worker/PR; one read-only collision scout ran, while the coordinator owns the coupled canonical workflow edits and PR #493 path boundary."
+    },
+    {
+      "cycle": "tdd_gate",
+      "decision": "local_critical_path",
+      "reason": "Focused PM orchestrator contract validation failed against the old canonical route before guidance changes, proving the unavailable-command and review-owner defects."
     }
   ],
   "verificationPassed": false,
