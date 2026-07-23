@@ -91,7 +91,9 @@ def markdown_dependencies(seeds: list[str]) -> set[str]:
             continue
         seen.add(relative)
         for dependency in reference.findall(read(relative)):
-            if dependency not in seen and (root / dependency).is_file():
+            if not (root / dependency).is_file():
+                errors.append(f"{relative}: required dependency reference does not exist: {dependency}")
+            elif dependency not in seen:
                 pending.append(dependency)
     return seen
 
@@ -103,6 +105,19 @@ pm_entry_paths = forward_paths + [
     ".agents/agentic-delivery/agents/coordination/parent-issue-orchestrator.agent.yaml",
 ]
 pm_dependencies = markdown_dependencies(pm_entry_paths)
+require(
+    ".pi/agents/pm-gsd-worker.md",
+    ".agents/agentic-delivery/references/required-skills-routing.md",
+    "available skills advertised by the active harness",
+)
+forbid(
+    ".pi/agents/pm-gsd-worker.md",
+    {
+        "nonexistent go implementation skill": r"\.pi/skills/go-implementation/SKILL\.md",
+        "nonexistent website TypeScript skill": r"\.pi/skills/ts-website/SKILL\.md",
+        "nonexistent UI design skill": r"\.pi/skills/design-ui/SKILL\.md",
+    },
+)
 for deprecated_template in (
     ".agents/agentic-delivery/contracts/worker-handoff-template.md",
     ".agents/agentic-delivery/contracts/code-review-disposition-template.md",
@@ -264,6 +279,19 @@ for relative in canonical_contract_paths:
     if actual != expected_dispositions:
         errors.append(f"{relative}: disposition enum drift: {actual!r}")
 
+disposition_artifact = read(".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md")
+actual_disposition_rows = 0
+for line in disposition_artifact.splitlines():
+    if not re.match(r"^\| (?:F|N|R)[A-Za-z0-9-]* \|", line):
+        continue
+    cells = [cell.strip() for cell in line.split("|")]
+    disposition = cells[3] if len(cells) > 3 else ""
+    actual_disposition_rows += 1
+    if disposition not in expected_dispositions:
+        errors.append(f"review disposition row uses noncanonical value {disposition!r}: {line}")
+if actual_disposition_rows == 0:
+    errors.append("review disposition artifact has no parsed finding rows")
+
 for relative in (
     ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
     ".pi/prompts/pm-auto-loop.md",
@@ -379,5 +407,17 @@ classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
     "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/historical-human-gate.json")"
 if [[ "$classification" != "human_ready" ]]; then
   printf 'PM orchestrator contract violation: historical human-gate classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/unknown-schema-human-gate.json")"
+if [[ "$classification" != "blocked_human_decision" ]]; then
+  printf 'PM orchestrator contract violation: unknown-schema classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/unknown-kind-human-gate.json")"
+if [[ "$classification" != "blocked_human_decision" ]]; then
+  printf 'PM orchestrator contract violation: unknown-kind classifier returned %s\n' "$classification" >&2
   exit 1
 fi
