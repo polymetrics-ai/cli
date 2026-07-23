@@ -1,6 +1,6 @@
 # Issue #397 PM Orchestrator Extension TDD Ledger
 
-Status: GREEN complete; full VERIFY pending
+Status: correction round 2 RED planned; GREEN/VERIFY/re-review pending
 Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE because the 69-command GSD registry has no `programming-loop`.
 
 | Risk | RED contract | GREEN target | Status |
@@ -12,6 +12,9 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 | stale state schema | focused script rejects review enums without `local_codex` and `shepherd` fields | forward records capture both gates; legacy aliases remain parseable | green |
 | PR #493 collision | changed-path comparison rejects any PR #493-owned path | extension remains path-disjoint from PR #493 | green |
 | historical falsification | scan/diff detects bulk edits under historical phase directories | only new extension and narrow current Wave 1 evidence change | green so far; final diff check pending |
+| authoritative PR #493 migration gate | focused script rejects #408 readiness unless durable trace, machine state, and summary require PR #493 integration after Wave 1 | #408 remains `not_spawned_dependency_blocked` until both Wave 1 and PR #493 routing migration integrate | red planned |
+| transitive legacy review route | focused script rejects current PM references to generic bot-era handoff/disposition templates | PM-specific templates represent exact-head local Codex plus independent Shepherd only | red planned |
+| correction counter split/reset | focused script rejects active `guards.correction_rounds` shape and requires replacement-head/cap fixture | canonical autonomous state persists stable exact-base/candidate-lineage counters and human block on exceed | red planned |
 
 ## Evidence log
 
@@ -25,3 +28,4 @@ Manual route: PM-owned PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW
 - REVIEW at `3c88fc78062ba0a3437f79bc88c395286c228c65`: fresh-context local Codex returned five findings. Dispositions are recorded in `REVIEW-DISPOSITION.md`: adapter/migration-gate, schema compatibility, bounded correction, and PR body findings accepted in scope; the Gong operation metadata defect is deferred because the cited files are byte-identical to current main and product changes are forbidden here.
 - Correction round 1: removed the unconditional unavailable command example, made PR #493 routing reconciliation a hard post-Wave1 dependency, added canonical pending/clean/blocked plus historical review fixtures, made Shepherd verdict conditional, preserved historical local Codex shapes, and persisted a default four-round correction budget with per-range counters.
 - Captain-authorized F2 follow-up: created focused bug https://github.com/polymetrics-ai/cli/issues/497 from the pre-existing Gong evidence without changing product code in PR #495.
+- REVIEW at `0665ad7aad1ec083f4bb0572a88ac1a38f417a35`: fresh-context exact-head re-review confirmed F2/F3/F5, then found F6 authoritative queue drift, F7 transitive bot-era templates, and F8 active autonomous counter drift. All three are accepted for correction round 2; no product code or PR #493-owned path is authorized.

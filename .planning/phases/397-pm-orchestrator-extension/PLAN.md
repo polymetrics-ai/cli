@@ -60,6 +60,7 @@ PR #493 files in PR #495, or claim the routing migration is complete.
 
 - `.agents/agentic-delivery/README.md`
 - `.agents/agentic-delivery/contracts/{issue-agent-contract,parent-orchestrator-contract}.md`
+- new PM-specific worker-handoff and code-review-disposition contract templates; keep generic bot-era templates unchanged
 - `.agents/agentic-delivery/workflows/{automated-review-routing-loop,claude-review-loop,codex-active-orchestration-loop,gsd-universal-runtime-loop,parent-issue-orchestration-loop,pi-active-orchestration-loop,pi-autonomous-orchestration-loop,stacked-parent-subissue-workflow}.md`
 - new `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
 - `.agents/agentic-delivery/prompts/shepherd-validator-prompt.md`
@@ -71,8 +72,8 @@ PR #493 files in PR #495, or claim the routing migration is complete.
 - relevant `.pi/agents/pm-*.md` role corrections
 - `docs/prompts/universal-programming-loop-prompts.md`
 - `scripts/tests/pi-model-routing.sh`
-- new `scripts/tests/pm-orchestrator-contract.sh`
-- this phase directory and narrow Wave 1 extension evidence updates
+- new `scripts/tests/pm-orchestrator-contract.sh` and focused review-state fixtures
+- this phase directory, authoritative `.planning/traces/cli-architecture-v2-orchestration-state.yaml`, and narrow #397/Wave 1 machine-state/summary evidence updates
 
 ## Slices
 
@@ -88,7 +89,11 @@ Add one local Codex review workflow/prompt. Update runtime-neutral parent/stacke
 
 Update PM prompts/agents/operator docs and state schema consistently. Retain Claude/Copilot documents and the legacy disposition agent only as explicitly deprecated, non-PM historical routes that point to the canonical local Codex workflow. Do not globally replace truthful historical phase records.
 
-### 4. VERIFY
+### 4. Correction round 2 — authoritative gate, transitive templates, correction lineage
+
+After the first corrected exact-head re-review, make the PR #493 post-Wave1 migration gate durable in the authoritative #397 queue, route all current PM required-reading to PM-specific handoff/disposition templates, and align the autonomous driver with stable exact-base/candidate-lineage correction counters. Add RED assertions for each finding before guidance/state edits. Preserve legacy fields/templates as read-only input and do not edit PR #493-owned paths.
+
+### 5. VERIFY
 
 Run the focused contract first, then:
 
@@ -108,7 +113,7 @@ make verify
 
 Also verify YAML/JSON parsing, PR #493 path disjointness, no dependency delta, no CLI/help/docs/website product applicability, and no historical phase rewrite.
 
-### 5. REVIEW / INTEGRATE
+### 6. REVIEW / INTEGRATE
 
 Commit and push coherent additive checkpoints. At the final exact head, run a fresh-context read-only local Codex review bound to parent base and task head, disposition every finding, rerun affected gates/review after any change, then run independent Shepherd trajectory validation. Update draft PR #495 title/body and inspect checks/reviews. Never request Claude/Copilot, mark ready, merge PR #495, or edit/merge PR #438.
 

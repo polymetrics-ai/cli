@@ -2,7 +2,7 @@
 
 Review range: `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65`
 Reviewer: fresh-context project `pm-reviewer`, local Codex Sol/xhigh, read-only
-Status: correction in progress; exact-head re-review required
+Status: correction round 2 in progress; exact-head re-review required
 
 | ID | Severity | Disposition | Reason / action |
 |---|---|---|---|
@@ -11,6 +11,9 @@ Status: correction in progress; exact-head re-review required
 | F3 | medium | accepted | Make the current review schema versioned and conditional: canonical pending/blocked Shepherd records need no invented verdict; completed statuses require one. Preserve legacy bot and local-Codex shapes read-only. Add pending/clean/blocked/historical fixtures to focused validation. |
 | F4 | medium | accepted | Add a required default correction budget (4), per-range counters, and human-block transition to the parent contract, `/pm-orchestrate`, local review workflow, state schema/spec, and focused validation. |
 | F5 | medium | accepted | Update PR #495 title/body after correction commits to distinguish historical `3fd63fbe...` evidence from the new exact head and mark/reconcile current review, Shepherd, and CI state truthfully. Body-only updates do not alter Git head. |
+| F6 | high | accepted | Add PR #493 as an explicit dependency/blocker in the authoritative #397 trace, machine run state, and summary. Extend the contract test to reject a ready #408 before this post-Wave1 routing migration integrates. Do not edit PR #493-owned paths. |
+| F7 | high | accepted | Add PM-specific handoff/disposition templates with exact-head local Codex and independent Shepherd fields. Route every current PM prompt/agent/workflow reference to them and make the focused contract reject transitive legacy bot templates. Preserve the generic historical templates unchanged. |
+| F8 | medium | accepted | Align the autonomous run/prompt with canonical `correction_budget.max_correction_rounds` plus durable `rounds_by_range` lineage counters. Accept old `guards.correction_rounds` only as read-only legacy input and add a replacement-head/cap-exceeded fixture assertion. |
 
 ## Residual human/program gates
 

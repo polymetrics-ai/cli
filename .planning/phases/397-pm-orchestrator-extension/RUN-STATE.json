@@ -3,7 +3,7 @@
   "phase": "397-pm-orchestrator-extension",
   "issue": 397,
   "pullRequest": 495,
-  "status": "review_findings_correction_round_1",
+  "status": "review_findings_correction_round_2_planned",
   "branch": "chore/cli-architecture-v2-wave1-parent-sync-r1",
   "startingHead": "3fd63fbe0f526873fa3adb8a75fa5f20342d52a6",
   "baseHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -40,24 +40,29 @@
       "cycle": "review",
       "decision": "read_only_spawned",
       "reason": "Fresh-context project pm-reviewer inspected exact base 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f and head 3c88fc78062ba0a3437f79bc88c395286c228c65, returning five findings; four are corrected or modified in scope and one pre-existing Gong product defect is deferred by the explicit non-product scope."
+    },
+    {
+      "cycle": "review_round_2",
+      "decision": "read_only_spawned",
+      "reason": "Fresh-context project pm-reviewer inspected verified exact head 0665ad7aad1ec083f4bb0572a88ac1a38f417a35, confirmed the scoped Gong follow-up, and returned three accepted orchestration findings: authoritative PR #493 gate drift, transitive bot-era templates, and autonomous correction-counter drift."
     }
   ],
   "verificationPassed": true,
   "verifiedImplementationHead": "d72a93018933541d390884f96b285856e269a1ab",
-  "verifiedEvidenceHead": "3c88fc78062ba0a3437f79bc88c395286c228c65",
+  "verifiedEvidenceHead": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
   "correctionBudget": {
     "maxCorrectionRounds": 4,
     "roundsByRange": {
-      "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65": 1
+      "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f...3c88fc78062ba0a3437f79bc88c395286c228c65": 2
     }
   },
   "localCodexReview": {
     "status": "findings_correction_required",
     "exactBase": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
-    "exactHead": "3c88fc78062ba0a3437f79bc88c395286c228c65",
-    "findings": 5,
+    "exactHead": "0665ad7aad1ec083f4bb0572a88ac1a38f417a35",
+    "findings": 3,
     "dispositionArtifact": ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md"
   },
   "shepherd": "pending_after_clean_rereview",
-  "updatedAt": "2026-07-23T13:50:42Z"
+  "updatedAt": "2026-07-23T14:43:24Z"
 }
