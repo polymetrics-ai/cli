@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "pm-review-system-phase/v1",
+  "phase": "397-pm-first-round-review-system-r1",
+  "parentIssue": 397,
+  "parentBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "taskBranch": "chore/pm-first-round-review-system-r1",
+  "exactBaseSHA": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+  "candidateLineage": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1",
+  "correctionBudget": {
+    "maxCorrectionRounds": 5,
+    "roundsByRange": {
+      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 0
+    },
+    "headHistory": []
+  },
+  "status": "plan_checked_red_pending",
+  "verificationPassed": false,
+  "localCodex": {
+    "status": "pending",
+    "exactHeadSHA": null,
+    "synthesisArtifact": null
+  },
+  "shepherd": {
+    "status": "pending",
+    "exactHeadSHA": null,
+    "verdict": null,
+    "evidenceArtifact": null
+  },
+  "gsd": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "generated_and_executed_via_pi_tools",
+    "programmingLoop": "unavailable_unknown_command",
+    "lifecycleOwner": "/pm-orchestrate"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only measurement scout completed. Three read-only scouts failed to start because the isolated provider lacked authentication; no result is claimed from those failures."
+    },
+    {
+      "cycle": "plan_local_owner",
+      "decision": "local_critical_path",
+      "reason": "The promoted follow-up is one cohesive shared PM review-system write scope in this isolated task worktree; no independent mutating subissue was created or spawned."
+    },
+    {
+      "cycle": "plan_check",
+      "decision": "read_only_spawned",
+      "reason": "Independent read-only plan checker returned BLOCKED with active-owner, TDD-order, path-security, corpus-provenance, scope, threshold, delivery, and state-evidence gaps; planning artifacts were corrected before RED."
+    }
+  ],
+  "readyQueue": [
+    {
+      "work": "pm-first-round-review-system-r1",
+      "decision": "local_critical_path",
+      "reason": "Captain-promoted cohesive follow-up selected for this isolated branch."
+    },
+    {
+      "work": "issue-408-tui",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "Explicitly outside this task and forbidden by ship scope."
+    },
+    {
+      "work": "pr-493-owned-routing",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "All 18 PR #493-owned paths are forbidden for this branch."
+    }
+  ],
+  "terminalHumanGate": "correction rounds greater than 5; any dependency/secret/auth/destructive/quality-gate decision; any merge of this stacked PR into feat/cli-architecture-v2; or any parent PR merge to main",
+  "humanGates": [
+    "new dependencies",
+    "secrets or credentialed checks",
+    "quality-gate reduction",
+    "merge this stacked PR into feat/cli-architecture-v2",
+    "parent PR merge to main"
+  ]
+}
