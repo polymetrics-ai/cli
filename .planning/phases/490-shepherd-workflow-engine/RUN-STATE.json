@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "phase": "490-shepherd-workflow-engine",
+  "issue": 490,
+  "status": "local_verification_passed",
+  "verificationPassed": true,
+  "verificationBlocker": null,
+  "manualGsdFallback": {
+    "active": true,
+    "reason": "scripts/gsd doctor passed but programming-loop is absent from the command registry"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "read_only_spawned",
+      "reason": "workflow-engine run 43dc4d81-66bf-4642-bed2-207a00d5fec0 performed four bounded read-only analyses and typed synthesis; this issue worker retains the only mutating path"
+    },
+    {
+      "cycle": "merge-readiness-preflight",
+      "decision": "local_critical_path",
+      "reason": "existing child PR #491 needs one bounded artifact correction and exact-diff review round; no mutating implementation worker is ready or required"
+    },
+    {
+      "cycle": "merge-readiness-review",
+      "decision": "read_only_spawned",
+      "reason": "workflow-engine run 29165c4c-c62c-405d-a6b0-78010dcc5a82 dispatched the required runtime/security and CI/delivery exact-diff lanes; synthesis accepted two terminal-snapshot P1 blockers for one correction pass"
+    },
+    {
+      "cycle": "merge-readiness-correction",
+      "decision": "local_critical_path",
+      "reason": "one bounded correction restored final Pi message status and producing-route authority; selected tests, 163 affected tests, strict source typecheck, all verifiers, and the one final 1719-test sequential suite passed"
+    }
+  ],
+  "workflowAnalysisRunId": "43dc4d81-66bf-4642-bed2-207a00d5fec0",
+  "reviewRunId": "8e04bba9-012b-422f-89cb-4d845f340e3e",
+  "mergeReadinessReviewRunId": "29165c4c-c62c-405d-a6b0-78010dcc5a82",
+  "reviewPreflightRunId": "abaefcd2-90cf-4569-9ac6-b7e58d0428e9",
+  "updatedAt": "2026-07-23T04:37:00.000Z"
+}

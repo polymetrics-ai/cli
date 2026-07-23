@@ -80,10 +80,39 @@ Useful prompt templates:
   Export `SEARXNG_BASE` (and its token if proxied) first so research can query the audited `searxng`
   connector via `pm`.
 
+### Bounded workflow-engine development orchestration
+
+`.pi/settings.json` pins `npm:pi-workflow-engine@0.12.0` for project-local bounded analysis,
+typed synthesis, and independent review. The inspected npm artifact resolves to
+`pi-workflow-engine-0.12.0.tgz` with integrity
+`sha512-DX+e2U03raK8o8YbwnDUcAQSKNZm0v1J6jWS+bk2j2kEFihLmZCf0sUlrHWou1kWC3Zw+CA4HCgqpjLWlmtcRg==`.
+The package requires Pi 0.80.10 or newer; this repository deliberately narrows Shepherd to the
+stable interval `>=0.80.10 <0.80.11` until another release is explicitly tested.
+
+This is a partial adoption. Workflow-engine runs are non-authoritative development/review
+orchestration. Their ignored `.pi/.workflow-runs` records, journals, run IDs, isolated patches,
+retries, background state, and disposable worktrees never replace Shepherd state, external-effect
+receipts, recovery, persistent issue worktrees, exact-head evidence, or human gates. Production
+Shepherd does not import workflow-engine or its undocumented internals. It retains
+`ProductionAgentSessionPort` and uses public Pi APIs directly with claimed cwd, exact scoped host
+tools, prompt completion, typed bound handoffs, cancellation, and abort/join-before-release.
+
+Shepherd production does not import the package, register workflow-engine commands, or route any
+`pm-shepherd` stage through its built-ins. A developer may explicitly invoke the package's built-in
+workflows with the normal authority of that Pi coding-agent session, including their documented
+`bash` access. That explicit developer-tool execution is outside Shepherd production: its output,
+commands, journals, patches, disposable worktrees, and run IDs are never Shepherd verification
+evidence or durable authority.
+
+For Shepherd's bounded independent review evidence, the host must capture and bound the exact
+reviewed material first. Inline analysis, verification, and synthesis agents use `tools: []`, omit
+dynamic tool hints and skills, receive only that material in their prompts, and receive no GitHub
+mutation authority. The host revalidates the clean exact head afterward.
+
 ### Autonomous in-process Shepherd
 
 `/pm-shepherd` is the authoritative replacement program tracked by parent issue #471 and draft
-parent PR #472. It uses Pi 0.80.6 public `createAgentSession` APIs inside the current Pi process;
+parent PR #472. It uses bounded-compatible Pi 0.80.10 public `createAgentSession` APIs inside the current Pi process;
 it does not start another `pi` process, use tmux as transport, or rely on the abandoned standalone
 Go Shepherd.
 
@@ -100,7 +129,7 @@ default branch.
 
 Before starting:
 
-- Launch Pi 0.80.6 from the clean canonical Git worktree on the intended non-default parent branch.
+- Launch Pi 0.80.10 from the clean canonical Git worktree on the intended non-default parent branch.
   Authenticate Pi's configured models and `gh` in the host environment; never put credentials in a
   plan or prompt. Plan bootstrap requires authoritative `admin` or `maintain` repository permission.
 - Ensure the parent GitHub issue and non-default parent branch exist. On `start`, the host creates or

@@ -261,7 +261,7 @@ export type SessionToolResult = Omit<AgentToolResult<unknown>, "content"> & {
 	content: Array<{ type: "text"; text: string }>;
 };
 
-/** Pi 0.80.6 public custom-tool definition using its supported plain-JSON-schema path. */
+/** Bounded-compatible Pi 0.80.10 custom-tool definition using its public plain-JSON-schema path. */
 export type SessionTool = Omit<PiSessionTool, "execute"> & {
 	execute(
 		toolCallId: string,
@@ -1040,7 +1040,7 @@ function codePointAt(value: string, index: number): number {
 	return INTRINSIC_REFLECT_APPLY(INTRINSIC_STRING_CODE_POINT_AT, value, [index]) as number;
 }
 
-// Pi 0.80.6's pinned TypeBox guard uses this intentionally small grapheme
+// Pi 0.80.10's pinned TypeBox guard uses this intentionally small grapheme
 // implementation. Preserve its fast-path quirks as part of the tool ABI while
 // charging each consumed UTF-16 point's exact JSON/UTF-8 bytes in the same walk.
 function chargeProjectedStringAndMeasure(

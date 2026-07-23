@@ -2,9 +2,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
 
-const EXPECTED_VERSION = "0.80.6";
+const EXPECTED_VERSION = "0.80.10";
 const prefix = dirname(dirname(process.execPath));
-const packageRoot = join(
+const packageRoot = process.env.SHEPHERD_PI_PACKAGE_ROOT ?? join(
 	prefix,
 	"lib",
 	"node_modules",

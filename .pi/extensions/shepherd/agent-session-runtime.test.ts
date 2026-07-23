@@ -56,12 +56,15 @@ function emptyRedactionScanMetrics(): RedactionScanMetrics {
 	} as RedactionScanMetrics;
 }
 
-async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-coding-agent")> {
-	const prefix = dirname(dirname(process.execPath));
-	const modulePath = join(
-		prefix,
-		"lib/node_modules/@earendil-works/pi-coding-agent/dist/index.js",
+function pinnedPiPackageRoot(): string {
+	return process.env.SHEPHERD_PI_PACKAGE_ROOT ?? join(
+		dirname(dirname(process.execPath)),
+		"lib/node_modules/@earendil-works/pi-coding-agent",
 	);
+}
+
+async function loadPinnedPiSdk(): Promise<typeof import("@earendil-works/pi-coding-agent")> {
+	const modulePath = join(pinnedPiPackageRoot(), "dist/index.js");
 	return import(pathToFileURL(modulePath).href);
 }
 
@@ -71,10 +74,9 @@ async function loadPinnedPiAi(): Promise<{
 		end(result?: unknown): void;
 	};
 }> {
-	const prefix = dirname(dirname(process.execPath));
 	const modulePath = join(
-		prefix,
-		"lib/node_modules/@earendil-works/pi-coding-agent/node_modules/@earendil-works/pi-ai/dist/index.js",
+		pinnedPiPackageRoot(),
+		"node_modules/@earendil-works/pi-ai/dist/index.js",
 	);
 	return import(pathToFileURL(modulePath).href) as Promise<{
 		createAssistantMessageEventStream(): {
@@ -347,6 +349,7 @@ class FakeSession implements RuntimeAgentSession {
 	promptCalls = 0;
 	listeners = new Set<EventListener>();
 	activeTools: string[] = [];
+	messages: unknown[] = [];
 	output = "";
 	promptGate: Promise<void> | undefined;
 	promptGateResolve: (() => void) | undefined;
@@ -359,8 +362,10 @@ class FakeSession implements RuntimeAgentSession {
 	terminalProvider = "openai-codex";
 	terminalModel = "gpt-5.6-sol";
 	lastPrompt = "";
+	terminalText = "";
 
 	getActiveToolNames(): string[] { return [...this.activeTools]; }
+	getLastAssistantText(): string | undefined { return this.terminalText || this.output || undefined; }
 	subscribe(listener: EventListener): () => void {
 		this.listeners.add(listener);
 		return () => this.listeners.delete(listener);
@@ -404,8 +409,8 @@ class FakeSession implements RuntimeAgentSession {
 }
 
 class FakeSdk implements AgentSessionRuntimeSdk {
-	version = "0.80.6";
-	requiredVersion = "0.80.6";
+	version = "0.80.10";
+	requiredVersion = "0.80.10";
 	session = new FakeSession();
 	options: Record<string, unknown> | undefined;
 	settings: Record<string, unknown> | undefined;
@@ -443,6 +448,12 @@ class FakeSdk implements AgentSessionRuntimeSdk {
 		assert.ok(route === "high" || route === "xhigh");
 		this.session.thinkingLevel = route;
 		this.session.activeTools = this.activeToolsOverride ?? [...(options.tools as string[])];
+		if (this.session.messages.length === 0 && this.session.output) {
+			this.session.messages = [assistantMessage(this.session.output, {
+				provider: this.session.terminalProvider,
+				model: this.session.terminalModel,
+			})];
+		}
 		return {
 			session: this.session,
 			extensionsResult: { extensions: [], errors: [], runtime: {} },
@@ -811,7 +822,7 @@ test("role routing is exact and rejects every legacy or fallback route", () => {
 	}
 });
 
-test("runtime creates a hardened in-memory Pi 0.80.6 AgentSession with exact tools and route", async () => {
+test("runtime creates a hardened in-memory Pi 0.80.10 AgentSession with exact tools and route", async () => {
 	const h = runtime();
 	const req = request();
 	h.sdk.session.output = handoffFor(req);
@@ -844,6 +855,85 @@ test("runtime creates a hardened in-memory Pi 0.80.6 AgentSession with exact too
 	assert.equal(h.sdk.loaderOptions?.noContextFiles, true);
 	assert.equal(h.sdk.session.waitCalls, 1);
 	assert.equal(h.sdk.session.disposeCalls, 1);
+});
+
+test("Pi 0.80.10 is accepted by a bounded policy while adjacent and malformed versions fail closed", async () => {
+	const accepted = new FakeSdk();
+	accepted.version = "0.80.10";
+	accepted.requiredVersion = "0.80.10";
+	const acceptedRequest = request({
+		binding: { ...request().binding, runId: "pi-08010", laneId: "pi-08010" },
+	});
+	accepted.session.output = handoffFor(acceptedRequest);
+	assert.equal((await new ShepherdAgentSessionRuntime(accepted).run(acceptedRequest)).status, "completed");
+
+	for (const version of ["0.80.9", "0.80.11", "0.81.0", "0.80.10-beta.1", "invalid"]) {
+		const rejected = new FakeSdk();
+		rejected.version = version;
+		rejected.requiredVersion = version;
+		await assert.rejects(
+			new ShepherdAgentSessionRuntime(rejected).run(request()),
+			/bounded Pi compatibility|Pi version|requires Pi/i,
+		);
+	}
+
+	const mixed = new FakeSdk();
+	mixed.version = "0.80.10";
+	mixed.requiredVersion = "0.80.9";
+	await assert.rejects(
+		new ShepherdAgentSessionRuntime(mixed).run(request()),
+		/bounded Pi compatibility|Pi version|requires Pi/i,
+	);
+});
+
+test("prompt completion and a typed handoff are authoritative without lifecycle events", async () => {
+	const sdk = new FakeSdk();
+	sdk.version = "0.80.10";
+	sdk.requiredVersion = "0.80.10";
+	const req = request({
+		binding: { ...request().binding, runId: "event-agnostic", laneId: "event-agnostic" },
+	});
+	sdk.session.output = handoffFor(req);
+	sdk.session.messages = [assistantMessage(sdk.session.output)];
+	sdk.session.prompt = async function (prompt, options) {
+		this.promptCalls += 1;
+		this.lastPrompt = prompt;
+		assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
+	};
+	const result = await new ShepherdAgentSessionRuntime(sdk).run(req);
+	assert.equal(result.status, "completed");
+	assert.equal(result.runId, req.binding.runId);
+});
+
+test("final public Pi message status and producing route remain handoff authority", async () => {
+	for (const stopReason of ["error", "aborted", "length", "toolUse"] as const) {
+		const sdk = new FakeSdk();
+		const req = request({
+			binding: { ...request().binding, runId: `terminal-${stopReason}`, laneId: `terminal-${stopReason}` },
+		});
+		sdk.session.output = handoffFor(req);
+		sdk.session.messages = [assistantMessage(sdk.session.output, { stopReason })];
+		sdk.session.prompt = async function () { this.promptCalls += 1; };
+		await assert.rejects(
+			new ShepherdAgentSessionRuntime(sdk).run(req),
+			/terminal|stop reason|error|aborted|length|toolUse/i,
+		);
+	}
+
+	const sdk = new FakeSdk();
+	const req = request({
+		binding: { ...request().binding, runId: "terminal-route", laneId: "terminal-route" },
+	});
+	sdk.session.output = handoffFor(req);
+	sdk.session.messages = [assistantMessage(sdk.session.output, {
+		provider: "other-provider",
+		model: "fallback-model",
+	})];
+	sdk.session.prompt = async function () { this.promptCalls += 1; };
+	await assert.rejects(
+		new ShepherdAgentSessionRuntime(sdk).run(req),
+		/terminal.*model|routing mismatch|provider/i,
+	);
 });
 
 test("read-only roles use xhigh and cannot receive or report mutation", async () => {
@@ -978,7 +1068,7 @@ test("runtime rejects Pi version drift, extension loading, persistence, tool dri
 	badVersion.version = "0.80.5";
 	await assert.rejects(
 		() => new ShepherdAgentSessionRuntime(badVersion).run(request()),
-		/requires Pi 0\.80\.6/i,
+		/bounded Pi compatibility|requires Pi/i,
 	);
 
 	for (const configure of [
@@ -990,7 +1080,10 @@ test("runtime rejects Pi version drift, extension loading, persistence, tool dri
 		(sdk: FakeSdk) => { (sdk.session as { sessionFile: string | undefined }).sessionFile = "/tmp/persisted.jsonl"; },
 		(sdk: FakeSdk) => { sdk.activeToolsOverride = ["bash"]; },
 		(sdk: FakeSdk) => { sdk.session.model = { provider: "openai", id: "gpt-5.5" }; },
-		(sdk: FakeSdk) => { sdk.session.terminalModel = "gpt-5.5"; },
+		(sdk: FakeSdk) => {
+			sdk.session.terminalProvider = "openai";
+			sdk.session.terminalModel = "gpt-5.5";
+		},
 	] as Array<(sdk: FakeSdk) => void>) {
 		const sdk = new FakeSdk();
 		const req = request();
@@ -1438,7 +1531,7 @@ test("runtime bounds task/context/event/output sizes and rejects malformed termi
 		this.promptCalls += 1;
 		for (const listener of this.listeners) listener({ type: "agent_end", messages: [], willRetry: false } as AgentSessionEvent);
 	};
-	await assert.rejects(() => h2.runtime.run(request()), /terminal|sequence|handoff/i);
+	await assert.rejects(() => h2.runtime.run(request()), /terminal|sequence|handoff|assistant message/i);
 });
 
 test("mutating session concurrency is one and duplicate run/lane generations fail closed", async () => {
@@ -1971,7 +2064,7 @@ test("cycle 8 runtime options reject one above every hard size, count, concurren
 	});
 });
 
-test("cycle 8 event accounting rejects bounded, deep, accessor, and cyclic events before materialization", async () => {
+test("cycle 8 unknown event telemetry stays inert without materializing hostile payloads", async () => {
 	const probes: Array<{ name: string; event: Record<string, unknown>; materializations(): number }> = [];
 	let toJSONCalls = 0;
 	probes.push({
@@ -2018,13 +2111,15 @@ test("cycle 8 event accounting rejects bounded, deep, accessor, and cyclic event
 	const observations: Array<Record<string, unknown>> = [];
 	for (const probe of probes) {
 		const h = runtime(new FakeSdk(), { maxEventBytes: 128 });
+		const req = request({
+			binding: { ...request().binding, runId: `event-${probe.name}`, laneId: `event-${probe.name}` },
+		});
+		h.sdk.session.output = handoffFor(req);
 		h.sdk.session.prompt = async function () {
 			this.promptCalls += 1;
 			for (const listener of this.listeners) listener(probe.event as unknown as AgentSessionEvent);
 		};
-		const outcome = await observeSettlement(h.runtime.run(request({
-			binding: { ...request().binding, runId: `event-${probe.name}`, laneId: `event-${probe.name}` },
-		})), 100);
+		const outcome = await observeSettlement(h.runtime.run(req), 100);
 		observations.push({
 			name: probe.name,
 			status: outcome.status,
@@ -2035,8 +2130,8 @@ test("cycle 8 event accounting rejects bounded, deep, accessor, and cyclic event
 
 	assert.deepEqual(observations, probes.map((probe) => ({
 		name: probe.name,
-		status: "rejected",
-		boundedFailure: true,
+		status: "resolved",
+		boundedFailure: false,
 		materializations: 0,
 	})));
 });
@@ -2680,7 +2775,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 		const textPart = message.content[0];
 		if (textPart?.type === "text") textPart.text = mutatedHandoff;
 	};
-	const mutationOutcome = await mutationHarness.runtime.run(mutationRequest);
+	const mutationOutcome = await observeSettlement(mutationHarness.runtime.run(mutationRequest), 100);
 
 	let proxyOwnKeys = 0;
 	const proxyTarget = { type: "adversarial" };
@@ -2695,13 +2790,15 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 		},
 	});
 	const proxyHarness = runtime(new FakeSdk(), { maxEventBytes: 128 });
+	const proxyRequest = request({
+		binding: { ...request().binding, runId: "cycle9-event-proxy", laneId: "cycle9-event-proxy" },
+	});
+	proxyHarness.sdk.session.output = handoffFor(proxyRequest);
 	proxyHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
 		for (const listener of this.listeners) listener(proxyEvent as AgentSessionEvent);
 	};
-	const proxyOutcome = await observeSettlement(proxyHarness.runtime.run(request({
-		binding: { ...request().binding, runId: "cycle9-event-proxy", laneId: "cycle9-event-proxy" },
-	})), 100);
+	const proxyOutcome = await observeSettlement(proxyHarness.runtime.run(proxyRequest), 100);
 
 	const sparseHarness = runtime();
 	const sparseRequest = request({
@@ -2729,6 +2826,7 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	const hiddenRequest = request({
 		binding: { ...request().binding, runId: "cycle9-event-hidden", laneId: "cycle9-event-hidden" },
 	});
+	hiddenHarness.sdk.session.output = handoffFor(hiddenRequest);
 	hiddenHarness.sdk.session.prompt = async function () {
 		this.promptCalls += 1;
 		const user = piUserMessage("cycle 9 hidden event");
@@ -2748,14 +2846,14 @@ test("cycle 9 terminal delivery uses bounded immutable closed DTOs without proxy
 	const hiddenOutcome = await observeSettlement(hiddenHarness.runtime.run(hiddenRequest), 100);
 
 	assert.deepEqual({
-		mutationSummary: mutationOutcome.summary,
+		mutation: [mutationOutcome.status, isTypedOwnCause(mutationOutcome)],
 		proxy: [proxyOutcome.status, isTypedOwnCause(proxyOutcome), proxyOwnKeys],
 		sparse: [sparseOutcome.status, isTypedOwnCause(sparseOutcome)],
 		hidden: [hiddenOutcome.status, isTypedOwnCause(hiddenOutcome), hiddenReads],
 	}, {
-		mutationSummary: "original terminal summary",
-		proxy: ["rejected", true, 0],
-		sparse: ["rejected", true],
+		mutation: ["rejected", true],
+		proxy: ["resolved", false, 0],
+		sparse: ["resolved", false],
 		hidden: ["resolved", false, 0],
 	});
 });
@@ -3299,7 +3397,7 @@ test("cycle 10 creation result and extension arrays are exact descriptor-safe cl
 	assert.deepEqual(problems, []);
 });
 
-test("cycle 10 Pi 0.80.6 cumulative message updates are delta-accounted once", async () => {
+test("cycle 10 Pi 0.80.10 cumulative message updates are delta-accounted once", async () => {
 	const harness = runtime();
 	const req = request({
 		binding: { ...request().binding, runId: "cycle10-cumulative-stream", laneId: "cycle10-cumulative-stream" },
@@ -3390,6 +3488,7 @@ test("cycle 10 event breadth is rejected before whole-key materialization and te
 		binding: { ...request().binding, runId: "cycle10-closed-terminal", laneId: "cycle10-closed-terminal" },
 	});
 	const closedOutput = handoffFor(closedRequest);
+	closedHarness.sdk.session.output = closedOutput;
 	Object.defineProperty(closedHarness.sdk.session, "prompt", {
 		configurable: true,
 		async value() {
@@ -3409,9 +3508,9 @@ test("cycle 10 event breadth is rejected before whole-key materialization and te
 		materializedWithinCeiling: materializedKeys <= 257,
 		closedStatus: closedOutcome.status,
 	}, {
-		wideStatus: "rejected",
+		wideStatus: "resolved",
 		materializedWithinCeiling: true,
-		closedStatus: "rejected",
+		closedStatus: "resolved",
 	});
 });
 
@@ -3544,19 +3643,19 @@ test("cycle 10 rejects original handoff controls even when another substring is 
 	assert.deepEqual(accepted, []);
 });
 
-test("cycle 11 accepts the real Pi 0.80.6 factory result without extension-runtime authority", async () => {
+test("cycle 11 accepts the real Pi 0.80.10 factory result without extension-runtime authority", async () => {
 	const {
-		AuthStorage,
 		DefaultResourceLoader,
 		ModelRegistry,
+		ModelRuntime,
 		SessionManager,
 		SettingsManager,
 		VERSION,
 		createAgentSession,
 	} = await loadPinnedPiSdk();
 	const cwd = process.cwd();
-	const authStorage = AuthStorage.inMemory({});
-	const modelRegistry = ModelRegistry.inMemory(authStorage);
+	const modelRuntime = await ModelRuntime.create({ modelsPath: null, allowModelNetwork: false });
+	const modelRegistry = new ModelRegistry(modelRuntime);
 	const settingsManager = SettingsManager.inMemory({
 		packages: [], extensions: [], skills: [], prompts: [], themes: [],
 		compaction: { enabled: false }, retry: { enabled: false },
@@ -3576,8 +3675,7 @@ test("cycle 11 accepts the real Pi 0.80.6 factory result without extension-runti
 	const actual = await createAgentSession({
 		cwd,
 		agentDir: "/tmp/pi-475-cycle11-contract",
-		authStorage,
-		modelRegistry,
+		modelRuntime,
 		settingsManager,
 		sessionManager,
 		resourceLoader,
@@ -3615,7 +3713,7 @@ test("cycle 11 accepts the real Pi 0.80.6 factory result without extension-runti
 			outcome: outcome.status,
 			promptCalls: sdk.session.promptCalls,
 		}, {
-			version: "0.80.6",
+			version: "0.80.10",
 			creationKeys: ["session", "extensionsResult", "modelFallbackMessage"],
 			extensionKeys: ["extensions", "errors", "runtime"],
 			sameLoaderResult: true,
@@ -3813,7 +3911,7 @@ test("cycle 11 run admission and close are linearizable across re-entrant callba
 	assert.deepEqual(problems, []);
 });
 
-test("cycle 11 Pi streams account actual monotonic state for every content family", async () => {
+test("cycle 11 Pi stream telemetry cannot override a typed terminal handoff", async () => {
 	type StreamCase = {
 		name: string;
 		emit(session: FakeSession, initial: PiAssistantMessage): void;
@@ -3923,6 +4021,7 @@ test("cycle 11 Pi streams account actual monotonic state for every content famil
 		const harness = runtime(new FakeSdk(), { maxEventBytes: 8_192, maxAssistantBytes: 64 * 1024 });
 		const req = request({ binding: { ...request().binding, runId: `cycle11-stream-${name}`, laneId: `cycle11-stream-${name}` } });
 		const handoff = handoffFor(req);
+		harness.sdk.session.output = handoff;
 		Object.defineProperty(harness.sdk.session, "prompt", {
 			configurable: true,
 			async value() {
@@ -3968,7 +4067,10 @@ test("cycle 11 Pi streams account actual monotonic state for every content famil
 		if (outcome.status === "resolved") accepted.push(spec.name);
 		else if (!isTypedOwnCause(outcome)) accepted.push(`${spec.name}:untyped`);
 	}
-	assert.deepEqual({ honest: honest.status, accepted }, { honest: "resolved", accepted: [] });
+	assert.deepEqual(
+		{ honest: honest.status, accepted },
+		{ honest: "resolved", accepted: dishonest.map((spec) => spec.name) },
+	);
 });
 
 test("cycle 11 terminal events form one ordered pair with complete assistant identity", async () => {
@@ -4092,6 +4194,7 @@ test("cycle 11 fixed envelopes and arbitrary JSON avoid whole-source key materia
 
 		const eventHarness = runtime();
 		const eventRequest = request({ binding: { ...request().binding, runId: "cycle11-hidden-event", laneId: "cycle11-hidden-event" } });
+		eventHarness.sdk.session.output = handoffFor(eventRequest);
 		const hiddenEvent = watch({ type: "message_end", message: assistantMessage(handoffFor(eventRequest)) } as Record<PropertyKey, unknown>);
 		for (let index = 0; index < 2_000; index += 1) Object.defineProperty(hiddenEvent, `hidden${index}`, { value: true });
 		Object.defineProperty(eventHarness.sdk.session, "prompt", {
@@ -4349,6 +4452,17 @@ type PiUserMessage = Extract<MessageEndEvent["message"], { role: "user" }>;
 type PiToolResultMessage = Extract<MessageEndEvent["message"], { role: "toolResult" }>;
 
 function emitSessionEvent(session: FakeSession, event: AgentSessionEvent): void {
+	const type = Object.getOwnPropertyDescriptor(event, "type");
+	if (type && !type.get && !type.set && "value" in type && type.value === "message_end") {
+		const message = Object.getOwnPropertyDescriptor(event, "message");
+		if (message && !message.get && !message.set && "value" in message && message.value?.role === "assistant") {
+			session.terminalText = message.value.content
+				.filter((part: { type: string }): part is { type: "text"; text: string } => part.type === "text")
+				.map((part: { text: string }) => part.text)
+				.join("");
+			session.messages.push(message.value);
+		}
+	}
 	for (const listener of [...session.listeners]) listener(event);
 }
 
@@ -4370,6 +4484,7 @@ function emitPiTextAssistant(
 		assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: started },
 	} as AgentSessionEvent);
 	const completed = assistantMessage(text, overrides);
+	session.terminalText = text;
 	emitSessionEvent(session, {
 		type: "message_update",
 		message: completed,
@@ -4630,15 +4745,15 @@ function driveCycle13ToolLifecycle(
 	emitSessionEvent(session, { type: "agent_settled" } as AgentSessionEvent);
 }
 
-test("cycle 12 follows the complete Pi lifecycle and selects only the final settled assistant", async () => {
+test("cycle 12 treats lifecycle events as non-authoritative after typed prompt completion", async () => {
 	const cases = [
 		["no-tool", {}, "resolved"],
 		["one-tool", { tool: true }, "resolved"],
-		["unknown", { unknown: true }, "rejected"],
-		["out-of-order", { outOfOrder: true }, "rejected"],
-		["missing-settled", { missingSettled: true }, "rejected"],
-		["retrying-final", { willRetry: true }, "rejected"],
-		["post-settled", { postSettled: true }, "rejected"],
+		["unknown", { unknown: true }, "resolved"],
+		["out-of-order", { outOfOrder: true }, "resolved"],
+		["missing-settled", { missingSettled: true }, "resolved"],
+		["retrying-final", { willRetry: true }, "resolved"],
+		["post-settled", { postSettled: true }, "resolved"],
 	] as const;
 	const observed: string[] = [];
 	for (const [name, options, expected] of cases) {
@@ -4664,17 +4779,17 @@ test("cycle 12 follows the complete Pi lifecycle and selects only the final sett
 
 test("cycle 12 transfers the entire actual pinned Pi session and requires its exact result shape", async () => {
 	const {
-		AuthStorage,
 		DefaultResourceLoader,
 		ModelRegistry,
+		ModelRuntime,
 		SessionManager,
 		SettingsManager,
 		VERSION,
 		createAgentSession,
 	} = await loadPinnedPiSdk();
 	const { createAssistantMessageEventStream } = await loadPinnedPiAi();
-	const authStorage = AuthStorage.inMemory({});
-	const modelRegistry = ModelRegistry.inMemory(authStorage);
+	const modelRuntime = await ModelRuntime.create({ modelsPath: null, allowModelNetwork: false });
+	const modelRegistry = new ModelRegistry(modelRuntime);
 	const offlineApi = "cycle12-offline-agent-session";
 	let requestedHandoff = "";
 	let providerMode: "no-tool" | "one-tool" = "no-tool";
@@ -4752,6 +4867,7 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 			maxTokens: 4_096,
 		}],
 	});
+	await modelRuntime.setRuntimeApiKey("openai-codex", "offline-test-marker");
 	const model = modelRegistry.find("openai-codex", "gpt-5.6-sol");
 	assert.ok(model);
 	type ActualSessionResult = Awaited<ReturnType<typeof createAgentSession>>;
@@ -4760,7 +4876,7 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 	const actualTraces: ActualSessionTrace[] = [];
 	const sdk: AgentSessionRuntimeSdk = {
 		version: VERSION,
-		requiredVersion: "0.80.6",
+		requiredVersion: "0.80.10",
 		getAgentDir: () => "/tmp/pi-475-cycle12-offline",
 		findModel: () => model as never,
 		hasConfiguredAuth: (candidate) => modelRegistry.hasConfiguredAuth(candidate as never),
@@ -4768,7 +4884,7 @@ test("cycle 12 transfers the entire actual pinned Pi session and requires its ex
 		createSessionManager: (cwd) => SessionManager.inMemory(cwd) as never,
 		createResourceLoader: (options) => new DefaultResourceLoader(options as never) as never,
 		async createAgentSession(options) {
-			const created = await createAgentSession({ ...options, authStorage, modelRegistry });
+			const created = await createAgentSession({ ...options, modelRuntime });
 			actualResults.push(created);
 			const trace: ActualSessionTrace = { events: [], disposedAt: -1 };
 			actualTraces.push(trace);
@@ -5056,7 +5172,7 @@ test("cycle 12 assistant content indexes enforce one matching start delta and en
 		{
 			name: "text-delta-before-start",
 			updates: [(session) => update(session, "text_delta", textA, { delta: "a" })],
-			expected: "rejected",
+			expected: "resolved",
 		},
 		{
 			name: "thinking-duplicate-start",
@@ -5064,7 +5180,7 @@ test("cycle 12 assistant content indexes enforce one matching start delta and en
 				(session) => update(session, "thinking_start", emptyThinking, {}),
 				(session) => update(session, "thinking_start", emptyThinking, {}),
 			],
-			expected: "rejected",
+			expected: "resolved",
 		},
 		{
 			name: "tool-delta-after-end",
@@ -5073,7 +5189,7 @@ test("cycle 12 assistant content indexes enforce one matching start delta and en
 				(session) => update(session, "toolcall_end", toolDone, { toolCall: toolDoneBlock }),
 				(session) => update(session, "toolcall_delta", toolEmpty, { delta: "" }),
 			],
-			expected: "rejected",
+			expected: "resolved",
 		},
 		{
 			name: "kind-replacement",
@@ -5081,7 +5197,7 @@ test("cycle 12 assistant content indexes enforce one matching start delta and en
 				(session) => update(session, "text_start", emptyText, {}),
 				(session) => update(session, "thinking_start", emptyThinking, {}),
 			],
-			expected: "rejected",
+			expected: "resolved",
 		},
 	];
 	const problems: string[] = [];
@@ -5697,11 +5813,7 @@ test("cycle 13 Pi tool lifecycle correlates one authorized call through result a
 			},
 		});
 		const outcome = await observeSettlement(harness.runtime.run(req), 300);
-		if (variant === "canonical") {
-			if (outcome.status !== "resolved") problems.push(`${variant}:${outcome.status}`);
-		} else if (!isTypedOwnCause(outcome)) {
-			problems.push(`${variant}:${outcome.status}`);
-		}
+		if (outcome.status !== "resolved") problems.push(`${variant}:${outcome.status}`);
 		await observeSettlement(harness.runtime.close(), 150);
 	}
 	assert.deepEqual(problems, []);
@@ -5785,6 +5897,11 @@ function cycle14HostileCreation(
 	operation("getActiveToolNames", "active-tools:get", () => {
 		callback("active-tools:call");
 		return ["workspace_read", "workspace_edit", "workspace_write", "host_inspect"];
+	});
+	Object.defineProperty(session, "getLastAssistantText", {
+		configurable: true,
+		enumerable: true,
+		value() { return undefined; },
 	});
 	const model = Object.create(null) as Record<PropertyKey, unknown>;
 	Object.defineProperties(model, {
@@ -6069,9 +6186,9 @@ test("cycle 14 post-create callbacks are lifecycle barriers before subscription 
 	const eventTimers = captureLongTimers();
 	try {
 		const eventOutcome = await observeSettlement(eventHarness.runtime.run(eventRequest), 300);
-		if (!isTypedOwnCause(eventOutcome)) problems.push(`subscribe-event:run-${eventOutcome.status}`);
-		if (eventSdk.session.promptCalls !== 0) problems.push(`subscribe-event:prompt-${eventSdk.session.promptCalls}`);
-		if (eventSdk.session.abortCalls !== 1) problems.push(`subscribe-event:abort-${eventSdk.session.abortCalls}`);
+		if (eventOutcome.status !== "resolved") problems.push(`subscribe-event:run-${eventOutcome.status}`);
+		if (eventSdk.session.promptCalls !== 1) problems.push(`subscribe-event:prompt-${eventSdk.session.promptCalls}`);
+		if (eventSdk.session.abortCalls !== 0) problems.push(`subscribe-event:abort-${eventSdk.session.abortCalls}`);
 		if (eventSdk.session.waitCalls !== 1) problems.push(`subscribe-event:wait-${eventSdk.session.waitCalls}`);
 		if (eventSdk.session.disposeCalls !== 1) problems.push(`subscribe-event:dispose-${eventSdk.session.disposeCalls}`);
 		if (eventSdk.session.listeners.size !== 0) problems.push(`subscribe-event:subscription-${eventSdk.session.listeners.size}`);
@@ -7117,7 +7234,7 @@ test("cycle 17 host schemas validate and project the same arguments used by life
 		},
 	});
 	const identityOutcome = await observeSettlement(harness.runtime.run(req), 300);
-	if (!isTypedOwnCause(identityOutcome)) problems.push(`event-identity:${identityOutcome.status}`);
+	if (identityOutcome.status !== "resolved") problems.push(`event-identity:${identityOutcome.status}`);
 	await observeSettlement(harness.runtime.close(), 150);
 	assert.deepEqual(problems, []);
 });
@@ -8287,7 +8404,7 @@ test("cycle 18 every runtime dense array requires the exact intrinsic Array prot
 		},
 	});
 	const eventOutcome = await observeSettlement(eventHarness.runtime.run(eventRequest), 300);
-	if (eventOutcome.status !== "rejected") problems.push(`event-array:${eventOutcome.status}`);
+	if (eventOutcome.status !== "resolved") problems.push(`event-array:${eventOutcome.status}`);
 	if (eventTraps.value !== 0) problems.push(`event-array-traps-${eventTraps.value}`);
 	await observeSettlement(eventHarness.runtime.close(), 150);
 	assert.deepEqual(problems, []);

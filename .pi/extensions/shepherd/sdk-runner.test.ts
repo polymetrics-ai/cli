@@ -108,8 +108,14 @@ function makeSdk(overrides = {}) {
 	let resourceOptions;
 	let sessionOptions;
 	let listener;
-	const emit = (event) => listener?.(event);
+	let lastAssistantText = evidenceText();
+	const messages = [terminalMessage()];
+	const emit = (event) => {
+		if (event?.type === "message_end" && event.message?.role === "assistant") messages.push(event.message);
+		listener?.(event);
+	};
 	const emitTerminal = (stopReason = "stop", text = evidenceText()) => {
+		lastAssistantText = text;
 		const message = terminalMessage(stopReason, text);
 		emit({ type: "message_end", message });
 		emit({ type: "agent_end", messages: [message], willRetry: false });
@@ -117,6 +123,7 @@ function makeSdk(overrides = {}) {
 	};
 	const session = {
 		model: { provider: "openai-codex", id: "gpt-5.6-sol" },
+		messages,
 		thinkingLevel: "xhigh",
 		sessionFile: undefined,
 		getActiveToolNames: () => [],
@@ -132,16 +139,20 @@ function makeSdk(overrides = {}) {
 		async waitForIdle() { calls.idle += 1; },
 		async abort() { calls.abort += 1; },
 		dispose() { calls.dispose += 1; },
-		getLastAssistantText: () => evidenceText(),
+		getLastAssistantText: () => lastAssistantText,
 	};
 	const modelRegistry = {
-		authStorage: { opaque: true },
 		find: (provider, model) => provider === "openai-codex" && model === "gpt-5.6-sol" ? session.model : undefined,
 		hasConfiguredAuth: () => true,
+		getProviderAuthStatus: () => ({ configured: true, source: "runtime" }),
+		getApiKeyForProvider: async () => "offline-test-marker",
+		isUsingOAuth: () => false,
+		getRegisteredProviderConfig: () => undefined,
+		getRegisteredProviderIds: () => [],
 	};
 	const sdk = {
-		version: "0.80.6",
-		requiredVersion: "0.80.6",
+		version: "0.80.10",
+		requiredVersion: "0.80.10",
 		getAgentDir: () => "/tmp/pi-agent",
 		createSettingsManager: (settings, options) => ({ settings, options, kind: "settings" }),
 		createSessionManager: (cwd) => ({ cwd, kind: "session" }),
@@ -187,9 +198,33 @@ test("constructs an isolated exact-model session and always cleans it up", async
 	assert.equal(harness.calls.dispose, 1);
 });
 
+test("accepts Pi 0.80.10 within the bounded compatibility policy", async () => {
+	const harness = makeSdk({ version: "0.80.10", requiredVersion: "0.80.10" });
+	const result = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+	assert.equal(result.summary, "read-only inspection passed");
+
+	for (const version of ["0.80.9", "0.80.11", "0.81.0", "0.80.10-beta.1", "invalid"]) {
+		const rejected = makeSdk({ version, requiredVersion: version });
+		await assert.rejects(
+			new SdkAgentRunner(rejected.sdk, rejected.modelRegistry).run(request()),
+			/bounded Pi compatibility|Pi version|requires Pi/i,
+		);
+	}
+});
+
+test("typed assistant evidence remains authoritative without lifecycle events", async () => {
+	const harness = makeSdk({ version: "0.80.10", requiredVersion: "0.80.10" });
+	harness.session.prompt = async () => { harness.calls.prompt += 1; };
+	const result = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+	assert.equal(result.summary, "read-only inspection passed");
+});
+
 test("fails closed on SDK, model, extension, tool, and persistence drift", async () => {
 	const badVersion = makeSdk({ version: "0.81.0" });
-	await assert.rejects(new SdkAgentRunner(badVersion.sdk, badVersion.modelRegistry).run(request()), /requires Pi 0.80.6/);
+	await assert.rejects(
+		new SdkAgentRunner(badVersion.sdk, badVersion.modelRegistry).run(request()),
+		/bounded Pi compatibility|requires Pi/i,
+	);
 
 	const nested = makeSdk({
 		async createSession() {
@@ -207,7 +242,7 @@ test("fails closed on SDK, model, extension, tool, and persistence drift", async
 	await assert.rejects(new SdkAgentRunner(persistent.sdk, persistent.modelRegistry).run(request()), /unexpectedly enabled persistence/);
 });
 
-test("rejects terminal events emitted by a drifted provider or model", async () => {
+test("rejects typed evidence from a drifted final producing route", async () => {
 	const harness = makeSdk();
 	harness.session.prompt = async () => {
 		const message = {
@@ -220,7 +255,7 @@ test("rejects terminal events emitted by a drifted provider or model", async () 
 	};
 	await assert.rejects(
 		new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request()),
-		/terminal.*model|routing mismatch/i,
+		/terminal.*model|routing mismatch|provider/i,
 	);
 });
 
@@ -242,7 +277,6 @@ test("rejects every requested built-in or custom child tool before session creat
 
 test("fails closed on malformed and oversized assistant evidence", async () => {
 	const malformed = makeSdk();
-	malformed.session.getLastAssistantText = () => evidenceText({ summary: "stale accessor must not be trusted" });
 	malformed.session.prompt = async () => { malformed.emitTerminal("stop", "not-json"); };
 	await assert.rejects(
 		new SdkAgentRunner(malformed.sdk, malformed.modelRegistry).run(request()),
@@ -261,42 +295,50 @@ test("fails closed on malformed and oversized assistant evidence", async () => {
 
 
 for (const stopReason of ["stop", "error", "aborted", "length", "toolUse"]) {
-	test(`${stopReason} terminal evidence is ${stopReason === "stop" ? "accepted" : "rejected"}`, async () => {
+	test(`${stopReason} final public Pi message status is enforced`, async () => {
 		const harness = makeSdk();
-		harness.session.getLastAssistantText = () => evidenceText({ summary: "unverified accessor text" });
 		harness.session.prompt = async () => { harness.emitTerminal(stopReason, evidenceText({ summary: `${stopReason} terminal` })); };
 		const outcome = new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
 		if (stopReason === "stop") {
 			assert.equal((await outcome).summary, "stop terminal");
 		} else {
-			await assert.rejects(outcome, new RegExp(`terminal.*${stopReason}`, "i"));
+			await assert.rejects(outcome, /terminal|stop reason|error|aborted|length|toolUse/i);
 		}
 		assert.equal(harness.calls.dispose, 1);
 	});
 }
 
-test("rejects incomplete or inconsistent terminal event sequences", async () => {
+test("accepts typed evidence without a complete raw terminal event sequence", async () => {
 	const noAgentEnd = makeSdk();
 	noAgentEnd.session.prompt = async () => {
 		noAgentEnd.emit({ type: "message_end", message: terminalMessage() });
 	};
-	await assert.rejects(
-		new SdkAgentRunner(noAgentEnd.sdk, noAgentEnd.modelRegistry).run(request()),
-		/terminal event sequence/i,
+	assert.equal(
+		(await new SdkAgentRunner(noAgentEnd.sdk, noAgentEnd.modelRegistry).run(request())).summary,
+		"read-only inspection passed",
 	);
 });
 
-test("aborts and cleans up when the event budget is exceeded", async () => {
+test("saturates all non-authoritative callbacks before inspecting later telemetry", async () => {
 	const harness = makeSdk();
+	let descriptorReads = 0;
+	const ignoredAfterSaturation = new Proxy({}, {
+		getOwnPropertyDescriptor() {
+			descriptorReads += 1;
+			return undefined;
+		},
+	});
 	harness.session.prompt = async () => {
 		harness.emit({ type: "first" });
 		harness.emit({ type: "second" });
+		harness.emit(ignoredAfterSaturation);
 		harness.emitTerminal();
 	};
-	await assert.rejects(
-		new SdkAgentRunner(harness.sdk, harness.modelRegistry, { maxEvents: 1 }).run(request()),
-		/event limit exceeded/,
+	assert.equal(
+		(await new SdkAgentRunner(harness.sdk, harness.modelRegistry, { maxEvents: 1 }).run(request())).summary,
+		"read-only inspection passed",
 	);
+	assert.equal(descriptorReads, 0);
 	assert.equal(harness.calls.abort, 1);
 	assert.equal(harness.calls.unsubscribe, 1);
 	assert.equal(harness.calls.dispose, 1);

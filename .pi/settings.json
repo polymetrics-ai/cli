@@ -1,13 +1,16 @@
 {
- "extensions": [
-  "extensions/pi-sub-agent",
-  "extensions/gsd"
- ],
- "prompts": [
-  "prompts"
- ],
- "skills": [
-  "skills"
- ],
- "enableSkillCommands": true
+  "extensions": [
+    "extensions/pi-sub-agent",
+    "extensions/gsd"
+  ],
+  "prompts": [
+    "prompts"
+  ],
+  "skills": [
+    "skills"
+  ],
+  "enableSkillCommands": true,
+  "packages": [
+    "npm:pi-workflow-engine@0.12.0"
+  ]
 }
