@@ -359,8 +359,10 @@ class FakeSession implements RuntimeAgentSession {
 	terminalProvider = "openai-codex";
 	terminalModel = "gpt-5.6-sol";
 	lastPrompt = "";
+	terminalText = "";
 
 	getActiveToolNames(): string[] { return [...this.activeTools]; }
+	getLastAssistantText(): string | undefined { return this.terminalText || this.output || undefined; }
 	subscribe(listener: EventListener): () => void {
 		this.listeners.add(listener);
 		return () => this.listeners.delete(listener);
@@ -844,6 +846,53 @@ test("runtime creates a hardened in-memory Pi 0.80.6 AgentSession with exact too
 	assert.equal(h.sdk.loaderOptions?.noContextFiles, true);
 	assert.equal(h.sdk.session.waitCalls, 1);
 	assert.equal(h.sdk.session.disposeCalls, 1);
+});
+
+test("Pi 0.80.10 is accepted by a bounded policy while adjacent and malformed versions fail closed", async () => {
+	const accepted = new FakeSdk();
+	accepted.version = "0.80.10";
+	accepted.requiredVersion = "0.80.10";
+	const acceptedRequest = request({
+		binding: { ...request().binding, runId: "pi-08010", laneId: "pi-08010" },
+	});
+	accepted.session.output = handoffFor(acceptedRequest);
+	assert.equal((await new ShepherdAgentSessionRuntime(accepted).run(acceptedRequest)).status, "completed");
+
+	for (const version of ["0.80.9", "0.80.11", "0.81.0", "0.80.10-beta.1", "invalid"]) {
+		const rejected = new FakeSdk();
+		rejected.version = version;
+		rejected.requiredVersion = version;
+		await assert.rejects(
+			new ShepherdAgentSessionRuntime(rejected).run(request()),
+			/bounded Pi compatibility|Pi version|requires Pi/i,
+		);
+	}
+
+	const mixed = new FakeSdk();
+	mixed.version = "0.80.10";
+	mixed.requiredVersion = "0.80.9";
+	await assert.rejects(
+		new ShepherdAgentSessionRuntime(mixed).run(request()),
+		/bounded Pi compatibility|Pi version|requires Pi/i,
+	);
+});
+
+test("prompt completion and a typed handoff are authoritative without lifecycle events", async () => {
+	const sdk = new FakeSdk();
+	sdk.version = "0.80.10";
+	sdk.requiredVersion = "0.80.10";
+	const req = request({
+		binding: { ...request().binding, runId: "event-agnostic", laneId: "event-agnostic" },
+	});
+	sdk.session.output = handoffFor(req);
+	sdk.session.prompt = async function (prompt, options) {
+		this.promptCalls += 1;
+		this.lastPrompt = prompt;
+		assert.deepEqual(options, { expandPromptTemplates: false, source: "extension" });
+	};
+	const result = await new ShepherdAgentSessionRuntime(sdk).run(req);
+	assert.equal(result.status, "completed");
+	assert.equal(result.runId, req.binding.runId);
 });
 
 test("read-only roles use xhigh and cannot receive or report mutation", async () => {
@@ -4370,6 +4419,7 @@ function emitPiTextAssistant(
 		assistantMessageEvent: { type: "text_start", contentIndex: 0, partial: started },
 	} as AgentSessionEvent);
 	const completed = assistantMessage(text, overrides);
+	session.terminalText = text;
 	emitSessionEvent(session, {
 		type: "message_update",
 		message: completed,
@@ -4634,7 +4684,7 @@ test("cycle 12 follows the complete Pi lifecycle and selects only the final sett
 	const cases = [
 		["no-tool", {}, "resolved"],
 		["one-tool", { tool: true }, "resolved"],
-		["unknown", { unknown: true }, "rejected"],
+		["unknown", { unknown: true }, "resolved"],
 		["out-of-order", { outOfOrder: true }, "rejected"],
 		["missing-settled", { missingSettled: true }, "rejected"],
 		["retrying-final", { willRetry: true }, "rejected"],

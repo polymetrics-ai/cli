@@ -187,6 +187,27 @@ test("constructs an isolated exact-model session and always cleans it up", async
 	assert.equal(harness.calls.dispose, 1);
 });
 
+test("accepts Pi 0.80.10 within the bounded compatibility policy", async () => {
+	const harness = makeSdk({ version: "0.80.10", requiredVersion: "0.80.10" });
+	const result = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+	assert.equal(result.summary, "read-only inspection passed");
+
+	for (const version of ["0.80.9", "0.80.11", "0.81.0", "0.80.10-beta.1", "invalid"]) {
+		const rejected = makeSdk({ version, requiredVersion: version });
+		await assert.rejects(
+			new SdkAgentRunner(rejected.sdk, rejected.modelRegistry).run(request()),
+			/bounded Pi compatibility|Pi version|requires Pi/i,
+		);
+	}
+});
+
+test("typed assistant evidence remains authoritative without lifecycle events", async () => {
+	const harness = makeSdk({ version: "0.80.10", requiredVersion: "0.80.10" });
+	harness.session.prompt = async () => { harness.calls.prompt += 1; };
+	const result = await new SdkAgentRunner(harness.sdk, harness.modelRegistry).run(request());
+	assert.equal(result.summary, "read-only inspection passed");
+});
+
 test("fails closed on SDK, model, extension, tool, and persistence drift", async () => {
 	const badVersion = makeSdk({ version: "0.81.0" });
 	await assert.rejects(new SdkAgentRunner(badVersion.sdk, badVersion.modelRegistry).run(request()), /requires Pi 0.80.6/);

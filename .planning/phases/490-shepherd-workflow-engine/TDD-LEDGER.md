@@ -39,11 +39,15 @@ Production files stay unchanged until R1–R4 execute and fail for their intende
 | GSD doctor | `scripts/gsd doctor` | PASS |
 | programming loop | `scripts/gsd prompt programming-loop init --phase 490 --dry-run` | unavailable; manual fallback recorded |
 | parallel analysis | workflow run `43dc4d81-66bf-4642-bed2-207a00d5fec0` | PASS; typed partial-adoption synthesis |
-| baseline focused | pending | pending |
-| RED | pending | pending |
+| baseline focused | `node --test .pi/extensions/shepherd/agent-session-runtime.test.ts .pi/extensions/shepherd/sdk-runner.test.ts` | PASS — 158/158 before #490 RED |
+| RED | focused `--test-name-pattern` over the five #490 contracts | EXPECTED FAIL — 0/5 passed; Pi 0.80.10 rejected in both runtimes, event-free typed results rejected in both runtimes, harmless unknown event rejected |
 | GREEN focused | pending | pending |
 | full Shepherd | pending | pending |
 | strict Pi 0.80.10 typecheck | pending | pending |
 | offline RPC/canary | pending | pending |
 | exact-head review | pending | exactly one round required |
 | final full Shepherd | pending | run once after review disposition |
+
+## RED checkpoint detail
+
+The focused command executed five top-level behavior tests and failed exactly all five intended assertions. No file-load, compile, missing-module, timeout, skip, cancellation, or todo contributed. Three failures show the exact Pi `0.80.6` pin rejecting `0.80.10`; two show lifecycle-event authority rejecting an otherwise valid typed handoff, including the harmless unknown-event reproduction. Production files remained unchanged.
