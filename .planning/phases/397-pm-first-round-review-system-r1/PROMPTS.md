@@ -14,4 +14,5 @@
 - Downstream artifacts: `PLAN.md`, `TDD-LEDGER.md`, `VERIFICATION.md`, `RUN-STATE.json`, `SETUP-EVIDENCE.md`.
 - Plan-check result: initial BLOCKED; gaps corrected before RED.
 - RED result: focused semantic test exited 1 for intended classifier, disposition, mutation, threshold, one-way migration, and append-only-history failures.
-- GREEN result: focused semantic/compiler/synthesis/measurement tests, canonical PM contract, model routing, shell syntax, Shellcheck, JSON, YAML syntax, and diff checks pass in the working tree; exact committed-head full verification pending.
+- GREEN result: focused semantic/compiler/synthesis/measurement tests, canonical PM contract, model routing, shell syntax, Shellcheck, JSON, YAML syntax, and diff checks passed.
+- Verification result: full local gates and `make verify` passed at exact implementation head `7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839`; final evidence-commit rerun remains pending before review.

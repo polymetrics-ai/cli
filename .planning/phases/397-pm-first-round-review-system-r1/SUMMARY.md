@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: deterministic treatment and packet route focused GREEN; exact-head full verification/review pending.
+Status: deterministic treatment and packet route GREEN; full gates passed at implementation head `7f1b2d8fe`; final evidence-head rerun/review pending.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.
@@ -14,4 +14,5 @@ Status: deterministic treatment and packet route focused GREEN; exact-head full 
 - Opaque inputs and separate oracle were frozen and hashed before GREEN; the detector receives no oracle argument.
 - Dependency-free treatment result on the frozen fixture corpus: 15/15 defect detections, 0/10 clean-control false positives, seven of seven threshold decisions. Baseline escaped 15/15. This is deterministic preflight evidence only; model tokens/cost, correction rounds, and prospective production evidence are unavailable.
 - Active PM route now compiles closure/authority/semantic gates, creates bounded packets, requires complete responses, synthesizes one PM verdict, and keeps Shepherd independent/downstream.
-- Full verification, exact-head packet review, Shepherd, no-mistakes delivery, PR, and CI remain pending.
+- Focused gates, Shellcheck, JSON/YAML syntax, Go format no-diff, vet, 20-minute tests, build, module checks, and `make verify` passed at `7f1b2d8fe`.
+- Final evidence-head rerun, exact-head packet review, Shepherd, no-mistakes delivery, PR, and CI remain pending.

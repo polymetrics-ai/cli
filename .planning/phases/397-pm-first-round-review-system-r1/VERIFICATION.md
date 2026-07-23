@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** planned; `verificationPassed: false`
+**Status:** full local gates passed at implementation head `7f1b2d8fe`; final evidence-commit exact-head rerun pending before review
 
 ## Identity and scope
 
@@ -10,11 +10,11 @@
 - [x] Clean detached remote-base transition and branch creation recorded without reset/rebase/amend/force (`SETUP-EVIDENCE.md`).
 - [x] Branch is `chore/pm-first-round-review-system-r1`.
 - [x] Parent PR #438 exists and remains draft/human-only.
-- [ ] Diff remains disjoint from all PR #493-owned paths.
-- [ ] No #408/TUI, Gong/#497, write-URL, dependency, credential, connector, CLI help, or reverse-ETL behavior change.
-- [ ] Historical PR #495 evidence remains truthful and is not rewritten as clean.
-- [ ] Diff is within the exact positive path allowlist in `PLAN.md`.
-- [ ] No new CLI/subcommand, orchestration owner, article/#498, `go.mod`, or `go.sum` change.
+- [x] Diff remains disjoint from all PR #493-owned paths.
+- [x] No #408/TUI, Gong/#497, write-URL, dependency, credential, connector, CLI help, or reverse-ETL behavior change.
+- [x] Historical PR #495 evidence remains truthful and is not rewritten as clean.
+- [x] Diff is within the exact positive path allowlist in `PLAN.md`.
+- [x] No new CLI/subcommand, orchestration owner, article/#498, `go.mod`, or `go.sum` change.
 
 ## RED/GREEN requirements
 
@@ -88,20 +88,20 @@ go mod tidy -diff
 make verify
 ```
 
-- [ ] Focused gates pass.
-- [ ] Shellcheck runs when available; unavailability is recorded without installing dependencies.
-- [ ] JSON/YAML parsing passes.
-- [ ] Go formatting produces no product diff.
-- [ ] `go vet ./...` passes.
-- [ ] `go test -timeout 20m ./...` passes.
-- [ ] `go build ./cmd/pm` passes.
-- [ ] `go mod verify` passes.
-- [ ] `go mod tidy -diff` passes.
-- [ ] `make verify` passes.
+- [x] Focused gates pass.
+- [x] Shellcheck is available and passes for all changed shell scripts.
+- [x] JSON/YAML parsing passes.
+- [x] Go formatting produces no product diff.
+- [x] `go vet ./...` passes.
+- [x] `go test -timeout 20m ./...` passes (slowest observed packages: `internal/cli` 468.189s; `internal/connectors/certify` 354.296s).
+- [x] `go build ./cmd/pm` passes.
+- [x] `go mod verify` passes.
+- [x] `go mod tidy -diff` passes.
+- [x] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
 
 ## Review and delivery
 
-- [ ] Exact implementation commit exists and coherent plan/RED/GREEN/measurement checkpoints were pushed additively.
+- [x] Exact implementation commit `7f1b2d8fe` exists and coherent plan/RED/GREEN/refactor checkpoints were pushed additively.
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
 - [ ] Every finding has a canonical disposition.
