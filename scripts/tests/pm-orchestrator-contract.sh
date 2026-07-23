@@ -195,6 +195,26 @@ require(
     "before another CLI Architecture v2 implementation worker starts",
     "not_spawned_dependency_blocked",
 )
+trace = read(".planning/traces/cli-architecture-v2-orchestration-state.yaml")
+subissues = trace.split("\nsubissues:\n", 1)
+if len(subissues) != 2:
+    errors.append("authoritative trace: missing subissues section")
+else:
+    issue_408 = re.search(r"(?ms)^  - number: 408\n(?P<body>.*?)(?=^  - number:|\Z)", subissues[1])
+    if issue_408 is None:
+        errors.append("authoritative trace: missing scoped #408 subissue")
+    else:
+        body = issue_408.group("body")
+        for marker in ("parent_sync_and_pr_493_migration_pending", "Wave 1", "PR #493"):
+            if marker not in body:
+                errors.append(f"authoritative trace #408 subissue: missing {marker!r}")
+
+run_state = json.loads(read(".planning/phases/397-cli-architecture-v2-orchestration/RUN-STATE.json"))
+main_sync = run_state.get("mainSync", {})
+if main_sync.get("taskBranch") != "chore/cli-architecture-v2-wave1-parent-sync-r1":
+    errors.append("#397 run state: current mainSync.taskBranch is not PR #495's chore/... branch")
+if main_sync.get("historicalTaskBranch") != "fm/cli-architecture-v2-wave1-parent-sync-r1":
+    errors.append("#397 run state: superseded fm/... branch is not preserved as historicalTaskBranch")
 require(
     ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
     '"correction_budget"',
@@ -214,6 +234,32 @@ for relative in (
     ".pi/prompts/pm-auto-loop.md",
 ):
     forbid(relative, {"active per-subissue correction counter": r'"correction_rounds"\s*:'})
+
+local_statuses = ("pending", "findings_correction_required", "clean", "comments_addressed", "blocked")
+for relative in (
+    ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
+    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
+    ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
+    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
+):
+    require(relative, *local_statuses)
+for relative in (
+    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
+    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
+    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
+):
+    require(relative, "accepted", "accepted_with_modification", "declined", "duplicate", "deferred", "needs_human")
+
+require(
+    "scripts/pm-terminal-classifier.sh",
+    "correction_cap_exceeded",
+    "blocked_human_decision",
+    "human_ready",
+)
+for relative in ("scripts/pi-auto-loop.sh", "scripts/pi-shepherd-loop.sh"):
+    require(relative, "pm-terminal-classifier.sh", "blocked human decision")
 
 reviewer = read(".pi/agents/pm-reviewer.md")
 if not re.search(r"^tools:.*\bbash\b", reviewer, flags=re.MULTILINE):
@@ -277,6 +323,8 @@ if cap_fixture.is_file():
         errors.append("cap_lineage: correction cap is not exceeded on the stable lineage")
     if record.get("terminal") != "human_gate" or record.get("automated_review", {}).get("status") != "blocked":
         errors.append("cap_lineage: cap exceed does not persist a blocked human gate")
+    if record.get("human_gate_kind") != "correction_cap_exceeded":
+        errors.append("cap_lineage: human gate kind does not identify correction-cap exceed")
 
 if errors:
     raise SystemExit("PM orchestrator contract violations:\n- " + "\n- ".join(errors))
@@ -287,3 +335,10 @@ print(
     "no Claude/Copilot PM coverage"
 )
 PY
+
+classification="$(bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/correction-cap-lineage.json")"
+if [[ "$classification" != "blocked_human_decision" ]]; then
+  printf 'PM orchestrator contract violation: cap classifier returned %s\n' "$classification" >&2
+  exit 1
+fi
