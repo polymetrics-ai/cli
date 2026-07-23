@@ -108,10 +108,23 @@ worktrees are stale evidence only and will not be reused as active workers.
 #480 is now the only implementation-ready child. It owns restart/fault recovery closure, bounded
 redacted audit evidence, operator behavior, and reversible cutover preparation. #481 remains
 dependency-blocked until #480 integrates, then owns the deterministic plus read-only live #397/#438
-canary and post-pass deprecation activation. Both run through `/pm-shepherd` from one ignored,
-validated schema-2 plan with persistent child worktrees; the controller serializes them by
-`canary` depending on `recovery`. There was no persisted Shepherd run at reconciliation, so `start`
-may create the single durable run; subsequent turns must use `resume`.
+canary and post-pass deprecation activation.
+
+Two parent-owned live preflight gaps must be corrected before any production dispatch. The first
+was captured RED and fixed at `95a4bd697`: required-check discovery now treats an unprotected
+non-default parent as an exact empty policy and GitHub null app bindings as legacy contexts. The
+second was captured by read-only canary generation 1 from a clean persistent checkout of exact
+#438 head `21d195aff`: the scout lane completed, but the concurrent validator halted because each
+embedded session independently constructed the pinned Pi OAuth runtime. The bounded correction is
+to share one single-flight public `ModelRuntime` across embedded sessions while continuing to fail
+closed for genuinely unavailable host-only OAuth. Owned files are `index.ts`, a small testable
+runtime coordinator and its focused tests, plus parent/#481 planning evidence. No credential value
+may be read, copied, logged, persisted, or passed to a child session.
+
+The ignored schema-2 dispatch plan was validated read-only but deliberately removed without
+`start`; no issue-471 durable run exists and no duplicate run may be created. After the preflight is
+green, regenerate/revalidate one exact plan, start once, and use `resume` thereafter. Persistent
+child worktrees and `canary` depending on `recovery` remain mandatory.
 
 After #481 integrates, freeze the exact parent SHA, review only the unreviewed range from the last
 accepted parent baseline plus all cross-child seams, run one four-domain Codex 5.6-sol xhigh round,

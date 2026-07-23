@@ -21,8 +21,8 @@
     "status": "running"
   },
   "reconciliation_base_head": "c3f4f683e60ac52bcedae04b2e9448e4523b5234",
-  "cached_remote_parent_head": "c3f4f683e60ac52bcedae04b2e9448e4523b5234",
-  "github_parent_head": "c3f4f683e60ac52bcedae04b2e9448e4523b5234",
+  "cached_remote_parent_head": "95a4bd697dd8ab755725d2f774a697e7665a690f",
+  "github_parent_head": "95a4bd697dd8ab755725d2f774a697e7665a690f",
   "main_baseline_head": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
   "verificationPassed": false,
   "reviewCoveragePassed": false,
@@ -69,6 +69,18 @@
       "decision": "not_spawned_dependency_blocked",
       "issue_numbers": [481],
       "reason": "#481 remains blocked until the exact reviewed #480 child is integrated."
+    },
+    {
+      "timestamp": "2026-07-23T07:10:00Z",
+      "decision": "local_critical_path",
+      "issue_numbers": [471],
+      "reason": "Live read-only canary generation 1 proved concurrent embedded sessions independently initialize OAuth runtime state; parent owner will apply one bounded single-flight public Pi runtime correction before Shepherd dispatch."
+    },
+    {
+      "timestamp": "2026-07-23T07:10:00Z",
+      "decision": "read_only_spawned",
+      "issue_numbers": [481, 397],
+      "reason": "Canary run run-689079d0-089c-4d72-ab78-3dd1b213923e reconciled exact #438 head without mutation; scout completed, validator halted on the parent OAuth preflight defect."
     }
   ],
   "subissues": [
@@ -203,5 +215,5 @@
     "quality-gate reductions",
     "scope or authority changes"
   ],
-  "updated_at": "2026-07-23T05:38:00Z"
+  "updated_at": "2026-07-23T07:10:00Z"
 }

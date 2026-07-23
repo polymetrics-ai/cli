@@ -7,7 +7,8 @@ Verdict: **DEPENDENCY-BLOCKED — waiting for #480 integration**.
 - [ ] #480 exact-head handoff is integrated and clean.
 - [ ] Focused deterministic canary RED fails for intended assertions.
 - [ ] Focused GREEN passes.
-- [ ] Supported read-only live #397/#438 canary completes against an unchanged exact head.
+- [x] Generation 1 attempted supported read-only live #397/#438 reconciliation at exact head `21d195aff`; #438 stayed unchanged and scout evidence completed.
+- [ ] A later generation completes after the parent-owned embedded OAuth runtime preflight is green.
 - [ ] #438 remains open, draft, and unmerged; no branch or issue mutation is attributed to the canary.
 - [ ] Complete sequential Shepherd suite passes in the child lane.
 - [ ] Strict no-emit TypeScript passes against exact Pi 0.80.10 declarations.

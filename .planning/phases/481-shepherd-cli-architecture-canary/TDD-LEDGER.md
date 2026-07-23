@@ -21,7 +21,24 @@
 The worker records exact failing command/counts. Missing-module RED alone is insufficient; planned
 assertions must execute against a compiling scaffold and fail for their intended behavior.
 
+## Supplementary live canary preflight
+
+A clean persistent checkout was created at `/private/tmp/shepherd-481-cli-architecture-canary`
+because the preserved historical #397 worktree contains globally ignored `.DS_Store` files and
+was not mutated or cleaned. Exact target evidence passed at #438 head
+`21d195aff0c7bd60b3bf54f14b1ce165cec9e03f` (open/draft, GitHub `DIRTY`, visible checks green).
+
+Read-only generation 1 (`run-689079d0-089c-4d72-ab78-3dd1b213923e`) supplied useful behavior RED:
+the scout lane completed exact reconciliation, while the concurrent validator halted because the
+extension independently initialized a Pi OAuth runtime for each embedded session. Hard gates were
+`lane_execution_failed,run_halted`; score was 0.000. #438 was not mutated or merged, no credential
+value was requested/read/printed, and deprecation remains inactive. The parent owns the bounded
+single-flight runtime correction because it blocks Shepherd dispatch itself; this does not count as
+#481 production implementation or satisfy R1-R6.
+
 ## GREEN / live canary / review
 
-Pending #480 integration and worker handoff. The live read-only canary is supplementary exact-state
-evidence, not a replacement for deterministic RED/GREEN or human approval.
+Pending #480 integration and worker handoff. After the parent preflight fix, create the next durable
+canary generation from the same clean checkout rather than deleting prior evidence. The live
+read-only canary is supplementary exact-state evidence, not a replacement for deterministic
+RED/GREEN or human approval.

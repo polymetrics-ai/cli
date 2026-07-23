@@ -45,6 +45,30 @@ pass for a mutating autonomous path.
   production plan is started. Each child gets one behavior-level RED→GREEN→refactor cycle and at
   most one comprehensive review/correction round.
 
+## Parent-owned live preflight RED/GREEN
+
+- Required-check RED: the selected tests executed against compiling production and failed because
+  an unprotected parent branch queried a protected-only endpoint and GitHub null `app_id` values
+  were rejected. GREEN at `95a4bd697` passed 3/3 selected cases, 660/660 affected tests, and live
+  read-only policy construction with exact empty parent checks plus protected `main` checks.
+- Embedded OAuth behavior RED: `/pm-shepherd canary --issue 397 --pr 438 --read-only --backend
+  sdk-inproc --experimental --max-concurrency 2 --timeout-seconds 900` ran from clean persistent
+  checkout `/private/tmp/shepherd-481-cli-architecture-canary` at exact head `21d195aff`. Durable
+  generation 1 (`run-689079d0-089c-4d72-ab78-3dd1b213923e`) halted: the scout completed exact
+  read-only reconciliation, while the concurrent validator failed with `embedded AgentSession
+  cannot inherit host-only OAuth for openai-codex`. #438 stayed open/draft/unmerged and unchanged.
+- Intended GREEN: one lazily initialized public Pi `ModelRuntime` is shared by all embedded legacy
+  and production session adapters for the extension host. Concurrent callers await the same
+  initialization; a different agent directory or genuinely unavailable child auth fails closed.
+  The runtime reads the normal mode-0600 credential store itself; Shepherd never reads, copies,
+  logs, stores, or forwards a credential value. Focused concurrency/auth tests and a new live
+  canary generation must pass before dispatch.
+- Orchestration decision: `local_critical_path`. A core embedded-session preflight defect blocks the
+  controller that would dispatch #480, so the parent owner performs only this bounded TDD
+  correction. Workflow-engine run `93478be5-f7af-41d7-abf1-494a67cdaebf` supplied two read-only
+  gpt-5.6-sol/high research lanes with no GitHub mutation authority; it is analysis, not Shepherd
+  success evidence or human approval.
+
 ## Historical read-only foundation ledger
 
 ## RED: command parser and registration
