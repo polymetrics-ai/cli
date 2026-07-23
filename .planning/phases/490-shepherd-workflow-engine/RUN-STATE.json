@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "phase": "490-shepherd-workflow-engine",
+  "issue": 490,
+  "status": "in_progress",
+  "verificationPassed": false,
+  "verificationBlocker": "RED/GREEN and declared Shepherd gates are pending",
+  "manualGsdFallback": {
+    "active": true,
+    "reason": "scripts/gsd doctor passed but programming-loop is absent from the command registry"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "read_only_spawned",
+      "reason": "workflow-engine run 43dc4d81-66bf-4642-bed2-207a00d5fec0 performed four bounded read-only analyses and typed synthesis; this issue worker retains the only mutating path"
+    }
+  ],
+  "workflowAnalysisRunId": "43dc4d81-66bf-4642-bed2-207a00d5fec0",
+  "reviewRunId": null,
+  "updatedAt": "2026-07-23T00:00:00.000Z"
+}
