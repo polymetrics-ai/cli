@@ -24,6 +24,8 @@ Parent issue: #471. Parent PR: #472. Parent branch:
 
 Allowed:
 
+- `.pi/extensions/shepherd/gh-orchestration-transport.ts`
+- `.pi/extensions/shepherd/gh-orchestration-transport.test.ts`
 - `.pi/extensions/shepherd/recovery.ts`
 - `.pi/extensions/shepherd/recovery.test.ts`
 - `.pi/extensions/shepherd/audit-log.ts`
@@ -39,6 +41,9 @@ reduction is allowed. Legacy scripts and historical worktrees/branches are retai
 
 ## TDD slice
 
+0. Preflight RED: reproduce the real unprotected non-default parent branch. The policy source must
+   record a stable empty required-check policy instead of failing before Shepherd can create durable
+   state, while protected `main` still reads and enforces its exact required checks.
 1. RED: add executable fault-injection tests for restart ordering, ambiguous external effects,
    bounded/redacted audit records, cancellation, stale heads, and reversible cutover state.
 2. GREEN: add the smallest adapter/audit implementation over existing production ports.

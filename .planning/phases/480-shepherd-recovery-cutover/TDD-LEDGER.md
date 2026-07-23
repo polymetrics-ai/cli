@@ -13,6 +13,7 @@
 
 | ID | Failing behavior required before production edit |
 |---|---|
+| R0 | an unprotected non-default parent branch yields an exact empty required-check policy while protected `main` retains its exact checks; current production instead aborts policy intake on GitHub 404 |
 | R1 | restart schedules no work before state/lease/worktree/ref/GitHub reconciliation completes |
 | R2 | every ambiguous external-effect window reconciles once or fails closed without duplicate mutation |
 | R3 | audit records reject unknown/oversized/control/secret-bearing payloads and remain causally ordered |
@@ -20,9 +21,10 @@
 | R5 | stale heads, force movement, conflicts, review change, and rate limiting preserve exact authority |
 | R6 | cutover preparation is reversible and cannot activate deprecation before a bound #481 pass receipt |
 
-The worker must record exact focused failing command/counts after these assertions execute. A
-missing-module/compile failure alone is not behavior RED; use a compiling throwing scaffold if new
-modules are introduced.
+The coordinator owns R0 as the local critical-path unblocker before `/pm-shepherd start`; it must
+commit the failing test before the production fix. The worker records exact focused failing
+command/counts for R1-R6 after they execute. A missing-module/compile failure alone is not behavior
+RED; use a compiling throwing scaffold if new modules are introduced.
 
 ## GREEN / refactor / review
 
