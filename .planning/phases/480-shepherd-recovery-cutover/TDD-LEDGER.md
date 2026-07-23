@@ -26,6 +26,18 @@ commit the failing test before the production fix. The worker records exact focu
 command/counts for R1-R6 after they execute. A missing-module/compile failure alone is not behavior
 RED; use a compiling throwing scaffold if new modules are introduced.
 
+### R0 RED evidence
+
+```bash
+node --test --test-name-pattern='records an exact empty policy' \
+  .pi/extensions/shepherd/gh-orchestration-transport.test.ts
+```
+
+Result: **expected RED — 0 pass / 1 fail**. The assertion executed against compiling production and
+failed because `GhRequiredCheckPolicySource` called the absent required-status-check resource before
+observing that the non-default parent branch is unprotected. No load, compile, timeout, skip, or
+unrelated assertion contributed.
+
 ## GREEN / refactor / review
 
 Pending worker handoff. GREEN must cite focused assertions and the full Shepherd suite. Refactor must

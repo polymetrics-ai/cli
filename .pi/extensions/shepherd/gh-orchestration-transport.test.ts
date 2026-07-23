@@ -116,6 +116,25 @@ test("reads stable authoritative required-check policies for parent and base bra
 	]);
 });
 
+test("records an exact empty policy for an unprotected non-default parent branch", async () => {
+	const calls: string[] = [];
+	const execute: GhOrchestrationExecutor = async (_file, args) => {
+		const endpoint = String(args[3] ?? "");
+		calls.push(endpoint);
+		if (endpoint === "/repos/acme/widgets/branches/feat%2Fparent") {
+			return JSON.stringify({ protected: false });
+		}
+		throw new Error("an unprotected branch has no required-status-check resource");
+	};
+	const source = new GhRequiredCheckPolicySource({ execute });
+	const observation = await source.findRequiredCheckPolicies({
+		repository: "acme/widgets",
+		baseBranch: "feat/parent",
+	}, context());
+	assert.deepEqual(observation.items[0].requiredChecks, []);
+	assert.deepEqual(calls, ["/repos/acme/widgets/branches/feat%2Fparent"]);
+});
+
 test("reads checks from the authoritative live head and fails closed on bounded pagination", async () => {
 	const marker = "<!-- shepherd-pr:v1:471:child-a:abc -->";
 	const metadata = {
