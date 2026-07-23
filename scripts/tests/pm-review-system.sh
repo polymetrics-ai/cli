@@ -437,14 +437,13 @@ import subprocess, sys, time
 children = [subprocess.Popen([sys.executable, "-c", "import time; time.sleep(5)"]) for _ in range(12)]
 time.sleep(5)
 EOF
-cat >"$impact_repo/scripts/outside_write.py" <<'EOF'
-from pathlib import Path
-Path('/tmp/pm-review-lab-outside').write_text('escaped')
-EOF
-cat >"$impact_repo/scripts/outside_read.py" <<'EOF'
-from pathlib import Path
-print(Path('/tmp/pm-review-lab-outside').read_text())
-EOF
+outside_target="$test_tmp/lab-outside-sentinel"
+python3 - "$outside_target" "$impact_repo/scripts" <<'PY'
+import pathlib,sys
+outside=repr(sys.argv[1]); scripts=pathlib.Path(sys.argv[2])
+(scripts/'outside_write.py').write_text(f"from pathlib import Path\nPath({outside}).write_text('escaped')\n")
+(scripts/'outside_read.py').write_text(f"from pathlib import Path\nprint(Path({outside}).read_text())\n")
+PY
 cat >"$impact_repo/scripts/network.py" <<'EOF'
 import socket
 socket.create_connection(('127.0.0.1', 9), timeout=0.2)
@@ -457,7 +456,7 @@ except PermissionError:
     raise SystemExit(0)
 raise SystemExit(77)
 EOF
-ln -s /tmp/pm-review-lab-outside "$impact_repo/escape-link"
+ln -s "$outside_target" "$impact_repo/escape-link"
 cat >"$impact_repo/.agents/review-config.json" <<'JSON'
 {
   "schema_version":"polymetrics.ai/pm-review-system/v2",
@@ -574,11 +573,11 @@ done
 lab_script="$repo_root/scripts/pm-review-lab.py"
 if [[ ! -f "$lab_script" ]]; then
   fail "counterfactual lab runner is absent; safety/identity/cleanup RED is expected"
-elif ! python3 - "$lab_script" "$impact_repo" "$impact_base" "$impact_head" "$test_tmp" <<'PY'
+elif ! python3 - "$lab_script" "$impact_repo" "$impact_base" "$impact_head" "$test_tmp" "$outside_target" <<'PY'
 import json, os, pathlib, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 
-script, repo, base, head, tmp = sys.argv[1:]
+script, repo, base, head, tmp, outside_arg = sys.argv[1:]
 root=pathlib.Path(tmp); labs=root/'labs'; labs.mkdir()
 
 def request(name, **overrides):
@@ -619,7 +618,7 @@ def blocked(name, **changes):
 blocked('candidate-write', change_scope='candidate')
 blocked('outside-write', changes=[{"path":"../outside","find":"x","replace":"y"}])
 blocked('symlink-write', changes=[{"path":"escape-link","find":"x","replace":"y"}])
-outside=pathlib.Path('/tmp/pm-review-lab-outside'); outside.write_text('sentinel')
+outside=pathlib.Path(outside_arg); outside.write_text('sentinel')
 blocked('nested-outside-write',changes=[],command=['python3','scripts/outside_write.py'],expected_discriminator={'exit_code':0})
 assert outside.read_text()=='sentinel'
 blocked('nested-outside-read',changes=[],command=['python3','scripts/outside_read.py'],expected_discriminator={'exit_code':0})
