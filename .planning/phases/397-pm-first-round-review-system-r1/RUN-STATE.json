@@ -10,7 +10,7 @@
   "correctionBudget": {
     "maxCorrectionRounds": 5,
     "roundsByRange": {
-      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 1
+      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 2
     },
     "headHistory": [
       "cb6b2c771347133e35e369efbb381b3a024476e0",
@@ -33,11 +33,12 @@
       "ce168238afb980a3a73902531f7f7a01933c3432",
       "472fc6da59359bb3d488cde26aaac93b12b137e9",
       "89c86dd5329b3e29698b758fa53e0a86b85a580d",
-      "528dcc68599af4efaaee46c9b038bbd022178411"
+      "528dcc68599af4efaaee46c9b038bbd022178411",
+      "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34"
     ]
   },
-  "status": "local_codex_round_1_systemic_full_green_final_review_pending",
-  "verificationPassed": true,
+  "status": "local_codex_round_2_findings_systemic_correction_planned",
+  "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "528dcc68599af4efaaee46c9b038bbd022178411",
     "focused": "passed_round_1_correction",
@@ -51,15 +52,15 @@
   },
   "localCodex": {
     "status": "findings_correction_required",
-    "exactHeadSHA": "b1d869732d230575ab7c8295b15cef42cc0078ef",
-    "exactHeadTree": "ec828909478685de6dcce8e095efa8ef255e4334",
-    "packetCount": 17,
-    "rawFindingCount": 89,
-    "rawSynthesisStatus": "blocked",
-    "rawSynthesisBlockers": 14,
-    "synthesisArtifactSHA256": "42626c4555d9769105b8d07ece6c831f44e4cbbdadcfa8a9b50842e9e4f8bd5c",
-    "dispositionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-DISPOSITION.md",
-    "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-MEASUREMENT.json"
+    "exactHeadSHA": "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34",
+    "exactHeadTree": "0a3c3eda637210d240dd13cfd99b475d032c36c0",
+    "packetCount": 41,
+    "rawFindingCount": 141,
+    "rawSynthesisStatus": "findings_correction_required",
+    "rawSynthesisBlockers": 0,
+    "synthesisArtifactSHA256": "cce8c3dfe95700d5f001d5b3cdf4eaa3f24dde407f9cf06356a7c50e3c50107a",
+    "dispositionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-DISPOSITION.md",
+    "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json"
   },
   "shepherd": {
     "status": "pending",
@@ -154,7 +155,12 @@
     {
       "cycle": "local_codex_round_1_full_verify",
       "decision": "local_critical_path",
-      "reason": "At exact head 528dcc68599af4efaaee46c9b038bbd022178411, focused PM/graph/lab/route gates, Python/Shellcheck/JSON/YAML/schema checks, Go module verification/tidy, and make verify all passed. Final evidence-commit exact-head rerun remains before fresh packet review."
+      "reason": "At exact head 528dcc68599af4efaaee46c9b038bbd022178411, focused PM/graph/lab/route gates, Python/Shellcheck/JSON/YAML/schema checks, Go module verification/tidy, and make verify all passed."
+    },
+    {
+      "cycle": "local_codex_round_2",
+      "decision": "local_critical_path",
+      "reason": "At exact head 92ce5e6a19cb7562aead8b224e6ba8dcc0857d34, 41/41 fresh Sol/xhigh bounded packets completed and one synthesis returned findings_correction_required with 141 findings and zero blockers. Forty-four packet attempts included three recovered first-attempt failures; one separately observed context-window rejection is an operational attempt only. Every finding is mapped to recurrence or a new systemic group; correction round 2/5 begins and Shepherd remains pending."
     }
   ],
   "measurement": {
@@ -180,7 +186,12 @@
     "round1GreenArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-GREEN-MEASUREMENT.json",
     "round1GreenMeasuredHead": "89c86dd5329b3e29698b758fa53e0a86b85a580d",
     "round1GreenPackets": 41,
-    "round1GreenMaximumEstimatedPacketTokens": 29982
+    "round1GreenMaximumEstimatedPacketTokens": 29982,
+    "actualReviewRound2Artifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json",
+    "actualReviewRound2Packets": 41,
+    "actualReviewRound2Findings": 141,
+    "actualReviewRound2ProviderAttempts": 45,
+    "actualReviewRound2ProviderFailures": 4
   },
   "readyQueue": [
     {

@@ -13,7 +13,7 @@
 **Exact starting base:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`
 
 **Stable candidate lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`
-**Correction budget:** 1/5 used. Round 1 is the synthesized exact-head findings verdict at `b1d869732d230575ab7c8295b15cef42cc0078ef` followed by this systemic correction. Changed heads retain this lineage. Packet/provider retries are tracked separately and do not consume rounds.
+**Correction budget:** 2/5 used. Round 1 is the synthesized exact-head findings verdict at `b1d869732d230575ab7c8295b15cef42cc0078ef`; round 2 is the synthesized recurrence verdict at `92ce5e6a19cb7562aead8b224e6ba8dcc0857d34`. Changed heads retain this lineage. Packet/provider/OAuth/WebSocket/context-window attempts are tracked separately and do not consume rounds.
 
 ## Objective
 
@@ -273,6 +273,16 @@ cannot authorize clean. Commit/push GREEN additively.
 The exact head `b1d869732d230575ab7c8295b15cef42cc0078ef` compiled 17 packets. All 17 fresh Sol/xhigh contexts completed with no unreviewed files and disclosed 89 raw findings. The machine synthesis returned `blocked` with 14 invariant blockers because failed invariants were misclassified as omitted; that fail-closed result is retained, and the PM-owned disposition is `findings_correction_required`, never clean. `REVIEW-R1-DISPOSITION.md` maps every finding into 15 systemic groups and `REVIEW-R1-MEASUREMENT.json` records hashes, latency, and 22 provider attempts/5 operational failures separately from the 1/5 correction budget.
 
 Before production edits, add RED fixtures for: exact compile/synthesis identity and ready-manifest binding; strict response/status/invariant/lab-evidence shape; relation-state BFS; coherent exact-blob packet bounds; parser/certainty/endpoint/deletion/prohibited-target handling; pre-index resource bounds; offline external-module and deleted-Go impact; default-deny lab read/Git/process containment; explicit-null terminal schema; reusable per-run scope; route parity; authority state/schema parity; remote-no-network reviewer identity; and explicit root/source document references. Then fix each root cause once, rerun focused gates, and compile a fresh exact head. A repeated group in a later round triggers diagnosis rather than another local patch. At 5/5, automatic correction stops; checks are never weakened and lineage never resets.
+
+### Slice 7.6 — exact-head recurrence round 2 systemic correction
+
+The exact head `92ce5e6a19cb7562aead8b224e6ba8dcc0857d34` compiled 41 packets. All 41 fresh Sol/xhigh contexts completed; synthesis returned `findings_correction_required` with 141 findings and zero response blockers. `REVIEW-R2-DISPOSITION.md` maps every finding to the existing R1-A–R1-O recurrence groups or six new systemic groups. `REVIEW-R2-MEASUREMENT.json` records 44 packet attempts with three recovered startup failures plus one separately observed context-window rejection. The context rejection is operational only; a second matching failure stops retries for estimator/rendered-prompt diagnosis.
+
+Round 2 replaces mechanisms whose R1 tests validated their own labels rather than independent invariants. Before production correction: add RED tests for same-head manifest tampering; exact response/lab binding; immutable exact-commit compilation; one-byte-per-token full rendered-prompt bounds and atomic slices; format-aware Markdown/JSON/YAML/shell/Python parsing with base+head provenance; full phase/mirror validation; Go and graph pre-materialization limits; default-deny lab behavior and final resource/state proof; exact-identity bounded Shepherd; trace containment/redaction; current route parity; and measurement set/corpus binding. Every repeated real defect receives a permanent regression.
+
+The correction may expand the positive scope to the non-forbidden Shepherd/trace/runtime and parent-plan surfaces named in the disposition. It must not touch any PR #493-owned path. GitHub connector pending-review write coverage remains a disclosed `needs_human` product/auth decision; the PM impact graph must not pull that unrelated pre-existing ledger into this candidate through false ownership/provenance edges.
+
+GREEN requires versioned exact machine contracts, deterministic fail-closed behavior without tracebacks, independently authenticated coverage, safe bounded prompts, and semantic parity fixtures. Shepherd still runs only after a future exact-head clean synthesis. The five-round lineage never resets.
 
 ### Slice 8 — verification, review, delivery
 

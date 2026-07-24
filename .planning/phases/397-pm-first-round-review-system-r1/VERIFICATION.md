@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** correction round 1/5 full verification passed at `528dcc685`; final evidence-head rerun and fresh exact-head recurrence review pending
+**Status:** correction round 2/5 planned from `92ce5e6a1` recurrence synthesis; round-2 RED/GREEN, full verification, fresh exact-head review, Shepherd, no-mistakes, PR, and CI pending
 
 > Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
@@ -109,7 +109,12 @@
 - [x] R1-N remote freshness is parent-owned and packet review remains local/no-network.
 - [x] R1-O governing root/source docs enter explicit bounded closure.
 - [x] Re-run focused/full verification on correction head `528dcc68599af4efaaee46c9b038bbd022178411`.
-- [ ] Re-run exact-head packets, recurrence comparison, synthesis, and Shepherd on the final evidence head.
+- [x] Re-run exact-head packets and recurrence synthesis at `92ce5e6a1`: 41/41 responses, 141 findings, zero blockers; Shepherd correctly remained pending.
+- [x] Record 44 packet provider attempts/3 recovered failures plus one context-window rejection as operational evidence, not a correction round.
+- [x] Compare every finding against R1-A–R1-O in `REVIEW-R2-DISPOSITION.md`; repeated groups have root-cause diagnoses rather than local patch plans.
+- [ ] Capture round-2 RED fixtures for authenticated synthesis, complete rendered-prompt bounds, structural graph parsing, phase/mirror validation, lab containment, Shepherd/trace safety, and route parity.
+- [ ] Implement round-2 systemic corrections and pass focused GREEN without weakening limits or touching PR #493-owned paths.
+- [ ] Re-run full verification, fresh exact-head packets, one clean synthesis, and independent Shepherd on the final evidence head.
 
 ## Measurement
 
@@ -178,7 +183,7 @@ After both correction GREENs on one committed exact head:
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
 - [x] Every round-1 finding has a canonical disposition; future-round findings remain pending by definition.
-- [x] Stable five-round `rounds_by_range` usage is 1/5 and append-only head history is retained without lineage reset.
+- [x] Stable five-round `rounds_by_range` usage is 2/5 and append-only head history is retained without lineage reset.
 - [ ] Independent Shepherd exact-head trajectory validation recorded after clean Codex review.
 - [ ] `no-mistakes axi` returns `checks-passed`; `passed` (merged/closed) is treated as a violation/escalation, not success for this task.
 - [ ] Any AXI-created commit/base/head change invalidated prior evidence and triggered applicable full verification, fresh packet synthesis, and fresh Shepherd at final identities.
