@@ -10,7 +10,7 @@
   "correctionBudget": {
     "maxCorrectionRounds": 5,
     "roundsByRange": {
-      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 0
+      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 1
     },
     "headHistory": [
       "cb6b2c771347133e35e369efbb381b3a024476e0",
@@ -20,11 +20,12 @@
       "813f1d14661e4a2ee73fd2719956deaf83468dd7",
       "2809c677c8da996932fb2b2738fcc8dbf74aaa56",
       "0e210d1819f2642ee600aa6921873997101ba7bd",
-      "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f"
+      "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
+      "b1d869732d230575ab7c8295b15cef42cc0078ef"
     ]
   },
-  "status": "post_correction_full_verification_passed_review_pending",
-  "verificationPassed": true,
+  "status": "local_codex_round_1_findings_systemic_correction_planned",
+  "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
     "focused": "passed_post_correction",
@@ -37,9 +38,16 @@
     "finalEvidenceCommitRerun": "pending_before_exact_head_review"
   },
   "localCodex": {
-    "status": "pending",
-    "exactHeadSHA": null,
-    "synthesisArtifact": null
+    "status": "findings_correction_required",
+    "exactHeadSHA": "b1d869732d230575ab7c8295b15cef42cc0078ef",
+    "exactHeadTree": "ec828909478685de6dcce8e095efa8ef255e4334",
+    "packetCount": 17,
+    "rawFindingCount": 89,
+    "rawSynthesisStatus": "blocked",
+    "rawSynthesisBlockers": 14,
+    "synthesisArtifactSHA256": "42626c4555d9769105b8d07ece6c831f44e4cbbdadcfa8a9b50842e9e4f8bd5c",
+    "dispositionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-DISPOSITION.md",
+    "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-MEASUREMENT.json"
   },
   "shepherd": {
     "status": "pending",
@@ -110,6 +118,16 @@
       "cycle": "post_correction_verify",
       "decision": "local_critical_path",
       "reason": "At exact head e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f, focused graph/lab/PM gates, Python/Shellcheck/JSON/YAML checks, Go format no-diff, vet, 20-minute tests, build, module checks, and make verify all passed. Final evidence-commit rerun remains before exact-head review."
+    },
+    {
+      "cycle": "local_codex_round_1",
+      "decision": "local_critical_path",
+      "reason": "At exact head b1d869732d230575ab7c8295b15cef42cc0078ef, 17/17 fresh Sol/xhigh packets completed with zero unreviewed files and disclosed 89 findings. Raw synthesis blocked on 14 failed-invariant contract defects; PM disposition is findings_correction_required across 15 systemic groups. Correction round 1/5 begins; Shepherd correctly remains pending."
+    },
+    {
+      "cycle": "review_loop_monitoring",
+      "decision": "local_critical_path",
+      "reason": "Captain monitoring is active. Twenty-two provider attempts and five startup/WebSocket failures are separate from correction rounds. The same OAuth startup failure was diagnosed after two concurrent attempts with a successful serialized auth probe/recovery. Repeated finding groups trigger root-cause fixes; automatic correction stops at 5/5 without weakening checks or resetting lineage."
     }
   ],
   "measurement": {
@@ -126,7 +144,12 @@
     "correctionBaselineRecall": 0.0,
     "correctionTreatmentFixtureRecall": 1.0,
     "correctionTreatmentFixturePrecision": 1.0,
-    "measuredImplementationHead": "0e210d1819f2642ee600aa6921873997101ba7bd"
+    "measuredImplementationHead": "0e210d1819f2642ee600aa6921873997101ba7bd",
+    "actualReviewRound1Artifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-MEASUREMENT.json",
+    "actualReviewRound1Packets": 17,
+    "actualReviewRound1Findings": 89,
+    "actualReviewRound1ProviderAttempts": 22,
+    "actualReviewRound1ProviderFailures": 5
   },
   "readyQueue": [
     {

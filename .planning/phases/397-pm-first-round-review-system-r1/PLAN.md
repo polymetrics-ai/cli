@@ -13,7 +13,7 @@
 **Exact starting base:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`
 
 **Stable candidate lineage:** `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1`
-**Correction budget:** 0/5 used; changed heads retain this lineage. Captain pre-delivery requirements continue this exact lineage and do not reset it.
+**Correction budget:** 1/5 used. Round 1 is the synthesized exact-head findings verdict at `b1d869732d230575ab7c8295b15cef42cc0078ef` followed by this systemic correction. Changed heads retain this lineage. Packet/provider retries are tracked separately and do not consume rounds.
 
 ## Objective
 
@@ -37,6 +37,7 @@ independent/downstream; and publish only measured fixture/replay claims.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-one-time-review-waiver-and-merge-2026-07-23.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-snyk-deferral-2026-07-23.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-review-system-conditional-merge-authorization-2026-07-24.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pm-review-loop-monitoring-2026-07-24.md`
 - PR #495 accepted source head `fc7167990c92292625493f05b495c70e2c7ce886`; squash on parent `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 
 Historical PR #495 findings and pending review/Shepherd records remain historical evidence. This
@@ -97,8 +98,9 @@ No CLI command/help surface changes; CLI help/manual/website parity is not appli
 - `.pi/prompts/pm-auto-loop.md`
 - `.pi/prompts/pm-orchestrate.md`
 - `.planning/phases/397-pm-first-round-review-system-r1/**`
+- Round-1 systemic parity corrections only: `.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md`, `.agents/agentic-delivery/contracts/issue-prompt-template.md`, `.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml`, `.agents/connector-migration/rollout-checklist.md`, `.agents/connector-migration/validation-gates.md`, `.planning/traces/cli-architecture-v2-pi-prompts.md`, `.planning/phases/397-cli-architecture-v2-orchestration/{RUN-STATE.json,SUMMARY.md}`, and `.planning/traces/cli-architecture-v2-orchestration-state.yaml`.
 
-Any additional production path requires a plan update and write-scope check before editing.
+These additions are limited to conclusive round-1 current-route/authority findings and remain disjoint from the explicit PR #493-owned list below. Any other production path requires a plan update and write-scope check before editing.
 
 ### Forbidden PR #493-owned paths
 
@@ -265,6 +267,12 @@ concurrent isolation, no-experiment clean control, and v1 migration failure. Com
 Then implement the fail-closed versioned lab runner and packet response/synthesis contract. An OS
 sandbox must prove network/write containment or the experiment stays blocked; a policy-only fallback
 cannot authorize clean. Commit/push GREEN additively.
+
+### Slice 7.5 — exact-head local Codex round 1 systemic correction
+
+The exact head `b1d869732d230575ab7c8295b15cef42cc0078ef` compiled 17 packets. All 17 fresh Sol/xhigh contexts completed with no unreviewed files and disclosed 89 raw findings. The machine synthesis returned `blocked` with 14 invariant blockers because failed invariants were misclassified as omitted; that fail-closed result is retained, and the PM-owned disposition is `findings_correction_required`, never clean. `REVIEW-R1-DISPOSITION.md` maps every finding into 15 systemic groups and `REVIEW-R1-MEASUREMENT.json` records hashes, latency, and 22 provider attempts/5 operational failures separately from the 1/5 correction budget.
+
+Before production edits, add RED fixtures for: exact compile/synthesis identity and ready-manifest binding; strict response/status/invariant/lab-evidence shape; relation-state BFS; coherent exact-blob packet bounds; parser/certainty/endpoint/deletion/prohibited-target handling; pre-index resource bounds; offline external-module and deleted-Go impact; default-deny lab read/Git/process containment; explicit-null terminal schema; reusable per-run scope; route parity; authority state/schema parity; remote-no-network reviewer identity; and explicit root/source document references. Then fix each root cause once, rerun focused gates, and compile a fresh exact head. A repeated group in a later round triggers diagnosis rather than another local patch. At 5/5, automatic correction stops; checks are never weakened and lineage never resets.
 
 ### Slice 8 — verification, review, delivery
 

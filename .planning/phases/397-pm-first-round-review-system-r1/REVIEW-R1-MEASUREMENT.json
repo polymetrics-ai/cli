@@ -1,0 +1,358 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-run-measurement/v1",
+  "review_round": 1,
+  "exact_base_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+  "exact_head_sha": "b1d869732d230575ab7c8295b15cef42cc0078ef",
+  "exact_head_tree": "ec828909478685de6dcce8e095efa8ef255e4334",
+  "manifest_sha256": "1f12f1c429f6fb9048917a7a0874212618b4236a20c385a12174dee0ce884763",
+  "synthesis_sha256": "42626c4555d9769105b8d07ece6c831f44e4cbbdadcfa8a9b50842e9e4f8bd5c",
+  "packet_count": 17,
+  "successful_packet_reviews": 17,
+  "packet_status_counts": {
+    "clean": 0,
+    "findings": 17,
+    "blocked": 0
+  },
+  "finding_count": 89,
+  "synthesis_status": "blocked",
+  "synthesis_blocker_count": 14,
+  "provider_attempts": 22,
+  "provider_failures": 5,
+  "provider_retries_do_not_consume_correction_rounds": true,
+  "diagnosis": "architecture_reference-01 failed OAuth startup twice only under concurrent provider launch; a sequential provider probe returned AUTH_OK and the serialized recovery attempt succeeded. Three WebSocket/startup failures succeeded on attempt 2. Future provider starts are bounded and serialized after duplicate failure.",
+  "aggregate_packet_wall_clock_ms": 18879078.173,
+  "elapsed_parallel_wall_clock_ms": null,
+  "telemetry_note": "Pi text mode exposed no trustworthy model token or cost telemetry; fields remain null. Wall time is parent-observed process duration.",
+  "packets": [
+    {
+      "packet_id": "architecture_reference-01",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 3,
+      "provider_failures": 2,
+      "provider_attempt_log": [
+        "attempt=1 status=1 stderr=No API key found for openai-codex.  Use /login to log into a provider via OAuth or API key. See:   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/providers.md   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/models.md ",
+        "attempt=2 status=1 stderr=No API key found for openai-codex.  Use /login to log into a provider via OAuth or API key. See:   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/providers.md   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/models.md ",
+        "diagnosis=two immediate authentication failures occurred only during concurrent provider startup; sequential no-tool openai-codex diagnostic returned AUTH_OK; recovery serializes the retry",
+        "attempt=3_after_diagnosis status=0 stderr="
+      ],
+      "status": "findings",
+      "finding_count": 4,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 450682.612,
+      "response_sha256": "54b7fdd45615c69be2a82c3f8f27f4caa5f8cfabe01f768faf59143543d4a095",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "authority_workflow_state-01",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 3,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 822435.746,
+      "response_sha256": "4471f32b2b838ecb0426236b5f121ea5c05d3158e6d799f0808159c35457a62d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "implementation_test-01",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 8,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 881712.174,
+      "response_sha256": "39c1a9177f308b45e9a05295d30dc1b2503c1a96087a82475391da7397ccbf95",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "architecture_reference-02",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 3,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 364330.376,
+      "response_sha256": "1cb28f3c8cc1fa58c12c8dc29f7993481eeff089c947b471bd43599b533df899",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "architecture_reference-03",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "provider_attempt_log": [
+        "attempt=1 status=1 stderr=No API key found for openai-codex.  Use /login to log into a provider via OAuth or API key. See:   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/providers.md   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/models.md ",
+        "attempt=2 status=0 stderr="
+      ],
+      "status": "findings",
+      "finding_count": 3,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 2653497.03,
+      "response_sha256": "ae10faca2d265767f033e59d5e648ec2f4ae0760517007fe6d95db0f4b7b578a",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-01",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 7,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 636915.647,
+      "response_sha256": "e3c7df89a90a937af296437b38b1fe5ff63f5d91495bbbc69f09ac430225752b",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-02",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 6,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 524924.251,
+      "response_sha256": "762112e135fc07bd94784bd6bf8a5077b8c367152fd7e36d255e6277541cff76",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-03",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 7,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 2969535.464,
+      "response_sha256": "f4621eea8a1e124ec020c053d14f3dd8b809717f63bf8a16db3f5239886bd34d",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-04",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 4,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 2660330.945,
+      "response_sha256": "0ad752df40a1b56853fdb62ccb5186388dd63684427f79f00dcf8e9a84194303",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-05",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "provider_attempt_log": [
+        "attempt=1 status=1 stderr=WebSocket error ",
+        "attempt=2 status=0 stderr="
+      ],
+      "status": "findings",
+      "finding_count": 6,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 2673719.922,
+      "response_sha256": "4b0a330ec5b57d2cbfa753750e4fe585c70a7245fc7d67831006904e6306a095",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-06",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 5,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 560215.139,
+      "response_sha256": "3d2aa35794845a27eede4e63196a776dd7d886cdf187641634fdd419802dc708",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-07",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 6,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 543570.441,
+      "response_sha256": "565d83b118fba35bd6f493b9acd73bdb6311b376ff5593476473216cd50b70be",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-08",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "provider_attempt_log": [
+        "attempt=1 status=1 stderr=WebSocket error ",
+        "attempt=2 status=0 stderr="
+      ],
+      "status": "findings",
+      "finding_count": 6,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 550291.701,
+      "response_sha256": "a4aa3bf5a2e551309185eb9a4cd41c7338e75753d7564973c147f0e052520471",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-09",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 6,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 592223.609,
+      "response_sha256": "a96df4970ffb9509b7a946cfb19ddc4d02efe96916e092e2a85d5726eb5947b7",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-10",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 5,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 913430.866,
+      "response_sha256": "be1c35ae7960bf270cc3181212f4439f5fd52a85623efb8de37c610a0f6f5602",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-11",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 5,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 590338.152,
+      "response_sha256": "60f09c715be23da4b988dce310d681ecbd1741b1c9dc25ef0d50623eb2822892",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    },
+    {
+      "packet_id": "impact_graph-12",
+      "model": "openai-codex/gpt-5.6-sol",
+      "thinking": "xhigh",
+      "fresh_context": true,
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "provider_attempt_log": [
+        "attempt=1 status=0"
+      ],
+      "status": "findings",
+      "finding_count": 5,
+      "unreviewed_count": 0,
+      "wall_clock_ms": 490924.098,
+      "response_sha256": "d2dc0fead7cd8f6e8da6cbbd9ad46c67c4e5bc3e6e565bfb736bf39ee90ccc8b",
+      "input_tokens": null,
+      "output_tokens": null,
+      "cost": null
+    }
+  ],
+  "claim_scope": "actual fresh-context exact-head local Codex packet run; finding counts are raw and include cross-packet duplicates; no ideal-human equivalence claim."
+}

@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: captain research, impact-graph/lab RED→GREEN, measurement, and post-correction full local gates complete; final evidence-head rerun/review/delivery pending on the same 0/5 lineage.
+Status: exact-head Codex round 1 completed with 89 findings across 15 systemic groups; correction round 1/5 is planned before production edits on the same stable lineage.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.
@@ -19,5 +19,6 @@ Status: captain research, impact-graph/lab RED→GREEN, measurement, and post-co
 - `ALGORITHM-RESEARCH.md` compares primary build/query/index/test-impact/graph sources and a disposable exact-head benchmark: 1,669 nodes/5,039 edges; indexed BFS 21/21 oracle nodes versus 14/21 outgoing-only; synthetic 63.735 ms indexed versus 10,479.531 ms repeated scan. Unrestricted depth-3 traversal still hit a frontier, so typed relation policy and explicit blocking were selected.
 - Selected v1: typed directed multigraph, materialized forward/reverse adjacency, deterministic multi-source relation-policy BFS, authoritative `go list`, three-valued certainty, complete discovery before packets, no persistent cache/SCC/new dependency.
 - Correction RED: 17/17 defect fixtures escaped old treatment, four clean controls stayed clean, and real tests proved absent impact v2, graph-bound/schema fail-open, absent lab runner, and missing migration/inconclusive synthesis rules.
-- Focused/full gates at `7f1b2d8fe` are historical. Post-correction focused/full gates and `make verify` passed at `e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f`; final evidence-head rerun, exact-head packet review/labs, Shepherd, no-mistakes, PR, and CI remain pending.
+- Focused/full gates at `7f1b2d8fe` are historical. Post-correction full gates passed at `e4ca19ce8` and exact-head full gates passed at `b1d869732`, but 17/17 fresh packet reviews then disclosed 89 findings; no prior verification is final after correction starts.
+- `REVIEW-R1-DISPOSITION.md` maps every finding to 15 systemic groups; `REVIEW-R1-MEASUREMENT.json` records hashes, 22 provider attempts, five operational failures, and actual packet timing separately from correction round 1/5. Raw synthesis blocked because failed invariants were misclassified; PM lifecycle status is findings-correction-required, not clean. Shepherd was not run.
 - Captain conditionally authorizes Firstmate to merge the eventual all-green stacked PR into `feat/cli-architecture-v2`; this agent must not merge and will report the green open PR. Parent PR #438 remains draft/human-only.

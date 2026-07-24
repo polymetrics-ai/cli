@@ -1,6 +1,8 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** captain impact-graph/lab corrections and full local gates passed at `e4ca19ce8`; final evidence-head rerun/review pending
+**Status:** exact-head Codex round 1 found 89 issues in 15 systemic groups; correction round 1/5 RED planning recorded before production edits
+
+> Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
 ## Identity and scope
 
@@ -84,6 +86,30 @@
 - [x] Graph/lab/packet/response/synthesis contracts are versioned; incompatible v1 migration fixtures fail closed.
 - [x] Focused PM tests remain transitively present in repository `make verify`/CI routing.
 
+## Exact-head Codex round 1 correction
+
+- [x] 17/17 fresh Sol/xhigh packet reviews completed at `b1d869732d230575ab7c8295b15cef42cc0078ef`, zero unreviewed files, 89 unlimited raw findings.
+- [x] Raw manifest/synthesis/response hashes and 22 provider attempts/5 operational failures are recorded separately from correction round usage in `REVIEW-R1-MEASUREMENT.json`.
+- [x] Duplicate authentication failure was diagnosed after two attempts; sequential auth probe passed and serialized recovery succeeded. Provider retries did not consume correction rounds.
+- [x] Every raw finding has an explicit accepted-with-modification or duplicate disposition in `REVIEW-R1-DISPOSITION.md`; none is declined, waived, hidden, or deferred.
+- [x] Stable lineage advanced to correction round 1/5; Shepherd was correctly not run on non-clean synthesis.
+- [ ] R1-A exact compile/synthesis head/tree/base/ready-manifest binding passes RED→GREEN.
+- [ ] R1-B strict response/invariant/experiment/lab-evidence contract passes RED→GREEN.
+- [ ] R1-C relation/direction policy-state BFS and global frontier handling pass RED→GREEN.
+- [ ] R1-D coherent exact-blob bounded packets include and charge every edge endpoint.
+- [ ] R1-E parser/certainty/endpoint/deletion/prohibited/root/shell/fixture cases fail closed correctly.
+- [ ] R1-F file/node/edge limits prevent broad reads/materialization before blocking.
+- [ ] R1-G external-module offline Go indexing and deleted-Go base+head context pass.
+- [ ] R1-H default-deny lab reads, immutable Git administration, process-tree containment, and lab-evidence binding pass.
+- [ ] R1-I explicit-null/conflicting schema aliases block while key-absent legacy remains compatible.
+- [ ] R1-J reusable policy and validated per-run scope are separated and manifest-bound.
+- [ ] R1-K current PM route siblings are reconciled without touching explicit PR #493-owned paths.
+- [ ] R1-L post-#495 parent authority and phase-state temporal contract are truthful and validated.
+- [ ] R1-M durable phase evidence reconciles at the next exact head.
+- [ ] R1-N remote freshness is parent-owned and packet review remains local/no-network.
+- [ ] R1-O governing root/source docs enter explicit bounded closure.
+- [ ] Re-run focused/full verification, exact-head packets, recurrence comparison, synthesis, and Shepherd on the new head.
+
 ## Measurement
 
 - [x] Historical source identities are retained for PR #495 replays.
@@ -150,8 +176,8 @@ After both correction GREENs on one committed exact head:
 - [x] Exact corrected verified commit `e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f` exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
 - [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
 - [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
-- [ ] Every finding has a canonical disposition.
-- [ ] Fresh five-round `rounds_by_range` usage and append-only head history recorded without lineage reset.
+- [x] Every round-1 finding has a canonical disposition; future-round findings remain pending by definition.
+- [x] Stable five-round `rounds_by_range` usage is 1/5 and append-only head history is retained without lineage reset.
 - [ ] Independent Shepherd exact-head trajectory validation recorded after clean Codex review.
 - [ ] `no-mistakes axi` returns `checks-passed`; `passed` (merged/closed) is treated as a violation/escalation, not success for this task.
 - [ ] Any AXI-created commit/base/head change invalidated prior evidence and triggered applicable full verification, fresh packet synthesis, and fresh Shepherd at final identities.
