@@ -426,6 +426,61 @@ if cap_fixture.is_file():
     if record.get("human_gate_kind") != "correction_cap_exceeded":
         errors.append("cap_lineage: human gate kind does not identify correction-cap exceed")
 
+# Round-2 recurrence contracts: executable routes, exact-identity Shepherd, trace safety, and
+# active parent artifacts must agree semantically rather than merely containing generic markers.
+review_loop = read(".pi/prompts/pm-review-loop.md")
+for marker in ("--scope", "--base", "--head", "--manifest", "--responses-dir"):
+    if marker not in review_loop:
+        errors.append(f".pi/prompts/pm-review-loop.md: invocable review route lacks {marker}")
+
+execution_trace = read(".planning/traces/cli-architecture-v2-pi-prompts.md")
+if "gsd-programming-loop" in execution_trace:
+    errors.append("cli-architecture-v2-pi-prompts.md: invokes unavailable programming-loop")
+for block in ("Generic issue worker", "Issue #408 TUI worker"):
+    start = execution_trace.find(block)
+    if start < 0:
+        errors.append(f"cli-architecture-v2-pi-prompts.md: missing {block}")
+        continue
+    section = execution_trace[start : execution_trace.find("## ", start + 3) if execution_trace.find("## ", start + 3) >= 0 else None]
+    for marker in ("local Codex", "Shepherd"):
+        if marker not in section:
+            errors.append(f"cli-architecture-v2-pi-prompts.md: {block} lacks explicit {marker} gate")
+
+for relative in (
+    ".agents/agentic-delivery/workflows/shepherd-validator.md",
+    ".agents/agentic-delivery/prompts/shepherd-validator-prompt.md",
+):
+    require(relative, "exact_base_sha", "exact_head_sha", "exact_head_tree", "candidate_lineage", "synthesis_sha256")
+
+require("scripts/pi-shepherd-loop.sh", "run_validator_with_watchdog", "exact_head_tree", "synthesis_sha256")
+require("scripts/pi-auto-loop.sh", "pi-shepherd-loop.sh", "exec")
+require("scripts/loop-trace.sh", "safe_trace_slug", "redact_trace_value", "session_id", "exclusive")
+
+parent_plan = read(".planning/phases/397-cli-architecture-v2-orchestration/PLAN.md")
+parent_verification = read(".planning/phases/397-cli-architecture-v2-orchestration/VERIFICATION.md")
+for relative, text in (("PLAN.md", parent_plan), ("VERIFICATION.md", parent_verification)):
+    for marker in ("pm-review-system.py compile", "clean synthesis", "Shepherd"):
+        if marker not in text:
+            errors.append(f"397-cli-architecture-v2-orchestration/{relative}: active gate lacks {marker}")
+if "Wave 1 is not yet integrated" in parent_verification:
+    errors.append("397-cli-architecture-v2-orchestration/VERIFICATION.md: stale Wave 1 blocker remains current")
+
+parent_workflow = read(".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md")
+for exact in ("accepted_with_modification", "needs_human"):
+    if exact not in parent_workflow:
+        errors.append(f"parent-issue-orchestration-loop.md: lacks exact disposition enum {exact}")
+
+runtime_loop = read(".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md")
+for marker in ("pm-scout", "pm-reviewer", "pm-verifier", "restricted read-only bash"):
+    if marker not in runtime_loop:
+        errors.append(f"gsd-universal-runtime-loop.md: tool-scope parity lacks {marker}")
+
+pi_runtime = read(".agents/agentic-delivery/workflows/pi-active-orchestration-loop.md")
+pi_readme = read(".pi/README.md")
+for text, relative in ((pi_runtime, "pi-active-orchestration-loop.md"), (pi_readme, ".pi/README.md")):
+    if "vendored" not in text or ".pi/extensions/pi-sub-agent" not in text:
+        errors.append(f"{relative}: local pi-sub-agent provenance is not truthful")
+
 if errors:
     raise SystemExit("PM orchestrator contract violations:\n- " + "\n- ".join(errors))
 

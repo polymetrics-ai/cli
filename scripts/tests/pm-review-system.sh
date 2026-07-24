@@ -487,7 +487,9 @@ outside=repr(sys.argv[1]); scripts=pathlib.Path(sys.argv[2])
 PY
 cat >"$impact_repo/scripts/network.py" <<'EOF'
 import socket
-socket.create_connection(('127.0.0.1', 9), timeout=0.2)
+sock = socket.socket()
+sock.bind(('127.0.0.1', 0))
+raise SystemExit(77)
 EOF
 cat >"$impact_repo/scripts/check_isolation.py" <<'EOF'
 from pathlib import Path
@@ -806,7 +808,7 @@ assert outside.read_text()=='sentinel'
 blocked('nested-outside-read',changes=[],command=['python3','scripts/outside_read.py'],expected_discriminator={'exit_code':0})
 blocked('nonlab-system-read',changes=[],command=['python3','scripts/read_system.py'],expected_discriminator={'exit_code':0})
 blocked('escaped-process-group',changes=[],command=['python3','scripts/escape_process.py'],expected_discriminator={'exit_code':0})
-blocked('nested-network',changes=[],command=['python3','scripts/network.py'],expected_discriminator={'exit_code':0})
+blocked('nested-network',changes=[],command=['python3','scripts/network.py'],expected_discriminator={'exit_code':77})
 outside.unlink()
 for name,command in {
   'network':['curl','https://example.invalid'], 'commit':['git','commit','-am','x'],
@@ -1203,6 +1205,218 @@ PY
 then
   fail "stale/incomplete/overflow packet response did not block synthesis"
 fi
+# Round-2 recurrence RED: these assertions use independent adversarial oracles rather than the
+# compiler's own labels. They intentionally cover the systemic causes behind the 141 exact-head
+# findings: authenticated manifest semantics, exact response/lab binding, rendered-prompt bounds,
+# structural graph parsing, nested phase state, bounded scoring, and endpoint validation.
+if ! python3 - "$repo_root" "$unsafe_dir/manifest.json" "$test_tmp" <<'PY'
+import argparse
+import contextlib
+import hashlib
+import importlib.util
+import io
+import json
+import math
+import os
+import pathlib
+import shutil
+import subprocess
+import sys
+
+repo = pathlib.Path(sys.argv[1])
+manifest_path = pathlib.Path(sys.argv[2])
+tmp = pathlib.Path(sys.argv[3]) / "r2-red"
+tmp.mkdir()
+spec = importlib.util.spec_from_file_location("pm_review_system", repo / "scripts/pm-review-system.py")
+pm = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(pm)
+manifest = json.loads(manifest_path.read_text())
+errors = []
+
+def clean_response(packet):
+    return {
+        "schema_version": pm.PACKET_RESPONSE_SCHEMA,
+        "packet_id": packet["packet_id"],
+        "exact_base_sha": manifest["exact_base_sha"],
+        "exact_head_sha": manifest["exact_head_sha"],
+        "exact_head_tree": manifest["exact_head_tree"],
+        "status": "clean",
+        "reviewed_files": packet["changed_files"],
+        "closure_files": packet["closure_files"],
+        "authority_files": packet["authority_files"],
+        "impact_files": packet.get("impact_files", []),
+        "impact_edge_ids": packet.get("impact_edge_ids", []),
+        "impact_file_slices": packet.get("impact_file_slices", []),
+        "edge_context_files": packet.get("edge_context_files", []),
+        "invariants": [{"id": item, "status": "pass", "evidence_paths": []} for item in packet["invariants"]],
+        "unreviewed_files": [],
+        "review_behaviors": {
+            "impact_model_built_first": True,
+            "directions_traced": ["upstream", "downstream", "lateral", "temporal"],
+            "history_inspected": {"status": "not_needed", "reason": "fixture is exact"},
+            "sibling_paths_compared": {"status": "not_needed", "reason": "fixture has no sibling"},
+            "hypotheses": ["H1 claim: complete; alternative: omitted; falsifier: set mismatch"],
+            "disconfirming_evidence": "exact fixture assignments agree",
+        },
+        "experiments": [],
+        "no_experiment_reason": "static fixture evidence is decisive",
+        "findings": [],
+        "residual_risk": [],
+        "context": {"input_tokens": None, "output_tokens": None, "cost": None, "overflow": False, "truncated": False},
+        "wall_clock_ms": None,
+    }
+
+def write_responses(directory):
+    directory.mkdir()
+    for packet in manifest["packets"]:
+        (directory / f"{packet['packet_id']}.json").write_text(json.dumps(clean_response(packet)))
+
+def synthesize(candidate_manifest, responses):
+    rel_manifest = os.path.relpath(candidate_manifest, repo)
+    rel_responses = os.path.relpath(responses, repo)
+    proc = subprocess.run(
+        [sys.executable, str(repo / "scripts/pm-review-system.py"), "synthesize", "--repo-root", str(repo),
+         "--manifest", rel_manifest, "--responses-dir", rel_responses],
+        cwd=repo, capture_output=True, text=True,
+    )
+    try:
+        value = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        value = None
+    return proc, value
+
+# Same-head manifest packet removal must be detected independently of matching responses.
+responses = tmp / "responses"
+write_responses(responses)
+tampered = json.loads(json.dumps(manifest))
+removed = tampered["packets"].pop()
+(tampered_path := tmp / "tampered-manifest.json").write_text(json.dumps(tampered))
+(responses / f"{removed['packet_id']}.json").unlink()
+proc, value = synthesize(tampered_path, responses)
+if proc.returncode == 0 or not isinstance(value, dict) or value.get("status") != "blocked":
+    errors.append("same-head packet removal was not rejected by independent manifest/coverage validation")
+
+# Non-object response input must return a blocked synthesis envelope, never a traceback.
+shutil.rmtree(responses)
+write_responses(responses)
+first_packet = manifest["packets"][0]
+(responses / f"{first_packet['packet_id']}.json").write_text("[]\n")
+proc, value = synthesize(manifest_path, responses)
+if not isinstance(value, dict) or value.get("status") != "blocked":
+    errors.append("non-object response did not return the canonical blocked synthesis envelope")
+
+# Identifier-only hypotheses do not satisfy a falsifiable claim/alternative/discriminator contract.
+shutil.rmtree(responses)
+write_responses(responses)
+first_response_path = responses / f"{first_packet['packet_id']}.json"
+first_response = json.loads(first_response_path.read_text())
+first_response["review_behaviors"]["hypotheses"] = ["H1"]
+first_response_path.write_text(json.dumps(first_response))
+proc, value = synthesize(manifest_path, responses)
+if proc.returncode == 0 or not isinstance(value, dict) or value.get("status") != "blocked":
+    errors.append("identifier-only hypothesis synthesized clean")
+
+# A valid hashed lab artifact cannot be relabeled as another response experiment.
+packet = first_packet
+evidence_rel = os.path.relpath(tmp / "lab-evidence.json", repo)
+experiment = {
+    "hypothesis_id": "H1", "claim": "original claim", "alternative": "original alternative",
+    "impact_edges_examined": packet.get("impact_edge_ids", [])[:1], "temporary_change": "original change",
+    "command": ["python3", "scripts/check.py"], "expected_discriminator": {"exit_code": 1},
+    "observed": {"exit_code": 1, "limit_hit": None, "processes_remaining": 0},
+}
+evidence = {
+    "schema_version": pm.LAB_EVIDENCE_SCHEMA, "status": "evidence", "packet_id": packet["packet_id"],
+    "exact_base_sha": manifest["exact_base_sha"], "exact_head_sha": manifest["exact_head_sha"],
+    "exact_head_tree": manifest["exact_head_tree"], "candidate_unchanged": True,
+    "lab_cleanup_verified": True, "experiment": experiment,
+}
+evidence_path = repo / evidence_rel
+evidence_path.write_text(json.dumps(evidence))
+response = clean_response(packet)
+response["experiments"] = [{**experiment, "claim": "relabeled claim", "supports": "claim",
+    "candidate_unchanged": True, "lab_cleanup_verified": True,
+    "lab_evidence_path": evidence_rel,
+    "lab_evidence_sha256": hashlib.sha256(evidence_path.read_bytes()).hexdigest()}]
+response["no_experiment_reason"] = None
+if not pm.validate_experiments(repo, manifest, packet, response):
+    errors.append("response experiment was not bound field-for-field to its hashed lab artifact")
+
+# Packet accounting must charge exact changed bytes plus the full rendered envelope under a true
+# tokenizer-independent upper bound; one 100 KiB line cannot cost four tokens.
+config = json.loads((repo / ".agents/agentic-delivery/contracts/pm-review-system.json").read_text())
+selection, packets, problems = pm.build_packets(
+    manifest["exact_base_sha"], manifest["exact_head_sha"], manifest["exact_head_tree"],
+    ["scripts/huge.py"], {"scripts/huge.py": 1}, {"scripts/huge.py": "implementation_test"},
+    [], [], [], [], {"scripts/huge.py": 100_000}, {"scripts/huge.py": []}, config,
+)
+if selection != "blocked" and not problems and not any(p["context"]["overflow"] for p in packets):
+    errors.append("100 KiB one-line changed file bypassed conservative packet accounting")
+
+# Format-aware relation/certainty parsing must not depend on same-line filename keywords.
+universe = {".agents/required.md", ".agents/next.md", "scripts/body.py", "scripts/helper.py"}
+yaml_edges, _ = pm.typed_file_edges(
+    ".agents/worker.yaml", "inputs:\n  required:\n    - .agents/required.md\n", universe
+)
+if not yaml_edges or yaml_edges[0]["relation"] != "required_reference":
+    errors.append("YAML inputs.required lost structural required-reference semantics")
+md_edges, _ = pm.typed_file_edges(
+    ".agents/start.md", "Read .agents/required.md and .agents/next.md before work.\n", universe
+)
+if len(md_edges) != 2 or {edge["relation"] for edge in md_edges} != {"required_reference"}:
+    errors.append("imperative multi-path read clause did not type both edges identically")
+if pm.line_certainty("This unconditional contract reads .agents/required.md") != "active":
+    errors.append("unconditional active reference was misclassified as unknown")
+heredoc_edges, _ = pm.typed_file_edges(
+    "scripts/check.sh", "python3 - <<'PY'\nfrom pathlib import Path\nPath('.agents/required.md').read_text()\nPY\n", universe
+)
+if not heredoc_edges or all(edge["certainty"] == "inactive" for edge in heredoc_edges):
+    errors.append("executed Python heredoc dependency was classified wholly inactive")
+python_edges, _ = pm.typed_file_edges("scripts/body.py", "from . import helper\n", universe)
+if not any(edge["relation"] == "python_import" and edge["target"] == "scripts/helper.py" for edge in python_edges):
+    errors.append("relative Python ImportFrom dependency was omitted")
+
+# Both impact-edge endpoints and every seed are mandatory graph nodes.
+invalid_graph = {"nodes": ["target"], "edges": [{"source": "missing", "target": "target", "certainty": "active"}],
+                 "seeds": ["target"], "reported_impact": ["missing", "target"], "reported_status": "complete"}
+if not pm.impact_contract_findings(invalid_graph):
+    errors.append("impact detector accepted a missing source endpoint")
+
+# Dedicated phase-state validation must enforce nested correction constraints, not only markers.
+phase_root = tmp / "phase-root"
+phase_root.mkdir()
+(phase_root / "schema.json").write_text(json.dumps({
+    "required": ["schemaVersion", "correctionBudget"],
+    "properties": {"schemaVersion": {"const": "pm-review-system-phase/v2"},
+                   "correctionBudget": {"type": "object"}},
+}))
+(phase_root / "state.json").write_text(json.dumps({"schemaVersion": "pm-review-system-phase/v2", "correctionBudget": {}}))
+_, _, phase_findings = pm.authority_inventory(phase_root, {"authorities": [], "configured_relationships": [{
+    "source": "schema.json", "target": "state.json", "relation": "temporal_phase_state_instance",
+    "certainty": "active", "validator": "pm_review_phase_v2",
+}]})
+if not phase_findings:
+    errors.append("empty nested correction budget passed dedicated phase-state validation")
+
+# Scoring must reject a partial observed set instead of reporting perfect metrics.
+observed_path = tmp / "partial-observed.json"
+oracle_path = tmp / "oracle.json"
+observed_path.write_text(json.dumps({"mode": "treatment", "observations": [{"case_id": "a", "suite": "x", "findings": [{}]}]}))
+oracle_path.write_text(json.dumps({"cases": {"a": {"expected": "finding"}, "b": {"expected": "finding"}}}))
+score = subprocess.run([sys.executable, str(repo / "scripts/pm-review-system.py"), "score",
+                        "--observations", str(observed_path), "--oracle", str(oracle_path)],
+                       cwd=repo, capture_output=True, text=True)
+if score.returncode == 0:
+    errors.append("partial observation set produced a measurement instead of blocking")
+
+if errors:
+    print("\n".join(errors), file=sys.stderr)
+    raise SystemExit(1)
+PY
+then
+  fail "round-2 systemic recurrence RED assertions did not fail closed"
+fi
+
 rm -rf "$unsafe_dir" "$compile_output"
 
 if [[ $failures -ne 0 ]]; then
