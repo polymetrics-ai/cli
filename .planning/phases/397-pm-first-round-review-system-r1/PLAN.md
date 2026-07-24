@@ -98,7 +98,7 @@ No CLI command/help surface changes; CLI help/manual/website parity is not appli
 - `.pi/prompts/pm-auto-loop.md`
 - `.pi/prompts/pm-orchestrate.md`
 - `.planning/phases/397-pm-first-round-review-system-r1/**`
-- Round-1 systemic parity corrections only: `.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md`, `.agents/agentic-delivery/contracts/issue-prompt-template.md`, `.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml`, `.agents/connector-migration/rollout-checklist.md`, `.agents/connector-migration/validation-gates.md`, `.planning/traces/cli-architecture-v2-pi-prompts.md`, `.planning/phases/397-cli-architecture-v2-orchestration/{RUN-STATE.json,SUMMARY.md}`, and `.planning/traces/cli-architecture-v2-orchestration-state.yaml`.
+- Round-1 systemic parity corrections only: `.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md`, `.agents/agentic-delivery/contracts/issue-prompt-template.md`, `.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml`, `.agents/connector-migration/{rollout-checklist.md,validation-gates.md,ownership-rules.md}`, `.planning/traces/cli-architecture-v2-pi-prompts.md`, `.planning/phases/397-cli-architecture-v2-orchestration/{RUN-STATE.json,SUMMARY.md}`, and `.planning/traces/cli-architecture-v2-orchestration-state.yaml`.
 
 These additions are limited to conclusive round-1 current-route/authority findings and remain disjoint from the explicit PR #493-owned list below. Any other production path requires a plan update and write-scope check before editing.
 

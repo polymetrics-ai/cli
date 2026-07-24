@@ -728,6 +728,38 @@ def script_invocation_line(text: str) -> bool:
     )
 
 
+def structural_inactive_lines(relative: str, lines: list[str]) -> set[int]:
+    inactive: set[int] = set()
+    if relative.endswith("TDD-LEDGER.md"):
+        return set(range(1, len(lines) + 1))
+    section_inactive = False
+    heredoc: str | None = None
+    fixture_continuation = False
+    for number, line in enumerate(lines, 1):
+        stripped = line.strip()
+        if PurePosixPath(relative).suffix == ".md" and stripped.startswith("#"):
+            heading = stripped.lstrip("#").strip().lower()
+            section_inactive = any(word in heading for word in ("historical", "forbidden", "excluded", "deprecated"))
+        if section_inactive:
+            inactive.add(number)
+        if PurePosixPath(relative).suffix == ".sh":
+            if heredoc is not None:
+                inactive.add(number)
+                if stripped == heredoc:
+                    heredoc = None
+                continue
+            marker = re.search(r"<<-?['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?", line)
+            if marker:
+                heredoc = marker.group(1)
+                inactive.add(number)
+            if fixture_continuation or any(value in line for value in ("$impact_repo", "$test_tmp", "$fixture_root")):
+                inactive.add(number)
+                fixture_continuation = line.rstrip().endswith("\\")
+            elif fixture_continuation:
+                fixture_continuation = line.rstrip().endswith("\\")
+    return inactive
+
+
 def typed_file_edges(
     relative: str,
     text: str,
@@ -735,16 +767,23 @@ def typed_file_edges(
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     # The review-system policy and per-run scope are interpreted structurally. Their pattern arrays
     # are declarations, not active repository references.
-    if relative.endswith(("pm-review-system.json", "REVIEW-SCOPE.json")):
+    if relative.endswith(("pm-review-system.json", "REVIEW-SCOPE.json")) or relative.startswith(
+        "scripts/tests/fixtures/"
+    ):
         return [], []
     result: list[dict[str, Any]] = []
     findings: list[dict[str, Any]] = []
     seen: set[str] = set()
     lines = text.splitlines()
     suffix = PurePosixPath(relative).suffix
+    structurally_inactive = structural_inactive_lines(relative, lines)
 
     for number, line_text in enumerate(lines, 1):
-        certainty = line_certainty(line_text)
+        certainty = "inactive" if number in structurally_inactive else line_certainty(line_text)
+        if certainty != "inactive" and "fixture" in line_text.lower() and any(
+            marker in relative for marker in ("TDD-LEDGER.md", "VERIFICATION.md", "REVIEW-R1-DISPOSITION.md")
+        ):
+            certainty = "inactive"
         for match in MARKDOWN_LINK.finditer(line_text):
             try:
                 target = normalize_reference(relative, match.group(1))
@@ -765,6 +804,8 @@ def typed_file_edges(
                     seen.add(edge["id"])
                     result.append(edge)
         for match in REPO_REFERENCE.finditer(line_text):
+            if match.start() >= 2 and line_text[match.start() - 2 : match.start()] == "~/":
+                continue
             target = match.group(1)
             relation = reference_relation(line_text, target)
             parser_name = "structured_path" if suffix in {".json", ".yaml", ".yml"} else "text_path"
@@ -1006,6 +1047,7 @@ def build_impact_index(
         configured_endpoints.update((record.get("source", ""), record.get("target", "")))
     configured_endpoints.discard("")
 
+    include_go = any(path.endswith(".go") for path in changed)
     selected = {
         path
         for path in tracked
@@ -1013,7 +1055,7 @@ def build_impact_index(
             PurePosixPath(path).suffix in INDEX_SUFFIXES
             and (path.startswith(prefixes) or path in canonical or path in explicit or path in configured_endpoints or path in changed)
         )
-        or (path.endswith(".go") and path.startswith(go_prefixes))
+        or (include_go and path.endswith(".go") and path.startswith(go_prefixes))
     }
     selected.update(path for path in changed if PurePosixPath(path).suffix in INDEX_SUFFIXES)
     selected.update(path for path in configured_endpoints if path in tracked)
@@ -1466,6 +1508,10 @@ def build_packets(
     def file_tokens(paths: Iterable[str]) -> int:
         return sum(max(1, math.ceil(blob_sizes[path] / 4)) for path in sorted(set(paths)))
 
+    def edge_context_tokens(paths: Iterable[str]) -> int:
+        maximum = int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
+        return sum(max(1, math.ceil(min(blob_sizes[path], maximum) / 4)) for path in sorted(set(paths)))
+
     def estimate(
         changed: list[str],
         closure: list[str],
@@ -1477,7 +1523,8 @@ def build_packets(
         changed_cost = sum(line_counts.get(path, 0) for path in changed) * int(
             thresholds["estimated_tokens_per_changed_line"]
         )
-        context_cost = file_tokens(set(closure) | set(authority) | set(impact) | set(edge_context))
+        full_context = set(closure) | set(authority) | set(impact)
+        context_cost = file_tokens(full_context) + edge_context_tokens(set(edge_context) - full_context)
         metadata_bytes = len(
             json.dumps([impact_edge_by_id[edge_id] for edge_id in edge_ids], sort_keys=True, separators=(",", ":")).encode()
         )
@@ -1526,6 +1573,8 @@ def build_packets(
                     "estimated_tokens": estimated,
                     "estimation": "exact_head_bytes_conservative",
                     "bytes_per_token_upper_bound": 4,
+                    "edge_context_mode": "provenance line plus bounded exact-blob excerpts",
+                    "edge_context_max_bytes_per_file": int(graph_limits.get("edge_context_max_bytes_per_file", 8192)),
                     "overflow": overflow,
                     "truncated": False,
                 },
@@ -1615,7 +1664,6 @@ def build_packets(
     if current_edges:
         edge_groups.append(current_edges)
 
-    unassigned_impact = set(impact_files)
     for group in edge_groups:
         edge_ids = [edge["id"] for edge in group]
         endpoints = sorted(
@@ -1626,11 +1674,9 @@ def build_packets(
                 if not endpoint.startswith("go-package:")
             }
         )
-        assigned = sorted(unassigned_impact.intersection(endpoints))[: int(graph_limits["packet_max_impact_files"])]
-        unassigned_impact.difference_update(assigned)
-        append_packet("impact_graph", [], [], [], assigned, edge_ids, endpoints)
+        append_packet("impact_graph", [], [], [], [], edge_ids, endpoints)
 
-    for part in greedy_file_groups(sorted(unassigned_impact), int(graph_limits["packet_max_impact_files"])):
+    for part in greedy_file_groups(sorted(impact_files), int(graph_limits["packet_max_impact_files"])):
         append_packet("impact_graph", [], [], [], part, [], [])
 
     maximum_packets = int(graph_limits.get("max_packets", 64))
