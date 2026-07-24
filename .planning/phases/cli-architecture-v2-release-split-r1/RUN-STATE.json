@@ -1,6 +1,6 @@
 {
   "phase": "cli-architecture-v2-release-split-r1",
-  "status": "release_asset_audit",
+  "status": "paused_review_system",
   "baseSHA": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
   "branch": "fm/cli-architecture-v2-release-split-r1",
   "localVerificationPassed": true,
@@ -63,6 +63,16 @@
       "cycle": "release-plan",
       "decision": "local_critical_path",
       "reason": "Captain authorized draft PR #499 and a bounded audit of existing release-please/GoReleaser support; release workflow and package-validation script are one shared integration surface."
+    },
+    {
+      "cycle": "release-verify",
+      "decision": "local_critical_path",
+      "reason": "GoReleaser cross-built and validated six deterministic checksummed assets twice; targeted actionlint, negative validator tests, focused CLI tests, module gates, and make verify passed. No asset was uploaded."
+    },
+    {
+      "cycle": "return-to-review-wait",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Release support is locally green and draft PR #499 is open; canonical PM synthesis and Shepherd remain unavailable, so no-mistakes and readiness promotion remain blocked by instruction."
     }
   ],
   "reviewSystemWait": {

@@ -1,6 +1,6 @@
 # Summary — CLI Architecture v2 Cobra/Viper release split
 
-Status: draft PR #499 open; authorized release-asset audit in progress before returning to the canonical PM review-system wait.
+Status: draft PR #499 open; Cobra/Viper and release-asset support locally green; returned to the canonical PM review-system wait.
 
 The approved five source squashes are reconstructed on exact latest-main base `873cd7b251f70c4a35a607a0d4e86051ea0fbd15`. The single `internal/cli/cli.go` conflict retained current Gong behavior, Cobra was adapted to the current JSON-help signature, and only affected golden/docs outputs were regenerated.
 
@@ -10,4 +10,6 @@ The candidate explicitly excludes TUI, events, logging, OpenTelemetry, PR #493 r
 
 Captain timing authorization allowed the exact green candidate to be pushed and opened as draft PR #499 before canonical review. The PR prominently records all pending gates and is not ready to merge or release.
 
-After the bounded release-asset audit, delivery returns to the external wait because `chore/pm-first-round-review-system-r1` is at `355510f5b0827f800dcbaa232d5804f8fcd3b407` (`docs(orchestration): record round two red evidence`) with no PR, so it is not integrated or clean. No manual/Claude/Copilot substitute is allowed. Exact-version PM packets, synthesis, independent Shepherd, no-mistakes, GitHub CI/Snyk, RC version decision, and release publication remain pending.
+The existing GoReleaser config already covered macOS/Linux/Windows on amd64/arm64, version ldflags, archive naming, and SHA-256 checksums. The release workflow now validates all six packages on pull requests without publication, validates deterministic packages before upload, and uploads only after a non-draft GitHub release/release-please result. Permissions default read-only and write access is job-scoped. Two local exact-head snapshots produced identical checksums; archive contents and binary architectures were inspected. No tag, prerelease, or release was created.
+
+Delivery has returned to the external wait because `chore/pm-first-round-review-system-r1` is at `355510f5b0827f800dcbaa232d5804f8fcd3b407` (`docs(orchestration): record round two red evidence`) with no PR, so it is not integrated or clean. No manual/Claude/Copilot substitute is allowed. Exact-version PM packets, synthesis, independent Shepherd, no-mistakes, GitHub CI/Snyk, RC version decision, and release publication remain pending.
