@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** correction round 1/5 focused GREEN and measured at `89c86dd53`; full verification and fresh exact-head recurrence review pending
+**Status:** correction round 1/5 full verification passed at `528dcc685`; final evidence-head rerun and fresh exact-head recurrence review pending
 
 > Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
@@ -108,7 +108,8 @@
 - [x] R1-M durable phase evidence is reconciled while historical logs remain intact.
 - [x] R1-N remote freshness is parent-owned and packet review remains local/no-network.
 - [x] R1-O governing root/source docs enter explicit bounded closure.
-- [ ] Re-run focused/full verification, exact-head packets, recurrence comparison, synthesis, and Shepherd on the new head.
+- [x] Re-run focused/full verification on correction head `528dcc68599af4efaaee46c9b038bbd022178411`.
+- [ ] Re-run exact-head packets, recurrence comparison, synthesis, and Shepherd on the final evidence head.
 
 ## Measurement
 

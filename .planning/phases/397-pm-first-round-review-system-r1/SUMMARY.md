@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: correction round 1/5 focused GREEN and measured at `89c86dd53`; full verification and fresh exact-head recurrence review pending.
+Status: correction round 1/5 full verification passed at `528dcc685`; final evidence-head rerun and fresh exact-head recurrence review pending.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.

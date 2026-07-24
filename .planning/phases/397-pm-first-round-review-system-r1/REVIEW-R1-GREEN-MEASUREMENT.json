@@ -5,6 +5,12 @@
   "measured_head": "89c86dd5329b3e29698b758fa53e0a86b85a580d",
   "measured_tree": "02380a2de651668f59ad5b39bb6ef75a6dd5c6d2",
   "focused_status": "passed",
+  "full_verification": {
+    "status": "passed",
+    "exact_head": "528dcc68599af4efaaee46c9b038bbd022178411",
+    "internal_cli_seconds": 462.828,
+    "make_verify": "passed"
+  },
   "compiler": {
     "status": "ready",
     "selection": "split",
