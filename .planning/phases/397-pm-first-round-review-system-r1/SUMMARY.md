@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: exact-head Codex round 1 completed with 89 findings across 15 systemic groups; correction round 1/5 is planned before production edits on the same stable lineage.
+Status: exact-head Codex round 1 completed with 89 findings across 15 systemic groups; correction round 1/5 committed RED is captured at `58df39097` before production edits.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.

@@ -21,10 +21,13 @@
       "2809c677c8da996932fb2b2738fcc8dbf74aaa56",
       "0e210d1819f2642ee600aa6921873997101ba7bd",
       "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
-      "b1d869732d230575ab7c8295b15cef42cc0078ef"
+      "b1d869732d230575ab7c8295b15cef42cc0078ef",
+      "1ce34f18dcba31e13d14a36f0cf035df4f492747",
+      "c6f45538b43a78fc73ee208eb90313e5f5971000",
+      "58df390977a51dc402f65c31a0a798f8a0ecc4bc"
     ]
   },
-  "status": "local_codex_round_1_findings_systemic_correction_planned",
+  "status": "local_codex_round_1_systemic_red_captured",
   "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
@@ -128,6 +131,11 @@
       "cycle": "review_loop_monitoring",
       "decision": "local_critical_path",
       "reason": "Captain monitoring is active. Twenty-two provider attempts and five startup/WebSocket failures are separate from correction rounds. The same OAuth startup failure was diagnosed after two concurrent attempts with a successful serialized auth probe/recovery. Repeated finding groups trigger root-cause fixes; automatic correction stops at 5/5 without weakening checks or resetting lineage."
+    },
+    {
+      "cycle": "local_codex_round_1_red",
+      "decision": "local_critical_path",
+      "reason": "At clean committed test head 58df390977a51dc402f65c31a0a798f8a0ecc4bc, the focused PM test exited 1 with 15 intended systemic semantic groups covering exact identity, synthesis shape, policy-state traversal, packet bounds, parser/certainty, pre-index resources, external/deleted Go, lab containment, terminal schema, route/state parity, no-network reviewer identity, and root documents. No production treatment edit had started."
     }
   ],
   "measurement": {

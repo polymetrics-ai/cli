@@ -4,7 +4,7 @@ set -uo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 fixture_root="$repo_root/scripts/tests/fixtures/pm-review-system"
 test_tmp="$(mktemp -d "$repo_root/.pm-review-test.XXXXXX")"
-trap 'rm -rf "$test_tmp"' EXIT
+trap 'chmod -R u+w "$test_tmp" 2>/dev/null || true; rm -rf "$test_tmp"' EXIT
 failures=0
 
 fail() {
