@@ -1739,7 +1739,37 @@ def build_packets(
         append_packet("impact_graph", [], [], [], [], edge_ids, endpoints)
 
     impact_slice_items = [item for path in sorted(impact_files) for item in blob_slices[path]]
+    remaining_slices: list[dict[str, Any]] = []
+    edge_packets = [packet for packet in packets if packet["role"] == "impact_graph" and packet["impact_edge_ids"]]
+    for item in sorted(impact_slice_items, key=lambda value: (value["bytes"], value["path"], value["start_line"])):
+        candidates: list[tuple[int, dict[str, Any], list[str], list[dict[str, Any]]]] = []
+        for packet in edge_packets:
+            if item["path"] not in packet["edge_context_files"]:
+                continue
+            proposed_paths = sorted(set(packet["impact_files"]) | {item["path"]})
+            if len(proposed_paths) > int(graph_limits["packet_max_impact_files"]):
+                continue
+            proposed_slices = sorted(
+                [*packet["impact_file_slices"], item],
+                key=lambda value: (value["path"], value["start_line"], value["end_line"]),
+            )
+            proposed_estimate = estimate(
+                [], [], [], proposed_paths, packet["edge_context_files"], packet["impact_edge_ids"], proposed_slices
+            )
+            if proposed_estimate <= target_tokens:
+                candidates.append((proposed_estimate, packet, proposed_paths, proposed_slices))
+        if not candidates:
+            remaining_slices.append(item)
+            continue
+        proposed_estimate, packet, proposed_paths, proposed_slices = min(
+            candidates, key=lambda value: (value[0], value[1]["packet_id"])
+        )
+        packet["impact_files"] = proposed_paths
+        packet["impact_file_slices"] = proposed_slices
+        packet["context"]["estimated_tokens"] = proposed_estimate
+
     current_slices: list[dict[str, Any]] = []
+    impact_slice_items = sorted(remaining_slices, key=lambda value: (value["path"], value["start_line"]))
     current_paths: set[str] = set()
     for item in impact_slice_items:
         proposed_paths = current_paths | {item["path"]}
