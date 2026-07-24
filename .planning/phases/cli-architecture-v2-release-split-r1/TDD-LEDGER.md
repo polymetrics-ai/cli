@@ -38,6 +38,22 @@ Pending:
 - Confirm no global Viper, `AutomaticEnv`, watcher, credential config, or hidden worker enablement.
 - Add truthful ADR/release-split records without importing historical bootstrap state.
 
+## Release automation red / green
+
+Red audit of the tracked release path before edits:
+
+- `.goreleaser.yaml` already defines `pm` archives for linux/darwin/windows on amd64/arm64, ldflags version injection, and `checksums.txt`.
+- `.github/workflows/release.yml` only runs on `main` push/manual dispatch; it has no pull-request snapshot/package gate and no `release: published` path for an independently published prerelease.
+- Workflow-level permissions are write-capable rather than read-only by default.
+- No repository script validates exact archive names, checksum coverage, or archive contents.
+
+Green target:
+
+- retain GoReleaser and current tag/ldflags/archive naming;
+- validate the full configured matrix on pull requests without uploading;
+- package and upload only for an actual GitHub release/prerelease created by release-please or received through `release.published`;
+- default to read-only permissions, scope write permissions to release creation/upload jobs, validate exact names/checksums/contents before upload, and exercise every matrix entry locally.
+
 ## Review and correction rounds
 
 Pending exact-version PM Codex packets, one PM synthesis, and independent Shepherd only after clean synthesis. Manual/Claude/Copilot substitution is explicitly disallowed for this candidate.

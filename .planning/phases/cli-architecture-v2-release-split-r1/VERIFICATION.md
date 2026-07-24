@@ -50,6 +50,18 @@ The comparison ran under an empty home/project with `CI=1` and `TERM=dumb`; all 
 
 The workstation's newer ambient Go 1.26.4 separately reports standard-library GO-2026-5856, fixed in Go 1.26.5. The repository and CI pin Go 1.25.12; a fresh `GOTOOLCHAIN=go1.25.12 govulncheck ./...` returned `No vulnerabilities found`. No candidate dependency caused the ambient standard-library result.
 
+## Release asset automation
+
+- [ ] Existing release-please/tag/version injection remains authoritative.
+- [ ] PRs build/package the full GoReleaser target matrix without upload credentials or publication.
+- [ ] Actual GitHub release and prerelease publication can upload assets; no untrusted PR path can upload.
+- [ ] Workflow permissions are read-only by default and write permissions are job-scoped.
+- [ ] macOS and Linux amd64/arm64 all cross-build with `CGO_ENABLED=0`; retained Windows targets also pass.
+- [ ] Archive names are unambiguous and archive contents include `pm`/`pm.exe`, LICENSE, NOTICE, and README.
+- [ ] `checksums.txt` covers exactly the expected assets and verifies successfully.
+- [ ] Workflow YAML parses and repository workflow conventions pass.
+- [ ] Focused release tests, module gates, and `make verify` pass after release support edits.
+
 ## GitHub/release gates
 
 - [ ] PR targets `main`, has a Conventional Commit title, truthful source provenance, GSD/TDD/skills evidence, exclusions, compatibility results, and no merge authorization.
