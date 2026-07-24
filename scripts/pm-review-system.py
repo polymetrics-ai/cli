@@ -1690,7 +1690,10 @@ def build_packets(
 
     edge_groups: list[list[dict[str, Any]]] = []
     current_edges: list[dict[str, Any]] = []
-    for edge in sorted(impact_edges, key=lambda item: item["id"]):
+    for edge in sorted(
+        impact_edges,
+        key=lambda item: (item["source"], item["target"], item["relation"], item["id"]),
+    ):
         proposed = [*current_edges, edge]
         proposed_ids = [item["id"] for item in proposed]
         endpoints = sorted(
