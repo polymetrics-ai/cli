@@ -1,0 +1,7 @@
+{
+  "schema_version": null,
+  "terminal": "human_gate",
+  "human_gate_kind": "",
+  "review_status": "blocked",
+  "outstanding_findings": ["malformed explicit schema must not use legacy readiness"]
+}

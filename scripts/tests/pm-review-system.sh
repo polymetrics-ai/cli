@@ -99,6 +99,13 @@ classification="$({
 if [[ "$classification" != "blocked_human_decision" ]]; then
   fail "canonical final_parent_readiness classified as '$classification', want blocked_human_decision"
 fi
+explicit_null_classification="$({
+  bash "$repo_root/scripts/pm-terminal-classifier.sh" \
+    "$repo_root/scripts/tests/fixtures/pm-orchestrator-review-state/explicit-null-schema-human-gate.json"
+} 2>&1)"
+if [[ "$explicit_null_classification" != "blocked_human_decision" ]]; then
+  fail "explicit null schema alias classified as '$explicit_null_classification', want blocked_human_decision"
+fi
 
 # Accepted PR #495 finding 2: arbitrary valid finding IDs must not bypass disposition validation.
 disposition_output="$({
@@ -340,6 +347,17 @@ go 1.24
 EOF
 cat >"$impact_repo/.pi/prompts/canonical.md" <<'EOF'
 # Canonical root
+Requires `.agents/mixed/a.md`.
+EOF
+mkdir -p "$impact_repo/.agents/mixed"
+cat >"$impact_repo/.agents/mixed/a.md" <<'EOF'
+Requires `.agents/mixed/b.md`.
+EOF
+cat >"$impact_repo/.agents/mixed/b.md" <<'EOF'
+Run `python3 scripts/mixed.py`.
+EOF
+cat >"$impact_repo/scripts/mixed.py" <<'EOF'
+print("mixed relation target")
 EOF
 cat >"$impact_repo/.pi/prompts/upstream.md" <<'EOF'
 Required template: `.agents/templates/leaf.md`
@@ -437,6 +455,14 @@ import subprocess, sys, time
 children = [subprocess.Popen([sys.executable, "-c", "import time; time.sleep(5)"]) for _ in range(12)]
 time.sleep(5)
 EOF
+cat >"$impact_repo/scripts/escape_process.py" <<'EOF'
+import os, subprocess, sys
+subprocess.Popen([sys.executable, "-c", "import time; time.sleep(5)"], start_new_session=True)
+EOF
+cat >"$impact_repo/scripts/read_system.py" <<'EOF'
+from pathlib import Path
+print(Path("/etc/hosts").read_text())
+EOF
 outside_target="$test_tmp/lab-outside-sentinel"
 python3 - "$outside_target" "$impact_repo/scripts" <<'PY'
 import pathlib,sys
@@ -469,7 +495,11 @@ cat >"$impact_repo/.agents/review-config.json" <<'JSON'
     "index_prefixes":[".agents/",".pi/",".planning/","scripts/","cmd/","internal/"],
     "max_index_files":200,"max_index_bytes":2000000,"max_nodes":300,"max_edges":1000,
     "max_traversal_states":1000,"max_depth":12,"max_impact_files":200,"max_impact_edges":1000,
-    "go_command_timeout_seconds":20,"packet_max_impact_files":10,"packet_max_impact_edges":40
+    "go_command_timeout_seconds":20,"packet_max_impact_files":10,"packet_max_impact_edges":40,
+    "relation_policy":{
+      "required_reference":{"upstream":4,"downstream":4,"lateral":0,"temporal":0},
+      "script_invokes":{"upstream":1,"downstream":1,"lateral":0,"temporal":0}
+    }
   },
   "configured_relationships":[
     {"source":"scripts/generate.py","target":".agents/generated/data.json","relation":"generates","certainty":"active"},
@@ -534,6 +564,7 @@ graph=value["impact_graph"]
 files=set(value["coverage_manifest"]["impact_files"])
 required={
  ".agents/templates/leaf.md", ".pi/prompts/upstream.md", "scripts/tool.py", "scripts/helper.py",
+ ".agents/mixed/a.md", ".agents/mixed/b.md", "scripts/mixed.py",
  ".pi/prompts/script-user.md", ".agents/schema/state.yaml", ".pi/prompts/state-writer.md",
  "scripts/state_reader.py", ".planning/state-mirror.json", "scripts/generate.py",
  ".agents/generated/data.json", ".pi/prompts/generated-user.md", "internal/lib/lib.go",
@@ -550,10 +581,40 @@ packet_files={path for packet in value["packets"] for path in packet["impact_fil
 packet_edges={edge for packet in value["packets"] for edge in packet["impact_edge_ids"]}
 assert packet_files == files
 assert packet_edges == set(value["coverage_manifest"]["impact_edge_ids"])
+for packet in value["packets"]:
+    endpoint_files={endpoint for edge in packet.get("impact_edges",[]) for endpoint in (edge["source"],edge["target"]) if not endpoint.startswith("go-package:")}
+    assert endpoint_files <= set(packet.get("edge_context_files",[])), (packet["packet_id"], sorted(endpoint_files-set(packet.get("edge_context_files",[]))))
+    assert packet["context"].get("estimation") == "exact_head_bytes_conservative"
 PY
 then
-  fail "changed-file-seeded bidirectional typed impact graph or exact packet coverage is absent"
+  fail "changed-file-seeded bidirectional typed impact graph, policy-state traversal, or coherent exact packet coverage is absent"
 fi
+
+# Unsafe Markdown and active planning/test targets must not disappear from the graph merely because
+# the parser rejects a path or the source lives under .planning/scripts/tests.
+impact_branch="$(git -C "$impact_repo" symbolic-ref --short HEAD)"
+git -C "$impact_repo" checkout -qb unsafe-impact "$impact_head"
+cat >"$impact_repo/.planning/unsafe.md" <<'EOF'
+Required unsafe target: [escape](../../outside.py)
+Required missing target: `scripts/required-missing.py`
+EOF
+git -C "$impact_repo" add .planning/unsafe.md
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm unsafe-impact
+unsafe_impact_head="$(git -C "$impact_repo" rev-parse HEAD)"
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$impact_head" --head "$unsafe_impact_head" >"$test_tmp/unsafe-impact.json"
+unsafe_impact_status=$?
+if [[ $unsafe_impact_status -eq 0 ]] || ! python3 - "$test_tmp/unsafe-impact.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); claims="\n".join(item.get("claim","") for item in value.get("findings",[]))
+assert value["status"]=="blocked"
+assert "escapes" in claims or "unsafe" in claims
+assert "required-missing.py" in claims
+PY
+then
+  fail "unsafe Markdown or active missing planning target did not fail closed"
+fi
+git -C "$impact_repo" checkout -q "$impact_branch"
 for config_case in bound-config legacy-config; do
   python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
     --config ".agents/$config_case.json" --base "$impact_base" --head "$impact_head" \
@@ -618,10 +679,13 @@ def blocked(name, **changes):
 blocked('candidate-write', change_scope='candidate')
 blocked('outside-write', changes=[{"path":"../outside","find":"x","replace":"y"}])
 blocked('symlink-write', changes=[{"path":"escape-link","find":"x","replace":"y"}])
+blocked('git-admin-change', changes=[{"path":".git/config","find":"repositoryformatversion = 0","replace":"repositoryformatversion = 1"}])
 outside=pathlib.Path(outside_arg); outside.write_text('sentinel')
 blocked('nested-outside-write',changes=[],command=['python3','scripts/outside_write.py'],expected_discriminator={'exit_code':0})
 assert outside.read_text()=='sentinel'
 blocked('nested-outside-read',changes=[],command=['python3','scripts/outside_read.py'],expected_discriminator={'exit_code':0})
+blocked('nonlab-system-read',changes=[],command=['python3','scripts/read_system.py'],expected_discriminator={'exit_code':0})
+blocked('escaped-process-group',changes=[],command=['python3','scripts/escape_process.py'],expected_discriminator={'exit_code':0})
 blocked('nested-network',changes=[],command=['python3','scripts/network.py'],expected_discriminator={'exit_code':0})
 outside.unlink()
 for name,command in {
@@ -777,6 +841,7 @@ for packet in manifest["packets"]:
         "experiments": [],
         "no_experiment_reason": "static fixture evidence is decisive",
         "findings": [],
+        "residual_risk": [],
         "context": {"input_tokens": None, "output_tokens": None, "cost": None, "overflow": False, "truncated": False},
         "wall_clock_ms": None,
     }
@@ -816,6 +881,94 @@ for path in sorted(pathlib.Path(sys.argv[1]).glob('*.json')):
 PY
 )"
 cp "$first_response" "$first_response.clean"
+
+# Status/content and invariant semantics are distinct from missing coverage. Malformed status blocks;
+# an explicitly failed invariant paired with a finding enters the correction loop, not a blocker.
+python3 - "$first_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["status"]="findings"; value["findings"]=[]
+open(path,"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+status_mismatch=$?
+if [[ $status_mismatch -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any("status" in item["claim"] for item in value["blockers"])
+PY
+then
+  fail "findings status with empty findings did not block"
+fi
+cp "$first_response.clean" "$first_response"
+python3 - "$first_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["status"]="findings"; value["invariants"][0]["status"]="fail"
+value["findings"]=[{"severity":"high","category":"fixture_invariant","path":"scripts/pm-review-system.py","line":"1","evidence":"fixture failed invariant","impact":"fixture impact","smallest_safe_correction":"fixture correction"}]
+open(path,"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+failed_invariant_status=$?
+if [[ $failed_invariant_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="findings_correction_required"; assert value["findings"] and not value["blockers"]
+PY
+then
+  fail "failed invariant paired with a finding did not synthesize findings_correction_required"
+fi
+cp "$first_response.clean" "$first_response"
+
+# A blocked compile manifest and mutually matching stale fake identities can never synthesize clean.
+cp "$unsafe_dir/manifest.json" "$unsafe_dir/blocked-manifest.json"
+python3 - "$unsafe_dir/blocked-manifest.json" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["status"]="blocked"; value["findings"]=[{"category":"fixture","claim":"compile blocked"}]
+open(path,"w").write(json.dumps(value))
+PY
+blocked_manifest_relative="$(python3 - "$repo_root" "$unsafe_dir/blocked-manifest.json" <<'PY'
+import os,sys
+print(os.path.relpath(sys.argv[2],sys.argv[1]))
+PY
+)"
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$blocked_manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+blocked_manifest_status=$?
+if [[ $blocked_manifest_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any("manifest" in item["claim"] or "compile" in item["claim"] for item in value["blockers"])
+PY
+then
+  fail "blocked compile manifest synthesized clean"
+fi
+cp "$unsafe_dir/manifest.json" "$unsafe_dir/stale-manifest.json"
+cp -R "$responses_dir" "$unsafe_dir/stale-responses"
+python3 - "$unsafe_dir/stale-manifest.json" "$unsafe_dir/stale-responses" <<'PY'
+import json,pathlib,sys
+manifest_path=pathlib.Path(sys.argv[1]); manifest=json.loads(manifest_path.read_text()); fake="f"*40; manifest["exact_head_sha"]=fake; manifest_path.write_text(json.dumps(manifest))
+for path in pathlib.Path(sys.argv[2]).glob("*.json"):
+ value=json.loads(path.read_text()); value["exact_head_sha"]=fake; path.write_text(json.dumps(value))
+PY
+stale_manifest_relative="$(python3 - "$repo_root" "$unsafe_dir/stale-manifest.json" <<'PY'
+import os,sys
+print(os.path.relpath(sys.argv[2],sys.argv[1]))
+PY
+)"
+stale_responses_relative="$(python3 - "$repo_root" "$unsafe_dir/stale-responses" <<'PY'
+import os,sys
+print(os.path.relpath(sys.argv[2],sys.argv[1]))
+PY
+)"
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$stale_manifest_relative" --responses-dir "$stale_responses_relative" >"$synthesis_output"
+stale_manifest_status=$?
+if [[ $stale_manifest_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any("HEAD" in item["claim"] or "head" in item["claim"] for item in value["blockers"])
+PY
+then
+  fail "mutually matching stale manifest/responses ignored current candidate identity"
+fi
+
 python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["schema_version"]="polymetrics.ai/pm-review-packet-response/v1"; open(path,"w").write(json.dumps(value))
@@ -853,7 +1006,7 @@ if [[ ! -f "$first_response.clean" ]]; then
 # Restore is regenerated from the manifest because the clean backup was moved above.
 import json,sys
 manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
-value={"schema_version":"polymetrics.ai/pm-review-packet-response/v2","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[],"disconfirming_evidence":"fixture"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v2","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[],"disconfirming_evidence":"fixture"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
 open(sys.argv[2],"w").write(json.dumps(value))
 PY
 fi
