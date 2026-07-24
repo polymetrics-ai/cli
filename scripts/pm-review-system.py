@@ -730,7 +730,7 @@ def script_invocation_line(text: str) -> bool:
 
 def structural_inactive_lines(relative: str, lines: list[str]) -> set[int]:
     inactive: set[int] = set()
-    if relative.endswith("TDD-LEDGER.md"):
+    if relative.endswith("TDD-LEDGER.md") or "/claude-" in relative:
         return set(range(1, len(lines) + 1))
     section_inactive = False
     heredoc: str | None = None
@@ -739,7 +739,7 @@ def structural_inactive_lines(relative: str, lines: list[str]) -> set[int]:
         stripped = line.strip()
         if PurePosixPath(relative).suffix == ".md" and stripped.startswith("#"):
             heading = stripped.lstrip("#").strip().lower()
-            section_inactive = any(word in heading for word in ("historical", "forbidden", "excluded", "deprecated"))
+            section_inactive = any(word in heading for word in ("historical", "forbidden", "excluded", "deprecated", "collision boundary"))
         if section_inactive:
             inactive.add(number)
         if PurePosixPath(relative).suffix == ".sh":
@@ -1455,25 +1455,63 @@ def chunks(values: list[str], size: int) -> list[list[str]]:
     return [values[index : index + size] for index in range(0, len(values), size)]
 
 
-def exact_blob_sizes(root: Path, base: str, head: str, paths: Iterable[str]) -> dict[str, int]:
+def exact_blob_metadata(
+    root: Path,
+    base: str,
+    head: str,
+    paths: Iterable[str],
+    maximum_slice_bytes: int,
+) -> tuple[dict[str, int], dict[str, list[dict[str, Any]]]]:
     sizes: dict[str, int] = {}
+    slices: dict[str, list[dict[str, Any]]] = {}
     for relative in sorted(set(paths)):
         if relative.startswith("go-package:"):
             continue
         validate_relative_path(relative, "packet context path")
+        blob: bytes | None = None
         for commit in (head, base):
             proc = subprocess.run(
-                ["git", "-C", str(root), "cat-file", "-s", f"{commit}:{relative}"],
+                ["git", "-C", str(root), "show", f"{commit}:{relative}"],
                 check=False,
                 capture_output=True,
-                text=True,
             )
-            if proc.returncode == 0 and proc.stdout.strip().isdigit():
-                sizes[relative] = int(proc.stdout.strip())
+            if proc.returncode == 0:
+                blob = proc.stdout
                 break
-        else:
+        if blob is None:
             raise ReviewSystemError(f"packet context has no exact base/head blob: {relative}")
-    return sizes
+        sizes[relative] = len(blob)
+        lines = blob.splitlines(keepends=True) or [b""]
+        path_slices: list[dict[str, Any]] = []
+        start = 0
+        current = 0
+        for index, line in enumerate(lines):
+            if current and current + len(line) > maximum_slice_bytes:
+                payload = b"".join(lines[start:index])
+                path_slices.append(
+                    {
+                        "path": relative,
+                        "start_line": start + 1,
+                        "end_line": index,
+                        "bytes": len(payload),
+                        "sha256": hashlib.sha256(payload).hexdigest(),
+                    }
+                )
+                start = index
+                current = 0
+            current += len(line)
+        payload = b"".join(lines[start:])
+        path_slices.append(
+            {
+                "path": relative,
+                "start_line": start + 1,
+                "end_line": len(lines),
+                "bytes": len(payload),
+                "sha256": hashlib.sha256(payload).hexdigest(),
+            }
+        )
+        slices[relative] = path_slices
+    return sizes, slices
 
 
 def build_packets(
@@ -1488,6 +1526,7 @@ def build_packets(
     impact_files: list[str],
     impact_edges: list[dict[str, Any]],
     blob_sizes: dict[str, int],
+    blob_slices: dict[str, list[dict[str, Any]]],
     config: dict[str, Any],
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     thresholds = config["thresholds"]
@@ -1519,12 +1558,18 @@ def build_packets(
         impact: list[str],
         edge_context: list[str],
         edge_ids: list[str],
+        impact_slices: list[dict[str, Any]] | None = None,
     ) -> int:
         changed_cost = sum(line_counts.get(path, 0) for path in changed) * int(
             thresholds["estimated_tokens_per_changed_line"]
         )
-        full_context = set(closure) | set(authority) | set(impact)
-        context_cost = file_tokens(full_context) + edge_context_tokens(set(edge_context) - full_context)
+        full_context = set(closure) | set(authority)
+        if impact_slices is None:
+            full_context.update(impact)
+            impact_cost = 0
+        else:
+            impact_cost = sum(math.ceil(int(item["bytes"]) / 4) for item in impact_slices)
+        context_cost = file_tokens(full_context) + impact_cost + edge_context_tokens(set(edge_context) - full_context - set(impact))
         metadata_bytes = len(
             json.dumps([impact_edge_by_id[edge_id] for edge_id in edge_ids], sort_keys=True, separators=(",", ":")).encode()
         )
@@ -1538,12 +1583,24 @@ def build_packets(
         impact: list[str] | None = None,
         impact_edge_ids: list[str] | None = None,
         edge_context_files: list[str] | None = None,
+        impact_file_slices: list[dict[str, Any]] | None = None,
     ) -> None:
         impact = sorted(impact or [])
         impact_edge_ids = sorted(impact_edge_ids or [])
         edge_context_files = sorted(edge_context_files or [])
         packet_number = 1 + sum(1 for packet in packets if packet["role"] == role)
-        estimated = estimate(changed, closure, authority, impact, edge_context_files, impact_edge_ids)
+        impact_file_slices = sorted(
+            impact_file_slices or [], key=lambda item: (item["path"], item["start_line"], item["end_line"])
+        )
+        estimated = estimate(
+            changed,
+            closure,
+            authority,
+            impact,
+            edge_context_files,
+            impact_edge_ids,
+            impact_file_slices if impact_file_slices else None,
+        )
         overflow = estimated > target_tokens
         if overflow:
             problems.append(
@@ -1566,6 +1623,7 @@ def build_packets(
                 "impact_files": impact,
                 "impact_edge_ids": impact_edge_ids,
                 "impact_edges": [impact_edge_by_id[edge_id] for edge_id in impact_edge_ids],
+                "impact_file_slices": impact_file_slices,
                 "edge_context_files": edge_context_files,
                 "invariants": config["packet_invariants"].get(role, config["packet_invariants"]["combined"]),
                 "context": {
@@ -1584,6 +1642,7 @@ def build_packets(
                     "authority_files",
                     "impact_files",
                     "impact_edge_ids",
+                    "impact_file_slices",
                     "edge_context_files",
                     "invariants",
                     "review_behaviors",
@@ -1676,8 +1735,28 @@ def build_packets(
         )
         append_packet("impact_graph", [], [], [], [], edge_ids, endpoints)
 
-    for part in greedy_file_groups(sorted(impact_files), int(graph_limits["packet_max_impact_files"])):
-        append_packet("impact_graph", [], [], [], part, [], [])
+    impact_slice_items = [item for path in sorted(impact_files) for item in blob_slices[path]]
+    current_slices: list[dict[str, Any]] = []
+    current_paths: set[str] = set()
+    for item in impact_slice_items:
+        proposed_paths = current_paths | {item["path"]}
+        proposed_slices = [*current_slices, item]
+        proposed_tokens = sum(math.ceil(int(value["bytes"]) / 4) for value in proposed_slices)
+        if current_slices and (
+            len(proposed_paths) > int(graph_limits["packet_max_impact_files"]) or proposed_tokens > target_tokens
+        ):
+            append_packet(
+                "impact_graph", [], [], [], sorted(current_paths), [], [], current_slices
+            )
+            current_slices = [item]
+            current_paths = {item["path"]}
+        else:
+            current_slices = proposed_slices
+            current_paths = proposed_paths
+        if math.ceil(int(item["bytes"]) / 4) > target_tokens:
+            problems.append(finding("packet_overflow", f"atomic impact file slice cannot fit: {item['path']}:{item['start_line']}-{item['end_line']}"))
+    if current_slices:
+        append_packet("impact_graph", [], [], [], sorted(current_paths), [], [], current_slices)
 
     maximum_packets = int(graph_limits.get("max_packets", 64))
     if len(packets) > maximum_packets:
@@ -1846,7 +1925,13 @@ def command_compile(args: argparse.Namespace) -> int:
             packet_context_paths.update(
                 endpoint for endpoint in (edge["source"], edge["target"]) if not endpoint.startswith("go-package:")
             )
-        blob_sizes = exact_blob_sizes(root, base, head, packet_context_paths)
+        blob_sizes, blob_slices = exact_blob_metadata(
+            root,
+            base,
+            head,
+            packet_context_paths,
+            int(config["impact_graph"].get("packet_max_file_slice_bytes", 96000)),
+        )
         selection, packets, packet_findings = build_packets(
             base,
             head,
@@ -1859,6 +1944,7 @@ def command_compile(args: argparse.Namespace) -> int:
             impact_graph["files"],
             impact_graph["edges"],
             blob_sizes,
+            blob_slices,
             config,
         )
         findings.extend(packet_findings)
@@ -2033,7 +2119,7 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
     required = {
         "schema_version", "packet_id", "exact_base_sha", "exact_head_sha", "exact_head_tree",
         "status", "reviewed_files", "closure_files", "authority_files", "impact_files",
-        "impact_edge_ids", "edge_context_files", "invariants", "unreviewed_files",
+        "impact_edge_ids", "impact_file_slices", "edge_context_files", "invariants", "unreviewed_files",
         "review_behaviors", "experiments", "no_experiment_reason", "findings", "residual_risk",
         "context", "wall_clock_ms",
     }
@@ -2045,6 +2131,16 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
         value = response.get(field)
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value) or len(value) != len(set(value)):
             blockers.append(finding("packet_response", f"{packet_id} {field} must be a duplicate-free string list"))
+    slices = response.get("impact_file_slices")
+    if not isinstance(slices, list) or not all(
+        isinstance(item, dict)
+        and set(item) == {"path", "start_line", "end_line", "bytes", "sha256"}
+        and isinstance(item.get("path"), str)
+        and all(isinstance(item.get(field), int) for field in ("start_line", "end_line", "bytes"))
+        and isinstance(item.get("sha256"), str)
+        for item in slices
+    ):
+        blockers.append(finding("packet_response", f"{packet_id} impact_file_slices is malformed"))
     context = response.get("context")
     if not isinstance(context, dict) or set(context) != {"input_tokens", "output_tokens", "cost", "overflow", "truncated"}:
         blockers.append(finding("packet_response", f"{packet_id} context shape is malformed"))
@@ -2147,6 +2243,8 @@ def command_synthesize(args: argparse.Namespace) -> int:
                 actual = response.get(field)
                 if not isinstance(actual, list) or actual != expected_values:
                     blockers.append(finding("packet_coverage", f"{packet['packet_id']} {field} differs from exact assignment"))
+            if response.get("impact_file_slices") != packet.get("impact_file_slices", []):
+                blockers.append(finding("packet_coverage", f"{packet['packet_id']} impact_file_slices differs from exact assignment"))
             invariant_blockers, failed_invariants = response_invariants(
                 packet["packet_id"], set(packet.get("invariants", [])), response
             )

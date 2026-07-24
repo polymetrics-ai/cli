@@ -158,7 +158,8 @@
         "temporal": 4
       }
     },
-    "edge_context_max_bytes_per_file": 8192
+    "edge_context_max_bytes_per_file": 8192,
+    "packet_max_file_slice_bytes": 96000
   },
   "configured_relationships": [
     {

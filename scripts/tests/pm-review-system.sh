@@ -604,8 +604,10 @@ assert {"active", "unknown"} <= {edge["certainty"] for edge in graph["edges"]}
 relations={edge["relation"] for edge in graph["edges"]}
 assert {"required_reference","python_import","authority_writes","authority_reads","authority_mirror","generates","go_imports","go_test","platform_variant"} <= relations
 packet_files={path for packet in value["packets"] for path in packet["impact_files"]}
+packet_slice_files={item["path"] for packet in value["packets"] for item in packet.get("impact_file_slices",[])}
 packet_edges={edge for packet in value["packets"] for edge in packet["impact_edge_ids"]}
 assert packet_files == files
+assert packet_slice_files == files
 assert packet_edges == set(value["coverage_manifest"]["impact_edge_ids"])
 for packet in value["packets"]:
     endpoint_files={endpoint for edge in packet.get("impact_edges",[]) for endpoint in (edge["source"],edge["target"]) if not endpoint.startswith("go-package:")}
@@ -914,6 +916,7 @@ for packet in document["packets"]:
     assert len(packet["impact_files"]) <= 10
     assert len(packet["impact_edge_ids"]) <= 40
     assert set(packet["impact_edge_ids"]) == {edge["id"] for edge in packet["impact_edges"]}
+    assert {item["path"] for item in packet.get("impact_file_slices", [])} <= set(packet["impact_files"])
     assert not packet["context"]["overflow"]
     assert not packet["context"]["truncated"]
 PY
@@ -974,6 +977,7 @@ for packet in manifest["packets"]:
         "authority_files": packet["authority_files"],
         "impact_files": packet.get("impact_files", []),
         "impact_edge_ids": packet.get("impact_edge_ids", []),
+        "impact_file_slices": packet.get("impact_file_slices", []),
         "edge_context_files": packet.get("edge_context_files", []),
         "invariants": [
             {"id": item, "status": "pass", "evidence_paths": []}
@@ -1172,7 +1176,7 @@ if [[ ! -f "$first_response.clean" ]]; then
 # Restore is regenerated from the manifest because the clean backup was moved above.
 import json,sys
 manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
-value={"schema_version":"polymetrics.ai/pm-review-packet-response/v3","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"edge_context_files":packet.get("edge_context_files",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":["H1 claim: fixture coverage is complete; alternative: an assigned item is omitted"],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v3","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"impact_file_slices":packet.get("impact_file_slices",[]),"edge_context_files":packet.get("edge_context_files",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":["H1 claim: fixture coverage is complete; alternative: an assigned item is omitted"],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
 open(sys.argv[2],"w").write(json.dumps(value))
 PY
 fi

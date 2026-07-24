@@ -66,6 +66,6 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 
 ## Handoff
 
-Return `.agents/agentic-delivery/contracts/worker-handoff-template.md`: branch, commits pushed,
+Return `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`: branch, commits pushed,
 artifacts produced, parity matrix gaps, gate results, and the `spawned`/`local_critical_path`/
 `not_spawned_*` decision for this run.

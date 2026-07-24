@@ -18,6 +18,7 @@
     ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
     ".agents/connector-migration/ownership-rules.md",
     ".agents/connector-migration/rollout-checklist.md",
+    ".agents/connector-migration/templates/connector-rollout-prompt.md",
     ".agents/connector-migration/validation-gates.md",
     ".pi/agents/pm-reviewer.md",
     ".pi/prompts/pm-auto-loop.md",

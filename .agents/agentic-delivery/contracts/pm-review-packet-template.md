@@ -36,6 +36,7 @@ synthesis, and Shepherd evidence.
   "impact_files": [],
   "impact_edge_ids": [],
   "impact_edges": [],
+  "impact_file_slices": [],
   "edge_context_files": [],
   "invariants": [],
   "context": {
@@ -50,6 +51,7 @@ synthesis, and Shepherd evidence.
     "authority_files",
     "impact_files",
     "impact_edge_ids",
+    "impact_file_slices",
     "edge_context_files",
     "invariants",
     "review_behaviors",
@@ -142,6 +144,7 @@ private evidence root. Do not commit it after exact-head review.
   "authority_files": [],
   "impact_files": [],
   "impact_edge_ids": [],
+  "impact_file_slices": [],
   "edge_context_files": [],
   "invariants": [
     {"id": "impact_complete", "status": "pass", "evidence_paths": []}
