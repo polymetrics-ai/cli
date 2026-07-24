@@ -37,6 +37,11 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The authorized changes form one dependency-ordered reconstruction in the isolated assigned worktree; there is no disjoint mutating slice to delegate."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Captured config-package/config-help red evidence and a 17-case current-main byte baseline before applying authorized production patches."
     }
   ],
   "humanGates": [
