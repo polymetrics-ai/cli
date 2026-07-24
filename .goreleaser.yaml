@@ -2,6 +2,9 @@ version: 2
 
 project_name: pm
 
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
+
 release:
   mode: keep-existing
   replace_existing_artifacts: true
@@ -12,6 +15,7 @@ builds:
     binary: pm
     env:
       - CGO_ENABLED=0
+    mod_timestamp: "{{ .CommitTimestamp }}"
     goos:
       - linux
       - darwin
@@ -23,7 +27,7 @@ builds:
       - -s -w
       - -X polymetrics.ai/internal/cli.version={{ .Version }}
       - -X polymetrics.ai/internal/cli.commit={{ .Commit }}
-      - -X polymetrics.ai/internal/cli.buildDate={{ .Date }}
+      - -X polymetrics.ai/internal/cli.buildDate={{ .CommitDate }}
 
 archives:
   - id: pm

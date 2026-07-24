@@ -4,17 +4,24 @@ on:
   push:
     branches:
       - main
+  pull_request:
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 permissions:
-  contents: write
-  issues: write
-  pull-requests: write
+  contents: read
 
 jobs:
   release-please:
     name: release-please
+    if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
@@ -28,32 +35,87 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
 
-  goreleaser:
-    name: goreleaser
+  package-check:
+    name: package-check
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
-    needs: release-please
-    if: needs.release-please.outputs.release_created == 'true'
-    permissions:
-      contents: write
 
     steps:
-      - name: Checkout release tag
+      - name: Checkout candidate
         uses: actions/checkout@v7
         with:
-          ref: ${{ needs.release-please.outputs.tag_name }}
           fetch-depth: 0
 
       - name: Set up Go
         uses: actions/setup-go@v6
         with:
-          go-version-file: go.mod
+          go-version: '1.25.12'
           cache: true
 
-      - name: Run GoReleaser
+      - name: Build snapshot release assets
         uses: goreleaser/goreleaser-action@v7
         with:
           distribution: goreleaser
           version: "~> v2"
-          args: release --clean
+          args: release --snapshot --clean
+
+      - name: Verify release assets
+        run: ./scripts/verify-release-assets.sh dist
+
+  release-assets:
+    name: release-assets
+    needs: release-please
+    if: >-
+      ${{
+        always() &&
+        (github.event_name == 'release' ||
+         needs.release-please.outputs.release_created == 'true')
+      }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: release-assets-${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.12'
+          cache: true
+
+      - name: Build release assets without publishing
+        uses: goreleaser/goreleaser-action@v7
+        with:
+          distribution: goreleaser
+          version: "~> v2"
+          args: release --clean --skip=publish
+
+      - name: Verify release assets
+        run: ./scripts/verify-release-assets.sh dist
+
+      - name: Upload verified assets to published release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+        run: |
+          set -euo pipefail
+          published_tag=$(gh release view "$TAG_NAME" --json isDraft,tagName --jq 'select(.isDraft == false) | .tagName')
+          test "$published_tag" = "$TAG_NAME"
+          assets=(
+            dist/pm_*_darwin_amd64.tar.gz
+            dist/pm_*_darwin_arm64.tar.gz
+            dist/pm_*_linux_amd64.tar.gz
+            dist/pm_*_linux_arm64.tar.gz
+            dist/pm_*_windows_amd64.zip
+            dist/pm_*_windows_arm64.zip
+            dist/checksums.txt
+          )
+          gh release upload "$TAG_NAME" "${assets[@]}" --clobber
