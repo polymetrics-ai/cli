@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Summary
 
-Status: exact-head Codex round 1 completed with 89 findings across 15 systemic groups; correction round 1/5 committed RED is captured at `58df39097` before production edits.
+Status: correction round 1/5 focused GREEN and measured at `89c86dd53`; full verification and fresh exact-head recurrence review pending.
 
 - Base verified at parent squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 - Separate branch: `chore/pm-first-round-review-system-r1`.
@@ -20,5 +20,6 @@ Status: exact-head Codex round 1 completed with 89 findings across 15 systemic g
 - Selected v1: typed directed multigraph, materialized forward/reverse adjacency, deterministic multi-source relation-policy BFS, authoritative `go list`, three-valued certainty, complete discovery before packets, no persistent cache/SCC/new dependency.
 - Correction RED: 17/17 defect fixtures escaped old treatment, four clean controls stayed clean, and real tests proved absent impact v2, graph-bound/schema fail-open, absent lab runner, and missing migration/inconclusive synthesis rules.
 - Focused/full gates at `7f1b2d8fe` are historical. Post-correction full gates passed at `e4ca19ce8` and exact-head full gates passed at `b1d869732`, but 17/17 fresh packet reviews then disclosed 89 findings; no prior verification is final after correction starts.
-- `REVIEW-R1-DISPOSITION.md` maps every finding to 15 systemic groups; `REVIEW-R1-MEASUREMENT.json` records hashes, 22 provider attempts, five operational failures, and actual packet timing separately from correction round 1/5. Raw synthesis blocked because failed invariants were misclassified; PM lifecycle status is findings-correction-required, not clean. Shepherd was not run.
+- `REVIEW-R1-DISPOSITION.md` maps every finding to 15 systemic groups; `REVIEW-R1-MEASUREMENT.json` records hashes, 22 provider attempts, five operational failures, and actual packet timing separately from correction round 1/5. Raw round-1 synthesis remains truthful findings evidence; Shepherd was not run.
+- Round-1 GREEN introduces v3 exact-head policy/compile/packet/response/synthesis contracts, required hashed per-run scope, policy-state traversal, exact blob slices and bounded endpoint excerpts, strict synthesis/lab evidence, offline exact-commit Go context, hardened Darwin lab containment, dedicated phase-state schema, current PM route parity, and post-#495 parent authority reconciliation. `REVIEW-R1-GREEN-MEASUREMENT.json` records 41 packets with max estimate 29,982/30,000 and no bound hit at `89c86dd53`.
 - Captain conditionally authorizes Firstmate to merge the eventual all-green stacked PR into `feat/cli-architecture-v2`; this agent must not merge and will report the green open PR. Parent PR #438 remains draft/human-only.

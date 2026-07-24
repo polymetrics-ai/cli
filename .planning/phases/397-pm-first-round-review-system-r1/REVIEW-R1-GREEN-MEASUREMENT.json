@@ -1,0 +1,61 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-correction-measurement/v1",
+  "correction_round": 1,
+  "stable_lineage": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1",
+  "measured_head": "89c86dd5329b3e29698b758fa53e0a86b85a580d",
+  "measured_tree": "02380a2de651668f59ad5b39bb6ef75a6dd5c6d2",
+  "focused_status": "passed",
+  "compiler": {
+    "status": "ready",
+    "selection": "split",
+    "changed_files": 54,
+    "changed_lines": 8164,
+    "index_files": 170,
+    "indexed_edges": 945,
+    "indexed_edges_by_certainty": {
+      "active": 663,
+      "inactive": 278,
+      "unknown": 4
+    },
+    "impact_files": 133,
+    "impact_edges": 666,
+    "packet_count": 41,
+    "packet_roles": {
+      "architecture_reference": 5,
+      "authority_workflow_state": 2,
+      "implementation_test": 1,
+      "impact_graph": 33
+    },
+    "maximum_estimated_packet_tokens": 29982,
+    "packet_target_tokens": 30000,
+    "bound_hit": false,
+    "manifest_bytes": 1423839,
+    "cold_compile_real_seconds": [
+      1.70,
+      1.65,
+      1.64
+    ]
+  },
+  "systemic_groups": {
+    "total": 15,
+    "focused_green": 15,
+    "repeated_after_correction": null,
+    "note": "Recurrence is measurable only after the next fresh exact-head local Codex review."
+  },
+  "lab": {
+    "darwin_backend": "macos_sandbox_exec",
+    "outside_home_and_etc_reads": "denied",
+    "git_administration_writes": "denied_and_hashed",
+    "descendant_fork": "denied_by_sandbox",
+    "unsupported_platform": "blocked"
+  },
+  "tokens": {
+    "status": "unavailable",
+    "reason": "deterministic compiler and focused tests do not expose model token telemetry"
+  },
+  "cost": {
+    "status": "unavailable",
+    "reason": "deterministic compiler and focused tests make no model call"
+  },
+  "claim_scope": "post-round-1 deterministic compiler/lab/contract measurement before fresh model re-review; no human-equivalence or prospective recall claim"
+}

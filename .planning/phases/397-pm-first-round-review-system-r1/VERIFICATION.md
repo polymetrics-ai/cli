@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** exact-head Codex round 1 found 89 issues in 15 systemic groups; correction round 1/5 RED planning recorded before production edits
+**Status:** correction round 1/5 focused GREEN and measured at `89c86dd53`; full verification and fresh exact-head recurrence review pending
 
 > Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
@@ -93,21 +93,21 @@
 - [x] Duplicate authentication failure was diagnosed after two attempts; sequential auth probe passed and serialized recovery succeeded. Provider retries did not consume correction rounds.
 - [x] Every raw finding has an explicit accepted-with-modification or duplicate disposition in `REVIEW-R1-DISPOSITION.md`; none is declined, waived, hidden, or deferred.
 - [x] Stable lineage advanced to correction round 1/5; Shepherd was correctly not run on non-clean synthesis.
-- [ ] R1-A exact compile/synthesis head/tree/base/ready-manifest binding passes RED→GREEN.
-- [ ] R1-B strict response/invariant/experiment/lab-evidence contract passes RED→GREEN.
-- [ ] R1-C relation/direction policy-state BFS and global frontier handling pass RED→GREEN.
-- [ ] R1-D coherent exact-blob bounded packets include and charge every edge endpoint.
-- [ ] R1-E parser/certainty/endpoint/deletion/prohibited/root/shell/fixture cases fail closed correctly.
-- [ ] R1-F file/node/edge limits prevent broad reads/materialization before blocking.
-- [ ] R1-G external-module offline Go indexing and deleted-Go base+head context pass.
-- [ ] R1-H default-deny lab reads, immutable Git administration, process-tree containment, and lab-evidence binding pass.
-- [ ] R1-I explicit-null/conflicting schema aliases block while key-absent legacy remains compatible.
-- [ ] R1-J reusable policy and validated per-run scope are separated and manifest-bound.
-- [ ] R1-K current PM route siblings are reconciled without touching explicit PR #493-owned paths.
-- [ ] R1-L post-#495 parent authority and phase-state temporal contract are truthful and validated.
-- [ ] R1-M durable phase evidence reconciles at the next exact head.
-- [ ] R1-N remote freshness is parent-owned and packet review remains local/no-network.
-- [ ] R1-O governing root/source docs enter explicit bounded closure.
+- [x] R1-A exact compile/synthesis head/tree/base/ready-manifest binding passes RED→GREEN.
+- [x] R1-B strict response/invariant/experiment/lab-evidence contract passes RED→GREEN.
+- [x] R1-C relation/direction policy-state BFS and global frontier handling pass RED→GREEN.
+- [x] R1-D coherent exact-blob slices and bounded endpoint excerpts stay ≤30K tokens without truncation.
+- [x] R1-E parser/certainty/endpoint/deletion/prohibited/root/shell/fixture cases fail closed correctly.
+- [x] R1-F file/node/edge limits prevent broad reads/materialization before blocking.
+- [x] R1-G external-module offline Go indexing and deleted-Go base+head context pass.
+- [x] R1-H outside config/home/temp reads, Git administration, and descendant process creation are denied; lab evidence is exact-bound.
+- [x] R1-I explicit-null/conflicting schema aliases block while key-absent legacy remains compatible.
+- [x] R1-J reusable policy and validated per-run scope are separated and manifest-bound.
+- [x] R1-K current PM route siblings are reconciled without touching explicit PR #493-owned paths.
+- [x] R1-L post-#495 parent authority and phase-state temporal contract are truthful and validated.
+- [x] R1-M durable phase evidence is reconciled while historical logs remain intact.
+- [x] R1-N remote freshness is parent-owned and packet review remains local/no-network.
+- [x] R1-O governing root/source docs enter explicit bounded closure.
 - [ ] Re-run focused/full verification, exact-head packets, recurrence comparison, synthesis, and Shepherd on the new head.
 
 ## Measurement

@@ -24,10 +24,18 @@
       "b1d869732d230575ab7c8295b15cef42cc0078ef",
       "1ce34f18dcba31e13d14a36f0cf035df4f492747",
       "c6f45538b43a78fc73ee208eb90313e5f5971000",
-      "58df390977a51dc402f65c31a0a798f8a0ecc4bc"
+      "58df390977a51dc402f65c31a0a798f8a0ecc4bc",
+      "e62c7f9bd518810b6382128528e29977249c6a5a",
+      "b2a6d6791bb978548db408cb7ac286914df3326e",
+      "526d1e2b2074791ac4332edb0f6f5eb4a03b7519",
+      "7343f1d33c7bb7d2d40cb36044d40c52537156f7",
+      "01eeee82d714522210ddab185f3399ab22a5103f",
+      "ce168238afb980a3a73902531f7f7a01933c3432",
+      "472fc6da59359bb3d488cde26aaac93b12b137e9",
+      "89c86dd5329b3e29698b758fa53e0a86b85a580d"
     ]
   },
-  "status": "local_codex_round_1_systemic_red_captured",
+  "status": "local_codex_round_1_systemic_focused_green_full_verify_pending",
   "verificationPassed": false,
   "verificationEvidence": {
     "exactImplementationHead": "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
@@ -136,6 +144,11 @@
       "cycle": "local_codex_round_1_red",
       "decision": "local_critical_path",
       "reason": "At clean committed test head 58df390977a51dc402f65c31a0a798f8a0ecc4bc, the focused PM test exited 1 with 15 intended systemic semantic groups covering exact identity, synthesis shape, policy-state traversal, packet bounds, parser/certainty, pre-index resources, external/deleted Go, lab containment, terminal schema, route/state parity, no-network reviewer identity, and root documents. No production treatment edit had started."
+    },
+    {
+      "cycle": "local_codex_round_1_green",
+      "decision": "local_critical_path",
+      "reason": "At exact head 89c86dd5329b3e29698b758fa53e0a86b85a580d, all 15 systemic RED groups pass focused tests. The v3 compiler is ready with validated per-run scope, 170 files/945 indexed edges, 133 impact files/666 traversed edges, 41 coherent packets, maximum estimate 29,982/30,000 tokens, no bound hit, and 1.64-1.70 second cold compiles. Full verification and fresh exact-head recurrence review remain pending."
     }
   ],
   "measurement": {
@@ -157,7 +170,11 @@
     "actualReviewRound1Packets": 17,
     "actualReviewRound1Findings": 89,
     "actualReviewRound1ProviderAttempts": 22,
-    "actualReviewRound1ProviderFailures": 5
+    "actualReviewRound1ProviderFailures": 5,
+    "round1GreenArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-GREEN-MEASUREMENT.json",
+    "round1GreenMeasuredHead": "89c86dd5329b3e29698b758fa53e0a86b85a580d",
+    "round1GreenPackets": 41,
+    "round1GreenMaximumEstimatedPacketTokens": 29982
   },
   "readyQueue": [
     {

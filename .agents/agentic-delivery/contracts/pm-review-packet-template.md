@@ -67,7 +67,8 @@ synthesis, and Shepherd evidence.
 ```
 
 Impact context is discovered completely under the configured typed relation policy before packets
-are partitioned. Every impact edge has stable id, source, target, relation, base direction, parser,
+are partitioned. Large impact blobs are assigned as exact-head line slices with byte counts and hashes;
+edge packets carry every endpoint plus bounded provenance excerpts. Every impact edge has stable id, source, target, relation, base direction, parser,
 provenance reason/line, certainty (`active`, `inactive`, or `unknown`), traversal directions, and
 minimum depth. Graph/index/traversal/packet bounds block; packet limits never silently trim impact.
 This is practical deterministic file/package context, not symbol-level call/data-flow coverage.
@@ -206,7 +207,7 @@ cost, or latency data is `null`, never invented.
 - a performed experiment is incomplete, inconclusive, blocked, unsafe, or lacks candidate/cleanup proof;
 - any response declares unreviewed context, overflow, truncation, or blocked status.
 
-Any finding produces `findings_correction_required`. Only complete clean responses with no finding
+Any finding produces `findings_correction_required`. A failed assigned invariant paired with a valid finding enters that correction state; it is not misclassified as missing coverage. Only complete clean responses with no finding
 produce one PM-owned `clean` synthesis. After clean synthesis, independent Shepherd validates the
 same exact identities and trajectory. Neither packet review, lab evidence, synthesis, nor Shepherd
 grants merge authority.
