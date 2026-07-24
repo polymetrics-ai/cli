@@ -2,10 +2,11 @@
 
 ## Red / baseline
 
-Pending before production edits:
+Captured before production edits against product tree `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` (the only branch delta was the committed phase plan):
 
-- Confirm exact latest-main has no `internal/config` package and no `pm help config` topic.
-- Capture a deterministic current-main binary and 17-case credential-free CLI transcript baseline (exit code, stdout bytes, stderr bytes).
+- `test -f internal/config/config.go` exited 1: exact latest-main has no typed config package.
+- `pm --root <empty-project> help config` exited 1 with zero stdout bytes and `error: help topic "config" not found` on stderr.
+- Built the exact latest-main product tree and captured 17 credential-free CLI cases under an empty `HOME`, `CI=1`, and `TERM=dumb`. The manifest records exit code and byte/hash evidence for root/help/JSON help, bare namespaces, connector inspect, agent plan, version, invalid command/help, Gong dynamic JSON help, and worker status.
 - Source PR heads retain the original fail-first history for #399/#400/#401/#402/#453; this reconstruction preserves that source-to-candidate provenance rather than inventing new historical red commits.
 
 Expected reconstruction failures from the audited scout:
