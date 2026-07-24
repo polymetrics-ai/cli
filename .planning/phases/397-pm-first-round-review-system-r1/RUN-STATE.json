@@ -61,13 +61,24 @@
     "exactHeadTree": "bb1f51e60abd62cdddafab03b2f4bdcf2dea3bda",
     "nextRound": 3,
     "nextRoundMode": "fresh_prospective_exact_head_after_advisory_correction",
-    "nextRoundStatus": "halted_by_captain_before_synthesis_correction_authorized",
+    "nextRoundStatus": "advisory_correction_committed_self_reviewed_model_synthesis_blocked_by_codex_quota",
     "haltedProspectiveReview": {
       "exactHeadSHA": "c28126bb337a2e9899a4a9b429b6d8473cbcd52f",
       "packetCount": 63,
       "validatedResponsesBeforeHalt": 4,
       "synthesis": "not_run",
       "coverageClaim": "none"
+    },
+    "advisoryCorrectionSelfReview": {
+      "exactHeadSHA": "0933611bdc3da5045ef4370fcc38519f7c7276df",
+      "exactHeadTree": "abba49b07057af67fc3c251da8c6e0c57a3ed9cc",
+      "trustBoundSelfCompile": "ready_64_packets_headroom_0_max_30000_0_overflow_0_findings",
+      "reintroducedF1Test": "caught: fix_present_blocked_44_packet_coverage_findings; invariant_removed_silently_unpacked_22_changed_files",
+      "modelPacketReview": "blocked_codex_subscription_quota_exhausted_recorded_operational_blocker_not_a_correction_round",
+      "deterministicSelfReview": "clean",
+      "shepherd": "not_run_model_synthesis_not_clean",
+      "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/self-review-0933611bd/DISPOSITION.md",
+      "candidateTreeUntouched": true
     },
     "lastCompletedReview": {
       "round": 2,

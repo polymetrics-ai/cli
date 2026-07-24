@@ -35,9 +35,9 @@
 - [x] Bounded perf pass (prefilter, edge-slice cache, account early-stop) proven byte-identical output on a frozen tree; clawed back a ~15.8s pre-opt regression to ~14.6s; three compiles share one semantic-manifest digest.
 - [x] Packet-budget honesty: with the required honest F2/F3 prompt the accumulated candidate compiles ready within the unchanged 64-packet hard cap; the max rendered packet is ≤30,000 (hard cap) with 0 overflow. The baseline's single packet of headroom was consumed by required corrections plus legitimate content growth; recorded, not hidden, and no limit/gate was weakened.
 - [x] Complete static/focused/adversarial/repository verification passes on the corrected candidate (gofmt clean, vet, full `go test`, build, module checks, `make verify` with 0 lint/547 connectors/PM+Shepherd suites/safe reverse ETL).
-- [ ] One clean exact correction commit is pushed; same-head/tree clean verification passes.
-- [ ] Fresh trust-bound self-review uses no `c28126bb3` manifest/response and deliberately proves reintroduced F1 blocks.
-- [ ] One PM synthesis is reported without silent iteration; Shepherd runs only if it is clean.
+- [x] One clean exact correction commit `0933611bdc3da5045ef4370fcc38519f7c7276df` is pushed; clean-tree focused/full identity reconfirmed.
+- [x] Fresh trust-bound self-review at the new head uses no `c28126bb3` artifact and deliberately proves reintroduced F1 blocks: fix present blocks with 44 named `packet_coverage` findings; invariant removed silently unpacks 22 changed files (`data/cli-first-round-review-audit-r1/self-review-0933611bd/`).
+- [x] PM disposition reported without silent iteration: deterministic self-review clean (compile ready, F1 caught); fresh-context model packet synthesis blocked by Codex subscription quota exhaustion (recorded operational blocker, not a correction round); Shepherd not run because model synthesis is not clean.
 - [ ] Stacked PR targets `feat/cli-architecture-v2`, CI is green, and PR remains open/unmerged.
 
 ## Measurement
