@@ -172,7 +172,7 @@ func runManualAlias(_ context.Context, _ string, args []string, stdout io.Writer
 	if len(args) == 0 {
 		return writeRootManual(stdout, jsonOut)
 	}
-	return runHelp(args, stdout)
+	return runHelp(args, stdout, jsonOut)
 }
 
 func setManualHelp(cmd *cobra.Command, topic string, stdout io.Writer, jsonOut bool) {

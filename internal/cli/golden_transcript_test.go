@@ -119,7 +119,7 @@ var goldenTranscriptInputs = []struct {
 	{Name: "unknown_command_plain", Args: []string{"nosuch"}},
 	{Name: "unknown_command_json_sanitized", Args: []string{"bad\x1b[31mcmd", "--json"}},
 	{Name: "help_missing_topic", Args: []string{"help", "nosuchtopic"}},
-	{Name: "dynamic_connector_missing_path_json", Args: []string{"github", "--json"}},
+	{Name: "dynamic_connector_bare_json", Args: []string{"github", "--json"}},
 	{Name: "dynamic_connector_unknown_path_json", Args: []string{"github", "definitely-not-command", "--json"}},
 	{Name: "hidden_extract_help_json", Args: []string{"extract", "--help", "--json"}},
 	{Name: "hidden_worker_help_json", Args: []string{"worker", "--help", "--json"}},
