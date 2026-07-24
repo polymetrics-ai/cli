@@ -44,9 +44,9 @@ connector's slice is considered integrated.
 
 ## 6. Handoff and merge
 
-- [ ] Worker handoff uses `.agents/agentic-delivery/contracts/worker-handoff-template.md`.
+- [ ] Worker handoff uses `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`.
 - [ ] Sub-PR targets the parent branch with `Refs #<sub-issue>` and `Refs #44` (no closing keywords).
-- [ ] Claude review threads dispositioned before merge (or parent-PR review coverage recorded when Claude skips the sub-PR).
+- [ ] Exact-head local Codex packet synthesis is clean, every finding is dispositioned, and independent Shepherd returns `PROCEED` for the same head.
 - [ ] Shared/generated files remain coordinator-owned; the worker did not commit generated files unless authorized.
 
 ## 7. Human gates (stop)

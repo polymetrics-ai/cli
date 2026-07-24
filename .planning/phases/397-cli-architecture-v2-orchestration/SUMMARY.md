@@ -76,11 +76,11 @@ The 10-minute full race and 20-minute CLI race retry timed out without race find
 
 Current main `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` has been merged normally into isolated branch `fm/cli-architecture-v2-wave1-parent-sync-r1` from parent/PR head `21d195aff0c7bd60b3bf54f14b1ce165cec9e03f`. Merge commit `c545c3740c71b889fd2f1f64cec5491003f7b654` preserves Gong parity and CLI Architecture v2 contracts; full credential-free verification is green at pre-evidence task head `2a2e964b17144939b0a42f297de0d2b1c87383e1`.
 
-PR #438 has not changed: it remains draft at the old parent head until the Wave 1 stacked PR is reviewed and human-integrated. #462 now has exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`; historical #425–#436 waiver/review work remains pending. #408 remains excluded at branch head `6c643f5c971d1fac4a83e4ffe653b83847c2fceb`.
+At this historical checkpoint PR #438 remained draft at the old parent head until the Wave 1 stacked PR was reviewed and human-integrated. The parent was subsequently fetched and verified at `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`; PR #438 remains draft/human-only. #462 has exact-head human approval at https://github.com/polymetrics-ai/cli/pull/468#issuecomment-5054325561. #419 is `deferred_by_human`; historical #425–#436 waiver/review work remains pending. #408 remains excluded at branch head `6c643f5c971d1fac4a83e4ffe653b83847c2fceb` until PR #493's canonical PM migration integrates.
 
 ### PR #493 canonical PM migration gate
 
-Post-integration: fetch `origin/feat/cli-architecture-v2`, record the actual resulting parent/PR #438 head, verify current main is an ancestor, and refresh parent CI/body evidence. Then PR #493 must merge that resulting parent normally, reconcile only its owned routing/skill/Makefile guidance to the canonical PM route, rerun its gates, and integrate before another CLI Architecture v2 implementation worker starts. Until both Wave 1 and PR #493 integrate, #408 remains `not_spawned_dependency_blocked`; do not copy the Wave 1 task head into parent state or start another implementation worker.
+Post-integration reconciliation recorded the actual parent/PR #438 head as `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`. PR #493 must merge that resulting parent normally, reconcile only its owned routing/skill/Makefile guidance to the canonical PM route, rerun its gates, and integrate before another CLI Architecture v2 implementation worker starts. Until PR #493 integrates, #408 remains `not_spawned_dependency_blocked`.
 
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 

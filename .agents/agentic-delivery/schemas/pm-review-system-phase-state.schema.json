@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://polymetrics.ai/schemas/pm-review-system-phase-state/v2",
+  "title": "PM review-system phase state",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "phase",
+    "exactBaseSHA",
+    "candidateLineage",
+    "correctionBudget",
+    "status",
+    "verificationPassed",
+    "localCodex",
+    "shepherd",
+    "humanGates"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "pm-review-system-phase/v2"},
+    "phase": {"const": "397-pm-first-round-review-system-r1"},
+    "exactBaseSHA": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "candidateLineage": {"type": "string", "minLength": 1},
+    "correctionBudget": {
+      "type": "object",
+      "required": ["maxCorrectionRounds", "roundsByRange", "headHistory"],
+      "properties": {
+        "maxCorrectionRounds": {"const": 5},
+        "roundsByRange": {"type": "object", "minProperties": 1},
+        "headHistory": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "status": {"type": "string", "minLength": 1},
+    "verificationPassed": {"type": "boolean"},
+    "localCodex": {"type": "object"},
+    "shepherd": {"type": "object"},
+    "humanGates": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": true
+}

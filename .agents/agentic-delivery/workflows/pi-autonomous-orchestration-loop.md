@@ -58,7 +58,7 @@ RESEARCH is skipped entirely for a fully-specified `implementation` task (no ext
 `implementation` path stays first-class and light. Gates are hard: RESEARCH (connector) must be
 `complete` before `PARENT_PLAN`; `VERIFY` must pass before `REVIEW`; fresh-context local Codex
 `REVIEW` must be clean (every finding fixed or dispositioned per
-`pm-code-review-disposition-template.md`) after `scripts/pm-review-system.py compile` returns ready,
+`pm-code-review-disposition-template.md`) after `scripts/pm-review-system.py compile --scope <validated-per-run-scope>` returns ready,
 every changed/impact item is packet-covered, every response/lab proof is complete and safe, and
 `synthesize` returns clean. Independent Shepherd must then
 return `PROCEED` before `INTEGRATE`. Branch

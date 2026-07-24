@@ -1,5 +1,5 @@
 {
-  "schema_version": "polymetrics.ai/pm-review-system/v2",
+  "schema_version": "polymetrics.ai/pm-review-system/v3",
   "owner": "parent_orchestrator",
   "canonical_roots": [
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
@@ -9,7 +9,12 @@
     ".pi/prompts/pm-orchestrate.md",
     ".pi/prompts/pm-auto-loop.md",
     ".pi/prompts/pm-review-loop.md",
-    ".pi/agents/pm-reviewer.md"
+    ".pi/agents/pm-reviewer.md",
+    "AGENTS.md",
+    ".planning/PROJECT.md",
+    ".planning/ROADMAP.md",
+    ".planning/STATE.md",
+    ".planning/config.json"
   ],
   "reference_prefixes": [
     ".agents/",
@@ -62,30 +67,134 @@
       "temporal": 1
     },
     "relation_policy": {
-      "required_reference": {"upstream": 6, "downstream": 6, "lateral": 0, "temporal": 0},
-      "descriptive_reference": {"upstream": 1, "downstream": 1, "lateral": 0, "temporal": 0},
-      "script_invokes": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "python_import": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "authority_writes": {"upstream": 3, "downstream": 3, "lateral": 0, "temporal": 0},
-      "authority_reads": {"upstream": 3, "downstream": 3, "lateral": 0, "temporal": 0},
-      "authority_mirror": {"upstream": 0, "downstream": 0, "lateral": 3, "temporal": 0},
-      "generates": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "generated_consumer": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "go_member_of": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "go_contains": {"upstream": 4, "downstream": 4, "lateral": 0, "temporal": 0},
-      "go_imports": {"upstream": 4, "downstream": 3, "lateral": 0, "temporal": 0},
-      "go_test": {"upstream": 0, "downstream": 0, "lateral": 4, "temporal": 0},
-      "platform_variant": {"upstream": 0, "downstream": 0, "lateral": 4, "temporal": 0},
-      "temporal_schema_instance": {"upstream": 0, "downstream": 0, "lateral": 0, "temporal": 4}
+      "required_reference": {
+        "upstream": 6,
+        "downstream": 6,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "descriptive_reference": {
+        "upstream": 1,
+        "downstream": 1,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "script_invokes": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "python_import": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "authority_writes": {
+        "upstream": 3,
+        "downstream": 3,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "authority_reads": {
+        "upstream": 3,
+        "downstream": 3,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "authority_mirror": {
+        "upstream": 0,
+        "downstream": 0,
+        "lateral": 3,
+        "temporal": 0
+      },
+      "generates": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "generated_consumer": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "go_member_of": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "go_contains": {
+        "upstream": 4,
+        "downstream": 4,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "go_imports": {
+        "upstream": 4,
+        "downstream": 3,
+        "lateral": 0,
+        "temporal": 0
+      },
+      "go_test": {
+        "upstream": 0,
+        "downstream": 0,
+        "lateral": 4,
+        "temporal": 0
+      },
+      "platform_variant": {
+        "upstream": 0,
+        "downstream": 0,
+        "lateral": 4,
+        "temporal": 0
+      },
+      "temporal_phase_state_instance": {
+        "upstream": 0,
+        "downstream": 0,
+        "lateral": 0,
+        "temporal": 4
+      }
     }
   },
   "configured_relationships": [
     {
-      "source": ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
+      "source": ".agents/agentic-delivery/schemas/pm-review-system-phase-state.schema.json",
       "target": ".planning/phases/397-pm-first-round-review-system-r1/RUN-STATE.json",
-      "relation": "temporal_schema_instance",
+      "relation": "temporal_phase_state_instance",
       "certainty": "active",
-      "reason": "current review-state schema governs correction lineage and exact-version transition state"
+      "reason": "dedicated PM review-system phase-state v2 schema validates correction lineage and exact-version transition state",
+      "validator": "pm_review_phase_v2"
+    },
+    {
+      "source": "scripts/tests/pm-review-system.sh",
+      "target": "scripts/tests/fixtures/pm-review-system/inputs.json",
+      "relation": "fixture",
+      "certainty": "active",
+      "reason": "focused PM review regression consumes frozen fixture"
+    },
+    {
+      "source": "scripts/tests/pm-review-system.sh",
+      "target": "scripts/tests/fixtures/pm-review-system/oracle.json",
+      "relation": "fixture",
+      "certainty": "active",
+      "reason": "focused PM review regression consumes frozen fixture"
+    },
+    {
+      "source": "scripts/tests/pm-review-system.sh",
+      "target": "scripts/tests/fixtures/pm-review-system/correction-inputs.json",
+      "relation": "fixture",
+      "certainty": "active",
+      "reason": "focused PM review regression consumes frozen fixture"
+    },
+    {
+      "source": "scripts/tests/pm-review-system.sh",
+      "target": "scripts/tests/fixtures/pm-review-system/correction-oracle.json",
+      "relation": "fixture",
+      "certainty": "active",
+      "reason": "focused PM review regression consumes frozen fixture"
     }
   ],
   "authorities": [
@@ -150,7 +259,8 @@
           "complete",
           "parent_review_clean"
         ]
-      }
+      },
+      "expected_current_head": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20"
     }
   ],
   "thresholds": {
@@ -230,39 +340,11 @@
       "human_merge_authority"
     ]
   },
-  "allowed_changed_paths": [
-    "scripts/pm-review-system.py",
-    "scripts/pm-review-lab.py",
-    "scripts/pm-terminal-classifier.sh",
-    "scripts/tests/pm-review-system.sh",
-    "scripts/tests/pm-orchestrator-contract.sh",
-    "scripts/tests/pi-model-routing.sh",
-    "scripts/tests/fixtures/pm-review-system/**",
-    "scripts/tests/fixtures/pm-orchestrator-review-state/**",
-    ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
-    ".agents/agentic-delivery/contracts/pm-review-system.json",
-    ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
-    ".agents/agentic-delivery/contracts/pm-code-review-disposition-template.md",
-    ".agents/agentic-delivery/contracts/pm-worker-handoff-template.md",
-    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md",
-    ".agents/agentic-delivery/workflows/local-codex-review-loop.md",
-    ".agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md",
-    ".agents/agentic-delivery/schemas/orchestration-state.schema.yaml",
-    ".pi/agents/pm-reviewer.md",
-    ".pi/prompts/pm-review-loop.md",
-    ".pi/prompts/pm-auto-loop.md",
-    ".pi/prompts/pm-orchestrate.md",
-    ".planning/phases/397-pm-first-round-review-system-r1/**"
-  ],
-  "forbidden_changed_paths": [
+  "explicit_reference_files": [
     "AGENTS.md",
-    "Makefile",
-    ".agents/agentic-delivery/matrices/task-skill-matrix.yaml",
-    ".agents/agentic-delivery/references/required-skills-routing.md",
-    ".agents/skills/cli-architecture-v2-delivery/**",
-    ".planning/phases/397-cli-architecture-v2-delivery-skill/**",
-    "scripts/tests/cli-architecture-v2-delivery-skill.sh",
-    "go.mod",
-    "go.sum"
+    ".planning/PROJECT.md",
+    ".planning/ROADMAP.md",
+    ".planning/STATE.md",
+    ".planning/config.json"
   ]
 }

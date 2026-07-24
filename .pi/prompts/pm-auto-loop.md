@@ -61,7 +61,7 @@ Required reading before acting:
    - EXECUTE / CORRECT → `pm-gsd-worker`, each with its own `cwd` (sibling checkout or worktree) and one write scope.
    - SUB_PR_OPEN → after the worker's first push, open the sub-PR (base = parent branch; body `Refs #<sub>` + `Refs #<N>`). Idempotent — adopt an existing matching PR. Record `sub_pr`.
    - VERIFY → `pm-verifier` (gate: must pass before review).
-   - REVIEW → run `scripts/pm-review-system.py compile`; stop on semantic/closure/authority/typed-
+   - REVIEW → run `scripts/pm-review-system.py compile --scope <validated-per-run-scope>`; stop on semantic/closure/authority/typed-
      impact/scope findings, graph bounds, or unsplittable context. Dispatch fresh-context
      candidate-read-only `pm-reviewer` once per bounded exact-base/head/tree packet. Require impact-
      first hypothesis/disconfirmation behavior; temporary changes run only in bounded disposable

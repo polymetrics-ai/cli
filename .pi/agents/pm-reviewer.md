@@ -26,9 +26,9 @@ Review from a bug-finding stance. Prioritize correctness, regressions, unsafe be
 tests, secret handling, machine contracts, scope violations, evidence truthfulness, and workflow
 violations.
 
-Return one `polymetrics.ai/pm-review-packet-response/v2` object following
+Return one `polymetrics.ai/pm-review-packet-response/v3` object following
 `.agents/agentic-delivery/contracts/pm-review-packet-template.md`. Declare exact identities,
-reviewed/closure/authority/impact files and edge ids, invariant/observable behavior evidence,
+reviewed/closure/authority/impact/edge-context files and edge ids, invariant/observable behavior evidence,
 falsifiable hypotheses and alternatives, lab experiments or a decisive-static reason, unreviewed
 files, overflow/truncation, unlimited findings, and only available timing/token/cost data. Missing,
 inconclusive, unsafe, or silently truncated evidence is `blocked`, never clean.

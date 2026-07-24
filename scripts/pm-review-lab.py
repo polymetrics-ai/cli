@@ -25,7 +25,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 LAB_REQUEST_SCHEMA = "polymetrics.ai/pm-review-lab-request/v1"
-LAB_EVIDENCE_SCHEMA = "polymetrics.ai/pm-review-lab-evidence/v1"
+LAB_EVIDENCE_SCHEMA = "polymetrics.ai/pm-review-lab-evidence/v2"
 HEX_SHA = re.compile(r"^[0-9a-f]{40}$")
 SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$")
 CONTROL = re.compile(r"[\x00-\x1f\x7f]")
@@ -144,21 +144,32 @@ def sandbox_command(backend: dict[str, Any], lab_root: Path, repo: Path, command
     if backend["name"] == "macos_sandbox_exec":
         profile = lab_root / "sandbox.sb"
         escaped_lab = str(lab_root).replace('"', '\\"')
-        denied_read_roots = {str(Path.home().resolve()), "/Volumes", "/private/tmp", "/tmp", "/var/tmp", "/Applications"}
+        escaped_git = str(repo / ".git").replace('"', '\\"')
+        # Seatbelt requires ordinary runtime/IPC reads for Python and Go startup. Deny all writes
+        # outside the private lab and explicitly deny host data/config roots, then re-enable only
+        # the private lab and the selected interpreter installation. This closes the earlier `/etc`
+        # and non-lab-home disclosure while preserving fixed OS runtime reads.
+        denied_read_roots = {
+            str(Path.home().resolve()), "/Applications", "/Volumes", "/Network", "/cores", "/home",
+            "/etc", "/private/etc", "/tmp", "/private/tmp", "/var/tmp", "/opt", "/usr/local",
+        }
+        runtime_roots = (str(Path(sys.base_prefix).resolve()),)
         rules = [
             "(version 1)",
             "(allow default)",
             "(deny network*)",
+            "(deny process-fork)",
             "(deny file-write*)",
             f'(allow file-write* (subpath "{escaped_lab}"))',
+            f'(deny file-write* (subpath "{escaped_git}"))',
         ]
         for value in sorted(denied_read_roots):
             escaped = value.replace('"', '\\"')
             rules.append(f'(deny file-read* (subpath "{escaped}"))')
-        # The lab is more specific than its private temporary parent and is the only reviewer data
-        # root re-enabled. System runtime/framework reads remain available to execute allowlisted
-        # compilers and parsers; candidate/home/temp/volume/application reads stay denied.
         rules.append(f'(allow file-read* (subpath "{escaped_lab}"))')
+        for value in runtime_roots:
+            escaped = value.replace('"', '\\"')
+            rules.append(f'(allow file-read* (subpath "{escaped}"))')
         profile.write_text("\n".join(rules) + "\n")
         return ["/usr/bin/sandbox-exec", "-f", str(profile), *command], profile
     if backend["name"] == "linux_bwrap":
@@ -203,10 +214,10 @@ def command_policy(argv: Any, repo: Path) -> list[str]:
             path = (repo / script).resolve(strict=True)
             if repo.resolve() not in path.parents or not path.is_file() or path.suffix != ".py":
                 raise LabError("Python script is outside the lab or not a file")
-        child_python = shutil.which("python3", path="/usr/bin:/bin:/opt/homebrew/bin:/usr/local/bin")
-        if not child_python:
-            raise LabError("allowlisted system Python is unavailable")
-        return [child_python, *args]
+        child_python_path = Path(sys.executable).resolve()
+        if not child_python_path.is_file():
+            raise LabError("allowlisted Python runtime is unavailable")
+        return [str(child_python_path), *args]
     if tool == "go":
         if not args or args[0] not in {"test", "vet", "build"}:
             raise LabError("Go command is not allowlisted")
@@ -252,6 +263,8 @@ def merge_limits(requested: Any) -> dict[str, Any]:
 
 def resolve_lab_file(repo: Path, relative: str) -> Path:
     normalized = validate_relative(relative, "temporary change path")
+    if PurePosixPath(normalized).parts[0] == ".git":
+        raise LabError("temporary changes to Git administration are denied")
     candidate = repo / normalized
     try:
         resolved = candidate.resolve(strict=True)
@@ -299,6 +312,20 @@ def directory_size(root: Path) -> int:
             except OSError:
                 continue
     return total
+
+
+def directory_hash(root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted(root.rglob("*")):
+        relative = path.relative_to(root).as_posix().encode()
+        digest.update(relative)
+        if path.is_symlink():
+            digest.update(b"L" + os.readlink(path).encode())
+        elif path.is_file():
+            digest.update(b"F" + path.read_bytes())
+        elif path.is_dir():
+            digest.update(b"D")
+    return digest.hexdigest()
 
 
 def process_group_count(group: int) -> int:
@@ -500,14 +527,14 @@ def command_run(args: argparse.Namespace) -> int:
         repo = clone_exact(candidate, head, lab_root, env)
         if run_git(repo, ["rev-parse", "HEAD"]).strip() != head or run_git(repo, ["rev-parse", "HEAD^{tree}"]).strip() != candidate_before["tree"]:
             raise LabError("lab snapshot identity does not match candidate")
-        object_count_before = run_git(repo, ["count-objects", "-v"])
+        git_admin_before = directory_hash(repo / ".git")
         changed_paths = apply_changes(repo, request["changes"], int(limits["max_change_bytes"]))
         command = command_policy(request["command"], repo)
         diff_bytes = subprocess.check_output(["git", "-C", str(repo), "diff", "--binary", "--no-ext-diff", "--"], env=env)
         diff_stat = subprocess.check_output(["git", "-C", str(repo), "diff", "--stat", "--no-renames", "--"], env=env, text=True).strip()
         execution = execute(lab_root, repo, command, env, limits, backend)
         lab_head = run_git(repo, ["rev-parse", "HEAD"]).strip()
-        object_count_after = run_git(repo, ["count-objects", "-v"])
+        git_admin_after = directory_hash(repo / ".git")
         candidate_after = candidate_identity(candidate)
         if os.environ.get("PM_REVIEW_LAB_TEST_FORCE_IDENTITY_DRIFT") == "1":
             candidate_after = {**candidate_after, "tree": "f" * 40}
@@ -521,8 +548,8 @@ def command_run(args: argparse.Namespace) -> int:
             blockers.append({"category": "lab_limit", "claim": f"experiment hit {execution['limit_hit']} limit"})
         if execution["process_residue_detected"] or execution["processes_remaining"]:
             blockers.append({"category": "lab_cleanup", "claim": "experiment spawned residual processes; process group was terminated"})
-        if lab_head != head or object_count_after != object_count_before:
-            blockers.append({"category": "lab_git_mutation", "claim": "lab Git identity/object store changed"})
+        if lab_head != head or git_admin_after != git_admin_before:
+            blockers.append({"category": "lab_git_mutation", "claim": "lab Git administration changed"})
         if not candidate_unchanged:
             blockers.append({"category": "candidate_identity", "claim": "canonical candidate identity changed"})
         evidence = {
@@ -562,6 +589,8 @@ def command_run(args: argparse.Namespace) -> int:
                 },
                 "sandbox": execution["sandbox"],
                 "sandbox_profile_sha256": execution["profile_sha256"],
+                "git_admin_sha256_before": git_admin_before,
+                "git_admin_sha256_after": git_admin_after,
                 "limits": limits,
             },
             "lab_cleanup_verified": False,

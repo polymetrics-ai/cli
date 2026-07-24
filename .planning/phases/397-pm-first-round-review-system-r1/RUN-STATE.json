@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "pm-review-system-phase/v1",
+  "schemaVersion": "pm-review-system-phase/v2",
   "phase": "397-pm-first-round-review-system-r1",
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",

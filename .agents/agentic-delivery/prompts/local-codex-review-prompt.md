@@ -12,10 +12,10 @@ Inputs supplied by the parent orchestrator:
 
 Follow `.agents/agentic-delivery/workflows/local-codex-review-loop.md`.
 
-1. Verify local and remote identities match the exact base and exact head. Stop and report drift.
+1. Verify local HEAD/tree/base and packet identities match exactly. Remote freshness is a recorded parent-orchestrator precondition; do not use network. Stop and report local drift.
 2. Confirm packet base/head/tree match the candidate. Build the practical impact model before
    judging individual lines and inspect every assigned changed, closure, authority, impact file,
-   impact edge, and invariant. Trace upstream, downstream, lateral, and temporal/state paths.
+   impact edge, edge-context file, and invariant. Trace upstream, downstream, lateral, and temporal/state paths.
 3. Inspect bounded relevant history when behavior/ownership/compatibility is ambiguous. Compare
    divergent siblings/variants and explain why differences are safe or suspicious.
 4. State explicit falsifiable hypotheses for suspected defects, the strongest plausible alternative,
@@ -28,9 +28,9 @@ Follow `.agents/agentic-delivery/workflows/local-codex-review-loop.md`.
    failure, identity drift, or missing evidence is `blocked`.
 6. Review correctness, security, safety, regressions, tests, evidence truthfulness, scope, machine
    contracts, credential handling, and human gates from the assigned lens.
-7. Return one `polymetrics.ai/pm-review-packet-response/v2` object following
+7. Return one `polymetrics.ai/pm-review-packet-response/v3` object following
    `pm-review-packet-template.md`. Declare exact base/head/tree; changed/closure/authority/impact
-   files and edge ids; invariant and observable-behavior evidence; experiments or a decisive-static
+   files, edge ids, and edge-context files; invariant and observable-behavior evidence; experiments or a decisive-static
    reason; unreviewed files; findings; overflow/truncation; wall time; and available token/cost data.
    Never invent unavailable telemetry.
 8. Finding count is unlimited. Every finding includes severity, category, file/line evidence,

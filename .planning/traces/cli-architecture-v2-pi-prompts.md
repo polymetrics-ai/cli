@@ -7,8 +7,8 @@ Act as the active parent issue orchestrator for polymetrics-ai/cli#397.
 
 Read AGENTS.md, issue #397, .agents/agentic-delivery/contracts/parent-orchestrator-contract.md,
 .agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md, the stacked-PR workflow,
-the GSD universal runtime loop, automated-review routing loop, Claude review loop,
-.agents/agentic-delivery/references/gsd-pi-adapter.md, required-skills-routing.md, and the worker
+the GSD universal runtime loop, exact-head local Codex review loop, independent Shepherd workflow,
+.agents/agentic-delivery/references/gsd-pi-adapter.md, required-skills-routing.md, and the PM worker
 handoff template. Run /gsd doctor.
 
 Treat GitHub sub-issues and blocked-by relationships as the authoritative ready queue. First execute
@@ -22,7 +22,7 @@ issue's /gsd plan-phase, /gsd-programming-loop, /gsd verify-work, and /gsd-code-
 Do not launch Phase 9 namespace issues concurrently; #421 through #437 are deliberately serialized.
 The first designed parallel fan-out occurs after #402: #403, #404, #406, and #410 may run in
 separate worktrees. Keep the parent context open, collect worker handoffs, arbitrate stacked PRs,
-and record review coverage. Integrate terminal-design gate #462/D-TUI and its accepted correction
+and record exact-head PM synthesis plus Shepherd coverage. Integrate terminal-design gate #462/D-TUI and its accepted correction
 PR/review disposition before dispatching production work for #408, #409, #411, #412, #414, #416,
 #469, #418, or chart child #463. #416 owns reverse guidance; #469 owns credential/connection setup.
 Never merge the parent PR into main without human approval.
@@ -73,9 +73,10 @@ Then run:
 /gsd-code-review <ISSUE>
 
 Open a stacked PR to feat/cli-architecture-v2 with a Conventional Commit title and body containing
-Refs #<ISSUE> and Refs #397. Follow automated-review routing and disposition every actionable
-finding. Return the repository worker handoff template with branch, PR, commits, changed files,
-red/green/refactor evidence, exact verification, skills used, parity status, review coverage, and
+Refs #<ISSUE> and Refs #397. Compile exact-head PM packets, disposition every local Codex finding,
+require clean synthesis, then run independent Shepherd validation. Return the PM worker handoff with
+branch, PR, commits, changed files, red/green/refactor evidence, exact verification, skills used,
+parity status, exact-head synthesis/Shepherd coverage, and
 remaining blockers. Do not merge the PR and never merge the parent PR to main.
 ```
 

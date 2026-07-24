@@ -22,9 +22,8 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
 
 ## Deterministic review compilation
 
-1. Confirm the candidate worktree and remote head equal the supplied exact head SHA. Confirm the
-   comparison base equals the supplied exact base SHA. Stop on drift.
-2. Run `scripts/pm-review-system.py compile` for that exact base/head/tree. It must return `ready`
+1. The parent orchestrator confirms the fetched remote head and candidate worktree equal the supplied exact head SHA and records that precondition without delegating network access. Confirm the comparison base is the candidate merge base. Stop on drift.
+2. Run `scripts/pm-review-system.py compile --scope <validated-per-run-scope>` for that exact base/head/tree. It must return `ready`
    before model review. Treat its changed-path assignment, active reference closure, authority
    inventory, and versioned practical impact graph as review inputs. The graph indexes its declared
    universe before traversal, seeds canonical roots plus every changed file, and follows a typed
@@ -45,7 +44,7 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
    `pm-reviewer` role (Sol/xhigh) or the runtime's equivalent. Packet reviewers are analytical
    inputs; the parent orchestrator remains the only lifecycle and disposition owner.
 2. Keep the canonical candidate and review source read-only. `bash` is allowed only for non-mutating
-   identity, diff, log, assigned tests, and read-only `gh-axi` inspection. Temporary hypothesis
+   local identity, diff, log, and assigned test inspection; packet reviewers have no network access. Temporary hypothesis
    changes are allowed only through `scripts/pm-review-lab.py` in a private disposable exact-head
    copy. No candidate edit/write, generic shell, network, commit, push, PR mutation, install,
    credentialed/live call, deployment, destructive external effect, or merge is allowed.
@@ -54,8 +53,8 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
    disconfirming evidence, and use the smallest discriminating lab experiment only when static
    evidence is insufficient. An unavailable sandbox, denial, timeout/bound, cleanup failure,
    candidate drift, or inconclusive experiment blocks clean review.
-4. Each v2 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
-   authority, impact-file, impact-edge, invariant, and behavior coverage; experiment/no-experiment
+4. Each v3 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
+   authority, impact-file, impact-edge, edge-context-file, invariant, and behavior coverage; experiment/no-experiment
    evidence; unreviewed files; context overflow/truncation; and findings. Finding count is unlimited.
    Missing token/cost/latency data stays explicitly null.
 5. Preserve raw responses and lab evidence outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`

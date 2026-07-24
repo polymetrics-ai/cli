@@ -7,15 +7,16 @@ trajectory/evidence validator and never edits code.
 
 ## Versioned contracts
 
-- compile manifest: `polymetrics.ai/pm-review-compile/v2`
-- practical impact graph: `polymetrics.ai/pm-review-impact-graph/v1`
-- packet: `polymetrics.ai/pm-review-packet/v2`
-- packet response: `polymetrics.ai/pm-review-packet-response/v2`
+- review policy/scope: `polymetrics.ai/pm-review-system/v3` and `polymetrics.ai/pm-review-scope/v1`
+- compile manifest: `polymetrics.ai/pm-review-compile/v3`
+- practical impact graph: `polymetrics.ai/pm-review-impact-graph/v2`
+- packet: `polymetrics.ai/pm-review-packet/v3`
+- packet response: `polymetrics.ai/pm-review-packet-response/v3`
 - hypothesis-lab request/evidence: `polymetrics.ai/pm-review-lab-request/v1` and
-  `polymetrics.ai/pm-review-lab-evidence/v1`
-- synthesis: `polymetrics.ai/pm-review-synthesis/v2`
+  `polymetrics.ai/pm-review-lab-evidence/v2`
+- synthesis: `polymetrics.ai/pm-review-synthesis/v3`
 
-Incompatible v1 packet responses do not upgrade implicitly. Synthesis returns an explicit migration
+Incompatible v2 packet responses do not upgrade implicitly. Synthesis returns an explicit migration
 blocker. Any exact base/head/tree change invalidates the manifest, packet responses, lab evidence,
 synthesis, and Shepherd evidence.
 
@@ -23,7 +24,7 @@ synthesis, and Shepherd evidence.
 
 ```json
 {
-  "schema_version": "polymetrics.ai/pm-review-packet/v2",
+  "schema_version": "polymetrics.ai/pm-review-packet/v3",
   "packet_id": "impact_graph-01",
   "role": "impact_graph",
   "exact_base_sha": "<40 hex>",
@@ -35,6 +36,7 @@ synthesis, and Shepherd evidence.
   "impact_files": [],
   "impact_edge_ids": [],
   "impact_edges": [],
+  "edge_context_files": [],
   "invariants": [],
   "context": {
     "target_tokens": 30000,
@@ -48,13 +50,16 @@ synthesis, and Shepherd evidence.
     "authority_files",
     "impact_files",
     "impact_edge_ids",
+    "edge_context_files",
     "invariants",
     "review_behaviors",
     "experiments",
     "no_experiment_reason",
     "unreviewed_files",
     "findings",
-    "context"
+    "residual_risk",
+    "context",
+    "wall_clock_ms"
   ]
 }
 ```
@@ -126,7 +131,7 @@ private evidence root. Do not commit it after exact-head review.
 
 ```json
 {
-  "schema_version": "polymetrics.ai/pm-review-packet-response/v2",
+  "schema_version": "polymetrics.ai/pm-review-packet-response/v3",
   "packet_id": "impact_graph-01",
   "exact_base_sha": "<same exact base>",
   "exact_head_sha": "<same exact head>",
@@ -137,6 +142,7 @@ private evidence root. Do not commit it after exact-head review.
   "authority_files": [],
   "impact_files": [],
   "impact_edge_ids": [],
+  "edge_context_files": [],
   "invariants": [
     {"id": "impact_complete", "status": "pass", "evidence_paths": []}
   ],
@@ -162,11 +168,14 @@ private evidence root. Do not commit it after exact-head review.
       "observed": {"exit_code": 1, "limit_hit": null},
       "supports": "claim",
       "candidate_unchanged": true,
-      "lab_cleanup_verified": true
+      "lab_cleanup_verified": true,
+      "lab_evidence_path": "pm-review-evidence.tmp/<head>/<packet>/H1.json",
+      "lab_evidence_sha256": "<64 hex>"
     }
   ],
   "no_experiment_reason": null,
   "findings": [],
+  "residual_risk": [],
   "context": {
     "input_tokens": null,
     "output_tokens": null,

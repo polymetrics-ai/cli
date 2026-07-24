@@ -10,7 +10,7 @@ parent_pr:
   url: https://github.com/polymetrics-ai/cli/pull/438
   base: main
   head: feat/cli-architecture-v2
-  head_sha: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
+  head_sha: 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20
   draft: true
   state: open
 default_branch: main
@@ -19,7 +19,7 @@ orchestrator:
   runtime: pi
   status: running
 wave1_parent_sync:
-  status: stacked_pr_pending_parent_unchanged
+  status: integrated_parent_verified
   task_branch: chore/cli-architecture-v2-wave1-parent-sync-r1
   pull_request: 495
   parent_before_sync: 21d195aff0c7bd60b3bf54f14b1ce165cec9e03f
@@ -41,7 +41,8 @@ wave1_parent_sync:
     decision: not_spawned_dependency_blocked
     blocks_worker_start: true
     required_action: "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
-  post_integration: "Fetch parent; record the actual resulting parent/PR #438 head; verify current main ancestry; refresh CI/body; then complete and integrate the PR #493 canonical PM migration gate before reconciling #408. Do not assume task head equals parent head."
+  parent_after_sync_and_review_system_base: 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20
+  post_integration: "Parent head fetched and recorded at 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20; complete and integrate the PR #493 canonical PM migration gate before reconciling #408."
 ready_queue:
   - number: 408
     status: active_ready_parent_sync_and_pr_493_migration_pending

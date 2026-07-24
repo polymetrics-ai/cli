@@ -3,9 +3,9 @@
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
   "parentPR": 438,
-  "status": "worker_blocked_wave1_and_pr493_migration",
+  "status": "worker_blocked_pr493_migration",
   "startingHead": "56a7ecb08f755184af7b55318c3285582d5adfb7",
-  "currentHead": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+  "currentHead": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
   "verificationPassed": false,
   "gsdAdapter": {
     "doctor": "passed",
@@ -846,7 +846,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
-  "updatedAt": "2026-07-23T05:10:00Z",
+  "updatedAt": "2026-07-24T00:00:00Z",
   "mainSync": {
     "parentBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
     "parentPRHeadBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -858,8 +858,9 @@
     "verifiedTaskHeadBeforeEvidence": "2a2e964b17144939b0a42f297de0d2b1c87383e1",
     "strategy": "git merge --no-ff origin/main",
     "forcePush": "not_used",
-    "status": "stacked_pr_pending_parent_unchanged",
-    "postIntegration": "fetch origin/feat/cli-architecture-v2; record the actual resulting parent and PR #438 head; verify origin/main ancestry; refresh parent CI/body evidence; then complete and integrate PR #493's canonical PM migration before #408; do not predeclare the task head as the parent head"
+    "status": "integrated_parent_verified",
+    "parentAfterWave1AndReviewSystemBase": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+    "postIntegration": "parent head fetched and recorded at 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20; PR #493 canonical PM migration remains the worker-start blocker before #408"
   },
   "automatedReviewAvailability": {
     "claudeWorkflow": "disabled_manually",

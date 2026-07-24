@@ -17,11 +17,11 @@ Load required Go/design skills:
 For CLI command, flag, output, connector surface, or help-topic changes, use:
 `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
 
-Follow the post-implementation Claude review loop:
-`.agents/agentic-delivery/workflows/claude-review-loop.md`
+Follow the exact-head local Codex packet review and synthesis loop:
+`.agents/agentic-delivery/workflows/local-codex-review-loop.md`
 
-Choose the automated review route before posting review commands:
-`.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+After clean synthesis, run independent trajectory validation:
+`.agents/agentic-delivery/workflows/shepherd-validator.md`
 
 For parent issues, sub-issues, and stacked PRs, follow:
 `.agents/agentic-delivery/workflows/stacked-parent-subissue-workflow.md`
@@ -47,10 +47,10 @@ Parent issue:
 Orchestration:
 - spawned by: `<parent issue orchestrator or "None">`
 - state ledger: `<issue comment, PR body section, file path, or "None">`
-- worker handoff template: `.agents/agentic-delivery/contracts/worker-handoff-template.md`
+- worker handoff template: `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`
 - merge owner: `<parent issue orchestrator | assigned coordinator | not applicable>`
-- Automated review coverage route: `<sub_pr | parent_pr_fallback | copilot_backup | blocked | not applicable>`
-- Copilot fallback route: `<copilot_backup | human | none | not applicable>`
+- exact-head PM manifest/synthesis: `<pending | clean | findings_correction_required | blocked | not applicable>`
+- independent Shepherd verdict: `<pending | PROCEED | RETRY | REVERT | HALT | not applicable>`
 
 Branch policy:
 - parent branch: `<type>/<parent-issue>-<slug>` or `None`
@@ -77,18 +77,11 @@ Before merge:
   generated help/manual artifacts, and tests are updated or explicitly marked not applicable
 - commit and push coherent green slices to the active issue/PR branch after local green gates;
   never push to `main`
-- observe automatic Claude review after implementation when the PR is non-draft and targets
-  `main`; do not post manual review commands unless the documented fallback conditions apply
-- confirm Claude actually reviewed the relevant commits, or record the parent PR, Copilot, or
-  human fallback route for stacked sub-PRs
-- if Claude is rate-limited, skipped, disabled, paused, or unavailable and review coverage is
-  blocking progress, request GitHub Copilot review once as backup when it is enabled
-- reply to every actionable Claude or Copilot item with accepted, accepted_with_modification,
-  declined, deferred, or needs_human
-- rerun verification after accepted fixes
-- ensure accepted fix commits are Claude-reviewed; wait for automatic incremental review when
-  active, and use manual `@claude review` only when automatic review is paused, disabled,
-  skipped, rate-limit retry is due, or the automatic pause threshold was reached
+- compile bounded exact-head PM review packets after verification and preserve raw responses outside tracked source
+- synthesize exactly one PM-owned local-Codex verdict and disposition every actionable finding with the canonical enum
+- rerun verification and fresh exact-head packet review after every accepted fix or changed head
+- run independent Shepherd validation only after clean synthesis and require `PROCEED` for the same exact head
+- do not request Claude or Copilot as current PM coverage
 - merge sub-PRs into parent branches only when all automated gates pass and no human gate is
   triggered
 - require human approval before merging parent PRs into `main`

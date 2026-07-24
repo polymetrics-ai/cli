@@ -37,7 +37,7 @@ confirm the parent branch and parent PR, and delegate independent ready work thr
   sidecars.
 - Dispatch `pm-verifier` (read-only, `model: openai-codex/gpt-5.6-sol:xhigh`) for exact-head
   verification.
-- After verification, run `scripts/pm-review-system.py compile` for exact-base/head/tree closure,
+- After verification, run `scripts/pm-review-system.py compile --scope <validated-per-run-scope>` for exact-base/head/tree closure,
   authority, typed bidirectional practical impact, semantic, scope, and packet coverage. Stop on
   unresolved impact, any graph/packet bound, or unsplittable context. Dispatch a fresh-context
   `pm-reviewer` (candidate read-only,

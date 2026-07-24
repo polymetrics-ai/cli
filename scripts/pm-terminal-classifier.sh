@@ -22,15 +22,21 @@ if record.get("terminal") != "human_gate":
     raise SystemExit(0)
 
 kind = record.get("human_gate_kind", "")
-schema = record.get("schema_version", record.get("schemaVersion"))
-if schema is None:
-    # Missing schema is detected read-only legacy input. Its historical empty kind represented
-    # final parent readiness; current producers must never write this shape.
+keys = [key for key in ("schema_version", "schemaVersion") if key in record]
+if not keys:
+    # Missing schema keys identify read-only legacy input. An explicitly null/malformed schema is
+    # current malformed state and must never inherit historical readiness semantics.
     if not kind:
         print("human_ready")
     else:
         print("blocked_human_decision")
-elif schema != "canonical_v2":
+    raise SystemExit(0)
+values = [record[key] for key in keys]
+if len(values) != 1 or not isinstance(values[0], str) or not values[0] or len(set(values)) != 1:
+    print("blocked_human_decision")
+    raise SystemExit(0)
+schema = values[0]
+if schema != "canonical_v2":
     # Any explicit unsupported schema stops safely, regardless of a familiar kind.
     print("blocked_human_decision")
 elif kind == "parent_ready":

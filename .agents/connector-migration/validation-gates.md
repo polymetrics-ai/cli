@@ -58,7 +58,7 @@ handoff.
 
 ## Review gate
 
-- Claude auto-review where the base branch is `main`; for stacked sub-PRs into the parent
-  branch where Claude is disabled, the parent PR must receive review coverage for the
-  integrated range before the slice is considered integrated (see
-  `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`).
+- After exact-head verification, compile bounded PM review packets and require one clean local
+  Codex synthesis with every finding dispositioned. Then require independent Shepherd `PROCEED`
+  for the same exact head before the slice is considered ready (see
+  `.agents/agentic-delivery/workflows/local-codex-review-loop.md`).

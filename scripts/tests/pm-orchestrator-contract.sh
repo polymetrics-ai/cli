@@ -53,16 +53,16 @@ require(local_prompt, "exact base", "exact head", "read-only", "disposition", "i
 require(local_review, "bidirectional", "upstream", "downstream", "lateral", "temporal", "pm-review-lab.py", "disconfirming")
 require(
     ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
-    "pm-review-packet/v2",
-    "pm-review-packet-response/v2",
-    "pm-review-impact-graph/v1",
+    "pm-review-packet/v3",
+    "pm-review-packet-response/v3",
+    "pm-review-impact-graph/v2",
     "pm-review-lab-request/v1",
     "candidate_unchanged",
     "lab_cleanup_verified",
 )
 review_config = json.loads(read(".agents/agentic-delivery/contracts/pm-review-system.json"))
-if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v2":
-    errors.append("pm-review-system config: expected explicit v2 schema")
+if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v3":
+    errors.append("pm-review-system config: expected explicit v3 schema")
 impact_config = review_config.get("impact_graph", {})
 for key in (
     "max_index_files", "max_index_bytes", "max_nodes", "max_edges", "max_traversal_states",
@@ -71,8 +71,13 @@ for key in (
 ):
     if key not in impact_config:
         errors.append(f"pm-review-system config: missing impact bound/policy {key}")
-if "scripts/pm-review-lab.py" not in review_config.get("allowed_changed_paths", []):
-    errors.append("pm-review-system config: lab runner is outside the positive write-scope allowlist")
+review_scope = json.loads(read(".planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json"))
+if review_scope.get("schema_version") != "polymetrics.ai/pm-review-scope/v1":
+    errors.append("pm-review scope: expected explicit v1 schema")
+if "scripts/pm-review-lab.py" not in review_scope.get("allowed_changed_paths", []):
+    errors.append("pm-review scope: lab runner is outside the positive write-scope allowlist")
+if "allowed_changed_paths" in review_config or "forbidden_changed_paths" in review_config:
+    errors.append("pm-review-system config: reusable policy must not embed one branch delivery scope")
 require("scripts/pm-review-lab.py", "policy-only execution cannot authorize clean evidence", "network", "outside_write", "candidate_unchanged", "lab_cleanup_verified")
 
 forward_paths = [

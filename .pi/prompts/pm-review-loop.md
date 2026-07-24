@@ -21,7 +21,7 @@ Required reading:
 - `.agents/agentic-delivery/contracts/pm-review-packet-template.md`
 
 Confirm the supplied exact base/head/tree match local/remote ground truth. Run
-`scripts/pm-review-system.py compile` and stop on deterministic findings, unsafe/missing impact,
+`scripts/pm-review-system.py compile --scope <validated-per-run-scope>` and stop on deterministic findings, unsafe/missing impact,
 authority disagreement, graph/index/traversal/packet bounds, unassigned files/edges, or unsplittable
 context. Spawn one fresh-context candidate-read-only `pm-reviewer` per compiled packet. Reviewers
 must model upstream/downstream/lateral/temporal impact and may run temporary hypothesis changes only
