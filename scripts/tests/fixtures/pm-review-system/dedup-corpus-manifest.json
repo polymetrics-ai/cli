@@ -1,0 +1,20 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-dedup-corpus-manifest/v1",
+  "measurement_policy": "R1 and R2 are retrospective development only because R2 labels were inspected during tuning; freeze deterministic-partial-keys/v1 before prospective R3",
+  "raw_response_limitation": "Hash-verified raw response objects are unavailable in Git. Candidate evaluation uses only committed table fields and makes no semantic/causal acceptance claim.",
+  "sources": {
+    "R1": {
+      "path": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-DISPOSITION.md",
+      "bytes": 23593,
+      "sha256": "9a745178167768606c64fd3faa13603b17f92568e9de6377708baffc44133134",
+      "role": "retrospective_development"
+    },
+    "R2": {
+      "path": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-DISPOSITION.md",
+      "bytes": 34633,
+      "sha256": "caf455bd48949df5e2d0829be930674bd3f0af0d947e89dfa158a0dd13b2fa80",
+      "role": "retrospective_development_labels_inspected"
+    }
+  },
+  "next_untouched_measurement": "fresh prospective exact-head R3"
+}

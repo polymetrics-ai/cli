@@ -56,9 +56,15 @@ handoff.
   must be idempotent — regenerate twice with no diff — and the regenerated files must be
   committed so the "Verify generated website data" CI step passes.
 
-## Review gate
+## Delivery-profile and review gate
 
-- After exact-head verification, compile bounded PM review packets and require one clean local
-  Codex synthesis with every finding dispositioned. Then require independent Shepherd `PROCEED`
-  for the same exact head before the slice is considered ready (see
+- `pm_worker` must have committed and pushed coherent green slices only to its assigned branch;
+  `coordinator_fanout` must remain uncommitted and return an exact path/verification handoff to the
+  coordinator. Neither profile edits shared generated/bootstrap files without explicit scope.
+- After exact-head verification for `pm_worker`, run v4
+  `scripts/pm-review-system.py compile --scope ... --base ... --head ...`, require a ready manifest,
+  render every packet with the canonical `render` command, and pass each rendered stdout unchanged
+  to a fresh-context local Codex reviewer. Require one authenticated `synthesize` result that is
+  clean with every finding dispositioned. Then require independent Shepherd `PROCEED` for the same
+  exact base/head/tree before the slice is ready (see
   `.agents/agentic-delivery/workflows/local-codex-review-loop.md`).

@@ -25,15 +25,22 @@ from pathlib import Path, PurePosixPath
 from typing import Any, Iterable
 
 OBSERVATION_SCHEMA = "polymetrics.ai/pm-review-observation/v1"
-CONFIG_SCHEMA = "polymetrics.ai/pm-review-system/v3"
+CONFIG_SCHEMA = "polymetrics.ai/pm-review-system/v4"
 SCOPE_SCHEMA = "polymetrics.ai/pm-review-scope/v1"
-COMPILE_SCHEMA = "polymetrics.ai/pm-review-compile/v3"
-IMPACT_SCHEMA = "polymetrics.ai/pm-review-impact-graph/v2"
-PACKET_SCHEMA = "polymetrics.ai/pm-review-packet/v3"
-PACKET_RESPONSE_SCHEMA = "polymetrics.ai/pm-review-packet-response/v3"
-SYNTHESIS_SCHEMA = "polymetrics.ai/pm-review-synthesis/v3"
-LAB_EVIDENCE_SCHEMA = "polymetrics.ai/pm-review-lab-evidence/v2"
-MEASUREMENT_SCHEMA = "polymetrics.ai/pm-review-measurement/v1"
+COMPILE_SCHEMA = "polymetrics.ai/pm-review-compile/v4"
+IMPACT_SCHEMA = "polymetrics.ai/pm-review-impact-graph/v3"
+PACKET_SCHEMA = "polymetrics.ai/pm-review-packet/v4"
+PACKET_RESPONSE_SCHEMA = "polymetrics.ai/pm-review-packet-response/v4"
+SYNTHESIS_SCHEMA = "polymetrics.ai/pm-review-synthesis/v4"
+LAB_EVIDENCE_SCHEMA = "polymetrics.ai/pm-review-lab-evidence/v3"
+MEASUREMENT_SCHEMA = "polymetrics.ai/pm-review-measurement/v2"
+FINDING_OBSERVATION_SCHEMA = "polymetrics.ai/pm-review-finding-observation/v1"
+OCCURRENCE_SCHEMA = "polymetrics.ai/pm-review-occurrence/v1"
+ROOT_CAUSE_SCHEMA = "polymetrics.ai/pm-review-root-cause/v1"
+DEDUP_SCHEMA = "polymetrics.ai/pm-review-dedup/v1"
+DEDUP_DECISIONS_SCHEMA = "polymetrics.ai/pm-review-dedup-decisions/v1"
+DEDUP_HISTORY_SCHEMA = "polymetrics.ai/pm-review-dedup-history/v1"
+TRUST_BUNDLE_SCHEMA = "polymetrics.ai/pm-review-trust-bundle/v1"
 CANONICAL_SCHEMA = "canonical_v2"
 CANONICAL_GATE_KINDS = {"parent_ready", "correction_cap_exceeded"}
 CANONICAL_DISPOSITIONS = {
@@ -45,14 +52,71 @@ CANONICAL_DISPOSITIONS = {
     "needs_human",
 }
 HEX_SHA = re.compile(r"^[0-9a-f]{40}$")
+HEX_DIGEST = re.compile(r"^[0-9a-f]{64}$")
+SAFE_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,79}$")
 CONTROL = re.compile(r"[\x00-\x1f\x7f]")
 REFERENCE_SUFFIXES = (".md", ".json", ".yaml", ".yml", ".sh", ".py", ".go")
 INDEX_SUFFIXES = set(REFERENCE_SUFFIXES)
-REPO_REFERENCE = re.compile(
-    r"(?<![A-Za-z0-9])((?:(?:\.agents|\.pi|scripts|\.planning|cmd|internal)/"
-    r"[A-Za-z0-9_.\-/]+\.(?:md|json|ya?ml|sh|py|go)|(?:AGENTS|CLAUDE)\.md))"
+PATH_REFERENCE = re.compile(
+    r"(?<![A-Za-z0-9])((?:(?:\.{0,2}/)?(?:[A-Za-z0-9_.-]+/)+"
+    r"[A-Za-z0-9_.-]+\.(?:md|json|ya?ml|sh|py|go)|(?:AGENTS|CLAUDE)\.md))"
 )
+REPO_REFERENCE = PATH_REFERENCE
 MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+CERTAINTIES = {"active", "inactive", "unknown"}
+DIRECTIONS = {"upstream", "downstream", "lateral", "temporal"}
+RELATIONS = {
+    "required_reference", "descriptive_reference", "script_invokes", "python_import",
+    "authority_writes", "authority_reads", "authority_mirror", "generates",
+    "generated_consumer", "go_member_of", "go_contains", "go_imports", "go_test",
+    "platform_variant", "temporal_phase_state_instance", "temporal_state_mirror",
+    "migration", "restart_resume", "version_invalidation", "fixture", "sibling_variant",
+}
+PHASE_STATUSES = {
+    "planned", "red", "green", "verifying", "review_pending",
+    "findings_correction_required", "blocked", "human_ready", "complete",
+    "local_codex_round_2_findings_systemic_correction_planned",
+}
+LOCAL_CODEX_STATUSES = {"pending", "findings_correction_required", "clean", "comments_addressed", "blocked"}
+SHEPHERD_STATUSES = {"pending", "proceed", "retry", "revert", "halt", "blocked"}
+SLICE_FIELDS = {
+    "path", "revision", "revision_kind", "blob_sha256", "start_line", "end_line",
+    "start_byte", "end_byte", "bytes", "sha256",
+}
+HYPOTHESIS_FIELDS = {"id", "claim", "strongest_alternative", "falsifier", "evidence_paths"}
+EXPERIMENT_BINDING_FIELDS = {
+    "hypothesis_id", "claim", "alternative", "impact_edges_examined", "temporary_change",
+    "command", "expected_discriminator", "observed",
+}
+PROMPT_HEADER = b"PM exact-head packet review v4\n"
+PACKET_MARKER = b"\nCOMPILED PACKET:\n"
+PAYLOAD_MARKER = b"\nEXACT SLICE PAYLOADS (canonical descriptor order):\n"
+SLICE_SEPARATOR = b"\n<<PM_SLICE>>\n"
+MAX_EXACT_DIFF_BYTES = 64 * 1024 * 1024
+MAX_RESPONSE_BYTES = 16 * 1024 * 1024
+DEDUP_KEY_VERSIONS = {
+    "payload_hash": "payloadHash/v1",
+    "invariant": "invariant/v1",
+    "category_family": "categoryFamily/v1",
+    "source_anchor": "sourceAnchor/v1",
+    "mechanism": "mechanism/v1",
+    "correction_surface": "correctionSurface/v1",
+    "claim_shingles": "claimShingles/v1",
+}
+DEDUP_STOP_WORDS = {
+    "a", "an", "and", "are", "as", "at", "be", "by", "can", "for", "from", "has",
+    "in", "into", "is", "it", "of", "on", "or", "that", "the", "this", "to", "was",
+    "when", "with", "without", "must", "should", "may", "not",
+}
+CATEGORY_FAMILY_RULES = (
+    (re.compile(r"(?:packet|context).*(?:bound|budget|overflow|slice)"), "packet_bounds"),
+    (re.compile(r"(?:impact|graph).*(?:parser|relation|edge|certainty|coverage|provenance|recall|completeness)"), "impact_graph"),
+    (re.compile(r"(?:lab|experiment).*(?:evidence|binding|safety|resource|denial|discriminator)"), "lab_evidence"),
+    (re.compile(r"(?:manifest|exact|version|blob|stale).*(?:binding|integrity|authentication|evidence)?"), "exact_identity"),
+    (re.compile(r"(?:phase|authority|state|schema|mirror)"), "authority_state"),
+    (re.compile(r"(?:workflow|route|gate|shepherd|orchestration)"), "workflow_gate"),
+    (re.compile(r"(?:secret|credential|trace|path_safety)"), "security_containment"),
+)
 
 
 class ReviewSystemError(ValueError):
@@ -123,11 +187,55 @@ def path_matches(path: str, patterns: Iterable[str]) -> bool:
     return False
 
 
+def canonical_json_bytes(value: Any) -> bytes:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode()
+
+
+def sha256_json(value: Any) -> str:
+    return hashlib.sha256(canonical_json_bytes(value)).hexdigest()
+
+
 def load_json(path: Path) -> Any:
     try:
         return json.loads(path.read_text())
     except (OSError, json.JSONDecodeError) as exc:
         raise ReviewSystemError(f"cannot read JSON {path}: {exc}") from exc
+
+
+def require_object(value: Any, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ReviewSystemError(f"{label} must be a JSON object")
+    return value
+
+
+def git_blob(root: Path, commit: str, relative: str, *, maximum: int | None = None) -> bytes:
+    validate_sha(commit, "blob revision")
+    relative = validate_relative_path(relative, "blob path")
+    proc = subprocess.Popen(
+        ["git", "-C", str(root), "show", f"{commit}:{relative}"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    assert proc.stdout is not None and proc.stderr is not None
+    limit = maximum if maximum is not None else 64 * 1024 * 1024
+    data = proc.stdout.read(limit + 1)
+    if len(data) > limit:
+        proc.kill()
+        proc.wait()
+        raise ReviewSystemError(f"exact blob exceeds {limit} bytes: {relative}")
+    stderr = proc.stderr.read(4096)
+    return_code = proc.wait()
+    if return_code != 0:
+        detail = stderr.decode(errors="replace").strip()
+        raise ReviewSystemError(f"exact blob is absent at {commit[:12]}: {relative}: {detail}")
+    return data
+
+
+def git_blob_optional(root: Path, commit: str, relative: str, *, maximum: int | None = None) -> bytes | None:
+    try:
+        return git_blob(root, commit, relative, maximum=maximum)
+    except ReviewSystemError:
+        return None
 
 
 def load_case(path: Path, case_id: str) -> dict[str, Any]:
@@ -228,12 +336,18 @@ def impact_contract_findings(data: dict[str, Any]) -> list[dict[str, Any]]:
         if not source or not target or certainty not in {"active", "inactive", "unknown"}:
             result.append(finding("impact_graph_contract", "edge lacks typed source/target/certainty"))
             continue
+        if certainty != "inactive" and source not in nodes:
+            result.append(finding("impact_graph_contract", f"{certainty} impact source is absent: {source}"))
         if certainty != "inactive" and target not in nodes:
             result.append(finding("impact_graph_contract", f"{certainty} impact target is absent: {target}"))
-        if certainty != "inactive":
+        if certainty != "inactive" and source in nodes and target in nodes:
             forward[source].append(edge)
             reverse[target].append(edge)
-    pending = deque((seed, 0) for seed in sorted(set(data.get("seeds", []))))
+    seeds = sorted(set(data.get("seeds", [])))
+    for seed in seeds:
+        if seed not in nodes:
+            result.append(finding("impact_graph_contract", f"impact seed is absent: {seed}"))
+    pending = deque((seed, 0) for seed in seeds if seed in nodes)
     seen: set[str] = set()
     bound_hit = False
     maximum = data.get("max_depth")
@@ -464,8 +578,39 @@ def run_git(root: Path, args: list[str]) -> str:
     return proc.stdout
 
 
+def run_git_bytes_bounded(root: Path, args: list[str], maximum: int) -> bytes:
+    if not isinstance(maximum, int) or maximum <= 0:
+        raise ReviewSystemError("bounded Git output maximum must be a positive integer")
+    with tempfile.TemporaryFile() as stderr_file:
+        proc = subprocess.Popen(
+            ["git", "-C", str(root), *args],
+            stdout=subprocess.PIPE,
+            stderr=stderr_file,
+        )
+        assert proc.stdout is not None
+        payload = proc.stdout.read(maximum + 1)
+        if len(payload) > maximum:
+            proc.kill()
+            proc.wait()
+            raise ReviewSystemError(f"bounded Git output exceeds {maximum} bytes: {' '.join(args[:2])}")
+        return_code = proc.wait()
+        if return_code != 0:
+            stderr_file.seek(0)
+            detail = stderr_file.read(4096).decode(errors="replace").strip()
+            raise ReviewSystemError(f"git {' '.join(args[:2])} failed: {detail}")
+        return payload
+
+
+def read_file_bounded(path: Path, maximum: int) -> bytes:
+    with path.open("rb") as handle:
+        payload = handle.read(maximum + 1)
+    if len(payload) > maximum:
+        raise ReviewSystemError(f"file exceeds {maximum} bytes: {path.name}")
+    return payload
+
+
 def normalize_reference(source: str, raw: str) -> str | None:
-    value = raw.strip().strip("`'\"")
+    value = raw.strip().strip("`'\"(),:;")
     value = value.split("#", 1)[0].split("?", 1)[0]
     if not value or value.startswith(("http://", "https://", "mailto:", "#")):
         return None
@@ -473,24 +618,31 @@ def normalize_reference(source: str, raw: str) -> str | None:
         return None
     if not value.endswith(REFERENCE_SUFFIXES):
         return None
-    if value in {"AGENTS.md", "CLAUDE.md"} or value.startswith(
-        (".agents/", ".pi/", "scripts/", ".planning/", "cmd/", "internal/")
-    ):
+    repository_roots = (".agents/", ".pi/", ".gsd/", "scripts/", ".planning/", "cmd/", "internal/", "docs/", "website/")
+    if value in {"AGENTS.md", "CLAUDE.md"} or value.startswith(repository_roots):
         return validate_relative_path(value, "active reference")
     source_parent = PurePosixPath(source).parent
     combined = posixpath.normpath((source_parent / value).as_posix())
     return validate_relative_path(combined, "active reference")
 
 
+def reference_candidates(text: str) -> list[str]:
+    values = [match.group(1) for match in MARKDOWN_LINK.finditer(text)]
+    values.extend(match.group(1) for match in PATH_REFERENCE.finditer(text))
+    return list(dict.fromkeys(values))
+
+
 def extract_references(relative: str, text: str) -> list[dict[str, Any]]:
-    """Extract active references, not every historical/test mention of a path."""
+    """Extract structurally active closure references with safe relative resolution."""
     candidates: list[tuple[str, str, int]] = []
     suffix = PurePosixPath(relative).suffix
     lines = text.splitlines()
-    inactive_words = ("historical", "legacy", "deprecated", "prohibited", "forbid", "reject")
+    inactive_section = False
+    markdown_heading = ""
+    yaml_stack: list[tuple[int, str]] = []
 
     if relative.endswith("pm-review-system.json"):
-        document = json.loads(text)
+        document = require_object(json.loads(text), "review policy")
         for raw in document.get("canonical_roots", []):
             candidates.append((raw, "config_canonical_root", 0))
         for authority in document.get("authorities", []):
@@ -498,32 +650,42 @@ def extract_references(relative: str, text: str) -> list[dict[str, Any]]:
             for field in ("writers", "readers", "mirrors"):
                 for raw in authority.get(field, []):
                     candidates.append((raw, f"config_authority_{field}", 0))
-    elif suffix in {".sh", ".py"}:
-        active_command = re.compile(r"(?:^|\s)(?:source|bash|python3|exec|runpy\.run_path)\b|\$repo_root/")
-        for number, line_text in enumerate(lines, 1):
-            if not active_command.search(line_text):
-                continue
-            for match in REPO_REFERENCE.finditer(line_text):
-                candidates.append((match.group(1), "script_execution_path", number))
     else:
-        for match in MARKDOWN_LINK.finditer(text):
-            line = text.count("\n", 0, match.start()) + 1
-            line_text = lines[line - 1].lower() if line <= len(lines) else ""
-            if not any(word in line_text for word in inactive_words):
-                candidates.append((match.group(1), "markdown_link", line))
         for number, line_text in enumerate(lines, 1):
-            lowered = line_text.lower()
-            if any(word in lowered for word in inactive_words):
+            stripped = line_text.strip()
+            if suffix == ".md" and stripped.startswith("#"):
+                markdown_heading = stripped.lstrip("#").strip().lower()
+                inactive_section = bool(re.search(r"\b(historical|deprecated|retired|forbidden examples?)\b", markdown_heading))
+            if inactive_section or line_certainty(line_text) != "active":
                 continue
-            if suffix in {".yaml", ".yml"}:
-                key = line_text.split(":", 1)[0].lower() if ":" in line_text else ""
-                if not any(word in key for word in ("path", "prompt", "contract", "workflow", "schema", "template", "required", "source")):
+            reason = "inline_required_path"
+            relevant = True
+            if suffix in {".sh", ".py"}:
+                relevant = script_invocation_line(line_text) or bool(re.search(r"\b(?:Path|open|run_path)\s*\(", line_text))
+                reason = "script_execution_path"
+            elif suffix in {".yaml", ".yml"}:
+                indent = len(line_text) - len(line_text.lstrip(" "))
+                while yaml_stack and yaml_stack[-1][0] >= indent:
+                    yaml_stack.pop()
+                key_match = re.match(r"\s*(?:-\s*)?([A-Za-z_][A-Za-z0-9_-]*)\s*:", line_text)
+                if key_match:
+                    yaml_stack.append((indent, key_match.group(1).lower()))
+                context = {key for _, key in yaml_stack}
+                relevant = bool(context & {"path", "paths", "prompt", "contract", "workflow", "schema", "template", "required", "requires", "source", "inputs", "dependencies"})
+                reason = "yaml_structural_path"
+            if not relevant:
+                continue
+            for raw in reference_candidates(line_text):
+                if suffix == ".sh":
+                    raw = re.sub(r"^(?:repo_root|REPO_ROOT|ROOT_DIR)/", "", raw)
+                    if re.match(r"^[A-Z][A-Z0-9_]*/", raw):
+                        continue
+                structural_keys = {key for _, key in yaml_stack} if suffix in {".yaml", ".yml"} else set()
+                relation = "script_invokes" if suffix == ".sh" and script_invocation_line(line_text) else reference_relation(line_text, raw, structural_keys)
+                heading_requires = suffix == ".md" and bool(re.search(r"\b(required|must read|inputs?|dependencies)\b", markdown_heading))
+                if relation not in {"required_reference", "script_invokes"} and not heading_requires:
                     continue
-                reason = "yaml_or_frontmatter_path"
-            else:
-                reason = "inline_required_path"
-            for match in REPO_REFERENCE.finditer(line_text):
-                candidates.append((match.group(1), reason, number))
+                candidates.append((raw, reason, number))
 
     result: list[dict[str, Any]] = []
     seen: set[tuple[str, str, int]] = set()
@@ -587,6 +749,139 @@ def compile_closure(root: Path, config: dict[str, Any]) -> tuple[list[str], list
     return sorted(seen), sorted(edges, key=lambda item: (item["source"], item["target"], item["line"])), findings
 
 
+def json_schema_findings(value: Any, schema: Any, location: str = "$") -> list[str]:
+    """Validate the dependency-free JSON-Schema subset used by PM phase state."""
+    if not isinstance(schema, dict):
+        return [f"{location}: schema node is not an object"]
+    errors: list[str] = []
+    expected_type = schema.get("type")
+    type_checks = {
+        "object": lambda item: isinstance(item, dict),
+        "array": lambda item: isinstance(item, list),
+        "string": lambda item: isinstance(item, str),
+        "boolean": lambda item: isinstance(item, bool),
+        "integer": lambda item: isinstance(item, int) and not isinstance(item, bool),
+        "number": lambda item: isinstance(item, (int, float)) and not isinstance(item, bool),
+        "null": lambda item: item is None,
+    }
+    if isinstance(expected_type, list):
+        type_ok = any(type_checks.get(item, lambda _: False)(value) for item in expected_type)
+    else:
+        type_ok = type_checks.get(expected_type, lambda _: True)(value)
+    if not type_ok:
+        return [f"{location}: expected {expected_type}"]
+    if "const" in schema and value != schema["const"]:
+        errors.append(f"{location}: value differs from const")
+    if "enum" in schema and value not in schema["enum"]:
+        errors.append(f"{location}: value is outside enum")
+    if isinstance(value, str):
+        if len(value) < int(schema.get("minLength", 0)):
+            errors.append(f"{location}: string is too short")
+        if schema.get("pattern") and re.fullmatch(schema["pattern"], value) is None:
+            errors.append(f"{location}: string does not match pattern")
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        if "minimum" in schema and value < schema["minimum"]:
+            errors.append(f"{location}: number is below minimum")
+        if "maximum" in schema and value > schema["maximum"]:
+            errors.append(f"{location}: number is above maximum")
+    if isinstance(value, dict):
+        required = schema.get("required", [])
+        if not isinstance(required, list):
+            errors.append(f"{location}: schema required is malformed")
+            required = []
+        for key in required:
+            if key not in value:
+                errors.append(f"{location}: missing required property {key}")
+        if len(value) < int(schema.get("minProperties", 0)):
+            errors.append(f"{location}: too few properties")
+        properties = schema.get("properties", {})
+        if not isinstance(properties, dict):
+            errors.append(f"{location}: schema properties is malformed")
+            properties = {}
+        for key, item in value.items():
+            if key in properties:
+                errors.extend(json_schema_findings(item, properties[key], f"{location}.{key}"))
+            elif schema.get("additionalProperties") is False:
+                errors.append(f"{location}: unexpected property {key}")
+            elif isinstance(schema.get("additionalProperties"), dict):
+                errors.extend(json_schema_findings(item, schema["additionalProperties"], f"{location}.{key}"))
+    if isinstance(value, list):
+        if schema.get("uniqueItems") and len({canonical_json_bytes(item) for item in value}) != len(value):
+            errors.append(f"{location}: array items are not unique")
+        item_schema = schema.get("items")
+        if isinstance(item_schema, dict):
+            for index, item in enumerate(value):
+                errors.extend(json_schema_findings(item, item_schema, f"{location}[{index}]"))
+    return errors
+
+
+def phase_state_semantic_findings(state: Any) -> list[str]:
+    if not isinstance(state, dict):
+        return ["phase state must be an object"]
+    errors: list[str] = []
+    budget = state.get("correctionBudget")
+    if not isinstance(budget, dict) or set(budget) != {"maxCorrectionRounds", "roundsByRange", "headHistory"}:
+        errors.append("correctionBudget must contain exactly maxCorrectionRounds, roundsByRange, and headHistory")
+        return errors
+    maximum = budget.get("maxCorrectionRounds")
+    rounds = budget.get("roundsByRange")
+    history = budget.get("headHistory")
+    if not isinstance(maximum, int) or isinstance(maximum, bool) or maximum < 1:
+        errors.append("maxCorrectionRounds must be a positive integer")
+    if not isinstance(rounds, dict) or not rounds:
+        errors.append("roundsByRange must be a non-empty object")
+    else:
+        for key, value in rounds.items():
+            if not isinstance(key, str) or "..." not in key or not isinstance(value, int) or isinstance(value, bool) or value < 0:
+                errors.append("roundsByRange contains a malformed lineage/count")
+            elif isinstance(maximum, int) and value > maximum:
+                errors.append("roundsByRange exceeds maxCorrectionRounds")
+    if not isinstance(history, list) or not history or len(history) != len(set(history)) or not all(isinstance(item, str) and HEX_SHA.fullmatch(item) for item in history):
+        errors.append("headHistory must be a non-empty append-only unique SHA list")
+    lineage = state.get("candidateLineage")
+    if isinstance(rounds, dict) and (not isinstance(lineage, str) or set(rounds) != {lineage}):
+        errors.append("roundsByRange must be keyed only by the stable candidate lineage")
+    guards = state.get("guards")
+    if isinstance(guards, dict) and "correction_rounds" in guards:
+        errors.append("canonical phase state must not write the legacy correction counter")
+    status = state.get("status")
+    if not isinstance(status, str) or status not in PHASE_STATUSES:
+        errors.append("phase status is outside the current enum")
+    local = state.get("localCodex")
+    if not isinstance(local, dict) or local.get("status") not in LOCAL_CODEX_STATUSES:
+        errors.append("localCodex status is absent or invalid")
+    elif local.get("status") != "pending":
+        if not HEX_SHA.fullmatch(str(local.get("exactHeadSHA", ""))) or not HEX_SHA.fullmatch(str(local.get("exactHeadTree", ""))):
+            errors.append("non-pending localCodex state lacks exact head/tree")
+        elif isinstance(history, list) and local.get("exactHeadSHA") != history[-1]:
+            errors.append("localCodex exact head must equal the latest append-only headHistory entry")
+    shepherd = state.get("shepherd")
+    if not isinstance(shepherd, dict) or shepherd.get("status") not in SHEPHERD_STATUSES:
+        errors.append("shepherd status is absent or invalid")
+    elif shepherd.get("status") == "pending" and shepherd.get("verdict") is not None:
+        errors.append("pending Shepherd must not carry a verdict")
+    if not isinstance(state.get("verificationPassed"), bool):
+        errors.append("verificationPassed must be boolean")
+    if not isinstance(state.get("humanGates"), list) or not all(isinstance(item, str) and item for item in state.get("humanGates", [])):
+        errors.append("humanGates must be a string list")
+    return errors
+
+
+def json_pointer(value: Any, pointer: str) -> Any:
+    if not isinstance(pointer, str) or not pointer.startswith("/"):
+        raise ReviewSystemError("mirror JSON pointer must start with /")
+    current = value
+    for raw in pointer.split("/")[1:]:
+        key = raw.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        elif isinstance(current, list) and key.isdigit() and int(key) < len(current):
+            current = current[int(key)]
+        else:
+            raise ReviewSystemError(f"mirror pointer is absent: {pointer}")
+    return current
+
+
 def authority_inventory(root: Path, config: dict[str, Any]) -> tuple[list[dict[str, Any]], list[str], list[dict[str, Any]]]:
     inventory: list[dict[str, Any]] = []
     files: set[str] = set()
@@ -636,26 +931,44 @@ def authority_inventory(root: Path, config: dict[str, Any]) -> tuple[list[dict[s
             if blocked and ready.get(live["decision_field"]) != live["blocked_decision"]:
                 findings.append(finding("dependency_consistency", f"ready item {live['issue']} is dispatchable before authoritative gate"))
     for relationship in config.get("configured_relationships", []):
-        if relationship.get("validator") != "pm_review_phase_v2":
-            continue
-        try:
-            schema = load_json(resolve_safe(root, relationship["source"]))
-            state = load_json(resolve_safe(root, relationship["target"]))
-        except ReviewSystemError as exc:
-            findings.append(finding("authority_inventory", str(exc), relationship.get("target")))
-            continue
-        required = set(schema.get("required", []))
-        missing = required - set(state)
-        expected_version = schema.get("properties", {}).get("schemaVersion", {}).get("const")
-        budget = state.get("correctionBudget")
-        if missing or state.get("schemaVersion") != expected_version or not isinstance(budget, dict):
-            findings.append(
-                finding(
-                    "authoritative_state_consistency",
-                    f"dedicated PM phase state does not validate: missing={sorted(missing)} expected_schema={expected_version!r}",
-                    relationship["target"],
+        validator = relationship.get("validator")
+        if validator == "pm_review_phase_v2":
+            try:
+                schema = require_object(load_json(resolve_safe(root, relationship["source"])), "phase schema")
+                state = load_json(resolve_safe(root, relationship["target"]))
+            except ReviewSystemError as exc:
+                findings.append(finding("authority_inventory", str(exc), relationship.get("target")))
+                continue
+            errors = json_schema_findings(state, schema)
+            errors.extend(phase_state_semantic_findings(state))
+            if errors:
+                findings.append(
+                    finding(
+                        "authoritative_state_consistency",
+                        "dedicated PM phase state does not validate: " + "; ".join(errors[:20]),
+                        relationship["target"],
+                    )
                 )
-            )
+        elif validator == "authority_mirror_v1":
+            try:
+                source = load_json(resolve_safe(root, relationship["source"]))
+                target = load_json(resolve_safe(root, relationship["target"]))
+                mappings = relationship.get("field_mappings")
+                if not isinstance(mappings, list) or not mappings:
+                    raise ReviewSystemError("authority mirror validator requires field_mappings")
+                for mapping in mappings:
+                    if not isinstance(mapping, dict) or set(mapping) != {"source", "target"}:
+                        raise ReviewSystemError("authority mirror mapping is malformed")
+                    left = json_pointer(source, mapping["source"])
+                    right = json_pointer(target, mapping["target"])
+                    if left != right:
+                        raise ReviewSystemError(
+                            f"authority mirror differs: {mapping['source']} != {mapping['target']}"
+                        )
+            except ReviewSystemError as exc:
+                findings.append(
+                    finding("authoritative_state_consistency", str(exc), relationship.get("target"))
+                )
     return inventory, sorted(files), findings
 
 
@@ -667,8 +980,15 @@ def stable_edge(
     reason: str,
     certainty: str,
     line: int = 0,
+    *,
+    revision: str = "head",
+    blob_sha256: str | None = None,
 ) -> dict[str, Any]:
-    identity = "\0".join((source, target, relation, parser_name, reason, certainty, str(line)))
+    if relation not in RELATIONS:
+        raise ReviewSystemError(f"impact relation is outside enum: {relation!r}")
+    if certainty not in CERTAINTIES:
+        raise ReviewSystemError(f"impact certainty is outside enum: {certainty!r}")
+    identity = "\0".join((source, target, relation, parser_name, reason, certainty, str(line), revision, blob_sha256 or ""))
     return {
         "id": "edge-" + hashlib.sha256(identity.encode()).hexdigest()[:20],
         "source": source,
@@ -679,78 +999,58 @@ def stable_edge(
         "reason": reason,
         "line": line,
         "certainty": certainty,
+        "revision": revision,
+        "source_blob_sha256": blob_sha256,
     }
 
 
 def line_certainty(text: str) -> str:
     lowered = text.lower()
-    # Negative requirements containing "reject", "forbid", or "prohibited" are live contracts,
-    # not historical edges. Only explicit lifecycle markers establish inactivity.
-    if any(word in lowered for word in ("historical", "legacy-only", "deprecated", "superseded", "retired")):
+    if re.search(r"\b(historical|legacy-only|deprecated|superseded|retired)\b", lowered):
         return "inactive"
-    if any(word in lowered for word in ("${{", " optional", "condition", "when:")):
+    if "${{" in lowered or re.search(r"\b(optional|conditionally|conditional|when|if)\b", lowered):
         return "unknown"
     return "active"
 
 
-def reference_relation(text: str, matched_path: str = "") -> str:
-    lowered = text.lower().replace(matched_path.lower(), "") if matched_path else text.lower()
-    if any(
-        word in lowered
-        for word in (
-            "require",
-            "must read",
-            "must use",
-            "load ",
-            "loads ",
-            "template",
-            "contract",
-            "workflow",
-            "schema",
-            "prompt",
-            "consume",
-            "writes ",
-            "reads ",
-            "run ",
-            "source ",
-        )
-    ):
+def reference_relation(text: str, matched_path: str = "", structural_keys: Iterable[str] = ()) -> str:
+    lowered = text.lower()
+    keys = {key.lower() for key in structural_keys}
+    if keys & {"required", "requires", "inputs", "dependencies", "template", "contract", "workflow", "schema", "prompt", "source"}:
+        return "required_reference"
+    if re.search(r"\b(require(?:d|s)?|must\s+(?:read|use)|read|load(?:s)?|consume(?:s)?|write(?:s)?|run)\b", lowered):
         return "required_reference"
     return "descriptive_reference"
 
 
 def script_invocation_line(text: str) -> bool:
-    return bool(
-        re.search(
-            r"(?:^|[\s;|&({=])(?:source|exec|bash|sh|python3)(?:\s|$)|runpy\.run_path",
-            text,
-        )
-    )
+    return bool(re.search(r"(?:^|[\s;|&({=])(?:source|exec|bash|sh|python3)(?:\s|$)|runpy\.run_path", text))
 
 
 def structural_inactive_lines(relative: str, lines: list[str]) -> set[int]:
     inactive: set[int] = set()
-    if relative.endswith("TDD-LEDGER.md") or "/claude-" in relative:
+    name = PurePosixPath(relative).name
+    if name in {"TDD-LEDGER.md", "VERIFICATION.md"} or name.startswith("REVIEW-") or "/claude-" in relative:
         return set(range(1, len(lines) + 1))
     section_inactive = False
-    heredoc: str | None = None
     fixture_continuation = False
+    data_heredoc: str | None = None
     for number, line in enumerate(lines, 1):
         stripped = line.strip()
         if PurePosixPath(relative).suffix == ".md" and stripped.startswith("#"):
             heading = stripped.lstrip("#").strip().lower()
-            section_inactive = any(word in heading for word in ("historical", "forbidden", "excluded", "deprecated", "collision boundary"))
+            section_inactive = bool(re.search(r"\b(historical|forbidden|excluded|deprecated|collision boundary)\b", heading))
         if section_inactive:
             inactive.add(number)
         if PurePosixPath(relative).suffix == ".sh":
-            if heredoc is not None:
+            if data_heredoc is not None:
                 inactive.add(number)
-                if stripped == heredoc:
-                    heredoc = None
+                if stripped == data_heredoc:
+                    data_heredoc = None
                 continue
             marker = re.search(r"<<-?['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?", line)
-            if marker:
-                heredoc = marker.group(1)
+            if marker and not re.search(r"(?:^|\s)python3?\s+-?\s*<<", line):
+                data_heredoc = marker.group(1)
                 inactive.add(number)
             if fixture_continuation or any(value in line for value in ("$impact_repo", "$test_tmp", "$fixture_root")):
                 inactive.add(number)
@@ -760,64 +1060,157 @@ def structural_inactive_lines(relative: str, lines: list[str]) -> set[int]:
     return inactive
 
 
+def yaml_structural_context(lines: list[str]) -> dict[int, tuple[str, ...]]:
+    result: dict[int, tuple[str, ...]] = {}
+    stack: list[tuple[int, str]] = []
+    for number, line in enumerate(lines, 1):
+        indent = len(line) - len(line.lstrip(" "))
+        while stack and stack[-1][0] >= indent:
+            stack.pop()
+        match = re.match(r"\s*(?:-\s*)?([A-Za-z_][A-Za-z0-9_-]*)\s*:", line)
+        if match:
+            stack.append((indent, match.group(1).lower()))
+        result[number] = tuple(key for _, key in stack)
+    return result
+
+
+def json_reference_records(relative: str, text: str) -> tuple[list[tuple[str, tuple[str, ...]]], list[dict[str, Any]]]:
+    try:
+        document = json.loads(text)
+    except json.JSONDecodeError as exc:
+        return [], [finding("impact_parser", f"JSON syntax prevents structural parsing: {exc}", relative)]
+    records: list[tuple[str, tuple[str, ...]]] = []
+    def visit(value: Any, keys: tuple[str, ...]) -> None:
+        if isinstance(value, dict):
+            for key, item in value.items():
+                visit(item, (*keys, str(key).lower()))
+        elif isinstance(value, list):
+            for item in value:
+                visit(item, keys)
+        elif isinstance(value, str):
+            for raw in reference_candidates(value):
+                records.append((raw, keys))
+    visit(document, ())
+    return records, []
+
+
+def python_import_targets(relative: str, node: ast.AST, universe: set[str]) -> list[tuple[str, str]]:
+    parent = PurePosixPath(relative).parent
+    modules: list[tuple[int, str]] = []
+    if isinstance(node, ast.Import):
+        modules.extend((0, alias.name) for alias in node.names)
+    elif isinstance(node, ast.ImportFrom):
+        module = node.module or ""
+        for alias in node.names:
+            suffix = module or alias.name
+            modules.append((node.level, suffix))
+    result: list[tuple[str, str]] = []
+    for level, module in modules:
+        if level:
+            base = parent
+            for _ in range(max(0, level - 1)):
+                base = base.parent
+            module_path = module.replace(".", "/")
+            candidates = [(base / (module_path + ".py")).as_posix(), (base / module_path / "__init__.py").as_posix()]
+        else:
+            module_path = module.replace(".", "/")
+            candidates = [module_path + ".py", module_path + "/__init__.py", (parent / (module.rsplit(".", 1)[-1] + ".py")).as_posix()]
+        target = next((candidate for candidate in candidates if candidate in universe), None)
+        if target:
+            result.append((target, "." * level + module))
+    return result
+
+
 def typed_file_edges(
     relative: str,
     text: str,
     universe: set[str],
+    *,
+    revision: str = "head",
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
-    # The review-system policy and per-run scope are interpreted structurally. Their pattern arrays
-    # are declarations, not active repository references.
-    if relative.endswith(("pm-review-system.json", "REVIEW-SCOPE.json")) or relative.startswith(
-        "scripts/tests/fixtures/"
-    ):
+    if relative.endswith(("pm-review-system.json", "REVIEW-SCOPE.json")) or relative.startswith("scripts/tests/fixtures/"):
         return [], []
     result: list[dict[str, Any]] = []
     findings: list[dict[str, Any]] = []
     seen: set[str] = set()
     lines = text.splitlines()
     suffix = PurePosixPath(relative).suffix
+    source_digest = hashlib.sha256(text.encode()).hexdigest()
     structurally_inactive = structural_inactive_lines(relative, lines)
+    yaml_context = yaml_structural_context(lines) if suffix in {".yaml", ".yml"} else {}
 
-    for number, line_text in enumerate(lines, 1):
-        certainty = "inactive" if number in structurally_inactive else line_certainty(line_text)
-        if certainty != "inactive" and "fixture" in line_text.lower() and any(
-            marker in relative for marker in ("TDD-LEDGER.md", "VERIFICATION.md", "REVIEW-R1-DISPOSITION.md")
-        ):
-            certainty = "inactive"
-        for match in MARKDOWN_LINK.finditer(line_text):
-            try:
-                target = normalize_reference(relative, match.group(1))
-            except ReviewSystemError as exc:
+    def add(raw: str, number: int, parser_name: str, reason: str, context: Iterable[str] = (), certainty: str | None = None) -> None:
+        if suffix == ".sh":
+            raw = re.sub(r"^(?:repo_root|REPO_ROOT|ROOT_DIR)/", "", raw)
+            if re.match(r"^[A-Z][A-Z0-9_]*/", raw):
+                return
+        repository_rooted = raw.startswith((".agents/", ".pi/", ".gsd/", "scripts/", ".planning/", "cmd/", "internal/", "docs/", "website/", "./", "../")) or raw in {"AGENTS.md", "CLAUDE.md"}
+        source_line = lines[number - 1] if number and number <= len(lines) else ""
+        if suffix == ".md" and not repository_rooted and f"`{raw}`" not in source_line and not any(match.group(1) == raw for match in MARKDOWN_LINK.finditer(source_line)):
+            return
+        actual_certainty = certainty or ("inactive" if number in structurally_inactive else line_certainty(source_line))
+        relation = "script_invokes" if suffix == ".sh" and script_invocation_line(source_line) else reference_relation(source_line, raw, context)
+        if relation == "descriptive_reference" and certainty == "active" and parser_name in {
+            "shell_python_heredoc_ast", "python_ast"
+        }:
+            relation = "required_reference"
+        elif relation == "descriptive_reference":
+            actual_certainty = "inactive"
+        try:
+            target = normalize_reference(relative, raw)
+        except ReviewSystemError as exc:
+            if relation != "descriptive_reference" and actual_certainty != "inactive":
                 findings.append(finding("impact_path", str(exc), relative))
+            return
+        if not target:
+            return
+        edge = stable_edge(relative, target, relation, parser_name, reason, actual_certainty, number, revision=revision, blob_sha256=source_digest)
+        if edge["id"] not in seen:
+            seen.add(edge["id"])
+            result.append(edge)
+
+    if suffix == ".json":
+        records, parser_findings = json_reference_records(relative, text)
+        findings.extend(parser_findings)
+        for raw, keys in records:
+            add(raw, 0, "json", "json_structural_path", keys, "unknown" if "optional" in keys else "active")
+    else:
+        for number, line_text in enumerate(lines, 1):
+            if suffix == ".sh" and not script_invocation_line(line_text):
                 continue
-            if target:
-                edge = stable_edge(
-                    relative,
-                    target,
-                    reference_relation(line_text, match.group(1)),
-                    "markdown",
-                    "markdown_link",
-                    certainty,
-                    number,
-                )
-                if edge["id"] not in seen:
-                    seen.add(edge["id"])
-                    result.append(edge)
-        for match in REPO_REFERENCE.finditer(line_text):
-            if match.start() >= 2 and line_text[match.start() - 2 : match.start()] == "~/":
-                continue
-            target = match.group(1)
-            relation = reference_relation(line_text, target)
-            parser_name = "structured_path" if suffix in {".json", ".yaml", ".yml"} else "text_path"
-            reason = "inline_repository_path"
-            if suffix in {".sh", ".py"} and script_invocation_line(line_text):
-                relation = "script_invokes"
-                parser_name = "script"
-                reason = "script_execution_path"
-            edge = stable_edge(relative, target, relation, parser_name, reason, certainty, number)
-            if edge["id"] not in seen:
-                seen.add(edge["id"])
-                result.append(edge)
+            context = yaml_context.get(number, ())
+            parser_name = "yaml" if suffix in {".yaml", ".yml"} else ("markdown" if suffix == ".md" else "text_path")
+            reason = "yaml_structural_path" if context else "inline_repository_path"
+            for raw in reference_candidates(line_text):
+                add(raw, number, parser_name, reason, context)
+
+    if suffix == ".sh":
+        index = 0
+        while index < len(lines):
+            opener = lines[index]
+            marker = re.search(r"<<-?['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?", opener)
+            if marker:
+                delimiter = marker.group(1)
+                end = index + 1
+                while end < len(lines) and lines[end].strip() != delimiter:
+                    end += 1
+                executed_python = bool(re.search(r"(?:^|\s)python3?\s+-?\s*<<", opener))
+                if executed_python and end < len(lines):
+                    body = "\n".join(lines[index + 1:end]) + "\n"
+                    try:
+                        tree = ast.parse(body, filename=relative + ":heredoc")
+                        for node in ast.walk(tree):
+                            for target, module in python_import_targets(relative, node, universe):
+                                edge = stable_edge(relative, target, "python_import", "shell_python_heredoc_ast", f"heredoc_import:{module}", "active", index + 2 + getattr(node, "lineno", 0), revision=revision, blob_sha256=source_digest)
+                                if edge["id"] not in seen:
+                                    seen.add(edge["id"]); result.append(edge)
+                            if isinstance(node, ast.Constant) and isinstance(node.value, str):
+                                for raw in reference_candidates(node.value):
+                                    add(raw, index + 1 + getattr(node, "lineno", 1), "shell_python_heredoc_ast", "executed_heredoc_path", (), "active")
+                    except SyntaxError as exc:
+                        findings.append(finding("impact_parser", f"executed Python heredoc syntax is invalid: {exc}", relative))
+                index = end
+            index += 1
 
     if suffix == ".py":
         try:
@@ -825,34 +1218,118 @@ def typed_file_edges(
         except SyntaxError as exc:
             findings.append(finding("impact_parser", f"Python syntax prevents authoritative import parsing: {exc}", relative))
             return sorted(result, key=lambda item: item["id"]), findings
-        source_parent = PurePosixPath(relative).parent
         for node in ast.walk(tree):
-            modules: list[str] = []
-            if isinstance(node, ast.Import):
-                modules.extend(alias.name for alias in node.names)
-            elif isinstance(node, ast.ImportFrom) and node.module:
-                modules.append(node.module)
-            for module in modules:
-                candidates = [module.replace(".", "/") + ".py"]
-                candidates.append((source_parent / (module.rsplit(".", 1)[-1] + ".py")).as_posix())
-                target = next((candidate for candidate in candidates if candidate in universe), None)
-                if target:
-                    edge = stable_edge(
-                        relative,
-                        target,
-                        "python_import",
-                        "python_ast",
-                        f"import:{module}",
-                        "active",
-                        getattr(node, "lineno", 0),
-                    )
-                    if edge["id"] not in seen:
-                        seen.add(edge["id"])
-                        result.append(edge)
+            for target, module in python_import_targets(relative, node, universe):
+                edge = stable_edge(relative, target, "python_import", "python_ast", f"import:{module}", "active", getattr(node, "lineno", 0), revision=revision, blob_sha256=source_digest)
+                if edge["id"] not in seen:
+                    seen.add(edge["id"]); result.append(edge)
     return sorted(result, key=lambda item: item["id"]), findings
 
 
-def decode_json_stream(text: str) -> list[dict[str, Any]]:
+def validate_config(config: Any) -> dict[str, Any]:
+    config = require_object(config, "review-system config")
+    if config.get("schema_version") != CONFIG_SCHEMA:
+        raise ReviewSystemError(
+            f"review-system config migration required: {config.get('schema_version')!r} != {CONFIG_SCHEMA!r}"
+        )
+    if config.get("owner") != "parent_orchestrator":
+        raise ReviewSystemError("review-system owner must be parent_orchestrator")
+    for field in ("canonical_roots", "reference_prefixes", "explicit_reference_files", "prompt_contract_files"):
+        values = config.get(field)
+        if values is None and field == "prompt_contract_files":
+            continue
+        if not isinstance(values, list) or not all(isinstance(item, str) and item for item in values):
+            raise ReviewSystemError(f"review-system {field} must be a string list")
+    for field in ("canonical_roots", "explicit_reference_files", "prompt_contract_files", "prohibited_active_targets"):
+        for path in config.get(field, []):
+            validate_relative_path(path, f"review-system {field} path")
+    for field in ("reference_prefixes", "ignored_reference_prefixes"):
+        for prefix in config.get(field, []):
+            if CONTROL.search(prefix) or prefix.startswith(("-", "/")) or "\\" in prefix or ".." in PurePosixPath(prefix).parts:
+                raise ReviewSystemError(f"review-system {field} contains an unsafe prefix")
+    settings = require_object(config.get("impact_graph"), "impact_graph")
+    for field in ("index_prefixes", "go_index_prefixes"):
+        values = settings.get(field, [])
+        if not isinstance(values, list):
+            raise ReviewSystemError(f"impact_graph {field} must be a list")
+        for prefix in values:
+            if not isinstance(prefix, str) or CONTROL.search(prefix) or prefix.startswith(("-", "/")) or "\\" in prefix or ".." in PurePosixPath(prefix).parts:
+                raise ReviewSystemError(f"impact_graph {field} contains an unsafe prefix")
+    positive_limits = {
+        "max_index_files", "max_index_bytes", "max_nodes", "max_edges", "max_traversal_states",
+        "max_depth", "max_impact_files", "max_impact_edges", "go_command_timeout_seconds",
+        "go_max_output_bytes", "go_max_packages", "packet_max_impact_files",
+        "packet_max_impact_edges", "max_packets", "edge_context_max_bytes_per_file",
+        "packet_max_file_slice_bytes",
+    }
+    for key in positive_limits:
+        value = settings.get(key)
+        numeric_type = (int, float) if key == "go_command_timeout_seconds" else (int,)
+        if not isinstance(value, numeric_type) or isinstance(value, bool) or value <= 0:
+            raise ReviewSystemError(f"impact_graph {key} must be a positive {'number' if key == 'go_command_timeout_seconds' else 'integer'}")
+    if settings["max_packets"] > 64:
+        raise ReviewSystemError("impact_graph max_packets exceeds the hard v4 maximum of 64")
+    for policy_field in ("default_relation_policy", "relation_policy"):
+        value = require_object(settings.get(policy_field), f"impact_graph {policy_field}")
+        records = {"default": value} if policy_field == "default_relation_policy" else value
+        for relation, policy in records.items():
+            if relation != "default" and relation not in RELATIONS:
+                raise ReviewSystemError(f"relation_policy key is outside enum: {relation!r}")
+            if not isinstance(policy, dict) or set(policy) != DIRECTIONS:
+                raise ReviewSystemError(f"relation policy {relation} must contain exactly four directions")
+            if not all(isinstance(limit, int) and not isinstance(limit, bool) and limit >= 0 for limit in policy.values()):
+                raise ReviewSystemError(f"relation policy {relation} limits must be non-negative integers")
+    for record in config.get("configured_relationships", []):
+        if not isinstance(record, dict):
+            raise ReviewSystemError("configured relationship must be an object")
+        for endpoint in ("source", "target"):
+            validate_relative_path(record.get(endpoint), f"configured relationship {endpoint}")
+        if record.get("relation") not in RELATIONS:
+            raise ReviewSystemError(f"configured relationship relation is outside enum: {record.get('relation')!r}")
+        if record.get("certainty") not in CERTAINTIES:
+            raise ReviewSystemError(f"configured relationship certainty is outside enum: {record.get('certainty')!r}")
+        if record.get("validator") not in {None, "pm_review_phase_v2", "authority_mirror_v1"}:
+            raise ReviewSystemError(f"configured relationship validator is outside enum: {record.get('validator')!r}")
+    for record in config.get("authorities", []):
+        if not isinstance(record, dict) or not isinstance(record.get("id"), str):
+            raise ReviewSystemError("authority record is malformed")
+        validate_relative_path(record.get("authoritative_path"), "authority path")
+        for field in ("writers", "readers", "mirrors"):
+            values = record.get(field, [])
+            if not isinstance(values, list):
+                raise ReviewSystemError(f"authority {field} must be a list")
+            for endpoint in values:
+                validate_relative_path(endpoint, f"authority {field} endpoint")
+    roles = {"combined", "architecture_reference", "authority_workflow_state", "implementation_test", "impact_graph"}
+    for rule in config.get("domain_rules", []):
+        if not isinstance(rule, dict) or rule.get("domain") not in roles or not isinstance(rule.get("patterns"), list):
+            raise ReviewSystemError("domain rule has an invalid role or patterns")
+        for pattern in rule["patterns"]:
+            if not isinstance(pattern, str) or CONTROL.search(pattern) or pattern.startswith(("-", "/")) or "\\" in pattern or ".." in PurePosixPath(pattern).parts:
+                raise ReviewSystemError("domain rule contains an unsafe pattern")
+    invariants = require_object(config.get("packet_invariants"), "packet_invariants")
+    if "combined" not in invariants or any(role not in roles for role in invariants):
+        raise ReviewSystemError("packet invariant role is outside enum or combined is absent")
+    for role, values in invariants.items():
+        if not isinstance(values, list) or not values or not all(isinstance(item, str) and SAFE_ID.fullmatch(item) for item in values) or len(values) != len(set(values)):
+            raise ReviewSystemError(f"packet invariants for {role} must be a non-empty unique safe-id list")
+    thresholds = require_object(config.get("thresholds"), "thresholds")
+    for key in (
+        "combined_max_files", "combined_max_non_generated_lines", "combined_max_domains",
+        "packet_max_changed_files", "packet_max_context_files", "packet_target_tokens",
+        "response_reserve_tokens", "context_window_tokens",
+    ):
+        value = thresholds.get(key)
+        if not isinstance(value, int) or isinstance(value, bool) or value <= 0:
+            raise ReviewSystemError(f"threshold {key} must be a positive integer")
+    if thresholds["packet_target_tokens"] > 30000:
+        raise ReviewSystemError("packet_target_tokens exceeds the hard v4 rendered-input maximum of 30000")
+    if thresholds["packet_target_tokens"] + thresholds["response_reserve_tokens"] > thresholds["context_window_tokens"]:
+        raise ReviewSystemError("packet input target plus response reserve exceeds the context window")
+    return config
+
+
+def decode_json_stream(text: str, maximum_items: int | None = None) -> list[dict[str, Any]]:
     decoder = json.JSONDecoder()
     position = 0
     result: list[dict[str, Any]] = []
@@ -861,15 +1338,23 @@ def decode_json_stream(text: str) -> list[dict[str, Any]]:
             position += 1
         if position >= len(text):
             break
-        item, position = decoder.raw_decode(text, position)
-        if isinstance(item, dict):
-            result.append(item)
+        try:
+            item, position = decoder.raw_decode(text, position)
+        except json.JSONDecodeError as exc:
+            raise ReviewSystemError(f"bounded Go JSON stream is malformed: {exc}") from exc
+        if not isinstance(item, dict):
+            raise ReviewSystemError("bounded Go JSON stream contains a non-object package")
+        result.append(item)
+        if maximum_items is not None and len(result) > maximum_items:
+            raise ReviewSystemError(f"Go package bound exceeded: > {maximum_items}")
     return result
 
 
 def go_impact_edges(
     root: Path,
     timeout_seconds: float,
+    maximum_output_bytes: int,
+    maximum_packages: int,
 ) -> tuple[set[str], list[dict[str, Any]], dict[str, Any], list[dict[str, Any]]]:
     root = root.resolve(strict=True)
     nodes: set[str] = set()
@@ -881,7 +1366,11 @@ def go_impact_edges(
         (temp / "cache").mkdir()
         module_cache_value = os.environ.get("GOMODCACHE", "")
         if module_cache_value:
-            module_cache = Path(module_cache_value).resolve(strict=True)
+            try:
+                module_cache = Path(module_cache_value).resolve(strict=True)
+            except OSError as exc:
+                findings.append(finding("impact_go", f"configured module cache is unavailable: {exc}"))
+                return nodes, edges, {"status": "blocked", "reason": "configured module cache unavailable"}, findings
         else:
             probe = subprocess.run(
                 ["go", "env", "GOMODCACHE"],
@@ -916,25 +1405,55 @@ def go_impact_edges(
             "GIT_CONFIG_SYSTEM": os.devnull,
             "GIT_TERMINAL_PROMPT": "0",
         }
+        stdout_path = temp / "go-list.stdout"
+        stderr_path = temp / "go-list.stderr"
         try:
-            proc = subprocess.run(
-                ["go", "list", "-mod=mod", "-json", "-deps", "-test", "./..."],
-                cwd=root,
-                env=env,
-                check=False,
-                capture_output=True,
-                text=True,
-                timeout=timeout_seconds,
-            )
-        except (OSError, subprocess.TimeoutExpired) as exc:
-            findings.append(finding("impact_go", f"authoritative go list failed or timed out: {exc}"))
+            with stdout_path.open("wb") as stdout_file, stderr_path.open("wb") as stderr_file:
+                proc = subprocess.Popen(
+                    ["go", "list", "-mod=mod", "-json", "-deps", "-test", "./..."],
+                    cwd=root,
+                    env=env,
+                    stdin=subprocess.DEVNULL,
+                    stdout=stdout_file,
+                    stderr=stderr_file,
+                    start_new_session=True,
+                )
+                deadline = time.monotonic() + float(timeout_seconds)
+                bound_hit: str | None = None
+                while proc.poll() is None:
+                    if time.monotonic() >= deadline:
+                        bound_hit = "timeout"
+                    elif stdout_path.stat().st_size + stderr_path.stat().st_size > maximum_output_bytes:
+                        bound_hit = "output"
+                    if bound_hit:
+                        try:
+                            os.killpg(proc.pid, 9)
+                        except ProcessLookupError:
+                            pass
+                        proc.wait()
+                        findings.append(finding("impact_go", f"authoritative go list hit {bound_hit} bound"))
+                        return nodes, edges, {"status": "blocked", "reason": f"go list {bound_hit} bound"}, findings
+                    time.sleep(0.01)
+                return_code = proc.wait()
+            output_bytes = stdout_path.stat().st_size + stderr_path.stat().st_size
+            if output_bytes > maximum_output_bytes:
+                findings.append(finding("impact_go", "authoritative go list output bound exceeded"))
+                return nodes, edges, {"status": "blocked", "reason": "go list output bound"}, findings
+            stdout_text = stdout_path.read_text(errors="replace")
+            stderr_text = stderr_path.read_text(errors="replace")
+        except OSError as exc:
+            findings.append(finding("impact_go", f"authoritative go list failed: {exc}"))
             return nodes, edges, {"status": "blocked", "reason": str(exc)}, findings
-    if proc.returncode != 0:
-        detail = proc.stderr.strip() or proc.stdout.strip()
+    if return_code != 0:
+        detail = stderr_text.strip() or stdout_text.strip()
         findings.append(finding("impact_go", f"authoritative go list failed: {detail[:1000]}"))
         return nodes, edges, {"status": "blocked", "reason": detail[:1000]}, findings
 
-    packages = decode_json_stream(proc.stdout)
+    try:
+        packages = decode_json_stream(stdout_text, maximum_packages)
+    except ReviewSystemError as exc:
+        findings.append(finding("impact_go", str(exc)))
+        return nodes, edges, {"status": "blocked", "reason": str(exc)}, findings
     local: dict[str, dict[str, Any]] = {}
     for package in packages:
         directory = package.get("Dir", "")
@@ -1032,8 +1551,11 @@ def build_impact_index(
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     settings = config["impact_graph"]
     findings: list[dict[str, Any]] = []
-    tracked_raw = run_git(root, ["ls-tree", "-r", "--name-only", "-z", head, "--"])
-    tracked = {path for path in tracked_raw.split("\0") if path}
+    tracked_head_raw = run_git(root, ["ls-tree", "-r", "--name-only", "-z", head, "--"])
+    tracked_base_raw = run_git(root, ["ls-tree", "-r", "--name-only", "-z", base, "--"])
+    tracked_head = {path for path in tracked_head_raw.split("\0") if path}
+    tracked_base = {path for path in tracked_base_raw.split("\0") if path}
+    tracked = tracked_head | {path for path in tracked_base if path in changed and PurePosixPath(path).suffix in INDEX_SUFFIXES}
     prefixes = tuple(settings.get("index_prefixes", []))
     go_prefixes = tuple(settings.get("go_index_prefixes", []))
     canonical = set(config.get("canonical_roots", []))
@@ -1047,7 +1569,7 @@ def build_impact_index(
         configured_endpoints.update((record.get("source", ""), record.get("target", "")))
     configured_endpoints.discard("")
 
-    include_go = any(path.endswith(".go") for path in changed)
+    include_go = any(path.endswith((".go", "go.mod", "go.sum")) for path in changed)
     selected = {
         path
         for path in tracked
@@ -1071,13 +1593,18 @@ def build_impact_index(
         selected = set(sorted(selected)[:max_nodes])
 
     nodes: set[str] = set(selected)
-    node_types: dict[str, str] = {path: "file" for path in selected}
+    node_types: dict[str, str] = {
+        path: ("file" if path in tracked_head else "deleted_file") for path in selected
+    }
     file_bytes: dict[str, int] = {}
     edges: list[dict[str, Any]] = []
     edge_ids: set[str] = set()
     total_bytes = 0
-    parsed: set[str] = set()
-    pending = deque(sorted(selected))
+    parsed: set[tuple[str, str]] = set()
+    pending = deque((path, "head" if path in tracked_head else "base") for path in sorted(selected))
+    for path in sorted(set(changed) & tracked_head & tracked_base & selected):
+        if PurePosixPath(path).suffix in INDEX_SUFFIXES:
+            pending.append((path, "base"))
     ignored = tuple(config.get("ignored_reference_prefixes", []))
     prohibited = set(config.get("prohibited_active_targets", []))
     max_edges = int(settings["max_edges"])
@@ -1092,7 +1619,7 @@ def build_impact_index(
         nodes.add(relative)
         selected.add(relative)
         node_types[relative] = "file"
-        pending.append(relative)
+        pending.append((relative, "head" if relative in tracked_head else "base"))
         return True
 
     def append_edge(edge: dict[str, Any]) -> bool:
@@ -1108,33 +1635,34 @@ def build_impact_index(
         return True
 
     while pending and not index_stopped:
-        relative = pending.popleft()
-        if relative in parsed:
+        relative, revision_name = pending.popleft()
+        parsed_key = (relative, revision_name)
+        if parsed_key in parsed:
             continue
-        parsed.add(relative)
-        if relative not in tracked:
-            node_types[relative] = "deleted_file"
+        parsed.add(parsed_key)
+        revision_sha = head if revision_name == "head" else base
+        if (revision_name == "head" and relative not in tracked_head) or (revision_name == "base" and relative not in tracked_base):
             continue
         try:
-            path = resolve_safe(root, relative)
-            size = path.stat().st_size
+            blob = git_blob(root, revision_sha, relative, maximum=int(settings["max_index_bytes"]))
+            size = len(blob)
             if total_bytes + size > int(settings["max_index_bytes"]):
                 findings.append(
                     finding(
                         "impact_graph_bound",
-                        f"index byte bound would be exceeded before reading {relative}: {total_bytes + size} > {settings['max_index_bytes']}",
+                        f"index byte bound would be exceeded before reading {relative}@{revision_name}: {total_bytes + size} > {settings['max_index_bytes']}",
                         relative,
                     )
                 )
                 index_stopped = True
                 break
-            text = path.read_text()
+            text = blob.decode()
         except (ReviewSystemError, OSError, UnicodeDecodeError) as exc:
-            findings.append(finding("impact_index", f"cannot index review-relevant file: {exc}", relative))
+            findings.append(finding("impact_index", f"cannot index exact review-relevant blob: {exc}", relative))
             continue
         total_bytes += size
-        file_bytes[relative] = size
-        parsed_edges, parser_findings = typed_file_edges(relative, text, tracked | nodes)
+        file_bytes[relative] = max(file_bytes.get(relative, 0), size)
+        parsed_edges, parser_findings = typed_file_edges(relative, text, tracked | nodes, revision=revision_name)
         findings.extend(parser_findings)
         for edge in parsed_edges:
             target = edge["target"]
@@ -1184,36 +1712,44 @@ def build_impact_index(
         )
     for edge in configured_edges:
         for endpoint in (edge["source"], edge["target"]):
-            if endpoint not in tracked:
-                findings.append(finding("impact_graph", f"configured {edge['certainty']} endpoint is unresolved: {endpoint}", edge["source"]))
+            if endpoint not in tracked_head:
+                findings.append(finding("impact_graph", f"configured {edge['certainty']} endpoint is unresolved at exact head: {endpoint}", edge["source"]))
             else:
                 include_node(endpoint, edge["source"])
         if edge["target"] in prohibited and edge["certainty"] != "inactive":
             findings.append(finding("impact_graph", f"configured edge reaches prohibited target {edge['target']} ({edge['id']})", edge["source"]))
         append_edge(edge)
 
-    go_context: dict[str, Any] = {"status": "not_needed", "reason": "no changed Go file"}
-    if any(path.endswith(".go") for path in changed):
+    reachable_go_trigger = include_go or any(path.endswith(".go") for path in nodes)
+    go_context: dict[str, Any] = {"status": "not_needed", "reason": "no changed or indirectly reachable Go input"}
+    if reachable_go_trigger:
         try:
             head_snapshot_tmp = clone_commit_snapshot(root, head)
             with head_snapshot_tmp:
                 head_snapshot = Path(head_snapshot_tmp.name) / "repo"
                 go_nodes, go_edges, go_context, go_findings = go_impact_edges(
-                    head_snapshot, settings["go_command_timeout_seconds"]
+                    head_snapshot,
+                    settings["go_command_timeout_seconds"],
+                    int(settings["go_max_output_bytes"]),
+                    int(settings["go_max_packages"]),
                 )
         except ReviewSystemError as exc:
             go_nodes, go_edges = set(), []
             go_context = {"status": "blocked", "reason": str(exc)}
             go_findings = [finding("impact_go", str(exc))]
         findings.extend(go_findings)
-        deleted_go = sorted(path for path in changed if path.endswith(".go") and path not in tracked)
-        if deleted_go:
+        changed_go_in_base = sorted(path for path in changed if path.endswith(".go") and path in tracked_base)
+        deleted_go = sorted(path for path in changed_go_in_base if path not in tracked_head)
+        if changed_go_in_base:
             try:
                 snapshot_tmp = clone_commit_snapshot(root, base)
                 with snapshot_tmp:
                     snapshot = Path(snapshot_tmp.name) / "repo"
                     base_nodes, base_edges, base_context, base_findings = go_impact_edges(
-                        snapshot, settings["go_command_timeout_seconds"]
+                        snapshot,
+                        settings["go_command_timeout_seconds"],
+                        int(settings["go_max_output_bytes"]),
+                        int(settings["go_max_packages"]),
                     )
                 go_nodes.update(base_nodes)
                 for edge in base_edges:
@@ -1225,12 +1761,19 @@ def build_impact_index(
                         "base_deleted_context:" + edge["reason"],
                         edge["certainty"],
                         edge.get("line", 0),
+                        revision="base",
+                        blob_sha256=edge.get("source_blob_sha256"),
                     )
                     go_edges.append(base_edge)
                 findings.extend(base_findings)
-                go_context = {**go_context, "base_deleted_file_context": base_context, "deleted_go_files": deleted_go}
+                go_context = {
+                    **go_context,
+                    "base_changed_file_context": base_context,
+                    "base_changed_go_files": changed_go_in_base,
+                    "deleted_go_files": deleted_go,
+                }
             except ReviewSystemError as exc:
-                findings.append(finding("impact_go", f"deleted Go base context failed: {exc}"))
+                findings.append(finding("impact_go", f"changed/deleted Go base context failed: {exc}"))
         for node in sorted(go_nodes):
             if node not in nodes and len(nodes) >= max_nodes:
                 findings.append(finding("impact_graph_bound", f"Go node bound exceeded during construction: > {max_nodes}"))
@@ -1251,18 +1794,21 @@ def build_impact_index(
             except ReviewSystemError as exc:
                 findings.append(finding("impact_path", str(exc), edge.get("source")))
         if edge["certainty"] != "inactive":
+            source = edge["source"]
             target = edge["target"]
+            if source not in nodes:
+                findings.append(finding("impact_graph", f"{edge['certainty']} indexed source is absent: {source}", source))
             if target not in nodes:
-                findings.append(finding("impact_graph", f"{edge['certainty']} indexed target is absent: {target}", edge["source"]))
-            elif node_types.get(target) == "deleted_file" and not edge.get("reason", "").startswith("base_deleted_context:"):
-                findings.append(finding("impact_graph", f"{edge['certainty']} indexed target was deleted: {target}", edge["source"]))
+                findings.append(finding("impact_graph", f"{edge['certainty']} indexed target is absent: {target}", source))
+            elif node_types.get(target) == "deleted_file" and edge.get("revision") != "base" and not edge.get("reason", "").startswith("base_deleted_context:"):
+                findings.append(finding("impact_graph", f"{edge['certainty']} indexed target was deleted: {target}", source))
 
     return {
         "nodes": nodes,
         "node_types": node_types,
         "edges": indexed_edges,
         "tracked": tracked,
-        "index_files": sorted(parsed),
+        "index_files": sorted({path for path, _ in parsed}),
         "index_bytes": total_bytes,
         "file_bytes": file_bytes,
         "go_context": go_context,
@@ -1468,48 +2014,133 @@ def exact_blob_metadata(
         if relative.startswith("go-package:"):
             continue
         validate_relative_path(relative, "packet context path")
-        blob: bytes | None = None
-        for commit in (head, base):
-            proc = subprocess.run(
-                ["git", "-C", str(root), "show", f"{commit}:{relative}"],
-                check=False,
-                capture_output=True,
-            )
-            if proc.returncode == 0:
-                blob = proc.stdout
-                break
-        if blob is None:
+        head_blob = git_blob_optional(root, head, relative)
+        base_blob = git_blob_optional(root, base, relative)
+        versions: list[tuple[str, str, bytes]] = []
+        if head_blob is not None:
+            versions.append((head, "head", head_blob))
+        if base_blob is not None and (head_blob is None or hashlib.sha256(base_blob).digest() != hashlib.sha256(head_blob).digest()):
+            versions.append((base, "base_deleted" if head_blob is None else "base_changed", base_blob))
+        if not versions:
             raise ReviewSystemError(f"packet context has no exact base/head blob: {relative}")
-        sizes[relative] = len(blob)
-        lines = blob.splitlines(keepends=True) or [b""]
+        sizes[relative] = sum(len(blob) for _, _, blob in versions)
         path_slices: list[dict[str, Any]] = []
-        start = 0
-        current = 0
-        for index, line in enumerate(lines):
-            if current and current + len(line) > maximum_slice_bytes:
-                payload = b"".join(lines[start:index])
+        for revision, revision_kind, blob in versions:
+            blob_digest = hashlib.sha256(blob).hexdigest()
+            lines = blob.splitlines(keepends=True) or [b""]
+            segments: list[tuple[int, bytes]] = []
+            for line_number, line in enumerate(lines, 1):
+                if not line:
+                    segments.append((line_number, b""))
+                else:
+                    for offset in range(0, len(line), maximum_slice_bytes):
+                        segments.append((line_number, line[offset:offset + maximum_slice_bytes]))
+            group: list[tuple[int, bytes]] = []
+            group_bytes = 0
+            start_byte = 0
+            def flush_group() -> None:
+                nonlocal group, group_bytes, start_byte
+                if not group:
+                    return
+                payload = b"".join(piece for _, piece in group)
                 path_slices.append(
                     {
                         "path": relative,
-                        "start_line": start + 1,
-                        "end_line": index,
+                        "revision": revision,
+                        "revision_kind": revision_kind,
+                        "blob_sha256": blob_digest,
+                        "start_line": group[0][0],
+                        "end_line": group[-1][0],
+                        "start_byte": start_byte,
+                        "end_byte": start_byte + len(payload),
                         "bytes": len(payload),
                         "sha256": hashlib.sha256(payload).hexdigest(),
                     }
                 )
-                start = index
-                current = 0
-            current += len(line)
-        payload = b"".join(lines[start:])
-        path_slices.append(
-            {
-                "path": relative,
-                "start_line": start + 1,
-                "end_line": len(lines),
-                "bytes": len(payload),
-                "sha256": hashlib.sha256(payload).hexdigest(),
-            }
+                start_byte += len(payload)
+                group = []
+                group_bytes = 0
+            for line_number, piece in segments:
+                if group and group_bytes + len(piece) > maximum_slice_bytes:
+                    flush_group()
+                group.append((line_number, piece))
+                group_bytes += len(piece)
+            flush_group()
+        slices[relative] = path_slices
+    return sizes, slices
+
+
+def exact_diff_metadata(
+    root: Path,
+    base: str,
+    head: str,
+    paths: Iterable[str],
+    maximum_slice_bytes: int,
+) -> tuple[dict[str, int], dict[str, list[dict[str, Any]]]]:
+    """Return exact bounded diff slices for changed-file review packets.
+
+    Changed packets review the patch, not duplicate full base and head blobs. Context and edge
+    packets remain revision/blob-bound through exact_blob_metadata.
+    """
+    sizes: dict[str, int] = {}
+    slices: dict[str, list[dict[str, Any]]] = {}
+    for relative in sorted(set(paths)):
+        validate_relative_path(relative, "changed diff path")
+        payload = run_git_bytes_bounded(
+            root,
+            [
+                "diff", "--no-ext-diff", "--no-renames", "--binary", "--full-index",
+                "--unified=3", f"{base}...{head}", "--", relative,
+            ],
+            MAX_EXACT_DIFF_BYTES,
         )
+        if not payload:
+            raise ReviewSystemError(f"changed path has no exact diff payload: {relative}")
+        digest = hashlib.sha256(payload).hexdigest()
+        sizes[relative] = len(payload)
+        lines = payload.splitlines(keepends=True) or [b""]
+        path_slices: list[dict[str, Any]] = []
+        current: list[bytes] = []
+        current_bytes = 0
+        start_line = 1
+        start_byte = 0
+
+        def flush(end_line: int) -> None:
+            nonlocal current, current_bytes, start_line, start_byte
+            if not current:
+                return
+            chunk = b"".join(current)
+            path_slices.append(
+                {
+                    "path": relative,
+                    "revision": head,
+                    "revision_kind": "diff",
+                    "blob_sha256": digest,
+                    "start_line": start_line,
+                    "end_line": end_line,
+                    "start_byte": start_byte,
+                    "end_byte": start_byte + len(chunk),
+                    "bytes": len(chunk),
+                    "sha256": hashlib.sha256(chunk).hexdigest(),
+                }
+            )
+            start_byte += len(chunk)
+            current = []
+            current_bytes = 0
+            start_line = end_line + 1
+
+        for line_number, line in enumerate(lines, 1):
+            pieces = [line[offset:offset + maximum_slice_bytes] for offset in range(0, len(line), maximum_slice_bytes)] or [b""]
+            for piece in pieces:
+                if current and current_bytes + len(piece) > maximum_slice_bytes:
+                    flush(line_number - 1 if current[-1].endswith(b"\n") else line_number)
+                if not current:
+                    start_line = line_number
+                current.append(piece)
+                current_bytes += len(piece)
+        flush(len(lines))
+        if sum(item["bytes"] for item in path_slices) != len(payload):
+            raise ReviewSystemError(f"changed diff slicing is incomplete: {relative}")
         slices[relative] = path_slices
     return sizes, slices
 
@@ -1528,8 +2159,14 @@ def build_packets(
     blob_sizes: dict[str, int],
     blob_slices: dict[str, list[dict[str, Any]]],
     config: dict[str, Any],
+    changed_content_sizes: dict[str, int] | None = None,
+    changed_content_slices: dict[str, list[dict[str, Any]]] | None = None,
+    edge_blob_slices: dict[str, list[dict[str, Any]]] | None = None,
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     thresholds = config["thresholds"]
+    changed_content_sizes = changed_content_sizes or {path: blob_sizes[path] for path in files}
+    changed_content_slices = changed_content_slices or {path: blob_slices[path] for path in files}
+    edge_blob_slices = edge_blob_slices or blob_slices
     graph_limits = config["impact_graph"]
     domain_values = sorted(set(domains.values()))
     changed_lines = sum(line_counts.values())
@@ -1537,19 +2174,35 @@ def build_packets(
         len(files) <= thresholds["combined_max_files"]
         and changed_lines <= thresholds["combined_max_non_generated_lines"]
         and len(domain_values) <= thresholds["combined_max_domains"]
+        and sum(changed_content_sizes.get(path, 0) for path in files)
+        + int(thresholds.get("rendered_prompt_fixed_bytes", 4096))
+        + 4096 <= int(thresholds["packet_target_tokens"])
     )
     selection = "combined" if combined else "split"
     packets: list[dict[str, Any]] = []
     problems: list[dict[str, Any]] = []
+    for path in sorted(set(files) | set(closure_files) | set(authority_files) | set(impact_files)):
+        assigned_slices = blob_slices.get(path)
+        if not isinstance(assigned_slices, list) or not assigned_slices or sum(int(item.get("bytes", -1)) for item in assigned_slices if isinstance(item, dict)) != blob_sizes.get(path):
+            problems.append(finding("packet_overflow", f"exact blob slices are absent or incomplete: {path}"))
     impact_edge_by_id = {edge["id"]: edge for edge in impact_edges}
     target_tokens = int(thresholds["packet_target_tokens"])
+    response_reserve = int(thresholds["response_reserve_tokens"])
+    context_window = int(thresholds["context_window_tokens"])
+    fixed_prompt_bytes = int(thresholds.get("rendered_prompt_fixed_bytes", 4096))
 
     def file_tokens(paths: Iterable[str]) -> int:
-        return sum(max(1, math.ceil(blob_sizes[path] / 4)) for path in sorted(set(paths)))
+        return sum(max(1, blob_sizes[path]) for path in sorted(set(paths)))
+
+    def changed_tokens(paths: Iterable[str]) -> int:
+        return sum(max(1, changed_content_sizes[path]) for path in sorted(set(paths)))
 
     def edge_context_tokens(paths: Iterable[str]) -> int:
-        maximum = int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
-        return sum(max(1, math.ceil(min(blob_sizes[path], maximum) / 4)) for path in sorted(set(paths)))
+        maximum = min(
+            int(graph_limits.get("edge_context_max_bytes_per_file", 8192)),
+            int(graph_limits.get("packet_max_file_slice_bytes", 8192)),
+        )
+        return sum(max(1, min(blob_sizes[path], maximum)) for path in sorted(set(paths)))
 
     def estimate(
         changed: list[str],
@@ -1560,20 +2213,71 @@ def build_packets(
         edge_ids: list[str],
         impact_slices: list[dict[str, Any]] | None = None,
     ) -> int:
-        changed_cost = sum(line_counts.get(path, 0) for path in changed) * int(
-            thresholds["estimated_tokens_per_changed_line"]
-        )
+        changed_cost = changed_tokens(changed)
         full_context = set(closure) | set(authority)
         if impact_slices is None:
             full_context.update(impact)
             impact_cost = 0
         else:
-            impact_cost = sum(math.ceil(int(item["bytes"]) / 4) for item in impact_slices)
+            impact_cost = sum(int(item["bytes"]) for item in impact_slices)
         context_cost = file_tokens(full_context) + impact_cost + edge_context_tokens(set(edge_context) - full_context - set(impact))
-        metadata_bytes = len(
-            json.dumps([impact_edge_by_id[edge_id] for edge_id in edge_ids], sort_keys=True, separators=(",", ":")).encode()
+        metadata_bytes = len(canonical_json_bytes([impact_edge_by_id[edge_id] for edge_id in edge_ids]))
+        return fixed_prompt_bytes + changed_cost + context_cost + metadata_bytes + 4096
+
+    def exact_edge_slices(edge_ids: Iterable[str]) -> list[dict[str, Any]]:
+        selected: dict[tuple[str, str, int, int], dict[str, Any]] = {}
+        for edge_id in edge_ids:
+            edge = impact_edge_by_id[edge_id]
+            revision_sha = base if edge.get("revision") == "base" else head
+            for endpoint, line in ((edge["source"], int(edge.get("line", 0))), (edge["target"], 0)):
+                if endpoint.startswith("go-package:"):
+                    continue
+                candidates = [item for item in edge_blob_slices.get(endpoint, []) if item["revision"] == revision_sha]
+                if not candidates:
+                    candidates = list(edge_blob_slices.get(endpoint, []))
+                if not candidates:
+                    continue
+                matching = [
+                    value for value in candidates
+                    if line > 0 and value["start_line"] <= line <= value["end_line"]
+                ]
+                # A long source line may span several bounded chunks with the same line number.
+                # Include every such chunk; selecting the first would silently lose provenance.
+                for item in matching or candidates[:1]:
+                    selected[(item["path"], item["revision"], item["start_byte"], item["end_byte"])] = item
+        return sorted(selected.values(), key=lambda item: (item["path"], item["revision"], item["start_byte"]))
+
+    def account_packet(packet: dict[str, Any]) -> None:
+        all_slices = (
+            packet.get("changed_file_slices", []) + packet.get("context_file_slices", [])
+            + packet.get("impact_file_slices", []) + packet.get("edge_context_slices", [])
         )
-        return changed_cost + context_cost + math.ceil(metadata_bytes / 4)
+        unique_slices = {
+            (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]): item
+            for item in all_slices
+        }
+        ordered_slices = sorted(
+            unique_slices.values(),
+            key=lambda item: (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]),
+        )
+        payload_bytes = sum(int(item["bytes"]) for item in ordered_slices)
+        separator_bytes = len(ordered_slices) * len(SLICE_SEPARATOR)
+        for _ in range(4):
+            envelope_bytes = len(canonical_json_bytes(packet))
+            prompt_bytes = fixed_prompt_bytes + envelope_bytes + payload_bytes + separator_bytes
+            total = prompt_bytes + response_reserve
+            packet["context"].update(
+                {
+                    "estimated_tokens": total,
+                    "input_token_upper_bound": prompt_bytes,
+                    "total_context_upper_bound": total,
+                    "rendered_prompt_bytes": prompt_bytes,
+                    "packet_envelope_bytes": envelope_bytes,
+                    "slice_payload_bytes": payload_bytes,
+                    "slice_separator_bytes": separator_bytes,
+                    "overflow": prompt_bytes > target_tokens or total > context_window,
+                }
+            )
 
     def append_packet(
         role: str,
@@ -1584,6 +2288,7 @@ def build_packets(
         impact_edge_ids: list[str] | None = None,
         edge_context_files: list[str] | None = None,
         impact_file_slices: list[dict[str, Any]] | None = None,
+        changed_file_slices_override: list[dict[str, Any]] | None = None,
     ) -> None:
         impact = sorted(impact or [])
         impact_edge_ids = sorted(impact_edge_ids or [])
@@ -1592,69 +2297,76 @@ def build_packets(
         impact_file_slices = sorted(
             impact_file_slices or [], key=lambda item: (item["path"], item["start_line"], item["end_line"])
         )
-        estimated = estimate(
-            changed,
-            closure,
-            authority,
-            impact,
-            edge_context_files,
-            impact_edge_ids,
-            impact_file_slices if impact_file_slices else None,
+        changed_file_slices = (
+            sorted(changed_file_slices_override, key=lambda item: (item["path"], item["start_byte"]))
+            if changed_file_slices_override is not None
+            else [item for path in sorted(changed) for item in changed_content_slices.get(path, [])]
         )
-        overflow = estimated > target_tokens
-        if overflow:
+        context_file_slices = [
+            item for path in sorted(set(closure) | set(authority)) for item in blob_slices.get(path, [])
+        ]
+        edge_context_slices = exact_edge_slices(impact_edge_ids)
+        maximum_edge_bytes = int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
+        by_edge_path: dict[str, int] = defaultdict(int)
+        for item in edge_context_slices:
+            by_edge_path[item["path"]] += int(item["bytes"])
+        for path, used in by_edge_path.items():
+            if used > maximum_edge_bytes:
+                problems.append(finding("packet_overflow", f"exact edge provenance slices exceed per-file bound for {path}: {used} > {maximum_edge_bytes}"))
+        packet = {
+            "schema_version": PACKET_SCHEMA,
+            "packet_id": f"{role}-{packet_number:02d}",
+            "role": role,
+            "exact_base_sha": base,
+            "exact_head_sha": head,
+            "exact_head_tree": head_tree,
+            "changed_files": sorted(changed),
+            "changed_file_slices": changed_file_slices,
+            "closure_files": sorted(closure),
+            "authority_files": sorted(authority),
+            "context_file_slices": context_file_slices,
+            "impact_files": impact,
+            "impact_edge_ids": impact_edge_ids,
+            "impact_edges": [impact_edge_by_id[edge_id] for edge_id in impact_edge_ids],
+            "impact_file_slices": impact_file_slices,
+            "edge_context_files": edge_context_files,
+            "edge_context_slices": edge_context_slices,
+            "invariants": config["packet_invariants"].get(role, config["packet_invariants"]["combined"]),
+            "context": {
+                "target_tokens": target_tokens,
+                "estimated_tokens": 0,
+                "input_token_upper_bound": 0,
+                "response_reserve_tokens": response_reserve,
+                "context_window_tokens": context_window,
+                "total_context_upper_bound": 0,
+                "rendered_prompt_bytes": 0,
+                "packet_envelope_bytes": 0,
+                "slice_payload_bytes": 0,
+                "slice_separator_bytes": 0,
+                "fixed_prompt_bytes": fixed_prompt_bytes,
+                "estimation": "complete_rendered_prompt_one_token_per_byte",
+                "bytes_per_token_upper_bound": 1,
+                "edge_context_mode": "exact revision/blob-bound line slices around assigned edge endpoints",
+                "edge_context_max_bytes_per_file": maximum_edge_bytes,
+                "overflow": False,
+                "truncated": False,
+            },
+        }
+        account_packet(packet)
+        if packet["context"]["overflow"]:
             problems.append(
                 finding(
                     "packet_overflow",
-                    f"{role} packet estimate {estimated} exceeds target {target_tokens}",
+                    f"{role} rendered input {packet['context']['rendered_prompt_bytes']} exceeds input target {target_tokens} or total {packet['context']['total_context_upper_bound']} exceeds context window {context_window}",
                 )
             )
-        packets.append(
-            {
-                "schema_version": PACKET_SCHEMA,
-                "packet_id": f"{role}-{packet_number:02d}",
-                "role": role,
-                "exact_base_sha": base,
-                "exact_head_sha": head,
-                "exact_head_tree": head_tree,
-                "changed_files": sorted(changed),
-                "closure_files": sorted(closure),
-                "authority_files": sorted(authority),
-                "impact_files": impact,
-                "impact_edge_ids": impact_edge_ids,
-                "impact_edges": [impact_edge_by_id[edge_id] for edge_id in impact_edge_ids],
-                "impact_file_slices": impact_file_slices,
-                "edge_context_files": edge_context_files,
-                "invariants": config["packet_invariants"].get(role, config["packet_invariants"]["combined"]),
-                "context": {
-                    "target_tokens": target_tokens,
-                    "estimated_tokens": estimated,
-                    "estimation": "exact_head_bytes_conservative",
-                    "bytes_per_token_upper_bound": 4,
-                    "edge_context_mode": "provenance line plus bounded exact-blob excerpts",
-                    "edge_context_max_bytes_per_file": int(graph_limits.get("edge_context_max_bytes_per_file", 8192)),
-                    "overflow": overflow,
-                    "truncated": False,
-                },
-                "required_response_fields": [
-                    "reviewed_files",
-                    "closure_files",
-                    "authority_files",
-                    "impact_files",
-                    "impact_edge_ids",
-                    "impact_file_slices",
-                    "edge_context_files",
-                    "invariants",
-                    "review_behaviors",
-                    "experiments",
-                    "no_experiment_reason",
-                    "unreviewed_files",
-                    "findings",
-                    "residual_risk",
-                    "context",
-                    "wall_clock_ms",
-                ],
-            }
+        packets.append(packet)
+
+    def slice_group_upper(paths: Iterable[str], source: dict[str, list[dict[str, Any]]]) -> int:
+        assigned = [item for path in sorted(set(paths)) for item in source.get(path, [])]
+        return (
+            fixed_prompt_bytes + 1800 + sum(int(item["bytes"]) for item in assigned)
+            + len(canonical_json_bytes(assigned))
         )
 
     def greedy_file_groups(values: list[str], maximum_files: int) -> list[list[str]]:
@@ -1662,12 +2374,12 @@ def build_packets(
         current: list[str] = []
         for value in sorted(values):
             proposed = [*current, value]
-            if current and (len(proposed) > maximum_files or file_tokens(proposed) > target_tokens):
+            if current and (len(proposed) > maximum_files or slice_group_upper(proposed, blob_slices) > target_tokens):
                 groups.append(current)
                 current = [value]
             else:
                 current = proposed
-            if file_tokens(current) > target_tokens:
+            if slice_group_upper(current, blob_slices) > target_tokens:
                 problems.append(finding("packet_overflow", f"single context file cannot fit packet target: {value}"))
         if current:
             groups.append(current)
@@ -1675,17 +2387,85 @@ def build_packets(
 
     if combined:
         append_packet("combined", files, [], [])
-    else:
+        if packets[-1]["context"]["overflow"]:
+            packets.clear()
+            problems[:] = [
+                item for item in problems
+                if not item.get("claim", "").startswith("combined rendered input ")
+            ]
+            combined = False
+            selection = "split"
+    if not combined:
         by_role: dict[str, list[str]] = {}
         for path in files:
             by_role.setdefault(domains[path], []).append(path)
         for role in ("architecture_reference", "authority_workflow_state", "implementation_test"):
-            for part in chunks(sorted(by_role.get(role, [])), thresholds["packet_max_changed_files"]):
-                append_packet(role, part, [], [])
+            current_paths: list[str] = []
+            current_slices: list[dict[str, Any]] = []
+            current_bytes = 0
+            def flush_changed() -> None:
+                nonlocal current_paths, current_slices, current_bytes
+                if current_slices:
+                    append_packet(role, sorted(set(current_paths)), [], [], changed_file_slices_override=current_slices)
+                current_paths, current_slices, current_bytes = [], [], 0
+            for path in sorted(by_role.get(role, [])):
+                for item in changed_content_slices.get(path, []):
+                    proposed_slices = [*current_slices, item]
+                    proposed_upper = (
+                        fixed_prompt_bytes + 1800
+                        + sum(int(value["bytes"]) for value in proposed_slices)
+                        + len(canonical_json_bytes(proposed_slices))
+                    )
+                    if current_slices and (
+                        len(set(current_paths) | {path}) > int(thresholds["packet_max_changed_files"])
+                        or proposed_upper > target_tokens
+                    ):
+                        flush_changed()
+                    current_paths.append(path)
+                    current_slices.append(item)
+                    current_bytes += int(item["bytes"])
+                    if (
+                        fixed_prompt_bytes + 1800 + int(item["bytes"])
+                        + len(canonical_json_bytes(item)) > target_tokens
+                    ):
+                        problems.append(finding("packet_overflow", f"atomic changed slice cannot fit: {path}:{item['start_line']}-{item['end_line']}"))
+            flush_changed()
 
-    for part in greedy_file_groups(closure_files, int(thresholds["packet_max_context_files"])):
+    def co_pack_context(paths: list[str], role: str, assignment_field: str) -> list[str]:
+        remaining: list[str] = []
+        maximum_files = int(thresholds["packet_max_context_files"])
+        for path in sorted(paths):
+            packed = False
+            for packet in sorted(
+                (item for item in packets if item["role"] == role),
+                key=lambda item: (item["context"]["rendered_prompt_bytes"], item["packet_id"]),
+            ):
+                assigned_count = len(packet["closure_files"]) + len(packet["authority_files"])
+                if assigned_count >= maximum_files:
+                    continue
+                candidate = json.loads(json.dumps(packet))
+                candidate[assignment_field] = sorted([*candidate[assignment_field], path])
+                candidate["context_file_slices"] = sorted(
+                    [*candidate["context_file_slices"], *blob_slices.get(path, [])],
+                    key=lambda item: (item["path"], item["revision"], item["start_byte"]),
+                )
+                account_packet(candidate)
+                if candidate["context"]["overflow"]:
+                    continue
+                packet.update(candidate)
+                packed = True
+                break
+            if not packed:
+                remaining.append(path)
+        return remaining
+
+    remaining_closure = co_pack_context(closure_files, "architecture_reference", "closure_files")
+    remaining_authority = co_pack_context(
+        authority_files, "authority_workflow_state", "authority_files"
+    )
+    for part in greedy_file_groups(remaining_closure, int(thresholds["packet_max_context_files"])):
         append_packet("architecture_reference", [], part, [])
-    for part in greedy_file_groups(authority_files, int(thresholds["packet_max_context_files"])):
+    for part in greedy_file_groups(remaining_authority, int(thresholds["packet_max_context_files"])):
         append_packet("authority_workflow_state", [], [], part)
 
     edge_groups: list[list[dict[str, Any]]] = []
@@ -1704,9 +2484,24 @@ def build_packets(
                 if not endpoint.startswith("go-package:")
             }
         )
-        proposed_estimate = estimate([], [], [], [], endpoints, proposed_ids)
+        proposed_edge_slices = exact_edge_slices(proposed_ids)
+        proposed_estimate = (
+            fixed_prompt_bytes + 5000
+            + len(canonical_json_bytes([impact_edge_by_id[edge_id] for edge_id in proposed_ids]))
+            + len(canonical_json_bytes(proposed_edge_slices))
+            + sum(int(item["bytes"]) for item in proposed_edge_slices)
+        )
+        proposed_by_path: dict[str, int] = defaultdict(int)
+        for item in proposed_edge_slices:
+            proposed_by_path[item["path"]] += int(item["bytes"])
+        edge_slice_bound_hit = any(
+            used > int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
+            for used in proposed_by_path.values()
+        )
         if current_edges and (
-            len(proposed) > int(graph_limits["packet_max_impact_edges"]) or proposed_estimate > target_tokens
+            len(proposed) > int(graph_limits["packet_max_impact_edges"])
+            or proposed_estimate > target_tokens
+            or edge_slice_bound_hit
         ):
             edge_groups.append(current_edges)
             current_edges = [edge]
@@ -1721,11 +2516,25 @@ def build_packets(
                 if not endpoint.startswith("go-package:")
             }
         )
-        if estimate([], [], [], [], single_endpoints, single_ids) > target_tokens:
+        single_slices = exact_edge_slices(single_ids)
+        single_estimate = (
+            fixed_prompt_bytes + 5000
+            + len(canonical_json_bytes([impact_edge_by_id[edge_id] for edge_id in single_ids]))
+            + len(canonical_json_bytes(single_slices))
+            + sum(int(item["bytes"]) for item in single_slices)
+        )
+        single_by_path: dict[str, int] = defaultdict(int)
+        for item in single_slices:
+            single_by_path[item["path"]] += int(item["bytes"])
+        if single_estimate > target_tokens or any(
+            used > int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
+            for used in single_by_path.values()
+        ):
             problems.append(finding("packet_overflow", f"atomic impact edge neighborhood cannot fit: {edge['id']}"))
     if current_edges:
         edge_groups.append(current_edges)
 
+    edge_impact_assigned: set[str] = set()
     for group in edge_groups:
         edge_ids = [edge["id"] for edge in group]
         endpoints = sorted(
@@ -1736,60 +2545,81 @@ def build_packets(
                 if not endpoint.startswith("go-package:")
             }
         )
-        append_packet("impact_graph", [], [], [], [], edge_ids, endpoints)
-
-    impact_slice_items = [item for path in sorted(impact_files) for item in blob_slices[path]]
-    remaining_slices: list[dict[str, Any]] = []
-    edge_packets = [packet for packet in packets if packet["role"] == "impact_graph" and packet["impact_edge_ids"]]
-    for item in sorted(impact_slice_items, key=lambda value: (value["bytes"], value["path"], value["start_line"])):
-        candidates: list[tuple[int, dict[str, Any], list[str], list[dict[str, Any]]]] = []
-        for packet in edge_packets:
-            if item["path"] not in packet["edge_context_files"]:
-                continue
-            proposed_paths = sorted(set(packet["impact_files"]) | {item["path"]})
-            if len(proposed_paths) > int(graph_limits["packet_max_impact_files"]):
-                continue
-            proposed_slices = sorted(
-                [*packet["impact_file_slices"], item],
-                key=lambda value: (value["path"], value["start_line"], value["end_line"]),
-            )
-            proposed_estimate = estimate(
-                [], [], [], proposed_paths, packet["edge_context_files"], packet["impact_edge_ids"], proposed_slices
-            )
-            if proposed_estimate <= target_tokens:
-                candidates.append((proposed_estimate, packet, proposed_paths, proposed_slices))
-        if not candidates:
-            remaining_slices.append(item)
-            continue
-        proposed_estimate, packet, proposed_paths, proposed_slices = min(
-            candidates, key=lambda value: (value[0], value[1]["packet_id"])
+        ordered_endpoints = [path for path in endpoints if path not in edge_impact_assigned]
+        ordered_endpoints.extend(path for path in endpoints if path in edge_impact_assigned)
+        covered_endpoints = ordered_endpoints[: int(graph_limits["packet_max_impact_files"])]
+        edge_impact_assigned.update(covered_endpoints)
+        # Edge-context slices already bind the exact content for these impact files. Do not copy
+        # identical slice metadata into impact_file_slices; response coverage echoes both the file
+        # assignment and the single canonical edge-context slice assignment.
+        append_packet(
+            "impact_graph", [], [], [], covered_endpoints, edge_ids, endpoints
         )
-        packet["impact_files"] = proposed_paths
-        packet["impact_file_slices"] = proposed_slices
-        packet["context"]["estimated_tokens"] = proposed_estimate
 
+    # Practical impact coverage is edge-focused, not a claim that every byte of every transitive
+    # file receives a second full-file review. Each impact file receives at least one exact
+    # revision/blob-bound slice at a traversed edge. Isolated seeds receive one bounded anchor slice.
+    assigned_impact_files = {
+        path for packet in packets for path in packet.get("impact_files", [])
+    }
+    remaining_files = sorted(set(impact_files) - assigned_impact_files)
     current_slices: list[dict[str, Any]] = []
-    impact_slice_items = sorted(remaining_slices, key=lambda value: (value["path"], value["start_line"]))
     current_paths: set[str] = set()
-    for item in impact_slice_items:
-        proposed_paths = current_paths | {item["path"]}
-        proposed_slices = [*current_slices, item]
-        proposed_tokens = sum(math.ceil(int(value["bytes"]) / 4) for value in proposed_slices)
-        if current_slices and (
-            len(proposed_paths) > int(graph_limits["packet_max_impact_files"]) or proposed_tokens > target_tokens
+    payload_limit = max(1, target_tokens - fixed_prompt_bytes - 4096)
+    for path in remaining_files:
+        candidates = edge_blob_slices.get(path, [])
+        if not candidates:
+            problems.append(finding("packet_overflow", f"impact file lacks exact anchor slice: {path}"))
+            continue
+        item = next((value for value in candidates if value["revision_kind"] == "head"), candidates[0])
+        # Fill spare impact-file slots in edge packets first. This preserves one coherent
+        # neighborhood and avoids duplicating fixed prompt/envelope overhead for isolated anchors.
+        co_packed = False
+        for packet in sorted(
+            (value for value in packets if value["role"] == "impact_graph" and value["impact_edge_ids"]),
+            key=lambda value: (value["context"]["rendered_prompt_bytes"], value["packet_id"]),
         ):
-            append_packet(
-                "impact_graph", [], [], [], sorted(current_paths), [], [], current_slices
+            if len(packet["impact_files"]) >= int(graph_limits["packet_max_impact_files"]):
+                continue
+            candidate = json.loads(json.dumps(packet))
+            candidate["impact_files"] = sorted([*candidate["impact_files"], path])
+            candidate["impact_file_slices"] = sorted(
+                [*candidate["impact_file_slices"], item],
+                key=lambda value: (value["path"], value["revision"], value["start_byte"]),
             )
-            current_slices = [item]
-            current_paths = {item["path"]}
-        else:
-            current_slices = proposed_slices
-            current_paths = proposed_paths
-        if math.ceil(int(item["bytes"]) / 4) > target_tokens:
-            problems.append(finding("packet_overflow", f"atomic impact file slice cannot fit: {item['path']}:{item['start_line']}-{item['end_line']}"))
+            account_packet(candidate)
+            if candidate["context"]["overflow"]:
+                continue
+            packet.update(candidate)
+            co_packed = True
+            break
+        if co_packed:
+            continue
+        if current_slices and (
+            len(current_paths | {path}) > int(graph_limits["packet_max_impact_files"])
+            or sum(int(value["bytes"]) for value in current_slices) + int(item["bytes"]) > payload_limit
+        ):
+            append_packet("impact_graph", [], [], [], sorted(current_paths), [], [], current_slices)
+            current_slices = []
+            current_paths = set()
+        current_paths.add(path)
+        current_slices.append(item)
+        if int(item["bytes"]) > payload_limit:
+            problems.append(finding("packet_overflow", f"atomic impact anchor slice cannot fit: {path}"))
     if current_slices:
         append_packet("impact_graph", [], [], [], sorted(current_paths), [], [], current_slices)
+
+    # Re-account after impact slices are packed into existing edge packets. The postcondition uses
+    # the complete serialized packet envelope and every exact payload slice; no average tokenizer
+    # ratio or pre-mutation estimate can authorize a packet.
+    for packet in packets:
+        account_packet(packet)
+        if packet["context"]["overflow"] and not any(
+            packet["packet_id"] in item.get("claim", "") for item in problems
+        ):
+            problems.append(
+                finding("packet_overflow", f"{packet['packet_id']} violates the final rendered-input postcondition")
+            )
 
     maximum_packets = int(graph_limits.get("max_packets", 64))
     if len(packets) > maximum_packets:
@@ -1810,20 +2640,30 @@ def command_detect(args: argparse.Namespace) -> int:
 
 def command_observe(args: argparse.Namespace) -> int:
     try:
-        document = load_json(Path(args.input))
+        input_path = Path(args.input).resolve(strict=True)
+        input_bytes = input_path.read_bytes()
+        document = require_object(json.loads(input_bytes), "observation corpus")
+        cases = document.get("cases")
+        if not isinstance(cases, list) or not all(isinstance(case, dict) for case in cases):
+            raise ReviewSystemError("observation corpus cases must be an object list")
+        case_ids = [case.get("case_id") for case in cases]
+        if not all(isinstance(case_id, str) and case_id for case_id in case_ids) or len(case_ids) != len(set(case_ids)):
+            raise ReviewSystemError("observation corpus case ids must be non-empty and unique")
         started = time.perf_counter_ns()
-        observations = [detect(case, args.mode) for case in document.get("cases", [])]
+        observations = [detect(case, args.mode) for case in cases]
         emit_json(
             {
                 "schema_version": "polymetrics.ai/pm-review-observations/v1",
                 "mode": args.mode,
-                "input": str(args.input),
+                "input": str(input_path),
+                "input_sha256": hashlib.sha256(input_bytes).hexdigest(),
+                "case_set_sha256": hashlib.sha256("\n".join(sorted(case_ids)).encode()).hexdigest(),
                 "observations": observations,
                 "wall_clock_ms": round((time.perf_counter_ns() - started) / 1_000_000, 6),
             }
         )
         return 0
-    except ReviewSystemError as exc:
+    except (ReviewSystemError, OSError, json.JSONDecodeError) as exc:
         print(f"pm review observe error: {exc}", file=sys.stderr)
         return 2
 
@@ -1834,9 +2674,42 @@ def metric_ratio(numerator: int, denominator: int) -> float | None:
 
 def command_score(args: argparse.Namespace) -> int:
     try:
-        observed = load_json(Path(args.observations))
-        oracle = load_json(Path(args.oracle)).get("cases", {})
+        observed = require_object(load_json(Path(args.observations)), "observations")
+        oracle_document = require_object(load_json(Path(args.oracle)), "oracle")
+        oracle = oracle_document.get("cases", {})
         rows = observed.get("observations", [])
+        if not isinstance(oracle, dict) or not oracle:
+            raise ReviewSystemError("oracle cases must be a non-empty object")
+        if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+            raise ReviewSystemError("observations must be an object list")
+        observed_ids = [row.get("case_id") for row in rows]
+        if not all(isinstance(case_id, str) and case_id for case_id in observed_ids):
+            raise ReviewSystemError("observations contain a malformed case id")
+        if len(observed_ids) != len(set(observed_ids)):
+            raise ReviewSystemError("observations contain duplicate case ids")
+        if set(observed_ids) != set(oracle):
+            raise ReviewSystemError(
+                f"observation/oracle case bijection differs: missing={sorted(set(oracle)-set(observed_ids))} extra={sorted(set(observed_ids)-set(oracle))}"
+            )
+        input_value = observed.get("input")
+        input_digest = observed.get("input_sha256")
+        case_set_digest = observed.get("case_set_sha256")
+        if not isinstance(input_value, str) or not isinstance(input_digest, str) or not HEX_DIGEST.fullmatch(input_digest):
+            raise ReviewSystemError("observations lack exact input-corpus binding")
+        try:
+            current_input = Path(input_value).resolve(strict=True).read_bytes()
+        except OSError as exc:
+            raise ReviewSystemError(f"bound observation corpus is unavailable: {exc}") from exc
+        if hashlib.sha256(current_input).hexdigest() != input_digest:
+            raise ReviewSystemError("bound observation corpus hash differs")
+        try:
+            input_document = require_object(json.loads(current_input), "bound observation corpus")
+            input_case_ids = [item.get("case_id") for item in input_document.get("cases", []) if isinstance(item, dict)]
+        except json.JSONDecodeError as exc:
+            raise ReviewSystemError(f"bound observation corpus is malformed: {exc}") from exc
+        expected_case_set = hashlib.sha256("\n".join(sorted(observed_ids)).encode()).hexdigest()
+        if input_case_ids != observed_ids or case_set_digest != expected_case_set:
+            raise ReviewSystemError("observation order/case set is not exactly bound to the input corpus")
         tp = fp = fn = tn = 0
         decision_total = decision_correct = 0
         suites: dict[str, dict[str, int]] = {}
@@ -1903,52 +2776,67 @@ def command_score(args: argparse.Namespace) -> int:
         return 2
 
 
-def command_compile(args: argparse.Namespace) -> int:
-    try:
-        root = Path(args.repo_root).resolve(strict=True)
-        if not (root / ".git").exists() and not run_git(root, ["rev-parse", "--git-dir"]).strip():
-            raise ReviewSystemError("repo root is not a Git worktree")
-        config_path = resolve_safe(root, args.config)
-        config = load_json(config_path)
-        if config.get("schema_version") != CONFIG_SCHEMA:
-            raise ReviewSystemError(
-                f"review-system config migration required: {config.get('schema_version')!r} != {CONFIG_SCHEMA!r}"
-            )
-        scope_path = resolve_safe(root, args.scope)
-        scope = load_json(scope_path)
+def compile_document(root: Path, config_relative: str, scope_relative: str, base: str, head: str) -> dict[str, Any]:
+    root = root.resolve(strict=True)
+    base = validate_sha(base, "exact base")
+    head = validate_sha(head, "exact head")
+    config_relative = validate_relative_path(config_relative, "review config path")
+    scope_relative = validate_relative_path(scope_relative, "review scope path")
+    run_git(root, ["cat-file", "-e", f"{base}^{{commit}}"])
+    run_git(root, ["cat-file", "-e", f"{head}^{{commit}}"])
+    head_tree = run_git(root, ["rev-parse", f"{head}^{{tree}}"]).strip()
+    merge_base = run_git(root, ["merge-base", base, head]).strip()
+    if merge_base != base:
+        raise ReviewSystemError(f"exact base is not the candidate merge base: {merge_base} != {base}")
+
+    snapshot_tmp = clone_commit_snapshot(root, head)
+    with snapshot_tmp:
+        snapshot = Path(snapshot_tmp.name) / "repo"
+        config_bytes = git_blob(snapshot, head, config_relative, maximum=2 * 1024 * 1024)
+        scope_bytes = git_blob(snapshot, head, scope_relative, maximum=512 * 1024)
+        try:
+            config = validate_config(json.loads(config_bytes))
+            scope = require_object(json.loads(scope_bytes), "review scope")
+        except json.JSONDecodeError as exc:
+            raise ReviewSystemError(f"exact config/scope JSON is malformed: {exc}") from exc
         if scope.get("schema_version") != SCOPE_SCHEMA:
             raise ReviewSystemError(
                 f"review scope migration required: {scope.get('schema_version')!r} != {SCOPE_SCHEMA!r}"
             )
+        if not isinstance(scope.get("review_round"), int) or isinstance(scope.get("review_round"), bool) or scope["review_round"] <= 0:
+            raise ReviewSystemError("review scope review_round must be a positive integer")
         for field in ("allowed_changed_paths", "forbidden_changed_paths"):
-            if not isinstance(scope.get(field), list) or not all(isinstance(item, str) and item for item in scope[field]):
+            values = scope.get(field)
+            if not isinstance(values, list) or not all(isinstance(item, str) and item for item in values):
                 raise ReviewSystemError(f"review scope {field} must be a non-empty string list")
-        base = validate_sha(args.base, "exact base")
-        head = validate_sha(args.head, "exact head")
-        run_git(root, ["cat-file", "-e", f"{base}^{{commit}}"])
-        run_git(root, ["cat-file", "-e", f"{head}^{{commit}}"])
-        head_tree = run_git(root, ["rev-parse", f"{head}^{{tree}}"]).strip()
-        merge_base = run_git(root, ["merge-base", base, head]).strip()
-        if merge_base != base:
-            raise ReviewSystemError(f"exact base is not the candidate merge base: {merge_base} != {base}")
-        current = run_git(root, ["rev-parse", "HEAD"]).strip()
-        if current != head:
-            raise ReviewSystemError(f"worktree HEAD drift: {current} != {head}")
-        worktree_drift = run_git(root, ["--no-optional-locks", "status", "--porcelain", "--untracked-files=all"]).strip()
-        if worktree_drift:
-            raise ReviewSystemError("worktree differs from exact reviewed head, including untracked files")
-        files, line_counts = changed_files(root, base, head)
+            for pattern in values:
+                if CONTROL.search(pattern) or pattern.startswith(("-", "/")) or "\\" in pattern or ".." in PurePosixPath(pattern).parts:
+                    raise ReviewSystemError(f"review scope {field} contains an unsafe pattern")
+
+        # The fixed reviewer/workflow/template bytes are part of every rendered input. They are
+        # loaded from the exact head and charged once per packet under one token per byte.
+        prompt_contract: list[dict[str, Any]] = []
+        fixed_prompt_bytes = len(PROMPT_HEADER) + len(PACKET_MARKER) + len(PAYLOAD_MARKER)
+        for relative in config.get("prompt_contract_files", []):
+            relative = validate_relative_path(relative, "prompt contract file")
+            payload = git_blob(snapshot, head, relative, maximum=2 * 1024 * 1024)
+            prompt_contract.append({"path": relative, "bytes": len(payload), "sha256": hashlib.sha256(payload).hexdigest()})
+            fixed_prompt_bytes += len(payload)
+        config = json.loads(json.dumps(config))
+        config["thresholds"]["rendered_prompt_fixed_bytes"] = fixed_prompt_bytes
+
+        files, line_counts = changed_files(snapshot, base, head)
         findings: list[dict[str, Any]] = []
         for path in files:
             if path_matches(path, scope.get("forbidden_changed_paths", [])):
                 findings.append(finding("changed_path_scope", "changed path is forbidden", path))
             elif not path_matches(path, scope.get("allowed_changed_paths", [])):
                 findings.append(finding("changed_path_scope", "changed path is outside the positive allowlist", path))
-        closure, edges, closure_findings = compile_closure(root, config)
+        closure, edges, closure_findings = compile_closure(snapshot, config)
         findings.extend(closure_findings)
-        authority, authority_files, authority_findings = authority_inventory(root, config)
+        authority, authority_files, authority_findings = authority_inventory(snapshot, config)
         findings.extend(authority_findings)
-        impact_graph, impact_findings = compile_impact_graph(root, base, head, files, config)
+        impact_graph, impact_findings = compile_impact_graph(snapshot, base, head, files, config)
         findings.extend(impact_findings)
         domains = {path: classify_domain(path, config) for path in files}
         closure_context = sorted(set(closure) - set(files))
@@ -1958,71 +2846,258 @@ def command_compile(args: argparse.Namespace) -> int:
             packet_context_paths.update(
                 endpoint for endpoint in (edge["source"], edge["target"]) if not endpoint.startswith("go-package:")
             )
+        maximum_slice_bytes = int(config["impact_graph"]["packet_max_file_slice_bytes"])
         blob_sizes, blob_slices = exact_blob_metadata(
-            root,
-            base,
-            head,
-            packet_context_paths,
-            int(config["impact_graph"].get("packet_max_file_slice_bytes", 96000)),
+            snapshot, base, head, packet_context_paths, maximum_slice_bytes,
+        )
+        diff_sizes, diff_slices = exact_diff_metadata(
+            snapshot, base, head, files, maximum_slice_bytes,
+        )
+        _, edge_slices = exact_blob_metadata(
+            snapshot, base, head, packet_context_paths, min(256, maximum_slice_bytes),
         )
         selection, packets, packet_findings = build_packets(
-            base,
-            head,
-            head_tree,
-            files,
-            line_counts,
-            domains,
-            closure_context,
-            authority_context,
-            impact_graph["files"],
-            impact_graph["edges"],
-            blob_sizes,
-            blob_slices,
-            config,
+            base, head, head_tree, files, line_counts, domains, closure_context, authority_context,
+            impact_graph["files"], impact_graph["edges"], blob_sizes, blob_slices, config,
+            diff_sizes, diff_slices, edge_slices,
         )
         findings.extend(packet_findings)
         status = "blocked" if findings or selection == "blocked" else "ready"
-        emit_json(
-            {
-                "schema_version": COMPILE_SCHEMA,
-                "status": status,
-                "owner": config.get("owner"),
-                "scope": {
-                    "schema_version": SCOPE_SCHEMA,
-                    "path": args.scope,
-                    "sha256": hashlib.sha256(scope_path.read_bytes()).hexdigest(),
-                    "issue": scope.get("issue"),
-                    "candidate_lineage": scope.get("candidate_lineage"),
-                },
-                "exact_base_sha": base,
-                "exact_head_sha": head,
-                "exact_head_tree": head_tree,
-                "changed_files": files,
-                "changed_lines": sum(line_counts.values()),
-                "domains": domains,
-                "reference_closure": {"files": closure, "edges": edges},
-                "authority_inventory": authority,
-                "impact_graph": impact_graph,
-                "selection": selection,
-                "packets": packets,
-                "findings": findings,
-                "coverage_manifest": {
-                    "changed_files": files,
-                    "closure_files": closure_context,
-                    "authority_files": authority_context,
-                    "impact_files": impact_graph["files"],
-                    "impact_edge_ids": [edge["id"] for edge in impact_graph["edges"]],
-                    "edge_context_files": sorted(
-                        {path for packet in packets for path in packet.get("edge_context_files", [])}
-                    ),
-                    "packet_ids": [packet["packet_id"] for packet in packets],
-                },
-                "content_policy": "paths and metadata only; no file contents or environment values",
-            }
+        coverage = {
+            "changed_files": files,
+            "closure_files": closure_context,
+            "authority_files": authority_context,
+            "impact_files": impact_graph["files"],
+            "impact_edge_ids": [edge["id"] for edge in impact_graph["edges"]],
+            "edge_context_files": sorted({path for packet in packets for path in packet.get("edge_context_files", [])}),
+            "packet_ids": [packet["packet_id"] for packet in packets],
+        }
+        document: dict[str, Any] = {
+            "schema_version": COMPILE_SCHEMA,
+            "status": status,
+            "owner": config.get("owner"),
+            "config": {
+                "schema_version": CONFIG_SCHEMA,
+                "path": config_relative,
+                "sha256": hashlib.sha256(config_bytes).hexdigest(),
+            },
+            "scope": {
+                "schema_version": SCOPE_SCHEMA,
+                "path": scope_relative,
+                "sha256": hashlib.sha256(scope_bytes).hexdigest(),
+                "issue": scope.get("issue"),
+                "candidate_lineage": scope.get("candidate_lineage"),
+                "review_round": scope.get("review_round"),
+            },
+            "exact_base_sha": base,
+            "exact_head_sha": head,
+            "exact_head_tree": head_tree,
+            "source_mode": "detached_exact_commit_snapshot",
+            "prompt_contract": prompt_contract,
+            "changed_files": files,
+            "changed_lines": sum(line_counts.values()),
+            "domains": domains,
+            "reference_closure": {"files": closure, "edges": edges},
+            "authority_inventory": authority,
+            "impact_graph": impact_graph,
+            "selection": selection,
+            "packets": packets,
+            "findings": findings,
+            "coverage_manifest": coverage,
+            "content_policy": "paths, exact revision/blob/slice metadata, and deterministic accounting only; no file contents or environment values",
+        }
+        document["authentication"] = {
+            "algorithm": "sha256-canonical-json-v1",
+            "coverage_sha256": sha256_json(coverage),
+            "packets_sha256": sha256_json(packets),
+            "semantic_manifest_sha256": sha256_json(document),
+        }
+        return document
+
+
+def load_trust_bundle(root: Path, path_value: str, document: dict[str, Any]) -> dict[str, Any]:
+    if not isinstance(path_value, str) or not path_value:
+        raise ReviewSystemError("an external parent-approved trust bundle is required")
+    path = Path(path_value).expanduser()
+    if path.is_symlink():
+        raise ReviewSystemError("trust bundle must not be a symlink")
+    try:
+        resolved = path.resolve(strict=True)
+    except OSError as exc:
+        raise ReviewSystemError(f"trust bundle is unavailable: {exc}") from exc
+    root_resolved = root.resolve(strict=True)
+    if Path(os.path.commonpath((str(root_resolved), str(resolved)))) == root_resolved:
+        raise ReviewSystemError("trust bundle must be parent-owned outside the candidate repository")
+    with resolved.open("rb") as handle:
+        raw = handle.read(64 * 1024 + 1)
+    if len(raw) > 64 * 1024:
+        raise ReviewSystemError("trust bundle exceeds 64 KiB")
+    try:
+        bundle = require_object(json.loads(raw), "trust bundle")
+    except json.JSONDecodeError as exc:
+        raise ReviewSystemError(f"trust bundle JSON is malformed: {exc}") from exc
+    required = {
+        "schema_version", "exact_base_sha", "exact_head_sha", "exact_head_tree",
+        "candidate_lineage", "review_round", "compiler_sha256", "config_sha256",
+        "scope_sha256", "prompt_contract_sha256", "approval_reference",
+    }
+    if set(bundle) != required or bundle.get("schema_version") != TRUST_BUNDLE_SCHEMA:
+        raise ReviewSystemError("trust bundle shape/schema is not exact v1")
+    compiler_path = Path(__file__).resolve(strict=True)
+    compiler_digest = hashlib.sha256(compiler_path.read_bytes()).hexdigest()
+    expected = {
+        "exact_base_sha": document.get("exact_base_sha"),
+        "exact_head_sha": document.get("exact_head_sha"),
+        "exact_head_tree": document.get("exact_head_tree"),
+        "candidate_lineage": document.get("scope", {}).get("candidate_lineage"),
+        "review_round": document.get("scope", {}).get("review_round"),
+        "compiler_sha256": compiler_digest,
+        "config_sha256": document.get("config", {}).get("sha256"),
+        "scope_sha256": document.get("scope", {}).get("sha256"),
+        "prompt_contract_sha256": sha256_json(document.get("prompt_contract", [])),
+    }
+    for field, value in expected.items():
+        if bundle.get(field) != value:
+            raise ReviewSystemError(f"trust bundle {field} differs from the parent-approved candidate binding")
+    if not isinstance(bundle.get("approval_reference"), str) or not bundle["approval_reference"].strip():
+        raise ReviewSystemError("trust bundle approval_reference is empty")
+    return {
+        **bundle,
+        "bundle_sha256": hashlib.sha256(raw).hexdigest(),
+        "source": "external_parent_owned_exact_binding",
+    }
+
+
+def bind_trust(root: Path, document: dict[str, Any], trust_bundle_path: str) -> dict[str, Any]:
+    unsigned = {key: value for key, value in document.items() if key != "authentication"}
+    unsigned["trust_root"] = load_trust_bundle(root, trust_bundle_path, document)
+    unsigned["authentication"] = {
+        "algorithm": "sha256-canonical-json-v1",
+        "coverage_sha256": sha256_json(unsigned.get("coverage_manifest")),
+        "packets_sha256": sha256_json(unsigned.get("packets")),
+        "semantic_manifest_sha256": sha256_json(unsigned),
+    }
+    return unsigned
+
+
+def command_compile(args: argparse.Namespace) -> int:
+    try:
+        root = Path(args.repo_root).resolve(strict=True)
+        expected_head = validate_sha(args.head, "exact head")
+        before = (
+            run_git(root, ["rev-parse", "HEAD"]).strip(),
+            run_git(root, ["rev-parse", "HEAD^{tree}"]).strip(),
+            run_git(root, ["--no-optional-locks", "status", "--porcelain", "--untracked-files=all"]).strip(),
         )
-        return 1 if status == "blocked" else 0
-    except ReviewSystemError as exc:
+        if before[0] != expected_head or before[2]:
+            raise ReviewSystemError("candidate must be the clean exact reviewed HEAD before compilation")
+        document = compile_document(root, args.config, args.scope, args.base, expected_head)
+        document = bind_trust(root, document, args.trust_bundle)
+        after = (
+            run_git(root, ["rev-parse", "HEAD"]).strip(),
+            run_git(root, ["rev-parse", "HEAD^{tree}"]).strip(),
+            run_git(root, ["--no-optional-locks", "status", "--porcelain", "--untracked-files=all"]).strip(),
+        )
+        if after != before or after[1] != document.get("exact_head_tree"):
+            raise ReviewSystemError("candidate identity or cleanliness drifted during compilation")
+        emit_json(document)
+        return 1 if document["status"] == "blocked" else 0
+    except (ReviewSystemError, OSError, TypeError, KeyError) as exc:
         emit_json({"schema_version": COMPILE_SCHEMA, "status": "blocked", "findings": [finding("compile_input", str(exc))]})
+        return 2
+
+
+def command_render(args: argparse.Namespace) -> int:
+    try:
+        root = Path(args.repo_root).resolve(strict=True)
+        manifest = require_object(load_json(resolve_safe(root, args.manifest)), "compile manifest")
+        if manifest.get("schema_version") != COMPILE_SCHEMA:
+            raise ReviewSystemError(
+                f"compile manifest migration required: {manifest.get('schema_version')!r} != {COMPILE_SCHEMA!r}"
+            )
+        blockers = verify_manifest_candidate(root, manifest)
+        if blockers:
+            raise ReviewSystemError(f"compile manifest is not renderable: {blockers[0]['claim']}")
+        rebuilt = compile_document(
+            root,
+            require_object(manifest.get("config"), "manifest config").get("path", ""),
+            require_object(manifest.get("scope"), "manifest scope").get("path", ""),
+            manifest["exact_base_sha"],
+            manifest["exact_head_sha"],
+        )
+        rebuilt = bind_trust(root, rebuilt, args.trust_bundle)
+        if sha256_json(rebuilt) != sha256_json(manifest):
+            raise ReviewSystemError("compile manifest differs from deterministic exact-commit reconstruction")
+        packet_id = args.packet_id
+        if not isinstance(packet_id, str) or not SAFE_ID.fullmatch(packet_id):
+            raise ReviewSystemError("packet id is malformed")
+        packet = next(
+            (item for item in manifest.get("packets", []) if item.get("packet_id") == packet_id),
+            None,
+        )
+        if packet is None:
+            raise ReviewSystemError(f"packet id is not assigned: {packet_id}")
+        for field in (
+            "changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"
+        ):
+            for item in packet.get(field, []):
+                if item.get("revision") not in {manifest["exact_base_sha"], manifest["exact_head_sha"]}:
+                    raise ReviewSystemError(f"packet slice revision is outside exact base/head: {item.get('path')}")
+                if item.get("revision_kind") == "diff" and item.get("revision") != manifest["exact_head_sha"]:
+                    raise ReviewSystemError(f"packet diff slice is not bound to exact head: {item.get('path')}")
+        prompt = bytearray(PROMPT_HEADER)
+        for record in manifest.get("prompt_contract", []):
+            if not isinstance(record, dict):
+                raise ReviewSystemError("prompt contract binding is malformed")
+            payload = git_blob(root, manifest["exact_head_sha"], record.get("path", ""), maximum=2 * 1024 * 1024)
+            if len(payload) != record.get("bytes") or hashlib.sha256(payload).hexdigest() != record.get("sha256"):
+                raise ReviewSystemError("prompt contract content differs from compile binding")
+            prompt.extend(payload)
+        prompt.extend(PACKET_MARKER)
+        prompt.extend(canonical_json_bytes(packet))
+        prompt.extend(PAYLOAD_MARKER)
+        all_slices = (
+            packet.get("changed_file_slices", []) + packet.get("context_file_slices", [])
+            + packet.get("impact_file_slices", []) + packet.get("edge_context_slices", [])
+        )
+        unique_slices = {
+            (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]): item
+            for item in all_slices
+        }
+        blob_cache: dict[tuple[str, str, str], bytes] = {}
+        for item in sorted(
+            unique_slices.values(),
+            key=lambda value: (value["path"], value["revision"], value["start_byte"], value["end_byte"], value["sha256"]),
+        ):
+            cache_key = (item["revision_kind"], item["revision"], item["path"])
+            if cache_key not in blob_cache:
+                if item["revision_kind"] == "diff":
+                    blob_cache[cache_key] = run_git_bytes_bounded(
+                        root,
+                        [
+                            "diff", "--no-ext-diff", "--no-renames", "--binary", "--full-index",
+                            "--unified=3", f"{manifest['exact_base_sha']}...{manifest['exact_head_sha']}",
+                            "--", item["path"],
+                        ],
+                        MAX_EXACT_DIFF_BYTES,
+                    )
+                else:
+                    blob_cache[cache_key] = git_blob(root, item["revision"], item["path"])
+            blob = blob_cache[cache_key]
+            if hashlib.sha256(blob).hexdigest() != item["blob_sha256"]:
+                raise ReviewSystemError(f"slice blob binding differs: {item['path']}")
+            payload = blob[int(item["start_byte"]):int(item["end_byte"])]
+            if len(payload) != item["bytes"] or hashlib.sha256(payload).hexdigest() != item["sha256"]:
+                raise ReviewSystemError(f"slice content binding differs: {item['path']}")
+            prompt.extend(SLICE_SEPARATOR)
+            prompt.extend(payload)
+        expected = packet.get("context", {}).get("rendered_prompt_bytes", 0)
+        if len(prompt) != expected:
+            raise ReviewSystemError(f"rendered prompt accounting differs: {len(prompt)} != {expected}")
+        sys.stdout.buffer.write(prompt)
+        return 0
+    except (ReviewSystemError, OSError, TypeError, KeyError) as exc:
+        print(f"pm review render error: {exc}", file=sys.stderr)
         return 2
 
 
@@ -2075,8 +3150,25 @@ def validate_review_behaviors(packet_id: str, response: dict[str, Any]) -> list[
         if not isinstance(value, dict) or set(value) != {"status", "reason"} or value.get("status") not in {"inspected", "not_needed"} or not isinstance(value.get("reason"), str) or not value["reason"].strip():
             blockers.append(finding("hypothesis_evidence", f"{packet_id} lacks reasoned {field}"))
     hypotheses = behaviors.get("hypotheses")
-    if not isinstance(hypotheses, list) or not hypotheses or not all(isinstance(value, str) and value.strip() for value in hypotheses):
-        blockers.append(finding("hypothesis_evidence", f"{packet_id} lacks explicit falsifiable hypotheses and alternatives"))
+    if not isinstance(hypotheses, list) or not hypotheses:
+        blockers.append(finding("hypothesis_evidence", f"{packet_id} lacks structured falsifiable hypotheses"))
+    else:
+        seen_hypotheses: set[str] = set()
+        for hypothesis in hypotheses:
+            if not isinstance(hypothesis, dict) or set(hypothesis) != HYPOTHESIS_FIELDS:
+                blockers.append(finding("hypothesis_evidence", f"{packet_id} hypothesis shape is not exact v4"))
+                continue
+            identifier = hypothesis.get("id")
+            if not isinstance(identifier, str) or not SAFE_ID.fullmatch(identifier) or identifier in seen_hypotheses:
+                blockers.append(finding("hypothesis_evidence", f"{packet_id} hypothesis id is malformed or duplicate"))
+            else:
+                seen_hypotheses.add(identifier)
+            for field in ("claim", "strongest_alternative", "falsifier"):
+                if not isinstance(hypothesis.get(field), str) or not hypothesis[field].strip():
+                    blockers.append(finding("hypothesis_evidence", f"{packet_id} hypothesis {field} is empty"))
+            evidence_paths = hypothesis.get("evidence_paths")
+            if not isinstance(evidence_paths, list) or not evidence_paths or not all(isinstance(path, str) and path for path in evidence_paths):
+                blockers.append(finding("hypothesis_evidence", f"{packet_id} hypothesis evidence_paths is malformed"))
     if not isinstance(behaviors.get("disconfirming_evidence"), str) or not behaviors["disconfirming_evidence"].strip():
         blockers.append(finding("hypothesis_evidence", f"{packet_id} lacks disconfirming evidence"))
     return blockers
@@ -2106,13 +3198,17 @@ def validate_experiments(
         "lab_cleanup_verified", "lab_evidence_path", "lab_evidence_sha256",
     }
     assigned_edges = set(packet.get("impact_edge_ids", []))
+    behavior_hypotheses = response.get("review_behaviors", {}).get("hypotheses", []) if isinstance(response.get("review_behaviors"), dict) else []
+    hypothesis_ids = {item.get("id") for item in behavior_hypotheses if isinstance(item, dict)}
     for experiment in experiments:
-        if not isinstance(experiment, dict) or not required.issubset(experiment):
-            blockers.append(finding("hypothesis_evidence", f"{packet_id} experiment lacks required counterfactual evidence"))
+        if not isinstance(experiment, dict) or set(experiment) != required:
+            blockers.append(finding("hypothesis_evidence", f"{packet_id} experiment does not match the exact v4 shape"))
             continue
         for field in ("hypothesis_id", "claim", "alternative", "temporary_change", "lab_evidence_path", "lab_evidence_sha256"):
             if not isinstance(experiment.get(field), str) or not experiment[field].strip():
                 blockers.append(finding("hypothesis_evidence", f"{packet_id} experiment {field} is malformed"))
+        if experiment.get("hypothesis_id") not in hypothesis_ids:
+            blockers.append(finding("hypothesis_evidence", f"{packet_id} experiment cites an unassigned hypothesis"))
         examined = experiment.get("impact_edges_examined")
         if not isinstance(examined, list) or not all(isinstance(item, str) for item in examined) or not set(examined).issubset(assigned_edges):
             blockers.append(finding("hypothesis_evidence", f"{packet_id} experiment cites unassigned impact edges"))
@@ -2129,7 +3225,7 @@ def validate_experiments(
             evidence_bytes = evidence_path.read_bytes()
             if hashlib.sha256(evidence_bytes).hexdigest() != experiment.get("lab_evidence_sha256"):
                 raise ReviewSystemError("lab evidence hash differs")
-            evidence = json.loads(evidence_bytes)
+            evidence = require_object(json.loads(evidence_bytes), "lab evidence")
             if evidence.get("schema_version") != LAB_EVIDENCE_SCHEMA or evidence.get("status") != "evidence":
                 raise ReviewSystemError("lab evidence schema/status is not clean evidence")
             for field in ("exact_base_sha", "exact_head_sha", "exact_head_tree"):
@@ -2137,10 +3233,24 @@ def validate_experiments(
                     raise ReviewSystemError(f"lab evidence {field} is stale")
             if evidence.get("packet_id") != packet_id or evidence.get("candidate_unchanged") is not True or evidence.get("lab_cleanup_verified") is not True:
                 raise ReviewSystemError("lab evidence packet, candidate, or cleanup proof differs")
-            observed = evidence.get("experiment", {}).get("observed", {})
-            expected = evidence.get("experiment", {}).get("expected_discriminator", {})
-            if not isinstance(expected, dict) or expected.get("exit_code") != observed.get("exit_code") or observed.get("limit_hit") is not None or observed.get("processes_remaining") != 0:
-                raise ReviewSystemError("lab discriminator, limit, or residue proof is incomplete")
+            evidence_experiment = require_object(evidence.get("experiment"), "lab experiment")
+            for field in EXPERIMENT_BINDING_FIELDS:
+                if experiment.get(field) != evidence_experiment.get(field):
+                    raise ReviewSystemError(f"response experiment relabels lab evidence field {field}")
+            observed = require_object(evidence_experiment.get("observed"), "lab observed result")
+            expected = require_object(evidence_experiment.get("expected_discriminator"), "lab discriminator")
+            if any(observed.get(key) != value for key, value in expected.items()):
+                raise ReviewSystemError("lab discriminator does not match observed evidence")
+            if (
+                observed.get("limit_hit") is not None
+                or observed.get("processes_remaining") != 0
+                or observed.get("process_residue_detected") not in {None, False}
+                or observed.get("sandbox_denial_observed") is not False
+            ):
+                raise ReviewSystemError("lab limit, residue, or sandbox-denial proof is incomplete")
+            final = evidence.get("final_state")
+            if not isinstance(final, dict) or final.get("resource_bounds_satisfied") is not True or final.get("candidate_unchanged") is not True or final.get("cleanup_verified") is not True:
+                raise ReviewSystemError("lab final aggregate/state proof is incomplete")
         except (ReviewSystemError, OSError, json.JSONDecodeError) as exc:
             blockers.append(finding("lab_safety", f"{packet_id} lab evidence is invalid: {exc}"))
     return blockers
@@ -2151,8 +3261,9 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
         return [finding("packet_response", f"{packet_id} response must be an object")]
     required = {
         "schema_version", "packet_id", "exact_base_sha", "exact_head_sha", "exact_head_tree",
-        "status", "reviewed_files", "closure_files", "authority_files", "impact_files",
-        "impact_edge_ids", "impact_file_slices", "edge_context_files", "invariants", "unreviewed_files",
+        "status", "reviewed_files", "changed_file_slices", "closure_files", "authority_files",
+        "context_file_slices", "impact_files", "impact_edge_ids", "impact_file_slices",
+        "edge_context_files", "edge_context_slices", "invariants", "unreviewed_files",
         "review_behaviors", "experiments", "no_experiment_reason", "findings", "residual_risk",
         "context", "wall_clock_ms",
     }
@@ -2164,21 +3275,39 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
         value = response.get(field)
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value) or len(value) != len(set(value)):
             blockers.append(finding("packet_response", f"{packet_id} {field} must be a duplicate-free string list"))
-    slices = response.get("impact_file_slices")
-    if not isinstance(slices, list) or not all(
-        isinstance(item, dict)
-        and set(item) == {"path", "start_line", "end_line", "bytes", "sha256"}
-        and isinstance(item.get("path"), str)
-        and all(isinstance(item.get(field), int) for field in ("start_line", "end_line", "bytes"))
-        and isinstance(item.get("sha256"), str)
-        for item in slices
-    ):
-        blockers.append(finding("packet_response", f"{packet_id} impact_file_slices is malformed"))
+    for slice_field in ("changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"):
+        slices = response.get(slice_field)
+        if not isinstance(slices, list) or not all(
+            isinstance(item, dict)
+            and set(item) == SLICE_FIELDS
+            and isinstance(item.get("path"), str)
+            and isinstance(item.get("revision"), str) and HEX_SHA.fullmatch(item["revision"])
+            and item.get("revision_kind") in {"head", "base_changed", "base_deleted", "diff"}
+            and isinstance(item.get("blob_sha256"), str) and HEX_DIGEST.fullmatch(item["blob_sha256"])
+            and all(isinstance(item.get(field), int) and not isinstance(item.get(field), bool) for field in ("start_line", "end_line", "start_byte", "end_byte", "bytes"))
+            and item["start_line"] >= 1 and item["end_line"] >= item["start_line"]
+            and item["start_byte"] >= 0 and item["end_byte"] - item["start_byte"] == item["bytes"] >= 0
+            and isinstance(item.get("sha256"), str) and HEX_DIGEST.fullmatch(item["sha256"])
+            for item in slices
+        ):
+            blockers.append(finding("packet_response", f"{packet_id} {slice_field} is malformed"))
     context = response.get("context")
     if not isinstance(context, dict) or set(context) != {"input_tokens", "output_tokens", "cost", "overflow", "truncated"}:
         blockers.append(finding("packet_response", f"{packet_id} context shape is malformed"))
     elif not isinstance(context.get("overflow"), bool) or not isinstance(context.get("truncated"), bool):
         blockers.append(finding("packet_response", f"{packet_id} context flags are malformed"))
+    else:
+        for field in ("input_tokens", "output_tokens"):
+            value = context.get(field)
+            if value is not None and (
+                not isinstance(value, int) or isinstance(value, bool) or value < 0
+            ):
+                blockers.append(finding("packet_response", f"{packet_id} context {field} is malformed"))
+        cost = context.get("cost")
+        if cost is not None and (
+            not isinstance(cost, (int, float)) or isinstance(cost, bool) or cost < 0
+        ):
+            blockers.append(finding("packet_response", f"{packet_id} context cost is malformed"))
     findings_value = response.get("findings")
     if not isinstance(findings_value, list):
         blockers.append(finding("packet_response", f"{packet_id} findings must be a list"))
@@ -2194,6 +3323,499 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
     if wall is not None and (not isinstance(wall, (int, float)) or wall < 0):
         blockers.append(finding("packet_response", f"{packet_id} wall_clock_ms is malformed"))
     return blockers
+
+
+def dedup_tokens(value: str) -> list[str]:
+    return [
+        token for token in re.findall(r"[a-z][a-z0-9_.:/-]{1,63}", value.lower())
+        if token not in DEDUP_STOP_WORDS
+    ]
+
+
+def category_families(category: str) -> list[str]:
+    normalized = re.sub(r"[^a-z0-9]+", "_", category.lower()).strip("_") or "uncategorized"
+    families = {normalized}
+    for pattern, family in CATEGORY_FAMILY_RULES:
+        if pattern.search(normalized):
+            families.add(family)
+    if re.search(r"(?:exact|version|revision|blob|manifest|synthesi|stale|machine_contract|response|hypothesis|review_behavior|lab_evidence|workflow_contract)", normalized):
+        families.add("review_evidence_integrity")
+    if re.search(r"(?:authority|authoritative|phase_state|schema_migration|mirror|one_way_migration|temporal|exact_version|machine_contract|evidence_truthfulness)", normalized):
+        families.add("authority_state")
+    if re.search(r"(?:impact|graph|edge|reference|certainty|path_safety|coverage_active)", normalized):
+        families.add("impact_graph")
+    if re.search(r"(?:packet|context|slice_bound|slice_bounds|impact_slice_bound|typed_edge_provenance)", normalized):
+        families.add("packet_bounds")
+    if re.search(r"(?:lab|experiment|resource_bound|information_disclosure|network_test)", normalized):
+        families.add("lab_containment")
+    if re.search(r"(?:workflow|route|gate|shepherd|revert|liveness|runtime|tool_scope|documentation|exact_identity_safety|human_gate_safety|stale_evidence|authoritative_state_consistency)", normalized):
+        families.add("workflow_lifecycle")
+    if re.search(r"(?:secret|trace|evidence_isolation|evidence_integrity|path_safety)", normalized):
+        families.add("evidence_containment")
+    return sorted(families)
+
+
+def packet_source_anchors(packet: dict[str, Any], path: str) -> list[str]:
+    anchors: set[str] = set()
+    for field in (
+        "changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"
+    ):
+        for item in packet.get(field, []):
+            if item.get("path") == path:
+                anchors.add(
+                    ":".join(
+                        (
+                            path,
+                            str(item.get("blob_sha256", "")),
+                            str(item.get("start_line", "")),
+                            str(item.get("sha256", "")),
+                        )
+                    )
+                )
+    return sorted(anchors)
+
+
+def observation_features(packet: dict[str, Any], raw: dict[str, Any]) -> dict[str, Any]:
+    payload = {key: raw.get(key) for key in sorted(raw)}
+    evidence_text = " ".join(
+        str(raw.get(field, "")) for field in ("category", "evidence", "impact")
+    )
+    correction_text = str(raw.get("smallest_safe_correction", ""))
+    mechanism = sorted(set(dedup_tokens(evidence_text)))
+    correction = dedup_tokens(correction_text)
+    correction_surface = sorted(set([*dedup_tokens(str(raw.get("path", ""))), *correction[:12]]))
+    claim_tokens = dedup_tokens(" ".join((evidence_text, correction_text)))
+    shingles = sorted(
+        {" ".join(claim_tokens[index:index + 3]) for index in range(max(0, len(claim_tokens) - 2))}
+    )
+    return {
+        "versions": DEDUP_KEY_VERSIONS,
+        "payload_hash": sha256_json(payload),
+        "invariants": sorted(set(packet.get("invariants", []))),
+        "category_families": category_families(str(raw.get("category", ""))),
+        "source_anchors": packet_source_anchors(packet, str(raw.get("path", ""))),
+        "mechanism_terms": mechanism,
+        "correction_surface_terms": correction_surface,
+        "claim_shingles": shingles,
+    }
+
+
+def build_observations(
+    manifest: dict[str, Any],
+    finding_records: list[dict[str, Any]],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    scope = require_object(manifest.get("scope"), "manifest scope")
+    review_round = scope.get("review_round")
+    if not isinstance(review_round, int) or isinstance(review_round, bool) or review_round <= 0:
+        raise ReviewSystemError("manifest scope lacks a positive review_round for occurrence identity")
+    lineage = scope.get("candidate_lineage")
+    if not isinstance(lineage, str) or not lineage:
+        raise ReviewSystemError("manifest scope lacks candidate lineage")
+    manifest_digest = require_object(manifest.get("authentication"), "manifest authentication").get(
+        "semantic_manifest_sha256"
+    )
+    run_seed = {
+        "lineage_id": lineage,
+        "review_round": review_round,
+        "exact_base_sha": manifest.get("exact_base_sha"),
+        "exact_head_sha": manifest.get("exact_head_sha"),
+        "exact_head_tree": manifest.get("exact_head_tree"),
+        "manifest_sha256": manifest_digest,
+    }
+    run_id = "RUN-" + sha256_json(run_seed)[:20]
+    run = {
+        "run_id": run_id,
+        **run_seed,
+    }
+    observations: list[dict[str, Any]] = []
+    for global_ordinal, record in enumerate(finding_records, 1):
+        packet = require_object(record.get("packet"), "observation packet")
+        raw = require_object(record.get("finding"), "observation finding")
+        response_digest = record.get("response_sha256")
+        raw_ordinal = record.get("raw_ordinal")
+        if not isinstance(response_digest, str) or not HEX_DIGEST.fullmatch(response_digest):
+            raise ReviewSystemError("observation response digest is malformed")
+        if not isinstance(raw_ordinal, int) or raw_ordinal <= 0:
+            raise ReviewSystemError("observation raw ordinal is malformed")
+        identity_seed = {
+            "run_id": run_id,
+            "packet_id": packet.get("packet_id"),
+            "response_sha256": response_digest,
+            "raw_ordinal": raw_ordinal,
+        }
+        observation_id = "OBS-" + sha256_json(identity_seed)[:24]
+        observation = {
+            "schema_version": FINDING_OBSERVATION_SCHEMA,
+            "observation_id": observation_id,
+            "display_alias": f"R{review_round}-F{global_ordinal:03d}",
+            "run_id": run_id,
+            "lineage_id": lineage,
+            "review_round": review_round,
+            "exact_base_sha": manifest.get("exact_base_sha"),
+            "exact_head_sha": manifest.get("exact_head_sha"),
+            "exact_head_tree": manifest.get("exact_head_tree"),
+            "manifest_sha256": manifest_digest,
+            "packet_id": packet.get("packet_id"),
+            "response_sha256": response_digest,
+            "raw_ordinal": raw_ordinal,
+            "finding": json.loads(json.dumps(raw)),
+            "evidence_locations": [
+                {
+                    "path": raw.get("path"),
+                    "line": raw.get("line"),
+                    "packet_id": packet.get("packet_id"),
+                    "response_sha256": response_digest,
+                }
+            ],
+            "features": observation_features(packet, raw),
+        }
+        observation["identity_sha256"] = sha256_json(observation)
+        observations.append(observation)
+    return run, observations
+
+
+def jaccard(left: Iterable[str], right: Iterable[str]) -> float:
+    left_set, right_set = set(left), set(right)
+    union = left_set | right_set
+    return len(left_set & right_set) / len(union) if union else 0.0
+
+
+def generate_candidate_pairs(observations: list[dict[str, Any]]) -> dict[str, Any]:
+    by_id = {item["observation_id"]: item for item in observations}
+    term_frequency: dict[str, int] = defaultdict(int)
+    for item in observations:
+        for term in set(item["features"]["mechanism_terms"]):
+            term_frequency[term] += 1
+    candidates: list[dict[str, Any]] = []
+    for index, left in enumerate(observations):
+        for right in observations[index + 1:]:
+            left_features, right_features = left["features"], right["features"]
+            reasons: list[str] = []
+            if left_features["payload_hash"] == right_features["payload_hash"]:
+                reasons.append("exact_payload")
+            same_invariant = bool(set(left_features["invariants"]) & set(right_features["invariants"]))
+            same_family = bool(
+                set(left_features["category_families"]) & set(right_features["category_families"])
+            )
+            if same_invariant and same_family:
+                reasons.append("invariant_category")
+            if set(left_features["source_anchors"]) & set(right_features["source_anchors"]) and same_family:
+                reasons.append("source_anchor_category")
+            mechanism_overlap = set(left_features["mechanism_terms"]) & set(right_features["mechanism_terms"])
+            if same_invariant and len(mechanism_overlap) >= 2:
+                reasons.append("invariant_mechanism")
+            correction_score = jaccard(
+                left_features["correction_surface_terms"], right_features["correction_surface_terms"]
+            )
+            if correction_score >= 0.5 and min(
+                len(left_features["correction_surface_terms"]),
+                len(right_features["correction_surface_terms"]),
+            ) >= 2:
+                reasons.append("correction_surface")
+            shingle_score = jaccard(left_features["claim_shingles"], right_features["claim_shingles"])
+            rare_terms = sorted(term for term in mechanism_overlap if term_frequency[term] <= 2)
+            if shingle_score >= 0.45 or len(rare_terms) >= 2:
+                reasons.append("text_candidate")
+            if not reasons:
+                continue
+            incompatible_invariants = bool(
+                left_features["invariants"] and right_features["invariants"] and not same_invariant
+            )
+            pair = sorted((left["observation_id"], right["observation_id"]))
+            candidates.append(
+                {
+                    "candidate_id": "PAIR-" + sha256_json(pair)[:20],
+                    "observation_ids": pair,
+                    "reasons": sorted(set(reasons)),
+                    "scores": {
+                        "correction_surface_jaccard": round(correction_score, 6),
+                        "claim_shingle_jaccard": round(shingle_score, 6),
+                    },
+                    "hard_non_merge_signals": (
+                        ["incompatible_assigned_invariants"] if incompatible_invariants else []
+                    ),
+                    "rare_terms": rare_terms,
+                }
+            )
+    candidates.sort(key=lambda item: item["candidate_id"])
+    possible = len(observations) * (len(observations) - 1) // 2
+    return {
+        "algorithm": "deterministic-partial-keys/v1",
+        "model_tokens": 0,
+        "model_assistance": "disabled",
+        "possible_pairs": possible,
+        "candidate_pair_count": len(candidates),
+        "candidate_pair_fraction": len(candidates) / possible if possible else 0.0,
+        "pairs": candidates,
+        "observation_ids_sha256": sha256_json(sorted(by_id)),
+    }
+
+
+def load_dedup_decisions(root: Path, relative: str | None, run: dict[str, Any], observations: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    if not relative:
+        return []
+    document = require_object(load_json(resolve_safe(root, relative)), "dedup decisions")
+    if document.get("schema_version") != DEDUP_DECISIONS_SCHEMA:
+        raise ReviewSystemError("dedup decisions schema migration required")
+    if document.get("run_id") != run["run_id"] or document.get("lineage_id") != run["lineage_id"]:
+        raise ReviewSystemError("dedup decisions are stale for this exact run/lineage")
+    events = document.get("events")
+    if not isinstance(events, list):
+        raise ReviewSystemError("dedup decision events must be a list")
+    known = {item["observation_id"] for item in observations}
+    previous = None
+    result: list[dict[str, Any]] = []
+    for sequence, event in enumerate(events, 1):
+        if not isinstance(event, dict) or event.get("sequence") != sequence:
+            raise ReviewSystemError("dedup decision sequence is not append-only")
+        if event.get("previous_event_sha256") != previous:
+            raise ReviewSystemError("dedup decision hash chain differs")
+        supplied_digest = event.get("event_sha256")
+        unsigned = {key: value for key, value in event.items() if key != "event_sha256"}
+        if supplied_digest != sha256_json(unsigned):
+            raise ReviewSystemError("dedup decision event digest differs")
+        decision = event.get("decision")
+        ids = event.get("observation_ids")
+        if decision not in {"same", "distinct", "ambiguous", "recurrence", "split", "reassign"}:
+            raise ReviewSystemError("dedup decision is outside the exact enum")
+        if not isinstance(ids, list) or not ids or any(item not in known for item in ids):
+            raise ReviewSystemError("dedup decision cites unknown observations")
+        if decision in {"same", "distinct", "ambiguous", "split"} and len(set(ids)) != 2:
+            raise ReviewSystemError("pair decision must cite exactly two observations")
+        if decision in {"recurrence", "reassign"} and len(set(ids)) != 1:
+            raise ReviewSystemError("recurrence/reassign decision must cite exactly one observation")
+        causal = event.get("causal_test")
+        if not isinstance(causal, dict) or set(causal) != {
+            "same_invariant", "same_mechanism", "single_treatment", "contradictions",
+            "counterfactual_all_cease", "evidence_observation_ids",
+        }:
+            raise ReviewSystemError("dedup decision lacks the exact causal test")
+        if not isinstance(causal.get("contradictions"), list):
+            raise ReviewSystemError("dedup contradictions must be a list")
+        if sorted(set(causal.get("evidence_observation_ids", []))) != sorted(set(ids)):
+            raise ReviewSystemError("dedup causal evidence does not cover every observation")
+        if decision in {"same", "recurrence", "reassign"} and not (
+            causal.get("same_invariant") is True
+            and causal.get("same_mechanism") is True
+            and causal.get("single_treatment") is True
+            and causal.get("counterfactual_all_cease") is True
+            and not causal.get("contradictions")
+        ):
+            raise ReviewSystemError("same/recurrence/reassign decision does not prove the five-part causal test")
+        if decision in {"recurrence", "reassign"} and not isinstance(event.get("root_id"), str):
+            raise ReviewSystemError("recurrence/reassign decision lacks a stable root id")
+        if decision == "reassign" and not isinstance(event.get("retired_root_id"), str):
+            raise ReviewSystemError("reassign decision lacks a retained retired root id")
+        previous = supplied_digest
+        result.append(event)
+    return result
+
+
+def load_dedup_history(root: Path, relative: str | None, lineage: str) -> dict[str, Any]:
+    if not relative:
+        return {"schema_version": DEDUP_HISTORY_SCHEMA, "lineage_id": lineage, "roots": []}
+    document = require_object(load_json(resolve_safe(root, relative)), "dedup history")
+    if document.get("schema_version") != DEDUP_HISTORY_SCHEMA or document.get("lineage_id") != lineage:
+        raise ReviewSystemError("dedup history schema or lineage differs")
+    if not isinstance(document.get("roots"), list):
+        raise ReviewSystemError("dedup history roots must be a list")
+    return document
+
+
+def synthesize_dedup(
+    root: Path,
+    manifest: dict[str, Any],
+    finding_records: list[dict[str, Any]],
+    decisions_relative: str | None,
+    history_relative: str | None,
+) -> dict[str, Any]:
+    run, observations = build_observations(manifest, finding_records)
+    candidates = generate_candidate_pairs(observations)
+    decisions = load_dedup_decisions(root, decisions_relative, run, observations)
+    history = load_dedup_history(root, history_relative, run["lineage_id"])
+    known_history = {
+        item.get("root_id"): item for item in history["roots"]
+        if isinstance(item, dict) and isinstance(item.get("root_id"), str)
+    }
+    pair_decisions: dict[tuple[str, str], str] = {}
+    recurrence: dict[str, str] = {}
+    for event in decisions:
+        ids = sorted(set(event["observation_ids"]))
+        if event["decision"] in {"recurrence", "reassign"}:
+            if event["root_id"] not in known_history:
+                raise ReviewSystemError("recurrence/reassign decision cites an unknown historical root")
+            recurrence[ids[0]] = event["root_id"]
+        else:
+            pair_decisions[(ids[0], ids[1])] = (
+                "distinct" if event["decision"] == "split" else event["decision"]
+            )
+
+    clusters: list[list[str]] = []
+    for observation_id in sorted(item["observation_id"] for item in observations):
+        placed = False
+        for cluster in clusters:
+            relations = [
+                pair_decisions.get(tuple(sorted((observation_id, member)))) for member in cluster
+            ]
+            if relations and all(relation == "same" for relation in relations):
+                cluster.append(observation_id)
+                placed = True
+                break
+        if not placed:
+            clusters.append([observation_id])
+    by_id = {item["observation_id"]: item for item in observations}
+    severity_rank = {"critical": 4, "high": 3, "medium": 2, "low": 1}
+    roots: list[dict[str, Any]] = []
+    occurrences: list[dict[str, Any]] = []
+    for members in clusters:
+        recurrence_roots = {recurrence[item] for item in members if item in recurrence}
+        if len(recurrence_roots) > 1:
+            raise ReviewSystemError("one occurrence cannot recur from multiple stable roots")
+        root_id = next(iter(recurrence_roots), None)
+        if root_id is None:
+            root_id = "RC-" + hashlib.sha256(
+                (run["lineage_id"] + "\0" + min(members)).encode()
+            ).hexdigest()[:16]
+        representative = sorted(
+            members,
+            key=lambda item: (
+                -len(by_id[item]["evidence_locations"]),
+                -severity_rank.get(by_id[item]["finding"].get("severity"), 0),
+                -len(str(by_id[item]["finding"].get("smallest_safe_correction", ""))),
+                item,
+            ),
+        )[0]
+        occurrence_id = "OCC-" + hashlib.sha256(
+            (root_id + "\0" + run["run_id"]).encode()
+        ).hexdigest()[:20]
+        occurrences.append(
+            {
+                "schema_version": OCCURRENCE_SCHEMA,
+                "occurrence_id": occurrence_id,
+                "root_id": root_id,
+                "run_id": run["run_id"],
+                "recurrence_of": root_id if root_id in recurrence_roots else None,
+                "representative_observation_id": representative,
+                "observation_ids": sorted(members),
+                "aggregate_severity": max(
+                    (by_id[item]["finding"].get("severity", "low") for item in members),
+                    key=lambda value: severity_rank.get(value, 0),
+                ),
+                "evidence_backlinks": [
+                    {"observation_id": item, "locations": by_id[item]["evidence_locations"]}
+                    for item in sorted(members)
+                ],
+            }
+        )
+        historical = known_history.get(root_id, {})
+        representative_finding = by_id[representative]["finding"]
+        roots.append(
+            {
+                "schema_version": ROOT_CAUSE_SCHEMA,
+                "root_id": root_id,
+                "lineage_id": run["lineage_id"],
+                "friendly_aliases": sorted(set(historical.get("friendly_aliases", []))),
+                "status": "active",
+                "pm_root_summary": {
+                    "invariant": by_id[representative]["features"]["invariants"],
+                    "mechanism": representative_finding.get("evidence"),
+                    "correction_owner": representative_finding.get("path"),
+                    "regression_treatment": representative_finding.get("smallest_safe_correction"),
+                },
+                "occurrence_ids": sorted([*historical.get("occurrence_ids", []), occurrence_id]),
+                "membership_events": [
+                    {
+                        "observation_id": item,
+                        "action": "assigned",
+                        "decision_source": "parent_orchestrator",
+                        "run_id": run["run_id"],
+                    }
+                    for item in sorted(members)
+                ],
+                "retired_root_ids": sorted(
+                    set(historical.get("retired_root_ids", []))
+                    | {
+                        event["retired_root_id"] for event in decisions
+                        if event.get("decision") == "reassign"
+                        and event.get("root_id") == root_id
+                    }
+                ),
+            }
+        )
+    candidate_pair_ids = {
+        tuple(item["observation_ids"]): item["candidate_id"] for item in candidates["pairs"]
+    }
+    candidate_decisions = []
+    for pair, candidate_id in sorted(candidate_pair_ids.items()):
+        candidate_decisions.append(
+            {
+                "candidate_id": candidate_id,
+                "observation_ids": list(pair),
+                "decision": pair_decisions.get(pair, "ambiguous"),
+            }
+        )
+    raw_count = len(observations)
+    disclosure = {
+        "raw_observation_count": raw_count,
+        "flat_observation_ids": [item["observation_id"] for item in observations],
+        "observation_identity_sha256": sha256_json(
+            [item["identity_sha256"] for item in observations]
+        ),
+        "retained_observation_count": sum(len(item["observation_ids"]) for item in occurrences),
+    }
+    if disclosure["retained_observation_count"] != raw_count:
+        raise ReviewSystemError("dedup disclosure does not retain every raw observation exactly once")
+    result = {
+        "schema_version": DEDUP_SCHEMA,
+        "run": run,
+        "key_versions": DEDUP_KEY_VERSIONS,
+        "observations": observations,
+        "candidates": candidates,
+        "candidate_decisions": candidate_decisions,
+        "decision_events": decisions,
+        "occurrences": sorted(occurrences, key=lambda item: item["occurrence_id"]),
+        "roots": sorted(roots, key=lambda item: item["root_id"]),
+        "disclosure": disclosure,
+        "raw_finding_count": raw_count,
+        "occurrence_count": len(occurrences),
+        "root_count": len(roots),
+        "duplicate_observation_count": raw_count - len(occurrences),
+        "duplicate_ratio": (raw_count - len(occurrences)) / raw_count if raw_count else 0.0,
+        "optional_model_assistance": {
+            "enabled": False,
+            "reason": "disabled until precision, recall, integrity, and trustworthy token/cost gates pass",
+        },
+    }
+    result["deterministic_digest"] = sha256_json(result)
+    return result
+
+
+def aggregate_validated_telemetry(response_records: list[dict[str, Any]], manifest: dict[str, Any]) -> dict[str, Any]:
+    contexts = [record["response"].get("context", {}) for record in response_records]
+    walls = [record["response"].get("wall_clock_ms") for record in response_records]
+    def aggregate(field: str) -> dict[str, Any]:
+        values = [context.get(field) for context in contexts if context.get(field) is not None]
+        return {
+            "available_count": len(values),
+            "missing_count": len(contexts) - len(values),
+            "total": sum(values) if values else None,
+        }
+    return {
+        "packet_count": len(manifest.get("packets", [])),
+        "exact_rendered_prompt_bytes": sum(
+            int(packet.get("context", {}).get("rendered_prompt_bytes", 0))
+            for packet in manifest.get("packets", [])
+        ),
+        "input_tokens": aggregate("input_tokens"),
+        "output_tokens": aggregate("output_tokens"),
+        "cost": aggregate("cost"),
+        "wall_clock_ms": {
+            "available_count": sum(value is not None for value in walls),
+            "missing_count": sum(value is None for value in walls),
+            "total": sum(value for value in walls if value is not None) if any(value is not None for value in walls) else None,
+        },
+        "claim": "only validated provider/runtime telemetry is aggregated; null values are never inferred",
+    }
 
 
 def verify_manifest_candidate(root: Path, manifest: dict[str, Any]) -> list[dict[str, Any]]:
@@ -2222,41 +3844,106 @@ def verify_manifest_candidate(root: Path, manifest: dict[str, Any]) -> list[dict
     if merge_base != manifest["exact_base_sha"]:
         blockers.append(finding("stale_evidence", "manifest exact base is not the candidate merge base"))
     scope = manifest.get("scope")
+    config = manifest.get("config")
+    authentication = manifest.get("authentication")
+    trust_root = manifest.get("trust_root")
+    if not isinstance(trust_root, dict) or trust_root.get("schema_version") != TRUST_BUNDLE_SCHEMA or trust_root.get("source") != "external_parent_owned_exact_binding":
+        blockers.append(finding("compile_manifest", "manifest external trust root is absent or incompatible"))
     if not isinstance(scope, dict) or scope.get("schema_version") != SCOPE_SCHEMA:
         blockers.append(finding("compile_manifest", "manifest scope binding is absent or incompatible"))
+    if not isinstance(config, dict) or config.get("schema_version") != CONFIG_SCHEMA:
+        blockers.append(finding("compile_manifest", "manifest config binding is absent or incompatible"))
+    if not isinstance(authentication, dict) or authentication.get("algorithm") != "sha256-canonical-json-v1":
+        blockers.append(finding("compile_manifest", "manifest authentication is absent or incompatible"))
     else:
-        try:
-            scope_path = resolve_safe(root, scope.get("path", ""))
-            if hashlib.sha256(scope_path.read_bytes()).hexdigest() != scope.get("sha256"):
-                blockers.append(finding("stale_evidence", "manifest scope hash differs from current exact scope"))
-        except ReviewSystemError as exc:
-            blockers.append(finding("compile_manifest", str(exc)))
+        unsigned = {key: value for key, value in manifest.items() if key != "authentication"}
+        expected = {
+            "coverage_sha256": sha256_json(manifest.get("coverage_manifest")),
+            "packets_sha256": sha256_json(manifest.get("packets")),
+            "semantic_manifest_sha256": sha256_json(unsigned),
+        }
+        for field, digest in expected.items():
+            if authentication.get(field) != digest:
+                blockers.append(finding("compile_manifest", f"manifest {field} authentication differs"))
+    packet_ids: list[str] = []
+    for packet in manifest.get("packets", []) if isinstance(manifest.get("packets"), list) else []:
+        packet_id = packet.get("packet_id") if isinstance(packet, dict) else None
+        if not isinstance(packet_id, str) or not SAFE_ID.fullmatch(packet_id):
+            blockers.append(finding("compile_manifest", "manifest contains an unsafe packet id"))
+        else:
+            packet_ids.append(packet_id)
+    if len(packet_ids) != len(set(packet_ids)):
+        blockers.append(finding("compile_manifest", "manifest packet ids are not unique"))
     return blockers
 
 
 def command_synthesize(args: argparse.Namespace) -> int:
     try:
         root = Path(args.repo_root).resolve(strict=True)
-        manifest = load_json(resolve_safe(root, args.manifest))
+        manifest = require_object(load_json(resolve_safe(root, args.manifest)), "compile manifest")
         if manifest.get("schema_version") != COMPILE_SCHEMA:
             raise ReviewSystemError(
                 f"compile manifest migration required: {manifest.get('schema_version')!r} != {COMPILE_SCHEMA!r}"
             )
-        responses_dir = resolve_safe(root, args.responses_dir, must_exist=False)
+        responses_relative = validate_relative_path(args.responses_dir, "responses directory")
+        responses_candidate = root / responses_relative
+        if responses_candidate.is_symlink():
+            raise ReviewSystemError("responses directory must not be a symlink")
+        try:
+            responses_dir = responses_candidate.resolve(strict=True)
+        except OSError as exc:
+            raise ReviewSystemError(f"responses directory is unavailable: {exc}") from exc
         root_resolved = root.resolve(strict=True)
-        if Path(os.path.commonpath((str(root_resolved), str(responses_dir)))) != root_resolved:
-            raise ReviewSystemError("responses directory escapes repository")
+        if Path(os.path.commonpath((str(root_resolved), str(responses_dir)))) != root_resolved or not responses_dir.is_dir():
+            raise ReviewSystemError("responses directory escapes repository or is not a directory")
         findings: list[dict[str, Any]] = []
         blockers = verify_manifest_candidate(root, manifest)
+        config_binding = manifest.get("config") if isinstance(manifest.get("config"), dict) else {}
+        scope_binding = manifest.get("scope") if isinstance(manifest.get("scope"), dict) else {}
+        try:
+            rebuilt = compile_document(
+                root,
+                config_binding.get("path", ""),
+                scope_binding.get("path", ""),
+                manifest.get("exact_base_sha", ""),
+                manifest.get("exact_head_sha", ""),
+            )
+            rebuilt = bind_trust(root, rebuilt, args.trust_bundle)
+            if canonical_json_bytes(rebuilt) != canonical_json_bytes(manifest):
+                blockers.append(finding("compile_manifest", "manifest semantics differ from deterministic exact-commit recompilation"))
+        except (ReviewSystemError, OSError, TypeError, KeyError) as exc:
+            blockers.append(finding("compile_manifest", f"deterministic manifest authentication failed: {exc}"))
         response_records: list[dict[str, Any]] = []
-        for packet in manifest.get("packets", []):
-            response_path = responses_dir / f"{packet['packet_id']}.json"
-            if not response_path.is_file():
-                blockers.append(finding("packet_response", f"missing packet response {packet['packet_id']}"))
+        finding_records: list[dict[str, Any]] = []
+        packets = manifest.get("packets", []) if isinstance(manifest.get("packets"), list) else []
+        expected_response_names = {f"{packet.get('packet_id')}.json" for packet in packets if isinstance(packet, dict)}
+        for child in responses_dir.iterdir():
+            if child.is_symlink() or not child.is_file() or child.name not in expected_response_names:
+                blockers.append(finding("packet_response", f"unexpected or unsafe response child: {child.name}"))
+        for packet in packets:
+            packet_id = packet.get("packet_id") if isinstance(packet, dict) else None
+            if not isinstance(packet_id, str) or not SAFE_ID.fullmatch(packet_id):
+                blockers.append(finding("packet_response", "unsafe packet id cannot select a response child"))
                 continue
-            response = load_json(response_path)
-            response_records.append(response)
-            blockers.extend(validate_response_shape(packet["packet_id"], response))
+            response_path = responses_dir / f"{packet_id}.json"
+            if response_path.is_symlink() or not response_path.is_file() or response_path.parent != responses_dir:
+                blockers.append(finding("packet_response", f"missing or unsafe packet response {packet_id}"))
+                continue
+            try:
+                response_bytes = read_file_bounded(response_path, MAX_RESPONSE_BYTES)
+                response_value = json.loads(response_bytes)
+            except json.JSONDecodeError as exc:
+                blockers.append(finding("packet_response", f"{packet_id} response JSON is malformed: {exc}"))
+                continue
+            if not isinstance(response_value, dict):
+                blockers.extend(validate_response_shape(packet_id, response_value))
+                continue
+            response = response_value
+            response_digest = hashlib.sha256(response_bytes).hexdigest()
+            response_records.append(
+                {"packet": packet, "response": response, "response_sha256": response_digest}
+            )
+            blockers.extend(validate_response_shape(packet_id, response))
             if response.get("schema_version") != PACKET_RESPONSE_SCHEMA:
                 blockers.append(finding("packet_response", f"response migration required for {packet['packet_id']}: {response.get('schema_version')!r} != {PACKET_RESPONSE_SCHEMA!r}"))
             if response.get("packet_id") != packet["packet_id"]:
@@ -2276,8 +3963,9 @@ def command_synthesize(args: argparse.Namespace) -> int:
                 actual = response.get(field)
                 if not isinstance(actual, list) or actual != expected_values:
                     blockers.append(finding("packet_coverage", f"{packet['packet_id']} {field} differs from exact assignment"))
-            if response.get("impact_file_slices") != packet.get("impact_file_slices", []):
-                blockers.append(finding("packet_coverage", f"{packet['packet_id']} impact_file_slices differs from exact assignment"))
+            for slice_field in ("changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"):
+                if response.get(slice_field) != packet.get(slice_field, []):
+                    blockers.append(finding("packet_coverage", f"{packet_id} {slice_field} differs from exact assignment"))
             invariant_blockers, failed_invariants = response_invariants(
                 packet["packet_id"], set(packet.get("invariants", [])), response
             )
@@ -2301,10 +3989,28 @@ def command_synthesize(args: argparse.Namespace) -> int:
                 blockers.append(finding("packet_response", f"{packet['packet_id']} has invalid status"))
             if failed_invariants and not packet_findings:
                 blockers.append(finding("packet_response", f"{packet['packet_id']} failed invariants lack paired findings: {sorted(failed_invariants)}"))
-            for item in packet_findings:
+            for raw_ordinal, item in enumerate(packet_findings, 1):
                 if isinstance(item, dict):
                     findings.append({"packet_id": packet["packet_id"], **item})
+                    finding_records.append(
+                        {
+                            "packet": packet,
+                            "finding": item,
+                            "response_sha256": response_digest,
+                            "raw_ordinal": raw_ordinal,
+                        }
+                    )
         blockers.extend(verify_manifest_candidate(root, manifest))
+        dedup: dict[str, Any] | None = None
+        try:
+            dedup = synthesize_dedup(
+                root, manifest, finding_records, args.dedup_decisions, args.dedup_history
+            )
+            if dedup["raw_finding_count"] != len(findings):
+                raise ReviewSystemError("dedup raw finding count differs from flat synthesis disclosure")
+        except (ReviewSystemError, OSError, TypeError, KeyError, json.JSONDecodeError) as exc:
+            blockers.append(finding("dedup_integrity", str(exc)))
+        telemetry = aggregate_validated_telemetry(response_records, manifest)
         if blockers:
             status = "blocked"
         elif findings:
@@ -2322,13 +4028,15 @@ def command_synthesize(args: argparse.Namespace) -> int:
                 "packet_count": len(manifest.get("packets", [])),
                 "response_count": len(response_records),
                 "findings": findings,
+                "dedup": dedup,
+                "telemetry": telemetry,
                 "blockers": blockers,
                 "shepherd": {"status": "pending", "rule": "run independently only after clean synthesis"},
                 "human_merge_authority": True,
             }
         )
         return 0 if status == "clean" else 1
-    except (ReviewSystemError, TypeError, KeyError, json.JSONDecodeError) as exc:
+    except (ReviewSystemError, OSError, TypeError, AttributeError, KeyError, json.JSONDecodeError, subprocess.SubprocessError) as exc:
         emit_json({"schema_version": SYNTHESIS_SCHEMA, "status": "blocked", "blockers": [finding("synthesis_input", str(exc))]})
         return 2
 
@@ -2358,12 +4066,23 @@ def parser() -> argparse.ArgumentParser:
     compile_parser.add_argument("--scope", required=True)
     compile_parser.add_argument("--base", required=True)
     compile_parser.add_argument("--head", required=True)
+    compile_parser.add_argument("--trust-bundle", default=os.environ.get("PM_REVIEW_TRUST_BUNDLE"))
     compile_parser.set_defaults(func=command_compile)
+
+    render_parser = subparsers.add_parser("render", help="render one authenticated bounded packet prompt")
+    render_parser.add_argument("--repo-root", default=".")
+    render_parser.add_argument("--manifest", required=True)
+    render_parser.add_argument("--packet-id", required=True)
+    render_parser.add_argument("--trust-bundle", default=os.environ.get("PM_REVIEW_TRUST_BUNDLE"))
+    render_parser.set_defaults(func=command_render)
 
     synthesize_parser = subparsers.add_parser("synthesize", help="synthesize raw packet responses into one PM verdict")
     synthesize_parser.add_argument("--repo-root", default=".")
     synthesize_parser.add_argument("--manifest", required=True)
     synthesize_parser.add_argument("--responses-dir", required=True)
+    synthesize_parser.add_argument("--trust-bundle", default=os.environ.get("PM_REVIEW_TRUST_BUNDLE"))
+    synthesize_parser.add_argument("--dedup-decisions")
+    synthesize_parser.add_argument("--dedup-history")
     synthesize_parser.set_defaults(func=command_synthesize)
     return result
 

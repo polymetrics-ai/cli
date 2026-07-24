@@ -6,18 +6,29 @@
   "required": [
     "schemaVersion",
     "phase",
+    "parentIssue",
+    "parentBranch",
+    "parentPR",
+    "taskBranch",
     "exactBaseSHA",
     "candidateLineage",
     "correctionBudget",
     "status",
     "verificationPassed",
+    "verificationEvidence",
     "localCodex",
     "shepherd",
+    "gsd",
+    "orchestrationDecisions",
     "humanGates"
   ],
   "properties": {
     "schemaVersion": {"const": "pm-review-system-phase/v2"},
     "phase": {"const": "397-pm-first-round-review-system-r1"},
+    "parentIssue": {"const": 397},
+    "parentBranch": {"type": "string", "minLength": 1},
+    "parentPR": {"type": "integer", "minimum": 1},
+    "taskBranch": {"type": "string", "minLength": 1},
     "exactBaseSHA": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "candidateLineage": {"type": "string", "minLength": 1},
     "correctionBudget": {
@@ -25,15 +36,58 @@
       "required": ["maxCorrectionRounds", "roundsByRange", "headHistory"],
       "properties": {
         "maxCorrectionRounds": {"const": 5},
-        "roundsByRange": {"type": "object", "minProperties": 1},
-        "headHistory": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "uniqueItems": true}
+        "roundsByRange": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "integer", "minimum": 0, "maximum": 5}
+        },
+        "headHistory": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "uniqueItems": true
+        }
       },
       "additionalProperties": false
     },
-    "status": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": [
+        "planned",
+        "red",
+        "green",
+        "verifying",
+        "review_pending",
+        "findings_correction_required",
+        "local_codex_round_2_findings_systemic_correction_planned",
+        "blocked",
+        "human_ready",
+        "complete"
+      ]
+    },
     "verificationPassed": {"type": "boolean"},
-    "localCodex": {"type": "object"},
-    "shepherd": {"type": "object"},
+    "verificationEvidence": {"type": "object", "minProperties": 1},
+    "localCodex": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": {"enum": ["pending", "findings_correction_required", "clean", "comments_addressed", "blocked"]},
+        "exactHeadSHA": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "exactHeadTree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      },
+      "additionalProperties": true
+    },
+    "shepherd": {
+      "type": "object",
+      "required": ["status", "exactHeadSHA", "verdict", "evidenceArtifact"],
+      "properties": {
+        "status": {"enum": ["pending", "proceed", "retry", "revert", "halt", "blocked"]},
+        "exactHeadSHA": {"type": ["string", "null"]},
+        "verdict": {"type": ["string", "null"]},
+        "evidenceArtifact": {"type": ["string", "null"]}
+      },
+      "additionalProperties": true
+    },
+    "gsd": {"type": "object", "minProperties": 1},
+    "orchestrationDecisions": {"type": "array", "items": {"type": "object"}},
     "humanGates": {"type": "array", "items": {"type": "string"}}
   },
   "additionalProperties": true

@@ -23,7 +23,7 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
 ## Deterministic review compilation
 
 1. The parent orchestrator confirms the fetched remote head and candidate worktree equal the supplied exact head SHA and records that precondition without delegating network access. Confirm the comparison base is the candidate merge base. Stop on drift.
-2. Run `scripts/pm-review-system.py compile --scope <validated-per-run-scope>` for that exact base/head/tree. It must return `ready`
+2. Run `scripts/pm-review-system.py compile --scope <validated-per-run-scope>` for that exact base/head/tree. Compilation uses detached exact-commit snapshots for policy, scope, graph, authority, and blob reads; it must return `ready`
    before model review. Treat its changed-path assignment, active reference closure, authority
    inventory, and versioned practical impact graph as review inputs. The graph indexes its declared
    universe before traversal, seeds canonical roots plus every changed file, and follows a typed
@@ -31,18 +31,24 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
    `active|inactive|unknown` certainty. Missing/unresolved edges, unsafe paths, incomplete impact,
    authoritative-state disagreement, or any graph/index/traversal/packet bound block review. This is
    file/package impact, not a symbol-level call/data-flow claim.
-3. The compiler emits paths and metadata only. It must not copy file contents, environment values,
-   or credentials into packet artifacts.
-4. Complete impact discovery before packetization. For a small coherent range, use one combined
+3. The compiler emits paths and exact revision/blob/slice metadata only. It binds config/scope hashes,
+   complete semantic/coverage/packet hashes, and a deterministic exact-commit reconstruction contract.
+   It must not copy file contents, environment values, or credentials into packet artifacts.
+4. Complete impact discovery before packetization. Account the complete rendered prompt envelope,
+   exact assigned payload bytes, and response reserve with a tokenizer-independent one-token-per-byte
+   upper bound. For a small coherent range, use one combined
    diff packet only when all configured file/line/domain limits pass; otherwise split architecture,
    authority, and implementation packets. Always assign complete impact files/edge ids to bounded
    impact packets. If discovery or a packet cannot fit without truncation, stop as blocked.
 
 ## Fresh-context packet review and synthesis
 
-1. Spawn a fresh-context local Codex reviewer for each compiled packet using the read-only
-   `pm-reviewer` role (Sol/xhigh) or the runtime's equivalent. Packet reviewers are analytical
-   inputs; the parent orchestrator remains the only lifecycle and disposition owner.
+1. For each assigned packet, run `scripts/pm-review-system.py render --manifest <manifest>
+   --packet-id <id>` and pass that stdout unchanged as the complete reviewer prompt. The renderer
+   rechecks clean exact identity and exact blob/slice bindings; hand-built, augmented, or manifest-only
+   packet prompts are prohibited. Spawn one fresh-context local Codex reviewer per rendered packet
+   using the read-only `pm-reviewer` role (Sol/xhigh) or the runtime's equivalent. Packet reviewers
+   are analytical inputs; the parent orchestrator remains the only lifecycle and disposition owner.
 2. Keep the canonical candidate and review source read-only. `bash` is allowed only for non-mutating
    local identity, diff, log, and assigned test inspection; packet reviewers have no network access. Temporary hypothesis
    changes are allowed only through `scripts/pm-review-lab.py` in a private disposable exact-head
@@ -53,12 +59,14 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
    disconfirming evidence, and use the smallest discriminating lab experiment only when static
    evidence is insufficient. An unavailable sandbox, denial, timeout/bound, cleanup failure,
    candidate drift, or inconclusive experiment blocks clean review.
-4. Each v3 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
-   authority, impact-file, impact-edge, edge-context-file, invariant, and behavior coverage; experiment/no-experiment
+4. Each v4 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
+   authority, impact-file, impact-edge, edge-context-file, exact changed/context/impact/edge-slice,
+   invariant, and behavior coverage; structured hypothesis and experiment/no-experiment
    evidence; unreviewed files; context overflow/truncation; and findings. Finding count is unlimited.
    Missing token/cost/latency data stays explicitly null.
 5. Preserve raw responses and lab evidence outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`
-   to produce one PM-owned result. Missing responses/coverage, stale identities, any unreviewed file,
+   to deterministically recompile and authenticate the exact manifest, reject unsafe/extra response
+   children, bind experiments field-for-field to v3 lab evidence, and produce one PM-owned result. Missing responses/coverage, stale identities, any unreviewed file,
    or overflow/truncation cannot synthesize clean.
 6. Review correctness, security, safety, regressions, test adequacy, evidence truthfulness,
    write-scope violations, machine contracts, and human gates. Return findings with severity,

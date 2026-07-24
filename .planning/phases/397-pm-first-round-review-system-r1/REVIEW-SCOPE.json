@@ -1,6 +1,7 @@
 {
   "schema_version": "polymetrics.ai/pm-review-scope/v1",
   "issue": 397,
+  "review_round": 3,
   "candidate_lineage": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1",
   "allowed_changed_paths": [
     ".agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml",

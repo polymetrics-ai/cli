@@ -53,16 +53,16 @@ require(local_prompt, "exact base", "exact head", "read-only", "disposition", "i
 require(local_review, "bidirectional", "upstream", "downstream", "lateral", "temporal", "pm-review-lab.py", "disconfirming")
 require(
     ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
-    "pm-review-packet/v3",
-    "pm-review-packet-response/v3",
-    "pm-review-impact-graph/v2",
-    "pm-review-lab-request/v1",
+    "pm-review-packet/v4",
+    "pm-review-packet-response/v4",
+    "pm-review-impact-graph/v3",
+    "pm-review-lab-request/v2",
     "candidate_unchanged",
     "lab_cleanup_verified",
 )
 review_config = json.loads(read(".agents/agentic-delivery/contracts/pm-review-system.json"))
-if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v3":
-    errors.append("pm-review-system config: expected explicit v3 schema")
+if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v4":
+    errors.append("pm-review-system config: expected explicit v4 schema")
 impact_config = review_config.get("impact_graph", {})
 for key in (
     "max_index_files", "max_index_bytes", "max_nodes", "max_edges", "max_traversal_states",

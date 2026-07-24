@@ -3,7 +3,7 @@ kind: Agent
 metadata:
   id: passb-expander
   name: Pass B Connector Surface Expander
-  version: 2
+  version: 3
   summary: Expands one connector JSON bundle to its full documented API surface.
   tags:
   - connector-migration
@@ -24,13 +24,15 @@ skills:
   - golang-design-patterns
   - golang-structs-interfaces
   required_local_skills:
-  - gsd-programming-loop
+  - gsd-core
   - golang-how-to
   - golang-testing
   - golang-security
 inputs:
   required:
   - connector name
+  - issue number and parent branch when delivery_profile is pm_worker
+  - 'delivery_profile: pm_worker or coordinator_fanout'
   - AGENTS.md
   - .agents/agentic-delivery/references/gsd-pi-adapter.md
   - .agents/agentic-delivery/references/required-skills-routing.md
@@ -46,9 +48,13 @@ outputs:
   - expanded internal/connectors/defs/<connector>/api_surface.json
   - new streams, writes, schemas, fixtures, and docs for implemented capabilities
   - typed blocker notes when the engine cannot honestly model an endpoint
+  - issue-local PLAN, TDD ledger, verification checklist, and PM worker handoff when delivery_profile is pm_worker
+  - dirty-tree path inventory and verification handoff when delivery_profile is coordinator_fanout
 permissions:
   allowed_paths:
   - internal/connectors/defs/<connector>/**
+  - docs/connectors/<connector>/**
+  - .planning/phases/<issue>/**
   denied_paths:
   - internal/connectors/hooks/**
   - internal/connectors/native/**
@@ -58,12 +64,17 @@ permissions:
   - go.sum
   - .github/**
   - .agents/**
-  - .planning/**
+  - .planning/STATE.md
+  - .planning/ROADMAP.md
+  - .planning/config.json
+  - .planning/phases/<parent-phase>/**
   denied_tools:
   - unrestricted HTTP write
   - unrestricted SQL write
   - generic shell write to external systems
 workflow:
+- select_and_record_delivery_profile_before_edits
+- create_issue_local_plan_tdd_and_verification_before_production_edits_when_pm_worker
 - enforce_cli_help_docs_website_parity_when_cli_changes
 - load_gsd_pi_adapter
 - load_required_go_and_design_skills
@@ -77,6 +88,8 @@ workflow:
 - add_schemas_fixtures_docs_and_risk_notes
 - record_typed_blockers_for_engine_gaps
 - run_connector_validation
+- commit_and_push_coherent_green_slices_only_when_pm_worker
+- return_uncommitted_path_guard_handoff_only_when_coordinator_fanout
 guardrails:
   input:
   - exactly one connector must be assigned
@@ -91,17 +104,21 @@ guardrails:
   output:
   - no Pass B placeholder exclusions remain for reviewed endpoints
   - no secret-looking literals in fixtures or docs
-  - no commits from the agent
+  - pm_worker commits and pushes only its assigned branch after green gates; never main
+  - coordinator_fanout does not commit, push, or open a PR and returns control to its coordinator
 verification:
   required:
   - go run ./cmd/connectorgen validate internal/connectors/defs
   - go test ./internal/connectors/conformance -count=1 -run 'TestConformance/<connector>$' -v
+  - v4 exact-head PM compile/render/synthesize is clean for pm_worker
+  - independent Shepherd returns PROCEED for the same exact head for pm_worker
 adapters:
   codex:
-    note: Translate this YAML to a connector-specific Codex prompt; do not rely on .codex/agents TOML.
+    note: Translate this YAML to a connector-specific Codex prompt; do not rely on .codex/agents TOML. The prompt must select pm_worker or coordinator_fanout explicitly.
   pi:
-    note: Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
+    note: >-
+      Use the repo-local official GSD Core Pi adapter. In Pi, run /gsd <command> or generated /gsd-* aliases. From shell/non-interactive
       runners, run scripts/gsd prompt <command> [args...] and execute the generated prompt. Read .agents/agentic-delivery/references/gsd-pi-adapter.md
-      before GSD work; record manual fallback only if the adapter is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
+      before GSD work; discover commands before invoking them. When the registry lacks programming-loop, do not invent it: pm_worker uses the active /pm-orchestrate lifecycle and coordinator_fanout remains under its named coordinator lifecycle. Record a manual fallback only if the adapter itself is unavailable. Load required Go/design skills from .agents/agentic-delivery/references/required-skills-routing.md
       and record them in the plan, handoff, or PR body. For runtime/RLM/Pi-agent/website architecture work, read .agents/agentic-delivery/references/runtime-rlm-website-integration.md
       and keep runtime-backed services optional unless explicitly in scope.

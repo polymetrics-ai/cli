@@ -1,5 +1,5 @@
 {
-  "schema_version": "polymetrics.ai/pm-review-system/v3",
+  "schema_version": "polymetrics.ai/pm-review-system/v4",
   "owner": "parent_orchestrator",
   "canonical_roots": [
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
@@ -16,15 +16,20 @@
     ".planning/STATE.md",
     ".planning/config.json"
   ],
+  "prompt_contract_files": [
+    ".agents/agentic-delivery/prompts/local-codex-review-prompt.md"
+  ],
   "reference_prefixes": [
     ".agents/",
     ".pi/",
     "scripts/",
-    ".planning/"
+    ".planning/",
+    "docs/"
   ],
   "ignored_reference_prefixes": [
     ".planning/auto-loop/",
-    ".planning/traces/phase-437-pending-intake/"
+    ".planning/traces/phase-437-pending-intake/",
+    "docs/migration/"
   ],
   "prohibited_active_targets": [
     ".agents/agentic-delivery/contracts/worker-handoff-template.md",
@@ -57,6 +62,8 @@
     "max_impact_files": 400,
     "max_impact_edges": 2400,
     "go_command_timeout_seconds": 60,
+    "go_max_output_bytes": 33554432,
+    "go_max_packages": 20000,
     "packet_max_impact_files": 10,
     "packet_max_impact_edges": 40,
     "max_packets": 64,
@@ -158,8 +165,8 @@
         "temporal": 4
       }
     },
-    "edge_context_max_bytes_per_file": 8192,
-    "packet_max_file_slice_bytes": 96000
+    "edge_context_max_bytes_per_file": 16384,
+    "packet_max_file_slice_bytes": 4096
   },
   "configured_relationships": [
     {
@@ -275,9 +282,8 @@
     "packet_max_changed_files": 20,
     "packet_max_context_files": 10,
     "packet_target_tokens": 30000,
-    "estimated_tokens_per_changed_line": 4,
-    "estimated_tokens_per_context_file": 200,
-    "estimated_tokens_per_impact_edge": 40
+    "response_reserve_tokens": 8000,
+    "context_window_tokens": 100000
   },
   "domain_rules": [
     {

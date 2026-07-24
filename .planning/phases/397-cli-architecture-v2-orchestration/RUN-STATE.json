@@ -1,4 +1,83 @@
 {
+  "schema_version": "canonical_v2",
+  "kind": "OrchestrationState",
+  "correction_budget": {
+    "max_correction_rounds": 4,
+    "candidate_lineage": "74ab381eb8236305170ffd44d5aed74f8d0d2936...cli-architecture-v2-parent",
+    "rounds_by_range": {
+      "74ab381eb8236305170ffd44d5aed74f8d0d2936...cli-architecture-v2-parent": 0
+    },
+    "head_history": [
+      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20"
+    ]
+  },
+  "review_coverage": {
+    "primary_route": "blocked",
+    "status": "blocked",
+    "exact_base_sha": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+    "exact_head_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+    "exact_head_tree": "e2bde1a7392486202c5ad542a398827b463f36d0",
+    "reviewed_range": "74ab381eb8236305170ffd44d5aed74f8d0d2936..0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+    "disposition_summary": "Current parent review is blocked until PR #493 integrates the canonical PM activation route; no current clean review or Shepherd verdict is claimed.",
+    "finding_disposition_values": [
+      "accepted",
+      "accepted_with_modification",
+      "declined",
+      "duplicate",
+      "deferred",
+      "needs_human"
+    ],
+    "review_compiler": {
+      "schema_version": "polymetrics.ai/pm-review-compile/v4",
+      "status": "blocked",
+      "exact_base_sha": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+      "exact_head_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+      "exact_head_tree": "e2bde1a7392486202c5ad542a398827b463f36d0",
+      "manifest_artifact": null,
+      "packet_ids": [],
+      "coverage": {
+        "changed_files": [],
+        "closure_files": [],
+        "authority_files": [],
+        "impact_files": [],
+        "impact_edge_ids": [],
+        "edge_context_files": []
+      },
+      "impact_graph": {
+        "schema_version": "polymetrics.ai/pm-review-impact-graph/v3",
+        "status": "blocked",
+        "seed_files": [],
+        "indexed_edge_counts": {},
+        "files": [],
+        "edges": [],
+        "bounds": null,
+        "precision_scope": "practical_file_package; symbol_call_data_flow_unavailable"
+      }
+    },
+    "review_packets": [],
+    "review_packets_schema_version": "polymetrics.ai/pm-review-packet-response/v4",
+    "local_codex": {
+      "reviewer_identity": null,
+      "fresh_context": false,
+      "exact_base_sha": "74ab381eb8236305170ffd44d5aed74f8d0d2936",
+      "exact_head_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+      "exact_head_tree": "e2bde1a7392486202c5ad542a398827b463f36d0",
+      "status": "blocked",
+      "synthesis_artifact": null,
+      "findings_artifact": null,
+      "lab_evidence_artifacts": []
+    },
+    "shepherd": {
+      "status": "blocked",
+      "exact_head_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+      "evidence_artifact": null
+    }
+  },
+  "legacy_history": {
+    "status": "read_only",
+    "fields": ["units[].automatedReview", "automatedReviewAvailability", "lastIntegration", "updatedAt"],
+    "rule": "Preserve truthful pre-canonical records without updating or counting them as current PM coverage."
+  },
   "phase": "397-cli-architecture-v2-orchestration",
   "parentIssue": 397,
   "parentBranch": "feat/cli-architecture-v2",
@@ -12,14 +91,15 @@
     "list": "passed_69_commands",
     "planPhase397": "passed_prompt_generated_10688_bytes",
     "programmingLoop": "blocked_unknown_command",
-    "fallback": "pm_orchestrator_owned_manual_lifecycle"
+    "fallback": "pm_orchestrate_owned_canonical_lifecycle"
   },
   "orchestrator": {
     "model": "openai-codex/gpt-5.6-sol",
     "thinking": "xhigh",
     "session": "4e6d3ae8-19fc-4c5a-8135-a3e6e4fa1cfc",
     "runtime": "pi",
-    "mode": "active_owner"
+    "mode": "active_owner",
+    "status": "blocked"
   },
   "modelPolicy": {
     "planningReviewVerification": {
@@ -453,6 +533,17 @@
         408
       ],
       "reason": "After confirming no live process owned the preserved cwd, exactly one Sol/high pm-gsd-worker adopted the existing plan commit plus 19 dirty entries and pushed clean synchronized head ff7be3bd. Full-race timeouts and phase-evidence defects require a separate correction/verification stage; #413 remains collision-deferred."
+    },
+    {
+      "cycle": "canonical_v2_route_state_parity_20260724",
+      "timestamp": "2026-07-24T10:29:17Z",
+      "decision": "local_critical_path",
+      "issues": [
+        397,
+        408,
+        413
+      ],
+      "reason": "Migrated current parent authority to a canonical_v2 overlay, preserved old review records as read-only history, removed the completed Wave 1 gate from current #408 blocking state, retained PR #493 as the sole worker-start dependency, and reconciled #413 as ready but collision-deferred."
     }
   ],
   "units": [
@@ -686,33 +777,34 @@
   ],
   "postWave1RoutingMigrationGate": {
     "pullRequest": 493,
-    "status": "parent_sync_then_canonical_pm_reconciliation_pending",
+    "status": "canonical_pm_reconciliation_pending",
     "decision": "not_spawned_dependency_blocked",
     "blocksWorkerStart": true,
-    "requiredAction": "After Wave 1 integrates, merge the resulting parent into PR #493; reconcile PR #493-owned routing to the canonical PM route; rerun its gates; integrate it before another CLI Architecture v2 implementation worker starts."
+    "requiredAction": "Reconcile PR #493-owned routing to the canonical PM route on top of the integrated Wave 1 parent, rerun its gates, and integrate it before another CLI Architecture v2 implementation worker starts."
   },
   "readyQueue": [
     {
       "issue": 408,
-      "status": "active_ready_parent_sync_and_pr_493_migration_pending",
+      "status": "blocked",
+      "blockerState": "active_ready_pr_493_migration_pending",
       "dependencies": [
         405,
         462
       ],
       "integrationGates": [
-        "wave1_parent_sync",
         "pr_493_canonical_pm_migration"
       ],
       "writeScope": "flow/ETL dashboards, TUI event bridge, command wiring, tests, docs/goldens/website parity",
       "decision": "not_spawned_dependency_blocked",
-      "reason": "Branch-only implementation is preserved at 6c643f5c; #462 human review is complete, but Wave 1 parent synchronization and the subsequent PR #493 canonical PM routing migration must integrate before #408 reconciliation. Wave 1 does not implement or open #408.",
+      "reason": "Branch-only implementation is preserved at 6c643f5c; Wave 1 and #462 review are complete, and PR #493 canonical PM routing migration is the sole remaining worker-start blocker before #408 reconciliation.",
       "workerDirectory": "/Users/karthiksivadas/Development/polymetrics-cli-agents/wt-408-flow-etl-dashboards",
       "branch": "feat/408-flow-etl-dashboards",
       "head": "6c643f5c971d1fac4a83e4ffe653b83847c2fceb"
     },
     {
       "issue": 413,
-      "status": "worker_ready_deferred",
+      "status": "worker_ready",
+      "blockerState": "write_scope_collision_deferred",
       "dependencies": [
         407
       ],
@@ -846,6 +938,7 @@
     "quality gate reductions",
     "reverse ETL execution outside plan-preview-approval-execute"
   ],
+  "updated_at": "2026-07-24T10:29:17Z",
   "updatedAt": "2026-07-24T00:00:00Z",
   "mainSync": {
     "parentBeforeWave1": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
@@ -860,7 +953,7 @@
     "forcePush": "not_used",
     "status": "integrated_parent_verified",
     "parentAfterWave1AndReviewSystemBase": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
-    "postIntegration": "parent head fetched and recorded at 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20; PR #493 canonical PM migration remains the worker-start blocker before #408"
+    "postIntegration": "parent head fetched and recorded at 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20; Wave 1 is complete and PR #493 canonical PM migration remains the sole worker-start blocker before #408"
   },
   "automatedReviewAvailability": {
     "claudeWorkflow": "disabled_manually",

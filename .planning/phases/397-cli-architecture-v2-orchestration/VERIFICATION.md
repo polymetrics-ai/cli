@@ -131,7 +131,7 @@ Status: not yet run at final HEAD
 - [ ] Trajectory/Shepherd validation after exact-head review.
 - [ ] Draft stacked PR checks green; parent PR #438 remains unchanged/draft.
 
-`verificationPassed` remains false in the parent campaign because Wave 1 is not yet integrated and the full program is unfinished. The Wave 1 slice's own verification is green at its recorded task head.
+`verificationPassed` remains false in the parent campaign because the full program is unfinished and PR #493's canonical PM route migration still blocks the next implementation worker. Wave 1 is integrated at the recorded parent head; its slice verification remains historical green evidence, not the current blocker.
 
 ## Per-unit gate
 
@@ -142,8 +142,10 @@ For every remaining unit:
 - [ ] Focused RED captured before production behavior edit.
 - [ ] Focused GREEN and issue safety/parity checks pass.
 - [ ] Coherent green commit created.
-- [ ] Independent Sol/xhigh exact-head review is clean.
-- [ ] Reviewed commit promoted with head continuity confirmed.
+- [ ] `scripts/pm-review-system.py compile --scope <validated-scope> --base <exact-base> --head <exact-head>` emits a ready v4 manifest for the exact base/head/tree.
+- [ ] Every packet is produced by the canonical renderer, its fresh-context local Codex response is complete, and one authenticated exact-head synthesis is clean; every finding uses the exact disposition enum and is resolved.
+- [ ] Independent Shepherd returns `PROCEED` for the same clean synthesis identities.
+- [ ] Reviewed and Shepherd-validated commit promoted with head continuity confirmed; any head change invalidates and reruns every gate above.
 
 ## Final exact-head campaign
 
@@ -166,8 +168,9 @@ For every remaining unit:
 
 ## Final review
 
-- [ ] Correctness review at exact final HEAD: Sol/xhigh, clean.
-- [ ] Security review at exact final HEAD: Sol/xhigh, clean.
-- [ ] Architecture/issue-coverage/evidence review at exact final HEAD: Sol/xhigh, clean.
-- [ ] Every correction reviewed at its new exact HEAD.
+- [ ] V4 `pm-review-system.py compile` is ready for the exact final base/head/tree with complete changed, closure, authority, practical-impact, edge, invariant, and packet coverage.
+- [ ] Every bounded prompt comes only from `pm-review-system.py render`; fresh-context Sol/xhigh local Codex responses cover correctness, security, architecture, issue coverage, and evidence without truncation or unreviewed context.
+- [ ] One authenticated `pm-review-system.py synthesize` result is a clean synthesis at that exact head, and all findings use `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`.
+- [ ] Independent Shepherd returns `PROCEED` for the same exact identities after clean synthesis.
+- [ ] Every correction is verified, recompiled, re-rendered, re-synthesized, and Shepherd-validated at its new exact HEAD.
 - [ ] PR #438 final CI green at the same pushed HEAD.

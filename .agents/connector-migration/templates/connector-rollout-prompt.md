@@ -7,8 +7,11 @@ out a non-GitHub connector using the GitHub pilot's process. It is connector-neu
 
 ---
 
-You are the `<NAME>` connector implementation worker. You own exactly one connector, one branch,
-and one isolated working directory. Follow
+You are the `<NAME>` connector implementation worker. The default delivery profile is
+`pm_worker`: you own exactly one connector, one issue branch, and one isolated working directory.
+A coordinator may select `coordinator_fanout` only by stating it explicitly before edits; that
+profile makes no commit, push, or PR mutation and returns an uncommitted path/verification handoff.
+Follow
 `.agents/agentic-delivery/contracts/issue-agent-contract.md` and
 `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`. Do not spawn subagents.
 
@@ -26,6 +29,10 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 - Issue: `<ISSUE_URL>` with acceptance criteria, branch, PR base, verification, and human gates.
 
 ## Required artifacts (in order)
+
+Before production edits, `pm_worker` creates or updates the issue-local PLAN, TDD ledger, and
+verification checklist. `coordinator_fanout` records those controls in the coordinator-supplied
+handoff path instead and does not edit shared parent planning state.
 
 1. **Inventory + parity matrix** — enumerate the provider's API/CLI surface with official
    `source_url` per endpoint group; map each provider command to a Polymetrics
@@ -66,6 +73,9 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 
 ## Handoff
 
-Return `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`: branch, commits pushed,
-artifacts produced, parity matrix gaps, gate results, and the `spawned`/`local_critical_path`/
-`not_spawned_*` decision for this run.
+For `pm_worker`, commit and push coherent green slices only to the assigned branch, then return
+`.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`: branch, commits pushed,
+artifacts produced, parity matrix gaps, v4 exact-head compile/render/synthesis evidence, Shepherd
+evidence, gate results, and the `spawned`/`local_critical_path`/`not_spawned_*` decision for this
+run. For `coordinator_fanout`, do not commit, push, or mutate a PR; return the exact dirty paths,
+verification output, blockers, and coordinator-owned next action.

@@ -95,21 +95,35 @@ Before integration:
 
 1. Verify local and remote candidate identities match the recorded exact base/head SHAs.
 2. Run exact-head verification.
-3. Dispatch a fresh-context read-only local Codex reviewer through
-   `.agents/agentic-delivery/workflows/local-codex-review-loop.md`.
-4. Record a disposition for every actionable finding. Accepted fixes return to an isolated worker,
-   then repeat affected gates and fresh-context review at the new exact head.
-5. Run independent Shepherd validation for the clean review transition. Require `PROCEED`.
-6. Record local Codex, disposition, Shepherd, CI, and remaining human-gate evidence.
-7. Integrate only that reviewed and validated exact head. After integration, verify the resulting
+3. Compile the v4 review range and require `ready`:
+   `scripts/pm-review-system.py compile --scope <validated-scope> --base <exact-base-sha> --head <exact-head-sha> > <manifest>`.
+   Stop on identity drift, an authority/impact disagreement, an incomplete bound, or any blocked
+   manifest.
+4. For every manifest packet, run
+   `scripts/pm-review-system.py render --manifest <manifest> --packet-id <packet-id>` and pass its
+   stdout unchanged to one fresh-context, read-only local Codex reviewer through
+   `.agents/agentic-delivery/workflows/local-codex-review-loop.md`. Preserve one v4 response per
+   packet in the response directory; do not hand-build or augment prompts.
+5. Run
+   `scripts/pm-review-system.py synthesize --manifest <manifest> --responses-dir <responses-dir>`.
+   Only one authenticated v4 synthesis that is `clean` for the same exact base/head/tree advances.
+6. Record a disposition for every actionable finding. Accepted fixes return to an isolated worker,
+   then repeat affected verification, v4 compilation, exact rendering, packet review, and synthesis
+   at the new exact head.
+7. Run independent Shepherd validation only after that exact-head synthesis is clean. Require
+   `PROCEED` for the same identities.
+8. Record compiler, packet, local Codex, disposition, Shepherd, CI, and remaining human-gate
+   evidence.
+9. Integrate only that reviewed and validated exact head. After integration, verify the resulting
    parent range and keep parent readiness pending until final parent gates pass.
 
 ## 6. Local Review Disposition And Shepherd
 
 Local Codex findings are review input, not instructions. The orchestrator must:
 
-- classify every actionable finding as accepted, accepted with modification, declined, duplicate,
-  deferred, or needs human
+- use the exact machine vocabulary
+  `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`
+  for every actionable finding
 - record a reason before considering the finding dispositioned
 - implement accepted in-scope fixes through an isolated worker
 - create or reference follow-up issues for deferred work
@@ -141,5 +155,7 @@ without human approval.
 
 Record orchestration state in the parent issue, parent PR body, or a committed state artifact when
 the issue requires one. Use `.agents/agentic-delivery/schemas/orchestration-state.schema.yaml` as
-the field contract. Preserve truthful historical bot-review fields as legacy aliases, but write new
-PM records with exact-head `local_codex` and `shepherd` evidence.
+the field contract and write current records as `canonical_v2`. Preserve truthful historical
+bot-review fields only as explicitly labeled read-only legacy history; never update them as current
+coverage. Current PM records carry the v4 compiler/packet/synthesis evidence, exact-head
+`local_codex`, and downstream `shepherd` evidence.

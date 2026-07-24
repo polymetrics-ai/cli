@@ -7,7 +7,11 @@ connector's slice is considered integrated.
 ## 1. Inputs and scope
 
 - [ ] One connector assigned to one implementation agent (no shared-file collisions).
-- [ ] Issue names the connector, branch, PR base, primary agent, verification, and human gates.
+- [ ] Delivery profile is explicit: `pm_worker` for issue/branch/stacked-PR delivery, or
+      `coordinator_fanout` for an explicitly coordinator-owned no-commit bulk task.
+- [ ] Issue names the connector, branch, PR base, primary agent, verification, and human gates when
+      the profile is `pm_worker`; the coordinator prompt names the isolated directory and handoff
+      boundary when the profile is `coordinator_fanout`.
 - [ ] Branch starts from `feat/44-github-cli-parity` (or the active rollout parent branch), not `main`.
 - [ ] Worker has an isolated working directory or git worktree before any edit.
 - [ ] No production `internal/connectors/defs/<name>/` edits unless the issue explicitly assigns this connector.
@@ -44,9 +48,14 @@ connector's slice is considered integrated.
 
 ## 6. Handoff and merge
 
-- [ ] Worker handoff uses `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`.
-- [ ] Sub-PR targets the parent branch with `Refs #<sub-issue>` and `Refs #44` (no closing keywords).
-- [ ] Exact-head local Codex packet synthesis is clean, every finding is dispositioned, and independent Shepherd returns `PROCEED` for the same head.
+- [ ] `pm_worker` handoff uses `.agents/agentic-delivery/contracts/pm-worker-handoff-template.md`;
+      `coordinator_fanout` returns an uncommitted path inventory and verification handoff instead.
+- [ ] `pm_worker` committed/pushed coherent green slices only to its assigned branch and its sub-PR
+      targets the parent branch with `Refs #<sub-issue>` and `Refs #44` (no closing keywords).
+      `coordinator_fanout` did not commit, push, or mutate a PR.
+- [ ] V4 exact-head compilation is ready, every packet was rendered by the canonical renderer,
+      one authenticated synthesis is clean, every finding is dispositioned, and independent
+      Shepherd returns `PROCEED` for the same exact identities (`pm_worker` profile).
 - [ ] Shared/generated files remain coordinator-owned; the worker did not commit generated files unless authorized.
 
 ## 7. Human gates (stop)

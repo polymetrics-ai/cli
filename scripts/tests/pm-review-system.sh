@@ -23,6 +23,40 @@ fail() {
   failures=$((failures + 1))
 }
 
+write_trust_bundle() {
+  local candidate_root="$1" base_sha="$2" head_sha="$3" config_path="$4" scope_path="$5" output_path="$6"
+  python3 - "$candidate_root" "$base_sha" "$head_sha" "$config_path" "$scope_path" \
+    "$repo_root/scripts/pm-review-system.py" "$output_path" <<'PY'
+import hashlib,json,subprocess,sys
+from pathlib import Path
+root,base,head,config_path,scope_path,compiler,output=sys.argv[1:]
+def git(*args):
+    return subprocess.check_output(["git","-C",root,*args])
+def digest(value):
+    return hashlib.sha256(value).hexdigest()
+def canonical(value):
+    return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
+config_bytes=git("show",f"{head}:{config_path}")
+scope_bytes=git("show",f"{head}:{scope_path}")
+config=json.loads(config_bytes)
+scope=json.loads(scope_bytes)
+prompt=[]
+for relative in config.get("prompt_contract_files",[]):
+    payload=git("show",f"{head}:{relative}")
+    prompt.append({"path":relative,"bytes":len(payload),"sha256":digest(payload)})
+bundle={
+ "schema_version":"polymetrics.ai/pm-review-trust-bundle/v1",
+ "exact_base_sha":base,"exact_head_sha":head,
+ "exact_head_tree":git("rev-parse",f"{head}^{{tree}}").decode().strip(),
+ "candidate_lineage":scope["candidate_lineage"],"review_round":scope["review_round"],
+ "compiler_sha256":digest(Path(compiler).read_bytes()),"config_sha256":digest(config_bytes),
+ "scope_sha256":digest(scope_bytes),"prompt_contract_sha256":canonical(prompt),
+ "approval_reference":"captain-approved deterministic test trust binding",
+}
+Path(output).write_text(json.dumps(bundle,sort_keys=True)+"\n")
+PY
+}
+
 # Frozen-corpus integrity is checked before any detector runs.
 if ! python3 - "$fixture_root" <<'PY'
 import hashlib
@@ -502,7 +536,7 @@ EOF
 ln -s "$outside_target" "$impact_repo/escape-link"
 cat >"$impact_repo/.agents/review-config.json" <<'JSON'
 {
-  "schema_version":"polymetrics.ai/pm-review-system/v3",
+  "schema_version":"polymetrics.ai/pm-review-system/v4",
   "owner":"parent_orchestrator",
   "canonical_roots":[".pi/prompts/canonical.md"],
   "explicit_reference_files":["AGENTS.md"],
@@ -513,7 +547,10 @@ cat >"$impact_repo/.agents/review-config.json" <<'JSON'
     "index_prefixes":[".agents/",".pi/",".planning/","scripts/","cmd/","internal/"],
     "max_index_files":200,"max_index_bytes":2000000,"max_nodes":300,"max_edges":1000,
     "max_traversal_states":1000,"max_depth":12,"max_impact_files":200,"max_impact_edges":1000,
-    "go_command_timeout_seconds":20,"packet_max_impact_files":10,"packet_max_impact_edges":40,
+    "go_command_timeout_seconds":20,"go_max_output_bytes":8388608,"go_max_packages":2000,
+    "packet_max_impact_files":10,"packet_max_impact_edges":40,"max_packets":64,
+    "edge_context_max_bytes_per_file":4096,"packet_max_file_slice_bytes":4096,
+    "default_relation_policy":{"upstream":1,"downstream":1,"lateral":1,"temporal":1},
     "relation_policy":{
       "required_reference":{"upstream":4,"downstream":4,"lateral":0,"temporal":0},
       "script_invokes":{"upstream":1,"downstream":1,"lateral":0,"temporal":0}
@@ -533,7 +570,7 @@ cat >"$impact_repo/.agents/review-config.json" <<'JSON'
     "combined_max_files":20,"combined_max_non_generated_lines":600,"combined_max_domains":1,
     "mandatory_split_files":25,"mandatory_split_non_generated_lines":800,"mandatory_split_domains":2,
     "packet_max_changed_files":20,"packet_max_context_files":10,"packet_target_tokens":30000,
-    "estimated_tokens_per_changed_line":4,"estimated_tokens_per_context_file":200
+    "response_reserve_tokens":6000,"context_window_tokens":100000
   },
   "domain_rules":[
     {"domain":"implementation_test","patterns":["scripts/**","cmd/**","internal/**"]},
@@ -550,6 +587,7 @@ cat >"$impact_repo/.agents/review-scope.json" <<'JSON'
 {
   "schema_version":"polymetrics.ai/pm-review-scope/v1",
   "issue":397,
+  "review_round":3,
   "candidate_lineage":"fixture-impact",
   "allowed_changed_paths":["**"],
   "forbidden_changed_paths":[]
@@ -560,7 +598,7 @@ import json,sys
 normal=json.load(open(sys.argv[1]))
 bound=json.loads(json.dumps(normal)); bound["impact_graph"]["max_impact_files"]=3
 open(sys.argv[2],"w").write(json.dumps(bound,indent=2)+"\n")
-legacy=json.loads(json.dumps(normal)); legacy["schema_version"]="polymetrics.ai/pm-review-system/v2"
+legacy=json.loads(json.dumps(normal)); legacy["schema_version"]="polymetrics.ai/pm-review-system/v3"
 open(sys.argv[3],"w").write(json.dumps(legacy,indent=2)+"\n")
 index_bound=json.loads(json.dumps(normal)); index_bound["impact_graph"]["max_index_files"]=1
 open(sys.argv[4],"w").write(json.dumps(index_bound,indent=2)+"\n")
@@ -580,14 +618,17 @@ EOF
 git -C "$impact_repo" add .
 git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm head
 impact_head="$(git -C "$impact_repo" rev-parse HEAD)"
+impact_trust="$test_tmp/impact-trust.json"
+write_trust_bundle "$impact_repo" "$impact_base" "$impact_head" .agents/review-config.json .agents/review-scope.json "$impact_trust"
 impact_manifest="$test_tmp/impact-manifest.json"
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_head" >"$impact_manifest"
+  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_head" \
+  --trust-bundle "$impact_trust" >"$impact_manifest"
 impact_status=$?
 if [[ $impact_status -ne 0 ]] || ! python3 - "$impact_manifest" <<'PY'
 import json,sys
 value=json.load(open(sys.argv[1]))
-assert value["schema_version"] == "polymetrics.ai/pm-review-compile/v3"
+assert value["schema_version"] == "polymetrics.ai/pm-review-compile/v4"
 graph=value["impact_graph"]
 files=set(value["coverage_manifest"]["impact_files"])
 required={
@@ -603,10 +644,11 @@ assert required <= files, sorted(required-files)
 assert ".agents/unrelated.md" not in files
 assert not graph["bounds"]["hit"]
 assert {"active", "unknown"} <= {edge["certainty"] for edge in graph["edges"]}
+assert all(edge["revision"] in {"base","head"} and edge["source_blob_sha256"] is not None or edge["parser"] in {"config","go_list"} for edge in graph["edges"])
 relations={edge["relation"] for edge in graph["edges"]}
 assert {"required_reference","python_import","authority_writes","authority_reads","authority_mirror","generates","go_imports","go_test","platform_variant"} <= relations
 packet_files={path for packet in value["packets"] for path in packet["impact_files"]}
-packet_slice_files={item["path"] for packet in value["packets"] for item in packet.get("impact_file_slices",[])}
+packet_slice_files={item["path"] for packet in value["packets"] for field in ("impact_file_slices","edge_context_slices") for item in packet.get(field,[])}
 packet_edges={edge for packet in value["packets"] for edge in packet["impact_edge_ids"]}
 assert packet_files == files
 assert packet_slice_files == files
@@ -614,7 +656,9 @@ assert packet_edges == set(value["coverage_manifest"]["impact_edge_ids"])
 for packet in value["packets"]:
     endpoint_files={endpoint for edge in packet.get("impact_edges",[]) for endpoint in (edge["source"],edge["target"]) if not endpoint.startswith("go-package:")}
     assert endpoint_files <= set(packet.get("edge_context_files",[])), (packet["packet_id"], sorted(endpoint_files-set(packet.get("edge_context_files",[]))))
-    assert packet["context"].get("estimation") == "exact_head_bytes_conservative"
+    assert packet["context"].get("estimation") == "complete_rendered_prompt_one_token_per_byte"
+    assert packet["context"].get("bytes_per_token_upper_bound") == 1
+    assert packet["context"].get("response_reserve_tokens") > 0
 PY
 then
   fail "changed-file-seeded bidirectional typed impact graph, policy-state traversal, or coherent exact packet coverage is absent"
@@ -631,8 +675,11 @@ EOF
 git -C "$impact_repo" add .planning/unsafe.md
 git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm unsafe-impact
 unsafe_impact_head="$(git -C "$impact_repo" rev-parse HEAD)"
+unsafe_impact_trust="$test_tmp/unsafe-impact-trust.json"
+write_trust_bundle "$impact_repo" "$impact_head" "$unsafe_impact_head" .agents/review-config.json .agents/review-scope.json "$unsafe_impact_trust"
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$unsafe_impact_head" >"$test_tmp/unsafe-impact.json"
+  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$unsafe_impact_head" \
+  --trust-bundle "$unsafe_impact_trust" >"$test_tmp/unsafe-impact.json"
 unsafe_impact_status=$?
 if [[ $unsafe_impact_status -eq 0 ]] || ! python3 - "$test_tmp/unsafe-impact.json" <<'PY'
 import json,sys
@@ -649,6 +696,7 @@ git -C "$impact_repo" checkout -q "$impact_branch"
 # Non-head filesystem reads, diverged comparison bases, and operational index limits must block.
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
   --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_base" --allow-non-head \
+  --trust-bundle "$impact_trust" \
   >"$test_tmp/non-head.json" 2>"$test_tmp/non-head.stderr"
 non_head_status=$?
 if [[ $non_head_status -eq 0 ]]; then
@@ -661,13 +709,17 @@ git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-tes
 divergent_base="$(git -C "$impact_repo" rev-parse HEAD)"
 git -C "$impact_repo" checkout -q "$impact_branch"
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/review-config.json --scope .agents/review-scope.json --base "$divergent_base" --head "$impact_head" >"$test_tmp/divergent-base.json"
+  --config .agents/review-config.json --scope .agents/review-scope.json --base "$divergent_base" --head "$impact_head" \
+  --trust-bundle "$impact_trust" >"$test_tmp/divergent-base.json"
 divergent_status=$?
 if [[ $divergent_status -eq 0 ]]; then
   fail "divergent supplied base was silently replaced by merge-base semantics"
 fi
+index_bound_trust="$test_tmp/index-bound-trust.json"
+write_trust_bundle "$impact_repo" "$impact_base" "$impact_head" .agents/index-bound-config.json .agents/review-scope.json "$index_bound_trust"
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/index-bound-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_head" >"$test_tmp/index-bound.json"
+  --config .agents/index-bound-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_head" \
+  --trust-bundle "$index_bound_trust" >"$test_tmp/index-bound.json"
 index_bound_status=$?
 if [[ $index_bound_status -eq 0 ]] || ! python3 - "$test_tmp/index-bound.json" <<'PY'
 import json,sys
@@ -709,8 +761,11 @@ PY
 git -C "$impact_repo" add go.mod internal/lib/lib.go
 git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm external-go
 external_head="$(git -C "$impact_repo" rev-parse HEAD)"
+external_trust="$test_tmp/external-trust.json"
+write_trust_bundle "$impact_repo" "$impact_head" "$external_head" .agents/review-config.json .agents/review-scope.json "$external_trust"
 GOMODCACHE="$module_cache" python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$external_head" >"$test_tmp/external-go.json"
+  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$external_head" \
+  --trust-bundle "$external_trust" >"$test_tmp/external-go.json"
 external_status=$?
 if [[ $external_status -ne 0 ]] || ! python3 - "$test_tmp/external-go.json" <<'PY'
 import json,sys
@@ -724,8 +779,11 @@ git -C "$impact_repo" checkout -qb deleted-go "$impact_head"
 git -C "$impact_repo" rm -q internal/lib/lib.go
 git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm deleted-go
 deleted_head="$(git -C "$impact_repo" rev-parse HEAD)"
+deleted_trust="$test_tmp/deleted-trust.json"
+write_trust_bundle "$impact_repo" "$impact_head" "$deleted_head" .agents/review-config.json .agents/review-scope.json "$deleted_trust"
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
-  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$deleted_head" >"$test_tmp/deleted-go.json"
+  --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_head" --head "$deleted_head" \
+  --trust-bundle "$deleted_trust" >"$test_tmp/deleted-go.json"
 deleted_status=$?
 if [[ $deleted_status -ne 0 ]] || ! python3 - "$test_tmp/deleted-go.json" <<'PY'
 import json,sys
@@ -738,9 +796,11 @@ fi
 git -C "$impact_repo" checkout -q "$impact_branch"
 
 for config_case in bound-config legacy-config; do
+  case_trust="$test_tmp/$config_case-trust.json"
+  write_trust_bundle "$impact_repo" "$impact_base" "$impact_head" ".agents/$config_case.json" .agents/review-scope.json "$case_trust"
   python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
     --config ".agents/$config_case.json" --scope .agents/review-scope.json --base "$impact_base" --head "$impact_head" \
-    >"$test_tmp/$config_case-result.json"
+    --trust-bundle "$case_trust" >"$test_tmp/$config_case-result.json"
   config_status=$?
   if [[ $config_status -eq 0 ]] || ! python3 - "$test_tmp/$config_case-result.json" <<'PY'
 import json,sys
@@ -765,7 +825,7 @@ root=pathlib.Path(tmp); labs=root/'labs'; labs.mkdir()
 
 def request(name, **overrides):
     value={
-      "schema_version":"polymetrics.ai/pm-review-lab-request/v1","hypothesis_id":name,
+      "schema_version":"polymetrics.ai/pm-review-lab-request/v2","hypothesis_id":name,
       "claim":"temporary accept behavior must make the targeted check fail",
       "alternative":"the behavior change is irrelevant to the targeted check",
       "impact_edges_examined":["edge-fixture-1"],
@@ -776,9 +836,11 @@ def request(name, **overrides):
     }
     value.update(overrides); path=root/f"{name}.json"; path.write_text(json.dumps(value)); return path
 
-def run(path, extra_env=None):
+def run(path, extra_env=None, approvals=None):
     env=os.environ.copy(); env.update(extra_env or {})
-    proc=subprocess.run([sys.executable,script,"run","--repo-root",repo,"--base",base,"--head",head,"--packet-id",path.stem,"--request",str(path),"--temp-root",str(labs)],text=True,capture_output=True,env=env)
+    argv=[sys.executable,script,"run","--repo-root",repo,"--base",base,"--head",head,"--packet-id",path.stem,"--request",str(path),"--temp-root",str(labs)]
+    for approval in approvals or []: argv.extend(["--approval",str(approval)])
+    proc=subprocess.run(argv,text=True,capture_output=True,env=env)
     try: value=json.loads(proc.stdout)
     except Exception as exc: raise AssertionError((path.name,proc.returncode,proc.stdout,proc.stderr)) from exc
     return proc.returncode,value
@@ -794,6 +856,34 @@ code,safe=run(request('safe'))
 assert code==0 and safe["status"]=="evidence" and safe["candidate_unchanged"] and safe["lab_cleanup_verified"]
 assert safe["experiment"]["discriminator_matched"] and safe["experiment"]["exit_code"]==23, safe
 assert safe["experiment"]["temporary_diff"]["sha256"] and safe["experiment"]["duration_ms"] is not None
+assert not any(labs.iterdir())
+
+# Explicit human-like modes: read, disposable writes/dummy SQLite, compiler cache, local service,
+# counterfactual diff, and trusted denial evidence. All effects remain inside each disposable lab.
+def explicit(name,mode,command,expected={"exit_code":0},**overrides):
+    roots=["repo","home","tmp","xdg_config","xdg_cache","go_cache","go_mod_cache","services","credentials"]
+    value={"mode":mode,"allowed_read_roots":roots,
+           "allowed_write_roots":[] if mode=="read_inspect" else ["repo","home","tmp","xdg_config","xdg_cache","go_cache","go_mod_cache","services"],
+           "changes":[],"command":command,"expected_discriminator":expected}
+    value.update(overrides); return request(name,**value)
+code,read_evidence=run(explicit("read-inspect","read_inspect",["python3","scripts/check_behavior.py"]))
+assert code==0 and read_evidence["status"]=="evidence" and read_evidence["experiment"]["mode"]=="read_inspect"
+db_code="import os,sqlite3; p=os.path.join(os.environ['HOME'],'dummy.db'); c=sqlite3.connect(p); c.execute('create table t(v)'); c.execute('insert into t values (7)'); c.commit(); assert c.execute('select v from t').fetchone()[0]==7"
+code,db_evidence=run(explicit("dummy-db","disposable_write_test",["python3","-c",db_code]))
+assert code==0 and db_evidence["status"]=="evidence" and any("dummy.db" in path for path in db_evidence["experiment"]["actual_effects"]["lab_owned_roots"]["changed_paths"])
+code,cache_evidence=run(explicit("compile-cache","disposable_write_test",["go","test","./internal/lib"]))
+assert code==0 and cache_evidence["status"]=="evidence", cache_evidence
+server=("import socket; s=socket.socket(); s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1); "
+        "s.bind(('127.0.0.1',{service.http.port})); s.listen(); "
+        "exec(\"while True:\\n c,_=s.accept(); c.recv(4096); "
+        "c.sendall(b'HTTP/1.0 200 OK\\\\r\\\\nContent-Length: 2\\\\r\\\\n\\\\r\\\\nok'); c.close()\")")
+service={"id":"http","transport":"tcp","host":"127.0.0.1","port":0,
+         "command":["python3","-c",server],"readiness":"connect"}
+client="import urllib.request; assert urllib.request.urlopen('http://{service.http.endpoint}/',timeout=2).status==200"
+code,service_evidence=run(explicit("local-service","local_service_simulation",["python3","-c",client],services=[service]))
+assert code==0 and service_evidence["status"]=="evidence" and service_evidence["experiment"]["services"][0]["local_only"], service_evidence
+code,caught=run(explicit("caught-denial","read_inspect",["python3","scripts/check_isolation.py"]))
+assert code!=0 and caught["status"]=="blocked" and caught["experiment"]["observed"]["sandbox_denial_observed"]
 assert not any(labs.iterdir())
 
 def blocked(name, **changes):
@@ -830,7 +920,7 @@ assert code!=0 and drift['status']=='blocked'
 with ThreadPoolExecutor(max_workers=2) as pool:
     rows=list(pool.map(lambda p: run(p),[
       request('parallel-a'),
-      request('parallel-b',changes=[],command=['python3','scripts/check_isolation.py'],expected_discriminator={"exit_code":0})
+      request('parallel-b',changes=[],command=['python3','scripts/check_env.py'],expected_discriminator={"exit_code":0})
     ]))
 assert all(code==0 and value['status']=='evidence' for code,value in rows)
 assert not any(labs.iterdir())
@@ -872,14 +962,59 @@ fi
 
 # Compile the exact committed range. Output must be one non-TTY JSON envelope containing paths and
 # metadata only, with complete packet assignment and no environment-value leakage.
-head_sha="$(git -C "$repo_root" rev-parse HEAD)"
-compile_output="$test_tmp/compile.json"
+system_repo="$test_tmp/system-repo"
+git clone --no-hardlinks --quiet "$repo_root" "$system_repo"
+git -C "$repo_root" diff HEAD --binary -- \
+  scripts/pm-review-system.py scripts/pm-review-lab.py scripts/tests/pm-review-system.sh \
+  .agents/agentic-delivery/contracts/pm-review-system.json \
+  .agents/agentic-delivery/contracts/pm-review-packet-template.md \
+  .agents/agentic-delivery/prompts/local-codex-review-prompt.md \
+  .agents/agentic-delivery/schemas/orchestration-state.schema.yaml \
+  .agents/agentic-delivery/schemas/pm-review-system-phase-state.schema.json \
+  .agents/agentic-delivery/workflows/local-codex-review-loop.md \
+  .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json \
+  .pi/agents/pm-reviewer.md .pi/prompts/pm-review-loop.md | git -C "$system_repo" apply
+# Materialize the frozen dedup manifest from a test-owned literal. Its hash-bound R1/R2 sources
+# already come from the isolated clone's immutable Git objects; no mutable outer fixture is read.
+cat >"$system_repo/scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json" <<'JSON'
+{
+  "schema_version": "polymetrics.ai/pm-review-dedup-corpus-manifest/v1",
+  "measurement_policy": "R1 and R2 are retrospective development only because R2 labels were inspected during tuning; freeze deterministic-partial-keys/v1 before prospective R3",
+  "raw_response_limitation": "Hash-verified raw response objects are unavailable in Git. Candidate evaluation uses only committed table fields and makes no semantic/causal acceptance claim.",
+  "sources": {
+    "R1": {
+      "path": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-DISPOSITION.md",
+      "bytes": 23593,
+      "sha256": "9a745178167768606c64fd3faa13603b17f92568e9de6377708baffc44133134",
+      "role": "retrospective_development"
+    },
+    "R2": {
+      "path": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-DISPOSITION.md",
+      "bytes": 34633,
+      "sha256": "caf455bd48949df5e2d0829be930674bd3f0af0d947e89dfa158a0dd13b2fa80",
+      "role": "retrospective_development_labels_inspected"
+    }
+  },
+  "next_untouched_measurement": "fresh prospective exact-head R3"
+}
+JSON
+# Test the immutable compiler against an exact commit containing the current uncommitted treatment;
+# the user's worktree remains uncommitted and untouched.
+git -C "$system_repo" add .
+git -C "$system_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm system-green
+head_sha="$(git -C "$system_repo" rev-parse HEAD)"
+system_trust="$test_tmp/system-trust.json"
+write_trust_bundle "$system_repo" 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 "$head_sha" \
+  .agents/agentic-delivery/contracts/pm-review-system.json \
+  .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json "$system_trust"
+export PM_REVIEW_TRUST_BUNDLE="$system_trust"
+compile_output="$test_tmp/compile-manifest.tmp.json"
 PM_REVIEW_SECRET_SENTINEL='do-not-copy-this-environment-value' \
   python3 "$repo_root/scripts/pm-review-system.py" compile \
-    --repo-root "$repo_root" \
+    --repo-root "$system_repo" \
     --scope .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json \
     --base 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 \
-    --head "$head_sha" >"$compile_output"
+    --head "$head_sha" --trust-bundle "$system_trust" >"$compile_output"
 compile_status=$?
 if [[ $compile_status -ne 0 ]]; then
   fail "exact-head compiler blocked the allowlisted current range"
@@ -890,10 +1025,10 @@ import json
 import sys
 
 document = json.load(open(sys.argv[1]))
-assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v3"
+assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v4"
 assert document["status"] == "ready"
 assert document["selection"] in {"combined", "split"}
-assert document["content_policy"].startswith("paths and metadata only")
+assert document["content_policy"].startswith("paths, exact revision/blob/slice metadata")
 changed = set(document["changed_files"])
 assigned = {path for packet in document["packets"] for path in packet["changed_files"]}
 assert changed == assigned
@@ -908,6 +1043,9 @@ covered_edges = {edge for packet in document["packets"] for edge in packet["impa
 assert impact_edges == covered_edges
 assert document["impact_graph"]["seed_files"]
 assert not document["impact_graph"]["bounds"]["hit"]
+assert document["source_mode"] == "detached_exact_commit_snapshot"
+assert document["config"]["sha256"] and document["scope"]["sha256"]
+assert set(document["authentication"]) == {"algorithm","coverage_sha256","packets_sha256","semantic_manifest_sha256"}
 for packet in document["packets"]:
     assert packet["exact_base_sha"] == document["exact_base_sha"]
     assert packet["exact_head_sha"] == document["exact_head_sha"]
@@ -919,6 +1057,13 @@ for packet in document["packets"]:
     assert len(packet["impact_edge_ids"]) <= 40
     assert set(packet["impact_edge_ids"]) == {edge["id"] for edge in packet["impact_edges"]}
     assert {item["path"] for item in packet.get("impact_file_slices", [])} <= set(packet["impact_files"])
+    assert {item["path"] for item in packet.get("changed_file_slices", [])} <= set(packet["changed_files"])
+    assert {item["path"] for item in packet.get("edge_context_slices", [])} <= set(packet["edge_context_files"])
+    all_slices=packet.get("changed_file_slices",[])+packet.get("context_file_slices",[])+packet.get("impact_file_slices",[])+packet.get("edge_context_slices",[])
+    assert all(item["revision"] in {document["exact_base_sha"],document["exact_head_sha"]} and item["blob_sha256"] and item["sha256"] for item in all_slices)
+    assert packet["context"]["bytes_per_token_upper_bound"] == 1
+    assert packet["context"]["response_reserve_tokens"] > 0
+    assert packet["context"]["total_context_upper_bound"] == packet["context"]["rendered_prompt_bytes"] + packet["context"]["response_reserve_tokens"]
     assert not packet["context"]["overflow"]
     assert not packet["context"]["truncated"]
 PY
@@ -927,10 +1072,57 @@ then
 fi
 
 # Malformed identities and escaping/symlinked config paths stop without reading broad files.
-unsafe_dir="$test_tmp/unsafe"
+unsafe_dir="$system_repo/pm-review-evidence.tmp"
 mkdir -p "$unsafe_dir"
+cp "$compile_output" "$unsafe_dir/render-manifest.json"
+render_packet_id="$(python3 - "$compile_output" <<'PY'
+import json,sys
+print(json.load(open(sys.argv[1]))["packets"][0]["packet_id"])
+PY
+)"
+render_expected_bytes="$(python3 - "$compile_output" "$render_packet_id" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+print(next(packet for packet in value["packets"] if packet["packet_id"] == sys.argv[2])["context"]["rendered_prompt_bytes"])
+PY
+)"
+render_output="$test_tmp/rendered-packet.prompt"
+python3 "$repo_root/scripts/pm-review-system.py" render --repo-root "$system_repo" \
+  --manifest pm-review-evidence.tmp/render-manifest.json --packet-id "$render_packet_id" \
+  --trust-bundle "$system_trust" >"$render_output"
+render_status=$?
+if [[ $render_status -ne 0 || ! -s "$render_output" ]] ||
+  [[ "$(wc -c <"$render_output" | tr -d ' ')" != "$render_expected_bytes" ]] ||
+  ! grep -Fq 'EXACT SLICE PAYLOADS (canonical descriptor order)' "$render_output"
+then
+  fail "authenticated renderer did not emit the exactly accounted bounded packet prompt"
+fi
+cp "$unsafe_dir/render-manifest.json" "$unsafe_dir/tampered-render-manifest.json"
+python3 - "$unsafe_dir/tampered-render-manifest.json" <<'PY'
+import json,sys
+path=sys.argv[1]
+value=json.load(open(path))
+value["packets"][0]["context"]["rendered_prompt_bytes"] += 1
+def digest(item):
+    return hashlib.sha256(json.dumps(item,sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
+import hashlib
+unsigned={key:item for key,item in value.items() if key != "authentication"}
+value["authentication"]={
+    "algorithm":"sha256-canonical-json-v1",
+    "coverage_sha256":digest(value["coverage_manifest"]),
+    "packets_sha256":digest(value["packets"]),
+    "semantic_manifest_sha256":digest(unsigned),
+}
+open(path,"w").write(json.dumps(value)+"\n")
+PY
+if python3 "$repo_root/scripts/pm-review-system.py" render --repo-root "$system_repo" \
+  --manifest pm-review-evidence.tmp/tampered-render-manifest.json --packet-id "$render_packet_id" \
+  --trust-bundle "$system_trust" >"$test_tmp/tampered-render.prompt" 2>"$test_tmp/tampered-render.stderr"
+then
+  fail "renderer accepted a manifest whose packet authentication was tampered"
+fi
 ln -s /etc/passwd "$unsafe_dir/escape.json"
-unsafe_relative="$(python3 - "$repo_root" "$unsafe_dir/escape.json" <<'PY'
+unsafe_relative="$(python3 - "$system_repo" "$unsafe_dir/escape.json" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2], sys.argv[1]))
 PY
@@ -941,9 +1133,9 @@ for unsafe_args in \
   "--base=0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 --config=$unsafe_relative"
 do
   # shellcheck disable=SC2086 # fixed test-only arguments contain no user-controlled values.
-  python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$repo_root" \
+  python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$system_repo" \
     --scope .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json \
-    $unsafe_args --head "$head_sha" >"$unsafe_dir/result.json" 2>"$unsafe_dir/error.log"
+    $unsafe_args --head "$head_sha" --trust-bundle "$system_trust" >"$unsafe_dir/result.json" 2>"$unsafe_dir/error.log"
   unsafe_status=$?
   if [[ $unsafe_status -eq 0 ]] || ! python3 - "$unsafe_dir/result.json" <<'PY'
 import json,sys
@@ -968,19 +1160,22 @@ manifest = json.load(open(sys.argv[1]))
 root = pathlib.Path(sys.argv[2])
 for packet in manifest["packets"]:
     response = {
-        "schema_version": "polymetrics.ai/pm-review-packet-response/v3",
+        "schema_version": "polymetrics.ai/pm-review-packet-response/v4",
         "packet_id": packet["packet_id"],
         "exact_base_sha": manifest["exact_base_sha"],
         "exact_head_sha": manifest["exact_head_sha"],
         "exact_head_tree": manifest["exact_head_tree"],
         "status": "clean",
         "reviewed_files": packet["changed_files"],
+        "changed_file_slices": packet.get("changed_file_slices", []),
         "closure_files": packet["closure_files"],
         "authority_files": packet["authority_files"],
+        "context_file_slices": packet.get("context_file_slices", []),
         "impact_files": packet.get("impact_files", []),
         "impact_edge_ids": packet.get("impact_edge_ids", []),
         "impact_file_slices": packet.get("impact_file_slices", []),
         "edge_context_files": packet.get("edge_context_files", []),
+        "edge_context_slices": packet.get("edge_context_slices", []),
         "invariants": [
             {"id": item, "status": "pass", "evidence_paths": []}
             for item in packet["invariants"]
@@ -991,7 +1186,7 @@ for packet in manifest["packets"]:
             "directions_traced": ["upstream", "downstream", "lateral", "temporal"],
             "history_inspected": {"status": "not_needed", "reason": "fixture evidence is unambiguous"},
             "sibling_paths_compared": {"status": "not_needed", "reason": "fixture has no divergent sibling"},
-            "hypotheses": ["H1 claim: fixture coverage is complete; alternative: an assigned item is omitted"],
+            "hypotheses": [{"id":"H1","claim":"fixture coverage is complete","strongest_alternative":"an assigned item is omitted","falsifier":"any exact assignment differs","evidence_paths":["scripts/tests/pm-review-system.sh"]}],
             "disconfirming_evidence": "exact assigned sets and fixture contract agree"
         },
         "experiments": [],
@@ -1003,18 +1198,18 @@ for packet in manifest["packets"]:
     }
     (root / f"{packet['packet_id']}.json").write_text(json.dumps(response))
 PY
-manifest_relative="$(python3 - "$repo_root" "$unsafe_dir/manifest.json" <<'PY'
+manifest_relative="$(python3 - "$system_repo" "$unsafe_dir/manifest.json" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2], sys.argv[1]))
 PY
 )"
-responses_relative="$(python3 - "$repo_root" "$responses_dir" <<'PY'
+responses_relative="$(python3 - "$system_repo" "$responses_dir" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2], sys.argv[1]))
 PY
 )"
 synthesis_output="$unsafe_dir/synthesis.json"
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 synthesis_status=$?
 if [[ $synthesis_status -ne 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1024,6 +1219,10 @@ assert value["status"] == "clean"
 assert value["owner"] == "parent_orchestrator"
 assert value["shepherd"]["status"] == "pending"
 assert value["human_merge_authority"] is True
+assert value["dedup"]["schema_version"] == "polymetrics.ai/pm-review-dedup/v1"
+assert value["dedup"]["raw_finding_count"] == 0
+assert value["dedup"]["disclosure"]["retained_observation_count"] == 0
+assert value["telemetry"]["claim"].startswith("only validated")
 PY
 then
   fail "complete clean packet responses did not produce one PM-owned clean synthesis"
@@ -1036,7 +1235,8 @@ for path in sorted(pathlib.Path(sys.argv[1]).glob('*.json')):
         break
 PY
 )"
-cp "$first_response" "$first_response.clean"
+clean_backup="$unsafe_dir/clean-response.backup"
+cp "$first_response" "$clean_backup"
 
 # Status/content and invariant semantics are distinct from missing coverage. Malformed status blocks;
 # an explicitly failed invariant paired with a finding enters the correction loop, not a blocker.
@@ -1045,7 +1245,7 @@ import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["status"]="findings"; value["findings"]=[]
 open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 status_mismatch=$?
 if [[ $status_mismatch -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1055,30 +1255,32 @@ PY
 then
   fail "findings status with empty findings did not block"
 fi
-cp "$first_response.clean" "$first_response"
+cp "$clean_backup" "$first_response"
 python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["status"]="findings"; value["invariants"][0]["status"]="fail"
 value["findings"]=[{"severity":"high","category":"fixture_invariant","path":"scripts/pm-review-system.py","line":"1","evidence":"fixture failed invariant","impact":"fixture impact","smallest_safe_correction":"fixture correction"}]
 open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 failed_invariant_status=$?
 if [[ $failed_invariant_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
 import json,sys
 value=json.load(open(sys.argv[1])); assert value["status"]=="findings_correction_required"; assert value["findings"] and not value["blockers"]
+assert value["dedup"]["raw_finding_count"] == len(value["findings"]) == 1
+assert len(value["dedup"]["observations"]) == 1
 PY
 then
   fail "failed invariant paired with a finding did not synthesize findings_correction_required"
 fi
-cp "$first_response.clean" "$first_response"
+cp "$clean_backup" "$first_response"
 python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["impact_edge_ids"].append("edge-unassigned")
 open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 extra_coverage_status=$?
 if [[ $extra_coverage_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1088,7 +1290,7 @@ PY
 then
   fail "unassigned extra packet coverage synthesized clean"
 fi
-cp "$first_response.clean" "$first_response"
+cp "$clean_backup" "$first_response"
 
 # A blocked compile manifest and mutually matching stale fake identities can never synthesize clean.
 cp "$unsafe_dir/manifest.json" "$unsafe_dir/blocked-manifest.json"
@@ -1097,12 +1299,12 @@ import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["status"]="blocked"; value["findings"]=[{"category":"fixture","claim":"compile blocked"}]
 open(path,"w").write(json.dumps(value))
 PY
-blocked_manifest_relative="$(python3 - "$repo_root" "$unsafe_dir/blocked-manifest.json" <<'PY'
+blocked_manifest_relative="$(python3 - "$system_repo" "$unsafe_dir/blocked-manifest.json" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2],sys.argv[1]))
 PY
 )"
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$blocked_manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 blocked_manifest_status=$?
 if [[ $blocked_manifest_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1120,17 +1322,17 @@ manifest_path=pathlib.Path(sys.argv[1]); manifest=json.loads(manifest_path.read_
 for path in pathlib.Path(sys.argv[2]).glob("*.json"):
  value=json.loads(path.read_text()); value["exact_head_sha"]=fake; path.write_text(json.dumps(value))
 PY
-stale_manifest_relative="$(python3 - "$repo_root" "$unsafe_dir/stale-manifest.json" <<'PY'
+stale_manifest_relative="$(python3 - "$system_repo" "$unsafe_dir/stale-manifest.json" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2],sys.argv[1]))
 PY
 )"
-stale_responses_relative="$(python3 - "$repo_root" "$unsafe_dir/stale-responses" <<'PY'
+stale_responses_relative="$(python3 - "$system_repo" "$unsafe_dir/stale-responses" <<'PY'
 import os,sys
 print(os.path.relpath(sys.argv[2],sys.argv[1]))
 PY
 )"
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$stale_manifest_relative" --responses-dir "$stale_responses_relative" >"$synthesis_output"
 stale_manifest_status=$?
 if [[ $stale_manifest_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1146,7 +1348,7 @@ python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["schema_version"]="polymetrics.ai/pm-review-packet-response/v2"; open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 v1_status=$?
 if [[ $v1_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1156,14 +1358,14 @@ PY
 then
   fail "incompatible v1 packet response did not require explicit migration"
 fi
-mv "$first_response.clean" "$first_response"
+mv "$clean_backup" "$first_response"
 python3 - "$first_response" <<'PY'
 import json,sys
 path=sys.argv[1]; value=json.load(open(path)); value["no_experiment_reason"]=None
 value["experiments"]=[{"hypothesis_id":"H-inconclusive","claim":"suspected defect","alternative":"safe behavior","impact_edges_examined":[],"temporary_change":"fixture change","command":["python3","fixture.py"],"expected_discriminator":"different exits","observed":"same exit","supports":"inconclusive","candidate_unchanged":True,"lab_cleanup_verified":True}]
 open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 inconclusive_status=$?
 if [[ $inconclusive_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1173,13 +1375,13 @@ PY
 then
   fail "inconclusive counterfactual experiment was allowed to prove clean"
 fi
-cp "$first_response.clean" "$first_response" 2>/dev/null || true
-if [[ ! -f "$first_response.clean" ]]; then
+cp "$clean_backup" "$first_response" 2>/dev/null || true
+if [[ ! -f "$clean_backup" ]]; then
   python3 - "$compile_output" "$first_response" <<'PY'
 # Restore is regenerated from the manifest because the clean backup was moved above.
 import json,sys
 manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
-value={"schema_version":"polymetrics.ai/pm-review-packet-response/v3","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"impact_file_slices":packet.get("impact_file_slices",[]),"edge_context_files":packet.get("edge_context_files",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":["H1 claim: fixture coverage is complete; alternative: an assigned item is omitted"],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v4","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"changed_file_slices":packet.get("changed_file_slices",[]),"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"context_file_slices":packet.get("context_file_slices",[]),"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"impact_file_slices":packet.get("impact_file_slices",[]),"edge_context_files":packet.get("edge_context_files",[]),"edge_context_slices":packet.get("edge_context_slices",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[{"id":"H1","claim":"fixture coverage is complete","strongest_alternative":"an assigned item is omitted","falsifier":"any exact assignment differs","evidence_paths":["scripts/tests/pm-review-system.sh"]}],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
 open(sys.argv[2],"w").write(json.dumps(value))
 PY
 fi
@@ -1192,7 +1394,7 @@ value["context"]["overflow"]=True
 value["reviewed_files"]=[]
 open(path,"w").write(json.dumps(value))
 PY
-python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
   --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
 stale_status=$?
 if [[ $stale_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
@@ -1209,7 +1411,7 @@ fi
 # compiler's own labels. They intentionally cover the systemic causes behind the 141 exact-head
 # findings: authenticated manifest semantics, exact response/lab binding, rendered-prompt bounds,
 # structural graph parsing, nested phase state, bounded scoring, and endpoint validation.
-if ! python3 - "$repo_root" "$unsafe_dir/manifest.json" "$test_tmp" <<'PY'
+if ! python3 - "$system_repo" "$unsafe_dir/manifest.json" "$system_repo/pm-review-r2.tmp" <<'PY'
 import argparse
 import contextlib
 import hashlib
@@ -1222,11 +1424,12 @@ import pathlib
 import shutil
 import subprocess
 import sys
+import time
 
 repo = pathlib.Path(sys.argv[1])
 manifest_path = pathlib.Path(sys.argv[2])
 tmp = pathlib.Path(sys.argv[3]) / "r2-red"
-tmp.mkdir()
+tmp.mkdir(parents=True)
 spec = importlib.util.spec_from_file_location("pm_review_system", repo / "scripts/pm-review-system.py")
 pm = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(pm)
@@ -1242,12 +1445,15 @@ def clean_response(packet):
         "exact_head_tree": manifest["exact_head_tree"],
         "status": "clean",
         "reviewed_files": packet["changed_files"],
+        "changed_file_slices": packet.get("changed_file_slices", []),
         "closure_files": packet["closure_files"],
         "authority_files": packet["authority_files"],
+        "context_file_slices": packet.get("context_file_slices", []),
         "impact_files": packet.get("impact_files", []),
         "impact_edge_ids": packet.get("impact_edge_ids", []),
         "impact_file_slices": packet.get("impact_file_slices", []),
         "edge_context_files": packet.get("edge_context_files", []),
+        "edge_context_slices": packet.get("edge_context_slices", []),
         "invariants": [{"id": item, "status": "pass", "evidence_paths": []} for item in packet["invariants"]],
         "unreviewed_files": [],
         "review_behaviors": {
@@ -1255,7 +1461,7 @@ def clean_response(packet):
             "directions_traced": ["upstream", "downstream", "lateral", "temporal"],
             "history_inspected": {"status": "not_needed", "reason": "fixture is exact"},
             "sibling_paths_compared": {"status": "not_needed", "reason": "fixture has no sibling"},
-            "hypotheses": ["H1 claim: complete; alternative: omitted; falsifier: set mismatch"],
+            "hypotheses": [{"id":"H1","claim":"complete","strongest_alternative":"omitted","falsifier":"set mismatch","evidence_paths":["scripts/tests/pm-review-system.sh"]}],
             "disconfirming_evidence": "exact fixture assignments agree",
         },
         "experiments": [],
@@ -1290,6 +1496,15 @@ responses = tmp / "responses"
 write_responses(responses)
 tampered = json.loads(json.dumps(manifest))
 removed = tampered["packets"].pop()
+def canonical_digest(item):
+    return hashlib.sha256(json.dumps(item,sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()).hexdigest()
+unsigned = {key:item for key,item in tampered.items() if key != "authentication"}
+tampered["authentication"] = {
+    "algorithm":"sha256-canonical-json-v1",
+    "coverage_sha256":canonical_digest(tampered["coverage_manifest"]),
+    "packets_sha256":canonical_digest(tampered["packets"]),
+    "semantic_manifest_sha256":canonical_digest(unsigned),
+}
 (tampered_path := tmp / "tampered-manifest.json").write_text(json.dumps(tampered))
 (responses / f"{removed['packet_id']}.json").unlink()
 proc, value = synthesize(tampered_path, responses)
@@ -1304,6 +1519,18 @@ first_packet = manifest["packets"][0]
 proc, value = synthesize(manifest_path, responses)
 if not isinstance(value, dict) or value.get("status") != "blocked":
     errors.append("non-object response did not return the canonical blocked synthesis envelope")
+
+# Claimed telemetry is null or non-negative and correctly typed; malformed values cannot be clean.
+shutil.rmtree(responses)
+write_responses(responses)
+first_packet = manifest["packets"][0]
+telemetry_path = responses / f"{first_packet['packet_id']}.json"
+telemetry = json.loads(telemetry_path.read_text())
+telemetry["context"]["input_tokens"] = -1
+telemetry_path.write_text(json.dumps(telemetry))
+proc, value = synthesize(manifest_path, responses)
+if proc.returncode == 0 or not isinstance(value, dict) or value.get("status") != "blocked":
+    errors.append("negative packet telemetry synthesized clean")
 
 # Identifier-only hypotheses do not satisfy a falsifiable claim/alternative/discriminator contract.
 shutil.rmtree(responses)
@@ -1323,13 +1550,14 @@ experiment = {
     "hypothesis_id": "H1", "claim": "original claim", "alternative": "original alternative",
     "impact_edges_examined": packet.get("impact_edge_ids", [])[:1], "temporary_change": "original change",
     "command": ["python3", "scripts/check.py"], "expected_discriminator": {"exit_code": 1},
-    "observed": {"exit_code": 1, "limit_hit": None, "processes_remaining": 0},
+    "observed": {"exit_code": 1, "limit_hit": None, "process_residue_detected": False, "processes_remaining": 0, "sandbox_denial_observed": False},
 }
 evidence = {
     "schema_version": pm.LAB_EVIDENCE_SCHEMA, "status": "evidence", "packet_id": packet["packet_id"],
     "exact_base_sha": manifest["exact_base_sha"], "exact_head_sha": manifest["exact_head_sha"],
     "exact_head_tree": manifest["exact_head_tree"], "candidate_unchanged": True,
     "lab_cleanup_verified": True, "experiment": experiment,
+    "final_state": {"resource_bounds_satisfied": True, "candidate_unchanged": True, "cleanup_verified": True},
 }
 evidence_path = repo / evidence_rel
 evidence_path.write_text(json.dumps(evidence))
@@ -1341,17 +1569,75 @@ response["experiments"] = [{**experiment, "claim": "relabeled claim", "supports"
 response["no_experiment_reason"] = None
 if not pm.validate_experiments(repo, manifest, packet, response):
     errors.append("response experiment was not bound field-for-field to its hashed lab artifact")
+response["experiments"][0]["claim"] = experiment["claim"]
+evidence["experiment"]["observed"]["sandbox_denial_observed"] = True
+evidence_path.write_text(json.dumps(evidence))
+response["experiments"][0]["observed"]["sandbox_denial_observed"] = True
+response["experiments"][0]["lab_evidence_sha256"] = hashlib.sha256(evidence_path.read_bytes()).hexdigest()
+if not pm.validate_experiments(repo, manifest, packet, response):
+    errors.append("sandbox denial was allowed to support clean experiment evidence")
 
-# Packet accounting must charge exact changed bytes plus the full rendered envelope under a true
-# tokenizer-independent upper bound; one 100 KiB line cannot cost four tokens.
+# Packet accounting must charge real exact slices under the 30K/64 hard caps; a 100 KiB line is
+# split without average-token assumptions, silent truncation, or an artificial empty-slice blocker.
 config = json.loads((repo / ".agents/agentic-delivery/contracts/pm-review-system.json").read_text())
+raw = b"x" * 100_000
+blob_digest = hashlib.sha256(raw).hexdigest()
+huge_slices=[]
+for start in range(0,len(raw),4096):
+    payload=raw[start:start+4096]
+    huge_slices.append({
+        "path":"scripts/huge.py","revision":manifest["exact_head_sha"],"revision_kind":"diff",
+        "blob_sha256":blob_digest,"start_line":1,"end_line":1,"start_byte":start,
+        "end_byte":start+len(payload),"bytes":len(payload),"sha256":hashlib.sha256(payload).hexdigest(),
+    })
 selection, packets, problems = pm.build_packets(
     manifest["exact_base_sha"], manifest["exact_head_sha"], manifest["exact_head_tree"],
     ["scripts/huge.py"], {"scripts/huge.py": 1}, {"scripts/huge.py": "implementation_test"},
-    [], [], [], [], {"scripts/huge.py": 100_000}, {"scripts/huge.py": []}, config,
+    [], [], [], [], {"scripts/huge.py": 100_000}, {"scripts/huge.py": huge_slices}, config,
+    changed_content_sizes={"scripts/huge.py":100_000}, changed_content_slices={"scripts/huge.py":huge_slices},
 )
-if selection != "blocked" and not problems and not any(p["context"]["overflow"] for p in packets):
-    errors.append("100 KiB one-line changed file bypassed conservative packet accounting")
+if problems or not packets or len(packets) > 64 or any(p["context"]["rendered_prompt_bytes"] > 30_000 for p in packets):
+    errors.append("real 100 KiB one-line slices did not split within exact hard packet bounds")
+if sum(item["bytes"] for packet in packets for item in packet["changed_file_slices"]) != len(raw):
+    errors.append("real 100 KiB changed slices were not assigned exactly once")
+
+for field,value in (("packet_target_tokens",30001),):
+    bad=json.loads(json.dumps(config)); bad["thresholds"][field]=value
+    try: pm.validate_config(bad)
+    except pm.ReviewSystemError: pass
+    else: errors.append("v4 accepted packet_target_tokens above the hard 30000 maximum")
+bad=json.loads(json.dumps(config)); bad["impact_graph"]["max_packets"]=65
+try: pm.validate_config(bad)
+except pm.ReviewSystemError: pass
+else: errors.append("v4 accepted max_packets above the hard 64 maximum")
+bad=json.loads(json.dumps(config)); bad["impact_graph"]["max_nodes"]=1.5
+try: pm.validate_config(bad)
+except pm.ReviewSystemError: pass
+else: errors.append("v4 accepted a fractional count bound")
+
+# Every bounded chunk of a long provenance line must be assigned; choosing the first chunk would
+# silently omit a reference located later on the same line.
+def bound_slice(path,start,payload):
+    return {"path":path,"revision":manifest["exact_head_sha"],"revision_kind":"head",
+            "blob_sha256":hashlib.sha256(b"x"*512 if path=="scripts/source.py" else b"y").hexdigest(),
+            "start_line":1,"end_line":1,"start_byte":start,"end_byte":start+len(payload),
+            "bytes":len(payload),"sha256":hashlib.sha256(payload).hexdigest()}
+source_slices=[bound_slice("scripts/source.py",0,b"x"*256),bound_slice("scripts/source.py",256,b"x"*256)]
+target_slices=[bound_slice("scripts/target.py",0,b"y")]
+edge={"id":"edge-long-line","source":"scripts/source.py","target":"scripts/target.py",
+      "relation":"required_reference","direction":"forward","parser":"python_ast",
+      "reason":"long_line_path","certainty":"active","line":1,"revision":"head",
+      "source_blob_sha256":hashlib.sha256(b"x"*512).hexdigest(),"traversal_directions":["downstream"],"minimum_depth":1}
+_, edge_packets, edge_problems = pm.build_packets(
+    manifest["exact_base_sha"],manifest["exact_head_sha"],manifest["exact_head_tree"],
+    [],{}, {}, [],[],["scripts/source.py","scripts/target.py"],[edge],
+    {"scripts/source.py":512,"scripts/target.py":1},
+    {"scripts/source.py":source_slices,"scripts/target.py":target_slices},config,
+    edge_blob_slices={"scripts/source.py":source_slices,"scripts/target.py":target_slices},
+)
+assigned_source={item["start_byte"] for packet in edge_packets for item in packet.get("edge_context_slices",[]) if item["path"]=="scripts/source.py"}
+if edge_problems or assigned_source != {0,256}:
+    errors.append("long-line edge provenance did not include every bounded source-line chunk")
 
 # Format-aware relation/certainty parsing must not depend on same-line filename keywords.
 universe = {".agents/required.md", ".agents/next.md", "scripts/body.py", "scripts/helper.py"}
@@ -1365,6 +1651,16 @@ md_edges, _ = pm.typed_file_edges(
 )
 if len(md_edges) != 2 or {edge["relation"] for edge in md_edges} != {"required_reference"}:
     errors.append("imperative multi-path read clause did not type both edges identically")
+json_edges, _ = pm.typed_file_edges(
+    ".agents/worker.json", '{"inputs":{"required":[".agents/required.md"]}}', universe
+)
+if not json_edges or json_edges[0]["relation"] != "required_reference":
+    errors.append("JSON inputs.required lost structural required-reference semantics")
+relative_md_edges, _ = pm.typed_file_edges(
+    ".agents/sub/start.md", "## Required inputs\n- [required](../required.md)\n", universe
+)
+if not any(edge["target"] == ".agents/required.md" and edge["relation"] == "required_reference" for edge in relative_md_edges):
+    errors.append("Markdown heading/list relative reference was not normalized and typed")
 if pm.line_certainty("This unconditional contract reads .agents/required.md") != "active":
     errors.append("unconditional active reference was misclassified as unknown")
 heredoc_edges, _ = pm.typed_file_edges(
@@ -1381,6 +1677,9 @@ invalid_graph = {"nodes": ["target"], "edges": [{"source": "missing", "target": 
                  "seeds": ["target"], "reported_impact": ["missing", "target"], "reported_status": "complete"}
 if not pm.impact_contract_findings(invalid_graph):
     errors.append("impact detector accepted a missing source endpoint")
+invalid_seed = {"nodes":["target"],"edges":[],"seeds":["absent"],"reported_impact":[],"reported_status":"complete"}
+if not any("seed is absent" in item["claim"] for item in pm.impact_contract_findings(invalid_seed)):
+    errors.append("impact detector accepted a seed outside the materialized node set")
 
 # Dedicated phase-state validation must enforce nested correction constraints, not only markers.
 phase_root = tmp / "phase-root"
@@ -1397,6 +1696,22 @@ _, _, phase_findings = pm.authority_inventory(phase_root, {"authorities": [], "c
 }]})
 if not phase_findings:
     errors.append("empty nested correction budget passed dedicated phase-state validation")
+(source_mirror := phase_root / "source.json").write_text(json.dumps({"status":"clean","nested":{"head":"a"*40}}))
+(target_mirror := phase_root / "target.json").write_text(json.dumps({"review":{"status":"blocked","head":"a"*40}}))
+_, _, mirror_findings = pm.authority_inventory(phase_root, {"authorities": [], "configured_relationships": [{
+    "source":"source.json", "target":"target.json", "relation":"authority_mirror", "certainty":"active",
+    "validator":"authority_mirror_v1", "field_mappings":[{"source":"/status","target":"/review/status"},{"source":"/nested/head","target":"/review/head"}],
+}]})
+if not mirror_findings:
+    errors.append("configured authority mirror disagreement was accepted")
+bad_config = json.loads((repo / ".agents/agentic-delivery/contracts/pm-review-system.json").read_text())
+bad_config["configured_relationships"][0]["certainty"] = "maybe"
+try:
+    pm.validate_config(bad_config)
+except pm.ReviewSystemError:
+    pass
+else:
+    errors.append("configured endpoint/certainty enum validation failed open")
 
 # Scoring must reject a partial observed set instead of reporting perfect metrics.
 observed_path = tmp / "partial-observed.json"
@@ -1408,6 +1723,141 @@ score = subprocess.run([sys.executable, str(repo / "scripts/pm-review-system.py"
                        cwd=repo, capture_output=True, text=True)
 if score.returncode == 0:
     errors.append("partial observation set produced a measurement instead of blocking")
+duplicate_observed = tmp / "duplicate-observed.json"
+corpus = tmp / "duplicate-input.json"
+corpus.write_text(json.dumps({"cases":[{"case_id":"a"},{"case_id":"a"}]}))
+duplicate_observed.write_text(json.dumps({"mode":"treatment","input":str(corpus),"input_sha256":hashlib.sha256(corpus.read_bytes()).hexdigest(),"case_set_sha256":"0"*64,"observations":[{"case_id":"a","suite":"x","findings":[]},{"case_id":"a","suite":"x","findings":[]}]}))
+duplicate = subprocess.run([sys.executable, str(repo / "scripts/pm-review-system.py"), "score", "--observations", str(duplicate_observed), "--oracle", str(oracle_path)], cwd=repo, capture_output=True, text=True)
+if duplicate.returncode == 0:
+    errors.append("duplicate measurement case ids bypassed exact corpus/oracle bijection")
+
+# Dedup v1 preserves immutable observations and uses labels only after deterministic candidate
+# generation. R1/R2 are retrospective development because R2 labels were inspected during tuning;
+# prospective R3 is the next untouched measurement and no retrospective acceptance claim is made.
+dedup_manifest_path = repo / "scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json"
+dedup_manifest = json.loads(dedup_manifest_path.read_text())
+if dedup_manifest.get("next_untouched_measurement") != "fresh prospective exact-head R3":
+    errors.append("dedup corpus policy does not reserve prospective R3")
+historical_metrics = {}
+for round_name, source in dedup_manifest.get("sources", {}).items():
+    source_path = repo / source["path"]
+    payload = source_path.read_bytes()
+    if len(payload) != source["bytes"] or hashlib.sha256(payload).hexdigest() != source["sha256"]:
+        errors.append(f"dedup retrospective source drifted: {round_name}")
+        continue
+    rows=[]
+    for line in payload.decode().splitlines():
+        if not line.startswith(f"| {round_name}-F"):
+            continue
+        cells=[item.strip().strip("`") for item in line.strip("|").split("|")]
+        if len(cells) >= 8:
+            rows.append(cells[:8])
+    table_observations=[]; labels={}; paths={}
+    for alias,packet_id,severity,category,location,root_group,disposition,response_digest in rows:
+        path, _, line_value = location.partition(":")
+        raw={"severity":severity,"category":category,"path":path,"line":line_value,
+             "evidence":category.replace("_"," "),"impact":category.replace("_"," "),
+             "smallest_safe_correction":category.replace("_"," ")}
+        assignment={"invariants":["historical_table_limited"],"changed_file_slices":[],
+                    "context_file_slices":[],"impact_file_slices":[],"edge_context_slices":[]}
+        table_observations.append({"observation_id":alias,"features":pm.observation_features(assignment,raw)})
+        labels[alias]=root_group; paths[alias]=path
+    generated=[pm.generate_candidate_pairs(table_observations) for _ in range(10)]
+    digests={pm.sha256_json(item) for item in generated}
+    if len(digests) != 1 or any(item["model_tokens"] != 0 for item in generated):
+        errors.append(f"dedup candidate generation is nondeterministic or used model tokens: {round_name}")
+    pairs={tuple(item["observation_ids"]) for item in generated[0]["pairs"]}
+    same=[]; cross=[]
+    for index,left in enumerate(table_observations):
+        for right in table_observations[index+1:]:
+            left_id,right_id=left["observation_id"],right["observation_id"]
+            if labels[left_id] == labels[right_id]:
+                pair=tuple(sorted((left_id,right_id))); same.append(pair)
+                if paths[left_id] != paths[right_id]: cross.append(pair)
+    historical_metrics[round_name]={
+        "candidate_recall":sum(pair in pairs for pair in same)/len(same) if same else 1.0,
+        "cross_file_recall":sum(pair in pairs for pair in cross)/len(cross) if cross else 1.0,
+        "candidate_pair_fraction":generated[0]["candidate_pair_fraction"],
+        "claim":"retrospective development diagnostic only; labels inspected; no acceptance claim",
+    }
+if set(historical_metrics) != {"R1","R2"} or not all("no acceptance claim" in item["claim"] for item in historical_metrics.values()):
+    errors.append("dedup retrospective metrics were mislabeled as held-out acceptance")
+
+# Fixed transparent all-pairs generation remains bounded at 500 observations on this reference run.
+perf_observations=[]
+for index in range(500):
+    raw={"category":f"unique_{index}","path":f"scripts/f{index}.py","line":"1",
+         "evidence":f"mechanism_{index}","impact":f"impact_{index}",
+         "smallest_safe_correction":f"replace_{index}"}
+    assignment={"invariants":[f"inv_{index}"],"changed_file_slices":[],"context_file_slices":[],
+                "impact_file_slices":[],"edge_context_slices":[]}
+    perf_observations.append({"observation_id":f"PERF-{index:03d}","features":pm.observation_features(assignment,raw)})
+latencies=[]
+for _ in range(3):
+    started=time.perf_counter(); pm.generate_candidate_pairs(perf_observations); latencies.append(time.perf_counter()-started)
+if sorted(latencies)[-1] > 2.0:
+    errors.append(f"dedup deterministic 500-observation p95 proxy exceeded 2s: {latencies}")
+
+# One explicit causal decision may consolidate presentation, while a positive chain cannot bridge
+# an ambiguous pair; recurrence/reassignment remain separate exact-head occurrences with audit IDs.
+synthetic_packet={"packet_id":"implementation_test-99","invariants":["same_contract"],
+                  "changed_file_slices":[],"context_file_slices":[],"impact_file_slices":[],"edge_context_slices":[]}
+synthetic_findings=[]
+for ordinal,(path,category,correction) in enumerate((
+    ("scripts/a.py","same_mechanism","fix shared validator"),
+    ("scripts/b.py","same_mechanism","fix shared validator"),
+    ("scripts/a.py","distinct_trigger","fix separate parser"),
+    ("scripts/moved.py","recurring_mechanism","fix prior validator"),
+    ("scripts/reassigned.py","reassigned_mechanism","fix prior owner"),
+),1):
+    raw={"severity":"high","category":category,"path":path,"line":str(ordinal),
+         "evidence":category,"impact":"candidate behavior fails","smallest_safe_correction":correction}
+    synthetic_findings.append({"packet":synthetic_packet,"finding":raw,
+                               "response_sha256":hashlib.sha256(f"response-{ordinal}".encode()).hexdigest(),
+                               "raw_ordinal":ordinal})
+synthetic_run, synthetic_observations = pm.build_observations(manifest, synthetic_findings)
+ids=[item["observation_id"] for item in synthetic_observations]
+def causal(ids_value, same=True):
+    return {"same_invariant":same,"same_mechanism":same,"single_treatment":same,
+            "contradictions":[] if same else ["independent trigger"],
+            "counterfactual_all_cease":same,"evidence_observation_ids":sorted(ids_value)}
+def event(sequence,previous,decision,ids_value,**extra):
+    value={"sequence":sequence,"previous_event_sha256":previous,"decision":decision,
+           "observation_ids":sorted(ids_value),"causal_test":causal(ids_value,decision in {"same","recurrence","reassign"}),**extra}
+    value["event_sha256"]=pm.sha256_json(value); return value
+events=[]; previous=None
+for decision,ids_value,extra in (
+    ("same",ids[:2],{}),("same",ids[1:3],{}),("ambiguous",[ids[0],ids[2]],{}),
+    ("recurrence",[ids[3]],{"root_id":"RC-HISTORICAL-1"}),
+    ("reassign",[ids[4]],{"root_id":"RC-HISTORICAL-2","retired_root_id":"RC-RETIRED-1"}),
+):
+    item=event(len(events)+1,previous,decision,ids_value,**extra);events.append(item);previous=item["event_sha256"]
+decisions_path=tmp/"dedup-decisions.json"
+decisions_path.write_text(json.dumps({"schema_version":pm.DEDUP_DECISIONS_SCHEMA,
+                                      "run_id":synthetic_run["run_id"],"lineage_id":synthetic_run["lineage_id"],"events":events}))
+history_path=tmp/"dedup-history.json"
+history_path.write_text(json.dumps({"schema_version":pm.DEDUP_HISTORY_SCHEMA,
+ "lineage_id":synthetic_run["lineage_id"],"roots":[
+  {"root_id":"RC-HISTORICAL-1","friendly_aliases":["R1-X"],"occurrence_ids":["OCC-OLD-1"],"retired_root_ids":[]},
+  {"root_id":"RC-HISTORICAL-2","friendly_aliases":["R1-Y"],"occurrence_ids":["OCC-OLD-2"],"retired_root_ids":[]}] }))
+dedup=pm.synthesize_dedup(repo,manifest,synthetic_findings,
+                           os.path.relpath(decisions_path,repo),os.path.relpath(history_path,repo))
+if dedup["raw_finding_count"] != 5 or dedup["disclosure"]["retained_observation_count"] != 5:
+    errors.append("dedup did not preserve complete flat observation disclosure")
+if sorted(len(item["observation_ids"]) for item in dedup["occurrences"]) != [1,1,1,2]:
+    errors.append("dedup allowed transitive candidate chaining or lost an explicit same pair")
+if not any(item["recurrence_of"] == "RC-HISTORICAL-1" for item in dedup["occurrences"]):
+    errors.append("later-head recurrence was treated as a same-run duplicate")
+if not any("RC-RETIRED-1" in item["retired_root_ids"] for item in dedup["roots"]):
+    errors.append("dedup reassignment did not retain the retired root id")
+tampered=json.loads(decisions_path.read_text());tampered["events"][0]["causal_test"]["same_mechanism"]=False
+tampered_path=tmp/"dedup-tampered.json";tampered_path.write_text(json.dumps(tampered))
+try:
+    pm.load_dedup_decisions(repo,os.path.relpath(tampered_path,repo),synthetic_run,synthetic_observations)
+except pm.ReviewSystemError:
+    pass
+else:
+    errors.append("dedup accepted a tampered append-only causal decision")
 
 if errors:
     print("\n".join(errors), file=sys.stderr)

@@ -6,8 +6,9 @@ PR #468 now carries the GSD-verified Phase 18 interaction contract. #416 owns th
 reverse workspace and `reverse guide` alias; #411 owns the equivalent bare query workspace and
 `query grid` alias. Child #469 owns TTY-progressive credential and connection setup. The live
 GitHub graph records #409/#462 → #469 → #417/#418, and the missing #411 → #463 edge is restored.
-PR #468 is now integrated into the parent branch at `c3d8a757`; production TUI work remains
-sequenced behind the rebuilt dependency queue and the open #437/#408 write-scope collision.
+PR #468 was integrated into the parent branch at `c3d8a757`. At that historical checkpoint,
+production TUI work remained behind the #437/#408 write-scope collision; #437 and Wave 1 are now
+integrated, and PR #493's canonical PM route migration is the sole current worker-start blocker.
 
 Status: ACTIVE — not final
 Starting HEAD: `56a7ecb08f755184af7b55318c3285582d5adfb7`
@@ -45,7 +46,7 @@ PR #460 / #424 was corrected at `323d4a91`, independently re-reviewed clean, and
 
 #437 / PR #466 contains the final serialized Phase 9 connectors/certify migration. After safety/correctness correction cycles, remote CI exposed a wall-clock concurrency-test flake. The worker replaced it with a deterministic barrier/counter proof without raising or removing the gate. Head `26f98a72` passes focused/repeated/race tests, full CLI/certify packages, `go test ./...`, vet, build, `make verify`, help/docs/website parity, fixture-only sample certification, connectorgen 547/0, and all current GitHub checks. Exact-path local re-review found no remaining actionable runtime/code issue.
 
-#437 is not integrated because human/parent fallback review coverage remains pending. #408 is source-ready after #462 integration but is not spawned because it would collide with open PR #466 central CLI/help/golden/docs/website files. #407/#413 remain dependency-blocked on #437; #409/#416/#469 remain downstream; #419 remains an explicit human dependency-decision gate. Final parent verification and final parent review have not run; `verificationPassed` remains false.
+At that historical checkpoint, #437 was not integrated because human/parent fallback review coverage remained pending, #408 was held for its write-scope collision, and #407/#413 were dependency-blocked. Later sections record #437 integration, the human #419 defer decision, and Wave 1 integration. Current state keeps #408 blocked only on PR #493's canonical PM migration; final parent verification and final parent review have not run, so `verificationPassed` remains false.
 
 ## Live reconciliation — 2026-07-20T19:28Z
 
@@ -81,6 +82,12 @@ At this historical checkpoint PR #438 remained draft at the old parent head unti
 ### PR #493 canonical PM migration gate
 
 Post-integration reconciliation recorded the actual parent/PR #438 head as `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`. PR #493 must merge that resulting parent normally, reconcile only its owned routing/skill/Makefile guidance to the canonical PM route, rerun its gates, and integrate before another CLI Architecture v2 implementation worker starts. Until PR #493 integrates, #408 remains `not_spawned_dependency_blocked`.
+
+After that activation gate, every new unit uses the v4 PM sequence: exact verification;
+`pm-review-system.py compile` with a validated scope; canonical packet render; complete fresh-context
+local Codex responses; one authenticated clean synthesis at the exact base/head/tree; exact finding
+dispositions; then independent Shepherd `PROCEED`. Any head change invalidates and reruns that
+sequence. Historical hosted-bot records remain read-only evidence and are not current PM coverage.
 
 ## Pi 5.6 Sol routing and Shepherd hardening — 2026-07-21
 

@@ -37,18 +37,21 @@
       "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34"
     ]
   },
-  "status": "local_codex_round_2_findings_systemic_correction_planned",
-  "verificationPassed": false,
+  "status": "review_pending",
+  "verificationPassed": true,
   "verificationEvidence": {
-    "exactImplementationHead": "528dcc68599af4efaaee46c9b038bbd022178411",
-    "focused": "passed_round_1_correction",
-    "goVet": "passed_round_1_correction",
-    "goTest20m": "passed_round_1_correction",
-    "goBuild": "passed_round_1_correction",
-    "goModVerify": "passed_round_1_correction",
-    "goModTidyDiff": "passed_round_1_correction",
-    "makeVerify": "passed_round_1_correction",
-    "finalEvidenceCommitRerun": "pending_before_exact_head_review"
+    "exactImplementationHead": null,
+    "candidateState": "combined_uncommitted_tree_verified_exact_commit_pending",
+    "static": "passed_python_shell_shellcheck_json_yaml_diff",
+    "focused": "passed_pm_review_pm_orchestrator_pi_routing_shepherd_adversarial",
+    "goVet": "passed_combined_candidate",
+    "goTest20m": "passed_combined_candidate_internal_cli_467_908s",
+    "goBuild": "passed_combined_candidate",
+    "goModVerify": "passed_combined_candidate",
+    "goModTidyDiff": "passed_combined_candidate",
+    "makeVerify": "passed_combined_candidate_internal_cli_467_030s_lint_0_connectors_547",
+    "reverseETLSmoke": "passed_plan_preview_approval_execute",
+    "finalExactCommitRerun": "pending_before_prospective_r3"
   },
   "localCodex": {
     "status": "findings_correction_required",
@@ -60,7 +63,10 @@
     "rawSynthesisBlockers": 0,
     "synthesisArtifactSHA256": "cce8c3dfe95700d5f001d5b3cdf4eaa3f24dde407f9cf06356a7c50e3c50107a",
     "dispositionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-DISPOSITION.md",
-    "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json"
+    "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json",
+    "nextRound": 3,
+    "nextRoundMode": "fresh_prospective_exact_head",
+    "nextRoundStatus": "pending"
   },
   "shepherd": {
     "status": "pending",
@@ -161,6 +167,21 @@
       "cycle": "local_codex_round_2",
       "decision": "local_critical_path",
       "reason": "At exact head 92ce5e6a19cb7562aead8b224e6ba8dcc0857d34, 41/41 fresh Sol/xhigh bounded packets completed and one synthesis returned findings_correction_required with 141 findings and zero blockers. Forty-four packet attempts included three recovered first-attempt failures; one separately observed context-window rejection is an operational attempt only. Every finding is mapped to recurrence or a new systemic group; correction round 2/5 begins and Shepherd remains pending."
+    },
+    {
+      "cycle": "round_2_route_docs_state_retry",
+      "decision": "local_critical_path",
+      "reason": "After one parallel OAuth/provider startup failure, this operational retry reproduced the focused PM route/documentation/state RED and owns only R1-I/R1-K/R1-L/R2-N2/R2-N5 allowlisted paths. PR #493, Shepherd/driver/trace-script, compiler/lab, and GitHub connector-ledger paths remain excluded."
+    },
+    {
+      "cycle": "round_2_route_docs_state_green",
+      "decision": "local_critical_path",
+      "reason": "All 13 owned PM contract failures are closed; pm-review-system passes, and pm-orchestrator-contract now reports only three pm-review-loop invocation flags owned by R1-A. State/schema syntax and parity, v4 route order, connector profiles, GitHub ledger non-change, Pi provenance, and diff checks pass."
+    },
+    {
+      "cycle": "round_2_combined_recovery_green",
+      "decision": "local_critical_path",
+      "reason": "A fresh worker preserved every uncommitted change, loaded the required GSD/skill route, fixed only newly exposed evidence and isolated-lab fixture defects without weakening default-deny or bounds, and passed static, complete focused/adversarial, Go, module, build, and make verify campaigns. R1/R2 dedup diagnostics remain retrospective development; deterministic-partial-keys/v1 is frozen before prospective R3. Exact commit and clean rebuild are next; Shepherd remains prohibited unless R3 synthesis is clean."
     }
   ],
   "measurement": {
@@ -191,7 +212,12 @@
     "actualReviewRound2Packets": 41,
     "actualReviewRound2Findings": 141,
     "actualReviewRound2ProviderAttempts": 45,
-    "actualReviewRound2ProviderFailures": 4
+    "actualReviewRound2ProviderFailures": 4,
+    "dedupAlgorithm": "deterministic-partial-keys/v1",
+    "dedupR1R2Claim": "retrospective_development_only_labels_inspected_no_acceptance_claim",
+    "dedupCorpusManifest": "scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json",
+    "nextUntouchedMeasurement": "fresh_prospective_exact_head_R3",
+    "combinedCandidateFullVerification": "passed_uncommitted_tree_exact_commit_pending"
   },
   "readyQueue": [
     {

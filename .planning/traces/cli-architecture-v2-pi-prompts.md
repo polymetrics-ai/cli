@@ -17,8 +17,10 @@ feat/cli-architecture-v2 from main, make a deliberate planning/roadmap seed comm
 draft parent PR to main. Do not mark an implementation issue worker_ready until that parent PR exists.
 
 After every integration, recompute dependencies and write-scope collisions. Assign each ready issue
-to one isolated git worktree and one Pi session. Every worker gets exactly one issue and must use the
-issue's /gsd plan-phase, /gsd-programming-loop, /gsd verify-work, and /gsd-code-review workflow.
+to one isolated git worktree and one Pi session. Every worker gets exactly one issue, runs registry
+discovery, and uses only available `/gsd` commands. When no registered implementation-loop command
+exists, the `/pm-orchestrate` owner supplies PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW →
+INTEGRATE; workers still use the available plan-phase, verify-work, and code-review commands.
 Do not launch Phase 9 namespace issues concurrently; #421 through #437 are deliberately serialized.
 The first designed parallel fan-out occurs after #402: #403, #404, #406, and #410 may run in
 separate worktrees. Keep the parent context open, collect worker handoffs, arbitrate stacked PRs,
@@ -45,7 +47,7 @@ main using Refs #397. Update #397 with the PR URL and state ledger. Do not edit 
 Do not merge the parent PR.
 ```
 
-## Generic worker session
+## Generic issue worker session
 
 Replace the placeholders with one GitHub issue and its assigned isolated worktree.
 
@@ -60,9 +62,10 @@ Do not edit shared parent planning/orchestration artifacts unless #397 explicitl
 Run:
 /gsd doctor
 /gsd plan-phase <ISSUE> --skip-research
-/gsd-programming-loop init --phase <ISSUE> --dry-run
 
-Create/update the issue GSD plan, TDD ledger, and verification checklist before production edits.
+Inspect the command registry first. If no registered implementation-loop command exists, do not
+invent one; execute PLAN → RED → GREEN → REFACTOR → VERIFY under the active `/pm-orchestrate`
+owner. Create/update the issue GSD plan, TDD ledger, and verification checklist before production edits.
 Load and record the required skills from the issue, starting with golang-how-to for Go work. For
 behavior changes, capture the failing test and exact red output before implementation. Implement only
 the issue's allowed write scope, commit/push coherent green slices, and run all targeted and broader
@@ -73,14 +76,16 @@ Then run:
 /gsd-code-review <ISSUE>
 
 Open a stacked PR to feat/cli-architecture-v2 with a Conventional Commit title and body containing
-Refs #<ISSUE> and Refs #397. Compile exact-head PM packets, disposition every local Codex finding,
-require clean synthesis, then run independent Shepherd validation. Return the PM worker handoff with
+Refs #<ISSUE> and Refs #397. Have the parent compile a ready v4 manifest for the exact base/head/tree,
+render every bounded packet through the canonical renderer, pass each rendered stdout unchanged to
+a fresh-context local Codex reviewer, and run one authenticated synthesis. Disposition every
+finding; only a clean exact-head synthesis proceeds to independent Shepherd validation. Return the PM worker handoff with
 branch, PR, commits, changed files, red/green/refactor evidence, exact verification, skills used,
 parity status, exact-head synthesis/Shepherd coverage, and
 remaining blockers. Do not merge the PR and never merge the parent PR to main.
 ```
 
-## TUI worker session
+## Issue #408 TUI worker and sibling TUI sessions
 
 Use this prompt in each isolated Pi session for issues #408, #409, #411, #412, #414, #416, #469,
 #418, and #463 after #462/D-TUI plus its accepted correction PR/review blocker are integrated or
@@ -100,9 +105,10 @@ reference, required-skills-routing.md, and the worker handoff template.
 Run:
 /gsd doctor
 /gsd plan-phase <ISSUE> --skip-research
-/gsd-programming-loop init --phase <ISSUE> --dry-run
 
-Load and record `bubble-tea-tui-design`, then `golang-how-to`, `golang-cli`, `golang-testing`,
+Inspect the command registry first. If no registered implementation-loop command exists, do not
+invent one; execute PLAN → RED → GREEN → REFACTOR → VERIFY under the active `/pm-orchestrate`
+owner. Load and record `bubble-tea-tui-design`, then `golang-how-to`, `golang-cli`, `golang-testing`,
 `golang-error-handling`, `golang-security`, `golang-safety`, `golang-context`,
 `golang-concurrency`, and `golang-documentation` as applicable. Before production edits, put exact
 RED cases in PLAN.md/TDD-LEDGER.md for ordinary bare-namespace help behavior plus the narrow
@@ -155,8 +161,11 @@ repeated/race, help/manual/website parity, and full repository gates required by
 /gsd verify-work
 /gsd-code-review <ISSUE>
 
-Open a stacked PR to feat/cli-architecture-v2 with Refs #<ISSUE> and Refs #397, route automated
-review, and return the complete worker handoff. Never merge the parent PR to main.
+Open a stacked PR to feat/cli-architecture-v2 with Refs #<ISSUE> and Refs #397. Have the parent
+compile a ready v4 manifest, render every packet through the canonical renderer, obtain fresh-context
+local Codex responses, and run one authenticated synthesis for the exact base/head/tree. Disposition
+every finding; require a clean exact-head synthesis and independent Shepherd `PROCEED` for the same
+identities before integration. Return the complete worker handoff. Never merge the parent PR to main.
 ```
 
 ### Shell launcher for a new Pi TUI session

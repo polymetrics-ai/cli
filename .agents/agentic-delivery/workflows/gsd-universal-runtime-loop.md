@@ -47,10 +47,13 @@ REFACTOR → VERIFY → REVIEW → INTEGRATE lifecycle, reconciles durable state
 command as evidence. Deterministic `scripts/gsd` commands remain preflight and prompt helpers.
 
 For current and forward PM review, use `local-codex-review-loop.md`: verify the exact candidate,
-spawn a fresh-context read-only local Codex reviewer for the exact base/head range, disposition all
-findings, and re-review every changed head. Then run independent `shepherd-validator.md` trajectory
-validation before integration. Claude and GitHub Copilot are not required or fallback PM review
-coverage. Final parent merge remains human-only.
+compile a ready v4 manifest for the exact base/head/tree, render each bounded packet through
+`scripts/pm-review-system.py render`, pass that stdout unchanged to a fresh-context read-only local
+Codex reviewer, and synthesize exactly one authenticated v4 result. Disposition all findings and
+repeat verification, compile, render, packet review, and synthesis for every changed head. Only a
+`clean` exact-head synthesis advances to independent `shepherd-validator.md` trajectory validation
+before integration. Claude and GitHub Copilot are not required or fallback PM review coverage.
+Final parent merge remains human-only.
 
 ## Runtime Adapters
 
@@ -113,9 +116,15 @@ coverage. Final parent merge remains human-only.
 - Prompts: `.pi/prompts/*.md` use `$@`/`$1` placeholders and `argument-hint` frontmatter; invoke with
   `/pm-orchestrate`, `/pm-gsd-loop`, `/pm-review-loop`.
 - Agents: `.pi/agents/*.md` (read-only `pm-scout`/`pm-reviewer`; mutating `pm-gsd-worker`).
-- Subagent mechanism: the `subagent` tool with per-task `cwd`, concurrency 8 total / 4 concurrent.
-  Read-only agents are scoped to `read,grep,find,ls`; the mutating worker adds `bash,edit,write`
-  and never receives `subagent` (no recursive delegation).
+- Subagent mechanism: the `subagent` tool is loaded from the project-local, vendored
+  `.pi/extensions/pi-sub-agent` extension configured by `.pi/settings.json`. It is derived from
+  `pi-sub-agent@0.1.5` (MIT) and includes a local child-session recording modification; the active
+  project route does not install the npm package at runtime. Per-task `cwd` isolation applies, with
+  concurrency 8 total / 4 concurrent.
+- Read-only tool scopes are role-specific: `pm-scout` uses `read,grep,find,ls` only;
+  `pm-reviewer` and `pm-verifier` additionally receive restricted read-only bash (`bash`) for local
+  identity, diff/history, and verification commands. Mutating workers add `edit,write` and never
+  receive `subagent` (no recursive delegation).
 - Required launch: `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve` so read-only agents
   that request `grep`/`find`/`ls` actually receive them (pi's default active set is
   `read,bash,edit,write` only).

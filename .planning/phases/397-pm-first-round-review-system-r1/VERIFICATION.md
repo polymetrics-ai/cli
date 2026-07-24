@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** correction round 2/5 planned from `92ce5e6a1` recurrence synthesis; round-2 RED/GREEN, full verification, fresh exact-head review, Shepherd, no-mistakes, PR, and CI pending
+**Status:** correction round 2/5 combined uncommitted candidate is focused/full GREEN; exact commit, clean input rebuild, prospective R3, and conditional Shepherd remain pending
 
 > Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
@@ -112,9 +112,45 @@
 - [x] Re-run exact-head packets and recurrence synthesis at `92ce5e6a1`: 41/41 responses, 141 findings, zero blockers; Shepherd correctly remained pending.
 - [x] Record 44 packet provider attempts/3 recovered failures plus one context-window rejection as operational evidence, not a correction round.
 - [x] Compare every finding against R1-A–R1-O in `REVIEW-R2-DISPOSITION.md`; repeated groups have root-cause diagnoses rather than local patch plans.
-- [ ] Capture round-2 RED fixtures for authenticated synthesis, complete rendered-prompt bounds, structural graph parsing, phase/mirror validation, lab containment, Shepherd/trace safety, and route parity.
-- [ ] Implement round-2 systemic corrections and pass focused GREEN without weakening limits or touching PR #493-owned paths.
-- [ ] Re-run full verification, fresh exact-head packets, one clean synthesis, and independent Shepherd on the final evidence head.
+- [x] Capture round-2 RED fixtures for authenticated synthesis, complete rendered-prompt bounds, structural graph parsing, phase/mirror validation, lab containment, Shepherd/trace safety, route parity, and evidence-preserving deduplication.
+- [x] Implement round-2 systemic corrections and pass focused GREEN without weakening limits or touching PR #493-owned paths.
+- [x] Re-run complete full verification on the combined candidate tree.
+- [ ] Commit one exact candidate, rebuild inputs from scratch, run fresh prospective R3 packets, and obtain one synthesis.
+- [ ] Run independent Shepherd only if that exact R3 synthesis is clean.
+
+## Round-2 route/documentation/state parity retry
+
+- [x] `scripts/gsd doctor` passed; `scripts/gsd list` exposed 69 commands without `programming-loop`; `scripts/gsd sources plan-phase` and the generated 10,632-byte plan prompt were executed through local tools.
+- [x] Required skills and Pi/runtime/connector authorities were loaded and recorded in `PLAN.md`.
+- [x] RED: `bash scripts/tests/pm-orchestrator-contract.sh` failed on the expected active-route, parent-gate, exact-enum, stale-state, tool-scope, and vendored-provenance assertions before production documentation/state edits.
+- [x] Scope is limited to allowlisted R1-I/R1-K/R1-L/R2-N2/R2-N5 paths; PR #493-owned files, Shepherd workflow/prompt, driver scripts, trace driver, PM compiler/lab implementation/tests, and the GitHub connector ledger remain untouched.
+- [x] Active parent and worker routes state v4 compile → renderer output unchanged → synthesize → clean exact head → independent Shepherd.
+- [x] Parent workflow uses exact disposition enum values and current parent PLAN/VERIFICATION/state agree on the sole PR #493 worker-start blocker.
+- [x] Pi runtime docs match executable tool frontmatter and `.pi/settings.json` truthfully loads the locally modified vendored `.pi/extensions/pi-sub-agent` derived from `pi-sub-agent@0.1.5` without an npm install step.
+- [x] Connector ownership says `bundleregistry/registry.go` is shared hand-maintained bootstrap code and distinguishes `pm_worker` commit/push delivery from explicit `coordinator_fanout` no-commit delivery.
+- [x] Focused PM contract rerun closes all owned assertions. It exits 1 only for the three missing `.pi/prompts/pm-review-loop.md` invocation flags owned by the R1-A route implementation workstream.
+
+## Fresh-runtime combined implementation recovery
+
+- [x] Read the five controlling audit, consolidated, dedup, R3, and experiment-capability documents in the specified order.
+- [x] Preserved the published `355510f5b` head and every uncommitted/untracked change; no reset, checkout, stash, clean, amend, or rebase was used.
+- [x] `git status`, changed-path inventory, recent log, and `git diff --check` inspected before correction.
+- [x] `scripts/gsd doctor` and `scripts/gsd list` pass; registry has 69 commands and no `programming-loop`, so `/pm-orchestrate` remains active.
+- [x] Required review/hardening skills loaded and recorded; CLI help/manual/website parity remains not applicable.
+- [x] Python compile, shell syntax, Shellcheck, JSON parsing, YAML parsing, and `git diff --check` pass.
+- [x] Focused RED isolated: successful dummy SQLite execution reached `KeyError: 'changed_paths'` because trusted lab-owned root effects partitioned paths but omitted the deterministic aggregate.
+- [x] Added the aggregate disclosure without weakening effect partitions, hashing, read/write bounds, policy violations, candidate immutability, or cleanup evidence; the suite advanced.
+- [x] Next focused RED isolated: macOS kill-on-denial blocked Go on the host user's `.CFUserTextEncoding`; diagnostic profiles preserved all denies and proved a UID-derived dummy `__CF_USER_TEXT_ENCODING` avoids the host read.
+- [x] Added only that scrubbed non-inherited locale value; host-home reads remain denied and kill-on-denial remains authoritative.
+- [x] Next focused RED isolated: Go ran with zero policy violations but the isolated fixture requested absent `internal/connectors/engine` instead of its committed `internal/lib` package.
+- [x] Corrected only the fixture package path and retained real Go compile/cache/effect assertions; the suite advanced.
+- [x] Next focused RED isolated: `python -m http.server` attempted host mDNS resolution and was correctly killed before readiness; a minimal numeric loopback HTTP responder passed the unchanged sandbox policy.
+- [x] Replaced only the dummy service fixture; exact localhost/port enforcement and host-resolver/external-network denial remain unchanged.
+- [x] Next focused RED isolated: successful trusted service evidence omitted explicit `local_only` despite validated loopback-TCP/lab-Unix normalization.
+- [x] Added only the authenticated disclosure; endpoint access was not broadened.
+- [x] Clean `bash scripts/tests/pm-review-system.sh` result recorded after all recovery corrections.
+- [x] Remaining focused/adversarial campaigns pass: PM orchestrator contract, Shepherd stall/watchdog/process-tree guard, Shepherd exact-identity/verdict/checkpoint guard, and Pi model routing with transitive PM suites.
+- [x] Full repository verification passes on the final uncommitted candidate tree; exact commit and same-tree identity verification are next before prospective R3.
 
 ## Measurement
 
@@ -130,6 +166,8 @@
 - [x] Baseline/treatment reports impact recall/precision, edge/file coverage, bound hits, cold/traversal time, memory availability, determinism, invalidation, impact size, and packet consequences.
 - [x] Lab measurement reports attempted/denied/completed/inconclusive experiments, cleanup/identity proofs, latency, output/disk/process bounds, and available model token/cost fields.
 - [x] Public fixtures are labeled regression evidence rather than a secret benchmark; prospective #493/#408/later Architecture v2 evidence remains unavailable until observed.
+- [x] R1 and R2 dedup diagnostics are labeled retrospective development because R2 labels were inspected during tuning; no held-out acceptance claim is made.
+- [x] Deterministic `deterministic-partial-keys/v1` is frozen before the next untouched measurement, fresh prospective R3.
 
 ## Focused commands
 
@@ -175,6 +213,17 @@ After both correction GREENs on one committed exact head:
 - [x] `go mod verify` passes.
 - [x] `go mod tidy -diff` passes.
 - [x] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
+
+Fresh-runtime combined candidate rerun:
+
+- [x] Python compile, shell syntax, Shellcheck, JSON/YAML parsing, and `git diff --check` pass.
+- [x] Complete PM review-system, PM orchestrator, Pi routing, Shepherd watchdog/stall, and Shepherd verdict/identity campaigns pass.
+- [x] `gofmt -w cmd internal` leaves no `cmd`/`internal` diff.
+- [x] `go vet ./...` passes.
+- [x] `go test -timeout 20m ./...` passes (`internal/cli` 467.908s).
+- [x] `go build ./cmd/pm`, `go mod verify`, and `go mod tidy -diff` pass.
+- [x] `make verify` passes (`internal/cli` 467.030s), with zero lint findings, 547 connector definitions, focused PM/Shepherd regressions, and safe sample reverse ETL order.
+- [ ] Reconfirm the committed head/tree/status and rebuild review graph/manifest/packets from scratch without tracked writes.
 
 ## Review and delivery
 

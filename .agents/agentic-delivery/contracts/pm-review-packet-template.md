@@ -7,16 +7,16 @@ trajectory/evidence validator and never edits code.
 
 ## Versioned contracts
 
-- review policy/scope: `polymetrics.ai/pm-review-system/v3` and `polymetrics.ai/pm-review-scope/v1`
-- compile manifest: `polymetrics.ai/pm-review-compile/v3`
-- practical impact graph: `polymetrics.ai/pm-review-impact-graph/v2`
-- packet: `polymetrics.ai/pm-review-packet/v3`
-- packet response: `polymetrics.ai/pm-review-packet-response/v3`
-- hypothesis-lab request/evidence: `polymetrics.ai/pm-review-lab-request/v1` and
-  `polymetrics.ai/pm-review-lab-evidence/v2`
-- synthesis: `polymetrics.ai/pm-review-synthesis/v3`
+- review policy/scope: `polymetrics.ai/pm-review-system/v4` and `polymetrics.ai/pm-review-scope/v1`
+- compile manifest: `polymetrics.ai/pm-review-compile/v4`
+- practical impact graph: `polymetrics.ai/pm-review-impact-graph/v3`
+- packet: `polymetrics.ai/pm-review-packet/v4`
+- packet response: `polymetrics.ai/pm-review-packet-response/v4`
+- hypothesis-lab request/evidence: `polymetrics.ai/pm-review-lab-request/v2` and
+  `polymetrics.ai/pm-review-lab-evidence/v3`
+- synthesis: `polymetrics.ai/pm-review-synthesis/v4`
 
-Incompatible v2 packet responses do not upgrade implicitly. Synthesis returns an explicit migration
+Incompatible v3 and earlier compile/config/packet/response contracts do not upgrade implicitly. Synthesis returns an explicit migration
 blocker. Any exact base/head/tree change invalidates the manifest, packet responses, lab evidence,
 synthesis, and Shepherd evidence.
 
@@ -24,51 +24,50 @@ synthesis, and Shepherd evidence.
 
 ```json
 {
-  "schema_version": "polymetrics.ai/pm-review-packet/v3",
+  "schema_version": "polymetrics.ai/pm-review-packet/v4",
   "packet_id": "impact_graph-01",
   "role": "impact_graph",
   "exact_base_sha": "<40 hex>",
   "exact_head_sha": "<40 hex>",
   "exact_head_tree": "<40 hex>",
   "changed_files": [],
+  "changed_file_slices": [],
   "closure_files": [],
   "authority_files": [],
+  "context_file_slices": [],
   "impact_files": [],
   "impact_edge_ids": [],
   "impact_edges": [],
   "impact_file_slices": [],
   "edge_context_files": [],
+  "edge_context_slices": [],
   "invariants": [],
   "context": {
     "target_tokens": 30000,
-    "estimated_tokens": 0,
+    "input_token_upper_bound": 0,
+    "response_reserve_tokens": 8000,
+    "context_window_tokens": 100000,
+    "total_context_upper_bound": 0,
+    "rendered_prompt_bytes": 0,
+    "slice_payload_bytes": 0,
+    "slice_separator_bytes": 0,
+    "bytes_per_token_upper_bound": 1,
+    "estimation": "complete_rendered_prompt_one_token_per_byte",
     "overflow": false,
     "truncated": false
-  },
-  "required_response_fields": [
-    "reviewed_files",
-    "closure_files",
-    "authority_files",
-    "impact_files",
-    "impact_edge_ids",
-    "impact_file_slices",
-    "edge_context_files",
-    "invariants",
-    "review_behaviors",
-    "experiments",
-    "no_experiment_reason",
-    "unreviewed_files",
-    "findings",
-    "residual_risk",
-    "context",
-    "wall_clock_ms"
-  ]
+  }
 }
 ```
 
+Compilation reads policy, per-run scope, closure, authority state, and file context only from detached
+exact-commit snapshots. Reviewers receive only prompts emitted by
+`scripts/pm-review-system.py render --manifest <manifest> --packet-id <id>`; rendering authenticates
+the clean candidate and exact blob/slice bindings, then emits the contract, compact packet envelope,
+and canonical-order exact slice payloads. Hand-built or augmented packet prompts are prohibited. The manifest binds exact config/scope hashes and independently reconstructible
+canonical hashes for coverage, packets, and complete semantics; synthesis recompiles and compares it.
 Impact context is discovered completely under the configured typed relation policy before packets
-are partitioned. Large impact blobs are assigned as exact-head line slices with byte counts and hashes;
-edge packets carry every endpoint plus bounded provenance excerpts. Every impact edge has stable id, source, target, relation, base direction, parser,
+are partitioned. Changed/context/impact blobs are assigned exact revision/blob-bound byte-and-line
+slices; edge packets carry every endpoint plus exact bounded provenance slices. Every impact edge has stable id, source, target, relation, base direction, parser,
 provenance reason/line, certainty (`active`, `inactive`, or `unknown`), traversal directions, and
 minimum depth. Graph/index/traversal/packet bounds block; packet limits never silently trim impact.
 This is practical deterministic file/package context, not symbol-level call/data-flow coverage.
@@ -99,7 +98,7 @@ the whole lab.
 
 ```json
 {
-  "schema_version": "polymetrics.ai/pm-review-lab-request/v1",
+  "schema_version": "polymetrics.ai/pm-review-lab-request/v2",
   "hypothesis_id": "H1",
   "claim": "the candidate accepts an unknown current-schema gate kind",
   "alternative": "the behavior is legacy-only and cannot occur for current schema",
@@ -134,19 +133,22 @@ private evidence root. Do not commit it after exact-head review.
 
 ```json
 {
-  "schema_version": "polymetrics.ai/pm-review-packet-response/v3",
+  "schema_version": "polymetrics.ai/pm-review-packet-response/v4",
   "packet_id": "impact_graph-01",
   "exact_base_sha": "<same exact base>",
   "exact_head_sha": "<same exact head>",
   "exact_head_tree": "<same exact tree>",
   "status": "clean",
   "reviewed_files": [],
+  "changed_file_slices": [],
   "closure_files": [],
   "authority_files": [],
+  "context_file_slices": [],
   "impact_files": [],
   "impact_edge_ids": [],
   "impact_file_slices": [],
   "edge_context_files": [],
+  "edge_context_slices": [],
   "invariants": [
     {"id": "impact_complete", "status": "pass", "evidence_paths": []}
   ],
@@ -156,12 +158,17 @@ private evidence root. Do not commit it after exact-head review.
     "directions_traced": ["upstream", "downstream", "lateral", "temporal"],
     "history_inspected": {"status": "inspected", "reason": "compatibility behavior changed"},
     "sibling_paths_compared": {"status": "not_needed", "reason": "no sibling path exists"},
-    "hypotheses": ["H1"],
+    "hypotheses": [{
+      "id": "H1",
+      "claim": "the exact assigned coverage is complete",
+      "strongest_alternative": "an assigned slice or edge is omitted",
+      "falsifier": "any response assignment differs field-for-field",
+      "evidence_paths": ["scripts/tests/pm-review-system.sh"]
+    }],
     "disconfirming_evidence": "the strongest legacy-only alternative was tested"
   },
   "experiments": [
     {
-      "status": "evidence",
       "hypothesis_id": "H1",
       "claim": "...",
       "alternative": "...",
@@ -169,7 +176,13 @@ private evidence root. Do not commit it after exact-head review.
       "temporary_change": "...",
       "command": ["python3", "scripts/<targeted-test>.py"],
       "expected_discriminator": {"exit_code": 1},
-      "observed": {"exit_code": 1, "limit_hit": null},
+      "observed": {
+        "exit_code": 1,
+        "limit_hit": null,
+        "process_residue_detected": false,
+        "processes_remaining": 0,
+        "sandbox_denial_observed": false
+      },
       "supports": "claim",
       "candidate_unchanged": true,
       "lab_cleanup_verified": true,
@@ -191,7 +204,10 @@ private evidence root. Do not commit it after exact-head review.
 }
 ```
 
-`status` is exactly `clean`, `findings`, or `blocked`. Finding count is unlimited. Every finding
+Every hypothesis is an exact object with `id`, `claim`, `strongest_alternative`, `falsifier`, and
+non-empty `evidence_paths`; identifier-only strings are incompatible. Every performed response
+experiment matches its hashed v3 lab artifact field-for-field for hypothesis, claim, alternative,
+edges, temporary change, argv, expected discriminator, and observation. `status` is exactly `clean`, `findings`, or `blocked`. Finding count is unlimited. Every finding
 uses severity, category, path/line evidence, impact, and smallest safe correction. Missing token,
 cost, or latency data is `null`, never invented.
 
