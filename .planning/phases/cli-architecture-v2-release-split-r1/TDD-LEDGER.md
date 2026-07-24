@@ -23,12 +23,11 @@ Observed reconstruction red evidence:
 - Golden regeneration changed only the two affected cases (`connectors_inspect_github_json` and the renamed `dynamic_connector_bare_json`).
 - `go test ./internal/cli -run 'Test(Cobra|Golden|Config)' -count=1` passed after adaptation.
 
-Pending:
-
-- Typed config precedence, invocation isolation, explicit-env behavior, and config consumers pass all focused tests.
-- Reverse smoke structurally enforces plan -> preview -> approval -> execute.
-- All 17 unchanged CLI transcript cases match latest-main byte-for-byte.
-- Full local verification passes.
+- Typed config precedence, invocation isolation, explicit-env behavior, and config consumers passed focused and full tests.
+- Reverse smoke passed with plan -> preview -> approval -> execute against temporary local sample/warehouse/outbox state.
+- All 17 unchanged CLI transcript cases matched latest-main exit code, stdout bytes, and stderr bytes.
+- Focused race tests, vet, full tests, build, module checks, lint, connector validation, and `make verify` passed.
+- A fresh vulnerability scan under the repository/CI Go 1.25.12 toolchain found no vulnerabilities. The workstation's unrelated Go 1.26.4 standard library reports GO-2026-5856 and must be upgraded to 1.26.5 for ambient-toolchain scans.
 
 ## Refactor / hardening
 
