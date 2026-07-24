@@ -47,12 +47,16 @@ Red audit of the tracked release path before edits:
 - Workflow-level permissions are write-capable rather than read-only by default.
 - No repository script validates exact archive names, checksum coverage, or archive contents.
 
-Green target:
+Green result:
 
-- retain GoReleaser and current tag/ldflags/archive naming;
-- validate the full configured matrix on pull requests without uploading;
-- package and upload only for an actual GitHub release/prerelease created by release-please or received through `release.published`;
-- default to read-only permissions, scope write permissions to release creation/upload jobs, validate exact names/checksums/contents before upload, and exercise every matrix entry locally.
+- retained GoReleaser and current tag/version/archive naming; no release framework or package dependency was added;
+- pull requests run a snapshot package check for all six existing targets without release upload permissions;
+- release assets are built without publishing, validated, then uploaded only after a non-draft GitHub release exists from release-please or a `release.published` event (including prereleases);
+- workflow permissions default to `contents: read`; release-please and release-asset jobs receive only their required write scopes;
+- added `scripts/verify-release-assets.sh` to require one archive for each target, exact archive contents, exact checksum-manifest coverage, and valid SHA-256 checksums;
+- changed GoReleaser metadata/binary timestamps and version build date to commit time. Two exact-head snapshot builds produced identical checksums;
+- GoReleaser v2.17.0 cross-built darwin/linux/windows on amd64/arm64. `file` identified the expected Mach-O, static ELF, and PE architectures, and native `pm version --json` reported the snapshot version, exact commit, and commit date;
+- focused negative tests rejected a missing target and a tampered checksum.
 
 ## Review and correction rounds
 

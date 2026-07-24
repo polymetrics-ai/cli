@@ -9,5 +9,5 @@
 - Exact base: `873cd7b251f70c4a35a607a0d4e86051ea0fbd15`.
 - Authorized source squashes: `379cb501`, `8900db14`, `7683087d`, `cc2a90e9`, `20475ddf` in that order.
 - Execution decision: `local_critical_path`; this is one dependency-ordered reconstruction in the already isolated assigned worktree, with no disjoint mutating slice to delegate.
-- Downstream artifact: draft PR #499 (`https://github.com/polymetrics-ai/cli/pull/499`) plus authorized release-asset audit on the same branch.
-- Verification result: Cobra/Viper candidate locally green; release-asset workflow/package validation in progress; PM review, no-mistakes, remote CI/Dependency Review/Snyk remain pending.
+- Downstream artifact: draft PR #499 (`https://github.com/polymetrics-ai/cli/pull/499`) includes the green Cobra/Viper candidate and checksummed cross-platform release automation.
+- Verification result: Cobra/Viper and release-asset campaigns locally green, including deterministic six-target GoReleaser snapshots; PM review, no-mistakes, remote CI/Dependency Review/Snyk remain pending.

@@ -52,15 +52,25 @@ The workstation's newer ambient Go 1.26.4 separately reports standard-library GO
 
 ## Release asset automation
 
-- [ ] Existing release-please/tag/version injection remains authoritative.
-- [ ] PRs build/package the full GoReleaser target matrix without upload credentials or publication.
-- [ ] Actual GitHub release and prerelease publication can upload assets; no untrusted PR path can upload.
-- [ ] Workflow permissions are read-only by default and write permissions are job-scoped.
-- [ ] macOS and Linux amd64/arm64 all cross-build with `CGO_ENABLED=0`; retained Windows targets also pass.
-- [ ] Archive names are unambiguous and archive contents include `pm`/`pm.exe`, LICENSE, NOTICE, and README.
-- [ ] `checksums.txt` covers exactly the expected assets and verifies successfully.
-- [ ] Workflow YAML parses and repository workflow conventions pass.
-- [ ] Focused release tests, module gates, and `make verify` pass after release support edits.
+- [x] Existing release-please/tag/version injection remains authoritative.
+- [x] PRs build/package the full GoReleaser target matrix without upload credentials or publication.
+- [x] Actual GitHub release and prerelease publication can upload assets; no untrusted PR path can upload.
+- [x] Workflow permissions are read-only by default and write permissions are job-scoped.
+- [x] macOS and Linux amd64/arm64 all cross-build with `CGO_ENABLED=0`; retained Windows targets also pass.
+- [x] Archive names are unambiguous and archive contents include `pm`/`pm.exe`, LICENSE, NOTICE, and README.
+- [x] `checksums.txt` covers exactly the expected assets and verifies successfully.
+- [x] Workflow YAML parses and the changed workflow passes actionlint 1.7.12.
+- [x] Focused release tests, module gates, and `make verify` pass after release support edits.
+
+Evidence:
+
+- GoReleaser 2.17.0 `check` passed and two exact-head snapshot runs generated the same six archive checksums.
+- Targets: `darwin/{amd64,arm64}`, `linux/{amd64,arm64}`, and retained `windows/{amd64,arm64}`.
+- `file` confirmed Mach-O x86_64/arm64, statically linked ELF x86-64/AArch64, and PE x86-64/AArch64 binaries.
+- Native `pm version --json` reported snapshot `0.0.1-next`, exact build commit, and commit-derived date. This snapshot value is test output, not an RC-version decision.
+- The validator rejected a deliberately missing archive and a deliberately tampered checksum, then passed after restoration.
+- Targeted `actionlint .github/workflows/release.yml` passed. A full-tree actionlint also surfaced pre-existing out-of-scope findings in `verify.yml` shell quoting and custom website runner labels; this change did not alter those workflows.
+- JSON release-please files and release/GoReleaser YAML parsed; focused version/golden/Cobra/config tests, `go mod verify`, `go mod tidy -diff`, and `make verify` passed.
 
 ## GitHub/release gates
 
