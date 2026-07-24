@@ -1,0 +1,93 @@
+{
+  "phase": "cli-architecture-v2-release-split-r1",
+  "status": "paused_review_system",
+  "baseSHA": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "branch": "fm/cli-architecture-v2-release-split-r1",
+  "localVerificationPassed": true,
+  "verificationPassed": false,
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoop": "manual_fallback_unavailable",
+    "adapterError": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-lint",
+    "golang-documentation",
+    "golang-design-patterns",
+    "golang-spf13-cobra",
+    "golang-spf13-viper",
+    "golang-dependency-management",
+    "golang-continuous-integration"
+  ],
+  "sourceCommits": [
+    "379cb5015335ff7c9b20e5bb780952ead22c53b2",
+    "8900db141cc289b65491365d2ebcab490af57789",
+    "7683087d41646c92b2bd7f677f47cf2bc9d88462",
+    "cc2a90e918b2814a64516d6bad6d14462b3ac079",
+    "20475ddf8ae3486282ead4fc7d2129f2bd1129b3"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The authorized changes form one dependency-ordered reconstruction in the isolated assigned worktree; there is no disjoint mutating slice to delegate."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Captured config-package/config-help red evidence and a 17-case current-main byte baseline before applying authorized production patches."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Reconstructed the five dependency-ordered source squashes and resolved only the audited current-main Cobra/Gong drift seams; focused Cobra/golden/config tests passed."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran focused and full tests, race checks, byte compatibility, module checks, vet, build, lint, docs/golden generation, vulnerability scanning, and make verify; local gates passed."
+    },
+    {
+      "cycle": "review-wait",
+      "decision": "not_spawned_review_blocked",
+      "reason": "The canonical PM first-round review system is not integrated or clean: its remote branch is at 355510f5b0827f800dcbaa232d5804f8fcd3b407 with round-two red evidence and has no PR. Ship instructions forbid substituting manual, Claude, or Copilot review."
+    },
+    {
+      "cycle": "release-plan",
+      "decision": "local_critical_path",
+      "reason": "Captain authorized draft PR #499 and a bounded audit of existing release-please/GoReleaser support; release workflow and package-validation script are one shared integration surface."
+    },
+    {
+      "cycle": "release-verify",
+      "decision": "local_critical_path",
+      "reason": "GoReleaser cross-built and validated six deterministic checksummed assets twice; targeted actionlint, negative validator tests, focused CLI tests, module gates, and make verify passed. No asset was uploaded."
+    },
+    {
+      "cycle": "return-to-review-wait",
+      "decision": "not_spawned_review_blocked",
+      "reason": "Release support is locally green and draft PR #499 is open; canonical PM synthesis and Shepherd remain unavailable, so no-mistakes and readiness promotion remain blocked by instruction."
+    }
+  ],
+  "reviewSystemWait": {
+    "branch": "chore/pm-first-round-review-system-r1",
+    "remoteHead": "355510f5b0827f800dcbaa232d5804f8fcd3b407",
+    "remoteHeadMessage": "docs(orchestration): record round two red evidence",
+    "pullRequest": null,
+    "requiredNextGate": "exact-version bounded Codex packets, one clean PM synthesis, then independent Shepherd"
+  },
+  "humanGates": [
+    "merge to main",
+    "parent branch reconciliation",
+    "prerelease publication before all gates",
+    "new dependencies beyond approved Cobra/Viper set",
+    "credentialed checks",
+    "external reverse ETL execution"
+  ]
+}

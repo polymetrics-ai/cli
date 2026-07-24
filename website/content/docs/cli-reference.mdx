@@ -19,6 +19,67 @@ This page is the public website contract for the `pm` CLI. When a command is add
   `--json` is the agent path for operational commands. A few developer-facing commands, such as `pm help`, are intentionally plain text because they return human manuals.
 </Callout>
 
+## Configuration
+
+`pm` resolves typed invocation configuration once per run from a bounded allowlist. Precedence is:
+
+1. Bound global flags (`--root`, `--json`).
+2. Explicit `POLYMETRICS_*` environment variables.
+3. Documented `PM_*` legacy aliases when the primary variable is absent.
+4. `<project-root>/.polymetrics/config.yaml`.
+5. Built-in defaults.
+
+Missing config files are allowed. Malformed YAML is a validation error (exit `3`). The `root` key in a file does not relocate config discovery for the same invocation; use `--root`, `POLYMETRICS_ROOT`, or `PM_ROOT` before loading another project. For malformed files, `--json`, `POLYMETRICS_JSON=true`, or `PM_JSON=true` selects the same single JSON `Error` envelope on stdout used by other validation errors.
+
+Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are consumed by migrated runtime, worker, agent image, schedule, and RLM non-secret call sites. Worker/RLM agent Temporal execution remains opt-in: `runtime.temporal_addr` must be explicitly set by env or config file for those paths, while runtime doctor keeps local Compose defaults.
+
+| Config key | Default | Primary env | Legacy alias |
+|---|---|---|---|
+| `root` | invocation root (`.`) | `POLYMETRICS_ROOT` | `PM_ROOT` |
+| `json` | `false` | `POLYMETRICS_JSON` | `PM_JSON` |
+| `version` | `1` | `POLYMETRICS_VERSION` | `PM_VERSION` |
+| `project` | `polymetrics-local` | `POLYMETRICS_PROJECT` | `PM_PROJECT` |
+| `warehouse.connector` | `warehouse` | `POLYMETRICS_WAREHOUSE_CONNECTOR` | `PM_WAREHOUSE_CONNECTOR` |
+| `warehouse.path` | `.polymetrics/warehouse` | `POLYMETRICS_WAREHOUSE_PATH` | `PM_WAREHOUSE_PATH` |
+| `runtime.postgres_url` | local Compose PostgreSQL DSN | `POLYMETRICS_POSTGRES_URL` | `PM_POSTGRES_URL` |
+| `runtime.dragonfly_addr` | `localhost:6379` | `POLYMETRICS_DRAGONFLY_ADDR` | `PM_DRAGONFLY_ADDR` |
+| `runtime.temporal_addr` | `localhost:7233` | `POLYMETRICS_TEMPORAL_ADDR` | `PM_TEMPORAL_ADDR` |
+| `rlm.image` | `ghcr.io/polymetrics/rlm-agent:latest` | `POLYMETRICS_RLM_IMAGE` | `PM_RLM_IMAGE` |
+| `rlm.podman_bin` | `podman` | `POLYMETRICS_PODMAN_BIN` | `PM_PODMAN_BIN` |
+| `rlm.fake_runner` | `false` | `POLYMETRICS_RLM_FAKE_RUNNER` | `PM_RLM_FAKE_RUNNER` |
+| `rlm.embedded_worker` | `false` | `POLYMETRICS_RLM_EMBEDDED_WORKER` | `PM_RLM_EMBEDDED_WORKER` |
+| `rlm.llm.provider` | `openrouter` | `POLYMETRICS_LLM_PROVIDER` | `PM_LLM_PROVIDER` |
+| `rlm.llm.base_url` | `https://openrouter.ai/api/v1` | `POLYMETRICS_LLM_BASE_URL` | `PM_LLM_BASE_URL` |
+| `rlm.llm.model` | empty | `POLYMETRICS_LLM_MODEL` | `PM_LLM_MODEL` |
+| `schedule.crontab_file` | empty | `POLYMETRICS_CRONTAB_FILE` | `PM_CRONTAB_FILE` |
+
+```yaml
+version: 1
+project: polymetrics-local
+warehouse:
+  connector: warehouse
+  path: .polymetrics/warehouse
+runtime:
+  postgres_url: postgres://localhost:15433/polymetrics?sslmode=disable
+  dragonfly_addr: localhost:6379
+  temporal_addr: localhost:7233
+rlm:
+  image: ghcr.io/polymetrics/rlm-agent:latest
+  podman_bin: podman
+  fake_runner: false
+  embedded_worker: false
+  llm:
+    provider: openrouter
+    base_url: https://openrouter.ai/api/v1
+    model: ""
+schedule:
+  crontab_file: ""
+```
+
+<Callout type="warning">
+  Configuration is not a secret store. User-named credential variables passed to `--from-env`, connector certification credsfile entries, `PM_LLM_API_KEY`, and provider-specific API key variables stay environment-only. Do not put secret values in `config.yaml`, docs, issues, or chat.
+</Callout>
+
 ## Command map
 
 | Command | Subcommands | Primary docs |
@@ -42,12 +103,13 @@ This page is the public website contract for the `pm` CLI. When a command is add
 | `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
 
-## Connector command metadata
+## Connector command surfaces
 
-The GitHub connector has gh-inspired command metadata for future help rendering and safe command
-execution, but it is not a dispatched `pm github ...` command tree yet. See
-[/docs/github-cli-surface](/docs/github-cli-surface) for the current metadata, safety labels, and
-staged parity roadmap.
+The GitHub connector exposes a dynamic `pm github ...` command tree generated from connector
+metadata. `pm github`, `pm github --help`, and `pm help github` render its manual; declared
+product-safe command paths dispatch through the connector command runner. See
+[/docs/github-cli-surface](/docs/github-cli-surface) for the current command metadata, safety labels,
+and staged parity roadmap.
 
 ## Workspace commands
 

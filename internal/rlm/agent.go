@@ -17,9 +17,9 @@ import (
 )
 
 // ErrRemoteUnavailable is returned when the RLM agent backend cannot run because
-// its opt-in dependencies are missing (no Temporal address, Temporal unreachable,
-// or podman absent). Callers should fall back to a deterministic/fixture run.
-var ErrRemoteUnavailable = errors.New("rlm: remote agent backend unavailable (set POLYMETRICS_TEMPORAL_ADDR and install podman, or use --mode deterministic)")
+// its opt-in dependencies are missing (no explicit Temporal address, Temporal
+// unreachable, or podman absent). Callers should fall back to a deterministic/fixture run.
+var ErrRemoteUnavailable = errors.New("rlm: remote agent backend unavailable (set runtime.temporal_addr/POLYMETRICS_TEMPORAL_ADDR and install podman, or use --mode deterministic)")
 
 // AgentRequest is the JSON-safe payload handed to the Temporal worker. It carries
 // only a reference to the staged JobDir and metadata — never warehouse row data,

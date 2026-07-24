@@ -1,0 +1,67 @@
+# TDD ledger — CLI Architecture v2 Cobra/Viper release split
+
+## Red / baseline
+
+Captured before production edits against product tree `873cd7b251f70c4a35a607a0d4e86051ea0fbd15` (the only branch delta was the committed phase plan):
+
+- `test -f internal/config/config.go` exited 1: exact latest-main has no typed config package.
+- `pm --root <empty-project> help config` exited 1 with zero stdout bytes and `error: help topic "config" not found` on stderr.
+- Built the exact latest-main product tree and captured 17 credential-free CLI cases under an empty `HOME`, `CI=1`, and `TERM=dumb`. The manifest records exit code and byte/hash evidence for root/help/JSON help, bare namespaces, connector inspect, agent plan, version, invalid command/help, Gong dynamic JSON help, and worker status.
+- Source PR heads retain the original fail-first history for #399/#400/#401/#402/#453; this reconstruction preserves that source-to-candidate provenance rather than inventing new historical red commits.
+
+Observed reconstruction red evidence:
+
+- Applying `8900db14` produced the expected single `internal/cli/cli.go` conflict; resolution selected the Cobra entrypoint only and retained current-main Gong code outside that hunk.
+- The first focused build failed at `internal/cli/cobra_router.go:175`: `runHelp` needed the current `jsonOut` argument.
+- After that API adaptation, focused tests failed only at the audited latest-main drift seams: the old test expected GitHub dynamic help to fail, `connectors_inspect_github_json` had a stale golden, and bare `github --json` now correctly rendered dynamic help instead of exit 2.
+
+## Green
+
+- All five authorized source patches were reconstructed on latest `main` in the required order.
+- Cobra now calls the current `runHelp(..., jsonOut)` signature.
+- The obsolete GitHub no-dynamic-surface expectation was replaced with a positive dynamic-help assertion.
+- Golden regeneration changed only the two affected cases (`connectors_inspect_github_json` and the renamed `dynamic_connector_bare_json`).
+- `go test ./internal/cli -run 'Test(Cobra|Golden|Config)' -count=1` passed after adaptation.
+
+- Typed config precedence, invocation isolation, explicit-env behavior, and config consumers passed focused and full tests.
+- Reverse smoke passed with plan -> preview -> approval -> execute against temporary local sample/warehouse/outbox state.
+- All 17 unchanged CLI transcript cases matched latest-main exit code, stdout bytes, and stderr bytes.
+- Focused race tests, vet, full tests, build, module checks, lint, connector validation, and `make verify` passed.
+- A fresh vulnerability scan under the repository/CI Go 1.25.12 toolchain found no vulnerabilities. The workstation's unrelated Go 1.26.4 standard library reports GO-2026-5856 and must be upgraded to 1.26.5 for ambient-toolchain scans.
+
+## Refactor / hardening
+
+Pending:
+
+- Regenerate only affected docs/golden outputs.
+- Confirm no TUI/event/logging/telemetry packages or dependencies enter the diff.
+- Confirm no global Viper, `AutomaticEnv`, watcher, credential config, or hidden worker enablement.
+- Add truthful ADR/release-split records without importing historical bootstrap state.
+
+## Release automation red / green
+
+Red audit of the tracked release path before edits:
+
+- `.goreleaser.yaml` already defines `pm` archives for linux/darwin/windows on amd64/arm64, ldflags version injection, and `checksums.txt`.
+- `.github/workflows/release.yml` only runs on `main` push/manual dispatch; it has no pull-request snapshot/package gate and no `release: published` path for an independently published prerelease.
+- Workflow-level permissions are write-capable rather than read-only by default.
+- No repository script validates exact archive names, checksum coverage, or archive contents.
+
+Green result:
+
+- retained GoReleaser and current tag/version/archive naming; no release framework or package dependency was added;
+- pull requests run a snapshot package check for all six existing targets without release upload permissions;
+- release assets are built without publishing, validated, then uploaded only after a non-draft GitHub release exists from release-please or a `release.published` event (including prereleases);
+- workflow permissions default to `contents: read`; release-please and release-asset jobs receive only their required write scopes;
+- added `scripts/verify-release-assets.sh` to require one archive for each target, exact archive contents, exact checksum-manifest coverage, and valid SHA-256 checksums;
+- changed GoReleaser metadata/binary timestamps and version build date to commit time. Two exact-head snapshot builds produced identical checksums;
+- GoReleaser v2.17.0 cross-built darwin/linux/windows on amd64/arm64. `file` identified the expected Mach-O, static ELF, and PE architectures, and native `pm version --json` reported the snapshot version, exact commit, and commit date;
+- focused negative tests rejected a missing target and a tampered checksum.
+
+## Review and correction rounds
+
+Pending exact-version PM Codex packets, one PM synthesis, and independent Shepherd only after clean synthesis. Manual/Claude/Copilot substitution is explicitly disallowed for this candidate.
+
+## Skills
+
+`gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-documentation`, `golang-design-patterns`, `golang-spf13-cobra`, `golang-spf13-viper`, `golang-dependency-management`, `golang-continuous-integration`.

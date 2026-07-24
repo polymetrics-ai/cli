@@ -12,6 +12,7 @@ import (
 
 	"polymetrics.ai/internal/agentmode"
 	"polymetrics.ai/internal/app"
+	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/commandrunner"
@@ -27,81 +28,40 @@ const maxConnectorCommandLimit = 10000
 func Run(args []string, stdout, stderr io.Writer) int {
 	ctx := context.Background()
 	root, jsonOut, cleanArgs := parseGlobal(args)
-	if len(cleanArgs) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	cmd := cleanArgs[0]
-	rest := cleanArgs[1:]
-	if cmd == "--help" || cmd == "-h" || (cmd == "help" && len(rest) == 0) || cmd == "man" && len(rest) == 0 {
-		if err := writeRootManual(stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	if len(rest) > 0 && (rest[0] == "--help" || rest[0] == "-h" || rest[0] == "help") {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	if len(rest) == 0 && isManualCommand(cmd) {
-		if err := writeManual(cmd, stdout, jsonOut); err != nil {
-			return writeError(stdout, stderr, err, jsonOut)
-		}
-		return 0
-	}
-	var err error
-	switch cmd {
-	case "init":
-		err = runInit(root, stdout, jsonOut)
-	case "help", "man":
-		err = runHelp(rest, stdout, jsonOut)
-	case "connectors":
-		err = runConnectors(ctx, root, rest, stdout, jsonOut)
-	case "credentials":
-		err = withApp(root, func(a *app.App) error { return runCredentials(ctx, a, rest, stdout, jsonOut) })
-	case "connections":
-		err = withApp(root, func(a *app.App) error { return runConnections(ctx, a, rest, stdout, jsonOut) })
-	case "catalog":
-		err = withApp(root, func(a *app.App) error { return runCatalog(ctx, a, rest, stdout, jsonOut) })
-	case "etl":
-		err = withApp(root, func(a *app.App) error { return runETL(ctx, a, rest, stdout, jsonOut) })
-	case "query":
-		err = withApp(root, func(a *app.App) error { return runQuery(ctx, a, rest, stdout, jsonOut) })
-	case "reverse":
-		err = withApp(root, func(a *app.App) error { return runReverse(ctx, a, rest, stdout, jsonOut) })
-	case "agent":
-		err = runAgent(ctx, root, rest, stdout, jsonOut)
-	case "runtime":
-		err = runRuntime(ctx, rest, stdout, jsonOut)
-	case "flow":
-		err = withApp(root, func(a *app.App) error { return runFlow(ctx, a, rest, stdout, jsonOut) })
-	case "extract":
-		err = withApp(root, func(a *app.App) error { return runExtract(ctx, a, root, rest, stdout, jsonOut) })
-	case "perf":
-		err = runPerf(ctx, rest, stdout, jsonOut)
-	case "docs":
-		err = runDocs(rest, stdout)
-	case "skills":
-		err = runSkills(rest, stdout, jsonOut)
-	case "version":
-		err = runVersion(rest, stdout, jsonOut)
-	case "rlm":
-		err = runRLM(ctx, root, rest, stdout, jsonOut)
-	case "schedule":
-		err = runSchedule(ctx, root, rest, stdout, jsonOut)
-	case "worker":
-		err = runWorker(ctx, rest, stdout, jsonOut)
-	default:
-		err = runMaybeConnectorCommand(ctx, root, cmd, rest, stdout, jsonOut)
-	}
+	opts := config.Options{Root: root, Flags: globalConfigFlags(args, root, jsonOut)}
+	bootstrap, err := config.ResolveBootstrap(opts)
 	if err != nil {
-		return writeError(stdout, stderr, err, jsonOut)
+		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	cfg, err := config.Load(opts)
+	if err != nil {
+		return writeError(stdout, stderr, validationErrorf("%v", err), bootstrap.JSON)
+	}
+	cmd := newRootCmd(ctx, cfg, stdout, stderr)
+	if err := executeRootCmd(cmd, cleanArgs); err != nil {
+		return writeError(stdout, stderr, mapCobraErr(err), cfg.JSON)
 	}
 	return 0
+}
+
+func globalConfigFlags(args []string, root string, jsonOut bool) map[string]config.FlagValue {
+	flags := map[string]config.FlagValue{}
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
+		switch {
+		case arg == "--json":
+			flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+		case arg == "--root" && i+1 < len(args):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+			i++
+		case strings.HasPrefix(arg, "--root="):
+			flags["root"] = config.StaticFlag{FlagName: "root", Value: root, Type: "string", Changed: true}
+		}
+	}
+	if jsonOut {
+		flags["json"] = config.StaticFlag{FlagName: "json", Value: "true", Type: "bool", Changed: true}
+	}
+	return flags
 }
 
 func writeRootManual(stdout io.Writer, jsonOut bool) error {
@@ -492,7 +452,7 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	return nil
 }
 
-func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool) error {
+func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, jsonOut bool, cfg config.Config) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -572,7 +532,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		runtimeRecorded := false
 		if flags.first("runtime") == "true" {
-			if err := recordRuntimeETL(ctx, run); err != nil {
+			if err := recordRuntimeETL(ctx, run, cfg); err != nil {
 				return err
 			}
 			runtimeRecorded = true
@@ -1172,12 +1132,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 	}
 }
 
-func runAgent(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
+func runAgent(ctx context.Context, cfg config.Config, root string, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
 	if args[0] == "image" {
-		return runAgentImage(ctx, root, args[1:], stdout, jsonOut)
+		return runAgentImage(ctx, cfg, root, args[1:], stdout, jsonOut)
 	}
 	if args[0] != "plan" {
 		return errUsage
@@ -1244,16 +1204,16 @@ func runDocs(args []string, stdout io.Writer) error {
 	}
 }
 
-func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
+func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 || args[0] != "doctor" {
 		return errUsage
 	}
-	cfg := runtimecheck.FromEnv()
-	report := runtimecheck.Doctor(ctx, cfg)
+	runtimeCfg := runtimecheck.FromConfig(cfg)
+	report := runtimecheck.Doctor(ctx, runtimeCfg)
 	if jsonOut {
 		return writeJSON(stdout, envelope{
 			"kind":   "RuntimeDoctor",
-			"config": runtimecheck.RedactedConfig(cfg),
+			"config": runtimecheck.RedactedConfig(runtimeCfg),
 			"report": report,
 		})
 	}
@@ -1268,7 +1228,7 @@ func runRuntime(ctx context.Context, args []string, stdout io.Writer, jsonOut bo
 	return nil
 }
 
-func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool) error {
+func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Writer, jsonOut bool) error {
 	if len(args) == 0 {
 		return errUsage
 	}
@@ -1280,8 +1240,9 @@ func runPerf(ctx context.Context, args []string, stdout io.Writer, jsonOut bool)
 			return err
 		}
 		comparison, err := perf.Compare(ctx, perf.CompareRequest{
-			Iterations: iterations,
-			Runtime:    flags.first("runtime") == "true",
+			Iterations:    iterations,
+			Runtime:       flags.first("runtime") == "true",
+			RuntimeConfig: runtimecheck.FromConfig(cfg),
 		})
 		if err != nil {
 			return err
