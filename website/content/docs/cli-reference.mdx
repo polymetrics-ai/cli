@@ -103,12 +103,13 @@ schedule:
 | `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
 
-## Connector command metadata
+## Connector command surfaces
 
-The GitHub connector has gh-inspired command metadata for future help rendering and safe command
-execution, but it is not a dispatched `pm github ...` command tree yet. See
-[/docs/github-cli-surface](/docs/github-cli-surface) for the current metadata, safety labels, and
-staged parity roadmap.
+The GitHub connector exposes a dynamic `pm github ...` command tree generated from connector
+metadata. `pm github`, `pm github --help`, and `pm help github` render its manual; declared
+product-safe command paths dispatch through the connector command runner. See
+[/docs/github-cli-surface](/docs/github-cli-surface) for the current command metadata, safety labels,
+and staged parity roadmap.
 
 ## Workspace commands
 
