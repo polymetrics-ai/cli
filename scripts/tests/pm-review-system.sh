@@ -647,7 +647,7 @@ git -C "$impact_repo" checkout -q "$impact_branch"
 # Non-head filesystem reads, diverged comparison bases, and operational index limits must block.
 python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
   --config .agents/review-config.json --scope .agents/review-scope.json --base "$impact_base" --head "$impact_base" --allow-non-head \
-  >"$test_tmp/non-head.json"
+  >"$test_tmp/non-head.json" 2>"$test_tmp/non-head.stderr"
 non_head_status=$?
 if [[ $non_head_status -eq 0 ]]; then
   fail "allow-non-head compiled worktree content under a different advertised head"
