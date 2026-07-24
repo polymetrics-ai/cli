@@ -1,6 +1,6 @@
 {
   "phase": "cli-architecture-v2-release-split-r1",
-  "status": "paused_review_system",
+  "status": "release_asset_audit",
   "baseSHA": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
   "branch": "fm/cli-architecture-v2-release-split-r1",
   "localVerificationPassed": true,
@@ -58,6 +58,11 @@
       "cycle": "review-wait",
       "decision": "not_spawned_review_blocked",
       "reason": "The canonical PM first-round review system is not integrated or clean: its remote branch is at 355510f5b0827f800dcbaa232d5804f8fcd3b407 with round-two red evidence and has no PR. Ship instructions forbid substituting manual, Claude, or Copilot review."
+    },
+    {
+      "cycle": "release-plan",
+      "decision": "local_critical_path",
+      "reason": "Captain authorized draft PR #499 and a bounded audit of existing release-please/GoReleaser support; release workflow and package-validation script are one shared integration surface."
     }
   ],
   "reviewSystemWait": {

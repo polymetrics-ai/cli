@@ -52,7 +52,9 @@ No Charm, Bubble Tea, OpenTelemetry, `golang.org/x/term`, or any other dependenc
 4. **Latest-main adaptations:** adapt Cobra help routing to current `runHelp(..., jsonOut)`, remove the obsolete assumption that GitHub lacks a dynamic connector surface, and regenerate only affected golden/docs outputs.
 5. **Governance/docs:** add ADR 0002 and an additive, truthful release-split record. Do not import the historical bootstrap commit or post-foundation architecture state.
 6. **Verification:** run focused tests, exact CLI transcript comparison, docs/golden freshness, module gates, formatting/lint/vet/full tests/build/race where practical, `make verify`, security/dependency checks, and allowlist checks.
-7. **Review/delivery:** use the canonical PM exact-version Codex review when the PM review system is clean, then independent Shepherd after a clean synthesis. Run `/no-mistakes`/`no-mistakes axi` through a green open PR. Do not merge.
+7. **Draft PR timing:** captain authorization dated 2026-07-24 permits pushing the green candidate and opening a disclosed draft PR before PM review. The PR must remain draft and list PM synthesis, Shepherd, no-mistakes, CI, Dependency Review, and Snyk as pending.
+8. **Release-asset audit/support:** inspect release-please, GoReleaser, version ldflags, targets, names, checksums, and permissions. Preserve existing GoReleaser rather than adding a framework. If needed, add PR snapshot/package validation and actual GitHub release/prerelease publication support for darwin/linux amd64/arm64, with least-privilege upload permissions and no PR publication.
+9. **Review/delivery:** use the canonical PM exact-version Codex review when the PM review system is clean, then independent Shepherd after a clean synthesis. Run `/no-mistakes`/`no-mistakes axi` only after those gates. Do not merge or publish a release.
 
 ## Mandatory behavior contracts
 
@@ -90,7 +92,7 @@ Also exclude all TUI/event/logging/telemetry phase artifacts and dependencies, P
 
 - Commit the plan before production edits.
 - Commit each coherent green reconstruction/adaptation slice.
-- Push only through the authorized no-mistakes delivery pipeline after local gates.
+- Captain timing authorization permits additive pushes to the feature branch and draft PR #499 before PM/no-mistakes; it does not permit merge or release publication.
 - Never push `main`, rewrite published history, alter `feat/cli-architecture-v2`, merge PR #438, or publish a release before all authorized gates.
 
 ## Human gates and external waits
