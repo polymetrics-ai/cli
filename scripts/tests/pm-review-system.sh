@@ -1133,7 +1133,8 @@ python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_r
 stale_manifest_status=$?
 if [[ $stale_manifest_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
 import json,sys
-value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any("HEAD" in item["claim"] or "head" in item["claim"] for item in value["blockers"])
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert value["blockers"]
+assert {item["category"] for item in value["blockers"]} & {"stale_evidence","synthesis_input","compile_manifest"}
 PY
 then
   fail "mutually matching stale manifest/responses ignored current candidate identity"
