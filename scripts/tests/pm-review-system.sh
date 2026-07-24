@@ -348,6 +348,10 @@ EOF
 cat >"$impact_repo/.pi/prompts/canonical.md" <<'EOF'
 # Canonical root
 Requires `.agents/mixed/a.md`.
+Requires `AGENTS.md`.
+EOF
+cat >"$impact_repo/AGENTS.md" <<'EOF'
+# Governing fixture instructions
 EOF
 mkdir -p "$impact_repo/.agents/mixed"
 cat >"$impact_repo/.agents/mixed/a.md" <<'EOF'
@@ -488,6 +492,7 @@ cat >"$impact_repo/.agents/review-config.json" <<'JSON'
   "schema_version":"polymetrics.ai/pm-review-system/v2",
   "owner":"parent_orchestrator",
   "canonical_roots":[".pi/prompts/canonical.md"],
+  "explicit_reference_files":["AGENTS.md"],
   "reference_prefixes":[".agents/",".pi/",".planning/","scripts/","cmd/","internal/"],
   "ignored_reference_prefixes":[],
   "prohibited_active_targets":[],
@@ -563,7 +568,7 @@ assert value["schema_version"] == "polymetrics.ai/pm-review-compile/v2"
 graph=value["impact_graph"]
 files=set(value["coverage_manifest"]["impact_files"])
 required={
- ".agents/templates/leaf.md", ".pi/prompts/upstream.md", "scripts/tool.py", "scripts/helper.py",
+ "AGENTS.md", ".agents/templates/leaf.md", ".pi/prompts/upstream.md", "scripts/tool.py", "scripts/helper.py",
  ".agents/mixed/a.md", ".agents/mixed/b.md", "scripts/mixed.py",
  ".pi/prompts/script-user.md", ".agents/schema/state.yaml", ".pi/prompts/state-writer.md",
  "scripts/state_reader.py", ".planning/state-mirror.json", "scripts/generate.py",
@@ -615,6 +620,99 @@ then
   fail "unsafe Markdown or active missing planning target did not fail closed"
 fi
 git -C "$impact_repo" checkout -q "$impact_branch"
+
+# Non-head filesystem reads, diverged comparison bases, and operational index limits must block.
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$impact_base" --head "$impact_base" --allow-non-head \
+  >"$test_tmp/non-head.json"
+non_head_status=$?
+if [[ $non_head_status -eq 0 ]]; then
+  fail "allow-non-head compiled worktree content under a different advertised head"
+fi
+git -C "$impact_repo" checkout -qb divergent-base "$impact_base"
+printf 'divergent\n' >"$impact_repo/.agents/divergent.md"
+git -C "$impact_repo" add .agents/divergent.md
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm divergent
+divergent_base="$(git -C "$impact_repo" rev-parse HEAD)"
+git -C "$impact_repo" checkout -q "$impact_branch"
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$divergent_base" --head "$impact_head" >"$test_tmp/divergent-base.json"
+divergent_status=$?
+if [[ $divergent_status -eq 0 ]]; then
+  fail "divergent supplied base was silently replaced by merge-base semantics"
+fi
+python3 - "$impact_repo/.agents/review-config.json" "$impact_repo/.agents/index-bound-config.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); value["impact_graph"]["max_index_files"]=1
+open(sys.argv[2],"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/index-bound-config.json --base "$impact_base" --head "$impact_head" >"$test_tmp/index-bound.json"
+index_bound_status=$?
+if [[ $index_bound_status -eq 0 ]] || ! python3 - "$test_tmp/index-bound.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert value["impact_graph"]["universe"]["index_file_count"] <= 1
+PY
+then
+  fail "max_index_files did not prevent broad index materialization"
+fi
+rm -f "$impact_repo/.agents/index-bound-config.json"
+
+# External-module Go indexing must use a scrubbed pre-populated read-only cache without network, and
+# deleted Go seeds must retain base package/test/importer context.
+module_cache="$test_tmp/go-mod-cache"
+mkdir -p "$module_cache/example.test/external@v1.0.0"
+cat >"$module_cache/example.test/external@v1.0.0/go.mod" <<'EOF'
+module example.test/external
+
+go 1.24
+EOF
+cat >"$module_cache/example.test/external@v1.0.0/external.go" <<'EOF'
+package external
+const Name = "external"
+EOF
+chmod -R a-w "$module_cache"
+git -C "$impact_repo" checkout -qb external-go "$impact_head"
+cat >>"$impact_repo/go.mod" <<'EOF'
+
+require example.test/external v1.0.0
+EOF
+python3 - "$impact_repo/internal/lib/lib.go" <<'PY'
+from pathlib import Path
+import sys
+p=Path(sys.argv[1]); text=p.read_text(); p.write_text(text.replace('package lib\n','package lib\nimport "example.test/external"\n').replace('return "v2"','return external.Name'))
+PY
+git -C "$impact_repo" add go.mod internal/lib/lib.go
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm external-go
+external_head="$(git -C "$impact_repo" rev-parse HEAD)"
+GOMODCACHE="$module_cache" python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$impact_head" --head "$external_head" >"$test_tmp/external-go.json"
+external_status=$?
+if [[ $external_status -ne 0 ]] || ! python3 - "$test_tmp/external-go.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["impact_graph"]["go_context"]["status"]=="complete"
+PY
+then
+  fail "offline external-module Go impact indexing did not use the pre-populated cache"
+fi
+git -C "$impact_repo" checkout -q "$impact_branch"
+git -C "$impact_repo" checkout -qb deleted-go "$impact_head"
+git -C "$impact_repo" rm -q internal/lib/lib.go
+git -C "$impact_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm deleted-go
+deleted_head="$(git -C "$impact_repo" rev-parse HEAD)"
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
+  --config .agents/review-config.json --base "$impact_head" --head "$deleted_head" >"$test_tmp/deleted-go.json"
+deleted_status=$?
+if [[ $deleted_status -ne 0 ]] || ! python3 - "$test_tmp/deleted-go.json" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); files=set(value["coverage_manifest"]["impact_files"])
+assert {"internal/lib/lib.go","internal/lib/lib_test.go","cmd/app/main.go"} <= files
+PY
+then
+  fail "deleted Go seed lost base package tests or reverse importer context"
+fi
+git -C "$impact_repo" checkout -q "$impact_branch"
+
 for config_case in bound-config legacy-config; do
   python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$impact_repo" \
     --config ".agents/$config_case.json" --base "$impact_base" --head "$impact_head" \
@@ -717,6 +815,35 @@ assert not subprocess.check_output(['git','-C',repo,'status','--porcelain'],text
 PY
 then
   fail "counterfactual lab did not enforce exact-head isolation, denial, bounds, evidence, concurrency, and cleanup"
+fi
+
+# Current route siblings and durable authority/state evidence must agree before compilation. These
+# are narrow parity checks and intentionally exclude every explicit PR #493-owned path.
+if ! python3 - "$repo_root" <<'PY'
+import json, pathlib, sys
+root=pathlib.Path(sys.argv[1])
+route_paths=[
+ '.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md',
+ '.agents/agentic-delivery/contracts/issue-prompt-template.md',
+ '.agents/agentic-delivery/agents/implementation/issue-first-implementation-agent.agent.yaml',
+ '.agents/connector-migration/rollout-checklist.md',
+ '.agents/connector-migration/validation-gates.md',
+ '.planning/traces/cli-architecture-v2-pi-prompts.md',
+]
+for relative in route_paths:
+ text=(root/relative).read_text().lower()
+ assert 'claude-review-loop.md' not in text, relative
+ assert 'copilot_backup' not in text and 'copilot backup' not in text, relative
+state=json.loads((root/'.planning/phases/397-cli-architecture-v2-orchestration/RUN-STATE.json').read_text())
+assert state['currentHead']=='0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20'
+phase=json.loads((root/'.planning/phases/397-pm-first-round-review-system-r1/RUN-STATE.json').read_text())
+assert phase['schemaVersion']=='pm-review-system-phase/v2'
+assert (root/'.agents/agentic-delivery/schemas/pm-review-system-phase-state.schema.json').is_file()
+workflow=(root/'.agents/agentic-delivery/workflows/local-codex-review-loop.md').read_text().lower()
+assert 'remote head equal' not in workflow and 'gh-axi' not in workflow
+PY
+then
+  fail "current PM route, post-PR-495 authority, phase schema, or no-network reviewer identity is inconsistent"
 fi
 
 # Compile the exact committed range. Output must be one non-TTY JSON envelope containing paths and
@@ -915,6 +1042,22 @@ value=json.load(open(sys.argv[1])); assert value["status"]=="findings_correction
 PY
 then
   fail "failed invariant paired with a finding did not synthesize findings_correction_required"
+fi
+cp "$first_response.clean" "$first_response"
+python3 - "$first_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path)); value["impact_edge_ids"].append("edge-unassigned")
+open(path,"w").write(json.dumps(value))
+PY
+python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$repo_root" \
+  --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+extra_coverage_status=$?
+if [[ $extra_coverage_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1])); assert value["status"]=="blocked"; assert any(item["category"]=="packet_coverage" for item in value["blockers"])
+PY
+then
+  fail "unassigned extra packet coverage synthesized clean"
 fi
 cp "$first_response.clean" "$first_response"
 
