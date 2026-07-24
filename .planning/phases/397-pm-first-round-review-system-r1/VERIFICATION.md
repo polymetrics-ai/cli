@@ -1,6 +1,6 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** correction round 2/5 combined uncommitted candidate is focused/full GREEN; exact commit, clean input rebuild, prospective R3, and conditional Shepherd remain pending
+**Status:** correction round 2/5 replacement candidate is focused/full GREEN at 63 packets under hard limits; clean exact commit/rebuild pending before prospective R3
 
 > Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
 
@@ -223,7 +223,13 @@ Fresh-runtime combined candidate rerun:
 - [x] `go test -timeout 20m ./...` passes (`internal/cli` 467.908s).
 - [x] `go build ./cmd/pm`, `go mod verify`, and `go mod tidy -diff` pass.
 - [x] `make verify` passes (`internal/cli` 467.030s), with zero lint findings, 547 connector definitions, focused PM/Shepherd regressions, and safe sample reverse ETL order.
-- [ ] Reconfirm the committed head/tree/status and rebuild review graph/manifest/packets from scratch without tracked writes.
+- [x] Committed `1e640f9a4` and reconfirmed exact head/tree/clean status.
+- [x] Exact commit passed direct static, format, vet, standalone test/build/module gates.
+- [x] RED: transitive `make verify` exposed a dirty-only focused fixture and complete-range 77/64 packet block; R3 and Shepherd did not start.
+- [x] Repair the fixture for dirty and clean candidates; dirty mode compiles the full stable-base range and clean mode is conditional without empty patch/commit errors.
+- [x] Reach 63 packets with every rendered prompt ≤30,000 bytes by exact context partitioning, cross-role best-fit assignment, and assignment-preserving coalescing—not truncation or bound reduction.
+- [x] Re-run complete focused/full verification on the replacement candidate before exact commit.
+- [ ] Commit the replacement exact candidate and prove clean-tree focused/full identity before R3.
 
 ## Review and delivery
 

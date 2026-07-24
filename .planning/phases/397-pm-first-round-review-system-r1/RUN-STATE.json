@@ -37,21 +37,21 @@
       "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34"
     ]
   },
-  "status": "review_pending",
+  "status": "green",
   "verificationPassed": true,
   "verificationEvidence": {
     "exactImplementationHead": null,
-    "candidateState": "combined_uncommitted_tree_verified_exact_commit_pending",
+    "candidateState": "bounded_replacement_tree_verified_exact_commit_pending",
     "static": "passed_python_shell_shellcheck_json_yaml_diff",
-    "focused": "passed_pm_review_pm_orchestrator_pi_routing_shepherd_adversarial",
-    "goVet": "passed_combined_candidate",
-    "goTest20m": "passed_combined_candidate_internal_cli_467_908s",
-    "goBuild": "passed_combined_candidate",
-    "goModVerify": "passed_combined_candidate",
-    "goModTidyDiff": "passed_combined_candidate",
-    "makeVerify": "passed_combined_candidate_internal_cli_467_030s_lint_0_connectors_547",
+    "focused": "passed_complete_range_exact_assignment_63_packets_max_64_30000_byte_cap",
+    "goVet": "passed_bounded_replacement",
+    "goTest20m": "passed_bounded_replacement_internal_cli_464_856s",
+    "goBuild": "passed_bounded_replacement",
+    "goModVerify": "passed_bounded_replacement",
+    "goModTidyDiff": "passed_bounded_replacement",
+    "makeVerify": "passed_bounded_replacement_internal_cli_467_296s_lint_0_connectors_547",
     "reverseETLSmoke": "passed_plan_preview_approval_execute",
-    "finalExactCommitRerun": "pending_before_prospective_r3"
+    "finalExactCommitRerun": "pending_after_bounded_efficiency_correction"
   },
   "localCodex": {
     "status": "findings_correction_required",
@@ -182,6 +182,21 @@
       "cycle": "round_2_combined_recovery_green",
       "decision": "local_critical_path",
       "reason": "A fresh worker preserved every uncommitted change, loaded the required GSD/skill route, fixed only newly exposed evidence and isolated-lab fixture defects without weakening default-deny or bounds, and passed static, complete focused/adversarial, Go, module, build, and make verify campaigns. R1/R2 dedup diagnostics remain retrospective development; deterministic-partial-keys/v1 is frozen before prospective R3. Exact commit and clean rebuild are next; Shepherd remains prohibited unless R3 synthesis is clean."
+    },
+    {
+      "cycle": "round_2_exact_commit_packet_red",
+      "decision": "local_critical_path",
+      "reason": "Exact commit 1e640f9a4 stayed clean and passed direct gates, but make verify exposed a dirty-only focused fixture and the complete 73-file stable-base range correctly blocked at 77 packets above the hard 64 maximum. No R3 or Shepherd run started and correction usage stays 2/5. The next TDD slice repairs clean-tree coverage and uses assignment-preserving exact-envelope efficiency without changing the 30000-byte or 64-packet limits."
+    },
+    {
+      "cycle": "round_2_bounded_efficiency_green",
+      "decision": "local_critical_path",
+      "reason": "The complete-range fixture now supports dirty and clean candidates. Exact 8500-byte changed/impact slices, 4096-byte context slices, a concise reviewer prompt, cross-role best-fit context/anchor assignment, and iterative scarcity coalescing reached 63 packets while preserving every assignment, invariant union, file/edge/provenance bound, and 30000-byte postcondition. Focused PM adversarial tests pass; full replacement-candidate verification remains pending."
+    },
+    {
+      "cycle": "round_2_bounded_replacement_full_green",
+      "decision": "local_critical_path",
+      "reason": "Complete static, focused/adversarial, Go, build, module, lint, connector-definition, make verify, and safe reverse-ETL smoke gates passed on the bounded replacement tree. R1/R2 remain retrospective development only, R3 and Shepherd remain unstarted, and exact clean commit/rebuild is the next gate."
     }
   ],
   "measurement": {
@@ -217,7 +232,7 @@
     "dedupR1R2Claim": "retrospective_development_only_labels_inspected_no_acceptance_claim",
     "dedupCorpusManifest": "scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json",
     "nextUntouchedMeasurement": "fresh_prospective_exact_head_R3",
-    "combinedCandidateFullVerification": "passed_uncommitted_tree_exact_commit_pending"
+    "combinedCandidateFullVerification": "bounded_replacement_tree_passed_63_packets_exact_commit_pending"
   },
   "readyQueue": [
     {

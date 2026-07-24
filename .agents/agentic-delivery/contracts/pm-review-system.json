@@ -166,7 +166,7 @@
       }
     },
     "edge_context_max_bytes_per_file": 16384,
-    "packet_max_file_slice_bytes": 4096
+    "packet_max_file_slice_bytes": 8500
   },
   "configured_relationships": [
     {

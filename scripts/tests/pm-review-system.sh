@@ -964,16 +964,11 @@ fi
 # metadata only, with complete packet assignment and no environment-value leakage.
 system_repo="$test_tmp/system-repo"
 git clone --no-hardlinks --quiet "$repo_root" "$system_repo"
-git -C "$repo_root" diff HEAD --binary -- \
-  scripts/pm-review-system.py scripts/pm-review-lab.py scripts/tests/pm-review-system.sh \
-  .agents/agentic-delivery/contracts/pm-review-system.json \
-  .agents/agentic-delivery/contracts/pm-review-packet-template.md \
-  .agents/agentic-delivery/prompts/local-codex-review-prompt.md \
-  .agents/agentic-delivery/schemas/orchestration-state.schema.yaml \
-  .agents/agentic-delivery/schemas/pm-review-system-phase-state.schema.json \
-  .agents/agentic-delivery/workflows/local-codex-review-loop.md \
-  .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json \
-  .pi/agents/pm-reviewer.md .pi/prompts/pm-review-loop.md | git -C "$system_repo" apply
+treatment_patch="$test_tmp/complete-treatment.patch"
+git -C "$repo_root" diff HEAD --binary >"$treatment_patch"
+if [[ -s "$treatment_patch" ]]; then
+  git -C "$system_repo" apply "$treatment_patch"
+fi
 # Materialize the frozen dedup manifest from a test-owned literal. Its hash-bound R1/R2 sources
 # already come from the isolated clone's immutable Git objects; no mutable outer fixture is read.
 cat >"$system_repo/scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json" <<'JSON'
@@ -998,10 +993,12 @@ cat >"$system_repo/scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest
   "next_untouched_measurement": "fresh prospective exact-head R3"
 }
 JSON
-# Test the immutable compiler against an exact commit containing the current uncommitted treatment;
-# the user's worktree remains uncommitted and untouched.
+# Test the immutable compiler against the complete stable-base range in both recovery modes: apply
+# and commit every dirty treatment path, or reuse an already committed clean candidate unchanged.
 git -C "$system_repo" add .
-git -C "$system_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm system-green
+if ! git -C "$system_repo" diff --cached --quiet; then
+  git -C "$system_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm system-green
+fi
 head_sha="$(git -C "$system_repo" rev-parse HEAD)"
 system_trust="$test_tmp/system-trust.json"
 write_trust_bundle "$system_repo" 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 "$head_sha" \
@@ -1020,14 +1017,17 @@ if [[ $compile_status -ne 0 ]]; then
   fail "exact-head compiler blocked the allowlisted current range"
 elif grep -Fq 'do-not-copy-this-environment-value' "$compile_output"; then
   fail "compiler leaked an environment value"
-elif ! python3 - "$compile_output" <<'PY'
+elif ! python3 - "$compile_output" "$system_repo" <<'PY'
 import json
+import subprocess
 import sys
 
 document = json.load(open(sys.argv[1]))
+repo = sys.argv[2]
 assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v4"
 assert document["status"] == "ready"
 assert document["selection"] in {"combined", "split"}
+assert 1 <= len(document["packets"]) <= 64
 assert document["content_policy"].startswith("paths, exact revision/blob/slice metadata")
 changed = set(document["changed_files"])
 assigned = {path for packet in document["packets"] for path in packet["changed_files"]}
@@ -1035,6 +1035,22 @@ assert changed == assigned
 closure = set(document["coverage_manifest"]["closure_files"])
 covered_closure = {path for packet in document["packets"] for path in packet["closure_files"]}
 assert closure == covered_closure
+context_paths = closure | set(document["coverage_manifest"]["authority_files"])
+for path in context_paths:
+    rows = [
+        item
+        for packet in document["packets"]
+        for item in packet.get("context_file_slices", [])
+        if item["path"] == path
+    ]
+    keys = {(item["revision"], item["start_byte"], item["end_byte"], item["sha256"]) for item in rows}
+    assert len(keys) == len(rows)
+    ordered = sorted(rows, key=lambda item: item["start_byte"])
+    assert ordered and ordered[0]["start_byte"] == 0
+    assert all(left["end_byte"] == right["start_byte"] for left, right in zip(ordered, ordered[1:]))
+    payload = subprocess.check_output(["git", "-C", repo, "show", f"{document['exact_head_sha']}:{path}"])
+    assert ordered[-1]["end_byte"] == len(payload)
+    assert sum(item["bytes"] for item in ordered) == len(payload)
 impact = set(document["coverage_manifest"]["impact_files"])
 covered_impact = {path for packet in document["packets"] for path in packet["impact_files"]}
 assert impact == covered_impact

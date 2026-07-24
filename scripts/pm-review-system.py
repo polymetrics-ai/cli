@@ -2162,11 +2162,13 @@ def build_packets(
     changed_content_sizes: dict[str, int] | None = None,
     changed_content_slices: dict[str, list[dict[str, Any]]] | None = None,
     edge_blob_slices: dict[str, list[dict[str, Any]]] | None = None,
+    context_blob_slices: dict[str, list[dict[str, Any]]] | None = None,
 ) -> tuple[str, list[dict[str, Any]], list[dict[str, Any]]]:
     thresholds = config["thresholds"]
     changed_content_sizes = changed_content_sizes or {path: blob_sizes[path] for path in files}
     changed_content_slices = changed_content_slices or {path: blob_slices[path] for path in files}
     edge_blob_slices = edge_blob_slices or blob_slices
+    context_blob_slices = context_blob_slices or blob_slices
     graph_limits = config["impact_graph"]
     domain_values = sorted(set(domains.values()))
     changed_lines = sum(line_counts.values())
@@ -2181,8 +2183,10 @@ def build_packets(
     selection = "combined" if combined else "split"
     packets: list[dict[str, Any]] = []
     problems: list[dict[str, Any]] = []
-    for path in sorted(set(files) | set(closure_files) | set(authority_files) | set(impact_files)):
-        assigned_slices = blob_slices.get(path)
+    context_paths = set(closure_files) | set(authority_files)
+    for path in sorted(set(files) | context_paths | set(impact_files)):
+        source = context_blob_slices if path in context_paths else blob_slices
+        assigned_slices = source.get(path)
         if not isinstance(assigned_slices, list) or not assigned_slices or sum(int(item.get("bytes", -1)) for item in assigned_slices if isinstance(item, dict)) != blob_sizes.get(path):
             problems.append(finding("packet_overflow", f"exact blob slices are absent or incomplete: {path}"))
     impact_edge_by_id = {edge["id"]: edge for edge in impact_edges}
@@ -2289,6 +2293,7 @@ def build_packets(
         edge_context_files: list[str] | None = None,
         impact_file_slices: list[dict[str, Any]] | None = None,
         changed_file_slices_override: list[dict[str, Any]] | None = None,
+        context_file_slices_override: list[dict[str, Any]] | None = None,
     ) -> None:
         impact = sorted(impact or [])
         impact_edge_ids = sorted(impact_edge_ids or [])
@@ -2302,9 +2307,18 @@ def build_packets(
             if changed_file_slices_override is not None
             else [item for path in sorted(changed) for item in changed_content_slices.get(path, [])]
         )
-        context_file_slices = [
-            item for path in sorted(set(closure) | set(authority)) for item in blob_slices.get(path, [])
-        ]
+        context_file_slices = (
+            sorted(
+                context_file_slices_override,
+                key=lambda item: (item["path"], item["revision"], item["start_byte"]),
+            )
+            if context_file_slices_override is not None
+            else [
+                item
+                for path in sorted(set(closure) | set(authority))
+                for item in context_blob_slices.get(path, [])
+            ]
+        )
         edge_context_slices = exact_edge_slices(impact_edge_ids)
         maximum_edge_bytes = int(graph_limits.get("edge_context_max_bytes_per_file", 8192))
         by_edge_path: dict[str, int] = defaultdict(int)
@@ -2431,42 +2445,100 @@ def build_packets(
                         problems.append(finding("packet_overflow", f"atomic changed slice cannot fit: {path}:{item['start_line']}-{item['end_line']}"))
             flush_changed()
 
-    def co_pack_context(paths: list[str], role: str, assignment_field: str) -> list[str]:
-        remaining: list[str] = []
+    def co_pack_context(
+        paths: list[str], role: str, assignment_field: str,
+    ) -> list[tuple[str, dict[str, Any]]]:
+        remaining: list[tuple[str, dict[str, Any]]] = []
         maximum_files = int(thresholds["packet_max_context_files"])
         for path in sorted(paths):
-            packed = False
-            for packet in sorted(
-                (item for item in packets if item["role"] == role),
-                key=lambda item: (item["context"]["rendered_prompt_bytes"], item["packet_id"]),
-            ):
-                assigned_count = len(packet["closure_files"]) + len(packet["authority_files"])
-                if assigned_count >= maximum_files:
-                    continue
-                candidate = json.loads(json.dumps(packet))
-                candidate[assignment_field] = sorted([*candidate[assignment_field], path])
-                candidate["context_file_slices"] = sorted(
-                    [*candidate["context_file_slices"], *blob_slices.get(path, [])],
-                    key=lambda item: (item["path"], item["revision"], item["start_byte"]),
-                )
-                account_packet(candidate)
-                if candidate["context"]["overflow"]:
-                    continue
-                packet.update(candidate)
-                packed = True
-                break
-            if not packed:
-                remaining.append(path)
+            for context_slice in context_blob_slices.get(path, []):
+                best: tuple[int, str, dict[str, Any], dict[str, Any]] | None = None
+                for packet in sorted(packets, key=lambda item: item["packet_id"]):
+                    assigned = set(packet["closure_files"]) | set(packet["authority_files"])
+                    if path not in assigned and len(assigned) >= maximum_files:
+                        continue
+                    candidate = json.loads(json.dumps(packet))
+                    if candidate["role"] != role:
+                        candidate["role"] = "combined"
+                        candidate["packet_id"] = "combined-00"
+                        candidate["invariants"] = sorted(
+                            set(candidate["invariants"])
+                            | set(config["packet_invariants"][role])
+                        )
+                    candidate[assignment_field] = sorted(set(candidate[assignment_field]) | {path})
+                    candidate["context_file_slices"] = sorted(
+                        [*candidate["context_file_slices"], context_slice],
+                        key=lambda item: (item["path"], item["revision"], item["start_byte"]),
+                    )
+                    account_packet(candidate)
+                    if candidate["context"]["overflow"]:
+                        continue
+                    score = (candidate["context"]["rendered_prompt_bytes"], packet["packet_id"])
+                    if best is None or score > best[:2]:
+                        best = (*score, packet, candidate)
+                if best is None:
+                    remaining.append((path, context_slice))
+                else:
+                    best[2].update(best[3])
         return remaining
 
-    remaining_closure = co_pack_context(closure_files, "architecture_reference", "closure_files")
-    remaining_authority = co_pack_context(
-        authority_files, "authority_workflow_state", "authority_files"
+    def append_context_remainders(
+        remaining: list[tuple[str, dict[str, Any]]], role: str, assignment_field: str,
+    ) -> None:
+        current_paths: set[str] = set()
+        current_slices: list[dict[str, Any]] = []
+
+        def flush() -> None:
+            nonlocal current_paths, current_slices
+            if not current_slices:
+                return
+            closure = sorted(current_paths) if assignment_field == "closure_files" else []
+            authority = sorted(current_paths) if assignment_field == "authority_files" else []
+            append_packet(
+                role, [], closure, authority,
+                context_file_slices_override=current_slices,
+            )
+            current_paths, current_slices = set(), []
+
+        for path, context_slice in remaining:
+            proposed_paths = current_paths | {path}
+            proposed_slices = [*current_slices, context_slice]
+            proposed_upper = (
+                fixed_prompt_bytes + 1800
+                + sum(int(item["bytes"]) for item in proposed_slices)
+                + len(canonical_json_bytes(proposed_slices))
+            )
+            if current_slices and (
+                len(proposed_paths) > int(thresholds["packet_max_context_files"])
+                or proposed_upper > target_tokens
+            ):
+                flush()
+            current_paths.add(path)
+            current_slices.append(context_slice)
+            if (
+                fixed_prompt_bytes + 1800 + int(context_slice["bytes"])
+                + len(canonical_json_bytes(context_slice)) > target_tokens
+            ):
+                problems.append(
+                    finding(
+                        "packet_overflow",
+                        f"atomic context slice cannot fit: {path}:{context_slice['start_line']}-{context_slice['end_line']}",
+                    )
+                )
+        flush()
+
+    remaining_closure = co_pack_context(
+        closure_files, "architecture_reference", "closure_files",
     )
-    for part in greedy_file_groups(remaining_closure, int(thresholds["packet_max_context_files"])):
-        append_packet("architecture_reference", [], part, [])
-    for part in greedy_file_groups(remaining_authority, int(thresholds["packet_max_context_files"])):
-        append_packet("authority_workflow_state", [], [], part)
+    remaining_authority = co_pack_context(
+        authority_files, "authority_workflow_state", "authority_files",
+    )
+    append_context_remainders(
+        remaining_closure, "architecture_reference", "closure_files",
+    )
+    append_context_remainders(
+        remaining_authority, "authority_workflow_state", "authority_files",
+    )
 
     edge_groups: list[list[dict[str, Any]]] = []
     current_edges: list[dict[str, Any]] = []
@@ -2576,12 +2648,19 @@ def build_packets(
         # neighborhood and avoids duplicating fixed prompt/envelope overhead for isolated anchors.
         co_packed = False
         for packet in sorted(
-            (value for value in packets if value["role"] == "impact_graph" and value["impact_edge_ids"]),
-            key=lambda value: (value["context"]["rendered_prompt_bytes"], value["packet_id"]),
+            packets,
+            key=lambda value: (-value["context"]["rendered_prompt_bytes"], value["packet_id"]),
         ):
             if len(packet["impact_files"]) >= int(graph_limits["packet_max_impact_files"]):
                 continue
             candidate = json.loads(json.dumps(packet))
+            if candidate["role"] != "impact_graph":
+                candidate["role"] = "combined"
+                candidate["packet_id"] = "combined-00"
+                candidate["invariants"] = sorted(
+                    set(candidate["invariants"])
+                    | set(config["packet_invariants"]["impact_graph"])
+                )
             candidate["impact_files"] = sorted([*candidate["impact_files"], path])
             candidate["impact_file_slices"] = sorted(
                 [*candidate["impact_file_slices"], item],
@@ -2614,14 +2693,108 @@ def build_packets(
     # ratio or pre-mutation estimate can authorize a packet.
     for packet in packets:
         account_packet(packet)
-        if packet["context"]["overflow"] and not any(
-            packet["packet_id"] in item.get("claim", "") for item in problems
+
+    maximum_packets = int(graph_limits.get("max_packets", 64))
+
+    def unique_packet_slices(values: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        unique = {
+            (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]): item
+            for item in values
+        }
+        return sorted(
+            unique.values(),
+            key=lambda item: (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]),
+        )
+
+    def merge_packet_pair(left: dict[str, Any], right: dict[str, Any]) -> dict[str, Any]:
+        candidate = json.loads(json.dumps(left))
+        candidate["role"] = left["role"] if left["role"] == right["role"] else "combined"
+        candidate["packet_id"] = f"{candidate['role']}-00"
+        for field in (
+            "changed_files", "closure_files", "authority_files", "impact_files",
+            "impact_edge_ids", "edge_context_files", "invariants",
         ):
+            candidate[field] = sorted(set(left[field]) | set(right[field]))
+        candidate["impact_edges"] = [
+            impact_edge_by_id[edge_id] for edge_id in candidate["impact_edge_ids"]
+        ]
+        for field in (
+            "changed_file_slices", "context_file_slices", "impact_file_slices",
+            "edge_context_slices",
+        ):
+            candidate[field] = unique_packet_slices([*left[field], *right[field]])
+        account_packet(candidate)
+        return candidate
+
+    def merge_preserves_bounds(candidate: dict[str, Any]) -> bool:
+        if len(candidate["changed_files"]) > int(thresholds["packet_max_changed_files"]):
+            return False
+        if len(candidate["closure_files"]) + len(candidate["authority_files"]) > int(thresholds["packet_max_context_files"]):
+            return False
+        if len(candidate["impact_files"]) > int(graph_limits["packet_max_impact_files"]):
+            return False
+        if len(candidate["impact_edge_ids"]) > int(graph_limits["packet_max_impact_edges"]):
+            return False
+        edge_bytes: dict[str, int] = defaultdict(int)
+        for item in candidate["edge_context_slices"]:
+            edge_bytes[item["path"]] += int(item["bytes"])
+        if any(used > int(graph_limits["edge_context_max_bytes_per_file"]) for used in edge_bytes.values()):
+            return False
+        return not candidate["context"]["overflow"]
+
+    # A large exact range can contain a few complementary under-filled packets. Coalesce only
+    # assignment-preserving compatible pairs near the hard packet cap, retaining two packets of
+    # headroom for final evidence-only range growth. The scarcity-first order avoids consuming a
+    # packet that is the sole fit for another packet; every accepted pair is re-accounted from the
+    # complete merged envelope and exact payload bytes.
+    coalescing_target = max(1, maximum_packets - 2)
+    while coalescing_target < len(packets) <= maximum_packets * 2:
+        compatible: list[tuple[int, int, dict[str, Any]]] = []
+        degrees = [0] * len(packets)
+        for left_index, left in enumerate(packets):
+            for right_index in range(left_index + 1, len(packets)):
+                candidate = merge_packet_pair(left, packets[right_index])
+                if not merge_preserves_bounds(candidate):
+                    continue
+                compatible.append((left_index, right_index, candidate))
+                degrees[left_index] += 1
+                degrees[right_index] += 1
+        selected: list[tuple[int, int, dict[str, Any]]] = []
+        consumed: set[int] = set()
+        for left_index, right_index, candidate in sorted(
+            compatible,
+            key=lambda item: (degrees[item[0]] + degrees[item[1]], item[0], item[1]),
+        ):
+            if len(packets) - len(selected) <= coalescing_target:
+                break
+            if left_index in consumed or right_index in consumed:
+                continue
+            selected.append((left_index, right_index, candidate))
+            consumed.update((left_index, right_index))
+        if not selected:
+            break
+        merged_by_left = {left: (right, candidate) for left, right, candidate in selected}
+        right_indexes = {right for _, right, _ in selected}
+        coalesced: list[dict[str, Any]] = []
+        for index, packet in enumerate(packets):
+            if index in right_indexes:
+                continue
+            if index in merged_by_left:
+                coalesced.append(merged_by_left[index][1])
+            else:
+                coalesced.append(packet)
+        packets = coalesced
+
+    role_counts: dict[str, int] = defaultdict(int)
+    for packet in packets:
+        role_counts[packet["role"]] += 1
+        packet["packet_id"] = f"{packet['role']}-{role_counts[packet['role']]:02d}"
+        account_packet(packet)
+        if packet["context"]["overflow"]:
             problems.append(
                 finding("packet_overflow", f"{packet['packet_id']} violates the final rendered-input postcondition")
             )
 
-    maximum_packets = int(graph_limits.get("max_packets", 64))
     if len(packets) > maximum_packets:
         problems.append(finding("packet_overflow", f"packet count {len(packets)} exceeds {maximum_packets}"))
     if any(packet["context"]["overflow"] for packet in packets) or problems:
@@ -2856,10 +3029,14 @@ def compile_document(root: Path, config_relative: str, scope_relative: str, base
         _, edge_slices = exact_blob_metadata(
             snapshot, base, head, packet_context_paths, min(256, maximum_slice_bytes),
         )
+        _, context_slices = exact_blob_metadata(
+            snapshot, base, head, set(closure_context) | set(authority_context),
+            min(4096, maximum_slice_bytes),
+        )
         selection, packets, packet_findings = build_packets(
             base, head, head_tree, files, line_counts, domains, closure_context, authority_context,
             impact_graph["files"], impact_graph["edges"], blob_sizes, blob_slices, config,
-            diff_sizes, diff_slices, edge_slices,
+            diff_sizes, diff_slices, edge_slices, context_slices,
         )
         findings.extend(packet_findings)
         status = "blocked" if findings or selection == "blocked" else "ready"
