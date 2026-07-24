@@ -38,6 +38,9 @@ independent/downstream; and publish only measured fixture/replay claims.
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pr495-snyk-deferral-2026-07-23.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-review-system-conditional-merge-authorization-2026-07-24.md`
 - `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pm-review-loop-monitoring-2026-07-24.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/decisions/cli-pm-review-f1-correction-authorization-2026-07-25.md`
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-pm-review-claude-fresh-assessment-r1/report.md` (advisory only; not PM review coverage)
+- `/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/f1-correction-and-self-review-instructions.md`
 - PR #495 accepted source head `fc7167990c92292625493f05b495c70e2c7ce886`; squash on parent `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`.
 
 Historical PR #495 findings and pending review/Shepherd records remain historical evidence. This
@@ -58,6 +61,7 @@ phase does not rewrite them as clean.
 - 2026-07-24 correction/research cycle: `scripts/gsd prompt plan-phase 397-pm-first-round-review-system-r1 --research` generated the official prompt. Read-only scout/security architecture calls failed to return usable results (WebSocket/provider authentication), so the active PM performed the documented inline GSD fallback. Primary-source research and a disposable exact-head benchmark were completed before graph design; selection is in `ALGORITHM-RESEARCH.md`. Prior verification is historical.
 - 2026-07-24 implementation-recovery cycle: the fresh runtime re-read the five controlling audit/dedup/R3/capability documents in order, preserved all uncommitted work, and reran `scripts/gsd doctor` plus `scripts/gsd list`. The healthy 69-command registry still has no `programming-loop`, so the existing `/pm-orchestrate` PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE lifecycle remains authoritative. Initial Python, shell, Shellcheck, JSON, YAML, and diff static checks passed. The focused PM suite first proved that trusted lab-owned root effects omitted the deterministic aggregate `changed_paths` disclosure. After that additive correction, the next assertion exposed a real macOS containment incompatibility: Go subprocesses consult the host user's `.CFUserTextEncoding`, and kill-on-denial correctly blocked the compiler-cache experiment. Diagnostic sandbox runs isolated the denied read and proved that a UID-derived, non-inherited `__CF_USER_TEXT_ENCODING` in the scrubbed lab environment lets Go run without granting host-home access. With that correction, the compiler ran and exposed a fixture-only path error: the isolated impact repository defines `internal/lib`, but the test requested the primary repository's absent `internal/connectors/engine`; the fixture now targets its own committed minimal package. The next assertion showed `python -m http.server` consulting the host mDNS responder during server-name resolution before binding. The exact local TCP sandbox policy itself passed with a numeric-address socket server and numeric client. The fixture therefore uses that lab-owned minimal HTTP responder rather than permitting a host resolver or weakening network denial. It then reached successful service evidence and exposed one final disclosure omission: normalized services are provably loopback TCP or lab-root Unix sockets, but the emitted trusted service record did not state `local_only`; the additive field closed it. R1/R2 remain retrospective development only; no R3 review has started.
 - 2026-07-24 exact-commit recovery RED: commit `1e640f9a417c59c142cb64bea86719a13bc97b2e` passed the direct full gates, but its transitive `make verify` rerun exposed that the focused test compiled only selected uncommitted treatment paths. A clean-tree clone compiled the complete stable-base range: 73 changed files produced 77 bounded packets and correctly blocked above 64. Correction usage remains 2/5 because this is deterministic pre-review RED. Before more production edits, freeze this regression: the fixture must support both dirty recovery and clean committed trees and compile the complete range. Preserve every assignment and the hard 30,000/64 caps. The selected dependency-free efficiency treatment is exact 8,500-byte atomic changed/impact slices, bounded 4,096-byte governing-context slices, a concise complete canonical reviewer prompt, best-fit cross-role context/isolated-impact assignment, and iterative scarcity-first pair coalescing only when the exact envelope preserves all assignments, invariant union, file/edge/provenance bounds, and final rendered accounting. The real dirty-range fixture now reaches 63 packets without relaxing trust; full and clean-commit GREEN remain required before prospective R3.
+- 2026-07-25 captain-authorized advisory correction: the captain halted the partial prospective R3 at exact head `c28126bb337a2e9899a4a9b429b6d8473cbcd52f`; no synthesis or Shepherd result exists. Advisory findings F1, F2, F3, F4, F6, and the F5 disclosure/comment correction are authorized without consuming a correction round, so lineage remains 2/5. `scripts/gsd doctor`/`list` passed; the 69-command registry still lacks `programming-loop`, so the documented manual GSD PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW path is active. Permanent RED tests precede every production correction. The broad typed-domain/decomposition refactor is deferred. Hard 30,000-byte/64-packet limits, quality gates, and no-merge authority remain unchanged. Baseline at `c28126bb3`: ready, 63 packets, max 29,994 rendered bytes, 1.018025x duplication, one derived packet of headroom, 14.24s wall clock, and 285,360,128-byte maximum RSS.
 
 ## Required skills loaded
 
@@ -294,6 +298,36 @@ This bounded retry owns only R1-I/R1-K/R1-L/R2-N2/R2-N5 route, documentation, an
 The correction may expand the positive scope to the non-forbidden Shepherd/trace/runtime and parent-plan surfaces named in the disposition. It must not touch any PR #493-owned path. GitHub connector pending-review write coverage remains a disclosed `needs_human` product/auth decision; the PM impact graph must not pull that unrelated pre-existing ledger into this candidate through false ownership/provenance edges.
 
 GREEN requires versioned exact machine contracts, deterministic fail-closed behavior without tracebacks, independently authenticated coverage, safe bounded prompts, and semantic parity fixtures. Shepherd still runs only after a future exact-head clean synthesis. The five-round lineage never resets.
+
+### Slice 7.7 — captain-authorized advisory correction and review-system self-test
+
+The advisory route is not R3 coverage and does not consume a correction round; usage stays 2/5.
+Before production edits, add permanent RED regressions for: accepted `combined` domain rules silently
+losing changed files; byte-for-byte changed-diff assignment for every file; missing actionability
+criterion; directives to unavailable reviewer contracts; undisclosed per-impact-file provided/total
+bytes; duplicate occurrence ids on replay; and missing/misstated packet headroom. Then apply only the
+smallest safe F1/F2/F3/F4/F5/F6 corrections. Packing domains are data-driven and a closing production
+postcondition checks every changed file and its complete exact diff bytes. Impact disclosure records
+provided and total bytes without claiming full-file review. The 30,000-byte and 64-packet caps are
+immutable.
+
+Measure before/after compile wall time, peak memory, packet count, max rendered bytes, duplication,
+and first-class packet headroom. Take no performance change unless repeated measurement shows a
+safe win with identical guarantees. Prove deterministic semantic authentication across three
+independent exact-head compiles. After one clean commit and exact clean-tree full verification,
+compile a new trust-bound manifest and run the corrected system over itself, including an explicit
+reintroduced-F1 mutation that must block with `packet_coverage`. Preserve one PM synthesis even when
+it returns findings; do not silently iterate. Shepherd remains clean-synthesis-only.
+
+Final outcome: the required honest self-contained F2/F3 prompt plus a legitimately larger impact
+graph raise the accumulated candidate from the 63-packet perf baseline to 64 packets, still ready
+within the unchanged 64-packet hard cap with 0 overflow, every rendered prompt <= 30,000 bytes,
+duplication 1.019555 (<= the 1.02 baseline), and ~13.9s compile (<= the 14.24s baseline). The
+baseline's single packet of headroom was consumed by required corrections plus content growth; no
+limit, bound, gate, quality check, or disclosure was weakened. Superseded process narration in
+`TDD-LEDGER.md`, `VERIFICATION.md`, and `PLAN.md` was condensed to keep the reviewer focused on
+code rather than thousands of lines of process records, preserving SHAs, lineage, F1-F6 records, and
+disposition pointers.
 
 ### Slice 8 — verification, review, delivery
 

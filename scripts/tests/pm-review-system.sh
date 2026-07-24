@@ -1027,11 +1027,48 @@ repo = sys.argv[2]
 assert document["schema_version"] == "polymetrics.ai/pm-review-compile/v4"
 assert document["status"] == "ready"
 assert document["selection"] in {"combined", "split"}
-assert 1 <= len(document["packets"]) <= 64
+packet_count = len(document["packets"])
+max_rendered_bytes = max(packet["context"]["rendered_prompt_bytes"] for packet in document["packets"])
+# The hard cap is 64 packets. The required honest F2/F3 prompt plus a legitimately larger impact
+# graph raised the accumulated candidate from the 63-packet perf baseline to 64; it still compiles
+# ready within the unchanged hard cap. The guards below are the true contract: at most 64 packets,
+# consistent arithmetic headroom, no overflow, every rendered prompt at or under the 30000 target
+# (overflow is a strict > comparison so a packet may sit exactly at 30000), and no duplication
+# regression.
+assert 1 <= packet_count <= 64, packet_count
+assert document["packet_headroom"] == 64 - packet_count
+assert document["packet_headroom"] >= 0
+assert max_rendered_bytes <= 30_000, max_rendered_bytes
+assert not any(packet["context"]["overflow"] for packet in document["packets"])
+all_slices = [
+    item
+    for packet in document["packets"]
+    for field in ("changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices")
+    for item in packet.get(field, [])
+]
+packed_slice_bytes = sum(item["bytes"] for item in all_slices)
+unique_slice_bytes = sum({
+    (item["path"], item["revision"], item["revision_kind"], item["start_byte"], item["end_byte"], item["sha256"]): item["bytes"]
+    for item in all_slices
+}.values())
+assert packed_slice_bytes / unique_slice_bytes <= 1.02
 assert document["content_policy"].startswith("paths, exact revision/blob/slice metadata")
 changed = set(document["changed_files"])
 assigned = {path for packet in document["packets"] for path in packet["changed_files"]}
 assert changed == assigned
+for path in changed:
+    packed = sum(
+        item["bytes"]
+        for packet in document["packets"]
+        for item in packet.get("changed_file_slices", [])
+        if item["path"] == path
+    )
+    payload = subprocess.check_output([
+        "git", "-C", repo, "diff", "--no-ext-diff", "--no-renames", "--binary",
+        "--full-index", "--unified=3",
+        f"{document['exact_base_sha']}...{document['exact_head_sha']}", "--", path,
+    ])
+    assert packed == len(payload), (path, packed, len(payload))
 closure = set(document["coverage_manifest"]["closure_files"])
 covered_closure = {path for packet in document["packets"] for path in packet["closure_files"]}
 assert closure == covered_closure
@@ -1073,6 +1110,22 @@ for packet in document["packets"]:
     assert len(packet["impact_edge_ids"]) <= 40
     assert set(packet["impact_edge_ids"]) == {edge["id"] for edge in packet["impact_edges"]}
     assert {item["path"] for item in packet.get("impact_file_slices", [])} <= set(packet["impact_files"])
+    impact_coverage = packet["impact_file_coverage"]
+    assert {item["path"] for item in impact_coverage} == set(packet["impact_files"])
+    assert len(impact_coverage) == len(packet["impact_files"])
+    for coverage in impact_coverage:
+        rows = [
+            item
+            for field in ("impact_file_slices", "edge_context_slices")
+            for item in packet.get(field, [])
+            if item["path"] == coverage["path"]
+        ]
+        unique_rows = {
+            (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]): item
+            for item in rows
+        }
+        assert coverage["provided_bytes"] == sum(item["bytes"] for item in unique_rows.values())
+        assert 0 < coverage["provided_bytes"] <= coverage["file_bytes"]
     assert {item["path"] for item in packet.get("changed_file_slices", [])} <= set(packet["changed_files"])
     assert {item["path"] for item in packet.get("edge_context_slices", [])} <= set(packet["edge_context_files"])
     all_slices=packet.get("changed_file_slices",[])+packet.get("context_file_slices",[])+packet.get("impact_file_slices",[])+packet.get("edge_context_slices",[])
@@ -1085,6 +1138,46 @@ for packet in document["packets"]:
 PY
 then
   fail "compiled JSON envelope or packet coverage is invalid"
+fi
+
+# An accepted reserved-domain rule must never silently drop its changed files. The production
+# closing invariant is the authority: the compile blocks nonzero with a named packet_coverage
+# finding instead of claiming ready coverage.
+domain_repo="$test_tmp/domain-rule-repo"
+git clone -q "$system_repo" "$domain_repo"
+python3 - "$domain_repo/.agents/agentic-delivery/contracts/pm-review-system.json" <<'PY'
+import json,sys
+path=sys.argv[1]
+value=json.load(open(path))
+value["domain_rules"].insert(0,{"domain":"combined","patterns":["scripts/**"]})
+open(path,"w").write(json.dumps(value,sort_keys=True,indent=2)+"\n")
+PY
+git -C "$domain_repo" add .agents/agentic-delivery/contracts/pm-review-system.json
+git -C "$domain_repo" -c user.name='PM Review Test' -c user.email='pm-review-test@example.invalid' commit -qm reserved-domain-probe
+domain_head="$(git -C "$domain_repo" rev-parse HEAD)"
+domain_trust="$test_tmp/domain-rule-trust.json"
+write_trust_bundle "$domain_repo" 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 "$domain_head" \
+  .agents/agentic-delivery/contracts/pm-review-system.json \
+  .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json "$domain_trust"
+domain_output="$test_tmp/domain-rule-manifest.json"
+python3 "$repo_root/scripts/pm-review-system.py" compile --repo-root "$domain_repo" \
+  --scope .planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json \
+  --base 0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 --head "$domain_head" \
+  --trust-bundle "$domain_trust" >"$domain_output"
+domain_status=$?
+if [[ $domain_status -eq 0 ]] || ! python3 - "$domain_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["status"] == "blocked"
+assert any(
+    item.get("category") == "packet_coverage"
+    and "assigned to no packet" in item.get("claim", "")
+    and "scripts/" in item.get("claim", "")
+    for item in value["findings"]
+)
+PY
+then
+  fail "accepted combined domain rule did not block on named changed-file packet coverage"
 fi
 
 # Malformed identities and escaping/symlinked config paths stop without reading broad files.
@@ -1109,7 +1202,10 @@ python3 "$repo_root/scripts/pm-review-system.py" render --repo-root "$system_rep
 render_status=$?
 if [[ $render_status -ne 0 || ! -s "$render_output" ]] ||
   [[ "$(wc -c <"$render_output" | tr -d ' ')" != "$render_expected_bytes" ]] ||
-  ! grep -Fq 'EXACT SLICE PAYLOADS (canonical descriptor order)' "$render_output"
+  ! grep -Fq 'EXACT SLICE PAYLOADS (canonical descriptor order)' "$render_output" ||
+  ! grep -Fq 'Actionable means introduced, activated, worsened, or relied on by this candidate' "$render_output" ||
+  ! grep -Fq 'assumed to already hold the PM reviewer role and v4 response schema' "$render_output" ||
+  grep -Fq "Follow \`local-codex-review-loop.md\`" "$render_output"
 then
   fail "authenticated renderer did not emit the exactly accounted bounded packet prompt"
 fi
@@ -1188,6 +1284,7 @@ for packet in manifest["packets"]:
         "authority_files": packet["authority_files"],
         "context_file_slices": packet.get("context_file_slices", []),
         "impact_files": packet.get("impact_files", []),
+        "impact_file_coverage": packet.get("impact_file_coverage", []),
         "impact_edge_ids": packet.get("impact_edge_ids", []),
         "impact_file_slices": packet.get("impact_file_slices", []),
         "edge_context_files": packet.get("edge_context_files", []),
@@ -1242,6 +1339,39 @@ assert value["telemetry"]["claim"].startswith("only validated")
 PY
 then
   fail "complete clean packet responses did not produce one PM-owned clean synthesis"
+fi
+coverage_response="$(python3 - "$responses_dir" <<'PY'
+import json,pathlib,sys
+for path in sorted(pathlib.Path(sys.argv[1]).glob('*.json')):
+    if json.loads(path.read_text()).get('impact_file_coverage'):
+        print(path)
+        break
+PY
+)"
+if [[ -z "$coverage_response" ]]; then
+  fail "packet responses lack per-impact-file provided/total byte disclosure"
+else
+  coverage_backup="$unsafe_dir/coverage-response.backup"
+  cp "$coverage_response" "$coverage_backup"
+  python3 - "$coverage_response" <<'PY'
+import json,sys
+path=sys.argv[1]; value=json.load(open(path))
+value["impact_file_coverage"][0]["provided_bytes"] += 1
+open(path,"w").write(json.dumps(value))
+PY
+  python3 "$repo_root/scripts/pm-review-system.py" synthesize --repo-root "$system_repo" \
+    --manifest "$manifest_relative" --responses-dir "$responses_relative" >"$synthesis_output"
+  coverage_status=$?
+  if [[ $coverage_status -eq 0 ]] || ! python3 - "$synthesis_output" <<'PY'
+import json,sys
+value=json.load(open(sys.argv[1]))
+assert value["status"] == "blocked"
+assert any(item["category"] == "packet_coverage" and "impact_file_coverage" in item["claim"] for item in value["blockers"])
+PY
+  then
+    fail "altered impact-file coverage disclosure did not block synthesis"
+  fi
+  cp "$coverage_backup" "$coverage_response"
 fi
 first_response="$(python3 - "$responses_dir" <<'PY'
 import json,pathlib,sys
@@ -1397,7 +1527,7 @@ if [[ ! -f "$clean_backup" ]]; then
 # Restore is regenerated from the manifest because the clean backup was moved above.
 import json,sys
 manifest=json.load(open(sys.argv[1])); packet=next(p for p in manifest['packets'] if p['packet_id'] in sys.argv[2])
-value={"schema_version":"polymetrics.ai/pm-review-packet-response/v4","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"changed_file_slices":packet.get("changed_file_slices",[]),"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"context_file_slices":packet.get("context_file_slices",[]),"impact_files":packet.get("impact_files",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"impact_file_slices":packet.get("impact_file_slices",[]),"edge_context_files":packet.get("edge_context_files",[]),"edge_context_slices":packet.get("edge_context_slices",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[{"id":"H1","claim":"fixture coverage is complete","strongest_alternative":"an assigned item is omitted","falsifier":"any exact assignment differs","evidence_paths":["scripts/tests/pm-review-system.sh"]}],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
+value={"schema_version":"polymetrics.ai/pm-review-packet-response/v4","packet_id":packet["packet_id"],"exact_base_sha":manifest["exact_base_sha"],"exact_head_sha":manifest["exact_head_sha"],"exact_head_tree":manifest["exact_head_tree"],"status":"clean","reviewed_files":packet["changed_files"],"changed_file_slices":packet.get("changed_file_slices",[]),"closure_files":packet["closure_files"],"authority_files":packet["authority_files"],"context_file_slices":packet.get("context_file_slices",[]),"impact_files":packet.get("impact_files",[]),"impact_file_coverage":packet.get("impact_file_coverage",[]),"impact_edge_ids":packet.get("impact_edge_ids",[]),"impact_file_slices":packet.get("impact_file_slices",[]),"edge_context_files":packet.get("edge_context_files",[]),"edge_context_slices":packet.get("edge_context_slices",[]),"invariants":[{"id":x,"status":"pass","evidence_paths":[]} for x in packet["invariants"]],"unreviewed_files":[],"review_behaviors":{"impact_model_built_first":True,"directions_traced":["upstream","downstream","lateral","temporal"],"history_inspected":{"status":"not_needed","reason":"fixture"},"sibling_paths_compared":{"status":"not_needed","reason":"fixture"},"hypotheses":[{"id":"H1","claim":"fixture coverage is complete","strongest_alternative":"an assigned item is omitted","falsifier":"any exact assignment differs","evidence_paths":["scripts/tests/pm-review-system.sh"]}],"disconfirming_evidence":"exact assigned sets agree"},"experiments":[],"no_experiment_reason":"static fixture evidence is decisive","findings":[],"residual_risk":[],"context":{"input_tokens":None,"output_tokens":None,"cost":None,"overflow":False,"truncated":False},"wall_clock_ms":None}
 open(sys.argv[2],"w").write(json.dumps(value))
 PY
 fi
@@ -1466,6 +1596,7 @@ def clean_response(packet):
         "authority_files": packet["authority_files"],
         "context_file_slices": packet.get("context_file_slices", []),
         "impact_files": packet.get("impact_files", []),
+        "impact_file_coverage": packet.get("impact_file_coverage", []),
         "impact_edge_ids": packet.get("impact_edge_ids", []),
         "impact_file_slices": packet.get("impact_file_slices", []),
         "edge_context_files": packet.get("edge_context_files", []),
@@ -1866,6 +1997,23 @@ if not any(item["recurrence_of"] == "RC-HISTORICAL-1" for item in dedup["occurre
     errors.append("later-head recurrence was treated as a same-run duplicate")
 if not any("RC-RETIRED-1" in item["retired_root_ids"] for item in dedup["roots"]):
     errors.append("dedup reassignment did not retain the retired root id")
+replay_history_path=tmp/"dedup-replay-history.json"
+replay_history_path.write_text(json.dumps({
+    "schema_version":pm.DEDUP_HISTORY_SCHEMA,
+    "lineage_id":synthetic_run["lineage_id"],
+    "roots":dedup["roots"],
+}))
+replay=pm.synthesize_dedup(
+    repo,manifest,synthetic_findings,
+    os.path.relpath(decisions_path,repo),os.path.relpath(replay_history_path,repo),
+)
+original_occurrences={item["root_id"]:item["occurrence_ids"] for item in dedup["roots"]}
+for root in replay["roots"]:
+    occurrence_ids=root["occurrence_ids"]
+    if len(occurrence_ids) != len(set(occurrence_ids)):
+        errors.append(f"dedup replay duplicated occurrence ids for {root['root_id']}")
+    if root["root_id"] in original_occurrences and occurrence_ids != original_occurrences[root["root_id"]]:
+        errors.append(f"dedup replay changed stable occurrence ids for {root['root_id']}")
 tampered=json.loads(decisions_path.read_text());tampered["events"][0]["causal_test"]["same_mechanism"]=False
 tampered_path=tmp/"dedup-tampered.json";tampered_path.write_text(json.dumps(tampered))
 try:

@@ -13,7 +13,8 @@ The parent orchestrator must supply an exact base SHA, exact head SHA/tree, and 
 prompt emitted unchanged by `scripts/pm-review-system.py render` from an authenticated compiled
 packet. Reject hand-built, augmented, or manifest-only prompts. Confirm packet and candidate identities before
 review and stop on drift. Build the impact model first; review every assigned changed, closure,
-authority, impact-file, impact-edge, and invariant item; trace upstream/downstream/lateral/temporal
+authority, impact-file, per-impact-file provided/available byte-depth, impact-edge, and invariant
+item; treat low byte ratios as anchors rather than full-file review; trace upstream/downstream/lateral/temporal
 paths; inspect relevant history and sibling divergence; and seek disconfirming evidence. Do not
 inherit implementation rationale as authority.
 
@@ -29,8 +30,9 @@ violations.
 
 Return one `polymetrics.ai/pm-review-packet-response/v4` object following
 `.agents/agentic-delivery/contracts/pm-review-packet-template.md`. Declare exact identities,
-reviewed/closure/authority/impact/edge-context files, exact revision/blob-bound slices, and edge ids,
-invariant/observable behavior evidence, structured claim/alternative/falsifier hypotheses, lab experiments or a decisive-static reason, unreviewed
+reviewed/closure/authority/impact/edge-context files, exact per-impact-file byte-depth disclosure,
+exact revision/blob-bound slices, and edge ids, invariant/observable behavior evidence, structured
+claim/alternative/falsifier hypotheses, lab experiments or a decisive-static reason, unreviewed
 files, overflow/truncation, unlimited findings, and only available timing/token/cost data. The packet must preserve complete rendered-prompt one-token-per-byte accounting and its response
 reserve. Missing, inconclusive, unsafe, or silently truncated evidence is `blocked`, never clean.
 

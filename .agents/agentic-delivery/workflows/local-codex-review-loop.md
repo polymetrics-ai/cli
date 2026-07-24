@@ -60,14 +60,16 @@ A branch name, mutable PR ref, prior review, or session memory is not an exact i
    evidence is insufficient. An unavailable sandbox, denial, timeout/bound, cleanup failure,
    candidate drift, or inconclusive experiment blocks clean review.
 4. Each v4 response follows `pm-review-packet-template.md`: exact base/head/tree; changed, closure,
-   authority, impact-file, impact-edge, edge-context-file, exact changed/context/impact/edge-slice,
-   invariant, and behavior coverage; structured hypothesis and experiment/no-experiment
-   evidence; unreviewed files; context overflow/truncation; and findings. Finding count is unlimited.
-   Missing token/cost/latency data stays explicitly null.
+   authority, impact-file, per-impact-file provided/available byte depth, impact-edge,
+   edge-context-file, exact changed/context/impact/edge-slice, invariant, and behavior coverage;
+   low impact-file ratios are anchors rather than full-file review; structured hypothesis and
+   experiment/no-experiment evidence; unreviewed files; context overflow/truncation; and findings.
+   Finding count is unlimited. Missing token/cost/latency data stays explicitly null.
 5. Preserve raw responses and lab evidence outside the tracked worktree. Run `scripts/pm-review-system.py synthesize`
    to deterministically recompile and authenticate the exact manifest, reject unsafe/extra response
-   children, bind experiments field-for-field to v3 lab evidence, and produce one PM-owned result. Missing responses/coverage, stale identities, any unreviewed file,
-   or overflow/truncation cannot synthesize clean.
+   children, bind experiments field-for-field to v3 lab evidence, and produce one PM-owned result.
+   Missing responses/coverage or altered impact-depth disclosure, stale identities, any unreviewed
+   file, or overflow/truncation cannot synthesize clean.
 6. Review correctness, security, safety, regressions, test adequacy, evidence truthfulness,
    write-scope violations, machine contracts, and human gates. Return findings with severity,
    file/line evidence, impact, and smallest safe correction. List residual risk separately.

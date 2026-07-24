@@ -2228,9 +2228,15 @@ def build_packets(
         metadata_bytes = len(canonical_json_bytes([impact_edge_by_id[edge_id] for edge_id in edge_ids]))
         return fixed_prompt_bytes + changed_cost + context_cost + metadata_bytes + 4096
 
+    edge_slice_cache: dict[tuple[str, ...], list[dict[str, Any]]] = {}
+
     def exact_edge_slices(edge_ids: Iterable[str]) -> list[dict[str, Any]]:
+        cache_key = tuple(sorted(edge_ids))
+        cached = edge_slice_cache.get(cache_key)
+        if cached is not None:
+            return [dict(item) for item in cached]
         selected: dict[tuple[str, str, int, int], dict[str, Any]] = {}
-        for edge_id in edge_ids:
+        for edge_id in cache_key:
             edge = impact_edge_by_id[edge_id]
             revision_sha = base if edge.get("revision") == "base" else head
             for endpoint, line in ((edge["source"], int(edge.get("line", 0))), (edge["target"], 0)):
@@ -2249,9 +2255,32 @@ def build_packets(
                 # Include every such chunk; selecting the first would silently lose provenance.
                 for item in matching or candidates[:1]:
                     selected[(item["path"], item["revision"], item["start_byte"], item["end_byte"])] = item
-        return sorted(selected.values(), key=lambda item: (item["path"], item["revision"], item["start_byte"]))
+        result = sorted(selected.values(), key=lambda item: (item["path"], item["revision"], item["start_byte"]))
+        edge_slice_cache[cache_key] = [dict(item) for item in result]
+        return result
+
+    def refresh_impact_file_coverage(packet: dict[str, Any]) -> None:
+        impact_paths = set(packet.get("impact_files", []))
+        provided_slices = {
+            (item["path"], item["revision"], item["start_byte"], item["end_byte"], item["sha256"]): item
+            for field in ("impact_file_slices", "edge_context_slices")
+            for item in packet.get(field, [])
+            if item.get("path") in impact_paths
+        }
+        provided_by_path: dict[str, int] = defaultdict(int)
+        for item in provided_slices.values():
+            provided_by_path[item["path"]] += int(item["bytes"])
+        packet["impact_file_coverage"] = [
+            {
+                "path": path,
+                "provided_bytes": provided_by_path[path],
+                "file_bytes": int(blob_sizes[path]),
+            }
+            for path in sorted(packet.get("impact_files", []))
+        ]
 
     def account_packet(packet: dict[str, Any]) -> None:
+        refresh_impact_file_coverage(packet)
         all_slices = (
             packet.get("changed_file_slices", []) + packet.get("context_file_slices", [])
             + packet.get("impact_file_slices", []) + packet.get("edge_context_slices", [])
@@ -2266,6 +2295,10 @@ def build_packets(
         )
         payload_bytes = sum(int(item["bytes"]) for item in ordered_slices)
         separator_bytes = len(ordered_slices) * len(SLICE_SEPARATOR)
+        # The envelope embeds the context dict, so rendered_prompt_bytes is self-referential; iterate
+        # to a fixed point (bounded at 4) but stop as soon as the byte count stops changing, which is
+        # usually after two passes. Stopping early avoids redundant canonical serialization.
+        previous_prompt_bytes = None
         for _ in range(4):
             envelope_bytes = len(canonical_json_bytes(packet))
             prompt_bytes = fixed_prompt_bytes + envelope_bytes + payload_bytes + separator_bytes
@@ -2282,6 +2315,9 @@ def build_packets(
                     "overflow": prompt_bytes > target_tokens or total > context_window,
                 }
             )
+            if prompt_bytes == previous_prompt_bytes:
+                break
+            previous_prompt_bytes = prompt_bytes
 
     def append_packet(
         role: str,
@@ -2340,6 +2376,7 @@ def build_packets(
             "authority_files": sorted(authority),
             "context_file_slices": context_file_slices,
             "impact_files": impact,
+            "impact_file_coverage": [],
             "impact_edge_ids": impact_edge_ids,
             "impact_edges": [impact_edge_by_id[edge_id] for edge_id in impact_edge_ids],
             "impact_file_slices": impact_file_slices,
@@ -2413,37 +2450,53 @@ def build_packets(
         by_role: dict[str, list[str]] = {}
         for path in files:
             by_role.setdefault(domains[path], []).append(path)
-        for role in ("architecture_reference", "authority_workflow_state", "implementation_test"):
-            current_paths: list[str] = []
-            current_slices: list[dict[str, Any]] = []
-            current_bytes = 0
-            def flush_changed() -> None:
-                nonlocal current_paths, current_slices, current_bytes
-                if current_slices:
-                    append_packet(role, sorted(set(current_paths)), [], [], changed_file_slices_override=current_slices)
-                current_paths, current_slices, current_bytes = [], [], 0
-            for path in sorted(by_role.get(role, [])):
+        # Enumerate the actual classified domains so validation and packing cannot drift. The
+        # reserved aggregate/impact roles are not changed-file domains in split mode; the closing
+        # packet-coverage postcondition below reports any such unsafe classification explicitly.
+        # Valid changed slices use deterministic cross-role best-fit packing; exact accounting and
+        # the invariant union are recomputed before any candidate packet is accepted.
+        for role in sorted(by_role):
+            if role in {"combined", "impact_graph"}:
+                continue
+            for path in sorted(by_role[role]):
                 for item in changed_content_slices.get(path, []):
-                    proposed_slices = [*current_slices, item]
-                    proposed_upper = (
-                        fixed_prompt_bytes + 1800
-                        + sum(int(value["bytes"]) for value in proposed_slices)
-                        + len(canonical_json_bytes(proposed_slices))
-                    )
-                    if current_slices and (
-                        len(set(current_paths) | {path}) > int(thresholds["packet_max_changed_files"])
-                        or proposed_upper > target_tokens
-                    ):
-                        flush_changed()
-                    current_paths.append(path)
-                    current_slices.append(item)
-                    current_bytes += int(item["bytes"])
-                    if (
-                        fixed_prompt_bytes + 1800 + int(item["bytes"])
-                        + len(canonical_json_bytes(item)) > target_tokens
-                    ):
-                        problems.append(finding("packet_overflow", f"atomic changed slice cannot fit: {path}:{item['start_line']}-{item['end_line']}"))
-            flush_changed()
+                    best: tuple[int, str, dict[str, Any], dict[str, Any]] | None = None
+                    item_bytes = int(item["bytes"])
+                    for packet in sorted(packets, key=lambda value: value["packet_id"]):
+                        # Cheap lower-bound prefilter: adding a slice only grows the envelope and
+                        # payload, so a packet whose current rendered size plus the slice payload
+                        # already exceeds the target cannot fit. Skip it before the costly deep copy
+                        # and canonical re-accounting; the account below stays authoritative.
+                        if path not in packet["changed_files"] and len(packet["changed_files"]) >= int(thresholds["packet_max_changed_files"]):
+                            continue
+                        if packet["context"]["rendered_prompt_bytes"] + item_bytes > target_tokens:
+                            continue
+                        candidate = json.loads(json.dumps(packet))
+                        candidate["changed_files"] = sorted(set(candidate["changed_files"]) | {path})
+                        candidate["changed_file_slices"] = sorted(
+                            [*candidate["changed_file_slices"], item],
+                            key=lambda value: (value["path"], value["start_byte"]),
+                        )
+                        if candidate["role"] != role:
+                            candidate["role"] = "combined"
+                            candidate["packet_id"] = "combined-00"
+                            candidate["invariants"] = sorted(
+                                set(candidate["invariants"])
+                                | set(config["packet_invariants"][role])
+                            )
+                        account_packet(candidate)
+                        if candidate["context"]["overflow"]:
+                            continue
+                        score = (candidate["context"]["rendered_prompt_bytes"], packet["packet_id"])
+                        if best is None or score > best[:2]:
+                            best = (*score, packet, candidate)
+                    if best is None:
+                        append_packet(
+                            role, [path], [], [],
+                            changed_file_slices_override=[item],
+                        )
+                    else:
+                        best[2].update(best[3])
 
     def co_pack_context(
         paths: list[str], role: str, assignment_field: str,
@@ -2743,8 +2796,9 @@ def build_packets(
         return not candidate["context"]["overflow"]
 
     # A large exact range can contain a few complementary under-filled packets. Coalesce only
-    # assignment-preserving compatible pairs near the hard packet cap, retaining two packets of
-    # headroom for final evidence-only range growth. The scarcity-first order avoids consuming a
+    # assignment-preserving compatible pairs near the hard packet cap, targeting two packets of
+    # headroom when compatible pairs exist; the manifest reports the actual achieved margin. The
+    # scarcity-first order avoids consuming a
     # packet that is the sole fit for another packet; every accepted pair is re-accounted from the
     # complete merged envelope and exact payload bytes.
     coalescing_target = max(1, maximum_packets - 2)
@@ -2794,6 +2848,19 @@ def build_packets(
             problems.append(
                 finding("packet_overflow", f"{packet['packet_id']} violates the final rendered-input postcondition")
             )
+
+    packed_changed = {path for packet in packets for path in packet["changed_files"]}
+    for path in files:
+        if path not in packed_changed:
+            problems.append(finding("packet_coverage", f"changed file is assigned to no packet: {path}"))
+        packed_bytes = sum(
+            int(item["bytes"])
+            for packet in packets
+            for item in packet["changed_file_slices"]
+            if item["path"] == path
+        )
+        if packed_bytes != changed_content_sizes.get(path):
+            problems.append(finding("packet_coverage", f"changed file slice assignment is incomplete: {path}"))
 
     if len(packets) > maximum_packets:
         problems.append(finding("packet_overflow", f"packet count {len(packets)} exceeds {maximum_packets}"))
@@ -3078,6 +3145,7 @@ def compile_document(root: Path, config_relative: str, scope_relative: str, base
             "authority_inventory": authority,
             "impact_graph": impact_graph,
             "selection": selection,
+            "packet_headroom": int(config["impact_graph"]["max_packets"]) - len(packets),
             "packets": packets,
             "findings": findings,
             "coverage_manifest": coverage,
@@ -3439,8 +3507,8 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
     required = {
         "schema_version", "packet_id", "exact_base_sha", "exact_head_sha", "exact_head_tree",
         "status", "reviewed_files", "changed_file_slices", "closure_files", "authority_files",
-        "context_file_slices", "impact_files", "impact_edge_ids", "impact_file_slices",
-        "edge_context_files", "edge_context_slices", "invariants", "unreviewed_files",
+        "context_file_slices", "impact_files", "impact_file_coverage", "impact_edge_ids",
+        "impact_file_slices", "edge_context_files", "edge_context_slices", "invariants", "unreviewed_files",
         "review_behaviors", "experiments", "no_experiment_reason", "findings", "residual_risk",
         "context", "wall_clock_ms",
     }
@@ -3452,6 +3520,29 @@ def validate_response_shape(packet_id: str, response: Any) -> list[dict[str, Any
         value = response.get(field)
         if not isinstance(value, list) or not all(isinstance(item, str) for item in value) or len(value) != len(set(value)):
             blockers.append(finding("packet_response", f"{packet_id} {field} must be a duplicate-free string list"))
+    coverage = response.get("impact_file_coverage")
+    if not isinstance(coverage, list):
+        blockers.append(finding("packet_response", f"{packet_id} impact_file_coverage must be a list"))
+    else:
+        seen_coverage_paths: set[str] = set()
+        for item in coverage:
+            if (
+                not isinstance(item, dict)
+                or set(item) != {"path", "provided_bytes", "file_bytes"}
+                or not isinstance(item.get("path"), str)
+                or not isinstance(item.get("provided_bytes"), int)
+                or isinstance(item.get("provided_bytes"), bool)
+                or not isinstance(item.get("file_bytes"), int)
+                or isinstance(item.get("file_bytes"), bool)
+                or item["provided_bytes"] < 0
+                or item["file_bytes"] < item["provided_bytes"]
+            ):
+                blockers.append(finding("packet_response", f"{packet_id} impact_file_coverage entry is malformed"))
+                continue
+            if item["path"] in seen_coverage_paths:
+                blockers.append(finding("packet_response", f"{packet_id} impact_file_coverage path is duplicate"))
+            seen_coverage_paths.add(item["path"])
+
     for slice_field in ("changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"):
         slices = response.get(slice_field)
         if not isinstance(slices, list) or not all(
@@ -3899,7 +3990,7 @@ def synthesize_dedup(
                     "correction_owner": representative_finding.get("path"),
                     "regression_treatment": representative_finding.get("smallest_safe_correction"),
                 },
-                "occurrence_ids": sorted([*historical.get("occurrence_ids", []), occurrence_id]),
+                "occurrence_ids": sorted(set(historical.get("occurrence_ids", [])) | {occurrence_id}),
                 "membership_events": [
                     {
                         "observation_id": item,
@@ -4140,9 +4231,12 @@ def command_synthesize(args: argparse.Namespace) -> int:
                 actual = response.get(field)
                 if not isinstance(actual, list) or actual != expected_values:
                     blockers.append(finding("packet_coverage", f"{packet['packet_id']} {field} differs from exact assignment"))
-            for slice_field in ("changed_file_slices", "context_file_slices", "impact_file_slices", "edge_context_slices"):
-                if response.get(slice_field) != packet.get(slice_field, []):
-                    blockers.append(finding("packet_coverage", f"{packet_id} {slice_field} differs from exact assignment"))
+            for coverage_field in (
+                "changed_file_slices", "context_file_slices", "impact_file_coverage",
+                "impact_file_slices", "edge_context_slices",
+            ):
+                if response.get(coverage_field) != packet.get(coverage_field, []):
+                    blockers.append(finding("packet_coverage", f"{packet_id} {coverage_field} differs from exact assignment"))
             invariant_blockers, failed_invariants = response_invariants(
                 packet["packet_id"], set(packet.get("invariants", [])), response
             )

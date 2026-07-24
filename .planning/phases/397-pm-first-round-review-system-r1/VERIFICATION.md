@@ -1,173 +1,52 @@
 # Issue #397 PM First-Round Review System Verification
 
-**Status:** correction round 2/5 replacement candidate is focused/full GREEN at 63 packets under hard limits; clean exact commit/rebuild pending before prospective R3
+**Status:** captain-authorized advisory F1–F6 correction full GREEN on the uncommitted candidate; exact clean commit + self-review pending; correction budget remains 2/5
 
-> Earlier checked graph/lab/compiler items record pre-review focused-fixture evidence. Round-1 review disproved several production-completeness claims; they are not final acceptance. The correction checklist below supersedes them.
+> Historical round-0/1/2 checklist detail is condensed below; the current F1–F6 correction and delivery gates are authoritative. Earlier focused-fixture claims are pre-review evidence, not final acceptance.
 
-## Identity and scope
+## Historical rounds (condensed; full detail in git history and REVIEW-R1/R2 artifacts)
 
-- [x] Isolated disposable worktree is not the primary clone (`SETUP-EVIDENCE.md`).
-- [x] Status/log/untracked/stash/diff inventory captured clean before production edits (`SETUP-EVIDENCE.md`).
-- [x] Normal fetch verified remote parent contains and equals PR #495 squash `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20` (`SETUP-EVIDENCE.md`).
-- [x] Clean detached remote-base transition and branch creation recorded without reset/rebase/amend/force (`SETUP-EVIDENCE.md`).
-- [x] Branch is `chore/pm-first-round-review-system-r1`.
-- [x] Parent PR #438 exists and remains draft/human-only.
-- [x] Diff remains disjoint from all PR #493-owned paths.
-- [x] No #408/TUI, Gong/#497, write-URL, dependency, credential, connector, CLI help, or reverse-ETL behavior change.
-- [x] Historical PR #495 evidence remains truthful and is not rewritten as clean.
-- [x] Diff is within the exact positive path allowlist in `PLAN.md`.
-- [x] No new CLI/subcommand, orchestration owner, article/#498, `go.mod`, or `go.sum` change.
+- [x] Setup: isolated worktree, clean status inventory, verified remote base `0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20`, clean branch creation, no reset/rebase/amend/force (`SETUP-EVIDENCE.md`).
+- [x] Scope: diff disjoint from all PR #493-owned paths; within the `PLAN.md` positive allowlist; no CLI/subcommand/dependency/connector/reverse-ETL behavior change; PR #495 history preserved truthfully.
+- [x] Round-0 RED→GREEN: readiness-gate, disposition-parser, prose-dependency, transitive-prohibited-target, lineage-reset, unsafe-reference, cross-format-closure, packet-coverage/overflow/threshold, and frozen opaque-corpus cases pass; clean controls stay clean.
+- [x] Compiler: active closure with edge reasons, authority writers/readers/mirrors, parsed dispatch, exact base/head in every packet, conservative/mandatory split thresholds, block-not-truncate, one PM synthesis, downstream Shepherd.
+- [x] Algorithm research: `ALGORITHM-RESEARCH.md` selected typed multigraph + forward/reverse adjacency + relation-policy BFS with measured tradeoffs and no new dependency.
+- [x] Bidirectional impact graph: seeds = changed + canonical roots; typed edges with three-valued certainty; Markdown/JSON/YAML/shell/Python/Go coverage; cycle-safe bounded BFS; complete impact coverage or block; practical-impact-only disclosure.
+- [x] Counterfactual lab: detached disposable exact-head copies; scrubbed env; canonical/outside/symlink/network/shell/commit/install/live/deploy denial; proven OS sandbox or block; time/process/disk/output bounds; before/after identity proof; discriminating hypotheses; versioned contracts.
+- [x] Codex round 1 at `b1d869732d230575ab7c8295b15cef42cc0078ef`: 17/17 packets, 89 findings, dispositioned in `REVIEW-R1-DISPOSITION.md`; R1-A..R1-O RED→GREEN; correction round 1/5; Shepherd not run.
+- [x] Round 2 at `92ce5e6a1`: 41/41 responses, 141 findings, `REVIEW-R2-DISPOSITION.md`; R2-A..R2-O/N1..N6 RED→GREEN; lineage advanced to 2/5; operational provider retries excluded from rounds.
+- [x] Round-2 route/docs/state parity and fresh-runtime lab-fixture recovery (aggregate `changed_paths`, `__CF_USER_TEXT_ENCODING`, `internal/lib` path, numeric loopback service, `local_only`) all closed; full repository verification passed on the uncommitted candidate.
+- [x] Bounded-efficiency replacement reached 63 packets with every rendered prompt ≤30,000 bytes via exact partitioning, cross-role best-fit, and assignment-preserving coalescing (no truncation, no bound reduction); committed `c28126bb3` and reconfirmed clean exact head/tree with full verification.
 
-## RED/GREEN requirements
+## Captain-authorized advisory F1–F6 correction
 
-- [x] RED: canonical `final_parent_readiness` incorrectly classifies `human_ready`.
-- [x] RED: valid identifier `SEC1` with noncanonical disposition is not rejected by current parser.
-- [x] RED: prose-only dependency mutation escapes baseline.
-- [x] RED: transitive prohibited-template mutation escapes direct-file baseline.
-- [x] RED: replacement-head lineage reset/fragmentation escapes shape-only baseline.
-- [x] RED: unsafe absolute/parent/control/option-like references are rejected at the semantic corpus layer; real symlink/identity integration RED remains pending.
-- [x] RED: cross-format graph, cycle, and missing-target semantics are exercised in the frozen corpus; real file-parser integration RED remains pending.
-- [x] RED: stale packet identity, incomplete coverage, overflow, threshold boundaries, replacement/resume, and cap boundary fail semantically; one-way legacy migration/append-only integration RED remains pending.
-- [x] RED: opaque corpus and separate oracle are frozen and hashed before treatment implementation.
-- [x] GREEN: all five concrete cases and pre-frozen mutation cases are detected for the intended semantic reason.
-- [x] GREEN: unknown schema/kind, stale evidence, cap exceeded, arbitrary IDs, and missing active targets block.
-- [x] GREEN: clean/metamorphic controls do not produce findings.
-
-## Review compiler
-
-- [x] Active required-reference closure records source, target, and edge reason.
-- [x] Missing active targets and prohibited reachable targets fail.
-- [x] Authority registry records authoritative state plus writers/readers/mirrors.
-- [x] Dispatch/readiness checks parse relationships rather than trust prose.
-- [x] Exact base/head are verified and embedded in each packet.
-- [x] Small coherent changes stay one packet only at ≤20 files, ≤600 lines, one domain.
-- [x] 21–25 files, 601–800 lines, or exactly two domains split conservatively; >25 files, >800 lines, or >2 domains split mandatorily.
-- [x] Any partition that cannot meet ≤20 changed, ≤10 closure/authority, and declared 30K-token packet caps blocks rather than truncates.
-- [x] Every changed file is assigned; each response declares reviewed, closure, invariants, unreviewed, findings, and overflow/truncation.
-- [x] Missing response/coverage, stale identity, overflow, or silent truncation cannot synthesize clean.
-- [x] Findings are unlimited and synthesize to one PM-owned local-Codex disposition.
-- [x] Shepherd remains independent and runs only after clean synthesis.
-
-## Algorithm research checkpoint
-
-- [x] All three additive captain requirements were read in full before production graph/lab edits.
-- [x] `ALGORITHM-RESEARCH.md` records primary title, author/organization, date/version, stable URL/DOI, mechanism, and limits.
-- [x] Every required capability compares at least two credible alternatives.
-- [x] Disposable exact-head benchmark covers real graph shape, cold/traversal/incremental timing, memory availability, oracle precision/recall, synthetic fan-in/fan-out/cycles, determinism, invalidation, and packet consequences.
-- [x] Candidate baseline was explicitly revised: typed directed multigraph + forward/reverse adjacency + multi-source relation-policy BFS selected; v1 SCC condensation, unrestricted traversal, persistent cache, and new dependencies rejected with measured reasons.
-- [x] Selected design adds no shipped dependency.
-
-## Bidirectional practical impact graph
-
-- [x] Separate correction inputs/oracle are frozen and hashed before GREEN; old root/outgoing behavior failed 17 defect fixtures and real integration assertions while four clean controls stayed clean.
-- [x] Union of every changed file and canonical roots forms seeds; declared universe is indexed before traversal.
-- [x] Every edge records stable id, source, target, relation/direction, parser, provenance reason/location, and `active|inactive|unknown` certainty.
-- [x] Markdown/frontmatter/JSON/YAML, shell, Python, authoritative Go package/test/import/current-build, authority, generator/generated, lateral, mirror, and temporal edges are covered.
-- [x] Reverse leaf, script both directions, authority, generated chain, Go importer/test, platform variant, cycle, unknown conditional, and unrelated control pass.
-- [x] Iterative deterministic relation-policy BFS terminates on cycles; a continuing frontier or any index/node/edge/depth/file/token/Go-command bound blocks explicitly.
-- [x] Missing active edges and unresolved unknowns include safely or block; inactive edges do not become active.
-- [x] Complete impact files and edge ids enter exact-version coverage and bounded packets only after discovery.
-- [x] Missing/stale impact response coverage, overflow, truncation, or graph-bound evidence cannot synthesize clean.
-- [x] Output distinguishes practical file/package impact from unavailable symbol-level call/data-flow coverage.
-
-## Counterfactual hypothesis lab
-
-- [x] Old system's absent lab support and missing response/synthesis semantics are captured as RED before production lab code.
-- [x] Every experiment uses a detached disposable exact-head copy under a private temporary root; canonical candidate stays clean/read-only.
-- [x] Environment/config/credentials are scrubbed; captured artifacts contain no secret sentinel.
-- [x] Canonical/outside/symlink writes and cross-lab access are denied.
-- [x] Network, generic shell, commit/push/PR/remote mutation, install, credential/live connector, deployment, and destructive external commands are denied.
-- [x] A proven OS sandbox is required; unavailable/ambiguous/policy-only fallback blocks clean experiments.
-- [x] Time/process/disk/output bounds, descendant termination, evidence bounds, and whole-lab destruction are enforced.
-- [x] Candidate exact base/head/tree/status are proven unchanged before/after; drift or cleanup failure blocks synthesis.
-- [x] Evidence captures hypothesis/alternative, examined impact edges, temporary diff hash/summary, argv, expected discriminator, stdout/stderr, exit, duration, observation, and safety proof.
-- [x] Competing hypotheses discriminate; an inconclusive performed experiment cannot prove clean; decisive static evidence uses an explicit no-experiment reason.
-- [x] Concurrent packet labs cannot inspect peers and are destroyed; an unrelated clean control performs no unnecessary experiment.
-- [x] Graph/lab/packet/response/synthesis contracts are versioned; incompatible v1 migration fixtures fail closed.
-- [x] Focused PM tests remain transitively present in repository `make verify`/CI routing.
-
-## Exact-head Codex round 1 correction
-
-- [x] 17/17 fresh Sol/xhigh packet reviews completed at `b1d869732d230575ab7c8295b15cef42cc0078ef`, zero unreviewed files, 89 unlimited raw findings.
-- [x] Raw manifest/synthesis/response hashes and 22 provider attempts/5 operational failures are recorded separately from correction round usage in `REVIEW-R1-MEASUREMENT.json`.
-- [x] Duplicate authentication failure was diagnosed after two attempts; sequential auth probe passed and serialized recovery succeeded. Provider retries did not consume correction rounds.
-- [x] Every raw finding has an explicit accepted-with-modification or duplicate disposition in `REVIEW-R1-DISPOSITION.md`; none is declined, waived, hidden, or deferred.
-- [x] Stable lineage advanced to correction round 1/5; Shepherd was correctly not run on non-clean synthesis.
-- [x] R1-A exact compile/synthesis head/tree/base/ready-manifest binding passes RED→GREEN.
-- [x] R1-B strict response/invariant/experiment/lab-evidence contract passes RED→GREEN.
-- [x] R1-C relation/direction policy-state BFS and global frontier handling pass RED→GREEN.
-- [x] R1-D coherent exact-blob slices and bounded endpoint excerpts stay ≤30K tokens without truncation.
-- [x] R1-E parser/certainty/endpoint/deletion/prohibited/root/shell/fixture cases fail closed correctly.
-- [x] R1-F file/node/edge limits prevent broad reads/materialization before blocking.
-- [x] R1-G external-module offline Go indexing and deleted-Go base+head context pass.
-- [x] R1-H outside config/home/temp reads, Git administration, and descendant process creation are denied; lab evidence is exact-bound.
-- [x] R1-I explicit-null/conflicting schema aliases block while key-absent legacy remains compatible.
-- [x] R1-J reusable policy and validated per-run scope are separated and manifest-bound.
-- [x] R1-K current PM route siblings are reconciled without touching explicit PR #493-owned paths.
-- [x] R1-L post-#495 parent authority and phase-state temporal contract are truthful and validated.
-- [x] R1-M durable phase evidence is reconciled while historical logs remain intact.
-- [x] R1-N remote freshness is parent-owned and packet review remains local/no-network.
-- [x] R1-O governing root/source docs enter explicit bounded closure.
-- [x] Re-run focused/full verification on correction head `528dcc68599af4efaaee46c9b038bbd022178411`.
-- [x] Re-run exact-head packets and recurrence synthesis at `92ce5e6a1`: 41/41 responses, 141 findings, zero blockers; Shepherd correctly remained pending.
-- [x] Record 44 packet provider attempts/3 recovered failures plus one context-window rejection as operational evidence, not a correction round.
-- [x] Compare every finding against R1-A–R1-O in `REVIEW-R2-DISPOSITION.md`; repeated groups have root-cause diagnoses rather than local patch plans.
-- [x] Capture round-2 RED fixtures for authenticated synthesis, complete rendered-prompt bounds, structural graph parsing, phase/mirror validation, lab containment, Shepherd/trace safety, route parity, and evidence-preserving deduplication.
-- [x] Implement round-2 systemic corrections and pass focused GREEN without weakening limits or touching PR #493-owned paths.
-- [x] Re-run complete full verification on the combined candidate tree.
-- [ ] Commit one exact candidate, rebuild inputs from scratch, run fresh prospective R3 packets, and obtain one synthesis.
-- [ ] Run independent Shepherd only if that exact R3 synthesis is clean.
-
-## Round-2 route/documentation/state parity retry
-
-- [x] `scripts/gsd doctor` passed; `scripts/gsd list` exposed 69 commands without `programming-loop`; `scripts/gsd sources plan-phase` and the generated 10,632-byte plan prompt were executed through local tools.
-- [x] Required skills and Pi/runtime/connector authorities were loaded and recorded in `PLAN.md`.
-- [x] RED: `bash scripts/tests/pm-orchestrator-contract.sh` failed on the expected active-route, parent-gate, exact-enum, stale-state, tool-scope, and vendored-provenance assertions before production documentation/state edits.
-- [x] Scope is limited to allowlisted R1-I/R1-K/R1-L/R2-N2/R2-N5 paths; PR #493-owned files, Shepherd workflow/prompt, driver scripts, trace driver, PM compiler/lab implementation/tests, and the GitHub connector ledger remain untouched.
-- [x] Active parent and worker routes state v4 compile → renderer output unchanged → synthesize → clean exact head → independent Shepherd.
-- [x] Parent workflow uses exact disposition enum values and current parent PLAN/VERIFICATION/state agree on the sole PR #493 worker-start blocker.
-- [x] Pi runtime docs match executable tool frontmatter and `.pi/settings.json` truthfully loads the locally modified vendored `.pi/extensions/pi-sub-agent` derived from `pi-sub-agent@0.1.5` without an npm install step.
-- [x] Connector ownership says `bundleregistry/registry.go` is shared hand-maintained bootstrap code and distinguishes `pm_worker` commit/push delivery from explicit `coordinator_fanout` no-commit delivery.
-- [x] Focused PM contract rerun closes all owned assertions. It exits 1 only for the three missing `.pi/prompts/pm-review-loop.md` invocation flags owned by the R1-A route implementation workstream.
-
-## Fresh-runtime combined implementation recovery
-
-- [x] Read the five controlling audit, consolidated, dedup, R3, and experiment-capability documents in the specified order.
-- [x] Preserved the published `355510f5b` head and every uncommitted/untracked change; no reset, checkout, stash, clean, amend, or rebase was used.
-- [x] `git status`, changed-path inventory, recent log, and `git diff --check` inspected before correction.
-- [x] `scripts/gsd doctor` and `scripts/gsd list` pass; registry has 69 commands and no `programming-loop`, so `/pm-orchestrate` remains active.
-- [x] Required review/hardening skills loaded and recorded; CLI help/manual/website parity remains not applicable.
-- [x] Python compile, shell syntax, Shellcheck, JSON parsing, YAML parsing, and `git diff --check` pass.
-- [x] Focused RED isolated: successful dummy SQLite execution reached `KeyError: 'changed_paths'` because trusted lab-owned root effects partitioned paths but omitted the deterministic aggregate.
-- [x] Added the aggregate disclosure without weakening effect partitions, hashing, read/write bounds, policy violations, candidate immutability, or cleanup evidence; the suite advanced.
-- [x] Next focused RED isolated: macOS kill-on-denial blocked Go on the host user's `.CFUserTextEncoding`; diagnostic profiles preserved all denies and proved a UID-derived dummy `__CF_USER_TEXT_ENCODING` avoids the host read.
-- [x] Added only that scrubbed non-inherited locale value; host-home reads remain denied and kill-on-denial remains authoritative.
-- [x] Next focused RED isolated: Go ran with zero policy violations but the isolated fixture requested absent `internal/connectors/engine` instead of its committed `internal/lib` package.
-- [x] Corrected only the fixture package path and retained real Go compile/cache/effect assertions; the suite advanced.
-- [x] Next focused RED isolated: `python -m http.server` attempted host mDNS resolution and was correctly killed before readiness; a minimal numeric loopback HTTP responder passed the unchanged sandbox policy.
-- [x] Replaced only the dummy service fixture; exact localhost/port enforcement and host-resolver/external-network denial remain unchanged.
-- [x] Next focused RED isolated: successful trusted service evidence omitted explicit `local_only` despite validated loopback-TCP/lab-Unix normalization.
-- [x] Added only the authenticated disclosure; endpoint access was not broadened.
-- [x] Clean `bash scripts/tests/pm-review-system.sh` result recorded after all recovery corrections.
-- [x] Remaining focused/adversarial campaigns pass: PM orchestrator contract, Shepherd stall/watchdog/process-tree guard, Shepherd exact-identity/verdict/checkpoint guard, and Pi model routing with transitive PM suites.
-- [x] Full repository verification passes on the final uncommitted candidate tree; exact commit and same-tree identity verification are next before prospective R3.
+- [x] Captain authorization, advisory report, and correction/self-review instructions read in full.
+- [x] Advisory path is recorded as non-R3 and non-budget-consuming; correction usage stays 2/5.
+- [x] Partial prospective R3 at `c28126bb3` was halted without synthesis; Shepherd was not run.
+- [x] `scripts/gsd doctor` and `scripts/gsd list` pass; absent `programming-loop` manual fallback recorded.
+- [x] Before baseline captured: ready, 63 packets, max 29,994 rendered bytes, 1.018025x duplication, derived headroom 1, 14.24s, 285,360,128-byte max RSS.
+- [x] RED F1: accepted `combined` domain assignment stayed ready instead of named nonzero `packet_coverage` block.
+- [x] RED F1 byte proof: permanent assertion requires all changed files' packed diff bytes equal exact Git diff bytes.
+- [x] RED F2/F3: renderer lacked honest held-contract assumption and actionable-vs-residual-risk criterion.
+- [x] RED F4: packets/responses lacked per-impact-file provided/total bytes and exact synthesis echo.
+- [x] RED F5: manifest access raised `KeyError: packet_headroom`; comment still overclaimed two slots.
+- [x] RED F6: replay duplicated deterministic occurrence ids across four roots.
+- [x] GREEN F1–F6 focused regressions pass with unchanged 30,000-byte/64-packet hard limits.
+- [x] Bounded perf pass (prefilter, edge-slice cache, account early-stop) proven byte-identical output on a frozen tree; clawed back a ~15.8s pre-opt regression to ~14.6s; three compiles share one semantic-manifest digest.
+- [x] Packet-budget honesty: with the required honest F2/F3 prompt the accumulated candidate compiles ready within the unchanged 64-packet hard cap; the max rendered packet is ≤30,000 (hard cap) with 0 overflow. The baseline's single packet of headroom was consumed by required corrections plus legitimate content growth; recorded, not hidden, and no limit/gate was weakened.
+- [x] Complete static/focused/adversarial/repository verification passes on the corrected candidate (gofmt clean, vet, full `go test`, build, module checks, `make verify` with 0 lint/547 connectors/PM+Shepherd suites/safe reverse ETL).
+- [ ] One clean exact correction commit is pushed; same-head/tree clean verification passes.
+- [ ] Fresh trust-bound self-review uses no `c28126bb3` manifest/response and deliberately proves reintroduced F1 blocks.
+- [ ] One PM synthesis is reported without silent iteration; Shepherd runs only if it is clean.
+- [ ] Stacked PR targets `feat/cli-architecture-v2`, CI is green, and PR remains open/unmerged.
 
 ## Measurement
 
-- [x] Historical source identities are retained for PR #495 replays.
-- [x] Detector execution does not receive the separate oracle.
-- [x] Opaque held-out mutations and clean/metamorphic controls run.
-- [x] Machine report captures recall, precision, escapes, false positives, exact invalidations, rounds, overflows, wall time, and available token/cost fields.
-- [x] Deterministic fixture results are not described as model-review or prospective production results.
-- [x] Corpus provenance/hash and fixture-level blinding limitation are explicit.
-- [x] Unavailable token/cost/prospective evidence is explicit.
-- [x] Packet artifacts contain paths/metadata only; environment-sentinel regression proves no environment-value copy.
-- [x] Correction measurement separates static/semantic findings, impact-graph coverage, lab experiments/safety/cleanup, deterministic mutation results, actual packet metrics, and prospective evidence.
-- [x] Baseline/treatment reports impact recall/precision, edge/file coverage, bound hits, cold/traversal time, memory availability, determinism, invalidation, impact size, and packet consequences.
-- [x] Lab measurement reports attempted/denied/completed/inconclusive experiments, cleanup/identity proofs, latency, output/disk/process bounds, and available model token/cost fields.
-- [x] Public fixtures are labeled regression evidence rather than a secret benchmark; prospective #493/#408/later Architecture v2 evidence remains unavailable until observed.
-- [x] R1 and R2 dedup diagnostics are labeled retrospective development because R2 labels were inspected during tuning; no held-out acceptance claim is made.
-- [x] Deterministic `deterministic-partial-keys/v1` is frozen before the next untouched measurement, fresh prospective R3.
+- [x] Detector execution does not receive the separate oracle; opaque held-out mutations and clean/metamorphic controls run; corpus provenance/hash and fixture-blinding limitation are explicit.
+- [x] Machine report captures recall, precision, escapes, false positives, exact invalidations, rounds, overflows, wall time, and available token/cost fields; deterministic fixtures are labeled regression evidence, not model-review or prospective production results.
+- [x] Packet artifacts contain paths/metadata only; an environment-sentinel regression proves no environment-value copy.
+- [x] R1/R2 dedup diagnostics are labeled retrospective development because R2 labels were inspected during tuning; `deterministic-partial-keys/v1` is frozen before the fresh prospective R3.
+- [x] Correction measurement (`data/cli-first-round-review-audit-r1/f1-correction-{baseline-c28126bb33,after-uncommitted}/measurement.json`) separates before/after wall time, memory, packet count, max rendered bytes, duplication, and headroom.
 
 ## Focused commands
 
@@ -175,22 +54,13 @@
 bash scripts/tests/pm-review-system.sh
 bash scripts/tests/pm-orchestrator-contract.sh
 bash scripts/tests/pi-model-routing.sh
-bash -n scripts/pm-terminal-classifier.sh scripts/tests/pm-review-system.sh scripts/tests/pm-orchestrator-contract.sh
-# focused test additionally exercises classifier usage/malformed JSON/legacy stdout+stderr+exit compatibility,
-# JSON envelope fields, non-TTY execution, unsafe paths and symlinks, closure formats/cycles,
-# threshold boundaries, state transitions, and stale evidence
-ruby -e 'require "psych"; Psych.parse_file(ARGV.fetch(0))' .agents/agentic-delivery/schemas/orchestration-state.schema.yaml
-ruby -e 'require "psych"; Psych.parse_file(ARGV.fetch(0))' .planning/traces/cli-architecture-v2-orchestration-state.yaml
-python3 -m py_compile scripts/pm-review-system.py
-python3 -m json.tool .agents/agentic-delivery/contracts/pm-review-system.json >/dev/null
-python3 -m json.tool .planning/phases/397-pm-first-round-review-system-r1/MEASUREMENT.json >/dev/null
+python3 -m py_compile scripts/pm-review-system.py scripts/pm-review-lab.py
 ```
 
 ## Full local gates
 
 ```bash
-gofmt -w cmd internal
-git diff --exit-code -- cmd internal
+gofmt -w cmd internal && git diff --exit-code -- cmd internal
 git diff --check
 go vet ./...
 go test -timeout 20m ./...
@@ -200,51 +70,15 @@ go mod tidy -diff
 make verify
 ```
 
-The pre-correction passes at `7f1b2d8fe`/`5601be8d0` are historical and do not satisfy delivery.
-After both correction GREENs on one committed exact head:
-
-- [x] Focused graph/lab/PM gates pass at exact implementation head `0e210d1819f2642ee600aa6921873997101ba7bd`.
-- [x] Shellcheck is available and passes for all changed shell scripts.
-- [x] JSON/YAML parsing passes.
-- [x] Go formatting produces no product diff.
-- [x] `go vet ./...` passes.
-- [x] `go test -timeout 20m ./...` passes (`internal/cli` observed 472.174s).
-- [x] `go build ./cmd/pm` passes.
-- [x] `go mod verify` passes.
-- [x] `go mod tidy -diff` passes.
-- [x] `make verify` passes, including safe sample reverse ETL in required plan → preview → approval → execute order.
-
-Fresh-runtime combined candidate rerun:
-
-- [x] Python compile, shell syntax, Shellcheck, JSON/YAML parsing, and `git diff --check` pass.
-- [x] Complete PM review-system, PM orchestrator, Pi routing, Shepherd watchdog/stall, and Shepherd verdict/identity campaigns pass.
-- [x] `gofmt -w cmd internal` leaves no `cmd`/`internal` diff.
-- [x] `go vet ./...` passes.
-- [x] `go test -timeout 20m ./...` passes (`internal/cli` 467.908s).
-- [x] `go build ./cmd/pm`, `go mod verify`, and `go mod tidy -diff` pass.
-- [x] `make verify` passes (`internal/cli` 467.030s), with zero lint findings, 547 connector definitions, focused PM/Shepherd regressions, and safe sample reverse ETL order.
-- [x] Committed `1e640f9a4` and reconfirmed exact head/tree/clean status.
-- [x] Exact commit passed direct static, format, vet, standalone test/build/module gates.
-- [x] RED: transitive `make verify` exposed a dirty-only focused fixture and complete-range 77/64 packet block; R3 and Shepherd did not start.
-- [x] Repair the fixture for dirty and clean candidates; dirty mode compiles the full stable-base range and clean mode is conditional without empty patch/commit errors.
-- [x] Reach 63 packets with every rendered prompt ≤30,000 bytes by exact context partitioning, cross-role best-fit assignment, and assignment-preserving coalescing—not truncation or bound reduction.
-- [x] Re-run complete focused/full verification on the replacement candidate before exact commit.
-- [ ] Commit the replacement exact candidate and prove clean-tree focused/full identity before R3.
+Pre-correction passes at `7f1b2d8fe`/`5601be8d0`/`0e210d18`/`528dcc68`/`e4ca19ce`/`1e640f9a4`/`c28126bb3` are historical. Current-correction full verification is recorded in `TDD-LEDGER.md`.
 
 ## Review and delivery
 
 - [x] Captain's 2026-07-24 conditional Firstmate merge authorization is recorded; this agent remains no-merge, parent PR #438 remains draft/human-only, and the deliverable is a green open stacked PR.
-- [x] Exact corrected verified commit `e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f` exists and coherent research/plan/RED/GREEN/refactor checkpoints were pushed additively. (`7f1b2d8fe` remains historical evidence only.)
-- [ ] All tracked evidence was committed before final exact-head packet/Shepherd gates; no tracked write followed them.
-- [ ] Fresh local-Codex packet system reviews exact base/head and synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
-- [x] Every round-1 finding has a canonical disposition; future-round findings remain pending by definition.
-- [x] Stable five-round `rounds_by_range` usage is 2/5 and append-only head history is retained without lineage reset.
-- [ ] Independent Shepherd exact-head trajectory validation recorded after clean Codex review.
-- [ ] `no-mistakes axi` returns `checks-passed`; `passed` (merged/closed) is treated as a violation/escalation, not success for this task.
-- [ ] Any AXI-created commit/base/head change invalidated prior evidence and triggered applicable full verification, fresh packet synthesis, and fresh Shepherd at final identities.
-- [ ] No parallel/manual reviewer ran outside the specified PM packet system.
-- [ ] Branch pushed normally without force.
-- [ ] PR has Conventional Commit title, targets `feat/cli-architecture-v2`, uses `Refs #397`, and reports full URL, exact source/head, risk, metrics, limitations, and round usage.
-- [ ] Published branch history remained additive; any proposed post-publication non-additive pipeline rewrite stopped for human direction.
-- [ ] CI green.
-- [ ] PR remains open and unmerged for captain approval.
+- [x] Every round-1/round-2 finding has a canonical disposition; future-round findings remain pending by definition.
+- [x] Stable five-round `rounds_by_range` usage is 2/5 with append-only head history and no lineage reset.
+- [ ] Complete correction-candidate verification, one exact commit, and clean-tree identity reconfirmation.
+- [ ] Fresh trust-bound self-review synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
+- [ ] Independent Shepherd exact-head trajectory validation recorded only after a clean self-review.
+- [ ] Branch pushed normally without force; PR has Conventional Commit title, targets `feat/cli-architecture-v2`, uses `Refs #397`, reports URL/exact head/risk/metrics/limitations/round usage.
+- [ ] CI green; PR remains open and unmerged for captain approval.

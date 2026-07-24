@@ -29,8 +29,8 @@ context. Require authenticated v4 manifests plus complete rendered-prompt one-to
 accounting with response reserve. For every packet, use only the unchanged stdout of
 `scripts/pm-review-system.py render --manifest <manifest> --packet-id <id>`; never hand-build or
 augment prompts. Spawn one fresh-context candidate-read-only `pm-reviewer` per rendered packet. Reviewers
-must model upstream/downstream/lateral/temporal impact, return exact structured hypotheses and
-revision/blob-bound coverage slices, and may run temporary hypothesis changes only
+must model upstream/downstream/lateral/temporal impact, return exact structured hypotheses,
+per-impact-file provided/available byte depth, and revision/blob-bound coverage slices, and may run temporary hypothesis changes only
 through the bounded disposable `scripts/pm-review-lab.py`; any unsafe, inconclusive, or unclean lab
 proof blocks. Require exact packet responses with no silent coverage/truncation gap, then run
 `scripts/pm-review-system.py synthesize --manifest <manifest> --responses-dir <responses-dir>` for

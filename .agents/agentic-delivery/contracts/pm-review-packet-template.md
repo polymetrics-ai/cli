@@ -36,6 +36,7 @@ synthesis, and Shepherd evidence.
   "authority_files": [],
   "context_file_slices": [],
   "impact_files": [],
+  "impact_file_coverage": [],
   "impact_edge_ids": [],
   "impact_edges": [],
   "impact_file_slices": [],
@@ -67,7 +68,9 @@ and canonical-order exact slice payloads. Hand-built or augmented packet prompts
 canonical hashes for coverage, packets, and complete semantics; synthesis recompiles and compares it.
 Impact context is discovered completely under the configured typed relation policy before packets
 are partitioned. Changed/context/impact blobs are assigned exact revision/blob-bound byte-and-line
-slices; edge packets carry every endpoint plus exact bounded provenance slices. Every impact edge has stable id, source, target, relation, base direction, parser,
+slices; edge packets carry every endpoint plus exact bounded provenance slices. Each packet also
+binds one `impact_file_coverage` record per assigned impact file with `path`, `provided_bytes`, and
+`file_bytes`; this discloses anchor depth and does not claim unprovided bytes were reviewed. Every impact edge has stable id, source, target, relation, base direction, parser,
 provenance reason/line, certainty (`active`, `inactive`, or `unknown`), traversal directions, and
 minimum depth. Graph/index/traversal/packet bounds block; packet limits never silently trim impact.
 This is practical deterministic file/package context, not symbol-level call/data-flow coverage.
@@ -145,6 +148,7 @@ private evidence root. Do not commit it after exact-head review.
   "authority_files": [],
   "context_file_slices": [],
   "impact_files": [],
+  "impact_file_coverage": [],
   "impact_edge_ids": [],
   "impact_file_slices": [],
   "edge_context_files": [],
@@ -204,8 +208,9 @@ private evidence root. Do not commit it after exact-head review.
 }
 ```
 
-Every hypothesis is an exact object with `id`, `claim`, `strongest_alternative`, `falsifier`, and
-non-empty `evidence_paths`; identifier-only strings are incompatible. Every performed response
+Every response echoes `impact_file_coverage` exactly; changing or omitting its per-file
+provided/available byte disclosure blocks synthesis. Every hypothesis is an exact object with `id`,
+`claim`, `strongest_alternative`, `falsifier`, and non-empty `evidence_paths`; identifier-only strings are incompatible. Every performed response
 experiment matches its hashed v3 lab artifact field-for-field for hypothesis, claim, alternative,
 edges, temporary change, argv, expected discriminator, and observation. `status` is exactly `clean`, `findings`, or `blocked`. Finding count is unlimited. Every finding
 uses severity, category, path/line evidence, impact, and smallest safe correction. Missing token,
