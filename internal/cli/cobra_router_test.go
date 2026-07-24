@@ -185,28 +185,34 @@ func TestCobraRouterShellMapsGenuineCobraParseErrorsToUsage(t *testing.T) {
 }
 
 func TestCobraRouterShellPreservesLegacyHelpInterceptionForFallback(t *testing.T) {
-	tests := []struct {
-		name string
-		args []string
-		want string
-	}{
-		{name: "unknown command help", args: []string{"nosuch", "--help", "--json"}, want: `"message": "help topic \"nosuch\" not found"`},
-		{name: "dynamic connector help", args: []string{"github", "help", "--json"}, want: `"message": "help topic \"github\" not found"`},
+	var stdout, stderr bytes.Buffer
+	args := []string{"nosuch", "--help", "--json"}
+	code := Run(args, &stdout, &stderr)
+	if code != 1 {
+		t.Fatalf("Run(%v) code = %d, want 1; stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			var stdout, stderr bytes.Buffer
-			code := Run(tt.args, &stdout, &stderr)
-			if code != 1 {
-				t.Fatalf("Run(%v) code = %d, want 1; stdout=%s stderr=%s", tt.args, code, stdout.String(), stderr.String())
-			}
-			if !strings.Contains(stdout.String(), tt.want) {
-				t.Fatalf("stdout missing %q:\n%s", tt.want, stdout.String())
-			}
-			if strings.Contains(stderr.String(), "unknown command") || strings.Contains(stderr.String(), "missing connector command path") {
-				t.Fatalf("fallback help was routed as command execution: stderr=%s", stderr.String())
-			}
-		})
+	if want := `"message": "help topic \"nosuch\" not found"`; !strings.Contains(stdout.String(), want) {
+		t.Fatalf("stdout missing %q:\n%s", want, stdout.String())
+	}
+	if strings.Contains(stderr.String(), "unknown command") || strings.Contains(stderr.String(), "missing connector command path") {
+		t.Fatalf("fallback help was routed as command execution: stderr=%s", stderr.String())
+	}
+}
+
+func TestCobraRouterShellPreservesDynamicConnectorHelp(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	args := []string{"github", "help", "--json"}
+	code := Run(args, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(%v) code = %d, want 0; stdout=%s stderr=%s", args, code, stdout.String(), stderr.String())
+	}
+	for _, want := range []string{`"kind": "CommandManual"`, `"command": "github"`, `pm github`} {
+		if !strings.Contains(stdout.String(), want) {
+			t.Fatalf("stdout missing %q:\n%s", want, stdout.String())
+		}
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("stderr = %q, want empty", stderr.String())
 	}
 }
 
