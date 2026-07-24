@@ -1,0 +1,50 @@
+{
+  "phase": "cli-architecture-v2-release-split-r1",
+  "status": "planned",
+  "baseSHA": "873cd7b251f70c4a35a607a0d4e86051ea0fbd15",
+  "branch": "fm/cli-architecture-v2-release-split-r1",
+  "verificationPassed": false,
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoop": "manual_fallback_unavailable",
+    "adapterError": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-safety",
+    "golang-lint",
+    "golang-documentation",
+    "golang-design-patterns",
+    "golang-spf13-cobra",
+    "golang-spf13-viper",
+    "golang-dependency-management",
+    "golang-continuous-integration"
+  ],
+  "sourceCommits": [
+    "379cb5015335ff7c9b20e5bb780952ead22c53b2",
+    "8900db141cc289b65491365d2ebcab490af57789",
+    "7683087d41646c92b2bd7f677f47cf2bc9d88462",
+    "cc2a90e918b2814a64516d6bad6d14462b3ac079",
+    "20475ddf8ae3486282ead4fc7d2129f2bd1129b3"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The authorized changes form one dependency-ordered reconstruction in the isolated assigned worktree; there is no disjoint mutating slice to delegate."
+    }
+  ],
+  "humanGates": [
+    "merge to main",
+    "parent branch reconciliation",
+    "prerelease publication before all gates",
+    "new dependencies beyond approved Cobra/Viper set",
+    "credentialed checks",
+    "external reverse ETL execution"
+  ]
+}
