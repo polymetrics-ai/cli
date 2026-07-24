@@ -9,5 +9,5 @@
 - Exact base: `873cd7b251f70c4a35a607a0d4e86051ea0fbd15`.
 - Authorized source squashes: `379cb501`, `8900db14`, `7683087d`, `cc2a90e9`, `20475ddf` in that order.
 - Execution decision: `local_critical_path`; this is one dependency-ordered reconstruction in the already isolated assigned worktree, with no disjoint mutating slice to delegate.
-- Downstream artifact: pending candidate commits and PR.
-- Verification result: pending.
+- Downstream artifact: committed local candidate on `fm/cli-architecture-v2-release-split-r1`; PR pending the canonical PM review gate.
+- Verification result: local campaign green, including `make verify`, 17/17 byte-compatible CLI cases, focused race tests, and no vulnerabilities under pinned Go 1.25.12; remote review/CI/Snyk pending.
