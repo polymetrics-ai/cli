@@ -2,9 +2,12 @@
 
 Fully automated, resumable, multi-model delivery loop. Given one prompt describing any problem
 (connector or implementation), the loop plans, creates issues, implements, verifies, reviews,
-corrects, and integrates. Roles carry no model pin and inherit the parent session model, so the
-whole loop runs on whatever model drives the orchestrator. It can be stopped and resumed at any
-point (including token exhaustion) without losing work.
+corrects, and integrates. On the subagent-based path (`pm-orchestrate` / `pm-auto-loop`), roles
+carry no model pin and inherit the parent session model, so that path runs on whatever model drives
+the orchestrator. Inheritance does **not** cross a process boundary: the Claude-orchestrated driver
+spawns a fresh `pi` process per worker, which resolves pi's own model rather than the
+orchestrator's — see "Runtimes" below. The loop can be stopped and resumed at any point (including
+token exhaustion) without losing work.
 
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
@@ -19,7 +22,7 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 | Web / API research | `pm-web-researcher` | inherits parent session (high) | inherited |
 | Parent + task planning | `pm-planner` | inherits parent session (xhigh) | inherited |
 | Issue creation | `pm-issue-creator` | inherits parent session (xhigh) | inherited |
-| Execute / correct | `pm-gsd-worker` | inherits parent session (xhigh) | inherited |
+| Execute / correct | `pm-gsd-worker` | inherits parent session as a subagent (xhigh); named explicitly when spawned as a separate `pi` process | inherited on the subagent path only |
 | Verify | `pm-verifier` | inherits parent session (high) | inherited |
 | Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | inherits parent session (xhigh) | inherited |
 
@@ -153,12 +156,15 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
   (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches implementation workers through `pi` with an explicit
-  `--model anthropic/claude-opus-4-8`, with the Shepherd supervisor layer below. There is no cross-process
-  model inheritance on this path — a fresh `pi` worker has no parent session to inherit from, and
-  omitting `--model` would fall back to pi's own default (`openai-codex/gpt-5.5`) — so the worker
-  model must always be named explicitly. When this driver is used, the orchestrator, verify, and
-  review roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
+  dispatches implementation workers by spawning a fresh `pi` process, with the Shepherd supervisor
+  layer below. There is **no** model inheritance on this path — a fresh `pi` process has no parent
+  session to inherit from, so the worker model is whatever the dispatch names explicitly (and
+  omitting `--model` resolves pi's own default, `openai-codex/gpt-5.5`). That dispatch still names
+  the exhausted `openai-codex` Codex provider, so this driver's EXECUTE/CORRECT stage has no
+  capacity until it is repointed; doing so with a billing-compliant Claude route is a deliberate
+  separate follow-up, the same disposition as the unaligned launcher defaults below. The
+  orchestrator, verify, and review roles run **only** on the first-party `claude` CLI — never
+  through a third-party gateway.
 
 - **Pi-orchestrated + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
   or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on `pi`.

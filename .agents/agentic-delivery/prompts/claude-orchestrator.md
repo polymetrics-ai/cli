@@ -31,12 +31,18 @@ apply it before anything else.
    - INTEGRATE / PARENT_FINALIZE → merge sub-PR into the parent branch; stop at the human gate.
 3. **IMPLEMENTATION goes to a dispatched worker, not you.** For EXECUTE / CORRECT (writing
    production code), do NOT write it yourself. Dispatch a `pm-gsd-worker` via bash, in the
-   sub-issue's own worktree/cwd, naming the worker model explicitly so it runs on Claude. There is
-   NO cross-process model inheritance on this path: you are the first-party `claude` CLI and the
-   worker is a fresh `pi` process with no parent session to inherit from, so omitting `--model`
-   falls back to pi's own default (`openai-codex/gpt-5.5`), not your model:
+   sub-issue's own worktree/cwd. There is NO cross-process model inheritance on this path: you are
+   the first-party `claude` CLI and the worker is a fresh `pi` process with no parent session to
+   inherit from, so the worker model is whatever `--model` names here — not your model. **Known
+   gap:** this dispatch still names the `openai-codex` Codex provider, whose ChatGPT plan is
+   exhausted, so the worker will fail to get capacity until it is repointed. Repointing it to a
+   billing-compliant Claude route is a deliberate separate follow-up — the same disposition as
+   `scripts/pi-shepherd-loop.sh` and `.pi/README.md`, which also still default to Codex. Do not
+   substitute a `pi` `anthropic/*` model here: that would route a Claude role off the first-party
+   `claude` CLI and can bill per token, breaching the billing hard rule in
+   `pi-autonomous-orchestration-loop.md`.
    ```
-   pi -p --model anthropic/claude-opus-4-8 --tools read,bash,edit,write,grep,find,ls --approve \
+   pi -p --model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve \
      --agentScope both --confirmProjectAgents false \
      "You are pm-gsd-worker. Implement <sub-issue> per its PLAN.md and .agents/connector-migration/
       templates/connector-rollout-prompt.md. Commit per green slice; never push to main; return a handoff."
