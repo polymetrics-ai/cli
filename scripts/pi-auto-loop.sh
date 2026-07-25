@@ -15,7 +15,7 @@
 # Config (env; defaults shown). Set the model IDs once here to whatever your
 # `/model` list in Pi shows for your logged-in Claude Max + Codex subscriptions.
 #   PI_BIN=pi
-#   ORCH_MODEL=anthropic/claude-opus-4-8      # orchestrator (main session) = Claude Opus 4.8
+#   ORCH_MODEL=claude-bridge/claude-opus-5    # orchestrator (main session) = subscription-backed Opus 5
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_MINUTES=0                             # wall-clock cap (0 = no cap)
@@ -30,7 +30,7 @@
 set -euo pipefail
 
 PI_BIN="${PI_BIN:-pi}"
-ORCH_MODEL="${ORCH_MODEL:-anthropic/claude-opus-4-8}"
+ORCH_MODEL="${ORCH_MODEL:-claude-bridge/claude-opus-5}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_MINUTES="${MAX_MINUTES:-0}"

@@ -122,10 +122,12 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 
 Model routing is NOT per-agent: `.pi/agents/*.md` carry no `model:` key, so each role inherits the
 parent orchestrator session model the driver launches `pi` with (`ORCH_MODEL`), preserving each
-agent's declared thinking level. The Shepherd validator turn still defaults to
-`openai-codex/gpt-5.6-sol --thinking high` via `VALIDATOR_ARGS`. Choose the fleet's provider by
-setting the driver environment (`ORCH_MODEL` / `VALIDATOR_ARGS`) — for example `scripts/pi-auto-loop.sh`
-already defaults `ORCH_MODEL` to `anthropic/claude-opus-4-8` — not by re-adding frontmatter pins.
+agent's declared thinking level. Both launchers default to the subscription-backed Claude bridge:
+`scripts/pi-auto-loop.sh` and `scripts/pi-shepherd-loop.sh` default `ORCH_MODEL` (and the Shepherd
+`VALIDATOR_ARGS --model`) to `claude-bridge/claude-opus-5`, so the fleet runs on Opus 5 via the
+subscription-backed bridge. Set the driver environment (`ORCH_MODEL` / `VALIDATOR_ARGS`) to choose a
+different, still subscription-backed provider — never a per-token `anthropic/*` route — not by
+re-adding frontmatter pins.
 Confirm the exact model IDs your subscription exposes with `/model`. Connector research uses the
 repo's `searxng` connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied)
 before launching.

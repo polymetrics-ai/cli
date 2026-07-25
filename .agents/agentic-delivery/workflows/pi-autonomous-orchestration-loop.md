@@ -173,22 +173,20 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
   Requires `pi install npm:pi-sub-agent` once. Project agents in `.pi/agents/*` carry no `model:`
   pin, so each dispatched role inherits whatever `ORCH_MODEL` the driver launched `pi` with — which
   keeps the fleet provider-agnostic but means the driver default decides the provider. Do not re-add
-  frontmatter pins. The remaining follow-up is the launcher DEFAULTS themselves:
-  `scripts/pi-shepherd-loop.sh` still defaults `ORCH_MODEL` to `openai-codex/gpt-5.5` and hard-pins
-  its validator turn to `openai-codex/gpt-5.6-sol`, while `scripts/pi-auto-loop.sh` defaults
-  `ORCH_MODEL` to `anthropic/claude-opus-4-8`. Set `ORCH_MODEL`/`VALIDATOR_ARGS` explicitly for the
-  provider you intend; repointing those launcher defaults is a separate follow-up. Because
-  inheritance now covers the whole fleet, a Claude `ORCH_MODEL` on this path runs Claude *through*
-  `pi` for every dispatched role rather than on the first-party `claude` CLI. Reconciling that with
-  the billing hard rule below — ensuring any Claude `ORCH_MODEL` resolves to a subscription-backed
-  route and never a per-token API key — is an OPEN item tracked as part of the same deferred
-  billing/launcher follow-up as `scripts/pi-shepherd-loop.sh`'s defaults and the
-  `.agents/agentic-delivery/prompts/claude-orchestrator.md` dispatch. It is not resolved here, and
-  the billing hard rule below is unchanged.
+  frontmatter pins. Both launchers now default to the subscription-backed Claude bridge:
+  `scripts/pi-auto-loop.sh` and `scripts/pi-shepherd-loop.sh` default `ORCH_MODEL` (and the Shepherd
+  `VALIDATOR_ARGS --model`) to `claude-bridge/claude-opus-5`, so the whole fleet runs on Opus 5 via
+  the subscription-backed bridge by default. Because inheritance covers the whole fleet, a Claude
+  `ORCH_MODEL` on this path runs Claude *through* `pi` for every dispatched role rather than on the
+  first-party `claude` CLI; that is billing-compliant **only** on the subscription-backed
+  `claude-bridge/*` route — never on the per-token `anthropic/*` API. Set `ORCH_MODEL`/`VALIDATOR_ARGS`
+  explicitly only to choose a different, still subscription-backed provider.
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
-pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI — never
-through a third-party gateway or relay. Codex roles stay on the subscription-backed
+pay-per-token gateway. Claude roles run only on a subscription-backed route — the first-party
+`claude` CLI (Claude-orchestrated driver) or the subscription-backed `claude-bridge/*` bridge
+(pi-orchestrated driver, e.g. `claude-bridge/claude-opus-5`) — never through the per-token
+`anthropic/*` API, a third-party gateway, or a relay. Codex roles stay on the subscription-backed
 `openai-codex/*` provider via the ChatGPT plan — never through an API-backed `openai/*` model,
 which bills per token (`.pi/README.md:41-47`).
 

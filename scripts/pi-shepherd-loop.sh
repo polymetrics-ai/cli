@@ -21,8 +21,9 @@
 # All progress is durable (git + GitHub + RUN.json/ORCHESTRATION-STATE.json), so a run killed
 # anywhere resumes by reconciling: scripts/pi-shepherd-loop.sh --resume
 #
-# Model policy: Codex on the ChatGPT plan via the `openai-codex/*` provider ONLY. Never route
-# any role through OpenRouter or another pay-per-token gateway.
+# Model policy: the pi-orchestrated fleet runs on the subscription-backed Claude bridge
+# (`claude-bridge/*`, e.g. claude-bridge/claude-opus-5) ONLY. Never route any role through the
+# per-token `anthropic/*` API, OpenRouter, or another pay-per-token gateway.
 #
 # Requires the `subagent` tool package once per machine:  pi install npm:pi-sub-agent
 # (project agents in .pi/agents/ are auto-discovered when running with --approve).
@@ -33,10 +34,10 @@
 #
 # Config (env; defaults shown):
 #   PI_BIN=pi
-#   ORCH_MODEL=openai-codex/gpt-5.5           # orchestrator model (thinking level via ":<level>")
+#   ORCH_MODEL=claude-bridge/claude-opus-5    # orchestrator model, subscription-backed (thinking via ":<level>")
 #   PI_TOOLS=read,bash,edit,write,grep,find,ls,subagent
 #   VALIDATOR_BIN=pi                          # Shepherd CLI (cross-model judging is a feature)
-#   VALIDATOR_ARGS="--model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
+#   VALIDATOR_ARGS="--model claude-bridge/claude-opus-5 --thinking high --tools read,bash,edit,write,grep,find,ls --approve"
 #   MAX_ITERATIONS=200                        # hard backstop on orchestrator turns
 #   MAX_REVERTS=6                             # total revert budget per run before HALT
 #   MAX_NO_VERDICT=3                          # consecutive no-verdict turns before HALT
@@ -55,10 +56,10 @@ if [[ -x "$NODE_BIN_DIR/node" ]]; then
 fi
 
 PI_BIN="${PI_BIN:-pi}"
-ORCH_MODEL="${ORCH_MODEL:-openai-codex/gpt-5.5}"
+ORCH_MODEL="${ORCH_MODEL:-claude-bridge/claude-opus-5}"
 PI_TOOLS="${PI_TOOLS:-read,bash,edit,write,grep,find,ls,subagent}"
 VALIDATOR_BIN="${VALIDATOR_BIN:-pi}"
-VALIDATOR_ARGS="${VALIDATOR_ARGS:---model openai-codex/gpt-5.6-sol --thinking high --tools read,bash,edit,write,grep,find,ls --approve}"
+VALIDATOR_ARGS="${VALIDATOR_ARGS:---model claude-bridge/claude-opus-5 --thinking high --tools read,bash,edit,write,grep,find,ls --approve}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-200}"
 MAX_REVERTS="${MAX_REVERTS:-6}"
 MAX_NO_VERDICT="${MAX_NO_VERDICT:-3}"
