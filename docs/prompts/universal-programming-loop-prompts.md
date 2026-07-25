@@ -85,18 +85,24 @@ Overrides live in `.planning/config.json` `model_overrides`.
 ### Model routing (cost efficiency)
 
 Not every task needs the most capable model. Prototype on `gpt-5.5:xhigh` to establish a baseline,
-then route cheaper models to recon/classification once evals pass. Pi agent frontmatter sets
-per-agent `model` and `thinking` (see the `pi-sub-agent` README); Codex/OpenCode pick up the
-`model_overrides` entries below:
+then route cheaper models to recon/classification once evals pass.
 
-| Pi agent / override key | Model | Rationale |
+Model routing is NOT per-agent on the Pi path: files under `.pi/agents/*` carry no `model:` key, so
+every dispatched role inherits the parent orchestrator session model the driver launched `pi` with
+(`ORCH_MODEL`). Do not re-add per-agent model pins. Pi agent frontmatter still sets `thinking` per
+role, and that declared level is preserved under inheritance (see the `pi-sub-agent` README).
+Codex/OpenCode adapters continue to pick up `model_overrides` from `.planning/config.json`.
+
+| Pi agent / override key | Thinking | Rationale |
 |---|---|---|
-| `pm-scout` | `gpt-5.4-mini:high` | Read-only recon is cheap; smaller model is sufficient. |
-| `pm-gsd-worker` | `gpt-5.5:high` | Implementation needs capability but not orchestrator-grade reasoning. |
-| `pm-reviewer` | `gpt-5.5:xhigh` | Adversarial review benefits from deepest reasoning. |
-| orchestrator (`/pm-orchestrate`) | `gpt-5.5:xhigh` (default) | Owns spawn/merge/review decisions; inherit default. |
+| `pm-scout` | `high` | Read-only recon; a cheaper `ORCH_MODEL` is sufficient for scout-only runs. |
+| `pm-gsd-worker` | `xhigh` | Implementation needs capability across the whole slice. |
+| `pm-reviewer` | `xhigh` | Adversarial review benefits from deepest reasoning. |
+| orchestrator (`/pm-orchestrate`) | `xhigh` | Owns spawn/merge/review decisions; sets the inherited model for the fleet. |
 
-Record an eval baseline note in the phase `VERIFICATION.md` before downgrading a role further.
+To route a cheaper or different provider, set `ORCH_MODEL` on the driver rather than pinning a
+model in agent frontmatter. Record an eval baseline note in the phase `VERIFICATION.md` before
+downgrading the fleet further.
 
 ## Runtime policy
 

@@ -33,7 +33,7 @@ Decompose the problem (connector or implementation) into:
    ready queue.
 
 Write the decomposition to the phase planning area (`.planning/phases/<phase>/PLAN.md` or the
-parent roadmap the prompt names). Do not call `gh` — issue creation is the Codex issue-creator's
+parent roadmap the prompt names). Do not call `gh` — issue creation is the issue-creator's
 job. Return the structured decomposition in your handoff so the orchestrator can pass it on.
 
 **Connector parent-plan (when a research doc exists at `.planning/auto-loop/RESEARCH/<name>/`):**
@@ -56,7 +56,7 @@ one sub-issue's write scope. Do not implement.
 
 Rules:
 
-- Plan before code. Every plan must be executable by a Codex worker with no further decisions.
+- Plan before code. Every plan must be executable by an implementation worker with no further decisions.
 - Never request, print, store, summarize, or invent secrets.
 - Do not edit production files, shared parent artifacts you were not assigned, or other workers'
   branches.

@@ -159,7 +159,9 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
   dispatches implementation workers by spawning a fresh `pi` process, with the Shepherd supervisor
   layer below. There is **no** model inheritance on this path — a fresh `pi` process has no parent
   session to inherit from, so the worker model is whatever the dispatch names explicitly (and
-  omitting `--model` resolves pi's own default, `openai-codex/gpt-5.5`). That dispatch still names
+  omitting `--model` resolves pi's own configured default — historically `openai-codex/gpt-5.5`,
+  but `.pi/settings.json` sets no model key, so it actually depends on the user's `~/.pi` config or
+  last `/model` selection). That dispatch still names
   the exhausted `openai-codex` Codex provider, so this driver's EXECUTE/CORRECT stage has no
   capacity until it is repointed; doing so with a billing-compliant Claude route is a deliberate
   separate follow-up, the same disposition as the unaligned launcher defaults below. The
@@ -170,18 +172,19 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
   or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on `pi`.
   Requires `pi install npm:pi-sub-agent` once. Project agents in `.pi/agents/*` carry no `model:`
   pin, so each dispatched role inherits whatever `ORCH_MODEL` the driver launched `pi` with — which
-  keeps the fleet provider-agnostic but means the driver default decides the provider. Note the
-  launcher defaults are not aligned yet: `scripts/pi-shepherd-loop.sh` still defaults `ORCH_MODEL`
-  to `openai-codex/gpt-5.5` and hard-pins its validator turn to `openai-codex/gpt-5.6-sol`, and
-  `.pi/README.md` still documents those Codex defaults, while `scripts/pi-auto-loop.sh` defaults
+  keeps the fleet provider-agnostic but means the driver default decides the provider. Do not re-add
+  frontmatter pins. The remaining follow-up is the launcher DEFAULTS themselves:
+  `scripts/pi-shepherd-loop.sh` still defaults `ORCH_MODEL` to `openai-codex/gpt-5.5` and hard-pins
+  its validator turn to `openai-codex/gpt-5.6-sol`, while `scripts/pi-auto-loop.sh` defaults
   `ORCH_MODEL` to `anthropic/claude-opus-4-8`. Set `ORCH_MODEL`/`VALIDATOR_ARGS` explicitly for the
-  provider you intend; repointing those launcher defaults is a separate follow-up. `.pi/README.md`'s
-  model-routing prose has been corrected to match this reality — it now states routing comes from the
-  driver's parent session model rather than per-agent frontmatter pins — so the remaining
-  README/launcher follow-up is limited to the launcher DEFAULTS themselves (`ORCH_MODEL` /
-  `VALIDATOR_ARGS` in `scripts/pi-shepherd-loop.sh`, which still default to Codex). No `.pi/agents/*`
-  file carries a `model:` key anymore, so routing comes from the parent session model, not agent
-  frontmatter — do not re-add frontmatter pins.
+  provider you intend; repointing those launcher defaults is a separate follow-up. Because
+  inheritance now covers the whole fleet, a Claude `ORCH_MODEL` on this path runs Claude *through*
+  `pi` for every dispatched role rather than on the first-party `claude` CLI. Reconciling that with
+  the billing hard rule below — ensuring any Claude `ORCH_MODEL` resolves to a subscription-backed
+  route and never a per-token API key — is an OPEN item tracked as part of the same deferred
+  billing/launcher follow-up as `scripts/pi-shepherd-loop.sh`'s defaults and the
+  `.agents/agentic-delivery/prompts/claude-orchestrator.md` dispatch. It is not resolved here, and
+  the billing hard rule below is unchanged.
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
 pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI — never

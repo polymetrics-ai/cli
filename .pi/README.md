@@ -8,7 +8,7 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Model routing: the orchestrator roles in `.pi/agents/*` carry no `model:` key and inherit the parent session model the driver launches `pi` with (`ORCH_MODEL`); `openai-codex/gpt-5.5` is only pi's bare-launch fallback default when no `--model`/`ORCH_MODEL` is given
+- Model routing: the orchestrator roles in `.pi/agents/*` carry no `model:` key and inherit the parent session model the driver launches `pi` with (`ORCH_MODEL`); with no `--model`/`ORCH_MODEL` a bare launch falls back to pi's own configured default (historically `openai-codex/gpt-5.5`), which depends on the user's `~/.pi` config / last `/model` selection — `.pi/settings.json` sets no model key
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
 
@@ -67,7 +67,8 @@ Useful prompt templates:
 - `/pm-review-loop`: Claude/Copilot review disposition loop.
   Example: `/pm-review-loop 74` (PR number) or `/pm-review-loop feat/40-github-projects-discussions`.
 - `/pm-auto-loop`: fully automated, resumable delivery loop. The orchestrator model comes from the
-  driver, and worker models come from `.pi/agents/*.md` frontmatter. Given one problem prompt it
+  driver, and the workers carry no frontmatter pin — each inherits that same parent session model
+  (`ORCH_MODEL`). Given one problem prompt it
   (researches if needed →) plans the parent + sub-issues, creates issues, opens the parent draft PR
   and per-slice sub-PRs, then runs plan→execute→verify→review→correct per task until integrated.
   Handles any task (`problem_type: implementation | connector`).

@@ -37,7 +37,8 @@ apply it before anything else.
    gap:** this dispatch still names the `openai-codex` Codex provider, whose ChatGPT plan is
    exhausted, so the worker will fail to get capacity until it is repointed. Repointing it to a
    billing-compliant Claude route is a deliberate separate follow-up — the same disposition as
-   `scripts/pi-shepherd-loop.sh` and `.pi/README.md`, which also still default to Codex. Do not
+   `scripts/pi-shepherd-loop.sh`'s `ORCH_MODEL`/`VALIDATOR_ARGS` defaults, which also still point at
+   Codex. Do not
    substitute a `pi` `anthropic/*` model here: that would route a Claude role off the first-party
    `claude` CLI and can bill per token, breaching the billing hard rule in
    `pi-autonomous-orchestration-loop.md`.
