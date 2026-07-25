@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "waba_fixture_1",
+      "name": "Fixture HMS WABA",
+      "currency": "USD",
+      "timezone_id": "1",
+      "message_template_namespace": "fixture_namespace",
+      "account_review_status": "APPROVED"
+    }
+  }
+}

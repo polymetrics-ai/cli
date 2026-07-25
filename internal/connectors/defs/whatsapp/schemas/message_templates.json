@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Message template ID."
+    },
+    "name": {
+      "type": "string",
+      "description": "Template name."
+    },
+    "language": {
+      "type": "string",
+      "description": "Template language/locale code."
+    },
+    "category": {
+      "type": "string",
+      "description": "Template category (UTILITY/MARKETING/AUTHENTICATION)."
+    },
+    "status": {
+      "type": "string",
+      "description": "Approval status (APPROVED/PENDING/REJECTED)."
+    },
+    "components": {
+      "type": "array",
+      "description": "Template components (header/body/footer/buttons).",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "quality_score": {
+      "type": "object",
+      "description": "Template quality score.",
+      "additionalProperties": true
+    }
+  }
+}

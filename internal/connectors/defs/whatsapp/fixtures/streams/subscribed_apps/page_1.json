@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/subscribed_apps",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "whatsapp_business_api_data": {
+            "id": "app_fixture_1",
+            "name": "HMS Integration",
+            "link": "https://example.org/app"
+          }
+        }
+      ],
+      "paging": {
+        "cursors": {}
+      }
+    }
+  }
+}

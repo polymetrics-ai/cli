@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "WhatsApp connection",
+  "type": "object",
+  "required": [
+    "mode"
+  ],
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "cloud",
+        "web"
+      ],
+      "default": "cloud",
+      "description": "Active access mode. 'cloud' = WhatsApp Business Platform (Cloud API + Business Management API on Meta Graph). 'web' = WhatsApp Web multidevice (whatsmeow) personal-account mode. The two modes' credentials are never conflated."
+    },
+    "base_url": {
+      "type": "string",
+      "default": "https://graph.facebook.com/v25.0",
+      "format": "uri",
+      "description": "Meta Graph API base URL (includes graph version). Override for tests or proxies."
+    },
+    "waba_id": {
+      "type": "string",
+      "description": "WhatsApp Business Account (WABA) ID for Business Management API reads (cloud mode)."
+    },
+    "phone_number_id": {
+      "type": "string",
+      "description": "Phone Number ID used for messaging, media, profile, and registration (cloud mode)."
+    },
+    "page_size": {
+      "type": "string",
+      "default": "100",
+      "description": "Records per page for paginated Graph list reads (1-100)."
+    },
+    "max_pages": {
+      "type": "string",
+      "default": "0",
+      "description": "Maximum pages to fetch; 0 exhausts a paginated stream."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "RFC3339 lower bound for time-windowed analytics reads."
+    },
+    "store_dir": {
+      "type": "string",
+      "description": "WhatsApp Web (whatsmeow) local store directory for the QR session and SQLite state (web mode). No session secret is read or printed at inspection."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Meta Graph API access token (system-user or app token) for Bearer auth in cloud mode. Used only for Authorization; never logged or printed."
+    }
+  }
+}

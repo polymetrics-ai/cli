@@ -1,0 +1,30 @@
+{
+  "phase": "505-whatsapp-connector",
+  "parent_issue": 505,
+  "sub_issues": [506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 527],
+  "branch": "fm/cli-whatsapp-connector-r1",
+  "base": "main",
+  "status": "implementation_complete_pending_no_mistakes_pr",
+  "gsd_mode": "manual_fallback",
+  "gsd_fallback_reason": "repo-local GSD adapter requires Pi runtime; crewmate runs under Claude Code",
+  "tier": "declarative_defs_bundle",
+  "native_adapter": false,
+  "new_dependencies": false,
+  "counts": {
+    "streams": 4,
+    "write_actions": 28,
+    "operations": 8,
+    "api_surface_endpoints": 52,
+    "cli_commands": 50,
+    "connectors_total": 548
+  },
+  "gates": {
+    "connectorgen_validate": "0 findings",
+    "conformance_whatsapp": "pass",
+    "go_build": "pass",
+    "go_vet": "pass",
+    "gofmt": "clean",
+    "docs_check": "pass",
+    "affected_tests": "pass"
+  }
+}

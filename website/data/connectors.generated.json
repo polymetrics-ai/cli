@@ -106721,6 +106721,1532 @@
     }
   },
   {
+    "slug": "whatsapp",
+    "name": "WhatsApp",
+    "description": "Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, WhatsApp Business Account (WABA) metadata, subscribed apps, and messaging/conversation/pricing/template analytics; executes bounded direct reads and typed analytics read-queries; and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.",
+    "docs_url": "https://developers.facebook.com/docs/whatsapp/cloud-api",
+    "integration_type": "api",
+    "release_stage": "beta",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": true,
+      "query": true,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "streams": [
+      {
+        "name": "phone_numbers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "message_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "subscribed_apps",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "waba",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "send_text_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_image_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_audio_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_video_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_document_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_sticker_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_location_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_contacts_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_interactive_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_template_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "send_reaction_message",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "mark_message_read",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "send_typing_indicator",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_message_template",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_message_template",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "delete_message_template",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_business_profile",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "register_phone_number",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "deregister_phone_number",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "request_verification_code",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "verify_phone_number",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "set_two_step_pin",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "subscribe_waba_app",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "unsubscribe_waba_app",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "create_qr_code",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_qr_code",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "upload_media",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_media",
+        "method": "DELETE",
+        "kind": "delete"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect, read, and safely plan typed WhatsApp patient-messaging operations.",
+      "usage": "pm whatsapp <command> [flags]",
+      "source_cli": {
+        "name": "WhatsApp Business Platform + vicentereig/whatsapp-cli",
+        "docs": "https://developers.facebook.com/docs/whatsapp/cloud-api",
+        "reference": "Meta Graph API v25.0; whatsapp-cli v1.3.2 (whatsmeow)",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "messages",
+          "title": "Messages",
+          "commands": [
+            "messages"
+          ]
+        },
+        {
+          "id": "templates",
+          "title": "Templates",
+          "commands": [
+            "templates"
+          ]
+        },
+        {
+          "id": "phone-numbers",
+          "title": "Phone numbers",
+          "commands": [
+            "phone-numbers"
+          ]
+        },
+        {
+          "id": "profile",
+          "title": "Business profile",
+          "commands": [
+            "profile"
+          ]
+        },
+        {
+          "id": "media",
+          "title": "Media",
+          "commands": [
+            "media"
+          ]
+        },
+        {
+          "id": "analytics",
+          "title": "Analytics",
+          "commands": [
+            "analytics"
+          ]
+        },
+        {
+          "id": "apps",
+          "title": "Subscribed apps",
+          "commands": [
+            "apps"
+          ]
+        },
+        {
+          "id": "qr",
+          "title": "QR / short links",
+          "commands": [
+            "qr"
+          ]
+        },
+        {
+          "id": "waba",
+          "title": "WABA metadata",
+          "commands": [
+            "waba"
+          ]
+        },
+        {
+          "id": "web",
+          "title": "WhatsApp Web (whatsmeow)",
+          "commands": [
+            "web"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the WhatsApp request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Bound the number of records for stream reads.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation for destructive/admin reverse-ETL actions.",
+          "values": [
+            "destructive"
+          ],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "phone-numbers list",
+          "summary": "List WhatsApp phone numbers on the WABA.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "phone_numbers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm whatsapp phone-numbers list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "templates list",
+          "summary": "List WhatsApp message templates.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "message_templates",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm whatsapp templates list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "apps list",
+          "summary": "List apps subscribed to the WABA webhooks.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "subscribed_apps",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm whatsapp apps list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "waba get",
+          "summary": "Read WABA metadata as a single ETL record.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "waba",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm whatsapp waba get --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "phone-numbers get",
+          "summary": "Retrieve a single phone number's detail.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "phone-number-id",
+              "type": "string",
+              "summary": "Phone Number ID.",
+              "values": [],
+              "maps_to": "path.phone_number_id"
+            }
+          ],
+          "examples": [
+            "pm whatsapp phone-numbers get --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "templates get",
+          "summary": "Retrieve a single message template's detail.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "template-id",
+              "type": "string",
+              "summary": "Message template ID.",
+              "values": [],
+              "maps_to": "path.template_id"
+            }
+          ],
+          "examples": [
+            "pm whatsapp templates get --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "profile get",
+          "summary": "Retrieve the WhatsApp business profile.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm whatsapp profile get --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "media get-url",
+          "summary": "Resolve a media id to a 5-minute TTL media URL.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "media-id",
+              "type": "string",
+              "summary": "Media ID.",
+              "values": [],
+              "maps_to": "path.media_id"
+            }
+          ],
+          "examples": [
+            "pm whatsapp media get-url --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "analytics messaging",
+          "summary": "Bounded typed WhatsApp analytics read-query.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Inclusive window start (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.start"
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Exclusive window end (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.end"
+            },
+            {
+              "name": "granularity",
+              "type": "enum",
+              "summary": "Aggregation granularity.",
+              "values": [
+                "HALF_HOUR",
+                "DAILY",
+                "MONTHLY"
+              ],
+              "maps_to": "body.granularity"
+            }
+          ],
+          "examples": [
+            "pm whatsapp analytics messaging --start 2026-07-01 --end 2026-07-25 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
+          "approval": "none: read-only analytics query with schema-gated fields",
+          "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed."
+        },
+        {
+          "path": "analytics conversation",
+          "summary": "Bounded typed WhatsApp analytics read-query.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Inclusive window start (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.start"
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Exclusive window end (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.end"
+            },
+            {
+              "name": "granularity",
+              "type": "enum",
+              "summary": "Aggregation granularity.",
+              "values": [
+                "HALF_HOUR",
+                "DAILY",
+                "MONTHLY"
+              ],
+              "maps_to": "body.granularity"
+            }
+          ],
+          "examples": [
+            "pm whatsapp analytics conversation --start 2026-07-01 --end 2026-07-25 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
+          "approval": "none: read-only analytics query with schema-gated fields",
+          "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed."
+        },
+        {
+          "path": "analytics pricing",
+          "summary": "Bounded typed WhatsApp analytics read-query.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Inclusive window start (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.start"
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Exclusive window end (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.end"
+            },
+            {
+              "name": "granularity",
+              "type": "enum",
+              "summary": "Aggregation granularity.",
+              "values": [
+                "HALF_HOUR",
+                "DAILY",
+                "MONTHLY"
+              ],
+              "maps_to": "body.granularity"
+            }
+          ],
+          "examples": [
+            "pm whatsapp analytics pricing --start 2026-07-01 --end 2026-07-25 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
+          "approval": "none: read-only analytics query with schema-gated fields",
+          "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed."
+        },
+        {
+          "path": "analytics template",
+          "summary": "Bounded typed WhatsApp analytics read-query.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "start",
+              "type": "string",
+              "summary": "Inclusive window start (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.start"
+            },
+            {
+              "name": "end",
+              "type": "string",
+              "summary": "Exclusive window end (unix seconds or RFC3339).",
+              "values": [],
+              "maps_to": "body.end"
+            },
+            {
+              "name": "granularity",
+              "type": "enum",
+              "summary": "Aggregation granularity.",
+              "values": [
+                "HALF_HOUR",
+                "DAILY",
+                "MONTHLY"
+              ],
+              "maps_to": "body.granularity"
+            }
+          ],
+          "examples": [
+            "pm whatsapp analytics template --start 2026-07-01 --end 2026-07-25 --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
+          "approval": "none: read-only analytics query with schema-gated fields",
+          "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed."
+        },
+        {
+          "path": "messages send-text",
+          "summary": "Send a WhatsApp text message to a patient number (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_text_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-image",
+          "summary": "Send a WhatsApp image message (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_image_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-audio",
+          "summary": "Send a WhatsApp audio message (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_audio_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-video",
+          "summary": "Send a WhatsApp video message (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_video_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-document",
+          "summary": "Send a WhatsApp document message, e.g. a lab-result PDF (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_document_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-sticker",
+          "summary": "Send a WhatsApp sticker message.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_sticker_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-location",
+          "summary": "Send a WhatsApp location message.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_location_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-contacts",
+          "summary": "Send a WhatsApp contacts message (top-level contacts array).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_contacts_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-interactive",
+          "summary": "Send a WhatsApp interactive message (action rows/buttons arrays).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_interactive_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-template",
+          "summary": "Send a WhatsApp template message (appointment/OTP/utility).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_template_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages send-reaction",
+          "summary": "Send a WhatsApp reaction to a message.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_reaction_message",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans).",
+              "values": [],
+              "maps_to": "record.to"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages mark-read",
+          "summary": "Mark an inbound patient message as read.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "mark_message_read",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "message-id",
+              "type": "string",
+              "summary": "Inbound message id to mark as read.",
+              "values": [],
+              "maps_to": "record.message_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "marks an inbound patient message as read",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "messages typing",
+          "summary": "Send a typing indicator on an inbound conversation.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "send_typing_indicator",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "message-id",
+              "type": "string",
+              "summary": "Inbound message id to acknowledge with a typing indicator.",
+              "values": [],
+              "maps_to": "record.message_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "sends a typing indicator on an inbound patient conversation",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "templates create",
+          "summary": "Create a WhatsApp message template pending Meta review.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_message_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Template name.",
+              "values": [],
+              "maps_to": "record.name"
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Template language code.",
+              "values": [],
+              "maps_to": "record.language"
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "summary": "category",
+              "values": [],
+              "maps_to": "record.category"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "creates a WhatsApp message template pending Meta review",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "templates update",
+          "summary": "Edit an existing message template.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "update_message_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "template-id",
+              "type": "string",
+              "summary": "Message template ID to edit.",
+              "values": [],
+              "maps_to": "record.template_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "edits an existing message template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "templates delete",
+          "summary": "Permanently delete a message template.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "delete_message_template",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "name",
+              "type": "string",
+              "summary": "Template name to delete.",
+              "values": [],
+              "maps_to": "record.name"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: permanently deletes a message template",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "profile update",
+          "summary": "Update the WhatsApp business profile.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "update_business_profile",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "messaging-product",
+              "type": "string",
+              "summary": "messaging_product",
+              "values": [],
+              "maps_to": "record.messaging_product"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "updates the WhatsApp business profile for the number",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "phone-numbers register",
+          "summary": "Register the phone number on Cloud API.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "register_phone_number",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "messaging-product",
+              "type": "string",
+              "summary": "messaging_product",
+              "values": [],
+              "maps_to": "record.messaging_product"
+            },
+            {
+              "name": "pin",
+              "type": "string",
+              "summary": "6-digit registration PIN (two-step verification).",
+              "values": [],
+              "maps_to": "record.pin"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: registers the phone number on Cloud API",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "phone-numbers deregister",
+          "summary": "Deregister the phone number from Cloud API.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "deregister_phone_number",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "messaging-product",
+              "type": "string",
+              "summary": "messaging_product",
+              "values": [],
+              "maps_to": "record.messaging_product"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: deregisters the phone number from Cloud API",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "phone-numbers request-code",
+          "summary": "Request a phone-number verification code.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "request_verification_code",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "code-method",
+              "type": "string",
+              "summary": "code_method",
+              "values": [],
+              "maps_to": "record.code_method"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "requests a phone-number verification code",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "phone-numbers verify-code",
+          "summary": "Submit the phone-number verification code.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "verify_phone_number",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "code",
+              "type": "string",
+              "summary": "Verification code received via SMS/VOICE.",
+              "values": [],
+              "maps_to": "record.code"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "submits the phone-number verification code",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "phone-numbers set-pin",
+          "summary": "Set or change the two-step verification PIN.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "set_two_step_pin",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "pin",
+              "type": "string",
+              "summary": "New 6-digit two-step verification PIN.",
+              "values": [],
+              "maps_to": "record.pin"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: sets or changes the two-step verification PIN",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "apps subscribe",
+          "summary": "Subscribe the app to WABA webhooks.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "subscribe_waba_app",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "messaging-product",
+              "type": "string",
+              "summary": "messaging_product",
+              "values": [],
+              "maps_to": "record.messaging_product"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "subscribes the app to WABA webhooks",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "apps unsubscribe",
+          "summary": "Unsubscribe the app from WABA webhooks.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "unsubscribe_waba_app",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "messaging-product",
+              "type": "string",
+              "summary": "messaging_product",
+              "values": [],
+              "maps_to": "record.messaging_product"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: unsubscribes the app from WABA webhooks",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "qr create",
+          "summary": "Create a QR code / short link for the number.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_qr_code",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "prefilled-message",
+              "type": "string",
+              "summary": "Prefilled message body for the QR/short link.",
+              "values": [],
+              "maps_to": "record.prefilled_message"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "creates a QR code / short link for the number",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "qr delete",
+          "summary": "Delete a QR code / short link.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "delete_qr_code",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "code",
+              "type": "string",
+              "summary": "QR code id to delete.",
+              "values": [],
+              "maps_to": "record.code"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: deletes a QR code / short link",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "media upload",
+          "summary": "Upload bounded media to WhatsApp and return a media id (PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "upload_media",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "file",
+              "type": "string",
+              "summary": "Local file path to upload (bounded; image/audio/video/document/sticker).",
+              "values": [],
+              "maps_to": "record.file"
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "MIME type of the media file.",
+              "values": [],
+              "maps_to": "record.type"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "uploads bounded media to WhatsApp and returns a media id (patient content; PHI)",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "media delete",
+          "summary": "Permanently delete an uploaded media object.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "delete_media",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "media-id",
+              "type": "string",
+              "summary": "Media id to delete.",
+              "values": [],
+              "maps_to": "record.media_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "high: permanently deletes an uploaded media object",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+          "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+        },
+        {
+          "path": "web sync",
+          "summary": "WhatsApp Web history backfill + realtime capture + media sync (whatsmeow).",
+          "intent": "etl",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web sync",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web chats list",
+          "summary": "List WhatsApp Web chats.",
+          "intent": "etl",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web chats list",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web messages list",
+          "summary": "List WhatsApp Web messages for a chat.",
+          "intent": "etl",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web messages list --chat JID",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web contacts search",
+          "summary": "List/search WhatsApp Web contacts.",
+          "intent": "etl",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web contacts search",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web messages search",
+          "summary": "Search WhatsApp Web message content.",
+          "intent": "direct_read",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web messages search --query TEXT",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web chats query",
+          "summary": "Parameterized WhatsApp Web chat lookup.",
+          "intent": "direct_read",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web chats list --query TEXT",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web send",
+          "summary": "Send a WhatsApp Web text message (whatsmeow; PHI).",
+          "intent": "reverse_etl",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web send --to JID --message TEXT",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web media download",
+          "summary": "Download a WhatsApp Web attachment (bounded local output).",
+          "intent": "direct_read",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web media download --message-id ID",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        },
+        {
+          "path": "web auth",
+          "summary": "WhatsApp Web QR login and local session lifecycle.",
+          "intent": "auth",
+          "availability": "unsupported_local",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "whatsapp web auth --store DIR",
+          "source_url": "https://github.com/vicentereig/whatsapp-cli",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": "WhatsApp Web multidevice (whatsmeow) op modeled from vicentereig/whatsapp-cli. Requires a local QR session (spec.mode=web, store_dir); not executed by the declarative Graph HTTP engine. Patient content is PHI."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "whatsapp-auth",
+          "summary": "Cloud mode uses a Graph access_token via credentials (Bearer); web mode uses a local whatsmeow QR session and store_dir. Never pass secrets in command text; the two modes' credentials are never conflated."
+        },
+        {
+          "name": "whatsapp-phi",
+          "summary": "Recipient numbers and message bodies are patient PHI; they are redacted by default in plans and never printed at inspection. Sends require consent and template pre-approval."
+        },
+        {
+          "name": "whatsapp-tiers",
+          "summary": "Cloud API messaging tiers, template categories (utility/marketing/authentication), and Graph rate limits bound send throughput; the connector retries 429s with backoff."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nReads the WhatsApp Business Platform (Cloud API + Business Management API) on Meta Graph API\nv25.0 and models the WhatsApp Web multidevice (whatsmeow) access mode from\n`https://github.com/vicentereig/whatsapp-cli`. Framed for an HMS / healthcare deployment paired with the Bahmni EMR connector\n(parent #516): WhatsApp is the patient engagement / outbound notification channel while Bahmni\nholds the clinical system of record.\n\nExecutable ETL streams (cloud mode): `phone_numbers`, `message_templates`, `subscribed_apps`,\n`waba`.\n\nBounded direct-read commands cover single phone-number/template/profile/media detail plus the four\ntyped analytics read-queries (messaging, conversation, pricing, template) under the `json_redacted`\noutput policy. WhatsApp sends (all 11 message types), template and phone-number\nadministration, business-profile updates, QR/subscription management, and bounded media upload are\nmodeled as 28 typed reverse-ETL write actions.\n\nThe WhatsApp Web (whatsmeow) mode is modeled as documented, config-scoped ops (`spec.mode=web`);\nit requires a local QR session and is not executed by the declarative Graph HTTP engine.\n\nService documentation: https://developers.facebook.com/docs/whatsapp/cloud-api.\n\n## Auth setup\n\nConnection fields:\n\n- `mode` (required, string, enum cloud|web); default `cloud`; selects the active access mode. The\n  two modes' credentials are never conflated.\n- `access_token` (optional, secret, string); Meta Graph access token for cloud-mode Bearer auth;\n  never logged.\n- `base_url` (optional, string); default `https://graph.facebook.com/v25.0`; Graph base URL (includes version) override.\n- `waba_id` (optional, string); WhatsApp Business Account ID for Business Management reads.\n- `phone_number_id` (optional, string); Phone Number ID for messaging/media/profile/registration.\n- `page_size` (optional, string); default `100`; records per page (1-100).\n- `max_pages` (optional, string); default `0`; 0 exhausts a paginated stream.\n- `start_date` (optional, string); format `date-time`; RFC3339 lower bound for analytics windows.\n- `store_dir` (optional, string); WhatsApp Web (whatsmeow) local store directory for the QR session.\n\nSecret fields are redacted in logs and write previews: `access_token`. No secret value is read or\nprinted at `pm connectors inspect whatsapp --json`.\n\nAuthentication behavior: cloud mode uses Bearer auth on `secrets.access_token` (falling back to no\nauth when unset, for credential-free conformance); web mode uses a local whatsmeow QR session and\n`store_dir` with no printed session secret.\n\nConnection checks call GET `/{WABA_ID}/phone_numbers` with query `limit`=`1`.\n\n## Streams notes\n\nDefault pagination: Graph cursor pagination; cursor parameter `after`; next token read from\n`paging.cursors.after`. The `waba` stream is a single-object read with pagination disabled.\n\nStreams are full-refresh over Graph list endpoints; the `waba` stream reads WABA metadata as one\nrecord. Analytics are exposed as bounded typed direct-read queries rather than streams because the\nGraph analytics surface is a time-windowed field-expansion on the WABA node.\n\nWebhook-fed inbound messages and statuses are push-only Graph callbacks, not pollable streams; they\nare recorded as blocked ledger rows and should be ingested by the EMR/webhook receiver.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` for WhatsApp sends (text/image/audio/video/document/\nsticker/location/contacts/interactive/template/reaction), mark-as-read and typing, template\ncreate/edit/delete, phone-number register/deregister/request-code/verify/two-step-PIN, business-\nprofile update, app subscribe/unsubscribe, QR create/delete, and bounded multipart media upload +\nmedia delete.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Sends and destructive/admin actions declare `confirm: destructive` and require `--confirm\n  destructive`.\n- Recipient numbers and message bodies are patient PHI: redacted by default in command plans;\n  sends require patient consent and Meta template pre-approval.\n- Multipart media upload accepts only a declared local file path field and enforces a bounded byte\n  limit; no generic upload or raw Graph body flag is exposed.\n- No generic raw HTTP write, arbitrary Graph API method/path/body, raw whatsmeow method, generic\n  shell write, or SQL write is exposed.\n\nRead risk: external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and analytics; direct reads are bounded and PHI-redacted.\n\nWrite risk: typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans.\n\nApproval: reverse ETL requires plan, preview, approval, execute; sends and destructive/admin actions require --confirm destructive plus healthcare consent/template pre-approval.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage is inventoried from Meta WhatsApp Cloud API + Business Management API v25.0 (reviewed\n  2026-07-25) and the vicentereig/whatsapp-cli command surface.\n- Executable coverage (cloud mode): 4 stream endpoints, 4 GET direct reads, 4 typed analytics\n  read-queries, and 28 typed reverse-ETL write actions.\n- WhatsApp Web (whatsmeow) mode: modeled as documented, config-scoped ops\n  (`unsupported_local`); live execution requires a whatsmeow QR session and is human-gated.\n- Live sends, template submissions, phone-number administration, media payloads beyond fixtures,\n  and any real patient messaging are human-gated (credentials, consent, template pre-approval).\n",
+    "icon": null
+  },
+  {
     "slug": "when-i-work",
     "name": "When I Work",
     "description": "Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.",

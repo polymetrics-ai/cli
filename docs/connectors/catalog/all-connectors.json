@@ -146767,6 +146767,341 @@
     }
   },
   {
+    "name": "whatsapp",
+    "display_name": "WhatsApp",
+    "description": "Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, WhatsApp Business Account (WABA) metadata, subscribed apps, and messaging/conversation/pricing/template analytics; executes bounded direct reads and typed analytics read-queries; and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.",
+    "integration_type": "api",
+    "docs_url": "https://developers.facebook.com/docs/whatsapp/cloud-api",
+    "release_stage": "beta",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": true
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "WhatsApp connection",
+      "type": "object",
+      "required": [
+        "mode"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "cloud",
+            "web"
+          ],
+          "default": "cloud",
+          "description": "Active access mode. 'cloud' = WhatsApp Business Platform (Cloud API + Business Management API on Meta Graph). 'web' = WhatsApp Web multidevice (whatsmeow) personal-account mode. The two modes' credentials are never conflated."
+        },
+        "base_url": {
+          "type": "string",
+          "default": "https://graph.facebook.com/v25.0",
+          "format": "uri",
+          "description": "Meta Graph API base URL (includes graph version). Override for tests or proxies."
+        },
+        "waba_id": {
+          "type": "string",
+          "description": "WhatsApp Business Account (WABA) ID for Business Management API reads (cloud mode)."
+        },
+        "phone_number_id": {
+          "type": "string",
+          "description": "Phone Number ID used for messaging, media, profile, and registration (cloud mode)."
+        },
+        "page_size": {
+          "type": "string",
+          "default": "100",
+          "description": "Records per page for paginated Graph list reads (1-100)."
+        },
+        "max_pages": {
+          "type": "string",
+          "default": "0",
+          "description": "Maximum pages to fetch; 0 exhausts a paginated stream."
+        },
+        "start_date": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339 lower bound for time-windowed analytics reads."
+        },
+        "store_dir": {
+          "type": "string",
+          "description": "WhatsApp Web (whatsmeow) local store directory for the QR session and SQLite state (web mode). No session secret is read or printed at inspection."
+        },
+        "access_token": {
+          "type": "string",
+          "x-secret": true,
+          "description": "Meta Graph API access token (system-user or app token) for Bearer auth in cloud mode. Used only for Authorization; never logged or printed."
+        }
+      }
+    },
+    "streams": [
+      {
+        "name": "phone_numbers",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "message_templates",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "subscribed_apps",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "waba",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "send_text_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_image_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_audio_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_video_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_document_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_sticker_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_location_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_contacts_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_interactive_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_template_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "send_reaction_message",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent"
+      },
+      {
+        "name": "mark_message_read",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "marks an inbound patient message as read"
+      },
+      {
+        "name": "send_typing_indicator",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/messages",
+        "risk": "sends a typing indicator on an inbound patient conversation"
+      },
+      {
+        "name": "create_message_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.waba_id }}/message_templates",
+        "risk": "creates a WhatsApp message template pending Meta review"
+      },
+      {
+        "name": "update_message_template",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ record.template_id }}",
+        "risk": "edits an existing message template"
+      },
+      {
+        "name": "delete_message_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/{{ config.waba_id }}/message_templates",
+        "risk": "permanently deletes a message template",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_business_profile",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/whatsapp_business_profile",
+        "risk": "updates the WhatsApp business profile for the number"
+      },
+      {
+        "name": "register_phone_number",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/register",
+        "risk": "registers the phone number on Cloud API",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deregister_phone_number",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/deregister",
+        "risk": "deregisters the phone number from Cloud API",
+        "confirm": "destructive"
+      },
+      {
+        "name": "request_verification_code",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/request_code",
+        "risk": "requests a phone-number verification code"
+      },
+      {
+        "name": "verify_phone_number",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/verify_code",
+        "risk": "submits the phone-number verification code"
+      },
+      {
+        "name": "set_two_step_pin",
+        "kind": "update",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}",
+        "risk": "sets or changes the two-step verification PIN",
+        "confirm": "destructive"
+      },
+      {
+        "name": "subscribe_waba_app",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.waba_id }}/subscribed_apps",
+        "risk": "subscribes the app to WABA webhooks"
+      },
+      {
+        "name": "unsubscribe_waba_app",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/{{ config.waba_id }}/subscribed_apps",
+        "risk": "unsubscribes the app from WABA webhooks",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_qr_code",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/message_qrdls",
+        "risk": "creates a QR code / short link for the number"
+      },
+      {
+        "name": "delete_qr_code",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/{{ config.phone_number_id }}/message_qrdls/{{ record.code }}",
+        "risk": "deletes a QR code / short link",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_media",
+        "kind": "create",
+        "method": "POST",
+        "path": "/{{ config.phone_number_id }}/media",
+        "risk": "uploads bounded media to WhatsApp and returns a media id (patient content; PHI)"
+      },
+      {
+        "name": "delete_media",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/{{ record.media_id }}",
+        "risk": "permanently deletes an uploaded media object",
+        "confirm": "destructive"
+      }
+    ],
+    "risk": {
+      "read": "external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and analytics; direct reads are bounded and PHI-redacted",
+      "write": "typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans",
+      "approval": "reverse ETL requires plan, preview, approval, execute; sends and destructive/admin actions require --confirm destructive plus healthcare consent/template pre-approval"
+    },
+    "icon": {
+      "id": "pm-whatsapp",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "when-i-work",
     "display_name": "When I Work",
     "description": "Reads and writes When I Work workforce-scheduling data: users, locations, positions, shifts, sites, shift templates, annotations, availability events, request types, time entries, timezones, payrolls, open-shift approval requests, and shift swaps.",
