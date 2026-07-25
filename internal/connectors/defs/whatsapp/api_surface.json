@@ -7,287 +7,302 @@
   "endpoints": [
     {
       "method": "GET",
-      "path": "/{WABA_ID}/phone_numbers",
+      "path": "/{waba_id}/phone_numbers",
       "covered_by": {
         "stream": "phone_numbers"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}/message_templates",
+      "path": "/{waba_id}/message_templates",
       "covered_by": {
         "stream": "message_templates"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}/subscribed_apps",
+      "path": "/{waba_id}/subscribed_apps",
       "covered_by": {
         "stream": "subscribed_apps"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}",
+      "path": "/{waba_id}",
       "covered_by": {
         "stream": "waba"
       }
     },
     {
       "method": "GET",
-      "path": "/{PHONE_NUMBER_ID}",
+      "path": "/{phone_number_id}",
       "covered_by": {
         "direct_read": "phone-numbers get"
       }
     },
     {
       "method": "GET",
-      "path": "/{TEMPLATE_ID}",
+      "path": "/{template_id}",
       "covered_by": {
         "direct_read": "templates get"
       }
     },
     {
       "method": "GET",
-      "path": "/{PHONE_NUMBER_ID}/whatsapp_business_profile",
+      "path": "/{phone_number_id}/whatsapp_business_profile",
       "covered_by": {
         "direct_read": "profile get"
       }
     },
     {
       "method": "GET",
-      "path": "/{MEDIA_ID}",
+      "path": "/{media_id}",
       "covered_by": {
         "direct_read": "media get-url"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}?fields=analytics",
-      "covered_by": {
-        "direct_read": "analytics messaging"
+      "path": "/{waba_id}?fields=analytics",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Messaging analytics filters (start/end/granularity) are only expressible through Graph field-expansion syntax (fields=analytics.start(..).end(..).granularity(..)). The declarative direct-read engine resolves path variables and flat query parameters only, and this connector deliberately exposes no raw `fields` flag, so the windowed read cannot be authored without a generic Graph escape hatch.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}?fields=conversation_analytics",
-      "covered_by": {
-        "direct_read": "analytics conversation"
+      "path": "/{waba_id}?fields=conversation_analytics",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Conversation analytics filters are only expressible through Graph field-expansion syntax (fields=conversation_analytics.start(..).end(..).granularity(..)); the declarative direct-read engine cannot author it without a raw `fields` escape hatch.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}?fields=pricing_analytics",
-      "covered_by": {
-        "direct_read": "analytics pricing"
+      "path": "/{waba_id}?fields=pricing_analytics",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Pricing analytics filters are only expressible through Graph field-expansion syntax (fields=pricing_analytics.start(..).end(..).granularity(..)); the declarative direct-read engine cannot author it without a raw `fields` escape hatch.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}/template_analytics",
+      "path": "/{waba_id}/template_analytics",
       "covered_by": {
         "direct_read": "analytics template"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_text_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_image_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_audio_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_video_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_document_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_sticker_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_location_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_contacts_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_interactive_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_template_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_reaction_message"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "mark_message_read"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/messages",
+      "path": "/{phone_number_id}/messages",
       "covered_by": {
         "write": "send_typing_indicator"
       }
     },
     {
       "method": "POST",
-      "path": "/{WABA_ID}/message_templates",
+      "path": "/{waba_id}/message_templates",
       "covered_by": {
         "write": "create_message_template"
       }
     },
     {
       "method": "POST",
-      "path": "/{TEMPLATE_ID}",
+      "path": "/{template_id}",
       "covered_by": {
         "write": "update_message_template"
       }
     },
     {
       "method": "DELETE",
-      "path": "/{WABA_ID}/message_templates",
+      "path": "/{waba_id}/message_templates",
       "covered_by": {
         "write": "delete_message_template"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/whatsapp_business_profile",
+      "path": "/{phone_number_id}/whatsapp_business_profile",
       "covered_by": {
         "write": "update_business_profile"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/register",
+      "path": "/{phone_number_id}/register",
       "covered_by": {
         "write": "register_phone_number"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/deregister",
+      "path": "/{phone_number_id}/deregister",
       "covered_by": {
         "write": "deregister_phone_number"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/request_code",
+      "path": "/{phone_number_id}/request_code",
       "covered_by": {
         "write": "request_verification_code"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/verify_code",
+      "path": "/{phone_number_id}/verify_code",
       "covered_by": {
         "write": "verify_phone_number"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}",
+      "path": "/{phone_number_id}",
       "covered_by": {
         "write": "set_two_step_pin"
       }
     },
     {
       "method": "POST",
-      "path": "/{WABA_ID}/subscribed_apps",
+      "path": "/{waba_id}/subscribed_apps",
       "covered_by": {
         "write": "subscribe_waba_app"
       }
     },
     {
       "method": "DELETE",
-      "path": "/{WABA_ID}/subscribed_apps",
+      "path": "/{waba_id}/subscribed_apps",
       "covered_by": {
         "write": "unsubscribe_waba_app"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/message_qrdls",
+      "path": "/{phone_number_id}/message_qrdls",
       "covered_by": {
         "write": "create_qr_code"
       }
     },
     {
       "method": "DELETE",
-      "path": "/{PHONE_NUMBER_ID}/message_qrdls/{QR_ID}",
+      "path": "/{phone_number_id}/message_qrdls/{qr_id}",
       "covered_by": {
         "write": "delete_qr_code"
       }
     },
     {
       "method": "POST",
-      "path": "/{PHONE_NUMBER_ID}/media",
+      "path": "/{phone_number_id}/media",
       "covered_by": {
         "write": "upload_media"
       }
     },
     {
       "method": "DELETE",
-      "path": "/{MEDIA_ID}",
+      "path": "/{media_id}",
       "covered_by": {
         "write": "delete_media"
       }
     },
     {
       "method": "GET",
-      "path": "/{WABA_ID}/webhooks/verification",
+      "path": "/{waba_id}/webhooks/verification",
       "operation": {
         "model": "local_workflow",
         "status": "blocked",
@@ -299,7 +314,7 @@
     },
     {
       "method": "POST",
-      "path": "/{APP_ID}/webhooks/messages",
+      "path": "/{app_id}/webhooks/messages",
       "operation": {
         "model": "local_workflow",
         "status": "blocked",
@@ -311,7 +326,7 @@
     },
     {
       "method": "POST",
-      "path": "/{APP_ID}/webhooks/statuses",
+      "path": "/{app_id}/webhooks/statuses",
       "operation": {
         "model": "local_workflow",
         "status": "blocked",
@@ -323,7 +338,7 @@
     },
     {
       "method": "GET",
-      "path": "/{PHONE_NUMBER_ID}/message_qrdls",
+      "path": "/{phone_number_id}/message_qrdls",
       "operation": {
         "model": "duplicate",
         "status": "blocked",

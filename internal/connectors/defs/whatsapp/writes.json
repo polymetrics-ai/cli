@@ -36,7 +36,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_image_message",
@@ -74,7 +75,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_audio_message",
@@ -112,7 +114,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_video_message",
@@ -150,7 +153,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_document_message",
@@ -188,7 +192,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_sticker_message",
@@ -226,7 +231,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_location_message",
@@ -264,7 +270,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_contacts_message",
@@ -305,7 +312,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_interactive_message",
@@ -343,7 +351,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_template_message",
@@ -381,7 +390,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "send_reaction_message",
@@ -419,7 +429,8 @@
         },
         "additionalProperties": true
       },
-      "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent"
+      "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent",
+      "confirm": "destructive"
     },
     {
       "name": "mark_message_read",
@@ -583,7 +594,10 @@
       "name": "delete_message_template",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/{{ config.waba_id }}/message_templates",
+      "path": "/{{ config.waba_id }}/message_templates?name={{ record.name }}",
+      "path_fields": [
+        "name"
+      ],
       "body_type": "none",
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
@@ -594,16 +608,12 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Template name to delete."
-          },
-          "hsm_id": {
-            "type": "string",
-            "description": "Optional specific template id to delete."
+            "description": "Template name to delete. Meta deletes every language version registered under this name."
           }
         },
         "additionalProperties": true
       },
-      "risk": "permanently deletes a message template",
+      "risk": "permanently deletes a message template and every language version registered under its name",
       "confirm": "destructive",
       "delete": {
         "idempotent": true,
@@ -940,6 +950,7 @@
         "additionalProperties": true
       },
       "risk": "uploads bounded media to WhatsApp and returns a media id (patient content; PHI)",
+      "confirm": "destructive",
       "multipart": {
         "max_bytes": 104857600,
         "parts": [

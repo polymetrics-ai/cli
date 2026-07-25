@@ -431,13 +431,16 @@ func TestRedactRecordRedactsMessagingPHIFields(t *testing.T) {
 		"type":              "text",
 		"status":            "read",
 		"country_code":      "US",
+		// an operator approving a github `pr merge`/`delete_file` plan must still
+		// see the commit message they are approving.
+		"commit_message": "Merge pull request #1",
 	})
 	for _, key := range []string{"to", "text", "image", "document", "media_file", "file", "pin", "code", "prefilled_message", "recipient_phone", "patient_uuid"} {
 		if redacted[key] != "***" {
 			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
 		}
 	}
-	for _, key := range []string{"messaging_product", "type", "status", "country_code"} {
+	for _, key := range []string{"messaging_product", "type", "status", "country_code", "commit_message"} {
 		if redacted[key] == "***" {
 			t.Fatalf("redacted[%s] was redacted, want visible in %+v", key, redacted)
 		}

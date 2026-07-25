@@ -827,14 +827,16 @@ func isSensitiveRecordField(name string) bool {
 	// Cloud API message-body keys and recipient/credential fields) that carry
 	// patient PHI or secrets but are too short/ambiguous to match as a substring
 	// without over-redacting unrelated fields ("to" vs "token", "code" vs
-	// "country_code", "file" vs "profile", "pin" vs "typing").
+	// "country_code", "file" vs "profile", "pin" vs "typing", "message" vs
+	// github's "commit_message" on an approved `pr merge` plan).
 	switch normalized {
 	case "to", "pin", "code", "file",
 		"text", "image", "audio", "video", "document", "sticker",
-		"location", "contacts", "interactive", "template", "reaction", "caption":
+		"location", "contacts", "interactive", "template", "reaction", "caption",
+		"message", "message_id", "prefilled_message":
 		return true
 	}
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path", "message", "recipient", "phone", "msisdn", "patient"} {
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path", "recipient", "phone", "msisdn", "patient"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}

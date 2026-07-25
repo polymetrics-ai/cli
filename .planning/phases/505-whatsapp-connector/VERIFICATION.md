@@ -32,8 +32,14 @@ Safety / policy:
 
 - [x] No secret values requested, printed, or stored; `access_token` is `x-secret`.
 - [x] No generic raw HTTP write, raw Graph method/path/body, or raw whatsmeow escape hatch.
-- [x] Sends + destructive/admin actions are typed reverse-ETL with `confirm: destructive`, risk +
-      approval text, and PHI-redaction language.
+- [x] Message sends, media upload, destructive deletes/unsubscribe, and phone-number
+      register/deregister/two-step-PIN are typed reverse-ETL with `confirm: destructive`, risk +
+      approval text, and PHI-redaction language. Read receipts, typing indicators, template
+      create/edit, profile update, code request/verify, app subscribe, and QR create are
+      approval-gated only; metadata/docs wording matches that split.
+- [x] Messaging/conversation/pricing analytics are declared `unsupported_api` (Graph exposes them
+      only as field expansions, which the declarative engine cannot author without a raw `fields`
+      flag); `analytics template` executes over the flat-query `template_analytics` edge.
 - [x] Access mode scoped by `spec.mode` (cloud|web); the two modes' credentials are never conflated.
 
 Not run locally (environment/human gates):

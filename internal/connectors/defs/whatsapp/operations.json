@@ -5,52 +5,17 @@
       "kind": "rest_read",
       "summary": "Messaging analytics (sent/delivered) on the WABA node",
       "risk": "medium",
-      "approval": "none: read-only bounded analytics query with schema-gated body fields and redacted output",
+      "approval": "none: read-only bounded analytics read with redacted output",
       "output_policy": "json_redacted",
-      "description": "Typed WhatsApp analytics read-query modeled as a bounded schema-gated POST body over the WABA analytics surface; connector-authored flags map to start/end/granularity/dimensions. No raw fields string or generic Graph flag is exposed.",
+      "description": "Messaging analytics ledger row on the WABA node. Graph accepts the start/end/granularity filters only as a field expansion (fields=analytics.start(..).end(..).granularity(..)), which the declarative direct-read engine cannot author without a raw Graph `fields` flag, so no CLI command binds this operation and `analytics messaging` is declared unsupported_api.",
       "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics",
       "rest": {
-        "method": "POST",
-        "path": "/{{ config.waba_id }}",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "start": {
-              "type": "string",
-              "description": "Inclusive window start (unix seconds or RFC3339)."
-            },
-            "end": {
-              "type": "string",
-              "description": "Exclusive window end (unix seconds or RFC3339)."
-            },
-            "granularity": {
-              "type": "string",
-              "enum": [
-                "HALF_HOUR",
-                "DAILY",
-                "MONTHLY"
-              ],
-              "description": "Aggregation granularity."
-            },
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Optional analytics dimensions."
-            },
-            "metric": {
-              "type": "string",
-              "enum": [
-                "analytics"
-              ],
-              "description": "Analytics metric family on the WABA node."
-            }
-          },
-          "additionalProperties": false
-        }
+        "method": "GET",
+        "path": "/{waba_id}",
+        "query": {
+          "fields": "analytics"
+        },
+        "max_bytes": 1048576
       }
     },
     {
@@ -58,52 +23,17 @@
       "kind": "rest_read",
       "summary": "Conversation analytics (conversation counts/cost) on the WABA node",
       "risk": "medium",
-      "approval": "none: read-only bounded analytics query with schema-gated body fields and redacted output",
+      "approval": "none: read-only bounded analytics read with redacted output",
       "output_policy": "json_redacted",
-      "description": "Typed WhatsApp analytics read-query modeled as a bounded schema-gated POST body over the WABA analytics surface; connector-authored flags map to start/end/granularity/dimensions. No raw fields string or generic Graph flag is exposed.",
+      "description": "Conversation analytics ledger row on the WABA node. Graph accepts the start/end/granularity filters only as a field expansion (fields=conversation_analytics.start(..).end(..).granularity(..)), which the declarative direct-read engine cannot author without a raw Graph `fields` flag, so no CLI command binds this operation and `analytics conversation` is declared unsupported_api.",
       "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics",
       "rest": {
-        "method": "POST",
-        "path": "/{{ config.waba_id }}",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "start": {
-              "type": "string",
-              "description": "Inclusive window start (unix seconds or RFC3339)."
-            },
-            "end": {
-              "type": "string",
-              "description": "Exclusive window end (unix seconds or RFC3339)."
-            },
-            "granularity": {
-              "type": "string",
-              "enum": [
-                "HALF_HOUR",
-                "DAILY",
-                "MONTHLY"
-              ],
-              "description": "Aggregation granularity."
-            },
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Optional analytics dimensions."
-            },
-            "metric": {
-              "type": "string",
-              "enum": [
-                "conversation_analytics"
-              ],
-              "description": "Analytics metric family on the WABA node."
-            }
-          },
-          "additionalProperties": false
-        }
+        "method": "GET",
+        "path": "/{waba_id}",
+        "query": {
+          "fields": "conversation_analytics"
+        },
+        "max_bytes": 1048576
       }
     },
     {
@@ -111,52 +41,17 @@
       "kind": "rest_read",
       "summary": "Pricing analytics (cost/pricing categories) on the WABA node",
       "risk": "medium",
-      "approval": "none: read-only bounded analytics query with schema-gated body fields and redacted output",
+      "approval": "none: read-only bounded analytics read with redacted output",
       "output_policy": "json_redacted",
-      "description": "Typed WhatsApp analytics read-query modeled as a bounded schema-gated POST body over the WABA analytics surface; connector-authored flags map to start/end/granularity/dimensions. No raw fields string or generic Graph flag is exposed.",
+      "description": "Pricing analytics ledger row on the WABA node. Graph accepts the start/end/granularity filters only as a field expansion (fields=pricing_analytics.start(..).end(..).granularity(..)), which the declarative direct-read engine cannot author without a raw Graph `fields` flag, so no CLI command binds this operation and `analytics pricing` is declared unsupported_api.",
       "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics",
       "rest": {
-        "method": "POST",
-        "path": "/{{ config.waba_id }}",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "start": {
-              "type": "string",
-              "description": "Inclusive window start (unix seconds or RFC3339)."
-            },
-            "end": {
-              "type": "string",
-              "description": "Exclusive window end (unix seconds or RFC3339)."
-            },
-            "granularity": {
-              "type": "string",
-              "enum": [
-                "HALF_HOUR",
-                "DAILY",
-                "MONTHLY"
-              ],
-              "description": "Aggregation granularity."
-            },
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Optional analytics dimensions."
-            },
-            "metric": {
-              "type": "string",
-              "enum": [
-                "pricing_analytics"
-              ],
-              "description": "Analytics metric family on the WABA node."
-            }
-          },
-          "additionalProperties": false
-        }
+        "method": "GET",
+        "path": "/{waba_id}",
+        "query": {
+          "fields": "pricing_analytics"
+        },
+        "max_bytes": 1048576
       }
     },
     {
@@ -164,45 +59,14 @@
       "kind": "rest_read",
       "summary": "Template analytics (per-template sent/delivered/read/clicked)",
       "risk": "medium",
-      "approval": "none: read-only bounded template analytics with schema-gated body and redacted output",
+      "approval": "none: read-only bounded template analytics with connector-authored query parameters and redacted output",
       "output_policy": "json_redacted",
-      "description": "Bounded template analytics read-query; connector-authored flags map to the time window and granularity.",
+      "description": "Bounded template analytics read-query over the template_analytics edge, which takes flat query parameters; connector-authored flags map to the time window, granularity, template ids, and metric types. No raw Graph fields string is exposed.",
       "source_url": "https://developers.facebook.com/docs/whatsapp/business-management-api/analytics",
       "rest": {
-        "method": "POST",
-        "path": "/{{ config.waba_id }}/template_analytics",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "properties": {
-            "start": {
-              "type": "string",
-              "description": "Inclusive window start (unix seconds or RFC3339)."
-            },
-            "end": {
-              "type": "string",
-              "description": "Exclusive window end (unix seconds or RFC3339)."
-            },
-            "granularity": {
-              "type": "string",
-              "enum": [
-                "HALF_HOUR",
-                "DAILY",
-                "MONTHLY"
-              ],
-              "description": "Aggregation granularity."
-            },
-            "dimensions": {
-              "type": "array",
-              "items": {
-                "type": "string"
-              },
-              "description": "Optional analytics dimensions."
-            }
-          },
-          "additionalProperties": false
-        }
+        "method": "GET",
+        "path": "/{waba_id}/template_analytics",
+        "max_bytes": 1048576
       }
     },
     {

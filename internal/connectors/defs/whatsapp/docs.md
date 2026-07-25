@@ -9,11 +9,13 @@ holds the clinical system of record.
 Executable ETL streams (cloud mode): `phone_numbers`, `message_templates`, `subscribed_apps`,
 `waba`.
 
-Bounded direct-read commands cover single phone-number/template/profile/media detail plus the four
-typed analytics read-queries (messaging, conversation, pricing, template) under the `json_redacted`
-output policy. WhatsApp sends (all 11 message types), template and phone-number
-administration, business-profile updates, QR/subscription management, and bounded media upload are
-modeled as 28 typed reverse-ETL write actions.
+Bounded direct-read commands cover single phone-number/template/profile/media detail plus the typed
+template-analytics read-query under the `json_redacted` output policy. Messaging, conversation, and
+pricing analytics are ledger-only: Graph exposes them solely as field expansions on the WABA node
+(`fields=analytics.start(..).end(..)`), which is not authorable without a raw Graph `fields` flag,
+so those commands are declared `unsupported_api`. WhatsApp sends (all 11 message types), template
+and phone-number administration, business-profile updates, QR/subscription management, and bounded
+media upload are modeled as 28 typed reverse-ETL write actions.
 
 The WhatsApp Web (whatsmeow) mode is modeled as documented, config-scoped ops (`spec.mode=web`);
 it requires a local QR session and is not executed by the declarative Graph HTTP engine.
@@ -43,7 +45,7 @@ Authentication behavior: cloud mode uses Bearer auth on `secrets.access_token` (
 auth when unset, for credential-free conformance); web mode uses a local whatsmeow QR session and
 `store_dir` with no printed session secret.
 
-Connection checks call GET `/{WABA_ID}/phone_numbers` with query `limit`=`1`.
+Connection checks call GET `/{waba_id}/phone_numbers` with query `limit`=`1`.
 
 ## Streams notes
 
@@ -68,28 +70,36 @@ media delete.
 Safety gates:
 
 - Use reverse ETL plan -> preview -> approval -> execute.
-- Sends and destructive/admin actions declare `confirm: destructive` and require `--confirm
-  destructive`.
+- Message sends, media upload, destructive deletes/unsubscribe, and phone-number
+  register/deregister/two-step-PIN declare `confirm: destructive` and require `--confirm
+  destructive`. Read receipts, typing indicators, template create/edit, profile update, code
+  request/verify, app subscribe, and QR create are approval-gated but not confirmation-gated.
 - Recipient numbers and message bodies are patient PHI: redacted by default in command plans;
-  sends require patient consent and Meta template pre-approval.
+  sends require patient consent and Meta template pre-approval. Approved plan records are persisted
+  unredacted in local plan state so the plan can be executed — treat the plan state directory as
+  PHI-bearing at rest.
 - Multipart media upload accepts only a declared local file path field and enforces a bounded byte
   limit; no generic upload or raw Graph body flag is exposed.
 - No generic raw HTTP write, arbitrary Graph API method/path/body, raw whatsmeow method, generic
   shell write, or SQL write is exposed.
 
-Read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and analytics; direct reads are bounded and PHI-redacted.
+Read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted. `media get-url` deliberately returns the short-TTL media URL in clear text — that URL is the command's output and still requires the access token to fetch.
 
 Write risk: typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans.
 
-Approval: reverse ETL requires plan, preview, approval, execute; sends and destructive/admin actions require --confirm destructive plus healthcare consent/template pre-approval.
+Approval: reverse ETL requires plan, preview, approval, execute; message sends, media upload, destructive deletes, and phone-number registration/PIN actions require --confirm destructive plus healthcare consent/template pre-approval.
 
 ## Known limits
 
 - Batch defaults: read_page_size=100.
 - API coverage is inventoried from Meta WhatsApp Cloud API + Business Management API v25.0 (reviewed
   2026-07-25) and the vicentereig/whatsapp-cli command surface.
-- Executable coverage (cloud mode): 4 stream endpoints, 4 GET direct reads, 4 typed analytics
-  read-queries, and 28 typed reverse-ETL write actions.
+- Executable coverage (cloud mode): 4 stream endpoints, 4 GET direct reads, 1 typed template
+  analytics read-query, and 28 typed reverse-ETL write actions.
+- Messaging/conversation/pricing analytics are not executable: their start/end/granularity filters
+  exist only inside Graph field-expansion syntax, and this connector exposes no raw `fields` flag.
+- `delete_message_template` targets by template name and removes every language version registered
+  under that name; per-language (`hsm_id`) deletion is not modeled.
 - WhatsApp Web (whatsmeow) mode: modeled as documented, config-scoped ops
   (`unsupported_local`); live execution requires a whatsmeow QR session and is human-gated.
 - Live sends, template submissions, phone-number administration, media payloads beyond fixtures,

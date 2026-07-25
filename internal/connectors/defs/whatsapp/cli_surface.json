@@ -124,7 +124,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{WABA_ID}/phone_numbers"
+          "path": "/{waba_id}/phone_numbers"
         }
       ],
       "examples": [
@@ -140,7 +140,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{WABA_ID}/message_templates"
+          "path": "/{waba_id}/message_templates"
         }
       ],
       "examples": [
@@ -156,7 +156,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{WABA_ID}/subscribed_apps"
+          "path": "/{waba_id}/subscribed_apps"
         }
       ],
       "examples": [
@@ -172,7 +172,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{WABA_ID}"
+          "path": "/{waba_id}"
         }
       ],
       "examples": [
@@ -188,7 +188,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{PHONE_NUMBER_ID}"
+          "path": "/{phone_number_id}"
         }
       ],
       "flags": [
@@ -199,7 +199,7 @@
           "maps_to": "path.phone_number_id"
         }
       ],
-      "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+      "risk": "bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted",
       "examples": [
         "pm whatsapp phone-numbers get --json"
       ]
@@ -213,7 +213,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{TEMPLATE_ID}"
+          "path": "/{template_id}"
         }
       ],
       "flags": [
@@ -224,7 +224,7 @@
           "maps_to": "path.template_id"
         }
       ],
-      "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+      "risk": "bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted",
       "examples": [
         "pm whatsapp templates get --json"
       ]
@@ -238,11 +238,11 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{PHONE_NUMBER_ID}/whatsapp_business_profile"
+          "path": "/{phone_number_id}/whatsapp_business_profile"
         }
       ],
       "flags": [],
-      "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+      "risk": "bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted",
       "examples": [
         "pm whatsapp profile get --json"
       ]
@@ -256,7 +256,7 @@
       "api_surface": [
         {
           "method": "GET",
-          "path": "/{MEDIA_ID}"
+          "path": "/{media_id}"
         }
       ],
       "flags": [
@@ -267,165 +267,85 @@
           "maps_to": "path.media_id"
         }
       ],
-      "risk": "bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted",
+      "risk": "bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted",
       "examples": [
         "pm whatsapp media get-url --json"
       ]
     },
     {
       "path": "analytics messaging",
-      "summary": "Bounded typed WhatsApp analytics read-query.",
+      "summary": "Messaging analytics on the WABA node (not executable in this engine).",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "whatsapp.analytics_messaging",
-      "output_policy": "json_redacted",
-      "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
-      "approval": "none: read-only analytics query with schema-gated fields",
-      "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed.",
-      "flags": [
-        {
-          "name": "start",
-          "type": "string",
-          "summary": "Inclusive window start (unix seconds or RFC3339).",
-          "maps_to": "body.start"
-        },
-        {
-          "name": "end",
-          "type": "string",
-          "summary": "Exclusive window end (unix seconds or RFC3339).",
-          "maps_to": "body.end"
-        },
-        {
-          "name": "granularity",
-          "type": "enum",
-          "summary": "Aggregation granularity.",
-          "maps_to": "body.granularity",
-          "values": [
-            "HALF_HOUR",
-            "DAILY",
-            "MONTHLY"
-          ]
-        }
-      ],
-      "examples": [
-        "pm whatsapp analytics messaging --start 2026-07-01 --end 2026-07-25 --json"
-      ]
+      "availability": "unsupported_api",
+      "notes": "Graph exposes messaging analytics only as a field expansion (GET /{waba_id}?fields=analytics.start(..).end(..).granularity(..)). The declarative direct-read engine resolves path variables and flat query parameters, and this connector exposes no raw Graph `fields` flag, so the windowed read is not authorable without a generic escape hatch."
     },
     {
       "path": "analytics conversation",
-      "summary": "Bounded typed WhatsApp analytics read-query.",
+      "summary": "Conversation analytics on the WABA node (not executable in this engine).",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "whatsapp.analytics_conversation",
-      "output_policy": "json_redacted",
-      "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
-      "approval": "none: read-only analytics query with schema-gated fields",
-      "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed.",
-      "flags": [
-        {
-          "name": "start",
-          "type": "string",
-          "summary": "Inclusive window start (unix seconds or RFC3339).",
-          "maps_to": "body.start"
-        },
-        {
-          "name": "end",
-          "type": "string",
-          "summary": "Exclusive window end (unix seconds or RFC3339).",
-          "maps_to": "body.end"
-        },
-        {
-          "name": "granularity",
-          "type": "enum",
-          "summary": "Aggregation granularity.",
-          "maps_to": "body.granularity",
-          "values": [
-            "HALF_HOUR",
-            "DAILY",
-            "MONTHLY"
-          ]
-        }
-      ],
-      "examples": [
-        "pm whatsapp analytics conversation --start 2026-07-01 --end 2026-07-25 --json"
-      ]
+      "availability": "unsupported_api",
+      "notes": "Graph exposes conversation analytics only as a field expansion (GET /{waba_id}?fields=conversation_analytics.start(..).end(..).granularity(..)), which is not authorable without a raw Graph `fields` flag."
     },
     {
       "path": "analytics pricing",
-      "summary": "Bounded typed WhatsApp analytics read-query.",
+      "summary": "Pricing analytics on the WABA node (not executable in this engine).",
       "intent": "direct_read",
-      "availability": "implemented",
-      "operation": "whatsapp.analytics_pricing",
-      "output_policy": "json_redacted",
-      "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
-      "approval": "none: read-only analytics query with schema-gated fields",
-      "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed.",
-      "flags": [
-        {
-          "name": "start",
-          "type": "string",
-          "summary": "Inclusive window start (unix seconds or RFC3339).",
-          "maps_to": "body.start"
-        },
-        {
-          "name": "end",
-          "type": "string",
-          "summary": "Exclusive window end (unix seconds or RFC3339).",
-          "maps_to": "body.end"
-        },
-        {
-          "name": "granularity",
-          "type": "enum",
-          "summary": "Aggregation granularity.",
-          "maps_to": "body.granularity",
-          "values": [
-            "HALF_HOUR",
-            "DAILY",
-            "MONTHLY"
-          ]
-        }
-      ],
-      "examples": [
-        "pm whatsapp analytics pricing --start 2026-07-01 --end 2026-07-25 --json"
-      ]
+      "availability": "unsupported_api",
+      "notes": "Graph exposes pricing analytics only as a field expansion (GET /{waba_id}?fields=pricing_analytics.start(..).end(..).granularity(..)), which is not authorable without a raw Graph `fields` flag."
     },
     {
       "path": "analytics template",
-      "summary": "Bounded typed WhatsApp analytics read-query.",
+      "summary": "Bounded typed WhatsApp template analytics read-query.",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "whatsapp.analytics_template",
       "output_policy": "json_redacted",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/{waba_id}/template_analytics"
+        }
+      ],
       "risk": "bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted",
-      "approval": "none: read-only analytics query with schema-gated fields",
-      "notes": "Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed.",
+      "approval": "none: read-only analytics query with connector-authored query parameters",
+      "notes": "Executes through the typed operation direct-read engine over the template_analytics edge, which takes flat query parameters; no raw Graph fields string or generic HTTP flag is exposed.",
       "flags": [
         {
           "name": "start",
           "type": "string",
-          "summary": "Inclusive window start (unix seconds or RFC3339).",
-          "maps_to": "body.start"
+          "summary": "Inclusive window start (unix seconds or YYYY-MM-DD).",
+          "maps_to": "query.start"
         },
         {
           "name": "end",
           "type": "string",
-          "summary": "Exclusive window end (unix seconds or RFC3339).",
-          "maps_to": "body.end"
+          "summary": "Exclusive window end (unix seconds or YYYY-MM-DD).",
+          "maps_to": "query.end"
         },
         {
           "name": "granularity",
           "type": "enum",
-          "summary": "Aggregation granularity.",
-          "maps_to": "body.granularity",
+          "summary": "Aggregation granularity; template analytics supports DAILY only.",
+          "maps_to": "query.granularity",
           "values": [
-            "HALF_HOUR",
-            "DAILY",
-            "MONTHLY"
+            "DAILY"
           ]
+        },
+        {
+          "name": "template-ids",
+          "type": "string",
+          "summary": "Graph array literal of up to 10 template IDs, e.g. [1421988012088524,2632273056924580].",
+          "maps_to": "query.template_ids"
+        },
+        {
+          "name": "metric-types",
+          "type": "string",
+          "summary": "Comma-separated metric types, e.g. SENT,DELIVERED,READ,CLICKED,COST.",
+          "maps_to": "query.metric_types"
         }
       ],
       "examples": [
-        "pm whatsapp analytics template --start 2026-07-01 --end 2026-07-25 --json"
+        "pm whatsapp analytics template --start 2026-07-01 --end 2026-07-25 --granularity DAILY --template-ids '[1421988012088524]' --json"
       ]
     },
     {
