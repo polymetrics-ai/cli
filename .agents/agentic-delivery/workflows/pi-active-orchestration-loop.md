@@ -4,9 +4,11 @@ Use this workflow when Pi owns a parent issue with subissues.
 
 ## Why This Exists
 
-Pi ships with subagents only when a package such as `pi-sub-agent` is enabled. The project runtime
-adds `npm:pi-sub-agent@0.1.5` and project agents under `.pi/agents/`. This file is the Pi adapter
-for the runtime-generic contract in
+Pi exposes subagents here through the project-local extension configured in `.pi/settings.json`:
+`.pi/extensions/pi-sub-agent`. That vendored MIT-licensed copy is derived from
+`pi-sub-agent@0.1.5` and carries a local child-session recording modification. It is loaded directly
+from the repository after project trust; this route does not install or add the npm package at
+runtime. Project agents live under `.pi/agents/`. This file is the Pi adapter for the runtime-generic contract in
 `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` and the parent orchestrator
 contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`.
 
@@ -49,8 +51,12 @@ contract in `.agents/agentic-delivery/contracts/parent-orchestrator-contract.md`
    - state ledger updates
    - merge eligibility checks
 9. When workers finish, integrate handoffs, verify scope, and close completed agent threads.
-10. After verification passes, run fresh-context local Codex review and disposition findings.
-11. Run independent Shepherd validation; integrate eligible sub-PRs only after `PROCEED`.
+10. After verification passes, compile a ready v4 exact-base/head/tree manifest, render every
+    bounded packet with `scripts/pm-review-system.py render`, pass each rendered stdout unchanged to
+    a fresh-context `pm-reviewer`, and run one authenticated v4 synthesis. Disposition every finding
+    and repeat the entire exact-head route after any change.
+11. Only after the exact-head synthesis is `clean`, run independent Shepherd validation; integrate
+    eligible sub-PRs only after `PROCEED` for the same identities.
 12. Repeat until all subissues are complete, deferred with issue links, or blocked.
 13. Mark the parent PR human-ready only after final exact-head verification, local Codex review,
     Shepherd validation, CI, and remaining human-gate review.
@@ -71,8 +77,9 @@ Use `local-codex-review-loop.md` followed by `shepherd-validator.md`.
   call.
 - Chain mode: maximum **8 sequential steps**.
 - Recursive `subagent` calls are blocked; the orchestrator is the only spawner.
-- Read-only agents (`pm-scout`, `pm-reviewer`) request `grep`, `find`, and `ls`. The parent Pi
-  session must enable those tools explicitly, e.g.
+- `pm-scout` requests only `read`, `grep`, `find`, and `ls`. Exact-head `pm-reviewer` and
+  `pm-verifier` also request restricted read-only `bash` for local identity, diff/history, and
+  verification commands. The parent Pi session must enable those tools explicitly, e.g.
   `pi --tools read,bash,edit,write,grep,find,ls,subagent --approve`. A subagent can only use tools
   that are active in the parent session.
 - Mutating workers must not share the coordinator checkout; use per-worker `cwd` or worktrees.
@@ -81,7 +88,9 @@ Use `local-codex-review-loop.md` followed by `shepherd-validator.md`.
 
 At every parent orchestration turn, write one of:
 
-- `spawned`: workers were spawned, list issue numbers and agent ids.
+- `spawned`: mutating workers were spawned, list issue numbers, agent ids, and isolated directories.
+- `read_only_spawned`: actual read-only scout/reviewer/verifier contexts were spawned; list their ids and scope.
+- `local_critical_path`: the coordinator performed the non-delegable shared or coupled action inline; name it.
 - `not_spawned_dependency_blocked`: dependencies block all ready work.
 - `not_spawned_write_scope_collision`: ready work would collide.
 - `not_spawned_human_gate`: human approval needed.
@@ -103,5 +112,5 @@ gates, security warnings, destructive-action warnings, and approval gates.
 - Pi prompt templates: `docs/prompt-templates.md`
 - Pi settings: `docs/settings.md`
 - Pi packages: `docs/packages.md`
-- `pi-sub-agent` README documents the `subagent` tool schema, agent file format, concurrency caps,
-  project-agent confirmation behavior, and parent tool-allowlist inheritance.
+- `.pi/extensions/pi-sub-agent/README.md` documents the vendored `subagent` tool schema, agent file
+  format, concurrency caps, project-agent confirmation behavior, and parent tool-allowlist inheritance.

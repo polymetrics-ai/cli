@@ -1,0 +1,21 @@
+{
+  "detector_receives_oracle": false,
+  "files": {
+    "correction-inputs.json": {
+      "bytes": 11692,
+      "sha256": "8b78b7ce1692f4b1fd3088393aaf9e14268b196e7f7901a3ffc11880b964b93d"
+    },
+    "correction-oracle.json": {
+      "bytes": 2196,
+      "sha256": "93bef77f4a6ad8d69d2deaf84a5fc665959abba0b397c967eee3dc67bcaab2dd"
+    }
+  },
+  "frozen_at": "2026-07-24T00:00:00Z",
+  "frozen_before_treatment": true,
+  "limitations": [
+    "Public committed regression fixtures are not a secret benchmark.",
+    "Integration fixtures additionally exercise real parsers, Git identity, graph bounds, OS lab isolation, and cleanup.",
+    "Actual local-Codex and prospective production effectiveness remain unavailable."
+  ],
+  "schema_version": "polymetrics.ai/pm-review-correction-corpus-manifest/v1"
+}

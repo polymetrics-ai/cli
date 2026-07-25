@@ -7,7 +7,9 @@ workflows, skills, and guardrails.
 ## Runtime
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
-- Project package: `npm:pi-sub-agent@0.1.5`
+- Project subagent extension: vendored `.pi/extensions/pi-sub-agent`, derived from the
+  MIT-licensed `pi-sub-agent@0.1.5` package with a local child-session recording modification;
+  `.pi/settings.json` loads this repository path directly
 - Default Pi coordinator model: `openai-codex/gpt-5.6-sol` with `xhigh` thinking
 - Implementation agents: `openai-codex/gpt-5.6-sol` with `high` thinking
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
@@ -52,8 +54,9 @@ pi --provider openai-codex --model gpt-5.6-sol --thinking xhigh
 
 Start Pi from the repository root. The orchestration agents request read-only search tools
 (`grep`, `find`, `ls`) and the `subagent` extension tool, so enable them explicitly. Pi's default
-active tool set is only `read,bash,edit,write`; without the flag below, `pm-scout`/`pm-reviewer`
-cannot use `grep`/`find`/`ls`:
+active tool set is only `read,bash,edit,write`; without the flag below, `pm-scout`, `pm-reviewer`,
+and `pm-verifier` cannot use `grep`/`find`/`ls` (reviewer/verifier also retain restricted read-only
+`bash` for local identity, history/diff, and verification commands):
 
 ```bash
 pi --model openai-codex/gpt-5.6-sol --thinking xhigh \
@@ -66,8 +69,8 @@ Useful prompt templates:
   Example: `/pm-orchestrate 42` (parent issue number) or `/pm-orchestrate https://github.com/polymetrics-ai/cli/issues/42`.
 - `/pm-gsd-loop`: issue-first GSD/TDD implementation loop.
   Example: `/pm-gsd-loop 40` or `/pm-gsd-loop "add DraftIssue to ListProjectItems"`.
-- `/pm-review-loop`: fresh-context exact-head local Codex review and disposition, followed by
-  independent Shepherd validation.
+- `/pm-review-loop`: v4 compile plus exact packet render, fresh-context local Codex responses, and
+  one authenticated synthesis; only a clean exact head proceeds to independent Shepherd validation.
   Example: `/pm-review-loop 74 <exact-base-sha> <exact-head-sha>`.
 - `/pm-auto-loop`: fully automated, resumable delivery loop. The orchestrator model comes from the
   driver, and worker models come from `.pi/agents/*.md` frontmatter. Given one problem prompt it
@@ -136,8 +139,10 @@ connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied
 
 ### Non-interactive (CI / parent-PR review coverage)
 
-For automated runs, install the subagent tool once (`pi install npm:pi-sub-agent`) and launch with
-`--approve` so project-local files are trusted:
+For automated runs, review and trust the project-local agents and the vendored
+`.pi/extensions/pi-sub-agent` source, then launch with `--approve`. `.pi/settings.json` loads the
+local extension; do **not** run `pi install npm:pi-sub-agent` for this project, because that adds a
+second package route, can duplicate the tool, omits the local modification, and crosses the new-dependency gate:
 
 ```bash
 pi -p "Run the GSD verify cycle for phase github-projects-discussions" \

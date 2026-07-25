@@ -1,0 +1,333 @@
+{
+  "schemaVersion": "pm-review-system-phase/v2",
+  "phase": "397-pm-first-round-review-system-r1",
+  "parentIssue": 397,
+  "parentBranch": "feat/cli-architecture-v2",
+  "parentPR": 438,
+  "taskBranch": "chore/pm-first-round-review-system-r1",
+  "exactBaseSHA": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+  "candidateLineage": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1",
+  "correctionBudget": {
+    "maxCorrectionRounds": 5,
+    "roundsByRange": {
+      "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20...pm-first-round-review-system-r1": 2
+    },
+    "headHistory": [
+      "cb6b2c771347133e35e369efbb381b3a024476e0",
+      "7f1b2d8fe12157b7bea7d6d57553c2aa2b4fe839",
+      "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
+      "9d9b8ea2167ce534289bc48204ffafb3d3670c18",
+      "813f1d14661e4a2ee73fd2719956deaf83468dd7",
+      "2809c677c8da996932fb2b2738fcc8dbf74aaa56",
+      "0e210d1819f2642ee600aa6921873997101ba7bd",
+      "e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f",
+      "b1d869732d230575ab7c8295b15cef42cc0078ef",
+      "1ce34f18dcba31e13d14a36f0cf035df4f492747",
+      "c6f45538b43a78fc73ee208eb90313e5f5971000",
+      "58df390977a51dc402f65c31a0a798f8a0ecc4bc",
+      "e62c7f9bd518810b6382128528e29977249c6a5a",
+      "b2a6d6791bb978548db408cb7ac286914df3326e",
+      "526d1e2b2074791ac4332edb0f6f5eb4a03b7519",
+      "7343f1d33c7bb7d2d40cb36044d40c52537156f7",
+      "01eeee82d714522210ddab185f3399ab22a5103f",
+      "ce168238afb980a3a73902531f7f7a01933c3432",
+      "472fc6da59359bb3d488cde26aaac93b12b137e9",
+      "89c86dd5329b3e29698b758fa53e0a86b85a580d",
+      "528dcc68599af4efaaee46c9b038bbd022178411",
+      "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34",
+      "c28126bb337a2e9899a4a9b429b6d8473cbcd52f"
+    ]
+  },
+  "status": "green",
+  "verificationPassed": true,
+  "verificationEvidence": {
+    "exactImplementationHead": null,
+    "candidateState": "captain_authorized_advisory_correction_full_green_honest_prompt_64_packets_exact_commit_pending",
+    "static": "passed_python_shell_shellcheck_json_yaml_diff",
+    "focused": "passed_advisory_f1_f6_complete_range_exact_diff_impact_depth_replay_headroom_63_packets_headroom_1_ready_0_overflow_max_30000_ci_robust",
+    "goVet": "passed_advisory_correction",
+    "goTest20m": "passed_advisory_correction_all_packages",
+    "goBuild": "passed_advisory_correction",
+    "goModVerify": "passed_advisory_correction",
+    "goModTidyDiff": "passed_advisory_correction",
+    "makeVerify": "passed_advisory_correction_lint_0_connectors_547_pm_shepherd_suites_safe_reverse_etl",
+    "gofmt": "clean_no_cmd_internal_diff",
+    "reverseETLSmoke": "passed_plan_preview_approval_execute",
+    "finalExactCommitRerun": "pending_after_advisory_correction_commit"
+  },
+  "localCodex": {
+    "status": "pending",
+    "exactHeadSHA": "c28126bb337a2e9899a4a9b429b6d8473cbcd52f",
+    "exactHeadTree": "bb1f51e60abd62cdddafab03b2f4bdcf2dea3bda",
+    "nextRound": 3,
+    "nextRoundMode": "fresh_prospective_exact_head_after_advisory_correction",
+    "nextRoundStatus": "advisory_correction_committed_self_reviewed_model_synthesis_blocked_by_codex_quota",
+    "haltedProspectiveReview": {
+      "exactHeadSHA": "c28126bb337a2e9899a4a9b429b6d8473cbcd52f",
+      "packetCount": 63,
+      "validatedResponsesBeforeHalt": 4,
+      "synthesis": "not_run",
+      "coverageClaim": "none"
+    },
+    "advisoryCorrectionSelfReview": {
+      "exactHeadSHA": "0933611bdc3da5045ef4370fcc38519f7c7276df",
+      "exactHeadTree": "abba49b07057af67fc3c251da8c6e0c57a3ed9cc",
+      "trustBoundSelfCompile": "ready_64_packets_headroom_0_max_30000_0_overflow_0_findings",
+      "reintroducedF1Test": "caught: fix_present_blocked_44_packet_coverage_findings; invariant_removed_silently_unpacked_22_changed_files",
+      "modelPacketReview": "blocked_codex_subscription_quota_exhausted_recorded_operational_blocker_not_a_correction_round",
+      "deterministicSelfReview": "clean",
+      "shepherd": "not_run_model_synthesis_not_clean",
+      "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/self-review-0933611bd/DISPOSITION.md",
+      "candidateTreeUntouched": true
+    },
+    "lastCompletedReview": {
+      "round": 2,
+      "status": "findings_correction_required",
+      "exactHeadSHA": "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34",
+      "exactHeadTree": "0a3c3eda637210d240dd13cfd99b475d032c36c0",
+      "packetCount": 41,
+      "rawFindingCount": 141,
+      "rawSynthesisBlockers": 0,
+      "synthesisArtifactSHA256": "cce8c3dfe95700d5f001d5b3cdf4eaa3f24dde407f9cf06356a7c50e3c50107a",
+      "dispositionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-DISPOSITION.md",
+      "measurementArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json"
+    }
+  },
+  "shepherd": {
+    "status": "pending",
+    "exactHeadSHA": null,
+    "verdict": null,
+    "evidenceArtifact": null
+  },
+  "gsd": {
+    "doctor": "passed",
+    "list": "passed_69_commands",
+    "planPhase": "generated_and_executed_via_pi_tools",
+    "researchPlanPhase": "generated_and_executed_inline_fallback_after_subagent_provider_failures",
+    "programmingLoop": "unavailable_unknown_command",
+    "lifecycleOwner": "/pm-orchestrate"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "read_only_spawned",
+      "reason": "One read-only measurement scout completed. Three read-only scouts failed to start because the isolated provider lacked authentication; no result is claimed from those failures."
+    },
+    {
+      "cycle": "plan_local_owner",
+      "decision": "local_critical_path",
+      "reason": "The promoted follow-up is one cohesive shared PM review-system write scope in this isolated task worktree; no independent mutating subissue was created or spawned."
+    },
+    {
+      "cycle": "plan_check",
+      "decision": "read_only_spawned",
+      "reason": "Independent read-only plan checker returned BLOCKED with active-owner, TDD-order, path-security, corpus-provenance, scope, threshold, delivery, and state-evidence gaps; planning artifacts were corrected before RED."
+    },
+    {
+      "cycle": "tdd_red",
+      "decision": "local_critical_path",
+      "reason": "Frozen corpus and semantic tests reproduced the two accepted PR #495 findings, all three original misses, ten opaque mutations, and threshold gaps before treatment implementation; focused test exited 1 for intended behavior."
+    },
+    {
+      "cycle": "execute_green",
+      "decision": "local_critical_path",
+      "reason": "Dependency-free compiler, semantic treatment, safe closure/authority inventory, bounded packet synthesis, current-schema fixes, machine measurement, and active PM route updates pass focused tests; full exact-head verification remains pending."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "At implementation head 7f1b2d8fe, focused gates, Shellcheck, JSON/YAML syntax, Go formatting no-diff, vet, 20-minute test suite, build, module verification/tidy diff, and make verify all passed. This evidence became historical when captain added impact-graph and hypothesis-lab requirements."
+    },
+    {
+      "cycle": "captain_correction_research",
+      "decision": "local_critical_path",
+      "reason": "Production graph/lab work paused. Primary sources and a disposable exact-head real/synthetic benchmark selected typed forward/reverse adjacency plus deterministic multi-source relation-policy BFS, authoritative go list, fail-closed bounds, no persistent v1 cache/SCC, and no new dependency. Read-only scout/security runs failed due WebSocket/provider authentication, so inline GSD fallback was recorded."
+    },
+    {
+      "cycle": "captain_correction_red",
+      "decision": "local_critical_path",
+      "reason": "Separate correction inputs/oracle were frozen. Focused test exited 1 for 17 missed defect fixtures plus absent v2 impact graph, bound/migration fail-open, absent safe lab runner, and missing hypothesis/migration synthesis checks; four clean controls stayed clean."
+    },
+    {
+      "cycle": "captain_correction_green",
+      "decision": "local_critical_path",
+      "reason": "At exact implementation head 0e210d1819f2642ee600aa6921873997101ba7bd, the typed bidirectional practical impact graph, complete impact packets, versioned synthesis, and fail-closed disposable hypothesis lab pass focused detector, real Git/Go/parser, sandbox denial, limit, cleanup, identity, concurrency, PM-contract, and model-routing tests. Full post-correction verification remains pending."
+    },
+    {
+      "cycle": "conditional_merge_authorization",
+      "decision": "not_spawned_human_gate",
+      "reason": "Captain conditionally authorized Firstmate to merge this stacked PR into feat/cli-architecture-v2 only after every implementation, measurement, exact-head Codex, Shepherd, no-mistakes, and CI gate is green. This execution remains no-merge and reports the green open PR; parent PR #438 remains draft/human-only."
+    },
+    {
+      "cycle": "post_correction_verify",
+      "decision": "local_critical_path",
+      "reason": "At exact head e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f, focused graph/lab/PM gates, Python/Shellcheck/JSON/YAML checks, Go format no-diff, vet, 20-minute tests, build, module checks, and make verify all passed. Final evidence-commit rerun remains before exact-head review."
+    },
+    {
+      "cycle": "local_codex_round_1",
+      "decision": "local_critical_path",
+      "reason": "At exact head b1d869732d230575ab7c8295b15cef42cc0078ef, 17/17 fresh Sol/xhigh packets completed with zero unreviewed files and disclosed 89 findings. Raw synthesis blocked on 14 failed-invariant contract defects; PM disposition is findings_correction_required across 15 systemic groups. Correction round 1/5 begins; Shepherd correctly remains pending."
+    },
+    {
+      "cycle": "review_loop_monitoring",
+      "decision": "local_critical_path",
+      "reason": "Captain monitoring is active. Twenty-two provider attempts and five startup/WebSocket failures are separate from correction rounds. The same OAuth startup failure was diagnosed after two concurrent attempts with a successful serialized auth probe/recovery. Repeated finding groups trigger root-cause fixes; automatic correction stops at 5/5 without weakening checks or resetting lineage."
+    },
+    {
+      "cycle": "local_codex_round_1_red",
+      "decision": "local_critical_path",
+      "reason": "At clean committed test head 58df390977a51dc402f65c31a0a798f8a0ecc4bc, the focused PM test exited 1 with 15 intended systemic semantic groups covering exact identity, synthesis shape, policy-state traversal, packet bounds, parser/certainty, pre-index resources, external/deleted Go, lab containment, terminal schema, route/state parity, no-network reviewer identity, and root documents. No production treatment edit had started."
+    },
+    {
+      "cycle": "local_codex_round_1_green",
+      "decision": "local_critical_path",
+      "reason": "At exact head 89c86dd5329b3e29698b758fa53e0a86b85a580d, all 15 systemic RED groups pass focused tests. The v3 compiler is ready with validated per-run scope, 170 files/945 indexed edges, 133 impact files/666 traversed edges, 41 coherent packets, maximum estimate 29,982/30,000 tokens, no bound hit, and 1.64-1.70 second cold compiles. Full verification and fresh exact-head recurrence review remain pending."
+    },
+    {
+      "cycle": "local_codex_round_1_full_verify",
+      "decision": "local_critical_path",
+      "reason": "At exact head 528dcc68599af4efaaee46c9b038bbd022178411, focused PM/graph/lab/route gates, Python/Shellcheck/JSON/YAML/schema checks, Go module verification/tidy, and make verify all passed."
+    },
+    {
+      "cycle": "local_codex_round_2",
+      "decision": "local_critical_path",
+      "reason": "At exact head 92ce5e6a19cb7562aead8b224e6ba8dcc0857d34, 41/41 fresh Sol/xhigh bounded packets completed and one synthesis returned findings_correction_required with 141 findings and zero blockers. Forty-four packet attempts included three recovered first-attempt failures; one separately observed context-window rejection is an operational attempt only. Every finding is mapped to recurrence or a new systemic group; correction round 2/5 begins and Shepherd remains pending."
+    },
+    {
+      "cycle": "round_2_route_docs_state_retry",
+      "decision": "local_critical_path",
+      "reason": "After one parallel OAuth/provider startup failure, this operational retry reproduced the focused PM route/documentation/state RED and owns only R1-I/R1-K/R1-L/R2-N2/R2-N5 allowlisted paths. PR #493, Shepherd/driver/trace-script, compiler/lab, and GitHub connector-ledger paths remain excluded."
+    },
+    {
+      "cycle": "round_2_route_docs_state_green",
+      "decision": "local_critical_path",
+      "reason": "All 13 owned PM contract failures are closed; pm-review-system passes, and pm-orchestrator-contract now reports only three pm-review-loop invocation flags owned by R1-A. State/schema syntax and parity, v4 route order, connector profiles, GitHub ledger non-change, Pi provenance, and diff checks pass."
+    },
+    {
+      "cycle": "round_2_combined_recovery_green",
+      "decision": "local_critical_path",
+      "reason": "A fresh worker preserved every uncommitted change, loaded the required GSD/skill route, fixed only newly exposed evidence and isolated-lab fixture defects without weakening default-deny or bounds, and passed static, complete focused/adversarial, Go, module, build, and make verify campaigns. R1/R2 dedup diagnostics remain retrospective development; deterministic-partial-keys/v1 is frozen before prospective R3. Exact commit and clean rebuild are next; Shepherd remains prohibited unless R3 synthesis is clean."
+    },
+    {
+      "cycle": "round_2_exact_commit_packet_red",
+      "decision": "local_critical_path",
+      "reason": "Exact commit 1e640f9a4 stayed clean and passed direct gates, but make verify exposed a dirty-only focused fixture and the complete 73-file stable-base range correctly blocked at 77 packets above the hard 64 maximum. No R3 or Shepherd run started and correction usage stays 2/5. The next TDD slice repairs clean-tree coverage and uses assignment-preserving exact-envelope efficiency without changing the 30000-byte or 64-packet limits."
+    },
+    {
+      "cycle": "round_2_bounded_efficiency_green",
+      "decision": "local_critical_path",
+      "reason": "The complete-range fixture now supports dirty and clean candidates. Exact 8500-byte changed/impact slices, 4096-byte context slices, a concise reviewer prompt, cross-role best-fit context/anchor assignment, and iterative scarcity coalescing reached 63 packets while preserving every assignment, invariant union, file/edge/provenance bound, and 30000-byte postcondition. Focused PM adversarial tests pass; full replacement-candidate verification remains pending."
+    },
+    {
+      "cycle": "round_2_bounded_replacement_full_green",
+      "decision": "local_critical_path",
+      "reason": "Complete static, focused/adversarial, Go, build, module, lint, connector-definition, make verify, and safe reverse-ETL smoke gates passed on the bounded replacement tree. R1/R2 remain retrospective development only, R3 and Shepherd remain unstarted, and exact clean commit/rebuild is the next gate."
+    },
+    {
+      "cycle": "captain_authorized_advisory_f1_correction",
+      "decision": "local_critical_path",
+      "reason": "Captain halted the partial prospective R3 at c28126bb3 before synthesis and authorized smallest-safe F1/F2/F3/F4/F5/F6 corrections plus permanent RED tests and a self-review. The advisory path is not PM coverage and consumes no correction round; stable usage remains 2/5. Hard 30000-byte and 64-packet limits, quality gates, deferred structural refactor, no-Shepherd-before-clean, and no-merge authority remain unchanged. The GSD programming-loop command is absent, so manual GSD lifecycle fallback is recorded."
+    },
+    {
+      "cycle": "captain_authorized_advisory_f1_red",
+      "decision": "local_critical_path",
+      "reason": "Permanent regressions failed before production treatment in five independent groups: absent packet_headroom, accepted reserved-domain silent coverage, dishonest/incomplete rendered prompt, absent impact-file byte-depth disclosure and response binding, and duplicate occurrence ids on replay. The exact changed-diff byte equality assertion is frozen. Shell syntax, Shellcheck, and diff checks passed; correction usage remains 2/5."
+    },
+    {
+      "cycle": "captain_authorized_advisory_f1_focused_green",
+      "decision": "local_critical_path",
+      "reason": "Focused PM review-system regressions pass with data-driven classified-domain handling, a closing changed-file/diff-byte invariant, exact-accounted cross-role best-fit, honest/actionable compact prompt, per-impact-file provided/available byte disclosure with exact synthesis echo, replay-idempotent occurrence ids, and first-class actual packet headroom. The complete-range test guards <=63 packets, >=1 headroom, 0 overflow, <=30000 rendered bytes (the true hard cap), and <=1.02 duplication, while hard 30000/64 caps remain unchanged."
+    },
+    {
+      "cycle": "captain_authorized_advisory_f1_perf_pass",
+      "decision": "local_critical_path",
+      "reason": "A bounded, output-preserving performance pass (changed-slice prefilter, exact_edge_slices cache, account_packet fixed-point early stop) reclaimed a ~15.8s pre-optimization regression back to ~14s. An isolated frozen-tree equivalence probe proved byte-identical packets and coverage between the perf-optimized and perf-reverted compilers, and three compiles yield one stable semantic-manifest digest. No bound, gate, or disclosure was weakened for speed."
+    },
+    {
+      "cycle": "captain_authorized_advisory_f1_honest_prompt_packet_budget",
+      "decision": "local_critical_path",
+      "reason": "The F2/F3 correction requires a self-contained honest reviewer prompt that no longer cites unprovided contract files. Because the prompt is charged once per packet, plus a legitimately larger impact graph from the corrected compiler and new tests referencing more files, the accumulated candidate compiles ready at 64 packets (the baseline was 63) within the unchanged 64-packet hard cap, 0 overflow, every rendered prompt <= 30000. The baseline's single packet of headroom was consumed by required corrections plus content growth; duplication 1.019555 stays <= the 1.02 baseline and wall clock ~13.9s <= 14.24s baseline. To keep the reviewer focused on code rather than thousands of lines of process records, superseded process narration in TDD-LEDGER/VERIFICATION/PLAN was condensed while preserving SHAs, correction lineage, F1-F6 records, and disposition pointers. No limit, bound, gate, quality check, or disclosure was weakened."
+    }
+  ],
+  "measurement": {
+    "artifact": ".planning/phases/397-pm-first-round-review-system-r1/MEASUREMENT.json",
+    "baselineRecall": 0.0,
+    "treatmentFixtureRecall": 1.0,
+    "treatmentFixturePrecision": 1.0,
+    "claimScope": "deterministic fixture preflight only",
+    "prospectiveStatus": "unavailable",
+    "algorithmResearchArtifact": ".planning/phases/397-pm-first-round-review-system-r1/ALGORITHM-RESEARCH.md",
+    "algorithmBenchmarkExactHead": "5601be8d01f9f0044a5e7e875be5669f7d6fc280",
+    "algorithmSelection": "typed directed multigraph; materialized forward/reverse adjacency; deterministic multi-source relation-policy BFS; exact-head cold rebuild; authoritative go list; fail-closed bounds",
+    "correctionArtifact": ".planning/phases/397-pm-first-round-review-system-r1/CORRECTION-MEASUREMENT.json",
+    "correctionBaselineRecall": 0.0,
+    "correctionTreatmentFixtureRecall": 1.0,
+    "correctionTreatmentFixturePrecision": 1.0,
+    "measuredImplementationHead": "0e210d1819f2642ee600aa6921873997101ba7bd",
+    "actualReviewRound1Artifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-MEASUREMENT.json",
+    "actualReviewRound1Packets": 17,
+    "actualReviewRound1Findings": 89,
+    "actualReviewRound1ProviderAttempts": 22,
+    "actualReviewRound1ProviderFailures": 5,
+    "round1GreenArtifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R1-GREEN-MEASUREMENT.json",
+    "round1GreenMeasuredHead": "89c86dd5329b3e29698b758fa53e0a86b85a580d",
+    "round1GreenPackets": 41,
+    "round1GreenMaximumEstimatedPacketTokens": 29982,
+    "actualReviewRound2Artifact": ".planning/phases/397-pm-first-round-review-system-r1/REVIEW-R2-MEASUREMENT.json",
+    "actualReviewRound2Packets": 41,
+    "actualReviewRound2Findings": 141,
+    "actualReviewRound2ProviderAttempts": 45,
+    "actualReviewRound2ProviderFailures": 4,
+    "dedupAlgorithm": "deterministic-partial-keys/v1",
+    "dedupR1R2Claim": "retrospective_development_only_labels_inspected_no_acceptance_claim",
+    "dedupCorpusManifest": "scripts/tests/fixtures/pm-review-system/dedup-corpus-manifest.json",
+    "nextUntouchedMeasurement": "fresh_prospective_exact_head_R3_after_authorized_advisory_correction",
+    "combinedCandidateFullVerification": "c28126bb3_exact_clean_full_pass_then_advisory_correction_authorized",
+    "advisoryCorrectionBudgetCharge": 0,
+    "advisoryCorrectionBudgetUsage": "2/5",
+    "advisoryCorrectionBaseline": {
+      "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/f1-correction-baseline-c28126bb33/measurement.json",
+      "compileWallClockSeconds": 14.24,
+      "peakMemoryBytes": 285360128,
+      "packetCount": 63,
+      "maxRenderedPromptBytes": 29994,
+      "duplicationFactor": 1.018025,
+      "derivedPacketHeadroom": 1
+    },
+    "advisoryCorrectionAfter": {
+      "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/f1-correction-after-uncommitted/measurement.json",
+      "packetCount": 63,
+      "hardPacketCap": 64,
+      "packetHeadroom": 1,
+      "maxRenderedPromptBytes": 30000,
+      "overflowPackets": 0,
+      "perfOptimizationOutputIdenticalOnFrozenTree": true,
+      "packetBudgetNote": "first correction commit compiled 64/headroom-0 locally but CI Linux tipped it to 65 and blocked verify; condensing process narration (PLAN/ALGORITHM-RESEARCH only; frozen dispositions and other-workstream files untouched) restored 63/headroom-1 CI-robust within the unchanged 64 hard cap; no limit/gate weakened"
+    }
+  },
+  "readyQueue": [
+    {
+      "work": "pm-first-round-review-system-r1",
+      "decision": "local_critical_path",
+      "reason": "Captain-promoted cohesive follow-up selected for this isolated branch."
+    },
+    {
+      "work": "issue-408-tui",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "Explicitly outside this task and forbidden by ship scope."
+    },
+    {
+      "work": "pr-493-owned-routing",
+      "decision": "not_spawned_write_scope_collision",
+      "reason": "All 18 PR #493-owned paths are forbidden for this branch."
+    }
+  ],
+  "terminalHumanGate": "correction rounds greater than 5; any dependency/secret/auth/destructive/quality-gate decision; agent merge prohibited; Firstmate may conditionally merge this stacked PR into feat/cli-architecture-v2 only after every named gate; parent PR #438 merge to main remains separately human-gated",
+  "humanGates": [
+    "new dependencies",
+    "secrets or credentialed checks",
+    "quality-gate reduction",
+    "agent must not merge; report green stacked PR for conditionally authorized Firstmate path",
+    "parent PR #438 merge to main requires separate explicit instruction"
+  ]
+}

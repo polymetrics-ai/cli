@@ -7,6 +7,7 @@ python3 - "$repo_root" <<'PY'
 from __future__ import annotations
 
 import json
+import os
 import pathlib
 import re
 import sys
@@ -48,7 +49,36 @@ require(
     "re-review",
     "Shepherd",
 )
-require(local_prompt, "exact base", "exact head", "read-only", "disposition")
+require(local_prompt, "exact base", "exact head", "read-only", "disposition", "impact", "pm-review-lab.py", "hypotheses")
+require(local_review, "bidirectional", "upstream", "downstream", "lateral", "temporal", "pm-review-lab.py", "disconfirming")
+require(
+    ".agents/agentic-delivery/contracts/pm-review-packet-template.md",
+    "pm-review-packet/v4",
+    "pm-review-packet-response/v4",
+    "pm-review-impact-graph/v3",
+    "pm-review-lab-request/v2",
+    "candidate_unchanged",
+    "lab_cleanup_verified",
+)
+review_config = json.loads(read(".agents/agentic-delivery/contracts/pm-review-system.json"))
+if review_config.get("schema_version") != "polymetrics.ai/pm-review-system/v4":
+    errors.append("pm-review-system config: expected explicit v4 schema")
+impact_config = review_config.get("impact_graph", {})
+for key in (
+    "max_index_files", "max_index_bytes", "max_nodes", "max_edges", "max_traversal_states",
+    "max_depth", "max_impact_files", "max_impact_edges", "packet_max_impact_files",
+    "packet_max_impact_edges", "max_packets", "relation_policy",
+):
+    if key not in impact_config:
+        errors.append(f"pm-review-system config: missing impact bound/policy {key}")
+review_scope = json.loads(read(".planning/phases/397-pm-first-round-review-system-r1/REVIEW-SCOPE.json"))
+if review_scope.get("schema_version") != "polymetrics.ai/pm-review-scope/v1":
+    errors.append("pm-review scope: expected explicit v1 schema")
+if "scripts/pm-review-lab.py" not in review_scope.get("allowed_changed_paths", []):
+    errors.append("pm-review scope: lab runner is outside the positive write-scope allowlist")
+if "allowed_changed_paths" in review_config or "forbidden_changed_paths" in review_config:
+    errors.append("pm-review-system config: reusable policy must not embed one branch delivery scope")
+require("scripts/pm-review-lab.py", "policy-only execution cannot authorize clean evidence", "network", "outside_write", "candidate_unchanged", "lab_cleanup_verified")
 
 forward_paths = [
     ".agents/agentic-delivery/contracts/parent-orchestrator-contract.md",
@@ -279,16 +309,37 @@ for relative in canonical_contract_paths:
     if actual != expected_dispositions:
         errors.append(f"{relative}: disposition enum drift: {actual!r}")
 
-disposition_artifact = read(".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md")
+disposition_relative = os.environ.get(
+    "PM_DISPOSITION_ARTIFACT",
+    ".planning/phases/397-pm-orchestrator-extension/REVIEW-DISPOSITION.md",
+)
+disposition_artifact = read(disposition_relative)
 actual_disposition_rows = 0
+disposition_column = None
 for line in disposition_artifact.splitlines():
-    if not re.match(r"^\| (?:F|N|R)[A-Za-z0-9-]* \|", line):
+    if not line.startswith("|"):
+        disposition_column = None
         continue
-    cells = [cell.strip() for cell in line.split("|")]
-    disposition = cells[3] if len(cells) > 3 else ""
+    cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+    lowered = [cell.lower() for cell in cells]
+    if "id" in lowered and "disposition" in lowered:
+        disposition_column = lowered.index("disposition")
+        continue
+    if disposition_column is None or all(re.fullmatch(r":?-+:?", cell) for cell in cells):
+        continue
+    if disposition_column >= len(cells):
+        errors.append(f"review disposition row is missing the disposition column: {line}")
+        continue
+    identifier = cells[0]
+    disposition = cells[disposition_column]
+    if not identifier:
+        errors.append(f"review disposition row has an empty finding identifier: {line}")
+        continue
     actual_disposition_rows += 1
     if disposition not in expected_dispositions:
-        errors.append(f"review disposition row uses noncanonical value {disposition!r}: {line}")
+        errors.append(
+            f"review disposition row {identifier!r} uses noncanonical value {disposition!r}: {line}"
+        )
 if actual_disposition_rows == 0:
     errors.append("review disposition artifact has no parsed finding rows")
 
@@ -374,6 +425,61 @@ if cap_fixture.is_file():
         errors.append("cap_lineage: cap exceed does not persist a blocked human gate")
     if record.get("human_gate_kind") != "correction_cap_exceeded":
         errors.append("cap_lineage: human gate kind does not identify correction-cap exceed")
+
+# Round-2 recurrence contracts: executable routes, exact-identity Shepherd, trace safety, and
+# active parent artifacts must agree semantically rather than merely containing generic markers.
+review_loop = read(".pi/prompts/pm-review-loop.md")
+for marker in ("--scope", "--base", "--head", "--manifest", "--responses-dir"):
+    if marker not in review_loop:
+        errors.append(f".pi/prompts/pm-review-loop.md: invocable review route lacks {marker}")
+
+execution_trace = read(".planning/traces/cli-architecture-v2-pi-prompts.md")
+if "gsd-programming-loop" in execution_trace:
+    errors.append("cli-architecture-v2-pi-prompts.md: invokes unavailable programming-loop")
+for block in ("Generic issue worker", "Issue #408 TUI worker"):
+    start = execution_trace.find(block)
+    if start < 0:
+        errors.append(f"cli-architecture-v2-pi-prompts.md: missing {block}")
+        continue
+    section = execution_trace[start : execution_trace.find("## ", start + 3) if execution_trace.find("## ", start + 3) >= 0 else None]
+    for marker in ("local Codex", "Shepherd"):
+        if marker not in section:
+            errors.append(f"cli-architecture-v2-pi-prompts.md: {block} lacks explicit {marker} gate")
+
+for relative in (
+    ".agents/agentic-delivery/workflows/shepherd-validator.md",
+    ".agents/agentic-delivery/prompts/shepherd-validator-prompt.md",
+):
+    require(relative, "exact_base_sha", "exact_head_sha", "exact_head_tree", "candidate_lineage", "synthesis_sha256")
+
+require("scripts/pi-shepherd-loop.sh", "run_validator_with_watchdog", "exact_head_tree", "synthesis_sha256")
+require("scripts/pi-auto-loop.sh", "pi-shepherd-loop.sh", "exec")
+require("scripts/loop-trace.sh", "safe_trace_slug", "redact_trace_value", "session_id", "exclusive")
+
+parent_plan = read(".planning/phases/397-cli-architecture-v2-orchestration/PLAN.md")
+parent_verification = read(".planning/phases/397-cli-architecture-v2-orchestration/VERIFICATION.md")
+for relative, text in (("PLAN.md", parent_plan), ("VERIFICATION.md", parent_verification)):
+    for marker in ("pm-review-system.py compile", "clean synthesis", "Shepherd"):
+        if marker not in text:
+            errors.append(f"397-cli-architecture-v2-orchestration/{relative}: active gate lacks {marker}")
+if "Wave 1 is not yet integrated" in parent_verification:
+    errors.append("397-cli-architecture-v2-orchestration/VERIFICATION.md: stale Wave 1 blocker remains current")
+
+parent_workflow = read(".agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md")
+for exact in ("accepted_with_modification", "needs_human"):
+    if exact not in parent_workflow:
+        errors.append(f"parent-issue-orchestration-loop.md: lacks exact disposition enum {exact}")
+
+runtime_loop = read(".agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md")
+for marker in ("pm-scout", "pm-reviewer", "pm-verifier", "restricted read-only bash"):
+    if marker not in runtime_loop:
+        errors.append(f"gsd-universal-runtime-loop.md: tool-scope parity lacks {marker}")
+
+pi_runtime = read(".agents/agentic-delivery/workflows/pi-active-orchestration-loop.md")
+pi_readme = read(".pi/README.md")
+for text, relative in ((pi_runtime, "pi-active-orchestration-loop.md"), (pi_readme, ".pi/README.md")):
+    if "vendored" not in text or ".pi/extensions/pi-sub-agent" not in text:
+        errors.append(f"{relative}: local pi-sub-agent provenance is not truthful")
 
 if errors:
     raise SystemExit("PM orchestrator contract violations:\n- " + "\n- ".join(errors))

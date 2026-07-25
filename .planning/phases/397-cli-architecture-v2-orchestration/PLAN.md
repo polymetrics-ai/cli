@@ -10,9 +10,9 @@ Implementation/correction model: `openai-codex/gpt-5.6-sol`, thinking `high`
 
 ## Workflow
 
-- GSD: `scripts/gsd doctor`; `scripts/gsd list`; attempted `scripts/gsd prompt programming-loop init --phase 397-cli-architecture-v2 --dry-run`.
-- Adapter result: `programming-loop` is absent from the 69-command registry. Use the documented manual fallback in `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md` and record it per unit.
-- Contracts: parent orchestrator, issue agent, stacked workflow, automated review routing, and exact-head review.
+- GSD discovery: `scripts/gsd doctor` and `scripts/gsd list`; the 69-command registry has no `programming-loop` entry, so the active route must not invoke or invent it.
+- Adapter result: `/pm-orchestrate` owns PLAN → RED → GREEN → REFACTOR → VERIFY → REVIEW → INTEGRATE under `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`; this is the canonical PM lifecycle, not a reduced manual fallback.
+- Contracts: parent orchestrator, issue agent, stacked workflow, v4 exact-head local Codex compile/render/synthesis, and downstream independent Shepherd validation.
 - Skills: `gsd-core`, `caveman`, `golang-how-to`, plus issue-specific CLI/testing/error/security/safety/lint/documentation/Cobra/Viper/observability/performance/concurrency/context/database/design skills.
 - CLI-visible work follows `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`.
 
@@ -44,15 +44,15 @@ Preserve parent commits through #410 at starting HEAD. Do not reimplement #398-#
 3. Add a focused failing test before behavior changes.
 4. Implement with Sol/high; run focused green tests, issue gates, safety checks, and parity checks.
 5. Commit the coherent green unit. Do not open another child PR unless collision isolation requires it.
-6. Run independent Sol/xhigh exact-head correctness/security/architecture/coverage/evidence review.
-7. Treat findings as Sol/high correction units, then repeat exact-head review.
-8. Promote only reviewed commits to the parent branch, verify continuity, update the parent ledger, commit, push, and continue.
+6. Run `scripts/pm-review-system.py compile --scope <validated-scope> --base <exact-base> --head <exact-head>` and require a ready v4 manifest. Render every packet with the canonical renderer, pass its stdout unchanged to one fresh-context Sol/xhigh local Codex reviewer, and run one authenticated v4 synthesis.
+7. Use exact `finding_disposition_values: [accepted, accepted_with_modification, declined, duplicate, deferred, needs_human]`. Treat accepted findings as Sol/high correction units, then repeat verification, v4 compilation, rendering, packet review, and synthesis at the changed head.
+8. After a clean exact-head synthesis, require independent Shepherd `PROCEED` for the same base/head/tree. Promote only that reviewed and validated commit to the parent branch, verify continuity, update canonical current state, commit, push, and continue.
 
 ## Recovery budgets
 
 - Implementation/test/lint failure: 3 bounded root-cause/fix cycles per unit.
 - Integration conflict: 2 rebase/cherry-pick conflict-resolution cycles; preserve both accepted sides.
-- Review findings: 3 correction/re-review cycles per unit.
+- Review findings: persist `max_correction_rounds: 4` and `rounds_by_range` for the stable exact-base/candidate lineage; stop for a human when the cap is exceeded and never reset it through a replacement head.
 - CI failure: 2 in-scope correction cycles; infrastructure failures are recorded and retried once deliberately.
 - External review unavailability: rely on the required local independent Sol/xhigh exact-head review and record GitHub review-route status; do not spam bots.
 
@@ -73,7 +73,7 @@ make verify
 
 Also run module-boundary, dependency/ADR delta, generated docs/help/manual, website parity, security/secret-pattern, CLI help/bare-namespace/invalid-action, integration applicability, and repository hygiene checks. Runtime-backed/credentialed checks remain not run unless explicitly requested.
 
-Then run independent Sol/xhigh correctness, security, architecture, issue-coverage, and evidence reviews against that exact HEAD. Any actionable finding becomes a Sol/high correction unit; repeat affected gates and exact-head review until clean.
+Then compile a ready v4 manifest for that exact parent base/head/tree, render every bounded packet through `scripts/pm-review-system.py render`, collect complete fresh-context Sol/xhigh local Codex responses, and run exactly one authenticated synthesis. Any actionable finding becomes a Sol/high correction unit; repeat affected gates and the entire exact-head review route after every change. Only a clean synthesis proceeds to independent Shepherd validation, and final parent readiness requires Shepherd `PROCEED` for the same identities.
 
 ## 2026-07-20 Pi active continuation
 

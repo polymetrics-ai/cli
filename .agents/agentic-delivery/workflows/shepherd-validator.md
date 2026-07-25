@@ -21,55 +21,84 @@ exactly this: a supervisor over parallel coding agents lifted pass rate 28.8% �
 
 ## The trace (what the validator reads)
 
-The loop's durable state IS the reversible trace — no new instrumentation needed:
+The loop's durable state IS the reversible trace:
 
 - `RUN.json` + `ORCHESTRATION-STATE.json` snapshots (one per turn, in `.planning/auto-loop/checkpoints/<turn>/`)
+- driver-owned `SHEPHERD-REQUEST.json`, which binds `exact_base_sha`, `exact_head_sha`,
+  `exact_head_tree`, `candidate_lineage`, and `synthesis_sha256`
+- the authenticated clean local-Codex synthesis artifact whose exact bytes produce
+  `synthesis_sha256`; its base/head/tree must match the request and current clean worktree
 - `git log` / diffs on the parent + sub branches (each green slice is a commit = a revertible node)
 - GitHub state (`gh issue/pr` — issues, PRs, review threads, dispositions)
 - stage artifacts (`RESEARCH.{md,json}`, `PLAN.md`, `VERIFICATION.md`, review findings)
 - `driver.log` (the ordered event log of orchestrator turns)
 
-## What the validator does each turn (after the orchestrator advances one stage)
+A branch name, mutable PR ref, prose SHA, prior verdict, or matching-but-stale state file is not an
+identity. Before invoking Shepherd, the driver must verify all five request fields against the
+canonical review state, authenticated compiler record, synthesis JSON, current `HEAD^{tree}`, merge
+base, and a clean worktree. Missing, malformed, dirty, stale, divergent, non-clean, or internally
+disagreeing evidence blocks validation. A changed head/tree or synthesis byte invalidates the
+request and every prior Shepherd result.
 
-1. **Reconstruct the last transition** `(state_before → action → state_after)` from the trace.
-2. **Score it 1–5 on each dimension** (independent of the orchestrator's own claim — verify against
-   git/gh/artifacts, ground truth wins):
+## What the validator does for an eligible review transition
+
+Shepherd is downstream of exact-head local-Codex review. The driver invokes the independent
+validator **only after** deterministic review compilation is authenticated and the exact-head
+synthesis is `clean`. Preparatory orchestration may continue, but INTEGRATE, parent-readiness
+mutation, and successful `done`/`human_gate` terminal handling remain unavailable until this gate
+returns a bound `PROCEED`. The validator reconstructs and judges the full trajectory leading to that
+review transition rather than silently skipping earlier actions.
+
+1. **Load the immutable request first.** Read driver-owned `SHEPHERD-REQUEST.json`; reject a missing
+   field or any mismatch in `exact_base_sha`, `exact_head_sha`, `exact_head_tree`,
+   `candidate_lineage`, or `synthesis_sha256`. Recheck clean current identity before writing a
+   verdict. Never repair, replace, or reinterpret the request.
+2. **Reconstruct the transition** `(state_before → action → state_after)` and its preceding
+   trajectory from the initial/last-good checkpoint, current ledgers, ordered driver log, and ground
+   truth.
+3. **Score it 1–5 on each dimension** (independent of the orchestrator's own claim — verify against
+   git/gh/artifacts; ground truth wins):
    - `correct_stage` — was the stage the orchestrator advanced the *right* one given true state?
-   - `artifact_valid` — did the action produce the expected, complete artifact? (research doc
-     `complete`/0-unclassified; plan maps every endpoint; verify actually ran the gates; review left
-     a disposition on every finding)
-   - `gates_respected` — no INTEGRATE before VERIFY+REVIEW green; no merge to `main`; no secret
-     printed/stored; no new dep/destructive action without a human gate.
+   - `artifact_valid` — are verification, authenticated clean synthesis, dispositions, and all
+     expected artifacts complete and bound to the request?
+   - `gates_respected` — no INTEGRATE before VERIFY + clean exact-head synthesis + Shepherd; no
+     unapproved dependency, auth-scope change, destructive/admin action, production deploy,
+     credentialed connector check, reverse-ETL action outside plan → preview → approval → execute,
+     generic shell/HTTP/SQL write, quality-gate reduction, parent-readiness mutation, or merge to
+     `main`; no secret printed or stored.
    - `real_progress` — the trace moved forward (a new commit / issue / PR / artifact), not a no-op or
-     a repeat of the previous turn.
-   - `no_hallucination` — the orchestrator's claimed state matches ground truth (ledger vs git/gh).
+     repeat.
+   - `no_hallucination` — claimed state matches ground truth (ledger vs git/gh).
    - `no_conflict` — no two mutating workers touched the same file/branch/shared bundle file in
-     parallel (the Shepherd supervisor's core job).
-3. **`step_score`** = geometric mean of the six dimension scores. Append a line to
+     parallel.
+4. **`step_score`** = geometric mean of the six dimension scores. Append exactly one bound line to
    `.planning/auto-loop/VALIDATION.jsonl` (schema below). **`trajectory_geomean`** = geometric mean
    of all `step_score`s so far.
-4. **Emit a verdict** and write it to `.planning/auto-loop/VALIDATOR-VERDICT.json` for the driver:
+5. **Emit one bound verdict** in `.planning/auto-loop/VALIDATOR-VERDICT.json`:
 
    | Verdict | When | Driver action |
    |---|---|---|
-   | `PROCEED` | `step_score ≥ 4` and no hard-gate breach | tag a checkpoint; continue |
-   | `RETRY` | `2 ≤ step_score < 4`, recoverable (bad artifact, missed disposition, wrong dispatch) | re-run the orchestrator turn with the validator's `correction` appended |
-   | `REVERT` | `step_score < 2` or repeated `RETRY` on the same stage | restore the last `PROCEED` checkpoint (state snapshot) and replay the stage from that fork point |
-   | `HALT` | hard-gate breach (merge to main, secret exposure, destructive action, unresolved write-scope conflict) or `max_reverts` hit | stop; `terminal: blocked`; report for human |
+   | `PROCEED` | `step_score ≥ 4`, exact identity still matches, and no hard-gate breach | tag a checkpoint; permit the next non-merge driver transition |
+   | `RETRY` | `2 ≤ step_score < 4`, recoverable (bad artifact, missed disposition, wrong dispatch) | re-run with the validator's correction |
+   | `REVERT` | `step_score < 2` or repeated `RETRY` on the same stage | restore a verified checkpoint and replay |
+   | `HALT` | any identity drift, hard-gate breach, unsafe/missing rollback point, or exhausted revert budget | stop blocked for a human |
 
-5. Keep the verdict **specific and actionable** — the `reason` cites the exact trace evidence
-   (commit SHA, issue/PR number, artifact path, the failing check), and `correction` tells the
-   orchestrator precisely what to redo.
+6. Keep the verdict **specific and actionable** — `reason` cites exact trace evidence and
+   `correction` says precisely what to redo. The validator never merges, marks a parent PR ready,
+   changes GitHub state, or edits the candidate.
 
 ## Checkpoints, revert, and replay (Shepherd-style)
 
-- After every `PROCEED`, the driver records a checkpoint under `.planning/auto-loop/checkpoints/<turn>/`:
-  a copy of `RUN.json` plus `HEAD.sha` (the worktree HEAD — the **fork point**). `ORCHESTRATION-STATE`
-  ledgers are not copied; the reconciler rebuilds them from ground truth on replay, and `RUN.json` +
-  the fork SHA are the anchors.
+- Before the first orchestrator/validator turn, the driver creates and verifies an `initial`
+  checkpoint containing `HEAD.sha` plus either `RUN.json` or an explicit `RUN.absent` marker. A
+  first-turn `REVERT` without that checkpoint is a fail-closed `HALT`, never a no-op continuation.
+- After every bound `PROCEED`, the driver records a checkpoint under
+  `.planning/auto-loop/checkpoints/<turn>/`: a copy of `RUN.json` plus `HEAD.sha` (the worktree HEAD —
+  the **fork point**). `ORCHESTRATION-STATE` ledgers are rebuilt from ground truth on replay.
 - `REVERT` does two things, because restoring bookkeeping alone would not undo the bad step (the next
   RECONCILE re-derives forward from ground truth):
-  1. restores `RUN.json` to the last `PROCEED` checkpoint, and
+  1. restores `RUN.json` to the verified last-good checkpoint (or removes it when the initial
+     checkpoint records `RUN.absent`), and
   2. writes `.planning/auto-loop/REVERT-CLEANUP.json` = `{ good_fork_sha, diverged_head_sha, instruction }`.
      The next orchestrator turn reads it during RECONCILE and **actually undoes the diverged commits**:
      `git reset` for **local-only** (unpushed) commits after the fork point, or a **revert-forward**
@@ -80,30 +109,45 @@ The loop's durable state IS the reversible trace — no new instrumentation need
   for human. Because every stage is idempotent and every slice is a committed node, the replay after
   cleanup never double-applies and never loses a good earlier slice.
 
-## VALIDATION.jsonl entry (one per orchestrator turn)
+## VALIDATION.jsonl entry (one per eligible exact review transition)
 
 ```json
 {
+  "schema_version": "polymetrics.ai/shepherd-validation/v1",
   "turn": 12,
-  "stage_from": "EXECUTE",
-  "action": "opened sub-PR #341 for surface-metadata slice",
-  "stage_to": "SUB_PR_OPEN",
+  "exact_base_sha": "<40-hex>",
+  "exact_head_sha": "<40-hex>",
+  "exact_head_tree": "<40-hex>",
+  "candidate_lineage": "<stable exact-base/candidate lineage>",
+  "synthesis_sha256": "<64-hex hash of the authenticated clean synthesis bytes>",
+  "stage_from": "REVIEW",
+  "action": "synthesized exact-head local-Codex review clean",
+  "stage_to": "REVIEW_CLEAN",
   "checks": { "correct_stage": 5, "artifact_valid": 4, "gates_respected": 5, "real_progress": 5, "no_hallucination": 5, "no_conflict": 5 },
   "step_score": 4.63,
   "trajectory_geomean": 4.41,
   "verdict": "PROCEED",
-  "reason": "sub-PR #341 exists (gh), base=parent branch, Refs #<sub>+#<parent>; ledger matches.",
+  "reason": "clean synthesis and trajectory match the exact request; no configured human gate was crossed.",
   "correction": null
 }
 ```
 
+`VALIDATOR-VERDICT.json` uses schema `polymetrics.ai/shepherd-verdict/v1` and repeats the same five
+identity fields verbatim. The driver rejects a verdict unless a new final `VALIDATION.jsonl` entry
+also repeats them and agrees on the verdict. Prose citations are supplementary, never identity.
+
 ## Guarantees
 
-- **No step goes unjudged** — the validator runs after every orchestrator turn; the geometric mean
-  means a single bad step drags the trajectory score down and triggers RETRY/REVERT rather than being
-  masked by good steps.
-- **Independent of the orchestrator** — the validator re-derives truth from git/gh/artifacts, so a
-  hallucinating orchestrator can't self-certify.
-- **Bounded** — `max_reverts` per stage and per run; a hard-gate breach is an immediate HALT.
-- The validator is read-mostly: it writes only `VALIDATION.jsonl`, `VALIDATOR-VERDICT.json`, and
-  checkpoint copies — never production code, never GitHub, never `main`.
+- **No successful terminal or integration bypass** — a trajectory is judged only after authenticated
+  clean synthesis, and all actions leading to that transition are reconstructed. Without a fresh
+  bound `PROCEED`, terminal success and integration remain blocked.
+- **Independent and exact** — the validator re-derives truth, while the driver rechecks identity
+  before and after the validator. A stale, dirty, malformed, or self-certified result cannot pass.
+- **Complete human gates** — every configured gate class above is a hard `HALT`; an unapproved
+  parent-ready transition is not success.
+- **Bounded liveness** — validator process and descendants run under a hard watchdog. Nonzero exit,
+  timeout, watchdog error, missing append, or exhausted revert budget discards the verdict and cannot
+  succeed.
+- **Read-mostly and no merge** — the validator writes only `VALIDATION.jsonl` and
+  `VALIDATOR-VERDICT.json`. The driver writes request/checkpoint/cleanup bookkeeping. Neither edits
+  production code, mutates GitHub, rewrites history, force-pushes, marks ready, or merges any branch.

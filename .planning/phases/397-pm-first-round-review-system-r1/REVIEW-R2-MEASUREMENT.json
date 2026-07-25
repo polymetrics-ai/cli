@@ -1,0 +1,363 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-run-measurement/v1",
+  "review_round": 2,
+  "exact_base_sha": "0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20",
+  "exact_head_sha": "92ce5e6a19cb7562aead8b224e6ba8dcc0857d34",
+  "exact_head_tree": "0a3c3eda637210d240dd13cfd99b475d032c36c0",
+  "manifest_sha256": "6ae018048856f917a7745602477b92fbee82edc6a7203e5226fc14d71022b85e",
+  "synthesis_sha256": "cce8c3dfe95700d5f001d5b3cdf4eaa3f24dde407f9cf06356a7c50e3c50107a",
+  "packet_count": 41,
+  "successful_packet_reviews": 41,
+  "finding_count": 141,
+  "synthesis_status": "findings_correction_required",
+  "synthesis_blocker_count": 0,
+  "recorded_packet_provider_attempts": 44,
+  "recorded_packet_provider_failures": 3,
+  "additional_operational_attempts": [
+    {
+      "kind": "context_window_rejection",
+      "count": 1,
+      "source": "captain-observed",
+      "disposition": "operational_only_not_correction_round",
+      "retry_rule": "second matching failure stops retries for estimator/rendered-prompt diagnosis"
+    }
+  ],
+  "total_operational_attempts_including_context_rejection": 45,
+  "total_operational_failures_including_context_rejection": 4,
+  "provider_retries_do_not_consume_correction_rounds": true,
+  "correction_rounds_consumed": 2,
+  "telemetry_note": "Pi text mode exposed no trustworthy token/cost telemetry. Packet timing files are parent-observed elapsed seconds; no model token/cost values are invented.",
+  "packets": [
+    {
+      "packet_id": "architecture_reference-01",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "architecture_reference-02",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "architecture_reference-03",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "architecture_reference-04",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "architecture_reference-05",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "authority_workflow_state-01",
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "attempt_log": [
+        "attempt=1 status=1 stderr=No API key found for openai-codex.  Use /login to log into a provider via OAuth or API key. See:   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/providers.md   /Users/karthiksivadas/.local/lib/node_modules/@earendil-works/pi-coding-agent/docs/models.md ",
+        "attempt=2 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "authority_workflow_state-02",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-01",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-02",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-03",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-04",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-05",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-06",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-07",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-08",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-09",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-10",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-11",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-12",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-13",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-14",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-15",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-16",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-17",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-18",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-19",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-20",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-21",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-22",
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "attempt_log": [
+        "attempt=1 status=1 stderr=WebSocket error ",
+        "attempt=2 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-23",
+      "provider_attempts": 2,
+      "provider_failures": 1,
+      "attempt_log": [
+        "attempt=1 status=1 stderr=WebSocket error ",
+        "attempt=2 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-24",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-25",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-26",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-27",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-28",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-29",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-30",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-31",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-32",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "impact_graph-33",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    },
+    {
+      "packet_id": "implementation_test-01",
+      "provider_attempts": 1,
+      "provider_failures": 0,
+      "attempt_log": [
+        "attempt=1 status=0 stderr="
+      ]
+    }
+  ]
+}

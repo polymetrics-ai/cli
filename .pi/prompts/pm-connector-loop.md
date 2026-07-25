@@ -29,7 +29,9 @@ Connector-specific expectations (everything else is inherited from pm-auto-loop)
    sensitive/admin) per `.agents/agentic-delivery/contracts/parent-issue-roadmap-template.md`. Seed
    each worker from `.agents/connector-migration/templates/connector-rollout-prompt.md`; for the
    api_surface/writes-heavy slices, work like
-   `.agents/connector-migration/agents/implementation/passb-expander.agent.yaml`.
+   `.agents/connector-migration/agents/implementation/passb-expander.agent.yaml` with
+   `delivery_profile: pm_worker`. The `coordinator_fanout` no-commit profile is only for a separately
+   explicit coordinator-owned bulk task; it is not the lifecycle used by this issue/branch/sub-PR loop.
 4. **Shared-file discipline.** `api_surface.json`, `cli_surface.json`, `docs.md` are cross-slice —
    serialize those slices (stacked, integrate-before-next) and coordinator-reconcile at INTEGRATE;
    the loop records `not_spawned_write_scope_collision` rather than editing a shared file in parallel.

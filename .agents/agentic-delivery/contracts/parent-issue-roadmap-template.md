@@ -17,7 +17,8 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 - Project:
 - Orchestrator:
 - Orchestration workflow: `.agents/agentic-delivery/workflows/parent-issue-orchestration-loop.md`
-- Automated review routing: `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`
+- Exact-head review: `.agents/agentic-delivery/workflows/local-codex-review-loop.md`
+- Independent trajectory validation: `.agents/agentic-delivery/workflows/shepherd-validator.md`
 
 ## Sub-issues
 
@@ -27,9 +28,9 @@ Use this template for epic-sized work that is intentionally split into sub-issue
 
 ## Orchestration state
 
-| Issue | Worker | Branch | PR | Latest SHA | Verification | Automated review coverage | Merge state | Blocker |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<sub_pr|parent_pr_fallback|copilot_backup|blocked>` | Planned | None |
+| Issue | Worker | Branch | PR | Latest SHA | Verification | PM manifest/synthesis | Shepherd | Merge state | Blocker |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| #N | `<agent>` | `<branch>` | `<url>` | `<sha>` | Pending | `<pending|clean|findings_correction_required|blocked>` | `<pending|PROCEED|RETRY|REVERT|HALT>` | Planned | None |
 
 ## Branch and PR policy
 
@@ -54,10 +55,8 @@ true:
 - branch name and PR title checks pass
 - PR body references the sub-issue and parent issue
 - targeted tests and issue verification pass
-- automated review loop is complete and comments are resolved
-- automated review coverage exists through the sub-PR, through a parent PR fallback review that
-  covers the newly integrated commit range, or through an explicitly recorded Copilot/human fallback
-  because Claude is blocked
+- exact-head PM packet compilation and one local-Codex synthesis are clean, with every finding dispositioned
+- independent Shepherd validation returns `PROCEED` for the same exact head after clean synthesis
 - no human gate is triggered
 - no requested-changes review is open
 - the parent branch is current enough that the sub-PR diff is reviewable

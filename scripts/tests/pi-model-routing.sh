@@ -151,3 +151,4 @@ print(
 PY
 
 "$repo_root/scripts/tests/pm-orchestrator-contract.sh"
+"$repo_root/scripts/tests/pm-review-system.sh"

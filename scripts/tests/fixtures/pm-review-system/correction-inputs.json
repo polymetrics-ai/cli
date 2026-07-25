@@ -1,0 +1,235 @@
+{
+  "schema_version": "polymetrics.ai/pm-review-correction-corpus/v1",
+  "frozen_before_treatment": true,
+  "cases": [
+    {
+      "case_id": "impact-reverse-leaf-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "changed leaf with upstream-only active referencer",
+      "input": {
+        "nodes": [".agents/template.md", ".pi/upstream.md"],
+        "edges": [{"source": ".pi/upstream.md", "target": ".agents/template.md", "relation": "required_reference", "certainty": "active"}],
+        "seeds": [".agents/template.md"],
+        "reported_impact": [".agents/template.md"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-script-both-directions-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "changed script with importer and invoked helper",
+      "input": {
+        "nodes": ["scripts/consumer.py", "scripts/tool.py", "scripts/helper.py"],
+        "edges": [
+          {"source": "scripts/consumer.py", "target": "scripts/tool.py", "relation": "python_import", "certainty": "active"},
+          {"source": "scripts/tool.py", "target": "scripts/helper.py", "relation": "python_import", "certainty": "active"}
+        ],
+        "seeds": ["scripts/tool.py"],
+        "reported_impact": ["scripts/tool.py", "scripts/helper.py"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-authority-neighborhood-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "changed authority missing writers and readers",
+      "input": {
+        "nodes": ["writer.md", "reader.py", "state.yaml", "mirror.json"],
+        "edges": [
+          {"source": "writer.md", "target": "state.yaml", "relation": "authority_writes", "certainty": "active"},
+          {"source": "reader.py", "target": "state.yaml", "relation": "authority_reads", "certainty": "active"},
+          {"source": "state.yaml", "target": "mirror.json", "relation": "authority_mirror", "certainty": "active"}
+        ],
+        "seeds": ["state.yaml"],
+        "reported_impact": ["state.yaml", "mirror.json"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-generated-chain-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "generated artifact missing generator and consumer",
+      "input": {
+        "nodes": ["scripts/generate.py", ".agents/generated.json", ".pi/consumer.md"],
+        "edges": [
+          {"source": "scripts/generate.py", "target": ".agents/generated.json", "relation": "generates", "certainty": "active"},
+          {"source": ".pi/consumer.md", "target": ".agents/generated.json", "relation": "required_reference", "certainty": "active"}
+        ],
+        "seeds": [".agents/generated.json"],
+        "reported_impact": [".agents/generated.json"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-go-importer-test-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "Go source missing same-package test and importing command",
+      "input": {
+        "nodes": ["internal/lib/lib.go", "go-package:example/internal/lib", "internal/lib/lib_test.go", "go-package:example/cmd/app"],
+        "edges": [
+          {"source": "internal/lib/lib.go", "target": "go-package:example/internal/lib", "relation": "go_member_of", "certainty": "active"},
+          {"source": "go-package:example/internal/lib", "target": "internal/lib/lib_test.go", "relation": "go_test", "certainty": "active"},
+          {"source": "go-package:example/cmd/app", "target": "go-package:example/internal/lib", "relation": "go_imports", "certainty": "active"}
+        ],
+        "seeds": ["internal/lib/lib.go"],
+        "reported_impact": ["internal/lib/lib.go", "go-package:example/internal/lib", "internal/lib/lib_test.go"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-unknown-platform-dropped-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "unknown platform sibling silently dropped",
+      "input": {
+        "nodes": ["impl_darwin.go", "impl_linux.go"],
+        "edges": [{"source": "impl_darwin.go", "target": "impl_linux.go", "relation": "platform_variant", "certainty": "unknown"}],
+        "seeds": ["impl_darwin.go"],
+        "reported_impact": ["impl_darwin.go"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-cycle-bound-ready-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "cycle terminates but continuing frontier is truncated at depth bound",
+      "input": {
+        "nodes": ["a.md", "b.md", "c.md"],
+        "edges": [
+          {"source": "a.md", "target": "b.md", "relation": "required_reference", "certainty": "active"},
+          {"source": "b.md", "target": "a.md", "relation": "required_reference", "certainty": "active"},
+          {"source": "b.md", "target": "c.md", "relation": "required_reference", "certainty": "active"}
+        ],
+        "seeds": ["a.md"],
+        "max_depth": 1,
+        "reported_impact": ["a.md", "b.md"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-active-missing-target-opaque",
+      "suite": "captain_impact_opaque",
+      "family": "impact_graph_contract",
+      "source_identity": "active edge target absent from declared universe",
+      "input": {
+        "nodes": ["root.md"],
+        "edges": [{"source": "root.md", "target": "missing.md", "relation": "required_reference", "certainty": "active"}],
+        "seeds": ["root.md"],
+        "reported_impact": ["root.md"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-clean-bidirectional-control",
+      "suite": "captain_impact_clean",
+      "family": "impact_graph_contract",
+      "source_identity": "complete bidirectional impact control",
+      "input": {
+        "nodes": ["upstream.md", "leaf.md", "downstream.md"],
+        "edges": [
+          {"source": "upstream.md", "target": "leaf.md", "relation": "required_reference", "certainty": "active"},
+          {"source": "leaf.md", "target": "downstream.md", "relation": "required_reference", "certainty": "active"}
+        ],
+        "seeds": ["leaf.md"],
+        "reported_impact": ["downstream.md", "leaf.md", "upstream.md"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "impact-unrelated-clean-control",
+      "suite": "captain_impact_clean",
+      "family": "impact_graph_contract",
+      "source_identity": "isolated changed file does not select unrelated component",
+      "input": {
+        "nodes": ["isolated.md", "unrelated-a.md", "unrelated-b.md"],
+        "edges": [{"source": "unrelated-a.md", "target": "unrelated-b.md", "relation": "required_reference", "certainty": "active"}],
+        "seeds": ["isolated.md"],
+        "reported_impact": ["isolated.md"],
+        "reported_status": "ready"
+      }
+    },
+    {
+      "case_id": "lab-candidate-write-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "temporary change targets canonical candidate",
+      "input": {"change_scope": "candidate", "command_category": "targeted_test", "candidate_unchanged": false, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-outside-symlink-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "temporary path resolves outside private lab",
+      "input": {"change_scope": "outside_or_symlink", "command_category": "targeted_test", "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-network-command-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "network command accepted by lab",
+      "input": {"change_scope": "lab", "command_category": "network", "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-secret-capture-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "ambient secret key/value reaches lab evidence",
+      "input": {"change_scope": "lab", "command_category": "targeted_test", "secret_material_present": true, "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-limit-clean-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "timeout or process/output/disk bound still represented clean",
+      "input": {"change_scope": "lab", "command_category": "targeted_test", "limit_hit": "timeout", "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-cleanup-identity-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "cleanup failed and candidate identity drifted",
+      "input": {"change_scope": "lab", "command_category": "targeted_test", "candidate_unchanged": false, "cleanup_verified": false, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-inconclusive-clean-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "inconclusive experiment treated as clean proof",
+      "input": {"change_scope": "lab", "command_category": "targeted_test", "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "inconclusive"}
+    },
+    {
+      "case_id": "lab-forbidden-git-install-live-opaque",
+      "suite": "captain_lab_opaque",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "Git mutation install credential live or deploy category accepted",
+      "input": {"change_scope": "lab", "command_category": "git_mutation_or_install_or_live_effect", "candidate_unchanged": true, "cleanup_verified": true, "status": "clean", "supports": "claim"}
+    },
+    {
+      "case_id": "lab-clean-experiment-control",
+      "suite": "captain_lab_clean",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "bounded experiment has complete safety proof",
+      "input": {"change_scope": "lab", "command_category": "targeted_test", "secret_material_present": false, "limit_hit": null, "candidate_unchanged": true, "cleanup_verified": true, "status": "evidence", "supports": "alternative"}
+    },
+    {
+      "case_id": "lab-clean-static-control",
+      "suite": "captain_lab_clean",
+      "family": "hypothesis_lab_contract",
+      "source_identity": "static evidence decisive so no experiment is needed",
+      "input": {"no_experiment_reason": "parsed enum and failing fixture are already decisive", "candidate_unchanged": true, "cleanup_verified": true, "status": "evidence", "supports": "claim"}
+    },
+    {
+      "case_id": "contract-v1-migration-opaque",
+      "suite": "captain_contract_opaque",
+      "family": "review_contract_version",
+      "source_identity": "incompatible v1 graph packet response accepted without migration",
+      "input": {"schema_version": "polymetrics.ai/pm-review-packet-response/v1", "required_schema_version": "polymetrics.ai/pm-review-packet-response/v2", "reported_status": "clean"}
+    }
+  ]
+}
