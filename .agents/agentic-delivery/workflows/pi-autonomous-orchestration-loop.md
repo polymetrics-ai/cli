@@ -3,8 +3,8 @@
 Fully automated, resumable, multi-model delivery loop. Given one prompt describing any problem
 (connector or implementation), the loop plans, creates issues, implements, verifies, reviews,
 corrects, and integrates. Roles carry no model pin and inherit the parent session model, so the
-whole loop runs on whatever model drives the orchestrator (currently Claude). It can be stopped
-and resumed at any point (including token exhaustion) without losing work.
+whole loop runs on whatever model drives the orchestrator. It can be stopped and resumed at any
+point (including token exhaustion) without losing work.
 
 This is the runtime-generic contract. The Pi adapter is `pm-auto-loop` (`.pi/prompts/pm-auto-loop.md`)
 driven by `scripts/pi-auto-loop.sh`. It composes the existing
@@ -15,13 +15,13 @@ driven by `scripts/pi-auto-loop.sh`. It composes the existing
 
 | Stage role | Agent | Model | Provider |
 |---|---|---|---|
-| Orchestrator (main session) | — | driver-set (parent session) | Claude |
-| Web / API research | `pm-web-researcher` | inherits parent session (high) | Claude |
-| Parent + task planning | `pm-planner` | inherits parent session (xhigh) | Claude |
-| Issue creation | `pm-issue-creator` | inherits parent session (xhigh) | Claude |
-| Execute / correct | `pm-gsd-worker` | inherits parent session (xhigh) | Claude |
-| Verify | `pm-verifier` | inherits parent session (high) | Claude |
-| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | inherits parent session (xhigh) | Claude |
+| Orchestrator (main session) | — | driver-set (parent session) | driver-set |
+| Web / API research | `pm-web-researcher` | inherits parent session (high) | inherited |
+| Parent + task planning | `pm-planner` | inherits parent session (xhigh) | inherited |
+| Issue creation | `pm-issue-creator` | inherits parent session (xhigh) | inherited |
+| Execute / correct | `pm-gsd-worker` | inherits parent session (xhigh) | inherited |
+| Verify | `pm-verifier` | inherits parent session (high) | inherited |
+| Review + disposition | `pm-reviewer`, `pm-claude-review-disposition` | inherits parent session (xhigh) | inherited |
 
 The orchestrator is the only spawner (recursive `subagent` calls are blocked). The loop is driven
 turn-by-turn by the orchestrator, which persists state after every transition so any turn is a
@@ -153,20 +153,25 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
   (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches implementation workers on the same Claude model, with the Shepherd supervisor layer
-  below. When this driver is used, the Claude roles run **only** on the first-party `claude` CLI —
-  never through a third-party gateway.
+  dispatches implementation workers through `pi` with no `--model` pin, so they run on the
+  orchestrator's configured model, with the Shepherd supervisor layer below. When this driver is
+  used, the Claude roles run **only** on the first-party `claude` CLI — never through a third-party
+  gateway.
 
 - **Pi-orchestrated + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
   or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on `pi`.
   Requires `pi install npm:pi-sub-agent` once. Project agents in `.pi/agents/*` carry no `model:`
-  pin, so each dispatched role inherits the parent orchestrator session model (whatever the driver
-  launched `pi` with — currently Claude). The Codex ChatGPT plan is exhausted until 2026-07-29, so
-  Codex is not a routing target while this note stands; inheritance keeps the fleet provider-agnostic.
+  pin, so each dispatched role inherits whatever `ORCH_MODEL` the driver launched `pi` with — which
+  keeps the fleet provider-agnostic but means the driver default decides the provider. Note the
+  launcher defaults are not aligned yet: `scripts/pi-shepherd-loop.sh` still defaults `ORCH_MODEL`
+  to `openai-codex/gpt-5.5` and hard-pins its validator turn to `openai-codex/gpt-5.6-sol`, and
+  `.pi/README.md` still documents those Codex defaults, while `scripts/pi-auto-loop.sh` defaults
+  `ORCH_MODEL` to `anthropic/claude-opus-4-8`. Set `ORCH_MODEL`/`VALIDATOR_ARGS` explicitly for the
+  provider you intend; repointing those launcher defaults is a separate follow-up.
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
-pay-per-token gateway. Claude roles stay on the first-party `claude` CLI or the driver's configured
-Claude bridge.
+pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI — never
+through a third-party gateway or relay.
 
 ## Validator layer (Shepherd supervisor meta-agent)
 
