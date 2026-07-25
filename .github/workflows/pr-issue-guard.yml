@@ -10,8 +10,11 @@ permissions:
 
 jobs:
   require-linked-issue:
+    # Issue-first delivery is required for human and agent branches. Tool-owned
+    # branches carry their intent in the generated PR body instead: dependabot,
+    # release-please, and fm/* branches opened by the no-mistakes fleet manager.
     runs-on: ubuntu-latest
-    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.head_ref, 'release-please--branches--') }}
+    if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.head_ref, 'release-please--branches--') && !startsWith(github.head_ref, 'fm/') }}
     steps:
       - name: Checkout
         uses: actions/checkout@v7

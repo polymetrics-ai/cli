@@ -25,8 +25,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Machine-generated branches keep their tool-owned namespace:
+          # dependabot, release-please, the connector-architecture-v2 parent,
+          # and fm/* branches opened by the no-mistakes fleet manager.
           case "$HEAD_REF" in
-            dependabot/*|release-please--branches--*|connector-architecture-v2)
+            dependabot/*|release-please--branches--*|connector-architecture-v2|fm/*)
               exit 0
               ;;
           esac
