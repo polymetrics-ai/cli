@@ -153,10 +153,12 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 - **Claude-orchestrated + Shepherd validator** (`scripts/claude-auto-loop.sh` +
   `.agents/agentic-delivery/prompts/claude-orchestrator.md`): the first-party Claude Code CLI
   (`claude -p`) is the orchestrator, billed to your **Claude subscription** (flat-rate). It
-  dispatches implementation workers through `pi` with no `--model` pin, so they run on the
-  orchestrator's configured model, with the Shepherd supervisor layer below. When this driver is
-  used, the Claude roles run **only** on the first-party `claude` CLI — never through a third-party
-  gateway.
+  dispatches implementation workers through `pi` with an explicit
+  `--model anthropic/claude-opus-4-8`, with the Shepherd supervisor layer below. There is no cross-process
+  model inheritance on this path — a fresh `pi` worker has no parent session to inherit from, and
+  omitting `--model` would fall back to pi's own default (`openai-codex/gpt-5.5`) — so the worker
+  model must always be named explicitly. When this driver is used, the orchestrator, verify, and
+  review roles run **only** on the first-party `claude` CLI — never through a third-party gateway.
 
 - **Pi-orchestrated + Shepherd validator** (`scripts/pi-shepherd-loop.sh` + `.pi/prompts/pm-auto-loop.md`
   or `/pm-connector-loop`): every role — orchestrator, subagents, validator — runs on `pi`.
