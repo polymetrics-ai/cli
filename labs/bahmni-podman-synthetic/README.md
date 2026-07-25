@@ -55,7 +55,9 @@ Real-contact testing is manual and local-only. Do not commit or log real contact
 
 1. Copy an override to a gitignored file, e.g. `labs/bahmni-podman-synthetic/local-contact-overrides.json`.
 2. Add human-only values there for manual UI tests.
-3. Keep fixture/config/report output on invalid placeholders by default.
+3. Keep fixture/config/report output on invalid placeholders by default. The fixture
+   `synthetic_contact` blocks are assertion-only: `check-synthetic` enforces them, and the seed
+   never writes any phone or email attribute to Bahmni.
 4. Delete the local override before handoff.
 
 The repository `.gitignore` and lab `.gitignore` exclude `local-contact-overrides*.json`, `.local-credentials.json`, `.env.local`, and runtime output.
