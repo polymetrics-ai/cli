@@ -25,8 +25,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          # Automation-owned branch namespaces: dependabot, release-please, the
+          # long-lived connector-architecture-v2 integration branch, and fm/<task-slug>
+          # branches created by the no-mistakes fleet-manager harness.
           case "$HEAD_REF" in
-            dependabot/*|release-please--branches--*|connector-architecture-v2)
+            dependabot/*|release-please--branches--*|connector-architecture-v2|fm/*)
               exit 0
               ;;
           esac
