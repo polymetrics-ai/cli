@@ -123,11 +123,17 @@ Record for every candidate range:
 - measured fixture/replay scope separately from prospective review outcomes, without claiming
   unmeasured improvement.
 
-## Prohibited PM coverage routes
+## Reviewer model and prohibited substitute routes
 
-Do not request or count Claude or GitHub Copilot as required, fallback, or substitute review
-coverage for this PM route. Historical records and legacy bot-review documents remain truthful but
-are not inputs to current PM orchestration.
+This PM route's fresh-context reviewer runs the authorized `claude-bridge/claude-opus-4-8` model,
+rendered by `scripts/pm-review-system.py render` (the Sol/Codex reviewer is quota-exhausted
+fleet-wide; the `local-codex-review` file/route names are kept and the rename is a deferred
+follow-up). Because the implementation worker also runs Claude Opus 4.8, reviewer and implementer
+share a model and its blind spots — a real reduction in adversarial independence to record and weigh.
+
+Do not instead count the GitHub-hosted Claude Action or GitHub Copilot as required, fallback, or
+substitute coverage for this PM route. Historical records and legacy bot-review documents remain
+truthful but are not inputs to current PM orchestration.
 
 The parent PR into `main`, dependency approval, auth scope changes, secrets, destructive actions,
 production deploys, and quality-gate reductions remain human-only decisions.

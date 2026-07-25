@@ -44,5 +44,7 @@ After the one local-Codex synthesis is clean, run independent `shepherd-validato
 Do not integrate unless Shepherd returns `PROCEED` for the exact reviewed head. A head change after
 review or Shepherd invalidates both results.
 
-Do not request or count Claude or GitHub Copilot as required, fallback, or substitute PM review
-coverage. Local review and Shepherd do not replace final human authority.
+The PM reviewer runs the authorized `claude-bridge/claude-opus-4-8` model (Sol/Codex is
+quota-exhausted fleet-wide); do not instead count the GitHub-hosted Claude Action or GitHub Copilot
+as required, fallback, or substitute PM review coverage. Review and Shepherd do not replace final
+human authority.

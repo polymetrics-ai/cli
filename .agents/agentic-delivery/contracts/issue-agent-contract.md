@@ -77,8 +77,11 @@ before implementation.
     `.agents/agentic-delivery/workflows/shepherd-validator.md`.
 18. Treat any head change after review or Shepherd as invalidating both exact-head results; repeat
     verification, local Codex review, and Shepherd.
-19. Do not request or count Claude or GitHub Copilot as required, fallback, or substitute PM review
-    coverage.
+19. The authorized PM reviewer runs `claude-bridge/claude-opus-4-8` via the canonical bounded packet
+    route (Sol/Codex is quota-exhausted fleet-wide). Do not instead count the GitHub-hosted Claude
+    Action or GitHub Copilot as required, fallback, or substitute PM review coverage; the bounded
+    packet route is the only PM coverage. Reviewer independence is reduced this round because the
+    implementer also runs Claude Opus 4.8.
 20. Ping the human coordinator only after no actionable finding remains, Shepherd passes, and only
     recorded human gates remain.
 

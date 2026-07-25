@@ -16,6 +16,11 @@ implementation_agents = {
     "pm-gsd-worker",
     "pm-issue-worker",
 }
+# The PM reviewer is repointed to Claude via pi-claude-bridge because Sol/Codex is quota-exhausted
+# fleet-wide; it keeps xhigh thinking. Everything else stays on Sol.
+claude_review_agents = {
+    "pm-reviewer": "claude-bridge/claude-opus-4-8",
+}
 
 
 def frontmatter(path: pathlib.Path) -> dict[str, str]:
@@ -45,8 +50,9 @@ for path in agent_paths:
     name = values.get("name", "")
     seen.add(name)
     expected_thinking = "high" if name in implementation_agents else "xhigh"
-    assert values.get("model") == model, (
-        f"{path}: model={values.get('model')!r}, want {model!r}"
+    expected_model = claude_review_agents.get(name, model)
+    assert values.get("model") == expected_model, (
+        f"{path}: model={values.get('model')!r}, want {expected_model!r}"
     )
     assert values.get("thinking") == expected_thinking, (
         f"{path}: thinking={values.get('thinking')!r}, want {expected_thinking!r}"
@@ -146,7 +152,8 @@ for path in active_policy_paths:
 
 print(
     f"pi model routing ok: {len(agent_paths)} agents; "
-    "implementation=sol/high; all other roles=sol/xhigh; concurrency=4"
+    "implementation=sol/high; pm-reviewer=claude-bridge/claude-opus-4-8/xhigh; "
+    "all other roles=sol/xhigh; concurrency=4"
 )
 PY
 
