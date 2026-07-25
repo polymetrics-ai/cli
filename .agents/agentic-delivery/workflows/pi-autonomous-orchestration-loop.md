@@ -175,7 +175,13 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
   to `openai-codex/gpt-5.5` and hard-pins its validator turn to `openai-codex/gpt-5.6-sol`, and
   `.pi/README.md` still documents those Codex defaults, while `scripts/pi-auto-loop.sh` defaults
   `ORCH_MODEL` to `anthropic/claude-opus-4-8`. Set `ORCH_MODEL`/`VALIDATOR_ARGS` explicitly for the
-  provider you intend; repointing those launcher defaults is a separate follow-up.
+  provider you intend; repointing those launcher defaults is a separate follow-up. That same
+  follow-up must also correct two now-stale `.pi/README.md` claims: its routing guidance
+  (`.pi/README.md:114-118`) still tells operators that "Model routing is per-agent in
+  `.pi/agents/*.md`" and to "set them once in the agent frontmatter", and its "Default Pi model:
+  `openai-codex/gpt-5.5`" line (`.pi/README.md:11`) still presents Codex as the fleet default. No
+  `.pi/agents/*` file carries a `model:` key anymore, so routing comes from the parent session
+  model, not agent frontmatter — do not re-add frontmatter pins on the strength of that README text.
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
 pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI — never
