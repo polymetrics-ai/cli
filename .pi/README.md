@@ -8,7 +8,7 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Default Pi model: `openai-codex/gpt-5.5` with `xhigh` thinking
+- Model routing: the orchestrator roles in `.pi/agents/*` carry no `model:` key and inherit the parent session model the driver launches `pi` with (`ORCH_MODEL`); `openai-codex/gpt-5.5` is only pi's bare-launch fallback default when no `--model`/`ORCH_MODEL` is given
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
 
@@ -96,9 +96,12 @@ scripts/pi-auto-loop.sh --resume        # continue the current run after a stop
 ### Claude-orchestrated driver + Shepherd validator (recommended)
 
 Uses the first-party **Claude Code CLI** (`claude -p`, subscription-backed — no third-party "extra
-usage" gate) as the orchestrator and **Codex** (`pi --model openai-codex/gpt-5.5`) for
-implementation, with an independent **Shepherd supervisor** scoring every step (revert + replay on a
-bad step). See `.agents/agentic-delivery/workflows/shepherd-validator.md`.
+usage" gate) as the orchestrator and dispatches implementation to a fresh `pi` worker
+(`pi --model openai-codex/gpt-5.5`), with an independent **Shepherd supervisor** scoring every step
+(revert + replay on a bad step). That `openai-codex` implementation route is currently exhausted;
+repointing it with a billing-compliant Claude route is a deliberate separate follow-up (see
+`.agents/agentic-delivery/prompts/claude-orchestrator.md`). See
+`.agents/agentic-delivery/workflows/shepherd-validator.md`.
 
 ```bash
 export SEARXNG_BASE=http://localhost:8888
@@ -112,12 +115,15 @@ The validator writes `.planning/auto-loop/VALIDATION.jsonl` (per-step scores) an
 `VALIDATOR-VERDICT.json` (the driver acts on `PROCEED`/`RETRY`/`REVERT`/`HALT`). Requires the local
 `claude` CLI to be logged in (`claude -p "ok"` should work).
 
-Model routing is per-agent in `.pi/agents/*.md`; the Codex-only Shepherd profile pins project
-agents to `openai-codex/gpt-5.5` with each agent's declared thinking level, while the Shepherd
-validator defaults to `openai-codex/gpt-5.6-sol --thinking high`. Confirm the exact model IDs your
-subscription exposes with `/model`, then set them once in the agent frontmatter and in the driver
-environment (`ORCH_MODEL` / `VALIDATOR_ARGS`). Connector research uses the repo's `searxng`
-connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied) before launching.
+Model routing is NOT per-agent: `.pi/agents/*.md` carry no `model:` key, so each role inherits the
+parent orchestrator session model the driver launches `pi` with (`ORCH_MODEL`), preserving each
+agent's declared thinking level. The Shepherd validator turn still defaults to
+`openai-codex/gpt-5.6-sol --thinking high` via `VALIDATOR_ARGS`. Choose the fleet's provider by
+setting the driver environment (`ORCH_MODEL` / `VALIDATOR_ARGS`) — for example `scripts/pi-auto-loop.sh`
+already defaults `ORCH_MODEL` to `anthropic/claude-opus-4-8` — not by re-adding frontmatter pins.
+Confirm the exact model IDs your subscription exposes with `/model`. Connector research uses the
+repo's `searxng` connector through `pm` (audited path); export `SEARXNG_BASE` (+ token if proxied)
+before launching.
 
 ### Non-interactive (CI / parent-PR review coverage)
 
