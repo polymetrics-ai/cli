@@ -21,7 +21,6 @@ import ssl
 import stat
 import subprocess
 import sys
-import time
 import urllib.error
 import urllib.parse
 import urllib.request

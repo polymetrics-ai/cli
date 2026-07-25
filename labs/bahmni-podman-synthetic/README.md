@@ -7,8 +7,8 @@ Task-owned assets for a reproducible local Bahmni Standard lab for connector tes
 - Pinned source: `Bahmni/bahmni-docker` tag `1.0.2-standard`, commit `1dfe62c4e5d6f3d702e65d869729726226fceb56`.
 - Rootless Podman only; no Docker CLI/Engine/Desktop.
 - Loopback-only service binds.
-- Task-prefixed resources: Podman machine `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`.
-- `reset`/`cleanup` require `--yes`, target only task-owned resources, and do not stop the Podman machine.
+- Task-prefixed resources: Podman machine `fm-bahmni-lab-r1-machine`, compose project `fm_bahmni_lab_r1`, runtime dir `/tmp/fm-bahmni-lab-r1`. Every explicit compose `container_name` is rewritten with the `fm-bahmni-lab-r1-` prefix, and generation fails closed if any unscoped name remains.
+- `reset`/`cleanup` require `--yes`, target only task-owned resources, and never create or stop the Podman machine. If the task-owned connection is unavailable they report that there is nothing to reset instead of provisioning a machine.
 - Local credentials stay under `/tmp/fm-bahmni-lab-r1` and are not committed.
 
 ## Commands
@@ -42,7 +42,7 @@ labs/bahmni-podman-synthetic/bin/bahmni-lab credentials --show
 Fixture: `fixtures/synthetic-seed.json`.
 
 - Hospital/location name is exactly `Chikitsalayaḥ`.
-- Patients use `SYN-HEN-*` identifiers and the synthetic family marker `Syntheticcase`.
+- Patients use `SYN-HEN-*` identifiers and obviously synthetic family names such as `Syntheticcase`, `Testpatient`, and `Democase`; `check-synthetic` fails if a family name carries no synthetic marker.
 - Contact defaults are deliberately invalid placeholders: `000-000-0000` and `.invalid` emails.
 - Karthik test patient: `SYN-HEN-0009 - Karthik Syntheticcase`.
 - Karthik has a completed OPD cold/fever visit, fever temperature observation, chief complaint text, diagnosis text, completed visit stop time, appointments, lab/procedure/radiology/medication orders, allergy placeholder, and FHIR condition presence.
