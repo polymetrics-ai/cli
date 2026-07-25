@@ -1,0 +1,30 @@
+{
+  "selected_distribution": "Bahmni Standard 1.0.2-standard",
+  "retrieval_date": "2026-07-26",
+  "profiles_started_by_default": ["bahmni-standard"],
+  "supported_and_seeded": [
+    {"family": "Facility and locations", "mechanism": "OpenMRS REST /location", "seeded": "synthetic facility, specialty departments, service locations"},
+    {"family": "Providers", "mechanism": "OpenMRS REST /person and /provider", "seeded": "fictional providers with SYN-PROV identifiers"},
+    {"family": "Patients and identifiers", "mechanism": "OpenMRS REST /patient", "seeded": "fictional patients with SYN-HEN identifiers"},
+    {"family": "Appointments", "mechanism": "Bahmni appointments REST /appointments using existing appointment services", "seeded": "scheduled synthetic appointments"},
+    {"family": "Visits", "mechanism": "OpenMRS REST /visit", "seeded": "OPD, IPD, emergency, special OPD, follow-up visits where configured"},
+    {"family": "Encounters", "mechanism": "OpenMRS REST /encounter", "seeded": "consultation, lab result, investigation, and patient-document-metadata encounters"},
+    {"family": "Vitals and observations", "mechanism": "OpenMRS REST encounter obs and FHIR Observation readback", "seeded": "weight, height, temperature, pulse, blood pressure, selected lab result values"},
+    {"family": "Conditions/diagnoses", "mechanism": "FHIR R4 /Condition plus OpenMRS encounter notes", "seeded": "active synthetic condition records"},
+    {"family": "Allergies", "mechanism": "OpenMRS REST /patient/{uuid}/allergy", "seeded": "coded synthetic medication allergy"},
+    {"family": "Orders", "mechanism": "OpenMRS REST /order", "seeded": "drug, lab, radiology, procedure, and generic test orders"},
+    {"family": "Medications", "mechanism": "OpenMRS REST drugorder", "seeded": "synthetic outpatient medication order using an existing demo drug"},
+    {"family": "Lab tests/results", "mechanism": "OpenMRS REST lab order + LAB_RESULT encounter", "seeded": "CBC order plus glucose/WBC/creatinine result observations"},
+    {"family": "Procedures", "mechanism": "OpenMRS REST procedure order", "seeded": "procedure order using existing procedure-class concept"},
+    {"family": "Documents metadata", "mechanism": "OpenMRS REST Patient Document encounter with text observation", "seeded": "metadata-only document note; no attachment bytes"},
+    {"family": "FHIR readback", "mechanism": "OpenMRS FHIR2 R4", "seeded": "Patient, Practitioner, Encounter, Observation, Condition, AllergyIntolerance, MedicationRequest, ServiceRequest readbacks where supported by installed modules"}
+  ],
+  "enabled_but_not_seeded_or_limited": [
+    {"family": "Speciality admin records", "status": "limited", "reason": "Bahmni /speciality/all is read-only in this deployment and no supported REST create endpoint was found; specialty taxonomy is seeded as OpenMRS locations/departments and appointment services use the demo services already present."},
+    {"family": "Binary document attachments", "status": "limited", "reason": "No supported REST/FHIR attachment create endpoint was exposed by this deployment; the seed writes document metadata only and avoids direct database or volume writes."},
+    {"family": "OpenELIS native result entry", "status": "limited", "reason": "The lab service is enabled, but this reproducible seed uses OpenMRS/Bahmni APIs for lab orders/results. Direct OpenELIS database writes are intentionally avoided."},
+    {"family": "Odoo billing/accounting and stock", "status": "not seeded", "reason": "The services are enabled by Standard, but the task is a clinical connector lab and no production-like fiscal/stock writes are generated."},
+    {"family": "PACS DICOM studies", "status": "not seeded", "reason": "DICOM binary study generation is outside the synthetic clinical API seed; PACS ports and service health are verified only."},
+    {"family": "SNOMED/CDSS", "status": "optional", "reason": "The official Standard compose exposes optional profiles; they are disabled by default to keep the local lab reproducible on laptops. Set BAHMNI_LAB_ENABLE_SNOMED=1 to start them, then record the additional resource usage."}
+  ]
+}

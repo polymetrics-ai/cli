@@ -22,5 +22,12 @@ deploy/compose/.env
 __pycache__/
 *.py[cod]
 
+# Local-only Bahmni synthetic lab runtime/credentials/overrides.
+labs/bahmni-podman-synthetic/.local/
+labs/bahmni-podman-synthetic/.local-credentials.json
+labs/bahmni-podman-synthetic/.env.local
+labs/bahmni-podman-synthetic/local-contact-overrides*.json
+labs/bahmni-podman-synthetic/*.local.json
+
 # Pi autonomous loop runtime state (durable resume lives on disk; not committed)
 .planning/auto-loop/

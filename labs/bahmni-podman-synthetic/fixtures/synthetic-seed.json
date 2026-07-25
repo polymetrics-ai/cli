@@ -1,0 +1,316 @@
+{
+  "dataset_id": "fm-bahmni-lab-r1-synthetic-v1",
+  "synthetic": true,
+  "organization": {
+    "name": "Chikitsalayaḥ",
+    "short_name": "CHIK",
+    "description": "Local synthetic Bahmni/OpenMRS connector test lab named Chikitsalayaḥ, inspired by public specialty taxonomy structure only; not affiliated with SPARSH or any real facility.",
+    "facility_identifier": "SYN-HEN-FAC-001"
+  },
+  "source_taxonomy": {
+    "structural_example": "SPARSH Hospital Hennur Road public specialty taxonomy",
+    "source_url": "https://www.sparshhospital.com/hospitals/sparsh-hospital-hennur-road/",
+    "retrieval_date": "2026-07-26",
+    "real_identity_use": "none"
+  },
+  "departments": [
+    "Anaesthesiology",
+    "Bariatric Sciences",
+    "Bone Marrow Transplant",
+    "Cardiology",
+    "Critical Care Medicine",
+    "Maxillofacial and Dental Surgery",
+    "Dentistry",
+    "Dermatology",
+    "Emergency Medicine",
+    "Endocrinology and Diabetology",
+    "Pediatric Intensive Care",
+    "Radiation Oncology",
+    "Neuro Intervention Radiology",
+    "Radiology",
+    "Pulmonology",
+    "Dialysis",
+    "Orthopaedic",
+    "Neuroscience",
+    "Urology and Nephrology",
+    "Cosmetology and Cosmetic Surgery",
+    "General Surgery",
+    "Head and Neck Surgery"
+  ],
+  "service_locations": [
+    "Synthetic Emergency Receiving",
+    "Synthetic General Ward",
+    "Synthetic Pediatric Ward",
+    "Synthetic Intensive Care Unit",
+    "Synthetic Day Care Procedures",
+    "Synthetic Diagnostic Imaging",
+    "Synthetic Clinical Laboratory",
+    "Synthetic Patient Documents Desk"
+  ],
+  "providers": [
+    {
+      "identifier": "SYN-PROV-CARD-001",
+      "given_name": "Asha",
+      "family_name": "Demoheart",
+      "gender": "F",
+      "birthdate": "1979-04-12",
+      "department": "Cardiology"
+    },
+    {
+      "identifier": "SYN-PROV-ORTH-002",
+      "given_name": "Balen",
+      "family_name": "Testbone",
+      "gender": "M",
+      "birthdate": "1981-09-04",
+      "department": "Orthopaedic"
+    },
+    {
+      "identifier": "SYN-PROV-NEUR-003",
+      "given_name": "Cira",
+      "family_name": "Simnerve",
+      "gender": "F",
+      "birthdate": "1983-02-18",
+      "department": "Neuroscience"
+    },
+    {
+      "identifier": "SYN-PROV-LAB-004",
+      "given_name": "Davin",
+      "family_name": "Mocklab",
+      "gender": "M",
+      "birthdate": "1976-12-08",
+      "department": "Clinical Laboratory"
+    },
+    {
+      "identifier": "SYN-PROV-RAD-005",
+      "given_name": "Esha",
+      "family_name": "Fictaradi",
+      "gender": "F",
+      "birthdate": "1985-07-21",
+      "department": "Radiology"
+    },
+    {
+      "identifier": "SYN-PROV-CRIT-006",
+      "given_name": "Feroz",
+      "family_name": "Synthcare",
+      "gender": "M",
+      "birthdate": "1977-06-30",
+      "department": "Critical Care Medicine"
+    },
+    {
+      "identifier": "SYN-PROV-PEDS-007",
+      "given_name": "Gita",
+      "family_name": "Demochild",
+      "gender": "F",
+      "birthdate": "1984-11-15",
+      "department": "Pediatric Intensive Care"
+    },
+    {
+      "identifier": "SYN-PROV-DERM-008",
+      "given_name": "Harin",
+      "family_name": "Testskin",
+      "gender": "M",
+      "birthdate": "1980-03-09",
+      "department": "Dermatology"
+    },
+    {
+      "identifier": "SYN-PROV-PULM-009",
+      "given_name": "Ila",
+      "family_name": "Simlung",
+      "gender": "F",
+      "birthdate": "1982-08-27",
+      "department": "Pulmonology"
+    },
+    {
+      "identifier": "SYN-PROV-ENDO-010",
+      "given_name": "Jovan",
+      "family_name": "Mockendo",
+      "gender": "M",
+      "birthdate": "1978-05-23",
+      "department": "Endocrinology and Diabetology"
+    },
+    {
+      "identifier": "SYN-PROV-SURG-011",
+      "given_name": "Kavi",
+      "family_name": "Fictasurg",
+      "gender": "F",
+      "birthdate": "1986-10-01",
+      "department": "General Surgery"
+    },
+    {
+      "identifier": "SYN-PROV-EMER-012",
+      "given_name": "Leor",
+      "family_name": "Synthrapid",
+      "gender": "M",
+      "birthdate": "1975-01-19",
+      "department": "Emergency Medicine"
+    }
+  ],
+  "patients": [
+    {
+      "identifier": "SYN-HEN-0001",
+      "given_name": "Mira",
+      "family_name": "Testpatient",
+      "gender": "F",
+      "birthdate": "1988-03-14",
+      "department": "Cardiology",
+      "provider": "SYN-PROV-CARD-001",
+      "visit_type": "OPD"
+    },
+    {
+      "identifier": "SYN-HEN-0002",
+      "given_name": "Niko",
+      "family_name": "Democase",
+      "gender": "M",
+      "birthdate": "1972-05-22",
+      "department": "Orthopaedic",
+      "provider": "SYN-PROV-ORTH-002",
+      "visit_type": "OPD"
+    },
+    {
+      "identifier": "SYN-HEN-0003",
+      "given_name": "Pavan",
+      "family_name": "Simrecord",
+      "gender": "M",
+      "birthdate": "2017-08-05",
+      "department": "Pediatric Intensive Care",
+      "provider": "SYN-PROV-PEDS-007",
+      "visit_type": "IPD"
+    },
+    {
+      "identifier": "SYN-HEN-0004",
+      "given_name": "Qiana",
+      "family_name": "Mockchart",
+      "gender": "F",
+      "birthdate": "1991-12-11",
+      "department": "Endocrinology and Diabetology",
+      "provider": "SYN-PROV-ENDO-010",
+      "visit_type": "Follow Up"
+    },
+    {
+      "identifier": "SYN-HEN-0005",
+      "given_name": "Rafi",
+      "family_name": "Fictitious",
+      "gender": "M",
+      "birthdate": "1967-02-02",
+      "department": "Pulmonology",
+      "provider": "SYN-PROV-PULM-009",
+      "visit_type": "EMERGENCY"
+    },
+    {
+      "identifier": "SYN-HEN-0006",
+      "given_name": "Sana",
+      "family_name": "Labdemo",
+      "gender": "F",
+      "birthdate": "1984-09-30",
+      "department": "Radiology",
+      "provider": "SYN-PROV-RAD-005",
+      "visit_type": "Special OPD"
+    },
+    {
+      "identifier": "SYN-HEN-0007",
+      "given_name": "Taru",
+      "family_name": "Trialpatient",
+      "gender": "O",
+      "birthdate": "2000-01-17",
+      "department": "Dermatology",
+      "provider": "SYN-PROV-DERM-008",
+      "visit_type": "OPD"
+    },
+    {
+      "identifier": "SYN-HEN-0008",
+      "given_name": "Uma",
+      "family_name": "Connectorcase",
+      "gender": "F",
+      "birthdate": "1959-07-08",
+      "department": "General Surgery",
+      "provider": "SYN-PROV-SURG-011",
+      "visit_type": "IPD"
+    },
+    {
+      "identifier": "SYN-HEN-0009",
+      "given_name": "Karthik",
+      "family_name": "Syntheticcase",
+      "gender": "M",
+      "birthdate": "1990-04-03",
+      "department": "Emergency Medicine",
+      "provider": "SYN-PROV-EMER-012",
+      "visit_type": "OPD",
+      "visit_status": "completed",
+      "chief_complaint": "FM-BAHMNI-LAB-R1 synthetic cold and fever visit for Karthik; no real contact data",
+      "synthetic_contact": {
+        "phone": "000-000-0000",
+        "email": "karthik.synthetic.invalid@example.invalid"
+      },
+      "diagnosis_notes": [
+        "FM-BAHMNI-LAB-R1 diagnosis: synthetic common cold for Karthik",
+        "FM-BAHMNI-LAB-R1 diagnosis: synthetic fever for Karthik"
+      ]
+    }
+  ],
+  "records": {
+    "appointment_comment_prefix": "FM-BAHMNI-LAB-R1 synthetic appointment",
+    "encounter_marker_prefix": "FM-BAHMNI-LAB-R1 synthetic encounter",
+    "condition_texts": [
+      "FM-BAHMNI-LAB-R1 synthetic controlled hypertension",
+      "FM-BAHMNI-LAB-R1 synthetic follow-up fracture care",
+      "FM-BAHMNI-LAB-R1 synthetic pediatric observation",
+      "FM-BAHMNI-LAB-R1 synthetic diabetes review",
+      "FM-BAHMNI-LAB-R1 synthetic acute bronchospasm",
+      "FM-BAHMNI-LAB-R1 synthetic imaging follow-up",
+      "FM-BAHMNI-LAB-R1 synthetic dermatitis review",
+      "FM-BAHMNI-LAB-R1 synthetic post-procedure review",
+      "FM-BAHMNI-LAB-R1 synthetic cold and fever"
+    ],
+    "allergy_comment": "FM-BAHMNI-LAB-R1 synthetic low-severity medication allergy; not real patient data",
+    "document_note": "FM-BAHMNI-LAB-R1 synthetic document metadata only; no real attachment bytes are stored"
+  },
+  "concepts": {
+    "weight_kg": "5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "height_cm": "5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "temperature_c": "5088AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "pulse": "5087AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "systolic_bp": "5085AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "diastolic_bp": "5086AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "serum_glucose": "887AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "white_blood_cells": "678AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "serum_creatinine_mg_dl": "164364AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "complete_blood_count": "1019AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "ultrasound": "26b938d8-2cd4-44a3-b667-eb46b6aa0b7b",
+    "electrocardiogram_diagnosis": "159565AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "document_text": "d3a35a0b-5e07-11ef-8f7c-0242ac120002",
+    "penicillin": "81724AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "dose_mg": "161553AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "route_oral": "d4634f75-5e07-11ef-8f7c-0242ac120002",
+    "quantity_tablet": "1513AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "duration_days": "1072AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "respiratory_rate": "5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "cough_diagnosis": "143264AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "fever_diagnosis": "140238AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "acute_coryza": "106AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "known_openmrs_uuids": {
+    "patient_identifier_type_name": "Patient Identifier",
+    "base_location_name": "OPD-1",
+    "encounter_types": [
+      "Consultation",
+      "LAB_RESULT",
+      "Patient Document",
+      "INVESTIGATION"
+    ],
+    "order_types": {
+      "drug_order": "131168f4-15f5-102d-96e4-000c29c2a5d7",
+      "test_order": "52a447d3-a64a-11e3-9aeb-50e549534c5e",
+      "lab_order": "d3560b17-5e07-11ef-8f7c-0242ac120002",
+      "radiology_order": "d3561dc0-5e07-11ef-8f7c-0242ac120002",
+      "procedure_order": "3f224d3e-afd7-4e90-8f14-34cf481b6d0f"
+    },
+    "care_setting_outpatient": "6f0c9a92-6f24-11e3-af88-005056821db0",
+    "frequency_once_daily": "d46af615-5e07-11ef-8f7c-0242ac120002",
+    "drug_search": "Bupivacaine"
+  },
+  "contact_defaults": {
+    "patient_phone_placeholder": "000-000-0000",
+    "patient_email_placeholder": "karthik.synthetic.invalid@example.invalid",
+    "privacy_note": "Placeholders are intentionally invalid and synthetic. Do not commit real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests."
+  }
+}
