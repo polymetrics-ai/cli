@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Phone Number ID."
+    },
+    "display_phone_number": {
+      "type": "string",
+      "description": "Formatted display phone number (PHI-adjacent business number)."
+    },
+    "verified_name": {
+      "type": "string",
+      "description": "Verified business display name."
+    },
+    "quality_rating": {
+      "type": "string",
+      "description": "Messaging quality rating (GREEN/YELLOW/RED)."
+    },
+    "code_verification_status": {
+      "type": "string",
+      "description": "Verification status of the number."
+    },
+    "platform_type": {
+      "type": "string",
+      "description": "Platform type (CLOUD_API/ON_PREMISE)."
+    },
+    "throughput": {
+      "type": "object",
+      "description": "Messaging throughput level.",
+      "additionalProperties": true
+    },
+    "name_status": {
+      "type": "string",
+      "description": "Display-name review status."
+    }
+  }
+}

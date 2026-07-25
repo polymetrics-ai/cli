@@ -15,8 +15,8 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 	if err != nil {
 		t.Fatalf("LoadAll(defs): %v", err)
 	}
-	if len(bundles) != 547 {
-		t.Fatalf("bundle count = %d, want 547", len(bundles))
+	if len(bundles) != 548 {
+		t.Fatalf("bundle count = %d, want 548", len(bundles))
 	}
 
 	registry := New()
@@ -55,8 +55,8 @@ func TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides(t *testing.T) {
 func TestRegistryCatalogEntriesComeFromDefinitions(t *testing.T) {
 	registry := New()
 	entries := registry.CatalogEntries()
-	if len(entries) < 547 {
-		t.Fatalf("CatalogEntries() count = %d, want at least 547 bundle/native definitions", len(entries))
+	if len(entries) < 548 {
+		t.Fatalf("CatalogEntries() count = %d, want at least 548 bundle/native definitions", len(entries))
 	}
 
 	var github connectors.Definition

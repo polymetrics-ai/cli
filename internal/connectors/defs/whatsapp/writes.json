@@ -1,0 +1,999 @@
+{
+  "actions": [
+    {
+      "name": "send_text_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "text": {
+            "type": "object",
+            "description": "Text body object {body, preview_url}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_image_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "image": {
+            "type": "object",
+            "description": "Image object {id|link, caption}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_audio_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "audio": {
+            "type": "object",
+            "description": "Audio object {id|link}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_video_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "video": {
+            "type": "object",
+            "description": "Video object {id|link, caption}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_document_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "document": {
+            "type": "object",
+            "description": "Document object {id|link, caption, filename} (e.g. lab-result PDF).",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_sticker_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "sticker": {
+            "type": "object",
+            "description": "Sticker object {id|link}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_location_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "location": {
+            "type": "object",
+            "description": "Location object {latitude, longitude, name, address}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_contacts_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "contacts": {
+            "type": "array",
+            "description": "Top-level contacts array.",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_interactive_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "interactive": {
+            "type": "object",
+            "description": "Interactive object with action.rows/buttons arrays.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_template_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "template": {
+            "type": "object",
+            "description": "Template object {name, language, components[]} (appointment/OTP/utility).",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "send_reaction_message",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "to"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ],
+            "description": "Always 'whatsapp'."
+          },
+          "to": {
+            "type": "string",
+            "description": "Recipient WhatsApp number in E.164 (patient PHI; redacted in plans)."
+          },
+          "type": {
+            "type": "string",
+            "description": "Message type."
+          },
+          "reaction": {
+            "type": "object",
+            "description": "Reaction object {message_id, emoji}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent"
+    },
+    {
+      "name": "mark_message_read",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "message_id"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "read"
+            ]
+          },
+          "message_id": {
+            "type": "string",
+            "description": "Inbound message id to mark as read."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "marks an inbound patient message as read"
+    },
+    {
+      "name": "send_typing_indicator",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/messages",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "message_id"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "read"
+            ]
+          },
+          "message_id": {
+            "type": "string",
+            "description": "Inbound message id to acknowledge with a typing indicator."
+          },
+          "typing_indicator": {
+            "type": "object",
+            "description": "Typing indicator object {type: text}.",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sends a typing indicator on an inbound patient conversation"
+    },
+    {
+      "name": "create_message_template",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.waba_id }}/message_templates",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name",
+          "language",
+          "category"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Template name."
+          },
+          "language": {
+            "type": "string",
+            "description": "Template language code."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "UTILITY",
+              "MARKETING",
+              "AUTHENTICATION"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Template components array."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates a WhatsApp message template pending Meta review"
+    },
+    {
+      "name": "update_message_template",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ record.template_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "template_id"
+        ],
+        "properties": {
+          "template_id": {
+            "type": "string",
+            "description": "Message template ID to edit."
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "UTILITY",
+              "MARKETING",
+              "AUTHENTICATION"
+            ]
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Updated components array."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "edits an existing message template",
+      "path_fields": [
+        "template_id"
+      ]
+    },
+    {
+      "name": "delete_message_template",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.waba_id }}/message_templates",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Template name to delete."
+          },
+          "hsm_id": {
+            "type": "string",
+            "description": "Optional specific template id to delete."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "permanently deletes a message template",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "update_business_profile",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/whatsapp_business_profile",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "messaging_product"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          },
+          "about": {
+            "type": "string",
+            "description": "Business about text."
+          },
+          "address": {
+            "type": "string",
+            "description": "Business address."
+          },
+          "description": {
+            "type": "string",
+            "description": "Business description."
+          },
+          "email": {
+            "type": "string",
+            "description": "Business contact email."
+          },
+          "vertical": {
+            "type": "string",
+            "description": "Business vertical (e.g. HEALTH)."
+          },
+          "websites": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Business websites."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "updates the WhatsApp business profile for the number"
+    },
+    {
+      "name": "register_phone_number",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/register",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "messaging_product",
+          "pin"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          },
+          "pin": {
+            "type": "string",
+            "description": "6-digit registration PIN (two-step verification)."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "registers the phone number on Cloud API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "deregister_phone_number",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/deregister",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "messaging_product"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deregisters the phone number from Cloud API",
+      "confirm": "destructive"
+    },
+    {
+      "name": "request_verification_code",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/request_code",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "code_method"
+        ],
+        "properties": {
+          "code_method": {
+            "type": "string",
+            "enum": [
+              "SMS",
+              "VOICE"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "description": "Language code for the verification message."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "requests a phone-number verification code"
+    },
+    {
+      "name": "verify_phone_number",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/verify_code",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Verification code received via SMS/VOICE."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "submits the phone-number verification code"
+    },
+    {
+      "name": "set_two_step_pin",
+      "kind": "update",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "pin"
+        ],
+        "properties": {
+          "pin": {
+            "type": "string",
+            "description": "New 6-digit two-step verification PIN."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "sets or changes the two-step verification PIN",
+      "confirm": "destructive"
+    },
+    {
+      "name": "subscribe_waba_app",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.waba_id }}/subscribed_apps",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "messaging_product"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "subscribes the app to WABA webhooks"
+    },
+    {
+      "name": "unsubscribe_waba_app",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.waba_id }}/subscribed_apps",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "messaging_product"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "unsubscribes the app from WABA webhooks",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "create_qr_code",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/message_qrdls",
+      "body_type": "json",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "prefilled_message"
+        ],
+        "properties": {
+          "prefilled_message": {
+            "type": "string",
+            "description": "Prefilled message body for the QR/short link."
+          },
+          "generate_qr_image": {
+            "type": "string",
+            "enum": [
+              "SVG",
+              "PNG"
+            ]
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "creates a QR code / short link for the number"
+    },
+    {
+      "name": "delete_qr_code",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.phone_number_id }}/message_qrdls/{{ record.code }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "code"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "QR code id to delete."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "deletes a QR code / short link",
+      "path_fields": [
+        "code"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "upload_media",
+      "kind": "create",
+      "method": "POST",
+      "path": "/{{ config.phone_number_id }}/media",
+      "body_type": "multipart",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "media_file",
+          "type"
+        ],
+        "properties": {
+          "messaging_product": {
+            "type": "string",
+            "enum": [
+              "whatsapp"
+            ]
+          },
+          "media_file": {
+            "type": "string",
+            "description": "Local file path to upload (bounded; image/audio/video/document/sticker); redacted in plans as PHI."
+          },
+          "type": {
+            "type": "string",
+            "description": "MIME type of the media file."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "uploads bounded media to WhatsApp and returns a media id (patient content; PHI)",
+      "multipart": {
+        "max_bytes": 104857600,
+        "parts": [
+          {
+            "name": "messaging_product",
+            "type": "field",
+            "field": "messaging_product"
+          },
+          {
+            "name": "type",
+            "type": "field",
+            "field": "type"
+          },
+          {
+            "name": "file",
+            "type": "file",
+            "field": "media_file",
+            "required": true,
+            "max_bytes": 104857600
+          }
+        ]
+      }
+    },
+    {
+      "name": "delete_media",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ record.media_id }}",
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "media_id"
+        ],
+        "properties": {
+          "media_id": {
+            "type": "string",
+            "description": "Media id to delete."
+          }
+        },
+        "additionalProperties": true
+      },
+      "risk": "permanently deletes an uploaded media object",
+      "path_fields": [
+        "media_id"
+      ],
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    }
+  ]
+}

@@ -515,6 +515,7 @@
 | `weatherstack` | [`icons/weatherstack.svg`](../icons/weatherstack.svg) | Weatherstack | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://weatherstack.com/documentation) | bundle definition |
 | `web-scrapper` | [`icons/web-scraper.svg`](../icons/web-scraper.svg) | Web Scrapper | `api` | ga | check, catalog, read, write | 6 | 5 | [Documentation](https://webscraper.io/documentation/web-scraper-cloud/api) | bundle definition |
 | `webflow` | [`icons/webflow.svg`](../icons/webflow.svg) | Webflow | `api` | ga | check, catalog, read, write | 15 | 13 | [Documentation](https://developers.webflow.com/data/reference) | bundle definition |
+| `whatsapp` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | WhatsApp | `api` | beta | check, catalog, read, write, query | 4 | 28 | [Documentation](https://developers.facebook.com/docs/whatsapp/cloud-api) | bundle definition |
 | `when-i-work` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | When I Work | `api` | ga | check, catalog, read, write | 14 | 26 | [Documentation](https://apidocs.wheniwork.com/) | bundle definition |
 | `whisky-hunter` | [`icons/whiskyhunter.svg`](../icons/whiskyhunter.svg) | Whisky Hunter | `api` | ga | check, catalog, read | 7 | 0 | [Documentation](https://whiskyhunter.net/api/) | bundle definition |
 | `wikipedia-pageviews` | [`icons/wikipedia-pageviews.svg`](../icons/wikipedia-pageviews.svg) | Wikipedia Pageviews | `api` | ga | check, catalog, read | 2 | 0 | [Documentation](https://wikitech.wikimedia.org/wiki/Analytics/AQS/Pageviews) | bundle definition |

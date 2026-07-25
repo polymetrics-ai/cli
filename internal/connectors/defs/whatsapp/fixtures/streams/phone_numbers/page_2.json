@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/phone_numbers",
+    "query": {
+      "limit": "synthetic-conformance-value",
+      "after": "CURSOR_PAGE_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pn_fixture_2",
+          "display_phone_number": "+1 555 0199",
+          "verified_name": "Fixture Clinic North",
+          "quality_rating": "GREEN",
+          "code_verification_status": "VERIFIED",
+          "platform_type": "CLOUD_API",
+          "throughput": {
+            "level": "STANDARD"
+          },
+          "name_status": "APPROVED"
+        }
+      ],
+      "paging": {
+        "cursors": {}
+      }
+    }
+  }
+}

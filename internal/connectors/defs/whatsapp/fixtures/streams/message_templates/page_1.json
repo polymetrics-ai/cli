@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/message_templates",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "tpl_fixture_1",
+          "name": "appointment_reminder",
+          "language": "en_US",
+          "category": "UTILITY",
+          "status": "APPROVED",
+          "components": [
+            {
+              "type": "BODY",
+              "text": "Your appointment is on {{1}}."
+            }
+          ]
+        }
+      ],
+      "paging": {
+        "cursors": {}
+      }
+    }
+  }
+}

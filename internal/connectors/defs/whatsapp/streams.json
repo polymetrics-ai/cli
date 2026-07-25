@@ -1,0 +1,97 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "cursor",
+      "cursor_param": "after",
+      "token_path": "paging.cursors.after"
+    },
+    "check": {
+      "method": "GET",
+      "path": "/{{ config.waba_id }}/phone_numbers",
+      "query": {
+        "limit": "1"
+      }
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "whatsapp access_token is missing or invalid; re-run pm credentials add whatsapp"
+      },
+      {
+        "status": 403,
+        "hint": "the Graph token lacks whatsapp_business_management/whatsapp_business_messaging scope for this WABA/number"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Graph API rate/messaging-tier limit exceeded; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "phone_numbers",
+      "path": "/{{ config.waba_id }}/phone_numbers",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/phone_numbers.json",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "computed_fields": {
+        "name_status": "{{ record.name_status }}"
+      }
+    },
+    {
+      "name": "message_templates",
+      "path": "/{{ config.waba_id }}/message_templates",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/message_templates.json",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      }
+    },
+    {
+      "name": "subscribed_apps",
+      "path": "/{{ config.waba_id }}/subscribed_apps",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/subscribed_apps.json",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      },
+      "computed_fields": {
+        "id": "{{ record.whatsapp_business_api_data.id }}",
+        "name": "{{ record.whatsapp_business_api_data.name }}",
+        "link": "{{ record.whatsapp_business_api_data.link }}"
+      }
+    },
+    {
+      "name": "waba",
+      "path": "/{{ config.waba_id }}",
+      "records": {
+        "single_object": true
+      },
+      "schema": "schemas/waba.json",
+      "pagination": {
+        "type": "none"
+      }
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/phone_numbers",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "pn_fixture_1",
+          "display_phone_number": "+1 555 0100",
+          "verified_name": "Fixture Clinic",
+          "quality_rating": "GREEN",
+          "code_verification_status": "VERIFIED",
+          "platform_type": "CLOUD_API",
+          "throughput": {
+            "level": "STANDARD"
+          },
+          "name_status": "APPROVED"
+        }
+      ],
+      "paging": {
+        "cursors": {
+          "after": "CURSOR_PAGE_2"
+        }
+      }
+    }
+  }
+}

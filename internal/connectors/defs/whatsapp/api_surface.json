@@ -1,0 +1,442 @@
+{
+  "api": "WhatsApp Business Platform (Cloud API + Business Management API) on Meta Graph API v25.0, plus the WhatsApp Web multidevice (whatsmeow) access mode",
+  "docs": "https://developers.facebook.com/docs/whatsapp/cloud-api",
+  "reviewed_at": "2026-07-25",
+  "operation_ledger_version": 1,
+  "scope": "Union of two access modes: the official Cloud API + Business Management API messaging/media/phone-number/template/analytics/WABA/webhook surface (graph.facebook.com), and the WhatsApp Web multidevice surface demonstrated by vicentereig/whatsapp-cli. Every operation is a stream, direct read, typed reverse-ETL write, bounded binary, or an explicitly blocked ledger row with evidence.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}/phone_numbers",
+      "covered_by": {
+        "stream": "phone_numbers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}/message_templates",
+      "covered_by": {
+        "stream": "message_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}/subscribed_apps",
+      "covered_by": {
+        "stream": "subscribed_apps"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}",
+      "covered_by": {
+        "stream": "waba"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{PHONE_NUMBER_ID}",
+      "covered_by": {
+        "direct_read": "phone-numbers get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{TEMPLATE_ID}",
+      "covered_by": {
+        "direct_read": "templates get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{PHONE_NUMBER_ID}/whatsapp_business_profile",
+      "covered_by": {
+        "direct_read": "profile get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{MEDIA_ID}",
+      "covered_by": {
+        "direct_read": "media get-url"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}?fields=analytics",
+      "covered_by": {
+        "direct_read": "analytics messaging"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}?fields=conversation_analytics",
+      "covered_by": {
+        "direct_read": "analytics conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}?fields=pricing_analytics",
+      "covered_by": {
+        "direct_read": "analytics pricing"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}/template_analytics",
+      "covered_by": {
+        "direct_read": "analytics template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_text_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_image_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_audio_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_video_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_document_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_sticker_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_location_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_contacts_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_interactive_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_template_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_reaction_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "mark_message_read"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/messages",
+      "covered_by": {
+        "write": "send_typing_indicator"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{WABA_ID}/message_templates",
+      "covered_by": {
+        "write": "create_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{TEMPLATE_ID}",
+      "covered_by": {
+        "write": "update_message_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{WABA_ID}/message_templates",
+      "covered_by": {
+        "write": "delete_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/whatsapp_business_profile",
+      "covered_by": {
+        "write": "update_business_profile"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/register",
+      "covered_by": {
+        "write": "register_phone_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/deregister",
+      "covered_by": {
+        "write": "deregister_phone_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/request_code",
+      "covered_by": {
+        "write": "request_verification_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/verify_code",
+      "covered_by": {
+        "write": "verify_phone_number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}",
+      "covered_by": {
+        "write": "set_two_step_pin"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{WABA_ID}/subscribed_apps",
+      "covered_by": {
+        "write": "subscribe_waba_app"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{WABA_ID}/subscribed_apps",
+      "covered_by": {
+        "write": "unsubscribe_waba_app"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/message_qrdls",
+      "covered_by": {
+        "write": "create_qr_code"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{PHONE_NUMBER_ID}/message_qrdls/{QR_ID}",
+      "covered_by": {
+        "write": "delete_qr_code"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{PHONE_NUMBER_ID}/media",
+      "covered_by": {
+        "write": "upload_media"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/{MEDIA_ID}",
+      "covered_by": {
+        "write": "delete_media"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{WABA_ID}/webhooks/verification",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Webhook verification handshake is an inbound HTTP challenge served by the integrator, not a syncable Graph read or a caller-invoked write.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{APP_ID}/webhooks/messages",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Inbound patient messages arrive as webhook POSTs to the integrator's own endpoint (PHI); ingestion is event-driven, not a pollable Graph stream. Model downstream ingestion in the EMR/webhook receiver, not this connector.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/{APP_ID}/webhooks/statuses",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Message status callbacks (sent/delivered/read/failed) are webhook POSTs, not a pollable Graph stream.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/{PHONE_NUMBER_ID}/message_qrdls",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "QR/short-link listing is covered by the create/delete_qr_code reverse-ETL actions; a standalone list read is redundant for the messaging use case.",
+        "source_url": "https://developers.facebook.com/docs/whatsapp/cloud-api/reference",
+        "duplicate_of": "create_qr_code"
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://sync",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web history backfill + realtime capture + concurrent media (whatsapp-cli `sync`); requires a whatsmeow QR session and local store, not the Graph HTTP engine.",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://chats/list",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web chat list (whatsapp-cli `chats list`); local store read over the whatsmeow session.",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://messages/list",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web messages for a chat (whatsapp-cli `messages list --chat`).",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://contacts/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web contacts (whatsapp-cli `contacts search`, max 50).",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://messages/search",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web content search across chats (whatsapp-cli `messages search --query`).",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://send",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web text send (whatsapp-cli `send --to --message`); local reverse-ETL over the whatsmeow session, PHI.",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://media/download",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web bounded attachment download (whatsapp-cli `media download`).",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    },
+    {
+      "method": "LOCAL",
+      "path": "whatsmeow://auth",
+      "operation": {
+        "model": "local_workflow",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "WhatsApp Web QR login + ~20-day session lifecycle (whatsapp-cli `auth`, `--store`); no session secret printed at inspection.",
+        "source_url": "https://github.com/vicentereig/whatsapp-cli",
+        "notes": "WhatsApp Web multidevice access mode modeled from vicentereig/whatsapp-cli; config-scoped by spec.mode=web and never conflated with Cloud API credentials."
+      }
+    }
+  ]
+}
