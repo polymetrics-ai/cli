@@ -1014,6 +1014,16 @@ PM_REVIEW_SECRET_SENTINEL='do-not-copy-this-environment-value' \
     --head "$head_sha" --trust-bundle "$system_trust" >"$compile_output"
 compile_status=$?
 if [[ $compile_status -ne 0 ]]; then
+  python3 - "$compile_output" >&2 <<'PY' || true
+import json,sys
+try:
+    d=json.load(open(sys.argv[1]))
+except Exception as exc:
+    print(f"compile-block: unreadable manifest: {exc}"); raise SystemExit
+print(f"compile-block: status={d.get('status')} packets={len(d.get('packets',[]))} impact_files={len(d.get('impact_graph',{}).get('files',[]))} findings={len(d.get('findings',[]))}")
+for f in d.get('findings',[])[:12]:
+    print(f"  finding: {f.get('category')}: {f.get('claim')}")
+PY
   fail "exact-head compiler blocked the allowlisted current range"
 elif grep -Fq 'do-not-copy-this-environment-value' "$compile_output"; then
   fail "compiler leaked an environment value"
