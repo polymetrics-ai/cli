@@ -964,6 +964,20 @@ fi
 # metadata only, with complete packet assignment and no environment-value leakage.
 system_repo="$test_tmp/system-repo"
 git clone --no-hardlinks --quiet "$repo_root" "$system_repo"
+# CI uses shallow checkouts that omit the exact base commit and the history the compiler needs to
+# diff base...head. Deepen the disposable clone from the upstream origin when the base is not an
+# ancestor of the clone HEAD. Local full-history checkouts already satisfy this and skip the fetch.
+if ! git -C "$system_repo" merge-base --is-ancestor \
+    0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 HEAD 2>/dev/null; then
+  system_origin_url="$(git -C "$repo_root" remote get-url origin 2>/dev/null || true)"
+  if [[ -n "$system_origin_url" ]]; then
+    git -C "$system_repo" fetch --quiet --unshallow "$system_origin_url" 2>/dev/null \
+      || git -C "$system_repo" fetch --quiet --deepen=200 "$system_origin_url" 2>/dev/null \
+      || git -C "$system_repo" fetch --quiet "$system_origin_url" \
+           0f8c964ba9cfbe1b1eec8e7998eacf4158ef0e20 2>/dev/null \
+      || true
+  fi
+fi
 treatment_patch="$test_tmp/complete-treatment.patch"
 git -C "$repo_root" diff HEAD --binary >"$treatment_patch"
 if [[ -s "$treatment_patch" ]]; then
