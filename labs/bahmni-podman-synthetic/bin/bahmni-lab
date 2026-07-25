@@ -1,0 +1,180 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+LAB_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+LABCTL="${LAB_ROOT}/lib/labctl.py"
+LAB_ID="fm-bahmni-lab-r1"
+LAB_HOME="${BAHMNI_LAB_HOME:-/tmp/${LAB_ID}}"
+MACHINE="${BAHMNI_LAB_MACHINE:-fm-bahmni-lab-r1-machine}"
+CONNECTION="${BAHMNI_LAB_CONNECTION:-${MACHINE}}"
+PROJECT="${BAHMNI_LAB_PROJECT:-fm_bahmni_lab_r1}"
+COMPOSE_FILE="${LAB_HOME}/bahmni-docker/bahmni-standard/docker-compose.podman.yml"
+ENV_FILE="${LAB_HOME}/bahmni-docker/bahmni-standard/.env.fm"
+PODMAN_WRAPPER="${LAB_HOME}/bin/podman-fm"
+
+usage() {
+  cat <<'USAGE'
+Usage: bahmni-lab <command> [args]
+
+Commands:
+  inventory [--json]            Read-only Podman inventory.
+  prepare [--dry-run]           Clone pinned Bahmni source into the task runtime and generate Podman files.
+  start                         Start the pinned Bahmni Standard stack with rootless Podman/podman-compose.
+  ps                            Show task project containers only.
+  health [--json]               Check local loopback HTTP/FHIR health.
+  seed [--dry-run] [--json]     Idempotently seed synthetic clinical data through supported APIs.
+  verify [--offline]            Verify fixtures or live seeded API records.
+  check-synthetic [--json]      Prove fixture identities are synthetic and contact data is invalid placeholder only.
+  credentials [--path|--show]   Print credential file path, or explicitly show local-only credentials.
+  reset --yes                   Stop/remove only this compose project and its volumes.
+  cleanup --yes                 reset --yes, then remove this task runtime directory. Does not stop the Podman machine.
+  urls                          Print local loopback URLs.
+
+This script never invokes Docker. It uses rootless podman and podman-compose only.
+USAGE
+}
+
+require_podman() {
+  command -v podman >/dev/null || { echo "podman not found" >&2; exit 1; }
+}
+
+require_podman_compose() {
+  command -v podman-compose >/dev/null || {
+    echo "podman-compose not found; install/use Podman Compose, not Docker Compose" >&2
+    exit 1
+  }
+}
+
+connection_works() {
+  podman --connection "${CONNECTION}" info --format json >/dev/null 2>&1
+}
+
+ensure_rootless_connection() {
+  local rootless
+  rootless="$(podman --connection "${CONNECTION}" info --format '{{.Host.Security.Rootless}}' 2>/dev/null || true)"
+  if [[ "${rootless}" != "true" ]]; then
+    echo "refusing non-rootless Podman connection ${CONNECTION}" >&2
+    exit 1
+  fi
+}
+
+safe_lab_home() {
+  local resolved base
+  resolved="$(${PYTHON_BIN} -c 'import os,sys; print(os.path.realpath(os.path.expanduser(sys.argv[1])))' "${LAB_HOME}")"
+  base="$(basename "${resolved}")"
+  if [[ -z "${resolved}" || "${resolved}" == "/" || "${base}" != "${LAB_ID}" ]]; then
+    echo "refusing unsafe BAHMNI_LAB_HOME cleanup target: ${LAB_HOME}" >&2
+    echo "cleanup target basename must be exactly ${LAB_ID}" >&2
+    exit 2
+  fi
+  printf '%s\n' "${resolved}"
+}
+
+ensure_connection() {
+  require_podman
+  if connection_works; then
+    ensure_rootless_connection
+    return 0
+  fi
+
+  if podman machine list --format '{{.Name}}' 2>/dev/null | grep -Fxq "${MACHINE}"; then
+    # Start only this task-owned machine. Do not touch defaults or unrelated machines.
+    podman machine start "${MACHINE}" >/dev/null
+  else
+    podman machine init --cpus "${BAHMNI_LAB_CPUS:-8}" --memory "${BAHMNI_LAB_MEMORY_MB:-16384}" --disk-size "${BAHMNI_LAB_DISK_GB:-80}" "${MACHINE}"
+    podman machine start "${MACHINE}" >/dev/null
+  fi
+
+  if ! connection_works; then
+    echo "unable to connect to task-owned rootless Podman connection ${CONNECTION}" >&2
+    exit 1
+  fi
+  ensure_rootless_connection
+}
+
+compose() {
+  require_podman_compose
+  podman-compose --podman-path "${PODMAN_WRAPPER}" -f "${COMPOSE_FILE}" --env-file "${ENV_FILE}" -p "${PROJECT}" "$@"
+}
+
+ensure_prepared() {
+  "${PYTHON_BIN}" "${LABCTL}" prepare >/dev/null
+}
+
+require_yes() {
+  if [[ "${1:-}" != "--yes" ]]; then
+    echo "refusing destructive task-resource operation without --yes" >&2
+    exit 2
+  fi
+}
+
+cmd="${1:-}"
+if [[ -z "${cmd}" || "${cmd}" == "--help" || "${cmd}" == "-h" ]]; then
+  usage
+  exit 0
+fi
+shift || true
+
+case "${cmd}" in
+  inventory)
+    "${PYTHON_BIN}" "${LABCTL}" inventory "$@"
+    ;;
+  prepare)
+    "${PYTHON_BIN}" "${LABCTL}" prepare "$@"
+    ;;
+  start)
+    ensure_connection
+    ensure_prepared
+    profiles=(--profile bahmni-standard)
+    if [[ "${BAHMNI_LAB_ENABLE_SNOMED:-0}" == "1" ]]; then
+      profiles+=(--profile snowstorm-lite --profile cdss)
+    fi
+    compose "${profiles[@]}" up -d
+    "${PYTHON_BIN}" "${LABCTL}" health --json
+    ;;
+  ps)
+    ensure_connection
+    ensure_prepared
+    compose --profile bahmni-standard ps
+    ;;
+  health)
+    "${PYTHON_BIN}" "${LABCTL}" health "$@"
+    ;;
+  seed)
+    "${PYTHON_BIN}" "${LABCTL}" seed "$@"
+    ;;
+  verify)
+    "${PYTHON_BIN}" "${LABCTL}" verify "$@"
+    ;;
+  check-synthetic)
+    "${PYTHON_BIN}" "${LABCTL}" check-synthetic "$@"
+    ;;
+  credentials)
+    "${PYTHON_BIN}" "${LABCTL}" credentials "$@"
+    ;;
+  urls)
+    "${PYTHON_BIN}" "${LABCTL}" prepare --dry-run | "${PYTHON_BIN}" -c 'import json,sys; print(json.dumps(json.load(sys.stdin)["loopback_urls"], indent=2))'
+    ;;
+  reset)
+    require_yes "${1:-}"
+    ensure_connection
+    if [[ -f "${COMPOSE_FILE}" && -f "${ENV_FILE}" && -x "${PODMAN_WRAPPER}" ]]; then
+      compose --profile emr --profile bahmni-standard --profile bahmni-mart --profile openelis --profile odoo --profile pacs --profile snowstorm-lite --profile cdss down -v
+    else
+      echo "no generated compose files found under ${LAB_HOME}; nothing to reset"
+    fi
+    ;;
+  cleanup)
+    require_yes "${1:-}"
+    safe_home="$(safe_lab_home)"
+    "${BASH_SOURCE[0]}" reset --yes
+    rm -rf -- "${safe_home}"
+    echo "removed ${safe_home}; task-owned Podman machine ${MACHINE} was left running if it was running"
+    ;;
+  *)
+    usage >&2
+    exit 2
+    ;;
+esac

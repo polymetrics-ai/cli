@@ -1,0 +1,9 @@
+# Local human-only overrides and generated state for the Bahmni synthetic lab.
+.local/
+*.local.json
+local-contact-overrides.json
+local-contact-overrides*.json
+.env.local
+.local-credentials.json
+__pycache__/
+*.pyc

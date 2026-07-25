@@ -1,0 +1,36 @@
+{
+  "source_name": "SPARSH Hospital Hennur Road public hospital page",
+  "source_url": "https://www.sparshhospital.com/hospitals/sparsh-hospital-hennur-road/",
+  "retrieval_date": "2026-07-26",
+  "retrieval_tool": "chrome-devtools-axi",
+  "usage": "Structural example only. The local seeded organization is synthetic and is not an official SPARSH environment.",
+  "privacy_constraints": [
+    "Do not copy real doctor/provider names, biographies, schedules, phone numbers, emails, patient data, or contact details.",
+    "Only public specialty/department labels from the Hennur page are used to shape synthetic departments.",
+    "All seeded providers and patients are fictional and marked synthetic."
+  ],
+  "specialty_taxonomy": [
+    "Anaesthesiology",
+    "Bariatric Sciences",
+    "Bone Marrow Transplant",
+    "Cardiology",
+    "Critical Care Medicine",
+    "Maxillofacial and Dental Surgery",
+    "Dentistry",
+    "Dermatology",
+    "Emergency Medicine",
+    "Endocrinology and Diabetology",
+    "Pediatric Intensive Care",
+    "Radiation Oncology",
+    "Neuro Intervention Radiology",
+    "Radiology",
+    "Pulmonology",
+    "Dialysis",
+    "Orthopaedic",
+    "Neuroscience",
+    "Urology and Nephrology",
+    "Cosmetology and Cosmetic Surgery",
+    "General Surgery",
+    "Head and Neck Surgery"
+  ]
+}
