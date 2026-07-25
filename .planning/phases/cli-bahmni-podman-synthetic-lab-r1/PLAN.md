@@ -1,6 +1,7 @@
 # Plan: Bahmni Podman synthetic lab
 
 **Branch:** `fm/cli-bahmni-podman-synthetic-lab-r1`
+**Linked issue:** `Refs #516` — this lab is the local Bahmni Standard validation environment for the Bahmni connector CLI parity roadmap; it does not close that roadmap.
 **Mode:** Manual GSD programming-loop fallback because `scripts/gsd prompt programming-loop ...` is not in this repo-local adapter registry.
 **Safety posture:** rootless Podman only; loopback ports only; no Docker CLI/Engine/Desktop; no production credentials; no mutation of unrelated Podman workloads, machines, networks, volumes, or default connection.
 
