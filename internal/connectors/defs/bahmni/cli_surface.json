@@ -281,7 +281,7 @@
     },
     {
       "path": "appointments list",
-      "summary": "List Bahmni appointments as ETL records.",
+      "summary": "List Bahmni appointments as ETL records (scoped by appointment_date and/or patient_uuid; otherwise a single unpaged cross-patient read).",
       "intent": "etl",
       "availability": "implemented",
       "stream": "appointments",
@@ -592,7 +592,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "bahmni.patient_search",
-      "risk": "bounded typed POST read-query; the response is size-capped and PHI/identifier fields are redacted.",
+      "risk": "bounded typed POST read-query; the response is size-capped and secret-shaped fields are redacted, but the returned patient identifiers and address values are clinical PHI and are not field-redacted by the current engine.",
       "approval": "none: read-only POST query with a schema-gated body.",
       "notes": "Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.",
       "output_policy": "json_redacted",

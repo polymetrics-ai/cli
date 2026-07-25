@@ -10089,7 +10089,11 @@
         },
         "patient_uuid": {
           "type": "string",
-          "description": "Patient UUID context used to scope patient-linked streams (encounters, observations, visits, orders, lab results, diagnoses)."
+          "description": "Patient UUID context used to scope patient-linked streams (encounters, observations, visits, orders, lab results, appointments, diagnoses)."
+        },
+        "appointment_date": {
+          "type": "string",
+          "description": "ISO-8601 date/datetime used to scope the appointments stream to a single scheduling day; without it (or patient_uuid) the appointments read is not scoped and returns the deployment's whole appointment book in one response."
         }
       }
     },

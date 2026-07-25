@@ -26,6 +26,7 @@ AUTHENTICATION
   Use pm credentials add with --from-env or --value-stdin for secret fields.
 
 CONFIGURATION
+  appointment_date
   base_url
   patient_query
   patient_uuid
@@ -154,7 +155,7 @@ COMMAND SURFACE
     lab_orders list - List lab (test) orders as ETL records (scoped by patient_uuid). [intent=etl availability=implemented stream=lab_orders]
     lab_results list - List Bahmni-core lab result observations as ETL records (scoped by patient_uuid). [intent=etl availability=implemented stream=lab_results]
   Scheduling
-    appointments list - List Bahmni appointments as ETL records. [intent=etl availability=implemented stream=appointments]
+    appointments list - List Bahmni appointments as ETL records (scoped by appointment_date and/or patient_uuid; otherwise a single unpaged cross-patient read). [intent=etl availability=implemented stream=appointments]
     appointments create - Book a Bahmni patient appointment. [intent=reverse_etl availability=partial write=create_appointment]; approval: reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.; risk: clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.; notes: Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed.; flags: --patient-uuid, --service-uuid, --start-date-time
   Direct reads
     patient get - Retrieve a single patient resource by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
@@ -168,7 +169,7 @@ COMMAND SURFACE
     fhir encounter-read - Read a FHIR R4 Encounter resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
     fhir condition-read - Read a FHIR R4 Condition resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
     bahmnicore patient-detail - Read a consolidated Bahmni-core patient profile by UUID. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --uuid
-    bahmnicore patient-search - Schema-gated typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient). [intent=direct_read availability=implemented]; approval: none: read-only POST query with a schema-gated body.; risk: bounded typed POST read-query; the response is size-capped and PHI/identifier fields are redacted.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index
+    bahmnicore patient-search - Schema-gated typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient). [intent=direct_read availability=implemented]; approval: none: read-only POST query with a schema-gated body.; risk: bounded typed POST read-query; the response is size-capped and secret-shaped fields are redacted, but the returned patient identifiers and address values are clinical PHI and are not field-redacted by the current engine.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index
   Documents
     documents upload - Upload a bounded local patient document via multipart. [intent=reverse_etl availability=partial write=upload_patient_document]; approval: reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.; risk: clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.; notes: Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed.; flags: --document-file-path, --patient-uuid, --caption
   Help topics:

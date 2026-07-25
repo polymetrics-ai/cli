@@ -32,7 +32,9 @@ Connection fields:
 - `patient_query` (optional, string); identifier or name search term used to enumerate the
   `patients` stream (OpenMRS patient search `q`).
 - `patient_uuid` (optional, string); patient UUID context used to scope patient-linked streams
-  (encounters, observations, visits, orders, lab results, diagnoses).
+  (encounters, observations, visits, orders, lab results, appointments, diagnoses).
+- `appointment_date` (optional, string); ISO-8601 date/datetime used to scope the `appointments`
+  stream to a single scheduling day.
 
 Secret fields are redacted in logs and write previews: `password`.
 
@@ -48,7 +50,9 @@ OpenMRS REST list streams return a `{ "results": [...] }` envelope and page with
 `lab_results`, `appointments`, `diagnoses`) return top-level JSON arrays and explicitly disable the
 inherited offset paginator because those endpoints do not honor `limit`/`startIndex`. Patient-linked
 streams require a `patient_uuid` (or, for `patients`, a `patient_query`) config value to scope the
-request; see Known limits.
+request; see Known limits. Because those streams do not page, an unscoped read fetches the whole
+result set in one response: scope `appointments` with `appointment_date` and/or `patient_uuid` rather
+than reading a deployment's entire cross-patient appointment book at once.
 
 ## Write actions & risks
 
@@ -91,7 +95,8 @@ require `--confirm destructive`.
   streams are full-refresh rather than incremental.
 - `patients` enumeration requires a search term: set `patient_query` (OpenMRS patient list is a
   search endpoint). Patient-linked streams (encounters/observations/visits/orders/lab results/
-  diagnoses) require a `patient_uuid` context.
+  diagnoses) require a `patient_uuid` context. `appointments` accepts `appointment_date` and/or
+  `patient_uuid` scoping and is otherwise a single unpaged cross-patient read.
 - The typed Bahmni patient search is modeled as a schema-gated JSON POST read-query with
   connector-authored flags; arbitrary/raw request bodies remain intentionally unavailable.
 - Patient-document binary download and patient image binary reads are blocked by default rather than
