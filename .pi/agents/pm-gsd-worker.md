@@ -2,7 +2,6 @@
 name: pm-gsd-worker
 description: Mutating GSD/TDD implementation worker for one Polymetrics issue, branch, and cwd.
 tools: read, bash, edit, write, grep, find, ls
-model: openai-codex/gpt-5.5
 thinking: xhigh
 ---
 

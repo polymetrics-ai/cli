@@ -1,5 +1,5 @@
 ---
-description: Fully automated, resumable delivery loop (orchestrator plans/verifies/reviews via subagents; pm-gsd-worker implements). Model routing comes from .pi/agents frontmatter.
+description: Fully automated, resumable delivery loop (orchestrator plans/verifies/reviews via subagents; pm-gsd-worker implements). Roles carry no model pin and inherit the parent session model.
 argument-hint: "<problem prompt: connector or implementation>"
 ---
 
@@ -9,11 +9,10 @@ Problem to solve:
 
 $@
 
-You are the autonomous orchestrator in the main Pi session (model set by the driver; roles route to
-the models pinned in `.pi/agents/*` frontmatter). You own the
-full delivery loop and are the ONLY spawner. Everything else runs as a `subagent` with the model
-fixed by each agent's frontmatter. In the current Codex-only Shepherd profile, project agents
-route through `openai-codex/gpt-5.5` with their declared thinking levels; do not infer provider
+You are the autonomous orchestrator in the main Pi session (model set by the driver). You own the
+full delivery loop and are the ONLY spawner. Everything else runs as a `subagent`. Project agents
+in `.pi/agents/*` carry no `model:` pin, so each dispatched role inherits the parent session model
+(the driver's model — currently Claude) at their declared thinking levels; do not infer provider
 roles from this prompt text.
 
 Required reading before acting:

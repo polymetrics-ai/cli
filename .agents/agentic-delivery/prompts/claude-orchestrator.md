@@ -29,10 +29,11 @@ apply it before anything else.
    - REVIEW → adversarially review the sub-PR; leave a disposition on EVERY finding per
      `code-review-disposition-template.md`.
    - INTEGRATE / PARENT_FINALIZE → merge sub-PR into the parent branch; stop at the human gate.
-3. **IMPLEMENTATION goes to Codex, not you.** For EXECUTE / CORRECT (writing production code), do NOT
-   write it yourself. Dispatch a Codex worker via bash, in the sub-issue's own worktree/cwd:
+3. **IMPLEMENTATION goes to a dispatched worker, not you.** For EXECUTE / CORRECT (writing
+   production code), do NOT write it yourself. Dispatch a `pm-gsd-worker` via bash, in the
+   sub-issue's own worktree/cwd, on the same Claude model that drives this orchestrator:
    ```
-   pi -p --model openai-codex/gpt-5.5 --tools read,bash,edit,write,grep,find,ls --approve \
+   pi -p --model claude-bridge/claude-opus-4-8 --tools read,bash,edit,write,grep,find,ls --approve \
      --agentScope both --confirmProjectAgents false \
      "You are pm-gsd-worker. Implement <sub-issue> per its PLAN.md and .agents/connector-migration/
       templates/connector-rollout-prompt.md. Commit per green slice; never push to main; return a handoff."
