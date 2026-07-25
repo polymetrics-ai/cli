@@ -33,6 +33,10 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"array","items":{"type":"string"}}`,
 		},
 		{
+			name: "anyOf",
+			raw:  `{"type":"object","anyOf":[{"required":["id"]},{"required":["link"]}]}`,
+		},
+		{
 			name: "enum",
 			raw:  `{"type":"string","enum":["a","b"]}`,
 		},
@@ -177,6 +181,18 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `{"user":{"login":5}}`,
 			wantErr:   true,
 			errSubstr: "/user/login",
+		},
+		{
+			name:     "anyOf valid",
+			raw:      `{"type":"object","anyOf":[{"required":["id"]},{"required":["link"]}],"properties":{"id":{"type":"string"},"link":{"type":"string"},"caption":{"type":"string"}},"additionalProperties":false}`,
+			instance: `{"link":"https://example.test/image.jpg","caption":"hello"}`,
+		},
+		{
+			name:      "anyOf invalid",
+			raw:       `{"type":"object","anyOf":[{"required":["id"]},{"required":["link"]}],"properties":{"id":{"type":"string"},"link":{"type":"string"},"caption":{"type":"string"}},"additionalProperties":false}`,
+			instance:  `{"caption":"hello"}`,
+			wantErr:   true,
+			errSubstr: "anyOf",
 		},
 	}
 

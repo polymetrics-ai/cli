@@ -10,7 +10,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "text"
         ],
         "properties": {
           "messaging_product": {
@@ -26,18 +29,40 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "text"
+            ],
             "description": "Message type."
           },
           "text": {
             "type": "object",
             "description": "Text body object {body, preview_url}.",
-            "additionalProperties": true
+            "required": [
+              "body"
+            ],
+            "properties": {
+              "body": {
+                "type": "string",
+                "description": "Message body."
+              },
+              "preview_url": {
+                "type": "boolean",
+                "description": "Whether to render link previews."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "text"
+      ]
     },
     {
       "name": "send_image_message",
@@ -49,7 +74,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "image"
         ],
         "properties": {
           "messaging_product": {
@@ -65,18 +93,53 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "image"
+            ],
             "description": "Message type."
           },
           "image": {
             "type": "object",
             "description": "Image object {id|link, caption}.",
-            "additionalProperties": true
+            "anyOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "required": [
+                  "link"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Uploaded media id."
+              },
+              "link": {
+                "type": "string",
+                "description": "HTTPS media URL."
+              },
+              "caption": {
+                "type": "string",
+                "description": "Optional image caption."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "image"
+      ]
     },
     {
       "name": "send_audio_message",
@@ -88,7 +151,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "audio"
         ],
         "properties": {
           "messaging_product": {
@@ -104,18 +170,49 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "audio"
+            ],
             "description": "Message type."
           },
           "audio": {
             "type": "object",
             "description": "Audio object {id|link}.",
-            "additionalProperties": true
+            "anyOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "required": [
+                  "link"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Uploaded media id."
+              },
+              "link": {
+                "type": "string",
+                "description": "HTTPS media URL."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "audio"
+      ]
     },
     {
       "name": "send_video_message",
@@ -127,7 +224,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "video"
         ],
         "properties": {
           "messaging_product": {
@@ -143,18 +243,53 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "video"
+            ],
             "description": "Message type."
           },
           "video": {
             "type": "object",
             "description": "Video object {id|link, caption}.",
-            "additionalProperties": true
+            "anyOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "required": [
+                  "link"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Uploaded media id."
+              },
+              "link": {
+                "type": "string",
+                "description": "HTTPS media URL."
+              },
+              "caption": {
+                "type": "string",
+                "description": "Optional video caption."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "video"
+      ]
     },
     {
       "name": "send_document_message",
@@ -166,7 +301,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "document"
         ],
         "properties": {
           "messaging_product": {
@@ -182,18 +320,57 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "document"
+            ],
             "description": "Message type."
           },
           "document": {
             "type": "object",
             "description": "Document object {id|link, caption, filename} (e.g. lab-result PDF).",
-            "additionalProperties": true
+            "anyOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "required": [
+                  "link"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Uploaded media id."
+              },
+              "link": {
+                "type": "string",
+                "description": "HTTPS media URL."
+              },
+              "caption": {
+                "type": "string",
+                "description": "Optional document caption."
+              },
+              "filename": {
+                "type": "string",
+                "description": "Optional displayed file name."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "document"
+      ]
     },
     {
       "name": "send_sticker_message",
@@ -205,7 +382,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "sticker"
         ],
         "properties": {
           "messaging_product": {
@@ -221,18 +401,49 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "sticker"
+            ],
             "description": "Message type."
           },
           "sticker": {
             "type": "object",
             "description": "Sticker object {id|link}.",
-            "additionalProperties": true
+            "anyOf": [
+              {
+                "required": [
+                  "id"
+                ]
+              },
+              {
+                "required": [
+                  "link"
+                ]
+              }
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Uploaded media id."
+              },
+              "link": {
+                "type": "string",
+                "description": "HTTPS media URL."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "sticker"
+      ]
     },
     {
       "name": "send_location_message",
@@ -244,7 +455,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "location"
         ],
         "properties": {
           "messaging_product": {
@@ -260,18 +474,49 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "location"
+            ],
             "description": "Message type."
           },
           "location": {
             "type": "object",
             "description": "Location object {latitude, longitude, name, address}.",
-            "additionalProperties": true
+            "required": [
+              "latitude",
+              "longitude"
+            ],
+            "properties": {
+              "latitude": {
+                "type": "number",
+                "description": "Latitude."
+              },
+              "longitude": {
+                "type": "number",
+                "description": "Longitude."
+              },
+              "name": {
+                "type": "string",
+                "description": "Optional location name."
+              },
+              "address": {
+                "type": "string",
+                "description": "Optional location address."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "location"
+      ]
     },
     {
       "name": "send_contacts_message",
@@ -283,7 +528,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "contacts"
         ],
         "properties": {
           "messaging_product": {
@@ -299,6 +547,9 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "contacts"
+            ],
             "description": "Message type."
           },
           "contacts": {
@@ -306,14 +557,21 @@
             "description": "Top-level contacts array.",
             "items": {
               "type": "object",
+              "minProperties": 1,
               "additionalProperties": true
             }
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "contacts"
+      ]
     },
     {
       "name": "send_interactive_message",
@@ -325,7 +583,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "interactive"
         ],
         "properties": {
           "messaging_product": {
@@ -341,18 +602,61 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "interactive"
+            ],
             "description": "Message type."
           },
           "interactive": {
             "type": "object",
             "description": "Interactive object with action.rows/buttons arrays.",
-            "additionalProperties": true
+            "required": [
+              "type",
+              "action"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Interactive message type."
+              },
+              "header": {
+                "type": "object",
+                "description": "Optional interactive header object.",
+                "minProperties": 1,
+                "additionalProperties": true
+              },
+              "body": {
+                "type": "object",
+                "description": "Interactive body object.",
+                "minProperties": 1,
+                "additionalProperties": true
+              },
+              "footer": {
+                "type": "object",
+                "description": "Optional interactive footer object.",
+                "minProperties": 1,
+                "additionalProperties": true
+              },
+              "action": {
+                "type": "object",
+                "description": "Interactive action object.",
+                "minProperties": 1,
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "interactive"
+      ]
     },
     {
       "name": "send_template_message",
@@ -364,7 +668,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "template"
         ],
         "properties": {
           "messaging_product": {
@@ -380,18 +687,62 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "template"
+            ],
             "description": "Message type."
           },
           "template": {
             "type": "object",
             "description": "Template object {name, language, components[]} (appointment/OTP/utility).",
-            "additionalProperties": true
+            "required": [
+              "name",
+              "language"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Template name."
+              },
+              "language": {
+                "type": "object",
+                "required": [
+                  "code"
+                ],
+                "properties": {
+                  "code": {
+                    "type": "string",
+                    "description": "Template language code."
+                  },
+                  "policy": {
+                    "type": "string",
+                    "description": "Optional language policy."
+                  }
+                },
+                "additionalProperties": false
+              },
+              "components": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "description": "Template components array."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "template"
+      ]
     },
     {
       "name": "send_reaction_message",
@@ -403,7 +754,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "to"
+          "messaging_product",
+          "to",
+          "type",
+          "reaction"
         ],
         "properties": {
           "messaging_product": {
@@ -419,18 +773,41 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "reaction"
+            ],
             "description": "Message type."
           },
           "reaction": {
             "type": "object",
             "description": "Reaction object {message_id, emoji}.",
-            "additionalProperties": true
+            "required": [
+              "message_id",
+              "emoji"
+            ],
+            "properties": {
+              "message_id": {
+                "type": "string",
+                "description": "Message id being reacted to."
+              },
+              "emoji": {
+                "type": "string",
+                "description": "Reaction emoji."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "to",
+        "type",
+        "reaction"
+      ]
     },
     {
       "name": "mark_message_read",
@@ -928,6 +1305,7 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
+          "messaging_product",
           "media_file",
           "type"
         ],
@@ -936,7 +1314,8 @@
             "type": "string",
             "enum": [
               "whatsapp"
-            ]
+            ],
+            "description": "Always 'whatsapp'."
           },
           "media_file": {
             "type": "string",
@@ -947,7 +1326,7 @@
             "description": "MIME type of the media file."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "uploads bounded media to WhatsApp and returns a media id (patient content; PHI)",
       "confirm": "destructive",
@@ -957,12 +1336,14 @@
           {
             "name": "messaging_product",
             "type": "field",
-            "field": "messaging_product"
+            "field": "messaging_product",
+            "required": true
           },
           {
             "name": "type",
             "type": "field",
-            "field": "type"
+            "field": "type",
+            "required": true
           },
           {
             "name": "file",

@@ -26,6 +26,7 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	anyOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
 	minProperties        int
@@ -64,6 +65,7 @@ var structuralKeywords = map[string]bool{
 	"required":             true,
 	"properties":           true,
 	"items":                true,
+	"anyOf":                true,
 	"enum":                 true,
 	"pattern":              true,
 	"minProperties":        true,
@@ -148,6 +150,24 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 			return nil, fmt.Errorf("compile schema: items: %w", err)
 		}
 		n.items = child
+	}
+
+	if raw, ok := m["anyOf"]; ok {
+		var subs []map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &subs); err != nil {
+			return nil, fmt.Errorf("compile schema: anyOf: %w", err)
+		}
+		if len(subs) == 0 {
+			return nil, fmt.Errorf("compile schema: anyOf must contain at least one schema")
+		}
+		n.anyOf = make([]*schemaNode, 0, len(subs))
+		for i, sub := range subs {
+			child, err := compileNode(sub)
+			if err != nil {
+				return nil, fmt.Errorf("compile schema: anyOf.%d: %w", i, err)
+			}
+			n.anyOf = append(n.anyOf, child)
+		}
 	}
 
 	if raw, ok := m["enum"]; ok {
@@ -289,6 +309,20 @@ func (n *schemaNode) validate(v any, path string) error {
 				return err
 			}
 		}
+	}
+	if len(n.anyOf) > 0 {
+		var firstErr error
+		for _, candidate := range n.anyOf {
+			if err := candidate.validate(v, path); err == nil {
+				return nil
+			} else if firstErr == nil {
+				firstErr = err
+			}
+		}
+		if firstErr != nil {
+			return fmt.Errorf("%s: value does not match anyOf: %w", displayPath(path), firstErr)
+		}
+		return fmt.Errorf("%s: value does not match anyOf", displayPath(path))
 	}
 
 	return nil

@@ -698,7 +698,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		PayloadIdentity:       payloadIdentity,
 		ConfirmationChallenge: a.confirmationChallengeForAction(req.DestinationConnector, req.Action),
 		RecordCount:           len(records),
-		Sample:                cloneRecords(mapped[:sampleCount]),
+		Sample:                redactedReversePlanSample(req.DestinationConnector, req.Action, mapped[:sampleCount]),
 		PlanHash:              planHash,
 		ApprovalTokenHash:     hashString(token),
 		ApprovalToken:         token,
@@ -854,7 +854,7 @@ func (a *App) validatePlanConfirmation(plan ReversePlan, got string) error {
 func (a *App) GetReversePlan(id string) (ReversePlan, error) {
 	for _, plan := range a.state.ReversePlans {
 		if plan.ID == id {
-			return plan, nil
+			return redactedReversePlan(plan), nil
 		}
 	}
 	return ReversePlan{}, fmt.Errorf("reverse plan %q not found", id)
@@ -862,6 +862,9 @@ func (a *App) GetReversePlan(id string) (ReversePlan, error) {
 
 func (a *App) ListReversePlans() []ReversePlan {
 	out := append([]ReversePlan(nil), a.state.ReversePlans...)
+	for i := range out {
+		out[i] = redactedReversePlan(out[i])
+	}
 	sort.Slice(out, func(i, j int) bool { return out[i].CreatedAt.Before(out[j].CreatedAt) })
 	return out
 }
