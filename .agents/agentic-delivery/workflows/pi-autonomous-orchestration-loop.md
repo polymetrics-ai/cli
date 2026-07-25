@@ -179,7 +179,9 @@ The stage machine, durable state, and reconciler above are runtime-agnostic. Two
 
 Billing hard rule for BOTH drivers: never route any role through OpenRouter or another
 pay-per-token gateway. Claude roles (when used) stay on the first-party `claude` CLI — never
-through a third-party gateway or relay.
+through a third-party gateway or relay. Codex roles stay on the subscription-backed
+`openai-codex/*` provider via the ChatGPT plan — never through an API-backed `openai/*` model,
+which bills per token (`.pi/README.md:41-47`).
 
 ## Validator layer (Shepherd supervisor meta-agent)
 
