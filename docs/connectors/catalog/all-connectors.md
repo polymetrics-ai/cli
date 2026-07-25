@@ -38,6 +38,7 @@
 | `awin-advertiser` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Awin Advertiser | `api` | ga | check, catalog, read, write | 5 | 1 | [Documentation](https://wiki.awin.com/index.php/Advertiser_API) | bundle definition |
 | `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) | bundle definition |
 | `babelforce` | [`icons/babelforce.svg`](../icons/babelforce.svg) | Babelforce | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://api.babelforce.com/) | bundle definition |
+| `bahmni-docker` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bahmni (bahmni-docker) | `api` | alpha | check, catalog, read, write | 12 | 9 | [Documentation](https://rest.openmrs.org/) | bundle definition |
 | `bamboo-hr` | [`icons/bamboohr.svg`](../icons/bamboohr.svg) | BambooHR | `api` | ga | check, catalog, read, write | 84 | 101 | [Documentation](https://documentation.bamboohr.com/reference/getting-started) | bundle definition |
 | `basecamp` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Basecamp | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://github.com/basecamp/bc3-api) | bundle definition |
 | `beamer` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Beamer | `api` | ga | check, catalog, read, write | 7 | 14 | [Documentation](https://www.getbeamer.com/api/docs) | bundle definition |

@@ -10045,6 +10045,272 @@
     }
   },
   {
+    "name": "bahmni-docker",
+    "display_name": "Bahmni (bahmni-docker)",
+    "description": "Reads clinical EMR data from a Bahmni deployment (bahmni-docker) through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Patient-linked data is redacted by default.",
+    "integration_type": "api",
+    "docs_url": "https://rest.openmrs.org/",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "catalog": true,
+      "read": true,
+      "write": true,
+      "query": false
+    },
+    "spec": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Bahmni (bahmni-docker) Connection Specification",
+      "type": "object",
+      "required": [
+        "base_url",
+        "username",
+        "password"
+      ],
+      "properties": {
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "default": "http://localhost/openmrs",
+          "description": "Base URL of the local bahmni-docker OpenMRS instance, e.g. http://localhost/openmrs."
+        },
+        "username": {
+          "type": "string",
+          "description": "OpenMRS username for HTTP Basic authentication."
+        },
+        "password": {
+          "type": "string",
+          "x-secret": true,
+          "description": "OpenMRS password for HTTP Basic authentication; never logged or printed."
+        },
+        "patient_query": {
+          "type": "string",
+          "description": "Identifier or name search term used to enumerate the patients stream (OpenMRS patient search q)."
+        },
+        "patient_uuid": {
+          "type": "string",
+          "description": "Patient UUID context used to scope patient-linked streams (encounters, observations, visits, orders, lab results, diagnoses)."
+        }
+      }
+    },
+    "streams": [
+      {
+        "name": "patients",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "encounters",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "observations",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "visits",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "concepts",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "locations",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "providers",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "drug_orders",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lab_orders",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "lab_results",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "appointments",
+        "primary_key": [
+          "uuid"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "diagnoses",
+        "primary_key": [
+          "existingObs"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_patient",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/patient",
+        "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; PHI fields are redacted in plans and require reverse ETL approval"
+      },
+      {
+        "name": "update_patient",
+        "kind": "update",
+        "method": "POST",
+        "path": "/ws/rest/v1/patient/{{ record.uuid }}",
+        "risk": "high: overwrites existing patient PHI in Bahmni/OpenMRS; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_encounter",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/encounter",
+        "risk": "high: writes a clinical encounter with linked observations for a patient; PHI fields are redacted in plans and require reverse ETL approval"
+      },
+      {
+        "name": "create_observation",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/obs",
+        "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; PHI/clinical values are redacted in plans and require reverse ETL approval"
+      },
+      {
+        "name": "create_appointment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/appointments",
+        "risk": "medium: books a Bahmni patient appointment; patient identifiers are redacted in plans and require reverse ETL approval"
+      },
+      {
+        "name": "create_drug_order",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/order",
+        "risk": "critical: places a medication (drug) order for a patient; medication and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_diagnosis",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/bahmnicore/diagnosis",
+        "risk": "critical: records a clinical diagnosis for a patient; diagnosis and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_observations_bulk",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/bahmnicore/observations",
+        "risk": "critical: uploads a bounded top-level JSON array of clinical observations; use only reviewed observation payloads with reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_patient_document",
+        "kind": "create",
+        "method": "POST",
+        "path": "/ws/rest/v1/attachment",
+        "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; file path/content and patient identifiers are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      }
+    ],
+    "risk": {
+      "read": "external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; patient-linked reads are bounded and PHI-redacted by default",
+      "write": "typed Bahmni/OpenMRS reverse ETL clinical mutations for patients, encounters, observations, appointments, drug orders, diagnoses, a bounded top-level JSON array observation upload, and a bounded multipart patient-document upload",
+      "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive; multipart document upload binds a SHA-256 payload identity that is snapshot-verified before network send"
+    },
+    "icon": {
+      "id": "pm-bahmni-docker",
+      "path": "icons/pm-sample.svg",
+      "source": "polymetrics",
+      "review_status": "polymetrics",
+      "review_url": "https://github.com/polymetrics-ai/cli"
+    }
+  },
+  {
     "name": "bamboo-hr",
     "display_name": "BambooHR",
     "description": "Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.",

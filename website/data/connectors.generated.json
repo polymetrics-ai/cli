@@ -6167,6 +6167,1193 @@
     }
   },
   {
+    "slug": "bahmni-docker",
+    "name": "Bahmni (bahmni-docker)",
+    "description": "Reads clinical EMR data from a Bahmni deployment (bahmni-docker) through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Patient-linked data is redacted by default.",
+    "docs_url": "https://rest.openmrs.org/",
+    "integration_type": "api",
+    "release_stage": "alpha",
+    "capabilities": {
+      "check": true,
+      "read": true,
+      "write": true,
+      "query": false,
+      "cdc": false,
+      "dynamic_schema": false
+    },
+    "streams": [
+      {
+        "name": "patients",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "encounters",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "observations",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "visits",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "concepts",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "locations",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "providers",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "drug_orders",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "lab_orders",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "lab_results",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "appointments",
+        "primary_key": [
+          "uuid"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "diagnoses",
+        "primary_key": [
+          "existingObs"
+        ],
+        "cursor": "",
+        "incremental": false
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "create_patient",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "update_patient",
+        "method": "POST",
+        "kind": "update"
+      },
+      {
+        "name": "create_encounter",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_observation",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_appointment",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_drug_order",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_diagnosis",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_observations_bulk",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "upload_patient_document",
+        "method": "POST",
+        "kind": "create"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Inspect, read, and safely plan typed Bahmni (bahmni-docker) clinical operations.",
+      "usage": "pm bahmni-docker <command> [flags]",
+      "source_cli": {
+        "name": "Bahmni / OpenMRS REST + FHIR2",
+        "docs": "https://rest.openmrs.org/",
+        "reference": "OpenMRS REST v1, Bahmni-core REST, OpenMRS FHIR2 R4",
+        "source": "provider_api"
+      },
+      "groups": [
+        {
+          "id": "clinical",
+          "title": "Clinical data",
+          "commands": [
+            "patients",
+            "encounters",
+            "observations",
+            "visits",
+            "diagnoses"
+          ]
+        },
+        {
+          "id": "catalog",
+          "title": "Catalog & reference",
+          "commands": [
+            "concepts",
+            "locations",
+            "providers"
+          ]
+        },
+        {
+          "id": "orders",
+          "title": "Orders & labs",
+          "commands": [
+            "drug-orders",
+            "lab_orders",
+            "lab_results"
+          ]
+        },
+        {
+          "id": "scheduling",
+          "title": "Scheduling",
+          "commands": [
+            "appointments"
+          ]
+        },
+        {
+          "id": "direct-reads",
+          "title": "Direct reads",
+          "commands": [
+            "patient",
+            "encounter",
+            "visit",
+            "concept",
+            "provider",
+            "location",
+            "fhir",
+            "bahmnicore"
+          ]
+        },
+        {
+          "id": "documents",
+          "title": "Documents",
+          "commands": [
+            "documents"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Credential name to use for the Bahmni request.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "connection",
+          "type": "string",
+          "summary": "Alias for --credential.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "config",
+          "type": "string_array",
+          "summary": "Connector config override as key=value.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "limit",
+          "type": "integer",
+          "summary": "Maximum ETL records to emit for stream commands.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Maximum direct-read response bytes; typed operations declare their own lower cap.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "plan",
+          "type": "string",
+          "summary": "Execute an approved reverse-ETL plan by id.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "preview",
+          "type": "boolean",
+          "summary": "Preview a reverse-ETL write command without making a network mutation.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "approve",
+          "type": "string",
+          "summary": "Approval token required to execute a reverse-ETL plan.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "confirm",
+          "type": "string",
+          "summary": "Typed confirmation challenge for destructive reverse-ETL writes.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "patients list",
+          "summary": "List Bahmni/OpenMRS patients as ETL records (requires a patient search term).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "patients",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker patients list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "encounters list",
+          "summary": "List patient encounters as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "encounters",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker encounters list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "observations list",
+          "summary": "List patient observations (obs) as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "observations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker observations list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "visits list",
+          "summary": "List patient visits as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "visits",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker visits list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "concepts list",
+          "summary": "List OpenMRS concepts as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "concepts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker concepts list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "locations list",
+          "summary": "List OpenMRS locations as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "locations",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker locations list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "providers list",
+          "summary": "List OpenMRS providers as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "providers",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker providers list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "drug_orders list",
+          "summary": "List active Bahmni drug orders as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "drug_orders",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker drug_orders list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "lab_orders list",
+          "summary": "List lab (test) orders as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "lab_orders",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker lab_orders list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "lab_results list",
+          "summary": "List Bahmni-core lab result observations as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "lab_results",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker lab_results list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "appointments list",
+          "summary": "List Bahmni appointments as ETL records.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "appointments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker appointments list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "diagnoses list",
+          "summary": "List Bahmni-core patient diagnoses as ETL records (scoped by patient_uuid).",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "diagnoses",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm bahmni-docker diagnoses list --json --limit 25"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "patient get",
+          "summary": "Retrieve a single patient resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker patient get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "encounter get",
+          "summary": "Retrieve a single encounter resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker encounter get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "visit get",
+          "summary": "Retrieve a single visit resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker visit get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "concept get",
+          "summary": "Retrieve a single concept resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker concept get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "provider get",
+          "summary": "Retrieve a single provider resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker provider get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "location get",
+          "summary": "Retrieve a single location resource by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker location get --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "fhir patient-read",
+          "summary": "Read a FHIR R4 Patient resource by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Resource id to fetch.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker fhir patient-read --json --id <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "fhir observation-read",
+          "summary": "Read a FHIR R4 Observation resource by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Resource id to fetch.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker fhir observation-read --json --id <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "fhir encounter-read",
+          "summary": "Read a FHIR R4 Encounter resource by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Resource id to fetch.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker fhir encounter-read --json --id <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "fhir condition-read",
+          "summary": "Read a FHIR R4 Condition resource by id.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "id",
+              "type": "string",
+              "summary": "Resource id to fetch.",
+              "values": [],
+              "maps_to": "path.id"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker fhir condition-read --json --id <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "bahmnicore patient-detail",
+          "summary": "Read a consolidated Bahmni-core patient profile by UUID.",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Resource uuid to fetch.",
+              "values": [],
+              "maps_to": "path.uuid"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker bahmnicore patient-detail --json --uuid <uuid>"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "bahmnicore patient-search",
+          "summary": "Schema-gated typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient).",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "q",
+              "type": "string",
+              "summary": "Free-text patient name or identifier search term.",
+              "values": [],
+              "maps_to": "body.q"
+            },
+            {
+              "name": "identifier",
+              "type": "string",
+              "summary": "Exact patient identifier.",
+              "values": [],
+              "maps_to": "body.identifier"
+            },
+            {
+              "name": "address-field-name",
+              "type": "string",
+              "summary": "Address field to filter on, e.g. city_village.",
+              "values": [],
+              "maps_to": "body.addressFieldName"
+            },
+            {
+              "name": "address-field-value",
+              "type": "string",
+              "summary": "Address field value to match.",
+              "values": [],
+              "maps_to": "body.addressFieldValue"
+            },
+            {
+              "name": "login-location-uuid",
+              "type": "string",
+              "summary": "Login/deployment location UUID scoping the search.",
+              "values": [],
+              "maps_to": "body.loginLocationUuid"
+            },
+            {
+              "name": "start-index",
+              "type": "integer",
+              "summary": "Zero-based result offset for bounded paging.",
+              "values": [],
+              "maps_to": "body.startIndex"
+            }
+          ],
+          "examples": [
+            "pm bahmni-docker bahmnicore patient-search --json --q <name> --max-bytes 1048576"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded typed POST read-query; the response is size-capped and PHI/identifier fields are redacted.",
+          "approval": "none: read-only POST query with a schema-gated body.",
+          "notes": "Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed."
+        },
+        {
+          "path": "patients create",
+          "summary": "Create a Bahmni/OpenMRS patient record (clinical PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_patient",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "identifiers",
+              "type": "string",
+              "summary": "Maps to record.identifiers.",
+              "values": [],
+              "maps_to": "record.identifiers"
+            },
+            {
+              "name": "person",
+              "type": "string",
+              "summary": "Maps to record.person.",
+              "values": [],
+              "maps_to": "record.person"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "patients update",
+          "summary": "Update an existing Bahmni/OpenMRS patient record (clinical PHI).",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "update_patient",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "uuid",
+              "type": "string",
+              "summary": "Maps to record.uuid.",
+              "values": [],
+              "maps_to": "record.uuid"
+            },
+            {
+              "name": "person",
+              "type": "string",
+              "summary": "Maps to record.person.",
+              "values": [],
+              "maps_to": "record.person"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "encounters create",
+          "summary": "Create a clinical encounter with linked observations.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_encounter",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "patient",
+              "type": "string",
+              "summary": "Maps to record.patient.",
+              "values": [],
+              "maps_to": "record.patient"
+            },
+            {
+              "name": "encounter-type",
+              "type": "string",
+              "summary": "Maps to record.encounterType.",
+              "values": [],
+              "maps_to": "record.encounterType"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "observations create",
+          "summary": "Record a clinical observation (obs) for a patient.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_observation",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "person",
+              "type": "string",
+              "summary": "Maps to record.person.",
+              "values": [],
+              "maps_to": "record.person"
+            },
+            {
+              "name": "concept",
+              "type": "string",
+              "summary": "Maps to record.concept.",
+              "values": [],
+              "maps_to": "record.concept"
+            },
+            {
+              "name": "value",
+              "type": "string",
+              "summary": "Maps to record.value.",
+              "values": [],
+              "maps_to": "record.value"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "appointments create",
+          "summary": "Book a Bahmni patient appointment.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_appointment",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "patient-uuid",
+              "type": "string",
+              "summary": "Maps to record.patientUuid.",
+              "values": [],
+              "maps_to": "record.patientUuid"
+            },
+            {
+              "name": "service-uuid",
+              "type": "string",
+              "summary": "Maps to record.serviceUuid.",
+              "values": [],
+              "maps_to": "record.serviceUuid"
+            },
+            {
+              "name": "start-date-time",
+              "type": "string",
+              "summary": "Maps to record.startDateTime.",
+              "values": [],
+              "maps_to": "record.startDateTime"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "drug-orders create",
+          "summary": "Place a medication (drug) order for a patient.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_drug_order",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "patient",
+              "type": "string",
+              "summary": "Maps to record.patient.",
+              "values": [],
+              "maps_to": "record.patient"
+            },
+            {
+              "name": "concept",
+              "type": "string",
+              "summary": "Maps to record.concept.",
+              "values": [],
+              "maps_to": "record.concept"
+            },
+            {
+              "name": "care-setting",
+              "type": "string",
+              "summary": "Maps to record.careSetting.",
+              "values": [],
+              "maps_to": "record.careSetting"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "diagnoses create",
+          "summary": "Record a clinical diagnosis for a patient.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_diagnosis",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "patient-uuid",
+              "type": "string",
+              "summary": "Maps to record.patientUuid.",
+              "values": [],
+              "maps_to": "record.patientUuid"
+            },
+            {
+              "name": "coded-answer",
+              "type": "string",
+              "summary": "Maps to record.codedAnswer.",
+              "values": [],
+              "maps_to": "record.codedAnswer"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "observations upload-bulk",
+          "summary": "Upload a bounded top-level JSON array of Bahmni observations.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "create_observations_bulk",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "observations",
+              "type": "string",
+              "summary": "Maps to record.observations.",
+              "values": [],
+              "maps_to": "record.observations"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        },
+        {
+          "path": "documents upload",
+          "summary": "Upload a bounded local patient document via multipart.",
+          "intent": "reverse_etl",
+          "availability": "partial",
+          "stream": "",
+          "write": "upload_patient_document",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "document-path",
+              "type": "string",
+              "summary": "Maps to record.document_path.",
+              "values": [],
+              "maps_to": "record.document_path"
+            },
+            {
+              "name": "patient-uuid",
+              "type": "string",
+              "summary": "Maps to record.patient_uuid.",
+              "values": [],
+              "maps_to": "record.patient_uuid"
+            },
+            {
+              "name": "caption",
+              "type": "string",
+              "summary": "Maps to record.caption.",
+              "values": [],
+              "maps_to": "record.caption"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
+          "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "bahmni-docker-auth",
+          "summary": "Point base_url at a local bahmni-docker OpenMRS instance and supply username/password via credentials; never pass secrets in command text."
+        },
+        {
+          "name": "bahmni-docker-writes",
+          "summary": "Bahmni clinical mutations are typed reverse-ETL actions with plan, preview, approval, execute gates; clinical/destructive actions require --confirm destructive."
+        },
+        {
+          "name": "bahmni-docker-direct-read",
+          "summary": "Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed POST patient search, all with PHI redaction and a response byte cap."
+        },
+        {
+          "name": "bahmni-docker-phi",
+          "summary": "Bahmni handles clinical PHI: patient identifiers, names, addresses, and clinical values are redacted by default on patient-linked reads and in write plans."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nThe `bahmni-docker` connector reads clinical EMR data from a local Bahmni deployment (the\nopen-source hospital/EMR distribution deployed via https://github.com/Bahmni/bahmni-docker) through\nthe OpenMRS REST v1, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs exposed by the deployment. It is\nconfig-driven and usable locally: point `base_url` at a running instance (for example\n`http://localhost/openmrs`), supply an OpenMRS username/password via credentials, and inspect it with\n`pm connectors inspect bahmni-docker --json` without reading or printing any secret values.\n\nExecutable ETL streams: `patients`, `encounters`, `observations`, `visits`, `concepts`, `locations`,\n`providers`, `drug_orders`, `lab_orders`, `lab_results`, `appointments`, `diagnoses`.\n\nBounded direct-read commands cover GET-by-UUID for patient/encounter/visit/concept/provider/location,\nFHIR R4 read-by-id for Patient/Observation/Encounter/Condition, a consolidated Bahmni-core patient\nprofile detail, and a schema-gated typed POST patient search. Clinical mutations, a top-level JSON\narray observation upload, and a bounded multipart patient-document upload are modeled as typed\nreverse-ETL write actions.\n\nBahmni handles clinical PHI, so patient-linked data is redacted by default on reads and in write\nplans.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (required, string, format uri); default `http://localhost/openmrs`; base URL of the\n  local bahmni-docker OpenMRS instance.\n- `username` (required, string); OpenMRS username for HTTP Basic authentication.\n- `password` (required, secret, string); OpenMRS password for HTTP Basic authentication; never\n  logged or printed.\n- `patient_query` (optional, string); identifier or name search term used to enumerate the\n  `patients` stream (OpenMRS patient search `q`).\n- `patient_uuid` (optional, string); patient UUID context used to scope patient-linked streams\n  (encounters, observations, visits, orders, lab results, diagnoses).\n\nSecret fields are redacted in logs and write previews: `password`.\n\nAuthentication behavior: HTTP Basic authentication using `config.username` and `secrets.password`.\nConnection checks call `GET /ws/rest/v1/session`.\n\n## Streams notes\n\nAll OpenMRS REST list streams return a `{ \"results\": [...] }` envelope and page with the OpenMRS\n`limit`/`startIndex` (offset) convention. Bahmni-core and appointment streams (`drug_orders`,\n`lab_results`, `appointments`, `diagnoses`) return top-level JSON arrays and are read from the\nresponse root. Patient-linked streams require a `patient_uuid` (or, for `patients`, a\n`patient_query`) config value to scope the request; see Known limits.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` as typed Bahmni/OpenMRS reverse-ETL mutations:\n`create_patient`, `update_patient`, `create_encounter`, `create_observation`, `create_appointment`,\n`create_drug_order`, `create_diagnosis`, the top-level JSON array `create_observations_bulk`\nobservation upload, and the bounded multipart `upload_patient_document` upload.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Clinical/destructive actions declare `confirm: destructive` (update patient, drug order, diagnosis,\n  bulk observation upload, and document upload).\n- No generic raw HTTP write, raw JSON body, arbitrary OpenMRS resource method/path/body escape hatch,\n  generic shell write, or SQL write is exposed.\n- The multipart document upload accepts only a declared project-local file path field, binds approval\n  to a SHA-256 content digest, snapshots and verifies the approved bytes before any HTTP request, and\n  enforces byte limits; file/path/content and patient identifiers are redacted in command plans.\n- The top-level JSON array observation upload uses a declared `body_field` and `body_schema`; no raw\n  JSON CLI flag is exposed.\n\nPHI redaction: patient identifiers, names, addresses, and clinical observation/diagnosis values are\nredacted by default on patient-linked reads and in write plans.\n\nRead risk: external Bahmni/OpenMRS clinical PHI read; direct reads are bounded and PHI-redacted.\n\nWrite risk: typed Bahmni/OpenMRS reverse ETL clinical mutations.\n\nApproval: reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions\nrequire `--confirm destructive`.\n\n## Known limits\n\n- Batch defaults: read_page_size=50; streams page with OpenMRS `limit`/`startIndex`.\n- OpenMRS/Bahmni REST does not document a fixed public rate limit; the target is a self-hosted local\n  deployment. The connector still bounds response sizes and paginates.\n- OpenMRS/Bahmni REST lacks a universal \"modified since\" cursor across these list endpoints, so\n  streams are full-refresh (offset/limit) rather than incremental.\n- `patients` enumeration requires a search term: set `patient_query` (OpenMRS patient list is a\n  search endpoint). Patient-linked streams (encounters/observations/visits/orders/lab results/\n  diagnoses) require a `patient_uuid` context.\n- The typed Bahmni patient search is modeled as a schema-gated JSON POST read-query with\n  connector-authored flags; arbitrary/raw request bodies remain intentionally unavailable.\n- Patient-document binary download is modeled as bounded binary metadata with a bounded local-output\n  policy (api_surface `binary_read`), not exposed as a generic HTTP byte-stream download. Permanent\n  patient deletion/purge and OpenMRS server administration are blocked with recorded evidence.\n- Live clinical writes and patient-document payload tests beyond fixtures are human-gated against any\n  non-local/non-disposable deployment.\n",
+    "icon": null
+  },
+  {
     "slug": "bamboo-hr",
     "name": "BambooHR",
     "description": "Reads and writes BambooHR employee, metadata, reporting, time off, applicant tracking, benefits, goals, training, time tracking, scheduling, and webhook resources that are available through the documented Basic-auth API surface.",

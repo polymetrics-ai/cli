@@ -1,0 +1,24 @@
+{
+  "name": "bahmni-docker",
+  "display_name": "Bahmni (bahmni-docker)",
+  "description": "Reads clinical EMR data from a Bahmni deployment (bahmni-docker) through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs \u2014 patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses \u2014 executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Patient-linked data is redacted by default.",
+  "integration_type": "api",
+  "docs_url": "https://rest.openmrs.org/",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 50
+  },
+  "risk": {
+    "read": "external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; patient-linked reads are bounded and PHI-redacted by default",
+    "write": "typed Bahmni/OpenMRS reverse ETL clinical mutations for patients, encounters, observations, appointments, drug orders, diagnoses, a bounded top-level JSON array observation upload, and a bounded multipart patient-document upload",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive; multipart document upload binds a SHA-256 payload identity that is snapshot-verified before network send"
+  }
+}
