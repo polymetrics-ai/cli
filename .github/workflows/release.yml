@@ -122,21 +122,25 @@ jobs:
 
   website-release:
     name: website-release
-    needs: release-please
-    # Couples the website publish to the code release: when release-please cuts a
-    # release (or a release is published), dispatch the website workflow on main so
-    # the site rebuilds and deploys (still gated by WEBSITE_DEPLOY_ENABLED) carrying
-    # the docs shipped in this release. Reverse the coupling by deleting this job or
-    # setting the WEBSITE_DEPLOY_ENABLED variable to a value other than 'true'.
+    needs: [release-please, release-assets]
+    # Couples the website publish to the code release: once release-assets has built
+    # and verified the release binaries, dispatch the website workflow on main so the
+    # site rebuilds and deploys (still gated by WEBSITE_DEPLOY_ENABLED) carrying the
+    # release's docs. Reverse the coupling by deleting this job or setting the
+    # WEBSITE_DEPLOY_ENABLED variable to a value other than 'true'.
     if: >-
       ${{
         always() &&
+        needs.release-assets.result == 'success' &&
         (github.event_name == 'release' ||
          needs.release-please.outputs.release_created == 'true')
       }}
     runs-on: ubuntu-latest
     permissions:
       actions: write
+    concurrency:
+      group: website-release-${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+      cancel-in-progress: false
     steps:
       - name: Publish website with the code release
         env:

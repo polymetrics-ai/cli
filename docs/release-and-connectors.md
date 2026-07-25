@@ -58,7 +58,7 @@ manifest update. That PR is the release candidate; nothing is tagged until it is
 | `release-please` | push to `main` / `workflow_dispatch` | Opens/updates the `chore: release` PR; on merge of that PR it creates the tag + GitHub release and exports `release_created` / `tag_name`. |
 | `package-check` | every `pull_request` | Runs `goreleaser release --snapshot --clean` then `scripts/verify-release-assets.sh dist` — so asset shape is verified on **every PR**, well before a release. |
 | `release-assets` | `release: published` OR `release-please.outputs.release_created == 'true'` | Checks out the tag, runs `goreleaser release --clean --skip=publish`, re-verifies assets, and uploads the 6 verified archives + `checksums.txt` to the published release. |
-| `website-release` | same run, `release: published` OR `release_created == 'true'` | Dispatches `website.yml` on `main` (`gh workflow run`) so the website rebuilds and deploys **with** the code release, carrying the release's docs. Still gated downstream by `WEBSITE_DEPLOY_ENABLED`. |
+| `website-release` | same run, after `release-assets` **succeeds** (`needs: [release-please, release-assets]`) | Dispatches `website.yml` on `main` (`gh workflow run`) so the website rebuilds and deploys **with** the code release, carrying the release's docs. Tag-scoped `concurrency` group serializes dispatches for a given release tag. Still gated downstream by `WEBSITE_DEPLOY_ENABLED`. |
 
 `scripts/verify-release-assets.sh` is the guardrail: it asserts exactly one archive per
 `{os, arch}` target, verifies each archive's contents (`LICENSE`, `NOTICE`, `README.md`, binary),
@@ -82,11 +82,16 @@ You do **not** create tags or run goreleaser by hand. The steps are:
    - creates the git **tag** `v<version>` and the **GitHub release**.
 4. **`release-assets` runs automatically** off `release_created == true`: it rebuilds the 6
    platform archives + `checksums.txt`, re-verifies them, and attaches them to the GitHub release.
-5. **`website-release` runs automatically** in the same workflow run (see “Coordinated release”
-   below): it dispatches
-   `website.yml` on `main`, which rebuilds the site from `main` HEAD (the release commit, so it
-   carries the docs shipped in this release) and — when `WEBSITE_DEPLOY_ENABLED == 'true'` — deploys
-   it. Code release and website publish thus happen together off the one merge.
+5. **`website-release` runs automatically** in the same workflow run, but only **after
+   `release-assets` succeeds** (see “Coordinated release” below): it dispatches `website.yml` on
+   `main`, which rebuilds the site from the current tip of `main` and — when
+   `WEBSITE_DEPLOY_ENABLED == 'true'` — deploys it. That tip already contains the release's docs
+   (they merged before the release was cut), but it is **not pinned to the exact release commit**:
+   `workflow_dispatch --ref main` resolves to whatever `main` points at when the dispatched run
+   starts, so it may also carry docs from PRs merged after the release. Pinning the dispatch to the
+   release tag is not possible without breaking `website.yml`'s `github.ref_name == 'main'` deploy
+   gate. Code release and website publish thus happen together off the one merge, with the site
+   serving a superset of the release's docs.
 6. **Verify**: the GitHub release should list 6 archives + `checksums.txt`, `pm version` from a
    downloaded binary should report the new tag, and the website should be serving the updated docs.
 
@@ -101,8 +106,16 @@ gated by the `WEBSITE_DEPLOY_ENABLED` repo variable. A release-please merge comm
 website deploy, and the website was never tied to the release tag.
 
 **The coupling wired here** is the `website-release` job in `.github/workflows/release.yml`. It runs
-in the same workflow run as `release-please`, gated on `release_created == 'true'` (or a
-`release: published` event), and dispatches the website workflow:
+in the same workflow run as `release-please`, declares `needs: [release-please, release-assets]`, and
+is gated on `needs.release-assets.result == 'success'` **plus** the release trigger
+(`release_created == 'true'` or a `release: published` event). The assets gate is what makes the
+“together” guarantee real: the site is never published for a release whose binaries failed to build
+or verify. On the manual `release: published` path `release-please` is skipped, which is why the
+success check reads `release-assets`' job result rather than a `release-please` output. A tag-scoped
+`concurrency` group (`website-release-<tag>`, `cancel-in-progress: false`) mirrors `release-assets`
+and serializes the dispatch when both the push run and a `release: published` run fire for one
+release — which happens when `RELEASE_PLEASE_TOKEN` (a PAT) is configured, since a PAT-created
+release *does* emit `release: published`. The job then dispatches the website workflow:
 
 ```yaml
 gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main
@@ -114,15 +127,19 @@ The repo already works around this for assets by gating `release-assets` on the 
 job output in the *same* run; `website-release` follows the same pattern. `workflow_dispatch` is the
 documented exception that `GITHUB_TOKEN` **is** allowed to trigger, and dispatching `--ref main`
 keeps `website.yml`'s existing `github.ref_name == 'main'` deploy conditions satisfied while picking
-up the release commit's docs.
+up the docs on `main`'s tip (see the caveat in step 5 above — the ref is `main`, not the tag).
 
 **Safety / reversibility:**
 
-- The job runs **only** on a real release (`release_created`/`release: published`), never on PRs or
-  ordinary pushes.
-- Actual deployment is still gated by `WEBSITE_DEPLOY_ENABLED`; if it is not `'true'`, the dispatched
-  run builds and (optionally) images but does not deploy. So merging this coupling **does not**
-  deploy anything by itself, and no website publish happens until a release is actually cut.
+- The job runs **only** on a real release (`release_created`/`release: published`) whose
+  `release-assets` job succeeded, never on PRs or ordinary pushes.
+- Actual **deployment** is still gated by `WEBSITE_DEPLOY_ENABLED`; if it is not `'true'`, the
+  dispatched run still runs checks, builds the site, and **pushes the `:main`-tagged website image to
+  GHCR** — `website.yml` gates its GHCR login and `PUSH_IMAGE` only on
+  `github.ref_name == 'main' && event_name in (push, workflow_dispatch)`, with no
+  `WEBSITE_DEPLOY_ENABLED` check — but the `deploy` job is skipped. So merging this coupling **does
+  not** deploy anything by itself, and no website deploy happens until a release is actually cut with
+  `WEBSITE_DEPLOY_ENABLED == 'true'`.
 - To reverse the coupling: delete the `website-release` job, or set `WEBSITE_DEPLOY_ENABLED` to a
   value other than `'true'` to keep code releases from publishing the site.
 - Manual fallback (if the dispatch is ever removed or fails): after merging the `chore: release` PR,
