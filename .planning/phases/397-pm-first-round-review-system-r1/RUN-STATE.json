@@ -61,11 +61,7 @@
     "exactHeadTree": "bb1f51e60abd62cdddafab03b2f4bdcf2dea3bda",
     "nextRound": 3,
     "nextRoundMode": "fresh_prospective_exact_head_after_advisory_correction",
-    "nextRoundStatus": "advisory_correction_committed_self_reviewed_reviewer_repointed_codex_to_claude",
-    "reviewerModel": "claude-bridge/claude-opus-4-8",
-    "reviewerModelReason": "Sol/Codex quota-exhausted fleet-wide; captain order 2026-07-25",
-    "reviewerIndependenceLimitation": "reduced: implementer and reviewer both run Claude Opus 4.8, so they share a model and blind spots; a cross-provider review would be more adversarial",
-    "localCodexRenameDeferred": "~141-file local-codex-review file/route rename deferred to a follow-up; only prose/model updated this round",
+    "nextRoundStatus": "advisory_correction_committed_self_reviewed_model_synthesis_blocked_by_codex_quota",
     "haltedProspectiveReview": {
       "exactHeadSHA": "c28126bb337a2e9899a4a9b429b6d8473cbcd52f",
       "packetCount": 63,
@@ -115,117 +111,117 @@
     {
       "cycle": "plan",
       "decision": "read_only_spawned",
-      "reason": "Planning checkpoint under /pm-orchestrate (no programming-loop in registry)."
+      "reason": "One read-only measurement scout completed. Three read-only scouts failed to start because the isolated provider lacked authentication; no result is claimed from those failures."
     },
     {
       "cycle": "plan_local_owner",
       "decision": "local_critical_path",
-      "reason": "Single cohesive PM-system write scope is the local critical path."
+      "reason": "The promoted follow-up is one cohesive shared PM review-system write scope in this isolated task worktree; no independent mutating subissue was created or spawned."
     },
     {
       "cycle": "plan_check",
       "decision": "read_only_spawned",
-      "reason": "Read-only plan checker BLOCKED; plan corrected before RED."
+      "reason": "Independent read-only plan checker returned BLOCKED with active-owner, TDD-order, path-security, corpus-provenance, scope, threshold, delivery, and state-evidence gaps; planning artifacts were corrected before RED."
     },
     {
       "cycle": "tdd_red",
       "decision": "local_critical_path",
-      "reason": "Focused RED captured intended semantic failures before treatment."
+      "reason": "Frozen corpus and semantic tests reproduced the two accepted PR #495 findings, all three original misses, ten opaque mutations, and threshold gaps before treatment implementation; focused test exited 1 for intended behavior."
     },
     {
       "cycle": "execute_green",
       "decision": "local_critical_path",
-      "reason": "Semantic gates and compiler GREEN after RED."
+      "reason": "Dependency-free compiler, semantic treatment, safe closure/authority inventory, bounded packet synthesis, current-schema fixes, machine measurement, and active PM route updates pass focused tests; full exact-head verification remains pending."
     },
     {
       "cycle": "verify",
       "decision": "local_critical_path",
-      "reason": "Focused/full verification GREEN at the implementation head."
+      "reason": "At implementation head 7f1b2d8fe, focused gates, Shellcheck, JSON/YAML syntax, Go formatting no-diff, vet, 20-minute test suite, build, module verification/tidy diff, and make verify all passed. This evidence became historical when captain added impact-graph and hypothesis-lab requirements."
     },
     {
       "cycle": "captain_correction_research",
       "decision": "local_critical_path",
-      "reason": "Captain graph/lab research checkpoint; ALGORITHM-RESEARCH selection recorded."
+      "reason": "Production graph/lab work paused. Primary sources and a disposable exact-head real/synthetic benchmark selected typed forward/reverse adjacency plus deterministic multi-source relation-policy BFS, authoritative go list, fail-closed bounds, no persistent v1 cache/SCC, and no new dependency. Read-only scout/security runs failed due WebSocket/provider authentication, so inline GSD fallback was recorded."
     },
     {
       "cycle": "captain_correction_red",
       "decision": "local_critical_path",
-      "reason": "Captain graph/lab RED across nine semantic groups before treatment."
+      "reason": "Separate correction inputs/oracle were frozen. Focused test exited 1 for 17 missed defect fixtures plus absent v2 impact graph, bound/migration fail-open, absent safe lab runner, and missing hypothesis/migration synthesis checks; four clean controls stayed clean."
     },
     {
       "cycle": "captain_correction_green",
       "decision": "local_critical_path",
-      "reason": "Typed impact graph and disposable lab GREEN."
+      "reason": "At exact implementation head 0e210d1819f2642ee600aa6921873997101ba7bd, the typed bidirectional practical impact graph, complete impact packets, versioned synthesis, and fail-closed disposable hypothesis lab pass focused detector, real Git/Go/parser, sandbox denial, limit, cleanup, identity, concurrency, PM-contract, and model-routing tests. Full post-correction verification remains pending."
     },
     {
       "cycle": "conditional_merge_authorization",
       "decision": "not_spawned_human_gate",
-      "reason": "Captain conditional Firstmate-only merge authorization recorded; this agent stays no-merge."
+      "reason": "Captain conditionally authorized Firstmate to merge this stacked PR into feat/cli-architecture-v2 only after every implementation, measurement, exact-head Codex, Shepherd, no-mistakes, and CI gate is green. This execution remains no-merge and reports the green open PR; parent PR #438 remains draft/human-only."
     },
     {
       "cycle": "post_correction_verify",
       "decision": "local_critical_path",
-      "reason": "Post-correction full verification GREEN."
+      "reason": "At exact head e4ca19ce864b6a3362a2d490aec2d0b6a3717b1f, focused graph/lab/PM gates, Python/Shellcheck/JSON/YAML checks, Go format no-diff, vet, 20-minute tests, build, module checks, and make verify all passed. Final evidence-commit rerun remains before exact-head review."
     },
     {
       "cycle": "local_codex_round_1",
       "decision": "local_critical_path",
-      "reason": "Round 1 exact-head review: 17/17 packets, findings-correction-required; round 1/5."
+      "reason": "At exact head b1d869732d230575ab7c8295b15cef42cc0078ef, 17/17 fresh Sol/xhigh packets completed with zero unreviewed files and disclosed 89 findings. Raw synthesis blocked on 14 failed-invariant contract defects; PM disposition is findings_correction_required across 15 systemic groups. Correction round 1/5 begins; Shepherd correctly remains pending."
     },
     {
       "cycle": "review_loop_monitoring",
       "decision": "local_critical_path",
-      "reason": "Active PM review monitoring; provider retries excluded from rounds."
+      "reason": "Captain monitoring is active. Twenty-two provider attempts and five startup/WebSocket failures are separate from correction rounds. The same OAuth startup failure was diagnosed after two concurrent attempts with a successful serialized auth probe/recovery. Repeated finding groups trigger root-cause fixes; automatic correction stops at 5/5 without weakening checks or resetting lineage."
     },
     {
       "cycle": "local_codex_round_1_red",
       "decision": "local_critical_path",
-      "reason": "Round 1 committed RED across 15 systemic groups."
+      "reason": "At clean committed test head 58df390977a51dc402f65c31a0a798f8a0ecc4bc, the focused PM test exited 1 with 15 intended systemic semantic groups covering exact identity, synthesis shape, policy-state traversal, packet bounds, parser/certainty, pre-index resources, external/deleted Go, lab containment, terminal schema, route/state parity, no-network reviewer identity, and root documents. No production treatment edit had started."
     },
     {
       "cycle": "local_codex_round_1_green",
       "decision": "local_critical_path",
-      "reason": "Round 1 focused GREEN (41 packets, max 29,982/30,000)."
+      "reason": "At exact head 89c86dd5329b3e29698b758fa53e0a86b85a580d, all 15 systemic RED groups pass focused tests. The v3 compiler is ready with validated per-run scope, 170 files/945 indexed edges, 133 impact files/666 traversed edges, 41 coherent packets, maximum estimate 29,982/30,000 tokens, no bound hit, and 1.64-1.70 second cold compiles. Full verification and fresh exact-head recurrence review remain pending."
     },
     {
       "cycle": "local_codex_round_1_full_verify",
       "decision": "local_critical_path",
-      "reason": "Round 1 full verification GREEN."
+      "reason": "At exact head 528dcc68599af4efaaee46c9b038bbd022178411, focused PM/graph/lab/route gates, Python/Shellcheck/JSON/YAML/schema checks, Go module verification/tidy, and make verify all passed."
     },
     {
       "cycle": "local_codex_round_2",
       "decision": "local_critical_path",
-      "reason": "Round 2 recurrence review: 41/41, findings-correction-required; lineage 2/5."
+      "reason": "At exact head 92ce5e6a19cb7562aead8b224e6ba8dcc0857d34, 41/41 fresh Sol/xhigh bounded packets completed and one synthesis returned findings_correction_required with 141 findings and zero blockers. Forty-four packet attempts included three recovered first-attempt failures; one separately observed context-window rejection is an operational attempt only. Every finding is mapped to recurrence or a new systemic group; correction round 2/5 begins and Shepherd remains pending."
     },
     {
       "cycle": "round_2_route_docs_state_retry",
       "decision": "local_critical_path",
-      "reason": "Route/docs/state retry ran locally; no correction round consumed."
+      "reason": "After one parallel OAuth/provider startup failure, this operational retry reproduced the focused PM route/documentation/state RED and owns only R1-I/R1-K/R1-L/R2-N2/R2-N5 allowlisted paths. PR #493, Shepherd/driver/trace-script, compiler/lab, and GitHub connector-ledger paths remain excluded."
     },
     {
       "cycle": "round_2_route_docs_state_green",
       "decision": "local_critical_path",
-      "reason": "Route/docs/state parity GREEN."
+      "reason": "All 13 owned PM contract failures are closed; pm-review-system passes, and pm-orchestrator-contract now reports only three pm-review-loop invocation flags owned by R1-A. State/schema syntax and parity, v4 route order, connector profiles, GitHub ledger non-change, Pi provenance, and diff checks pass."
     },
     {
       "cycle": "round_2_combined_recovery_green",
       "decision": "local_critical_path",
-      "reason": "Fresh-runtime lab-fixture recovery and combined full verification GREEN."
+      "reason": "A fresh worker preserved every uncommitted change, loaded the required GSD/skill route, fixed only newly exposed evidence and isolated-lab fixture defects without weakening default-deny or bounds, and passed static, complete focused/adversarial, Go, module, build, and make verify campaigns. R1/R2 dedup diagnostics remain retrospective development; deterministic-partial-keys/v1 is frozen before prospective R3. Exact commit and clean rebuild are next; Shepherd remains prohibited unless R3 synthesis is clean."
     },
     {
       "cycle": "round_2_exact_commit_packet_red",
       "decision": "local_critical_path",
-      "reason": "Exact-commit RED exposed the 77/64 packet block."
+      "reason": "Exact commit 1e640f9a4 stayed clean and passed direct gates, but make verify exposed a dirty-only focused fixture and the complete 73-file stable-base range correctly blocked at 77 packets above the hard 64 maximum. No R3 or Shepherd run started and correction usage stays 2/5. The next TDD slice repairs clean-tree coverage and uses assignment-preserving exact-envelope efficiency without changing the 30000-byte or 64-packet limits."
     },
     {
       "cycle": "round_2_bounded_efficiency_green",
       "decision": "local_critical_path",
-      "reason": "Bounded-efficiency GREEN reached 63 packets <=30,000 bytes."
+      "reason": "The complete-range fixture now supports dirty and clean candidates. Exact 8500-byte changed/impact slices, 4096-byte context slices, a concise reviewer prompt, cross-role best-fit context/anchor assignment, and iterative scarcity coalescing reached 63 packets while preserving every assignment, invariant union, file/edge/provenance bound, and 30000-byte postcondition. Focused PM adversarial tests pass; full replacement-candidate verification remains pending."
     },
     {
       "cycle": "round_2_bounded_replacement_full_green",
       "decision": "local_critical_path",
-      "reason": "Bounded replacement full verification GREEN; exact commit next."
+      "reason": "Complete static, focused/adversarial, Go, build, module, lint, connector-definition, make verify, and safe reverse-ETL smoke gates passed on the bounded replacement tree. R1/R2 remain retrospective development only, R3 and Shepherd remain unstarted, and exact clean commit/rebuild is the next gate."
     },
     {
       "cycle": "captain_authorized_advisory_f1_correction",
@@ -246,11 +242,6 @@
       "cycle": "captain_authorized_advisory_f1_perf_pass",
       "decision": "local_critical_path",
       "reason": "A bounded, output-preserving performance pass (changed-slice prefilter, exact_edge_slices cache, account_packet fixed-point early stop) reclaimed a ~15.8s pre-optimization regression back to ~14s. An isolated frozen-tree equivalence probe proved byte-identical packets and coverage between the perf-optimized and perf-reverted compilers, and three compiles yield one stable semantic-manifest digest. No bound, gate, or disclosure was weakened for speed."
-    },
-    {
-      "cycle": "captain_authorized_advisory_reviewer_repoint_codex_to_claude",
-      "decision": "local_critical_path",
-      "reason": "Captain order (2026-07-25): Sol/Codex is quota-exhausted fleet-wide, so the canonical review route cannot run. Repointed the pm-reviewer model to claude-bridge/claude-opus-4-8 (thinking xhigh), updated the reviewer role/route prose, and narrowed the three lines that forbade Claude as PM coverage so they permit the authorized bounded packet route while still barring the GitHub-hosted Claude Action and Copilot as substitute coverage. The ~141-file local-codex-review rename is a deferred follow-up. Reviewer independence is reduced this round because the implementer also runs Claude Opus 4.8; recorded as a known limitation. Advisory path stays non-budget-consuming (2/5)."
     },
     {
       "cycle": "captain_authorized_advisory_f1_honest_prompt_packet_budget",
@@ -305,15 +296,13 @@
     },
     "advisoryCorrectionAfter": {
       "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/f1-correction-after-uncommitted/measurement.json",
-      "packetCount": 62,
+      "packetCount": 63,
       "hardPacketCap": 64,
-      "packetHeadroom": 2,
+      "packetHeadroom": 1,
       "maxRenderedPromptBytes": 30000,
       "overflowPackets": 0,
-      "duplicationFactor": 1.020105,
-      "threeCompileDigestStable": true,
       "perfOptimizationOutputIdenticalOnFrozenTree": true,
-      "packetBudgetNote": "reviewer repoint added issue-agent-contract.md as a reviewed changed file; condensing process narration kept the full-range compile ready at 62/headroom-2 within the unchanged 64 cap. Duplication rose from ~1.0196 to 1.0201 (within the stated 1.02x baseline) because the required contract file adds shared context; reducing other content raises the ratio, so the fixture guard carries a documented <=1.021 tolerance. No limit/gate/disclosure weakened."
+      "packetBudgetNote": "first correction commit compiled 64/headroom-0 locally but CI Linux tipped it to 65 and blocked verify; condensing process narration (PLAN/ALGORITHM-RESEARCH only; frozen dispositions and other-workstream files untouched) restored 63/headroom-1 CI-robust within the unchanged 64 hard cap; no limit/gate weakened"
     }
   },
   "readyQueue": [

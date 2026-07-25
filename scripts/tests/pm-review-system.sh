@@ -1075,14 +1075,7 @@ unique_slice_bytes = sum({
     (item["path"], item["revision"], item["revision_kind"], item["start_byte"], item["end_byte"], item["sha256"]): item["bytes"]
     for item in all_slices
 }.values())
-# Duplication guards against review content ballooning with repeated context. The captain baseline
-# is "1.02x" (precisely ~1.0196 pre-repoint). The captain-ordered edit to the reviewed
-# issue-agent-contract.md adds a legitimately referenced contract file that appears as shared
-# context in several packets, raising duplication to ~1.0201 — still 1.02x to the stated precision.
-# Reducing other content is counterproductive (it shrinks unique bytes and raises the ratio), so the
-# guard carries a small documented tolerance and still rejects real ballooning. No packing behavior,
-# bound, or disclosure was weakened.
-assert packed_slice_bytes / unique_slice_bytes <= 1.021, packed_slice_bytes / unique_slice_bytes
+assert packed_slice_bytes / unique_slice_bytes <= 1.02
 assert document["content_policy"].startswith("paths, exact revision/blob/slice metadata")
 changed = set(document["changed_files"])
 assigned = {path for packet in document["packets"] for path in packet["changed_files"]}

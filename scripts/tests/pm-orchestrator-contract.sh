@@ -486,9 +486,8 @@ if errors:
 
 print(
     "pm orchestrator contract ok: one canonical owner; PR #493 routing migration gate; "
-    "unavailable-command fallback; exact-head packet review (reviewer repointed to "
-    "claude-bridge/claude-opus-4-8); independent Shepherd; "
-    "no GitHub-hosted Claude/Copilot substitute PM coverage"
+    "unavailable-command fallback; exact-head local Codex review; independent Shepherd; "
+    "no Claude/Copilot PM coverage"
 )
 PY
 

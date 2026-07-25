@@ -18,15 +18,6 @@
 - [x] Round-2 route/docs/state parity and fresh-runtime lab-fixture recovery (aggregate `changed_paths`, `__CF_USER_TEXT_ENCODING`, `internal/lib` path, numeric loopback service, `local_only`) all closed; full repository verification passed on the uncommitted candidate.
 - [x] Bounded-efficiency replacement reached 63 packets with every rendered prompt ≤30,000 bytes via exact partitioning, cross-role best-fit, and assignment-preserving coalescing (no truncation, no bound reduction); committed `c28126bb3` and reconfirmed clean exact head/tree with full verification.
 
-## Reviewer repoint (captain order 2026-07-25): Codex → Claude
-
-- [x] `.pi/agents/pm-reviewer.md` `model:` is `claude-bridge/claude-opus-4-8` (thinking `xhigh`); the model exists in the installed `pi-claude-bridge` catalog.
-- [x] Reviewer role/route prose describes the Claude reviewer; the `local-codex-review` file/route names are kept and the ~141-file rename is a **deferred follow-up**, noted explicitly.
-- [x] The three lines that forbade Claude as PM coverage (`issue-agent-contract.md`, `local-codex-review-loop.md`, `pm-review-loop.md`) now permit the authorized bounded packet route and still bar the GitHub-hosted Claude Action and GitHub Copilot as substitute coverage — the original guard is narrowed, not deleted.
-- [x] Tests updated: `pi-model-routing.sh` allows the pm-reviewer Claude binding (all other roles stay Sol); `pm-orchestrator-contract.sh` summary reflects the repoint; both pass.
-- [x] **Known limitation — reduced reviewer independence.** The implementation worker also runs Claude Opus 4.8, so reviewer and implementer share a model and its blind spots. This is a real reduction in adversarial independence versus a cross-provider review and is recorded plainly, not papered over.
-- [x] `issue-agent-contract.md` added to `REVIEW-SCOPE.json` allowed paths so the edit stays in scope; the full-range compile stays `ready` within the 64-packet cap and ≤1.02x duplication.
-
 ## Captain-authorized advisory F1–F6 correction
 
 - [x] Captain authorization, advisory report, and correction/self-review instructions read in full.
