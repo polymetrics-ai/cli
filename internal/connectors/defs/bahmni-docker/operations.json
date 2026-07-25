@@ -1,0 +1,61 @@
+{
+  "operations": [
+    {
+      "id": "bahmni.patient_search",
+      "kind": "rest_read",
+      "summary": "Typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient)",
+      "description": "Executable schema-gated Bahmni patient search: connector-authored flags map to an allow-listed JSON body, the response is bounded and PHI-redacted, and no raw request body or generic HTTP flag is exposed.",
+      "source_url": "https://bahmni.atlassian.net/wiki/spaces/BAH/pages/33260810/Bahmni+REST+APIs",
+      "risk": "high",
+      "approval": "none: read-only POST query with schema-gated body and bounded PHI-redacted output",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "sensitive_policy": {
+        "input_mode": "inline",
+        "redact_fields": [
+          "identifier",
+          "addressFieldValue"
+        ],
+        "transform": "none",
+        "approval_mode": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/ws/rest/v1/bahmnicore/search/patient",
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "body_schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "minProperties": 1,
+          "properties": {
+            "q": {
+              "type": "string",
+              "description": "Free-text patient name or identifier search term."
+            },
+            "identifier": {
+              "type": "string",
+              "description": "Exact patient identifier."
+            },
+            "addressFieldName": {
+              "type": "string",
+              "description": "Address field to filter on, e.g. city_village."
+            },
+            "addressFieldValue": {
+              "type": "string",
+              "description": "Address field value to match."
+            },
+            "loginLocationUuid": {
+              "type": "string",
+              "description": "Login/deployment location UUID scoping the search."
+            },
+            "startIndex": {
+              "type": "integer",
+              "description": "Zero-based result offset for bounded paging."
+            }
+          }
+        }
+      }
+    }
+  ]
+}

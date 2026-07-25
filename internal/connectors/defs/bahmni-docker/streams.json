@@ -1,0 +1,205 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "auth": [
+      {
+        "mode": "basic",
+        "username": "{{ config.username }}",
+        "password": "{{ secrets.password }}"
+      }
+    ],
+    "pagination": {
+      "type": "offset_limit",
+      "limit_param": "limit",
+      "offset_param": "startIndex",
+      "page_size": 50,
+      "max_pages": 100
+    },
+    "check": {
+      "method": "GET",
+      "path": "/ws/rest/v1/session"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "bahmni-docker username/password are missing or invalid; re-run pm credentials add bahmni-docker"
+      },
+      {
+        "status": 403,
+        "hint": "bahmni-docker account lacks privileges for this OpenMRS/Bahmni resource"
+      },
+      {
+        "status": 404,
+        "hint": "bahmni-docker resource not found; check the base_url path and the requested uuid"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "bahmni-docker request throttled; the connector will retry with backoff"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "patients",
+      "path": "/ws/rest/v1/patient",
+      "query": {
+        "q": {
+          "template": "{{ config.patient_query }}",
+          "omit_when_absent": true
+        },
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/patients.json"
+    },
+    {
+      "name": "encounters",
+      "path": "/ws/rest/v1/encounter",
+      "query": {
+        "patient": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/encounters.json"
+    },
+    {
+      "name": "observations",
+      "path": "/ws/rest/v1/obs",
+      "query": {
+        "patient": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/observations.json"
+    },
+    {
+      "name": "visits",
+      "path": "/ws/rest/v1/visit",
+      "query": {
+        "patient": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/visits.json"
+    },
+    {
+      "name": "concepts",
+      "path": "/ws/rest/v1/concept",
+      "query": {
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/concepts.json"
+    },
+    {
+      "name": "locations",
+      "path": "/ws/rest/v1/location",
+      "query": {
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/locations.json"
+    },
+    {
+      "name": "providers",
+      "path": "/ws/rest/v1/provider",
+      "query": {
+        "v": "default"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/providers.json"
+    },
+    {
+      "name": "drug_orders",
+      "path": "/ws/rest/v1/bahmnicore/drugOrders/active",
+      "query": {
+        "patientUuid": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/drug_orders.json"
+    },
+    {
+      "name": "lab_orders",
+      "path": "/ws/rest/v1/order",
+      "query": {
+        "patient": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "t": "testorder",
+        "v": "full"
+      },
+      "records": {
+        "path": "results"
+      },
+      "schema": "schemas/lab_orders.json"
+    },
+    {
+      "name": "lab_results",
+      "path": "/ws/rest/v1/bahmnicore/observations",
+      "query": {
+        "patientUuid": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "scope": "latest"
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/lab_results.json"
+    },
+    {
+      "name": "appointments",
+      "path": "/ws/rest/v1/appointments",
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/appointments.json"
+    },
+    {
+      "name": "diagnoses",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis/getDiagnoses",
+      "query": {
+        "patientUuid": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        }
+      },
+      "records": {
+        "path": ""
+      },
+      "schema": "schemas/diagnoses.json"
+    }
+  ]
+}

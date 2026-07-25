@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ws/rest/v1/session"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sessionId": "fixture-session-1",
+      "authenticated": true,
+      "user": {
+        "uuid": "user-fixture-1",
+        "display": "fixture-user"
+      }
+    }
+  }
+}

@@ -1,0 +1,322 @@
+{
+  "actions": [
+    {
+      "name": "create_patient",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/patient",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "identifiers": {
+            "type": "array",
+            "description": "OpenMRS patient identifiers payload."
+          },
+          "person": {
+            "type": "object",
+            "description": "OpenMRS person sub-resource (names, gender, birthdate, addresses)."
+          }
+        },
+        "required": [
+          "identifiers",
+          "person"
+        ]
+      },
+      "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; PHI fields are redacted in plans and require reverse ETL approval"
+    },
+    {
+      "name": "update_patient",
+      "kind": "update",
+      "method": "POST",
+      "path": "/ws/rest/v1/patient/{{ record.uuid }}",
+      "path_fields": [
+        "uuid"
+      ],
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "description": "Target patient UUID."
+          },
+          "person": {
+            "type": "object",
+            "description": "OpenMRS person sub-resource fields to update."
+          }
+        },
+        "required": [
+          "uuid"
+        ]
+      },
+      "risk": "high: overwrites existing patient PHI in Bahmni/OpenMRS; requires reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_encounter",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/encounter",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "patient": {
+            "type": "string",
+            "description": "Patient UUID."
+          },
+          "encounterType": {
+            "type": "string",
+            "description": "Encounter type UUID."
+          },
+          "encounterDatetime": {
+            "type": "string",
+            "description": "ISO-8601 encounter datetime."
+          },
+          "obs": {
+            "type": "array",
+            "description": "Inline observation payloads."
+          }
+        },
+        "required": [
+          "patient",
+          "encounterType"
+        ]
+      },
+      "risk": "high: writes a clinical encounter with linked observations for a patient; PHI fields are redacted in plans and require reverse ETL approval"
+    },
+    {
+      "name": "create_observation",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/obs",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "person": {
+            "type": "string",
+            "description": "Patient/person UUID."
+          },
+          "concept": {
+            "type": "string",
+            "description": "Concept UUID being observed."
+          },
+          "obsDatetime": {
+            "type": "string",
+            "description": "ISO-8601 observation datetime."
+          },
+          "value": {
+            "type": [
+              "string",
+              "number",
+              "boolean",
+              "object"
+            ],
+            "description": "Observation value."
+          }
+        },
+        "required": [
+          "person",
+          "concept",
+          "value"
+        ]
+      },
+      "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; PHI/clinical values are redacted in plans and require reverse ETL approval"
+    },
+    {
+      "name": "create_appointment",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/appointments",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "patientUuid": {
+            "type": "string",
+            "description": "Patient UUID."
+          },
+          "serviceUuid": {
+            "type": "string",
+            "description": "Appointment service UUID."
+          },
+          "startDateTime": {
+            "type": "string",
+            "description": "ISO-8601 appointment start."
+          },
+          "endDateTime": {
+            "type": "string",
+            "description": "ISO-8601 appointment end."
+          }
+        },
+        "required": [
+          "patientUuid",
+          "serviceUuid",
+          "startDateTime"
+        ]
+      },
+      "risk": "medium: books a Bahmni patient appointment; patient identifiers are redacted in plans and require reverse ETL approval"
+    },
+    {
+      "name": "create_drug_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/order",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "patient": {
+            "type": "string",
+            "description": "Patient UUID."
+          },
+          "concept": {
+            "type": "string",
+            "description": "Drug/order concept UUID."
+          },
+          "careSetting": {
+            "type": "string",
+            "description": "Care setting UUID."
+          },
+          "orderer": {
+            "type": "string",
+            "description": "Provider UUID placing the order."
+          },
+          "type": {
+            "type": "string",
+            "description": "Order type, e.g. drugorder."
+          }
+        },
+        "required": [
+          "patient",
+          "concept",
+          "careSetting"
+        ]
+      },
+      "risk": "critical: places a medication (drug) order for a patient; medication and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_diagnosis",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "patientUuid": {
+            "type": "string",
+            "description": "Patient UUID."
+          },
+          "codedAnswer": {
+            "type": "object",
+            "description": "Coded diagnosis concept payload."
+          },
+          "order": {
+            "type": "string",
+            "description": "Diagnosis order, e.g. PRIMARY or SECONDARY."
+          },
+          "certainty": {
+            "type": "string",
+            "description": "Diagnosis certainty, e.g. CONFIRMED or PRESUMED."
+          }
+        },
+        "required": [
+          "patientUuid",
+          "codedAnswer"
+        ]
+      },
+      "risk": "critical: records a clinical diagnosis for a patient; diagnosis and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "create_observations_bulk",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/observations",
+      "body_type": "json_array",
+      "body_field": "observations",
+      "body_schema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            },
+            "description": "Top-level JSON array of Bahmni observation payloads uploaded as a single bounded request body."
+          }
+        },
+        "required": [
+          "observations"
+        ]
+      },
+      "risk": "critical: uploads a bounded top-level JSON array of clinical observations; use only reviewed observation payloads with reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "upload_patient_document",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/attachment",
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 26214400,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "document_path",
+            "required": true,
+            "max_bytes": 26214400
+          },
+          {
+            "name": "patient",
+            "type": "field",
+            "field": "patient_uuid",
+            "required": true
+          },
+          {
+            "name": "fileCaption",
+            "type": "field",
+            "field": "caption"
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "document_path": {
+            "type": "string",
+            "description": "Project-relative path to the bounded local patient-document file to upload."
+          },
+          "patient_uuid": {
+            "type": "string",
+            "description": "Patient UUID the document attaches to."
+          },
+          "caption": {
+            "type": "string",
+            "description": "Optional document caption."
+          }
+        },
+        "required": [
+          "document_path",
+          "patient_uuid"
+        ]
+      },
+      "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; file path/content and patient identifiers are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "confirm": "destructive"
+    }
+  ]
+}

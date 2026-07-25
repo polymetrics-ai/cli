@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/ws/rest/v1/appointments",
+    "query": {
+      "limit": "50",
+      "startIndex": "0"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "uuid": "appt-fixture-1",
+        "display": "Cardiology 2026-01-05",
+        "status": "Scheduled"
+      },
+      {
+        "uuid": "appt-fixture-2",
+        "display": "Cardiology 2026-01-06",
+        "status": "Scheduled"
+      }
+    ]
+  }
+}

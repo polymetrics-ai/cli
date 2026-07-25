@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "concepts",
+  "type": "object",
+  "x-primary-key": [
+    "uuid"
+  ],
+  "properties": {
+    "uuid": {
+      "type": "string"
+    },
+    "display": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Human-readable label for the resource."
+    },
+    "name": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "datatype": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "conceptClass": {
+      "type": [
+        "object",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "uuid"
+  ]
+}
