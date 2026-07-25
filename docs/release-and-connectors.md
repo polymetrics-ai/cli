@@ -99,13 +99,13 @@ No manual `git tag`, `gh release create`, or `goreleaser release` is ever requir
 
 ### Coordinated release: code + website together
 
-**Before this PR** the two publishes were decoupled: `.github/workflows/website.yml` deploys only on
+**Before this coupling** the two publishes were decoupled: `.github/workflows/website.yml` deploys only on
 `push` to `main` **path-filtered to `website/**`** (plus `workflow_dispatch`), and its `deploy` job is
 gated by the `WEBSITE_DEPLOY_ENABLED` repo variable. A release-please merge commit changes
 `CHANGELOG.md` and `.release-please-manifest.json` — **not** `website/**` — so it never triggered a
 website deploy, and the website was never tied to the release tag.
 
-**The coupling wired here** is the `website-release` job in `.github/workflows/release.yml`. It runs
+**The coupling** is the `website-release` job in `.github/workflows/release.yml`. It runs
 in the same workflow run as `release-please`, declares `needs: [release-please, release-assets]`, and
 is gated on `needs.release-assets.result == 'success'` **plus** the release trigger
 (`release_created == 'true'` or a `release: published` event). The assets gate is what makes the

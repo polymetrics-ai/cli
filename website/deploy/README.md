@@ -1,10 +1,11 @@
 # Website Deployment
 
-The website pipelines build and test the Next.js app on pull requests and pushes that touch `website/`. Production deployment is limited to `main` and runs on the Polymetrics origin VPS through a Tailscale-connected self-hosted GitHub runner.
+The website pipelines build and test the Next.js app on pull requests and pushes that touch `website/`. Production deployment is limited to `main`, requires the `WEBSITE_DEPLOY_ENABLED` repository variable to be `true`, and runs on the Polymetrics origin VPS through a Tailscale-connected self-hosted GitHub runner.
 
 ## Flow
 
 - GitHub Actions runs `gen:website-data`, generated-file drift checks, `typecheck`, `build`, and a Docker image build. Pushes to `main` publish `ghcr.io/<owner>/<repo>/website:<sha>` and `:main`.
+- A code release also publishes the website: the `website-release` job in `.github/workflows/release.yml` dispatches `website.yml` on `main` once the release binaries are built and verified, so the site is rebuilt and (when enabled) deployed alongside the release. See [docs/release-and-connectors.md](../../docs/release-and-connectors.md) for that coupling.
 - GitLab CI runs the same website checks, builds the Docker image, and pushes `$CI_REGISTRY_IMAGE/website:<sha>` plus `:main` only on `main`.
 - Deployment runs `website/deploy/deploy-podman-quadlet.sh` on the origin runner. The script pulls the CI-built GHCR tag, resolves it to an immutable digest, updates the rootless Quadlet `Image=...@sha256:...`, restarts `cli-polymetrics.service`, checks loopback health, and verifies the public Cloudflare Tunnel URL.
 - `website/deploy/deploy-image.sh` and the Kubernetes manifests are retained for future Kubernetes environments, but they are not the active Polymetrics origin path.
@@ -32,6 +33,7 @@ GitLab image builds use Docker-in-Docker. The runner used by `website:image` mus
 Required:
 
 - `GITHUB_TOKEN`: provided by GitHub Actions; used to push to GHCR from `main`.
+- Variable `WEBSITE_DEPLOY_ENABLED`: must be `true` for the `deploy` job to run. Any other value builds and pushes the image but skips deployment.
 
 Optional:
 
