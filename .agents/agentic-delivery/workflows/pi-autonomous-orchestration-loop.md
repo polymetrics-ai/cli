@@ -37,16 +37,16 @@ INTAKE          (Orchestrator) classify problem: connector | implementation; not
 RESEARCH        (Orchestrator / pm-web-researcher) → durable research doc  [ALWAYS for connector; for implementation only when INTAKE flags an external unknown]
                 gate (connector): coverage self-check unclassified_endpoints==0, all_source_urls_present, complete==true
 PARENT_PLAN     (Orchestrator / pm-planner mode=parent-plan) → parent + ordered sub-issues + dep graph  [consumes the research doc]
-ISSUE_CREATE    (Codex  / pm-issue-creator) → gh issue create parent + subs (idempotent)
+ISSUE_CREATE    (Worker / pm-issue-creator) → gh issue create parent + subs (idempotent)
 PARENT_SETUP    create parent branch feat/<N>-<slug> from main; open DRAFT parent PR → main (Refs #<N>; seed --allow-empty commit if no diff). Record parent_branch + parent_pr.
 ─ per ready sub-issue ──────────────────────────── TASK LOOP ─────────────────────────────
   TASK_PLAN     (Orchestrator / pm-planner mode=task-plan) → PLAN.md, TDD-LEDGER seed, VERIFICATION checklist
   SUB_BRANCH    create sub-branch off the parent branch, own cwd/worktree (mutating worker isolation)
-  EXECUTE       (Codex  / pm-gsd-worker) → implement minimal green slices, commit per slice, push
+  EXECUTE       (Worker / pm-gsd-worker) → implement minimal green slices, commit per slice, push
   SUB_PR_OPEN   open sub-PR (base = parent branch; body: Refs #<sub> + Refs #<N>). Record sub_pr number.
   VERIFY        (Orchestrator / pm-verifier) → run gates → VERIFICATION.md   ── GATE: must pass ──
   REVIEW        (Orchestrator / pm-reviewer, on the sub-PR) → adversarial findings   ── GATE: must be clean ──
-  CORRECT       (Codex  / pm-gsd-worker) if findings → fix → push  ┐
+  CORRECT       (Worker / pm-gsd-worker) if findings → fix → push  ┐
                 (Orchestrator / pm-reviewer) re-review                    ┘ repeat ≤ max_correction_rounds
   INTEGRATE     merge sub-PR → parent branch; mark sub-issue complete
 ─────────────────────────────────────────────────────────────────────────────────────────

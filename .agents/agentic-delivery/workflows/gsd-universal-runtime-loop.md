@@ -95,7 +95,9 @@ Every runtime must run this lifecycle:
 ### Pi
 
 - Project instructions: `AGENTS.md`.
-- Settings: `.pi/settings.json` (provider/model defaults, compaction, retry).
+- Settings: `.pi/settings.json` (extensions, prompt/skill paths). It sets no model key; model
+  routing is owned by `.pi/README.md` — roles inherit the parent session model the driver launches
+  `pi` with (`ORCH_MODEL`).
 - Prompts: `.pi/prompts/*.md` use `$@`/`$1` placeholders and `argument-hint` frontmatter; invoke with
   `/pm-orchestrate`, `/pm-gsd-loop`, `/pm-review-loop`.
 - Agents: `.pi/agents/*.md` (read-only `pm-scout`/`pm-reviewer`; mutating `pm-gsd-worker`).

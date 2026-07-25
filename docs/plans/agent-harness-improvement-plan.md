@@ -247,6 +247,12 @@ later under the GSD loop.
 
 ### Phase 3 — Model routing for cost efficiency (fixes 3.4)
 
+> **Superseded — do not apply step 1.** `.pi/agents/*.md` deliberately carry no `model:` pin so
+> every role inherits the parent session model and the fleet stays provider-agnostic. Pi model
+> routing is owned by `.pi/README.md` and
+> `.agents/agentic-delivery/workflows/pi-autonomous-orchestration-loop.md`; route via the driver's
+> `ORCH_MODEL` instead of frontmatter pins.
+
 1. Add per-agent `model` overrides in `.pi/agents/*.md` frontmatter and
    `.planning/config.json` `model_overrides`: `pm-scout` → `gpt-5.4-mini:high` (recon),
    `pm-gsd-worker` → `gpt-5.5:high` (implementation), keep `pm-reviewer` and orchestrator on

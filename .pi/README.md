@@ -8,7 +8,11 @@ workflows, skills, and guardrails.
 
 - Pi CLI: `@earendil-works/pi-coding-agent`
 - Project package: `npm:pi-sub-agent@0.1.5`
-- Model routing: the orchestrator roles in `.pi/agents/*` carry no `model:` key and inherit the parent session model the driver launches `pi` with (`ORCH_MODEL`); with no `--model`/`ORCH_MODEL` a bare launch falls back to pi's own configured default (historically `openai-codex/gpt-5.5`), which depends on the user's `~/.pi` config / last `/model` selection — `.pi/settings.json` sets no model key
+- Model routing: the orchestrator roles in `.pi/agents/*` carry no `model:` key and inherit the
+  parent session model the driver launches `pi` with (`ORCH_MODEL`); with no `--model`/`ORCH_MODEL`
+  a bare launch falls back to pi's own configured default (historically `openai-codex/gpt-5.5`),
+  which depends on the user's `~/.pi` config / last `/model` selection — `.pi/settings.json` sets
+  no model key
 - OpenCode project model: `opencode-go/kimi-k2.7-code`
 - OpenCode small model: `opencode-go/deepseek-v4-flash`
 
