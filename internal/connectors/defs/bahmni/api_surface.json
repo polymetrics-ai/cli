@@ -204,8 +204,14 @@
     {
       "method": "POST",
       "path": "/ws/rest/v1/appointment",
-      "covered_by": {
-        "write": "create_appointment"
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Singular appointments-module save controller; the executable create_appointment write posts to the plural /ws/rest/v1/appointments endpoint, so this row is recorded for parity rather than claimed as covered.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments",
+        "duplicate_of": "POST /ws/rest/v1/appointments"
       }
     },
     {

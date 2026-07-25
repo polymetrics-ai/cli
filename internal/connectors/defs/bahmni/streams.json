@@ -192,6 +192,16 @@
     {
       "name": "appointments",
       "path": "/ws/rest/v1/appointments",
+      "query": {
+        "patientUuid": {
+          "template": "{{ config.patient_uuid }}",
+          "omit_when_absent": true
+        },
+        "forDate": {
+          "template": "{{ config.appointment_date }}",
+          "omit_when_absent": true
+        }
+      },
       "records": {
         "path": ""
       },
