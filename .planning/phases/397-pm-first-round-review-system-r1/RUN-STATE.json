@@ -44,7 +44,7 @@
     "exactImplementationHead": null,
     "candidateState": "captain_authorized_advisory_correction_full_green_honest_prompt_64_packets_exact_commit_pending",
     "static": "passed_python_shell_shellcheck_json_yaml_diff",
-    "focused": "passed_advisory_f1_f6_complete_range_exact_diff_impact_depth_replay_headroom_64_packets_ready_0_overflow_max_30000_dup_1_0196",
+    "focused": "passed_advisory_f1_f6_complete_range_exact_diff_impact_depth_replay_headroom_63_packets_headroom_1_ready_0_overflow_max_30000_ci_robust",
     "goVet": "passed_advisory_correction",
     "goTest20m": "passed_advisory_correction_all_packages",
     "goBuild": "passed_advisory_correction",
@@ -296,16 +296,13 @@
     },
     "advisoryCorrectionAfter": {
       "artifact": "/Users/karthiksivadas/karthik-agent-workspace/data/cli-first-round-review-audit-r1/f1-correction-after-uncommitted/measurement.json",
-      "compileWallClockSeconds": 13.91,
-      "packetCount": 64,
+      "packetCount": 63,
       "hardPacketCap": 64,
-      "packetHeadroom": 0,
+      "packetHeadroom": 1,
       "maxRenderedPromptBytes": 30000,
       "overflowPackets": 0,
-      "duplicationFactor": 1.019555,
-      "threeCompileDigestStable": true,
       "perfOptimizationOutputIdenticalOnFrozenTree": true,
-      "packetBudgetNote": "64 <= 64 hard cap; baseline headroom consumed by required honest F2/F3 prompt and larger impact graph; no limit/gate weakened"
+      "packetBudgetNote": "first correction commit compiled 64/headroom-0 locally but CI Linux tipped it to 65 and blocked verify; condensing process narration (PLAN/ALGORITHM-RESEARCH only; frozen dispositions and other-workstream files untouched) restored 63/headroom-1 CI-robust within the unchanged 64 hard cap; no limit/gate weakened"
     }
   },
   "readyQueue": [
