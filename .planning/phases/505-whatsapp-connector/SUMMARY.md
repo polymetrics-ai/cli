@@ -31,6 +31,25 @@ See `VERIFICATION.md`. Key gates: `connectorgen validate` 0 findings; conformanc
 `go build`/`vet`/`gofmt` clean; affected test packages green; `make docs-check` green.
 Manual-GSD fallback used (Pi-only adapter unavailable under Claude Code) — recorded in `PLAN.md`.
 
+## Sibling-review audit (Bahmni's 4 patterns)
+
+Audited feat/whatsapp-connector against the 4 bug patterns Bahmni's review surfaced:
+
+- (a) PHI-redaction — **APPLIED**. WhatsApp PHI/credential record fields (recipient `to`, message
+  content keys, media path, `pin`, `code`, `prefilled_message`) were not matched by the reverse-ETL
+  plan redactor. Fix: renamed the media-path field `file` -> `media_file` (matches an existing
+  marker) and extended `commandrunner.isSensitiveRecordField` with an exact-match set for
+  provider-dictated short/ambiguous keys (to/pin/code/file + message-content keys) plus substring
+  markers (message/recipient/phone/msisdn/patient). Locked by `TestRedactRecordRedactsMessagingPHIFields`;
+  `title`/`type`/`status`/`country_code` stay visible. certify (all connectors) still green.
+- (b) offset_limit on a root-array/non-paginated endpoint — **N/A**. WhatsApp uses Graph `cursor`
+  pagination (stops on empty `paging.cursors.after`); `waba` is `pagination: none`. No `offset_limit`
+  and no root-array streams.
+- (c) auth check passing with bad creds — **N/A**. Check hits the authenticated
+  `/{WABA_ID}/phone_numbers` (401 on bad/missing token), not a public/status endpoint.
+- (d) group/command hyphen-vs-underscore mismatch — **N/A**. Group ids exactly match command-path
+  first tokens (all hyphenated consistently; stream/write names stay snake_case as required).
+
 ## Human gates
 
 Parent PR merge to `main`; live Cloud API / whatsmeow credentials; live sends / template

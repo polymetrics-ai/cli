@@ -219,7 +219,7 @@
       "sensitive_policy": {
         "input_mode": "file",
         "redact_fields": [
-          "file"
+          "media_file"
         ],
         "transform": "none",
         "approval_mode": "typed_confirmation"

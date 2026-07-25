@@ -413,6 +413,37 @@ func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) 
 	}
 }
 
+func TestRedactRecordRedactsMessagingPHIFields(t *testing.T) {
+	redacted := redactRecord(connectors.Record{
+		"to":                "+15551234567",
+		"text":              map[string]any{"body": "your lab result is ready"},
+		"image":             map[string]any{"link": "https://media/x.jpg"},
+		"document":          map[string]any{"id": "doc1"},
+		"media_file":        "/tmp/patient-scan.pdf",
+		"file":              "/tmp/patient-scan.pdf",
+		"pin":               "123456",
+		"code":              "654321",
+		"prefilled_message": "book your appointment",
+		"recipient_phone":   "+15559876543",
+		"patient_uuid":      "abc-123",
+		// non-sensitive fields must stay visible
+		"messaging_product": "whatsapp",
+		"type":              "text",
+		"status":            "read",
+		"country_code":      "US",
+	})
+	for _, key := range []string{"to", "text", "image", "document", "media_file", "file", "pin", "code", "prefilled_message", "recipient_phone", "patient_uuid"} {
+		if redacted[key] != "***" {
+			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+		}
+	}
+	for _, key := range []string{"messaging_product", "type", "status", "country_code"} {
+		if redacted[key] == "***" {
+			t.Fatalf("redacted[%s] was redacted, want visible in %+v", key, redacted)
+		}
+	}
+}
+
 func TestRunReverseETLCommandRemainsNonExecutableInGenericRunner(t *testing.T) {
 	connector := reverseETLFakeConnector()
 

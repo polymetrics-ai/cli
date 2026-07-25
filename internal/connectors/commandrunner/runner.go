@@ -823,7 +823,18 @@ func redactRecord(in connectors.Record) connectors.Record {
 
 func isSensitiveRecordField(name string) bool {
 	normalized := strings.ToLower(strings.ReplaceAll(name, "-", "_"))
-	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path"} {
+	// Exact-match sensitive keys: provider-dictated record fields (e.g. WhatsApp
+	// Cloud API message-body keys and recipient/credential fields) that carry
+	// patient PHI or secrets but are too short/ambiguous to match as a substring
+	// without over-redacting unrelated fields ("to" vs "token", "code" vs
+	// "country_code", "file" vs "profile", "pin" vs "typing").
+	switch normalized {
+	case "to", "pin", "code", "file",
+		"text", "image", "audio", "video", "document", "sticker",
+		"location", "contacts", "interactive", "template", "reaction", "caption":
+		return true
+	}
+	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path", "message", "recipient", "phone", "msisdn", "patient"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}

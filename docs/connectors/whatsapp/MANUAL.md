@@ -160,7 +160,7 @@ REVERSE ETL ACTIONS
     risk: deletes a QR code / short link
   upload_media:
     endpoint: POST /{{ config.phone_number_id }}/media
-    required fields: file, type
+    required fields: media_file, type
     risk: uploads bounded media to WhatsApp and returns a media id (patient content; PHI)
   delete_media:
     endpoint: DELETE /{{ record.media_id }}
@@ -217,7 +217,7 @@ COMMAND SURFACE
     profile update - Update the WhatsApp business profile. [intent=reverse_etl availability=partial write=update_business_profile]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: updates the WhatsApp business profile for the number; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --messaging-product
   Media
     media get-url - Resolve a media id to a 5-minute TTL media URL. [intent=direct_read availability=implemented]; risk: bounded Graph JSON read; response is size-capped and secret/PHI/URL-shaped fields are redacted; flags: --media-id
-    media upload - Upload bounded media to WhatsApp and return a media id (PHI). [intent=reverse_etl availability=partial write=upload_media]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: uploads bounded media to WhatsApp and returns a media id (patient content; PHI); notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --file, --type
+    media upload - Upload bounded media to WhatsApp and return a media id (PHI). [intent=reverse_etl availability=partial write=upload_media]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: uploads bounded media to WhatsApp and returns a media id (patient content; PHI); notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --media-file, --type
     media delete - Permanently delete an uploaded media object. [intent=reverse_etl availability=partial write=delete_media]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes an uploaded media object; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --media-id
   Analytics
     analytics messaging - Bounded typed WhatsApp analytics read-query. [intent=direct_read availability=implemented]; approval: none: read-only analytics query with schema-gated fields; risk: bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted; notes: Executes through the typed operation direct-read engine; no raw Graph fields string or generic HTTP flag is exposed.; flags: --start, --end, --granularity

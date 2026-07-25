@@ -922,10 +922,10 @@
       "write": "upload_media",
       "flags": [
         {
-          "name": "file",
+          "name": "media-file",
           "type": "string",
-          "summary": "Local file path to upload (bounded; image/audio/video/document/sticker).",
-          "maps_to": "record.file"
+          "summary": "Local file path to upload (bounded; image/audio/video/document/sticker); redacted in plans as PHI.",
+          "maps_to": "record.media_file"
         },
         {
           "name": "type",

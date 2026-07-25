@@ -918,7 +918,7 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "file",
+          "media_file",
           "type"
         ],
         "properties": {
@@ -928,9 +928,9 @@
               "whatsapp"
             ]
           },
-          "file": {
+          "media_file": {
             "type": "string",
-            "description": "Local file path to upload (bounded; image/audio/video/document/sticker)."
+            "description": "Local file path to upload (bounded; image/audio/video/document/sticker); redacted in plans as PHI."
           },
           "type": {
             "type": "string",
@@ -956,7 +956,7 @@
           {
             "name": "file",
             "type": "file",
-            "field": "file",
+            "field": "media_file",
             "required": true,
             "max_bytes": 104857600
           }

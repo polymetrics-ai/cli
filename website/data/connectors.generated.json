@@ -108039,11 +108039,11 @@
           "source_url": "",
           "flags": [
             {
-              "name": "file",
+              "name": "media-file",
               "type": "string",
-              "summary": "Local file path to upload (bounded; image/audio/video/document/sticker).",
+              "summary": "Local file path to upload (bounded; image/audio/video/document/sticker); redacted in plans as PHI.",
               "values": [],
-              "maps_to": "record.file"
+              "maps_to": "record.media_file"
             },
             {
               "name": "type",
