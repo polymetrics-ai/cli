@@ -10045,9 +10045,9 @@
     }
   },
   {
-    "name": "bahmni-docker",
-    "display_name": "Bahmni (bahmni-docker)",
-    "description": "Reads clinical EMR data from a Bahmni deployment (bahmni-docker) through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Patient-linked data is redacted by default.",
+    "name": "bahmni",
+    "display_name": "Bahmni",
+    "description": "Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Output is bounded; secret-shaped fields and file-path inputs are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.",
     "integration_type": "api",
     "docs_url": "https://rest.openmrs.org/",
     "release_stage": "alpha",
@@ -10060,7 +10060,7 @@
     },
     "spec": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "Bahmni (bahmni-docker) Connection Specification",
+      "title": "Bahmni Connection Specification",
       "type": "object",
       "required": [
         "base_url",
@@ -10072,7 +10072,7 @@
           "type": "string",
           "format": "uri",
           "default": "http://localhost/openmrs",
-          "description": "Base URL of the local bahmni-docker OpenMRS instance, e.g. http://localhost/openmrs."
+          "description": "Base URL of the Bahmni OpenMRS instance, e.g. http://localhost/openmrs for a local Bahmni/bahmni-docker deployment."
         },
         "username": {
           "type": "string",
@@ -10233,7 +10233,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/patient",
-        "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; PHI fields are redacted in plans and require reverse ETL approval"
+        "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; requires reverse ETL approval"
       },
       {
         "name": "update_patient",
@@ -10248,28 +10248,28 @@
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/encounter",
-        "risk": "high: writes a clinical encounter with linked observations for a patient; PHI fields are redacted in plans and require reverse ETL approval"
+        "risk": "high: writes a clinical encounter with linked observations for a patient; requires reverse ETL approval"
       },
       {
         "name": "create_observation",
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/obs",
-        "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; PHI/clinical values are redacted in plans and require reverse ETL approval"
+        "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; requires reverse ETL approval"
       },
       {
         "name": "create_appointment",
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/appointments",
-        "risk": "medium: books a Bahmni patient appointment; patient identifiers are redacted in plans and require reverse ETL approval"
+        "risk": "medium: books a Bahmni patient appointment; requires reverse ETL approval"
       },
       {
         "name": "create_drug_order",
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/order",
-        "risk": "critical: places a medication (drug) order for a patient; medication and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "risk": "critical: places a medication (drug) order for a patient; requires reverse ETL approval and destructive confirmation",
         "confirm": "destructive"
       },
       {
@@ -10277,7 +10277,7 @@
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/bahmnicore/diagnosis",
-        "risk": "critical: records a clinical diagnosis for a patient; diagnosis and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "risk": "critical: records a clinical diagnosis for a patient; requires reverse ETL approval and destructive confirmation",
         "confirm": "destructive"
       },
       {
@@ -10293,17 +10293,17 @@
         "kind": "create",
         "method": "POST",
         "path": "/ws/rest/v1/attachment",
-        "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; file path/content and patient identifiers are redacted in plans and require reverse ETL approval and destructive confirmation",
+        "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; local file path is redacted in plans and the action requires reverse ETL approval and destructive confirmation",
         "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; patient-linked reads are bounded and PHI-redacted by default",
+      "read": "external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; reads are bounded and secret-shaped fields are redacted by existing output policies, but clinical PHI fields are not generally field-redacted by the current engine",
       "write": "typed Bahmni/OpenMRS reverse ETL clinical mutations for patients, encounters, observations, appointments, drug orders, diagnoses, a bounded top-level JSON array observation upload, and a bounded multipart patient-document upload",
-      "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive; multipart document upload binds a SHA-256 payload identity that is snapshot-verified before network send"
+      "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive; multipart document upload binds a SHA-256 payload identity that is snapshot-verified before network send and redacts the local file path in plans"
     },
     "icon": {
-      "id": "pm-bahmni-docker",
+      "id": "pm-bahmni",
       "path": "icons/pm-sample.svg",
       "source": "polymetrics",
       "review_status": "polymetrics",
@@ -55245,6 +55245,50 @@
           "full_refresh_overwrite",
           "full_refresh_overwrite_deduped"
         ]
+      },
+      {
+        "name": "projects",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_items",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "discussions",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "discussion",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
       }
     ],
     "write_actions": [
@@ -55277,6 +55321,13 @@
         "risk": "closes existing GitHub issue"
       },
       {
+        "name": "reopen_issue",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/issues/{{ record.issue_number }}",
+        "risk": "reopens a previously closed GitHub issue"
+      },
+      {
         "name": "create_pull_request",
         "kind": "create",
         "method": "POST",
@@ -55296,6 +55347,13 @@
         "method": "PATCH",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}",
         "risk": "closes existing GitHub pull request"
+      },
+      {
+        "name": "reopen_pull_request",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{{ config.owner }}/{{ config.repo }}/pulls/{{ record.pull_number }}",
+        "risk": "reopens a previously closed GitHub pull request"
       },
       {
         "name": "request_reviewers",
@@ -55717,6 +55775,1145 @@
         "method": "PATCH",
         "path": "/repos/{{ config.owner }}/{{ config.repo }}/secret-scanning/alerts/{{ record.alert_number }}",
         "risk": "changes a secret scanning alert's triage state, which can suppress a real leaked-credential finding"
+      },
+      {
+        "name": "repo",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}",
+        "risk": "critical",
+        "confirm": "destructive"
+      },
+      {
+        "name": "repo2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_cache_retention_limit2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/cache/retention-limit",
+        "risk": "high"
+      },
+      {
+        "name": "actions_cache_storage_limit2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/cache/storage-limit",
+        "risk": "high"
+      },
+      {
+        "name": "actions_caches",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/caches",
+        "risk": "medium"
+      },
+      {
+        "name": "actions_caches_cache_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/caches/{cache_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "actions_jobs_job_id_rerun",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/jobs/{job_id}/rerun",
+        "risk": "medium"
+      },
+      {
+        "name": "actions_oidc_customization_sub2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/oidc/customization/sub",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_access2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/access",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_artifact_and_log_retention2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/artifact-and-log-retention",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_fork_pr_contributor_approval2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-contributor-approval",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_fork_pr_workflows_private_repos2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/fork-pr-workflows-private-repos",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_selected_actions2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/selected-actions",
+        "risk": "high"
+      },
+      {
+        "name": "actions_permissions_workflow2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/permissions/workflow",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_generate_jitconfig",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/generate-jitconfig",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_registration_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/registration-token",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_remove_token",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/remove-token",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_runner_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_runner_id_labels",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_runner_id_labels3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_runner_id_labels4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runners_runner_id_labels_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runners/{runner_id}/labels/{name}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runs_run_id_approve",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/approve",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runs_run_id_deployment_protection_rule",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/deployment_protection_rule",
+        "risk": "high"
+      },
+      {
+        "name": "actions_runs_run_id_logs",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/logs",
+        "risk": "critical",
+        "confirm": "destructive"
+      },
+      {
+        "name": "actions_runs_run_id_pending_deployments2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/runs/{run_id}/pending_deployments",
+        "risk": "high"
+      },
+      {
+        "name": "actions_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_variables2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/actions/variables",
+        "risk": "high"
+      },
+      {
+        "name": "actions_variables_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_variables_name3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/actions/variables/{name}",
+        "risk": "high"
+      },
+      {
+        "name": "actions_workflows_workflow_id_disable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/disable",
+        "risk": "high"
+      },
+      {
+        "name": "actions_workflows_workflow_id_enable",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/actions/workflows/{workflow_id}/enable",
+        "risk": "high"
+      },
+      {
+        "name": "attestations",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/attestations",
+        "risk": "high"
+      },
+      {
+        "name": "autolinks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/autolinks",
+        "risk": "medium"
+      },
+      {
+        "name": "autolinks_autolink_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/autolinks/{autolink_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "automated_security_fixes",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/automated-security-fixes",
+        "risk": "high"
+      },
+      {
+        "name": "automated_security_fixes3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/automated-security-fixes",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_enforce_admins",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_enforce_admins3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/enforce_admins",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_pull_request_reviews",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_pull_request_reviews3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_pull_request_reviews",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_signatures",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_signatures3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_signatures",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_status_checks",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_status_checks3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_status_checks_contexts",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_status_checks_contexts3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_required_status_checks_contexts4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/required_status_checks/contexts",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_apps",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_apps3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_apps4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/apps",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_teams",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_teams3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_teams4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/teams",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_users",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_users3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_protection_restrictions_users4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/protection/restrictions/users",
+        "risk": "high"
+      },
+      {
+        "name": "branches_branch_rename",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/branches/{branch}/rename",
+        "risk": "critical",
+        "confirm": "destructive"
+      },
+      {
+        "name": "check_runs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-runs",
+        "risk": "medium"
+      },
+      {
+        "name": "check_runs_check_run_id2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "check_runs_check_run_id_rerequest",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-runs/{check_run_id}/rerequest",
+        "risk": "medium"
+      },
+      {
+        "name": "check_suites",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-suites",
+        "risk": "medium"
+      },
+      {
+        "name": "check_suites_preferences",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/check-suites/preferences",
+        "risk": "medium"
+      },
+      {
+        "name": "check_suites_check_suite_id_rerequest",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/check-suites/{check_suite_id}/rerequest",
+        "risk": "medium"
+      },
+      {
+        "name": "code_quality_setup2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/code-quality/setup",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_alerts_alert_number_autofix2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_alerts_alert_number_autofix_commits",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/alerts/{alert_number}/autofix/commits",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_analyses_analysis_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/code-scanning/analyses/{analysis_id}",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_codeql_databases_language",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/databases/{language}",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_codeql_variant_analyses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/codeql/variant-analyses",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_default_setup2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/code-scanning/default-setup",
+        "risk": "high"
+      },
+      {
+        "name": "code_scanning_sarifs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/code-scanning/sarifs",
+        "risk": "medium"
+      },
+      {
+        "name": "codespaces2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/codespaces",
+        "risk": "medium"
+      },
+      {
+        "name": "codespaces_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+        "risk": "medium"
+      },
+      {
+        "name": "codespaces_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/codespaces/secrets/{secret_name}",
+        "risk": "medium"
+      },
+      {
+        "name": "comments_comment_id_reactions2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions",
+        "risk": "medium"
+      },
+      {
+        "name": "comments_comment_id_reactions_reaction_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/comments/{comment_id}/reactions/{reaction_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "dependabot_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "dependabot_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/dependabot/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "dependency_graph_snapshots",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/dependency-graph/snapshots",
+        "risk": "medium"
+      },
+      {
+        "name": "deployments_deployment_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}",
+        "risk": "critical",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deployments_deployment_id_statuses2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/deployments/{deployment_id}/statuses",
+        "risk": "medium"
+      },
+      {
+        "name": "dispatches",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/dispatches",
+        "risk": "medium"
+      },
+      {
+        "name": "environments_environment_name_deployment_branch_policies2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_deployment_branch_policies_branch_policy_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment-branch-policies/{branch_policy_id}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_deployment_protection_rules2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_deployment_protection_rules_protection_rule_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/deployment_protection_rules/{protection_rule_id}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_secrets_secret_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_secrets_secret_name3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/secrets/{secret_name}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_variables2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_variables_name",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+        "risk": "high"
+      },
+      {
+        "name": "environments_environment_name_variables_name3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/environments/{environment_name}/variables/{name}",
+        "risk": "high"
+      },
+      {
+        "name": "git_blobs",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/blobs",
+        "risk": "medium"
+      },
+      {
+        "name": "git_commits",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/commits",
+        "risk": "medium"
+      },
+      {
+        "name": "git_trees",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/git/trees",
+        "risk": "medium"
+      },
+      {
+        "name": "hooks_hook_id_deliveries_delivery_id_attempts",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/deliveries/{delivery_id}/attempts",
+        "risk": "medium"
+      },
+      {
+        "name": "hooks_hook_id_pings",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/pings",
+        "risk": "low"
+      },
+      {
+        "name": "hooks_hook_id_tests",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/hooks/{hook_id}/tests",
+        "risk": "low"
+      },
+      {
+        "name": "immutable_releases",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/immutable-releases",
+        "risk": "high"
+      },
+      {
+        "name": "immutable_releases3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/immutable-releases",
+        "risk": "high"
+      },
+      {
+        "name": "import",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/import",
+        "risk": "medium"
+      },
+      {
+        "name": "import3",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import",
+        "risk": "medium"
+      },
+      {
+        "name": "import4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/import",
+        "risk": "medium"
+      },
+      {
+        "name": "import_authors_author_id",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import/authors/{author_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "import_lfs",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/import/lfs",
+        "risk": "medium"
+      },
+      {
+        "name": "interaction_limits",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/interaction-limits",
+        "risk": "high"
+      },
+      {
+        "name": "interaction_limits3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/interaction-limits",
+        "risk": "high"
+      },
+      {
+        "name": "interaction_limits_pulls_bypass_list",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+        "risk": "high"
+      },
+      {
+        "name": "interaction_limits_pulls_bypass_list3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/interaction-limits/pulls/bypass-list",
+        "risk": "high"
+      },
+      {
+        "name": "invitations_invitation_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "invitations_invitation_id2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/invitations/{invitation_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_comments_comment_id_pin",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_comments_comment_id_pin2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/pin",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_comments_comment_id_reactions2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_comments_comment_id_reactions_reaction_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/comments/{comment_id}/reactions/{reaction_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_dependencies_blocked_by2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_dependencies_blocked_by_issue_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/dependencies/blocked_by/{issue_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_issue_field_values2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+        "risk": "high"
+      },
+      {
+        "name": "issues_issue_number_issue_field_values3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values",
+        "risk": "high"
+      },
+      {
+        "name": "issues_issue_number_issue_field_values_issue_field_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/issue-field-values/{issue_field_id}",
+        "risk": "high"
+      },
+      {
+        "name": "issues_issue_number_reactions2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_reactions_reaction_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/reactions/{reaction_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_sub_issue",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issue",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_sub_issues2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues",
+        "risk": "medium"
+      },
+      {
+        "name": "issues_issue_number_sub_issues_priority",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/issues/{issue_number}/sub_issues/priority",
+        "risk": "medium"
+      },
+      {
+        "name": "merge_upstream",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/merge-upstream",
+        "risk": "medium"
+      },
+      {
+        "name": "notifications2",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/notifications",
+        "risk": "medium"
+      },
+      {
+        "name": "pages",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pages",
+        "risk": "medium"
+      },
+      {
+        "name": "pages3",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages",
+        "risk": "medium"
+      },
+      {
+        "name": "pages4",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/pages",
+        "risk": "medium"
+      },
+      {
+        "name": "pages_builds2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/builds",
+        "risk": "medium"
+      },
+      {
+        "name": "pages_deployments",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/deployments",
+        "risk": "medium"
+      },
+      {
+        "name": "pages_deployments_pages_deployment_id_cancel",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pages/deployments/{pages_deployment_id}/cancel",
+        "risk": "medium"
+      },
+      {
+        "name": "private_vulnerability_reporting",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+        "risk": "high"
+      },
+      {
+        "name": "private_vulnerability_reporting3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/private-vulnerability-reporting",
+        "risk": "high"
+      },
+      {
+        "name": "properties_values2",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/properties/values",
+        "risk": "high"
+      },
+      {
+        "name": "pulls_comments_comment_id_reactions2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions",
+        "risk": "medium"
+      },
+      {
+        "name": "pulls_comments_comment_id_reactions_reaction_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/comments/{comment_id}/reactions/{reaction_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "pulls_pull_number_codespaces",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/codespaces",
+        "risk": "medium"
+      },
+      {
+        "name": "pulls_pull_number_requested_reviewers",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers",
+        "risk": "medium"
+      },
+      {
+        "name": "releases_generate_notes",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/generate-notes",
+        "risk": "low"
+      },
+      {
+        "name": "releases_release_id_assets2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/assets",
+        "risk": "medium"
+      },
+      {
+        "name": "releases_release_id_reactions2",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions",
+        "risk": "medium"
+      },
+      {
+        "name": "releases_release_id_reactions_reaction_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/releases/{release_id}/reactions/{reaction_id}",
+        "risk": "medium"
+      },
+      {
+        "name": "secret_scanning_push_protection_bypasses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/secret-scanning/push-protection-bypasses",
+        "risk": "high"
+      },
+      {
+        "name": "security_advisories",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories",
+        "risk": "high"
+      },
+      {
+        "name": "security_advisories_reports",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/reports",
+        "risk": "high"
+      },
+      {
+        "name": "security_advisories_ghsa_id",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}",
+        "risk": "high"
+      },
+      {
+        "name": "security_advisories_ghsa_id_cve",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/cve",
+        "risk": "high"
+      },
+      {
+        "name": "security_advisories_ghsa_id_forks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/security-advisories/{ghsa_id}/forks",
+        "risk": "high"
+      },
+      {
+        "name": "statuses_sha",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/statuses/{sha}",
+        "risk": "medium"
+      },
+      {
+        "name": "subscription",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/subscription",
+        "risk": "medium"
+      },
+      {
+        "name": "subscription3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/subscription",
+        "risk": "medium"
+      },
+      {
+        "name": "transfer",
+        "kind": "create",
+        "method": "POST",
+        "path": "/repos/{owner}/{repo}/transfer",
+        "risk": "critical",
+        "confirm": "destructive"
+      },
+      {
+        "name": "vulnerability_alerts",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+        "risk": "high"
+      },
+      {
+        "name": "vulnerability_alerts3",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/repos/{owner}/{repo}/vulnerability-alerts",
+        "risk": "high"
       }
     ],
     "risk": {
@@ -58181,7 +59378,7 @@
   {
     "name": "gong",
     "display_name": "Gong",
-    "description": "Reads Gong users, calls, and scorecards through the Gong REST API (read-only).",
+    "description": "Reads Gong users, calls, scorecards, settings, flows, and related public API resources; executes selected typed POST read-query commands; models Gong mutations, multipart uploads, and top-level array uploads as typed reverse-ETL actions.",
     "integration_type": "api",
     "docs_url": "https://us-66463.app.gong.io/settings/api/documentation",
     "release_stage": "ga",
@@ -58189,7 +59386,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -58280,10 +59477,272 @@
           "incremental_append",
           "incremental_append_deduped"
         ]
+      },
+      {
+        "name": "crm_integrations",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "workspaces",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "trackers",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "briefs",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "library_folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "flows",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "flow_folders",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "call_outcomes",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      },
+      {
+        "name": "permission_profiles",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite"
+        ]
+      }
+    ],
+    "write_actions": [
+      {
+        "name": "add_call",
+        "kind": "create",
+        "method": "POST",
+        "path": "/calls",
+        "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+      },
+      {
+        "name": "create_permission_profile",
+        "kind": "create",
+        "method": "POST",
+        "path": "/permission-profile?workspaceId={{ record.workspaceId }}",
+        "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_permission_profile",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/permission-profile?profileId={{ record.profileId }}",
+        "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_meeting",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/meetings/{meetingId}",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_meeting",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/meetings/{meetingId}",
+        "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "content_viewed",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customer-engagement/content/viewed",
+        "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+      },
+      {
+        "name": "content_shared",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customer-engagement/content/shared",
+        "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+      },
+      {
+        "name": "custom_action",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/customer-engagement/action",
+        "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+      },
+      {
+        "name": "register_crm_integration",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/crm/integrations",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_crm_integration",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/crm/integrations?integrationId={{ record.integrationId }}\u0026clientRequestId={{ record.clientRequestId }}",
+        "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_calls_users_access",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/calls/users-access",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "delete_calls_users_access",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/calls/users-access",
+        "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_meeting",
+        "kind": "create",
+        "method": "POST",
+        "path": "/meetings",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "integration_settings",
+        "kind": "create",
+        "method": "POST",
+        "path": "/integration-settings",
+        "risk": "high: administrative Gong settings or permissions mutation; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unassign_flows_by_instance_id",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/flows/prospects/unassign-flows-by-instance-id",
+        "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "unassign_flows_by_crm_id",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/flows/prospects/unassign-flows-by-crm-id",
+        "risk": "high: removes Gong access, integration, meeting, or flow assignment state; requires reverse ETL approval and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "submit_flow_prospects_bulk_assignment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/flows/prospects/bulk-assignments",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "assign_prospects",
+        "kind": "create",
+        "method": "POST",
+        "path": "/flows/prospects/assign",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "assign_prospects_cool_off_override",
+        "kind": "create",
+        "method": "POST",
+        "path": "/flows/prospects/assign/cool-off-override",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "add_digital_interaction",
+        "kind": "create",
+        "method": "POST",
+        "path": "/digital-interaction",
+        "risk": "high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval"
+      },
+      {
+        "name": "purge_phone_number",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/data-privacy/erase-data-for-phone-number?phoneNumber={{ record.phoneNumber }}",
+        "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "purge_email_address",
+        "kind": "delete",
+        "method": "POST",
+        "path": "/data-privacy/erase-data-for-email-address?emailAddress={{ record.emailAddress }}",
+        "risk": "critical: destructive Gong data privacy erasure; requires reverse ETL plan, preview, approval, and destructive confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_task",
+        "kind": "update",
+        "method": "PATCH",
+        "path": "/tasks/{taskId}",
+        "risk": "medium: mutates Gong API state; requires reverse ETL approval"
+      },
+      {
+        "name": "upload_call_media",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/v2/calls/{{ record.id }}/media",
+        "risk": "high: uploads call media from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_crm_entities",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/crm/entities",
+        "risk": "high: uploads CRM data from a bounded local file path to Gong; file path/content are redacted in plans and require reverse ETL approval",
+        "confirm": "destructive"
+      },
+      {
+        "name": "upload_crm_entity_schema",
+        "kind": "create",
+        "method": "POST",
+        "path": "/v2/crm/entity-schema",
+        "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
+        "confirm": "destructive"
       }
     ],
     "risk": {
-      "read": "external Gong API read of call, user, and scorecard data"
+      "read": "external Gong API read of call, user, CRM, settings, flow, and activity data; direct reads are bounded and redacted",
+      "write": "typed Gong reverse ETL mutations for calls, meetings, CRM, permissions, flows, engagement, multipart uploads, top-level array CRM schema upload, and data privacy erasure",
+      "approval": "reverse ETL writes require plan, preview, approval, execute; destructive/admin actions require --confirm destructive; local file upload plans bind a SHA-256 payload identity that is snapshot-verified before network send"
     },
     "icon": {
       "id": "gong",

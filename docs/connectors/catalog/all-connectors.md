@@ -38,7 +38,7 @@
 | `awin-advertiser` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Awin Advertiser | `api` | ga | check, catalog, read, write | 5 | 1 | [Documentation](https://wiki.awin.com/index.php/Advertiser_API) | bundle definition |
 | `aws-cloudtrail` | [`icons/aws-cloudtrail.svg`](../icons/aws-cloudtrail.svg) | AWS CloudTrail | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html) | bundle definition |
 | `babelforce` | [`icons/babelforce.svg`](../icons/babelforce.svg) | Babelforce | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://api.babelforce.com/) | bundle definition |
-| `bahmni-docker` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bahmni (bahmni-docker) | `api` | alpha | check, catalog, read, write | 12 | 9 | [Documentation](https://rest.openmrs.org/) | bundle definition |
+| `bahmni` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Bahmni | `api` | alpha | check, catalog, read, write | 12 | 9 | [Documentation](https://rest.openmrs.org/) | bundle definition |
 | `bamboo-hr` | [`icons/bamboohr.svg`](../icons/bamboohr.svg) | BambooHR | `api` | ga | check, catalog, read, write | 84 | 101 | [Documentation](https://documentation.bamboohr.com/reference/getting-started) | bundle definition |
 | `basecamp` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Basecamp | `api` | alpha | check, catalog, read | 3 | 0 | [Documentation](https://github.com/basecamp/bc3-api) | bundle definition |
 | `beamer` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Beamer | `api` | ga | check, catalog, read, write | 7 | 14 | [Documentation](https://www.getbeamer.com/api/docs) | bundle definition |
@@ -181,7 +181,7 @@
 | `getlago` | [`icons/getlago.svg`](../icons/getlago.svg) | Lago | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://doc.getlago.com/api-reference/intro) | bundle definition |
 | `giphy` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Giphy | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.giphy.com/docs/api/) | bundle definition |
 | `gitbook` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GitBook | `api` | ga | check, catalog, read, write | 185 | 170 | [Documentation](https://gitbook.com/docs/developers/gitbook-api/api-reference) | bundle definition |
-| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 33 | 67 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
+| `github` | [`icons/github.svg`](../icons/github.svg) | GitHub | `api` | ga | check, catalog, read, write | 37 | 231 | [Documentation](https://docs.github.com/en/rest) | bundle definition |
 | `gitlab` | [`icons/gitlab.svg`](../icons/gitlab.svg) | GitLab | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.gitlab.com/ee/api/rest/) | bundle definition |
 | `glassfrog` | [`icons/glassfrog.svg`](../icons/glassfrog.svg) | GlassFrog | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://documenter.getpostman.com/view/1014385/glassfrog-api-v3/2SJViY) | bundle definition |
 | `gmail` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Gmail | `api` | ga | check, catalog, read, write | 10 | 35 | [Documentation](https://developers.google.com/gmail/api/reference/rest) | bundle definition |
@@ -189,7 +189,7 @@
 | `gocardless` | [`icons/gocardless.svg`](../icons/gocardless.svg) | GoCardless | `api` | ga | check, catalog, read, write | 63 | 76 | [Documentation](https://developer.gocardless.com/api-reference/) | bundle definition |
 | `goldcast` | [`icons/goldcast.svg`](../icons/goldcast.svg) | Goldcast | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://www.goldcast.io/api-docs) | bundle definition |
 | `gologin` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | GoLogin | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://api.gologin.com/docs) | bundle definition |
-| `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
+| `gong` | [`icons/gong.svg`](../icons/gong.svg) | Gong | `api` | ga | check, catalog, read, write | 12 | 26 | [Documentation](https://us-66463.app.gong.io/settings/api/documentation) | bundle definition |
 | `google-ads` | [`icons/google-adwords.svg`](../icons/google-adwords.svg) | Google Ads | `api` | ga | check, catalog, read | 3 | 0 | [Documentation](https://developers.google.com/google-ads/api/rest/overview) | bundle definition |
 | `google-analytics-data-api` | [`icons/google-analytics.svg`](../icons/google-analytics.svg) | Google Analytics 4 (GA4) | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://developers.google.com/analytics/devguides/reporting/data/v1/changelog) | bundle definition |
 | `google-calendar` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Google Calendar | `api` | alpha | check, catalog, read | 4 | 0 | [Documentation](https://developers.google.com/calendar/api/v3/reference) | bundle definition |

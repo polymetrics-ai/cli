@@ -1,0 +1,547 @@
+{
+  "api": "Bahmni / OpenMRS REST v1 + Bahmni-core REST + OpenMRS FHIR2 R4",
+  "docs": "https://rest.openmrs.org/",
+  "reviewed_at": "2026-07-25",
+  "operation_ledger_version": 1,
+  "scope": "OpenMRS REST v1, Bahmni-core REST, and OpenMRS FHIR2 R4 capability families reachable from a Bahmni deployment, including local Bahmni/bahmni-docker setups: list/detail reads are streams or bounded direct reads, one schema-gated typed POST patient search is an executable direct read, documented clinical mutations plus a top-level JSON array observation upload and a bounded multipart patient-document upload are typed reverse-ETL write actions, and binary download / destructive patient purge / server administration are blocked with recorded evidence.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/patient",
+      "covered_by": {
+        "stream": "patients"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/encounter",
+      "covered_by": {
+        "stream": "encounters"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/obs",
+      "covered_by": {
+        "stream": "observations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/visit",
+      "covered_by": {
+        "stream": "visits"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/concept",
+      "covered_by": {
+        "stream": "concepts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/location",
+      "covered_by": {
+        "stream": "locations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/provider",
+      "covered_by": {
+        "stream": "providers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/drugOrders/active",
+      "covered_by": {
+        "stream": "drug_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/order",
+      "covered_by": {
+        "stream": "lab_orders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/observations",
+      "covered_by": {
+        "stream": "lab_results"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/appointments",
+      "covered_by": {
+        "stream": "appointments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis/getDiagnoses",
+      "covered_by": {
+        "stream": "diagnoses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/patient/{uuid}",
+      "covered_by": {
+        "direct_read": "patient get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/encounter/{uuid}",
+      "covered_by": {
+        "direct_read": "encounter get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/visit/{uuid}",
+      "covered_by": {
+        "direct_read": "visit get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/concept/{uuid}",
+      "covered_by": {
+        "direct_read": "concept get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/provider/{uuid}",
+      "covered_by": {
+        "direct_read": "provider get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/location/{uuid}",
+      "covered_by": {
+        "direct_read": "location get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/fhir2/R4/Patient/{id}",
+      "covered_by": {
+        "direct_read": "fhir patient-read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/fhir2/R4/Observation/{id}",
+      "covered_by": {
+        "direct_read": "fhir observation-read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/fhir2/R4/Encounter/{id}",
+      "covered_by": {
+        "direct_read": "fhir encounter-read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/fhir2/R4/Condition/{id}",
+      "covered_by": {
+        "direct_read": "fhir condition-read"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/patientprofile/{uuid}",
+      "covered_by": {
+        "direct_read": "bahmnicore patient-detail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/search/patient",
+      "covered_by": {
+        "direct_read": "bahmnicore patient-search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/patient",
+      "covered_by": {
+        "write": "create_patient"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/patient/{uuid}",
+      "covered_by": {
+        "write": "update_patient"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/encounter",
+      "covered_by": {
+        "write": "create_encounter"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/obs",
+      "covered_by": {
+        "write": "create_observation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/appointment",
+      "covered_by": {
+        "write": "create_appointment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/order",
+      "covered_by": {
+        "write": "create_drug_order"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis",
+      "covered_by": {
+        "write": "create_diagnosis"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/observations",
+      "covered_by": {
+        "write": "create_observations_bulk"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/attachment",
+      "covered_by": {
+        "write": "upload_patient_document"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/attachment/{uuid}/bytes",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Patient-document binary download is modeled as bounded binary metadata with a bounded local-output policy; it is not exposed as a generic HTTP byte-stream download.",
+        "source_url": "https://rest.openmrs.org/"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ws/rest/v1/patient/{uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Permanent patient deletion/purge is disallowed for reverse ETL; patient removal is never exposed as an executable action.",
+        "notes": "OpenMRS DELETE ?purge=true permanently removes PHI; intentionally not modeled as a write action."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/systemsetting",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Server administration/global-property configuration is out of connector scope and not exposed as a reverse-ETL action.",
+        "notes": "OpenMRS system settings administration is out of scope for this data connector."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/session",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "OpenMRS session may return 200 with authenticated:false and is therefore not used as a health check.",
+        "source_url": "https://rest.openmrs.org/"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/config/{appName}/{configName}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Bahmni app configuration/global-property reads are UI/admin configuration, not clinical ETL records; exposing them generically would create an admin/config escape hatch.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/sql/globalproperty",
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "SQL/global-property helper is explicitly excluded to avoid generic admin/config reads.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/notes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Notes are clinical free text and need a separate typed schema/redaction design before executable CLI exposure.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/notes",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Clinical free-text notes write is not exposed without a dedicated typed write schema and approval policy.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/discharge",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Discharge/ADT workflow mutations are not exposed as generic writes; they require a separate workflow-specific typed command.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/appointment-services",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Appointment-service reference data is official scheduling support surface; not executable in this PR beyond appointment records. Recorded as a parity gap rather than silently omitted.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/appointments/{appointmentUuid}/status-change",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Appointment status transitions/provider responses/reschedules are workflow mutations and require separate typed write schemas; not exposed as generic writes.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v2/patientImage",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Patient image binary read is blocked by default; the current engine exposes JSON direct reads, not generic binary downloads.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/bahmniencounter/find",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Bahmni encounter search/match helpers are workflow-specific clinical reads and are not exposed as generic POST search commands in this connector slice.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ws/rest/v1/bahmnicore/bahmniencounter/{uuid}",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Bahmni encounter deletion is a destructive clinical action and is blocked without a dedicated typed workflow command and explicit approval policy.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Diagnosis search is a clinical helper endpoint; the connector exposes the patient-scoped diagnoses stream and blocks generic diagnosis search pending a typed direct-read design.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis/delete",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Bahmni diagnosis delete is a destructive clinical action, despite using GET in the source controller, and is never exposed as a read command.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmni/terminologies/concepts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Bahmni terminology search is reference data; the connector covers concepts through the OpenMRS concepts stream/direct read and does not expose a generic terminology search helper.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/visit/summary",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Visit summary is a patient-context display helper; the connector exposes visits stream/direct read and blocks the UI summary helper pending a typed schema.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/visit/endVisit",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "End-visit is an ADT/workflow mutation and requires a dedicated workflow-specific typed command; no generic write is exposed.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/bahmnicore/visit/endVisitAndCreateEncounter",
+      "operation": {
+        "model": "destructive_action",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "End-visit-and-create-encounter is an ADT/workflow mutation and is blocked without a dedicated typed workflow command.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/observations/flowSheet",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Flowsheet is a UI/reporting display helper; observations and lab results are exposed through typed streams instead of a generic display endpoint.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/bahmnicore/orders",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Bahmni order display helper is not exposed generically; lab orders and drug orders are covered through typed streams.",
+        "source_url": "https://github.com/Bahmni/bahmni-core"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/appointment/{uuid}/reschedule",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Appointment reschedule is a workflow mutation requiring a dedicated typed schema and approval text; no generic write is exposed.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/appointment/{appointmentUuid}/providerResponse",
+      "operation": {
+        "model": "sensitive_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Appointment provider response is a workflow mutation requiring a dedicated typed schema; no generic write is exposed.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ws/rest/v1/appointment-service-attribute-types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Appointment service attribute types are scheduling reference data; recorded as a future reference stream gap rather than exposed through a generic read.",
+        "source_url": "https://github.com/Bahmni/openmrs-module-appointments"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ws/rest/v1/appointments",
+      "covered_by": {
+        "write": "create_appointment"
+      }
+    }
+  ]
+}

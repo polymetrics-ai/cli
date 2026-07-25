@@ -1,11 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "path": "/ws/rest/v1/appointments",
-    "query": {
-      "limit": "50",
-      "startIndex": "0"
-    }
+    "path": "/ws/rest/v1/appointments"
   },
   "response": {
     "status": 200,

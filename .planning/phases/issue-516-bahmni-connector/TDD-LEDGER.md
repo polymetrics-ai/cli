@@ -7,16 +7,16 @@ the real `internal/connectors/defs` tree.
 
 ## Red
 
-Captured against the pre-change tree (`internal/connectors/defs/bahmni-docker/` did not exist):
+Captured against the pre-change tree (`internal/connectors/defs/bahmni/` did not exist):
 
-- `go test ./internal/connectors/conformance -run 'TestConformance/bahmni-docker'` matched **no
+- `go test ./internal/connectors/conformance -run 'TestConformance/bahmni'` matched **no
   subtest** — the connector had zero conformance coverage, the defining absence this phase closes.
 - `go run ./cmd/connectorgen validate internal/connectors/defs` reported **547 connector(s)
   checked**, i.e. the bundle was absent from the fleet.
 
 Real red observed while landing the bundle, each fixed before moving on:
 
-- `Red:` `connectorgen validate internal/connectors/defs/bahmni-docker` exited 1 with 2 findings
+- `Red:` `connectorgen validate internal/connectors/defs/bahmni` exited 1 with 2 findings
   (`missing_file` on `fixtures`/`schemas`). Cause: `validateDir` treats each *subdirectory* of the
   given path as a bundle, so the validator must be pointed at the parent `defs` tree, not at a
   single bundle directory. Corrected the invocation rather than the bundle.
@@ -35,7 +35,7 @@ Real red observed while landing the bundle, each fixed before moving on:
 
 - `go run ./cmd/connectorgen validate internal/connectors/defs` → **548 connector(s) checked, 0
   findings** (whole fleet, not just this bundle).
-- `go test ./internal/connectors/conformance -run 'TestConformance/bahmni-docker'` → **PASS**, with
+- `go test ./internal/connectors/conformance -run 'TestConformance/bahmni'` → **PASS**, with
   real engine replay rather than skips. Per-check dump:
   - All 10 static checks pass: `spec_schema_valid`, `stream_schemas_valid`, `pk_fields_exist`,
     `cursor_fields_exist`, `interpolations_resolve`, `write_schemas_valid`, `surface_complete`,
@@ -60,7 +60,7 @@ Real red observed while landing the bundle, each fixed before moving on:
   first stream's fixture below the page size so `pagination_terminates` asserts a real stop rather
   than a fixture coincidence.
 - Kept generated-artifact churn scoped: `pm docs generate` rewrites all ~450 committed connector
-  manuals with pre-existing drift unrelated to this connector, so only the bahmni-docker entries
+  manuals with pre-existing drift unrelated to this connector, so only the bahmni entries
   were spliced in. The website generators are not drifty and were run wholesale.
 
-Outstanding review findings (not yet fixed on this branch) are recorded in VERIFICATION.md.
+The follow-up phase `.planning/phases/issue-516-bahmni-rename-parity-followup/` records the captain-authorized fixes for the four real automated-review defects; the two captain-owned product decisions remain recorded in VERIFICATION.md.

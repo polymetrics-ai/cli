@@ -18,25 +18,29 @@
     },
     "check": {
       "method": "GET",
-      "path": "/ws/rest/v1/session"
+      "path": "/ws/rest/v1/provider",
+      "query": {
+        "v": "default",
+        "limit": "1"
+      }
     },
     "error_map": [
       {
         "status": 401,
-        "hint": "bahmni-docker username/password are missing or invalid; re-run pm credentials add bahmni-docker"
+        "hint": "bahmni username/password are missing or invalid; re-run pm credentials add bahmni"
       },
       {
         "status": 403,
-        "hint": "bahmni-docker account lacks privileges for this OpenMRS/Bahmni resource"
+        "hint": "bahmni account lacks privileges for this OpenMRS/Bahmni resource"
       },
       {
         "status": 404,
-        "hint": "bahmni-docker resource not found; check the base_url path and the requested uuid"
+        "hint": "bahmni resource not found; check the base_url path and the requested uuid"
       },
       {
         "status": 429,
         "class": "rate_limited",
-        "hint": "bahmni-docker request throttled; the connector will retry with backoff"
+        "hint": "bahmni request throttled; the connector will retry with backoff"
       }
     ]
   },
@@ -146,7 +150,10 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/drug_orders.json"
+      "schema": "schemas/drug_orders.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
       "name": "lab_orders",
@@ -177,7 +184,10 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/lab_results.json"
+      "schema": "schemas/lab_results.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
       "name": "appointments",
@@ -185,7 +195,10 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/appointments.json"
+      "schema": "schemas/appointments.json",
+      "pagination": {
+        "type": "none"
+      }
     },
     {
       "name": "diagnoses",
@@ -199,7 +212,10 @@
       "records": {
         "path": ""
       },
-      "schema": "schemas/diagnoses.json"
+      "schema": "schemas/diagnoses.json",
+      "pagination": {
+        "type": "none"
+      }
     }
   ]
 }

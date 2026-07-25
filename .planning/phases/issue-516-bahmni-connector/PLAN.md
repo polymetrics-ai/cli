@@ -2,7 +2,7 @@
 
 ## Objective
 
-Deliver `internal/connectors/defs/bahmni-docker/` as a config-driven connectors-as-data bundle with
+Deliver `internal/connectors/defs/bahmni/` as a config-driven connectors-as-data bundle with
 complete API parity at the same bar as the existing `github`/`gong` bundles, covering parent roadmap
 issue #516 and sub-issues #517-#526 in one coherent connector definition.
 
