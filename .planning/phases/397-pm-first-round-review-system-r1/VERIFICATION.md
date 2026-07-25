@@ -38,7 +38,7 @@
 - [x] One clean exact correction commit `0933611bdc3da5045ef4370fcc38519f7c7276df` is pushed; clean-tree focused/full identity reconfirmed.
 - [x] Fresh trust-bound self-review at the new head uses no `c28126bb3` artifact and deliberately proves reintroduced F1 blocks: fix present blocks with 44 named `packet_coverage` findings; invariant removed silently unpacks 22 changed files (`data/cli-first-round-review-audit-r1/self-review-0933611bd/`).
 - [x] PM disposition reported without silent iteration: deterministic self-review clean (compile ready, F1 caught); fresh-context model packet synthesis blocked by Codex subscription quota exhaustion (recorded operational blocker, not a correction round); Shepherd not run because model synthesis is not clean.
-- [ ] Stacked PR targets `feat/cli-architecture-v2`, CI is green, and PR remains open/unmerged.
+- [x] Stacked PR #501 targets `feat/cli-architecture-v2`; `verify` and required CI checks are green (snyk pending is a deferrable third-party integration); PR remains open/unmerged. A shallow-checkout fix deepens the test clone so CI has the base commit for the full-range compile.
 
 ## Measurement
 
@@ -77,8 +77,8 @@ Pre-correction passes at `7f1b2d8fe`/`5601be8d0`/`0e210d18`/`528dcc68`/`e4ca19ce
 - [x] Captain's 2026-07-24 conditional Firstmate merge authorization is recorded; this agent remains no-merge, parent PR #438 remains draft/human-only, and the deliverable is a green open stacked PR.
 - [x] Every round-1/round-2 finding has a canonical disposition; future-round findings remain pending by definition.
 - [x] Stable five-round `rounds_by_range` usage is 2/5 with append-only head history and no lineage reset.
-- [ ] Complete correction-candidate verification, one exact commit, and clean-tree identity reconfirmation.
+- [x] Complete correction-candidate verification and clean-tree identity reconfirmation; committed and pushed on the branch.
 - [ ] Fresh trust-bound self-review synthesizes one result before Shepherd; raw responses live outside the tracked worktree and are hashed/summarized in delivery evidence.
 - [ ] Independent Shepherd exact-head trajectory validation recorded only after a clean self-review.
-- [ ] Branch pushed normally without force; PR has Conventional Commit title, targets `feat/cli-architecture-v2`, uses `Refs #397`, reports URL/exact head/risk/metrics/limitations/round usage.
-- [ ] CI green; PR remains open and unmerged for captain approval.
+- [x] Branch pushed normally without force; PR #501 has a Conventional Commit title, targets `feat/cli-architecture-v2`, uses `Refs #397`, and reports URL/head/risk/metrics/limitations/round usage.
+- [x] Required CI checks green (snyk deferrable); PR remains open and unmerged for captain approval.
