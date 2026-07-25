@@ -4,10 +4,10 @@
       "id": "bahmni.patient_search",
       "kind": "rest_read",
       "summary": "Typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient)",
-      "description": "Executable schema-gated Bahmni patient search: connector-authored flags map to an allow-listed JSON body, the response is bounded and PHI-redacted, and no raw request body or generic HTTP flag is exposed.",
-      "source_url": "https://bahmni.atlassian.net/wiki/spaces/BAH/pages/33260810/Bahmni+REST+APIs",
+      "description": "Executable schema-gated Bahmni patient search: connector-authored flags map to an allow-listed JSON body, the response is bounded, and no raw request body or generic HTTP flag is exposed.",
+      "source_url": "https://github.com/Bahmni/bahmni-core",
       "risk": "high",
-      "approval": "none: read-only POST query with schema-gated body and bounded PHI-redacted output",
+      "approval": "none: read-only POST query with schema-gated body and bounded JSON output; clinical PHI fields are not generally field-redacted by the current engine",
       "output_policy": "json_redacted",
       "secret_sensitive": false,
       "sensitive_policy": {

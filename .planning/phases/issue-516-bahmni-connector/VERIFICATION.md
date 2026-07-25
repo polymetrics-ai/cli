@@ -5,7 +5,7 @@
 | Gate | Result |
 | --- | --- |
 | `go run ./cmd/connectorgen validate internal/connectors/defs` | 548 connector(s) checked, **0 findings** |
-| `go test ./internal/connectors/conformance -run 'TestConformance/bahmni-docker'` | **PASS** (10/10 static, real fixture replay) |
+| `go test ./internal/connectors/conformance -run 'TestConformance/bahmni'` | **PASS** (10/10 static, real fixture replay) |
 | `./pm docs validate --connectors-dir docs/connectors` | **PASS** |
 | `gofmt -l cmd internal` | clean |
 | `go vet ./...` | clean |
@@ -18,12 +18,12 @@ the defs fleet, and a full run logs zero `bahmni` references — so this connect
 
 ## CLI / help / docs / website parity
 
-- `pm bahmni-docker` (bare namespace) renders the connector manual and exits 0.
-- `pm connectors inspect bahmni-docker` and `--json` render identity, capabilities, config,
+- `pm bahmni` (bare namespace) renders the connector manual and exits 0.
+- `pm connectors inspect bahmni` and `--json` render identity, capabilities, config,
   12 ETL streams with primary keys, and 9 reverse-ETL actions with endpoint, required fields, and
   risk text. `password` renders as `(secret)`; no secret value is read or printed.
 - `pm connectors catalog --json`, `--capability write`, and `connectors list --all` all include it.
-- `docs/connectors/bahmni-docker/{MANUAL.md,SKILL.md}` generated; `docs/connectors/README.md` and
+- `docs/connectors/bahmni/{MANUAL.md,SKILL.md}` generated; `docs/connectors/README.md` and
   `docs/connectors/catalog/all-connectors.{json,md}` carry the new entry.
 - `docs/cli/connectors.md` CATALOG text updated to 552/548.
 - Website catalogs regenerated (`connectors.generated.json`, `connectors.generated.ts`,
@@ -40,30 +40,22 @@ the defs fleet, and a full run logs zero `bahmni` references — so this connect
   (`destructive_action`), OpenMRS system administration (`admin_reverse_etl`).
 - No new dependencies.
 
-## Outstanding review findings
+## Automated-review follow-up findings
 
-An automated review pass raised six findings against this branch. They are recorded here rather
-than silently dropped; the review step itself wedged twice on the diff size, so the PR was opened
-directly and these remain open for the reviewer's disposition.
+An automated review pass raised six findings against this branch. The captain authorized the four
+real defects for direct follow-up, and `.planning/phases/issue-516-bahmni-rename-parity-followup/`
+records the fixes and validation evidence:
 
-Real defects, not yet fixed:
+1. `document-path-not-redacted` — fixed by using `document_file_path`, which matches the existing
+   `file_path` reverse-plan redaction marker.
+2. `offset-paginator-on-array-endpoints` — fixed by setting per-stream `pagination: {type: none}`
+   for the four root-array streams (`drug_orders`, `lab_results`, `appointments`, `diagnoses`).
+3. `session-check-always-passes` — fixed by replacing `/ws/rest/v1/session` with authenticated
+   `GET /ws/rest/v1/provider?v=default&limit=1` for the connector health check fixture/config.
+4. `drug-orders-group-name-mismatch` — fixed by making group/command metadata consistently use
+   `drug_orders`.
 
-1. `document-path-not-redacted` — `upload_patient_document`'s record field is `document_path`, which
-   matches none of `commandrunner.isSensitiveRecordField`'s markers, so plans/previews print it
-   verbatim despite the risk text promising redaction. Gong uses `media_file_path`/`data_file_path`,
-   which match the `file_path` marker.
-2. `offset-paginator-on-array-endpoints` — `drug_orders`, `lab_results`, `appointments`, and
-   `diagnoses` (the four `records.path: ""` streams) inherit `base.pagination` `offset_limit`, but
-   those Bahmni-core/appointment controllers do not implement `startIndex`/`limit`.
-   `connsdk.OffsetPaginator.Next` stops only on a short page, so a patient with a full page of
-   records would re-request the same array.
-3. `session-check-always-passes` — `base.check` is `GET /ws/rest/v1/session`, which OpenMRS answers
-   200 with `"authenticated": false` for absent/invalid credentials. `engine.Check` asserts only a
-   non-error status, so `pm connectors check` reports healthy for wrong credentials.
-4. `drug-orders-group-name-mismatch` — the `orders` group lists prefix `drug-orders` while the ETL
-   command is `drug_orders list`, so it renders under "Other Commands".
-
-Product decisions deferred to the maintainer:
+Product decisions still deferred to the maintainer:
 
 5. `phi-redaction-unbacked` (error) — the bundle's text promises PHI redaction that no runtime code
    performs. The engine redacts only secret-shaped keys (`engine.shouldRedactJSONField`) and

@@ -23,7 +23,7 @@
           "person"
         ]
       },
-      "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; PHI fields are redacted in plans and require reverse ETL approval"
+      "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; requires reverse ETL approval"
     },
     {
       "name": "update_patient",
@@ -84,7 +84,7 @@
           "encounterType"
         ]
       },
-      "risk": "high: writes a clinical encounter with linked observations for a patient; PHI fields are redacted in plans and require reverse ETL approval"
+      "risk": "high: writes a clinical encounter with linked observations for a patient; requires reverse ETL approval"
     },
     {
       "name": "create_observation",
@@ -123,7 +123,7 @@
           "value"
         ]
       },
-      "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; PHI/clinical values are redacted in plans and require reverse ETL approval"
+      "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; requires reverse ETL approval"
     },
     {
       "name": "create_appointment",
@@ -157,7 +157,7 @@
           "startDateTime"
         ]
       },
-      "risk": "medium: books a Bahmni patient appointment; patient identifiers are redacted in plans and require reverse ETL approval"
+      "risk": "medium: books a Bahmni patient appointment; requires reverse ETL approval"
     },
     {
       "name": "create_drug_order",
@@ -195,7 +195,7 @@
           "careSetting"
         ]
       },
-      "risk": "critical: places a medication (drug) order for a patient; medication and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "risk": "critical: places a medication (drug) order for a patient; requires reverse ETL approval and destructive confirmation",
       "confirm": "destructive"
     },
     {
@@ -229,7 +229,7 @@
           "codedAnswer"
         ]
       },
-      "risk": "critical: records a clinical diagnosis for a patient; diagnosis and PHI fields are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "risk": "critical: records a clinical diagnosis for a patient; requires reverse ETL approval and destructive confirmation",
       "confirm": "destructive"
     },
     {
@@ -277,7 +277,7 @@
           {
             "name": "file",
             "type": "file",
-            "field": "document_path",
+            "field": "document_file_path",
             "required": true,
             "max_bytes": 26214400
           },
@@ -297,10 +297,6 @@
       "record_schema": {
         "type": "object",
         "properties": {
-          "document_path": {
-            "type": "string",
-            "description": "Project-relative path to the bounded local patient-document file to upload."
-          },
           "patient_uuid": {
             "type": "string",
             "description": "Patient UUID the document attaches to."
@@ -308,14 +304,18 @@
           "caption": {
             "type": "string",
             "description": "Optional document caption."
+          },
+          "document_file_path": {
+            "type": "string",
+            "description": "Project-relative path to the bounded local patient-document file to upload. The field name contains file_path so reverse-ETL plans redact it."
           }
         },
         "required": [
-          "document_path",
+          "document_file_path",
           "patient_uuid"
         ]
       },
-      "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; file path/content and patient identifiers are redacted in plans and require reverse ETL approval and destructive confirmation",
+      "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; local file path is redacted in plans and the action requires reverse ETL approval and destructive confirmation",
       "confirm": "destructive"
     }
   ]

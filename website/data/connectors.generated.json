@@ -6167,9 +6167,9 @@
     }
   },
   {
-    "slug": "bahmni-docker",
-    "name": "Bahmni (bahmni-docker)",
-    "description": "Reads clinical EMR data from a Bahmni deployment (bahmni-docker) through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Patient-linked data is redacted by default.",
+    "slug": "bahmni",
+    "name": "Bahmni",
+    "description": "Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Output is bounded; secret-shaped fields and file-path inputs are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.",
     "docs_url": "https://rest.openmrs.org/",
     "integration_type": "api",
     "release_stage": "alpha",
@@ -6327,8 +6327,8 @@
       }
     ],
     "cli_surface": {
-      "tagline": "Inspect, read, and safely plan typed Bahmni (bahmni-docker) clinical operations.",
-      "usage": "pm bahmni-docker <command> [flags]",
+      "tagline": "Inspect, read, and safely plan typed Bahmni clinical operations.",
+      "usage": "pm bahmni <command> [flags]",
       "source_cli": {
         "name": "Bahmni / OpenMRS REST + FHIR2",
         "docs": "https://rest.openmrs.org/",
@@ -6360,7 +6360,7 @@
           "id": "orders",
           "title": "Orders & labs",
           "commands": [
-            "drug-orders",
+            "drug_orders",
             "lab_orders",
             "lab_results"
           ]
@@ -6478,7 +6478,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker patients list --json --limit 25"
+            "pm bahmni patients list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6496,7 +6496,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker encounters list --json --limit 25"
+            "pm bahmni encounters list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6514,7 +6514,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker observations list --json --limit 25"
+            "pm bahmni observations list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6532,7 +6532,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker visits list --json --limit 25"
+            "pm bahmni visits list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6550,7 +6550,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker concepts list --json --limit 25"
+            "pm bahmni concepts list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6568,7 +6568,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker locations list --json --limit 25"
+            "pm bahmni locations list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6586,7 +6586,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker providers list --json --limit 25"
+            "pm bahmni providers list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6604,7 +6604,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker drug_orders list --json --limit 25"
+            "pm bahmni drug_orders list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6622,7 +6622,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker lab_orders list --json --limit 25"
+            "pm bahmni lab_orders list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6640,7 +6640,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker lab_results list --json --limit 25"
+            "pm bahmni lab_results list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6658,7 +6658,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker appointments list --json --limit 25"
+            "pm bahmni appointments list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6676,7 +6676,7 @@
           "source_url": "",
           "flags": [],
           "examples": [
-            "pm bahmni-docker diagnoses list --json --limit 25"
+            "pm bahmni diagnoses list --json --limit 25"
           ],
           "output_policy": "",
           "risk": "",
@@ -6702,10 +6702,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker patient get --json --uuid <uuid>"
+            "pm bahmni patient get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6728,10 +6728,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker encounter get --json --uuid <uuid>"
+            "pm bahmni encounter get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6754,10 +6754,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker visit get --json --uuid <uuid>"
+            "pm bahmni visit get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6780,10 +6780,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker concept get --json --uuid <uuid>"
+            "pm bahmni concept get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6806,10 +6806,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker provider get --json --uuid <uuid>"
+            "pm bahmni provider get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6832,10 +6832,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker location get --json --uuid <uuid>"
+            "pm bahmni location get --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6858,10 +6858,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker fhir patient-read --json --id <uuid>"
+            "pm bahmni fhir patient-read --json --id <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6884,10 +6884,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker fhir observation-read --json --id <uuid>"
+            "pm bahmni fhir observation-read --json --id <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6910,10 +6910,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker fhir encounter-read --json --id <uuid>"
+            "pm bahmni fhir encounter-read --json --id <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6936,10 +6936,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker fhir condition-read --json --id <uuid>"
+            "pm bahmni fhir condition-read --json --id <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -6962,10 +6962,10 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker bahmnicore patient-detail --json --uuid <uuid>"
+            "pm bahmni bahmnicore patient-detail --json --uuid <uuid>"
           ],
           "output_policy": "json_redacted",
-          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and PHI/secret-shaped fields are redacted.",
+          "risk": "bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.",
           "approval": "",
           "notes": ""
         },
@@ -7023,7 +7023,7 @@
             }
           ],
           "examples": [
-            "pm bahmni-docker bahmnicore patient-search --json --q <name> --max-bytes 1048576"
+            "pm bahmni bahmnicore patient-search --json --q <name> --max-bytes 1048576"
           ],
           "output_policy": "json_redacted",
           "risk": "bounded typed POST read-query; the response is size-capped and PHI/identifier fields are redacted.",
@@ -7057,7 +7057,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7088,7 +7088,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7119,7 +7119,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7157,7 +7157,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7195,12 +7195,12 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
         {
-          "path": "drug-orders create",
+          "path": "drug_orders create",
           "summary": "Place a medication (drug) order for a patient.",
           "intent": "reverse_etl",
           "availability": "partial",
@@ -7233,7 +7233,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7264,7 +7264,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7288,7 +7288,7 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         },
@@ -7303,11 +7303,11 @@
           "source_url": "",
           "flags": [
             {
-              "name": "document-path",
+              "name": "document-file-path",
               "type": "string",
-              "summary": "Maps to record.document_path.",
+              "summary": "Maps to redacted record.document_file_path.",
               "values": [],
-              "maps_to": "record.document_path"
+              "maps_to": "record.document_file_path"
             },
             {
               "name": "patient-uuid",
@@ -7326,31 +7326,31 @@
           ],
           "examples": [],
           "output_policy": "",
-          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute and redacts PHI in plans.",
+          "risk": "clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.",
           "approval": "reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.",
           "notes": "Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed."
         }
       ],
       "help_topics": [
         {
-          "name": "bahmni-docker-auth",
-          "summary": "Point base_url at a local bahmni-docker OpenMRS instance and supply username/password via credentials; never pass secrets in command text."
+          "name": "bahmni-auth",
+          "summary": "Point base_url at a Bahmni OpenMRS instance, including a local Bahmni/bahmni-docker deployment, and supply username/password via credentials; never pass secrets in command text."
         },
         {
-          "name": "bahmni-docker-writes",
+          "name": "bahmni-writes",
           "summary": "Bahmni clinical mutations are typed reverse-ETL actions with plan, preview, approval, execute gates; clinical/destructive actions require --confirm destructive."
         },
         {
-          "name": "bahmni-docker-direct-read",
-          "summary": "Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed POST patient search, all with PHI redaction and a response byte cap."
+          "name": "bahmni-direct-read",
+          "summary": "Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed POST patient search, all with a response byte cap; clinical PHI fields are not generally field-redacted by the current engine."
         },
         {
-          "name": "bahmni-docker-phi",
-          "summary": "Bahmni handles clinical PHI: patient identifiers, names, addresses, and clinical values are redacted by default on patient-linked reads and in write plans."
+          "name": "bahmni-phi",
+          "summary": "Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate engine policy decision."
         }
       ]
     },
-    "docs_md": "# Overview\n\nThe `bahmni-docker` connector reads clinical EMR data from a local Bahmni deployment (the\nopen-source hospital/EMR distribution deployed via https://github.com/Bahmni/bahmni-docker) through\nthe OpenMRS REST v1, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs exposed by the deployment. It is\nconfig-driven and usable locally: point `base_url` at a running instance (for example\n`http://localhost/openmrs`), supply an OpenMRS username/password via credentials, and inspect it with\n`pm connectors inspect bahmni-docker --json` without reading or printing any secret values.\n\nExecutable ETL streams: `patients`, `encounters`, `observations`, `visits`, `concepts`, `locations`,\n`providers`, `drug_orders`, `lab_orders`, `lab_results`, `appointments`, `diagnoses`.\n\nBounded direct-read commands cover GET-by-UUID for patient/encounter/visit/concept/provider/location,\nFHIR R4 read-by-id for Patient/Observation/Encounter/Condition, a consolidated Bahmni-core patient\nprofile detail, and a schema-gated typed POST patient search. Clinical mutations, a top-level JSON\narray observation upload, and a bounded multipart patient-document upload are modeled as typed\nreverse-ETL write actions.\n\nBahmni handles clinical PHI, so patient-linked data is redacted by default on reads and in write\nplans.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (required, string, format uri); default `http://localhost/openmrs`; base URL of the\n  local bahmni-docker OpenMRS instance.\n- `username` (required, string); OpenMRS username for HTTP Basic authentication.\n- `password` (required, secret, string); OpenMRS password for HTTP Basic authentication; never\n  logged or printed.\n- `patient_query` (optional, string); identifier or name search term used to enumerate the\n  `patients` stream (OpenMRS patient search `q`).\n- `patient_uuid` (optional, string); patient UUID context used to scope patient-linked streams\n  (encounters, observations, visits, orders, lab results, diagnoses).\n\nSecret fields are redacted in logs and write previews: `password`.\n\nAuthentication behavior: HTTP Basic authentication using `config.username` and `secrets.password`.\nConnection checks call `GET /ws/rest/v1/session`.\n\n## Streams notes\n\nAll OpenMRS REST list streams return a `{ \"results\": [...] }` envelope and page with the OpenMRS\n`limit`/`startIndex` (offset) convention. Bahmni-core and appointment streams (`drug_orders`,\n`lab_results`, `appointments`, `diagnoses`) return top-level JSON arrays and are read from the\nresponse root. Patient-linked streams require a `patient_uuid` (or, for `patients`, a\n`patient_query`) config value to scope the request; see Known limits.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` as typed Bahmni/OpenMRS reverse-ETL mutations:\n`create_patient`, `update_patient`, `create_encounter`, `create_observation`, `create_appointment`,\n`create_drug_order`, `create_diagnosis`, the top-level JSON array `create_observations_bulk`\nobservation upload, and the bounded multipart `upload_patient_document` upload.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Clinical/destructive actions declare `confirm: destructive` (update patient, drug order, diagnosis,\n  bulk observation upload, and document upload).\n- No generic raw HTTP write, raw JSON body, arbitrary OpenMRS resource method/path/body escape hatch,\n  generic shell write, or SQL write is exposed.\n- The multipart document upload accepts only a declared project-local file path field, binds approval\n  to a SHA-256 content digest, snapshots and verifies the approved bytes before any HTTP request, and\n  enforces byte limits; file/path/content and patient identifiers are redacted in command plans.\n- The top-level JSON array observation upload uses a declared `body_field` and `body_schema`; no raw\n  JSON CLI flag is exposed.\n\nPHI redaction: patient identifiers, names, addresses, and clinical observation/diagnosis values are\nredacted by default on patient-linked reads and in write plans.\n\nRead risk: external Bahmni/OpenMRS clinical PHI read; direct reads are bounded and PHI-redacted.\n\nWrite risk: typed Bahmni/OpenMRS reverse ETL clinical mutations.\n\nApproval: reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions\nrequire `--confirm destructive`.\n\n## Known limits\n\n- Batch defaults: read_page_size=50; streams page with OpenMRS `limit`/`startIndex`.\n- OpenMRS/Bahmni REST does not document a fixed public rate limit; the target is a self-hosted local\n  deployment. The connector still bounds response sizes and paginates.\n- OpenMRS/Bahmni REST lacks a universal \"modified since\" cursor across these list endpoints, so\n  streams are full-refresh (offset/limit) rather than incremental.\n- `patients` enumeration requires a search term: set `patient_query` (OpenMRS patient list is a\n  search endpoint). Patient-linked streams (encounters/observations/visits/orders/lab results/\n  diagnoses) require a `patient_uuid` context.\n- The typed Bahmni patient search is modeled as a schema-gated JSON POST read-query with\n  connector-authored flags; arbitrary/raw request bodies remain intentionally unavailable.\n- Patient-document binary download is modeled as bounded binary metadata with a bounded local-output\n  policy (api_surface `binary_read`), not exposed as a generic HTTP byte-stream download. Permanent\n  patient deletion/purge and OpenMRS server administration are blocked with recorded evidence.\n- Live clinical writes and patient-document payload tests beyond fixtures are human-gated against any\n  non-local/non-disposable deployment.\n",
+    "docs_md": "# Overview\n\nThe `bahmni` connector reads clinical EMR data from a Bahmni deployment (including the local\nBahmni/bahmni-docker docker-compose setup at https://github.com/Bahmni/bahmni-docker) through the\nOpenMRS REST v1, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs exposed by the deployment. It is\nconfig-driven and usable locally: point `base_url` at a running instance (for example\n`http://localhost/openmrs`), supply an OpenMRS username/password via credentials, and inspect it with\n`pm connectors inspect bahmni --json` without reading or printing any secret values.\n\nExecutable ETL streams: `patients`, `encounters`, `observations`, `visits`, `concepts`, `locations`,\n`providers`, `drug_orders`, `lab_orders`, `lab_results`, `appointments`, `diagnoses`.\n\nBounded direct-read commands cover GET-by-UUID for patient/encounter/visit/concept/provider/location,\nFHIR R4 read-by-id for Patient/Observation/Encounter/Condition, a consolidated Bahmni-core patient\nprofile detail, and a schema-gated typed POST patient search. Clinical mutations, a top-level JSON\narray observation upload, and a bounded multipart patient-document upload are modeled as typed\nreverse-ETL write actions.\n\nBahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts\nsecret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate\nengine policy decision.\n\n## Auth setup\n\nConnection fields:\n\n- `base_url` (required, string, format uri); default `http://localhost/openmrs`; base URL of the\n  Bahmni OpenMRS instance, including local Bahmni/bahmni-docker deployments.\n- `username` (required, string); OpenMRS username for HTTP Basic authentication.\n- `password` (required, secret, string); OpenMRS password for HTTP Basic authentication; never\n  logged or printed.\n- `patient_query` (optional, string); identifier or name search term used to enumerate the\n  `patients` stream (OpenMRS patient search `q`).\n- `patient_uuid` (optional, string); patient UUID context used to scope patient-linked streams\n  (encounters, observations, visits, orders, lab results, diagnoses).\n\nSecret fields are redacted in logs and write previews: `password`.\n\nAuthentication behavior: HTTP Basic authentication using `config.username` and `secrets.password`.\nConnection checks call an authenticated bounded provider-list endpoint (`GET /ws/rest/v1/provider`)\nwith `limit=1`, so bad basic-auth credentials fail instead of passing on an unauthenticated session\nprobe.\n\n## Streams notes\n\nOpenMRS REST list streams return a `{ \"results\": [...] }` envelope and page with the OpenMRS\n`limit`/`startIndex` (offset) convention. Bahmni-core and appointment streams (`drug_orders`,\n`lab_results`, `appointments`, `diagnoses`) return top-level JSON arrays and explicitly disable the\ninherited offset paginator because those endpoints do not honor `limit`/`startIndex`. Patient-linked\nstreams require a `patient_uuid` (or, for `patients`, a `patient_query`) config value to scope the\nrequest; see Known limits.\n\n## Write actions & risks\n\nWrite actions are declared in `writes.json` as typed Bahmni/OpenMRS reverse-ETL mutations:\n`create_patient`, `update_patient`, `create_encounter`, `create_observation`, `create_appointment`,\n`create_drug_order`, `create_diagnosis`, the top-level JSON array `create_observations_bulk`\nobservation upload, and the bounded multipart `upload_patient_document` upload.\n\nSafety gates:\n\n- Use reverse ETL plan -> preview -> approval -> execute.\n- Clinical/destructive actions declare `confirm: destructive` (update patient, drug order, diagnosis,\n  bulk observation upload, and document upload).\n- No generic raw HTTP write, raw JSON body, arbitrary OpenMRS resource method/path/body escape hatch,\n  generic shell write, or SQL write is exposed.\n- The multipart document upload accepts only the declared project-local `document_file_path` field,\n  binds approval to a SHA-256 content digest, snapshots and verifies the approved bytes before any\n  HTTP request, enforces byte limits, and redacts the local file path in command plans.\n- The top-level JSON array observation upload uses a declared `body_field` and `body_schema`; no raw\n  JSON CLI flag is exposed.\n\nPHI note: patient identifiers, names, addresses, and clinical observation/diagnosis values are not\ngenerally field-redacted by the current connector engine. Treat command output and write plans as\nclinical data unless and until a separate engine PHI redaction policy is authorized.\n\nRead risk: external Bahmni/OpenMRS clinical PHI read; direct reads are bounded and redact only\nsecret-shaped fields under the current engine policy.\n\nWrite risk: typed Bahmni/OpenMRS reverse ETL clinical mutations.\n\nApproval: reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions\nrequire `--confirm destructive`.\n\n## Known limits\n\n- Batch defaults: read_page_size=50; only OpenMRS envelope streams use `limit`/`startIndex` paging.\n- OpenMRS/Bahmni REST does not document a fixed public rate limit; the target is a self-hosted local\n  deployment. The connector still bounds response sizes and paginates where the endpoint supports it.\n- OpenMRS/Bahmni REST lacks a universal \"modified since\" cursor across these list endpoints, so\n  streams are full-refresh rather than incremental.\n- `patients` enumeration requires a search term: set `patient_query` (OpenMRS patient list is a\n  search endpoint). Patient-linked streams (encounters/observations/visits/orders/lab results/\n  diagnoses) require a `patient_uuid` context.\n- The typed Bahmni patient search is modeled as a schema-gated JSON POST read-query with\n  connector-authored flags; arbitrary/raw request bodies remain intentionally unavailable.\n- Patient-document binary download and patient image binary reads are blocked by default rather than\n  exposed as generic byte-stream downloads. Permanent patient deletion/purge, OpenMRS server\n  administration/global-property helpers, free-text clinical notes, appointment workflow state\n  transitions, and discharge/ADT mutations are blocked or excluded with recorded evidence in\n  `api_surface.json`.\n- Live clinical writes and patient-document payload tests beyond fixtures are human-gated against any\n  non-local/non-disposable deployment.\n",
     "icon": null
   },
   {
