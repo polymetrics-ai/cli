@@ -107,8 +107,12 @@ def run(cmd: list[str], cwd: Path | None = None, check: bool = True) -> subproce
 
 
 def ensure_dirs() -> None:
-    runtime_home().mkdir(parents=True, exist_ok=True)
-    (runtime_home() / "bin").mkdir(parents=True, exist_ok=True)
+    home = runtime_home()
+    if home.exists() and home.stat().st_uid != os.getuid():
+        raise SystemExit(f"refusing to use lab home owned by another user: {home}")
+    for directory in (home, home / "bin"):
+        directory.mkdir(parents=True, exist_ok=True)
+        directory.chmod(0o700)
 
 
 def parse_env_file(path: Path) -> dict[str, str]:
@@ -151,9 +155,15 @@ def write_env(upstream_env: Path, output_env: Path) -> dict[str, str]:
 
 def add_platform_after_service(text: str, service: str, platform: str) -> str:
     marker = f"  {service}:\n"
-    if marker not in text:
-        return text
-    start = text.index(marker)
+    # Only a top-level service key counts; the same key nested under depends_on
+    # or another mapping is more deeply indented and must not be matched.
+    if text.startswith(marker):
+        start = 0
+    else:
+        anchored = text.find("\n" + marker)
+        if anchored < 0:
+            return text
+        start = anchored + 1
     next_service = re.search(r"\n  [A-Za-z0-9_-]+:\n", text[start + len(marker):])
     end = start + len(marker) + next_service.start() if next_service else len(text)
     block = text[start:end]
@@ -184,6 +194,33 @@ def validate_loopback_ports(compose_text: str) -> None:
         raise SystemExit("generated compose contains non-loopback published ports: " + ", ".join(bad_ports))
 
 
+CONTAINER_NAME_RE = re.compile(r"(?m)^([ \t]*)container_name:[ \t]*(.+?)[ \t]*$")
+
+
+def scope_container_names(text: str) -> str:
+    prefix = f"{LAB_ID}-"
+
+    def rewrite(match: re.Match[str]) -> str:
+        indent, raw = match.group(1), match.group(2)
+        name = raw.strip().strip("'").strip('"')
+        if not name or name.startswith(prefix):
+            return match.group(0)
+        return f"{indent}container_name: {prefix}{name}"
+
+    return CONTAINER_NAME_RE.sub(rewrite, text)
+
+
+def validate_container_names(compose_text: str) -> None:
+    prefix = f"{LAB_ID}-"
+    unscoped = [
+        match.group(2).strip().strip("'").strip('"')
+        for match in CONTAINER_NAME_RE.finditer(compose_text)
+        if not match.group(2).strip().strip("'").strip('"').startswith(prefix)
+    ]
+    if unscoped:
+        raise SystemExit("generated compose contains container names outside this task: " + ", ".join(unscoped))
+
+
 def write_compose(upstream_compose: Path, output_compose: Path) -> None:
     pin = load_json(PIN_PATH)
     defaults = pin["default_ports"]
@@ -195,14 +232,17 @@ def write_compose(upstream_compose: Path, output_compose: Path) -> None:
         "      - '8070:8069'": "      - '127.0.0.1:18070:8069'",
         "      - '8055:8055'": f"      - '127.0.0.1:{port('DCM4CHEE_HTTP', defaults['dcm4chee_http'])}:8055'",
         "      - '11112:11112'": f"      - '127.0.0.1:{port('DCM4CHEE_DICOM', defaults['dcm4chee_dicom'])}:11112'",
-        "    container_name: ipd": "    container_name: fm-bahmni-lab-r1-ipd",
     }
     for old, new in port_replacements.items():
         text = text.replace(old, new)
+    # Any explicit container_name bypasses the compose project prefix, so scope
+    # every one of them to this lab before the stack can adopt a foreign container.
+    text = scope_container_names(text)
     # Official odoo-16 image for the pinned Standard tag is amd64-only as of the
     # research run. Platform pin lets rootless Podman on Apple Silicon use qemu.
     text = add_platform_after_service(text, "odoo", "linux/amd64")
     validate_loopback_ports(text)
+    validate_container_names(text)
     output_compose.write_text(text, encoding="utf-8")
 
 
@@ -414,12 +454,28 @@ class ApiError(RuntimeError):
     pass
 
 
+REST_SUFFIX = "/ws/rest/v1"
+FHIR_SUFFIX = "/ws/fhir2/R4"
+
+
+def derive_fhir_base(rest_base: str) -> str:
+    trimmed = rest_base.rstrip("/")
+    if trimmed.endswith(REST_SUFFIX):
+        trimmed = trimmed[: -len(REST_SUFFIX)]
+    return trimmed + FHIR_SUFFIX
+
+
 class BahmniApi:
     def __init__(self, base_https: str | None = None):
         creds = read_credentials()
         urls = creds.get("urls", local_urls())
         self.rest_base = (base_https or urls["openmrs_rest"]).rstrip("/")
-        self.fhir_base = urls.get("openmrs_fhir", self.rest_base.replace("/ws/rest/v1", "/ws/fhir2/R4")).rstrip("/")
+        # A --base-url override must move REST and FHIR together, otherwise one
+        # run would write to two different deployments.
+        if base_https:
+            self.fhir_base = derive_fhir_base(self.rest_base)
+        else:
+            self.fhir_base = urls.get("openmrs_fhir", derive_fhir_base(self.rest_base)).rstrip("/")
         user = creds.get("openmrs", {}).get("username") or "admin"
         password = creds.get("openmrs", {}).get("password") or parse_env_file(generated_env_path()).get("OPENMRS_ATOMFEED_PASSWORD", "")
         token = base64.b64encode(f"{user}:{password}".encode("utf-8")).decode("ascii")
@@ -787,6 +843,14 @@ def seed(args: argparse.Namespace) -> None:
     appointment_service_uuid = appointment_services[0]["uuid"] if appointment_services else None
     if not appointment_service_uuid:
         raise ApiError("no appointment services are available in this Bahmni deployment")
+    # Resolve every required encounter type up front so a distro that renames or
+    # omits one fails before any record is written.
+    required_encounter_types = {}
+    for name in ("Consultation", "LAB_RESULT", "INVESTIGATION", "Patient Document"):
+        uuid = encounter_types.get(name)
+        if not uuid:
+            raise ApiError(f"encounter type {name!r} is not available in this Bahmni deployment")
+        required_encounter_types[name] = uuid
 
     parent_location = ensure_location(api, seed_data["organization"]["name"], base_location, summary)
     location_by_department: dict[str, str] = {}
@@ -794,8 +858,6 @@ def seed(args: argparse.Namespace) -> None:
         location_by_department[department] = ensure_location(api, f"Synthetic Department - {department}", parent_location, summary)
     for service_location in seed_data["service_locations"]:
         ensure_location(api, service_location, parent_location, summary)
-    # Add an alias used by one provider department in the fixture.
-    location_by_department["Clinical Laboratory"] = ensure_location(api, "Synthetic Clinical Laboratory", parent_location, summary)
 
     provider_uuid_by_identifier = {provider["identifier"]: ensure_provider(api, provider, summary) for provider in seed_data["providers"]}
 
@@ -833,7 +895,7 @@ def seed(args: argparse.Namespace) -> None:
         consultation_encounter = ensure_encounter(
             api,
             patient_uuid,
-            encounter_types["Consultation"],
+            required_encounter_types["Consultation"],
             obs_time,
             department_location,
             visit_uuid,
@@ -849,13 +911,13 @@ def seed(args: argparse.Namespace) -> None:
             {"concept": concepts["white_blood_cells"], "value": round(5.0 + index * 0.4, 1), "obsDatetime": obs_time},
             {"concept": concepts["serum_creatinine_mg_dl"], "value": round(0.7 + index * 0.03, 2), "obsDatetime": obs_time},
         ]
-        ensure_encounter(api, patient_uuid, encounter_types["LAB_RESULT"], obs_time, department_location, visit_uuid, lab_obs, lab_marker, concepts["document_text"], summary)
+        ensure_encounter(api, patient_uuid, required_encounter_types["LAB_RESULT"], obs_time, department_location, visit_uuid, lab_obs, lab_marker, concepts["document_text"], summary)
 
         investigation_marker = f"{seed_data['records']['encounter_marker_prefix']} {patient['identifier']} investigation"
-        ensure_encounter(api, patient_uuid, encounter_types["INVESTIGATION"], obs_time, department_location, visit_uuid, [], investigation_marker, concepts["document_text"], summary)
+        ensure_encounter(api, patient_uuid, required_encounter_types["INVESTIGATION"], obs_time, department_location, visit_uuid, [], investigation_marker, concepts["document_text"], summary)
 
         document_marker = f"{seed_data['records']['document_note']} for {patient['identifier']}"
-        ensure_encounter(api, patient_uuid, encounter_types["Patient Document"], obs_time, department_location, visit_uuid, [], document_marker, concepts["document_text"], summary)
+        ensure_encounter(api, patient_uuid, required_encounter_types["Patient Document"], obs_time, department_location, visit_uuid, [], document_marker, concepts["document_text"], summary)
 
         appointment_start_dt = dt.datetime(2026, 1, 20 + index, 9 + (index % 6), 0, tzinfo=dt.timezone.utc)
         appointment_end_dt = appointment_start_dt + dt.timedelta(minutes=15)
@@ -893,7 +955,7 @@ def seed(args: argparse.Namespace) -> None:
         "urls": local_urls(),
         "note": "Counts distinguish created vs existing records so re-running the seed is safe and idempotent.",
     }
-    dump_json(result) if args.json else print(json.dumps(result, indent=2))
+    dump_json(result)
 
 
 def health(args: argparse.Namespace) -> dict[str, Any]:
@@ -968,8 +1030,10 @@ def verify(args: argparse.Namespace) -> None:
                 # projections. The seed path uses the supported create/list
                 # shape; verification keeps going and reports other endpoints.
                 pass
-        _, condition_bundle = api.fhir("/Condition")
-        counts["conditions"] = condition_bundle.get("total", counts["conditions"])
+            fhir_id = fhir_patient_id(api, patient["identifier"])
+            if fhir_id:
+                _, condition_bundle = api.fhir("/Condition", params={"patient": fhir_id})
+                counts["conditions"] += int(condition_bundle.get("total", 0) or 0)
     for provider in seed_data["providers"]:
         if api.results("/provider", q=provider["identifier"], v="default", limit=5):
             counts["providers"] += 1
@@ -1058,7 +1122,7 @@ def inventory(args: argparse.Namespace) -> None:
                 entry[kind] = {"unavailable": True}
         workloads.append(entry)
     result["workloads"] = workloads
-    dump_json(result) if args.json else print(json.dumps(result, indent=2))
+    dump_json(result)
 
 
 def main(argv: list[str] | None = None) -> None:

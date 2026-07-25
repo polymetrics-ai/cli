@@ -72,20 +72,32 @@ safe_lab_home() {
   printf '%s\n' "${resolved}"
 }
 
-ensure_connection() {
+# Use the task-owned connection only if it already exists. Never provisions a
+# machine, so teardown paths cannot create the VM they are meant to tear down.
+ensure_existing_connection() {
   require_podman
   if connection_works; then
     ensure_rootless_connection
     return 0
   fi
-
   if podman machine list --format '{{.Name}}' 2>/dev/null | grep -Fxq "${MACHINE}"; then
     # Start only this task-owned machine. Do not touch defaults or unrelated machines.
-    podman machine start "${MACHINE}" >/dev/null
-  else
-    podman machine init --cpus "${BAHMNI_LAB_CPUS:-8}" --memory "${BAHMNI_LAB_MEMORY_MB:-16384}" --disk-size "${BAHMNI_LAB_DISK_GB:-80}" "${MACHINE}"
-    podman machine start "${MACHINE}" >/dev/null
+    podman machine start "${MACHINE}" >/dev/null 2>&1 || true
   fi
+  if connection_works; then
+    ensure_rootless_connection
+    return 0
+  fi
+  return 1
+}
+
+ensure_connection() {
+  if ensure_existing_connection; then
+    return 0
+  fi
+
+  podman machine init --cpus "${BAHMNI_LAB_CPUS:-8}" --memory "${BAHMNI_LAB_MEMORY_MB:-16384}" --disk-size "${BAHMNI_LAB_DISK_GB:-80}" "${MACHINE}"
+  podman machine start "${MACHINE}" >/dev/null
 
   if ! connection_works; then
     echo "unable to connect to task-owned rootless Podman connection ${CONNECTION}" >&2
@@ -159,8 +171,9 @@ case "${cmd}" in
     ;;
   reset)
     require_yes "${1:-}"
-    ensure_connection
-    if [[ -f "${COMPOSE_FILE}" && -f "${ENV_FILE}" && -x "${PODMAN_WRAPPER}" ]]; then
+    if ! ensure_existing_connection; then
+      echo "task-owned Podman connection ${CONNECTION} is unavailable; nothing to reset"
+    elif [[ -f "${COMPOSE_FILE}" && -f "${ENV_FILE}" && -x "${PODMAN_WRAPPER}" ]]; then
       compose --profile emr --profile bahmni-standard --profile bahmni-mart --profile openelis --profile odoo --profile pacs --profile snowstorm-lite --profile cdss down -v
     else
       echo "no generated compose files found under ${LAB_HOME}; nothing to reset"
