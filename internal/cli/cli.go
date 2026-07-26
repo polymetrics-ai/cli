@@ -726,14 +726,18 @@ func renderConnectorCommandManual(connectorName string, connector connectors.Con
 }
 
 func connectorHelpPath(path []string) []string {
-	path = append([]string(nil), path...)
-	if len(path) > 0 && path[0] == "help" {
-		path = path[1:]
+	out := make([]string, 0, len(path))
+	for i, part := range path {
+		switch {
+		case part == "-h" || part == "--help":
+			continue
+		case part == "help" && (i == 0 || i == len(path)-1):
+			continue
+		default:
+			out = append(out, part)
+		}
 	}
-	if len(path) > 0 && path[len(path)-1] == "help" {
-		path = path[:len(path)-1]
-	}
-	return path
+	return out
 }
 
 func renderConnectorCommandRoot(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface) string {

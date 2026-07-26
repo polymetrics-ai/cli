@@ -750,8 +750,20 @@ func TestBahmniCommandSurfaceHelpScopes(t *testing.T) {
 			forbid: []string{"patients create", "drug_orders create"},
 		},
 		{
+			name:   "appointment group short help",
+			args:   []string{"bahmni", "appointments", "-h"},
+			want:   []string{"NAME", "pm bahmni appointments - Bahmni appointments commands", "appointments list", "appointments create", "appointments status-change", "appointments provider-response", "appointments reschedule", "appointment_date only"},
+			forbid: []string{"patients create", "drug_orders create"},
+		},
+		{
 			name:   "appointment create command",
 			args:   []string{"bahmni", "appointments", "create", "--help"},
+			want:   []string{"NAME", "pm bahmni appointments create", "INTENT", "reverse_etl", "AVAILABILITY", "implemented", "APPROVAL", "plan -> preview -> approval -> execute", "FLAGS", "--patient-uuid", "--service-uuid", "--start-date-time"},
+			forbid: []string{"patients create", "drug_orders create"},
+		},
+		{
+			name:   "appointment create command short help",
+			args:   []string{"bahmni", "appointments", "create", "-h"},
 			want:   []string{"NAME", "pm bahmni appointments create", "INTENT", "reverse_etl", "AVAILABILITY", "implemented", "APPROVAL", "plan -> preview -> approval -> execute", "FLAGS", "--patient-uuid", "--service-uuid", "--start-date-time"},
 			forbid: []string{"patients create", "drug_orders create"},
 		},
@@ -800,6 +812,16 @@ func TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked(t *testing.T
 			}
 			if !strings.Contains(helpOut.String(), "pm bahmni "+cmd.Path) {
 				t.Fatalf("command help for %q missing exact command path:\n%s", cmd.Path, helpOut.String())
+			}
+
+			shortHelpArgs := append([]string{"bahmni"}, strings.Fields(cmd.Path)...)
+			shortHelpArgs = append(shortHelpArgs, "-h")
+			var shortHelpOut, shortHelpErr bytes.Buffer
+			if code := cli.Run(shortHelpArgs, &shortHelpOut, &shortHelpErr); code != 0 {
+				t.Fatalf("short help Run(%v) code = %d stderr=%s stdout=%s", shortHelpArgs, code, shortHelpErr.String(), shortHelpOut.String())
+			}
+			if !strings.Contains(shortHelpOut.String(), "pm bahmni "+cmd.Path) {
+				t.Fatalf("short command help for %q missing exact command path:\n%s", cmd.Path, shortHelpOut.String())
 			}
 
 			runArgs := append([]string{"bahmni"}, strings.Fields(cmd.Path)...)
