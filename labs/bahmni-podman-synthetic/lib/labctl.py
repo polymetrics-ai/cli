@@ -35,6 +35,7 @@ MODULE_SUPPORT_PATH = ROOT / "config" / "module-support.json"
 
 LAB_ID = "fm-bahmni-lab-r1"
 DEFAULT_HOME = Path("/tmp") / LAB_ID
+REAL_PHONE_RE = re.compile(r"(?<!\d)(?:\+91[ -]?\d{10}|[6-9]\d{9})(?!\d)")
 
 
 def eprint(*parts: object) -> None:
@@ -391,6 +392,8 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
         failures.append("dataset synthetic flag is false")
     if seed.get("organization", {}).get("name") != "Chikitsalayaḥ":
         failures.append("synthetic hospital name must be exactly Chikitsalayaḥ")
+    if REAL_PHONE_RE.search(json.dumps(seed, ensure_ascii=False)):
+        failures.append("fixture contains a real-looking phone number; use invalid placeholders only")
     all_providers = provider_records(seed)
     if "SPARSH" in json.dumps(all_providers, ensure_ascii=False):
         failures.append("staff/provider fixture contains SPARSH")
@@ -804,6 +807,133 @@ def ensure_drug_order(api: BahmniApi, orders: list[dict[str, Any]], patient_uuid
     summary["medication_orders_created"] += 1
 
 
+def history_event_count(seed_data: dict[str, Any]) -> int:
+    return sum(len(patient.get("history_events", [])) for patient in seed_data.get("patients", []))
+
+
+def history_event_text_observations(event: dict[str, Any], concepts: dict[str, str], when: str) -> list[dict[str, Any]]:
+    lines = [
+        f"FM-BAHMNI-LAB-R1 synthetic history event {event['event_id']}: {event.get('summary', '')}",
+    ]
+    for field, label in [
+        ("diagnoses", "diagnoses"),
+        ("tests", "tests"),
+        ("medications", "medications"),
+        ("procedures", "procedures"),
+        ("notes", "notes"),
+    ]:
+        values = event.get(field) or []
+        if values:
+            lines.append(f"FM-BAHMNI-LAB-R1 synthetic {label}: " + "; ".join(str(value) for value in values))
+    billing = event.get("billing") or {}
+    if billing:
+        lines.append(
+            "FM-BAHMNI-LAB-R1 synthetic billing note: "
+            f"invoice={billing.get('invoice_id')}; status={billing.get('status')}; "
+            f"amount_inr={billing.get('amount_inr')}; payer={billing.get('payer')}; not a real invoice"
+        )
+    return [{"concept": concepts["document_text"], "value": line, "obsDatetime": when} for line in lines if line]
+
+
+def history_event_numeric_observations(event: dict[str, Any], concepts: dict[str, str], when: str) -> list[dict[str, Any]]:
+    concept_keys = {
+        "weight_kg": "weight_kg",
+        "height_cm": "height_cm",
+        "temperature_c": "temperature_c",
+        "pulse": "pulse",
+        "respiratory_rate": "respiratory_rate",
+        "systolic_bp": "systolic_bp",
+        "diastolic_bp": "diastolic_bp",
+    }
+    lab_keys = {
+        "serum_glucose": "serum_glucose",
+        "white_blood_cells": "white_blood_cells",
+        "serum_creatinine_mg_dl": "serum_creatinine_mg_dl",
+    }
+    obs: list[dict[str, Any]] = []
+    for source, mapping in [(event.get("vitals") or {}, concept_keys), (event.get("lab_results") or {}, lab_keys)]:
+        for key, value in source.items():
+            concept_key = mapping.get(key)
+            if concept_key and concept_key in concepts:
+                obs.append({"concept": concepts[concept_key], "value": value, "obsDatetime": when})
+    return obs
+
+
+def seed_history_event(
+    api: BahmniApi,
+    patient: dict[str, Any],
+    event: dict[str, Any],
+    patient_uuid: str,
+    provider_uuid_by_identifier: dict[str, str],
+    visit_types: dict[str, str],
+    required_encounter_types: dict[str, str],
+    location_by_department: dict[str, str],
+    parent_location: str,
+    concepts: dict[str, str],
+    summary: dict[str, int],
+) -> None:
+    event_id = event["event_id"]
+    provider_identifier = event.get("provider") or patient["provider"]
+    provider_uuid = provider_uuid_by_identifier[provider_identifier]
+    location = location_by_department.get(event.get("department") or patient["department"], parent_location)
+    visit_type_uuid = visit_types.get(event.get("visit_type") or patient["visit_type"]) or visit_types.get("OPD") or next(iter(visit_types.values()))
+    visit_uuid = ensure_visit(api, patient_uuid, visit_type_uuid, event["start"], location, summary, stop=event.get("stop"))
+    when = event.get("encounter_datetime") or event["start"]
+    marker_prefix = f"FM-BAHMNI-LAB-R1 synthetic history {patient['identifier']} {event_id}"
+    consultation_obs = history_event_numeric_observations(event, concepts, when) + history_event_text_observations(event, concepts, when)
+    ensure_encounter(
+        api,
+        patient_uuid,
+        required_encounter_types["Consultation"],
+        when,
+        location,
+        visit_uuid,
+        consultation_obs,
+        f"{marker_prefix} consultation",
+        concepts["document_text"],
+        summary,
+    )
+    if event.get("lab_results"):
+        ensure_encounter(
+            api,
+            patient_uuid,
+            required_encounter_types["LAB_RESULT"],
+            when,
+            location,
+            visit_uuid,
+            history_event_numeric_observations({"lab_results": event.get("lab_results", {})}, concepts, when),
+            f"{marker_prefix} lab-result",
+            concepts["document_text"],
+            summary,
+        )
+    if event.get("tests") or event.get("procedures"):
+        ensure_encounter(
+            api,
+            patient_uuid,
+            required_encounter_types["INVESTIGATION"],
+            when,
+            location,
+            visit_uuid,
+            history_event_text_observations({"event_id": event_id, "summary": event.get("summary", ""), "tests": event.get("tests", []), "procedures": event.get("procedures", [])}, concepts, when),
+            f"{marker_prefix} investigation",
+            concepts["document_text"],
+            summary,
+        )
+    if event.get("billing") or event.get("notes"):
+        ensure_encounter(
+            api,
+            patient_uuid,
+            required_encounter_types["Patient Document"],
+            when,
+            location,
+            visit_uuid,
+            history_event_text_observations({"event_id": event_id, "summary": event.get("summary", ""), "billing": event.get("billing", {}), "notes": event.get("notes", [])}, concepts, when),
+            f"{marker_prefix} document-billing",
+            concepts["document_text"],
+            summary,
+        )
+
+
 def new_summary() -> dict[str, int]:
     keys = [
         "locations_created", "locations_existing", "providers_created", "providers_existing", "patients_created", "patients_existing",
@@ -828,6 +958,7 @@ def seed(args: argparse.Namespace) -> None:
                 "clinical_providers": len(seed_data["providers"]),
                 "staff": len(seed_data.get("staff", [])),
                 "patients": len(seed_data["patients"]),
+                "history_events": history_event_count(seed_data),
                 "appointment_per_patient": 1,
                 "visit_per_patient": 1,
                 "encounter_families_per_patient": 4,
@@ -957,6 +1088,21 @@ def seed(args: argparse.Namespace) -> None:
         ensure_test_order(api, orders, patient_uuid, consultation_encounter, provider_uuid, concepts["electrocardiogram_diagnosis"], order_types["procedure_order"], care_setting, "procedure_orders", summary)
         ensure_drug_order(api, orders, patient_uuid, consultation_encounter, provider_uuid, seed_data, summary)
 
+        for event in patient.get("history_events", []):
+            seed_history_event(
+                api,
+                patient,
+                event,
+                patient_uuid,
+                provider_uuid_by_identifier,
+                visit_types,
+                required_encounter_types,
+                location_by_department,
+                parent_location,
+                concepts,
+                summary,
+            )
+
     result = {
         "ok": True,
         "dataset_id": seed_data["dataset_id"],
@@ -1004,11 +1150,15 @@ def verify(args: argparse.Namespace) -> None:
         "clinical_providers": len(seed_data["providers"]),
         "staff": len(seed_data.get("staff", [])),
         "patients": len(seed_data["patients"]),
+        "history_events": history_event_count(seed_data),
+        "karthik_history_events": next((len(patient.get("history_events", [])) for patient in seed_data["patients"] if patient.get("identifier") == "SYN-HEN-0009"), 0),
+        "rohit_history_events": next((len(patient.get("history_events", [])) for patient in seed_data["patients"] if patient.get("identifier") == "SYN-HEN-0010"), 0),
         "module_families_seeded": len(support["supported_and_seeded"]),
         "synthetic_check_ok": synthetic["ok"],
         "unicode_hospital_name": seed_data["organization"]["name"],
         "unicode_hospital_name_utf8_sha256": hashlib.sha256(seed_data["organization"]["name"].encode("utf-8")).hexdigest(),
         "karthik_patient_present": any(patient.get("given_name") == "Karthik" and patient.get("identifier") == "SYN-HEN-0009" for patient in seed_data["patients"]),
+        "rohit_patient_present": any(patient.get("given_name") == "Rohit" and patient.get("identifier") == "SYN-HEN-0010" for patient in seed_data["patients"]),
     }
     if args.offline:
         dump_json({"ok": True, "offline": offline})
@@ -1080,14 +1230,30 @@ def verify(args: argparse.Namespace) -> None:
             _, condition_bundle = api.fhir("/Condition", params={"patient": patient_id})
             karthik_live["cold_fever_conditions_found"] = condition_bundle.get("total", 0) > 0 and cold_fever_note_found
 
+    history_live: dict[str, dict[str, Any]] = {}
+    for patient in seed_data["patients"]:
+        expected_events = patient.get("history_events", [])
+        if not expected_events:
+            continue
+        patient_hits = api.results("/patient", q=patient["identifier"], v="default", limit=5)
+        found_events = 0
+        if patient_hits:
+            encounters = api.results("/encounter", patient=patient_hits[0]["uuid"], v="full", limit=100)
+            for event in expected_events:
+                marker_prefix = f"FM-BAHMNI-LAB-R1 synthetic history {patient['identifier']} {event['event_id']}"
+                if any(marker_in_obs(encounter, marker_prefix) for encounter in encounters):
+                    found_events += 1
+        history_live[patient["identifier"]] = {"expected": len(expected_events), "found": found_events, "ok": found_events == len(expected_events)}
+
     live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(provider_records(seed_data))
-    live_ok = live_ok and unicode_location_present and all(karthik_live.values())
+    live_ok = live_ok and unicode_location_present and all(karthik_live.values()) and all(item["ok"] for item in history_live.values())
     result = {
         "ok": live_ok,
         "offline": offline,
         "live_counts": counts | {"appointments": appointment_count},
         "unicode_location_present": unicode_location_present,
         "karthik_live": karthik_live,
+        "history_live": history_live,
         "fhir": {
             "patient_search_total": fhir_patients.get("total"),
             "weight_observation_total": fhir_observations.get("total"),

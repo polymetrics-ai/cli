@@ -19,7 +19,8 @@
 4. Healthy loopback-only lab left running for captain inspection.
 5. Synthetic hospital name exactly `Chikitsalayaḥ`, plus Karthik synthetic cold/fever completed visit fixture and live verification.
 6. Extended synthetic staff roster covering doctors, nursing, allied health, diagnostics, pharmacy, operations, revenue cycle, facilities, management, IT, quality, security, and support roles.
-7. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
+7. Rohit synthetic patient plus richer Karthik/Rohit longitudinal histories for tests, medication, documents, and simulated billing notes without storing real phone/contact data.
+8. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
 
 ## Work slices
 
@@ -90,6 +91,13 @@
 - Cover realistic hospital staffing breadth: consultant/resident doctors, nurses, nurse supervisors, lab technicians, radiology technicians, pharmacists, billing/insurance, front office, medical records, operations, management, HR/finance/procurement, IT, biomedical engineering, facilities, housekeeping, security, nutrition, ambulance/transport, quality/compliance, infection control, and patient relations.
 - Preserve the original patient data and Karthik cold/fever visit; do not introduce real SPARSH people, contacts, phone numbers, or emails.
 - Keep seeding idempotent by reusing the existing provider preflight search for every synthetic staff record.
+
+### Slice G — Rohit patient and richer synthetic histories
+
+- Add `SYN-HEN-0010 - Rohit Syntheticcase` using invalid placeholder contact defaults only; do not commit, log, or seed the user-provided real phone number into the synthetic fixture.
+- Add structured longitudinal `history_events` for Karthik and Rohit covering intake, consultation, lab/radiology/procedure orders, medication notes, billing/revenue-cycle notes, follow-up/discharge, and document metadata.
+- Implement history seeding through existing supported OpenMRS REST visit/encounter/obs primitives, using deterministic markers for idempotency and simulated billing notes rather than direct Odoo/DB writes.
+- Preserve the current live hold: no live `seed`, `verify`, restart, reset, cleanup, or dataset mutation until connector live-write proof clearance is explicitly granted.
 
 ## Risks and mitigations
 

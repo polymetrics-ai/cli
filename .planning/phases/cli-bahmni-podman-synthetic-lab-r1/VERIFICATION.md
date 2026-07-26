@@ -46,6 +46,15 @@
 - [ ] **Blocked pending connector clearance:** Live `verify` passes with provider count equal to fixture total and Karthik checks still true.
 - [ ] **Blocked pending connector clearance:** Spot-check OpenMRS/Bahmni provider search for a synthetic staff role such as nursing or management.
 
+## Rohit and longitudinal history checks (Slice G)
+
+- [x] `check-synthetic --json` reports 10 synthetic patients and rejects real-looking phone/contact data.
+- [x] `verify --offline` reports Rohit present and Karthik/Rohit history event counts: 7 total, 3 Karthik, 4 Rohit.
+- [x] `seed --dry-run --json` reports planned history events without mutating live Bahmni.
+- [ ] **Blocked pending connector clearance:** Live `seed --json` creates Rohit/history records without printing secrets or real contact data.
+- [ ] **Blocked pending connector clearance:** Second live `seed --json` is idempotent with no nonzero `*_created` counters.
+- [ ] **Blocked pending connector clearance:** Live `verify` passes with 10 patients and Karthik/Rohit history checks true.
+
 ## Final repo gates
 
 - [x] `gofmt -w cmd internal` not applicable: docs/scripts/lab fixture only, no Go edits.

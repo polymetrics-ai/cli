@@ -47,7 +47,9 @@ Fixture: `fixtures/synthetic-seed.json`.
 - Staff coverage includes consultant/resident doctors, nursing, allied health, lab, radiology, pharmacy, front office, billing, medical records, administration, HR, finance, procurement, IT, biomedical engineering, facilities, housekeeping, security, dietary, ambulance/transport, CSSD, infection control, quality/compliance, and patient relations.
 - Contact defaults are deliberately invalid placeholders: `000-000-0000` and `.invalid` emails.
 - Karthik test patient: `SYN-HEN-0009 - Karthik Syntheticcase`.
+- Rohit test patient: `SYN-HEN-0010 - Rohit Syntheticcase`; contact data remains the invalid placeholder and no real phone number is stored in fixture/config/log output.
 - Karthik has a completed OPD cold/fever visit, fever temperature observation, chief complaint text, diagnosis text, completed visit stop time, appointments, lab/procedure/radiology/medication orders, allergy placeholder, and FHIR condition presence.
+- Karthik and Rohit also have longitudinal synthetic history events for intake, diagnostics/lab results, medication notes, follow-up/discharge, document metadata, and simulated billing notes. Billing is represented as OpenMRS document/encounter text for connector testing, not as a real Odoo invoice.
 
 The dataset uses SPARSH Hennur-style taxonomy only structurally. It does not use real people, phone numbers, emails, addresses, or contacts.
 

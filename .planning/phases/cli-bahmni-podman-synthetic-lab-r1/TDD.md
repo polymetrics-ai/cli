@@ -24,6 +24,10 @@
 | F | `seed --dry-run --json` after staff expansion | planned counts do not include staff/providers | dry-run reports 87 providers = 23 clinical + 64 staff, 46 departments, 9 patients | green offline |
 | F | `seed --json` after staff expansion | new staff records fail OpenMRS API create/search | new `providers_created` count equals unseeded staff records; rerun creates zero records | blocked pending connector clearance |
 | F | `verify` after staff expansion | provider count remains old or staff missing | live provider count equals doctors plus extended staff roster | blocked pending connector clearance |
+| G | `check-synthetic --json` after Rohit/history expansion | real phone or non-synthetic identity appears in fixture | 10 synthetic patients, no real-looking phone, invalid placeholders only | green offline |
+| G | `verify --offline` after Rohit/history expansion | patient/history counts stale | offline reports Rohit present and Karthik/Rohit history events planned | green offline |
+| G | `seed --dry-run --json` after Rohit/history expansion | dry-run omits history events | reports planned history event count without live API writes | green offline |
+| G | live `seed --json` and idempotency | live mutation while connector proof is active | blocked until explicit connector clearance | blocked pending connector clearance |
 
 ## Evidence log
 
@@ -36,3 +40,5 @@
 - 2026-07-26: New staff-roster request accepted under Slice F; plan/TDD/verification updated before fixture/seeder edits.
 - 2026-07-26: User requested coordination with active connector verification; no live restart/reseed/container or current dataset mutation is allowed until `cli-bahmni-connector-r1` finishes. Offline-only work continues.
 - 2026-07-26: Offline staff validation passed: `check-synthetic --json` ok for 87 providers (23 clinical + 64 staff) and 9 patients; `verify --offline` ok; `seed --dry-run --json` planned 87 providers and 46 departments without live API writes.
+- 2026-07-26: Slice G accepted for offline-only Rohit/history fixture work. The user-provided real phone is intentionally not stored; live application remains blocked pending connector clearance.
+- 2026-07-26: Offline Rohit/history validation passed: `check-synthetic --json` ok for 10 patients and 87 providers; `verify --offline` ok with Rohit present and 7 history events (3 Karthik, 4 Rohit); `seed --dry-run --json` planned 7 history events without live writes.

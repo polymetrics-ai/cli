@@ -356,6 +356,309 @@
       "diagnosis_notes": [
         "FM-BAHMNI-LAB-R1 diagnosis: synthetic common cold for Karthik",
         "FM-BAHMNI-LAB-R1 diagnosis: synthetic fever for Karthik"
+      ],
+      "history_events": [
+        {
+          "event_id": "KARTHIK-INTAKE-2026-01-23",
+          "visit_type": "OPD",
+          "status": "completed",
+          "start": "2026-01-23T08:30:00.000+0000",
+          "stop": "2026-01-23T10:45:00.000+0000",
+          "department": "Emergency Medicine",
+          "provider": "SYN-PROV-EMER-012",
+          "summary": "Synthetic intake for Karthik cold and fever with front-office registration, nursing triage, physician assessment, and billing estimate.",
+          "vitals": {
+            "temperature_c": 38.6,
+            "pulse": 96,
+            "respiratory_rate": 22,
+            "systolic_bp": 118,
+            "diastolic_bp": 76,
+            "weight_kg": 72.4,
+            "height_cm": 174
+          },
+          "diagnoses": [
+            "synthetic common cold",
+            "synthetic fever"
+          ],
+          "tests": [
+            "complete blood count ordered",
+            "serum glucose ordered",
+            "creatinine screening ordered"
+          ],
+          "medications": [
+            "synthetic paracetamol advice",
+            "synthetic oral hydration advice"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-KAR-001",
+            "status": "closed",
+            "amount_inr": 1250,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "No real contact data stored; placeholder-only registration.",
+            "Nursing education completed with synthetic fever precautions."
+          ]
+        },
+        {
+          "event_id": "KARTHIK-LAB-2026-01-24",
+          "visit_type": "OPD",
+          "status": "completed",
+          "start": "2026-01-24T09:10:00.000+0000",
+          "stop": "2026-01-24T11:20:00.000+0000",
+          "department": "Clinical Laboratory",
+          "provider": "SYN-PROV-LAB-004",
+          "summary": "Synthetic lab follow-up for Karthik with sample collection, resulted hematology/chemistry, and medication continuation note.",
+          "vitals": {
+            "temperature_c": 37.9,
+            "pulse": 88,
+            "respiratory_rate": 20,
+            "systolic_bp": 116,
+            "diastolic_bp": 74,
+            "weight_kg": 72.2
+          },
+          "lab_results": {
+            "serum_glucose": 94,
+            "white_blood_cells": 6.8,
+            "serum_creatinine_mg_dl": 0.92
+          },
+          "diagnoses": [
+            "synthetic resolving viral syndrome"
+          ],
+          "tests": [
+            "CBC resulted synthetic normal range",
+            "renal function resulted synthetic normal range"
+          ],
+          "medications": [
+            "synthetic antipyretic course reviewed"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-KAR-002",
+            "status": "closed",
+            "amount_inr": 980,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "Lab result review completed; no direct database writes used."
+          ]
+        },
+        {
+          "event_id": "KARTHIK-FOLLOWUP-2026-01-28",
+          "visit_type": "Follow Up",
+          "status": "completed",
+          "start": "2026-01-28T15:00:00.000+0000",
+          "stop": "2026-01-28T15:40:00.000+0000",
+          "department": "Emergency Medicine",
+          "provider": "SYN-PROV-EMER-012",
+          "summary": "Synthetic follow-up closing Karthik cold and fever episode with discharge advice and revenue-cycle closure note.",
+          "vitals": {
+            "temperature_c": 36.8,
+            "pulse": 78,
+            "respiratory_rate": 18,
+            "systolic_bp": 114,
+            "diastolic_bp": 72,
+            "weight_kg": 72.1
+          },
+          "diagnoses": [
+            "synthetic fever resolved",
+            "synthetic cold improved"
+          ],
+          "tests": [
+            "no repeat lab required synthetic note"
+          ],
+          "medications": [
+            "synthetic medication stopped after symptom resolution"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-KAR-003",
+            "status": "settled",
+            "amount_inr": 350,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "Discharge summary and follow-up instructions documented as synthetic text observations."
+          ]
+        }
+      ]
+    },
+    {
+      "identifier": "SYN-HEN-0010",
+      "given_name": "Rohit",
+      "family_name": "Syntheticcase",
+      "gender": "M",
+      "birthdate": "1987-06-19",
+      "department": "Pulmonology",
+      "provider": "SYN-PROV-PULM-009",
+      "visit_type": "OPD",
+      "visit_status": "completed",
+      "chief_complaint": "FM-BAHMNI-LAB-R1 synthetic Rohit respiratory review; contact uses invalid placeholder only",
+      "synthetic_contact": {
+        "phone": "000-000-0000",
+        "email": "rohit.synthetic.invalid@example.invalid"
+      },
+      "diagnosis_notes": [
+        "FM-BAHMNI-LAB-R1 diagnosis: synthetic acute upper respiratory infection for Rohit",
+        "FM-BAHMNI-LAB-R1 diagnosis: synthetic medication review for Rohit"
+      ],
+      "history_events": [
+        {
+          "event_id": "ROHIT-INTAKE-2026-02-03",
+          "visit_type": "OPD",
+          "status": "completed",
+          "start": "2026-02-03T09:00:00.000+0000",
+          "stop": "2026-02-03T11:10:00.000+0000",
+          "department": "Pulmonology",
+          "provider": "SYN-PROV-PULM-009",
+          "summary": "Synthetic Rohit new-patient respiratory intake with registration, nursing triage, pulmonology consultation, and billing estimate.",
+          "vitals": {
+            "temperature_c": 37.7,
+            "pulse": 84,
+            "respiratory_rate": 21,
+            "systolic_bp": 122,
+            "diastolic_bp": 80,
+            "weight_kg": 79.3,
+            "height_cm": 176
+          },
+          "diagnoses": [
+            "synthetic acute cough",
+            "synthetic low-grade fever"
+          ],
+          "tests": [
+            "complete blood count ordered",
+            "chest imaging screening ordered",
+            "serum creatinine ordered before medication review"
+          ],
+          "medications": [
+            "synthetic inhalation guidance",
+            "synthetic antipyretic advice"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-ROH-001",
+            "status": "closed",
+            "amount_inr": 1450,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "The user-provided real phone number is not stored; placeholder-only contact policy retained."
+          ]
+        },
+        {
+          "event_id": "ROHIT-DIAGNOSTICS-2026-02-04",
+          "visit_type": "OPD",
+          "status": "completed",
+          "start": "2026-02-04T10:20:00.000+0000",
+          "stop": "2026-02-04T12:05:00.000+0000",
+          "department": "Radiology",
+          "provider": "SYN-PROV-RAD-005",
+          "summary": "Synthetic Rohit diagnostic day with lab result review, radiology order/result note, and pharmacy billing queue note.",
+          "vitals": {
+            "temperature_c": 37.2,
+            "pulse": 82,
+            "respiratory_rate": 19,
+            "systolic_bp": 120,
+            "diastolic_bp": 78,
+            "weight_kg": 79.1
+          },
+          "lab_results": {
+            "serum_glucose": 102,
+            "white_blood_cells": 7.4,
+            "serum_creatinine_mg_dl": 1.01
+          },
+          "diagnoses": [
+            "synthetic bronchitis review"
+          ],
+          "tests": [
+            "CBC resulted synthetic mild leukocyte trend",
+            "ultrasound/radiology placeholder order tracked",
+            "procedure placeholder reviewed"
+          ],
+          "medications": [
+            "synthetic short course medication dispensed",
+            "synthetic pharmacy counselling completed"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-ROH-002",
+            "status": "closed",
+            "amount_inr": 2320,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "Radiology and lab data are synthetic connector-test artifacts."
+          ]
+        },
+        {
+          "event_id": "ROHIT-PHARMACY-2026-02-06",
+          "visit_type": "Follow Up",
+          "status": "completed",
+          "start": "2026-02-06T14:00:00.000+0000",
+          "stop": "2026-02-06T14:50:00.000+0000",
+          "department": "Pharmacy",
+          "provider": "SYN-STAFF-PHAR-021",
+          "summary": "Synthetic Rohit pharmacy follow-up with medication reconciliation, billing settlement, and patient education.",
+          "vitals": {
+            "temperature_c": 36.9,
+            "pulse": 76,
+            "respiratory_rate": 18,
+            "systolic_bp": 118,
+            "diastolic_bp": 76,
+            "weight_kg": 79.0
+          },
+          "diagnoses": [
+            "synthetic respiratory symptoms improving"
+          ],
+          "tests": [
+            "no repeat diagnostic testing required synthetic note"
+          ],
+          "medications": [
+            "synthetic medication reconciliation complete",
+            "synthetic adherence counselling complete"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-ROH-003",
+            "status": "settled",
+            "amount_inr": 640,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "Billing settlement is simulated in OpenMRS document text, not an Odoo invoice."
+          ]
+        },
+        {
+          "event_id": "ROHIT-CLOSURE-2026-02-10",
+          "visit_type": "Follow Up",
+          "status": "completed",
+          "start": "2026-02-10T16:00:00.000+0000",
+          "stop": "2026-02-10T16:30:00.000+0000",
+          "department": "Patient Relations",
+          "provider": "SYN-STAFF-PR-064",
+          "summary": "Synthetic Rohit episode closure with care-coordination callback note, final billing audit, and document metadata.",
+          "vitals": {
+            "temperature_c": 36.7,
+            "pulse": 74,
+            "respiratory_rate": 17,
+            "systolic_bp": 116,
+            "diastolic_bp": 74,
+            "weight_kg": 78.8
+          },
+          "diagnoses": [
+            "synthetic episode closed"
+          ],
+          "tests": [
+            "all synthetic tests reviewed and filed"
+          ],
+          "medications": [
+            "synthetic medication course completed"
+          ],
+          "billing": {
+            "invoice_id": "SYN-BILL-ROH-004",
+            "status": "settled",
+            "amount_inr": 0,
+            "payer": "synthetic self-pay placeholder"
+          },
+          "notes": [
+            "Final record-history closure for connector testing; no real patient contact data."
+          ]
+        }
       ]
     }
   ],
@@ -371,7 +674,8 @@
       "FM-BAHMNI-LAB-R1 synthetic imaging follow-up",
       "FM-BAHMNI-LAB-R1 synthetic dermatitis review",
       "FM-BAHMNI-LAB-R1 synthetic post-procedure review",
-      "FM-BAHMNI-LAB-R1 synthetic cold and fever"
+      "FM-BAHMNI-LAB-R1 synthetic cold and fever",
+      "FM-BAHMNI-LAB-R1 synthetic Rohit respiratory medication follow-up"
     ],
     "allergy_comment": "FM-BAHMNI-LAB-R1 synthetic low-severity medication allergy; not real patient data",
     "document_note": "FM-BAHMNI-LAB-R1 synthetic document metadata only; no real attachment bytes are stored"
@@ -423,7 +727,7 @@
   "contact_defaults": {
     "patient_phone_placeholder": "000-000-0000",
     "patient_email_placeholder": "karthik.synthetic.invalid@example.invalid",
-    "privacy_note": "Placeholders are intentionally invalid and synthetic. Do not commit real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests."
+    "privacy_note": "Placeholders are intentionally invalid and synthetic. Do not commit, log, or seed real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests after explicit clearance."
   },
   "staff": [
     {
