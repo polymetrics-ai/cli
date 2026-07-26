@@ -621,6 +621,7 @@ type CLICommand struct {
 	Examples      []string                `json:"examples,omitempty"`
 	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
 	OutputPolicy  string                  `json:"output_policy,omitempty"`
+	RedactFields  []string                `json:"redact_fields,omitempty"`
 	Operation     string                  `json:"operation,omitempty"`
 	Risk          string                  `json:"risk,omitempty"`
 	Approval      string                  `json:"approval,omitempty"`

@@ -1,7 +1,7 @@
 {
   "name": "bahmni",
   "display_name": "Bahmni",
-  "description": "Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs \u2014 patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses \u2014 executes bounded direct reads and a schema-gated typed POST patient search, and models OpenMRS/Bahmni clinical mutations, a top-level JSON array observation upload, and a bounded multipart patient-document upload as typed reverse-ETL actions. Output is bounded; secret-shaped fields and file-path inputs are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.",
+  "description": "Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs \u2014 patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses \u2014 executes bounded direct reads and a schema-gated typed GET patient search, and models retained OpenMRS/Bahmni clinical mutations as approval-gated, schema-bound reverse-ETL actions. Output is bounded; secret-shaped fields are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.",
   "integration_type": "api",
   "docs_url": "https://rest.openmrs.org/",
   "release_stage": "alpha",
@@ -18,7 +18,7 @@
   },
   "risk": {
     "read": "external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; reads are bounded and secret-shaped fields are redacted by existing output policies, but clinical PHI fields are not generally field-redacted by the current engine",
-    "write": "typed Bahmni/OpenMRS reverse ETL clinical mutations for patients, encounters, observations, appointments, drug orders, diagnoses, a bounded top-level JSON array observation upload, and a bounded multipart patient-document upload",
-    "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive; multipart document upload binds a SHA-256 payload identity that is snapshot-verified before network send and redacts the local file path in plans"
+    "write": "typed Bahmni/OpenMRS reverse ETL clinical mutations for retained, live-proven patient, encounter, observation, visit, lab order, diagnosis, appointment create/status/provider-response, and note routes; drug order, appointment reschedule, bulk observation, and document upload surfaces are blocked unless separately typed and live-proven",
+    "approval": "reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive"
   }
 }

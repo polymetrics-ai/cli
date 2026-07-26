@@ -134,7 +134,11 @@
           },
           "output_policy": {
             "type": "string",
-            "enum": ["github_contents_file_metadata", "github_contents_directory", "json_redacted"]
+            "enum": ["github_contents_file_metadata", "github_contents_directory", "json_redacted", "clinical_json_redacted"]
+          },
+          "redact_fields": {
+            "type": "array",
+            "items": { "type": "string" }
           },
           "risk": { "type": "string" },
           "approval": { "type": "string" },

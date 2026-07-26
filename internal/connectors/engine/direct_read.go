@@ -24,6 +24,7 @@ const (
 	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
 	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
 	directReadPolicyJSONRedacted               = "json_redacted"
+	directReadPolicyClinicalJSONRedacted       = "clinical_json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -117,6 +118,13 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
+	redactFields := append([]string(nil), req.RedactFields...)
+	if op.SensitivePolicy != nil {
+		redactFields = append(redactFields, op.SensitivePolicy.RedactFields...)
+	}
+	if len(redactFields) > 0 {
+		decoded = redactNamedJSONFields(decoded, redactFields)
+	}
 	return connectors.DirectReadResult{Connector: b.Name, Method: method, Path: resolvedPath, Status: resp.Status, Body: decoded}, nil
 }
 
@@ -181,6 +189,9 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	body, err = applyDirectReadOutputPolicy(req.OutputPolicy, body)
 	if err != nil {
 		return connectors.DirectReadResult{}, err
+	}
+	if len(req.RedactFields) > 0 {
+		body = redactNamedJSONFields(body, req.RedactFields)
 	}
 	return connectors.DirectReadResult{
 		Connector: b.Name,
@@ -281,7 +292,7 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 			return err
 		}
 		return nil
-	case directReadPolicyJSONRedacted:
+	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
 		return nil
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
@@ -313,7 +324,7 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 			out = append(out, item)
 		}
 		return out, nil
-	case directReadPolicyJSONRedacted:
+	case directReadPolicyJSONRedacted, directReadPolicyClinicalJSONRedacted:
 		return redactJSONValue(body), nil
 	default:
 		return nil, fmt.Errorf("direct read output policy %q is not supported", policy)
@@ -373,8 +384,46 @@ func redactJSONValue(value any) any {
 	}
 }
 
+func redactNamedJSONFields(value any, fields []string) any {
+	if len(fields) == 0 {
+		return value
+	}
+	fieldSet := make(map[string]bool, len(fields))
+	for _, field := range fields {
+		fieldSet[normalizeJSONFieldName(field)] = true
+	}
+	return redactJSONFieldsBySet(value, fieldSet)
+}
+
+func redactJSONFieldsBySet(value any, fields map[string]bool) any {
+	return redactJSONFieldsByPredicate(value, func(name string) bool { return fields[normalizeJSONFieldName(name)] })
+}
+
+func redactJSONFieldsByPredicate(value any, shouldRedact func(string) bool) any {
+	switch v := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, item := range v {
+			if item != nil && shouldRedact(key) {
+				out[key+"_redacted"] = true
+				continue
+			}
+			out[key] = redactJSONFieldsByPredicate(item, shouldRedact)
+		}
+		return out
+	case []any:
+		out := make([]any, len(v))
+		for i, item := range v {
+			out[i] = redactJSONFieldsByPredicate(item, shouldRedact)
+		}
+		return out
+	default:
+		return value
+	}
+}
+
 func shouldRedactJSONField(name string) bool {
-	normalized := strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
+	normalized := normalizeJSONFieldName(name)
 	switch normalized {
 	case "content", "body", "payload", "raw", "download_url", "download_media_url", "clone_url", "api_key", "apikey", "access_key", "private_key", "authorization", "credential", "credentials":
 		return true
@@ -391,6 +440,10 @@ func shouldRedactJSONField(name string) bool {
 		}
 	}
 	return false
+}
+
+func normalizeJSONFieldName(name string) string {
+	return strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
 }
 
 func redactGitHubContentsObject(in map[string]any) map[string]any {

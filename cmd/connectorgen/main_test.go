@@ -203,6 +203,121 @@ func TestValidate_CLISurfaceReverseETLRequiresRequiredRecordFlagMappings(t *test
 	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
 }
 
+func TestValidate_CLISurfaceReverseETLAcceptsSchemaBoundNestedArrayMappings(t *testing.T) {
+	fsys := cliSurfaceBundleFS(`{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "patient create",
+				"summary": "Create patient",
+				"intent": "reverse_etl",
+				"availability": "implemented",
+				"write": "create_patient",
+				"api_surface": [{ "method": "POST", "path": "/widgets" }],
+				"flags": [
+					{ "name": "identifier", "type": "string", "maps_to": "record.identifiers.0.identifier" },
+					{ "name": "identifier-type", "type": "string", "maps_to": "record.identifiers.0.identifierType" },
+					{ "name": "identifier-location", "type": "string", "maps_to": "record.identifiers.0.location" },
+					{ "name": "identifier-preferred", "type": "boolean", "maps_to": "record.identifiers.0.preferred" },
+					{ "name": "given-name", "type": "string", "maps_to": "record.person.names.0.givenName" },
+					{ "name": "family-name", "type": "string", "maps_to": "record.person.names.0.familyName" },
+					{ "name": "gender", "type": "enum", "values": ["M", "F", "O"], "maps_to": "record.person.gender" },
+					{ "name": "birthdate", "type": "string", "maps_to": "record.person.birthdate" }
+				],
+				"risk": "creates a patient",
+				"approval": "reverse ETL writes require plan, preview, approval, execute"
+			}
+		]
+	}`)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_patient" } }
+		]
+	}`)}
+	fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [{
+			"name": "create_patient",
+			"kind": "create",
+			"method": "POST",
+			"path": "/widgets",
+			"record_schema": {
+				"type": "object",
+				"required": ["identifiers", "person"],
+				"properties": {
+					"identifiers": { "type": "array", "items": { "type": "object", "required": ["identifier", "identifierType", "location", "preferred"], "properties": { "identifier": { "type": "string" }, "identifierType": { "type": "string" }, "location": { "type": "string" }, "preferred": { "type": "boolean" } }, "additionalProperties": false } },
+					"person": { "type": "object", "required": ["names", "gender", "birthdate"], "properties": { "names": { "type": "array", "items": { "type": "object", "required": ["givenName", "familyName"], "properties": { "givenName": { "type": "string" }, "familyName": { "type": "string" } }, "additionalProperties": false } }, "gender": { "type": "string" }, "birthdate": { "type": "string" } }, "additionalProperties": false }
+				},
+				"additionalProperties": false
+			},
+			"risk": "creates a patient"
+		}]
+	}`)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for schema-bound nested mappings, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceReverseETLRejectsStructuredStringAndMissingNestedMapping(t *testing.T) {
+	fsys := cliSurfaceBundleFS(`{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "patient create",
+				"summary": "Create patient",
+				"intent": "reverse_etl",
+				"availability": "implemented",
+				"write": "create_patient",
+				"api_surface": [{ "method": "POST", "path": "/widgets" }],
+				"flags": [
+					{ "name": "identifiers", "type": "string", "maps_to": "record.identifiers" },
+					{ "name": "given-name", "type": "string", "maps_to": "record.person.names.0.givenName" }
+				],
+				"risk": "creates a patient",
+				"approval": "reverse ETL writes require plan, preview, approval, execute"
+			}
+		]
+	}`)
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_patient" } }
+		]
+	}`)}
+	fsys["cli-surface/writes.json"] = &fstest.MapFile{Data: []byte(`{
+		"actions": [{
+			"name": "create_patient",
+			"kind": "create",
+			"method": "POST",
+			"path": "/widgets",
+			"record_schema": {
+				"type": "object",
+				"required": ["identifiers", "person"],
+				"properties": {
+					"identifiers": { "type": "array", "items": { "type": "object", "required": ["identifier"], "properties": { "identifier": { "type": "string" } }, "additionalProperties": false } },
+					"person": { "type": "object", "required": ["names"], "properties": { "names": { "type": "array", "items": { "type": "object", "required": ["givenName", "familyName"], "properties": { "givenName": { "type": "string" }, "familyName": { "type": "string" } }, "additionalProperties": false } } }, "additionalProperties": false }
+				},
+				"additionalProperties": false
+			},
+			"risk": "creates a patient"
+		}]
+	}`)}
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceMissingMapping)
+}
+
 func TestValidate_CLISurfaceImplementedRawAPIIsBlocked(t *testing.T) {
 	cliSurface := strings.Replace(validCLISurfaceJSON(), `"intent": "etl"`, `"intent": "raw_api"`, 1)
 	report, err := validateDir(cliSurfaceBundleFS(cliSurface))

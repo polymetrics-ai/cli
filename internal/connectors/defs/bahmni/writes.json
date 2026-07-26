@@ -11,19 +11,110 @@
         "properties": {
           "identifiers": {
             "type": "array",
-            "description": "OpenMRS patient identifiers payload."
+            "items": {
+              "type": "object",
+              "properties": {
+                "identifier": {
+                  "type": "string"
+                },
+                "identifierType": {
+                  "type": "string"
+                },
+                "location": {
+                  "type": "string"
+                },
+                "preferred": {
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "identifier",
+                "identifierType",
+                "location",
+                "preferred"
+              ],
+              "additionalProperties": false
+            }
           },
           "person": {
             "type": "object",
-            "description": "OpenMRS person sub-resource (names, gender, birthdate, addresses)."
+            "properties": {
+              "names": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "givenName": {
+                      "type": "string"
+                    },
+                    "middleName": {
+                      "type": "string"
+                    },
+                    "familyName": {
+                      "type": "string"
+                    },
+                    "preferred": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "givenName",
+                    "familyName"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "M",
+                  "F",
+                  "O"
+                ]
+              },
+              "birthdate": {
+                "type": "string"
+              },
+              "addresses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "address1": {
+                      "type": "string"
+                    },
+                    "cityVillage": {
+                      "type": "string"
+                    },
+                    "stateProvince": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "postalCode": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "names",
+              "gender",
+              "birthdate"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
           "identifiers",
           "person"
-        ]
+        ],
+        "additionalProperties": false
       },
-      "risk": "high: creates a clinical patient record with PHI in Bahmni/OpenMRS; requires reverse ETL approval"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
     },
     {
       "name": "update_patient",
@@ -38,19 +129,87 @@
         "type": "object",
         "properties": {
           "uuid": {
-            "type": "string",
-            "description": "Target patient UUID."
+            "type": "string"
           },
           "person": {
             "type": "object",
-            "description": "OpenMRS person sub-resource fields to update."
+            "properties": {
+              "names": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "givenName": {
+                      "type": "string"
+                    },
+                    "middleName": {
+                      "type": "string"
+                    },
+                    "familyName": {
+                      "type": "string"
+                    },
+                    "preferred": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "givenName",
+                    "familyName"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "gender": {
+                "type": "string",
+                "enum": [
+                  "M",
+                  "F",
+                  "O"
+                ]
+              },
+              "birthdate": {
+                "type": "string"
+              },
+              "addresses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "address1": {
+                      "type": "string"
+                    },
+                    "cityVillage": {
+                      "type": "string"
+                    },
+                    "stateProvince": {
+                      "type": "string"
+                    },
+                    "country": {
+                      "type": "string"
+                    },
+                    "postalCode": {
+                      "type": "string"
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "names",
+              "gender",
+              "birthdate"
+            ],
+            "additionalProperties": false
           }
         },
         "required": [
-          "uuid"
-        ]
+          "uuid",
+          "person"
+        ],
+        "additionalProperties": false
       },
-      "risk": "high: overwrites existing patient PHI in Bahmni/OpenMRS; requires reverse ETL approval and destructive confirmation",
+      "risk": "critical: mutates clinical Bahmni/OpenMRS records; requires reverse ETL approval and destructive confirmation for non-disposable use",
       "confirm": "destructive"
     },
     {
@@ -63,28 +222,36 @@
         "type": "object",
         "properties": {
           "patient": {
-            "type": "string",
-            "description": "Patient UUID."
+            "type": "string"
           },
           "encounterType": {
-            "type": "string",
-            "description": "Encounter type UUID."
+            "type": "string"
           },
           "encounterDatetime": {
-            "type": "string",
-            "description": "ISO-8601 encounter datetime."
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "visit": {
+            "type": "string"
           },
           "obs": {
-            "type": "array",
-            "description": "Inline observation payloads."
+            "type": "array"
+          },
+          "encounterProviders": {
+            "type": "array"
           }
         },
         "required": [
           "patient",
-          "encounterType"
-        ]
+          "encounterType",
+          "encounterDatetime",
+          "location"
+        ],
+        "additionalProperties": false
       },
-      "risk": "high: writes a clinical encounter with linked observations for a patient; requires reverse ETL approval"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
     },
     {
       "name": "create_observation",
@@ -96,16 +263,13 @@
         "type": "object",
         "properties": {
           "person": {
-            "type": "string",
-            "description": "Patient/person UUID."
-          },
-          "concept": {
-            "type": "string",
-            "description": "Concept UUID being observed."
+            "type": "string"
           },
           "obsDatetime": {
-            "type": "string",
-            "description": "ISO-8601 observation datetime."
+            "type": "string"
+          },
+          "concept": {
+            "type": "string"
           },
           "value": {
             "type": [
@@ -113,17 +277,206 @@
               "number",
               "boolean",
               "object"
-            ],
-            "description": "Observation value."
+            ]
+          },
+          "location": {
+            "type": "string"
+          },
+          "encounter": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
           }
         },
         "required": [
           "person",
+          "obsDatetime",
           "concept",
           "value"
-        ]
+        ],
+        "additionalProperties": false
       },
-      "risk": "high: records a clinical observation (vitals/diagnostic value) for a patient; requires reverse ETL approval"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
+    },
+    {
+      "name": "create_visit",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/visit",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "patient": {
+            "type": "string"
+          },
+          "visitType": {
+            "type": "string"
+          },
+          "startDatetime": {
+            "type": "string"
+          },
+          "stopDatetime": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "indication": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "patient",
+          "visitType",
+          "startDatetime",
+          "location"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
+    },
+    {
+      "name": "create_lab_order",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/order",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "testorder"
+            ]
+          },
+          "encounter": {
+            "type": "string"
+          },
+          "patient": {
+            "type": "string"
+          },
+          "concept": {
+            "type": "string"
+          },
+          "careSetting": {
+            "type": "string"
+          },
+          "orderer": {
+            "type": "string"
+          },
+          "specimenSource": {
+            "type": "string"
+          },
+          "laterality": {
+            "type": "string"
+          },
+          "clinicalHistory": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "string"
+          },
+          "numberOfRepeats": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "orderType": {
+            "type": "string"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "NEW"
+            ]
+          }
+        },
+        "required": [
+          "type",
+          "encounter",
+          "patient",
+          "concept",
+          "careSetting",
+          "orderer",
+          "orderType",
+          "action"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
+    },
+    {
+      "name": "create_patient_diagnosis",
+      "kind": "create",
+      "method": "POST",
+      "path": "/ws/rest/v1/patientdiagnoses",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "properties": {
+          "diagnosis": {
+            "type": "object",
+            "properties": {
+              "nonCoded": {
+                "type": "string"
+              },
+              "coded": {
+                "type": "string"
+              },
+              "specificName": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false,
+            "description": "OpenMRS Diagnosis coded-or-free-text object built from connector-authored scalar flags.",
+            "required": [
+              "nonCoded"
+            ]
+          },
+          "encounter": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string"
+          },
+          "certainty": {
+            "type": "string",
+            "enum": [
+              "CONFIRMED",
+              "PROVISIONAL"
+            ]
+          },
+          "patient": {
+            "type": "string"
+          },
+          "rank": {
+            "type": [
+              "integer",
+              "number",
+              "string"
+            ]
+          },
+          "voided": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "diagnosis",
+          "encounter",
+          "condition",
+          "certainty",
+          "patient",
+          "rank"
+        ],
+        "additionalProperties": false
+      },
+      "risk": "critical: mutates clinical Bahmni/OpenMRS records; requires reverse ETL approval and destructive confirmation for non-disposable use",
+      "confirm": "destructive"
     },
     {
       "name": "create_appointment",
@@ -135,188 +488,205 @@
         "type": "object",
         "properties": {
           "patientUuid": {
-            "type": "string",
-            "description": "Patient UUID."
+            "type": "string"
           },
           "serviceUuid": {
-            "type": "string",
-            "description": "Appointment service UUID."
+            "type": "string"
+          },
+          "serviceTypeUuid": {
+            "type": "string"
+          },
+          "providerUuid": {
+            "type": "string"
+          },
+          "locationUuid": {
+            "type": "string"
+          },
+          "dateAppointmentScheduled": {
+            "type": "string"
           },
           "startDateTime": {
-            "type": "string",
-            "description": "ISO-8601 appointment start."
+            "type": "string"
           },
           "endDateTime": {
-            "type": "string",
-            "description": "ISO-8601 appointment end."
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "appointmentKind": {
+            "type": "string"
+          },
+          "comments": {
+            "type": "string"
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "uuid": {
+                  "type": "string"
+                },
+                "response": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "uuid",
+                "response"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "priority": {
+            "type": "string"
           }
         },
         "required": [
           "patientUuid",
           "serviceUuid",
-          "startDateTime"
-        ]
+          "startDateTime",
+          "endDateTime",
+          "appointmentKind",
+          "status"
+        ],
+        "additionalProperties": false
       },
-      "risk": "medium: books a Bahmni patient appointment; requires reverse ETL approval"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
     },
     {
-      "name": "create_drug_order",
-      "kind": "create",
+      "name": "update_appointment_status",
+      "kind": "update",
       "method": "POST",
-      "path": "/ws/rest/v1/order",
+      "path": "/ws/rest/v1/appointments/{{ record.appointmentUuid }}/status-change",
+      "path_fields": [
+        "appointmentUuid"
+      ],
       "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
-          "patient": {
-            "type": "string",
-            "description": "Patient UUID."
+          "appointmentUuid": {
+            "type": "string"
           },
-          "concept": {
-            "type": "string",
-            "description": "Drug/order concept UUID."
+          "toStatus": {
+            "type": "string"
           },
-          "careSetting": {
-            "type": "string",
-            "description": "Care setting UUID."
-          },
-          "orderer": {
-            "type": "string",
-            "description": "Provider UUID placing the order."
-          },
-          "type": {
-            "type": "string",
-            "description": "Order type, e.g. drugorder."
+          "onDate": {
+            "type": "string"
           }
         },
         "required": [
-          "patient",
-          "concept",
-          "careSetting"
-        ]
+          "appointmentUuid",
+          "toStatus",
+          "onDate"
+        ],
+        "additionalProperties": false
       },
-      "risk": "critical: places a medication (drug) order for a patient; requires reverse ETL approval and destructive confirmation",
+      "risk": "critical: mutates clinical Bahmni/OpenMRS records; requires reverse ETL approval and destructive confirmation for non-disposable use",
       "confirm": "destructive"
     },
     {
-      "name": "create_diagnosis",
-      "kind": "create",
+      "name": "update_appointment_provider_response",
+      "kind": "update",
       "method": "POST",
-      "path": "/ws/rest/v1/bahmnicore/diagnosis",
+      "path": "/ws/rest/v1/appointments/{{ record.appointmentUuid }}/providerResponse",
+      "path_fields": [
+        "appointmentUuid"
+      ],
       "body_type": "json",
       "record_schema": {
         "type": "object",
         "properties": {
-          "patientUuid": {
-            "type": "string",
-            "description": "Patient UUID."
+          "appointmentUuid": {
+            "type": "string"
           },
-          "codedAnswer": {
-            "type": "object",
-            "description": "Coded diagnosis concept payload."
+          "uuid": {
+            "type": "string"
           },
-          "order": {
-            "type": "string",
-            "description": "Diagnosis order, e.g. PRIMARY or SECONDARY."
+          "comments": {
+            "type": "string"
           },
-          "certainty": {
-            "type": "string",
-            "description": "Diagnosis certainty, e.g. CONFIRMED or PRESUMED."
+          "response": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
           }
         },
         "required": [
-          "patientUuid",
-          "codedAnswer"
-        ]
+          "appointmentUuid",
+          "uuid",
+          "response"
+        ],
+        "additionalProperties": false
       },
-      "risk": "critical: records a clinical diagnosis for a patient; requires reverse ETL approval and destructive confirmation",
-      "confirm": "destructive"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
     },
     {
-      "name": "create_observations_bulk",
+      "name": "create_note",
       "kind": "create",
       "method": "POST",
-      "path": "/ws/rest/v1/bahmnicore/observations",
+      "path": "/ws/rest/v1/notes",
       "body_type": "json_array",
-      "body_field": "observations",
+      "body_field": "notes",
       "body_schema": {
         "type": "array",
         "items": {
           "type": "object",
-          "additionalProperties": true
+          "required": [
+            "noteTypeName",
+            "noteText",
+            "noteDate"
+          ],
+          "properties": {
+            "noteTypeName": {
+              "type": "string"
+            },
+            "noteText": {
+              "type": "string"
+            },
+            "noteDate": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
         }
       },
       "record_schema": {
         "type": "object",
         "properties": {
-          "observations": {
+          "notes": {
             "type": "array",
             "items": {
               "type": "object",
-              "additionalProperties": true
-            },
-            "description": "Top-level JSON array of Bahmni observation payloads uploaded as a single bounded request body."
+              "required": [
+                "noteTypeName",
+                "noteText",
+                "noteDate"
+              ],
+              "properties": {
+                "noteTypeName": {
+                  "type": "string"
+                },
+                "noteText": {
+                  "type": "string"
+                },
+                "noteDate": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
           }
         },
         "required": [
-          "observations"
-        ]
+          "notes"
+        ],
+        "additionalProperties": false
       },
-      "risk": "critical: uploads a bounded top-level JSON array of clinical observations; use only reviewed observation payloads with reverse ETL approval and destructive confirmation",
-      "confirm": "destructive"
-    },
-    {
-      "name": "upload_patient_document",
-      "kind": "create",
-      "method": "POST",
-      "path": "/ws/rest/v1/attachment",
-      "body_type": "multipart",
-      "multipart": {
-        "max_bytes": 26214400,
-        "parts": [
-          {
-            "name": "file",
-            "type": "file",
-            "field": "document_file_path",
-            "required": true,
-            "max_bytes": 26214400
-          },
-          {
-            "name": "patient",
-            "type": "field",
-            "field": "patient_uuid",
-            "required": true
-          },
-          {
-            "name": "fileCaption",
-            "type": "field",
-            "field": "caption"
-          }
-        ]
-      },
-      "record_schema": {
-        "type": "object",
-        "properties": {
-          "patient_uuid": {
-            "type": "string",
-            "description": "Patient UUID the document attaches to."
-          },
-          "caption": {
-            "type": "string",
-            "description": "Optional document caption."
-          },
-          "document_file_path": {
-            "type": "string",
-            "description": "Project-relative path to the bounded local patient-document file to upload. The field name contains file_path so reverse-ETL plans redact it."
-          }
-        },
-        "required": [
-          "document_file_path",
-          "patient_uuid"
-        ]
-      },
-      "risk": "critical: uploads a patient document from a bounded local file path to Bahmni/OpenMRS; local file path is redacted in plans and the action requires reverse ETL approval and destructive confirmation",
-      "confirm": "destructive"
+      "risk": "high: writes clinical Bahmni/OpenMRS data; requires reverse ETL plan, preview, approval, execute against synthetic/disposable records unless explicitly approved"
     }
   ]
 }

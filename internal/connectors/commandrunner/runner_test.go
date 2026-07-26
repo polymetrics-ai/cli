@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -26,7 +27,9 @@ type fakeConnector struct {
 	writeRecords           []connectors.Record
 	validateErr            error
 	dryRunErr              error
+	readErr                error
 	writeErr               error
+	readRecords            []connectors.Record
 	preview                connectors.WritePreview
 	writeResult            connectors.WriteResult
 }
@@ -41,6 +44,17 @@ func (f *fakeConnector) Catalog(context.Context, connectors.RuntimeConfig) (conn
 }
 func (f *fakeConnector) Read(_ context.Context, req connectors.ReadRequest, emit func(connectors.Record) error) error {
 	f.readReq = req
+	if f.readErr != nil {
+		return f.readErr
+	}
+	if len(f.readRecords) > 0 {
+		for _, record := range f.readRecords {
+			if err := emit(record); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
 	return emit(connectors.Record{"number": 101, "state": req.Query["state"]})
 }
 func (f *fakeConnector) DirectRead(_ context.Context, req connectors.DirectReadRequest) (connectors.DirectReadResult, error) {
@@ -410,6 +424,355 @@ func TestRedactRecordRedactsDownloadContentAndMultipartFileFields(t *testing.T) 
 	}
 	if redacted["title"] != "visible" {
 		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	}
+}
+
+func TestRedactRecordKeepsClinicalLikeFieldsByDefault(t *testing.T) {
+	record := connectors.Record{
+		"patientUuid": "patient-uuid",
+		"identifier":  "SYN-12345",
+		"person":      map[string]any{"display": "Synthetic Person"},
+		"value":       "98.6",
+		"note":        "synthetic note",
+	}
+	redacted := redactRecord(record)
+	for key, want := range record {
+		if got := redacted[key]; fmt.Sprint(got) != fmt.Sprint(want) {
+			t.Fatalf("redacted[%s] = %#v, want unchanged %#v in %+v", key, got, want, redacted)
+		}
+	}
+}
+
+func TestRedactRecordWithExplicitFieldsRedactsBahmniClinicalPreviewFields(t *testing.T) {
+	redacted := redactRecordWithFields(connectors.Record{
+		"patientUuid": "patient-uuid",
+		"identifier":  "SYN-12345",
+		"person":      map[string]any{"display": "Synthetic Person"},
+		"value":       "98.6",
+		"title":       "visible",
+	}, []string{"patientUuid", "identifier", "person", "value"})
+	for _, key := range []string{"patientUuid", "identifier", "person", "value"} {
+		if redacted[key] != "***" {
+			t.Fatalf("redacted[%s] = %#v, want *** in %+v", key, redacted[key], redacted)
+		}
+	}
+	if redacted["title"] != "visible" {
+		t.Fatalf("redacted title = %v, want visible", redacted["title"])
+	}
+}
+
+func TestRunETLCommandAppliesRecursiveClinicalRedactFields(t *testing.T) {
+	tests := []struct {
+		name         string
+		path         string
+		redactFields []string
+		record       connectors.Record
+		secretValues []string
+	}{
+		{
+			name:         "patient",
+			path:         "patients list",
+			redactFields: []string{"uuid", "display", "identifier", "person", "givenName", "familyName", "birthdate", "gender"},
+			record: connectors.Record{
+				"uuid":       "patient-uuid-raw",
+				"display":    "SYN-HEN-RAW Raw Name",
+				"identifier": "SYN-HEN-RAW",
+				"person":     map[string]any{"givenName": "Raw", "familyName": "Name", "gender": "O"},
+			},
+			secretValues: []string{"patient-uuid-raw", "SYN-HEN-RAW", "Raw", "Name"},
+		},
+		{
+			name:         "encounter",
+			path:         "encounters list",
+			redactFields: []string{"uuid", "display", "encounterDatetime", "patient", "visit", "obs"},
+			record: connectors.Record{
+				"uuid":              "encounter-uuid-raw",
+				"encounterDatetime": "2026-01-01T00:00:00Z",
+				"patient":           map[string]any{"uuid": "patient-uuid-raw", "display": "SYN-HEN-RAW"},
+				"obs":               []any{map[string]any{"value": "fever raw"}},
+			},
+			secretValues: []string{"encounter-uuid-raw", "patient-uuid-raw", "SYN-HEN-RAW", "fever raw"},
+		},
+		{
+			name:         "observation",
+			path:         "observations list",
+			redactFields: []string{"uuid", "display", "person", "concept", "value", "obsDatetime", "comment"},
+			record: connectors.Record{
+				"uuid":        "obs-uuid-raw",
+				"concept":     map[string]any{"display": "Temperature"},
+				"value":       "38.6 raw",
+				"obsDatetime": "2026-01-01T00:00:00Z",
+				"person":      map[string]any{"uuid": "patient-uuid-raw"},
+			},
+			secretValues: []string{"obs-uuid-raw", "Temperature", "38.6 raw", "patient-uuid-raw"},
+		},
+		{
+			name:         "diagnosis",
+			path:         "diagnoses list",
+			redactFields: []string{"display", "certainty", "codedAnswer", "diagnosisDateTime", "existingObs", "order"},
+			record:       connectors.Record{"display": "raw diagnosis", "certainty": "CONFIRMED", "codedAnswer": map[string]any{"display": "Cold raw"}, "order": "PRIMARY"},
+			secretValues: []string{"raw diagnosis", "CONFIRMED", "Cold raw", "PRIMARY"},
+		},
+		{
+			name:         "lab",
+			path:         "lab_results list",
+			redactFields: []string{"uuid", "display", "patient", "concept", "value", "obsDatetime"},
+			record:       connectors.Record{"uuid": "lab-uuid-raw", "concept": map[string]any{"display": "Serum glucose"}, "value": 120, "patient": map[string]any{"display": "SYN-HEN-RAW"}},
+			secretValues: []string{"lab-uuid-raw", "Serum glucose", "SYN-HEN-RAW", "120"},
+		},
+		{
+			name:         "appointment",
+			path:         "appointments list",
+			redactFields: []string{"uuid", "patient", "providers", "startDateTime", "endDateTime", "comments", "status"},
+			record:       connectors.Record{"uuid": "appt-uuid-raw", "patient": map[string]any{"identifier": "SYN-HEN-RAW"}, "providers": []any{map[string]any{"name": "Provider Raw"}}, "comments": "raw appointment note", "status": "Scheduled"},
+			secretValues: []string{"appt-uuid-raw", "SYN-HEN-RAW", "Provider Raw", "raw appointment note", "Scheduled"},
+		},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+				Path:         tc.path,
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       strings.ReplaceAll(strings.Split(tc.path, " ")[0], "-", "_"),
+				RedactFields: tc.redactFields,
+			}}}, readRecords: []connectors.Record{tc.record}}
+			var records []connectors.Record
+			_, err := Run(context.Background(), connector, Request{Path: strings.Split(tc.path, " "), Limit: 1}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			encoded, err := json.Marshal(records)
+			if err != nil {
+				t.Fatalf("Marshal: %v", err)
+			}
+			out := string(encoded)
+			for _, raw := range tc.secretValues {
+				if strings.Contains(out, raw) {
+					t.Fatalf("redacted output leaked %q: %s", raw, out)
+				}
+			}
+			if !strings.Contains(out, "***") {
+				t.Fatalf("redacted output %s missing redaction marker", out)
+			}
+		})
+	}
+}
+
+func TestBuildWriteCommandRedactsClinicalNotePreviewRecord(t *testing.T) {
+	connector := &fakeConnector{
+		surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+			Path:         "notes create",
+			Intent:       "reverse_etl",
+			Availability: "implemented",
+			Write:        "create_note",
+			Flags: []connectors.CommandSurfaceFlag{
+				{Name: "note-type-name", Type: "string", MapsTo: "record.notes.0.noteTypeName"},
+				{Name: "note-text", Type: "string", MapsTo: "record.notes.0.noteText"},
+				{Name: "note-date", Type: "string", MapsTo: "record.notes.0.noteDate"},
+			},
+			RedactFields: []string{"notes"},
+		}}},
+		manifest: connectors.Manifest{WriteActions: []connectors.WriteActionSpec{{Name: "create_note", Method: http.MethodPost, Path: "/notes"}}},
+	}
+	cmd, err := BuildWriteCommand(context.Background(), connector, Request{
+		Path:    []string{"notes", "create"},
+		Preview: true,
+		Flags: map[string][]string{
+			"note-type-name": {"Consultation"},
+			"note-text":      {"raw synthetic note text"},
+			"note-date":      {"2026-01-01T00:00:00Z"},
+		},
+	})
+	if err != nil {
+		t.Fatalf("BuildWriteCommand: %v", err)
+	}
+	encoded, err := json.Marshal(cmd.RedactedRecord)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	out := string(encoded)
+	if strings.Contains(out, "raw synthetic note text") || strings.Contains(out, "Consultation") {
+		t.Fatalf("note preview leaked raw note payload: %s", out)
+	}
+	if got := cmd.RedactedRecord["notes"]; got != "***" {
+		t.Fatalf("redacted notes = %#v, want ***", got)
+	}
+}
+
+func TestRunETLCommandRedactsClinicalValuesFromErrors(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{Commands: []connectors.CommandSurfaceCommand{{
+		Path:         "observations list",
+		Intent:       "etl",
+		Availability: "implemented",
+		Stream:       "observations",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "value", Type: "string", MapsTo: "query.value"},
+		},
+		RedactFields: []string{"patientUuid", "value"},
+	}}}, readErr: errors.New("upstream rejected patient patient-uuid-raw with observation value fever raw")}
+	_, err := Run(context.Background(), connector, Request{
+		Path:   []string{"observations", "list"},
+		Flags:  map[string][]string{"value": {"fever raw"}},
+		Config: connectors.RuntimeConfig{Config: map[string]string{"patient_uuid": "patient-uuid-raw"}},
+	}, func(connectors.Record) error { return nil })
+	if err == nil {
+		t.Fatal("Run error = nil, want upstream error")
+	}
+	msg := err.Error()
+	for _, raw := range []string{"patient-uuid-raw", "fever raw"} {
+		if strings.Contains(msg, raw) {
+			t.Fatalf("error leaked %q: %s", raw, msg)
+		}
+	}
+	if !strings.Contains(msg, "***") {
+		t.Fatalf("error %q missing redaction marker", msg)
+	}
+}
+
+func TestCoerceFlagValueRejectsGenericJSONFlagType(t *testing.T) {
+	_, err := coerceFlagValue(connectors.CommandSurfaceFlag{Name: "diagnosis", Type: "json"}, []string{`{"nonCoded":"Synthetic"}`})
+	if err == nil {
+		t.Fatal("coerceFlagValue accepted generic JSON flag type; want unsupported type error")
+	}
+	if !strings.Contains(err.Error(), `unsupported type "json"`) {
+		t.Fatalf("coerceFlagValue error = %q, want unsupported json type", err.Error())
+	}
+}
+
+func TestRecordOverridesBuildsExplicitNestedScalarFields(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "diagnoses create",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "non-coded-diagnosis", Type: "string", MapsTo: "record.diagnosis.nonCoded"},
+			{Name: "rank", Type: "integer", MapsTo: "record.rank"},
+		},
+	}, map[string][]string{
+		"non-coded-diagnosis": {"Synthetic condition"},
+		"rank":                {"1"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	diagnosis, ok := record["diagnosis"].(map[string]any)
+	if !ok {
+		t.Fatalf("record diagnosis = %#v, want nested object", record["diagnosis"])
+	}
+	if diagnosis["nonCoded"] != "Synthetic condition" || record["rank"] != 1 {
+		t.Fatalf("record = %+v, want explicit nested scalar diagnosis and integer rank", record)
+	}
+}
+
+func TestRecordOverridesBuildsExplicitNestedArrayObjectFields(t *testing.T) {
+	record, err := recordOverrides(connectors.CommandSurfaceCommand{
+		Path:         "patients create",
+		Intent:       "reverse_etl",
+		Availability: "implemented",
+		Flags: []connectors.CommandSurfaceFlag{
+			{Name: "identifier", Type: "string", MapsTo: "record.identifiers.0.identifier"},
+			{Name: "identifier-type", Type: "string", MapsTo: "record.identifiers.0.identifierType"},
+			{Name: "identifier-location", Type: "string", MapsTo: "record.identifiers.0.location"},
+			{Name: "identifier-preferred", Type: "boolean", MapsTo: "record.identifiers.0.preferred"},
+			{Name: "given-name", Type: "string", MapsTo: "record.person.names.0.givenName"},
+			{Name: "family-name", Type: "string", MapsTo: "record.person.names.0.familyName"},
+			{Name: "gender", Type: "enum", Values: []string{"M", "F", "O"}, MapsTo: "record.person.gender"},
+			{Name: "birthdate", Type: "string", MapsTo: "record.person.birthdate"},
+		},
+	}, map[string][]string{
+		"identifier":           {"SYN-LIVE-001"},
+		"identifier-type":      {"patient-id-type"},
+		"identifier-location":  {"location-uuid"},
+		"identifier-preferred": {"true"},
+		"given-name":           {"Synthetic"},
+		"family-name":          {"Connectorcase"},
+		"gender":               {"O"},
+		"birthdate":            {"2000-01-02"},
+	})
+	if err != nil {
+		t.Fatalf("recordOverrides: %v", err)
+	}
+	identifiers, ok := record["identifiers"].([]any)
+	if !ok || len(identifiers) != 1 {
+		t.Fatalf("identifiers = %#v, want one-element array", record["identifiers"])
+	}
+	identifier, ok := identifiers[0].(map[string]any)
+	if !ok || identifier["identifier"] != "SYN-LIVE-001" || identifier["preferred"] != true {
+		t.Fatalf("identifier = %#v, want typed nested identifier", identifiers[0])
+	}
+	person, ok := record["person"].(map[string]any)
+	if !ok {
+		t.Fatalf("person = %#v, want object", record["person"])
+	}
+	names, ok := person["names"].([]any)
+	if !ok || len(names) != 1 {
+		t.Fatalf("names = %#v, want one-element array", person["names"])
+	}
+	name, ok := names[0].(map[string]any)
+	if !ok || name["givenName"] != "Synthetic" || name["familyName"] != "Connectorcase" {
+		t.Fatalf("name = %#v, want typed nested name", names[0])
+	}
+	if person["gender"] != "O" || person["birthdate"] != "2000-01-02" {
+		t.Fatalf("person = %#v, want scalar demographic fields", person)
+	}
+}
+
+func TestRecordOverridesRejectsSparseHugeAndConflictingNestedPaths(t *testing.T) {
+	tests := []struct {
+		name    string
+		command connectors.CommandSurfaceCommand
+		flags   map[string][]string
+		want    string
+	}{
+		{
+			name: "sparse array index",
+			command: connectors.CommandSurfaceCommand{Path: "patients create", Intent: "reverse_etl", Availability: "implemented", Flags: []connectors.CommandSurfaceFlag{
+				{Name: "family-name", Type: "string", MapsTo: "record.person.names.1.familyName"},
+			}},
+			flags: map[string][]string{"family-name": {"Connectorcase"}},
+			want:  "sparse array index 1",
+		},
+		{
+			name: "huge array index",
+			command: connectors.CommandSurfaceCommand{Path: "patients create", Intent: "reverse_etl", Availability: "implemented", Flags: []connectors.CommandSurfaceFlag{
+				{Name: "family-name", Type: "string", MapsTo: "record.person.names.129.familyName"},
+			}},
+			flags: map[string][]string{"family-name": {"Connectorcase"}},
+			want:  "exceeds max 128",
+		},
+		{
+			name: "leading zero array index",
+			command: connectors.CommandSurfaceCommand{Path: "patients create", Intent: "reverse_etl", Availability: "implemented", Flags: []connectors.CommandSurfaceFlag{
+				{Name: "family-name", Type: "string", MapsTo: "record.person.names.01.familyName"},
+			}},
+			flags: map[string][]string{"family-name": {"Connectorcase"}},
+			want:  "must not have leading zeroes",
+		},
+		{
+			name: "conflicting object and child",
+			command: connectors.CommandSurfaceCommand{Path: "patients create", Intent: "reverse_etl", Availability: "implemented", Flags: []connectors.CommandSurfaceFlag{
+				{Name: "person", Type: "string", MapsTo: "record.person"},
+				{Name: "given-name", Type: "string", MapsTo: "record.person.names.0.givenName"},
+			}},
+			flags: map[string][]string{"person": {"not-json"}, "given-name": {"Synthetic"}},
+			want:  "conflicting record mappings",
+		},
+	}
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := recordOverrides(tc.command, tc.flags)
+			if err == nil {
+				t.Fatal("recordOverrides succeeded, want error")
+			}
+			if !strings.Contains(err.Error(), tc.want) {
+				t.Fatalf("error = %q, want %q", err.Error(), tc.want)
+			}
+		})
 	}
 }
 

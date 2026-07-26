@@ -50,8 +50,7 @@
       "path": "/ws/rest/v1/patient",
       "query": {
         "q": {
-          "template": "{{ config.patient_query }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_query }}"
         },
         "v": "default"
       },
@@ -65,8 +64,7 @@
       "path": "/ws/rest/v1/encounter",
       "query": {
         "patient": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         },
         "v": "default"
       },
@@ -80,8 +78,7 @@
       "path": "/ws/rest/v1/obs",
       "query": {
         "patient": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         },
         "v": "default"
       },
@@ -95,8 +92,7 @@
       "path": "/ws/rest/v1/visit",
       "query": {
         "patient": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         },
         "v": "default"
       },
@@ -143,8 +139,7 @@
       "path": "/ws/rest/v1/bahmnicore/drugOrders/active",
       "query": {
         "patientUuid": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         }
       },
       "records": {
@@ -160,8 +155,7 @@
       "path": "/ws/rest/v1/order",
       "query": {
         "patient": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         },
         "t": "testorder",
         "v": "full"
@@ -176,8 +170,10 @@
       "path": "/ws/rest/v1/bahmnicore/observations",
       "query": {
         "patientUuid": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
+        },
+        "concept": {
+          "template": "{{ config.lab_result_concepts }}"
         },
         "scope": "latest"
       },
@@ -193,13 +189,8 @@
       "name": "appointments",
       "path": "/ws/rest/v1/appointments",
       "query": {
-        "patientUuid": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
-        },
         "forDate": {
-          "template": "{{ config.appointment_date }}",
-          "omit_when_absent": true
+          "template": "{{ config.appointment_date }}"
         }
       },
       "records": {
@@ -212,11 +203,10 @@
     },
     {
       "name": "diagnoses",
-      "path": "/ws/rest/v1/bahmnicore/diagnosis/getDiagnoses",
+      "path": "/ws/rest/v1/bahmnicore/diagnosis/search",
       "query": {
         "patientUuid": {
-          "template": "{{ config.patient_uuid }}",
-          "omit_when_absent": true
+          "template": "{{ config.patient_uuid }}"
         }
       },
       "records": {

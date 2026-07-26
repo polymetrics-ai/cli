@@ -11,10 +11,10 @@ Executable ETL streams: `patients`, `encounters`, `observations`, `visits`, `con
 `providers`, `drug_orders`, `lab_orders`, `lab_results`, `appointments`, `diagnoses`.
 
 Bounded direct-read commands cover GET-by-UUID for patient/encounter/visit/concept/provider/location,
-FHIR R4 read-by-id for Patient/Observation/Encounter/Condition, a consolidated Bahmni-core patient
-profile detail, and a schema-gated typed POST patient search. Clinical mutations, a top-level JSON
-array observation upload, and a bounded multipart patient-document upload are modeled as typed
-reverse-ETL write actions.
+FHIR R4 read-by-id for Patient/Observation/Encounter/Condition, and a schema-gated typed GET Bahmni
+patient search. Retained clinical mutations are modeled only as approval-gated, schema-bound
+reverse-ETL write actions. Drug-order create, appointment reschedule, bulk observation upload, and
+visit-document upload remain blocked until a safe typed surface is implemented and live-proven.
 
 Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts
 secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate
@@ -29,12 +29,14 @@ Connection fields:
 - `username` (required, string); OpenMRS username for HTTP Basic authentication.
 - `password` (required, secret, string); OpenMRS password for HTTP Basic authentication; never
   logged or printed.
-- `patient_query` (optional, string); identifier or name search term used to enumerate the
+- `patient_query` (required, string); identifier or name search term used to enumerate the
   `patients` stream (OpenMRS patient search `q`).
-- `patient_uuid` (optional, string); patient UUID context used to scope patient-linked streams
-  (encounters, observations, visits, orders, lab results, appointments, diagnoses).
-- `appointment_date` (optional, string); ISO-8601 date/datetime used to scope the `appointments`
-  stream to a single scheduling day.
+- `patient_uuid` (required, string); patient UUID context used to scope patient-linked streams
+  (encounters, observations, visits, orders, lab results, diagnoses).
+- `lab_result_concepts` (required, string); comma-separated Bahmni concept display names for the
+  Bahmni lab-results observation route.
+- `appointment_date` (required, string); `yyyy-MM-ddTHH:mm:ss.SSS` appointment day scope used by the
+  pinned appointments module; that route does not honor `patientUuid` scoping.
 
 Secret fields are redacted in logs and write previews: `password`.
 
@@ -50,29 +52,35 @@ OpenMRS REST list streams return a `{ "results": [...] }` envelope and page with
 `lab_results`, `appointments`, `diagnoses`) return top-level JSON arrays and explicitly disable the
 inherited offset paginator because those endpoints do not honor `limit`/`startIndex`. Patient-linked
 streams require a `patient_uuid` (or, for `patients`, a `patient_query`) config value to scope the
-request; see Known limits. Because those streams do not page, an unscoped read fetches the whole
-result set in one response: scope `appointments` with `appointment_date` and/or `patient_uuid` rather
-than reading a deployment's entire cross-patient appointment book at once.
+request; see Known limits. Because the appointment endpoint does not page or honor `patientUuid`, the
+connector requires `appointment_date` rather than advertising patient-scoped appointment reads.
 
 ## Write actions & risks
 
 Write actions are declared in `writes.json` as typed Bahmni/OpenMRS reverse-ETL mutations:
-`create_patient`, `update_patient`, `create_encounter`, `create_observation`, `create_appointment`,
-`create_drug_order`, `create_diagnosis`, the top-level JSON array `create_observations_bulk`
-observation upload, and the bounded multipart `upload_patient_document` upload.
+`create_patient`, `update_patient`, `create_encounter`, `create_observation`, `create_visit`,
+`create_lab_order`, `create_patient_diagnosis`, `create_appointment`,
+`update_appointment_status`, `update_appointment_provider_response`, and `create_note`.
 
 Safety gates:
 
 - Use reverse ETL plan -> preview -> approval -> execute.
-- Clinical/destructive actions declare `confirm: destructive` (update patient, drug order, diagnosis,
-  bulk observation upload, and document upload).
+- Clinical/destructive actions declare `confirm: destructive` where the retained route mutates an
+  existing clinical record or high-risk workflow state.
 - No generic raw HTTP write, raw JSON body, arbitrary OpenMRS resource method/path/body escape hatch,
   generic shell write, or SQL write is exposed.
-- The multipart document upload accepts only the declared project-local `document_file_path` field,
-  binds approval to a SHA-256 content digest, snapshots and verifies the approved bytes before any
-  HTTP request, enforces byte limits, and redacts the local file path in command plans.
-- The top-level JSON array observation upload uses a declared `body_field` and `body_schema`; no raw
-  JSON CLI flag is exposed.
+- Structured write payloads are built from connector-authored scalar/enum/boolean flag mappings such
+  as `record.person.names.0.givenName`; no raw JSON CLI flag is exposed.
+- Drug-order create is not retained in this PR: pinned OpenMRS webservices REST exposes the
+  `drugorder` subclass fields, but the local pinned lab rejected both the typed generated body and a
+  diagnostic-only direct counterfactual against `POST /ws/rest/v1/order`.
+- Appointment reschedule is not retained in this PR: pinned appointments source exposes the singular
+  reschedule controller, but the local pinned lab rejected both the typed generated body and a
+  diagnostic-only direct counterfactual against `POST /ws/rest/v1/appointment/{uuid}/reschedule`.
+- Visit-document upload is not retained in this PR because the previous inline-content surface lacked
+  the claimed file snapshot/SHA-256 approval binding.
+- The unsupported top-level bulk-observation route remains blocked; single observations use the
+  typed `POST /ws/rest/v1/obs` action.
 
 PHI note: patient identifiers, names, addresses, and clinical observation/diagnosis values are not
 generally field-redacted by the current connector engine. Treat command output and write plans as
@@ -95,14 +103,12 @@ require `--confirm destructive`.
   streams are full-refresh rather than incremental.
 - `patients` enumeration requires a search term: set `patient_query` (OpenMRS patient list is a
   search endpoint). Patient-linked streams (encounters/observations/visits/orders/lab results/
-  diagnoses) require a `patient_uuid` context. `appointments` accepts `appointment_date` and/or
-  `patient_uuid` scoping and is otherwise a single unpaged cross-patient read.
-- The typed Bahmni patient search is modeled as a schema-gated JSON POST read-query with
-  connector-authored flags; arbitrary/raw request bodies remain intentionally unavailable.
+  diagnoses) require a `patient_uuid` context. `appointments` requires `appointment_date`; the pinned
+  appointment controller ignores `patientUuid`.
+- The typed Bahmni patient search is modeled as a schema-gated GET read-query with connector-authored
+  query flags; arbitrary/raw request bodies remain intentionally unavailable.
 - Patient-document binary download and patient image binary reads are blocked by default rather than
   exposed as generic byte-stream downloads. Permanent patient deletion/purge, OpenMRS server
-  administration/global-property helpers, free-text clinical notes, appointment workflow state
-  transitions, and discharge/ADT mutations are blocked or excluded with recorded evidence in
-  `api_surface.json`.
-- Live clinical writes and patient-document payload tests beyond fixtures are human-gated against any
-  non-local/non-disposable deployment.
+  administration/global-property helpers, bulk observation upload, visit-document upload, and
+  discharge/ADT mutations are blocked or excluded with recorded evidence in `api_surface.json`.
+- Live clinical writes are human-gated against any non-local/non-disposable deployment.
