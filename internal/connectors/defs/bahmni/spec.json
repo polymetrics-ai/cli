@@ -29,7 +29,7 @@
     },
     "patient_query": {
       "type": "string",
-      "description": "Required identifier or name search term for the patients stream; OpenMRS REST does not support unqualified patient get-all in the pinned STANDARD/LITE stack."
+      "description": "Required identifier or name search term for the patients stream; OpenMRS REST does not support unqualified patient get-all in the pinned STANDARD alpha stack."
     },
     "patient_uuid": {
       "type": "string",

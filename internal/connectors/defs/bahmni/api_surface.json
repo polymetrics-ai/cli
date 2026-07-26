@@ -3,7 +3,7 @@
   "docs": "https://rest.openmrs.org/",
   "reviewed_at": "2026-07-26",
   "operation_ledger_version": 1,
-  "scope": "Version-pinned STANDARD/LITE contracts observed in bahmnicore-1.2.1, bahmni-commons-1.1.0, appointments-2.0.2, webservices.rest-2.44.0, and fhir2-2.1.0. Executable rows are fixed streams, bounded direct reads/typed patient search, and typed reverse-ETL writes with no generic HTTP/write escape hatch. Unsupported historical claims are blocked with source evidence.",
+  "scope": "Version-pinned STANDARD alpha contracts observed in bahmnicore-1.2.1, bahmni-commons-1.1.0, appointments-2.0.2, webservices.rest-2.44.0, and fhir2-2.1.0. Executable rows are fixed streams, bounded direct reads/typed patient search, and typed reverse-ETL writes with no generic HTTP/write escape hatch. Unsupported historical claims are blocked with source evidence.",
   "endpoints": [
     {
       "method": "GET",
@@ -294,7 +294,7 @@
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "No pinned STANDARD/LITE controller exposes POST /bahmnicore/search/patient; bahmni-commons 1.1.0 exposes GET /bahmni/search/patient.",
+        "reason": "No pinned STANDARD alpha controller exposes POST /bahmnicore/search/patient; bahmni-commons 1.1.0 exposes GET /bahmni/search/patient.",
         "source_url": "https://github.com/Bahmni/openmrs-module-bahmnicommons/blob/1.1.0/bahmni-commons-omod/src/main/java/org/bahmni/module/bahmnicommons/web/v1_0/controller/search/BahmniPatientSearchController.java"
       }
     },
@@ -318,7 +318,7 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "Pinned Bahmni observations display controller is GET-only; bulk observation upload is not an official STANDARD/LITE write route.",
+        "reason": "Pinned Bahmni observations display controller is GET-only; bulk observation upload is not an official STANDARD alpha write route.",
         "source_url": "https://github.com/Bahmni/bahmni-core/blob/1.2.1/bahmnicore-omod/src/main/java/org/bahmni/module/bahmnicore/web/v1_0/controller/display/controls/BahmniObservationsController.java"
       }
     },
@@ -330,7 +330,7 @@
         "status": "blocked",
         "risk": "critical",
         "blocked_by_default": true,
-        "reason": "No version-pinned STANDARD/LITE Bahmni/OpenMRS source in scope supports the prior multipart attachment route; visit documents use /bahmnicore/visitDocument/uploadDocument JSON.",
+        "reason": "No version-pinned STANDARD alpha Bahmni/OpenMRS source in scope supports the prior multipart attachment route; visit documents use /bahmnicore/visitDocument/uploadDocument JSON.",
         "source_url": "https://github.com/Bahmni/bahmni-core/blob/1.2.1/bahmnicore-omod/src/main/java/org/bahmni/module/bahmnicore/web/v1_0/controller/VisitDocumentController.java"
       }
     },
