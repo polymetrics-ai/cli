@@ -1560,7 +1560,7 @@
     },
     {
       "name": "bahmni-phi",
-      "summary": "Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate engine policy decision."
+      "summary": "Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields plus configured write path identifiers, but broad clinical PHI field redaction remains a separate engine policy decision."
     }
   ]
 }

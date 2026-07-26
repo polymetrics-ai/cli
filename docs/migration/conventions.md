@@ -135,11 +135,13 @@ not a full override by default.
   `merge_pull_request` — never `customer_create` or bare nouns.
 - **`spec.json` x-secret discipline**: every credential-shaped field (API keys, tokens, passwords,
   client secrets) is `x-secret: true` in `spec.json`, never a plain `properties` entry. Only
-  `x-secret` fields end up in `Schema.SecretKeys()`, which governs what is redacted from
-  `DryRunWrite` previews (see §3) and never logged. A field that merely *looks* sensitive but is
-  documentation-only (an optional Bearer-proxy key never wired into `auth`, e.g. searxng's
-  `api_key`) is still marked `x-secret: true` — the marker is about the *field's nature*, not
-  whether this bundle currently exercises it.
+  `x-secret` fields end up in `Schema.SecretKeys()`, which governs secret/config partitioning,
+  secret redaction from write previews, and log redaction. Write actions that place sensitive
+  non-secret identifiers or clinical values into templated paths must also declare `redact_fields`
+  for those record paths so previews and write errors do not expose them. A field that merely
+  *looks* sensitive but is documentation-only (an optional Bearer-proxy key never wired into `auth`,
+  e.g. searxng's `api_key`) is still marked `x-secret: true` — the marker is about the *field's
+  nature*, not whether this bundle currently exercises it.
 - **Schema-as-projection**: a stream's `schemas/<stream>.json` `properties` set is derived
   **field-for-field** from what the legacy connector's own `mapRecord`/record-shaping function
   actually emits — not from guessing the raw API shape. In `"schema"` projection mode (the
@@ -684,6 +686,12 @@ body to an explicit allow-list instead (used for delete-with-body actions). `"fo
 `url.Values` body (Stripe-shape — compare `stripe/write.go`'s `customerForm`), sorted keys for
 deterministic encoding, empty-string values omitted. `"none"` with no `body_fields` sends no body
 at all (pure path-parameterized mutation/delete).
+
+`redact_fields` is an action-local list of record paths whose values must be removed from
+operator-visible write surfaces. It is for non-secret identifiers or clinical values that can appear
+in templated paths or upstream error text; `DryRunWrite` replaces those path values in the resolved
+request preview, and `Write` redacts raw and URL-encoded literal forms from returned write errors
+while preserving typed error wrapping.
 
 **Delete semantics**: `kind: "delete"` + `delete.missing_ok_status: [404, ...]` means those HTTP
 statuses on the delete request count as **written, not failed** (idempotent delete) — any other
