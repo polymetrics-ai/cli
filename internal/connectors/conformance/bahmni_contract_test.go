@@ -1,10 +1,49 @@
 package conformance
 
 import (
+	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors/engine"
 )
+
+func TestBahmniFrozenScopeTextContracts(t *testing.T) {
+	b := loadTestBundle(t, "../defs", "bahmni")
+
+	for label, text := range map[string]string{
+		"metadata.description": b.Metadata.Description,
+		"api_surface.scope":    b.Surface.Scope,
+		"spec":                 string(b.RawSpec),
+		"operations":           string(b.RawOperations),
+		"cli_surface":          string(b.RawCLISurface),
+		"docs":                 b.Docs,
+	} {
+		if strings.Contains(text, "STANDARD/LITE") || strings.Contains(text, "LITE") {
+			t.Fatalf("%s still claims LITE support", label)
+		}
+	}
+
+	appointments, ok := bahmniCommand(b, "appointments list")
+	if !ok {
+		t.Fatalf("appointments list command missing")
+	}
+	if strings.Contains(appointments.Summary, "patient_uuid") {
+		t.Fatalf("appointments summary still claims patient_uuid scoping: %q", appointments.Summary)
+	}
+
+	patientSearch, ok := bahmniCommand(b, "bahmnicore patient-search")
+	if !ok {
+		t.Fatalf("bahmnicore patient-search command missing")
+	}
+	for label, text := range map[string]string{
+		"approval": patientSearch.Approval,
+		"risk":     patientSearch.Risk,
+	} {
+		if strings.Contains(text, "POST") || strings.Contains(text, "body") {
+			t.Fatalf("patient-search %s still describes POST/body semantics: %q", label, text)
+		}
+	}
+}
 
 func TestBahmniVersionPinnedReadContracts(t *testing.T) {
 	b := loadTestBundle(t, "../defs", "bahmni")
@@ -103,6 +142,20 @@ func TestBahmniVersionPinnedWriteContracts(t *testing.T) {
 		got := action.Method + " " + action.Path
 		if got != requestLine {
 			t.Fatalf("write %q request line = %q, want %q", name, got, requestLine)
+		}
+	}
+
+	for name, field := range map[string]string{
+		"update_patient":                       "uuid",
+		"update_appointment_status":            "appointmentUuid",
+		"update_appointment_provider_response": "appointmentUuid",
+	} {
+		action, ok := bahmniWrite(b, name)
+		if !ok {
+			t.Fatalf("write %q missing", name)
+		}
+		if !containsStringSlice(action.RedactFields, field) {
+			t.Fatalf("write %q redact_fields = %v, want %q", name, action.RedactFields, field)
 		}
 	}
 }

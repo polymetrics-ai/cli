@@ -55,7 +55,7 @@ Attempted `scripts/gsd prompt programming-loop ...`; adapter returned `unknown G
 
 ## Typed write completion directive - 2026-07-26
 
-Captain clarified that scalar-only live-write checks are a useful first pass but not completion. Every retained Bahmni write must be safely executable through the typed CLI surface and receive live synthetic proof. Structured string-valued inputs such as `person`, `identifiers`, `notes`, and other nested objects/arrays must be converted to explicit named, schema-bound flags/builders. If a write cannot be represented or proven against pinned STANDARD/LITE, remove it or mark it unavailable with source/live evidence rather than advertising an unusable mutation.
+Captain clarified that scalar-only live-write checks are a useful first pass but not completion. Every retained Bahmni write must be safely executable through the typed CLI surface and receive live synthetic proof. Structured string-valued inputs such as `person`, `identifiers`, `notes`, and other nested objects/arrays must be converted to explicit named, schema-bound flags/builders. If a write cannot be represented or proven against the pinned STANDARD alpha stack, remove it or mark it unavailable with source/live evidence rather than advertising an unusable mutation.
 
 ## PHI production-readiness directive - 2026-07-26
 
@@ -64,3 +64,13 @@ Captain clarified that truthful metadata cannot normalize an unprotected-PHI dis
 ## Live synthetic write verification authorization - 2026-07-26
 
 Captain authorized parallel live verification of every retained Bahmni write against the existing loopback-only Podman lab after typed/schema tests pass and `pm-bahmni` is rebuilt. Use unique `SYN-CONN-*` disposable identifiers. Every mutation must use the typed CLI plan -> preview -> explicit approval -> execute path; do not use raw JSON/method/path write escape hatches. Do not print or persist credentials/PHI, touch Karthik/Rohit records, reseed/restart containers, or collide across lanes. Capture safe opaque evidence/status only. Stop any failing operation, then either fix it or mark it unavailable with source/live evidence and rerun before claiming readiness.
+
+## Review-fix slice - 2026-07-26
+
+Manual-GSD continuation for prior review findings at head `4e89af9ea5436088f5cef8e9f14e6eee0696b290`. Findings verified as legitimate before production edits:
+
+- Generated catalog and website data still advertise removed Bahmni write actions from stale outputs.
+- Source still contains the old mixed-stack support claim despite the frozen STANDARD-only alpha scope.
+- Write preview request-line warnings can leak clinical UUID path fields before command-level redaction.
+- Appointment command help still claims unsupported `patient_uuid` scoping.
+- Patient-search approval/help text still describes the old POST/body route rather than GET query params.
