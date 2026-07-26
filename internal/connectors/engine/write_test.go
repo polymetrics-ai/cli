@@ -593,6 +593,25 @@ func TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody(t *testing.T) 
 	}
 }
 
+func TestWriteErrorRedactsOverlappingConfiguredRecordFields(t *testing.T) {
+	action := WriteAction{
+		RedactFields: []string{"short_id", "long_id"},
+	}
+	err := redactWriteActionError(errors.New("write failed for abcdef and abc"), action, connectors.Record{
+		"short_id": "abc",
+		"long_id":  "abcdef",
+	})
+	if err == nil {
+		t.Fatalf("redactWriteActionError: got nil error")
+	}
+	msg := err.Error()
+	for _, leaked := range []string{"abcdef", "abc", "redacteddef"} {
+		if strings.Contains(msg, leaked) {
+			t.Fatalf("write error leaked %q in %q", leaked, msg)
+		}
+	}
+}
+
 // --- accounting parity with legacy semantics (stripe/write.go:66) ---
 
 func TestWriteAccountingFailFastRemainderCountsAsFailed(t *testing.T) {
