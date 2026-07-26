@@ -54,6 +54,9 @@ func newRootCmd(ctx context.Context, cfg config.Config, stdout, stderr io.Writer
 				return markCobraLegacyError(writeRootManual(stdout, jsonOut))
 			}
 			if len(args) > 1 && isHelpArg(args[1]) {
+				if isDynamicConnectorCommand(args[0]) {
+					return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, jsonOut))
+				}
 				return markCobraLegacyError(writeManual(args[0], stdout, jsonOut))
 			}
 			return markCobraLegacyError(runMaybeConnectorCommand(ctx, root, args[0], args[1:], stdout, jsonOut))

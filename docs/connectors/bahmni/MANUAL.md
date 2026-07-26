@@ -198,6 +198,21 @@ EXAMPLES
   # Inspect as structured JSON
   pm connectors inspect bahmni --json
 
+  # Command discovery
+  pm bahmni --help
+  pm bahmni appointments --help
+  pm bahmni appointments create --help
+
+  # Synthetic appointment read
+  pm bahmni appointments list --credential bahmni-local --config appointment_date=2026-01-01T00:00:00.000 --limit 10 --json
+
+  # Synthetic patient create plan
+  pm bahmni patients create --credential bahmni-local --identifier SYN-CONN-EXAMPLE-001 --identifier-type <identifier-type-uuid> --identifier-location <location-uuid> --given-name Synthetic --family-name Connector --gender O --birthdate 1990-01-01 --preview --json
+
+  # Unsupported retained as blocked
+  pm bahmni appointments reschedule --help
+  pm bahmni drug_orders create --help
+
 AGENT WORKFLOW
   - Run pm connectors inspect bahmni before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
