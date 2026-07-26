@@ -145,6 +145,32 @@ jobs:
       - name: Publish website with the code release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+          WEBSITE_RUN_NAME: Website CI/CD release ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
         run: |
           set -euo pipefail
-          gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main
+
+          find_existing_run() {
+            gh api "/repos/${GITHUB_REPOSITORY}/actions/workflows/website.yml/runs?event=workflow_dispatch&branch=main&per_page=100" \
+              | jq -r --arg title "$WEBSITE_RUN_NAME" '[.workflow_runs[] | select(.display_title == $title) | .id][0] // empty'
+          }
+
+          existing_run_id="$(find_existing_run)"
+          if [ -n "$existing_run_id" ]; then
+            echo "Website workflow already dispatched for ${TAG_NAME}: ${existing_run_id}"
+            exit 0
+          fi
+
+          gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main -f release_tag="$TAG_NAME"
+
+          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+            dispatched_run_id="$(find_existing_run)"
+            if [ -n "$dispatched_run_id" ]; then
+              echo "Dispatched website workflow for ${TAG_NAME}: ${dispatched_run_id}"
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "Timed out waiting for website workflow dispatch for ${TAG_NAME} to appear" >&2
+          exit 1
