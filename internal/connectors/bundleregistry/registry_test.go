@@ -219,15 +219,16 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		{
 			action: "create_message_template",
 			valid: connectors.Record{
-				"name":     "appointment_reminder",
-				"language": "en_US",
-				"category": "UTILITY",
+				"name":       "appointment_reminder",
+				"language":   "en_US",
+				"category":   "UTILITY",
+				"components": []any{map[string]any{"type": "BODY", "text": "Appointment reminder"}},
 			},
 			wantBodyFields: []string{"name", "language", "category", "components"},
 		},
 		{
 			action:         "update_message_template",
-			valid:          connectors.Record{"template_id": "template_123"},
+			valid:          connectors.Record{"template_id": "template_123", "category": "UTILITY"},
 			wantBodyFields: []string{"category", "components"},
 		},
 		{
@@ -247,7 +248,7 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		},
 		{
 			action:         "request_verification_code",
-			valid:          connectors.Record{"code_method": "SMS"},
+			valid:          connectors.Record{"code_method": "SMS", "language": "en_US"},
 			wantBodyFields: []string{"code_method", "language"},
 		},
 		{
@@ -262,8 +263,8 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		},
 		{
 			action:         "subscribe_waba_app",
-			valid:          connectors.Record{"messaging_product": "whatsapp"},
-			wantBodyFields: []string{"messaging_product"},
+			valid:          connectors.Record{"override_callback_uri": "https://example.test/webhooks/whatsapp"},
+			wantBodyFields: []string{"override_callback_uri"},
 		},
 		{
 			action:         "create_qr_code",
@@ -277,12 +278,44 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		})
 	}
 
+	shapeTests := []struct {
+		name    string
+		action  string
+		record  connectors.Record
+		wantErr bool
+	}{
+		{"create template rejects missing components", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY"}, true},
+		{"create template rejects empty components", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY", "components": []any{}}, true},
+		{"create template accepts body component", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY", "components": []any{map[string]any{"type": "BODY", "text": "Appointment reminder"}}}, false},
+		{"update template rejects no body field", "update_message_template", connectors.Record{"template_id": "template_123"}, true},
+		{"update template accepts category", "update_message_template", connectors.Record{"template_id": "template_123", "category": "UTILITY"}, false},
+		{"update template accepts components", "update_message_template", connectors.Record{"template_id": "template_123", "components": []any{map[string]any{"type": "BODY", "text": "Appointment reminder"}}}, false},
+		{"request code rejects missing language", "request_verification_code", connectors.Record{"code_method": "SMS"}, true},
+		{"request code accepts language", "request_verification_code", connectors.Record{"code_method": "SMS", "language": "en_US"}, false},
+		{"subscribe accepts empty body", "subscribe_waba_app", connectors.Record{}, false},
+		{"subscribe accepts callback override", "subscribe_waba_app", connectors.Record{"override_callback_uri": "https://example.test/webhooks/whatsapp"}, false},
+		{"subscribe rejects messaging_product", "subscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}, true},
+		{"unsubscribe accepts empty body", "unsubscribe_waba_app", connectors.Record{}, false},
+		{"unsubscribe rejects messaging_product", "unsubscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}, true},
+	}
+	for _, tt := range shapeTests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: tt.action}, []connectors.Record{tt.record})
+			if tt.wantErr && err == nil {
+				t.Fatalf("ValidateWrite(%s) accepted invalid record %+v", tt.action, tt.record)
+			}
+			if !tt.wantErr && err != nil {
+				t.Fatalf("ValidateWrite(%s) valid record %+v: %v", tt.action, tt.record, err)
+			}
+		})
+	}
+
 	noneBodyTests := []struct {
 		action string
 		valid  connectors.Record
 	}{
 		{"delete_message_template", connectors.Record{"name": "appointment_reminder"}},
-		{"unsubscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}},
+		{"unsubscribe_waba_app", connectors.Record{}},
 		{"delete_qr_code", connectors.Record{"code": "qr_123"}},
 		{"delete_media", connectors.Record{"media_id": "media_123"}},
 	}

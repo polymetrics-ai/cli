@@ -152,6 +152,85 @@ func TestPlanReverseETLRedactsWhatsAppStatusSamples(t *testing.T) {
 	}
 }
 
+func TestPlanReverseETLRedactsWhatsAppTemplateComponents(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "whatsapp-local",
+		Connector: "whatsapp",
+		Config:    map[string]string{"mode": "cloud", "waba_id": "waba_123"},
+	}); err != nil {
+		t.Fatalf("AddCredential(whatsapp) error = %v", err)
+	}
+	if err := writeWarehouseRows(t, a, "whatsapp_templates", []connectors.Record{{
+		"template_id": "template_123",
+		"name":        "lab_result_ready",
+		"language":    "en_US",
+		"category":    "UTILITY",
+		"components": []any{map[string]any{
+			"type": "BODY",
+			"text": "Your private lab result is ready",
+			"example": map[string]any{
+				"body_text": []any{[]any{"private result example"}},
+			},
+		}},
+	}}); err != nil {
+		t.Fatalf("write whatsapp template rows: %v", err)
+	}
+
+	createPlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "whatsapp_template_create",
+		SourceTable:           "whatsapp_templates",
+		DestinationConnector:  "whatsapp",
+		DestinationCredential: "whatsapp-local",
+		Action:                "create_message_template",
+		Mappings: map[string]string{
+			"name":       "name",
+			"language":   "language",
+			"category":   "category",
+			"components": "components",
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(create_message_template) error = %v", err)
+	}
+	assertWhatsAppTemplateSampleRedacted(t, createPlan, false)
+
+	updatePlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "whatsapp_template_update",
+		SourceTable:           "whatsapp_templates",
+		DestinationConnector:  "whatsapp",
+		DestinationCredential: "whatsapp-local",
+		Action:                "update_message_template",
+		Mappings: map[string]string{
+			"template_id": "template_id",
+			"components":  "components",
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(update_message_template) error = %v", err)
+	}
+	assertWhatsAppTemplateSampleRedacted(t, updatePlan, true)
+
+	rawState, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read state: %v", err)
+	}
+	stateText := string(rawState)
+	for _, leak := range []string{"Your private lab result is ready", "private result example"} {
+		if strings.Contains(stateText, leak) {
+			t.Fatalf("state leaked %q: %s", leak, stateText)
+		}
+	}
+}
+
 func assertWhatsAppTextSampleRedacted(t *testing.T, plan app.ReversePlan) {
 	t.Helper()
 	if len(plan.Sample) != 1 {
@@ -180,5 +259,22 @@ func assertWhatsAppStatusSampleRedacted(t *testing.T, plan app.ReversePlan, want
 	}
 	if sample["messaging_product"] != "whatsapp" || sample["status"] != "read" {
 		t.Fatalf("sample = %+v, want provider fields visible", sample)
+	}
+}
+
+func assertWhatsAppTemplateSampleRedacted(t *testing.T, plan app.ReversePlan, wantTemplateID bool) {
+	t.Helper()
+	if len(plan.Sample) != 1 {
+		t.Fatalf("sample length = %d, want 1", len(plan.Sample))
+	}
+	sample := plan.Sample[0]
+	if sample["components"] != "***" {
+		t.Fatalf("sample = %+v, want components redacted", sample)
+	}
+	if wantTemplateID && sample["template_id"] != "template_123" {
+		t.Fatalf("sample = %+v, want template_id visible", sample)
+	}
+	if !wantTemplateID && (sample["name"] != "lab_result_ready" || sample["language"] != "en_US" || sample["category"] != "UTILITY") {
+		t.Fatalf("sample = %+v, want template metadata visible", sample)
 	}
 }

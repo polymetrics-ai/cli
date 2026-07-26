@@ -720,6 +720,12 @@
           "type": "string",
           "summary": "code_method",
           "maps_to": "record.code_method"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "summary": "Language code for the verification message.",
+          "maps_to": "record.language"
         }
       ],
       "risk": "requests a phone-number verification code",
@@ -770,10 +776,10 @@
       "write": "subscribe_waba_app",
       "flags": [
         {
-          "name": "messaging-product",
+          "name": "override-callback-uri",
           "type": "string",
-          "summary": "messaging_product",
-          "maps_to": "record.messaging_product"
+          "summary": "Optional callback URL override for WABA webhooks.",
+          "maps_to": "record.override_callback_uri"
         }
       ],
       "risk": "subscribes the app to WABA webhooks",
@@ -786,14 +792,7 @@
       "intent": "reverse_etl",
       "availability": "partial",
       "write": "unsubscribe_waba_app",
-      "flags": [
-        {
-          "name": "messaging-product",
-          "type": "string",
-          "summary": "messaging_product",
-          "maps_to": "record.messaging_product"
-        }
-      ],
+      "flags": [],
       "risk": "high: unsubscribes the app from WABA webhooks",
       "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
       "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."

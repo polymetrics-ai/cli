@@ -49,6 +49,10 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"object","minProperties":1}`,
 		},
 		{
+			name: "minItems",
+			raw:  `{"type":"array","minItems":1}`,
+		},
+		{
 			name: "additionalProperties false",
 			raw:  `{"type":"object","additionalProperties":false,"properties":{"a":{"type":"string"}}}`,
 		},
@@ -162,6 +166,18 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `{}`,
 			wantErr:   true,
 			errSubstr: "minProperties",
+		},
+		{
+			name:     "minItems valid",
+			raw:      `{"type":"array","minItems":1,"items":{"type":"string"}}`,
+			instance: `["a"]`,
+		},
+		{
+			name:      "minItems invalid",
+			raw:       `{"type":"array","minItems":1,"items":{"type":"string"}}`,
+			instance:  `[]`,
+			wantErr:   true,
+			errSubstr: "minItems",
 		},
 		{
 			name:     "additionalProperties false valid",

@@ -922,7 +922,8 @@
         "required": [
           "name",
           "language",
-          "category"
+          "category",
+          "components"
         ],
         "properties": {
           "name": {
@@ -943,8 +944,45 @@
           },
           "components": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "HEADER",
+                    "BODY",
+                    "FOOTER",
+                    "BUTTONS"
+                  ],
+                  "description": "Template component type."
+                },
+                "format": {
+                  "type": "string",
+                  "description": "Component format for header or media components."
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Component text body."
+                },
+                "example": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Meta template example payload."
+                },
+                "buttons": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "Template buttons."
+                }
+              },
               "additionalProperties": true
             },
             "description": "Template components array."
@@ -987,14 +1025,63 @@
           },
           "components": {
             "type": "array",
+            "minItems": 1,
             "items": {
               "type": "object",
+              "required": [
+                "type"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "HEADER",
+                    "BODY",
+                    "FOOTER",
+                    "BUTTONS"
+                  ],
+                  "description": "Template component type."
+                },
+                "format": {
+                  "type": "string",
+                  "description": "Component format for header or media components."
+                },
+                "text": {
+                  "type": "string",
+                  "description": "Component text body."
+                },
+                "example": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "description": "Meta template example payload."
+                },
+                "buttons": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "description": "Template buttons."
+                }
+              },
               "additionalProperties": true
             },
             "description": "Updated components array."
           }
         },
-        "additionalProperties": false
+        "additionalProperties": false,
+        "anyOf": [
+          {
+            "required": [
+              "category"
+            ]
+          },
+          {
+            "required": [
+              "components"
+            ]
+          }
+        ]
       },
       "risk": "edits an existing message template",
       "path_fields": [
@@ -1169,7 +1256,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "code_method"
+          "code_method",
+          "language"
         ],
         "properties": {
           "code_method": {
@@ -1252,22 +1340,17 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [
-          "messaging_product"
-        ],
         "properties": {
-          "messaging_product": {
+          "override_callback_uri": {
             "type": "string",
-            "enum": [
-              "whatsapp"
-            ]
+            "description": "Optional callback URL override for WABA webhooks."
           }
         },
         "additionalProperties": false
       },
       "risk": "subscribes the app to WABA webhooks",
       "body_fields": [
-        "messaging_product"
+        "override_callback_uri"
       ]
     },
     {
@@ -1279,17 +1362,7 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "required": [
-          "messaging_product"
-        ],
-        "properties": {
-          "messaging_product": {
-            "type": "string",
-            "enum": [
-              "whatsapp"
-            ]
-          }
-        },
+        "properties": {},
         "additionalProperties": false
       },
       "risk": "unsubscribes the app from WABA webhooks",

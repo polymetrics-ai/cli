@@ -31,6 +31,8 @@ type schemaNode struct {
 	pattern              *regexp.Regexp
 	minProperties        int
 	hasMinProperties     bool
+	minItems             int
+	hasMinItems          bool
 	additionalProperties bool // true unless explicitly set to false
 	hasAdditionalProps   bool
 
@@ -69,6 +71,7 @@ var structuralKeywords = map[string]bool{
 	"enum":                 true,
 	"pattern":              true,
 	"minProperties":        true,
+	"minItems":             true,
 	"additionalProperties": true,
 	"x-secret":             true,
 	"x-primary-key":        true,
@@ -201,6 +204,15 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 		n.hasMinProperties = true
 	}
 
+	if raw, ok := m["minItems"]; ok {
+		var mi int
+		if err := json.Unmarshal(raw, &mi); err != nil {
+			return nil, fmt.Errorf("compile schema: minItems: %w", err)
+		}
+		n.minItems = mi
+		n.hasMinItems = true
+	}
+
 	if raw, ok := m["default"]; ok {
 		var def any
 		dec := json.NewDecoder(strings.NewReader(string(raw)))
@@ -303,10 +315,15 @@ func (n *schemaNode) validate(v any, path string) error {
 			return err
 		}
 	}
-	if elems, ok := arrayElements(v); ok && n.items != nil {
-		for i, elem := range elems {
-			if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
-				return err
+	if elems, ok := arrayElements(v); ok {
+		if n.hasMinItems && len(elems) < n.minItems {
+			return fmt.Errorf("%s: minItems %d not satisfied (got %d)", displayPath(path), n.minItems, len(elems))
+		}
+		if n.items != nil {
+			for i, elem := range elems {
+				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
+					return err
+				}
 			}
 		}
 	}

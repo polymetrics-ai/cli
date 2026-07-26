@@ -112,8 +112,7 @@ Reads WhatsApp Business Platform (Cloud API + Business Management API) phone num
   - risk: sends a typing indicator on an inbound patient conversation
 - create_message_template:
   - endpoint: POST /{{ config.waba_id }}/message_templates
-  - required fields: name, language, category
-  - optional fields: components
+  - required fields: name, language, category, components
   - risk: creates a WhatsApp message template pending Meta review
 - update_message_template:
   - endpoint: POST /{{ record.template_id }}
@@ -139,8 +138,7 @@ Reads WhatsApp Business Platform (Cloud API + Business Management API) phone num
   - risk: deregisters the phone number from Cloud API
 - request_verification_code:
   - endpoint: POST /{{ config.phone_number_id }}/request_code
-  - required fields: code_method
-  - optional fields: language
+  - required fields: code_method, language
   - risk: requests a phone-number verification code
 - verify_phone_number:
   - endpoint: POST /{{ config.phone_number_id }}/verify_code
@@ -152,11 +150,10 @@ Reads WhatsApp Business Platform (Cloud API + Business Management API) phone num
   - risk: sets or changes the two-step verification PIN
 - subscribe_waba_app:
   - endpoint: POST /{{ config.waba_id }}/subscribed_apps
-  - required fields: messaging_product
+  - optional fields: override_callback_uri
   - risk: subscribes the app to WABA webhooks
 - unsubscribe_waba_app:
   - endpoint: DELETE /{{ config.waba_id }}/subscribed_apps
-  - required fields: messaging_product
   - risk: unsubscribes the app from WABA webhooks
 - create_qr_code:
   - endpoint: POST /{{ config.phone_number_id }}/message_qrdls
@@ -220,7 +217,7 @@ Reads WhatsApp Business Platform (Cloud API + Business Management API) phone num
   - phone-numbers get - Retrieve a single phone number's detail. [intent=direct_read availability=implemented]; risk: bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted; flags: --phone-number-id
   - phone-numbers register - Register the phone number on Cloud API. [intent=reverse_etl availability=partial write=register_phone_number]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: registers the phone number on Cloud API; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --messaging-product, --pin
   - phone-numbers deregister - Deregister the phone number from Cloud API. [intent=reverse_etl availability=partial write=deregister_phone_number]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: deregisters the phone number from Cloud API; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --messaging-product
-  - phone-numbers request-code - Request a phone-number verification code. [intent=reverse_etl availability=partial write=request_verification_code]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: requests a phone-number verification code; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --code-method
+  - phone-numbers request-code - Request a phone-number verification code. [intent=reverse_etl availability=partial write=request_verification_code]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: requests a phone-number verification code; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --code-method, --language
   - phone-numbers verify-code - Submit the phone-number verification code. [intent=reverse_etl availability=partial write=verify_phone_number]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: submits the phone-number verification code; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --code
   - phone-numbers set-pin - Set or change the two-step verification PIN. [intent=reverse_etl availability=partial write=set_two_step_pin]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: sets or changes the two-step verification PIN; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --pin
 - Business profile
@@ -237,8 +234,8 @@ Reads WhatsApp Business Platform (Cloud API + Business Management API) phone num
   - analytics template - Bounded typed WhatsApp template analytics read-query. [intent=direct_read availability=implemented]; approval: none: read-only analytics query with connector-authored query parameters; risk: bounded typed analytics read-query; response is size-capped and secret/PHI fields are redacted; notes: Executes through the typed operation direct-read engine over the template_analytics edge, which takes flat query parameters; no raw Graph fields string or generic HTTP flag is exposed.; flags: --start, --end, --granularity, --template-ids, --metric-types
 - Subscribed apps
   - apps list - List apps subscribed to the WABA webhooks. [intent=etl availability=implemented stream=subscribed_apps]
-  - apps subscribe - Subscribe the app to WABA webhooks. [intent=reverse_etl availability=partial write=subscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: subscribes the app to WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --messaging-product
-  - apps unsubscribe - Unsubscribe the app from WABA webhooks. [intent=reverse_etl availability=partial write=unsubscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: unsubscribes the app from WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --messaging-product
+  - apps subscribe - Subscribe the app to WABA webhooks. [intent=reverse_etl availability=partial write=subscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: subscribes the app to WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --override-callback-uri
+  - apps unsubscribe - Unsubscribe the app from WABA webhooks. [intent=reverse_etl availability=partial write=unsubscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: unsubscribes the app from WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.
 - QR / short links
   - qr create - Create a QR code / short link for the number. [intent=reverse_etl availability=partial write=create_qr_code]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: creates a QR code / short link for the number; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --prefilled-message
   - qr delete - Delete a QR code / short link. [intent=reverse_etl availability=partial write=delete_qr_code]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: deletes a QR code / short link; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --code

@@ -107804,6 +107804,13 @@
               "summary": "code_method",
               "values": [],
               "maps_to": "record.code_method"
+            },
+            {
+              "name": "language",
+              "type": "string",
+              "summary": "Language code for the verification message.",
+              "values": [],
+              "maps_to": "record.language"
             }
           ],
           "examples": [],
@@ -107871,11 +107878,11 @@
           "source_url": "",
           "flags": [
             {
-              "name": "messaging-product",
+              "name": "override-callback-uri",
               "type": "string",
-              "summary": "messaging_product",
+              "summary": "Optional callback URL override for WABA webhooks.",
               "values": [],
-              "maps_to": "record.messaging_product"
+              "maps_to": "record.override_callback_uri"
             }
           ],
           "examples": [],
@@ -107893,15 +107900,7 @@
           "write": "unsubscribe_waba_app",
           "source_cli_path": "",
           "source_url": "",
-          "flags": [
-            {
-              "name": "messaging-product",
-              "type": "string",
-              "summary": "messaging_product",
-              "values": [],
-              "maps_to": "record.messaging_product"
-            }
-          ],
+          "flags": [],
           "examples": [],
           "output_policy": "",
           "risk": "high: unsubscribes the app from WABA webhooks",
