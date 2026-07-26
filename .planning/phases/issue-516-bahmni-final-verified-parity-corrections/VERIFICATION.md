@@ -138,3 +138,10 @@ Required focused verification for this slice:
   - `create_note`: PASS live synthetic proof.
 - Blocked/unretained write-like commands: `create_drug_order`, `reschedule_appointment`, `upload_visit_document`, document upload, top-level bulk observations, and other destructive/admin routes in `api_surface.json`.
 - No operation is omitted from the retained-write matrix; unretained operations are explicitly not proof.
+
+## Post-merge corrective verification - 2026-07-26
+
+- `scripts/gsd doctor`: pass.
+- `scripts/gsd prompt programming-loop init --phase issue-535-bahmni-post-merge-corrections --dry-run`: unavailable (`unknown GSD command: programming-loop`); manual GSD fallback recorded.
+- Red: `go test ./internal/connectors/engine -run TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody -count=1` failed because the write error contained the encoded clinical path identifier.
+- Green: `go test ./internal/connectors/engine -run 'TestDryRunWritePreviewResolvedPath|TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody' -count=1` passed after write-error literal redaction preserved `errors.As` reachability.
