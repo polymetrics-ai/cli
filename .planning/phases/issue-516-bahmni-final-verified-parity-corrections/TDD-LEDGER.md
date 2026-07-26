@@ -81,3 +81,7 @@ Baseline checks at `4e89af9ea5436088f5cef8e9f14e6eee0696b290` reproduce the prio
 - `engine.DryRunWrite` resolves path fields from raw records in preview warnings.
 
 Planned red coverage: extend engine write-preview tests so configured write-action redaction fields scrub resolved path identifiers, and use the existing Bahmni contract tests plus generated-data checks to keep the frozen scope truthful.
+
+## Post-merge corrective slice - 2026-07-26
+
+GSD fallback remains in effect for `scripts/gsd prompt programming-loop ...` (`unknown GSD command: programming-loop`). Added failing regression `TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody` after PR #533 merged; red state proved execute-time `*connsdk.HTTPError` display leaked encoded clinical path identifiers. Green target: preserve `errors.As`/error-map behavior while redacting configured write-action record literals from operator-visible write errors.
