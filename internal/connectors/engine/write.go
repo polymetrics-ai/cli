@@ -119,15 +119,14 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 }
 
 // resolveWriteRequestLine interpolates the action's base URL and path
-// against rec/cfg, redacting {{ secrets.* }} references so a preview can
-// never leak a secret value even though the method/path is otherwise fully
-// resolved for operator review (THREAT-MODEL §1).
+// against rec/cfg, redacting {{ secrets.* }} and action redaction fields so
+// previews do not expose values that must stay out of operator-visible URLs.
 func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
 	redactedSecrets := make(map[string]string, len(cfg.Secrets))
 	for k := range cfg.Secrets {
 		redactedSecrets[k] = "***"
 	}
-	vars := Vars{Config: cfg.Config, Secrets: redactedSecrets, Record: map[string]any(rec)}
+	vars := Vars{Config: cfg.Config, Secrets: redactedSecrets, Record: previewRecordForWriteAction(rec, action.RedactFields)}
 
 	baseURL, err := Interpolate(b.HTTP.URL, vars)
 	if err != nil {
@@ -138,6 +137,54 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
 	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
+}
+
+func previewRecordForWriteAction(rec connectors.Record, redactFields []string) map[string]any {
+	out := copyRecordMap(map[string]any(rec))
+	for _, field := range redactFields {
+		redactPreviewRecordField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+	}
+	return out
+}
+
+func copyRecordMap(src map[string]any) map[string]any {
+	out := make(map[string]any, len(src))
+	for k, v := range src {
+		switch typed := v.(type) {
+		case map[string]any:
+			out[k] = copyRecordMap(typed)
+		case connectors.Record:
+			out[k] = copyRecordMap(map[string]any(typed))
+		default:
+			out[k] = v
+		}
+	}
+	return out
+}
+
+func redactPreviewRecordField(record map[string]any, field string) {
+	if field == "" {
+		return
+	}
+	parts := strings.Split(field, ".")
+	current := record
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return
+		}
+		switch typed := next.(type) {
+		case map[string]any:
+			current = typed
+		case connectors.Record:
+			current = map[string]any(typed)
+		default:
+			return
+		}
+	}
+	if _, ok := current[parts[len(parts)-1]]; ok {
+		current[parts[len(parts)-1]] = "redacted"
+	}
 }
 
 func joinURL(base, path string) string {

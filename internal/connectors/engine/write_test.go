@@ -397,6 +397,67 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 	}
 }
 
+func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
+	b := Bundle{
+		Name: "clinical",
+		HTTP: HTTPBase{URL: "https://api.example.com"},
+		Writes: []WriteAction{{
+			Name:         "update_patient",
+			Kind:         "update",
+			Method:       http.MethodPost,
+			Path:         "/patients/{{ record.uuid }}",
+			PathFields:   []string{"uuid"},
+			RedactFields: []string{"uuid"},
+			RecordSchema: json.RawMessage(`{"type": "object", "required": ["uuid"], "properties": {"uuid": {"type": "string"}}}`),
+		}},
+	}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_patient"}, []connectors.Record{
+		{"uuid": "patient-raw-uuid"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	if strings.Contains(joined, "patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, record path field leaked into preview", preview.Warnings)
+	}
+	if !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want redacted request path", preview.Warnings)
+	}
+}
+
+func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T) {
+	b := Bundle{
+		Name: "clinical",
+		HTTP: HTTPBase{URL: "https://api.example.com"},
+		Writes: []WriteAction{{
+			Name:         "update_patient",
+			Kind:         "update",
+			Method:       http.MethodPost,
+			Path:         "/patients/{{ record.patient.uuid }}",
+			PathFields:   []string{"patient.uuid"},
+			RedactFields: []string{"patient.uuid"},
+			RecordSchema: json.RawMessage(`{"type": "object", "required": ["patient"], "properties": {"patient": {"type": "object", "required": ["uuid"], "properties": {"uuid": {"type": "string"}}}}}`),
+		}},
+	}
+	patient := map[string]any{"uuid": "patient-nested-uuid"}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_patient"}, []connectors.Record{
+		{"patient": patient},
+	}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	if strings.Contains(joined, "patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, nested record path field leaked into preview", preview.Warnings)
+	}
+	if patient["uuid"] != "patient-nested-uuid" {
+		t.Fatalf("DryRunWrite mutated caller record: %v", patient)
+	}
+}
+
 // --- delete semantics: missing_ok_status ---
 
 func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {

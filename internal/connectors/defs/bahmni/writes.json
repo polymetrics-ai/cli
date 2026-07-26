@@ -124,6 +124,9 @@
       "path_fields": [
         "uuid"
       ],
+      "redact_fields": [
+        "uuid"
+      ],
       "body_type": "json",
       "record_schema": {
         "type": "object",
@@ -563,6 +566,9 @@
       "path_fields": [
         "appointmentUuid"
       ],
+      "redact_fields": [
+        "appointmentUuid"
+      ],
       "body_type": "json",
       "record_schema": {
         "type": "object",
@@ -593,6 +599,9 @@
       "method": "POST",
       "path": "/ws/rest/v1/appointments/{{ record.appointmentUuid }}/providerResponse",
       "path_fields": [
+        "appointmentUuid"
+      ],
+      "redact_fields": [
         "appointmentUuid"
       ],
       "body_type": "json",

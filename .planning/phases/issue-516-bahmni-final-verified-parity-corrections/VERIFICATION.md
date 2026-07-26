@@ -27,7 +27,7 @@ Pending implementation:
 
 - [ ] Codex-only validation/review against exact candidate head.
 - [ ] Fresh independent exact-head audit before any “full parity” claim.
-- [ ] Live STANDARD/LITE synthetic read verification and disposable write verification only if captain explicitly provides/authorizes synthetic lab credentials and write execution.
+- [ ] Live STANDARD synthetic read verification and disposable write verification only if captain explicitly provides/authorizes synthetic lab credentials and write execution.
 
 ## Merge boundary
 
@@ -69,6 +69,16 @@ Also run credential-free fixture/conformance smoke and safe synthetic-lab bounde
 ## Live synthetic write verification authorization - 2026-07-26
 
 Captain authorized parallel live verification of every retained Bahmni write against the existing loopback-only Podman lab after typed/schema tests pass and `pm-bahmni` is rebuilt. Constraints: unique `SYN-CONN-*` disposable identifiers, typed CLI plan -> preview -> explicit approval -> execute only, no raw JSON/method/path write escape hatches, no credential/PHI printing or persistence, no Karthik/Rohit records, no reseed/restart/container mutation, no lane collisions, safe opaque evidence/status only. Independent chains may run in parallel; dependencies inside each lane remain serial. Any failed operation must stop, be fixed or marked unavailable with source/live evidence, then rerun before readiness is claimed.
+
+## Review-fix slice - 2026-07-26
+
+Required focused verification for this slice:
+
+- [x] `go test ./internal/connectors/engine ./internal/connectors/conformance -run 'Test(DryRunWritePreviewResolvedPathRedactsConfiguredRecordFields|DryRunWritePreviewResolvedPathRedactionCopiesNestedRecord|BahmniVersionPinnedReadContracts|BahmniVersionPinnedDirectOperationContracts|BahmniVersionPinnedWriteContracts|BahmniFrozenScopeTextContracts)$' -count=1`
+- [x] Bahmni-only generated-data assertion confirms no stale write claims, no non-STANDARD support claim, appointment date-only help, and GET patient-search wording in connector catalog and website data.
+- [x] `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors`
+- [x] `npm --prefix website run gen:website-data`
+- [x] Unrelated generated connector MANUAL/SKILL churn restored out of the worktree.
 
 ### Live lane attempt 1 safe summary
 
