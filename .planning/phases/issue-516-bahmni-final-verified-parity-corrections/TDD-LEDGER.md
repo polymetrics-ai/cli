@@ -85,3 +85,12 @@ Planned red coverage: extend engine write-preview tests so configured write-acti
 ## Post-merge corrective slice - 2026-07-26
 
 GSD fallback remains in effect for `scripts/gsd prompt programming-loop ...` (`unknown GSD command: programming-loop`). Added failing regression `TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody` after PR #533 merged; red state proved execute-time `*connsdk.HTTPError` display leaked encoded clinical path identifiers. Green target: preserve `errors.As`/error-map behavior while redacting configured write-action record literals from operator-visible write errors.
+
+## Bahmni command discovery slice - 2026-07-26
+
+Captain authorized end-to-end dynamic command/help parity in the corrective PR after the two PHI-path corrections were preserved. Red coverage added:
+
+- `TestRootHelpListsDynamicConnectorCommands`: root help must expose dynamic connector command entry points.
+- `TestBahmniCommandSurfaceHelpScopes`: `pm bahmni --help`, group help, and exact command help must render scoped usage/flags instead of the full connector manual.
+- `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked`: every declared Bahmni command path must either reach credential lookup when implemented or block before credentials with its documented availability.
+- `TestBahmniAppointmentAliasSuggestion`: `appoint` typo/singular path must return an actionable `appointments` suggestion rather than looking like the connector has no commands.

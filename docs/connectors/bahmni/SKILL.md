@@ -211,6 +211,33 @@ pm connectors inspect bahmni
 pm connectors inspect bahmni --json
 ```
 
+### Command discovery
+
+```bash
+pm bahmni --help
+pm bahmni appointments --help
+pm bahmni appointments create --help
+```
+
+### Synthetic appointment read
+
+```bash
+pm bahmni appointments list --credential bahmni-local --config appointment_date=2026-01-01T00:00:00.000 --limit 10 --json
+```
+
+### Synthetic patient create plan
+
+```bash
+pm bahmni patients create --credential bahmni-local --identifier SYN-CONN-EXAMPLE-001 --identifier-type <identifier-type-uuid> --identifier-location <location-uuid> --given-name Synthetic --family-name Connector --gender O --birthdate 1990-01-01 --preview --json
+```
+
+### Unsupported retained as blocked
+
+```bash
+pm bahmni appointments reschedule --help
+pm bahmni drug_orders create --help
+```
+
 ## Agent Rules
 
 - Run pm connectors inspect bahmni before creating credentials or plans.

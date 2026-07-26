@@ -145,3 +145,13 @@ Required focused verification for this slice:
 - `scripts/gsd prompt programming-loop init --phase issue-535-bahmni-post-merge-corrections --dry-run`: unavailable (`unknown GSD command: programming-loop`); manual GSD fallback recorded.
 - Red: `go test ./internal/connectors/engine -run TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody -count=1` failed because the write error contained the encoded clinical path identifier.
 - Green: `go test ./internal/connectors/engine -run 'TestDryRunWritePreviewResolvedPath|TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody' -count=1` passed after write-error literal redaction preserved `errors.As` reachability.
+
+## Bahmni command discovery verification - 2026-07-26
+
+- Red before fix: focused Bahmni CLI tests failed because `pm bahmni --help`/group/command help rendered the full connector manual and `pm bahmni appoint list` only reported unknown command.
+- Green: `go test ./internal/cli -run 'TestRootHelpListsDynamicConnectorCommands|TestBahmniCommandSurfaceHelpScopes|TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked|TestBahmniAppointmentAliasSuggestion' -count=1` passed.
+- Green: `go test ./internal/cli ./internal/connectors/engine -count=1` passed.
+- Green: `go run ./cmd/connectorgen validate internal/connectors/defs` passed with `548 connector(s) checked, 0 findings`.
+- Green: `go run ./cmd/pm docs validate --connectors-dir docs/connectors` passed.
+- Green: `go test ./cmd/connectorgen ./internal/connectors/bundleregistry ./internal/connectors/conformance ./internal/cli ./internal/connectors/engine -count=1` passed.
+- Declared-path matrix now covers all 37 Bahmni command paths from `cli_surface.json`; implemented paths must reach credential resolution and blocked paths must return their documented availability before credential lookup.

@@ -595,6 +595,13 @@ func examplesForManifest(manifest Manifest) []GuideExample {
 		{Title: "Inspect as structured JSON", Command: "pm connectors inspect " + name + " --json"},
 	}
 	switch name {
+	case "bahmni":
+		examples = append(examples,
+			GuideExample{Title: "Command discovery", Command: "pm bahmni --help\npm bahmni appointments --help\npm bahmni appointments create --help"},
+			GuideExample{Title: "Synthetic appointment read", Command: "pm bahmni appointments list --credential bahmni-local --config appointment_date=2026-01-01T00:00:00.000 --limit 10 --json"},
+			GuideExample{Title: "Synthetic patient create plan", Command: "pm bahmni patients create --credential bahmni-local --identifier SYN-CONN-EXAMPLE-001 --identifier-type <identifier-type-uuid> --identifier-location <location-uuid> --given-name Synthetic --family-name Connector --gender O --birthdate 1990-01-01 --preview --json"},
+			GuideExample{Title: "Unsupported retained as blocked", Command: "pm bahmni appointments reschedule --help\npm bahmni drug_orders create --help"},
+		)
 	case "github":
 		examples = append(examples,
 			GuideExample{Title: "Public repository credential", Command: "pm credentials add github-public --connector github --config repository=octocat/Hello-World"},

@@ -65,11 +65,56 @@ func globalConfigFlags(args []string, root string, jsonOut bool) map[string]conf
 }
 
 func writeRootManual(stdout io.Writer, jsonOut bool) error {
+	manual := rootManual()
 	if jsonOut {
-		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": "pm", "manual": rootHelp})
+		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": "pm", "manual": manual})
 	}
-	fmt.Fprint(stdout, rootHelp)
+	fmt.Fprint(stdout, manual)
 	return nil
+}
+
+func rootManual() string {
+	section := dynamicConnectorCommandsSection(appRegistry())
+	if section == "" {
+		return rootHelp
+	}
+	return strings.TrimRight(rootHelp, "\n") + "\n\n" + section
+}
+
+func dynamicConnectorCommandsSection(registry *connectors.Registry) string {
+	if registry == nil {
+		return ""
+	}
+	lines := []string{}
+	for _, meta := range registry.List() {
+		connector, ok := registry.Get(meta.Name)
+		if !ok {
+			continue
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil || strings.TrimSpace(provider.CommandSurface().Usage) == "" {
+			continue
+		}
+		line := fmt.Sprintf("  pm %s <command>", meta.Name)
+		if meta.DisplayName != "" {
+			line += " - " + meta.DisplayName
+		}
+		if provider.CommandSurface().Tagline != "" {
+			line += ": " + provider.CommandSurface().Tagline
+		}
+		lines = append(lines, line)
+	}
+	if len(lines) == 0 {
+		return ""
+	}
+	var b strings.Builder
+	b.WriteString("CONNECTOR COMMANDS\n")
+	b.WriteString("  Some connectors expose provider-style command surfaces in addition to pm connectors inspect.\n")
+	for _, line := range lines {
+		b.WriteString(line + "\n")
+	}
+	b.WriteString("  Run pm <connector> --help for command groups and pm <connector> <path> --help for exact flags.\n")
+	return b.String()
 }
 
 func runInit(root string, stdout io.Writer, jsonOut bool) error {
@@ -115,18 +160,31 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 }
 
 func dynamicConnectorManual(name string) (string, bool) {
-	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
-		return "", false
-	}
-	connector, ok := appRegistry().Get(name)
+	connector, ok := dynamicConnectorWithCommandSurface(name)
 	if !ok {
 		return "", false
 	}
+	return connectors.RenderConnectorManual(connector), true
+}
+
+func isDynamicConnectorCommand(name string) bool {
+	_, ok := dynamicConnectorWithCommandSurface(name)
+	return ok
+}
+
+func dynamicConnectorWithCommandSurface(name string) (connectors.Connector, bool) {
+	if err := safety.ValidateIdentifier(name, "connector"); err != nil {
+		return nil, false
+	}
+	connector, ok := appRegistry().Get(name)
+	if !ok {
+		return nil, false
+	}
 	provider, ok := connector.(connectors.CommandSurfaceProvider)
 	if !ok || provider.CommandSurface() == nil {
-		return "", false
+		return nil, false
 	}
-	return connectors.RenderConnectorManual(connector), true
+	return connector, true
 }
 
 func runConnectors(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
@@ -582,9 +640,9 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	}
 	surface := surfaceProvider.CommandSurface()
 	if len(args) == 0 || connectorHelpRequested(args, surface) {
-		manual := connectors.RenderConnectorManual(connector)
+		command, manual := renderConnectorCommandManual(connectorName, connector, surface, args)
 		if jsonOut {
-			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": connectorName, "manual": manual})
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
 		}
 		fmt.Fprint(stdout, manual)
 		return nil
@@ -600,7 +658,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 	if err := commandrunner.Preflight(connector, path); err != nil {
 		var blocked *commandrunner.BlockedCommandError
 		if errors.As(err, &blocked) {
-			return connectorCommandBlockedError(err)
+			return connectorCommandBlockedError(withConnectorCommandSuggestion(blocked, surface, path))
 		}
 		return err
 	}
@@ -615,6 +673,9 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 		return true
 	}
 	path := flags.values["_"]
+	if len(path) > 0 && (path[0] == "help" || path[len(path)-1] == "help") {
+		return true
+	}
 	if len(path) == 0 {
 		declared := map[string]bool{
 			"credential": true, "connection": true, "config": true,
@@ -647,6 +708,272 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 		}
 	}
 	return false
+}
+
+func renderConnectorCommandManual(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, args []string) (string, string) {
+	flags := parseFlags(args)
+	path := connectorHelpPath(flags.values["_"])
+	if len(path) > 0 {
+		command := strings.Join(path, " ")
+		if cmd, ok := connectorSurfaceCommand(surface, command); ok {
+			return connectorName + " " + command, renderConnectorCommandDetail(connectorName, surface, cmd)
+		}
+		if len(path) == 1 && connectorSurfaceHasPrefix(surface, path[0]) {
+			return connectorName + " " + path[0], renderConnectorCommandGroup(connectorName, connector, surface, path[0])
+		}
+	}
+	return connectorName, renderConnectorCommandRoot(connectorName, connector, surface)
+}
+
+func connectorHelpPath(path []string) []string {
+	path = append([]string(nil), path...)
+	if len(path) > 0 && path[0] == "help" {
+		path = path[1:]
+	}
+	if len(path) > 0 && path[len(path)-1] == "help" {
+		path = path[:len(path)-1]
+	}
+	return path
+}
+
+func renderConnectorCommandRoot(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface) string {
+	meta := connector.Metadata()
+	var b strings.Builder
+	b.WriteString("NAME\n")
+	fmt.Fprintf(&b, "  pm %s - %s command surface\n\n", connectorName, valueOr(meta.DisplayName, connectorName))
+	b.WriteString("SYNOPSIS\n")
+	fmt.Fprintf(&b, "  pm %s <command> [flags]\n", connectorName)
+	fmt.Fprintf(&b, "  pm %s <group> --help\n", connectorName)
+	fmt.Fprintf(&b, "  pm %s <group> <command> --help\n\n", connectorName)
+	b.WriteString("DESCRIPTION\n")
+	if surface.Tagline != "" {
+		fmt.Fprintf(&b, "  %s\n", surface.Tagline)
+	} else if meta.Description != "" {
+		fmt.Fprintf(&b, "  %s\n", meta.Description)
+	}
+	b.WriteString("\nCOMMAND GROUPS\n")
+	rendered := map[string]bool{}
+	for _, group := range surface.Groups {
+		for _, prefix := range group.Commands {
+			if !connectorSurfaceHasPrefix(surface, prefix) {
+				continue
+			}
+			rendered[prefix] = true
+			fmt.Fprintf(&b, "  %s - %s; see pm %s %s --help\n", prefix, valueOr(group.Title, prefix), connectorName, prefix)
+		}
+	}
+	for _, prefix := range connectorSurfacePrefixes(surface) {
+		if rendered[prefix] {
+			continue
+		}
+		fmt.Fprintf(&b, "  %s - see pm %s %s --help\n", prefix, connectorName, prefix)
+	}
+	writeConnectorGlobalFlags(&b, surface)
+	if len(surface.HelpTopics) > 0 {
+		b.WriteString("\nHELP TOPICS\n")
+		for _, topic := range surface.HelpTopics {
+			if topic.Name == "" {
+				continue
+			}
+			fmt.Fprintf(&b, "  %s", topic.Name)
+			if topic.Summary != "" {
+				fmt.Fprintf(&b, " - %s", topic.Summary)
+			}
+			b.WriteByte('\n')
+		}
+	}
+	return b.String()
+}
+
+func renderConnectorCommandGroup(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, prefix string) string {
+	var b strings.Builder
+	displayName := valueOr(connector.Metadata().DisplayName, connectorName)
+	b.WriteString("NAME\n")
+	fmt.Fprintf(&b, "  pm %s %s - %s %s commands\n\n", connectorName, prefix, displayName, prefix)
+	b.WriteString("SYNOPSIS\n")
+	fmt.Fprintf(&b, "  pm %s %s <command> [flags]\n\n", connectorName, prefix)
+	if title := connectorSurfaceGroupTitle(surface, prefix); title != "" {
+		b.WriteString("DESCRIPTION\n")
+		fmt.Fprintf(&b, "  %s commands for %s.\n\n", title, prefix)
+	}
+	b.WriteString("COMMANDS\n")
+	for _, cmd := range surface.Commands {
+		if commandSurfacePrefix(cmd.Path) != prefix {
+			continue
+		}
+		fmt.Fprintf(&b, "  %s", cmd.Path)
+		if cmd.Summary != "" {
+			fmt.Fprintf(&b, " - %s", cmd.Summary)
+		}
+		if cmd.Availability != "" {
+			fmt.Fprintf(&b, " [availability=%s]", cmd.Availability)
+		}
+		b.WriteByte('\n')
+	}
+	writeConnectorGlobalFlags(&b, surface)
+	return b.String()
+}
+
+func renderConnectorCommandDetail(connectorName string, surface *connectors.CommandSurface, cmd connectors.CommandSurfaceCommand) string {
+	var b strings.Builder
+	b.WriteString("NAME\n")
+	fmt.Fprintf(&b, "  pm %s %s", connectorName, cmd.Path)
+	if cmd.Summary != "" {
+		fmt.Fprintf(&b, " - %s", cmd.Summary)
+	}
+	b.WriteString("\n\nSYNOPSIS\n")
+	fmt.Fprintf(&b, "  pm %s %s [flags]\n", connectorName, cmd.Path)
+	if len(cmd.Examples) > 0 {
+		for _, example := range cmd.Examples {
+			fmt.Fprintf(&b, "  %s\n", example)
+		}
+	}
+	if cmd.Summary != "" {
+		b.WriteString("\nDESCRIPTION\n")
+		fmt.Fprintf(&b, "  %s\n", cmd.Summary)
+	}
+	writeConnectorField(&b, "INTENT", cmd.Intent)
+	writeConnectorField(&b, "AVAILABILITY", cmd.Availability)
+	writeConnectorField(&b, "STREAM", cmd.Stream)
+	writeConnectorField(&b, "WRITE", cmd.Write)
+	writeConnectorField(&b, "OPERATION", cmd.Operation)
+	writeConnectorField(&b, "APPROVAL", cmd.Approval)
+	writeConnectorField(&b, "RISK", cmd.Risk)
+	writeConnectorField(&b, "OUTPUT POLICY", cmd.OutputPolicy)
+	writeConnectorField(&b, "NOTES", cmd.Notes)
+	b.WriteString("\nFLAGS\n")
+	if len(cmd.Flags) == 0 {
+		b.WriteString("  No command-specific flags.\n")
+	} else {
+		for _, flag := range cmd.Flags {
+			writeConnectorFlag(&b, flag)
+		}
+	}
+	writeConnectorGlobalFlags(&b, surface)
+	return b.String()
+}
+
+func writeConnectorField(b *strings.Builder, title, value string) {
+	if strings.TrimSpace(value) == "" {
+		return
+	}
+	fmt.Fprintf(b, "\n%s\n  %s\n", title, value)
+}
+
+func writeConnectorGlobalFlags(b *strings.Builder, surface *connectors.CommandSurface) {
+	if len(surface.GlobalFlags) == 0 {
+		return
+	}
+	b.WriteString("\nGLOBAL FLAGS\n")
+	for _, flag := range surface.GlobalFlags {
+		writeConnectorFlag(b, flag)
+	}
+}
+
+func writeConnectorFlag(b *strings.Builder, flag connectors.CommandSurfaceFlag) {
+	fmt.Fprintf(b, "  --%s", strings.TrimLeft(flag.Name, "-"))
+	if flag.Type != "" {
+		fmt.Fprintf(b, " (%s)", flag.Type)
+	}
+	if flag.Summary != "" {
+		fmt.Fprintf(b, ": %s", flag.Summary)
+	}
+	if len(flag.Values) > 0 {
+		fmt.Fprintf(b, " values=%s", strings.Join(flag.Values, "|"))
+	}
+	if flag.MapsTo != "" {
+		fmt.Fprintf(b, " maps_to=%s", flag.MapsTo)
+	}
+	b.WriteByte('\n')
+}
+
+func connectorSurfaceCommand(surface *connectors.CommandSurface, command string) (connectors.CommandSurfaceCommand, bool) {
+	if surface == nil {
+		return connectors.CommandSurfaceCommand{}, false
+	}
+	for _, cmd := range surface.Commands {
+		if cmd.Path == command {
+			return cmd, true
+		}
+	}
+	return connectors.CommandSurfaceCommand{}, false
+}
+
+func connectorSurfaceHasPrefix(surface *connectors.CommandSurface, prefix string) bool {
+	for _, cmd := range surface.Commands {
+		if commandSurfacePrefix(cmd.Path) == prefix {
+			return true
+		}
+	}
+	return false
+}
+
+func connectorSurfacePrefixes(surface *connectors.CommandSurface) []string {
+	seen := map[string]bool{}
+	out := []string{}
+	for _, cmd := range surface.Commands {
+		prefix := commandSurfacePrefix(cmd.Path)
+		if prefix == "" || seen[prefix] {
+			continue
+		}
+		seen[prefix] = true
+		out = append(out, prefix)
+	}
+	return out
+}
+
+func connectorSurfaceGroupTitle(surface *connectors.CommandSurface, prefix string) string {
+	for _, group := range surface.Groups {
+		for _, candidate := range group.Commands {
+			if candidate == prefix {
+				return valueOr(group.Title, group.ID)
+			}
+		}
+	}
+	return ""
+}
+
+func commandSurfacePrefix(path string) string {
+	fields := strings.Fields(path)
+	if len(fields) == 0 {
+		return ""
+	}
+	return fields[0]
+}
+
+func withConnectorCommandSuggestion(blocked *commandrunner.BlockedCommandError, surface *connectors.CommandSurface, path []string) error {
+	if blocked == nil || blocked.Reason != "unknown command" {
+		return blocked
+	}
+	if suggestion := connectorCommandSuggestion(surface, path); suggestion != "" {
+		copy := *blocked
+		copy.Reason = fmt.Sprintf("%s; did you mean %q", copy.Reason, suggestion)
+		return &copy
+	}
+	return blocked
+}
+
+func connectorCommandSuggestion(surface *connectors.CommandSurface, path []string) string {
+	if len(path) == 0 {
+		return ""
+	}
+	aliases := map[string]string{
+		"appoint":     "appointments",
+		"appointment": "appointments",
+	}
+	replacement, ok := aliases[path[0]]
+	if !ok {
+		return ""
+	}
+	candidate := append([]string{replacement}, path[1:]...)
+	command := strings.Join(candidate, " ")
+	if _, ok := connectorSurfaceCommand(surface, command); ok {
+		return command
+	}
+	if connectorSurfaceHasPrefix(surface, replacement) {
+		return replacement + " --help"
+	}
+	return ""
 }
 
 func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, args []string, stdout io.Writer, jsonOut bool) error {

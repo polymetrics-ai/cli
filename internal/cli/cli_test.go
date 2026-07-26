@@ -10,6 +10,8 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/cli"
+	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bundleregistry"
 )
 
 func TestHelpIncludesManPageStyleSections(t *testing.T) {
@@ -53,13 +55,14 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	tests := []struct {
 		name string
 		args []string
+		want []string
 	}{
-		{name: "help topic", args: []string{"help", "gong"}},
-		{name: "bare connector", args: []string{"gong"}},
-		{name: "connector help flag", args: []string{"gong", "--help"}},
-		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}},
-		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}},
-		{name: "false preview is passive", args: []string{"gong", "--preview=false"}},
+		{name: "help topic", args: []string{"help", "gong"}, want: []string{"pm connectors inspect gong", "calls transcript", "Gong"}},
+		{name: "bare connector", args: []string{"gong"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
+		{name: "connector help flag", args: []string{"gong", "--help"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
+		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}, want: []string{"pm gong calls transcript", "INTENT", "direct_read", "FLAGS"}},
+		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
+		{name: "false preview is passive", args: []string{"gong", "--preview=false"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -69,7 +72,7 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 				t.Fatalf("Run(%v) code = %d stderr = %s", tt.args, code, stderr.String())
 			}
 			out := stdout.String()
-			for _, want := range []string{"pm gong", "calls transcript", "Gong"} {
+			for _, want := range tt.want {
 				if !strings.Contains(out, want) {
 					t.Fatalf("Run(%v) help missing %q:\n%s", tt.args, want, out)
 				}
@@ -711,6 +714,150 @@ func TestGitHubCommandSurfaceBlocksOperationBeforeCredentialResolution(t *testin
 	if strings.Contains(out, "missing --credential") || strings.Contains(stderr.String(), "missing --credential") {
 		t.Fatalf("operation-backed command attempted credential resolution before blocking:\nstdout=%s\nstderr=%s", out, stderr.String())
 	}
+}
+
+func TestRootHelpListsDynamicConnectorCommands(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("root help code = %d stderr=%s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{"CONNECTOR COMMANDS", "pm bahmni <command>", "pm github <command>", "pm gong <command>"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("root help missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestBahmniCommandSurfaceHelpScopes(t *testing.T) {
+	tests := []struct {
+		name   string
+		args   []string
+		want   []string
+		forbid []string
+	}{
+		{
+			name:   "connector root",
+			args:   []string{"bahmni", "--help"},
+			want:   []string{"NAME", "pm bahmni - Bahmni command surface", "COMMAND GROUPS", "appointments", "pm bahmni appointments --help"},
+			forbid: []string{"CAPABILITIES", "REVERSE ETL ACTIONS"},
+		},
+		{
+			name:   "appointment group",
+			args:   []string{"bahmni", "appointments", "--help"},
+			want:   []string{"NAME", "pm bahmni appointments - Bahmni appointments commands", "appointments list", "appointments create", "appointments status-change", "appointments provider-response", "appointments reschedule", "appointment_date only"},
+			forbid: []string{"patients create", "drug_orders create"},
+		},
+		{
+			name:   "appointment create command",
+			args:   []string{"bahmni", "appointments", "create", "--help"},
+			want:   []string{"NAME", "pm bahmni appointments create", "INTENT", "reverse_etl", "AVAILABILITY", "implemented", "APPROVAL", "plan -> preview -> approval -> execute", "FLAGS", "--patient-uuid", "--service-uuid", "--start-date-time"},
+			forbid: []string{"patients create", "drug_orders create"},
+		},
+		{
+			name:   "appointment list command",
+			args:   []string{"bahmni", "appointments", "list", "--help"},
+			want:   []string{"NAME", "pm bahmni appointments list", "INTENT", "etl", "AVAILABILITY", "implemented", "STREAM", "appointments", "appointment_date only"},
+			forbid: []string{"patient_uuid", "patients create"},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(tt.args, &stdout, &stderr)
+			if code != 0 {
+				t.Fatalf("Run(%v) code = %d stderr=%s stdout=%s", tt.args, code, stderr.String(), stdout.String())
+			}
+			out := stdout.String()
+			for _, want := range tt.want {
+				if !strings.Contains(out, want) {
+					t.Fatalf("help for %v missing %q:\n%s", tt.args, want, out)
+				}
+			}
+			for _, forbidden := range tt.forbid {
+				if strings.Contains(out, forbidden) {
+					t.Fatalf("help for %v unexpectedly included %q:\n%s", tt.args, forbidden, out)
+				}
+			}
+		})
+	}
+}
+
+func TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked(t *testing.T) {
+	surface := bahmniCommandSurface(t)
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+
+	for _, cmd := range surface.Commands {
+		cmd := cmd
+		t.Run(strings.ReplaceAll(cmd.Path, " ", "_"), func(t *testing.T) {
+			helpArgs := append([]string{"bahmni"}, strings.Fields(cmd.Path)...)
+			helpArgs = append(helpArgs, "--help")
+			var helpOut, helpErr bytes.Buffer
+			if code := cli.Run(helpArgs, &helpOut, &helpErr); code != 0 {
+				t.Fatalf("help Run(%v) code = %d stderr=%s stdout=%s", helpArgs, code, helpErr.String(), helpOut.String())
+			}
+			if !strings.Contains(helpOut.String(), "pm bahmni "+cmd.Path) {
+				t.Fatalf("command help for %q missing exact command path:\n%s", cmd.Path, helpOut.String())
+			}
+
+			runArgs := append([]string{"bahmni"}, strings.Fields(cmd.Path)...)
+			runArgs = append(runArgs, "--credential", "absent", "--root", root, "--json")
+			var stdout, stderr bytes.Buffer
+			code := cli.Run(runArgs, &stdout, &stderr)
+			if code == 0 {
+				t.Fatalf("Run(%v) code = 0, want credential lookup or explicit block", runArgs)
+			}
+			out := stdout.String() + stderr.String()
+			if cmd.Availability == "implemented" {
+				if !strings.Contains(out, `credential "absent" not found`) {
+					t.Fatalf("implemented command %q did not reach credential lookup:\nstdout=%s\nstderr=%s", cmd.Path, stdout.String(), stderr.String())
+				}
+				if strings.Contains(out, "unknown command") || strings.Contains(out, "connector_command_blocked") {
+					t.Fatalf("implemented command %q looked unregistered or blocked:\nstdout=%s\nstderr=%s", cmd.Path, stdout.String(), stderr.String())
+				}
+				return
+			}
+			for _, want := range []string{`"code": "connector_command_blocked"`, cmd.Path, cmd.Availability} {
+				if !strings.Contains(out, want) {
+					t.Fatalf("blocked command %q output missing %q:\nstdout=%s\nstderr=%s", cmd.Path, want, stdout.String(), stderr.String())
+				}
+			}
+			if strings.Contains(out, `credential "absent" not found`) {
+				t.Fatalf("blocked command %q attempted credential lookup first:\nstdout=%s\nstderr=%s", cmd.Path, stdout.String(), stderr.String())
+			}
+		})
+	}
+}
+
+func TestBahmniAppointmentAliasSuggestion(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"bahmni", "appoint", "list", "--credential", "absent", "--root", root, "--json"}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("appoint alias code = 0, want actionable usage error")
+	}
+	out := stdout.String() + stderr.String()
+	for _, want := range []string{"unknown command", "did you mean \"appointments list\""} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("appoint alias output missing %q:\nstdout=%s\nstderr=%s", want, stdout.String(), stderr.String())
+		}
+	}
+}
+
+func bahmniCommandSurface(t *testing.T) *connectors.CommandSurface {
+	t.Helper()
+	connector, ok := bundleregistry.New().Get("bahmni")
+	if !ok {
+		t.Fatal("bahmni connector not found")
+	}
+	provider, ok := connector.(connectors.CommandSurfaceProvider)
+	if !ok || provider.CommandSurface() == nil {
+		t.Fatal("bahmni command surface not found")
+	}
+	return provider.CommandSurface()
 }
 
 func runCLI(t *testing.T, args []string) (stdout string, stderr string) {
