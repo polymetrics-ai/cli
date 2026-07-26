@@ -28,7 +28,7 @@ Releases are fully automated by two tools wired together in `.github/workflows/r
 
 release-please reads the Conventional Commit prefixes since the last release and picks the bump:
 
-| Commit prefix | Semantic bump (>= 1.0.0) |
+| Commit prefix | Default bump in this repo |
 | --- | --- |
 | `feat:` | **minor** (e.g. `0.3.0` → `0.4.0`) |
 | `fix:` | **patch** (e.g. `0.3.1` → `0.3.2`) |
@@ -144,8 +144,8 @@ up the docs on `main`'s tip (see the caveat in step 5 above — the ref is `main
   `WEBSITE_DEPLOY_ENABLED` check — but the `deploy` job is skipped. So merging this coupling **does
   not** deploy anything by itself, and no website deploy happens until a release is actually cut with
   `WEBSITE_DEPLOY_ENABLED == 'true'`.
-- To reverse the coupling: delete the `website-release` job, or set `WEBSITE_DEPLOY_ENABLED` to a
-  value other than `'true'` to keep code releases from publishing the site.
+- To stop release-triggered website runs entirely, delete the `website-release` job. To keep those
+  runs from deploying publicly, set `WEBSITE_DEPLOY_ENABLED` to a value other than `'true'`.
 - Manual fallback (if the dispatch is ever removed or fails): after merging the `chore: release` PR,
   a maintainer runs `gh workflow run website.yml --ref main -f release_tag=v<version>` to publish
   the site for that release.

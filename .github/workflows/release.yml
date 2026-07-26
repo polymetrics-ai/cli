@@ -125,9 +125,9 @@ jobs:
     needs: [release-please, release-assets]
     # Couples the website publish to the code release: once release-assets has built
     # and verified the release binaries, dispatch the website workflow on main so the
-    # site rebuilds and deploys (still gated by WEBSITE_DEPLOY_ENABLED) carrying the
-    # release's docs. Reverse the coupling by deleting this job or setting the
-    # WEBSITE_DEPLOY_ENABLED variable to a value other than 'true'.
+    # site rebuilds with the release's docs. The dispatched workflow deploys only
+    # when WEBSITE_DEPLOY_ENABLED is exactly 'true'; delete this job to stop
+    # release-triggered website runs entirely.
     if: >-
       ${{
         always() &&
@@ -163,7 +163,7 @@ jobs:
 
           gh workflow run website.yml --repo "$GITHUB_REPOSITORY" --ref main -f release_tag="$TAG_NAME"
 
-          for attempt in 1 2 3 4 5 6 7 8 9 10 11 12; do
+          for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
             dispatched_run_id="$(find_existing_run)"
             if [ -n "$dispatched_run_id" ]; then
               echo "Dispatched website workflow for ${TAG_NAME}: ${dispatched_run_id}"

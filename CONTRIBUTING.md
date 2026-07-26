@@ -35,7 +35,7 @@ pnpm run build
 - Keep pull requests narrowly scoped.
 - Create branches as `<type>/<description>`, for example `feat/github-connector`, `fix/stripe-pagination`, or `docs/install-binaries`.
 - Link an issue in the PR body with `Closes #N` for completed work or `Refs #N` for stacked or incremental work.
-- Tool-owned branches keep their generator's namespace and are exempt from branch-name checks: `dependabot/*`, `release-please--branches--*`, `connector-architecture-v2`, and `fm/*` branches opened by the no-mistakes fleet manager. Dependabot, release-please, and `connector-architecture-v2` branches remain exempt from linked-issue checks; `fm/*` branches must still link an issue. Conventional Commit PR titles are still required on those branches.
+- Tool-owned branches keep their generator's namespace and are exempt from branch-name checks: `dependabot/*`, `release-please--branches--*`, `connector-architecture-v2`, and `fm/*` branches opened by the no-mistakes fleet manager. Dependabot and release-please branches are exempt from linked-issue checks; `connector-architecture-v2` and `fm/*` branches must still link an issue. Conventional Commit PR titles are still required on those branches.
 - Title PRs with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), for example `feat(connector): add linear` or `fix(github): repair pagination`.
 - Add or update tests for behavior changes.
 - Run `make verify` before requesting review.
