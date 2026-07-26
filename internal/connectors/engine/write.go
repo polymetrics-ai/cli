@@ -229,7 +229,7 @@ func writeActionRedactionValues(action WriteAction, rec connectors.Record) []str
 	for value := range seen {
 		values = append(values, value)
 	}
-	sort.Strings(values)
+	sortWriteRedactionLiterals(values)
 	return values
 }
 
@@ -269,12 +269,35 @@ func addWriteRedactionValue(value string, out map[string]bool) {
 }
 
 func redactWriteLiterals(text string, values []string) string {
-	for _, value := range values {
-		for _, literal := range writeRedactionLiteralForms(value) {
-			text = strings.ReplaceAll(text, literal, "redacted")
-		}
+	for _, literal := range writeRedactionLiterals(values) {
+		text = strings.ReplaceAll(text, literal, "redacted")
 	}
 	return text
+}
+
+func sortWriteRedactionLiterals(values []string) {
+	sort.Slice(values, func(i, j int) bool {
+		if len(values[i]) != len(values[j]) {
+			return len(values[i]) > len(values[j])
+		}
+		return values[i] < values[j]
+	})
+}
+
+func writeRedactionLiterals(values []string) []string {
+	seen := map[string]bool{}
+	literals := make([]string, 0, len(values)*4)
+	for _, value := range values {
+		for _, literal := range writeRedactionLiteralForms(value) {
+			if seen[literal] {
+				continue
+			}
+			seen[literal] = true
+			literals = append(literals, literal)
+		}
+	}
+	sortWriteRedactionLiterals(literals)
+	return literals
 }
 
 func writeRedactionLiteralForms(value string) []string {
