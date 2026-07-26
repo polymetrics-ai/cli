@@ -144,6 +144,37 @@ skills:
       - web-design-guidelines
     required_for:
       - parent-orchestration
+  cli_architecture_v2_delivery:
+    capabilities:
+      - parent-branch implementation truth classification
+      - program dependency and write-scope collision routing
+      - exact-head stacked integration evidence
+      - machine-contract and human-gate preservation
+    required_local_skills:
+      - cli-architecture-v2-delivery
+    preferred_local_skills:
+      - gsd-core
+      - golang-how-to
+      - golang-cli
+      - golang-testing
+      - golang-security
+      - golang-documentation
+    required_for:
+      - cli_architecture_v2_program
+      - cli_architecture_v2_tui
+  cli_architecture_v2_tui:
+    capabilities:
+      - CLI Architecture v2 program delivery
+      - Bubble Tea interaction and rendering design
+    required_local_skills:
+      - cli-architecture-v2-delivery
+      - bubble-tea-tui-design
+    preferred_local_skills:
+      - golang-context
+      - golang-concurrency
+      - golang-safety
+    required_for:
+      - cli_architecture_v2_tui
   docs_and_ux:
     capabilities:
       - help rendering
@@ -167,6 +198,14 @@ skills:
       - website-docs
       - docs-preview
 task_types:
+  cli_architecture_v2_program:
+    required_skill_groups: [cli_architecture_v2_delivery, orchestration, github_planning, review_disposition]
+    primary_agent: parent-issue-orchestrator
+    activation: active_owner
+    compact_skill: caveman
+  cli_architecture_v2_tui:
+    required_skill_groups: [cli_architecture_v2_delivery, cli_architecture_v2_tui, go_tdd, security_review, docs_and_ux]
+    primary_agent: issue-first-implementation-agent
   parent-orchestration:
     required_skill_groups: [orchestration, github_planning, review_disposition, security_review]
     primary_agent: parent-issue-orchestrator

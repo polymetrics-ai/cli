@@ -60,6 +60,24 @@ For doc comments, README/manual docs, CLI docs, generated docs, examples, or doc
 - `golang-cli` when docs describe CLI behavior
 - `golang-security` when docs mention credentials, auth scopes, writes, filesystem paths, command args, or data movement
 
+## CLI Architecture v2 program delivery
+
+For CLI Architecture v2, issue #397, parent PR #438, `feat/cli-architecture-v2`, its S0/P01-P22,
+P18B/D-TUI phases, direct or nested subissues, stacked integration, review debt, or parent readiness,
+load:
+
+- `cli-architecture-v2-delivery`
+
+Load it before planning, implementation, verification, review, integration, scheduling, auditing, or
+continuation. The skill routes program state, GSD/TDD, dependency/collision, exact-head review,
+Shepherd, and human gates; it does not replace domain skills. Go implementation still starts with
+`golang-how-to` and the applicable CLI, Cobra, Viper, testing, context, concurrency, security,
+observability, and documentation skills. Terminal UI phases also require `bubble-tea-tui-design`.
+Observability-only and docs-only phases do not require the Bubble Tea skill.
+
+Connector Architecture v2 is a separate sibling program. Do not use its migration handoff as the
+CLI Architecture v2 roadmap.
+
 ## Design and website skill routing
 
 ### Terminal UI and interactive CLI design

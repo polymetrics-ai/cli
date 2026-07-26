@@ -41,6 +41,10 @@ Polymetrics is a Go-only CLI monolith for dependency-free ETL, reverse ETL, conn
 - For runtime/RLM/Pi-agent work involving Podman, PostgreSQL, DragonflyDB/Redis-compatible
   coordination, Temporal, `pm runtime`, `pm rlm`, `pm agent image`, `pm worker`, or website
   architecture docs, read `.agents/agentic-delivery/references/runtime-rlm-website-integration.md`.
+- For CLI Architecture v2 work involving issue #397, PR #438, `feat/cli-architecture-v2`, its
+  phase/subissue graph, or parent readiness, load `cli-architecture-v2-delivery` before planning,
+  implementation, verification, review, or integration. Also load `bubble-tea-tui-design` for
+  terminal UI phases and the normal Go/CLI task skills.
 - Record required skills used in the GSD plan, worker handoff, or PR body.
 
 ## GSD Core Runtime For Agents

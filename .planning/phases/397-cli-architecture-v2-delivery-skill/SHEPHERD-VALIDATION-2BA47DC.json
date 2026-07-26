@@ -1,0 +1,25 @@
+{
+  "validator": "fresh non-human Codex verifier",
+  "mode": "bounded worker-slice Shepherd trajectory review",
+  "base": "21d195aff0c7bd60b3bf54f14b1ce165cec9e03f",
+  "head": "2ba47dc3036a2b063bd051d66d60b37ccea96bf6",
+  "checks": {
+    "correct_stage": 5,
+    "artifact_valid": 4,
+    "gates_respected": 5,
+    "real_progress": 4,
+    "no_hallucination": 5,
+    "no_conflict": 5
+  },
+  "step_score": 4.64,
+  "trajectory_geomean": 4.52,
+  "verdict": "PROCEED",
+  "reason": "The validator independently reproduced RED and GREEN, ran focused and full gates in an exact-head disposable checkout, found no scope or hard-gate breach, and authorized a bounded planning-artifact refresh before stacked handoff.",
+  "correction": "Persist the scored evidence, complete phase artifacts, then rerun exact-head Codex review and Shepherd after any final finding-fix commit.",
+  "limitations": [
+    "This evidence covers the pre-artifact head only.",
+    "It does not authorize parent integration, readiness, or default-branch completion.",
+    "Final exact-head review and Shepherd evidence belong in the draft stacked PR after the final head is immutable."
+  ],
+  "validated_at": "2026-07-23"
+}

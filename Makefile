@@ -5,7 +5,7 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate pi-model-routing-check pi-shepherd-guards-check
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate cli-architecture-v2-skill-check pi-model-routing-check pi-shepherd-guards-check
 
 # Packages covered by `lint`: the declarative connector architecture packages.
 # Paths are filtered to existing directories so optional local trees do not
@@ -75,6 +75,9 @@ lint:
 
 connectorgen-validate:
 	go run ./cmd/connectorgen validate internal/connectors/defs
+
+cli-architecture-v2-skill-check:
+	scripts/tests/cli-architecture-v2-delivery-skill.sh
 
 pi-model-routing-check:
 	scripts/tests/pi-model-routing.sh

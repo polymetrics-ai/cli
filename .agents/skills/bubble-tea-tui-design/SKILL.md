@@ -8,6 +8,11 @@ description: Design, implement, test, or review Polymetrics terminal interfaces 
 Use this skill to keep every Polymetrics terminal surface consistent, safe, keyboard-first,
 accessible, and compatible with its plain/JSON sibling.
 
+For work in CLI Architecture v2 issue #397 / PR #438, also load
+[`cli-architecture-v2-delivery`](../cli-architecture-v2-delivery/SKILL.md) for parent-branch, GSD,
+dependency, integration, review, and human-gate rules. This skill remains the source of truth for
+TUI interaction and rendering design.
+
 ## Start here
 
 1. Read `docs/design/tui-ux-design.md` and
