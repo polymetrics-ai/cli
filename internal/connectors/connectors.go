@@ -103,6 +103,7 @@ type DirectReadRequest struct {
 	Query        map[string]string
 	MaxBytes     int
 	OutputPolicy string
+	RedactFields []string
 }
 
 type OperationDirectReadRequest struct {
@@ -113,6 +114,7 @@ type OperationDirectReadRequest struct {
 	Body         map[string]any
 	MaxBytes     int
 	OutputPolicy string
+	RedactFields []string
 }
 
 type DirectReadResult struct {

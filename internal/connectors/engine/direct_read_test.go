@@ -311,6 +311,129 @@ func TestDirectReadJSONRedactedPolicyRedactsSensitiveFieldsRecursively(t *testin
 	}
 }
 
+func TestDirectReadClinicalJSONRedactedRequiresExplicitFields(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"id":"record-1","value":"kept without explicit policy","patient":{"uuid":"kept"},"apiToken":"secret-token"}`))
+	}))
+	defer srv.Close()
+
+	result, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/records/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/records/{id}",
+		PathParams:   map[string]string{"id": "record-1"},
+		OutputPolicy: "clinical_json_redacted",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body := result.Body.(map[string]any)
+	if body["value"] != "kept without explicit policy" {
+		t.Fatalf("value = %#v, want unchanged without explicit policy", body["value"])
+	}
+	if _, ok := body["patient"].(map[string]any); !ok {
+		t.Fatalf("patient = %#v, want unchanged object without explicit policy", body["patient"])
+	}
+	if _, ok := body["apiToken"]; ok || body["apiToken_redacted"] != true {
+		t.Fatalf("apiToken redaction = %+v, want generic secret redaction preserved", body)
+	}
+
+	result, err = DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/records/{id}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/records/{id}",
+		PathParams:   map[string]string{"id": "record-1"},
+		OutputPolicy: "clinical_json_redacted",
+		RedactFields: []string{"value", "patient"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead with explicit redact fields: %v", err)
+	}
+	body = result.Body.(map[string]any)
+	if _, ok := body["value"]; ok || body["value_redacted"] != true {
+		t.Fatalf("value redaction = %+v, want explicit redaction", body)
+	}
+	if _, ok := body["patient"]; ok || body["patient_redacted"] != true {
+		t.Fatalf("patient redaction = %+v, want explicit redaction", body)
+	}
+}
+
+func TestOperationDirectReadAppliesDeclaredSensitiveRedactFields(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet {
+			t.Fatalf("method = %s, want GET", r.Method)
+		}
+		if got := r.URL.Query().Get("q"); got != "synthetic" {
+			t.Fatalf("q = %q, want synthetic", got)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{
+			"results":[{
+				"uuid":"patient-opaque-ref",
+				"identifier":"SYN-12345",
+				"addressFieldValue":"Synthetic Village",
+				"person":{"display":"Synthetic Person","birthdate":"1990-01-02"}
+			}]
+		}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "bahmni",
+		HTTP: HTTPBase{URL: srv.URL},
+		Operations: []OperationSpec{{
+			ID:              "bahmni.patient_search",
+			Kind:            "rest_read",
+			Summary:         "Search patients",
+			Risk:            "high",
+			Approval:        "none",
+			OutputPolicy:    "json_redacted",
+			SensitivePolicy: &SensitivePolicySpec{RedactFields: []string{"identifier", "addressFieldValue", "display", "birthdate"}},
+			REST: &RESTOperationSpec{
+				Method:   http.MethodGet,
+				Path:     "/ws/rest/v1/bahmni/search/patient",
+				MaxBytes: 1024,
+			},
+		}},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodGet,
+			Path:   "/ws/rest/v1/bahmni/search/patient",
+			Operation: &SurfaceOperation{
+				Model:            "direct_read",
+				Status:           "blocked",
+				Risk:             "high",
+				BlockedByDefault: true,
+				Reason:           "typed operation metadata",
+			},
+		}}},
+	}
+
+	result, err := OperationDirectRead(context.Background(), b, connectors.OperationDirectReadRequest{
+		Operation: "bahmni.patient_search",
+		Query:     map[string]string{"q": "synthetic"},
+		MaxBytes:  1024,
+	}, nil)
+	if err != nil {
+		t.Fatalf("OperationDirectRead: %v", err)
+	}
+	body := result.Body.(map[string]any)
+	results := body["results"].([]any)
+	patient := results[0].(map[string]any)
+	for _, key := range []string{"identifier", "addressFieldValue"} {
+		if _, ok := patient[key]; ok || patient[key+"_redacted"] != true {
+			t.Fatalf("patient search body did not redact %s: %+v", key, patient)
+		}
+	}
+	person := patient["person"].(map[string]any)
+	for _, key := range []string{"display", "birthdate"} {
+		if _, ok := person[key]; ok || person[key+"_redacted"] != true {
+			t.Fatalf("patient person body did not redact %s: %+v", key, person)
+		}
+	}
+	if patient["uuid"] != "patient-opaque-ref" {
+		t.Fatalf("opaque patient uuid = %v, want retained", patient["uuid"])
+	}
+}
+
 func TestOperationDirectReadPOSTJSONBodyValidatesAndRedacts(t *testing.T) {
 	var sawBody map[string]any
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

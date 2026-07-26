@@ -48,6 +48,7 @@ type CommandSurfaceCommand struct {
 	Examples      []string
 	APISurface    []CommandSurfaceEndpointRef
 	OutputPolicy  string
+	RedactFields  []string
 	Risk          string
 	Approval      string
 	Notes         string

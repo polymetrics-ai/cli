@@ -16,6 +16,7 @@ import (
 const (
 	MaxDirectReadBytes          = 1 << 20
 	MaxOperationDirectReadBytes = 16 << 20
+	maxRecordPathArrayIndex     = 128
 )
 
 type Request struct {
@@ -128,7 +129,7 @@ func BuildWriteCommand(ctx context.Context, connector connectors.Connector, req 
 		Approval:              firstNonEmpty(cmd.Approval, "reverse ETL writes require plan, preview, approval, execute"),
 		ConfirmationChallenge: strings.TrimSpace(action.Confirm),
 		Record:                cloneRecord(record),
-		RedactedRecord:        redactRecord(record),
+		RedactedRecord:        redactRecordWithFields(record, cmd.RedactFields),
 	}
 	if req.Preview {
 		dryRunner, ok := connector.(connectors.DryRunWriter)
@@ -185,10 +186,10 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	}
 	err = connector.Read(ctx, readReq, connectors.LimitEmitter(limit, func(record connectors.Record) error {
 		result.Count++
-		return emit(record)
+		return emit(redactRecordWithFields(record, cmd.RedactFields))
 	}))
 	if err := connectors.IgnoreReadLimit(err); err != nil {
-		return Result{}, err
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	return result, nil
 }
@@ -276,7 +277,7 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	}
 	pathParams, query, err := directReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, err
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -295,9 +296,10 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 		Query:        query,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, err
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	return Result{
 		Connector:  connector.Name(),
@@ -322,7 +324,7 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	}
 	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
-		return Result{}, err
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
@@ -339,9 +341,10 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 		Body:         body,
 		MaxBytes:     maxBytes,
 		OutputPolicy: cmd.OutputPolicy,
+		RedactFields: cmd.RedactFields,
 	})
 	if err != nil {
-		return Result{}, err
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	return Result{Connector: connector.Name(), Command: cmd.Path, DirectRead: &direct}, nil
 }
@@ -422,7 +425,7 @@ func validateOperationDirectReadCommand(connector connectors.Connector, cmd conn
 
 func isSupportedDirectReadOutputPolicy(policy string) bool {
 	switch policy {
-	case "github_contents_file_metadata", "github_contents_directory", "json_redacted":
+	case "github_contents_file_metadata", "github_contents_directory", "json_redacted", "clinical_json_redacted":
 		return true
 	default:
 		return false
@@ -652,29 +655,102 @@ func operationDirectReadOverrides(cmd connectors.CommandSurfaceCommand, flags ma
 }
 
 func setBodyValue(body map[string]any, path string, value any) error {
+	parts, err := validateDottedTargetPath(path, "body field")
+	if err != nil {
+		return err
+	}
+	_, err = setDottedValue(body, parts, value, path)
+	return err
+}
+
+func validateDottedTargetPath(path, field string) ([]string, error) {
 	parts := strings.Split(path, ".")
 	for _, part := range parts {
-		if err := safety.ValidateIdentifier(part, "body field"); err != nil {
-			return err
+		if err := safety.ValidateIdentifier(part, field); err != nil {
+			return nil, err
 		}
 	}
-	cur := body
-	for _, part := range parts[:len(parts)-1] {
-		next, ok := cur[part]
-		if !ok {
-			nested := map[string]any{}
-			cur[part] = nested
-			cur = nested
-			continue
-		}
-		nested, ok := next.(map[string]any)
-		if !ok {
-			return fmt.Errorf("body field %q conflicts with existing non-object value", path)
-		}
-		cur = nested
+	return parts, nil
+}
+
+func setDottedValue(current any, parts []string, value any, fullPath string) (any, error) {
+	if len(parts) == 0 {
+		return value, nil
 	}
-	cur[parts[len(parts)-1]] = value
-	return nil
+	part := parts[0]
+	if index, ok, err := pathArrayIndex(part); err != nil {
+		return nil, err
+	} else if ok {
+		items, ok := current.([]any)
+		if !ok {
+			return nil, fmt.Errorf("body field %q conflicts with existing non-array value", fullPath)
+		}
+		if index > len(items) {
+			return nil, fmt.Errorf("body field %q uses sparse array index %d", fullPath, index)
+		}
+		if index == len(items) {
+			items = append(items, nil)
+		}
+		if len(parts) == 1 {
+			items[index] = value
+			return items, nil
+		}
+		child := items[index]
+		if child == nil {
+			child = newDottedContainer(parts[1])
+		}
+		updated, err := setDottedValue(child, parts[1:], value, fullPath)
+		if err != nil {
+			return nil, err
+		}
+		items[index] = updated
+		return items, nil
+	}
+
+	object, ok := current.(map[string]any)
+	if !ok {
+		return nil, fmt.Errorf("body field %q conflicts with existing non-object value", fullPath)
+	}
+	if len(parts) == 1 {
+		object[part] = value
+		return object, nil
+	}
+	child, ok := object[part]
+	if !ok {
+		child = newDottedContainer(parts[1])
+	}
+	updated, err := setDottedValue(child, parts[1:], value, fullPath)
+	if err != nil {
+		return nil, err
+	}
+	object[part] = updated
+	return object, nil
+}
+
+func newDottedContainer(nextPart string) any {
+	if _, ok, _ := pathArrayIndex(nextPart); ok {
+		return []any{}
+	}
+	return map[string]any{}
+}
+
+func pathArrayIndex(part string) (int, bool, error) {
+	for _, r := range part {
+		if r < '0' || r > '9' {
+			return 0, false, nil
+		}
+	}
+	if len(part) > 1 && strings.HasPrefix(part, "0") {
+		return 0, false, fmt.Errorf("body field array index %q must not have leading zeroes", part)
+	}
+	index, err := strconv.Atoi(part)
+	if err != nil {
+		return 0, false, fmt.Errorf("body field array index %q is invalid", part)
+	}
+	if index > maxRecordPathArrayIndex {
+		return 0, false, fmt.Errorf("body field array index %d exceeds max %d", index, maxRecordPathArrayIndex)
+	}
+	return index, true, nil
 }
 
 func stringifyCommandValue(value any) string {
@@ -692,7 +768,16 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 		}
 		allowed[flag.Name] = flag
 	}
-	record := connectors.Record{}
+	if err := validateRecordFlagTargets(cmd); err != nil {
+		return nil, err
+	}
+	type flagApplication struct {
+		name   string
+		flag   connectors.CommandSurfaceFlag
+		values []string
+		target string
+	}
+	applications := make([]flagApplication, 0, len(flags))
 	for name, values := range flags {
 		if len(values) == 0 {
 			continue
@@ -713,16 +798,58 @@ func recordOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]st
 				Reason:       fmt.Sprintf("flag --%s maps to unsupported target %q", name, flag.MapsTo),
 			}
 		}
-		if err := safety.ValidateIdentifier(target, "record field"); err != nil {
-			return nil, err
+		applications = append(applications, flagApplication{name: name, flag: flag, values: values, target: target})
+	}
+	sort.Slice(applications, func(i, j int) bool {
+		if applications[i].target == applications[j].target {
+			return applications[i].name < applications[j].name
 		}
-		value, err := coerceFlagValue(flag, values)
+		return applications[i].target < applications[j].target
+	})
+	record := connectors.Record{}
+	for _, app := range applications {
+		value, err := coerceFlagValue(app.flag, app.values)
 		if err != nil {
 			return nil, err
 		}
-		record[target] = value
+		if err := setRecordValue(record, app.target, value); err != nil {
+			return nil, err
+		}
 	}
 	return record, nil
+}
+
+func validateRecordFlagTargets(cmd connectors.CommandSurfaceCommand) error {
+	targets := map[string]string{}
+	for _, flag := range cmd.Flags {
+		target, ok := strings.CutPrefix(flag.MapsTo, "record.")
+		if !ok || target == "" {
+			continue
+		}
+		parts, err := validateDottedTargetPath(target, "record field")
+		if err != nil {
+			return err
+		}
+		normalized := strings.Join(parts, ".")
+		if prior := targets[normalized]; prior != "" {
+			return fmt.Errorf("flags --%s and --%s both map to record.%s", prior, flag.Name, normalized)
+		}
+		for existing, prior := range targets {
+			if dottedPathPrefix(existing, normalized) || dottedPathPrefix(normalized, existing) {
+				return fmt.Errorf("flags --%s and --%s have conflicting record mappings", prior, flag.Name)
+			}
+		}
+		targets[normalized] = flag.Name
+	}
+	return nil
+}
+
+func dottedPathPrefix(parent, child string) bool {
+	return strings.HasPrefix(child, parent+".")
+}
+
+func setRecordValue(record connectors.Record, path string, value any) error {
+	return setBodyValue(map[string]any(record), path, value)
 }
 
 func coerceFlagValue(flag connectors.CommandSurfaceFlag, values []string) (any, error) {
@@ -810,25 +937,112 @@ func cloneRecord(in connectors.Record) connectors.Record {
 }
 
 func redactRecord(in connectors.Record) connectors.Record {
+	return redactRecordWithFields(in, nil)
+}
+
+func redactCommandError(err error, fields []string, req Request) error {
+	if err == nil {
+		return nil
+	}
+	text := safety.RedactErrorText(err.Error())
+	for _, values := range req.Flags {
+		for _, value := range values {
+			text = redactLiteral(text, value)
+		}
+	}
+	explicit := explicitRedactFieldSet(fields)
+	for key, value := range req.Config.Config {
+		if explicit[normalizeRecordFieldName(key)] || explicit[compactRecordFieldName(key)] || isSensitiveRecordField(key) || strings.Contains(compactRecordFieldName(key), "patient") {
+			text = redactLiteral(text, value)
+		}
+	}
+	return errors.New(text)
+}
+
+func redactLiteral(text, value string) string {
+	value = strings.TrimSpace(value)
+	if value == "" || value == "***" {
+		return text
+	}
+	return strings.ReplaceAll(text, value, "***")
+}
+
+func redactRecordWithFields(in connectors.Record, fields []string) connectors.Record {
+	explicit := explicitRedactFieldSet(fields)
 	out := make(connectors.Record, len(in))
 	for k, v := range in {
-		if isSensitiveRecordField(k) {
-			out[k] = "***"
+		out[k] = redactValueForField(k, v, explicit)
+	}
+	return out
+}
+
+func redactValueForField(field string, value any, explicit map[string]bool) any {
+	if isSensitiveRecordField(field) || explicit[normalizeRecordFieldName(field)] || explicit[compactRecordFieldName(field)] {
+		return "***"
+	}
+	switch typed := value.(type) {
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for k, v := range typed {
+			out[k] = redactValueForField(k, v, explicit)
+		}
+		return out
+	case connectors.Record:
+		return redactRecordWithFields(typed, redactFieldsFromSet(explicit))
+	case []any:
+		out := make([]any, len(typed))
+		for i, v := range typed {
+			out[i] = redactValueForField("", v, explicit)
+		}
+		return out
+	case []connectors.Record:
+		out := make([]connectors.Record, len(typed))
+		for i, v := range typed {
+			out[i] = redactRecordWithFields(v, redactFieldsFromSet(explicit))
+		}
+		return out
+	default:
+		return value
+	}
+}
+
+func redactFieldsFromSet(explicit map[string]bool) []string {
+	out := make([]string, 0, len(explicit))
+	for field := range explicit {
+		out = append(out, field)
+	}
+	return out
+}
+
+func explicitRedactFieldSet(fields []string) map[string]bool {
+	out := make(map[string]bool, len(fields))
+	for _, field := range fields {
+		field = strings.TrimSpace(field)
+		if field == "" {
 			continue
 		}
-		out[k] = v
+		out[normalizeRecordFieldName(field)] = true
+		out[compactRecordFieldName(field)] = true
 	}
 	return out
 }
 
 func isSensitiveRecordField(name string) bool {
-	normalized := strings.ToLower(strings.ReplaceAll(name, "-", "_"))
+	normalized := normalizeRecordFieldName(name)
 	for _, marker := range []string{"token", "secret", "password", "private_key", "api_key", "key", "body", "comment", "content", "payload", "inputs", "download", "clone", "media_url", "data_file", "media_file", "file_path"} {
 		if strings.Contains(normalized, marker) {
 			return true
 		}
 	}
 	return false
+}
+
+func normalizeRecordFieldName(name string) string {
+	return strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
+}
+
+func compactRecordFieldName(name string) string {
+	return strings.ReplaceAll(normalizeRecordFieldName(name), "_", "")
 }
 
 func firstNonEmpty(values ...string) string {

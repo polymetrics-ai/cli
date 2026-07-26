@@ -1,0 +1,26 @@
+{
+  "record": {
+    "diagnosis": {
+      "nonCoded": "Synthetic condition"
+    },
+    "encounter": "encounter-synthetic-uuid",
+    "condition": "condition-uuid",
+    "certainty": "CONFIRMED",
+    "patient": "patient-synthetic-uuid",
+    "rank": 1
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ws/rest/v1/patientdiagnoses",
+    "body": {
+      "diagnosis": {
+        "nonCoded": "Synthetic condition"
+      },
+      "encounter": "encounter-synthetic-uuid",
+      "condition": "condition-uuid",
+      "certainty": "CONFIRMED",
+      "patient": "patient-synthetic-uuid",
+      "rank": 1
+    }
+  }
+}

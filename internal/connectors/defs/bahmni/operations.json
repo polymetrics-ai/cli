@@ -3,9 +3,9 @@
     {
       "id": "bahmni.patient_search",
       "kind": "rest_read",
-      "summary": "Typed Bahmni patient search (POST /ws/rest/v1/bahmnicore/search/patient)",
-      "description": "Executable schema-gated Bahmni patient search: connector-authored flags map to an allow-listed JSON body, the response is bounded, and no raw request body or generic HTTP flag is exposed.",
-      "source_url": "https://github.com/Bahmni/bahmni-core",
+      "summary": "Search patients with the pinned bahmni-commons GET patient search route.",
+      "description": "Version-pinned bahmni-commons 1.1.0 GET /bahmni/search/patient typed read. Query parameters are allow-listed and declared sensitive fields are redacted from output.",
+      "source_url": "https://github.com/Bahmni/openmrs-module-bahmnicommons/blob/1.1.0/bahmni-commons-omod/src/main/java/org/bahmni/module/bahmnicommons/web/v1_0/controller/search/BahmniPatientSearchController.java#L30-L50",
       "risk": "high",
       "approval": "none: read-only POST query with schema-gated body and bounded JSON output; clinical PHI fields are not generally field-redacted by the current engine",
       "output_policy": "json_redacted",
@@ -14,47 +14,21 @@
         "input_mode": "inline",
         "redact_fields": [
           "identifier",
-          "addressFieldValue"
+          "addressFieldValue",
+          "display",
+          "givenName",
+          "middleName",
+          "familyName",
+          "birthDate",
+          "deathDate"
         ],
         "transform": "none",
         "approval_mode": "none"
       },
       "rest": {
-        "method": "POST",
-        "path": "/ws/rest/v1/bahmnicore/search/patient",
-        "content_type": "application/json",
-        "max_bytes": 1048576,
-        "body_schema": {
-          "type": "object",
-          "additionalProperties": false,
-          "minProperties": 1,
-          "properties": {
-            "q": {
-              "type": "string",
-              "description": "Free-text patient name or identifier search term."
-            },
-            "identifier": {
-              "type": "string",
-              "description": "Exact patient identifier."
-            },
-            "addressFieldName": {
-              "type": "string",
-              "description": "Address field to filter on, e.g. city_village."
-            },
-            "addressFieldValue": {
-              "type": "string",
-              "description": "Address field value to match."
-            },
-            "loginLocationUuid": {
-              "type": "string",
-              "description": "Login/deployment location UUID scoping the search."
-            },
-            "startIndex": {
-              "type": "integer",
-              "description": "Zero-based result offset for bounded paging."
-            }
-          }
-        }
+        "method": "GET",
+        "path": "/ws/rest/v1/bahmni/search/patient",
+        "max_bytes": 1048576
       }
     }
   ]

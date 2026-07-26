@@ -5,7 +5,11 @@
   "required": [
     "base_url",
     "username",
-    "password"
+    "password",
+    "patient_query",
+    "patient_uuid",
+    "lab_result_concepts",
+    "appointment_date"
   ],
   "properties": {
     "base_url": {
@@ -25,15 +29,19 @@
     },
     "patient_query": {
       "type": "string",
-      "description": "Identifier or name search term used to enumerate the patients stream (OpenMRS patient search q)."
+      "description": "Required identifier or name search term for the patients stream; OpenMRS REST does not support unqualified patient get-all in the pinned STANDARD/LITE stack."
     },
     "patient_uuid": {
       "type": "string",
-      "description": "Patient UUID context used to scope patient-linked streams (encounters, observations, visits, orders, lab results, appointments, diagnoses)."
+      "description": "Required patient UUID context used to scope patient-linked streams that require patientUuid/patient query parameters (encounters, observations, visits, orders, lab results, diagnoses)."
     },
     "appointment_date": {
       "type": "string",
-      "description": "ISO-8601 date/datetime used to scope the appointments stream to a single scheduling day; without it (or patient_uuid) the appointments read is not scoped and returns the deployment's whole appointment book in one response."
+      "description": "Required appointment day scope formatted exactly as yyyy-MM-ddTHH:mm:ss.SSS for appointments 2.0.2 forDate parsing; patient_uuid does not scope this route."
+    },
+    "lab_result_concepts": {
+      "type": "string",
+      "description": "Required comma-separated Bahmni concept names for lab_results; BahmniObservationsController 1.2.1 requires at least one concept query value."
     }
   }
 }
