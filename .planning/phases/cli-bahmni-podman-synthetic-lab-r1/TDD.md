@@ -20,6 +20,10 @@
 | E | `verify --offline` | verifier absent | validates fixture, Unicode name, Karthik fixture | green |
 | E | live `health`, `seed`, `verify` | stack absent/API failures | loopback services healthy and endpoints return synthetic records | green |
 | E | browser Unicode/login check | Chrome cannot open/login/render | Bahmni dashboard login succeeds; Unicode heading `Chikitsalayaḥ` renders | green |
+| F | `check-synthetic --json` after staff expansion | staff fixture absent, non-synthetic identifiers, real contacts, or forbidden identity tokens | validates expanded doctors/staff roster as synthetic and contact-free | green offline |
+| F | `seed --dry-run --json` after staff expansion | planned counts do not include staff/providers | dry-run reports 87 providers = 23 clinical + 64 staff, 46 departments, 9 patients | green offline |
+| F | `seed --json` after staff expansion | new staff records fail OpenMRS API create/search | new `providers_created` count equals unseeded staff records; rerun creates zero records | blocked pending connector clearance |
+| F | `verify` after staff expansion | provider count remains old or staff missing | live provider count equals doctors plus extended staff roster | blocked pending connector clearance |
 
 ## Evidence log
 
@@ -29,3 +33,6 @@
 - 2026-07-26: final idempotency rerun passed with `created_nonzero={}` and `conditions_created=0`.
 - 2026-07-26: live verify passed for Unicode location, Karthik completed cold/fever visit, fever observation, and condition+note presence.
 - 2026-07-26: `chrome-devtools-axi` verified Bahmni real local login and rendered `Chikitsalayaḥ` with final code point `U+1E25`.
+- 2026-07-26: New staff-roster request accepted under Slice F; plan/TDD/verification updated before fixture/seeder edits.
+- 2026-07-26: User requested coordination with active connector verification; no live restart/reseed/container or current dataset mutation is allowed until `cli-bahmni-connector-r1` finishes. Offline-only work continues.
+- 2026-07-26: Offline staff validation passed: `check-synthetic --json` ok for 87 providers (23 clinical + 64 staff) and 9 patients; `verify --offline` ok; `seed --dry-run --json` planned 87 providers and 46 departments without live API writes.

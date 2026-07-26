@@ -379,6 +379,11 @@ def normalize_name(value: str) -> str:
     return re.sub(r"[^a-z]", "", value.lower())
 
 
+def provider_records(seed: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return every synthetic staff/provider record represented in OpenMRS as a Provider."""
+    return list(seed.get("providers", [])) + list(seed.get("staff", []))
+
+
 def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
     seed = load_json(SEED_PATH)
     failures: list[str] = []
@@ -386,18 +391,19 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
         failures.append("dataset synthetic flag is false")
     if seed.get("organization", {}).get("name") != "Chikitsalayaḥ":
         failures.append("synthetic hospital name must be exactly Chikitsalayaḥ")
-    if "SPARSH" in json.dumps(seed.get("providers", []), ensure_ascii=False):
-        failures.append("provider fixture contains SPARSH")
-    for provider in seed.get("providers", []):
+    all_providers = provider_records(seed)
+    if "SPARSH" in json.dumps(all_providers, ensure_ascii=False):
+        failures.append("staff/provider fixture contains SPARSH")
+    for provider in all_providers:
         ident = provider.get("identifier", "")
-        if not ident.startswith("SYN-PROV-"):
-            failures.append(f"provider identifier not synthetic: {ident}")
+        if not ident.startswith(("SYN-PROV-", "SYN-STAFF-")):
+            failures.append(f"staff/provider identifier not synthetic: {ident}")
         full = f"{provider.get('given_name', '')} {provider.get('family_name', '')}"
         norm = normalize_name(full)
         if any(token in norm for token in ["doctor", "sparsh", "hospital", "praveen", "abhijit"]):
-            failures.append(f"provider {ident} contains a forbidden identity token")
+            failures.append(f"staff/provider {ident} contains a forbidden identity token")
         if not any(marker in provider.get("family_name", "").lower() for marker in ["demo", "test", "sim", "mock", "fict", "synth"]):
-            failures.append(f"provider {ident} family name is not obviously synthetic")
+            failures.append(f"staff/provider {ident} family name is not obviously synthetic")
     for patient in seed.get("patients", []):
         ident = patient.get("identifier", "")
         if not ident.startswith("SYN-HEN-"):
@@ -422,17 +428,19 @@ def check_synthetic(args: argparse.Namespace) -> dict[str, Any]:
             # Compare normalized synthetic provider names against live page text without
             # printing or storing real names.
             page_norm = normalize_name(html)
-            for provider in seed.get("providers", []):
+            for provider in all_providers:
                 full_norm = normalize_name(f"{provider['given_name']} {provider['family_name']}")
                 if full_norm and full_norm in page_norm:
-                    failures.append(f"provider {provider['identifier']} collides with online source text")
+                    failures.append(f"staff/provider {provider['identifier']} collides with online source text")
         except Exception as exc:  # pragma: no cover - network optional
             failures.append(f"online source check failed: {type(exc).__name__}")
 
     result = {
         "ok": not failures,
         "dataset_id": seed.get("dataset_id"),
-        "providers_checked": len(seed.get("providers", [])),
+        "providers_checked": len(all_providers),
+        "clinical_providers_checked": len(seed.get("providers", [])),
+        "staff_checked": len(seed.get("staff", [])),
         "patients_checked": len(seed.get("patients", [])),
         "online_source_checked": online_checked,
         "failures": failures,
@@ -816,7 +824,9 @@ def seed(args: argparse.Namespace) -> None:
             "planned_counts": {
                 "departments": len(seed_data["departments"]),
                 "service_locations": len(seed_data["service_locations"]),
-                "providers": len(seed_data["providers"]),
+                "providers": len(provider_records(seed_data)),
+                "clinical_providers": len(seed_data["providers"]),
+                "staff": len(seed_data.get("staff", [])),
                 "patients": len(seed_data["patients"]),
                 "appointment_per_patient": 1,
                 "visit_per_patient": 1,
@@ -858,7 +868,7 @@ def seed(args: argparse.Namespace) -> None:
     for service_location in seed_data["service_locations"]:
         ensure_location(api, service_location, parent_location, summary)
 
-    provider_uuid_by_identifier = {provider["identifier"]: ensure_provider(api, provider, summary) for provider in seed_data["providers"]}
+    provider_uuid_by_identifier = {provider["identifier"]: ensure_provider(api, provider, summary) for provider in provider_records(seed_data)}
 
     base_date = dt.datetime(2026, 1, 15, 9, 0, tzinfo=dt.timezone.utc)
     for index, patient in enumerate(seed_data["patients"]):
@@ -990,7 +1000,9 @@ def verify(args: argparse.Namespace) -> None:
         "pin": load_json(PIN_PATH)["official_commit"],
         "dataset_id": seed_data["dataset_id"],
         "departments": len(seed_data["departments"]),
-        "providers": len(seed_data["providers"]),
+        "providers": len(provider_records(seed_data)),
+        "clinical_providers": len(seed_data["providers"]),
+        "staff": len(seed_data.get("staff", [])),
         "patients": len(seed_data["patients"]),
         "module_families_seeded": len(support["supported_and_seeded"]),
         "synthetic_check_ok": synthetic["ok"],
@@ -1033,7 +1045,7 @@ def verify(args: argparse.Namespace) -> None:
             if fhir_id:
                 _, condition_bundle = api.fhir("/Condition", params={"patient": fhir_id})
                 counts["conditions"] += int(condition_bundle.get("total", 0) or 0)
-    for provider in seed_data["providers"]:
+    for provider in provider_records(seed_data):
         if api.results("/provider", q=provider["identifier"], v="default", limit=5):
             counts["providers"] += 1
     _, appointments = api.rest("/appointments")
@@ -1068,7 +1080,7 @@ def verify(args: argparse.Namespace) -> None:
             _, condition_bundle = api.fhir("/Condition", params={"patient": patient_id})
             karthik_live["cold_fever_conditions_found"] = condition_bundle.get("total", 0) > 0 and cold_fever_note_found
 
-    live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(seed_data["providers"])
+    live_ok = counts["patients"] == len(seed_data["patients"]) and counts["providers"] == len(provider_records(seed_data))
     live_ok = live_ok and unicode_location_present and all(karthik_live.values())
     result = {
         "ok": live_ok,

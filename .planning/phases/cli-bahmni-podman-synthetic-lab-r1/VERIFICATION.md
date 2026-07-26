@@ -36,6 +36,16 @@
   - Karthik live checks all true: patient found, completed visit found, fever observation found, cold/fever condition+note found.
 - [x] Known API limitation recorded: pinned FHIR2 Condition create accepts code/text but read/search does not echo code; seed treats condition presence as idempotency guard and stores cold/fever detail in encounter observations.
 
+## Extended staff roster checks (Slice F)
+
+- [x] `check-synthetic --json` reports expanded staff/provider totals with no identity/contact failures: 87 providers checked (23 clinical + 64 staff), 9 patients.
+- [x] `verify --offline` reports expanded provider count and unchanged 9 synthetic patients.
+- [x] `seed --dry-run --json` reports planned non-mutating counts: 87 providers, 23 clinical providers, 64 staff, 46 departments, 9 patients.
+- [ ] **Blocked pending connector clearance:** Live `seed --json` creates missing synthetic staff/provider records without printing secrets.
+- [ ] **Blocked pending connector clearance:** Second live `seed --json` is idempotent with no nonzero `*_created` counters.
+- [ ] **Blocked pending connector clearance:** Live `verify` passes with provider count equal to fixture total and Karthik checks still true.
+- [ ] **Blocked pending connector clearance:** Spot-check OpenMRS/Bahmni provider search for a synthetic staff role such as nursing or management.
+
 ## Final repo gates
 
 - [x] `gofmt -w cmd internal` not applicable: docs/scripts/lab fixture only, no Go edits.

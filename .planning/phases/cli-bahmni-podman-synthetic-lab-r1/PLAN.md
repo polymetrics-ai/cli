@@ -18,7 +18,8 @@
 3. Local runtime in a task-owned temp directory with official Bahmni deployment material cloned at the pinned commit and generated Podman compose adaptations.
 4. Healthy loopback-only lab left running for captain inspection.
 5. Synthetic hospital name exactly `Chikitsalayaḥ`, plus Karthik synthetic cold/fever completed visit fixture and live verification.
-6. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
+6. Extended synthetic staff roster covering doctors, nursing, allied health, diagnostics, pharmacy, operations, revenue cycle, facilities, management, IT, quality, security, and support roles.
+7. Commit containing only reproducible lab assets, not cloned upstream source or local secrets.
 
 ## Work slices
 
@@ -81,6 +82,14 @@
 - Run Podman stack health, seed, verify endpoints, and browser login/navigation verification with `chrome-devtools-axi`.
 - Record dataset counts, known gaps, URLs, pin, and local login procedure without exposing credentials.
 - Commit lab assets on the task branch.
+
+### Slice F — Extended synthetic hospital staff roster
+
+- Use `scripts/gsd prompt plan-phase cli-bahmni-podman-synthetic-lab-r1 --skip-research` as the repo-local GSD entry point; `programming-loop` remains unavailable, so continue the recorded manual TDD fallback.
+- Expand the fixture with a dedicated `staff` roster seeded as OpenMRS Provider/Person records, using synthetic `SYN-STAFF-*` identifiers and obviously synthetic names only.
+- Cover realistic hospital staffing breadth: consultant/resident doctors, nurses, nurse supervisors, lab technicians, radiology technicians, pharmacists, billing/insurance, front office, medical records, operations, management, HR/finance/procurement, IT, biomedical engineering, facilities, housekeeping, security, nutrition, ambulance/transport, quality/compliance, infection control, and patient relations.
+- Preserve the original patient data and Karthik cold/fever visit; do not introduce real SPARSH people, contacts, phone numbers, or emails.
+- Keep seeding idempotent by reusing the existing provider preflight search for every synthetic staff record.
 
 ## Risks and mitigations
 

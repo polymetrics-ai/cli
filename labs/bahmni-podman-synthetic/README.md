@@ -43,6 +43,8 @@ Fixture: `fixtures/synthetic-seed.json`.
 
 - Hospital/location name is exactly `Chikitsalayaḥ`.
 - Patients use `SYN-HEN-*` identifiers and obviously synthetic family names such as `Syntheticcase`, `Testpatient`, and `Democase`; `check-synthetic` fails if a family name carries no synthetic marker.
+- Clinical providers use `SYN-PROV-*`; the extended non-patient staff roster uses `SYN-STAFF-*` and is represented as OpenMRS Provider/Person records for connector inspection.
+- Staff coverage includes consultant/resident doctors, nursing, allied health, lab, radiology, pharmacy, front office, billing, medical records, administration, HR, finance, procurement, IT, biomedical engineering, facilities, housekeeping, security, dietary, ambulance/transport, CSSD, infection control, quality/compliance, and patient relations.
 - Contact defaults are deliberately invalid placeholders: `000-000-0000` and `.invalid` emails.
 - Karthik test patient: `SYN-HEN-0009 - Karthik Syntheticcase`.
 - Karthik has a completed OPD cold/fever visit, fever temperature observation, chief complaint text, diagnosis text, completed visit stop time, appointments, lab/procedure/radiology/medication orders, allergy placeholder, and FHIR condition presence.
@@ -64,16 +66,17 @@ The repository `.gitignore` and lab `.gitignore` exclude `local-contact-override
 
 ## Verification
 
-Recommended local checks:
+Recommended local checks. During active connector live verification, use only the static/offline commands until the connector owner clears a live reseed:
 
 ```bash
 bash -n labs/bahmni-podman-synthetic/bin/bahmni-lab
 python3 -m py_compile labs/bahmni-podman-synthetic/lib/labctl.py
 labs/bahmni-podman-synthetic/bin/bahmni-lab check-synthetic --json
 labs/bahmni-podman-synthetic/bin/bahmni-lab verify --offline
-labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json
-labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json   # idempotency rerun
-labs/bahmni-podman-synthetic/bin/bahmni-lab verify
+# Live mutation gates; run only after explicit clearance from active connector verification:
+# labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json
+# labs/bahmni-podman-synthetic/bin/bahmni-lab seed --json   # idempotency rerun
+# labs/bahmni-podman-synthetic/bin/bahmni-lab verify
 ```
 
 `verify` checks the fixture, live OpenMRS/FHIR records, Unicode hospital name, Karthik patient, completed visit, fever observation, cold/fever note, and FHIR condition presence.

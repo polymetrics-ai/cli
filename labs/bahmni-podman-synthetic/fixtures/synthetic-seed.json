@@ -35,7 +35,31 @@
     "Urology and Nephrology",
     "Cosmetology and Cosmetic Surgery",
     "General Surgery",
-    "Head and Neck Surgery"
+    "Head and Neck Surgery",
+    "Nursing Services",
+    "Operation Theatre Nursing",
+    "Pharmacy",
+    "Billing and Insurance",
+    "Front Office and Registration",
+    "Medical Records",
+    "Hospital Administration",
+    "Human Resources",
+    "Finance",
+    "Procurement and Stores",
+    "Information Technology",
+    "Biomedical Engineering",
+    "Facilities and Maintenance",
+    "Housekeeping",
+    "Security",
+    "Dietary and Nutrition",
+    "Ambulance and Transport",
+    "Quality and Compliance",
+    "Infection Control",
+    "Patient Relations",
+    "CSSD and Sterilization",
+    "Physiotherapy",
+    "Blood Bank",
+    "Mortuary Services"
   ],
   "service_locations": [
     "Synthetic Emergency Receiving",
@@ -143,6 +167,94 @@
       "gender": "M",
       "birthdate": "1975-01-19",
       "department": "Emergency Medicine"
+    },
+    {
+      "identifier": "SYN-PROV-ANES-013",
+      "given_name": "Malen",
+      "family_name": "Demosedate",
+      "gender": "M",
+      "birthdate": "1980-06-12",
+      "department": "Anaesthesiology"
+    },
+    {
+      "identifier": "SYN-PROV-BARI-014",
+      "given_name": "Nira",
+      "family_name": "Testscale",
+      "gender": "F",
+      "birthdate": "1982-09-19",
+      "department": "Bariatric Sciences"
+    },
+    {
+      "identifier": "SYN-PROV-BMT-015",
+      "given_name": "Orin",
+      "family_name": "Simmarrow",
+      "gender": "M",
+      "birthdate": "1978-12-03",
+      "department": "Bone Marrow Transplant"
+    },
+    {
+      "identifier": "SYN-PROV-DENT-016",
+      "given_name": "Piya",
+      "family_name": "Mockjaw",
+      "gender": "F",
+      "birthdate": "1986-02-16",
+      "department": "Maxillofacial and Dental Surgery"
+    },
+    {
+      "identifier": "SYN-PROV-DENT-017",
+      "given_name": "Rohan",
+      "family_name": "Fictatooth",
+      "gender": "M",
+      "birthdate": "1984-05-08",
+      "department": "Dentistry"
+    },
+    {
+      "identifier": "SYN-PROV-RONC-018",
+      "given_name": "Sima",
+      "family_name": "Synthbeam",
+      "gender": "F",
+      "birthdate": "1981-11-24",
+      "department": "Radiation Oncology"
+    },
+    {
+      "identifier": "SYN-PROV-NIR-019",
+      "given_name": "Tovan",
+      "family_name": "Demonerve",
+      "gender": "M",
+      "birthdate": "1979-01-27",
+      "department": "Neuro Intervention Radiology"
+    },
+    {
+      "identifier": "SYN-PROV-DIAL-020",
+      "given_name": "Veda",
+      "family_name": "Testdialysis",
+      "gender": "F",
+      "birthdate": "1983-04-20",
+      "department": "Dialysis"
+    },
+    {
+      "identifier": "SYN-PROV-URO-021",
+      "given_name": "Wyan",
+      "family_name": "Simrenal",
+      "gender": "M",
+      "birthdate": "1977-07-13",
+      "department": "Urology and Nephrology"
+    },
+    {
+      "identifier": "SYN-PROV-COSM-022",
+      "given_name": "Xara",
+      "family_name": "Mockskin",
+      "gender": "F",
+      "birthdate": "1985-10-09",
+      "department": "Cosmetology and Cosmetic Surgery"
+    },
+    {
+      "identifier": "SYN-PROV-HNS-023",
+      "given_name": "Yori",
+      "family_name": "Fictaneck",
+      "gender": "M",
+      "birthdate": "1980-03-30",
+      "department": "Head and Neck Surgery"
     }
   ],
   "patients": [
@@ -312,5 +424,647 @@
     "patient_phone_placeholder": "000-000-0000",
     "patient_email_placeholder": "karthik.synthetic.invalid@example.invalid",
     "privacy_note": "Placeholders are intentionally invalid and synthetic. Do not commit real contact data; use gitignored local-contact-overrides.json or manual UI entry for human-only contact tests."
-  }
+  },
+  "staff": [
+    {
+      "identifier": "SYN-STAFF-NURS-001",
+      "given_name": "Aditi",
+      "family_name": "Demonurse",
+      "gender": "F",
+      "birthdate": "1987-01-05",
+      "department": "Nursing Services",
+      "staff_role": "Chief Nursing Officer",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-002",
+      "given_name": "Biren",
+      "family_name": "Testcharge",
+      "gender": "M",
+      "birthdate": "1989-02-14",
+      "department": "Nursing Services",
+      "staff_role": "Ward Charge Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-003",
+      "given_name": "Charu",
+      "family_name": "Simtriage",
+      "gender": "F",
+      "birthdate": "1991-03-21",
+      "department": "Emergency Medicine",
+      "staff_role": "Emergency Triage Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-004",
+      "given_name": "Deepa",
+      "family_name": "Mockicu",
+      "gender": "F",
+      "birthdate": "1988-04-12",
+      "department": "Critical Care Medicine",
+      "staff_role": "ICU Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-005",
+      "given_name": "Evan",
+      "family_name": "Fictward",
+      "gender": "M",
+      "birthdate": "1990-05-09",
+      "department": "Nursing Services",
+      "staff_role": "Inpatient Ward Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-006",
+      "given_name": "Farah",
+      "family_name": "Synthpeds",
+      "gender": "F",
+      "birthdate": "1992-06-18",
+      "department": "Pediatric Intensive Care",
+      "staff_role": "Pediatric Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-007",
+      "given_name": "Garen",
+      "family_name": "Demoot",
+      "gender": "M",
+      "birthdate": "1986-07-22",
+      "department": "Operation Theatre Nursing",
+      "staff_role": "Operating Room Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-008",
+      "given_name": "Hira",
+      "family_name": "Testdial",
+      "gender": "F",
+      "birthdate": "1993-08-11",
+      "department": "Dialysis",
+      "staff_role": "Dialysis Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-009",
+      "given_name": "Ishan",
+      "family_name": "Simdischarge",
+      "gender": "M",
+      "birthdate": "1985-09-30",
+      "department": "Nursing Services",
+      "staff_role": "Discharge Coordinator Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-NURS-010",
+      "given_name": "Jaya",
+      "family_name": "Mockeducate",
+      "gender": "F",
+      "birthdate": "1984-10-28",
+      "department": "Nursing Services",
+      "staff_role": "Patient Education Nurse",
+      "staff_category": "Nursing"
+    },
+    {
+      "identifier": "SYN-STAFF-LAB-011",
+      "given_name": "Ketan",
+      "family_name": "Fictphleb",
+      "gender": "M",
+      "birthdate": "1994-01-17",
+      "department": "Clinical Laboratory",
+      "staff_role": "Phlebotomist",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-LAB-012",
+      "given_name": "Lina",
+      "family_name": "Synthmicro",
+      "gender": "F",
+      "birthdate": "1988-02-25",
+      "department": "Clinical Laboratory",
+      "staff_role": "Microbiology Technician",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-LAB-013",
+      "given_name": "Mohan",
+      "family_name": "Demochem",
+      "gender": "M",
+      "birthdate": "1987-03-13",
+      "department": "Clinical Laboratory",
+      "staff_role": "Biochemistry Technician",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-LAB-014",
+      "given_name": "Nadia",
+      "family_name": "Testpath",
+      "gender": "F",
+      "birthdate": "1986-04-04",
+      "department": "Clinical Laboratory",
+      "staff_role": "Pathology Coordinator",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-BLOOD-015",
+      "given_name": "Omar",
+      "family_name": "Simblood",
+      "gender": "M",
+      "birthdate": "1985-05-15",
+      "department": "Blood Bank",
+      "staff_role": "Blood Bank Technologist",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-RAD-016",
+      "given_name": "Prena",
+      "family_name": "Mockxray",
+      "gender": "F",
+      "birthdate": "1990-06-07",
+      "department": "Radiology",
+      "staff_role": "X-Ray Technician",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-RAD-017",
+      "given_name": "Qadir",
+      "family_name": "Fictct",
+      "gender": "M",
+      "birthdate": "1989-07-19",
+      "department": "Radiology",
+      "staff_role": "CT Technician",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-RAD-018",
+      "given_name": "Riya",
+      "family_name": "Synthmri",
+      "gender": "F",
+      "birthdate": "1991-08-23",
+      "department": "Radiology",
+      "staff_role": "MRI Technician",
+      "staff_category": "Diagnostics"
+    },
+    {
+      "identifier": "SYN-STAFF-PHYS-019",
+      "given_name": "Samar",
+      "family_name": "Demomove",
+      "gender": "M",
+      "birthdate": "1988-09-26",
+      "department": "Physiotherapy",
+      "staff_role": "Physiotherapist",
+      "staff_category": "Allied Health"
+    },
+    {
+      "identifier": "SYN-STAFF-DIET-020",
+      "given_name": "Tina",
+      "family_name": "Testdiet",
+      "gender": "F",
+      "birthdate": "1987-10-14",
+      "department": "Dietary and Nutrition",
+      "staff_role": "Clinical Dietitian",
+      "staff_category": "Allied Health"
+    },
+    {
+      "identifier": "SYN-STAFF-PHAR-021",
+      "given_name": "Uday",
+      "family_name": "Simpharma",
+      "gender": "M",
+      "birthdate": "1984-11-05",
+      "department": "Pharmacy",
+      "staff_role": "Chief Pharmacist",
+      "staff_category": "Pharmacy"
+    },
+    {
+      "identifier": "SYN-STAFF-PHAR-022",
+      "given_name": "Vani",
+      "family_name": "Mockdispense",
+      "gender": "F",
+      "birthdate": "1992-12-18",
+      "department": "Pharmacy",
+      "staff_role": "Dispensing Pharmacist",
+      "staff_category": "Pharmacy"
+    },
+    {
+      "identifier": "SYN-STAFF-PHAR-023",
+      "given_name": "Waseem",
+      "family_name": "Fictstock",
+      "gender": "M",
+      "birthdate": "1989-01-22",
+      "department": "Pharmacy",
+      "staff_role": "Pharmacy Inventory Controller",
+      "staff_category": "Pharmacy"
+    },
+    {
+      "identifier": "SYN-STAFF-FRONT-024",
+      "given_name": "Xena",
+      "family_name": "Synthfront",
+      "gender": "F",
+      "birthdate": "1993-02-12",
+      "department": "Front Office and Registration",
+      "staff_role": "Front Desk Executive",
+      "staff_category": "Administration"
+    },
+    {
+      "identifier": "SYN-STAFF-FRONT-025",
+      "given_name": "Yash",
+      "family_name": "Demoreg",
+      "gender": "M",
+      "birthdate": "1990-03-06",
+      "department": "Front Office and Registration",
+      "staff_role": "Registration Clerk",
+      "staff_category": "Administration"
+    },
+    {
+      "identifier": "SYN-STAFF-FRONT-026",
+      "given_name": "Zara",
+      "family_name": "Testappt",
+      "gender": "F",
+      "birthdate": "1991-04-08",
+      "department": "Front Office and Registration",
+      "staff_role": "Appointment Coordinator",
+      "staff_category": "Administration"
+    },
+    {
+      "identifier": "SYN-STAFF-MRD-027",
+      "given_name": "Anil",
+      "family_name": "Simrecord",
+      "gender": "M",
+      "birthdate": "1988-05-20",
+      "department": "Medical Records",
+      "staff_role": "Medical Records Officer",
+      "staff_category": "Administration"
+    },
+    {
+      "identifier": "SYN-STAFF-MRD-028",
+      "given_name": "Bela",
+      "family_name": "Mockcoded",
+      "gender": "F",
+      "birthdate": "1986-06-15",
+      "department": "Medical Records",
+      "staff_role": "Clinical Coding Analyst",
+      "staff_category": "Administration"
+    },
+    {
+      "identifier": "SYN-STAFF-BILL-029",
+      "given_name": "Chet",
+      "family_name": "Fictbill",
+      "gender": "M",
+      "birthdate": "1985-07-02",
+      "department": "Billing and Insurance",
+      "staff_role": "Billing Executive",
+      "staff_category": "Revenue Cycle"
+    },
+    {
+      "identifier": "SYN-STAFF-BILL-030",
+      "given_name": "Dia",
+      "family_name": "Synthclaim",
+      "gender": "F",
+      "birthdate": "1990-08-17",
+      "department": "Billing and Insurance",
+      "staff_role": "Insurance Claims Coordinator",
+      "staff_category": "Revenue Cycle"
+    },
+    {
+      "identifier": "SYN-STAFF-BILL-031",
+      "given_name": "Eron",
+      "family_name": "Democash",
+      "gender": "M",
+      "birthdate": "1992-09-09",
+      "department": "Finance",
+      "staff_role": "Cashier",
+      "staff_category": "Revenue Cycle"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-032",
+      "given_name": "Faye",
+      "family_name": "Testadmin",
+      "gender": "F",
+      "birthdate": "1979-10-10",
+      "department": "Hospital Administration",
+      "staff_role": "Hospital Administrator",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-033",
+      "given_name": "Gopal",
+      "family_name": "Simops",
+      "gender": "M",
+      "birthdate": "1978-11-11",
+      "department": "Hospital Administration",
+      "staff_role": "Operations Manager",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-034",
+      "given_name": "Heena",
+      "family_name": "Mockquality",
+      "gender": "F",
+      "birthdate": "1982-12-12",
+      "department": "Quality and Compliance",
+      "staff_role": "Quality Manager",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-035",
+      "given_name": "Irfan",
+      "family_name": "Fictfinance",
+      "gender": "M",
+      "birthdate": "1980-01-13",
+      "department": "Finance",
+      "staff_role": "Finance Manager",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-036",
+      "given_name": "Juhi",
+      "family_name": "Synthhr",
+      "gender": "F",
+      "birthdate": "1983-02-18",
+      "department": "Human Resources",
+      "staff_role": "Human Resources Manager",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-037",
+      "given_name": "Kiran",
+      "family_name": "Demoprocure",
+      "gender": "M",
+      "birthdate": "1981-03-23",
+      "department": "Procurement and Stores",
+      "staff_role": "Procurement Lead",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-038",
+      "given_name": "Leela",
+      "family_name": "Testpatientrel",
+      "gender": "F",
+      "birthdate": "1984-04-27",
+      "department": "Patient Relations",
+      "staff_role": "Patient Relations Manager",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-MGMT-039",
+      "given_name": "Manu",
+      "family_name": "Simcompliance",
+      "gender": "M",
+      "birthdate": "1977-05-31",
+      "department": "Quality and Compliance",
+      "staff_role": "Compliance Officer",
+      "staff_category": "Management"
+    },
+    {
+      "identifier": "SYN-STAFF-IT-040",
+      "given_name": "Nisha",
+      "family_name": "Mockit",
+      "gender": "F",
+      "birthdate": "1989-06-04",
+      "department": "Information Technology",
+      "staff_role": "IT Systems Analyst",
+      "staff_category": "Technology"
+    },
+    {
+      "identifier": "SYN-STAFF-IT-041",
+      "given_name": "Omkar",
+      "family_name": "Fictnet",
+      "gender": "M",
+      "birthdate": "1987-07-08",
+      "department": "Information Technology",
+      "staff_role": "Network Support Engineer",
+      "staff_category": "Technology"
+    },
+    {
+      "identifier": "SYN-STAFF-IT-042",
+      "given_name": "Pari",
+      "family_name": "Synthdata",
+      "gender": "F",
+      "birthdate": "1991-08-12",
+      "department": "Information Technology",
+      "staff_role": "Data Quality Analyst",
+      "staff_category": "Technology"
+    },
+    {
+      "identifier": "SYN-STAFF-BIOM-043",
+      "given_name": "Qasim",
+      "family_name": "Demobiomed",
+      "gender": "M",
+      "birthdate": "1986-09-16",
+      "department": "Biomedical Engineering",
+      "staff_role": "Biomedical Engineer",
+      "staff_category": "Facilities"
+    },
+    {
+      "identifier": "SYN-STAFF-BIOM-044",
+      "given_name": "Reva",
+      "family_name": "Testequip",
+      "gender": "F",
+      "birthdate": "1988-10-20",
+      "department": "Biomedical Engineering",
+      "staff_role": "Equipment Maintenance Coordinator",
+      "staff_category": "Facilities"
+    },
+    {
+      "identifier": "SYN-STAFF-FAC-045",
+      "given_name": "Sahil",
+      "family_name": "Simfacility",
+      "gender": "M",
+      "birthdate": "1985-11-24",
+      "department": "Facilities and Maintenance",
+      "staff_role": "Facilities Supervisor",
+      "staff_category": "Facilities"
+    },
+    {
+      "identifier": "SYN-STAFF-FAC-046",
+      "given_name": "Tara",
+      "family_name": "Mockelectric",
+      "gender": "F",
+      "birthdate": "1990-12-28",
+      "department": "Facilities and Maintenance",
+      "staff_role": "Electrical Technician",
+      "staff_category": "Facilities"
+    },
+    {
+      "identifier": "SYN-STAFF-FAC-047",
+      "given_name": "Utkar",
+      "family_name": "Fictwater",
+      "gender": "M",
+      "birthdate": "1989-01-03",
+      "department": "Facilities and Maintenance",
+      "staff_role": "Plumbing Technician",
+      "staff_category": "Facilities"
+    },
+    {
+      "identifier": "SYN-STAFF-HK-048",
+      "given_name": "Veda",
+      "family_name": "Synthclean",
+      "gender": "F",
+      "birthdate": "1993-02-07",
+      "department": "Housekeeping",
+      "staff_role": "Housekeeping Supervisor",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-HK-049",
+      "given_name": "Wahid",
+      "family_name": "Demowardclean",
+      "gender": "M",
+      "birthdate": "1994-03-11",
+      "department": "Housekeeping",
+      "staff_role": "Ward Housekeeping Associate",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-SEC-050",
+      "given_name": "Xavier",
+      "family_name": "Testguard",
+      "gender": "M",
+      "birthdate": "1986-04-15",
+      "department": "Security",
+      "staff_role": "Security Supervisor",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-SEC-051",
+      "given_name": "Yamini",
+      "family_name": "Simentry",
+      "gender": "F",
+      "birthdate": "1990-05-19",
+      "department": "Security",
+      "staff_role": "Entry Desk Security Associate",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-FOOD-052",
+      "given_name": "Zubin",
+      "family_name": "Mockkitchen",
+      "gender": "M",
+      "birthdate": "1985-06-23",
+      "department": "Dietary and Nutrition",
+      "staff_role": "Kitchen Supervisor",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-FOOD-053",
+      "given_name": "Arohi",
+      "family_name": "Fictmeal",
+      "gender": "F",
+      "birthdate": "1992-07-27",
+      "department": "Dietary and Nutrition",
+      "staff_role": "Meal Service Coordinator",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-AMB-054",
+      "given_name": "Bhav",
+      "family_name": "Synthdrive",
+      "gender": "M",
+      "birthdate": "1987-08-31",
+      "department": "Ambulance and Transport",
+      "staff_role": "Ambulance Driver",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-AMB-055",
+      "given_name": "Celia",
+      "family_name": "Demoparam",
+      "gender": "F",
+      "birthdate": "1991-09-04",
+      "department": "Ambulance and Transport",
+      "staff_role": "Emergency Medical Technician",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-PORT-056",
+      "given_name": "Dilan",
+      "family_name": "Testporter",
+      "gender": "M",
+      "birthdate": "1993-10-08",
+      "department": "Ambulance and Transport",
+      "staff_role": "Patient Transport Porter",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-CSSD-057",
+      "given_name": "Elina",
+      "family_name": "Simsterile",
+      "gender": "F",
+      "birthdate": "1989-11-12",
+      "department": "CSSD and Sterilization",
+      "staff_role": "Sterilization Technician",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-CSSD-058",
+      "given_name": "Faiz",
+      "family_name": "Mockscope",
+      "gender": "M",
+      "birthdate": "1988-12-16",
+      "department": "CSSD and Sterilization",
+      "staff_role": "Instrument Reprocessing Associate",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-INF-059",
+      "given_name": "Gia",
+      "family_name": "Fictcontrol",
+      "gender": "F",
+      "birthdate": "1984-01-20",
+      "department": "Infection Control",
+      "staff_role": "Infection Control Nurse",
+      "staff_category": "Quality"
+    },
+    {
+      "identifier": "SYN-STAFF-INF-060",
+      "given_name": "Harsh",
+      "family_name": "Synthsafety",
+      "gender": "M",
+      "birthdate": "1983-02-24",
+      "department": "Quality and Compliance",
+      "staff_role": "Patient Safety Officer",
+      "staff_category": "Quality"
+    },
+    {
+      "identifier": "SYN-STAFF-STORE-061",
+      "given_name": "Ina",
+      "family_name": "Demostore",
+      "gender": "F",
+      "birthdate": "1990-03-28",
+      "department": "Procurement and Stores",
+      "staff_role": "Stores Executive",
+      "staff_category": "Supply Chain"
+    },
+    {
+      "identifier": "SYN-STAFF-STORE-062",
+      "given_name": "Jerin",
+      "family_name": "Testasset",
+      "gender": "M",
+      "birthdate": "1987-04-01",
+      "department": "Procurement and Stores",
+      "staff_role": "Asset Coordinator",
+      "staff_category": "Supply Chain"
+    },
+    {
+      "identifier": "SYN-STAFF-MORT-063",
+      "given_name": "Kavya",
+      "family_name": "Simmort",
+      "gender": "F",
+      "birthdate": "1985-05-05",
+      "department": "Mortuary Services",
+      "staff_role": "Mortuary Attendant",
+      "staff_category": "Support"
+    },
+    {
+      "identifier": "SYN-STAFF-PR-064",
+      "given_name": "Lalit",
+      "family_name": "Mockguide",
+      "gender": "M",
+      "birthdate": "1988-06-09",
+      "department": "Patient Relations",
+      "staff_role": "Patient Guide",
+      "staff_category": "Support"
+    }
+  ]
 }
