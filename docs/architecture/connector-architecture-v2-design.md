@@ -390,6 +390,7 @@ type WriteAction struct {
     Kind         string          `json:"kind"` // create|update|upsert|delete|custom
     Method, Path string
     PathFields   []string        `json:"path_fields,omitempty"`
+    RedactFields []string        `json:"redact_fields,omitempty"` // record fields redacted from write previews/errors
     BodyType     string          `json:"body_type,omitempty"` // json (default) | form | none
     BodyFields   []string        `json:"body_fields,omitempty"`
     RecordSchema json.RawMessage `json:"record_schema"`
@@ -432,10 +433,12 @@ loop; Retry-After handling already exists in connsdk.
 
 `ValidateWrite` = compile-once `record_schema` validation per record (structural errors carry
 record index, matching current behavior). `DryRunWrite` = validation + fully-resolved request
-preview (`WritePreview.Warnings` includes resolved method/path with secrets redacted). `Write` =
-per-record execution; `kind: delete` honors `missing_ok_status` (a 404 on an idempotent delete
-counts as written, not failed). Batch semantics stay one-request-per-record (matches github/stripe
-today); `metadata.json.batch.write_batch_size` reserved for future bulk endpoints.
+preview (`WritePreview.Warnings` includes resolved method/path with secrets and action
+`redact_fields` redacted). `Write` = per-record execution; returned write errors redact the same
+action fields while preserving typed wrapping. `kind: delete` honors `missing_ok_status` (a 404 on
+an idempotent delete counts as written, not failed). Batch semantics stay one-request-per-record
+(matches github/stripe today); `metadata.json.batch.write_batch_size` reserved for future bulk
+endpoints.
 
 ### B.6 Sync modes — derived, never declared
 

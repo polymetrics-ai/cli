@@ -17,8 +17,8 @@ reverse-ETL write actions. Drug-order create, appointment reschedule, bulk obser
 visit-document upload remain blocked until a safe typed surface is implemented and live-proven.
 
 Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts
-secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate
-engine policy decision.
+secret-shaped fields plus configured write path identifiers, but broad clinical PHI field redaction
+remains a separate engine policy decision.
 
 ## Auth setup
 

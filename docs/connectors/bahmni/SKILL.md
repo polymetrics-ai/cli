@@ -195,7 +195,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
   - bahmni-auth - Point base_url at a Bahmni OpenMRS instance, including a local Bahmni/bahmni-docker deployment, and supply username/password via credentials; never pass secrets in command text.
   - bahmni-writes - Bahmni clinical mutations are typed reverse-ETL actions with plan, preview, approval, execute gates; clinical/destructive actions require --confirm destructive.
   - bahmni-direct-read - Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed GET patient search, all with a response byte cap; clinical PHI fields are not generally field-redacted by the current engine.
-  - bahmni-phi - Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate engine policy decision.
+  - bahmni-phi - Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields plus configured write path identifiers, but broad clinical PHI field redaction remains a separate engine policy decision.
 
 ## Commands
 
