@@ -56,63 +56,65 @@ SYNC MODES
 REVERSE ETL ACTIONS
   send_text_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, text
     risk: sends a WhatsApp text message to a patient number (PHI); requires reverse ETL approval and consent
   send_image_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, image
     risk: sends a WhatsApp image message to a patient number (PHI); requires reverse ETL approval and consent
   send_audio_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, audio
     risk: sends a WhatsApp audio message to a patient number (PHI); requires reverse ETL approval and consent
   send_video_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, video
     risk: sends a WhatsApp video message to a patient number (PHI); requires reverse ETL approval and consent
   send_document_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, document
     risk: sends a WhatsApp document message to a patient number (PHI); requires reverse ETL approval and consent
   send_sticker_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, sticker
     risk: sends a WhatsApp sticker message to a patient number (PHI); requires reverse ETL approval and consent
   send_location_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, location
     risk: sends a WhatsApp location message to a patient number (PHI); requires reverse ETL approval and consent
   send_contacts_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, contacts
     risk: sends a WhatsApp contacts message to a patient number (PHI); requires reverse ETL approval and consent
   send_interactive_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, interactive
     risk: sends a WhatsApp interactive message to a patient number (PHI); requires reverse ETL approval and consent
   send_template_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, template
     risk: sends a WhatsApp template message to a patient number (PHI); requires reverse ETL approval and consent
   send_reaction_message:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: to
+    required fields: messaging_product, to, type, reaction
     risk: sends a WhatsApp reaction message to a patient number (PHI); requires reverse ETL approval and consent
   mark_message_read:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: message_id
+    required fields: messaging_product, status, message_id
     risk: marks an inbound patient message as read
   send_typing_indicator:
     endpoint: POST /{{ config.phone_number_id }}/messages
-    required fields: message_id
+    required fields: messaging_product, status, message_id, typing_indicator
     risk: sends a typing indicator on an inbound patient conversation
   create_message_template:
     endpoint: POST /{{ config.waba_id }}/message_templates
     required fields: name, language, category
+    optional fields: components
     risk: creates a WhatsApp message template pending Meta review
   update_message_template:
     endpoint: POST /{{ record.template_id }}
     required fields: template_id
+    optional fields: category, components
     risk: edits an existing message template
   delete_message_template:
     endpoint: DELETE /{{ config.waba_id }}/message_templates?name={{ record.name }}
@@ -121,6 +123,7 @@ REVERSE ETL ACTIONS
   update_business_profile:
     endpoint: POST /{{ config.phone_number_id }}/whatsapp_business_profile
     required fields: messaging_product
+    optional fields: about, address, description, email, vertical, websites
     risk: updates the WhatsApp business profile for the number
   register_phone_number:
     endpoint: POST /{{ config.phone_number_id }}/register
@@ -133,6 +136,7 @@ REVERSE ETL ACTIONS
   request_verification_code:
     endpoint: POST /{{ config.phone_number_id }}/request_code
     required fields: code_method
+    optional fields: language
     risk: requests a phone-number verification code
   verify_phone_number:
     endpoint: POST /{{ config.phone_number_id }}/verify_code
@@ -153,6 +157,7 @@ REVERSE ETL ACTIONS
   create_qr_code:
     endpoint: POST /{{ config.phone_number_id }}/message_qrdls
     required fields: prefilled_message
+    optional fields: generate_qr_image
     risk: creates a QR code / short link for the number
   delete_qr_code:
     endpoint: DELETE /{{ config.phone_number_id }}/message_qrdls/{{ record.code }}
@@ -160,7 +165,7 @@ REVERSE ETL ACTIONS
     risk: deletes a QR code / short link
   upload_media:
     endpoint: POST /{{ config.phone_number_id }}/media
-    required fields: media_file, type
+    required fields: messaging_product, media_file, type
     risk: uploads bounded media to WhatsApp and returns a media id (patient content; PHI)
   delete_media:
     endpoint: DELETE /{{ record.media_id }}

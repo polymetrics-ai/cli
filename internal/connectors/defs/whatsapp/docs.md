@@ -74,9 +74,9 @@ Safety gates:
   register/deregister/two-step-PIN declare `confirm: destructive` and require `--confirm
   destructive`. Read receipts, typing indicators, template create/edit, profile update, code
   request/verify, app subscribe, and QR create are approval-gated but not confirmation-gated.
-- Recipient numbers and message bodies are patient PHI: redacted by default in command plans;
-  sends require patient consent and Meta template pre-approval. Approved plan records are persisted
-  unredacted in local plan state so the plan can be executed — treat the plan state directory as
+- Recipient numbers and message bodies are patient PHI: redacted by default in command and generic
+  reverse-ETL plan samples; sends require patient consent and Meta template pre-approval. Source
+  warehouse rows and approved execution inputs can still contain PHI, so treat local project data as
   PHI-bearing at rest.
 - Multipart media upload accepts only a declared local file path field and enforces a bounded byte
   limit; no generic upload or raw Graph body flag is exposed.

@@ -159,6 +159,162 @@ func TestWhatsAppSendAndMediaWriteSchemasRequireProviderFields(t *testing.T) {
 	}
 }
 
+func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
+	registry := New()
+	connector, ok := registry.Get("whatsapp")
+	if !ok {
+		t.Fatal("registry missing whatsapp")
+	}
+	validator, ok := connector.(connectors.WriteValidator)
+	if !ok {
+		t.Fatalf("whatsapp connector type = %T, want WriteValidator", connector)
+	}
+	bundle, err := engine.Load(defs.FS, "whatsapp")
+	if err != nil {
+		t.Fatalf("Load(whatsapp): %v", err)
+	}
+
+	statusTests := []struct {
+		action         string
+		incomplete     connectors.Record
+		valid          connectors.Record
+		wantBodyFields []string
+	}{
+		{
+			action:     "mark_message_read",
+			incomplete: connectors.Record{"message_id": "wamid.TEST"},
+			valid: connectors.Record{
+				"messaging_product": "whatsapp",
+				"status":            "read",
+				"message_id":        "wamid.TEST",
+			},
+			wantBodyFields: []string{"messaging_product", "status", "message_id"},
+		},
+		{
+			action:     "send_typing_indicator",
+			incomplete: connectors.Record{"message_id": "wamid.TEST"},
+			valid: connectors.Record{
+				"messaging_product": "whatsapp",
+				"status":            "read",
+				"message_id":        "wamid.TEST",
+				"typing_indicator":  map[string]any{"type": "text"},
+			},
+			wantBodyFields: []string{"messaging_product", "status", "message_id", "typing_indicator"},
+		},
+	}
+	for _, tt := range statusTests {
+		t.Run(tt.action, func(t *testing.T) {
+			if err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: tt.action}, []connectors.Record{tt.incomplete}); err == nil {
+				t.Fatalf("ValidateWrite(%s) accepted incomplete provider payload", tt.action)
+			}
+			assertWhatsAppWriteActionStrict(t, validator, bundle, tt.action, tt.valid, tt.wantBodyFields)
+		})
+	}
+
+	jsonActionTests := []struct {
+		action         string
+		valid          connectors.Record
+		wantBodyFields []string
+	}{
+		{
+			action: "create_message_template",
+			valid: connectors.Record{
+				"name":     "appointment_reminder",
+				"language": "en_US",
+				"category": "UTILITY",
+			},
+			wantBodyFields: []string{"name", "language", "category", "components"},
+		},
+		{
+			action:         "update_message_template",
+			valid:          connectors.Record{"template_id": "template_123"},
+			wantBodyFields: []string{"category", "components"},
+		},
+		{
+			action:         "update_business_profile",
+			valid:          connectors.Record{"messaging_product": "whatsapp"},
+			wantBodyFields: []string{"messaging_product", "about", "address", "description", "email", "vertical", "websites"},
+		},
+		{
+			action:         "register_phone_number",
+			valid:          connectors.Record{"messaging_product": "whatsapp", "pin": "123456"},
+			wantBodyFields: []string{"messaging_product", "pin"},
+		},
+		{
+			action:         "deregister_phone_number",
+			valid:          connectors.Record{"messaging_product": "whatsapp"},
+			wantBodyFields: []string{"messaging_product"},
+		},
+		{
+			action:         "request_verification_code",
+			valid:          connectors.Record{"code_method": "SMS"},
+			wantBodyFields: []string{"code_method", "language"},
+		},
+		{
+			action:         "verify_phone_number",
+			valid:          connectors.Record{"code": "123456"},
+			wantBodyFields: []string{"code"},
+		},
+		{
+			action:         "set_two_step_pin",
+			valid:          connectors.Record{"pin": "123456"},
+			wantBodyFields: []string{"pin"},
+		},
+		{
+			action:         "subscribe_waba_app",
+			valid:          connectors.Record{"messaging_product": "whatsapp"},
+			wantBodyFields: []string{"messaging_product"},
+		},
+		{
+			action:         "create_qr_code",
+			valid:          connectors.Record{"prefilled_message": "Reply START"},
+			wantBodyFields: []string{"prefilled_message", "generate_qr_image"},
+		},
+	}
+	for _, tt := range jsonActionTests {
+		t.Run(tt.action, func(t *testing.T) {
+			assertWhatsAppWriteActionStrict(t, validator, bundle, tt.action, tt.valid, tt.wantBodyFields)
+		})
+	}
+
+	noneBodyTests := []struct {
+		action string
+		valid  connectors.Record
+	}{
+		{"delete_message_template", connectors.Record{"name": "appointment_reminder"}},
+		{"unsubscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}},
+		{"delete_qr_code", connectors.Record{"code": "qr_123"}},
+		{"delete_media", connectors.Record{"media_id": "media_123"}},
+	}
+	for _, tt := range noneBodyTests {
+		t.Run(tt.action, func(t *testing.T) {
+			assertWhatsAppWriteActionStrict(t, validator, bundle, tt.action, tt.valid, nil)
+		})
+	}
+}
+
+func assertWhatsAppWriteActionStrict(t *testing.T, validator connectors.WriteValidator, bundle engine.Bundle, actionName string, valid connectors.Record, wantBodyFields []string) {
+	t.Helper()
+	if err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: actionName}, []connectors.Record{valid}); err != nil {
+		t.Fatalf("ValidateWrite(%s) valid record: %v", actionName, err)
+	}
+	withExtra := make(connectors.Record, len(valid)+1)
+	for k, v := range valid {
+		withExtra[k] = v
+	}
+	withExtra["raw_graph_body"] = map[string]any{"unsafe": true}
+	if err := validator.ValidateWrite(context.Background(), connectors.WriteRequest{Action: actionName}, []connectors.Record{withExtra}); err == nil {
+		t.Fatalf("ValidateWrite(%s) accepted an undeclared top-level field", actionName)
+	}
+	action, ok := findBundleWriteAction(bundle, actionName)
+	if !ok {
+		t.Fatalf("bundle missing write action %s", actionName)
+	}
+	if !reflect.DeepEqual(action.BodyFields, wantBodyFields) {
+		t.Fatalf("%s body_fields = %v, want %v", actionName, action.BodyFields, wantBodyFields)
+	}
+}
+
 func findBundleWriteAction(bundle engine.Bundle, name string) (engine.WriteAction, bool) {
 	for _, action := range bundle.Writes {
 		if action.Name == name {

@@ -819,6 +819,8 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
+          "messaging_product",
+          "status",
           "message_id"
         ],
         "properties": {
@@ -839,9 +841,14 @@
             "description": "Inbound message id to mark as read."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "marks an inbound patient message as read"
+      "risk": "marks an inbound patient message as read",
+      "body_fields": [
+        "messaging_product",
+        "status",
+        "message_id"
+      ]
     },
     {
       "name": "send_typing_indicator",
@@ -853,7 +860,10 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "message_id"
+          "messaging_product",
+          "status",
+          "message_id",
+          "typing_indicator"
         ],
         "properties": {
           "messaging_product": {
@@ -875,12 +885,30 @@
           "typing_indicator": {
             "type": "object",
             "description": "Typing indicator object {type: text}.",
-            "additionalProperties": true
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "text"
+                ],
+                "description": "Typing indicator type."
+              }
+            },
+            "additionalProperties": false
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "sends a typing indicator on an inbound patient conversation"
+      "risk": "sends a typing indicator on an inbound patient conversation",
+      "body_fields": [
+        "messaging_product",
+        "status",
+        "message_id",
+        "typing_indicator"
+      ]
     },
     {
       "name": "create_message_template",
@@ -922,9 +950,15 @@
             "description": "Template components array."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates a WhatsApp message template pending Meta review"
+      "risk": "creates a WhatsApp message template pending Meta review",
+      "body_fields": [
+        "name",
+        "language",
+        "category",
+        "components"
+      ]
     },
     {
       "name": "update_message_template",
@@ -960,11 +994,15 @@
             "description": "Updated components array."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "edits an existing message template",
       "path_fields": [
         "template_id"
+      ],
+      "body_fields": [
+        "category",
+        "components"
       ]
     },
     {
@@ -988,7 +1026,7 @@
             "description": "Template name to delete. Meta deletes every language version registered under this name."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "permanently deletes a message template and every language version registered under its name",
       "confirm": "destructive",
@@ -1046,9 +1084,18 @@
             "description": "Business websites."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "updates the WhatsApp business profile for the number"
+      "risk": "updates the WhatsApp business profile for the number",
+      "body_fields": [
+        "messaging_product",
+        "about",
+        "address",
+        "description",
+        "email",
+        "vertical",
+        "websites"
+      ]
     },
     {
       "name": "register_phone_number",
@@ -1075,10 +1122,14 @@
             "description": "6-digit registration PIN (two-step verification)."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "registers the phone number on Cloud API",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product",
+        "pin"
+      ]
     },
     {
       "name": "deregister_phone_number",
@@ -1100,10 +1151,13 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deregisters the phone number from Cloud API",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "messaging_product"
+      ]
     },
     {
       "name": "request_verification_code",
@@ -1130,9 +1184,13 @@
             "description": "Language code for the verification message."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "requests a phone-number verification code"
+      "risk": "requests a phone-number verification code",
+      "body_fields": [
+        "code_method",
+        "language"
+      ]
     },
     {
       "name": "verify_phone_number",
@@ -1152,9 +1210,12 @@
             "description": "Verification code received via SMS/VOICE."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "submits the phone-number verification code"
+      "risk": "submits the phone-number verification code",
+      "body_fields": [
+        "code"
+      ]
     },
     {
       "name": "set_two_step_pin",
@@ -1174,10 +1235,13 @@
             "description": "New 6-digit two-step verification PIN."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "sets or changes the two-step verification PIN",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "pin"
+      ]
     },
     {
       "name": "subscribe_waba_app",
@@ -1199,9 +1263,12 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "subscribes the app to WABA webhooks"
+      "risk": "subscribes the app to WABA webhooks",
+      "body_fields": [
+        "messaging_product"
+      ]
     },
     {
       "name": "unsubscribe_waba_app",
@@ -1223,7 +1290,7 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "unsubscribes the app from WABA webhooks",
       "confirm": "destructive",
@@ -1259,9 +1326,13 @@
             ]
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
-      "risk": "creates a QR code / short link for the number"
+      "risk": "creates a QR code / short link for the number",
+      "body_fields": [
+        "prefilled_message",
+        "generate_qr_image"
+      ]
     },
     {
       "name": "delete_qr_code",
@@ -1281,7 +1352,7 @@
             "description": "QR code id to delete."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "deletes a QR code / short link",
       "path_fields": [
@@ -1373,7 +1444,7 @@
             "description": "Media id to delete."
           }
         },
-        "additionalProperties": true
+        "additionalProperties": false
       },
       "risk": "permanently deletes an uploaded media object",
       "path_fields": [

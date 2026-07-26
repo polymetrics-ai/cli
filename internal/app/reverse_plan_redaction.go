@@ -20,6 +20,8 @@ var whatsappReversePlanRedactFields = map[string][]string{
 	"send_interactive_message": {"to", "interactive"},
 	"send_template_message":    {"to", "template"},
 	"send_reaction_message":    {"to", "reaction"},
+	"mark_message_read":        {"message_id"},
+	"send_typing_indicator":    {"message_id", "typing_indicator"},
 	"upload_media":             {"media_file"},
 	"create_qr_code":           {"prefilled_message"},
 }
