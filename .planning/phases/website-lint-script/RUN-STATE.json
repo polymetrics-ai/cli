@@ -1,0 +1,29 @@
+{
+  "phase": "website-lint-script",
+  "status": "green_local_verified",
+  "branch": "fix/website-lint-script",
+  "base": "origin/main@902fd9403",
+  "gsd": {
+    "doctor": "passed",
+    "plan_phase_prompt": "scripts/gsd prompt plan-phase website-lint-script --skip-research --tdd",
+    "programming_loop": "manual_fallback_unknown_command"
+  },
+  "skills": [
+    "gsd-core",
+    "vercel-react-best-practices",
+    "context-mode"
+  ],
+  "verification_passed": true,
+  "verification": [
+    "corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts (red before, green after)",
+    "corepack pnpm@11.7.0 run lint",
+    "corepack pnpm@11.7.0 run typecheck",
+    "corepack pnpm@11.7.0 run test:unit",
+    "corepack pnpm@11.7.0 run test:e2e",
+    "BETTER_AUTH_SECRET=<build-only placeholder> corepack pnpm@11.7.0 run build",
+    "rm -rf website/node_modules && corepack pnpm@11.7.0 install --frozen-lockfile --reporter=append-only",
+    "corepack pnpm@11.7.0 exec eslint . --quiet",
+    "git diff --check"
+  ],
+  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores."
+}

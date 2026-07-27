@@ -4,6 +4,7 @@ packages:
 allowBuilds:
   esbuild: true
   sharp: true
+  unrs-resolver: false
 
 overrides:
   js-yaml: 5.2.2
