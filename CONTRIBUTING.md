@@ -49,6 +49,8 @@ Releases are generated from Conventional Commits after changes land on `main`.
 - Add `!` before the colon, or a `BREAKING CHANGE:` footer, for breaking changes that require a major release.
 - Use other Conventional Commit types such as `docs:`, `ci:`, `test:`, `refactor:`, and `chore:` when the change should be categorized without implying a feature or bug-fix release.
 
+The release procedure itself — how release-please and goreleaser are wired, and the steps for cutting a release — is documented in [docs/release-and-connectors.md](docs/release-and-connectors.md).
+
 ## Connector Contributions
 
 Connector work should follow the existing package structure in `internal/connectors`. Prefer copying a similar connector and adapting the auth, streams, pagination, schema, and tests.
