@@ -40,10 +40,10 @@ const stats = [
     icon: Star,
   },
   {
-    label: 'Connectors',
+    label: 'Catalog entries',
     value: String(CONNECTOR_CATALOG_COUNT),
     href: '/docs/connectors',
-    tooltip: 'Browse connectors',
+    tooltip: 'Browse connector catalog entries',
     icon: Cable,
   },
   {
@@ -55,7 +55,7 @@ const stats = [
   },
   {
     label: 'Binary size',
-    value: '~18MB',
+    value: '~56MiB',
     href: '/docs/installation',
     tooltip: 'Single binary install',
     icon: HardDrive,
@@ -63,10 +63,10 @@ const stats = [
 ];
 
 const changelog = [
-  { version: 'release', label: 'Automated binary releases', icon: PackageCheck },
-  { version: 'v0.1.0', label: `${CONNECTOR_CATALOG_COUNT} connector catalog pages`, icon: Cable },
-  { version: 'v0.1.0', label: 'Embedded DuckDB SQL engine', icon: Database },
-  { version: 'v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
+  { version: 'planned v0.1.0', label: 'Binary release automation', icon: PackageCheck },
+  { version: 'planned v0.1.0', label: `${CONNECTOR_CATALOG_COUNT} connector catalog pages`, icon: Cable },
+  { version: 'planned v0.1.0', label: 'Local query workflow', icon: Database },
+  { version: 'planned v0.1.0', label: 'Local AES-GCM vault', icon: Lock },
 ];
 
 const latestBlogPosts = BLOG_POSTS.slice(0, 3);
@@ -179,7 +179,7 @@ export function HomeSidebar({
                       {label}
                     </span>
                     <span className="mt-0.5 block font-mono text-[10px] text-text-disabled">
-                      {version} · today
+                      {version}
                     </span>
                   </span>
                 </div>

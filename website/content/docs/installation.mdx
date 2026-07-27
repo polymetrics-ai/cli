@@ -15,50 +15,54 @@ description: Install pm from a release binary, via go install, or by building th
 
 <Tab value="Release binary">
 
-Release assets are published from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux, macOS, and Windows on amd64 and arm64.
+Release assets are planned from [`polymetrics-ai/cli`](https://github.com/polymetrics-ai/cli/releases) for Linux, macOS, and Windows on amd64 and arm64 beginning with `v0.1.0`.
 
-This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on macOS/Linux, `unzip` for Windows archives), but does not require Go.
+PM binary releases and website deployments are independent and never trigger each other. See the repository [release guide](https://github.com/polymetrics-ai/cli/blob/main/docs/release-and-connectors.md) for the release flow and connector release model.
+
+After `v0.1.0` is cut, the checksum-verified install path below supports macOS and Linux. Windows amd64/arm64 zip archives are published with the same `checksums.txt` manifest.
 
 ```bash
-os_name="$(uname -s)"
-arch_name="$(uname -m)"
+release=v0.1.0
+version=${release#v}
+repo=polymetrics-ai/cli
 
-case "$os_name" in
+case "$(uname -s)" in
   Darwin) os=darwin ;;
   Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
-  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
+  *) echo "unsupported OS: $(uname -s)" >&2; exit 1 ;;
 esac
 
-case "$arch_name" in
+case "$(uname -m)" in
   x86_64|amd64) arch=amd64 ;;
   arm64|aarch64) arch=arm64 ;;
-  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
+  *) echo "unsupported architecture: $(uname -m)" >&2; exit 1 ;;
 esac
 
+archive="pm_${version}_${os}_${arch}.tar.gz"
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
-gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
 
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
+gh release download "$release" --repo "$repo" \
+  --pattern "$archive" \
+  --pattern checksums.txt \
+  --dir "$tmpdir"
 
+awk -v archive="$archive" '$2 == archive { print }' \
+  "$tmpdir/checksums.txt" > "$tmpdir/checksums.selected.txt"
+test -s "$tmpdir/checksums.selected.txt"
+
+if command -v sha256sum >/dev/null 2>&1; then
+  (cd "$tmpdir" && sha256sum --check checksums.selected.txt)
+else
+  (cd "$tmpdir" && shasum -a 256 --check checksums.selected.txt)
+fi
+
+tar -xzf "$tmpdir/$archive" -C "$tmpdir"
 install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
 mkdir -p "$install_dir"
-cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
-chmod +x "$install_dir/$binary_name" 2>/dev/null || true
-"$install_dir/$binary_name" version
+install -m 0755 "$tmpdir/pm" "$install_dir/pm"
+"$install_dir/pm" version
 ```
-
-Each release includes `checksums.txt` for artifact verification.
 
 </Tab>
 
@@ -72,7 +76,7 @@ go install polymetrics.ai/cmd/pm@latest
 
 The binary is placed at `$GOPATH/bin/pm`. Make sure `$GOPATH/bin` (or `$(go env GOPATH)/bin`) is on your `$PATH`.
 
-To pin a specific version replace `latest` with a version tag, for example `v0.9.0`.
+To pin a specific version replace `latest` with a version tag, for example `v0.1.0`.
 
 </Tab>
 
