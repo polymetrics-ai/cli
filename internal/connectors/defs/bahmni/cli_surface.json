@@ -726,7 +726,7 @@
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "bahmni.patient_search",
-      "risk": "bounded typed GET read-query; the response is size-capped and secret-shaped fields are redacted, but the returned patient identifiers and address values are clinical PHI and are not field-redacted by the current engine.",
+      "risk": "bounded typed GET read-query; the response is size-capped, secret-shaped fields are redacted, and the operation direct-read engine redacts declared patient-search sensitive fields including identifier, addressFieldValue, display, givenName, middleName, familyName, birthDate, and deathDate. Remaining clinical PHI fields should still be treated as clinical data.",
       "approval": "none: read-only GET query with allow-listed query parameters and bounded JSON output.",
       "notes": "Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.",
       "output_policy": "clinical_json_redacted",
@@ -1556,11 +1556,11 @@
     },
     {
       "name": "bahmni-direct-read",
-      "summary": "Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed GET patient search, all with a response byte cap; clinical PHI fields are not generally field-redacted by the current engine."
+      "summary": "Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed GET patient search, all with a response byte cap; typed patient search redacts its declared identifier, address, name, birth-date, and death-date fields."
     },
     {
       "name": "bahmni-phi",
-      "summary": "Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields plus configured write path identifiers, but broad clinical PHI field redaction remains a separate engine policy decision."
+      "summary": "Bahmni reads and writes can include clinical PHI. The current runtime bounds output, redacts secret-shaped fields, configured write path identifiers, and typed patient-search declared sensitive fields; broad clinical PHI field redaction remains a separate engine policy decision."
     }
   ]
 }
