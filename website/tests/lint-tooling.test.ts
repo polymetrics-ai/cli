@@ -45,4 +45,14 @@ describe('lint tooling', () => {
       expect(config).toContain(ignoredPattern);
     }
   });
+
+  it('pins transitive brace expansion to the dependency-review-patched release', () => {
+    const lockfile = readWebsiteFile('pnpm-lock.yaml');
+    const braceExpansionEntries = [
+      ...new Set([...lockfile.matchAll(/^  brace-expansion@(.+):$/gm)].map((match) => match[1])),
+    ].sort();
+
+    expect(braceExpansionEntries).toEqual(['5.0.8']);
+    expect(lockfile).not.toContain('brace-expansion@1.1.16');
+  });
 });

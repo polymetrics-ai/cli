@@ -1,6 +1,6 @@
 {
   "phase": "website-lint-script",
-  "status": "green_local_verified",
+  "status": "green_local_verified_ci_fix",
   "branch": "fix/website-lint-script",
   "base": "origin/main@902fd9403",
   "gsd": {
@@ -10,6 +10,9 @@
   },
   "skills": [
     "gsd-core",
+    "gsd-programming-loop",
+    "no-mistakes",
+    "javascript-testing-patterns",
     "vercel-react-best-practices",
     "context-mode"
   ],
@@ -23,7 +26,11 @@
     "BETTER_AUTH_SECRET=<build-only placeholder> corepack pnpm@11.7.0 run build",
     "rm -rf website/node_modules && corepack pnpm@11.7.0 install --frozen-lockfile --reporter=append-only",
     "corepack pnpm@11.7.0 exec eslint . --quiet",
-    "git diff --check"
+    "git diff --check",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website install --frozen-lockfile --ignore-scripts --store-dir ../.pnpm-store --reporter=append-only",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run lint",
+    "go run ./cmd/prissueguard --title \"fix(website): restore lint command\" --body \"Refs #67\""
   ],
-  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores."
+  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores. Follow-up CI repair pins brace-expansion to patched 5.0.8 with a minimal minimatch compatibility patch and updates the live PR body with Refs #67."
 }
