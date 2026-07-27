@@ -20,7 +20,8 @@ type Result struct {
 }
 
 var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+`)
-var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|ref|refs):?\s+#([1-9][0-9]*)\b`)
+var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|reference|references|refs|ref|issues|issue):?\s+((?:#[1-9][0-9]*)(?:\s*(?:,|/|\band\b)\s*#[1-9][0-9]*)*)`)
+var issueNumberPattern = regexp.MustCompile(`#([1-9][0-9]*)\b`)
 
 var closingKeywords = map[string]bool{
 	"close":    true,
@@ -63,20 +64,25 @@ func ExtractIssueRefs(text string) []IssueRef {
 		if len(match) < 3 {
 			continue
 		}
-		number, err := strconv.Atoi(match[2])
-		if err != nil {
-			continue
-		}
 		keyword := strings.ToLower(match[1])
-		ref := IssueRef{
-			Number:  number,
-			Keyword: keyword,
-			Closing: closingKeywords[keyword],
+		for _, numberMatch := range issueNumberPattern.FindAllStringSubmatch(match[2], -1) {
+			if len(numberMatch) < 2 {
+				continue
+			}
+			number, err := strconv.Atoi(numberMatch[1])
+			if err != nil {
+				continue
+			}
+			ref := IssueRef{
+				Number:  number,
+				Keyword: keyword,
+				Closing: closingKeywords[keyword],
+			}
+			if existing, ok := seen[number]; ok && (existing.Closing || !ref.Closing) {
+				continue
+			}
+			seen[number] = ref
 		}
-		if existing, ok := seen[number]; ok && existing.Closing {
-			continue
-		}
-		seen[number] = ref
 	}
 
 	issues := make([]IssueRef, 0, len(seen))

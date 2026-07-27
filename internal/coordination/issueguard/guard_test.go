@@ -45,11 +45,26 @@ func TestValidatePRAllowsNonClosingReferenceForStackedIncrement(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsNarrativeNonClosingReferences(t *testing.T) {
+	body := "Implement the promoted provider-inert Windows signing foundation for PM issues #554 and #555; reference #550/#554/#555 without closing them; never merge."
+	result := ValidatePR("feat(packaging): add provider-inert Windows signing foundation", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 3 {
+		t.Fatalf("ValidatePR() issues = %#v, want 3 issues", result.Issues)
+	}
+	for i, want := range []int{550, 554, 555} {
+		if result.Issues[i].Number != want || result.Issues[i].Closing {
+			t.Fatalf("ValidatePR() issues = %#v, want non-closing issue %d at index %d", result.Issues, want, i)
+		}
+	}
+}
+
 func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 	tests := []string{
 		"Related to #123\n",
-		"Issue #123\n",
-		"References #123\n",
+		"Mentions #123\n",
 	}
 	for _, body := range tests {
 		result := ValidatePR("feat(github): add cli surface metadata", body)

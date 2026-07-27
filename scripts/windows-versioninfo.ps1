@@ -27,9 +27,9 @@ function Find-WindowsSdkTool {
 
     $kitsRoot = Join-Path ${env:ProgramFiles(x86)} 'Windows Kits\10\bin'
     if (Test-Path $kitsRoot) {
-        $matches = Get-ChildItem -Path $kitsRoot -Filter $ToolName -Recurse -ErrorAction SilentlyContinue |
+        $matches = @(Get-ChildItem -Path $kitsRoot -Filter $ToolName -Recurse -ErrorAction SilentlyContinue |
             Where-Object { $_.FullName -match '\\x64\\' } |
-            Sort-Object FullName -Descending
+            Sort-Object FullName -Descending)
         if ($matches.Count -gt 0) {
             return $matches[0].FullName
         }
@@ -48,9 +48,9 @@ function Find-Cvtres {
     if (Test-Path $vswhere) {
         $installPath = & $vswhere -latest -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
         if ($LASTEXITCODE -eq 0 -and $installPath) {
-            $matches = Get-ChildItem -Path (Join-Path $installPath 'VC\Tools\MSVC') -Filter cvtres.exe -Recurse -ErrorAction SilentlyContinue |
+            $matches = @(Get-ChildItem -Path (Join-Path $installPath 'VC\Tools\MSVC') -Filter cvtres.exe -Recurse -ErrorAction SilentlyContinue |
                 Where-Object { $_.FullName -match '\\Hostx64\\x64\\' } |
-                Sort-Object FullName -Descending
+                Sort-Object FullName -Descending)
             if ($matches.Count -gt 0) {
                 return $matches[0].FullName
             }

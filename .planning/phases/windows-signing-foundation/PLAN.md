@@ -7,7 +7,7 @@ Issues: Refs #550, #554, #555. Does not close them.
 ## GSD path
 
 - `scripts/gsd doctor` passed earlier in this session.
-- Required command attempted: `scripts/gsd prompt programming-loop init --phase issue-554-555 --dry-run`.
+- Required command attempted: `scripts/gsd prompt programming-loop init --phase windows-signing-foundation --dry-run`.
 - Adapter result: `scripts/gsd: unknown GSD command: programming-loop`.
 - Manual-GSD fallback is active per `.agents/agentic-delivery/references/gsd-pi-adapter.md` and `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`.
 - Design evidence: `/Users/karthiksivadas/karthik-agent-workspace/data/cli-windows-signpath-onboarding-r1/report.md`.
@@ -66,6 +66,9 @@ Create one provider-inert foundation PR for Windows signing readiness without ap
 8. **Verification and delivery**
    - Run focused tests, gofmt, go test, go vet/build as practical, and no-mistakes full PR path.
    - Push branch and open PR title `build(windows): prepare signed MSI releases`.
+9. **CI repair slice**
+   - Fix PR #559 reds without changing provider-inert scope: `govulncheck`, `require-linked-issue`, and `unsigned-msi-snapshot`.
+   - Keep dependency movement limited to the reachable vulnerable `grpc` module graph, keep issue references non-closing, and keep Windows packaging unsigned/provider-inert.
 
 ## Security boundaries
 
