@@ -72,6 +72,10 @@ Create one provider-inert foundation PR for Windows signing readiness without ap
    - Fix PR #559 reds without changing provider-inert scope: `govulncheck`, `require-linked-issue`, and `unsigned-msi-snapshot`.
    - Keep dependency movement limited to the reachable vulnerable `grpc` module graph, keep issue references non-closing, and keep Windows packaging unsigned/provider-inert.
    - Replace the Windows SDK `cvtres.exe` `.syso` path after CI showed Go rejecting that COFF object during `GOOS=windows GOARCH=amd64 go build`.
+10. **CI repair follow-up slice**
+   - Fix PR #559 `unsigned-msi-snapshot` ProductName mismatch by normalizing Windows Installer COM string padding in MSI metadata verification while keeping executable VERSIONINFO exact.
+   - Fix PR #559 external `security/snyk` by lifting the branch-introduced OpenTelemetry floor from `v1.43.0` to `v1.44.0`; Snyk reports `go.opentelemetry.io/otel/propagation` `>=1.41.0 <1.44.0` as vulnerable.
+   - Keep the workflow unsigned, provider-inert, and secret-free.
 
 ## Security boundaries
 

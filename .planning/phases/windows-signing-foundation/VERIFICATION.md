@@ -17,7 +17,10 @@
 - [x] `go vet ./...` — passed locally after implementation.
 - [x] `go build ./cmd/pm` — passed locally after implementation.
 - [x] `git diff --check` — passed locally after implementation.
-- [x] `make verify`
+- [x] `make verify` — passed locally with `go.mod`/`go.sum` temporarily staged because `tidy-check` requires no unstaged module diff.
+- [x] `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` — passed after MSI scalar normalization.
+- [x] `GOTOOLCHAIN=go1.25.12 go list -m go.opentelemetry.io/otel go.opentelemetry.io/otel/metric go.opentelemetry.io/otel/sdk go.opentelemetry.io/otel/sdk/metric go.opentelemetry.io/otel/trace google.golang.org/grpc` — selected OpenTelemetry `v1.44.0` and gRPC `v1.82.1`.
+- [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — passed with no vulnerabilities found.
 
 ## Windows PR-safe workflow checks
 
@@ -50,4 +53,4 @@
 
 ## Results
 
-Local focused and full repo verification for the CI repair passed. The direct VERSIONINFO `.syso` path links for both Windows targets under Go 1.25.12 without Windows SDK tools. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, WiX, and `msiexec.exe`.
+Local focused and full repo verification for the CI repair passed. The MSI verifier now normalizes Windows Installer COM string padding for MSI property reads, and OpenTelemetry resolves to the Snyk-fixed `v1.44.0` floor. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, WiX, and `msiexec.exe`.

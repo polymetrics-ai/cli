@@ -18,6 +18,8 @@
 | PR issue guard | PR #559 `require-linked-issue` with narrative body references `issues #554 and #555` plus `reference #550/#554/#555` | Failed because only `Refs #N`/closing keywords and single issue tokens were recognized | Red captured from CI/PR metadata |
 | Windows SDK VERSIONINFO object | PR #559 `unsigned-msi-snapshot` | Failed in `GOOS=windows GOARCH=amd64 go build` with `sectnum < 0!` after `cvtres.exe` generated `cmd\pm\pm_windows_amd64.syso` | Red captured from CI |
 | Direct VERSIONINFO `.syso` linkability | `GOTOOLCHAIN=go1.25.12 go run ./build/windowsversion -version 0.0.0 -goarch amd64 -out cmd/pm/pm_windows_amd64.syso`, then `GOTOOLCHAIN=go1.25.12 GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ... ./cmd/pm` | Must pass locally without Windows SDK tools | Red captured from CI; green captured locally |
+| MSI ProductName verifier | PR #559 `unsigned-msi-snapshot`; then static verifier-normalization test | Failed with MSI `ProductName` got `' Polymetrics CLI '`, want `Polymetrics CLI` | Red captured |
+| Snyk OpenTelemetry finding | PR #559 `security/snyk`; public Snyk advisory `SNYK-GOLANG-GOOPENTELEMETRYIOOTELPROPAGATION-17054905` | Branch introduced OpenTelemetry `v1.43.0`; fixed floor is `v1.44.0` | Red captured |
 
 ## Green evidence
 
@@ -37,6 +39,8 @@
 | CI repair package set | `GOTOOLCHAIN=go1.25.12 go test -count=1 ./cmd/prissueguard ./internal/coordination/issueguard ./build/windowsversion ./packaging/windows ./packaging/windows/winget ./internal/runtimecheck ./internal/worker ./internal/connectors/native/postgres` | PASS | Passed |
 | Full suite rerun | `go test -timeout 20m ./...` | PASS | Passed |
 | Full repo verification | `make verify` | PASS | Passed |
+| MSI ProductName verifier fix | `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` | PASS | Passed; verifier trims Windows Installer COM scalar padding for MSI properties while executable VERSIONINFO checks remain exact |
+| Snyk OpenTelemetry floor | `GOTOOLCHAIN=go1.25.12 go list -m go.opentelemetry.io/otel go.opentelemetry.io/otel/metric go.opentelemetry.io/otel/sdk go.opentelemetry.io/otel/sdk/metric go.opentelemetry.io/otel/trace google.golang.org/grpc`; `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` | OpenTelemetry selected at `v1.44.0`; vulnerability scan clean | Passed |
 | PR-safe Windows package workflow | GitHub Actions `Windows Package Check` | PASS | Pending on PR CI |
 | no-mistakes | `no-mistakes axi run --intent ...` | `checks-passed` | Pending |
 

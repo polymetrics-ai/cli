@@ -76,12 +76,24 @@ function Invoke-MsiScalar {
     }
 }
 
+function Normalize-MsiScalar {
+    param([AllowNull()][object]$Value)
+
+    if ($null -eq $Value) {
+        return $null
+    }
+    if ($Value -is [string]) {
+        return $Value.Trim()
+    }
+    return $Value
+}
+
 function Get-MsiProperty {
     param(
         [Parameter(Mandatory = $true)]$Database,
         [Parameter(Mandatory = $true)][string]$Property
     )
-    return Invoke-MsiScalar -Database $Database -Query "SELECT ``Value`` FROM ``Property`` WHERE ``Property``='$Property'"
+    return Normalize-MsiScalar -Value (Invoke-MsiScalar -Database $Database -Query "SELECT ``Value`` FROM ``Property`` WHERE ``Property``='$Property'")
 }
 
 function Assert-ExecutableVersionInfo {

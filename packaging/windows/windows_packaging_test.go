@@ -2,6 +2,7 @@ package windows_test
 
 import (
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -55,6 +56,26 @@ func TestWindowsPackagingReadmeDocumentsStableUpgradeCodes(t *testing.T) {
 	} {
 		if !strings.Contains(readme, want) {
 			t.Fatalf("README.md missing %q", want)
+		}
+	}
+}
+
+func TestVerifierNormalizesWindowsInstallerScalarPadding(t *testing.T) {
+	t.Parallel()
+
+	data, err := os.ReadFile(filepath.Join("..", "..", "scripts", "verify-windows-package.ps1"))
+	if err != nil {
+		t.Fatalf("read verify-windows-package.ps1: %v", err)
+	}
+	script := string(data)
+
+	for _, want := range []string{
+		"function Normalize-MsiScalar",
+		"$Value.Trim()",
+		"return Normalize-MsiScalar",
+	} {
+		if !strings.Contains(script, want) {
+			t.Fatalf("verify-windows-package.ps1 missing %q", want)
 		}
 	}
 }
