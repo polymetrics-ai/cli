@@ -29,6 +29,21 @@
 - [x] `go build ./cmd/pm` — passed.
 - [x] `make verify` — passed.
 
+## PR #560 CI repair gates
+
+- [x] `scripts/gsd doctor` — passed.
+- [x] `scripts/gsd prompt programming-loop init --phase pr-560-ci-repair --dry-run` — unavailable (`unknown GSD command: programming-loop`); continued with the recorded manual-GSD fallback.
+- [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — red, GO-2026-6061 through `google.golang.org/grpc v1.79.3`.
+- [x] `PR_TITLE=$(gh pr view 560 --json title -q .title) PR_BODY=$(gh pr view 560 --json body -q .body) go run ./cmd/prissueguard` — red, PR body has explicit issue-first wording but no `Closes`/`Refs` token.
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard` — passed.
+- [x] `PR_TITLE=$(gh pr view 560 --json title -q .title) PR_BODY=$(gh pr view 560 --json body -q .body) go run ./cmd/prissueguard` — passed, `issueguard: ok (3 linked issues)`.
+- [x] `go test ./...` — passed.
+- [x] `go vet ./...` — passed.
+- [x] `go mod verify` — passed, all modules verified.
+- [x] `go build ./cmd/pm` — passed.
+- [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — passed, no vulnerabilities found.
+- [ ] `make verify` — attempted; stopped at `tidy-check` because this uncommitted PR repair intentionally changes `go.mod`/`go.sum`. Its remaining Go constituents were run directly above.
+
 ## Documentation checks
 
 - [x] `docs/release-verification.md` documents repository/workflow/ref-constrained commands and digest/checksum verification.

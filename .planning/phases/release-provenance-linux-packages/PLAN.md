@@ -57,3 +57,9 @@
 1. Replace count-only existing-release skip logic with exact asset-set comparison, release asset download, checksum validation, Cosign bundle verification, and GitHub attestation verification before skipping upload.
 2. Extend Linux package install coverage to run both amd64 and arm64 packages in architecture-matched Docker containers, using QEMU on GitHub-hosted amd64 runners for arm64.
 3. Run one focused verification pass over the changed release workflow and shell scripts after all fixes are applied.
+
+## CI repair slice for PR #560
+
+1. Resolve `govulncheck` GO-2026-6061 by upgrading the existing indirect `google.golang.org/grpc` requirement from `v1.79.3` to the fixed floor `v1.82.1`, then run `go mod tidy` and the CI vulnerability command with `GOTOOLCHAIN=go1.25.12`.
+2. Fix `require-linked-issue` by adding a focused red test for PR #560's issue-first intent wording, then make `cmd/prissueguard` accept explicit delivery/parent issue references such as `fully delivering issues #551 and #552` and `parent polymetrics-ai/cli#550` while keeping vague references rejected.
+3. Verify with focused issueguard tests, `go test ./cmd/prissueguard ./internal/coordination/issueguard`, `go test ./...`, and the exact `govulncheck` CI command.

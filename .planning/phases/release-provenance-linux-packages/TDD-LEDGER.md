@@ -10,6 +10,10 @@
 | 6 | Broader checks | `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make verify` | Repository remains green; release changes do not add Go dependencies | Green |
 | 7 | Review red validation | Review finding audit against `.github/workflows/release.yml` and `scripts/test-linux-packages.sh` | Existing-release skip is count-only and package install tests are host-architecture-only | Red captured |
 | 8 | Review green validation | `bash -n ...`; `./scripts/verify-release-assets.sh --release-version 1.2.3 --print-expected-release-assets`; `shellcheck ...`; `actionlint .github/workflows/release.yml` | Existing-release skip proves exact assets/checksums/Cosign/GitHub attestations; package install tests cover amd64 and arm64 containers | Green |
+| 9 | CI red validation | `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` | Fails with GO-2026-6061 in existing indirect `google.golang.org/grpc v1.79.3`; fixed in `v1.82.1` | Red captured |
+| 10 | CI red validation | `PR_TITLE=$(gh pr view 560 --json title -q .title) PR_BODY=$(gh pr view 560 --json body -q .body) go run ./cmd/prissueguard` | Fails because the PR body names parent `polymetrics-ai/cli#550` and issues `#551`/`#552` in the intent but lacks `Closes`/`Refs` keywords | Red captured |
+| 11 | CI green validation | Targeted issueguard unit tests plus live PR-body guard check | PR #560 issue-first wording is recognized without accepting ambiguous `Related to`, `Issue`, or `References` text | Green |
+| 12 | CI green validation | `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` after dependency fix | No reachable vulnerabilities remain | Green |
 
 ## Notes
 

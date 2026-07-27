@@ -10,6 +10,7 @@ Status: implemented and locally verified.
 - Added Docker-based standalone package install/reinstall/remove checks for Ubuntu and Fedora-family environments on the available Docker architecture.
 - Added release-only GitHub OIDC provenance and Cosign keyless bundle generation before upload, with final verification gating upload and no overwrite/clobber path for existing PM release assets.
 - Added narrow release verification documentation and linked it from `docs/GUIDE.md`.
+- Repaired PR #560 CI by upgrading the existing indirect gRPC module to the GO-2026-6061 fixed floor and teaching `prissueguard` to recognize explicit issue-first delivery/parent references already present in the PR body.
 
 ## Deferred explicitly to separate issues
 
