@@ -2,8 +2,8 @@
 
 ## Local required checks
 
-- [ ] `go test ./build/windowsversion ./packaging/windows/winget`
-- [ ] `gofmt -w build/windowsversion packaging/windows/winget`
+- [x] `go test ./build/windowsversion ./packaging/windows ./packaging/windows/winget`
+- [x] `gofmt -w build/windowsversion packaging/windows`
 - [ ] `go test ./...`
 - [ ] `go vet ./...`
 - [ ] `go build ./cmd/pm`

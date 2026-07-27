@@ -15,7 +15,11 @@ We aim to acknowledge reports within 3 business days and provide a status update
 
 ## Scope
 
-Security-sensitive areas include credential storage, connector auth handling, local warehouse files, reverse-ETL write approval, generated docs, runtime orchestration, and CI/CD workflows.
+Security-sensitive areas include credential storage, connector auth handling, local warehouse files, reverse-ETL write approval, generated docs, runtime orchestration, release signing, and CI/CD workflows.
+
+## Code Signing
+
+The public Windows code-signing and privacy policy is documented in [docs/security/code-signing-policy.md](docs/security/code-signing-policy.md). It describes the planned SignPath Foundation route, publisher display implications, release-only approval rules, timestamping, no unsigned fallback, and incident response.
 
 ## Supported Versions
 

@@ -19,10 +19,11 @@
 
 | Slice | Command | Expected | Result |
 |---|---|---|---|
-| Version generator | `go test ./build/windowsversion` | PASS | Pending |
-| WinGet templates | `go test ./packaging/windows/winget` | PASS | Pending |
-| Go tests | `go test ./build/windowsversion ./packaging/windows/winget` | PASS | Pending |
-| Formatting | `gofmt -w build/windowsversion packaging/windows/winget` | no diff after gofmt | Pending |
+| Version generator | `go test ./build/windowsversion` | PASS | Passed via focused package run |
+| WinGet templates | `go test ./packaging/windows/winget` | PASS | Passed via focused package run |
+| WiX source guard | `go test ./packaging/windows` | PASS | Passed via focused package run |
+| Go tests | `go test ./build/windowsversion ./packaging/windows ./packaging/windows/winget` | PASS | Passed |
+| Formatting | `gofmt -w build/windowsversion packaging/windows` | no diff after gofmt | Passed |
 | Broad Go gates | `go test ./...`, `go vet ./...`, `go build ./cmd/pm` | PASS or documented blocker | Pending |
 | PR-safe Windows package workflow | GitHub Actions `Windows Package Check` | PASS | Pending |
 | no-mistakes | `no-mistakes axi run --intent ...` | `checks-passed` | Pending |
