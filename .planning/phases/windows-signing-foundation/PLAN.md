@@ -1,7 +1,7 @@
 # Windows signing foundation (#554/#555)
 
-Branch: `build/windows-signing-foundation`  
-Target: `main`  
+Branch: `build/windows-signing-foundation`
+Target: `main`
 Issues: Refs #550, #554, #555. Does not close them.
 
 ## GSD path
