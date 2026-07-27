@@ -41,15 +41,12 @@ func cloneRecords(in []connectors.Record) []connectors.Record {
 	return out
 }
 
-func mapReverseRecords(records []connectors.Record, mappings map[string]string, planID string) []connectors.Record {
+func mapReverseRecords(records []connectors.Record, mappings map[string]string) []connectors.Record {
 	mapped := make([]connectors.Record, 0, len(records))
 	for _, record := range records {
 		out := connectors.Record{}
 		for source, dest := range mappings {
 			out[dest] = record[source]
-		}
-		if planID != "" {
-			out["_polymetrics_reverse_plan_id"] = planID
 		}
 		mapped = append(mapped, out)
 	}
