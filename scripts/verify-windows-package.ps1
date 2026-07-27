@@ -65,14 +65,14 @@ function Invoke-MsiScalar {
 
     $view = $Database.OpenView($Query)
     try {
-        $view.Execute()
+        [void]$view.Execute()
         $record = $view.Fetch()
         if (-not $record) {
             return $null
         }
         return $record.StringData(1)
     } finally {
-        $view.Close()
+        [void]$view.Close()
     }
 }
 
@@ -82,10 +82,7 @@ function Normalize-MsiScalar {
     if ($null -eq $Value) {
         return $null
     }
-    if ($Value -is [string]) {
-        return $Value.Trim()
-    }
-    return $Value
+    return ([string]$Value).Trim()
 }
 
 function Get-MsiProperty {
@@ -93,7 +90,8 @@ function Get-MsiProperty {
         [Parameter(Mandatory = $true)]$Database,
         [Parameter(Mandatory = $true)][string]$Property
     )
-    return Normalize-MsiScalar -Value (Invoke-MsiScalar -Database $Database -Query "SELECT ``Value`` FROM ``Property`` WHERE ``Property``='$Property'")
+    $value = Invoke-MsiScalar -Database $Database -Query "SELECT ``Value`` FROM ``Property`` WHERE ``Property``='$Property'"
+    return (Normalize-MsiScalar -Value $value)
 }
 
 function Assert-ExecutableVersionInfo {

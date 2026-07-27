@@ -21,6 +21,7 @@
 - [x] `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` — passed after MSI scalar normalization.
 - [x] `GOTOOLCHAIN=go1.25.12 go list -m go.opentelemetry.io/otel go.opentelemetry.io/otel/metric go.opentelemetry.io/otel/sdk go.opentelemetry.io/otel/sdk/metric go.opentelemetry.io/otel/trace google.golang.org/grpc` — selected OpenTelemetry `v1.44.0` and gRPC `v1.82.1`.
 - [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — passed with no vulnerabilities found.
+- [x] `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` — red before the follow-up verifier patch, then passed after suppressing Windows Installer COM method output and casting MSI scalar values before trim.
 
 ## Windows PR-safe workflow checks
 
@@ -53,4 +54,4 @@
 
 ## Results
 
-Local focused and full repo verification for the CI repair passed. The MSI verifier now normalizes Windows Installer COM string padding for MSI property reads, and OpenTelemetry resolves to the Snyk-fixed `v1.44.0` floor. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, WiX, and `msiexec.exe`.
+Local focused and full repo verification for the CI repair passed. The MSI verifier now suppresses incidental Windows Installer COM method output and normalizes MSI property reads by casting returned scalar values to text before trimming; executable VERSIONINFO checks remain exact. OpenTelemetry resolves to the Snyk-fixed `v1.44.0` floor. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, WiX, and `msiexec.exe`.

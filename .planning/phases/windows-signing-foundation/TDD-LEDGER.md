@@ -20,6 +20,7 @@
 | Direct VERSIONINFO `.syso` linkability | `GOTOOLCHAIN=go1.25.12 go run ./build/windowsversion -version 0.0.0 -goarch amd64 -out cmd/pm/pm_windows_amd64.syso`, then `GOTOOLCHAIN=go1.25.12 GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ... ./cmd/pm` | Must pass locally without Windows SDK tools | Red captured from CI; green captured locally |
 | MSI ProductName verifier | PR #559 `unsigned-msi-snapshot`; then static verifier-normalization test | Failed with MSI `ProductName` got `' Polymetrics CLI '`, want `Polymetrics CLI` | Red captured |
 | Snyk OpenTelemetry finding | PR #559 `security/snyk`; public Snyk advisory `SNYK-GOLANG-GOOPENTELEMETRYIOOTELPROPAGATION-17054905` | Branch introduced OpenTelemetry `v1.43.0`; fixed floor is `v1.44.0` | Red captured |
+| MSI ProductName verifier follow-up | `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` after tightening the verifier test | Failed because the script still used a string-only type guard and did not suppress Windows Installer COM method output | Red captured |
 
 ## Green evidence
 
@@ -41,6 +42,7 @@
 | Full repo verification | `make verify` | PASS | Passed |
 | MSI ProductName verifier fix | `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` | PASS | Passed; verifier trims Windows Installer COM scalar padding for MSI properties while executable VERSIONINFO checks remain exact |
 | Snyk OpenTelemetry floor | `GOTOOLCHAIN=go1.25.12 go list -m go.opentelemetry.io/otel go.opentelemetry.io/otel/metric go.opentelemetry.io/otel/sdk go.opentelemetry.io/otel/sdk/metric go.opentelemetry.io/otel/trace google.golang.org/grpc`; `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` | OpenTelemetry selected at `v1.44.0`; vulnerability scan clean | Passed |
+| MSI ProductName verifier follow-up fix | `GOTOOLCHAIN=go1.25.12 go test -count=1 ./packaging/windows` | PASS | Passed; `Invoke-MsiScalar` suppresses COM method output and MSI property normalization casts to text before trimming |
 | PR-safe Windows package workflow | GitHub Actions `Windows Package Check` | PASS | Pending on PR CI |
 | no-mistakes | `no-mistakes axi run --intent ...` | `checks-passed` | Pending |
 

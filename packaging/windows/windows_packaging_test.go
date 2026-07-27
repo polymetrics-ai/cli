@@ -71,11 +71,17 @@ func TestVerifierNormalizesWindowsInstallerScalarPadding(t *testing.T) {
 
 	for _, want := range []string{
 		"function Normalize-MsiScalar",
-		"$Value.Trim()",
-		"return Normalize-MsiScalar",
+		"return ([string]$Value).Trim()",
+		"[void]$view.Execute()",
+		"[void]$view.Close()",
+		"$value = Invoke-MsiScalar",
+		"return (Normalize-MsiScalar -Value $value)",
 	} {
 		if !strings.Contains(script, want) {
 			t.Fatalf("verify-windows-package.ps1 missing %q", want)
 		}
+	}
+	if strings.Contains(script, "$Value -is [string]") {
+		t.Fatal("verify-windows-package.ps1 must cast MSI scalar values before trimming; COM output can arrive as non-string objects")
 	}
 }
