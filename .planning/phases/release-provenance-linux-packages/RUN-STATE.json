@@ -1,0 +1,17 @@
+{
+  "phase": "release-provenance-linux-packages",
+  "branch": "release/provenance-linux-packages",
+  "issues": [551, 552],
+  "parentIssue": 550,
+  "gsdCommand": "scripts/gsd prompt programming-loop init --phase release-provenance-linux-packages --dry-run",
+  "gsdFallback": "manual-gsd: scripts/gsd returned unknown GSD command: programming-loop",
+  "verificationPassed": false,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Single isolated worker owns tightly coupled release workflow/config/script/docs slice."
+    }
+  ],
+  "status": "in_progress"
+}
