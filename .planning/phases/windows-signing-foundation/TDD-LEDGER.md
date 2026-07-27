@@ -11,8 +11,8 @@
 | Slice | Red/baseline command | Expected red/baseline | Status |
 |---|---|---|---|
 | Current policy surface | `test -f docs/security/code-signing-policy.md` | Missing before docs slice | Pending |
-| Version normalization | `go test ./build/windowsversion` after adding tests before implementation | Fails until generator is implemented | Pending |
-| WinGet ID templates | `go test ./packaging/windows/winget` after adding tests before templates | Fails until templates exist | Pending |
+| Version normalization | `go test ./build/windowsversion ./packaging/windows/winget` after adding tests before implementation | Failed: undefined `Version`, `NormalizeVersion`, `RenderRC` | Red captured |
+| WinGet ID templates | `go test ./build/windowsversion ./packaging/windows/winget` after adding tests before templates | Failed: manifest templates missing | Red captured |
 | Windows package CI | PR workflow dry-run on GitHub | Fails if unsigned build/package/install validation regresses | Pending |
 
 ## Green evidence
