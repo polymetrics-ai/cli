@@ -985,7 +985,26 @@
               },
               "additionalProperties": true
             },
-            "description": "Template components array."
+            "description": "Template components array.",
+            "contains": {
+              "type": "object",
+              "required": [
+                "type",
+                "text"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "BODY"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": true
+            }
           }
         },
         "additionalProperties": false
@@ -1116,6 +1135,38 @@
         "additionalProperties": false
       },
       "risk": "permanently deletes a message template and every language version registered under its name",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_message_template_by_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/{{ config.waba_id }}/message_templates?hsm_id={{ record.hsm_id }}",
+      "path_fields": [
+        "hsm_id"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "hsm_id"
+        ],
+        "properties": {
+          "hsm_id": {
+            "type": "string",
+            "description": "Message template ID to delete."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "permanently deletes a single WhatsApp message template by ID",
       "confirm": "destructive",
       "delete": {
         "idempotent": true,

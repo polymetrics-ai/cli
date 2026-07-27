@@ -231,6 +231,90 @@ func TestPlanReverseETLRedactsWhatsAppTemplateComponents(t *testing.T) {
 	}
 }
 
+func TestPlanReverseETLRedactsWhatsAppPhoneAdminSecrets(t *testing.T) {
+	ctx := context.Background()
+	root := t.TempDir()
+	if err := app.InitProject(root); err != nil {
+		t.Fatalf("InitProject() error = %v", err)
+	}
+	a, err := app.Open(root)
+	if err != nil {
+		t.Fatalf("Open() error = %v", err)
+	}
+	if _, err := a.AddCredential(ctx, app.AddCredentialRequest{
+		Name:      "whatsapp-local",
+		Connector: "whatsapp",
+		Config:    map[string]string{"mode": "cloud", "phone_number_id": "phone_123"},
+	}); err != nil {
+		t.Fatalf("AddCredential(whatsapp) error = %v", err)
+	}
+	if err := writeWarehouseRows(t, a, "whatsapp_phone_admin", []connectors.Record{{
+		"product":          "whatsapp",
+		"registration_pin": "PIN-SECRET-9381",
+		"verification":     "CODE-SECRET-5274",
+		"two_step_pin":     "PIN-SECRET-1947",
+	}}); err != nil {
+		t.Fatalf("write whatsapp phone admin rows: %v", err)
+	}
+
+	registerPlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "whatsapp_register",
+		SourceTable:           "whatsapp_phone_admin",
+		DestinationConnector:  "whatsapp",
+		DestinationCredential: "whatsapp-local",
+		Action:                "register_phone_number",
+		Mappings: map[string]string{
+			"product":          "messaging_product",
+			"registration_pin": "pin",
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(register_phone_number) error = %v", err)
+	}
+	assertWhatsAppFieldRedacted(t, registerPlan, "pin")
+
+	verifyPlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "whatsapp_verify",
+		SourceTable:           "whatsapp_phone_admin",
+		DestinationConnector:  "whatsapp",
+		DestinationCredential: "whatsapp-local",
+		Action:                "verify_phone_number",
+		Mappings: map[string]string{
+			"verification": "code",
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(verify_phone_number) error = %v", err)
+	}
+	assertWhatsAppFieldRedacted(t, verifyPlan, "code")
+
+	pinPlan, err := a.PlanReverseETL(ctx, app.PlanReverseETLRequest{
+		Name:                  "whatsapp_set_pin",
+		SourceTable:           "whatsapp_phone_admin",
+		DestinationConnector:  "whatsapp",
+		DestinationCredential: "whatsapp-local",
+		Action:                "set_two_step_pin",
+		Mappings: map[string]string{
+			"two_step_pin": "pin",
+		},
+	})
+	if err != nil {
+		t.Fatalf("PlanReverseETL(set_two_step_pin) error = %v", err)
+	}
+	assertWhatsAppFieldRedacted(t, pinPlan, "pin")
+
+	rawState, err := os.ReadFile(filepath.Join(root, ".polymetrics", "state", "state.json"))
+	if err != nil {
+		t.Fatalf("read state: %v", err)
+	}
+	stateText := string(rawState)
+	for _, leak := range []string{"PIN-SECRET-9381", "CODE-SECRET-5274", "PIN-SECRET-1947"} {
+		if strings.Contains(stateText, leak) {
+			t.Fatalf("state leaked %q: %s", leak, stateText)
+		}
+	}
+}
+
 func assertWhatsAppTextSampleRedacted(t *testing.T, plan app.ReversePlan) {
 	t.Helper()
 	if len(plan.Sample) != 1 {
@@ -276,5 +360,15 @@ func assertWhatsAppTemplateSampleRedacted(t *testing.T, plan app.ReversePlan, wa
 	}
 	if !wantTemplateID && (sample["name"] != "lab_result_ready" || sample["language"] != "en_US" || sample["category"] != "UTILITY") {
 		t.Fatalf("sample = %+v, want template metadata visible", sample)
+	}
+}
+
+func assertWhatsAppFieldRedacted(t *testing.T, plan app.ReversePlan, field string) {
+	t.Helper()
+	if len(plan.Sample) != 1 {
+		t.Fatalf("sample length = %d, want 1", len(plan.Sample))
+	}
+	if plan.Sample[0][field] != "***" {
+		t.Fatalf("sample = %+v, want %s redacted", plan.Sample[0], field)
 	}
 }

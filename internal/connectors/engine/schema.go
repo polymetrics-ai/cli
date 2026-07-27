@@ -26,6 +26,7 @@ type schemaNode struct {
 	required             []string
 	properties           map[string]*schemaNode
 	items                *schemaNode
+	contains             *schemaNode
 	anyOf                []*schemaNode
 	enum                 []any
 	pattern              *regexp.Regexp
@@ -67,6 +68,7 @@ var structuralKeywords = map[string]bool{
 	"required":             true,
 	"properties":           true,
 	"items":                true,
+	"contains":             true,
 	"anyOf":                true,
 	"enum":                 true,
 	"pattern":              true,
@@ -153,6 +155,18 @@ func compileNode(m map[string]json.RawMessage) (*schemaNode, error) {
 			return nil, fmt.Errorf("compile schema: items: %w", err)
 		}
 		n.items = child
+	}
+
+	if raw, ok := m["contains"]; ok {
+		var sub map[string]json.RawMessage
+		if err := json.Unmarshal(raw, &sub); err != nil {
+			return nil, fmt.Errorf("compile schema: contains: %w", err)
+		}
+		child, err := compileNode(sub)
+		if err != nil {
+			return nil, fmt.Errorf("compile schema: contains: %w", err)
+		}
+		n.contains = child
 	}
 
 	if raw, ok := m["anyOf"]; ok {
@@ -324,6 +338,23 @@ func (n *schemaNode) validate(v any, path string) error {
 				if err := n.items.validate(elem, fmt.Sprintf("%s/%d", path, i)); err != nil {
 					return err
 				}
+			}
+		}
+		if n.contains != nil {
+			var firstErr error
+			for i, elem := range elems {
+				if err := n.contains.validate(elem, fmt.Sprintf("%s/%d", path, i)); err == nil {
+					firstErr = nil
+					break
+				} else if firstErr == nil {
+					firstErr = err
+				}
+			}
+			if firstErr != nil {
+				return fmt.Errorf("%s: contains not satisfied: %w", displayPath(path), firstErr)
+			}
+			if len(elems) == 0 {
+				return fmt.Errorf("%s: contains not satisfied", displayPath(path))
 			}
 		}
 	}

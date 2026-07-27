@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector whatsapp [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, WhatsApp Business Account (WABA) metadata, subscribed apps, and template analytics; executes bounded direct reads and a typed template-analytics read-query (messaging/conversation/pricing analytics stay ledger-only because Graph exposes them solely as field expansions); and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.
+  Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, QR codes, WhatsApp Business Account (WABA) metadata, subscribed apps, and template analytics; executes bounded direct reads and a typed template-analytics read-query (messaging/conversation/pricing analytics stay ledger-only because Graph exposes them solely as field expansions); and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.
 
 ICON
   asset: icons/pm-sample.svg
@@ -46,6 +46,9 @@ ETL STREAMS
   subscribed_apps:
     primary key: id
     fields: id(), link(), name()
+  qr_codes:
+    primary key: code
+    fields: code(), deep_link_url(), prefilled_message(), qr_image_url()
   waba:
     primary key: id
     fields: account_review_status(), currency(), id(), message_template_namespace(), name(), timezone_id()
@@ -119,6 +122,10 @@ REVERSE ETL ACTIONS
     endpoint: DELETE /{{ config.waba_id }}/message_templates?name={{ record.name }}
     required fields: name
     risk: permanently deletes a message template and every language version registered under its name
+  delete_message_template_by_id:
+    endpoint: DELETE /{{ config.waba_id }}/message_templates?hsm_id={{ record.hsm_id }}
+    required fields: hsm_id
+    risk: permanently deletes a single WhatsApp message template by ID
   update_business_profile:
     endpoint: POST /{{ config.phone_number_id }}/whatsapp_business_profile
     required fields: messaging_product
@@ -170,7 +177,7 @@ REVERSE ETL ACTIONS
     risk: permanently deletes an uploaded media object
 
 SECURITY
-  read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted; media get-url intentionally returns the short-TTL media URL it was asked to resolve
+  read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, QR codes, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted; media get-url intentionally returns the short-TTL media URL it was asked to resolve
   write risk: typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans
   approval: reverse ETL requires plan, preview, approval, execute; message sends, media upload, destructive deletes, and phone-number registration/PIN actions require --confirm destructive plus healthcare consent/template pre-approval
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
@@ -206,6 +213,7 @@ COMMAND SURFACE
     templates create - Create a WhatsApp message template pending Meta review. [intent=reverse_etl availability=partial write=create_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: creates a WhatsApp message template pending Meta review; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --name, --language, --category
     templates update - Edit an existing message template. [intent=reverse_etl availability=partial write=update_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: edits an existing message template; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --template-id
     templates delete - Permanently delete a message template. [intent=reverse_etl availability=partial write=delete_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes a message template; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --name
+    templates delete-id - Permanently delete a message template by ID. [intent=reverse_etl availability=partial write=delete_message_template_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes a message template by ID; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --hsm-id
   Phone numbers
     phone-numbers list - List WhatsApp phone numbers on the WABA. [intent=etl availability=implemented stream=phone_numbers]
     phone-numbers get - Retrieve a single phone number's detail. [intent=direct_read availability=implemented]; risk: bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted; flags: --phone-number-id
@@ -231,6 +239,7 @@ COMMAND SURFACE
     apps subscribe - Subscribe the app to WABA webhooks. [intent=reverse_etl availability=partial write=subscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: subscribes the app to WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --override-callback-uri
     apps unsubscribe - Unsubscribe the app from WABA webhooks. [intent=reverse_etl availability=partial write=unsubscribe_waba_app]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: unsubscribes the app from WABA webhooks; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.
   QR / short links
+    qr list - List QR codes / short links for the number. [intent=etl availability=implemented stream=qr_codes]
     qr create - Create a QR code / short link for the number. [intent=reverse_etl availability=partial write=create_qr_code]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: creates a QR code / short link for the number; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --prefilled-message
     qr delete - Delete a QR code / short link. [intent=reverse_etl availability=partial write=delete_qr_code]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: deletes a QR code / short link; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --code
   WABA metadata

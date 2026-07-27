@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/synthetic-conformance-value/message_qrdls",
+    "query": {
+      "limit": "synthetic-conformance-value"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "code": "qr_fixture_1",
+          "prefilled_message": "Reply START",
+          "deep_link_url": "https://wa.me/message/fixture"
+        }
+      ],
+      "paging": {
+        "cursors": {}
+      }
+    }
+  }
+}

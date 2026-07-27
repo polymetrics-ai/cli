@@ -217,6 +217,13 @@
       }
     },
     {
+      "method": "DELETE",
+      "path": "/{waba_id}/message_templates?hsm_id={hsm_id}",
+      "covered_by": {
+        "write": "delete_message_template_by_id"
+      }
+    },
+    {
       "method": "POST",
       "path": "/{phone_number_id}/whatsapp_business_profile",
       "covered_by": {
@@ -339,14 +346,8 @@
     {
       "method": "GET",
       "path": "/{phone_number_id}/message_qrdls",
-      "operation": {
-        "model": "duplicate",
-        "status": "blocked",
-        "risk": "low",
-        "blocked_by_default": true,
-        "reason": "QR/short-link listing is covered by the create/delete_qr_code reverse-ETL actions; a standalone list read is redundant for the messaging use case.",
-        "source_url": "https://developers.facebook.com/docs/whatsapp/cloud-api/reference",
-        "duplicate_of": "create_qr_code"
+      "covered_by": {
+        "stream": "qr_codes"
       }
     },
     {

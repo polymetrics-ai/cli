@@ -286,6 +286,7 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 	}{
 		{"create template rejects missing components", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY"}, true},
 		{"create template rejects empty components", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY", "components": []any{}}, true},
+		{"create template rejects footer only", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY", "components": []any{map[string]any{"type": "FOOTER", "text": "Fine print"}}}, true},
 		{"create template accepts body component", "create_message_template", connectors.Record{"name": "appointment_reminder", "language": "en_US", "category": "UTILITY", "components": []any{map[string]any{"type": "BODY", "text": "Appointment reminder"}}}, false},
 		{"update template rejects no body field", "update_message_template", connectors.Record{"template_id": "template_123"}, true},
 		{"update template accepts category", "update_message_template", connectors.Record{"template_id": "template_123", "category": "UTILITY"}, false},
@@ -315,6 +316,7 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		valid  connectors.Record
 	}{
 		{"delete_message_template", connectors.Record{"name": "appointment_reminder"}},
+		{"delete_message_template_by_id", connectors.Record{"hsm_id": "tpl_123"}},
 		{"unsubscribe_waba_app", connectors.Record{}},
 		{"delete_qr_code", connectors.Record{"code": "qr_123"}},
 		{"delete_media", connectors.Record{"media_id": "media_123"}},
@@ -323,6 +325,10 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		t.Run(tt.action, func(t *testing.T) {
 			assertWhatsAppWriteActionStrict(t, validator, bundle, tt.action, tt.valid, nil)
 		})
+	}
+
+	if _, ok := findBundleStream(bundle, "qr_codes"); !ok {
+		t.Fatal("bundle missing qr_codes stream")
 	}
 }
 
@@ -355,6 +361,15 @@ func findBundleWriteAction(bundle engine.Bundle, name string) (engine.WriteActio
 		}
 	}
 	return engine.WriteAction{}, false
+}
+
+func findBundleStream(bundle engine.Bundle, name string) (engine.StreamSpec, bool) {
+	for _, stream := range bundle.Streams {
+		if stream.Name == name {
+			return stream, true
+		}
+	}
+	return engine.StreamSpec{}, false
 }
 
 func TestGitHubGuideIncludesCLISurfaceHelp(t *testing.T) {

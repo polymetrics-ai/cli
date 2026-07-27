@@ -33,6 +33,10 @@ func TestSchemaCompileKeywordMatrix(t *testing.T) {
 			raw:  `{"type":"array","items":{"type":"string"}}`,
 		},
 		{
+			name: "contains",
+			raw:  `{"type":"array","contains":{"type":"string","enum":["ok"]}}`,
+		},
+		{
 			name: "anyOf",
 			raw:  `{"type":"object","anyOf":[{"required":["id"]},{"required":["link"]}]}`,
 		},
@@ -130,6 +134,18 @@ func TestSchemaValidateInstances(t *testing.T) {
 			instance:  `["a",5]`,
 			wantErr:   true,
 			errSubstr: "/1",
+		},
+		{
+			name:     "contains valid",
+			raw:      `{"type":"array","contains":{"type":"object","required":["type","text"],"properties":{"type":{"type":"string","enum":["BODY"]},"text":{"type":"string"}},"additionalProperties":true}}`,
+			instance: `[{"type":"FOOTER","text":"fine print"},{"type":"BODY","text":"hello"}]`,
+		},
+		{
+			name:      "contains invalid",
+			raw:       `{"type":"array","contains":{"type":"object","required":["type","text"],"properties":{"type":{"type":"string","enum":["BODY"]},"text":{"type":"string"}},"additionalProperties":true}}`,
+			instance:  `[{"type":"FOOTER","text":"fine print"}]`,
+			wantErr:   true,
+			errSubstr: "contains",
 		},
 		{
 			name:     "enum valid",

@@ -649,6 +649,24 @@
       "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
     },
     {
+      "path": "templates delete-id",
+      "summary": "Permanently delete a message template by ID.",
+      "intent": "reverse_etl",
+      "availability": "partial",
+      "write": "delete_message_template_by_id",
+      "flags": [
+        {
+          "name": "hsm-id",
+          "type": "string",
+          "summary": "Message template ID to delete.",
+          "maps_to": "record.hsm_id"
+        }
+      ],
+      "risk": "high: permanently deletes a message template by ID",
+      "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
+      "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+    },
+    {
       "path": "profile update",
       "summary": "Update the WhatsApp business profile.",
       "intent": "reverse_etl",
@@ -796,6 +814,13 @@
       "risk": "high: unsubscribes the app from WABA webhooks",
       "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
       "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
+    },
+    {
+      "path": "qr list",
+      "summary": "List QR codes / short links for the number.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "qr_codes"
     },
     {
       "path": "qr create",

@@ -83,6 +83,17 @@
       }
     },
     {
+      "name": "qr_codes",
+      "path": "/{{ config.phone_number_id }}/message_qrdls",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/qr_codes.json",
+      "query": {
+        "limit": "{{ config.page_size }}"
+      }
+    },
+    {
       "name": "waba",
       "path": "/{{ config.waba_id }}",
       "records": {

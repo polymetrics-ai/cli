@@ -106,6 +106,14 @@ func TestConformance(t *testing.T) {
 	}
 }
 
+func TestWhatsAppBundleConformancePasses(t *testing.T) {
+	b := loadTestBundle(t, "../defs", "whatsapp")
+	rep := RunBundle(b)
+	if !rep.Passed {
+		t.Fatalf("conformance failed for whatsapp: %+v", rep.Checks)
+	}
+}
+
 func TestConformance_EmptyDefsTreePassesTrivially(t *testing.T) {
 	// defs.FS ships zero bundles in wave0 (goldens land in Wave F); this
 	// locks in the "empty tree passes" contract independent of whatever

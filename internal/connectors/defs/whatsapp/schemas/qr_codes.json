@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "additionalProperties": true,
+  "x-primary-key": [
+    "code"
+  ],
+  "properties": {
+    "code": {
+      "type": "string",
+      "description": "QR code identifier."
+    },
+    "prefilled_message": {
+      "type": "string",
+      "description": "Prefilled message body for the QR/short link."
+    },
+    "deep_link_url": {
+      "type": "string",
+      "description": "WhatsApp deep link URL."
+    },
+    "qr_image_url": {
+      "type": "string",
+      "description": "QR image URL when returned by Graph."
+    }
+  }
+}

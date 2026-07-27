@@ -1,7 +1,7 @@
 {
   "name": "whatsapp",
   "display_name": "WhatsApp",
-  "description": "Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, WhatsApp Business Account (WABA) metadata, subscribed apps, and template analytics; executes bounded direct reads and a typed template-analytics read-query (messaging/conversation/pricing analytics stay ledger-only because Graph exposes them solely as field expansions); and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.",
+  "description": "Reads WhatsApp Business Platform (Cloud API + Business Management API) phone numbers, message templates, QR codes, WhatsApp Business Account (WABA) metadata, subscribed apps, and template analytics; executes bounded direct reads and a typed template-analytics read-query (messaging/conversation/pricing analytics stay ledger-only because Graph exposes them solely as field expansions); and models WhatsApp sends (all message types), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload/download as typed reverse-ETL actions. The WhatsApp Web multidevice (whatsmeow) access mode from vicentereig/whatsapp-cli is modeled as a documented, config-scoped op set. Framed for HMS/healthcare patient messaging alongside the Bahmni EMR connector; recipient numbers and message content are treated as patient PHI.",
   "integration_type": "api",
   "docs_url": "https://developers.facebook.com/docs/whatsapp/cloud-api",
   "release_stage": "beta",
@@ -20,7 +20,7 @@
     "requests_per_minute": 80
   },
   "risk": {
-    "read": "external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted; media get-url intentionally returns the short-TTL media URL it was asked to resolve",
+    "read": "external Meta Graph API read of WABA metadata, phone numbers, templates, QR codes, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted; media get-url intentionally returns the short-TTL media URL it was asked to resolve",
     "write": "typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans",
     "approval": "reverse ETL requires plan, preview, approval, execute; message sends, media upload, destructive deletes, and phone-number registration/PIN actions require --confirm destructive plus healthcare consent/template pre-approval"
   }

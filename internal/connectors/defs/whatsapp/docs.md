@@ -6,8 +6,8 @@ v25.0 and models the WhatsApp Web multidevice (whatsmeow) access mode from
 (parent #516): WhatsApp is the patient engagement / outbound notification channel while Bahmni
 holds the clinical system of record.
 
-Executable ETL streams (cloud mode): `phone_numbers`, `message_templates`, `subscribed_apps`,
-`waba`.
+Executable ETL streams (cloud mode): `phone_numbers`, `message_templates`, `qr_codes`,
+`subscribed_apps`, `waba`.
 
 Bounded direct-read commands cover single phone-number/template/profile/media detail plus the typed
 template-analytics read-query under the `json_redacted` output policy. Messaging, conversation, and
@@ -15,7 +15,7 @@ pricing analytics are ledger-only: Graph exposes them solely as field expansions
 (`fields=analytics.start(..).end(..)`), which is not authorable without a raw Graph `fields` flag,
 so those commands are declared `unsupported_api`. WhatsApp sends (all 11 message types), template
 and phone-number administration, business-profile updates, QR/subscription management, and bounded
-media upload are modeled as 28 typed reverse-ETL write actions.
+media upload are modeled as 29 typed reverse-ETL write actions.
 
 The WhatsApp Web (whatsmeow) mode is modeled as documented, config-scoped ops (`spec.mode=web`);
 it requires a local QR session and is not executed by the declarative Graph HTTP engine.
@@ -63,9 +63,9 @@ are recorded as blocked ledger rows and should be ingested by the EMR/webhook re
 
 Write actions are declared in `writes.json` for WhatsApp sends (text/image/audio/video/document/
 sticker/location/contacts/interactive/template/reaction), mark-as-read and typing, template
-create/edit/delete, phone-number register/deregister/request-code/verify/two-step-PIN, business-
-profile update, app subscribe/unsubscribe, QR create/delete, and bounded multipart media upload +
-media delete.
+create/edit/delete-by-name/delete-by-ID, phone-number register/deregister/request-code/verify/two-
+step-PIN, business-profile update, app subscribe/unsubscribe, QR create/delete, and bounded
+multipart media upload + media delete.
 
 Safety gates:
 
@@ -83,7 +83,7 @@ Safety gates:
 - No generic raw HTTP write, arbitrary Graph API method/path/body, raw whatsmeow method, generic
   shell write, or SQL write is exposed.
 
-Read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted. `media get-url` deliberately returns the short-TTL media URL in clear text — that URL is the command's output and still requires the access token to fetch.
+Read risk: external Meta Graph API read of WABA metadata, phone numbers, templates, QR codes, subscribed apps, and template analytics; direct reads are size-bounded and secret-shaped response fields are redacted. `media get-url` deliberately returns the short-TTL media URL in clear text — that URL is the command's output and still requires the access token to fetch.
 
 Write risk: typed WhatsApp reverse ETL: patient message sends (PHI), template and phone-number administration, business-profile updates, QR/subscription management, and bounded media upload; message bodies and recipient numbers are redacted in plans.
 
@@ -94,12 +94,12 @@ Approval: reverse ETL requires plan, preview, approval, execute; message sends, 
 - Batch defaults: read_page_size=100.
 - API coverage is inventoried from Meta WhatsApp Cloud API + Business Management API v25.0 (reviewed
   2026-07-25) and the vicentereig/whatsapp-cli command surface.
-- Executable coverage (cloud mode): 4 stream endpoints, 4 GET direct reads, 1 typed template
-  analytics read-query, and 28 typed reverse-ETL write actions.
+- Executable coverage (cloud mode): 5 stream endpoints, 4 GET direct reads, 1 typed template
+  analytics read-query, and 29 typed reverse-ETL write actions.
 - Messaging/conversation/pricing analytics are not executable: their start/end/granularity filters
   exist only inside Graph field-expansion syntax, and this connector exposes no raw `fields` flag.
 - `delete_message_template` targets by template name and removes every language version registered
-  under that name; per-language (`hsm_id`) deletion is not modeled.
+  under that name; `delete_message_template_by_id` targets a single template ID via `hsm_id`.
 - WhatsApp Web (whatsmeow) mode: modeled as documented, config-scoped ops
   (`unsupported_local`); live execution requires a whatsmeow QR session and is human-gated.
 - Live sends, template submissions, phone-number administration, media payloads beyond fixtures,

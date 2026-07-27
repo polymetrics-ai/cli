@@ -25,6 +25,9 @@ var whatsappReversePlanRedactFields = map[string][]string{
 	"upload_media":             {"media_file"},
 	"create_message_template":  {"components"},
 	"update_message_template":  {"components"},
+	"register_phone_number":    {"pin"},
+	"verify_phone_number":      {"code"},
+	"set_two_step_pin":         {"pin"},
 	"create_qr_code":           {"prefilled_message"},
 }
 
