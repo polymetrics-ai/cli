@@ -24,8 +24,8 @@
 | WiX source guard | `go test ./packaging/windows` | PASS | Passed via focused package run |
 | Go tests | `go test ./build/windowsversion ./packaging/windows ./packaging/windows/winget` | PASS | Passed |
 | Formatting | `gofmt -w build/windowsversion packaging/windows` | no diff after gofmt | Passed |
-| Broad Go gates | `go test ./...`, `go vet ./...`, `go build ./cmd/pm` | PASS or documented blocker | Pending |
-| PR-safe Windows package workflow | GitHub Actions `Windows Package Check` | PASS | Pending |
+| Broad Go gates | `go test ./...`, `go vet ./...`, `go build ./cmd/pm` | PASS or documented blocker | Passed locally |
+| PR-safe Windows package workflow | GitHub Actions `Windows Package Check` | PASS | Pending on PR CI |
 | no-mistakes | `no-mistakes axi run --intent ...` | `checks-passed` | Pending |
 
 ## Deferred production-signing evidence

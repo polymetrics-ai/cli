@@ -18,6 +18,7 @@ Before the first external PR:
 6. Compute `InstallerSha256` from the final signed MSI bytes only after signing is complete.
 7. Replace placeholders in these templates under the `winget-pkgs` path:
    `manifests/p/PolymetricsAI/PolymetricsCLI/<VERSION>/`.
+8. Replace `<APPROVED_PRIVACY_POLICY_URL>` only after maintainers approve the public privacy URL for package-manager metadata. The code-signing policy contains the current signing/privacy disclosure, but WinGet should point to a deliberate privacy URL when one is available.
 
 WinGet hashes pin installer bytes for repository validation and download integrity. They do not replace Authenticode signing or timestamp verification.
 

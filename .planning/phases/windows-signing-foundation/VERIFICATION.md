@@ -4,30 +4,30 @@
 
 - [x] `go test ./build/windowsversion ./packaging/windows ./packaging/windows/winget`
 - [x] `gofmt -w build/windowsversion packaging/windows`
-- [ ] `go test ./...`
-- [ ] `go vet ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `git diff --check`
+- [x] `go test ./...` — passed locally after implementation.
+- [x] `go vet ./...` — passed locally after implementation.
+- [x] `go build ./cmd/pm` — passed locally after implementation.
+- [x] `git diff --check` — passed locally after implementation.
 
 ## Windows PR-safe workflow checks
 
-- [ ] Workflow is separate from production release workflow and runs only unsigned validation.
-- [ ] Workflow has no secrets and no provider API calls.
-- [ ] Builds Windows amd64 and arm64 `pm.exe` snapshots with generated VERSIONINFO.
-- [ ] Builds WiX x64 and arm64 MSIs.
-- [ ] Verifies VERSIONINFO fields for both executables.
-- [ ] Verifies MSI metadata/structure for x64 and arm64.
-- [ ] Installs/runs/uninstalls x64 MSI on `windows-latest`.
-- [ ] Records arm64 native install/run/uninstall as deferred until a native Windows ARM64 runner is green.
+- [x] Workflow is separate from production release workflow and runs only unsigned validation.
+- [x] Workflow has no secrets and no provider API calls.
+- [x] Builds Windows amd64 and arm64 `pm.exe` snapshots with generated VERSIONINFO.
+- [x] Builds WiX x64 and arm64 MSIs.
+- [x] Verifies VERSIONINFO fields for both executables.
+- [x] Verifies MSI metadata/structure for x64 and arm64.
+- [x] Installs/runs/uninstalls x64 MSI on `windows-latest`.
+- [x] Records arm64 native install/run/uninstall as deferred until a native Windows ARM64 runner is green.
 
 ## Documentation checks
 
-- [ ] Code-signing policy is truthful about current unsigned state and future SignPath route.
-- [ ] Policy includes SignPath attribution and publisher-display caveat.
-- [ ] Policy documents HSM custody, release-only approvals, timestamping, no unsigned fallback, incident/revocation, and PM network behavior.
-- [ ] README download section links policy.
-- [ ] SECURITY.md links policy.
-- [ ] WinGet docs/templates use `PolymetricsAI.PolymetricsCLI` and placeholders only.
+- [x] Code-signing policy is truthful about current unsigned state and future SignPath route.
+- [x] Policy includes SignPath attribution and publisher-display caveat.
+- [x] Policy documents HSM custody, release-only approvals, timestamping, no unsigned fallback, incident/revocation, and PM network behavior.
+- [x] README download section links policy.
+- [x] SECURITY.md links policy.
+- [x] WinGet docs/templates use `PolymetricsAI.PolymetricsCLI` and placeholders only.
 
 ## no-mistakes PR path
 
@@ -40,4 +40,4 @@
 
 ## Results
 
-Pending implementation.
+Local Go verification passed. Windows package workflow and no-mistakes/CI are pending after push/PR.

@@ -9,6 +9,7 @@ on:
       - 'internal/**'
       - 'packaging/windows/**'
       - 'scripts/windows-*.ps1'
+      - 'scripts/verify-windows-package.ps1'
       - 'go.mod'
       - 'go.sum'
 
@@ -23,6 +24,8 @@ jobs:
     steps:
       - name: Checkout candidate
         uses: actions/checkout@v7
+        with:
+          persist-credentials: false
 
       - name: Set up Go
         uses: actions/setup-go@v6

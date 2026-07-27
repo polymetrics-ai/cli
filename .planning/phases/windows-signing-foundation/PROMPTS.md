@@ -14,7 +14,7 @@ Promotion instruction: continue `cli-windows-signpath-onboarding-r1` as a ship t
 
 ## Verification result
 
-Pending implementation.
+Focused tests, `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, and `git diff --check` passed locally. Windows PR workflow and no-mistakes/CI are pending after PR creation.
 
 ## GSD adapter status
 
