@@ -55,4 +55,12 @@ describe('lint tooling', () => {
     expect(braceExpansionEntries).toEqual(['5.0.8']);
     expect(lockfile).not.toContain('brace-expansion@1.1.16');
   });
+
+  it('includes pnpm patches in the Docker dependency layer', () => {
+    const workspaceConfig = readWebsiteFile('pnpm-workspace.yaml');
+    const dockerfile = readWebsiteFile('Dockerfile');
+
+    expect(workspaceConfig).toContain('patchedDependencies:');
+    expect(dockerfile).toContain('COPY patches ./patches');
+  });
 });

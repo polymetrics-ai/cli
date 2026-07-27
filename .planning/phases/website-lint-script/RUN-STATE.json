@@ -30,7 +30,8 @@
     "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website install --frozen-lockfile --ignore-scripts --store-dir ../.pnpm-store --reporter=append-only",
     "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose",
     "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run lint",
-    "go run ./cmd/prissueguard --title \"fix(website): restore lint command\" --body \"Refs #67\""
+    "go run ./cmd/prissueguard --title \"fix(website): restore lint command\" --body \"Refs #67\"",
+    "docker build --target deps -f website/Dockerfile -t polymetrics-website-deps:ci-fix website"
   ],
-  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores. Follow-up CI repair pins brace-expansion to patched 5.0.8 with a minimal minimatch compatibility patch and updates the live PR body with Refs #67."
+  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores. Follow-up CI repair pins brace-expansion to patched 5.0.8 with a minimal minimatch compatibility patch, copies pnpm patches into the Docker deps layer, and updates the live PR body with Refs #67."
 }

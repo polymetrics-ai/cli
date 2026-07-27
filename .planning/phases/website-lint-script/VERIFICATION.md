@@ -22,3 +22,7 @@
 - [x] Focused green regression: `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` — 3 tests passed.
 - [x] Website lint compatibility after pnpm patch: `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website run lint` — passed with 13 warnings, 0 errors.
 - [x] Issue guard source left unchanged; local body-shape validation uses `Refs #67` for the live PR body update.
+- [x] Website image log inspected: Docker deps stage failed because `patches/minimatch@3.1.5.patch` was not copied before `pnpm install --frozen-lockfile`.
+- [x] Focused Dockerfile red regression: `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` failed until `Dockerfile` included `COPY patches ./patches`.
+- [x] Focused Dockerfile green regression: `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` — 4 tests passed.
+- [x] Docker deps-stage verification: `docker build --target deps -f website/Dockerfile -t polymetrics-website-deps:ci-fix website`; removed the temporary local image tag with `docker image rm polymetrics-website-deps:ci-fix`.

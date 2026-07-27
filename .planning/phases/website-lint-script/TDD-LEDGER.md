@@ -5,6 +5,7 @@
 - Added focused Vitest coverage that asserts `website/package.json` uses the ESLint CLI (`eslint .`) instead of obsolete `next lint`.
 - Added coverage that asserts a flat ESLint config exists and records generated/build artifact ignores.
 - Added focused lockfile coverage that asserts `brace-expansion` is pinned to the Dependency Review patched release and the vulnerable `1.1.16` entry is absent.
+- Added focused Dockerfile coverage that asserts pnpm patch files are copied into the Docker dependency layer when `patchedDependencies` is configured.
 
 Evidence:
 - `corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts` failed before implementation:
@@ -12,6 +13,8 @@ Evidence:
   - expected `eslint.config.mjs` to exist, received missing config.
 - `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` failed before the Dependency Review fix:
   - expected `["5.0.8"]`, received `["1.1.16", "5.0.8"]`.
+- `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` failed before the Dockerfile fix:
+  - expected `Dockerfile` to contain `COPY patches ./patches`.
 
 ## Green
 
@@ -22,6 +25,7 @@ Evidence:
 - Kept pre-existing React Hooks compiler findings as warnings only for the known existing files so the restored lint command is runnable without touching out-of-scope product code or weakening future files.
 - Added `pnpm-workspace.yaml` override `brace-expansion: 5.0.8` because GitHub advisory GHSA-mh99-v99m-4gvg marks `<=5.0.7` affected and `5.0.8` patched.
 - Added `website/patches/minimatch@3.1.5.patch` so legacy CommonJS `minimatch@3.1.5` can call the patched `brace-expansion@5.0.8` `{ expand }` export.
+- Updated `website/Dockerfile` to copy `patches/` into the deps stage before `pnpm install --frozen-lockfile`.
 
 Evidence:
 - `corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts` passed.
@@ -29,6 +33,7 @@ Evidence:
 - `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website install --frozen-lockfile --ignore-scripts --store-dir ../.pnpm-store --reporter=append-only` passed.
 - `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose` passed.
 - `CI=true COREPACK_HOME="$PWD/.corepack" corepack pnpm@11.7.0 --dir website run lint` passed with 13 warnings and 0 errors.
+- `docker build --target deps -f website/Dockerfile -t polymetrics-website-deps:ci-fix website` passed; temporary local image tag was removed.
 
 ## Refactor
 
