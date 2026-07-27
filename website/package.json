@@ -31,7 +31,7 @@
     "fumadocs-mdx": "^15.0.13",
     "fumadocs-ui": "^16.10.7",
     "lucide-react": "^1.22.0",
-    "next": "^16.2.9",
+    "next": "^16.2.12",
     "pg": "^8.22.0",
     "radix-ui": "^1.6.0",
     "react": "^19.0.0",
@@ -48,5 +48,10 @@
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.9"
+  },
+  "overrides": {
+    "js-yaml": "5.2.2",
+    "postcss": "8.5.23",
+    "sharp": "0.35.3"
   }
 }

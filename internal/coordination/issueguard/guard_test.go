@@ -61,10 +61,41 @@ func TestValidatePRAllowsNarrativeNonClosingReferences(t *testing.T) {
 	}
 }
 
+func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
+	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 551 || !result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+	}
+}
+
+func TestValidatePRAcceptsIssueFirstDeliveryIntent(t *testing.T) {
+	body := "Implement the first shippable cross-platform PM release-trust slice under parent polymetrics-ai/cli#550 by fully delivering issues #551 and #552 only."
+	result := ValidatePR("feat: add release provenance and linux packages", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+
+	want := []int{550, 551, 552}
+	if len(result.Issues) != len(want) {
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+	}
+	for i, number := range want {
+		if result.Issues[i].Number != number || result.Issues[i].Closing {
+			t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+		}
+	}
+}
+
 func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 	tests := []string{
 		"Related to #123\n",
 		"Mentions #123\n",
+		"Issue #123\n",
+		"References #123\n",
+		"Do not implement issue #123\n",
 	}
 	for _, body := range tests {
 		result := ValidatePR("feat(github): add cli surface metadata", body)

@@ -45,6 +45,38 @@ archives:
       - NOTICE
       - README.md
 
+nfpms:
+  - id: linux_packages
+    package_name: pm
+    ids:
+      - pm
+    file_name_template: "{{ .ProjectName }}_{{ .Version }}_linux_{{ if eq .Format \"rpm\" }}{{ if eq .Arch \"amd64\" }}x86_64{{ else if eq .Arch \"arm64\" }}aarch64{{ else }}{{ .Arch }}{{ end }}{{ else }}{{ .Arch }}{{ end }}{{ .ConventionalExtension }}"
+    vendor: Polymetrics AI
+    homepage: https://cli.polymetrics.ai
+    maintainer: Polymetrics AI
+    description: |-
+      Local-first data CLI for ETL, embedded DuckDB SQL, reverse ETL,
+      scheduling, and AI-agent-safe automation.
+    license: AGPL-3.0-only
+    formats:
+      - deb
+      - rpm
+    bindir: /usr/bin
+    section: utils
+    priority: optional
+    release: 1
+    contents:
+      - src: LICENSE
+        dst: /usr/share/doc/pm/LICENSE
+        file_info:
+          mode: 0644
+          mtime: "{{ .CommitDate }}"
+      - src: NOTICE
+        dst: /usr/share/doc/pm/NOTICE
+        file_info:
+          mode: 0644
+          mtime: "{{ .CommitDate }}"
+
 checksum:
   name_template: checksums.txt
 

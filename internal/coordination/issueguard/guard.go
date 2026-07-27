@@ -20,8 +20,10 @@ type Result struct {
 }
 
 var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+`)
-var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|reference|references|refs|ref|issues|issue):?\s+((?:#[1-9][0-9]*)(?:\s*(?:,|/|\band\b)\s*#[1-9][0-9]*)*)`)
-var issueNumberPattern = regexp.MustCompile(`#([1-9][0-9]*)\b`)
+var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|ref|refs):?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
+var issueTokenPattern = regexp.MustCompile(`(?:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([1-9][0-9]*)\b`)
+var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?)\b[^.\n\r]{0,80}\bissues?\b[^.\n\r]{0,160}`)
+var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 
 var closingKeywords = map[string]bool{
 	"close":    true,
@@ -43,7 +45,7 @@ func ValidatePR(title, body string) Result {
 
 	issues := ExtractIssueRefs(body)
 	if len(issues) == 0 {
-		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work or Refs #123 for stacked/incremental work")
+		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, or explicit parent/delivery issue wording")
 	}
 
 	return Result{
@@ -55,34 +57,31 @@ func ValidatePR(title, body string) Result {
 
 func ExtractIssueRefs(text string) []IssueRef {
 	matches := issueRefPattern.FindAllStringSubmatch(text, -1)
-	if len(matches) == 0 {
-		return nil
-	}
-
 	seen := map[int]IssueRef{}
 	for _, match := range matches {
 		if len(match) < 3 {
 			continue
 		}
 		keyword := strings.ToLower(match[1])
-		for _, numberMatch := range issueNumberPattern.FindAllStringSubmatch(match[2], -1) {
-			if len(numberMatch) < 2 {
-				continue
-			}
-			number, err := strconv.Atoi(numberMatch[1])
-			if err != nil {
-				continue
-			}
-			ref := IssueRef{
-				Number:  number,
-				Keyword: keyword,
-				Closing: closingKeywords[keyword],
-			}
-			if existing, ok := seen[number]; ok && (existing.Closing || !ref.Closing) {
-				continue
-			}
-			seen[number] = ref
+		addIssueRef(seen, match[2], keyword)
+	}
+
+	for _, match := range parentIssuePattern.FindAllStringSubmatch(text, -1) {
+		if len(match) < 2 {
+			continue
 		}
+		addIssueRef(seen, match[1], "parent")
+	}
+
+	for _, loc := range deliveryIssuePhrasePattern.FindAllStringIndex(text, -1) {
+		if hasNegationPrefix(text, loc[0]) {
+			continue
+		}
+		addIssueTokens(seen, text[loc[0]:loc[1]], "issues")
+	}
+
+	if len(seen) == 0 {
+		return nil
 	}
 
 	issues := make([]IssueRef, 0, len(seen))
@@ -93,4 +92,38 @@ func ExtractIssueRefs(text string) []IssueRef {
 		return issues[i].Number < issues[j].Number
 	})
 	return issues
+}
+
+func addIssueTokens(seen map[int]IssueRef, text, keyword string) {
+	for _, match := range issueTokenPattern.FindAllStringSubmatch(text, -1) {
+		if len(match) < 2 {
+			continue
+		}
+		addIssueRef(seen, match[1], keyword)
+	}
+}
+
+func addIssueRef(seen map[int]IssueRef, rawNumber, keyword string) {
+	number, err := strconv.Atoi(rawNumber)
+	if err != nil {
+		return
+	}
+	ref := IssueRef{
+		Number:  number,
+		Keyword: keyword,
+		Closing: closingKeywords[keyword],
+	}
+	if existing, ok := seen[number]; ok && existing.Closing {
+		return
+	}
+	seen[number] = ref
+}
+
+func hasNegationPrefix(text string, start int) bool {
+	prefixStart := start - 16
+	if prefixStart < 0 {
+		prefixStart = 0
+	}
+	prefix := strings.ToLower(text[prefixStart:start])
+	return strings.Contains(prefix, "do not ") || strings.Contains(prefix, "don't ") || strings.Contains(prefix, "not ")
 }
