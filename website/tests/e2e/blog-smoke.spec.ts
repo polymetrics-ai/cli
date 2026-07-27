@@ -61,6 +61,70 @@ test.describe('blog UI smoke', () => {
     expect(hydrationErrors).toEqual([]);
   });
 
+  test('waits for profile settings before enabling visibility edits', async ({ page }) => {
+    const timestamp = '2026-01-01T00:00:00.000Z';
+    await page.route(/\/api\/auth\/get-session$/, (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          session: {
+            id: 'profile-session',
+            token: 'profile-session-token',
+            userId: 'profile-user',
+            expiresAt: timestamp,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          },
+          user: {
+            id: 'profile-user',
+            name: 'Profile Tester',
+            email: 'profile.tester@example.test',
+            emailVerified: true,
+            image: null,
+            createdAt: timestamp,
+            updatedAt: timestamp,
+          },
+        }),
+      }),
+    );
+
+    let releaseProfileLoad!: () => void;
+    const profileLoad = new Promise<void>((resolve) => {
+      releaseProfileLoad = resolve;
+    });
+
+    await page.route(/\/api\/profile$/, async (route) => {
+      await profileLoad;
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({
+          settings: {
+            profileVisible: false,
+            profileUrl: null,
+            providerUsername: null,
+            providerProfileUrl: null,
+          },
+        }),
+      });
+    });
+
+    await page.goto('/blog/human-harnesses');
+    const authCard = page.locator('[data-blog-auth-card][data-session-ready="true"]');
+    await expect(authCard).toBeVisible();
+    await authCard.getByRole('button', { name: 'Profile' }).click();
+
+    const dialog = page.getByRole('dialog', { name: 'How readers see you' });
+    const checkbox = dialog.getByRole('checkbox');
+    await expect(checkbox).toBeDisabled();
+
+    releaseProfileLoad();
+    await expect(checkbox).toBeEnabled();
+    await checkbox.check();
+    await expect(checkbox).toBeChecked();
+  });
+
   test('opens inline GitHub references without leaving the article', async ({ page }) => {
     await page.route('https://api.github.com/**', (route) => route.abort());
     await page.goto('/blog/human-harnesses');
