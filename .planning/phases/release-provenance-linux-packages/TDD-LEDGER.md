@@ -14,9 +14,12 @@
 | 10 | CI red validation | `PR_TITLE=$(gh pr view 560 --json title -q .title) PR_BODY=$(gh pr view 560 --json body -q .body) go run ./cmd/prissueguard` | Fails because the PR body names parent `polymetrics-ai/cli#550` and issues `#551`/`#552` in the intent but lacks `Closes`/`Refs` keywords | Red captured |
 | 11 | CI green validation | Targeted issueguard unit tests plus live PR-body guard check | PR #560 issue-first wording is recognized without accepting ambiguous `Related to`, `Issue`, or `References` text | Green |
 | 12 | CI green validation | `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` after dependency fix | No reachable vulnerabilities remain | Green |
+| 13 | Snyk red validation | `npm audit --omit=dev --package-lock-only --json` and `npx -y pnpm@11.7.0 audit --prod` in `website/` | Website manifests reproduce high-severity Snyk-style findings for `next <16.2.11`, `js-yaml <=5.2.1`, `postcss <=8.5.17`, and `sharp <0.35.0` | Red captured |
+| 14 | Snyk green validation | `npm audit --omit=dev --package-lock-only --json`; `npx -y pnpm@11.7.0 audit --prod` after lockfile repair | Both website package-manager scans report zero known production vulnerabilities | Green |
 
 ## Notes
 
 - Snapshot PR validation must not mint production attestations or publish release assets.
 - Fixture trust evidence is explicitly unsigned and accepted only when `ALLOW_UNSIGNED_TRUST_FIXTURES=1` is set.
 - Release upload must fail if any required asset, checksum entry, Cosign bundle, GitHub attestation, or package verification is missing or mismatched.
+- The Snyk repair is intentionally limited to independent website dependency metadata so the release package/provenance slice remains behaviorally separate from website build/deploy code.

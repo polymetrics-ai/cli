@@ -11,6 +11,7 @@ Status: implemented and locally verified.
 - Added release-only GitHub OIDC provenance and Cosign keyless bundle generation before upload, with final verification gating upload and no overwrite/clobber path for existing PM release assets.
 - Added narrow release verification documentation and linked it from `docs/GUIDE.md`.
 - Repaired PR #560 CI by upgrading the existing indirect gRPC module to the GO-2026-6061 fixed floor and teaching `prissueguard` to recognize explicit issue-first delivery/parent references already present in the PR body.
+- Repaired the external `security/snyk` check by updating independent website dependency metadata and lockfiles for vulnerable `next`, `js-yaml`, `postcss`, and `sharp` resolutions without changing release workflow behavior or website application source.
 
 ## Deferred explicitly to separate issues
 

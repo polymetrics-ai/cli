@@ -63,3 +63,9 @@
 1. Resolve `govulncheck` GO-2026-6061 by upgrading the existing indirect `google.golang.org/grpc` requirement from `v1.79.3` to the fixed floor `v1.82.1`, then run `go mod tidy` and the CI vulnerability command with `GOTOOLCHAIN=go1.25.12`.
 2. Fix `require-linked-issue` by adding a focused red test for PR #560's issue-first intent wording, then make `cmd/prissueguard` accept explicit delivery/parent issue references such as `fully delivering issues #551 and #552` and `parent polymetrics-ai/cli#550` while keeping vague references rejected.
 3. Verify with focused issueguard tests, `go test ./cmd/prissueguard ./internal/coordination/issueguard`, `go test ./...`, and the exact `govulncheck` CI command.
+
+## Snyk repair slice for PR #560
+
+1. Reproduce the external `security/snyk` failure locally with website package audits because Snyk scans the independent website dependency manifests even though the release package-check job is green.
+2. Keep binary/website independence intact by changing only website dependency metadata and lockfiles; do not change release workflow behavior, generated website data, or website application source.
+3. Raise the vulnerable website dependency floors for `next`, `js-yaml`, `postcss`, and `sharp` through existing package-manager mechanisms, then verify npm and pnpm production audits are clean.

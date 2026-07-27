@@ -44,6 +44,16 @@
 - [x] `GOTOOLCHAIN=go1.25.12 go run golang.org/x/vuln/cmd/govulncheck@latest ./...` — passed, no vulnerabilities found.
 - [ ] `make verify` — attempted; stopped at `tidy-check` because this uncommitted PR repair intentionally changes `go.mod`/`go.sum`. Its remaining Go constituents were run directly above.
 
+## PR #560 Snyk repair gates
+
+- [x] `npm audit --omit=dev --package-lock-only --json` in `website/` — red, high vulnerabilities in `next`, `js-yaml`, `postcss`, and `sharp`.
+- [x] `npx -y pnpm@11.7.0 install --lockfile-only --ignore-scripts` in `website/` — passed, lockfile passed pnpm supply-chain policy verification.
+- [x] `npm install --package-lock-only --ignore-scripts` in `website/` — passed, reported `found 0 vulnerabilities`.
+- [x] `npm audit --omit=dev --package-lock-only --json` in `website/` — passed, zero production vulnerabilities.
+- [x] `npx -y pnpm@11.7.0 audit --prod` in `website/` — passed, no known production vulnerabilities.
+- [x] `npx -y pnpm@11.7.0 install --frozen-lockfile --ignore-scripts` in `website/` — passed, lockfile is reproducible with the CI pnpm version.
+- [x] `npx -y pnpm@11.7.0 run postinstall` then `npx -y pnpm@11.7.0 run typecheck` in `website/` — passed after generating the same Fumadocs source module that CI creates during install.
+
 ## Documentation checks
 
 - [x] `docs/release-verification.md` documents repository/workflow/ref-constrained commands and digest/checksum verification.
