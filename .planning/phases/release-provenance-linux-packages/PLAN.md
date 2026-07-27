@@ -51,3 +51,9 @@
 ## Execution decision
 
 `local_critical_path`: this is one focused release pipeline slice touching shared release workflow/config/scripts/docs. No mutating subagent was spawned because this disposable worktree is the isolated worker context and the edits are tightly coupled.
+
+## Review fix slice
+
+1. Replace count-only existing-release skip logic with exact asset-set comparison, release asset download, checksum validation, Cosign bundle verification, and GitHub attestation verification before skipping upload.
+2. Extend Linux package install coverage to run both amd64 and arm64 packages in architecture-matched Docker containers, using QEMU on GitHub-hosted amd64 runners for arm64.
+3. Run one focused verification pass over the changed release workflow and shell scripts after all fixes are applied.

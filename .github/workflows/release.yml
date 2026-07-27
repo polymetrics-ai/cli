@@ -80,6 +80,11 @@ jobs:
           REQUIRE_TRUST_EVIDENCE: "1"
         run: ./scripts/verify-release-assets.sh dist
 
+      - name: Set up QEMU for Linux package tests
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
       - name: Test Linux package installation
         run: ./scripts/test-linux-packages.sh dist
 
@@ -110,6 +115,14 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
+      - name: Install release verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rpm
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+
       - name: Check existing release assets
         id: existing-assets
         env:
@@ -117,20 +130,50 @@ jobs:
           TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
         run: |
           set -euo pipefail
-          asset_count=$(gh release view "$TAG_NAME" --json assets --jq '[.assets[] | select(.name == "checksums.txt" or .name == "checksums.txt.sigstore.json" or (.name | startswith("pm_")))] | length')
-          case "$asset_count" in
-            0)
-              echo "skip_release_assets=false" >> "$GITHUB_OUTPUT"
-              ;;
-            22)
-              printf 'release %s already has the complete PM asset set; skipping duplicate upload\n' "$TAG_NAME"
-              echo "skip_release_assets=true" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              printf 'release %s already has %s PM assets; refusing to overwrite a partial or mismatched set\n' "$TAG_NAME" "$asset_count" >&2
-              exit 1
-              ;;
-          esac
+          release_version="${TAG_NAME#v}"
+          expected_assets=$(./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets | LC_ALL=C sort)
+          actual_assets=$(gh release view "$TAG_NAME" --json assets --jq '.assets[].name' | LC_ALL=C sort)
+          if [[ -z "$actual_assets" ]]; then
+            echo "skip_release_assets=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [[ "$actual_assets" != "$expected_assets" ]]; then
+            printf 'release %s has unexpected assets; refusing to overwrite or skip\n' "$TAG_NAME" >&2
+            diff -u <(printf '%s\n' "$expected_assets") <(printf '%s\n' "$actual_assets") || true
+            exit 1
+          fi
+
+          release_dir=$(mktemp -d)
+          trap 'rm -rf "$release_dir"' EXIT
+          download_args=()
+          while IFS= read -r asset; do
+            download_args+=(--pattern "$asset")
+          done <<<"$expected_assets"
+          gh release download "$TAG_NAME" --dir "$release_dir" "${download_args[@]}"
+
+          regex_escape() {
+            python3 - "$1" <<'PY'
+          import re
+          import sys
+
+          print(re.escape(sys.argv[1]))
+          PY
+          }
+          workflow_identity="https://github.com/${GITHUB_REPOSITORY}/.github/workflows/release.yml"
+          main_identity="${workflow_identity}@refs/heads/main"
+          tag_identity="${workflow_identity}@refs/tags/${TAG_NAME}"
+          identity_regexp="^($(regex_escape "$main_identity")|$(regex_escape "$tag_identity"))$"
+          COSIGN_CERT_IDENTITY_REGEXP="$identity_regexp" \
+            GITHUB_ATTESTATION_CERT_IDENTITY_REGEX="$identity_regexp" \
+            GITHUB_ATTESTATION_REPO="$GITHUB_REPOSITORY" \
+            REQUIRE_TRUST_EVIDENCE=1 \
+            VERIFY_GITHUB_ATTESTATIONS=1 \
+            ./scripts/verify-release-assets.sh "$release_dir" \
+              --release-version "$release_version" \
+              --require-exact-release-assets
+
+          printf 'release %s already has the exact verified PM asset set; skipping duplicate upload\n' "$TAG_NAME"
+          echo "skip_release_assets=true" >> "$GITHUB_OUTPUT"
 
       - name: Export reproducible package timestamp
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
@@ -143,12 +186,6 @@ jobs:
           go-version: '1.25.12'
           cache: true
 
-      - name: Install package inspection tools
-        if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y rpm
-
       - name: Build release assets without publishing
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         uses: goreleaser/goreleaser-action@v7
@@ -160,6 +197,12 @@ jobs:
       - name: Capture release trust subjects
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         run: ./scripts/verify-release-assets.sh dist --print-subjects > "$RUNNER_TEMP/release-trust-subjects.txt"
+
+      - name: Set up QEMU for Linux package tests
+        if: steps.existing-assets.outputs.skip_release_assets != 'true'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
 
       - name: Test Linux package installation
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
@@ -175,10 +218,6 @@ jobs:
             dist/pm_*.deb
             dist/pm_*.rpm
             dist/checksums.txt
-
-      - name: Install cosign
-        if: steps.existing-assets.outputs.skip_release_assets != 'true'
-        uses: sigstore/cosign-installer@v3
 
       - name: Generate Cosign keyless bundles
         if: steps.existing-assets.outputs.skip_release_assets != 'true'

@@ -1,10 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DIST_DIR=${1:-dist}
-shift || true
+DIST_DIR=dist
+if [[ $# -gt 0 && "$1" != --* ]]; then
+  DIST_DIR=$1
+  shift
+fi
 
 PRINT_SUBJECTS=0
+PRINT_EXPECTED_RELEASE_ASSETS=0
+REQUIRE_EXACT_RELEASE_ASSETS=0
+RELEASE_VERSION=${RELEASE_VERSION:-}
 REQUIRE_TRUST_EVIDENCE=${REQUIRE_TRUST_EVIDENCE:-0}
 VERIFY_GITHUB_ATTESTATIONS=${VERIFY_GITHUB_ATTESTATIONS:-0}
 ALLOW_UNSIGNED_TRUST_FIXTURES=${ALLOW_UNSIGNED_TRUST_FIXTURES:-0}
@@ -16,6 +22,20 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --print-subjects)
       PRINT_SUBJECTS=1
+      ;;
+    --print-expected-release-assets)
+      PRINT_EXPECTED_RELEASE_ASSETS=1
+      ;;
+    --require-exact-release-assets)
+      REQUIRE_EXACT_RELEASE_ASSETS=1
+      ;;
+    --release-version)
+      if [[ $# -lt 2 ]]; then
+        printf '%s\n' '--release-version requires a value' >&2
+        exit 2
+      fi
+      RELEASE_VERSION=$2
+      shift
       ;;
     --require-trust-evidence)
       REQUIRE_TRUST_EVIDENCE=1
@@ -30,6 +50,70 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+archive_targets=(
+  "darwin amd64 tar.gz pm"
+  "darwin arm64 tar.gz pm"
+  "linux amd64 tar.gz pm"
+  "linux arm64 tar.gz pm"
+  "windows amd64 zip pm.exe"
+  "windows arm64 zip pm.exe"
+)
+
+package_targets=(
+  "deb amd64 amd64"
+  "deb arm64 arm64"
+  "rpm amd64 x86_64"
+  "rpm arm64 aarch64"
+)
+
+validate_release_version() {
+  local version=$1
+  if [[ ! "$version" =~ ^[A-Za-z0-9][A-Za-z0-9._+-]*$ ]]; then
+    printf 'invalid release version for asset names: %s\n' "$version" >&2
+    exit 2
+  fi
+}
+
+require_release_version() {
+  if [[ -z "$RELEASE_VERSION" ]]; then
+    printf '%s\n' '--release-version or RELEASE_VERSION is required for exact release asset checks' >&2
+    exit 2
+  fi
+  validate_release_version "$RELEASE_VERSION"
+  printf '%s\n' "$RELEASE_VERSION"
+}
+
+expected_subject_names_for_version() {
+  local version=$1
+  local target goos goarch extension format package_arch
+  validate_release_version "$version"
+
+  for target in "${archive_targets[@]}"; do
+    read -r goos goarch extension _ <<<"$target"
+    printf 'pm_%s_%s_%s.%s\n' "$version" "$goos" "$goarch" "$extension"
+  done
+
+  for target in "${package_targets[@]}"; do
+    read -r format _ package_arch <<<"$target"
+    printf 'pm_%s_linux_%s.%s\n' "$version" "$package_arch" "$format"
+  done
+
+  printf 'checksums.txt\n'
+}
+
+expected_release_asset_names_for_version() {
+  local version=$1 subject
+  while IFS= read -r subject; do
+    printf '%s\n' "$subject"
+    printf '%s.sigstore.json\n' "$subject"
+  done < <(expected_subject_names_for_version "$version")
+}
+
+if [[ "$PRINT_EXPECTED_RELEASE_ASSETS" == "1" ]]; then
+  expected_release_asset_names_for_version "$(require_release_version)"
+  exit 0
+fi
 
 if [[ ! -d "$DIST_DIR" ]]; then
   printf 'release asset directory not found: %s\n' "$DIST_DIR" >&2
@@ -81,6 +165,15 @@ compare_exact() {
     diff -u <(printf '%s\n' "$expected") <(printf '%s\n' "$actual") || true
     exit 1
   fi
+}
+
+compare_exact_release_assets() {
+  local version=$1
+  local directory=$2
+  local expected actual
+  expected=$(expected_release_asset_names_for_version "$version" | LC_ALL=C sort)
+  actual=$(find "$directory" -maxdepth 1 -type f -exec basename {} \; | LC_ALL=C sort)
+  compare_exact "release asset set: $directory" "$expected" "$actual"
 }
 
 control_field() {
@@ -201,13 +294,18 @@ verify_cosign_bundle() {
   fi
 
   require_cmd cosign
-  if [[ -z "${COSIGN_CERT_IDENTITY:-}" ]]; then
-    printf 'COSIGN_CERT_IDENTITY is required when verifying real Cosign bundles\n' >&2
+  local identity_args=()
+  if [[ -n "${COSIGN_CERT_IDENTITY_REGEXP:-}" ]]; then
+    identity_args=(--certificate-identity-regexp "$COSIGN_CERT_IDENTITY_REGEXP")
+  elif [[ -n "${COSIGN_CERT_IDENTITY:-}" ]]; then
+    identity_args=(--certificate-identity "$COSIGN_CERT_IDENTITY")
+  else
+    printf 'COSIGN_CERT_IDENTITY or COSIGN_CERT_IDENTITY_REGEXP is required when verifying real Cosign bundles\n' >&2
     exit 1
   fi
   cosign verify-blob "$subject" \
     --bundle "$bundle" \
-    --certificate-identity "$COSIGN_CERT_IDENTITY" \
+    "${identity_args[@]}" \
     --certificate-oidc-issuer "$COSIGN_CERT_OIDC_ISSUER"
 }
 
@@ -217,29 +315,22 @@ verify_github_attestation() {
     return
   fi
   require_cmd gh
-  if [[ -z "${GITHUB_ATTESTATION_CERT_IDENTITY:-}" ]]; then
-    printf 'GITHUB_ATTESTATION_CERT_IDENTITY is required when verifying GitHub attestations\n' >&2
+  local identity_args=()
+  if [[ -n "${GITHUB_ATTESTATION_CERT_IDENTITY_REGEX:-}" ]]; then
+    identity_args=(--cert-identity-regex "$GITHUB_ATTESTATION_CERT_IDENTITY_REGEX")
+  elif [[ -n "${GITHUB_ATTESTATION_CERT_IDENTITY:-}" ]]; then
+    identity_args=(--cert-identity "$GITHUB_ATTESTATION_CERT_IDENTITY")
+  else
+    printf 'GITHUB_ATTESTATION_CERT_IDENTITY or GITHUB_ATTESTATION_CERT_IDENTITY_REGEX is required when verifying GitHub attestations\n' >&2
     exit 1
   fi
   gh attestation verify "$subject" \
     --repo "$GITHUB_ATTESTATION_REPO" \
-    --cert-identity "$GITHUB_ATTESTATION_CERT_IDENTITY" \
+    "${identity_args[@]}" \
     --cert-oidc-issuer "$GITHUB_ATTESTATION_CERT_OIDC_ISSUER" \
     --predicate-type https://slsa.dev/provenance/v1 \
     --deny-self-hosted-runners >/dev/null
 }
-
-# Keep these targets aligned with .goreleaser.yaml. The release keeps the
-# existing Windows targets while guaranteeing both supported macOS and Linux
-# archive arches.
-archive_targets=(
-  "darwin amd64 tar.gz pm"
-  "darwin arm64 tar.gz pm"
-  "linux amd64 tar.gz pm"
-  "linux arm64 tar.gz pm"
-  "windows amd64 zip pm.exe"
-  "windows arm64 zip pm.exe"
-)
 
 shopt -s nullglob
 assets=()
@@ -260,13 +351,6 @@ for target in "${archive_targets[@]}"; do
   expected=$(printf '%s\n' LICENSE NOTICE README.md "$binary_name" | LC_ALL=C sort)
   compare_exact "archive contents: $asset" "$expected" "$contents"
 done
-
-package_targets=(
-  "deb amd64 amd64"
-  "deb arm64 arm64"
-  "rpm amd64 x86_64"
-  "rpm arm64 aarch64"
-)
 
 for target in "${package_targets[@]}"; do
   read -r format goarch package_arch <<<"$target"
@@ -312,6 +396,10 @@ if [[ "$PRINT_SUBJECTS" != "1" ]]; then
 fi
 
 subjects=("${asset_paths[@]}" "$DIST_DIR/checksums.txt")
+
+if [[ "$REQUIRE_EXACT_RELEASE_ASSETS" == "1" ]]; then
+  compare_exact_release_assets "$(require_release_version)" "$DIST_DIR"
+fi
 
 if [[ "$REQUIRE_TRUST_EVIDENCE" == "1" ]]; then
   for subject in "${subjects[@]}"; do

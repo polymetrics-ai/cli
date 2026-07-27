@@ -2,13 +2,14 @@
 
 ## Focused release gates
 
+- [x] Review fix focused check: shell syntax, expected release asset helper output, shellcheck, and actionlint passed.
 - [x] `go run github.com/goreleaser/goreleaser/v2@latest check` — passed.
 - [x] `SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) go run github.com/goreleaser/goreleaser/v2@latest release --snapshot --clean` — passed.
 - [x] Reproducibility check: two snapshot builds with the same `SOURCE_DATE_EPOCH` produced identical hashes for all 11 copied release files (`checksums.txt` plus 10 archives/packages).
 - [x] Docker Ubuntu `./scripts/verify-release-assets.sh dist` with `rpm` installed — passed, `verified 10 release assets`.
 - [x] Docker Ubuntu `./scripts/create-release-trust-fixtures.sh dist` — passed, `11 subjects`.
 - [x] Docker Ubuntu `ALLOW_UNSIGNED_TRUST_FIXTURES=1 REQUIRE_TRUST_EVIDENCE=1 ./scripts/verify-release-assets.sh dist` — passed.
-- [x] `./scripts/test-linux-packages.sh dist` — passed on local Docker architecture with Ubuntu and Fedora containers.
+- [x] `./scripts/test-linux-packages.sh dist` — passed before review fix on local Docker architecture with Ubuntu and Fedora containers.
 - [x] `shellcheck scripts/verify-release-assets.sh scripts/create-release-trust-fixtures.sh scripts/test-linux-packages.sh` — passed.
 
 ## Workflow/security review
