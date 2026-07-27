@@ -9,6 +9,8 @@ Issues: Refs #550, #554, #555. Does not close them.
 - `scripts/gsd doctor` passed earlier in this session.
 - Required command attempted: `scripts/gsd prompt programming-loop init --phase windows-signing-foundation --dry-run`.
 - Adapter result: `scripts/gsd: unknown GSD command: programming-loop`.
+- CI repair command attempted: `scripts/gsd prompt programming-loop init --phase pr-559-ci-fixes --dry-run`.
+- CI repair adapter result: `scripts/gsd: unknown GSD command: programming-loop`.
 - Manual-GSD fallback is active per `.agents/agentic-delivery/references/gsd-pi-adapter.md` and `.agents/agentic-delivery/workflows/gsd-universal-runtime-loop.md`.
 - Design evidence: `/Users/karthiksivadas/karthik-agent-workspace/data/cli-windows-signpath-onboarding-r1/report.md`.
 - Promotion instructions: `/Users/karthiksivadas/karthik-agent-workspace/data/cli-windows-signpath-onboarding-r1/promotion-instructions.md`.
@@ -52,7 +54,7 @@ Create one provider-inert foundation PR for Windows signing readiness without ap
    - Link from `SECURITY.md` and README release/download section only; avoid website/generated churn.
 4. **Windows VERSIONINFO slice**
    - Add deterministic Go RC generator for `pm.exe` VERSIONINFO metadata with version normalization.
-   - Add Windows PowerShell script to compile RC to arch-specific `.syso` using Windows SDK `rc.exe`/`cvtres.exe` in CI.
+   - Add deterministic arch-specific `.syso` generation for `pm.exe` VERSIONINFO metadata without signing-provider calls.
    - Do not commit generated `.syso`, `.res`, `.msi`, or signed/unsigned release artifacts.
 5. **WiX MSI slice**
    - Add WiX source/configuration for x64 and arm64 machine-scope installers under `%ProgramFiles%\Polymetrics\CLI`.
@@ -69,6 +71,7 @@ Create one provider-inert foundation PR for Windows signing readiness without ap
 9. **CI repair slice**
    - Fix PR #559 reds without changing provider-inert scope: `govulncheck`, `require-linked-issue`, and `unsigned-msi-snapshot`.
    - Keep dependency movement limited to the reachable vulnerable `grpc` module graph, keep issue references non-closing, and keep Windows packaging unsigned/provider-inert.
+   - Replace the Windows SDK `cvtres.exe` `.syso` path after CI showed Go rejecting that COFF object during `GOOS=windows GOARCH=amd64 go build`.
 
 ## Security boundaries
 

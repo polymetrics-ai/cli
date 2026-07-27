@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"debug/pe"
 	"strings"
 	"testing"
 )
@@ -93,5 +95,86 @@ func TestRenderRCIncludesApprovedMetadata(t *testing.T) {
 	}
 	if strings.Contains(rc, "#include") {
 		t.Fatalf("RenderRC() emitted SDK header include:\n%s", rc)
+	}
+}
+
+func TestRenderSysoGeneratesLinkableResourceObject(t *testing.T) {
+	t.Parallel()
+
+	version := Version{Major: 1, Minor: 2, Patch: 3, Build: 0}
+	tests := []struct {
+		name      string
+		goarch    string
+		machine   uint16
+		relocType uint16
+	}{
+		{
+			name:      "amd64",
+			goarch:    "amd64",
+			machine:   coffMachineAMD64,
+			relocType: coffRelAMD64Addr32NB,
+		},
+		{
+			name:      "arm64",
+			goarch:    "arm64",
+			machine:   coffMachineARM64,
+			relocType: coffRelARM64Addr32NB,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			first, err := RenderSyso(version, tt.goarch)
+			if err != nil {
+				t.Fatalf("RenderSyso(%q) returned error: %v", tt.goarch, err)
+			}
+			second, err := RenderSyso(version, tt.goarch)
+			if err != nil {
+				t.Fatalf("RenderSyso(%q) second run returned error: %v", tt.goarch, err)
+			}
+			if !bytes.Equal(first, second) {
+				t.Fatal("RenderSyso() is not deterministic")
+			}
+
+			file, err := pe.NewFile(bytes.NewReader(first))
+			if err != nil {
+				t.Fatalf("generated syso is not a PE/COFF object: %v", err)
+			}
+			defer file.Close()
+
+			if file.Machine != tt.machine {
+				t.Fatalf("generated machine = %#x, want %#x", file.Machine, tt.machine)
+			}
+			if len(file.Sections) != 1 || file.Sections[0].Name != ".rsrc" {
+				t.Fatalf("generated sections = %#v, want single .rsrc section", file.Sections)
+			}
+			resource, err := file.Sections[0].Data()
+			if err != nil {
+				t.Fatalf("read .rsrc data: %v", err)
+			}
+			if !bytes.Contains(resource, utf16Bytes("Polymetrics AI")) {
+				t.Fatalf(".rsrc data does not contain CompanyName")
+			}
+			if !bytes.Contains(resource, utf16Bytes("1.2.3.0")) {
+				t.Fatalf(".rsrc data does not contain normalized version")
+			}
+			if len(file.Sections[0].Relocs) != 1 {
+				t.Fatalf(".rsrc relocations = %#v, want one relocation", file.Sections[0].Relocs)
+			}
+			if file.Sections[0].Relocs[0].Type != tt.relocType {
+				t.Fatalf(".rsrc relocation type = %#x, want %#x", file.Sections[0].Relocs[0].Type, tt.relocType)
+			}
+		})
+	}
+}
+
+func TestRenderSysoRejectsUnsupportedArch(t *testing.T) {
+	t.Parallel()
+
+	if _, err := RenderSyso(Version{Major: 1, Minor: 2, Patch: 3, Build: 0}, "386"); err == nil {
+		t.Fatal("RenderSyso() succeeded for unsupported arch, want error")
 	}
 }

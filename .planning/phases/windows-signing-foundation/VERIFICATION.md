@@ -9,13 +9,15 @@
 - [x] `GOTOOLCHAIN=go1.25.12 go test -count=1 ./cmd/prissueguard ./internal/coordination/issueguard ./build/windowsversion ./packaging/windows ./packaging/windows/winget ./internal/runtimecheck ./internal/worker ./internal/connectors/native/postgres`
 - [x] `GOTOOLCHAIN=go1.25.12 go vet ./cmd/prissueguard ./internal/coordination/issueguard ./build/windowsversion ./packaging/windows ./packaging/windows/winget ./internal/runtimecheck ./internal/worker ./internal/connectors/native/postgres`
 - [x] `GOTOOLCHAIN=go1.25.12 go build ./cmd/pm`
+- [x] Generate amd64 `.syso` with `GOTOOLCHAIN=go1.25.12 go run ./build/windowsversion -version 0.0.0 -goarch amd64 -out cmd/pm/pm_windows_amd64.syso`, then `GOTOOLCHAIN=go1.25.12 GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build ... ./cmd/pm`.
+- [x] Generate arm64 `.syso` with `GOTOOLCHAIN=go1.25.12 go run ./build/windowsversion -version 0.0.0 -goarch arm64 -out cmd/pm/pm_windows_arm64.syso`, then `GOTOOLCHAIN=go1.25.12 GOOS=windows GOARCH=arm64 CGO_ENABLED=0 go build ... ./cmd/pm`.
 - [x] `gofmt -w build/windowsversion packaging/windows`
 - [x] `gofmt -w internal/coordination/issueguard/guard.go internal/coordination/issueguard/guard_test.go`
-- [x] `go test ./...` — historical implementation run passed before the CI repair slice.
-- [ ] `go test -timeout=4m ./...` — repair rerun timed out in existing `internal/cli` and `internal/connectors/certify` broad connector-bundle tests; not in modified/fix-adjacent packages.
+- [x] `go test -timeout 20m ./...`
 - [x] `go vet ./...` — passed locally after implementation.
 - [x] `go build ./cmd/pm` — passed locally after implementation.
 - [x] `git diff --check` — passed locally after implementation.
+- [x] `make verify`
 
 ## Windows PR-safe workflow checks
 
@@ -48,4 +50,4 @@
 
 ## Results
 
-Local focused verification for the CI repair passed. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, Windows SDK, Visual Studio Build Tools, WiX, and `msiexec.exe`.
+Local focused and full repo verification for the CI repair passed. The direct VERSIONINFO `.syso` path links for both Windows targets under Go 1.25.12 without Windows SDK tools. The actual unsigned MSI build/install path still requires the Windows PR workflow because this host is not a Windows runner with PowerShell, WiX, and `msiexec.exe`.
