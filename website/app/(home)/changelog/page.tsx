@@ -12,26 +12,26 @@ export const metadata: Metadata = {
 
 const entries = [
   {
-    version: 'v0.1.0',
-    date: 'today',
+    version: 'Planned v0.1.0',
+    date: 'unreleased',
     title: `${CONNECTOR_CATALOG_COUNT} connector catalog pages`,
     body:
-      'The website now exposes bundle-generated connector pages with capabilities, streams, write actions, and JSON metadata for agents and documentation workflows.',
+      'The website exposes bundle-generated connector pages with capabilities, streams, write actions, and JSON metadata for agents and documentation workflows.',
     icon: Cable,
     href: '/docs/connectors',
   },
   {
-    version: 'v0.1.0',
-    date: 'today',
-    title: 'Embedded DuckDB SQL engine',
+    version: 'Planned v0.1.0',
+    date: 'unreleased',
+    title: 'Local query workflow',
     body:
-      'Query extracted connector data locally with DuckDB SQL before promoting the result into a reverse-ETL write.',
+      'Query extracted connector data locally before promoting the result into a reverse-ETL write; build with DuckDB when you need full analytical SQL.',
     icon: Database,
     href: '/docs/query',
   },
   {
-    version: 'v0.1.0',
-    date: 'today',
+    version: 'Planned v0.1.0',
+    date: 'unreleased',
     title: 'Local AES-GCM vault',
     body:
       'Credentials stay local-first and encrypted so connector setup can be tested without passing raw secrets through documentation or CI.',
@@ -39,8 +39,8 @@ const entries = [
     href: '/docs/architecture',
   },
   {
-    version: 'v0.1.0',
-    date: 'today',
+    version: 'Planned v0.1.0',
+    date: 'unreleased',
     title: 'Agent-native JSON output',
     body:
       'CLI commands expose structured output for automation loops, validation agents, and downstream platform integrations.',

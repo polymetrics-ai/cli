@@ -33,19 +33,19 @@ const toolsRow1: Tool[] = [
   {
     icon: Download,
     title: 'Extract (ETL)',
-    description: `Read from the ${CONNECTOR_CATALOG_COUNT}-connector bundle catalog: GitHub, Stripe, HubSpot, Postgres, and more. Cursor-incremental and full-refresh sync modes.`,
+    description: `Discover the ${CONNECTOR_CATALOG_COUNT}-entry connector catalog and run merged definitions such as GitHub, Stripe, and Postgres. Cursor-incremental and full-refresh sync modes.`,
     href: '/docs/connectors',
   },
   {
     icon: Database,
-    title: 'Query (DuckDB SQL)',
-    description: 'Run real analytical SQL over extracted data: joins, window functions, aggregations. No separate warehouse required.',
+    title: 'Query (local SQL)',
+    description: 'Run local queries over extracted data; build with DuckDB when you need joins, window functions, and aggregations.',
     href: '/docs/query',
   },
   {
     icon: ArrowLeftRight,
     title: 'Write Back (Reverse-ETL)',
-    description: 'Push query results back through approved connector actions. Create Jira issues, upsert HubSpot contacts, open GitHub PRs from your data.',
+    description: 'Push query results back through approved connector actions. Create GitHub issues, update Stripe customers, or open GitHub PRs from your data.',
     href: '/docs/reverse-etl',
   },
 ];
@@ -53,7 +53,7 @@ const toolsRow1: Tool[] = [
 const toolsRow2: Tool[] = [
   {
     icon: Plug,
-    title: `${CONNECTOR_CATALOG_COUNT} Connectors`,
+    title: `${CONNECTOR_CATALOG_COUNT} Catalog Entries`,
     description: 'Catalog metadata, docs, and native Go runtime coverage on a shared HTTP/DB toolkit.',
     href: '/docs/connectors',
   },
@@ -165,7 +165,7 @@ export default function HomePage() {
 
             <Text className="max-w-[42ch] relative">
               <code className="font-mono text-[14px] font-medium bg-surface-1 border border-line-structure rounded px-1.5 py-0.5">pm</code>
-              {' '}is a local-first, single-binary data engine. Browse {CONNECTOR_CATALOG_COUNT} connectors, query with embedded DuckDB SQL, and write results back. No Docker, no servers, agent-native by design.
+              {' '}is a local-first, single-binary data engine. Browse {CONNECTOR_CATALOG_COUNT} connector catalog entries, query locally, and build with DuckDB SQL when you need full analytics. No Docker, no servers, agent-native by design.
             </Text>
 
             <div className="flex flex-wrap gap-3 justify-center items-center relative">
@@ -186,7 +186,7 @@ export default function HomePage() {
             </div>
           </CornerBox>
 
-          {/* Connector marquee — every connector scrolls past */}
+          {/* Connector marquee — catalog entries scroll past */}
           <CornerBox className="-mt-px overflow-hidden">
             <ConnectorMarquee compact />
           </CornerBox>
@@ -238,7 +238,7 @@ export default function HomePage() {
                 Every data problem is a loop. Pull data from a connector, shape it with SQL, run approved actions, and repeat. pm makes this loop a single binary invocation.
               </Text>
               <Text size="s" className="text-left">
-                Real-world example: extract open GitHub issues every hour, run a SQL query to find stale ones, create Jira tickets for them. Fully local. Fully auditable. Zero cost.
+                Real-world example: extract open GitHub issues every hour, run a local query to find stale ones, and create follow-up GitHub issues. Fully local. Fully auditable. Zero cost.
               </Text>
               <div className="flex gap-3 flex-wrap">
                 <Link
@@ -286,12 +286,12 @@ export default function HomePage() {
         <HomeSection id="connectors" pattern="p026" className="pt-[120px]">
           <div className="flex flex-col gap-4 mb-8">
             <Heading>
-              {CONNECTOR_CATALOG_COUNT} connectors,{' '}
-              <TextHighlight>written</TextHighlight>{' '}
-              in Go.
+              {CONNECTOR_CATALOG_COUNT} connector{' '}
+              <TextHighlight>catalog</TextHighlight>{' '}
+              entries.
             </Heading>
             <Text className="max-w-[46ch]">
-              Every connector is native Go on a shared HTTP and database toolkit. No Python, no Docker, no connector images to download. Install once, run anywhere.
+              Connector metadata and docs are generated from local bundles, with growing native Go runtime coverage on a shared HTTP and database toolkit. No connector images to download. Install once, run anywhere.
             </Text>
           </div>
           <ConnectorMarquee />
@@ -325,7 +325,7 @@ export default function HomePage() {
               in 60 seconds.
             </Heading>
             <Text className="max-w-[38ch] relative">
-              One binary. Your machine. Every connector. AI agents welcome.
+              One binary. Your machine. Compiled connectors. AI agents welcome.
             </Text>
             <div className="flex flex-wrap gap-3 justify-center relative">
               <Link

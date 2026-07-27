@@ -36,52 +36,13 @@ build from source below.
 
 ### Install a release binary
 
-Release assets are published from `polymetrics-ai/cli` for Linux, macOS, and
-Windows on amd64 and arm64.
+Release assets are planned from `polymetrics-ai/cli` for Linux, macOS, and
+Windows on amd64 and arm64 beginning with `v0.1.0`.
 
-This path requires the GitHub CLI (`gh`) and standard archive tools (`tar` on
-macOS/Linux, `unzip` for Windows archives), but does not require Go.
-
-```bash
-os_name="$(uname -s)"
-arch_name="$(uname -m)"
-
-case "$os_name" in
-  Darwin) os=darwin ;;
-  Linux) os=linux ;;
-  MINGW*|MSYS*|CYGWIN*) os=windows ;;
-  *) echo "unsupported OS: $os_name" >&2; exit 1 ;;
-esac
-
-case "$arch_name" in
-  x86_64|amd64) arch=amd64 ;;
-  arm64|aarch64) arch=arm64 ;;
-  *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
-esac
-
-tmpdir="$(mktemp -d)"
-trap 'rm -rf "$tmpdir"' EXIT
-gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
-
-case "$os" in
-  windows)
-    unzip -q "$tmpdir"/pm_*_"${os}"_"${arch}".zip -d "$tmpdir"
-    binary_name=pm.exe
-    ;;
-  *)
-    tar -xzf "$tmpdir"/pm_*_"${os}"_"${arch}".tar.gz -C "$tmpdir"
-    binary_name=pm
-    ;;
-esac
-
-install_dir="${INSTALL_DIR:-$HOME/.local/bin}"
-mkdir -p "$install_dir"
-cp "$tmpdir/$binary_name" "$install_dir/$binary_name"
-chmod +x "$install_dir/$binary_name" 2>/dev/null || true
-"$install_dir/$binary_name" version
-```
-
-Each release also publishes `checksums.txt` for artifact verification.
+PM binary releases and website deployments are independent and never trigger each
+other. See [PM v0.1.0 release and connector shipping](release-and-connectors.md)
+for the release flow, connector release model, and checksum-verified macOS/Linux
+install script.
 
 ### Build from source
 
@@ -183,9 +144,10 @@ pm etl run --connection gh --stream pull_requests --batch-size 100 --json
 pm credentials add github --connector github --config repository=OWNER/REPO --config max_pages=0
 ```
 
-The same pattern works for `stripe`, `postgres`, `slack`, `hubspot`, and the rest —
-only the credential config and stream names change. Use `pm connectors inspect <name>`
-to see a connector's streams, cursors, and required config.
+The same pattern works for connectors listed by
+`pm connectors catalog --capability read`; only the credential config and stream
+names change. Use `pm connectors inspect <name>` to see a connector's streams,
+cursors, and required config.
 
 ---
 
@@ -249,10 +211,11 @@ able to perform them unsupervised.
 **Write actions** are connector-specific and allow-listed. GitHub, for example,
 supports `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `create_pull_request`, `update_pull_request`, `close_pull_request`,
-`request_reviewers`, and `merge_pull_request`. HubSpot supports
-`create_contact` / `update_contact`. Inspect a connector to see its actions:
+`request_reviewers`, and `merge_pull_request`. Use the write-capability catalog
+or inspect a connector to see its actions:
 
 ```bash
+pm connectors catalog --capability write --json
 pm connectors inspect github --json   # → manifest.write_actions
 ```
 
@@ -267,8 +230,8 @@ pm connectors inspect stripe  # auth modes, streams, sync modes, write actions
 pm connectors inspect stripe --json
 ```
 
-**118 native connectors** are implemented today (a `646`-connector catalog is the
-roadmap). A few notes:
+The runtime catalog is generated from local connector metadata and the current
+binary reports the exact compiled set. A few notes:
 
 - **GitHub** (`github`) — full certification passed for the current connector surface:
   509 API endpoints accounted, 37 catalog streams, 2 direct-read command families, and
@@ -284,7 +247,7 @@ roadmap). A few notes:
 - Most SaaS connectors are read-first; they add approval-gated writes where the upstream
   API has safe, well-defined mutations.
 
-Every connector supports `--config mode=fixture` for a credential-free smoke test.
+When a connector exposes `--config mode=fixture`, use it for a credential-free smoke test.
 
 ---
 

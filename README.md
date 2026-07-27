@@ -6,7 +6,7 @@
 
 ### One CLI to rule them all.
 
-`pm` is a local-first data CLI for ETL, embedded DuckDB SQL, reverse ETL,
+`pm` is a local-first data CLI for ETL, local warehouse queries, reverse ETL,
 scheduling, and AI-agent-safe automation. It runs as one Go binary, keeps
 credentials local, and speaks JSON everywhere.
 
@@ -26,7 +26,7 @@ credentials local, and speaks JSON everywhere.
 Polymetrics turns the whole operational data loop into a command-line workflow:
 
 ```text
-source -> extract -> local warehouse -> DuckDB SQL -> plan -> preview -> approve -> write back
+source -> extract -> local warehouse -> query -> plan -> preview -> approve -> write back
 ```
 
 No hosted control plane is required for the first useful run. Use it on a
@@ -38,10 +38,10 @@ same command surface.
 | Surface | What you get |
 | --- | --- |
 | ETL | Pull records from APIs, databases, local files, and catalog-backed connectors. |
-| SQL | Query extracted data locally with an embedded DuckDB engine. |
+| SQL | Query extracted data locally; build with DuckDB for full analytical SQL. |
 | Reverse ETL | Write results back through approval-gated destination actions. |
 | Agents | Use `--json`, stable exit codes, and no silent mutation paths. |
-| Catalog | Track a 646-connector catalog with active native Go ports. |
+| Catalog | Browse connector metadata and inspect the exact compiled set in your binary. |
 | Runtime | Keep credentials in an encrypted local vault. No server required. |
 
 ## Quickstart
@@ -75,11 +75,9 @@ export PM_SAMPLE_TOKEN=demo
 ./pm query run --table customers --limit 5 --json
 ```
 
-Release binaries are published on GitHub:
-
-```bash
-gh release download --repo polymetrics-ai/cli --pattern 'pm_*_darwin_arm64.tar.gz'
-```
+Release binaries are planned on GitHub beginning with `v0.1.0`. After a release
+is cut, use the [release guide](docs/release-and-connectors.md#install-on-macos-or-linux)
+for a checksum-verified macOS/Linux install.
 
 ## Why It Exists
 
@@ -101,7 +99,7 @@ Polymetrics is designed for humans and LLM agents to drive the same commands.
 
 ```bash
 pm etl run --connection github --stream issues --json
-pm query run --sql "select * from issues where state = 'open'" --json
+pm query run --table issues --limit 10 --json
 pm reverse plan sync --source-table stale_issues --destination github:write --json
 ```
 
@@ -126,9 +124,10 @@ pm connectors inspect github --json
 pm connectors port-plan --all --json
 ```
 
-The repository tracks a 646-connector catalog. Enabled connector support is
-expanding through native Go ports built on shared SDK primitives for auth,
-pagination, retries, schema inference, read streams, and write actions.
+The repository tracks connector catalog metadata, while each `pm` binary embeds
+only the connector definitions merged into its exact build commit. Use
+`pm connectors list` for the compiled set and `pm connectors list --all` for the
+implemented and planned catalog.
 
 ## Architecture
 
@@ -136,12 +135,12 @@ pagination, retries, schema inference, read streams, and write actions.
 flowchart LR
   CLI["pm CLI / agent"] --> SRC["Sources"]
   SRC --> WH[("Local warehouse")]
-  WH --> SQL["DuckDB SQL"]
+  WH --> SQL["Local query"]
   SQL --> PLAN["Plan and preview"]
   PLAN --> DEST["Destinations"]
 ```
 
-- `internal/connectors` contains per-system connector packages.
+- `internal/connectors` contains connector definitions, hooks, and native packages.
 - `internal/app` owns ETL, query, reverse ETL, scheduling, and automation flows.
 - `cmd/pm` exposes the CLI.
 - `docs` contains generated manuals and connector documentation.
@@ -151,8 +150,8 @@ flowchart LR
 
 The canonical description is:
 
-> Polymetrics CLI is a local-first data CLI for single-binary ETL, embedded
-> DuckDB SQL, reverse ETL, connector automation, and AI agent data workflows.
+> Polymetrics CLI is a local-first data CLI for single-binary ETL, local
+> warehouse queries, reverse ETL, connector automation, and AI agent data workflows.
 
 The README, docs, website metadata, blog, sitemap, and `llms.txt` use the same
 terms deliberately so humans, search engines, and AI answer engines can identify
@@ -162,7 +161,7 @@ Canonical topics:
 
 - local-first data CLI
 - single-binary ETL
-- embedded DuckDB SQL engine
+- local warehouse queries
 - reverse ETL CLI
 - AI agent data workflows
 - connector catalog
@@ -191,7 +190,7 @@ Use Conventional Commits:
 - [x] JSON output and stable exit-code contract
 - [x] Local encrypted credential vault
 - [x] ETL, query, and approval-gated reverse ETL
-- [x] Release binaries
+- [ ] Release binaries (planned beginning with `v0.1.0`)
 - [x] Website docs, connector catalog, blog, sitemap, and `llms.txt`
 - [ ] More native connector ports from the 646-connector catalog
 - [ ] Homebrew tap

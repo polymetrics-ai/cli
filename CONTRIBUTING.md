@@ -43,13 +43,27 @@ pnpm run build
 ## Release Versioning
 
 Releases are generated from Conventional Commits after changes land on `main`.
+PM binary releases and website deployments are independent and never trigger each
+other.
+
+The first PM binary release target is `v0.1.0`: Release Please opens or updates
+the release PR, that PR must be `chore: release 0.1.0`, the captain owns merging
+it after the intended `main` commit is green, and the release workflow uses
+GoReleaser to build and upload the macOS/Linux/Windows amd64/arm64 archives plus
+`checksums.txt`. See
+[PM v0.1.0 release and connector shipping](docs/release-and-connectors.md) for
+the operator checklist and checksummed install instructions.
 
 - `fix(<connector>): ...` creates a patch release for connector updates, bug fixes, pagination changes, auth fixes, docs that ship with the binary, and other compatible repairs.
 - `feat(connector): add <name>` creates a minor release for a new connector or new user-facing capability.
 - Add `!` before the colon, or a `BREAKING CHANGE:` footer, for breaking changes that require a major release.
 - Use other Conventional Commit types such as `docs:`, `ci:`, `test:`, `refactor:`, and `chore:` when the change should be categorized without implying a feature or bug-fix release.
 
-The release procedure itself — how release-please and goreleaser are wired, and the steps for cutting a release — is documented in [docs/release-and-connectors.md](docs/release-and-connectors.md).
+Connectors are embedded in the PM binary and have no separately versioned
+downloadable artifact. A release contains only connectors merged into its exact
+commit. After `v0.1.0`, a compatible connector fix normally ships as a patch
+release such as `v0.1.1`, while a connector feature normally ships as the next
+pre-1.0 minor release.
 
 ## Connector Contributions
 
