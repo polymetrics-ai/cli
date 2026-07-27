@@ -59,9 +59,14 @@ case "$arch_name" in
   *) echo "unsupported architecture: $arch_name" >&2; exit 1 ;;
 esac
 
+case "$os" in
+  windows) asset_pattern="pm_*_${os}_${arch}.zip" ;;
+  *) asset_pattern="pm_*_${os}_${arch}.tar.gz" ;;
+esac
+
 tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
-gh release download --repo polymetrics-ai/cli --pattern "pm_*_${os}_${arch}.*" --dir "$tmpdir"
+gh release download --repo polymetrics-ai/cli --pattern "$asset_pattern" --dir "$tmpdir"
 
 case "$os" in
   windows)
