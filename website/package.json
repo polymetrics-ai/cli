@@ -23,23 +23,23 @@
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
-    "better-auth": "^1.6.23",
+    "better-auth": "^1.6.25",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
-    "fumadocs-core": "^16.10.7",
-    "fumadocs-mdx": "^15.0.13",
-    "fumadocs-ui": "^16.10.7",
+    "fumadocs-core": "^16.13.0",
+    "fumadocs-mdx": "^15.2.0",
+    "fumadocs-ui": "^16.13.0",
     "lucide-react": "^1.22.0",
-    "next": "^16.2.9",
+    "next": "^16.2.12",
     "pg": "^8.22.0",
-    "radix-ui": "^1.6.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "radix-ui": "^1.6.7",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
-    "@playwright/test": "^1.61.1",
+    "@playwright/test": "^1.62.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^26",
     "@types/pg": "^8.20.0",
@@ -47,6 +47,6 @@
     "@types/react-dom": "^19",
     "tailwindcss": "^4",
     "typescript": "^6",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.10"
   }
 }
