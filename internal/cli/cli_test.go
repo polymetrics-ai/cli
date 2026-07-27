@@ -785,6 +785,12 @@ func TestBahmniCommandSurfaceHelpScopes(t *testing.T) {
 			want:   []string{"NAME", "pm bahmni appointments list", "INTENT", "etl", "AVAILABILITY", "implemented", "STREAM", "appointments", "appointment_date only"},
 			forbid: []string{"patient_uuid", "patients create"},
 		},
+		{
+			name:   "patient search redaction help",
+			args:   []string{"bahmni", "bahmnicore", "patient-search", "--help"},
+			want:   []string{"NAME", "pm bahmni bahmnicore patient-search", "declared patient-search sensitive fields", "identifier", "addressFieldValue"},
+			forbid: []string{"not field-redacted"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
