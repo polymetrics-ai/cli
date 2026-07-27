@@ -2,7 +2,7 @@
 
 | Step | Type | Command / artifact | Expected result | Status |
 |---|---|---|---|---|
-| 1 | Red validation | `./scripts/verify-release-assets.sh dist` after current snapshot | Baseline verifier does not require Linux native packages or trust evidence; record gap before production edits | Planned |
+| 1 | Red validation | `go run github.com/goreleaser/goreleaser/v2@latest release --snapshot --clean`; `./scripts/verify-release-assets.sh dist` | Baseline verifier passed with only six archives and no `.deb`, `.rpm`, or `.sigstore.json` evidence, proving the release gate did not yet enforce issues #551/#552 | Red captured |
 | 2 | Green validation | `goreleaser release --snapshot --clean` then `./scripts/verify-release-assets.sh dist` | Expected archives, `.deb`, `.rpm`, package metadata/contents, and checksums pass | Planned |
 | 3 | Green validation | `scripts/create-release-trust-fixtures.sh dist` then `ALLOW_UNSIGNED_TRUST_FIXTURES=1 REQUIRE_TRUST_EVIDENCE=1 ./scripts/verify-release-assets.sh dist` | Offline fixture mode checks subject names/digests without signing services | Planned |
 | 4 | Green validation | `scripts/test-linux-packages.sh dist` | Clean Debian/Ubuntu and Fedora/RHEL-family containers install, exercise, reinstall/upgrade, and remove amd64 packages | Planned |
