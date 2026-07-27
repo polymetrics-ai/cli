@@ -9,9 +9,9 @@
 - [x] Website source/tests/workflow docs and issue-guard repair traces excluded from branch diff.
 - [x] Release Please one-shot `Release-As: 0.1.0` evidence captured.
 - [x] Previous GoReleaser snapshot + `scripts/verify-release-assets.sh dist` evidence preserved.
-- [ ] Replacement PR opened with exact title and `Refs #67`.
-- [ ] Superseded pointers added to PR #528 and PR #538.
-- [ ] PR #538 closed unmerged after replacement confirmation.
+- [x] Replacement PR #539 opened with exact title and `Refs #67`.
+- [x] Superseded pointers added to PR #528 and PR #538.
+- [x] PR #538 closed unmerged after replacement confirmation.
 
 ## Evidence
 
@@ -20,3 +20,5 @@
 - Commit `7d019a11` body contains `Release-As: 0.1.0`; transient `release-please@latest release-pr --help` confirms `--release-as` support, and upstream README states commit-body `Release-As: x.x.x` opens the specified release PR. Full dry-run was blocked by GitHub GraphQL credentials, so no token was requested or printed.
 - `go run github.com/goreleaser/goreleaser/v2@latest release --snapshot --clean` passed.
 - `scripts/verify-release-assets.sh dist` passed before generated `dist/` cleanup; verified six archives plus `checksums.txt`.
+- Focused clean-branch verification passed: `git log --oneline origin/main..HEAD`, `git merge-base HEAD origin/main`, `git diff --name-status origin/main..HEAD`, `git diff --exit-code` for release/website/conventions/issue-guard paths, `git show --no-patch --format=%B 7d019a11`, and changed-doc `rg` checks for forbidden website workflow/deploy/dispatch markers.
+- PR #539: https://github.com/polymetrics-ai/cli/pull/539.
