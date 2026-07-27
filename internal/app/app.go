@@ -296,7 +296,7 @@ func (a *App) CreateConnection(ctx context.Context, req CreateConnectionRequest)
 	if _, ok := a.findConnection(req.Name); ok {
 		return Connection{}, fmt.Errorf("connection %q already exists", req.Name)
 	}
-	if req.Streams == nil || len(req.Streams) == 0 {
+	if len(req.Streams) == 0 {
 		return Connection{}, errors.New("at least one stream is required")
 	}
 	source, sourceRuntime, err := a.resolveEndpoint(ctx, req.Source)

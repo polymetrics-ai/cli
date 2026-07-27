@@ -177,6 +177,16 @@ not a full override by default.
 All of this is read from `internal/connectors/engine/{bundle,interpolate,paginate,read,write,
 schema}.go` directly — this section is a map, not a spec; when in doubt, read the source.
 
+**Schema dialect** (`schema.go`). `spec.json`, stream schemas, and write `record_schema` values use
+the engine's minimal draft-07 subset. Unknown keywords are a hard compile error. Supported
+structural keywords are `type`, `required`, `properties`, `items`, `contains`, `anyOf`, `enum`,
+`pattern`, `minProperties`, `minItems`, `additionalProperties`, `x-secret`, `x-primary-key`, and
+`x-cursor-field`; accepted annotations are `$schema`, `title`, `description`, `format`, and
+`default`. `anyOf` must contain at least one child schema and passes when any child validates;
+`oneOf` remains unsupported. `contains` requires at least one array element to validate against its
+child schema, so an empty array fails when `contains` is present. `minItems` and `minProperties`
+enforce array/object cardinality only on values of the matching container type.
+
 **Template references + filters** (`interpolate.go`). `{{ <ref> | <filter1> | <filter2> ... }}` —
 **a filter chain of any length** applies every stage left-to-right (not just one filter); an
 unknown filter name anywhere in the chain is a hard error (validate-time via `ResolveCheck`'s
@@ -819,7 +829,7 @@ change accepted-input behavior, or that the engine genuinely cannot express at a
 
 | id | connector | description | verdict |
 |---|---|---|---|
-| 1 | stripe | `create_customer`'s legacy "email OR name required" rule (a named-field OR) is approximated by `minProperties: 1` over the four optional fields (`email`,`name`,`description`,`phone`) — the engine's draft-07 subset has no `anyOf`/`oneOf`. Strictly more permissive (a record with only `phone` set passes here, would fail legacy); never stricter; parity tests only exercise legacy-valid records. | ACCEPTABLE |
+| 1 | stripe | `create_customer`'s legacy "email OR name required" rule (a named-field OR) is approximated by `minProperties: 1` over the four optional fields (`email`,`name`,`description`,`phone`). The current schema dialect supports `anyOf` but not `oneOf`; this migrated bundle still keeps the original permissive approximation because tightening it would be a behavior change outside this ledger entry. Strictly more permissive (a record with only `phone` set passes here, would fail legacy); never stricter; parity tests only exercise legacy-valid records. | ACCEPTABLE |
 | 2 | stripe | ~~Bundle's own `fixtures/streams/**` represented the `created` cursor as an RFC3339 string rather than Stripe's real Unix-seconds wire integer, to work around `conformance`'s `cursor_advances` string-only type assertion.~~ **RESOLVED**: `cursor_advances` now recognizes both string AND numeric (`json.Number`/`float64`) cursor values (B2, REVIEW.md); fixtures were rewritten to Stripe's real numeric wire shape and the schema type tightened back to `"integer"`-only (no more `["integer","string"]` widening). See §4. | RESOLVED |
 | 3 | stripe | ~~`limit=100` was sent via a static per-stream `query: {"limit": "100"}` while `pagination.limit_param`/`page_size` were ALSO declared on the spec despite being dead (the `cursor`+`last_record_field` paginator constructor never reads them).~~ **RESOLVED**: the dead `limit_param`/`page_size` fields were removed from `streams.json`'s `base.pagination` block (F6, REVIEW.md) — `limit=100` still flows via the static per-stream `query`, unchanged, but the bundle no longer declares config that does nothing. See §3's rate_limit rule for the same "informational vs. enforced" distinction applied to `metadata.json.rate_limit`. | RESOLVED |
 | 4 | searxng | ~~Raw API's `engines[]` array was passed through unjoined (schema typed it `["array","string","null"]`) rather than legacy's comma-joined string, because the dialect had no array-join filter.~~ **RESOLVED**: the engine's `join:<sep>` filter (R1) lets `computed_fields` emit `"engines": "{{ record.engines | join:, }}"`, producing legacy's exact comma-joined string; schema tightened to `["string","null"]`. `parity_searxng_test.go` asserts RAW record equality (the prior normalization workaround was removed). | RESOLVED |
