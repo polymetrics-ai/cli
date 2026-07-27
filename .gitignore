@@ -1,10 +1,14 @@
 poly
 
-# Built binaries (do not commit)
+# Built binaries and release/package artifacts (do not commit)
 /pm
 /inventorygen
 /connectorgen
 /registrygen
+/dist/
+*.msi
+*.res
+*.syso
 
 # Local Claude Code settings
 .claude/settings.local.json

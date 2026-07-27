@@ -81,6 +81,8 @@ Release binaries are published on GitHub:
 gh release download --repo polymetrics-ai/cli --pattern 'pm_*_darwin_arm64.tar.gz'
 ```
 
+Windows signing and installer distribution are being prepared for a future release. See the [code signing policy](docs/security/code-signing-policy.md) for the planned SignPath Foundation route, publisher display implications, and no-unsigned-fallback release rules.
+
 ## Why It Exists
 
 Data work is usually split across a pipeline service, a warehouse, a reverse
