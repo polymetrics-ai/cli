@@ -69,8 +69,8 @@ func writeRootManual(stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": "pm", "manual": manual})
 	}
-	fmt.Fprint(stdout, manual)
-	return nil
+	_, err := fmt.Fprint(stdout, manual)
+	return err
 }
 
 func rootManual() string {
@@ -724,10 +724,7 @@ func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.Command
 			return false
 		}
 	}
-	if truthyFlag(flags.first("preview")) {
-		return false
-	}
-	return true
+	return !truthyFlag(flags.first("preview"))
 }
 
 func renderConnectorCommandManual(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, args []string) (string, string) {
