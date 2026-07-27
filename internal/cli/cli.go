@@ -677,29 +677,12 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 		return true
 	}
 	if len(path) == 0 {
-		declared := map[string]bool{
-			"credential": true, "connection": true, "config": true,
-			"limit": true, "max-bytes": true,
-		}
-		for _, flag := range surface.GlobalFlags {
-			declared[flag.Name] = true
-		}
-		for name := range flags.values {
-			if name != "_" && !declared[name] {
-				return false
-			}
-		}
-		for _, name := range []string{"plan", "approve", "confirm"} {
-			if _, ok := flags.values[name]; ok {
-				return false
-			}
-		}
-		if truthyFlag(flags.first("preview")) {
-			return false
-		}
-		return true
+		return connectorHelpFlagsArePassive(flags, surface)
 	}
 	if len(path) == 1 && path[0] == "help" {
+		return true
+	}
+	if connectorBareCommandGroupHelpRequested(flags, surface, path) {
 		return true
 	}
 	for _, part := range path {
@@ -708,6 +691,43 @@ func connectorHelpRequested(args []string, surface *connectors.CommandSurface) b
 		}
 	}
 	return false
+}
+
+func connectorBareCommandGroupHelpRequested(flags parsedFlags, surface *connectors.CommandSurface, path []string) bool {
+	if len(path) != 1 {
+		return false
+	}
+	if _, ok := connectorSurfaceCommand(surface, path[0]); ok {
+		return false
+	}
+	if !connectorSurfaceHasPrefix(surface, path[0]) {
+		return false
+	}
+	return connectorHelpFlagsArePassive(flags, surface)
+}
+
+func connectorHelpFlagsArePassive(flags parsedFlags, surface *connectors.CommandSurface) bool {
+	declared := map[string]bool{
+		"credential": true, "connection": true, "config": true,
+		"limit": true, "max-bytes": true,
+	}
+	for _, flag := range surface.GlobalFlags {
+		declared[flag.Name] = true
+	}
+	for name := range flags.values {
+		if name != "_" && !declared[name] {
+			return false
+		}
+	}
+	for _, name := range []string{"plan", "approve", "confirm"} {
+		if _, ok := flags.values[name]; ok {
+			return false
+		}
+	}
+	if truthyFlag(flags.first("preview")) {
+		return false
+	}
+	return true
 }
 
 func renderConnectorCommandManual(connectorName string, connector connectors.Connector, surface *connectors.CommandSurface, args []string) (string, string) {

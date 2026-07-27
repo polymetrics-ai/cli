@@ -750,6 +750,18 @@ func TestBahmniCommandSurfaceHelpScopes(t *testing.T) {
 			forbid: []string{"patients create", "drug_orders create"},
 		},
 		{
+			name:   "appointment group bare",
+			args:   []string{"bahmni", "appointments"},
+			want:   []string{"NAME", "pm bahmni appointments - Bahmni appointments commands", "appointments list", "appointments create", "appointments status-change", "appointments provider-response", "appointments reschedule", "appointment_date only"},
+			forbid: []string{"patients create", "drug_orders create"},
+		},
+		{
+			name:   "appointment group passive flags",
+			args:   []string{"bahmni", "appointments", "--credential", "bahmni-local", "--preview=false"},
+			want:   []string{"NAME", "pm bahmni appointments - Bahmni appointments commands", "appointments list", "appointments create", "appointments status-change", "appointments provider-response", "appointments reschedule", "appointment_date only"},
+			forbid: []string{"patients create", "drug_orders create", `credential "bahmni-local" not found`},
+		},
+		{
 			name:   "appointment group short help",
 			args:   []string{"bahmni", "appointments", "-h"},
 			want:   []string{"NAME", "pm bahmni appointments - Bahmni appointments commands", "appointments list", "appointments create", "appointments status-change", "appointments provider-response", "appointments reschedule", "appointment_date only"},
@@ -793,6 +805,27 @@ func TestBahmniCommandSurfaceHelpScopes(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+func TestBahmniBareCommandGroupInvalidMultiPartPathIsNotHelp(t *testing.T) {
+	root := t.TempDir()
+	runCLI(t, []string{"init", "--root", root, "--json"})
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"bahmni", "appointments", "bogus", "--credential", "absent", "--root", root, "--json"}, &stdout, &stderr)
+	if code == 0 {
+		t.Fatalf("invalid command path code = 0, want usage error")
+	}
+	out := stdout.String() + stderr.String()
+	for _, want := range []string{"unknown command", "appointments bogus"} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("invalid command path output missing %q:\nstdout=%s\nstderr=%s", want, stdout.String(), stderr.String())
+		}
+	}
+	for _, forbidden := range []string{"Bahmni appointments commands", `credential "absent" not found`} {
+		if strings.Contains(out, forbidden) {
+			t.Fatalf("invalid command path unexpectedly included %q:\nstdout=%s\nstderr=%s", forbidden, stdout.String(), stderr.String())
+		}
 	}
 }
 
