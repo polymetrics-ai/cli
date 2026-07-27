@@ -7,4 +7,4 @@
 - Task: implement issues polymetrics-ai/cli#551 and polymetrics-ai/cli#552 under parent polymetrics-ai/cli#550.
 - GSD path: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase release-provenance-linux-packages --dry-run` failed with `scripts/gsd: unknown GSD command: programming-loop`; manual GSD fallback active.
 - Downstream artifact: PLAN.md, TDD-LEDGER.md, VERIFICATION.md, RUN-STATE.json, SUMMARY.md.
-- Verification result: pending.
+- Verification result: focused release checks, shellcheck, actionlint, Go tests/vet/build, and `make verify` passed locally.

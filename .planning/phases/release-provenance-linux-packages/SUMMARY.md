@@ -1,5 +1,23 @@
 # Summary — release/provenance-linux-packages
 
-Status: in progress.
+Status: implemented and locally verified.
 
-This phase implements the first shippable cross-platform release-trust slice for issues #551 and #552 under parent #550: future release provenance/signature evidence and standalone Linux `.deb`/`.rpm` packages. It intentionally leaves Apple signing/notarization, Windows Authenticode/WinGet, and signed APT/RPM repositories to their separate issues.
+## Delivered
+
+- Added GoReleaser v2/nFPM `.deb` and `.rpm` packages for Linux `amd64`/`arm64` with repository-grounded metadata, `/usr/bin/pm`, and `/usr/share/doc/pm/{LICENSE,NOTICE}`.
+- Extended `scripts/verify-release-assets.sh` to enforce 10 release assets, checksum coverage, archive contents, package metadata/contents/architectures, optional Cosign bundle verification, and optional GitHub attestation verification.
+- Added offline trust-evidence fixtures for PR snapshot validation without production signing services.
+- Added Docker-based standalone package install/reinstall/remove checks for Ubuntu and Fedora-family environments on the available Docker architecture.
+- Added release-only GitHub OIDC provenance and Cosign keyless bundle generation before upload, with final verification gating upload and no overwrite/clobber path for existing PM release assets.
+- Added narrow release verification documentation and linked it from `docs/GUIDE.md`.
+
+## Deferred explicitly to separate issues
+
+- Apple Developer ID signing/notarization.
+- Windows Authenticode and WinGet.
+- Signed APT/RPM repositories and repository-signing key custody (issue #553).
+- Broad public release runbooks (issue #558).
+
+## Verification
+
+See `VERIFICATION.md` for command results. Full `make verify` passed locally.

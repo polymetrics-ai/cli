@@ -3,11 +3,11 @@
 | Step | Type | Command / artifact | Expected result | Status |
 |---|---|---|---|---|
 | 1 | Red validation | `go run github.com/goreleaser/goreleaser/v2@latest release --snapshot --clean`; `./scripts/verify-release-assets.sh dist` | Baseline verifier passed with only six archives and no `.deb`, `.rpm`, or `.sigstore.json` evidence, proving the release gate did not yet enforce issues #551/#552 | Red captured |
-| 2 | Green validation | `goreleaser release --snapshot --clean` then `./scripts/verify-release-assets.sh dist` | Expected archives, `.deb`, `.rpm`, package metadata/contents, and checksums pass | Planned |
-| 3 | Green validation | `scripts/create-release-trust-fixtures.sh dist` then `ALLOW_UNSIGNED_TRUST_FIXTURES=1 REQUIRE_TRUST_EVIDENCE=1 ./scripts/verify-release-assets.sh dist` | Offline fixture mode checks subject names/digests without signing services | Planned |
-| 4 | Green validation | `scripts/test-linux-packages.sh dist` | Clean Debian/Ubuntu and Fedora/RHEL-family containers install, exercise, reinstall/upgrade, and remove amd64 packages | Planned |
-| 5 | Release-only validation | Release workflow trust step | GitHub attestations and Cosign bundles are generated after final checksums and verified before upload | Planned |
-| 6 | Broader checks | `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make verify` as feasible | Repository remains green; release changes do not add Go dependencies | Planned |
+| 2 | Green validation | `SOURCE_DATE_EPOCH=$(git log -1 --format=%ct) goreleaser release --snapshot --clean`; Docker Ubuntu `./scripts/verify-release-assets.sh dist` with `rpm` installed | Expected archives, `.deb`, `.rpm`, package metadata/contents, and checksums pass (`verified 10 release assets`) | Green |
+| 3 | Green validation | Docker Ubuntu `./scripts/create-release-trust-fixtures.sh dist`; `ALLOW_UNSIGNED_TRUST_FIXTURES=1 REQUIRE_TRUST_EVIDENCE=1 ./scripts/verify-release-assets.sh dist` | Offline fixture mode checks subject names/digests without signing services (`11 subjects`) | Green |
+| 4 | Green validation | `./scripts/test-linux-packages.sh dist` | Clean Ubuntu and Fedora containers install, exercise, reinstall/upgrade, and remove the package for the local Docker architecture | Green |
+| 5 | Release-only validation | `.github/workflows/release.yml` trust step; `actionlint` | GitHub attestations and Cosign bundles are generated after final checksums and verified before upload with release-only OIDC/attestation permissions | Green by static validation; production attestation minting only runs on release |
+| 6 | Broader checks | `go test ./...`, `go vet ./...`, `go build ./cmd/pm`, `make verify` | Repository remains green; release changes do not add Go dependencies | Green |
 
 ## Notes
 

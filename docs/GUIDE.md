@@ -81,7 +81,7 @@ chmod +x "$install_dir/$binary_name" 2>/dev/null || true
 "$install_dir/$binary_name" version
 ```
 
-Each release also publishes `checksums.txt` for artifact verification.
+Each future release also publishes `checksums.txt`, keyless Sigstore bundles, GitHub artifact attestations, and standalone Linux `.deb`/`.rpm` packages; see [release verification](release-verification.md).
 
 ### Build from source
 
