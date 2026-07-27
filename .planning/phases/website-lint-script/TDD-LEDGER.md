@@ -20,13 +20,14 @@ Evidence:
 
 Evidence:
 - `corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts` passed.
-- `corepack pnpm@11.7.0 run lint` passed with 18 warnings and 0 errors.
+- `corepack pnpm@11.7.0 run lint` passed with 13 warnings and 0 errors.
 
 ## Refactor
 
 - Set `pnpm-workspace.yaml` `allowBuilds.unrs-resolver: false` because the new ESLint resolver dependency was auto-added as a build-script decision; clean frozen pnpm install and ESLint both pass without allowing that build script.
 - Left the pre-existing npm lockfile untouched because website CI/Docker use pnpm and npm lockfile repair would pull in unrelated pre-existing website dependency drift.
 - Scoped existing React Hooks lint warnings to the current debt files rather than globally weakening future files.
+- Removed safe pre-existing non-product lint warnings from website generator/config files.
 
 ## Skills
 

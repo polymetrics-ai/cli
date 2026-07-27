@@ -3,7 +3,7 @@
 - [x] Reproduced pre-existing `pnpm run lint` failure on `origin/main`/branch start with installed dependencies: `next lint` treated `lint` as a project directory and exited 1.
 - [x] Focused red regression: `corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts` failed before implementation.
 - [x] Focused green regression: `corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts` passed.
-- [x] `corepack pnpm@11.7.0 run lint` — passed with 18 warnings, 0 errors.
+- [x] `corepack pnpm@11.7.0 run lint` — passed with 13 warnings, 0 errors.
 - [x] `corepack pnpm@11.7.0 run typecheck`
 - [x] `corepack pnpm@11.7.0 run test:unit` — 12 files / 72 tests passed.
 - [x] `corepack pnpm@11.7.0 run test:e2e` — 18 passed / 7 skipped.
