@@ -1,5 +1,4 @@
 name: Website CI/CD
-run-name: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.release_tag != '' && format('Website CI/CD release {0}', github.event.inputs.release_tag) || github.workflow }}
 
 on:
   pull_request:
@@ -15,11 +14,6 @@ on:
       - ".github/workflows/website.yml"
       - ".gitlab-ci.yml"
   workflow_dispatch:
-    inputs:
-      release_tag:
-        description: Release tag associated with an automated release publish.
-        required: false
-        type: string
 
 permissions:
   contents: read

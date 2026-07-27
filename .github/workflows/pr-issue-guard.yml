@@ -10,9 +10,6 @@ permissions:
 
 jobs:
   require-linked-issue:
-    # Issue-first delivery is required for human and agent branches. Tool-owned
-    # branches carry their intent in the generated PR body instead: dependabot
-    # and release-please.
     runs-on: ubuntu-latest
     if: ${{ github.event.pull_request.user.login != 'dependabot[bot]' && !startsWith(github.head_ref, 'dependabot/') && !startsWith(github.head_ref, 'release-please--branches--') }}
     steps:
