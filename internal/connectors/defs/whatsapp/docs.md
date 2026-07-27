@@ -99,7 +99,8 @@ Approval: reverse ETL requires plan, preview, approval, execute; message sends, 
 - Messaging/conversation/pricing analytics are not executable: their start/end/granularity filters
   exist only inside Graph field-expansion syntax, and this connector exposes no raw `fields` flag.
 - `delete_message_template` targets by template name and removes every language version registered
-  under that name; `delete_message_template_by_id` targets a single template ID via `hsm_id`.
+  under that name; `delete_message_template_by_id` targets the template matching the supplied name
+  and `hsm_id`.
 - WhatsApp Web (whatsmeow) mode: modeled as documented, config-scoped ops
   (`unsupported_local`); live execution requires a whatsmeow QR session and is human-gated.
 - Live sends, template submissions, phone-number administration, media payloads beyond fixtures,

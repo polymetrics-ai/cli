@@ -656,13 +656,19 @@
       "write": "delete_message_template_by_id",
       "flags": [
         {
+          "name": "name",
+          "type": "string",
+          "summary": "Template name containing the template ID to delete.",
+          "maps_to": "record.name"
+        },
+        {
           "name": "hsm-id",
           "type": "string",
           "summary": "Message template ID to delete.",
           "maps_to": "record.hsm_id"
         }
       ],
-      "risk": "high: permanently deletes a message template by ID",
+      "risk": "high: permanently deletes the message template matching the supplied name and ID",
       "approval": "reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans",
       "notes": "Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed."
     },

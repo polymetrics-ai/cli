@@ -123,9 +123,9 @@ REVERSE ETL ACTIONS
     required fields: name
     risk: permanently deletes a message template and every language version registered under its name
   delete_message_template_by_id:
-    endpoint: DELETE /{{ config.waba_id }}/message_templates?hsm_id={{ record.hsm_id }}
-    required fields: hsm_id
-    risk: permanently deletes a single WhatsApp message template by ID
+    endpoint: DELETE /{{ config.waba_id }}/message_templates?name={{ record.name }}&hsm_id={{ record.hsm_id }}
+    required fields: name, hsm_id
+    risk: permanently deletes the WhatsApp message template matching the supplied name and ID
   update_business_profile:
     endpoint: POST /{{ config.phone_number_id }}/whatsapp_business_profile
     required fields: messaging_product
@@ -213,7 +213,7 @@ COMMAND SURFACE
     templates create - Create a WhatsApp message template pending Meta review. [intent=reverse_etl availability=partial write=create_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: creates a WhatsApp message template pending Meta review; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --name, --language, --category
     templates update - Edit an existing message template. [intent=reverse_etl availability=partial write=update_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; PHI redacted in plans; risk: edits an existing message template; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --template-id
     templates delete - Permanently delete a message template. [intent=reverse_etl availability=partial write=delete_message_template]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes a message template; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --name
-    templates delete-id - Permanently delete a message template by ID. [intent=reverse_etl availability=partial write=delete_message_template_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes a message template by ID; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --hsm-id
+    templates delete-id - Permanently delete a message template by ID. [intent=reverse_etl availability=partial write=delete_message_template_by_id]; approval: reverse ETL plan -> preview -> approval -> execute; --confirm destructive required; PHI (message body + recipient number) redacted in plans; risk: high: permanently deletes the message template matching the supplied name and ID; notes: Typed reverse-ETL action; no raw Graph method/path/body escape hatch is exposed.; flags: --name, --hsm-id
   Phone numbers
     phone-numbers list - List WhatsApp phone numbers on the WABA. [intent=etl availability=implemented stream=phone_numbers]
     phone-numbers get - Retrieve a single phone number's detail. [intent=direct_read availability=implemented]; risk: bounded Graph JSON read; response is size-capped and secret-shaped fields are redacted; flags: --phone-number-id

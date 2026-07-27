@@ -218,7 +218,7 @@
     },
     {
       "method": "DELETE",
-      "path": "/{waba_id}/message_templates?hsm_id={hsm_id}",
+      "path": "/{waba_id}/message_templates?name={name}&hsm_id={hsm_id}",
       "covered_by": {
         "write": "delete_message_template_by_id"
       }

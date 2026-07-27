@@ -1147,8 +1147,9 @@
       "name": "delete_message_template_by_id",
       "kind": "delete",
       "method": "DELETE",
-      "path": "/{{ config.waba_id }}/message_templates?hsm_id={{ record.hsm_id }}",
+      "path": "/{{ config.waba_id }}/message_templates?name={{ record.name }}&hsm_id={{ record.hsm_id }}",
       "path_fields": [
+        "name",
         "hsm_id"
       ],
       "body_type": "none",
@@ -1156,9 +1157,14 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
+          "name",
           "hsm_id"
         ],
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "Template name containing the template ID to delete."
+          },
           "hsm_id": {
             "type": "string",
             "description": "Message template ID to delete."
@@ -1166,7 +1172,7 @@
         },
         "additionalProperties": false
       },
-      "risk": "permanently deletes a single WhatsApp message template by ID",
+      "risk": "permanently deletes the WhatsApp message template matching the supplied name and ID",
       "confirm": "destructive",
       "delete": {
         "idempotent": true,

@@ -298,6 +298,8 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		{"subscribe rejects messaging_product", "subscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}, true},
 		{"unsubscribe accepts empty body", "unsubscribe_waba_app", connectors.Record{}, false},
 		{"unsubscribe rejects messaging_product", "unsubscribe_waba_app", connectors.Record{"messaging_product": "whatsapp"}, true},
+		{"delete template by id rejects missing name", "delete_message_template_by_id", connectors.Record{"hsm_id": "tpl_123"}, true},
+		{"delete template by id rejects missing hsm_id", "delete_message_template_by_id", connectors.Record{"name": "appointment_reminder"}, true},
 	}
 	for _, tt := range shapeTests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -316,7 +318,7 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		valid  connectors.Record
 	}{
 		{"delete_message_template", connectors.Record{"name": "appointment_reminder"}},
-		{"delete_message_template_by_id", connectors.Record{"hsm_id": "tpl_123"}},
+		{"delete_message_template_by_id", connectors.Record{"name": "appointment_reminder", "hsm_id": "tpl_123"}},
 		{"unsubscribe_waba_app", connectors.Record{}},
 		{"delete_qr_code", connectors.Record{"code": "qr_123"}},
 		{"delete_media", connectors.Record{"media_id": "media_123"}},
@@ -325,6 +327,16 @@ func TestWhatsAppStatusAndAdminWriteSchemasAreStrict(t *testing.T) {
 		t.Run(tt.action, func(t *testing.T) {
 			assertWhatsAppWriteActionStrict(t, validator, bundle, tt.action, tt.valid, nil)
 		})
+	}
+	deleteByID, ok := findBundleWriteAction(bundle, "delete_message_template_by_id")
+	if !ok {
+		t.Fatal("bundle missing delete_message_template_by_id")
+	}
+	if !reflect.DeepEqual(deleteByID.PathFields, []string{"name", "hsm_id"}) {
+		t.Fatalf("delete_message_template_by_id path_fields = %v, want [name hsm_id]", deleteByID.PathFields)
+	}
+	if !strings.Contains(deleteByID.Path, "name={{ record.name }}") || !strings.Contains(deleteByID.Path, "hsm_id={{ record.hsm_id }}") {
+		t.Fatalf("delete_message_template_by_id path = %q, want name and hsm_id query fields", deleteByID.Path)
 	}
 
 	if _, ok := findBundleStream(bundle, "qr_codes"); !ok {

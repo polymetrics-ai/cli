@@ -147023,8 +147023,8 @@
         "name": "delete_message_template_by_id",
         "kind": "delete",
         "method": "DELETE",
-        "path": "/{{ config.waba_id }}/message_templates?hsm_id={{ record.hsm_id }}",
-        "risk": "permanently deletes a single WhatsApp message template by ID",
+        "path": "/{{ config.waba_id }}/message_templates?name={{ record.name }}&hsm_id={{ record.hsm_id }}",
+        "risk": "permanently deletes the WhatsApp message template matching the supplied name and ID",
         "confirm": "destructive"
       },
       {
