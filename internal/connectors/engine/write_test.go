@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -14,6 +15,7 @@ import (
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/connsdk"
 )
 
 // newWriteTestBundle builds a minimal Bundle wired against srv with a single
@@ -397,6 +399,67 @@ func TestDryRunWritePreviewResolvedMethodPathSecretsRedacted(t *testing.T) {
 	}
 }
 
+func TestDryRunWritePreviewResolvedPathRedactsConfiguredRecordFields(t *testing.T) {
+	b := Bundle{
+		Name: "clinical",
+		HTTP: HTTPBase{URL: "https://api.example.com"},
+		Writes: []WriteAction{{
+			Name:         "update_patient",
+			Kind:         "update",
+			Method:       http.MethodPost,
+			Path:         "/patients/{{ record.uuid }}",
+			PathFields:   []string{"uuid"},
+			RedactFields: []string{"uuid"},
+			RecordSchema: json.RawMessage(`{"type": "object", "required": ["uuid"], "properties": {"uuid": {"type": "string"}}}`),
+		}},
+	}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_patient"}, []connectors.Record{
+		{"uuid": "patient-raw-uuid"},
+	}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	if strings.Contains(joined, "patient-raw-uuid") {
+		t.Fatalf("Warnings = %v, record path field leaked into preview", preview.Warnings)
+	}
+	if !strings.Contains(joined, "/patients/redacted") {
+		t.Fatalf("Warnings = %v, want redacted request path", preview.Warnings)
+	}
+}
+
+func TestDryRunWritePreviewResolvedPathRedactionCopiesNestedRecord(t *testing.T) {
+	b := Bundle{
+		Name: "clinical",
+		HTTP: HTTPBase{URL: "https://api.example.com"},
+		Writes: []WriteAction{{
+			Name:         "update_patient",
+			Kind:         "update",
+			Method:       http.MethodPost,
+			Path:         "/patients/{{ record.patient.uuid }}",
+			PathFields:   []string{"patient.uuid"},
+			RedactFields: []string{"patient.uuid"},
+			RecordSchema: json.RawMessage(`{"type": "object", "required": ["patient"], "properties": {"patient": {"type": "object", "required": ["uuid"], "properties": {"uuid": {"type": "string"}}}}}`),
+		}},
+	}
+	patient := map[string]any{"uuid": "patient-nested-uuid"}
+
+	preview, err := DryRunWrite(context.Background(), b, connectors.WriteRequest{Action: "update_patient"}, []connectors.Record{
+		{"patient": patient},
+	}, nil)
+	if err != nil {
+		t.Fatalf("DryRunWrite: %v", err)
+	}
+	joined := strings.Join(preview.Warnings, " | ")
+	if strings.Contains(joined, "patient-nested-uuid") {
+		t.Fatalf("Warnings = %v, nested record path field leaked into preview", preview.Warnings)
+	}
+	if patient["uuid"] != "patient-nested-uuid" {
+		t.Fatalf("DryRunWrite mutated caller record: %v", patient)
+	}
+}
+
 // --- delete semantics: missing_ok_status ---
 
 func TestWriteDeleteMissingOkStatusCountsAsWritten(t *testing.T) {
@@ -473,6 +536,79 @@ func TestWriteNonListedStatusFails(t *testing.T) {
 	}
 	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
 		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
+	}
+}
+
+func TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody(t *testing.T) {
+	const rawPatientUUID = "patient/uuid with space"
+	const rawAppointmentUUID = "appointment-raw-uuid"
+	encodedPatientUUID := strings.ReplaceAll(url.QueryEscape(rawPatientUUID), "+", "%20")
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusBadRequest)
+		_, _ = w.Write([]byte(`{"error":"failed patient/uuid with space appointment-raw-uuid"}`))
+	}))
+	t.Cleanup(srv.Close)
+	b := newWriteTestBundle(srv, WriteAction{
+		Name:         "update_appointment_status",
+		Kind:         "update",
+		Method:       http.MethodPost,
+		Path:         "/openmrs/ws/rest/v1/appointment/{{ record.appointment.uuid }}/status/{{ record.uuid }}",
+		PathFields:   []string{"appointment.uuid", "uuid"},
+		RedactFields: []string{"appointment.uuid", "uuid"},
+		RecordSchema: json.RawMessage(`{
+			"type": "object",
+			"required": ["uuid", "appointment"],
+			"properties": {
+				"uuid": {"type": "string"},
+				"appointment": {"type": "object", "required": ["uuid"], "properties": {"uuid": {"type": "string"}}}
+			}
+		}`),
+	})
+
+	result, err := Write(context.Background(), b, connectors.WriteRequest{Action: "update_appointment_status"}, []connectors.Record{{
+		"uuid": rawPatientUUID,
+		"appointment": map[string]any{
+			"uuid": rawAppointmentUUID,
+		},
+	}}, nil)
+	if err == nil {
+		t.Fatalf("Write: want HTTP error")
+	}
+	if result.RecordsWritten != 0 || result.RecordsFailed != 1 {
+		t.Fatalf("result = %+v, want 0 written / 1 failed", result)
+	}
+	msg := err.Error()
+	for _, leaked := range []string{rawPatientUUID, encodedPatientUUID, rawAppointmentUUID} {
+		if strings.Contains(msg, leaked) {
+			t.Fatalf("write error leaked %q in %q", leaked, msg)
+		}
+	}
+	if !strings.Contains(msg, "redacted") {
+		t.Fatalf("write error %q missing redaction marker", msg)
+	}
+	var httpErr *connsdk.HTTPError
+	if !errors.As(err, &httpErr) || httpErr.Status != http.StatusBadRequest {
+		t.Fatalf("errors.As HTTPError = %#v, want status 400", httpErr)
+	}
+}
+
+func TestWriteErrorRedactsOverlappingConfiguredRecordFields(t *testing.T) {
+	action := WriteAction{
+		RedactFields: []string{"short_id", "long_id"},
+	}
+	err := redactWriteActionError(errors.New("write failed for abcdef and abc"), action, connectors.Record{
+		"short_id": "abc",
+		"long_id":  "abcdef",
+	})
+	if err == nil {
+		t.Fatalf("redactWriteActionError: got nil error")
+	}
+	msg := err.Error()
+	for _, leaked := range []string{"abcdef", "abc", "redacteddef"} {
+		if strings.Contains(msg, leaked) {
+			t.Fatalf("write error leaked %q in %q", leaked, msg)
+		}
 	}
 }
 

@@ -16,9 +16,10 @@ patient search. Retained clinical mutations are modeled only as approval-gated, 
 reverse-ETL write actions. Drug-order create, appointment reschedule, bulk observation upload, and
 visit-document upload remain blocked until a safe typed surface is implemented and live-proven.
 
-Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts
-secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate
-engine policy decision.
+Bahmni reads and writes can include clinical PHI. The current runtime bounds output, redacts
+secret-shaped fields, redacts configured write path identifiers, and redacts the typed patient search
+fields declared in `operations.json` (`identifier`, `addressFieldValue`, display/name, and
+birth/death dates). Broad clinical PHI field redaction remains a separate engine policy decision.
 
 ## Auth setup
 
@@ -82,12 +83,15 @@ Safety gates:
 - The unsupported top-level bulk-observation route remains blocked; single observations use the
   typed `POST /ws/rest/v1/obs` action.
 
-PHI note: patient identifiers, names, addresses, and clinical observation/diagnosis values are not
-generally field-redacted by the current connector engine. Treat command output and write plans as
-clinical data unless and until a separate engine PHI redaction policy is authorized.
+PHI note: the typed Bahmni patient search redacts its declared identifier, address value,
+display/name, birth-date, and death-date fields. Other patient identifiers, names, addresses, and
+clinical observation/diagnosis values are not generally field-redacted by the current connector
+engine. Treat command output and write plans as clinical data unless and until a broader engine PHI
+redaction policy is authorized.
 
-Read risk: external Bahmni/OpenMRS clinical PHI read; direct reads are bounded and redact only
-secret-shaped fields under the current engine policy.
+Read risk: external Bahmni/OpenMRS clinical PHI read; direct reads are bounded, generic direct reads
+redact secret-shaped fields, and typed patient search redacts declared identifier/address/name/date
+fields.
 
 Write risk: typed Bahmni/OpenMRS reverse ETL clinical mutations.
 
@@ -106,7 +110,8 @@ require `--confirm destructive`.
   diagnoses) require a `patient_uuid` context. `appointments` requires `appointment_date`; the pinned
   appointment controller ignores `patientUuid`.
 - The typed Bahmni patient search is modeled as a schema-gated GET read-query with connector-authored
-  query flags; arbitrary/raw request bodies remain intentionally unavailable.
+  query flags and operation-level redaction for declared identifier/address/name/date fields;
+  arbitrary/raw request bodies remain intentionally unavailable.
 - Patient-document binary download and patient image binary reads are blocked by default rather than
   exposed as generic byte-stream downloads. Permanent patient deletion/purge, OpenMRS server
   administration/global-property helpers, bulk observation upload, visit-document upload, and

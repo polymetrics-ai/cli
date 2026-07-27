@@ -7,7 +7,7 @@ description: Bahmni connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed GET patient search, and models retained OpenMRS/Bahmni clinical mutations as approval-gated, schema-bound reverse-ETL actions. Output is bounded; secret-shaped fields are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.
+Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-docker setups, through the OpenMRS REST, Bahmni-core REST, and OpenMRS FHIR2 R4 APIs — patients, encounters, observations, visits, concepts, locations, providers, orders, lab results, appointments, and diagnoses — executes bounded direct reads and a schema-gated typed GET patient search, and models retained OpenMRS/Bahmni clinical mutations as approval-gated, schema-bound reverse-ETL actions. Output is bounded; secret-shaped fields and typed patient-search declared sensitive fields are redacted by the current runtime, while broad clinical PHI field redaction remains a separate engine policy decision.
 
 ## Icon
 
@@ -126,7 +126,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 
 ## Security
 
-- read risk: external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; reads are bounded and secret-shaped fields are redacted by existing output policies, but clinical PHI fields are not generally field-redacted by the current engine
+- read risk: external Bahmni/OpenMRS clinical PHI read of patient, encounter, observation, visit, order, lab, appointment, and diagnosis data; reads are bounded, secret-shaped fields are redacted by existing output policies, and typed patient search redacts declared identifier/address/name/date fields, but remaining clinical PHI fields are not generally field-redacted by the current engine
 - write risk: typed Bahmni/OpenMRS reverse ETL clinical mutations for retained, live-proven patient, encounter, observation, visit, lab order, diagnosis, appointment create/status/provider-response, and note routes; drug order, appointment reschedule, bulk observation, and document upload surfaces are blocked unless separately typed and live-proven
 - approval: reverse ETL writes require plan, preview, approval, execute; clinical/destructive actions require --confirm destructive
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
@@ -170,7 +170,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
   - lab_orders create - Create an OpenMRS test/lab order through the typed order resource. [intent=reverse_etl availability=implemented write=create_lab_order]; approval: reverse ETL writes require plan, preview, approval, execute; risk: high; notes: Version-pinned supported write route; execute only through reverse ETL approval against disposable synthetic records unless explicitly approved.; flags: --type, --patient, --encounter, --concept, --care-setting, --orderer, --order-type, --action, --clinical-history
   - lab_results list - List Bahmni-core lab result observations as ETL records (scoped by patient_uuid). [intent=etl availability=implemented stream=lab_results]
 - Scheduling
-  - appointments list - List Bahmni appointments as ETL records (scoped by appointment_date and/or patient_uuid; otherwise a single unpaged cross-patient read). [intent=etl availability=implemented stream=appointments]
+  - appointments list - List Bahmni appointments as ETL records scoped by appointment_date only. [intent=etl availability=implemented stream=appointments]
   - appointments create - Book a Bahmni patient appointment. [intent=reverse_etl availability=implemented write=create_appointment]; approval: reverse ETL plan -> preview -> approval -> execute; clinical/destructive actions require --confirm destructive.; risk: clinical reverse-ETL mutation of Bahmni/OpenMRS PHI; runs only through plan, preview, approval, execute.; notes: Typed reverse-ETL action; no raw HTTP body, raw JSON, generic shell, or SQL write is exposed.; flags: --patient-uuid, --service-uuid, --start-date-time, --end-date-time, --appointment-kind, --status, --provider-uuid, --provider-response, --location-uuid, --comments
   - appointments status-change - Change an appointment status. [intent=reverse_etl availability=implemented write=update_appointment_status]; approval: reverse ETL writes require plan, preview, approval, execute; risk: critical; notes: Version-pinned supported write route; execute only through reverse ETL approval against disposable synthetic records unless explicitly approved.; flags: --appointment-uuid, --to-status, --on-date
   - appointments provider-response - Update an appointment provider response. [intent=reverse_etl availability=implemented write=update_appointment_provider_response]; approval: reverse ETL writes require plan, preview, approval, execute; risk: high; notes: Version-pinned supported write route; execute only through reverse ETL approval against disposable synthetic records unless explicitly approved.; flags: --appointment-uuid, --provider-detail-uuid, --response
@@ -186,7 +186,7 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
   - fhir observation-read - Read a FHIR R4 Observation resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
   - fhir encounter-read - Read a FHIR R4 Encounter resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
   - fhir condition-read - Read a FHIR R4 Condition resource by id. [intent=direct_read availability=implemented]; risk: bounded Bahmni/OpenMRS JSON read; the response is size-limited and secret-shaped fields are redacted.; flags: --id
-  - bahmnicore patient-search - Search patients with the pinned bahmni-commons GET patient search route. [intent=direct_read availability=implemented]; approval: none: read-only POST query with a schema-gated body.; risk: bounded typed POST read-query; the response is size-capped and secret-shaped fields are redacted, but the returned patient identifiers and address values are clinical PHI and are not field-redacted by the current engine.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index
+  - bahmnicore patient-search - Search patients with the pinned bahmni-commons GET patient search route. [intent=direct_read availability=implemented]; approval: none: read-only GET query with allow-listed query parameters and bounded JSON output.; risk: bounded typed GET read-query; the response is size-capped, secret-shaped fields are redacted, and the operation direct-read engine redacts declared patient-search sensitive fields including identifier, addressFieldValue, display, givenName, middleName, familyName, birthDate, and deathDate. Remaining clinical PHI fields should still be treated as clinical data.; notes: Executes through the typed operation direct-read engine; no raw request body or generic HTTP flag is exposed.; flags: --q, --identifier, --address-field-name, --address-field-value, --login-location-uuid, --start-index
 - Documents
   - documents upload - Visit-document upload is not advertised until a file-backed bounded multipart/hash-gated typed surface is implemented and live-proven. [intent=reverse_etl availability=unsafe_or_disallowed]; approval: blocked: inline content upload is not a retained typed write surface; risk: critical; notes: Blocked for PR #533: current inline JSON content surface lacks the claimed file snapshot/SHA-256 approval binding; do not use as an advertised write.
 - Other Commands
@@ -194,8 +194,8 @@ Reads clinical EMR data from a Bahmni deployment, including local Bahmni/bahmni-
 - Help topics:
   - bahmni-auth - Point base_url at a Bahmni OpenMRS instance, including a local Bahmni/bahmni-docker deployment, and supply username/password via credentials; never pass secrets in command text.
   - bahmni-writes - Bahmni clinical mutations are typed reverse-ETL actions with plan, preview, approval, execute gates; clinical/destructive actions require --confirm destructive.
-  - bahmni-direct-read - Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed POST patient search, all with a response byte cap; clinical PHI fields are not generally field-redacted by the current engine.
-  - bahmni-phi - Bahmni reads and writes can include clinical PHI. The current runtime bounds output and redacts secret-shaped fields/file-path inputs, but broad clinical PHI field redaction remains a separate engine policy decision.
+  - bahmni-direct-read - Bahmni direct reads are bounded JSON GET-by-uuid, FHIR read-by-id, or a schema-gated typed GET patient search, all with a response byte cap; typed patient search redacts its declared identifier, address, name, birth-date, and death-date fields.
+  - bahmni-phi - Bahmni reads and writes can include clinical PHI. The current runtime bounds output, redacts secret-shaped fields, configured write path identifiers, and typed patient-search declared sensitive fields; broad clinical PHI field redaction remains a separate engine policy decision.
 
 ## Commands
 
@@ -209,6 +209,33 @@ pm connectors inspect bahmni
 
 ```bash
 pm connectors inspect bahmni --json
+```
+
+### Command discovery
+
+```bash
+pm bahmni --help
+pm bahmni appointments --help
+pm bahmni appointments create --help
+```
+
+### Synthetic appointment read
+
+```bash
+pm bahmni appointments list --credential bahmni-local --config appointment_date=2026-01-01T00:00:00.000 --limit 10 --json
+```
+
+### Synthetic patient create plan
+
+```bash
+pm bahmni patients create --credential bahmni-local --identifier SYN-CONN-EXAMPLE-001 --identifier-type <identifier-type-uuid> --identifier-location <location-uuid> --given-name Synthetic --family-name Connector --gender O --birthdate 1990-01-01 --preview --json
+```
+
+### Unsupported retained as blocked
+
+```bash
+pm bahmni appointments reschedule --help
+pm bahmni drug_orders create --help
 ```
 
 ## Agent Rules

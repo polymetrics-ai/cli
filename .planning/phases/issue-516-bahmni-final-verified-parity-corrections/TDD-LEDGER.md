@@ -41,7 +41,7 @@ Before/alongside fixes, add tests that fail against `4f582253` and pass after co
 
 ## Results
 
-Pending implementation.
+Review-fix slice green for Bahmni scope text, generated artifact parity, and write-preview path redaction. Broader full-phase gates remain pending.
 
 ## Local preview checkpoint addendum - 2026-07-26
 
@@ -60,7 +60,7 @@ Captain clarified that scalar-only live-write checks are partial evidence only. 
 - a retained write lacks explicit schema-bound flag mappings/builders for required nested objects/arrays;
 - a retained write is advertised as implemented but cannot pass plan -> preview -> approval -> execute against the pinned synthetic lab.
 
-If an operation cannot be typed/proven against pinned STANDARD/LITE, mark it unavailable or remove it with source/live evidence instead of leaving an unusable advertised write.
+If an operation cannot be typed/proven against the pinned STANDARD alpha stack, mark it unavailable or remove it with source/live evidence instead of leaving an unusable advertised write.
 
 ## PHI protection addendum - 2026-07-26
 
@@ -69,3 +69,28 @@ Captain clarified that default PHI protection is a production-readiness gate, no
 ## Live synthetic write verification addendum - 2026-07-26
 
 Captain authorized live write proof after current typed/schema tests pass and `pm-bahmni` is rebuilt. Red tests/verification must fail if any retained write lacks typed CLI plan -> preview -> explicit approval -> execute proof against a unique disposable `SYN-CONN-*` record, or if a failed write remains advertised without source/live evidence. Evidence must be status/count/opaque IDs only; no credentials/PHI.
+
+## Review-fix slice - 2026-07-26
+
+Baseline checks at `4e89af9ea5436088f5cef8e9f14e6eee0696b290` reproduce the prior findings:
+
+- `docs/connectors/catalog/all-connectors.json` and `website/data/connectors.generated.json` still list `create_drug_order`, `create_diagnosis`, `create_observations_bulk`, and `upload_patient_document`.
+- `internal/connectors/defs/bahmni/spec.json` and `api_surface.json` still mention the old mixed-stack support claim.
+- `internal/connectors/defs/bahmni/cli_surface.json` still describes appointment reads as `appointment_date and/or patient_uuid`.
+- `internal/connectors/defs/bahmni/operations.json` and command help still call patient search a POST/body read.
+- `engine.DryRunWrite` resolves path fields from raw records in preview warnings.
+
+Planned red coverage: extend engine write-preview tests so configured write-action redaction fields scrub resolved path identifiers, and use the existing Bahmni contract tests plus generated-data checks to keep the frozen scope truthful.
+
+## Post-merge corrective slice - 2026-07-26
+
+GSD fallback remains in effect for `scripts/gsd prompt programming-loop ...` (`unknown GSD command: programming-loop`). Added failing regression `TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody` after PR #533 merged; red state proved execute-time `*connsdk.HTTPError` display leaked encoded clinical path identifiers. Green target: preserve `errors.As`/error-map behavior while redacting configured write-action record literals from operator-visible write errors.
+
+## Bahmni command discovery slice - 2026-07-26
+
+Captain authorized end-to-end dynamic command/help parity in the corrective PR after the two PHI-path corrections were preserved. Red coverage added:
+
+- `TestRootHelpListsDynamicConnectorCommands`: root help must expose dynamic connector command entry points.
+- `TestBahmniCommandSurfaceHelpScopes`: `pm bahmni --help`, group help, and exact command help must render scoped usage/flags instead of the full connector manual.
+- `TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked`: every declared Bahmni command path must either reach credential lookup when implemented or block before credentials with its documented availability.
+- `TestBahmniAppointmentAliasSuggestion`: `appoint` typo/singular path must return an actionable `appointments` suggestion rather than looking like the connector has no commands.

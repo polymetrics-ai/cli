@@ -27,7 +27,7 @@ Pending implementation:
 
 - [ ] Codex-only validation/review against exact candidate head.
 - [ ] Fresh independent exact-head audit before any “full parity” claim.
-- [ ] Live STANDARD/LITE synthetic read verification and disposable write verification only if captain explicitly provides/authorizes synthetic lab credentials and write execution.
+- [ ] Live STANDARD synthetic read verification and disposable write verification only if captain explicitly provides/authorizes synthetic lab credentials and write execution.
 
 ## Merge boundary
 
@@ -69,6 +69,16 @@ Also run credential-free fixture/conformance smoke and safe synthetic-lab bounde
 ## Live synthetic write verification authorization - 2026-07-26
 
 Captain authorized parallel live verification of every retained Bahmni write against the existing loopback-only Podman lab after typed/schema tests pass and `pm-bahmni` is rebuilt. Constraints: unique `SYN-CONN-*` disposable identifiers, typed CLI plan -> preview -> explicit approval -> execute only, no raw JSON/method/path write escape hatches, no credential/PHI printing or persistence, no Karthik/Rohit records, no reseed/restart/container mutation, no lane collisions, safe opaque evidence/status only. Independent chains may run in parallel; dependencies inside each lane remain serial. Any failed operation must stop, be fixed or marked unavailable with source/live evidence, then rerun before readiness is claimed.
+
+## Review-fix slice - 2026-07-26
+
+Required focused verification for this slice:
+
+- [x] `go test ./internal/connectors/engine ./internal/connectors/conformance -run 'Test(DryRunWritePreviewResolvedPathRedactsConfiguredRecordFields|DryRunWritePreviewResolvedPathRedactionCopiesNestedRecord|BahmniVersionPinnedReadContracts|BahmniVersionPinnedDirectOperationContracts|BahmniVersionPinnedWriteContracts|BahmniFrozenScopeTextContracts)$' -count=1`
+- [x] Bahmni-only generated-data assertion confirms no stale write claims, no non-STANDARD support claim, appointment date-only help, and GET patient-search wording in connector catalog and website data.
+- [x] `go run ./cmd/pm docs generate --dir docs/cli --connectors-dir docs/connectors`
+- [x] `npm --prefix website run gen:website-data`
+- [x] Unrelated generated connector MANUAL/SKILL churn restored out of the worktree.
 
 ### Live lane attempt 1 safe summary
 
@@ -128,3 +138,20 @@ Captain authorized parallel live verification of every retained Bahmni write aga
   - `create_note`: PASS live synthetic proof.
 - Blocked/unretained write-like commands: `create_drug_order`, `reschedule_appointment`, `upload_visit_document`, document upload, top-level bulk observations, and other destructive/admin routes in `api_surface.json`.
 - No operation is omitted from the retained-write matrix; unretained operations are explicitly not proof.
+
+## Post-merge corrective verification - 2026-07-26
+
+- `scripts/gsd doctor`: pass.
+- `scripts/gsd prompt programming-loop init --phase issue-535-bahmni-post-merge-corrections --dry-run`: unavailable (`unknown GSD command: programming-loop`); manual GSD fallback recorded.
+- Red: `go test ./internal/connectors/engine -run TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody -count=1` failed because the write error contained the encoded clinical path identifier.
+- Green: `go test ./internal/connectors/engine -run 'TestDryRunWritePreviewResolvedPath|TestWriteErrorRedactsConfiguredRecordFieldsInHTTPPathAndBody' -count=1` passed after write-error literal redaction preserved `errors.As` reachability.
+
+## Bahmni command discovery verification - 2026-07-26
+
+- Red before fix: focused Bahmni CLI tests failed because `pm bahmni --help`/group/command help rendered the full connector manual and `pm bahmni appoint list` only reported unknown command.
+- Green: `go test ./internal/cli -run 'TestRootHelpListsDynamicConnectorCommands|TestBahmniCommandSurfaceHelpScopes|TestBahmniDeclaredCommandMatrixIsRecognizedOrExplicitlyBlocked|TestBahmniAppointmentAliasSuggestion' -count=1` passed.
+- Green: `go test ./internal/cli ./internal/connectors/engine -count=1` passed.
+- Green: `go run ./cmd/connectorgen validate internal/connectors/defs` passed with `548 connector(s) checked, 0 findings`.
+- Green: `go run ./cmd/pm docs validate --connectors-dir docs/connectors` passed.
+- Green: `go test ./cmd/connectorgen ./internal/connectors/bundleregistry ./internal/connectors/conformance ./internal/cli ./internal/connectors/engine -count=1` passed.
+- Declared-path matrix now covers all 37 Bahmni command paths from `cli_surface.json`; implemented paths must reach credential resolution and blocked paths must return their documented availability before credential lookup.

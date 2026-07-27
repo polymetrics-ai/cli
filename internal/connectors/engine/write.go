@@ -119,15 +119,14 @@ func DryRunWrite(ctx context.Context, b Bundle, req connectors.WriteRequest, rec
 }
 
 // resolveWriteRequestLine interpolates the action's base URL and path
-// against rec/cfg, redacting {{ secrets.* }} references so a preview can
-// never leak a secret value even though the method/path is otherwise fully
-// resolved for operator review (THREAT-MODEL §1).
+// against rec/cfg, redacting {{ secrets.* }} and action redaction fields so
+// previews do not expose values that must stay out of operator-visible URLs.
 func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record, cfg connectors.RuntimeConfig) (method, path string, err error) {
 	redactedSecrets := make(map[string]string, len(cfg.Secrets))
 	for k := range cfg.Secrets {
 		redactedSecrets[k] = "***"
 	}
-	vars := Vars{Config: cfg.Config, Secrets: redactedSecrets, Record: map[string]any(rec)}
+	vars := Vars{Config: cfg.Config, Secrets: redactedSecrets, Record: previewRecordForWriteAction(rec, action.RedactFields)}
 
 	baseURL, err := Interpolate(b.HTTP.URL, vars)
 	if err != nil {
@@ -138,6 +137,182 @@ func resolveWriteRequestLine(b Bundle, action WriteAction, rec connectors.Record
 		return "", "", fmt.Errorf("engine: write action %q: resolve path: %w", action.Name, err)
 	}
 	return methodOrDefault(action.Method), joinURL(baseURL, relPath), nil
+}
+
+func previewRecordForWriteAction(rec connectors.Record, redactFields []string) map[string]any {
+	out := copyRecordMap(map[string]any(rec))
+	for _, field := range redactFields {
+		redactPreviewRecordField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+	}
+	return out
+}
+
+func copyRecordMap(src map[string]any) map[string]any {
+	out := make(map[string]any, len(src))
+	for k, v := range src {
+		switch typed := v.(type) {
+		case map[string]any:
+			out[k] = copyRecordMap(typed)
+		case connectors.Record:
+			out[k] = copyRecordMap(map[string]any(typed))
+		default:
+			out[k] = v
+		}
+	}
+	return out
+}
+
+func redactPreviewRecordField(record map[string]any, field string) {
+	if field == "" {
+		return
+	}
+	parts := strings.Split(field, ".")
+	current := record
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return
+		}
+		switch typed := next.(type) {
+		case map[string]any:
+			current = typed
+		case connectors.Record:
+			current = map[string]any(typed)
+		default:
+			return
+		}
+	}
+	if _, ok := current[parts[len(parts)-1]]; ok {
+		current[parts[len(parts)-1]] = "redacted"
+	}
+}
+
+type writeActionRedactedError struct {
+	err    error
+	values []string
+}
+
+func (e *writeActionRedactedError) Error() string {
+	return safety.RedactErrorText(redactWriteLiterals(e.err.Error(), e.values))
+}
+
+func (e *writeActionRedactedError) Unwrap() error {
+	return e.err
+}
+
+func redactWriteActionError(err error, action WriteAction, rec connectors.Record) error {
+	if err == nil || len(action.RedactFields) == 0 {
+		return err
+	}
+	values := writeActionRedactionValues(action, rec)
+	if len(values) == 0 {
+		return err
+	}
+	return &writeActionRedactedError{err: err, values: values}
+}
+
+func writeActionRedactionValues(action WriteAction, rec connectors.Record) []string {
+	record := copyRecordMap(map[string]any(rec))
+	seen := map[string]bool{}
+	for _, field := range action.RedactFields {
+		field = strings.TrimPrefix(strings.TrimSpace(field), "record.")
+		if field == "" {
+			continue
+		}
+		value, err := resolveRecordPathValue(record, strings.Split(field, "."))
+		if err != nil {
+			continue
+		}
+		collectWriteRedactionValues(value, seen)
+	}
+	values := make([]string, 0, len(seen))
+	for value := range seen {
+		values = append(values, value)
+	}
+	sortWriteRedactionLiterals(values)
+	return values
+}
+
+func collectWriteRedactionValues(value any, out map[string]bool) {
+	switch typed := value.(type) {
+	case nil:
+		return
+	case string:
+		addWriteRedactionValue(typed, out)
+	case []string:
+		for _, item := range typed {
+			addWriteRedactionValue(item, out)
+		}
+	case []any:
+		for _, item := range typed {
+			collectWriteRedactionValues(item, out)
+		}
+	case map[string]any:
+		for _, item := range typed {
+			collectWriteRedactionValues(item, out)
+		}
+	case connectors.Record:
+		for _, item := range typed {
+			collectWriteRedactionValues(item, out)
+		}
+	default:
+		addWriteRedactionValue(stringify(typed), out)
+	}
+}
+
+func addWriteRedactionValue(value string, out map[string]bool) {
+	value = strings.TrimSpace(value)
+	if value == "" || value == "***" || value == "redacted" {
+		return
+	}
+	out[value] = true
+}
+
+func redactWriteLiterals(text string, values []string) string {
+	for _, literal := range writeRedactionLiterals(values) {
+		text = strings.ReplaceAll(text, literal, "redacted")
+	}
+	return text
+}
+
+func sortWriteRedactionLiterals(values []string) {
+	sort.Slice(values, func(i, j int) bool {
+		if len(values[i]) != len(values[j]) {
+			return len(values[i]) > len(values[j])
+		}
+		return values[i] < values[j]
+	})
+}
+
+func writeRedactionLiterals(values []string) []string {
+	seen := map[string]bool{}
+	literals := make([]string, 0, len(values)*4)
+	for _, value := range values {
+		for _, literal := range writeRedactionLiteralForms(value) {
+			if seen[literal] {
+				continue
+			}
+			seen[literal] = true
+			literals = append(literals, literal)
+		}
+	}
+	sortWriteRedactionLiterals(literals)
+	return literals
+}
+
+func writeRedactionLiteralForms(value string) []string {
+	forms := []string{value, urlencodeSegment(value), url.QueryEscape(value), url.PathEscape(value)}
+	seen := map[string]bool{}
+	out := make([]string, 0, len(forms))
+	for _, form := range forms {
+		form = strings.TrimSpace(form)
+		if form == "" || seen[form] {
+			continue
+		}
+		seen[form] = true
+		out = append(out, form)
+	}
+	return out
 }
 
 func joinURL(base, path string) string {
@@ -185,7 +360,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 			handled, err := wh.ExecuteWrite(ctx, action, rec, rt)
 			if err != nil {
 				result.RecordsFailed = len(records) - result.RecordsWritten
-				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: err}
+				return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Err: redactWriteActionError(err, action, rec)}
 			}
 			if handled {
 				result.RecordsWritten++
@@ -200,7 +375,7 @@ func Write(ctx context.Context, b Bundle, req connectors.WriteRequest, records [
 			}
 			result.RecordsFailed = len(records) - result.RecordsWritten
 			class, hint := applyErrorMap(b.HTTP.ErrorMap, err)
-			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: err}
+			return result, &Error{Connector: b.Name, Action: action.Name, Page: -1, RecordIndex: i, Class: class, Hint: hint, Err: redactWriteActionError(err, action, rec)}
 		}
 		result.RecordsWritten++
 	}
