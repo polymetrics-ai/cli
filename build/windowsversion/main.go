@@ -76,9 +76,7 @@ func RenderRC(version Version) string {
 	commaVersion := version.CommaString()
 	textVersion := version.String()
 
-	return fmt.Sprintf(`#include <winver.h>
-
-1 VERSIONINFO
+	return fmt.Sprintf(`1 VERSIONINFO
 FILEVERSION %s
 PRODUCTVERSION %s
 FILEFLAGSMASK 0x3fL

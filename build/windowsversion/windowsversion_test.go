@@ -75,6 +75,7 @@ func TestRenderRCIncludesApprovedMetadata(t *testing.T) {
 	rc := RenderRC(version)
 
 	for _, want := range []string{
+		`1 VERSIONINFO`,
 		`FILEVERSION 1,2,3,0`,
 		`PRODUCTVERSION 1,2,3,0`,
 		`VALUE "CompanyName", "Polymetrics AI"`,
@@ -89,5 +90,8 @@ func TestRenderRCIncludesApprovedMetadata(t *testing.T) {
 		if !strings.Contains(rc, want) {
 			t.Fatalf("RenderRC() missing %q in:\n%s", want, rc)
 		}
+	}
+	if strings.Contains(rc, "#include") {
+		t.Fatalf("RenderRC() emitted SDK header include:\n%s", rc)
 	}
 }
