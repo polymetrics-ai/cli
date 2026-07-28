@@ -69,7 +69,7 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 | [#582](https://github.com/polymetrics-ai/cli/issues/582) | Audit retention UX | [#7](https://github.com/polymetrics-ai/pm-broker/issues/7), [#18](https://github.com/polymetrics-ai/pm-broker/issues/18), [#19](https://github.com/polymetrics-ai/pm-broker/issues/19), [#20](https://github.com/polymetrics-ai/pm-broker/issues/20), [#22](https://github.com/polymetrics-ai/pm-broker/issues/22) | Remote 365-day/local 30-day redacted evidence UX. |
 | [#583](https://github.com/polymetrics-ai/cli/issues/583) | GCP provider CLI contract | [#5](https://github.com/polymetrics-ai/pm-broker/issues/5), [#6](https://github.com/polymetrics-ai/pm-broker/issues/6), [#21](https://github.com/polymetrics-ai/pm-broker/issues/21), [#22](https://github.com/polymetrics-ai/pm-broker/issues/22), [#27](https://github.com/polymetrics-ai/pm-broker/issues/27), [#28](https://github.com/polymetrics-ai/pm-broker/issues/28) | Use fake/synthetic data by default; live non-production GCP evidence remains protected. |
 | [#584](https://github.com/polymetrics-ai/cli/issues/584) | Generic typed auth compatibility | [#5](https://github.com/polymetrics-ai/pm-broker/issues/5), [#6](https://github.com/polymetrics-ai/pm-broker/issues/6), [#8](https://github.com/polymetrics-ai/pm-broker/issues/8), [#12](https://github.com/polymetrics-ai/pm-broker/issues/12), [#16](https://github.com/polymetrics-ai/pm-broker/issues/16), [#21](https://github.com/polymetrics-ai/pm-broker/issues/21), [#22](https://github.com/polymetrics-ai/pm-broker/issues/22), [#23](https://github.com/polymetrics-ai/pm-broker/issues/23), [#24](https://github.com/polymetrics-ai/pm-broker/issues/24) | Built-in/internal typed auth only; public registry is future work. |
-| [#585](https://github.com/polymetrics-ai/cli/issues/585) | OpenAPI /v1 client and fake fixtures | [#8](https://github.com/polymetrics-ai/pm-broker/issues/8), [#24](https://github.com/polymetrics-ai/pm-broker/issues/24) | Contract-owner lane; should pin generated/fake fixture digests for downstream CLI work. |
+| [#585](https://github.com/polymetrics-ai/cli/issues/585) | OpenAPI /v1 HTTP/JSON client and fake fixtures | [#8](https://github.com/polymetrics-ai/pm-broker/issues/8), [#24](https://github.com/polymetrics-ai/pm-broker/issues/24) | Contract-owner lane; pins the typed client/transport contract, accepted fixtures, and fake broker for downstream CLI work. |
 | [#586](https://github.com/polymetrics-ai/cli/issues/586) | Architecture unblocked marker | [#25](https://github.com/polymetrics-ai/pm-broker/issues/25), [#31](https://github.com/polymetrics-ai/pm-broker/issues/31), [#32](https://github.com/polymetrics-ai/pm-broker/issues/32) | Implementation unblocked; public registry and exact deployment inputs are non-code blockers. |
 | [#587](https://github.com/polymetrics-ai/cli/issues/587) | Legacy vault retirement UX | [#11](https://github.com/polymetrics-ai/pm-broker/issues/11), [#15](https://github.com/polymetrics-ai/pm-broker/issues/15), [#21](https://github.com/polymetrics-ai/pm-broker/issues/21), [#22](https://github.com/polymetrics-ai/pm-broker/issues/22), [#26](https://github.com/polymetrics-ai/pm-broker/issues/26) | Two-stage human-controlled migration; no plaintext export. |
 | [#588](https://github.com/polymetrics-ai/cli/issues/588) | Provider SDK boundary in CLI | [#5](https://github.com/polymetrics-ai/pm-broker/issues/5), [#6](https://github.com/polymetrics-ai/pm-broker/issues/6), [#27](https://github.com/polymetrics-ai/pm-broker/issues/27) | No vendor leakage, runtime plugins, or auto-merge of provider APIs into CLI contracts. |
@@ -81,7 +81,7 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 ## Parallel implementation feed
 
 - Start contract-foundation lanes first: #564, #577, #585, and #586, coordinated with PM Broker #3/#4/#8/#24/#25.
-- Once #585 publishes fake/loopback fixtures, auth/context/storage/policy/audit UX lanes can proceed in parallel when write scopes do not collide: #565, #566, #567, #568, #573, #578, #579, #580, #581, #582, #590, #591.
+- With #585 publishing typed `/v1` fixtures plus loopback/remote HTTP client foundations, auth/context/storage/policy/audit UX lanes can proceed in parallel when write scopes do not collide: #565, #566, #567, #568, #573, #578, #579, #580, #581, #582, #590, #591.
 - Migration/compatibility lanes #569, #570, and #587 depend on PM Broker #15/#26 and no-raw-export #21.
 - Provider/GCP lanes #583, #588, and #589 depend on PM Broker #5/#6/#27/#28 and must stay synthetic unless live non-production evidence is separately approved.
 - #575 and #576 run continuously against accepted slices, then become final certification/docs gates after implementation lands.
@@ -89,10 +89,12 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 ## CLI-side contract fixture package
 
 The first CLI-side synthetic contract foundation for #585 lives in `internal/pmbroker/contract/v1`.
-Later profile, context, and execution CLI lanes should consume `NewSyntheticBroker().NewClient()`
-and `AcceptedSyntheticFixtures()` for deterministic tests of `/v1` compatibility negotiation,
-opaque connector references, and typed execution-plan requests. The package is intentionally
-network-free and does not expose production broker transport, arbitrary endpoints, caller-supplied
-headers, generic JSON/body execution, provider SDKs, raw-secret retrieval/export, SQL, shell, or
-runtime plugins. `auth_registry_mode` remains pinned to `internal_experimental`; this package does
-not claim a stable public authentication registry.
+Later profile, context, and execution CLI lanes should consume `NewSyntheticBroker().NewClient()`,
+`NewHTTPClient()`, and `AcceptedSyntheticFixtures()` for deterministic tests of `/v1` compatibility
+negotiation, loopback/remote HTTP parity, opaque connector references, and typed execution-plan
+requests. Tests stay network-free through the fake broker transport, while production-bound HTTP
+remains a typed endpoint-safe foundation with explicit auth and correlation seams. The package does
+not expose arbitrary request methods, caller-supplied headers, generic JSON/body execution, provider
+SDKs, raw-secret retrieval/export, public gRPC, divergent socket semantics, SQL, shell, or runtime
+plugins. `auth_registry_mode` remains pinned to `internal_experimental`; this package does not claim
+a stable public authentication registry.

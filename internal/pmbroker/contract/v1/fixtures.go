@@ -11,8 +11,8 @@ import (
 //go:embed testdata/fixtures/*.json
 var fixtureFS embed.FS
 
-// AcceptedSyntheticFixtures returns defensive copies of the PM Broker PR #35
-// fixture values consumed by the CLI fake-broker foundation.
+// AcceptedSyntheticFixtures returns defensive copies of the fixture values
+// consumed by the CLI fake-broker foundation.
 func AcceptedSyntheticFixtures() SyntheticFixtures {
 	fixtures, err := loadSyntheticFixtures()
 	if err != nil {
