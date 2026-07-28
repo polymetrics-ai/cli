@@ -1,0 +1,10 @@
+{
+  "error": {
+    "code": "incompatible_contract_version",
+    "message": "requested contract version is not supported",
+    "correlation_id": "corr_0123456789abcdef",
+    "supported_versions": [
+      "1.0"
+    ]
+  }
+}

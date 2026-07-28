@@ -1,0 +1,14 @@
+{
+  "organization_id": "org_0123456789abcdef",
+  "workspace_id": "wks_0123456789abcdef",
+  "environment_id": "env_0123456789abcdef",
+  "broker_profile_id": "bpf_0123456789abcdef",
+  "connector_connection_id": "ccn_0123456789abcdef",
+  "idempotency_key": "idem_0123456789abcdefghijkl",
+  "intent": {
+    "validate_connector_connection": {
+      "kind": "validate_connector_connection",
+      "connector_connection_id": "ccn_0123456789abcdef"
+    }
+  }
+}
