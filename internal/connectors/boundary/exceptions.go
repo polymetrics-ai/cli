@@ -151,6 +151,29 @@ func matchingFindingIndices(findings []Finding, ex Exception) []int {
 	return indices
 }
 
+func suppressAppliedExceptions(findings []Finding, applied []AppliedException) []Finding {
+	if len(findings) == 0 || len(applied) == 0 {
+		return findings
+	}
+	suppressed := map[string]bool{}
+	for _, ex := range applied {
+		suppressed[exceptionMatchKey(ex.Rule, ex.Connector, ex.Path, ex.Match)] = true
+	}
+	filtered := make([]Finding, 0, len(findings))
+	for _, finding := range findings {
+		if suppressed[exceptionMatchKey(finding.Rule, finding.Connector, finding.Path, finding.Match)] {
+			continue
+		}
+		filtered = append(filtered, finding)
+	}
+	sortFindings(filtered)
+	return filtered
+}
+
+func exceptionMatchKey(rule, connector, path, match string) string {
+	return rule + "\x00" + connector + "\x00" + path + "\x00" + match
+}
+
 func exceptionFinding(rule string, ex Exception, ledgerPath string, matches int, message string) Finding {
 	if matches > 0 {
 		message = fmt.Sprintf("%s: %s", message, ex.ID)

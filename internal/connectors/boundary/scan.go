@@ -69,7 +69,7 @@ func Scan(root string, opts Options) (Report, error) {
 	// active scan findings plus exception contract findings.
 	allAfterExceptions, applied := applyExceptions(allFindings, ledger, opts.Now, opts.ExceptionsPath)
 	exceptionContractFindings := filterExceptionContractFindings(allAfterExceptions)
-	findings, _ = applyExceptions(findings, ledger, opts.Now, opts.ExceptionsPath)
+	findings = suppressAppliedExceptions(findings, applied)
 	findings = mergeExceptionContractFindings(findings, exceptionContractFindings)
 	sortFindings(findings)
 

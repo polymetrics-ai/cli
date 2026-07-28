@@ -489,6 +489,51 @@ func changed(connector string) bool { return connector == "gong" }
 	}
 }
 
+func TestScanBaseDiffDoesNotMarkUnchangedAppliedExceptionsStale(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/engine/changed.go": `package engine
+
+const neutral = "ok"
+`,
+		"internal/connectors/engine/direct_read.go": `package engine
+
+const outputPolicy = "github_contents_directory"
+`,
+		DefaultExceptionsPath: exceptionsJSON([]map[string]any{{
+			"id":                  "github-direct-read-output-policy",
+			"rule":                RuleProviderPolicy,
+			"connector":           "github",
+			"path":                "internal/connectors/engine/direct_read.go",
+			"match":               "github_contents_directory",
+			"reason":              "bootstrap until output policies are definition-owned",
+			"migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/599",
+			"owner":               "connector-architecture-v2",
+			"expires_on":          "2026-08-31",
+			"max_matches":         1,
+		}}),
+	})
+	runGit(t, root, "init")
+	runGit(t, root, "config", "user.email", "test@example.com")
+	runGit(t, root, "config", "user.name", "Test User")
+	runGit(t, root, "add", ".")
+	runGit(t, root, "commit", "-m", "base")
+	writeFixtureFile(t, root, "internal/connectors/engine/changed.go", `package engine
+func changed(connector string) bool { return connector == "gong" }
+`)
+
+	report, err := Scan(root, Options{BaseRef: "HEAD", Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleConnectorSwitch, "gong", "internal/connectors/engine/changed.go", "gong")
+	if hasFinding(report, RuleExceptionStale, "github", "github_contents_directory") {
+		t.Fatalf("base diff scan reported unchanged applied exception as stale: %+v", report.Findings)
+	}
+	if len(report.Exceptions) != 1 || report.Exceptions[0].ID != "github-direct-read-output-policy" {
+		t.Fatalf("expected unchanged exception to remain applied, got %+v", report.Exceptions)
+	}
+}
+
 func TestCurrentRepositoryBaselinePasses(t *testing.T) {
 	root := findRepoRoot(t)
 	report, err := Scan(root, Options{Now: fixedNow})
