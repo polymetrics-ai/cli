@@ -67,6 +67,6 @@ reason and evidence. Copilot review is not approval. -->
 - [ ] Claude automatic review completed, Copilot fallback was justified, or review blocker was recorded
 - [ ] Every actionable automated review finding has a reasoned disposition reply
 - [ ] Sub-PR merge into parent branch is allowed by the stacked workflow, or this PR targets `main`
-- [ ] Branch name follows `<type>/<description>` such as `feat/new-connector` or `fix/api-pagination`
+- [ ] Branch name follows the repository branch-name workflow
 - [ ] PR title follows Conventional Commits
 - [ ] No credentials, tokens, private URLs, or customer data included
