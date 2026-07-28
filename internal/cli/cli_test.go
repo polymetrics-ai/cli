@@ -81,6 +81,25 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 	}
 }
 
+func TestGongCallsListHelpDocumentsDateFlagsAndLimitOutputCap(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"gong", "calls", "list", "--help"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(gong calls list --help) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"pm gong calls list",
+		"--from (string): Inclusive ISO-8601 lower bound mapped to Gong fromDateTime",
+		"--to (string): Exclusive ISO-8601 upper bound mapped to Gong toDateTime",
+		"--limit (integer): Maximum PM ETL records to emit; does not control Gong page size or total provider-side results",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("calls list help missing %q:\n%s", want, out)
+		}
+	}
+}
+
 func TestDynamicConnectorSharedPassiveFlagRendersHelp(t *testing.T) {
 	var stdout, stderr bytes.Buffer
 	code := cli.Run([]string{"github", "--credential", "github-local"}, &stdout, &stderr)

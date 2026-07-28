@@ -675,6 +675,30 @@ func TestReadIncrementalLowerBoundFallsBackToStartConfigKey(t *testing.T) {
 	}
 }
 
+func TestReadStartConfigIncrementalRequestParamDoesNotOverrideExplicitRequestQuery(t *testing.T) {
+	var gotSince string
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		gotSince = r.URL.Query().Get("since")
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "since", ParamFormat: "rfc3339", StartConfigKey: "start_date"},
+	})
+
+	req := connectors.ReadRequest{
+		Stream: "widgets",
+		Config: connectors.RuntimeConfig{Config: map[string]string{"start_date": "2025-06-01T00:00:00Z"}},
+		Query:  map[string]string{"since": "2026-07-01T00:00:00Z"},
+	}
+	_, err := readAll(t, context.Background(), b, req, nil)
+	if err != nil {
+		t.Fatalf("Read: %v", err)
+	}
+	if gotSince != "2026-07-01T00:00:00Z" {
+		t.Fatalf("since = %q, want explicit request query to override start_config_key fallback", gotSince)
+	}
+}
+
 func TestReadIncrementalParamFormats(t *testing.T) {
 	cases := []struct {
 		name      string

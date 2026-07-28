@@ -59442,7 +59442,7 @@
         "page_size": {
           "type": "string",
           "default": "100",
-          "description": "Records per page (1-100)."
+          "description": "Compatibility page-size request value for legacy Gong list streams; current Gong OpenAPI does not document a provider-side page-size parameter. CLI --limit remains the PM output cap."
         },
         "max_pages": {
           "type": "string",

@@ -40,6 +40,19 @@ export type ConnectorCliFlag = {
   summary: string;
   values: string[];
   mapsTo: string;
+  format?: string;
+  allowEmpty?: boolean;
+};
+
+export type ConnectorCliConstraint = {
+  kind: string;
+  left: string;
+  right: string;
+  op: string;
+  valueType: string;
+  leftFallback: string;
+  rightFallback: string;
+  message: string;
 };
 
 export type ConnectorCliSource = {
@@ -65,6 +78,7 @@ export type ConnectorCliCommand = {
   sourceCliPath: string;
   sourceUrl: string;
   flags: ConnectorCliFlag[];
+  constraints?: ConnectorCliConstraint[];
   examples: string[];
   outputPolicy: string;
   risk: string;
