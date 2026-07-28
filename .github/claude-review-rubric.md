@@ -33,7 +33,8 @@ because it looks like a lint nit.
 - Doesn't duplicate an existing helper; reuses connector/ETL/reverse-ETL abstractions.
 - Public surface / CLI flags stay consistent with existing UX; no breaking changes
   without a note.
-- Connector defs stay declarative and pass `connectorgen validate`.
+- Connector defs stay declarative, pass `connectorgen validate`, and do not add shared
+  connector-specific Go that fails `make connector-boundary`.
 
 ## 4. Tests
 - New/changed logic has tests (table-driven where idiomatic).

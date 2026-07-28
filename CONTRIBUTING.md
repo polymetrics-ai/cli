@@ -51,12 +51,16 @@ Releases are generated from Conventional Commits after changes land on `main`.
 
 ## Connector Contributions
 
-Connector work should follow the existing package structure in `internal/connectors`. Prefer copying a similar connector and adapting the auth, streams, pagination, schema, and tests.
+Connector work should follow `docs/migration/conventions.md`. New connector
+behavior normally belongs in `internal/connectors/defs/<name>/`; use
+`internal/connectors/hooks/<name>/` or `internal/connectors/native/<name>/` only
+for the documented escape hatches.
 
 Run:
 
 ```bash
-go test ./internal/connectors/...
+go run ./cmd/connectorgen validate internal/connectors/defs --json
+go run ./cmd/connectorgen boundary . --json
 make verify
 ```
 

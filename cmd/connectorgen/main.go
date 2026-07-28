@@ -4,7 +4,8 @@
 //	validate [dir] [--json]   loads and validates every bundle under dir
 //	                           (default internal/connectors/defs), exit 1 on
 //	                           any finding
-//	boundary [repo] [--json]   scans shared Go for connector-specific policy
+//	boundary [repo] [--json] [--base <ref>]
+//	                           scans shared Go for connector-specific policy
 //	                           outside definition-owned locations
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go

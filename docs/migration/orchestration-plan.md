@@ -35,7 +35,7 @@ agent runs** (~525 total, ~160–200M tokens, ~8–11 working days).
 
 | Wave | Purpose | Executors | Gate |
 |---|---|---|---|
-| 0 | Engine, connectorgen, conformance v2, certify core, conventions, goldens (stripe, searxng, postgres) | 10–12 | engine tests green; goldens pass conformance + parity; connectorgen validate rejects seeded bad input |
+| 0 | Engine, connectorgen, conformance v2, certify core, conventions, goldens (stripe, searxng, postgres) | 10–12 | engine tests green; goldens pass conformance + parity; connectorgen validate and boundary guard reject seeded bad input |
 | 1 | Pilot: xkcd, vitally, bitly, calendly, sentry, chargebee, zendesk-support, monday, github, gmail (1 agent each) | 10 + 3 reviewers | all 4 verification layers + Fable line-by-line review; conventions patched |
 | 2 | Fan-out declarative-HTTP S+M | ~49 | wave gate |
 | 3 | Fan-out declarative-HTTP L+XL | ~56 | wave gate; 100% review of XL |
@@ -69,12 +69,13 @@ failed (one retry). Wave-close (single-writer, orchestrator only):
 go run ./cmd/connectorgen gen     # (wave0+; registrygen until the flip)
 go build ./... && go test ./internal/connectors/...
 golangci-lint run ./internal/connectors/...
+go run ./cmd/connectorgen boundary . --json
 git add -A && git commit -m "wave N: <k> connectors migrated"
 ```
 
 ## Verification pyramid
 
-1. **Agent self-check**: connectorgen validate, package build/vet/test, per-connector conformance.
+1. **Agent self-check**: connectorgen validate, connector boundary guard when shared Go or exception ledgers changed, package build/vet/test, per-connector conformance.
 2. **Wave gate** (deterministic): path guard, regen, full build, full connector tests, full
    conformance, lint. Failures map to owning bundle → repair agent with error log (1 retry, then
    quarantine).

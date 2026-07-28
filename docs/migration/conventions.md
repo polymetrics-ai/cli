@@ -182,7 +182,9 @@ not a full override by default.
   date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
   command flag is absent. `internal/connectors/engine/schema/cli_surface.schema.json` is the schema
   source of truth, and `connectorgen validate` rejects unsupported formats, operators, fallback
-  namespaces, unmapped constraint targets, and multi-line validation messages.
+  namespaces, unmapped constraint targets, and multi-line validation messages. The shared-code
+  boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside
+  connector defs/hooks/native escape hatches.
 
 ## 3. The engine dialect reference
 
@@ -926,7 +928,7 @@ go test ./internal/connectors/conformance -run 'TestConformance/<name>'
 When hook/native behavior is touched, prefer the connector's focused hook/native tests plus
 `go test ./internal/connectors/conformance -run 'TestConformance/<name>'`. Whole-repo hygiene
 (run whenever touching anything beyond your exclusive dirs is even a remote possibility):
-`go build ./... && go vet ./...` and `make lint`.
+`go build ./... && go vet ./...`, `make lint`, and `make connector-boundary`.
 
 **FORBIDDEN files (never touch, regardless of connector)**: generated hook/native import sets
 (`internal/connectors/hooks/hookset/hookset_gen.go` and generated nativeset files) except via

@@ -448,7 +448,7 @@ func isAliasBoundary(value string, idx int) bool {
 		return true
 	}
 	ch := value[idx]
-	return !((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
+	return (ch < 'a' || ch > 'z') && (ch < '0' || ch > '9')
 }
 
 func literalMatchKey(match literalMatch) string {
