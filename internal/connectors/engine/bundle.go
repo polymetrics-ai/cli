@@ -601,11 +601,26 @@ type CLICommandGroup struct {
 
 // CLIFlag describes one command or global flag.
 type CLIFlag struct {
-	Name    string   `json:"name"`
-	Type    string   `json:"type"`
-	Summary string   `json:"summary,omitempty"`
-	Values  []string `json:"values,omitempty"`
-	MapsTo  string   `json:"maps_to,omitempty"`
+	Name       string   `json:"name"`
+	Type       string   `json:"type"`
+	Summary    string   `json:"summary,omitempty"`
+	Values     []string `json:"values,omitempty"`
+	MapsTo     string   `json:"maps_to,omitempty"`
+	Format     string   `json:"format,omitempty"`
+	AllowEmpty *bool    `json:"allow_empty,omitempty"`
+}
+
+// CLIConstraint describes a provider-neutral validation rule over mapped
+// command inputs.
+type CLIConstraint struct {
+	Kind          string `json:"kind"`
+	Left          string `json:"left"`
+	Right         string `json:"right"`
+	Op            string `json:"op"`
+	ValueType     string `json:"value_type,omitempty"`
+	LeftFallback  string `json:"left_fallback,omitempty"`
+	RightFallback string `json:"right_fallback,omitempty"`
+	Message       string `json:"message,omitempty"`
 }
 
 // CLICommand is one provider-inspired command path.
@@ -619,6 +634,7 @@ type CLICommand struct {
 	SourceCLIPath string                  `json:"source_cli_path,omitempty"`
 	SourceURL     string                  `json:"source_url,omitempty"`
 	Flags         []CLIFlag               `json:"flags,omitempty"`
+	Constraints   []CLIConstraint         `json:"constraints,omitempty"`
 	Examples      []string                `json:"examples,omitempty"`
 	APISurface    []CLISurfaceEndpointRef `json:"api_surface,omitempty"`
 	OutputPolicy  string                  `json:"output_policy,omitempty"`

@@ -174,7 +174,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if err != nil {
 		return Result{}, err
 	}
-	if err := validateReadCommandQuery(connector.Name(), cmd, req.Config, query); err != nil {
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
 		return Result{}, err
 	}
 	limit := req.Limit
@@ -283,6 +283,9 @@ func runDirectRead(ctx context.Context, connector connectors.Connector, cmd conn
 	if err != nil {
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query}); err != nil {
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+	}
 	maxBytes := req.MaxBytes
 	if maxBytes <= 0 {
 		maxBytes = MaxDirectReadBytes
@@ -328,6 +331,9 @@ func runOperationDirectRead(ctx context.Context, connector connectors.Connector,
 	}
 	pathParams, query, body, err := operationDirectReadOverrides(cmd, req.Flags)
 	if err != nil {
+		return Result{}, redactCommandError(err, cmd.RedactFields, req)
+	}
+	if err := validateCommandInputs(cmd, req.Config, mappedCommandInputs{Query: query, Body: body}); err != nil {
 		return Result{}, redactCommandError(err, cmd.RedactFields, req)
 	}
 	maxBytes := req.MaxBytes
@@ -531,59 +537,130 @@ func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]str
 	return query, nil
 }
 
-func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, query map[string]string) error {
-	if connectorName != "gong" || cmd.Path != "calls list" {
-		return nil
-	}
-	from, hasFrom, err := parseOptionalRFC3339Query(query, "fromDateTime", "from")
-	if err != nil {
-		return err
-	}
-	to, hasTo, err := parseOptionalRFC3339Query(query, "toDateTime", "to")
-	if err != nil {
-		return err
-	}
-	if hasTo && !hasFrom {
-		from, hasFrom, err = parseOptionalRFC3339Config(cfg, "start_date")
-		if err != nil {
+type mappedCommandInputs struct {
+	Query map[string]string
+	Body  map[string]any
+}
+
+func validateCommandInputs(cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	for _, constraint := range cmd.Constraints {
+		if err := validateCommandConstraint(constraint, cfg, inputs); err != nil {
 			return err
 		}
-	}
-	if hasFrom && hasTo && !from.Before(to) {
-		return fmt.Errorf("invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)")
 	}
 	return nil
 }
 
-func parseOptionalRFC3339Query(query map[string]string, key, flagName string) (time.Time, bool, error) {
-	raw, present := query[key]
-	if !present {
-		return time.Time{}, false, nil
+func validateCommandConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	switch constraint.Kind {
+	case "order":
+		return validateOrderConstraint(constraint, cfg, inputs)
+	default:
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint kind %q", constraint.Kind)}
 	}
-	value := strings.TrimSpace(raw)
-	if value == "" {
-		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
-	}
-	parsed, err := time.Parse(time.RFC3339, value)
-	if err != nil {
-		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
-	}
-	return parsed, true, nil
 }
 
-func parseOptionalRFC3339Config(cfg connectors.RuntimeConfig, key string) (time.Time, bool, error) {
-	value := strings.TrimSpace(cfg.Config[key])
-	if value == "" {
-		return time.Time{}, false, nil
-	}
-	parsed, err := time.Parse(time.RFC3339, value)
+func validateOrderConstraint(constraint connectors.CommandSurfaceConstraint, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) error {
+	leftValue, leftPresent, leftLabel, err := validationValueWithFallback(constraint.Left, constraint.LeftFallback, cfg, inputs)
 	if err != nil {
-		return time.Time{}, false, fmt.Errorf("invalid Gong calls list config %s %q, want ISO-8601/RFC3339 timestamp", key, value)
+		return err
 	}
-	return parsed, true, nil
+	rightValue, rightPresent, rightLabel, err := validationValueWithFallback(constraint.Right, constraint.RightFallback, cfg, inputs)
+	if err != nil {
+		return err
+	}
+	if !leftPresent || !rightPresent {
+		return nil
+	}
+	if constraint.Op != "lt" {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint operator %q", constraint.Op)}
+	}
+	if constraint.ValueType != "date-time" {
+		return &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command constraint value_type %q", constraint.ValueType)}
+	}
+	left, err := parseDateTimeValue(leftValue, leftLabel)
+	if err != nil {
+		return err
+	}
+	right, err := parseDateTimeValue(rightValue, rightLabel)
+	if err != nil {
+		return err
+	}
+	if !left.Before(right) {
+		if strings.TrimSpace(constraint.Message) != "" {
+			return errors.New(constraint.Message)
+		}
+		return fmt.Errorf("invalid command constraint: %s must be before %s", leftLabel, rightLabel)
+	}
+	return nil
+}
+
+func validationValueWithFallback(primary, fallback string, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) (string, bool, string, error) {
+	value, present, label, err := validationTargetValue(primary, cfg, inputs)
+	if err != nil || present || fallback == "" {
+		return value, present, label, err
+	}
+	return validationTargetValue(fallback, cfg, inputs)
+}
+
+func validationTargetValue(target string, cfg connectors.RuntimeConfig, inputs mappedCommandInputs) (string, bool, string, error) {
+	switch {
+	case strings.HasPrefix(target, "query."):
+		key := strings.TrimPrefix(target, "query.")
+		value, present := inputs.Query[key]
+		return strings.TrimSpace(value), present, target, nil
+	case strings.HasPrefix(target, "body."):
+		value, present := nestedBodyValue(inputs.Body, strings.TrimPrefix(target, "body."))
+		return strings.TrimSpace(fmt.Sprint(value)), present, target, nil
+	case strings.HasPrefix(target, "config."):
+		key := strings.TrimPrefix(target, "config.")
+		value := strings.TrimSpace(cfg.Config[key])
+		return value, value != "", target, nil
+	default:
+		return "", false, target, &BlockedCommandError{Command: "unknown", Reason: fmt.Sprintf("unsupported command validation target %q", target)}
+	}
+}
+
+func nestedBodyValue(body map[string]any, path string) (any, bool) {
+	if body == nil || strings.TrimSpace(path) == "" {
+		return nil, false
+	}
+	parts := strings.Split(path, ".")
+	var cur any = body
+	for _, part := range parts {
+		m, ok := cur.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+		cur, ok = m[part]
+		if !ok || cur == nil {
+			return nil, false
+		}
+	}
+	return cur, true
+}
+
+func parseDateTimeValue(value, label string) (time.Time, error) {
+	parsed, err := time.Parse(time.RFC3339, strings.TrimSpace(value))
+	if err != nil {
+		return time.Time{}, fmt.Errorf("invalid %s, want ISO-8601/RFC3339 timestamp", label)
+	}
+	return parsed, nil
 }
 
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
+	trimmed := strings.TrimSpace(value)
+	if flag.AllowEmpty != nil {
+		if !*flag.AllowEmpty && trimmed == "" {
+			return fmt.Errorf("invalid --%s %q, want non-empty value", flag.Name, value)
+		}
+		if *flag.AllowEmpty && trimmed == "" {
+			return nil
+		}
+	}
+	if err := validateFlagFormat(flag, trimmed); err != nil {
+		return err
+	}
 	switch flag.Type {
 	case "", "string", "boolean", "integer", "string_array":
 		return nil
@@ -600,6 +677,23 @@ func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
 		return &BlockedCommandError{
 			Command: "unknown",
 			Reason:  fmt.Sprintf("flag --%s has unsupported type %q", flag.Name, flag.Type),
+		}
+	}
+}
+
+func validateFlagFormat(flag connectors.CommandSurfaceFlag, value string) error {
+	switch flag.Format {
+	case "":
+		return nil
+	case "date-time":
+		if _, err := time.Parse(time.RFC3339, value); err != nil {
+			return fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flag.Name, value)
+		}
+		return nil
+	default:
+		return &BlockedCommandError{
+			Command: "unknown",
+			Reason:  fmt.Sprintf("flag --%s has unsupported format %q", flag.Name, flag.Format),
 		}
 	}
 }

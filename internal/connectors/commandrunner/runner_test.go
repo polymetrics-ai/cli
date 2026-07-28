@@ -193,6 +193,112 @@ func TestRunCoreStreamMappings(t *testing.T) {
 	}
 }
 
+func TestCLICommandValidationDefinitionsGeneric(t *testing.T) {
+	allowEmpty := false
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "widget list",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "widgets",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "start", Type: "string", MapsTo: "query.started_after", Format: "date-time", AllowEmpty: &allowEmpty},
+					{Name: "end", Type: "string", MapsTo: "query.started_before", Format: "date-time", AllowEmpty: &allowEmpty},
+				},
+				Constraints: []connectors.CommandSurfaceConstraint{
+					{
+						Kind:         "order",
+						Left:         "query.started_after",
+						LeftFallback: "config.default_start",
+						Op:           "lt",
+						Right:        "query.started_before",
+						ValueType:    "date-time",
+						Message:      "window start must be before end",
+					},
+				},
+			},
+		},
+	}}
+
+	tests := []struct {
+		name    string
+		flags   map[string][]string
+		config  map[string]string
+		wantErr string
+	}{
+		{
+			name: "valid explicit bounds",
+			flags: map[string][]string{
+				"start": {"2026-07-01T00:00:00Z"},
+				"end":   {"2026-07-02T00:00:00Z"},
+			},
+		},
+		{
+			name:  "missing right side skips order constraint",
+			flags: map[string][]string{"start": {"2026-07-01T00:00:00Z"}},
+		},
+		{
+			name:   "valid config fallback",
+			flags:  map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config: map[string]string{"default_start": "2026-07-01T00:00:00Z"},
+		},
+		{
+			name:    "invalid timestamp",
+			flags:   map[string][]string{"start": {"2026-07-01"}},
+			wantErr: "invalid --start",
+		},
+		{
+			name:    "blank timestamp",
+			flags:   map[string][]string{"start": {""}},
+			wantErr: "invalid --start",
+		},
+		{
+			name:    "invalid config fallback",
+			flags:   map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config:  map[string]string{"default_start": "not-a-time"},
+			wantErr: "invalid config.default_start",
+		},
+		{
+			name: "invalid explicit order",
+			flags: map[string][]string{
+				"start": {"2026-07-02T00:00:00Z"},
+				"end":   {"2026-07-02T00:00:00Z"},
+			},
+			wantErr: "window start must be before end",
+		},
+		{
+			name:    "invalid fallback order",
+			flags:   map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config:  map[string]string{"default_start": "2026-07-03T00:00:00Z"},
+			wantErr: "window start must be before end",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{
+				Path:   []string{"widget", "list"},
+				Flags:  tt.flags,
+				Config: connectors.RuntimeConfig{Config: tt.config},
+				Limit:  1,
+			}, func(connectors.Record) error { return nil })
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("Run: %v", err)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatalf("Run error = nil, want %q", tt.wantErr)
+			}
+			if !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 

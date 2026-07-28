@@ -235,13 +235,28 @@
           "name": "from",
           "type": "string",
           "summary": "Inclusive ISO-8601 lower bound mapped to Gong fromDateTime.",
-          "maps_to": "query.fromDateTime"
+          "maps_to": "query.fromDateTime",
+          "format": "date-time",
+          "allow_empty": false
         },
         {
           "name": "to",
           "type": "string",
           "summary": "Exclusive ISO-8601 upper bound mapped to Gong toDateTime.",
-          "maps_to": "query.toDateTime"
+          "maps_to": "query.toDateTime",
+          "format": "date-time",
+          "allow_empty": false
+        }
+      ],
+      "constraints": [
+        {
+          "kind": "order",
+          "left": "query.fromDateTime",
+          "left_fallback": "config.start_date",
+          "op": "lt",
+          "right": "query.toDateTime",
+          "value_type": "date-time",
+          "message": "invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)"
         }
       ],
       "notes": "Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.",
