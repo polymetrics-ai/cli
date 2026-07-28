@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/polymetrics-ai/cli/compare/v0.1.0...v0.1.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **connectors:** add Gong calls list date filters ([#597](https://github.com/polymetrics-ai/cli/issues/597)) ([b41dc61](https://github.com/polymetrics-ai/cli/commit/b41dc611ccfadc1477cab60aa309fa39446b21cd))
+
 ## [0.1.0](https://github.com/polymetrics-ai/cli/compare/v0.1.0...v0.1.0) (2026-07-27)
 
 
