@@ -1,0 +1,16 @@
+{
+  "connector_connection_id": "ccn_0123456789abcdef",
+  "organization_id": "org_0123456789abcdef",
+  "workspace_id": "wks_0123456789abcdef",
+  "environment_id": "env_0123456789abcdef",
+  "broker_profile_id": "bpf_0123456789abcdef",
+  "connector_kind": "synthetic",
+  "auth_ref": {
+    "kind": "opaque_secret_reference",
+    "ref": "secretref_0123456789abcdef",
+    "display_hint": "managed by broker",
+    "exportable": false
+  },
+  "status": "ready",
+  "write_mode": "deny"
+}

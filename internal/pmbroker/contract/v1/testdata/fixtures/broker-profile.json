@@ -1,0 +1,12 @@
+{
+  "broker_profile_id": "bpf_0123456789abcdef",
+  "organization_id": "org_0123456789abcdef",
+  "workspace_id": "wks_0123456789abcdef",
+  "environment_id": "env_0123456789abcdef",
+  "display_name": "Pilot broker profile",
+  "allowed_connector_kinds": [
+    "synthetic",
+    "gcp"
+  ],
+  "auth_registry_mode": "internal_experimental"
+}
