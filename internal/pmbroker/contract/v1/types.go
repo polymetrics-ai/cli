@@ -16,6 +16,20 @@ const (
 )
 
 const (
+	connectorKindSynthetic = "synthetic"
+	connectorKindGCP       = "gcp"
+
+	connectorConnectionStatusReady    = "ready"
+	connectorConnectionStatusPending  = "pending"
+	connectorConnectionStatusNotReady = "not_ready"
+	connectorConnectionStatusError    = "error"
+
+	connectorConnectionWriteModeDeny     = "deny"
+	connectorConnectionWriteModePlanOnly = "plan_only"
+	connectorConnectionWriteModeAllow    = "allow"
+)
+
+const (
 	// HeaderAPIVersion is required on typed /v1 operations.
 	HeaderAPIVersion = "PM-Broker-API-Version"
 	// IncompatibleContractVersionMessage is the exact client-safe refusal message.
@@ -278,10 +292,39 @@ func (connection ConnectorConnection) Validate() error {
 		!connection.BrokerProfileID.IsValid() {
 		return ErrInvalidIdentityBoundary
 	}
-	if connection.ConnectorKind != "synthetic" || connection.Status != "ready" || connection.WriteMode != "deny" {
+	if !isAllowedConnectorKind(connection.ConnectorKind) ||
+		!isAllowedConnectorConnectionStatus(connection.Status) ||
+		!isAllowedConnectorConnectionWriteMode(connection.WriteMode) {
 		return ErrInvalidExecutionPlan
 	}
 	return connection.AuthRef.Validate()
+}
+
+func isAllowedConnectorKind(kind string) bool {
+	switch kind {
+	case connectorKindSynthetic, connectorKindGCP:
+		return true
+	default:
+		return false
+	}
+}
+
+func isAllowedConnectorConnectionStatus(status string) bool {
+	switch status {
+	case connectorConnectionStatusReady, connectorConnectionStatusPending, connectorConnectionStatusNotReady, connectorConnectionStatusError:
+		return true
+	default:
+		return false
+	}
+}
+
+func isAllowedConnectorConnectionWriteMode(writeMode string) bool {
+	switch writeMode {
+	case connectorConnectionWriteModeDeny, connectorConnectionWriteModePlanOnly, connectorConnectionWriteModeAllow:
+		return true
+	default:
+		return false
+	}
 }
 
 // ExecutionIntent is a closed typed envelope for execution-plan intents.
@@ -328,7 +371,13 @@ func (request ExecutionPlanRequest) Validate() error {
 	if !request.IdempotencyKey.IsValid() {
 		return ErrInvalidExecutionPlan
 	}
-	return request.Intent.Validate()
+	if err := request.Intent.Validate(); err != nil {
+		return err
+	}
+	if request.Intent.ValidateConnectorConnection.ConnectorConnectionID != request.ConnectorConnectionID {
+		return ErrInvalidExecutionIntent
+	}
+	return nil
 }
 
 // ExecutionPlan is the immutable planned response from PM Broker.

@@ -111,6 +111,9 @@ func (fixtures SyntheticFixtures) validate() error {
 	if err := fixtures.ConnectorConnection.Validate(); err != nil {
 		return err
 	}
+	if err := validateSyntheticConnectorConnectionFixture(fixtures.ConnectorConnection); err != nil {
+		return err
+	}
 	if err := fixtures.ExecutionPlanRequest.Validate(); err != nil {
 		return err
 	}
@@ -119,6 +122,15 @@ func (fixtures SyntheticFixtures) validate() error {
 	}
 	if err := fixtures.IncompatibleVersionError.Validate(); err != nil {
 		return err
+	}
+	return nil
+}
+
+func validateSyntheticConnectorConnectionFixture(connection ConnectorConnection) error {
+	if connection.ConnectorKind != connectorKindSynthetic ||
+		connection.Status != connectorConnectionStatusReady ||
+		connection.WriteMode != connectorConnectionWriteModeDeny {
+		return ErrInvalidExecutionPlan
 	}
 	return nil
 }

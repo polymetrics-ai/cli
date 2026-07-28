@@ -24,3 +24,25 @@ Green evidence:
 - `go vet ./...` passed.
 - `go build ./cmd/pm` passed.
 - `make verify` passed.
+
+## Review-fix slice
+
+Planned red coverage before production edits:
+
+- `NegotiateCompatibility` should reject a configured client contract version that the broker compatibility response does not support.
+- `CreateExecutionPlan` should reject shape-valid broker plans whose identity boundary, idempotency key, or intent connector connection ID differs from the submitted request.
+- `ExecutionPlanRequest.Validate` should reject mismatched top-level and intent connector connection IDs.
+- `ConnectorConnection.Validate` should accept valid `/v1` enum values beyond the synthetic fixture while still rejecting arbitrary connector kinds, statuses, and write modes.
+- `.github/workflows/pr-issue-guard.yml` should keep the linked-issue guard enabled for `fm/*` pull requests unless a stronger validation-mirror marker is added in a later CI design.
+
+Preflight evidence:
+
+- `scripts/gsd doctor` passed.
+- `scripts/gsd prompt programming-loop init --phase pmbroker-contract-review-fixes --dry-run` failed with `unknown GSD command: programming-loop`; manual-GSD fallback used.
+- `scripts/gsd prompt gsd-quick "PM Broker contract review findings fix round"` generated the repo-local quick-task prompt.
+
+Green evidence:
+
+- Initial focused `go test ./internal/pmbroker/contract/v1` exposed a new parallel-test fixture aliasing bug in the execution-plan mismatch table; the test now deep-copies the nested intent before mutation.
+- `gofmt -w internal/pmbroker/contract/v1` passed.
+- `go test ./internal/pmbroker/contract/v1` passed.

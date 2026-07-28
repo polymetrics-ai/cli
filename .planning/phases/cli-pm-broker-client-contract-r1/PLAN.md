@@ -36,3 +36,11 @@ Implement the independent CLI-side PM Broker OpenAPI HTTP/JSON `/v1` client/tran
 2. Implement the smallest internal typed HTTP client surface and fake-broker handler enhancements needed to satisfy those tests while preserving the existing fake client API.
 3. Run targeted package tests, `gofmt`, and broader deterministic Go checks as practical.
 4. Commit the green slice on `fm/cli-pm-broker-client-contract-r1` for the sub-PR base `integration/pm-broker-production-program`.
+
+## Review-fix plan
+
+- GSD review-fix preflight on 2026-07-28: `scripts/gsd doctor` succeeded; `scripts/gsd prompt programming-loop init --phase pmbroker-contract-review-fixes --dry-run` returned `unknown GSD command: programming-loop`, so the documented manual-GSD fallback remains active.
+- Manual fallback prompt: `scripts/gsd prompt gsd-quick "PM Broker contract review findings fix round"`.
+- Required skills refreshed: `gsd-programming-loop`, `golang-how-to`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`.
+- Verified findings to fix: client compatibility negotiation must reject unsupported configured client versions during preflight; execution-plan responses must be bound to the submitted request; connector-connection response validation must accept contract enums rather than only the synthetic fixture; issue-first guard must not be bypassable by arbitrary `fm/*` branch names.
+- Focused verification boundary: `gofmt` on touched Go files and `go test ./internal/pmbroker/contract/v1` only.
