@@ -59,6 +59,21 @@ type githubDateRangeFallback struct{}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "githubDateRangeFallback")
 }
 
+func TestScanDetectsLegacyConnectorPackageImport(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/engine/import_legacy.go": `package engine
+
+import _ "polymetrics.ai/internal/connectors/gong"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleConnectorImport, "gong", "internal/connectors/engine/import_legacy.go", "polymetrics.ai/internal/connectors/gong")
+}
+
 func TestScanDetectsDisplayNameAliasesInStringLiterals(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/defs/microsoft-teams/metadata.json":      `{"name":"microsoft-teams","display_name":"Microsoft Teams","integration_type":"api"}`,
@@ -194,6 +209,87 @@ const outputPolicy = "github_date_range"
 		t.Fatalf("Scan: %v", err)
 	}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/engine/generated_bypass.go", "github_date_range")
+}
+
+func TestScanAppliesLedgerToConnectorDocsOutput(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/cli/connector_docs.go": "package cli\n\nfunc requiredDocs() []string { return []string{\"icons/github.svg\", \"`github`\"} }\n",
+		DefaultExceptionsPath: exceptionsJSON([]map[string]any{{
+			"id":                  "github-cli-connector-docs-catalog-validation",
+			"rule":                RuleDocsExample,
+			"connector":           "github",
+			"path":                "internal/cli/connector_docs.go",
+			"match":               "github",
+			"reason":              "bootstrap until generated connector catalog validation examples are provider-neutral",
+			"migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+			"owner":               "connector-architecture-v2",
+			"expires_on":          "2026-09-30",
+			"max_matches":         2,
+		}}),
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected connector docs exception to suppress findings, got %+v", report.Findings)
+	}
+	if len(report.Exceptions) != 1 || report.Exceptions[0].Matches != 2 {
+		t.Fatalf("expected connector docs exception with two matches, got %+v", report.Exceptions)
+	}
+}
+
+func TestScanFailsClosedWhenConnectorMetadataCannotLoad(t *testing.T) {
+	tests := []struct {
+		name  string
+		files map[string]string
+		want  string
+	}{
+		{
+			name: "missing defs",
+			want: "read connector defs",
+		},
+		{
+			name: "missing metadata",
+			files: map[string]string{
+				"internal/connectors/defs/github/streams.json": `{}`,
+			},
+			want: "load connector metadata github",
+		},
+		{
+			name: "invalid metadata",
+			files: map[string]string{
+				"internal/connectors/defs/github/metadata.json": `{`,
+			},
+			want: "load connector metadata github",
+		},
+		{
+			name: "blank metadata name",
+			files: map[string]string{
+				"internal/connectors/defs/github/metadata.json": `{"display_name":"GitHub"}`,
+			},
+			want: "name is required",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			root := t.TempDir()
+			writeFixtureFile(t, root, "go.mod", "module polymetrics.ai\n\ngo 1.25\n")
+			for path, content := range tt.files {
+				writeFixtureFile(t, root, path, content)
+			}
+			_, err := Scan(root, Options{Now: fixedNow})
+			var cfgErr *ConfigError
+			if !errors.As(err, &cfgErr) {
+				t.Fatalf("Scan error = %v, want ConfigError", err)
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Scan error = %q, want substring %q", err, tt.want)
+			}
+		})
+	}
 }
 
 func TestExceptionLedgerSuppressesExactBoundedFinding(t *testing.T) {

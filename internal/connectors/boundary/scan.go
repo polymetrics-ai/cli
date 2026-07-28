@@ -299,11 +299,11 @@ func (s *goScanner) scanImport(spec *ast.ImportSpec) {
 	if !ok {
 		return
 	}
-	s.addFinding(RuleConnectorImport, connector, spec.Path.Pos(), value, "connector-specific hook/native import in shared production Go", "move connector-specific implementation into internal/connectors/defs/<connector>, hooks/<connector>, native/<connector>, or generated hook/native wiring")
+	s.addFinding(RuleConnectorImport, connector, spec.Path.Pos(), value, "connector-specific import in shared production Go", "move connector-specific implementation into internal/connectors/defs/<connector>, hooks/<connector>, native/<connector>, or generated hook/native wiring")
 }
 
 func connectorFromImportPath(importPath string, lx lexicon) (string, bool) {
-	for _, marker := range []string{"/internal/connectors/hooks/", "/internal/connectors/native/"} {
+	for _, marker := range []string{"/internal/connectors/hooks/", "/internal/connectors/native/", "/internal/connectors/"} {
 		idx := strings.Index(importPath, marker)
 		if idx < 0 {
 			continue

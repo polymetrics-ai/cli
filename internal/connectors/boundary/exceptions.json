@@ -49,6 +49,18 @@
       "max_matches": 4
     },
     {
+      "id": "github-cli-connector-docs-catalog-validation",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/connector_docs.go",
+      "match": "github",
+      "reason": "bootstrap until generated connector catalog validation examples are provider-neutral",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 2
+    },
+    {
       "id": "github-cli-skills-examples",
       "rule": "docs_example",
       "connector": "github",

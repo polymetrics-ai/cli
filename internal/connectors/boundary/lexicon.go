@@ -49,9 +49,6 @@ func loadLexicon(root string) (lexicon, error) {
 	defsDir := filepath.Join(root, "internal", "connectors", "defs")
 	entries, err := os.ReadDir(defsDir)
 	if err != nil {
-		if os.IsNotExist(err) {
-			return lexicon{byName: map[string]connectorLexeme{}}, nil
-		}
 		return lexicon{}, fmt.Errorf("read connector defs: %w", err)
 	}
 
@@ -61,13 +58,19 @@ func loadLexicon(root string) (lexicon, error) {
 			continue
 		}
 		dirName := entry.Name()
-		meta := readMetadata(filepath.Join(defsDir, dirName, "metadata.json"))
+		meta, err := readMetadata(filepath.Join(defsDir, dirName, "metadata.json"))
+		if err != nil {
+			return lexicon{}, fmt.Errorf("load connector metadata %s: %w", dirName, err)
+		}
 		name := strings.TrimSpace(meta.Name)
 		if name == "" {
-			name = dirName
+			return lexicon{}, fmt.Errorf("load connector metadata %s: name is required", dirName)
 		}
 		name = strings.ToLower(name)
 		seen[name] = newConnectorLexeme(name, meta)
+	}
+	if len(seen) == 0 {
+		return lexicon{}, fmt.Errorf("no connector metadata loaded from %s", defsDir)
 	}
 
 	connectors := make([]connectorLexeme, 0, len(seen))
@@ -96,16 +99,16 @@ func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
 	return c
 }
 
-func readMetadata(path string) metadataFile {
+func readMetadata(path string) (metadataFile, error) {
 	b, err := os.ReadFile(path)
 	if err != nil {
-		return metadataFile{}
+		return metadataFile{}, err
 	}
 	var meta metadataFile
 	if err := json.Unmarshal(b, &meta); err != nil {
-		return metadataFile{}
+		return metadataFile{}, err
 	}
-	return meta
+	return meta, nil
 }
 
 func compactDisplayName(display string) string {

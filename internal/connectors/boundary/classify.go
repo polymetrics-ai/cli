@@ -38,7 +38,7 @@ func classifyPath(rel string, lx lexicon) pathClass {
 	if strings.HasPrefix(rel, "docs/") || strings.HasPrefix(rel, "website/") || strings.HasPrefix(rel, ".planning/") || strings.HasPrefix(rel, ".agents/") || rel == "README.md" || rel == "CHANGELOG.md" {
 		return pathClass{Class: pathClassDocs, Allowed: true}
 	}
-	if strings.HasPrefix(rel, "cmd/iconregistrygen/") || rel == "internal/connectors/icons.go" || rel == "internal/cli/connector_docs.go" {
+	if strings.HasPrefix(rel, "cmd/iconregistrygen/") || rel == "internal/connectors/icons.go" {
 		return pathClass{Class: pathClassAllowedGenerated, Allowed: true}
 	}
 	if strings.HasPrefix(rel, "internal/connectors/defs/") {
