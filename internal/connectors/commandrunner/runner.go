@@ -174,7 +174,7 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 	if err != nil {
 		return Result{}, err
 	}
-	if err := validateReadCommandQuery(connector.Name(), cmd, query); err != nil {
+	if err := validateReadCommandQuery(connector.Name(), cmd, req.Config, query); err != nil {
 		return Result{}, err
 	}
 	limit := req.Limit
@@ -531,7 +531,7 @@ func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]str
 	return query, nil
 }
 
-func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfaceCommand, query map[string]string) error {
+func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfaceCommand, cfg connectors.RuntimeConfig, query map[string]string) error {
 	if connectorName != "gong" || cmd.Path != "calls list" {
 		return nil
 	}
@@ -543,6 +543,12 @@ func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfac
 	if err != nil {
 		return err
 	}
+	if hasTo && !hasFrom {
+		from, hasFrom, err = parseOptionalRFC3339Config(cfg, "start_date")
+		if err != nil {
+			return err
+		}
+	}
 	if hasFrom && hasTo && !from.Before(to) {
 		return fmt.Errorf("invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)")
 	}
@@ -550,13 +556,29 @@ func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfac
 }
 
 func parseOptionalRFC3339Query(query map[string]string, key, flagName string) (time.Time, bool, error) {
-	value := strings.TrimSpace(query[key])
+	raw, present := query[key]
+	if !present {
+		return time.Time{}, false, nil
+	}
+	value := strings.TrimSpace(raw)
+	if value == "" {
+		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
+	}
+	parsed, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
+	}
+	return parsed, true, nil
+}
+
+func parseOptionalRFC3339Config(cfg connectors.RuntimeConfig, key string) (time.Time, bool, error) {
+	value := strings.TrimSpace(cfg.Config[key])
 	if value == "" {
 		return time.Time{}, false, nil
 	}
 	parsed, err := time.Parse(time.RFC3339, value)
 	if err != nil {
-		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
+		return time.Time{}, false, fmt.Errorf("invalid Gong calls list config %s %q, want ISO-8601/RFC3339 timestamp", key, value)
 	}
 	return parsed, true, nil
 }

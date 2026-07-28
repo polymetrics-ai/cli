@@ -18,6 +18,8 @@
 ## Green
 
 - [x] Implement command flags, validation, query precedence, and docs.
+- [x] Review fix: reject present-but-empty Gong calls list date flags before HTTP.
+- [x] Review fix: validate `--to` against effective `start_date` fallback when `--from` is absent.
 - [x] Targeted tests pass:
   - `go test ./internal/connectors/commandrunner -run 'Test.*(Gong|OperationDirectRead|DirectRead)' -count=1`
   - `go test ./internal/connectors/engine -run 'TestRead(StartConfigIncrementalRequestParamDoesNotOverrideExplicitRequestQuery|IncrementalRequestParamOverridesRequestQueryCollision|IncrementalLowerBoundFallsBackToStartConfigKey)' -count=1`

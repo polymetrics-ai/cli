@@ -318,12 +318,15 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 	connector := gongCommandRunnerTestConnector(t)
 
 	tests := []struct {
-		name  string
-		flags map[string][]string
-		want  string
+		name   string
+		flags  map[string][]string
+		config map[string]string
+		want   string
 	}{
 		{name: "invalid from", flags: map[string][]string{"from": {"2026-07-01"}}, want: "invalid --from"},
 		{name: "invalid to", flags: map[string][]string{"to": {"tomorrow"}}, want: "invalid --to"},
+		{name: "blank from", flags: map[string][]string{"from": {""}}, want: "invalid --from"},
+		{name: "blank to", flags: map[string][]string{"to": {" "}}, want: "invalid --to"},
 		{
 			name: "equal range",
 			flags: map[string][]string{
@@ -340,6 +343,12 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 			},
 			want: "invalid Gong calls list date range",
 		},
+		{
+			name:   "configured start date after explicit to",
+			flags:  map[string][]string{"to": {"2026-07-01T00:00:00Z"}},
+			config: map[string]string{"start_date": "2026-07-02T00:00:00Z"},
+			want:   "invalid Gong calls list date range",
+		},
 	}
 
 	for _, tt := range tests {
@@ -354,7 +363,7 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 			_, err := Run(context.Background(), connector, Request{
 				Path:   []string{"calls", "list"},
 				Flags:  tt.flags,
-				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "2"}),
+				Config: gongCommandRunnerTestConfig(server.URL, mergeCommandRunnerConfig(map[string]string{"page_size": "2"}, tt.config)),
 				Limit:  1,
 			}, func(connectors.Record) error { return nil })
 			if err == nil {
@@ -368,6 +377,17 @@ func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
 			}
 		})
 	}
+}
+
+func mergeCommandRunnerConfig(base, overrides map[string]string) map[string]string {
+	merged := map[string]string{}
+	for key, value := range base {
+		merged[key] = value
+	}
+	for key, value := range overrides {
+		merged[key] = value
+	}
+	return merged
 }
 
 func TestGongCallsListLimitCapsEmittedRecordsAcrossCursorPages(t *testing.T) {
