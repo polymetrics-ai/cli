@@ -27,11 +27,24 @@ type CommandSurfaceGroup struct {
 }
 
 type CommandSurfaceFlag struct {
-	Name    string
-	Type    string
-	Summary string
-	Values  []string
-	MapsTo  string
+	Name       string
+	Type       string
+	Summary    string
+	Values     []string
+	MapsTo     string
+	Format     string
+	AllowEmpty *bool
+}
+
+type CommandSurfaceConstraint struct {
+	Kind          string
+	Left          string
+	Right         string
+	Op            string
+	ValueType     string
+	LeftFallback  string
+	RightFallback string
+	Message       string
 }
 
 type CommandSurfaceCommand struct {
@@ -45,6 +58,7 @@ type CommandSurfaceCommand struct {
 	SourceCLIPath string
 	SourceURL     string
 	Flags         []CommandSurfaceFlag
+	Constraints   []CommandSurfaceConstraint
 	Examples      []string
 	APISurface    []CommandSurfaceEndpointRef
 	OutputPolicy  string

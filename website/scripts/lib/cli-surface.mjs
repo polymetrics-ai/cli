@@ -4,6 +4,10 @@ const keyNames = (keyStyle) => {
   if (keyStyle === 'camel') {
     return {
       mapsTo: 'mapsTo',
+      allowEmpty: 'allowEmpty',
+      leftFallback: 'leftFallback',
+      rightFallback: 'rightFallback',
+      valueType: 'valueType',
       sourceCli: 'sourceCli',
       sourceCliPath: 'sourceCliPath',
       sourceUrl: 'sourceUrl',
@@ -14,6 +18,10 @@ const keyNames = (keyStyle) => {
   }
   return {
     mapsTo: 'maps_to',
+    allowEmpty: 'allow_empty',
+    leftFallback: 'left_fallback',
+    rightFallback: 'right_fallback',
+    valueType: 'value_type',
     sourceCli: 'source_cli',
     sourceCliPath: 'source_cli_path',
     sourceUrl: 'source_url',
@@ -26,13 +34,18 @@ const keyNames = (keyStyle) => {
 export function mapFlags(flags, options = {}) {
   const keys = keyNames(options.keyStyle);
   return (Array.isArray(flags) ? flags : [])
-    .map((flag) => ({
-      name: trim(flag.name),
-      type: trim(flag.type),
-      summary: trim(flag.summary),
-      values: Array.isArray(flag.values) ? flag.values.map((value) => trim(value)).filter(Boolean) : [],
-      [keys.mapsTo]: trim(flag.maps_to),
-    }))
+    .map((flag) => {
+      const out = {
+        name: trim(flag.name),
+        type: trim(flag.type),
+        summary: trim(flag.summary),
+        values: Array.isArray(flag.values) ? flag.values.map((value) => trim(value)).filter(Boolean) : [],
+        [keys.mapsTo]: trim(flag.maps_to),
+      };
+      if (trim(flag.format)) out.format = trim(flag.format);
+      if (typeof flag.allow_empty === 'boolean') out[keys.allowEmpty] = flag.allow_empty;
+      return out;
+    })
     .filter((flag) => flag.name);
 }
 
@@ -58,6 +71,24 @@ export function mapCLISurface(surface, options = {}) {
       notes: trim(command.notes),
     }))
     .filter((command) => command.path);
+
+  for (const command of commands) {
+    const constraints = (Array.isArray(surface.commands) ? surface.commands : [])
+      .find((candidate) => trim(candidate.path) === command.path)?.constraints;
+    const mappedConstraints = (Array.isArray(constraints) ? constraints : [])
+      .map((constraint) => ({
+        kind: trim(constraint.kind),
+        left: trim(constraint.left),
+        right: trim(constraint.right),
+        op: trim(constraint.op),
+        [keys.valueType]: trim(constraint.value_type),
+        [keys.leftFallback]: trim(constraint.left_fallback),
+        [keys.rightFallback]: trim(constraint.right_fallback),
+        message: trim(constraint.message),
+      }))
+      .filter((constraint) => constraint.kind);
+    if (mappedConstraints.length > 0) command.constraints = mappedConstraints;
+  }
 
   if (!trim(surface.usage) && commands.length === 0) return null;
 

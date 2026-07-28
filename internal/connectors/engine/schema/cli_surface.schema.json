@@ -50,7 +50,12 @@
             "type": "array",
             "items": { "type": "string" }
           },
-          "maps_to": { "type": "string" }
+          "maps_to": { "type": "string" },
+          "format": {
+            "type": "string",
+            "enum": ["date-time"]
+          },
+          "allow_empty": { "type": "boolean" }
         }
       }
     },
@@ -112,7 +117,39 @@
                   "type": "array",
                   "items": { "type": "string" }
                 },
-                "maps_to": { "type": "string" }
+                "maps_to": { "type": "string" },
+                "format": {
+                  "type": "string",
+                  "enum": ["date-time"]
+                },
+                "allow_empty": { "type": "boolean" }
+              }
+            }
+          },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["kind", "left", "right", "op"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["order"]
+                },
+                "left": { "type": "string" },
+                "right": { "type": "string" },
+                "op": {
+                  "type": "string",
+                  "enum": ["lt"]
+                },
+                "value_type": {
+                  "type": "string",
+                  "enum": ["date-time"]
+                },
+                "left_fallback": { "type": "string" },
+                "right_fallback": { "type": "string" },
+                "message": { "type": "string" }
               }
             }
           },

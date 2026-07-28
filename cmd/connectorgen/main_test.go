@@ -105,6 +105,49 @@ func TestValidate_CLISurfaceValidReferencesPassCleanly(t *testing.T) {
 	}
 }
 
+func TestValidate_CLISurfaceValidationDeclarationsPassCleanly(t *testing.T) {
+	report, err := validateDir(cliSurfaceBundleFS(validCLISurfaceValidationJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid CLI validation declarations, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_CLISurfaceRejectsMalformedValidationDeclarations(t *testing.T) {
+	tests := []struct {
+		name string
+		json string
+	}{
+		{
+			name: "format requires string flag",
+			json: strings.Replace(validCLISurfaceValidationJSON(), `"type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time"`, `"type": "integer", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time"`, 1),
+		},
+		{
+			name: "constraint requires value type",
+			json: strings.Replace(validCLISurfaceValidationJSON(), `, "value_type": "date-time"`, ``, 1),
+		},
+		{
+			name: "fallback must be config",
+			json: strings.Replace(validCLISurfaceValidationJSON(), `"left_fallback": "config.default_start"`, `"left_fallback": "query.default_start"`, 1),
+		},
+		{
+			name: "constraint target must be mapped",
+			json: strings.Replace(validCLISurfaceValidationJSON(), `"right": "query.started_before"`, `"right": "query.unmapped_before"`, 1),
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			report, err := validateDir(cliSurfaceBundleFS(tt.json))
+			if err != nil {
+				t.Fatalf("validateDir: %v", err)
+			}
+			assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+		})
+	}
+}
+
 func TestValidate_CLISurfaceUnknownStreamIsHardFinding(t *testing.T) {
 	report, err := validateDir(cliSurfaceBundleFS(strings.ReplaceAll(validCLISurfaceJSON(), `"stream": "widgets"`, `"stream": "missing_widgets"`)))
 	if err != nil {
@@ -1338,6 +1381,21 @@ func validOperationCLISurfaceJSON() string {
 			}
 		]
 	}`
+}
+
+func validCLISurfaceValidationJSON() string {
+	return strings.Replace(validCLISurfaceJSON(), `"api_surface": [
+					{ "method": "GET", "path": "/widgets" }
+				],`, `"api_surface": [
+					{ "method": "GET", "path": "/widgets" }
+				],
+				"flags": [
+					{ "name": "start", "type": "string", "summary": "Start bound.", "maps_to": "query.started_after", "format": "date-time", "allow_empty": false },
+					{ "name": "end", "type": "string", "summary": "End bound.", "maps_to": "query.started_before", "format": "date-time", "allow_empty": false }
+				],
+				"constraints": [
+					{ "kind": "order", "left": "query.started_after", "left_fallback": "config.default_start", "op": "lt", "right": "query.started_before", "value_type": "date-time", "message": "start must be before end" }
+				],`, 1)
 }
 
 func validCLISurfaceJSON() string {

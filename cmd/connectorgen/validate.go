@@ -752,6 +752,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
@@ -877,6 +878,107 @@ func checkCLISurfaceOperationSafety(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	mappedTargets := map[string]string{}
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		if strings.TrimSpace(flag.MapsTo) != "" {
+			mappedTargets[flag.MapsTo] = flag.Name
+		}
+		if flag.Format != "" && flag.Format != "date-time" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s declares unsupported format %q", i, cmd.Path, flag.Name, flag.Format)})
+		}
+		if flag.Format != "" && flag.Type != "string" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s format validation requires string type", i, cmd.Path, flag.Name)})
+		}
+		if flag.AllowEmpty != nil && flag.Type != "string" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
+		}
+	}
+	for j, constraint := range cmd.Constraints {
+		if constraint.Kind != "order" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
+		}
+		if constraint.Op != "lt" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
+		}
+		if constraint.ValueType != "date-time" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
+		}
+		for _, ref := range []struct {
+			role   string
+			target string
+		}{
+			{role: "left", target: constraint.Left},
+			{role: "right", target: constraint.Right},
+		} {
+			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
+				continue
+			}
+			if mappedTargets[ref.target] == "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is not mapped by a command flag", i, cmd.Path, j, ref.role, ref.target)})
+			}
+		}
+		for _, ref := range []struct {
+			role   string
+			target string
+		}{
+			{role: "left_fallback", target: constraint.LeftFallback},
+			{role: "right_fallback", target: constraint.RightFallback},
+		} {
+			if ref.target == "" {
+				continue
+			}
+			if err := validateCLIConstraintConfigFallback(ref.target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
+			}
+		}
+		if strings.ContainsAny(constraint.Message, "\r\n") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d message must be a single line", i, cmd.Path, j)})
+		}
+	}
+	return findings
+}
+
+func validateCLIConstraintMappedTarget(target string) error {
+	switch {
+	case strings.HasPrefix(target, "query."):
+		return validateCLIConstraintPath(strings.TrimPrefix(target, "query."))
+	case strings.HasPrefix(target, "body."):
+		return validateCLIConstraintPath(strings.TrimPrefix(target, "body."))
+	default:
+		return fmt.Errorf("must use query. or body. target")
+	}
+}
+
+func validateCLIConstraintConfigFallback(target string) error {
+	if !strings.HasPrefix(target, "config.") {
+		return fmt.Errorf("must use config. fallback")
+	}
+	return validateCLIConstraintPath(strings.TrimPrefix(target, "config."))
+}
+
+func validateCLIConstraintPath(path string) error {
+	if strings.TrimSpace(path) == "" {
+		return fmt.Errorf("path is required")
+	}
+	for _, r := range path {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.':
+		default:
+			return fmt.Errorf("path contains invalid character %q", r)
+		}
+	}
+	if strings.Contains(path, "..") {
+		return fmt.Errorf("path must not contain empty segments")
+	}
+	return nil
 }
 
 func checkCLISurfaceWriteFlags(
