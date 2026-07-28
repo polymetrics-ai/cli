@@ -7,11 +7,13 @@
 | `scripts/gsd doctor` | Pass | Adapter healthy. |
 | `scripts/gsd list` | Pass | 69 commands listed. |
 | `scripts/gsd prompt programming-loop init --phase issue-599 --dry-run` | Fallback | Command registry returned `unknown GSD command: programming-loop`; manual-GSD fallback used. |
+| `scripts/gsd prompt programming-loop init --phase issue-599-branch-name-ci --dry-run` | Fallback | Command registry returned `unknown GSD command: programming-loop`; manual-GSD fallback reused for CI repair. |
 | `scripts/gsd prompt plan-phase issue-599 --skip-research` | Pass | Prompt generated and applied inline as planning fallback. |
 | `go test ./internal/connectors/boundary ./cmd/connectorgen` | Pass | Boundary package and CLI command tests green. |
-| `go run ./cmd/connectorgen boundary . --json` | Pass | `outcome=clean`, `findings=0`, `warnings=0`, `exceptions=23`, `checked_files=83`, `connectors_loaded=548`, `gong_exceptions=0`. |
+| `go run ./cmd/connectorgen boundary . --json` | Pass | `outcome=clean`, `findings=0`, `warnings=0`, `exceptions=24`, `checked_files=129`, `connectors_loaded=548`, `gong_exceptions=0`. |
 | `go run ./cmd/connectorgen validate internal/connectors/defs --json` | Pass | `connectors_checked=548`, `findings=0`, `warnings=0`. |
-| `make connector-boundary` | Pass | `outcome=clean`, `findings=0`, `exceptions=23`, `checked_files=83`. |
+| `make connector-boundary` | Pass | `outcome=clean`, `findings=0`, `exceptions=24`, `checked_files=129`. |
+| Extracted `conventions.yml` branch-name run block | Pass | Accepted `fm/cli-connector-boundary-guard-r1`, `fix/stripe-pagination`, and `dependabot/go_modules/example`; rejected `invalid/Bad_Name`. |
 | `make verify` | Pass | Exit 0. |
 | `git diff --check` | Pass | Exit 0. |
 | `/Users/karthiksivadas/karthik-agent-workspace/bin/fm-ensure-agents-md.sh .` | No change | Script reported both `AGENTS.md` and `CLAUDE.md` are real files and require manual reconciliation; no durable cross-session project knowledge was added for this guard-only slice. |

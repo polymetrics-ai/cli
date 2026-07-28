@@ -38,7 +38,7 @@
     {
       "command": "go run ./cmd/connectorgen boundary . --json",
       "result": "passed",
-      "summary": "outcome=clean findings=0 warnings=0 exceptions=23 checked_files=83 connectors_loaded=548 gong_exceptions=0"
+      "summary": "outcome=clean findings=0 warnings=0 exceptions=24 checked_files=129 connectors_loaded=548 gong_exceptions=0"
     },
     {
       "command": "go run ./cmd/connectorgen validate internal/connectors/defs --json",
@@ -48,7 +48,12 @@
     {
       "command": "make connector-boundary",
       "result": "passed",
-      "summary": "outcome=clean findings=0 exceptions=23 checked_files=83"
+      "summary": "outcome=clean findings=0 exceptions=24 checked_files=129"
+    },
+    {
+      "command": "extracted conventions.yml branch-name run block",
+      "result": "passed",
+      "summary": "accepted fm/cli-connector-boundary-guard-r1 fix/stripe-pagination dependabot/go_modules/example; rejected invalid/Bad_Name"
     },
     {
       "command": "make verify",

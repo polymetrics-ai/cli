@@ -11,7 +11,8 @@
 | JSON/schema shape | `TestReportJSONShapeUsesStableArrays` marshals a clean report. | Stable `api_version`, `kind`, and array fields for findings/warnings/exceptions. | Green |
 | CLI exits | `TestBoundaryCommand_*` covers clean JSON exit 0, policy exit 1, invalid invocation/config exit 2, and human output. | `cmd/connectorgen` focused tests pass. | Green |
 | Base diff mode | `TestScanBaseDiffRestrictsPrimaryScan` scans against `HEAD`. | Changed file is scanned; unchanged baseline policy is ignored for primary diff findings while exception contracts remain whole-tree. | Green |
-| Current baseline | `TestCurrentRepositoryBaselinePasses` scans the real repo with fixed time. | Current baseline passes via 23 bounded exceptions; Gong has zero shared-code exceptions. | Green |
+| Current baseline | `TestCurrentRepositoryBaselinePasses` scans the real repo with fixed time. | Current baseline passes via 24 bounded exceptions; Gong has zero shared-code exceptions. | Green |
+| Branch-name CI repair | GitHub Actions `branch-name` log rejects `HEAD_REF=fm/cli-connector-boundary-guard-r1` because `fm` is missing from `.github/workflows/conventions.yml`. | Extracted `conventions.yml` branch-name run block accepts `fm/cli-connector-boundary-guard-r1`, `fix/stripe-pagination`, and `dependabot/go_modules/example`, while rejecting `invalid/Bad_Name`. | Green |
 
 ## Actual evidence
 
@@ -21,13 +22,16 @@ go test ./internal/connectors/boundary ./cmd/connectorgen
 # ok polymetrics.ai/cmd/connectorgen
 
 go run ./cmd/connectorgen boundary . --json
-# outcome clean; findings 0; warnings 0; exceptions 23; checked_files 83; connectors_loaded 548; gong_exceptions 0
+# outcome clean; findings 0; warnings 0; exceptions 24; checked_files 129; connectors_loaded 548; gong_exceptions 0
 
 go run ./cmd/connectorgen validate internal/connectors/defs --json
 # connectors 548; findings 0; warnings 0
 
 make connector-boundary
-# outcome clean; findings 0; exceptions 23; checked_files 83
+# outcome clean; findings 0; exceptions 24; checked_files 129
+
+branch-name validation examples
+# extracted conventions.yml run block accepted fm/cli-connector-boundary-guard-r1, fix/stripe-pagination, dependabot/go_modules/example; rejected invalid/Bad_Name
 
 make verify
 # exit 0

@@ -13,13 +13,15 @@ Implementation and local verification complete on branch `fm/cli-connector-bound
 - Added synthetic tests for shared provider literals, provider policy helper placement, allowed definitions/native/hooks/generated/test/docs paths, exception stale/expired/broadened behavior, stable sorting, JSON shape, base-diff mode, CLI exit behavior, and current-main baseline.
 - Added `make connector-boundary` and a standalone always-present GitHub Actions workflow check named `connector-boundary` with read-only permissions and no path filters.
 - Added focused developer runbook at `docs/migration/connector-boundary-guard.md`.
+- Repaired the repository convention workflow so the active `fm/cli-connector-boundary-guard-r1` issue branch passes the `branch-name` check.
 
 ## Verification
 
 - `go test ./internal/connectors/boundary ./cmd/connectorgen` — pass.
-- `go run ./cmd/connectorgen boundary . --json` — pass (`findings=0`, `exceptions=23`, `gong_exceptions=0`).
+- `go run ./cmd/connectorgen boundary . --json` — pass (`findings=0`, `exceptions=24`, `gong_exceptions=0`).
 - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — pass (`connectors_checked=548`, `findings=0`, `warnings=0`).
 - `make connector-boundary` — pass.
+- Extracted `conventions.yml` branch-name run block — pass for `fm/cli-connector-boundary-guard-r1`; invalid branch example still fails.
 - `make verify` — pass.
 - `git diff --check` — pass.
 

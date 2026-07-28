@@ -100,6 +100,13 @@
 - `make verify`
 - `git diff --check`
 
+## CI repair checkpoint — 2026-07-28
+
+- Failing check: `branch-name` rejects the active PR branch `fm/cli-connector-boundary-guard-r1`.
+- Root cause: `.github/workflows/conventions.yml` enforces Conventional Commit-style branch prefixes but does not recognize the `fm/` branch family used by this issue branch.
+- Planned fix: update only the branch-name workflow convention so this existing issue branch family passes without changing connector behavior, dependencies, credentials, branch protection, repository settings, or reverse ETL behavior.
+- Focused verification: run the workflow shell logic locally with `HEAD_REF=fm/cli-connector-boundary-guard-r1`, plus negative and existing-positive branch examples.
+
 ## Commit checkpoint plan
 
 One implementation commit after planning, red tests, implementation, docs, and focused verification are green. Push/PR is deferred to the no-mistakes handoff per the worker brief.
