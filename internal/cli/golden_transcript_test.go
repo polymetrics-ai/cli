@@ -51,6 +51,10 @@ var goldenTranscriptInputs = []struct {
 	{Name: "help_docs", Args: []string{"help", "docs"}},
 	{Name: "help_skills", Args: []string{"help", "skills"}},
 	{Name: "help_version", Args: []string{"help", "version"}},
+	{Name: "help_context", Args: []string{"help", "context"}},
+	{Name: "help_organizations", Args: []string{"help", "organizations"}},
+	{Name: "help_workspaces", Args: []string{"help", "workspaces"}},
+	{Name: "help_environments", Args: []string{"help", "environments"}},
 
 	{Name: "bare_credentials_manual", Args: []string{"credentials"}},
 	{Name: "bare_etl_manual", Args: []string{"etl"}},
@@ -67,6 +71,10 @@ var goldenTranscriptInputs = []struct {
 	{Name: "bare_perf_manual", Args: []string{"perf"}},
 	{Name: "bare_docs_manual", Args: []string{"docs"}},
 	{Name: "bare_skills_manual", Args: []string{"skills"}},
+	{Name: "bare_context_manual", Args: []string{"context"}},
+	{Name: "bare_organizations_manual", Args: []string{"organizations"}},
+	{Name: "bare_workspaces_manual", Args: []string{"workspaces"}},
+	{Name: "bare_environments_manual", Args: []string{"environments"}},
 
 	{Name: "json_credentials_manual", Args: []string{"credentials", "--json"}},
 	{Name: "json_etl_manual", Args: []string{"etl", "--json"}},
@@ -83,6 +91,10 @@ var goldenTranscriptInputs = []struct {
 	{Name: "json_perf_manual", Args: []string{"perf", "--json"}},
 	{Name: "json_docs_manual", Args: []string{"docs", "--json"}},
 	{Name: "json_skills_manual", Args: []string{"skills", "--json"}},
+	{Name: "json_context_manual", Args: []string{"context", "--json"}},
+	{Name: "json_organizations_manual", Args: []string{"organizations", "--json"}},
+	{Name: "json_workspaces_manual", Args: []string{"workspaces", "--json"}},
+	{Name: "json_environments_manual", Args: []string{"environments", "--json"}},
 	{Name: "json_version_manual", Args: []string{"version", "--help", "--json"}},
 
 	{Name: "agent_plan_default", Args: []string{"agent", "plan"}},
@@ -142,8 +154,8 @@ func TestGoldenTranscripts(t *testing.T) {
 	if err := json.Unmarshal(content, &transcripts); err != nil {
 		t.Fatalf("parse golden transcripts: %v", err)
 	}
-	if len(transcripts) < 75 || len(transcripts) > 95 {
-		t.Fatalf("golden transcript count = %d, want about 80", len(transcripts))
+	if len(transcripts) < 75 || len(transcripts) > 110 {
+		t.Fatalf("golden transcript count = %d, want roughly 75-110", len(transcripts))
 	}
 	assertGoldenInputsMatchFixture(t, transcripts)
 

@@ -55,6 +55,11 @@ CONFIG FILE
         model: ""
     schedule:
       crontab_file: ""
+    broker:
+      required_context: ""
+      default_context: ""
+      runtime_mode: remote
+      hybrid_policy: ""
 
 KEYS
   root
@@ -121,6 +126,26 @@ KEYS
   schedule.crontab_file
     Default: empty. Primary env: POLYMETRICS_CRONTAB_FILE. Alias:
     PM_CRONTAB_FILE. Intended for local scheduler redirection and tests.
+
+  broker.required_context
+    Default: empty. Primary env: POLYMETRICS_BROKER_REQUIRED_CONTEXT. Alias:
+    PM_BROKER_REQUIRED_CONTEXT. Safe project requirement for a named PM Broker
+    context; never a token or credential reference.
+
+  broker.default_context
+    Default: empty. Primary env: POLYMETRICS_BROKER_DEFAULT_CONTEXT. Alias:
+    PM_BROKER_DEFAULT_CONTEXT. Safe project default used after active user
+    context and before synthesized legacy-local context.
+
+  broker.runtime_mode
+    Default: remote. Primary env: POLYMETRICS_BROKER_RUNTIME_MODE. Alias:
+    PM_BROKER_RUNTIME_MODE. Valid values: remote, local, hybrid. Production
+    defaults to remote; production writes and scheduled production jobs cannot
+    use local fallback.
+
+  broker.hybrid_policy
+    Default: empty. Primary env: POLYMETRICS_BROKER_HYBRID_POLICY. Alias:
+    PM_BROKER_HYBRID_POLICY. Required when broker.runtime_mode is hybrid.
 
 SECURITY
   Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or

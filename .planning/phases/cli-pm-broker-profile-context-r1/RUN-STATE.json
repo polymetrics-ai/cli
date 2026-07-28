@@ -1,10 +1,10 @@
 {
   "phase": "cli-pm-broker-profile-context-r1",
-  "status": "planning",
+  "status": "local_verified",
   "baseSHA": "4b0615835b70ec3809379c0cf3e0aa91aca876b8",
   "branch": "fm/cli-pm-broker-profile-context-r1",
   "targetBase": "integration/pm-broker-production-program",
-  "localVerificationPassed": false,
+  "localVerificationPassed": true,
   "verificationPassed": false,
   "gsd": {
     "doctor": "passed",
@@ -25,13 +25,29 @@
     "golang-safety",
     "golang-naming",
     "golang-spf13-cobra",
-    "golang-spf13-viper"
+    "golang-spf13-viper",
+    "no-mistakes"
   ],
   "orchestrationDecisions": [
     {
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "The assigned PM Broker context foundation is one dependency-ordered CLI/domain slice in an already isolated worktree; no disjoint mutating worker is needed."
+    },
+    {
+      "cycle": "tdd-gate",
+      "decision": "local_critical_path",
+      "reason": "Added failing package/config/CLI tests that prove the PM Broker domain package, safe config keys, and context commands are absent before production edits."
+    },
+    {
+      "cycle": "review-fix",
+      "decision": "local_review_parallel",
+      "reason": "Reviewer and security-auditor found no critical issues; environment isolation, invalid-action/state ordering, canonical runtime/context validation, state-file mode hardening, and website docs-validate wording were fixed before commit."
+    },
+    {
+      "cycle": "project-memory",
+      "decision": "out_of_scope_pre_existing_conflict",
+      "reason": "fm-ensure-agents-md.sh reported both AGENTS.md and CLAUDE.md are tracked real files. Firstmate instructed not to reconcile/edit them in this PR; no agent-memory change was made."
     }
   ],
   "humanGates": [
@@ -42,6 +58,18 @@
     "auth scope changes",
     "destructive actions",
     "main branch merge",
-    "public stable auth registry claim"
+    "public stable auth registry claim",
+    "AGENTS.md/CLAUDE.md memory-file reconciliation if explicitly required by reviewer"
+  ],
+  "localVerification": [
+    "git diff --check",
+    "go test ./internal/pmbroker ./internal/config ./internal/cli -run targeted PM Broker/config/CLI tests -count=1",
+    "go test ./internal/cli -count=1",
+    "go test ./... -count=1",
+    "go vet ./...",
+    "go build ./cmd/pm",
+    "go run ./cmd/pm docs validate --connectors-dir docs/connectors",
+    "CLI help/docs parity smoke checks",
+    "make verify"
   ]
 }

@@ -34,6 +34,10 @@ COMMANDS
   rlm               score warehouse records with deterministic or agent RLM
   schedule          create, list, install, and remove flow schedules
   agent             produce typed plans for external agents
+  context           manage PM Broker Organization/Workspace/Environment context
+  organizations     list cached PM Broker Organization metadata
+  workspaces        list cached PM Broker Workspace metadata
+  environments      list cached PM Broker Environment metadata
   runtime           check PostgreSQL, DragonflyDB, and Temporal dependencies
   perf              compare dependency-free and runtime-backed performance
   docs              generate markdown command docs
@@ -69,25 +73,29 @@ EXIT STATUS
 `
 
 var docs = map[string]string{
-	"":            rootHelp,
-	"pm":          rootHelp,
-	"credentials": credentialsHelp,
-	"etl":         etlHelp,
-	"reverse":     reverseHelp,
-	"connectors":  connectorsHelp,
-	"connections": connectionsHelp,
-	"catalog":     catalogHelp,
-	"query":       queryHelp,
-	"flow":        flowHelp,
-	"config":      configHelp,
-	"rlm":         rlmHelp,
-	"schedule":    scheduleHelp,
-	"agent":       agentHelp,
-	"runtime":     runtimeHelp,
-	"perf":        perfHelp,
-	"docs":        docsHelp,
-	"skills":      skillsHelp,
-	"version":     versionHelp,
+	"":              rootHelp,
+	"pm":            rootHelp,
+	"credentials":   credentialsHelp,
+	"etl":           etlHelp,
+	"reverse":       reverseHelp,
+	"connectors":    connectorsHelp,
+	"connections":   connectionsHelp,
+	"catalog":       catalogHelp,
+	"query":         queryHelp,
+	"flow":          flowHelp,
+	"config":        configHelp,
+	"rlm":           rlmHelp,
+	"schedule":      scheduleHelp,
+	"agent":         agentHelp,
+	"context":       contextHelp,
+	"organizations": organizationsHelp,
+	"workspaces":    workspacesHelp,
+	"environments":  environmentsHelp,
+	"runtime":       runtimeHelp,
+	"perf":          perfHelp,
+	"docs":          docsHelp,
+	"skills":        skillsHelp,
+	"version":       versionHelp,
 }
 
 const configHelp = `NAME
@@ -146,6 +154,11 @@ CONFIG FILE
         model: ""
     schedule:
       crontab_file: ""
+    broker:
+      required_context: ""
+      default_context: ""
+      runtime_mode: remote
+      hybrid_policy: ""
 
 KEYS
   root
@@ -212,6 +225,26 @@ KEYS
   schedule.crontab_file
     Default: empty. Primary env: POLYMETRICS_CRONTAB_FILE. Alias:
     PM_CRONTAB_FILE. Intended for local scheduler redirection and tests.
+
+  broker.required_context
+    Default: empty. Primary env: POLYMETRICS_BROKER_REQUIRED_CONTEXT. Alias:
+    PM_BROKER_REQUIRED_CONTEXT. Safe project requirement for a named PM Broker
+    context; never a token or credential reference.
+
+  broker.default_context
+    Default: empty. Primary env: POLYMETRICS_BROKER_DEFAULT_CONTEXT. Alias:
+    PM_BROKER_DEFAULT_CONTEXT. Safe project default used after active user
+    context and before synthesized legacy-local context.
+
+  broker.runtime_mode
+    Default: remote. Primary env: POLYMETRICS_BROKER_RUNTIME_MODE. Alias:
+    PM_BROKER_RUNTIME_MODE. Valid values: remote, local, hybrid. Production
+    defaults to remote; production writes and scheduled production jobs cannot
+    use local fallback.
+
+  broker.hybrid_policy
+    Default: empty. Primary env: POLYMETRICS_BROKER_HYBRID_POLICY. Alias:
+    PM_BROKER_HYBRID_POLICY. Required when broker.runtime_mode is hybrid.
 
 SECURITY
   Configuration is an allowlist. pm does not ingest arbitrary POLYMETRICS_* or
@@ -798,6 +831,121 @@ EXIT STATUS
   0 success
   1 runtime error
   2 usage error
+`
+
+const contextHelp = `NAME
+  pm context - manage PM Broker Organization, Workspace, and Environment context
+
+SYNOPSIS
+  pm context create <name> --organization <org-id> --organization-name <name> --workspace <workspace-id> --workspace-name <name> --environment <environment-id> --environment-name <name> --environment-type development|staging|production|ephemeral --broker-profile <profile-id> --broker-profile-name <name> [--runtime-mode remote|local|hybrid] [--hybrid-policy policy-id] [--json]
+  pm context use <name> [--json]
+  pm context show [--context <name>] [--json]
+  pm context list [--json]
+
+DESCRIPTION
+  Contexts are named safe metadata tuples for PM Broker Organization,
+  Workspace, Environment, and BrokerProfile references. The CLI stores this
+  user-level metadata in the operating system's standard Polymetrics user
+  config directory, not in the project vault. Context state contains immutable
+  broker IDs and display names only; it never stores tokens, provider
+  credentials, secret locators, or raw secret values.
+
+  Live PM Broker provider operations are not enabled in this foundation slice.
+  The metadata shown by these commands is cached from explicit context entries
+  and is a narrow seam for the future fake-client/contract-fixture package.
+
+RUNTIME MODES
+  remote
+    Use the broker as the authority. This is the default for production.
+
+  local
+    Use local-only evaluation for non-production or legacy-local reads. Local
+    fallback is forbidden for production writes and scheduled production jobs.
+
+  hybrid
+    Policy-bound mode that requires --hybrid-policy or broker.hybrid_policy.
+    Hybrid cannot provide local fallback for production writes or scheduled
+    production jobs.
+
+CONTEXT RESOLUTION
+  pm resolves context in this order: explicit --context, future
+  approval-bound flow/sync requirement, project broker.required_context, active
+  user context, broker.default_context, then a synthesized legacy-local context
+  for unmigrated projects. Scope mismatch or ambiguity stops safely.
+
+SECURITY
+  Context commands do not read credentials, legacy vault entries, provider
+  secrets, service-account JSON keys, or live broker resources. They cannot
+  grant Organization membership or change internal partition identity.
+
+EXIT STATUS
+  0 success
+  2 usage error
+  3 validation error
+`
+
+const organizationsHelp = `NAME
+  pm organizations - list cached PM Broker Organization metadata
+
+SYNOPSIS
+  pm organizations list [--json]
+  pm organizations show <organization-id> [--json]
+
+DESCRIPTION
+  Shows cached Organization metadata from safe PM Broker contexts only. This
+  foundation does not call a live broker and does not infer membership from
+  display names or project defaults.
+
+SECURITY
+  Output contains Organization IDs and display names only. No credentials or
+  raw secret values are read or printed.
+
+EXIT STATUS
+  0 success
+  2 usage error
+  3 validation error
+`
+
+const workspacesHelp = `NAME
+  pm workspaces - list cached PM Broker Workspace metadata
+
+SYNOPSIS
+  pm workspaces list [--organization <org-id>] [--json]
+  pm workspaces show <workspace-id> [--json]
+
+DESCRIPTION
+  Shows cached Workspace metadata from safe PM Broker contexts only. Workspaces
+  remain bound to immutable Organization IDs; display names never grant access.
+
+SECURITY
+  Output contains Workspace IDs, Organization IDs, and display names only.
+
+EXIT STATUS
+  0 success
+  2 usage error
+  3 validation error
+`
+
+const environmentsHelp = `NAME
+  pm environments - list cached PM Broker Environment metadata
+
+SYNOPSIS
+  pm environments list [--workspace <workspace-id>] [--json]
+  pm environments show <environment-id> [--json]
+
+DESCRIPTION
+  Shows cached Environment metadata from safe PM Broker contexts only.
+  Production environments default to remote runtime mode, and production writes
+  or scheduled production jobs cannot use local fallback.
+
+SECURITY
+  Output contains Environment IDs, parent IDs, display names, and environment
+  type only. Live provider operations remain unsupported.
+
+EXIT STATUS
+  0 success
+  2 usage error
+  3 validation error
 `
 
 const docsHelp = `NAME

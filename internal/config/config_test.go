@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -35,6 +36,10 @@ var allBoundEnvVars = []string{
 	"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL",
 	"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL",
 	"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE",
+	"POLYMETRICS_BROKER_REQUIRED_CONTEXT", "PM_BROKER_REQUIRED_CONTEXT",
+	"POLYMETRICS_BROKER_DEFAULT_CONTEXT", "PM_BROKER_DEFAULT_CONTEXT",
+	"POLYMETRICS_BROKER_RUNTIME_MODE", "PM_BROKER_RUNTIME_MODE",
+	"POLYMETRICS_BROKER_HYBRID_POLICY", "PM_BROKER_HYBRID_POLICY",
 }
 
 func TestLoadDefaultsAndMissingFile(t *testing.T) {
@@ -76,6 +81,9 @@ func TestLoadDefaultsAndMissingFile(t *testing.T) {
 	if cfg.Schedule.CrontabFile != "" {
 		t.Fatalf("Schedule.CrontabFile = %q, want empty", cfg.Schedule.CrontabFile)
 	}
+	if cfg.Broker.RuntimeMode != "remote" || cfg.Broker.RequiredContext != "" || cfg.Broker.DefaultContext != "" || cfg.Broker.HybridPolicy != "" {
+		t.Fatalf("Broker defaults = %#v, want remote with no context defaults", cfg.Broker)
+	}
 	if cfg.ConfigFile != filepath.Join(root, ".polymetrics", "config.yaml") {
 		t.Fatalf("ConfigFile = %q, want invocation-root config path", cfg.ConfigFile)
 	}
@@ -100,6 +108,10 @@ func TestLoadFileEnvAndAliasPrecedence(t *testing.T) {
 		{name: "rlm.llm.base_url", fileYAML: "rlm:\n  llm:\n    base_url: http://file-llm/v1\n", primaryEnv: "POLYMETRICS_LLM_BASE_URL", aliasEnv: "PM_LLM_BASE_URL", envValue: "http://env-llm/v1", fileWant: "http://file-llm/v1", envWant: "http://env-llm/v1", get: func(c Config) any { return c.RLM.LLM.BaseURL }},
 		{name: "rlm.llm.model", fileYAML: "rlm:\n  llm:\n    model: file-model\n", primaryEnv: "POLYMETRICS_LLM_MODEL", aliasEnv: "PM_LLM_MODEL", envValue: "env-model", fileWant: "file-model", envWant: "env-model", get: func(c Config) any { return c.RLM.LLM.Model }},
 		{name: "schedule.crontab_file", fileYAML: "schedule:\n  crontab_file: file-crontab\n", primaryEnv: "POLYMETRICS_CRONTAB_FILE", aliasEnv: "PM_CRONTAB_FILE", envValue: "env-crontab", fileWant: "file-crontab", envWant: "env-crontab", get: func(c Config) any { return c.Schedule.CrontabFile }},
+		{name: "broker.required_context", fileYAML: "broker:\n  required_context: file-prod\n", primaryEnv: "POLYMETRICS_BROKER_REQUIRED_CONTEXT", aliasEnv: "PM_BROKER_REQUIRED_CONTEXT", envValue: "env-prod", fileWant: "file-prod", envWant: "env-prod", get: func(c Config) any { return c.Broker.RequiredContext }},
+		{name: "broker.default_context", fileYAML: "broker:\n  default_context: file-dev\n", primaryEnv: "POLYMETRICS_BROKER_DEFAULT_CONTEXT", aliasEnv: "PM_BROKER_DEFAULT_CONTEXT", envValue: "env-dev", fileWant: "file-dev", envWant: "env-dev", get: func(c Config) any { return c.Broker.DefaultContext }},
+		{name: "broker.runtime_mode", fileYAML: "broker:\n  runtime_mode: local\n", primaryEnv: "POLYMETRICS_BROKER_RUNTIME_MODE", aliasEnv: "PM_BROKER_RUNTIME_MODE", envValue: "remote", fileWant: "local", envWant: "remote", get: func(c Config) any { return c.Broker.RuntimeMode }},
+		{name: "broker.hybrid_policy", fileYAML: "broker:\n  hybrid_policy: policy_file_fixture\n", primaryEnv: "POLYMETRICS_BROKER_HYBRID_POLICY", aliasEnv: "PM_BROKER_HYBRID_POLICY", envValue: "policy_env_fixture", fileWant: "policy_file_fixture", envWant: "policy_env_fixture", get: func(c Config) any { return c.Broker.HybridPolicy }},
 	}
 
 	for _, tt := range cases {
@@ -418,6 +430,55 @@ func clearBoundEnv(t *testing.T) {
 	// Version is in the table but rarely used by runtime code; keep it isolated too.
 	t.Setenv("POLYMETRICS_VERSION", "")
 	t.Setenv("PM_VERSION", "")
+}
+
+func TestLoadBrokerConfigSafeKeys(t *testing.T) {
+	root := writeConfig(t, `broker:
+  required_context: prod
+  default_context: dev
+  runtime_mode: hybrid
+  hybrid_policy: policy_ci_fixture
+`)
+
+	cfg, err := Load(Options{Root: root})
+	if err != nil {
+		t.Fatalf("Load() error = %v", err)
+	}
+	if cfg.Broker.RequiredContext != "prod" || cfg.Broker.DefaultContext != "dev" {
+		t.Fatalf("Broker contexts = %#v, want required prod default dev", cfg.Broker)
+	}
+	if cfg.Broker.RuntimeMode != "hybrid" || cfg.Broker.HybridPolicy != "policy_ci_fixture" {
+		t.Fatalf("Broker runtime = %#v, want hybrid policy", cfg.Broker)
+	}
+	for _, key := range []string{"broker.required_context", "broker.default_context", "broker.runtime_mode", "broker.hybrid_policy"} {
+		if !cfg.IsExplicit(key) {
+			t.Fatalf("IsExplicit(%q) = false, want true", key)
+		}
+	}
+}
+
+func TestLoadBrokerConfigRejectsInvalidRuntimeMode(t *testing.T) {
+	root := writeConfig(t, "broker:\n  runtime_mode: unsafe-production-fallback\n")
+
+	_, err := Load(Options{Root: root})
+	if err == nil {
+		t.Fatal("Load() succeeded with invalid broker runtime mode, want error")
+	}
+	if !strings.Contains(err.Error(), "broker.runtime_mode") {
+		t.Fatalf("Load() error = %v, want broker.runtime_mode", err)
+	}
+}
+
+func TestLoadBrokerConfigRejectsInvalidHybridPolicy(t *testing.T) {
+	root := writeConfig(t, "broker:\n  runtime_mode: hybrid\n  hybrid_policy: bad policy\n")
+
+	_, err := Load(Options{Root: root})
+	if err == nil {
+		t.Fatal("Load() succeeded with invalid broker hybrid policy, want error")
+	}
+	if !strings.Contains(err.Error(), "broker.hybrid_policy") {
+		t.Fatalf("Load() error = %v, want broker.hybrid_policy", err)
+	}
 }
 
 func writeConfig(t *testing.T, yaml string) string {

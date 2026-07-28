@@ -20,15 +20,71 @@ Required behaviors to constrain:
 
 ## Red evidence
 
-Pending: add tests and record exact failures.
+Captured before production code:
+
+```text
+$ go test ./internal/pmbroker ./internal/config ./internal/cli -run 'Test(PMBroker|LoadBroker)' -count=1
+exit=1
+# polymetrics.ai/internal/pmbroker
+internal/pmbroker/domain_test.go:15:13: undefined: RuntimeSelection
+internal/pmbroker/domain_test.go:21:18: undefined: RuntimeModeRemote
+internal/pmbroker/domain_test.go:22:18: undefined: EnvironmentTypeProduction
+internal/pmbroker/domain_test.go:23:18: undefined: RuntimeOperationWrite
+FAIL polymetrics.ai/internal/pmbroker [build failed]
+# polymetrics.ai/internal/config
+internal/config/config_test.go:435:9: cfg.Broker undefined (type Config has no field or method Broker)
+FAIL polymetrics.ai/internal/config [build failed]
+internal/cli/pmbroker_cli_test.go:17: context create exit = 2, want 0; unknown command "context"
+internal/cli/pmbroker_cli_test.go:138: help topic "context" not found
+FAIL polymetrics.ai/internal/cli
+```
+
 
 ## Green evidence
 
-Pending implementation.
+Captured after implementation:
+
+```text
+$ go test ./internal/pmbroker ./internal/config ./internal/cli -run 'TestRuntimeModePolicy|TestContextStateValidationAndResolution|TestStoreRejectsUnknownSecretFields|TestLoadBrokerConfig|TestPMBroker' -count=1
+ok  	polymetrics.ai/internal/pmbroker
+ok  	polymetrics.ai/internal/config
+ok  	polymetrics.ai/internal/cli
+
+$ go test ./internal/cli -count=1
+go test ./internal/cli PASS
+
+$ go test ./...
+all packages passed, including internal/cli and internal/pmbroker
+```
 
 ## Refactor/hardening evidence
 
-Pending verification.
+Reviewer/security-auditor follow-up fixed before commit:
+
+- Cleared PM Broker/config environment bindings in CLI tests to keep them deterministic.
+- Validated metadata subcommands before loading user state so invalid actions stay usage errors even with poisoned state.
+- Rejected non-canonical context names, runtime modes, and hybrid policy bindings to avoid trim-based ambiguity.
+- Hardened user-state load to require a regular file that is not group/world-writable.
+- Removed a false website claim that `pm docs validate` checks website docs; current docs parity is covered by golden-doc tests and generator checks.
+
+Final local gates:
+
+```text
+$ git diff --check
+git diff --check PASS
+
+$ go vet ./...
+go vet ./... PASS
+
+$ go build ./cmd/pm
+go build ./cmd/pm PASS
+
+$ go run ./cmd/pm docs validate --connectors-dir docs/connectors
+Validated connector docs in docs/connectors
+
+$ make verify
+make verify PASS
+```
 
 ## Skills
 

@@ -52,6 +52,12 @@ Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are
 | `rlm.llm.base_url` | `https://openrouter.ai/api/v1` | `POLYMETRICS_LLM_BASE_URL` | `PM_LLM_BASE_URL` |
 | `rlm.llm.model` | empty | `POLYMETRICS_LLM_MODEL` | `PM_LLM_MODEL` |
 | `schedule.crontab_file` | empty | `POLYMETRICS_CRONTAB_FILE` | `PM_CRONTAB_FILE` |
+| `broker.required_context` | empty | `POLYMETRICS_BROKER_REQUIRED_CONTEXT` | `PM_BROKER_REQUIRED_CONTEXT` |
+| `broker.default_context` | empty | `POLYMETRICS_BROKER_DEFAULT_CONTEXT` | `PM_BROKER_DEFAULT_CONTEXT` |
+| `broker.runtime_mode` | `remote` | `POLYMETRICS_BROKER_RUNTIME_MODE` | `PM_BROKER_RUNTIME_MODE` |
+| `broker.hybrid_policy` | empty | `POLYMETRICS_BROKER_HYBRID_POLICY` | `PM_BROKER_HYBRID_POLICY` |
+
+`broker.runtime_mode` accepts `remote`, `local`, and policy-bound `hybrid`. Production defaults to `remote`; production writes and scheduled production jobs cannot use local fallback.
 
 ```yaml
 version: 1
@@ -74,6 +80,11 @@ rlm:
     model: ""
 schedule:
   crontab_file: ""
+broker:
+  required_context: ""
+  default_context: ""
+  runtime_mode: remote
+  hybrid_policy: ""
 ```
 
 <Callout type="warning">
@@ -93,6 +104,10 @@ schedule:
 | `pm query` | `pm query run` | [/docs/query](/docs/query) |
 | `pm reverse` | `pm reverse list`, `pm reverse plan`, `pm reverse preview`, `pm reverse run`, `pm reverse status` | [/docs/reverse-etl](/docs/reverse-etl) |
 | `pm agent` | `pm agent plan`, `pm agent image build`, `pm agent image pull`, `pm agent image ensure` | [/docs/agent-guide](/docs/agent-guide) |
+| `pm context` | `pm context create`, `pm context use`, `pm context show`, `pm context list` | this page |
+| `pm organizations` | `pm organizations list`, `pm organizations show` | this page |
+| `pm workspaces` | `pm workspaces list`, `pm workspaces show` | this page |
+| `pm environments` | `pm environments list`, `pm environments show` | this page |
 | `pm runtime` | `pm runtime doctor` | [/docs/architecture](/docs/architecture) |
 | `pm flow` | `pm flow plan`, `pm flow preview`, `pm flow run`, `pm flow status`, `pm flow list` | [/docs/architecture](/docs/architecture) |
 | `pm extract` | request routing | [/docs/agent-guide](/docs/agent-guide) |
@@ -102,6 +117,34 @@ schedule:
 | `pm rlm` | `pm rlm run` | [/docs/architecture](/docs/architecture) |
 | `pm schedule` | `pm schedule create`, `pm schedule list`, `pm schedule install`, `pm schedule remove` | [/docs/architecture](/docs/architecture) |
 | `pm worker` | `pm worker serve`, `pm worker status` | [/docs/architecture](/docs/architecture) |
+
+## PM Broker context foundation
+
+```bash
+pm context create prod \
+  --organization org_0123456789abcdef \
+  --organization-name "Acme Organization" \
+  --workspace wks_0123456789abcdef \
+  --workspace-name "Analytics Workspace" \
+  --environment env_0123456789abcdef \
+  --environment-name "Production Environment" \
+  --environment-type production \
+  --broker-profile bpf_0123456789abcdef \
+  --broker-profile-name "Pilot Broker Profile" \
+  --runtime-mode remote \
+  --json
+
+pm context use prod --json
+pm context show --json
+pm context list --json
+pm organizations list --json
+pm workspaces list --json
+pm environments list --json
+```
+
+PM Broker contexts are safe user-level metadata tuples for Organization, Workspace, Environment, and BrokerProfile IDs. They live in the operating system's standard Polymetrics user config directory, not in the project vault. Project `.polymetrics/config.yaml` may set safe `broker.required_context`, `broker.default_context`, `broker.runtime_mode`, and `broker.hybrid_policy` defaults only.
+
+This foundation does not enable live provider operations, GCP/VPS resources, raw secret export, service-account JSON keys, generic authenticated HTTP, SQL writes, shell execution, or a public stable auth registry. Future fake-client fixtures will plug into the narrow contract seam; until then, `pm organizations`, `pm workspaces`, and `pm environments` show only cached metadata from explicit contexts.
 
 ## Connector command surfaces
 
@@ -260,10 +303,10 @@ Runtime-backed checks require PostgreSQL, DragonflyDB, and Temporal. The depende
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors
-pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+pm docs validate --connectors-dir docs/connectors
 ```
 
-`pm docs validate` is a release gate. It fails when a public command or subcommand is missing from embedded help, checked-in CLI markdown, website MDX, or connector docs.
+`pm docs validate` checks generated connector documentation. Embedded help and checked-in `docs/cli` drift are covered by the CLI golden-doc tests in the release gate.
 
 ## Exit codes
 
