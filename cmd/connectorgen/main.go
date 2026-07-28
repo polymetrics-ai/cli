@@ -4,6 +4,8 @@
 //	validate [dir] [--json]   loads and validates every bundle under dir
 //	                           (default internal/connectors/defs), exit 1 on
 //	                           any finding
+//	boundary [repo] [--json]   scans shared Go for connector-specific policy
+//	                           outside definition-owned locations
 //	gen                        regenerates hooks/hookset/hookset_gen.go and
 //	                           native/nativeset/nativeset_gen.go
 //	new <name>                 scaffolds internal/connectors/defs/<name>/
@@ -35,6 +37,8 @@ func run(args []string, stdout, stderr io.Writer) int {
 	switch args[0] {
 	case "validate":
 		return runValidate(args, stdout, stderr)
+	case "boundary":
+		return runBoundary(args, stdout, stderr)
 	case "gen":
 		return runGen(args, stdout, stderr)
 	case "new":
@@ -65,6 +69,7 @@ func logf(w io.Writer, format string, a ...any) {
 func usage() string {
 	return `usage:
   connectorgen validate [dir] [--json]   (default dir: internal/connectors/defs)
+  connectorgen boundary [repo-root] [--json] [--base <ref>]
   connectorgen gen
   connectorgen new <name>`
 }
