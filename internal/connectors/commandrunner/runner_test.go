@@ -7,10 +7,12 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
 
 	"polymetrics.ai/internal/connectors"
+	"polymetrics.ai/internal/connectors/bundleregistry"
 	"polymetrics.ai/internal/connectors/defs"
 	"polymetrics.ai/internal/connectors/engine"
 )
@@ -189,6 +191,422 @@ func TestRunCoreStreamMappings(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestCLICommandValidationDefinitionsGeneric(t *testing.T) {
+	allowEmpty := false
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "widget list",
+				Intent:       "etl",
+				Availability: "implemented",
+				Stream:       "widgets",
+				Flags: []connectors.CommandSurfaceFlag{
+					{Name: "start", Type: "string", MapsTo: "query.started_after", Format: "date-time", AllowEmpty: &allowEmpty},
+					{Name: "end", Type: "string", MapsTo: "query.started_before", Format: "date-time", AllowEmpty: &allowEmpty},
+				},
+				Constraints: []connectors.CommandSurfaceConstraint{
+					{
+						Kind:         "order",
+						Left:         "query.started_after",
+						LeftFallback: "config.default_start",
+						Op:           "lt",
+						Right:        "query.started_before",
+						ValueType:    "date-time",
+						Message:      "window start must be before end",
+					},
+				},
+			},
+		},
+	}}
+
+	tests := []struct {
+		name    string
+		flags   map[string][]string
+		config  map[string]string
+		wantErr string
+	}{
+		{
+			name: "valid explicit bounds",
+			flags: map[string][]string{
+				"start": {"2026-07-01T00:00:00Z"},
+				"end":   {"2026-07-02T00:00:00Z"},
+			},
+		},
+		{
+			name:  "missing right side skips order constraint",
+			flags: map[string][]string{"start": {"2026-07-01T00:00:00Z"}},
+		},
+		{
+			name:   "valid config fallback",
+			flags:  map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config: map[string]string{"default_start": "2026-07-01T00:00:00Z"},
+		},
+		{
+			name:    "invalid timestamp",
+			flags:   map[string][]string{"start": {"2026-07-01"}},
+			wantErr: "invalid --start",
+		},
+		{
+			name:    "blank timestamp",
+			flags:   map[string][]string{"start": {""}},
+			wantErr: "invalid --start",
+		},
+		{
+			name:    "invalid config fallback",
+			flags:   map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config:  map[string]string{"default_start": "not-a-time"},
+			wantErr: "invalid config.default_start",
+		},
+		{
+			name: "invalid explicit order",
+			flags: map[string][]string{
+				"start": {"2026-07-02T00:00:00Z"},
+				"end":   {"2026-07-02T00:00:00Z"},
+			},
+			wantErr: "window start must be before end",
+		},
+		{
+			name:    "invalid fallback order",
+			flags:   map[string][]string{"end": {"2026-07-02T00:00:00Z"}},
+			config:  map[string]string{"default_start": "2026-07-03T00:00:00Z"},
+			wantErr: "window start must be before end",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := Run(context.Background(), connector, Request{
+				Path:   []string{"widget", "list"},
+				Flags:  tt.flags,
+				Config: connectors.RuntimeConfig{Config: tt.config},
+				Limit:  1,
+			}, func(connectors.Record) error { return nil })
+			if tt.wantErr == "" {
+				if err != nil {
+					t.Fatalf("Run: %v", err)
+				}
+				return
+			}
+			if err == nil {
+				t.Fatalf("Run error = nil, want %q", tt.wantErr)
+			}
+			if !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestGongCallsListDateFlagsMapToQuery(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name  string
+		flags map[string][]string
+		want  map[string]string
+	}{
+		{
+			name:  "from only with offset",
+			flags: map[string][]string{"from": {"2026-07-01T00:00:00-07:00"}},
+			want:  map[string]string{"fromDateTime": "2026-07-01T00:00:00-07:00", "toDateTime": ""},
+		},
+		{
+			name:  "to only",
+			flags: map[string][]string{"to": {"2026-07-02T00:00:00Z"}},
+			want:  map[string]string{"fromDateTime": "", "toDateTime": "2026-07-02T00:00:00Z"},
+		},
+		{
+			name: "both",
+			flags: map[string][]string{
+				"from": {"2026-07-01T00:00:00Z"},
+				"to":   {"2026-07-02T00:00:00Z"},
+			},
+			want: map[string]string{"fromDateTime": "2026-07-01T00:00:00Z", "toDateTime": "2026-07-02T00:00:00Z"},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var gotQuery url.Values
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.Method != http.MethodGet || r.URL.Path != "/v2/calls" {
+					t.Fatalf("request = %s %s, want GET /v2/calls", r.Method, r.URL.Path)
+				}
+				gotQuery = r.URL.Query()
+				writeGongCallsPage(w, []int{1}, "")
+			}))
+			defer server.Close()
+
+			var records []connectors.Record
+			result, err := Run(context.Background(), connector, Request{
+				Path:   []string{"calls", "list"},
+				Flags:  tt.flags,
+				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "2"}),
+				Limit:  1,
+			}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.Count != 1 || len(records) != 1 {
+				t.Fatalf("count/result records = %d/%d, want 1/1", result.Count, len(records))
+			}
+			for key, want := range tt.want {
+				if got := gotQuery.Get(key); got != want {
+					t.Fatalf("query[%s] = %q, want %q (full query %v)", key, got, want, gotQuery)
+				}
+			}
+			if got := gotQuery.Get("limit"); got != "2" {
+				t.Fatalf("query[limit] = %q, want compatibility page_size 2", got)
+			}
+		})
+	}
+}
+
+func TestGongCallsListFromFlagOverridesStartDateConfig(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name      string
+		config    map[string]string
+		flags     map[string][]string
+		wantFrom  string
+		wantLimit string
+	}{
+		{
+			name:      "start date config remains compatible",
+			config:    map[string]string{"start_date": "2026-06-01T00:00:00Z", "page_size": "4"},
+			wantFrom:  "2026-06-01T00:00:00Z",
+			wantLimit: "4",
+		},
+		{
+			name:      "explicit from wins over configured start date",
+			config:    map[string]string{"start_date": "2026-06-01T00:00:00Z", "page_size": "4"},
+			flags:     map[string][]string{"from": {"2026-07-01T00:00:00Z"}},
+			wantFrom:  "2026-07-01T00:00:00Z",
+			wantLimit: "4",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var gotQuery url.Values
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				gotQuery = r.URL.Query()
+				writeGongCallsPage(w, []int{1}, "")
+			}))
+			defer server.Close()
+
+			_, err := Run(context.Background(), connector, Request{
+				Path:   []string{"calls", "list"},
+				Flags:  tt.flags,
+				Config: gongCommandRunnerTestConfig(server.URL, tt.config),
+				Limit:  1,
+			}, func(connectors.Record) error { return nil })
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if got := gotQuery.Get("fromDateTime"); got != tt.wantFrom {
+				t.Fatalf("query[fromDateTime] = %q, want %q (full query %v)", got, tt.wantFrom, gotQuery)
+			}
+			if got := gotQuery.Get("limit"); got != tt.wantLimit {
+				t.Fatalf("query[limit] = %q, want %q", got, tt.wantLimit)
+			}
+		})
+	}
+}
+
+func TestGongCallsListRejectsInvalidDateFlagsBeforeHTTP(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name   string
+		flags  map[string][]string
+		config map[string]string
+		want   string
+	}{
+		{name: "invalid from", flags: map[string][]string{"from": {"2026-07-01"}}, want: "invalid --from"},
+		{name: "invalid to", flags: map[string][]string{"to": {"tomorrow"}}, want: "invalid --to"},
+		{name: "blank from", flags: map[string][]string{"from": {""}}, want: "invalid --from"},
+		{name: "blank to", flags: map[string][]string{"to": {" "}}, want: "invalid --to"},
+		{
+			name: "equal range",
+			flags: map[string][]string{
+				"from": {"2026-07-01T00:00:00Z"},
+				"to":   {"2026-07-01T00:00:00Z"},
+			},
+			want: "invalid Gong calls list date range",
+		},
+		{
+			name: "reversed range",
+			flags: map[string][]string{
+				"from": {"2026-07-02T00:00:00Z"},
+				"to":   {"2026-07-01T00:00:00Z"},
+			},
+			want: "invalid Gong calls list date range",
+		},
+		{
+			name:   "configured start date after explicit to",
+			flags:  map[string][]string{"to": {"2026-07-01T00:00:00Z"}},
+			config: map[string]string{"start_date": "2026-07-02T00:00:00Z"},
+			want:   "invalid Gong calls list date range",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			hits := 0
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+				hits++
+				writeGongCallsPage(w, []int{1}, "")
+			}))
+			defer server.Close()
+
+			_, err := Run(context.Background(), connector, Request{
+				Path:   []string{"calls", "list"},
+				Flags:  tt.flags,
+				Config: gongCommandRunnerTestConfig(server.URL, mergeCommandRunnerConfig(map[string]string{"page_size": "2"}, tt.config)),
+				Limit:  1,
+			}, func(connectors.Record) error { return nil })
+			if err == nil {
+				t.Fatal("Run error = nil, want date validation error")
+			}
+			if !strings.Contains(err.Error(), tt.want) {
+				t.Fatalf("Run error = %q, want to contain %q", err.Error(), tt.want)
+			}
+			if hits != 0 {
+				t.Fatalf("server hits = %d, want 0; invalid date flags must be rejected before HTTP", hits)
+			}
+		})
+	}
+}
+
+func mergeCommandRunnerConfig(base, overrides map[string]string) map[string]string {
+	merged := map[string]string{}
+	for key, value := range base {
+		merged[key] = value
+	}
+	for key, value := range overrides {
+		merged[key] = value
+	}
+	return merged
+}
+
+func TestGongCallsListLimitCapsEmittedRecordsAcrossCursorPages(t *testing.T) {
+	connector := gongCommandRunnerTestConnector(t)
+
+	tests := []struct {
+		name         string
+		limit        int
+		wantIDs      []string
+		wantRequests int
+	}{
+		{name: "one", limit: 1, wantIDs: []string{"call-1"}, wantRequests: 1},
+		{name: "below page boundary", limit: 2, wantIDs: []string{"call-1", "call-2"}, wantRequests: 1},
+		{name: "at page boundary", limit: 3, wantIDs: []string{"call-1", "call-2", "call-3"}, wantRequests: 1},
+		{name: "across cursor pages", limit: 5, wantIDs: []string{"call-1", "call-2", "call-3", "call-4", "call-5"}, wantRequests: 2},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var requests []url.Values
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				query := r.URL.Query()
+				requests = append(requests, query)
+				switch cursor := query.Get("cursor"); cursor {
+				case "":
+					writeGongCallsPage(w, []int{1, 2, 3}, "page-2")
+				case "page-2":
+					writeGongCallsPage(w, []int{4, 5, 6}, "")
+				default:
+					t.Fatalf("unexpected cursor %q", cursor)
+				}
+			}))
+			defer server.Close()
+
+			var records []connectors.Record
+			result, err := Run(context.Background(), connector, Request{
+				Path:   []string{"calls", "list"},
+				Config: gongCommandRunnerTestConfig(server.URL, map[string]string{"page_size": "3"}),
+				Limit:  tt.limit,
+			}, func(record connectors.Record) error {
+				records = append(records, record)
+				return nil
+			})
+			if err != nil {
+				t.Fatalf("Run: %v", err)
+			}
+			if result.Count != len(tt.wantIDs) || len(records) != len(tt.wantIDs) {
+				t.Fatalf("count/result records = %d/%d, want %d", result.Count, len(records), len(tt.wantIDs))
+			}
+			if got := commandRunnerRecordIDs(records); fmt.Sprint(got) != fmt.Sprint(tt.wantIDs) {
+				t.Fatalf("ids = %v, want %v", got, tt.wantIDs)
+			}
+			if len(requests) != tt.wantRequests {
+				t.Fatalf("requests = %d, want %d (queries=%v)", len(requests), tt.wantRequests, requests)
+			}
+			for i, query := range requests {
+				if got := query.Get("limit"); got != "3" {
+					t.Fatalf("request %d query[limit] = %q, want compatibility page_size 3", i+1, got)
+				}
+			}
+		})
+	}
+}
+
+func gongCommandRunnerTestConnector(t *testing.T) connectors.Connector {
+	t.Helper()
+	connector, ok := bundleregistry.New().Get("gong")
+	if !ok {
+		t.Fatal("gong connector not found")
+	}
+	return connector
+}
+
+func gongCommandRunnerTestConfig(serverURL string, overrides map[string]string) connectors.RuntimeConfig {
+	config := map[string]string{
+		"base_url":  strings.TrimRight(serverURL, "/") + "/v2",
+		"page_size": "2",
+	}
+	for key, value := range overrides {
+		config[key] = value
+	}
+	return connectors.RuntimeConfig{
+		Config: config,
+		Secrets: map[string]string{
+			"access_key":        "synthetic-access-key",
+			"access_key_secret": "synthetic-access-key-secret",
+		},
+	}
+}
+
+func writeGongCallsPage(w http.ResponseWriter, ids []int, cursor string) {
+	calls := make([]map[string]any, 0, len(ids))
+	for _, id := range ids {
+		calls = append(calls, map[string]any{
+			"id":        fmt.Sprintf("call-%d", id),
+			"started":   fmt.Sprintf("2026-07-%02dT00:00:00Z", id),
+			"isPrivate": false,
+		})
+	}
+	_ = json.NewEncoder(w).Encode(map[string]any{
+		"calls": calls,
+		"records": map[string]any{
+			"cursor": cursor,
+		},
+	})
+}
+
+func commandRunnerRecordIDs(records []connectors.Record) []string {
+	ids := make([]string, 0, len(records))
+	for _, record := range records {
+		ids = append(ids, fmt.Sprint(record["id"]))
+	}
+	return ids
 }
 
 func TestRunBlocksNonStreamCommands(t *testing.T) {

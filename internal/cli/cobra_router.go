@@ -116,6 +116,18 @@ func cobraLegacyCommands(cfg config.Config) []cobraLegacyCommand {
 		{name: "agent", handler: func(ctx context.Context, root string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runAgent(ctx, cfg, root, args, stdout, jsonOut)
 		}},
+		{name: "context", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runPMBrokerContext(cfg, args, stdout, jsonOut)
+		}},
+		{name: "organizations", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runPMBrokerMetadata("organizations", cfg, args, stdout, jsonOut)
+		}},
+		{name: "workspaces", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runPMBrokerMetadata("workspaces", cfg, args, stdout, jsonOut)
+		}},
+		{name: "environments", handler: func(_ context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
+			return runPMBrokerMetadata("environments", cfg, args, stdout, jsonOut)
+		}},
 		{name: "runtime", handler: func(ctx context.Context, _ string, args []string, stdout io.Writer, jsonOut bool) error {
 			return runRuntime(ctx, cfg, args, stdout, jsonOut)
 		}},

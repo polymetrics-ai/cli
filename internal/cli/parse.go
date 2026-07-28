@@ -25,6 +25,11 @@ func (p parsedFlags) first(name string) string {
 	return values[len(values)-1]
 }
 
+func (p parsedFlags) has(name string) bool {
+	_, ok := p.values[name]
+	return ok
+}
+
 func parseGlobal(args []string) (root string, jsonOut bool, clean []string) {
 	root = "."
 	for i := 0; i < len(args); i++ {

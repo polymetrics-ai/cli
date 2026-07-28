@@ -9,6 +9,8 @@ import (
 	"strconv"
 
 	"github.com/spf13/viper"
+
+	"polymetrics.ai/internal/pmbroker"
 )
 
 const (
@@ -73,6 +75,7 @@ type Config struct {
 	Runtime      RuntimeConfig   `json:"runtime" mapstructure:"runtime"`
 	RLM          RLMConfig       `json:"rlm" mapstructure:"rlm"`
 	Schedule     ScheduleConfig  `json:"schedule" mapstructure:"schedule"`
+	Broker       BrokerConfig    `json:"broker" mapstructure:"broker"`
 	ConfigFile   string          `json:"config_file" mapstructure:"-"`
 	ExplicitKeys map[string]bool `json:"-" mapstructure:"-"`
 }
@@ -109,6 +112,15 @@ type LLMConfig struct {
 // ScheduleConfig configures local schedule installation seams.
 type ScheduleConfig struct {
 	CrontabFile string `json:"crontab_file" mapstructure:"crontab_file"`
+}
+
+// BrokerConfig contains safe PM Broker context defaults. It must never carry tokens,
+// provider credentials, raw secret values, or secret locators.
+type BrokerConfig struct {
+	RequiredContext string `json:"required_context" mapstructure:"required_context"`
+	DefaultContext  string `json:"default_context" mapstructure:"default_context"`
+	RuntimeMode     string `json:"runtime_mode" mapstructure:"runtime_mode"`
+	HybridPolicy    string `json:"hybrid_policy" mapstructure:"hybrid_policy"`
 }
 
 // IsExplicit reports whether a config key was provided by a bound flag,
@@ -198,6 +210,9 @@ func Load(opts Options) (Config, error) {
 	if err := v.Unmarshal(&cfg); err != nil {
 		return Config{}, &LoadError{Path: configPath, Err: err}
 	}
+	if err := validateBrokerConfig(&cfg); err != nil {
+		return Config{}, &LoadError{Path: configPath, Err: err}
+	}
 	cfg.ConfigFile = configPath
 	cfg.ExplicitKeys = explicitKeys(v, opts.Flags)
 	return cfg, nil
@@ -221,6 +236,10 @@ func setDefaults(v *viper.Viper, bootstrap Bootstrap) {
 	v.SetDefault("rlm.llm.base_url", defaultOpenRouterBase)
 	v.SetDefault("rlm.llm.model", "")
 	v.SetDefault("schedule.crontab_file", "")
+	v.SetDefault("broker.required_context", "")
+	v.SetDefault("broker.default_context", "")
+	v.SetDefault("broker.runtime_mode", string(pmbroker.RuntimeModeRemote))
+	v.SetDefault("broker.hybrid_policy", "")
 }
 
 type envBinding struct {
@@ -247,6 +266,10 @@ func allEnvBindings() []envBinding {
 		{key: "rlm.llm.base_url", names: []string{"POLYMETRICS_LLM_BASE_URL", "PM_LLM_BASE_URL"}},
 		{key: "rlm.llm.model", names: []string{"POLYMETRICS_LLM_MODEL", "PM_LLM_MODEL"}},
 		{key: "schedule.crontab_file", names: []string{"POLYMETRICS_CRONTAB_FILE", "PM_CRONTAB_FILE"}},
+		{key: "broker.required_context", names: []string{"POLYMETRICS_BROKER_REQUIRED_CONTEXT", "PM_BROKER_REQUIRED_CONTEXT"}},
+		{key: "broker.default_context", names: []string{"POLYMETRICS_BROKER_DEFAULT_CONTEXT", "PM_BROKER_DEFAULT_CONTEXT"}},
+		{key: "broker.runtime_mode", names: []string{"POLYMETRICS_BROKER_RUNTIME_MODE", "PM_BROKER_RUNTIME_MODE"}},
+		{key: "broker.hybrid_policy", names: []string{"POLYMETRICS_BROKER_HYBRID_POLICY", "PM_BROKER_HYBRID_POLICY"}},
 	}
 }
 
@@ -325,6 +348,29 @@ func bindFlags(v *viper.Viper, flags map[string]FlagValue) error {
 		if err := v.BindFlagValue(name, flag); err != nil {
 			return fmt.Errorf("bind --%s: %w", name, err)
 		}
+	}
+	return nil
+}
+
+func validateBrokerConfig(cfg *Config) error {
+	for key, value := range map[string]string{
+		"broker.required_context": cfg.Broker.RequiredContext,
+		"broker.default_context":  cfg.Broker.DefaultContext,
+	} {
+		if value == "" {
+			continue
+		}
+		if err := pmbroker.ValidateContextName(value); err != nil {
+			return fmt.Errorf("%s: %w", key, err)
+		}
+	}
+	mode, err := pmbroker.ParseRuntimeMode(cfg.Broker.RuntimeMode)
+	if err != nil {
+		return fmt.Errorf("broker.runtime_mode: %w", err)
+	}
+	cfg.Broker.RuntimeMode = string(mode)
+	if err := (pmbroker.RuntimeModeSelection{Mode: mode, PolicyBindingID: cfg.Broker.HybridPolicy}).Validate(pmbroker.EnvironmentTypeDevelopment); err != nil {
+		return fmt.Errorf("broker.hybrid_policy: %w", err)
 	}
 	return nil
 }

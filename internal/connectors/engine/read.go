@@ -679,10 +679,20 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 	for k, v := range req.Query {
 		q.Set(k, v)
 	}
-	if formattedLower != "" && stream.Incremental.RequestParam != "" {
+	if formattedLower != "" && stream.Incremental.RequestParam != "" && incrementalRequestParamShouldApply(stream, req) {
 		q.Set(stream.Incremental.RequestParam, formattedLower)
 	}
 	return q, nil
+}
+
+func incrementalRequestParamShouldApply(stream StreamSpec, req connectors.ReadRequest) bool {
+	if stream.Incremental == nil || stream.Incremental.RequestParam == "" {
+		return false
+	}
+	if _, explicit := req.Query[stream.Incremental.RequestParam]; !explicit {
+		return true
+	}
+	return connsdk.Cursor(req.State) != ""
 }
 
 // resolveQueryParams resolves every entry of params against vars, applying

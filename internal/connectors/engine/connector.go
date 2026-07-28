@@ -402,6 +402,7 @@ func synthesizeCommandSurface(b Bundle) *connectors.CommandSurface {
 			SourceCLIPath: cmd.SourceCLIPath,
 			SourceURL:     cmd.SourceURL,
 			Flags:         flags,
+			Constraints:   commandSurfaceConstraints(cmd.Constraints),
 			Examples:      append([]string(nil), cmd.Examples...),
 			APISurface:    commandSurfaceEndpointRefs(cmd.APISurface),
 			OutputPolicy:  cmd.OutputPolicy,
@@ -430,12 +431,39 @@ func commandSurfaceEndpointRefs(refs []CLISurfaceEndpointRef) []connectors.Comma
 
 func commandSurfaceFlag(flag CLIFlag) connectors.CommandSurfaceFlag {
 	return connectors.CommandSurfaceFlag{
-		Name:    flag.Name,
-		Type:    flag.Type,
-		Summary: flag.Summary,
-		Values:  append([]string(nil), flag.Values...),
-		MapsTo:  flag.MapsTo,
+		Name:       flag.Name,
+		Type:       flag.Type,
+		Summary:    flag.Summary,
+		Values:     append([]string(nil), flag.Values...),
+		MapsTo:     flag.MapsTo,
+		Format:     flag.Format,
+		AllowEmpty: cloneBoolPtr(flag.AllowEmpty),
 	}
+}
+
+func commandSurfaceConstraints(constraints []CLIConstraint) []connectors.CommandSurfaceConstraint {
+	out := make([]connectors.CommandSurfaceConstraint, 0, len(constraints))
+	for _, constraint := range constraints {
+		out = append(out, connectors.CommandSurfaceConstraint{
+			Kind:          constraint.Kind,
+			Left:          constraint.Left,
+			Right:         constraint.Right,
+			Op:            constraint.Op,
+			ValueType:     constraint.ValueType,
+			LeftFallback:  constraint.LeftFallback,
+			RightFallback: constraint.RightFallback,
+			Message:       constraint.Message,
+		})
+	}
+	return out
+}
+
+func cloneBoolPtr(value *bool) *bool {
+	if value == nil {
+		return nil
+	}
+	out := *value
+	return &out
 }
 
 // specJSON returns the bundle's spec.json VERBATIM (F5, REVIEW.md fix): a

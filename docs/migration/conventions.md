@@ -19,6 +19,7 @@ spec.json            # draft-07 connection spec; x-secret marks secret fields
 streams.json         # base HTTP config + streams[] (required unless dynamic_schema)
 writes.json          # actions[] (omit entirely when capabilities.write is false)
 api_surface.json     # coverage manifest (always required)
+cli_surface.json     # optional provider-style CLI/help metadata
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -173,6 +174,15 @@ not a full override by default.
   `Known limits` is not decorative — every deliberate simplification, `ENGINE_GAP`, or
   scope-narrowing goes there (see the parity-deviation ledger, §5) with enough detail that a
   reviewer or a future capability-expansion agent doesn't have to re-derive the reasoning.
+- **`cli_surface.json` validation stays definition-owned**: command-specific flags and constraints
+  belong in the connector's CLI surface metadata, never in provider-named shared runner branches.
+  Use `flags[].format:"date-time"` for RFC3339/ISO-8601 timestamp flags,
+  `flags[].allow_empty:false` to reject present blank string flags, and `constraints[]` `kind:"order"`
+  / `op:"lt"` / `value_type:"date-time"` over mapped `query.*` or `body.*` targets for provider
+  date-range rules. Optional `config.*` fallbacks preserve connection-level defaults when the
+  command flag is absent. `internal/connectors/engine/schema/cli_surface.schema.json` is the schema
+  source of truth, and `connectorgen validate` rejects unsupported formats, operators, fallback
+  namespaces, unmapped constraint targets, and multi-line validation messages.
 
 ## 3. The engine dialect reference
 

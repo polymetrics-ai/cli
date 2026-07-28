@@ -31,12 +31,12 @@ jobs:
               ;;
           esac
 
-          pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps)/[a-z0-9][a-z0-9._-]*$'
+          pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps|fm)/[a-z0-9][a-z0-9._-]*$'
           if [[ ! "$HEAD_REF" =~ $pattern ]]; then
             {
               echo "Invalid branch name: $HEAD_REF"
-              echo "Use <type>/<description>, for example feat/github-connector or fix/stripe-pagination."
-              echo "Allowed types: feat, fix, docs, chore, ci, test, refactor, perf, build, release, revert, deps."
+              echo "Use <type>/<description>, for example feat/github-connector, fix/stripe-pagination, or fm/phase-slug."
+              echo "Allowed types: feat, fix, docs, chore, ci, test, refactor, perf, build, release, revert, deps, fm."
             } >&2
             exit 1
           fi

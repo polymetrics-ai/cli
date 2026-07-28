@@ -2,6 +2,8 @@ package main
 
 import (
 	"bytes"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -50,5 +52,46 @@ func TestRunExitCodes(t *testing.T) {
 				t.Fatalf("stderr = %q, want substring %q", stderr.String(), tt.wantStderr)
 			}
 		})
+	}
+}
+
+func TestRunUsesFeatureManagerPlanningIssueFallback(t *testing.T) {
+	planningRoot := t.TempDir()
+	phaseDir := filepath.Join(planningRoot, "cli-pm-broker-profile-context-r1")
+	if err := os.MkdirAll(phaseDir, 0o755); err != nil {
+		t.Fatalf("MkdirAll() error = %v", err)
+	}
+	plan := "Primary CLI issue: [#566](https://github.com/polymetrics-ai/cli/issues/566)\nParent PR: [#593](https://github.com/polymetrics-ai/cli/pull/593)\n"
+	if err := os.WriteFile(filepath.Join(phaseDir, "PLAN.md"), []byte(plan), 0o644); err != nil {
+		t.Fatalf("WriteFile() error = %v", err)
+	}
+
+	body := `## Intent
+
+Add CLI-side PM Broker profile/context/domain foundation for Organization, Workspace, Environment, BrokerProfile, and runtime mode selection on branch fm/cli-pm-broker-profile-context-r1 targeting integration/pm-broker-production-program.
+
+## What Changed
+
+- Added metadata-only PM Broker context/domain support.
+`
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+
+	got := run(
+		[]string{
+			"--title", "feat(pmbroker): add metadata-only broker context foundation",
+			"--body", body,
+			"--head-ref", "fm/cli-pm-broker-profile-context-r1",
+			"--planning-root", planningRoot,
+		},
+		&stdout,
+		&stderr,
+		func(string) string { return "" },
+	)
+	if got != 0 {
+		t.Fatalf("run() exit code = %d, want 0\nstdout: %s\nstderr: %s", got, stdout.String(), stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "issueguard: ok (1 linked issue)") {
+		t.Fatalf("stdout = %q, want linked issue success", stdout.String())
 	}
 }
