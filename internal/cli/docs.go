@@ -238,9 +238,9 @@ KEYS
 
   broker.runtime_mode
     Default: remote. Primary env: POLYMETRICS_BROKER_RUNTIME_MODE. Alias:
-    PM_BROKER_RUNTIME_MODE. Valid values: remote, local, hybrid. Production
-    defaults to remote; production writes and scheduled production jobs cannot
-    use local fallback.
+    PM_BROKER_RUNTIME_MODE. Valid literal values are remote, local, and hybrid;
+    case or whitespace aliases are rejected. Production defaults to remote;
+    production writes and scheduled production jobs cannot use local fallback.
 
   broker.hybrid_policy
     Default: empty. Primary env: POLYMETRICS_BROKER_HYBRID_POLICY. Alias:
@@ -868,10 +868,13 @@ RUNTIME MODES
     production jobs.
 
 CONTEXT RESOLUTION
-  pm resolves context in this order: explicit --context, future
-  approval-bound flow/sync requirement, project broker.required_context, active
-  user context, broker.default_context, then a synthesized legacy-local context
-  for unmigrated projects. Scope mismatch or ambiguity stops safely.
+  pm first honors future approval-bound flow/sync requirements. Explicit
+  --context, project broker.required_context, active user context, and
+  broker.default_context must match the approval-bound identity or resolution
+  stops safely. Without an approval-bound requirement, explicit --context wins
+  before project broker.required_context, active user context,
+  broker.default_context, and finally a synthesized legacy-local context for
+  unmigrated projects.
 
 SECURITY
   Context commands do not read credentials, legacy vault entries, provider

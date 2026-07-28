@@ -139,9 +139,9 @@ KEYS
 
   broker.runtime_mode
     Default: remote. Primary env: POLYMETRICS_BROKER_RUNTIME_MODE. Alias:
-    PM_BROKER_RUNTIME_MODE. Valid values: remote, local, hybrid. Production
-    defaults to remote; production writes and scheduled production jobs cannot
-    use local fallback.
+    PM_BROKER_RUNTIME_MODE. Valid literal values are remote, local, and hybrid;
+    case or whitespace aliases are rejected. Production defaults to remote;
+    production writes and scheduled production jobs cannot use local fallback.
 
   broker.hybrid_policy
     Default: empty. Primary env: POLYMETRICS_BROKER_HYBRID_POLICY. Alias:

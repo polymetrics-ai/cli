@@ -34,10 +34,13 @@ RUNTIME MODES
     production jobs.
 
 CONTEXT RESOLUTION
-  pm resolves context in this order: explicit --context, future
-  approval-bound flow/sync requirement, project broker.required_context, active
-  user context, broker.default_context, then a synthesized legacy-local context
-  for unmigrated projects. Scope mismatch or ambiguity stops safely.
+  pm first honors future approval-bound flow/sync requirements. Explicit
+  --context, project broker.required_context, active user context, and
+  broker.default_context must match the approval-bound identity or resolution
+  stops safely. Without an approval-bound requirement, explicit --context wins
+  before project broker.required_context, active user context,
+  broker.default_context, and finally a synthesized legacy-local context for
+  unmigrated projects.
 
 SECURITY
   Context commands do not read credentials, legacy vault entries, provider

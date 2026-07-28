@@ -57,7 +57,7 @@ Root and `json` affect invocation bootstrap. Runtime, RLM, and schedule keys are
 | `broker.runtime_mode` | `remote` | `POLYMETRICS_BROKER_RUNTIME_MODE` | `PM_BROKER_RUNTIME_MODE` |
 | `broker.hybrid_policy` | empty | `POLYMETRICS_BROKER_HYBRID_POLICY` | `PM_BROKER_HYBRID_POLICY` |
 
-`broker.runtime_mode` accepts `remote`, `local`, and policy-bound `hybrid`. Production defaults to `remote`; production writes and scheduled production jobs cannot use local fallback.
+`broker.runtime_mode` accepts the literal lowercase values `remote`, `local`, and policy-bound `hybrid`; case or whitespace aliases are rejected. Production defaults to `remote`; production writes and scheduled production jobs cannot use local fallback.
 
 ```yaml
 version: 1

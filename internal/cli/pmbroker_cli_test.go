@@ -170,6 +170,41 @@ func TestPMBrokerHelpSurfaces(t *testing.T) {
 	}
 }
 
+func TestPMBrokerWebsiteCommandDocsParity(t *testing.T) {
+	indexPath := filepath.Join("..", "..", "website", "content", "docs", "index.mdx")
+	index, err := os.ReadFile(indexPath)
+	if err != nil {
+		t.Fatalf("read website index: %v", err)
+	}
+	for _, want := range []string{"pm context", "pm organizations", "pm workspaces", "pm environments"} {
+		if !strings.Contains(string(index), want) {
+			t.Fatalf("%s missing %q", indexPath, want)
+		}
+	}
+
+	referencePath := filepath.Join("..", "..", "website", "content", "docs", "cli-reference.mdx")
+	reference, err := os.ReadFile(referencePath)
+	if err != nil {
+		t.Fatalf("read website CLI reference: %v", err)
+	}
+	for _, want := range []string{"`pm context`", "`pm organizations`", "`pm workspaces`", "`pm environments`", "does not enable live provider operations"} {
+		if !strings.Contains(string(reference), want) {
+			t.Fatalf("%s missing %q", referencePath, want)
+		}
+	}
+
+	generatedPath := filepath.Join("..", "..", "website", "lib", "docs.generated.ts")
+	generated, err := os.ReadFile(generatedPath)
+	if err != nil {
+		t.Fatalf("read generated website docs data: %v", err)
+	}
+	for _, want := range []string{"pm context", "pm organizations", "pm workspaces", "pm environments"} {
+		if !strings.Contains(string(generated), want) {
+			t.Fatalf("%s missing %q", generatedPath, want)
+		}
+	}
+}
+
 func pmBrokerContextFlags(environmentType, runtimeMode string) []string {
 	return []string{
 		"--organization", "org_0123456789abcdef",

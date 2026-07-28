@@ -174,7 +174,7 @@ func DefaultRuntimeMode(_ EnvironmentType) RuntimeMode {
 
 // ParseRuntimeMode validates a user-facing runtime mode string.
 func ParseRuntimeMode(raw string) (RuntimeMode, error) {
-	mode := RuntimeMode(strings.ToLower(strings.TrimSpace(raw)))
+	mode := RuntimeMode(raw)
 	switch mode {
 	case RuntimeModeRemote, RuntimeModeLocal, RuntimeModeHybrid:
 		return mode, nil
@@ -218,9 +218,6 @@ func (s RuntimeSelection) Validate() error {
 	if err != nil {
 		return err
 	}
-	if s.Mode != mode {
-		return ErrInvalidRuntimeMode
-	}
 	if !s.Environment.IsValid() {
 		return ErrInvalidIdentityBoundary
 	}
@@ -241,11 +238,7 @@ func (s RuntimeSelection) Validate() error {
 
 // Validate checks that the context runtime mode can be stored safely.
 func (s RuntimeModeSelection) Validate(envType EnvironmentType) error {
-	mode := s.Mode
-	if mode == "" {
-		mode = DefaultRuntimeMode(envType)
-	}
-	return RuntimeSelection{Mode: mode, Environment: envType, Operation: RuntimeOperationRead, PolicyBindingID: s.PolicyBindingID}.Validate()
+	return RuntimeSelection{Mode: s.Mode, Environment: envType, Operation: RuntimeOperationRead, PolicyBindingID: s.PolicyBindingID}.Validate()
 }
 
 // Validate checks safe Organization metadata.
@@ -313,11 +306,8 @@ func (c Context) Validate() error {
 
 // Validate checks state version, unique names, active context, and nested contexts.
 func (s UserState) Validate() error {
-	if s.Version == 0 && len(s.Contexts) == 0 && s.ActiveContext == "" {
-		return nil
-	}
 	if s.Version != CurrentStateVersion {
-		return fmt.Errorf("%w: unsupported version %d", ErrUnsafeState, s.Version)
+		return fmt.Errorf("%w: unsupported or missing version %d; initialize current schema with pm context create or migrate the state file explicitly", ErrUnsafeState, s.Version)
 	}
 	seen := map[string]bool{}
 	activeFound := s.ActiveContext == ""
@@ -337,6 +327,10 @@ func (s UserState) Validate() error {
 		return ErrContextNotFound
 	}
 	return nil
+}
+
+func (s UserState) hasData() bool {
+	return s.Version != 0 || s.ActiveContext != "" || len(s.Contexts) > 0
 }
 
 // ContextByName returns a context by name.
@@ -445,9 +439,6 @@ func (s Store) Load() (UserState, error) {
 func (s Store) Save(state UserState) error {
 	if s.Path == "" {
 		return errors.New("pmbroker: state path is required")
-	}
-	if state.Version == 0 {
-		state.Version = CurrentStateVersion
 	}
 	if err := state.Validate(); err != nil {
 		return err
@@ -575,8 +566,32 @@ type ResolvedContext struct {
 
 // ResolveContext selects a context using the safe, documented precedence order.
 func ResolveContext(req ResolveRequest) (ResolvedContext, error) {
+	if req.State.hasData() {
+		if err := req.State.Validate(); err != nil {
+			return ResolvedContext{}, err
+		}
+	}
+	if req.ApprovalBoundContext != "" {
+		bound, err := contextByRequiredName(req.State, req.ApprovalBoundContext)
+		if err != nil {
+			return ResolvedContext{}, err
+		}
+		for _, candidate := range []string{req.ExplicitContext, req.ProjectRequiredContext, req.State.ActiveContext, req.ProjectDefaultContext} {
+			if candidate == "" {
+				continue
+			}
+			ctx, err := contextByRequiredName(req.State, candidate)
+			if err != nil {
+				return ResolvedContext{}, err
+			}
+			if ctx.identityBoundary() != bound.identityBoundary() {
+				return ResolvedContext{}, ErrContextMismatch
+			}
+		}
+		return ResolvedContext{Context: bound, Source: ResolveSourceApprovalBound}, nil
+	}
 	if req.ProjectRequiredContext != "" {
-		for _, candidate := range []string{req.ExplicitContext, req.ApprovalBoundContext} {
+		for _, candidate := range []string{req.ExplicitContext} {
 			if candidate != "" && candidate != req.ProjectRequiredContext {
 				return ResolvedContext{}, ErrContextMismatch
 			}
@@ -596,9 +611,9 @@ func ResolveContext(req ResolveRequest) (ResolvedContext, error) {
 		if candidate.name == "" {
 			continue
 		}
-		ctx, ok := req.State.ContextByName(candidate.name)
-		if !ok {
-			return ResolvedContext{}, ErrContextNotFound
+		ctx, err := contextByRequiredName(req.State, candidate.name)
+		if err != nil {
+			return ResolvedContext{}, err
 		}
 		return ResolvedContext{Context: ctx, Source: candidate.source}, nil
 	}
@@ -606,6 +621,33 @@ func ResolveContext(req ResolveRequest) (ResolvedContext, error) {
 		return ResolvedContext{Context: LegacyLocalContext(), Source: ResolveSourceLegacyLocal}, nil
 	}
 	return ResolvedContext{}, ErrContextNotFound
+}
+
+type contextIdentityBoundary struct {
+	OrganizationID  OrganizationID
+	WorkspaceID     WorkspaceID
+	EnvironmentID   EnvironmentID
+	BrokerProfileID BrokerProfileID
+}
+
+func (c Context) identityBoundary() contextIdentityBoundary {
+	return contextIdentityBoundary{
+		OrganizationID:  c.Organization.ID,
+		WorkspaceID:     c.Workspace.ID,
+		EnvironmentID:   c.Environment.ID,
+		BrokerProfileID: c.BrokerProfile.ID,
+	}
+}
+
+func contextByRequiredName(state UserState, name string) (Context, error) {
+	ctx, ok := state.ContextByName(name)
+	if !ok {
+		return Context{}, ErrContextNotFound
+	}
+	if err := ctx.Validate(); err != nil {
+		return Context{}, err
+	}
+	return ctx, nil
 }
 
 // LegacyLocalContext returns the synthesized local context for unmigrated projects.

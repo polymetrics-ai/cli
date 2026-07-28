@@ -458,14 +458,27 @@ func TestLoadBrokerConfigSafeKeys(t *testing.T) {
 }
 
 func TestLoadBrokerConfigRejectsInvalidRuntimeMode(t *testing.T) {
-	root := writeConfig(t, "broker:\n  runtime_mode: unsafe-production-fallback\n")
-
-	_, err := Load(Options{Root: root})
-	if err == nil {
-		t.Fatal("Load() succeeded with invalid broker runtime mode, want error")
+	tests := []struct {
+		name     string
+		fileYAML string
+	}{
+		{name: "unknown", fileYAML: "broker:\n  runtime_mode: unsafe-production-fallback\n"},
+		{name: "case alias", fileYAML: "broker:\n  runtime_mode: REMOTE\n"},
+		{name: "whitespace alias", fileYAML: "broker:\n  runtime_mode: \"remote \"\n"},
 	}
-	if !strings.Contains(err.Error(), "broker.runtime_mode") {
-		t.Fatalf("Load() error = %v, want broker.runtime_mode", err)
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			root := writeConfig(t, tt.fileYAML)
+
+			_, err := Load(Options{Root: root})
+			if err == nil {
+				t.Fatal("Load() succeeded with invalid broker runtime mode, want error")
+			}
+			if !strings.Contains(err.Error(), "broker.runtime_mode") {
+				t.Fatalf("Load() error = %v, want broker.runtime_mode", err)
+			}
+		})
 	}
 }
 
