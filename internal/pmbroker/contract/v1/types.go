@@ -103,7 +103,7 @@ var (
 	ErrInvalidExecutionPlan = errors.New("contractv1: invalid execution plan")
 	// ErrInvalidErrorResponse means a safe error response is malformed.
 	ErrInvalidErrorResponse = errors.New("contractv1: invalid error response")
-	// ErrUnexpectedResponse means the fake broker returned an unexpected status or payload.
+	// ErrUnexpectedResponse means the broker returned an unexpected status or payload.
 	ErrUnexpectedResponse = errors.New("contractv1: unexpected broker response")
 )
 
@@ -258,7 +258,7 @@ func isSafeDisplayHint(displayHint string) bool {
 	return true
 }
 
-// ConnectorConnection is a PM Broker connector connection fixture.
+// ConnectorConnection is a typed PM Broker connector connection record.
 type ConnectorConnection struct {
 	ConnectorConnectionID ConnectorConnectionID `json:"connector_connection_id"`
 	OrganizationID        OrganizationID        `json:"organization_id"`
@@ -331,7 +331,7 @@ func (request ExecutionPlanRequest) Validate() error {
 	return request.Intent.Validate()
 }
 
-// ExecutionPlan is the immutable planned response from the fake broker.
+// ExecutionPlan is the immutable planned response from PM Broker.
 type ExecutionPlan struct {
 	ExecutionPlanID       ExecutionPlanID       `json:"execution_plan_id"`
 	Digest                ExecutionPlanDigest   `json:"digest"`
@@ -398,7 +398,7 @@ func (response IncompatibleContractVersionErrorResponse) Validate() error {
 	return response.Error.ValidateIncompatibleVersion()
 }
 
-// SyntheticFixtures groups the deterministic fixture values accepted by PM Broker PR #35.
+// SyntheticFixtures groups the deterministic fixture values for the CLI-side /v1 contract.
 type SyntheticFixtures struct {
 	Compatibility            Compatibility                            `json:"compatibility"`
 	Organization             Organization                             `json:"organization"`

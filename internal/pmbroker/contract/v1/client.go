@@ -362,7 +362,7 @@ func (client *Client) ListConnectorConnections(ctx context.Context, pagination P
 	return page, nil
 }
 
-// ConnectorConnection returns the deterministic synthetic connector connection fixture.
+// ConnectorConnection returns a typed connector connection by ID.
 func (client *Client) ConnectorConnection(ctx context.Context, id ConnectorConnectionID) (ConnectorConnection, error) {
 	if !id.IsValid() {
 		return ConnectorConnection{}, ErrInvalidIdentityBoundary
@@ -380,7 +380,7 @@ func (client *Client) ConnectorConnection(ctx context.Context, id ConnectorConne
 	return connection, nil
 }
 
-// CreateExecutionPlan sends a typed execution-plan request to the synthetic broker.
+// CreateExecutionPlan sends a typed execution-plan request to the configured broker endpoint.
 func (client *Client) CreateExecutionPlan(ctx context.Context, request ExecutionPlanRequest) (ExecutionPlan, error) {
 	if err := request.Validate(); err != nil {
 		return ExecutionPlan{}, err

@@ -1,5 +1,5 @@
-// Package contractv1 pins the synthetic PM Broker /v1 HTTP/JSON contract
-// fixtures accepted by PM Broker PR #35 for CLI-side tests.
+// Package contractv1 pins the CLI-side PM Broker /v1 HTTP/JSON contract
+// fixtures and typed client foundations.
 //
 // The package is intentionally narrow: callers get typed fixture values, a
 // deterministic in-memory fake broker, and a typed HTTP/JSON client foundation
