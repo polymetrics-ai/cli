@@ -51,7 +51,7 @@ func (broker *SyntheticBroker) NewClient(opts ...ClientOption) *Client {
 	}
 }
 
-// ExecutionPlanRequestCount returns how many execution-plan requests reached execution.
+// ExecutionPlanRequestCount returns how many execution-plan requests were accepted.
 func (broker *SyntheticBroker) ExecutionPlanRequestCount() int {
 	broker.mu.Lock()
 	defer broker.mu.Unlock()
@@ -124,7 +124,9 @@ func doJSON[T any](ctx context.Context, client *Client, method string, target st
 	if err != nil {
 		return zero, fmt.Errorf("send synthetic broker request: %w", err)
 	}
-	defer response.Body.Close()
+	defer func() {
+		_ = response.Body.Close()
+	}()
 
 	if response.StatusCode == http.StatusUpgradeRequired {
 		var refusal IncompatibleContractVersionErrorResponse
