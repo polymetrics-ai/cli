@@ -16,7 +16,7 @@
 ## Targeted
 
 - [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1`
-- [x] `go run ./cmd/prissueguard --title "fix(connectors): add Gong calls list date filters" --body "Ship the focused PM v0.1.1 Gong calls list correction for issue 596: add bounded --from/--to filters, preserve output-limit semantics, update docs/help/generated website data, and open a reviewable PR without merging or releasing."`
+- [x] `go run ./cmd/prissueguard --title "fix(connectors): add Gong calls list date filters" --body "Ship the focused Gong calls list correction for issue 596: add bounded --from/--to filters, preserve output-limit semantics, update connector docs/help/generated website data, and open a reviewable PR without merging or releasing."`
 - [x] `go test ./internal/connectors/commandrunner -run 'Test.*Gong.*CallsList' -count=1`
 - [x] `go test ./internal/cli -run 'Test.*Gong.*CallsList|TestGong' -count=1`
 - [x] `go test ./cmd/connectorgen -run TestGong -count=1`

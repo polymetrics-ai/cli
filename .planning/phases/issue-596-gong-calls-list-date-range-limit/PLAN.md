@@ -2,7 +2,7 @@
 
 Issue: #596
 Branch: `fix/gong-calls-list-date-range-limit`
-Mode: focused PM v0.1.1 correction
+Mode: focused bounded calls-list correction
 
 ## GSD command path
 
@@ -30,7 +30,7 @@ Mode: focused PM v0.1.1 correction
 
 ## Objective
 
-Implement the captain-authorized focused v0.1.1 correction for `pm gong calls list`: add bounded `--from`/`--to` filters, make output-limit semantics deterministic and explicit, and reconcile/document calls-list request page-size behavior without unrelated Gong endpoint changes.
+Implement the captain-authorized focused correction for `pm gong calls list`: add bounded `--from`/`--to` filters, make output-limit semantics deterministic and explicit, and reconcile/document calls-list request page-size behavior without unrelated Gong endpoint changes.
 
 ## Scope
 
@@ -40,7 +40,7 @@ Implement the captain-authorized focused v0.1.1 correction for `pm gong calls li
 - Preserve `--config start_date=...` compatibility and use the established explicit command flag precedence over config-derived lower bounds.
 - Keep `--limit` as PM emitted-record cap. Verify N=1, below page boundary, at boundary, and across cursor pages.
 - Reconcile `limit={{ config.page_size }}` with current Gong OpenAPI by avoiding undocumented provider-side claim in help/docs while preserving backwards-safe request behavior unless tests prove removal is required.
-- Update user-facing docs/changelog/release surface for v0.1.1 preparation only; do not tag/release.
+- Update user-facing connector docs and generated website data only; do not update changelog, tag, or release.
 
 ## Non-goals
 
@@ -72,12 +72,12 @@ Existing commandrunner `queryOverrides` treats command-specific flags as explici
    - Local mock server returns two cursor pages; assert counts and request counts for N=1, N=2, page boundary, and above page boundary.
 3. **Green implementation**
    - Add `calls list` flags to Gong CLI surface.
-   - Add narrow validation for Gong calls list query values before connector read dispatch.
+   - Add generic CLI-surface validation for mapped date-time query/body values before connector dispatch.
    - Adjust engine query construction so explicit request query keys are not overwritten by incremental lower bound.
    - Preserve request `limit={{ config.page_size }}` but document it as compatibility/internal page-size config, not official Gong schema support.
-4. **Docs/release surface**
+4. **Docs/generated surfaces**
    - Update checked-in connector docs/manual/website generated surfaces as applicable.
-   - Add PM v0.1.1 changelog entry.
+   - Leave changelog/release tagging out of this PR; issue #596 remains scoped to the bounded Gong calls-list correction.
 5. **Verification and PR**
    - Run targeted tests, broader selected gates, no-mistakes AXI, push branch, open PR with `Closes #596`.
 

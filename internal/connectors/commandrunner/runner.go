@@ -236,7 +236,7 @@ func resolvePreflightCommand(connector connectors.Connector, path []string) (con
 	if !ok {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{Connector: connector.Name(), Command: command, Reason: "unknown command"}
 	}
-	if cmd.Operation != "" && !(cmd.Intent == "direct_read" && cmd.Availability == "implemented") {
+	if cmd.Operation != "" && (cmd.Intent != "direct_read" || cmd.Availability != "implemented") {
 		return connectors.CommandSurfaceCommand{}, command, &BlockedCommandError{
 			Connector:    connector.Name(),
 			Command:      command,
