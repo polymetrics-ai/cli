@@ -92,6 +92,33 @@ func TestPMBrokerContextHybridRequiresPolicy(t *testing.T) {
 	}
 }
 
+func TestPMBrokerContextRejectsExplicitEmptyRuntimeMode(t *testing.T) {
+	isolatePMBrokerUserConfig(t)
+
+	tests := []struct {
+		name  string
+		extra []string
+	}{
+		{name: "equals form", extra: []string{"--runtime-mode="}},
+		{name: "space form", extra: []string{"--runtime-mode", ""}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			args := append([]string{"--json", "context", "create", "dev"}, pmBrokerContextFlagsWithoutRuntime("development")...)
+			args = append(args, tt.extra...)
+			var stdout, stderr bytes.Buffer
+			code := Run(args, &stdout, &stderr)
+			if code != 3 {
+				t.Fatalf("context create exit = %d, want validation exit 3\nstdout=%s\nstderr=%s", code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String(), "validation_error") || !strings.Contains(stdout.String(), "invalid runtime mode") {
+				t.Fatalf("stdout = %s, want invalid runtime mode validation error", stdout.String())
+			}
+		})
+	}
+}
+
 func TestPMBrokerMetadataInvalidActionDoesNotReadPoisonedState(t *testing.T) {
 	isolatePMBrokerUserConfig(t)
 	path, err := pmbroker.DefaultUserStatePath()
@@ -206,6 +233,10 @@ func TestPMBrokerWebsiteCommandDocsParity(t *testing.T) {
 }
 
 func pmBrokerContextFlags(environmentType, runtimeMode string) []string {
+	return append(pmBrokerContextFlagsWithoutRuntime(environmentType), "--runtime-mode", runtimeMode)
+}
+
+func pmBrokerContextFlagsWithoutRuntime(environmentType string) []string {
 	return []string{
 		"--organization", "org_0123456789abcdef",
 		"--organization-name", "Acme Organization",
@@ -216,7 +247,6 @@ func pmBrokerContextFlags(environmentType, runtimeMode string) []string {
 		"--environment-type", environmentType,
 		"--broker-profile", "bpf_0123456789abcdef",
 		"--broker-profile-name", "Pilot Broker Profile",
-		"--runtime-mode", runtimeMode,
 	}
 }
 

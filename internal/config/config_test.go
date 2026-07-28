@@ -433,6 +433,8 @@ func clearBoundEnv(t *testing.T) {
 }
 
 func TestLoadBrokerConfigSafeKeys(t *testing.T) {
+	clearBoundEnv(t)
+
 	root := writeConfig(t, `broker:
   required_context: prod
   default_context: dev
@@ -469,6 +471,8 @@ func TestLoadBrokerConfigRejectsInvalidRuntimeMode(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			clearBoundEnv(t)
+
 			root := writeConfig(t, tt.fileYAML)
 
 			_, err := Load(Options{Root: root})
@@ -483,6 +487,8 @@ func TestLoadBrokerConfigRejectsInvalidRuntimeMode(t *testing.T) {
 }
 
 func TestLoadBrokerConfigRejectsInvalidHybridPolicy(t *testing.T) {
+	clearBoundEnv(t)
+
 	root := writeConfig(t, "broker:\n  runtime_mode: hybrid\n  hybrid_policy: bad policy\n")
 
 	_, err := Load(Options{Root: root})

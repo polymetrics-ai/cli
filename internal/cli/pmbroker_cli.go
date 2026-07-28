@@ -231,7 +231,10 @@ func pmBrokerContextFromFlags(name string, cfg config.Config, flags parsedFlags)
 	if err != nil {
 		return pmbroker.Context{}, fmt.Errorf("--environment-type: %w", err)
 	}
-	runtimeModeRaw := valueOr(flags.first("runtime-mode"), cfg.Broker.RuntimeMode)
+	runtimeModeRaw := cfg.Broker.RuntimeMode
+	if flags.has("runtime-mode") {
+		runtimeModeRaw = flags.first("runtime-mode")
+	}
 	mode, err := pmbroker.ParseRuntimeMode(runtimeModeRaw)
 	if err != nil {
 		return pmbroker.Context{}, fmt.Errorf("--runtime-mode: %w", err)
