@@ -170,6 +170,66 @@ func TestContractSafetyInvariants(t *testing.T) {
 	}
 }
 
+func TestExecutionPlanRequestRejectsMismatchedIntentConnectorConnection(t *testing.T) {
+	t.Parallel()
+
+	request := contractv1.AcceptedSyntheticFixtures().ExecutionPlanRequest
+	request.Intent.ValidateConnectorConnection.ConnectorConnectionID = contractv1.ConnectorConnectionID("ccn_aaaaaaaaaaaaaaaa")
+
+	if err := request.Validate(); !errors.Is(err, contractv1.ErrInvalidExecutionIntent) {
+		t.Fatalf("ExecutionPlanRequest.Validate() error = %v, want %v", err, contractv1.ErrInvalidExecutionIntent)
+	}
+}
+
+func TestConnectorConnectionValidationAllowsContractEnums(t *testing.T) {
+	t.Parallel()
+
+	fixtures := contractv1.AcceptedSyntheticFixtures()
+	validGCP := fixtures.ConnectorConnection
+	validGCP.ConnectorKind = "gcp"
+	validGCP.Status = "not_ready"
+	validGCP.WriteMode = "plan_only"
+	if err := validGCP.Validate(); err != nil {
+		t.Fatalf("ConnectorConnection.Validate() for GCP non-ready plan-only connection error = %v", err)
+	}
+
+	tests := []struct {
+		name   string
+		mutate func(*contractv1.ConnectorConnection)
+	}{
+		{
+			name: "connector kind",
+			mutate: func(connection *contractv1.ConnectorConnection) {
+				connection.ConnectorKind = "arbitrary-http"
+			},
+		},
+		{
+			name: "status",
+			mutate: func(connection *contractv1.ConnectorConnection) {
+				connection.Status = "compromised"
+			},
+		},
+		{
+			name: "write mode",
+			mutate: func(connection *contractv1.ConnectorConnection) {
+				connection.WriteMode = "raw_http"
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			connection := validGCP
+			tt.mutate(&connection)
+			if err := connection.Validate(); !errors.Is(err, contractv1.ErrInvalidExecutionPlan) {
+				t.Fatalf("ConnectorConnection.Validate() error = %v, want %v", err, contractv1.ErrInvalidExecutionPlan)
+			}
+		})
+	}
+}
+
 func TestNoGenericRequestEscapeHatches(t *testing.T) {
 	t.Parallel()
 
