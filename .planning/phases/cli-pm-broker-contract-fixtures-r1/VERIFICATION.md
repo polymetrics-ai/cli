@@ -8,6 +8,6 @@
 - [x] `go vet ./...`
 - [x] `go build ./cmd/pm`
 - [x] `make verify`
-- [ ] Branch committed and pushed to `fm/cli-pm-broker-contract-fixtures-r1`
-- [ ] PR opened against `integration/pm-broker-production-program`
+- [x] Branch committed and pushed to `fm/cli-pm-broker-contract-fixtures-r1`
+- [x] PR opened against `integration/pm-broker-production-program`: https://github.com/polymetrics-ai/cli/pull/594
 - [ ] no-mistakes / CI-ready validation attached to authoritative integration-base PR
