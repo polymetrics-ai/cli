@@ -7,6 +7,14 @@
 - [x] Verified current authoritative Gong OpenAPI docs before implementation finalization; private comparative notes remain outside tracked/public surfaces.
 - [ ] Next active slice: write fail-first request-shape, validation, limit/cursor, and help assertions before implementation.
 
+## CI follow-up — PR #597 linked issue guard
+
+- [x] Revalidated GSD adapter with `scripts/gsd doctor`; `scripts/gsd prompt programming-loop init --phase pr-597-require-linked-issue --dry-run` remains unavailable (`unknown GSD command: programming-loop`), so manual-GSD fallback stays active.
+- [x] Loaded required skills for the Go validation fix: `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, and `golang-safety`.
+- [x] Red: added issueguard coverage for the PR body wording `Ship ... for issue 596` and kept ambiguous `Issue 123` text rejected; `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1` failed on the new positive case before implementation.
+- [x] Green: delivery issue wording now accepts `ship` phrasing and unprefixed `issue 596` numbers within the delivery phrase while preserving rejection of ambiguous or negated references.
+- [x] Verification: targeted issueguard tests, direct `go run ./cmd/prissueguard` CI-shape invocation, `go vet ./...`, `go test ./...`, `go build ./cmd/pm`, and `make verify` passed.
+
 ## Red
 
 - [x] Add fail-first tests for `calls list --from` / `--to` request shape (`TestGongCallsListDateFlagsMapToQuery`; failed with unknown flags).

@@ -7,6 +7,8 @@
 
 ## Targeted
 
+- [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1`
+- [x] `go run ./cmd/prissueguard --title "fix(connectors): add Gong calls list date filters" --body "Ship the focused PM v0.1.1 Gong calls list correction for issue 596: add bounded --from/--to filters, preserve output-limit semantics, update docs/help/generated website data, and open a reviewable PR without merging or releasing."`
 - [x] `go test ./internal/connectors/commandrunner -run 'Test.*Gong.*CallsList' -count=1`
 - [x] `go test ./internal/cli -run 'Test.*Gong.*CallsList|TestGong' -count=1`
 - [x] `go test ./cmd/connectorgen -run TestGong -count=1`
@@ -22,11 +24,11 @@
 
 ## Broader local gates
 
-- [ ] `gofmt -w cmd internal`
-- [ ] `go vet ./...`
+- [x] `gofmt -w cmd internal`
+- [x] `go vet ./...`
 - [x] `go test ./...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make verify`
+- [x] `go build ./cmd/pm`
+- [x] `make verify`
 
 ## no-mistakes / PR
 
