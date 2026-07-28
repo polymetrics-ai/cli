@@ -119,6 +119,52 @@ func TestPMBrokerContextRejectsExplicitEmptyRuntimeMode(t *testing.T) {
 	}
 }
 
+func TestPMBrokerContextRejectsNonCanonicalContextNames(t *testing.T) {
+	isolatePMBrokerUserConfig(t)
+
+	createArgs := append([]string{"--json", "context", "create", "prod"}, pmBrokerContextFlags("production", "remote")...)
+	var stdout, stderr bytes.Buffer
+	if code := Run(createArgs, &stdout, &stderr); code != 0 {
+		t.Fatalf("context create exit = %d, want 0\nstdout=%s\nstderr=%s", code, stdout.String(), stderr.String())
+	}
+
+	tests := []struct {
+		name string
+		args []string
+	}{
+		{
+			name: "create preserves leading whitespace for validation",
+			args: append([]string{"--json", "context", "create", " prod"}, pmBrokerContextFlags("production", "remote")...),
+		},
+		{
+			name: "use rejects trailing whitespace selector",
+			args: []string{"--json", "context", "use", "prod "},
+		},
+		{
+			name: "show rejects leading whitespace selector",
+			args: []string{"--json", "context", "show", "--context", " prod"},
+		},
+		{
+			name: "show rejects explicit empty selector",
+			args: []string{"--json", "context", "show", "--context="},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout.Reset()
+			stderr.Reset()
+			code := Run(tt.args, &stdout, &stderr)
+			if code != 3 {
+				t.Fatalf("%v exit = %d, want validation exit 3\nstdout=%s\nstderr=%s", tt.args, code, stdout.String(), stderr.String())
+			}
+			if !strings.Contains(stdout.String(), "validation_error") || !strings.Contains(stdout.String(), "invalid context name") {
+				t.Fatalf("stdout = %s, want invalid context name validation error", stdout.String())
+			}
+		})
+	}
+}
+
 func TestPMBrokerMetadataInvalidActionDoesNotReadPoisonedState(t *testing.T) {
 	isolatePMBrokerUserConfig(t)
 	path, err := pmbroker.DefaultUserStatePath()

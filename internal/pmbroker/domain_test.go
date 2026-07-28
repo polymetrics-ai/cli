@@ -119,6 +119,50 @@ func TestRuntimeModeSelectionRequiresCanonicalStoredMode(t *testing.T) {
 	}
 }
 
+func TestContextRejectsUnsafeDisplayNamesBeforePersistence(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name   string
+		mutate func(*Context)
+	}{
+		{
+			name: "organization leading whitespace",
+			mutate: func(ctx *Context) {
+				ctx.Organization.DisplayName = " Acme Organization"
+			},
+		},
+		{
+			name: "workspace trailing whitespace",
+			mutate: func(ctx *Context) {
+				ctx.Workspace.DisplayName = "Analytics Workspace "
+			},
+		},
+		{
+			name: "environment leading newline",
+			mutate: func(ctx *Context) {
+				ctx.Environment.DisplayName = "\nProduction Environment"
+			},
+		},
+		{
+			name: "broker profile embedded control",
+			mutate: func(ctx *Context) {
+				ctx.BrokerProfile.DisplayName = "Pilot\nBroker Profile"
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := testContext("prod")
+			tt.mutate(&ctx)
+			if err := ctx.Validate(); !errors.Is(err, ErrInvalidIdentityBoundary) {
+				t.Fatalf("Context.Validate() error = %v, want %v", err, ErrInvalidIdentityBoundary)
+			}
+		})
+	}
+}
+
 func TestContextStateValidationAndResolution(t *testing.T) {
 	t.Parallel()
 
@@ -171,6 +215,30 @@ func TestContextStateValidationAndResolution(t *testing.T) {
 			}
 			if resolved.Context.Name != tt.want || resolved.Source != tt.source {
 				t.Fatalf("ResolveContext() = (%s,%s), want (%s,%s)", resolved.Context.Name, resolved.Source, tt.want, tt.source)
+			}
+		})
+	}
+}
+
+func TestResolveContextRejectsNonCanonicalRequestNames(t *testing.T) {
+	t.Parallel()
+
+	state := UserState{Version: CurrentStateVersion, ActiveContext: "prod", Contexts: []Context{testContext("prod"), testContext("dev")}}
+	tests := []struct {
+		name string
+		req  ResolveRequest
+	}{
+		{name: "explicit leading whitespace", req: ResolveRequest{State: state, ExplicitContext: " prod"}},
+		{name: "approval bound trailing whitespace", req: ResolveRequest{State: state, ApprovalBoundContext: "prod "}},
+		{name: "project required leading newline", req: ResolveRequest{State: state, ProjectRequiredContext: "\nprod"}},
+		{name: "project default trailing whitespace", req: ResolveRequest{State: state, ProjectDefaultContext: "dev "}},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			_, err := ResolveContext(tt.req)
+			if !errors.Is(err, ErrInvalidContextName) {
+				t.Fatalf("ResolveContext() error = %v, want %v", err, ErrInvalidContextName)
 			}
 		})
 	}

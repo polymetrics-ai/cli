@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"sort"
-	"strings"
 
 	"polymetrics.ai/internal/config"
 	"polymetrics.ai/internal/pmbroker"
@@ -54,13 +53,17 @@ func runPMBrokerContext(cfg config.Config, args []string, stdout io.Writer, json
 		return err
 	case "show":
 		flags := parseFlags(args[1:])
+		explicitContext, err := pmBrokerExplicitContext(flags)
+		if err != nil {
+			return pmBrokerValidationError(err)
+		}
 		state, err := store.Load()
 		if err != nil {
 			return pmBrokerValidationError(err)
 		}
 		resolved, err := pmbroker.ResolveContext(pmbroker.ResolveRequest{
 			State:                  state,
-			ExplicitContext:        strings.TrimSpace(flags.first("context")),
+			ExplicitContext:        explicitContext,
 			ProjectRequiredContext: cfg.Broker.RequiredContext,
 			ProjectDefaultContext:  cfg.Broker.DefaultContext,
 			AllowLegacyLocal:       true,
@@ -242,7 +245,7 @@ func pmBrokerContextFromFlags(name string, cfg config.Config, flags parsedFlags)
 	}
 	policy := valueOr(flags.first("hybrid-policy"), cfg.Broker.HybridPolicy)
 	ctx := pmbroker.Context{
-		Name: strings.TrimSpace(name),
+		Name: name,
 		Organization: pmbroker.Organization{
 			ID:          pmbroker.OrganizationID(flags.first("organization")),
 			DisplayName: flags.first("organization-name"),
@@ -272,6 +275,17 @@ func pmBrokerContextFromFlags(name string, cfg config.Config, flags parsedFlags)
 		return pmbroker.Context{}, err
 	}
 	return ctx, nil
+}
+
+func pmBrokerExplicitContext(flags parsedFlags) (string, error) {
+	if !flags.has("context") {
+		return "", nil
+	}
+	value := flags.first("context")
+	if err := pmbroker.ValidateContextName(value); err != nil {
+		return "", err
+	}
+	return value, nil
 }
 
 func writePMBrokerContextHuman(stdout io.Writer, ctx pmbroker.Context, source pmbroker.ResolveSource) error {

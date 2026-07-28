@@ -309,6 +309,11 @@ func (s UserState) Validate() error {
 	if s.Version != CurrentStateVersion {
 		return fmt.Errorf("%w: unsupported or missing version %d; initialize current schema with pm context create or migrate the state file explicitly", ErrUnsafeState, s.Version)
 	}
+	if s.ActiveContext != "" {
+		if err := ValidateContextName(s.ActiveContext); err != nil {
+			return err
+		}
+	}
 	seen := map[string]bool{}
 	activeFound := s.ActiveContext == ""
 	for _, ctx := range s.Contexts {
@@ -509,6 +514,9 @@ func (s Store) UpsertContext(ctx Context) (UserState, error) {
 
 // UseContext marks name as the active safe user context.
 func (s Store) UseContext(name string) (UserState, error) {
+	if err := ValidateContextName(name); err != nil {
+		return UserState{}, err
+	}
 	state, err := s.Load()
 	if err != nil {
 		return UserState{}, err
@@ -573,6 +581,9 @@ func ResolveContext(req ResolveRequest) (ResolvedContext, error) {
 		if err := req.State.Validate(); err != nil {
 			return ResolvedContext{}, err
 		}
+	}
+	if err := validateResolveRequestNames(req); err != nil {
+		return ResolvedContext{}, err
 	}
 	if req.ApprovalBoundContext != "" {
 		bound, err := contextByRequiredName(req.State, req.ApprovalBoundContext)
@@ -643,6 +654,9 @@ func (c Context) identityBoundary() contextIdentityBoundary {
 }
 
 func contextByRequiredName(state UserState, name string) (Context, error) {
+	if err := ValidateContextName(name); err != nil {
+		return Context{}, err
+	}
 	ctx, ok := state.ContextByName(name)
 	if !ok {
 		return Context{}, ErrContextNotFound
@@ -651,6 +665,18 @@ func contextByRequiredName(state UserState, name string) (Context, error) {
 		return Context{}, err
 	}
 	return ctx, nil
+}
+
+func validateResolveRequestNames(req ResolveRequest) error {
+	for _, name := range []string{req.ExplicitContext, req.ApprovalBoundContext, req.ProjectRequiredContext, req.ProjectDefaultContext} {
+		if name == "" {
+			continue
+		}
+		if err := ValidateContextName(name); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // LegacyLocalContext returns the synthesized local context for unmigrated projects.
@@ -666,8 +692,7 @@ func LegacyLocalContext() Context {
 }
 
 func safeDisplayName(value string) bool {
-	value = strings.TrimSpace(value)
-	if value == "" || len(value) > 128 {
+	if value != strings.TrimSpace(value) || value == "" || len(value) > 128 {
 		return false
 	}
 	for _, r := range value {
