@@ -1,0 +1,15 @@
+{
+  "current_version": "1.0",
+  "minimum_client_version": "1.0",
+  "supported_versions": [
+    "1.0"
+  ],
+  "incompatible_version_refusal": {
+    "code": "incompatible_contract_version",
+    "message": "requested contract version is not supported",
+    "correlation_id": "corr_0123456789abcdef",
+    "supported_versions": [
+      "1.0"
+    ]
+  }
+}
