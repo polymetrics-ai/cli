@@ -1,0 +1,33 @@
+{
+  "lab_id": "fm-bahmni-lab-r1",
+  "compose_project": "fm_bahmni_lab_r1",
+  "official_repository": "https://github.com/Bahmni/bahmni-docker.git",
+  "official_tag": "1.0.2-standard",
+  "official_tag_object": "e8e98dd61bc9be36490c8b26059fd331eae9405d",
+  "official_commit": "1dfe62c4e5d6f3d702e65d869729726226fceb56",
+  "official_commit_message": "BSL-13,BSL-14 | Upgrade. Bump OpenMRS image version to 1.1.3",
+  "distribution": "bahmni-standard",
+  "selected_on": "2026-07-26",
+  "why_selected": [
+    "Official Bahmni install page says Docker is the recommended evaluation path and older RPM installs are unsupported.",
+    "Official July 02 2026 Bahmni security patch notes list 1.0.2-standard as the patched Standard Docker distribution.",
+    "The tag resolves to an immutable commit and includes OpenMRS image 1.1.3 / bahmni-core 1.2.1 security patch line.",
+    "Standard exposes the broadest connector-relevant local lab surface: Bahmni Web, OpenMRS, OpenELIS, Odoo, reports, appointments, patient documents, inpatient UI, PACS, and optional SNOMED/CDSS profiles."
+  ],
+  "official_sources": [
+    "https://www.bahmni.org/",
+    "https://www.bahmni.org/install",
+    "https://bahmni.atlassian.net/wiki/spaces/BAH/pages/299630726/Running+Bahmni+on+Docker",
+    "https://bahmni.atlassian.net/wiki/spaces/BAH/pages/5519474693/Bahmni+Security+Patch+July+02+2026+Release+Notes",
+    "https://bahmni.atlassian.net/wiki/spaces/BAH/pages/3757965318/Bahmni+Standard+Releases",
+    "https://github.com/Bahmni/bahmni-docker/tree/1.0.2-standard"
+  ],
+  "default_ports": {
+    "http": 18080,
+    "https": 18443,
+    "odoo": 18069,
+    "dcm4chee_http": 18055,
+    "dcm4chee_dicom": 11112
+  },
+  "loopback_only": true
+}

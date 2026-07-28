@@ -34,6 +34,7 @@ pnpm run build
 
 - Keep pull requests narrowly scoped.
 - Create branches as `<type>/<description>`, for example `feat/github-connector`, `fix/stripe-pagination`, or `docs/install-binaries`.
+- The `fm/` prefix is reserved for branches created by the no-mistakes fleet-manager harness, alongside the `dependabot/` and `release-please--branches--` automation namespaces. Do not use it for hand-authored branches.
 - Title PRs with [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), for example `feat(connector): add linear` or `fix(github): repair pagination`.
 - Add or update tests for behavior changes.
 - Run `make verify` before requesting review.
