@@ -27,19 +27,26 @@ export function ProfileSettingsDialog({
   const [url, setUrl] = useState('');
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const loading = settings === null;
 
   useEffect(() => {
     if (!open) return;
+    let cancelled = false;
     setMessage(null);
+    setSettings(null);
     fetch('/api/profile')
       .then((response) => (response.ok ? response.json() : null))
       .then((data: { settings: Settings } | null) => {
-        if (!data) return;
+        if (cancelled || !data) return;
         setSettings(data.settings);
         setVisible(data.settings.profileVisible);
         setUrl(data.settings.profileUrl ?? '');
       })
       .catch(() => {});
+
+    return () => {
+      cancelled = true;
+    };
   }, [open]);
 
   async function save() {
@@ -88,8 +95,9 @@ export function ProfileSettingsDialog({
             <input
               type="checkbox"
               checked={visible}
+              disabled={loading || saving}
               onChange={(event) => setVisible(event.target.checked)}
-              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer appearance-none border border-line-structure bg-surface-bg outline-none checked:border-line-cta checked:bg-surface-cta-primary focus-visible:outline-1 focus-visible:outline-surface-cta-primary"
+              className="mt-0.5 h-4 w-4 shrink-0 cursor-pointer appearance-none border border-line-structure bg-surface-bg outline-none checked:border-line-cta checked:bg-surface-cta-primary disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-1 focus-visible:outline-surface-cta-primary"
             />
             <span>
               <span className="block text-[13px] font-medium text-text-primary">
@@ -119,9 +127,10 @@ export function ProfileSettingsDialog({
             <input
               type="url"
               value={url}
+              disabled={loading || saving}
               onChange={(event) => setUrl(event.target.value)}
               placeholder="https://your-site.dev"
-              className="w-full border border-line-structure bg-surface-bg px-3 py-2 text-[13px] text-text-primary outline-none placeholder:text-text-disabled focus:border-line-cta"
+              className="w-full border border-line-structure bg-surface-bg px-3 py-2 text-[13px] text-text-primary outline-none placeholder:text-text-disabled disabled:cursor-not-allowed disabled:opacity-60 focus:border-line-cta"
             />
           </label>
         </div>
@@ -132,7 +141,7 @@ export function ProfileSettingsDialog({
           </span>
           <button
             type="button"
-            disabled={saving || settings === null}
+            disabled={saving || loading}
             onClick={() => void save()}
             className="border border-line-cta bg-line-cta px-4 py-2 font-square text-[11px] font-semibold uppercase tracking-wider text-surface-bg transition-opacity hover:opacity-90 disabled:pointer-events-none disabled:opacity-50"
           >
