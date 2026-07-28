@@ -26,7 +26,7 @@ jobs:
           set -euo pipefail
 
           case "$HEAD_REF" in
-            dependabot/*|release-please--branches--*|connector-architecture-v2)
+            dependabot/*|release-please--branches--*|connector-architecture-v2|integration/pm-broker-production-program)
               exit 0
               ;;
           esac
