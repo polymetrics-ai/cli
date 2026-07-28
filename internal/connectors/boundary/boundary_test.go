@@ -2,6 +2,7 @@ package boundary
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -56,6 +57,72 @@ type githubDateRangeFallback struct{}
 	}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "github_date_range")
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "githubDateRangeFallback")
+}
+
+func TestScanDetectsDisplayNameAliasesInStringLiterals(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/microsoft-teams/metadata.json":      `{"name":"microsoft-teams","display_name":"Microsoft Teams","integration_type":"api"}`,
+		"internal/connectors/defs/free-agent-connector/metadata.json": `{"name":"free-agent-connector","display_name":"FreeAgent","integration_type":"api"}`,
+		"internal/connectors/engine/aliases.go": `package engine
+
+var providers = []string{"Microsoft Teams", "FreeAgent"}
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleConnectorLiteral, "microsoft-teams", "internal/connectors/engine/aliases.go", "Microsoft Teams")
+	requireFinding(t, report, RuleConnectorLiteral, "free-agent-connector", "internal/connectors/engine/aliases.go", "FreeAgent")
+}
+
+func TestScanDetectsConnectorSwitchForContextualMetadataName(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/mode/metadata.json": `{"name":"mode","display_name":"Mode","integration_type":"api"}`,
+		"internal/runtime/provider.go": `package runtime
+
+func selected(connector string) bool { return connector == "mode" }
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleConnectorSwitch, "mode", "internal/runtime/provider.go", "mode")
+}
+
+func TestScanDetectsProviderPolicyInSharedInternalPackages(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/runtime/policy.go": `package runtime
+
+const helperParamFormat = "github_date_range"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/runtime/policy.go", "github_date_range")
+}
+
+func TestScanRejectsUnsafeBaseRefsBeforeGitDiff(t *testing.T) {
+	root := newFixtureRepo(t, nil)
+	outputPath := filepath.Join(root, "git-option-output")
+	for _, baseRef := range []string{"--output=" + outputPath, "HEAD\n--output=" + outputPath} {
+		t.Run(baseRef, func(t *testing.T) {
+			_, err := Scan(root, Options{BaseRef: baseRef, Now: fixedNow})
+			var cfgErr *ConfigError
+			if !errors.As(err, &cfgErr) {
+				t.Fatalf("Scan error = %v, want ConfigError", err)
+			}
+			if _, statErr := os.Stat(outputPath); !errors.Is(statErr, os.ErrNotExist) {
+				t.Fatalf("unsafe base ref created output file: %v", statErr)
+			}
+		})
+	}
 }
 
 func TestScanAllowsDefinitionsNativeHooksGeneratedTestsAndDocs(t *testing.T) {
@@ -225,7 +292,7 @@ func TestFindingsAreSortedDeterministically(t *testing.T) {
 const z = "github_date_range"
 `,
 		"internal/connectors/engine/a.go": `package engine
-const a = "gong"
+func a(connector string) bool { return connector == "gong" }
 `,
 	})
 
@@ -279,14 +346,14 @@ const unchanged = "github_date_range"
 	runGit(t, root, "add", ".")
 	runGit(t, root, "commit", "-m", "base")
 	writeFixtureFile(t, root, "internal/connectors/engine/changed.go", `package engine
-const changed = "gong"
+func changed(connector string) bool { return connector == "gong" }
 `)
 
 	report, err := Scan(root, Options{BaseRef: "HEAD", Now: fixedNow})
 	if err != nil {
 		t.Fatalf("Scan: %v", err)
 	}
-	requireFinding(t, report, RuleConnectorLiteral, "gong", "internal/connectors/engine/changed.go", "gong")
+	requireFinding(t, report, RuleConnectorSwitch, "gong", "internal/connectors/engine/changed.go", "gong")
 	if hasFinding(report, RuleProviderPolicy, "github", "github_date_range") {
 		t.Fatalf("base diff scan reported unchanged baseline provider policy: %+v", report.Findings)
 	}

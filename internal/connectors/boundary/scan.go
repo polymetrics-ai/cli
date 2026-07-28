@@ -111,8 +111,11 @@ func validateRoot(root string) (string, error) {
 }
 
 func diffLimit(root, baseRef string) (map[string]bool, error) {
+	if err := validateBaseRef(baseRef); err != nil {
+		return nil, err
+	}
 	changed := map[string]bool{}
-	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRT", baseRef, "--")
+	cmd := exec.Command("git", "-C", root, "diff", "--name-only", "--diff-filter=ACMRT", "--end-of-options", baseRef, "--")
 	out, err := cmd.Output()
 	if err != nil {
 		var ee *exec.ExitError
@@ -138,6 +141,21 @@ func diffLimit(root, baseRef string) (map[string]bool, error) {
 		}
 	}
 	return changed, nil
+}
+
+func validateBaseRef(baseRef string) error {
+	if strings.TrimSpace(baseRef) == "" {
+		return fmt.Errorf("base ref is required")
+	}
+	if strings.HasPrefix(baseRef, "-") {
+		return fmt.Errorf("invalid base ref %q: must not start with '-'", baseRef)
+	}
+	for _, r := range baseRef {
+		if r < 0x20 || r == 0x7f {
+			return fmt.Errorf("invalid base ref %q: must not contain control characters", baseRef)
+		}
+	}
+	return nil
 }
 
 func scanFileList(root string, limit map[string]bool) ([]string, error) {
@@ -207,19 +225,37 @@ func scanGoFile(root, rel string, pc pathClass, lx lexicon) ([]Finding, error) {
 	}
 	ast.Inspect(file, func(node ast.Node) bool {
 		switch n := node.(type) {
-		case *ast.CaseClause:
-			for _, expr := range n.List {
-				if lit, ok := expr.(*ast.BasicLit); ok && lit.Kind == token.STRING {
-					literalContexts[lit] = literalContextSwitch
+		case *ast.SwitchStmt:
+			context := literalContextSwitch
+			if exprLooksConnectorDiscriminator(n.Tag) {
+				context = literalContextConnectorSwitch
+			}
+			if n.Body != nil {
+				for _, stmt := range n.Body.List {
+					if clause, ok := stmt.(*ast.CaseClause); ok {
+						for _, expr := range clause.List {
+							if lit, ok := expr.(*ast.BasicLit); ok && lit.Kind == token.STRING {
+								markLiteralContext(literalContexts, lit, context)
+							}
+						}
+					}
 				}
 			}
 		case *ast.BinaryExpr:
 			if n.Op == token.EQL || n.Op == token.NEQ {
 				if lit, ok := n.X.(*ast.BasicLit); ok && lit.Kind == token.STRING {
-					literalContexts[lit] = literalContextComparison
+					context := literalContextComparison
+					if exprLooksConnectorDiscriminator(n.Y) {
+						context = literalContextConnectorComparison
+					}
+					markLiteralContext(literalContexts, lit, context)
 				}
 				if lit, ok := n.Y.(*ast.BasicLit); ok && lit.Kind == token.STRING {
-					literalContexts[lit] = literalContextComparison
+					context := literalContextComparison
+					if exprLooksConnectorDiscriminator(n.X) {
+						context = literalContextConnectorComparison
+					}
+					markLiteralContext(literalContexts, lit, context)
 				}
 			}
 		}
@@ -294,7 +330,7 @@ func (s *goScanner) scanStringLiteral(lit *ast.BasicLit) {
 	if err != nil {
 		return
 	}
-	matches := s.lexicon.literalMatches(value)
+	matches := s.lexicon.literalMatches(value, context.isConnectorIdentity(), s.pathClass.DocsOutput)
 	if s.pathClass.DocsOutput {
 		seenConnectors := map[string]bool{}
 		for _, match := range matches {
@@ -334,7 +370,7 @@ func (s *goScanner) ruleFor(match literalMatch, context literalContext) string {
 	if match.Policy {
 		return RuleProviderPolicy
 	}
-	if context == literalContextSwitch || context == literalContextComparison {
+	if context == literalContextSwitch || context == literalContextComparison || context == literalContextConnectorSwitch || context == literalContextConnectorComparison {
 		return RuleConnectorSwitch
 	}
 	return RuleConnectorLiteral
@@ -363,8 +399,77 @@ const (
 	literalContextOther literalContext = iota
 	literalContextSwitch
 	literalContextComparison
+	literalContextConnectorSwitch
+	literalContextConnectorComparison
 	literalContextIdentifier
 )
+
+func (c literalContext) isConnectorIdentity() bool {
+	return c == literalContextConnectorSwitch || c == literalContextConnectorComparison
+}
+
+func markLiteralContext(contexts map[*ast.BasicLit]literalContext, lit *ast.BasicLit, context literalContext) {
+	if contextPriority(context) >= contextPriority(contexts[lit]) {
+		contexts[lit] = context
+	}
+}
+
+func contextPriority(context literalContext) int {
+	switch context {
+	case literalContextConnectorSwitch, literalContextConnectorComparison:
+		return 3
+	case literalContextSwitch, literalContextComparison:
+		return 2
+	case literalContextIdentifier:
+		return 1
+	default:
+		return 0
+	}
+}
+
+func exprLooksConnectorDiscriminator(expr ast.Expr) bool {
+	switch n := expr.(type) {
+	case nil:
+		return false
+	case *ast.Ident:
+		return nameLooksConnectorDiscriminator(n.Name)
+	case *ast.SelectorExpr:
+		return nameLooksConnectorDiscriminator(n.Sel.Name)
+	case *ast.ParenExpr:
+		return exprLooksConnectorDiscriminator(n.X)
+	case *ast.IndexExpr:
+		return exprLooksConnectorDiscriminator(n.X) || literalLooksConnectorKey(n.Index)
+	case *ast.CallExpr:
+		if exprLooksConnectorDiscriminator(n.Fun) {
+			return true
+		}
+		for _, arg := range n.Args {
+			if exprLooksConnectorDiscriminator(arg) {
+				return true
+			}
+		}
+		return false
+	default:
+		return false
+	}
+}
+
+func literalLooksConnectorKey(expr ast.Expr) bool {
+	lit, ok := expr.(*ast.BasicLit)
+	if !ok || lit.Kind != token.STRING {
+		return false
+	}
+	value, err := strconv.Unquote(lit.Value)
+	if err != nil {
+		return false
+	}
+	return nameLooksConnectorDiscriminator(value)
+}
+
+func nameLooksConnectorDiscriminator(name string) bool {
+	lower := strings.ToLower(strings.TrimSpace(name))
+	return lower == "connector" || lower == "provider" || strings.HasSuffix(lower, "connector") || strings.HasSuffix(lower, "provider")
+}
 
 func messageForRule(rule string, match literalMatch) string {
 	switch rule {

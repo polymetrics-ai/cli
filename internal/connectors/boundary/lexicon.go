@@ -11,6 +11,7 @@ import (
 )
 
 var tokenPattern = regexp.MustCompile(`[A-Za-z0-9][A-Za-z0-9_-]*`)
+var tokenOnlyPattern = regexp.MustCompile(`^[A-Za-z0-9][A-Za-z0-9_-]*$`)
 
 type lexicon struct {
 	connectors []connectorLexeme
@@ -18,15 +19,30 @@ type lexicon struct {
 }
 
 type connectorLexeme struct {
-	Name           string
-	DisplayName    string
-	DisplayCompact string
-	Contextual     bool
+	Name               string
+	DisplayName        string
+	tokenAliases       []lexemeAlias
+	weakTokenAliases   []lexemeAlias
+	phraseAliases      []lexemeAlias
+	weakPhraseAliases  []lexemeAlias
+	literalPrefixes    []string
+	identifierPrefixes []string
+	identifierContains []string
+	weakDocs           bool
+}
+
+type lexemeAlias struct {
+	Value string
+	Lower string
+	Alias bool
 }
 
 type metadataFile struct {
-	Name        string `json:"name"`
-	DisplayName string `json:"display_name"`
+	Name            string   `json:"name"`
+	DisplayName     string   `json:"display_name"`
+	IntegrationType string   `json:"integration_type"`
+	DocsURL         string   `json:"docs_url"`
+	Aliases         []string `json:"aliases"`
 }
 
 func loadLexicon(root string) (lexicon, error) {
@@ -51,13 +67,7 @@ func loadLexicon(root string) (lexicon, error) {
 			name = dirName
 		}
 		name = strings.ToLower(name)
-		display := strings.TrimSpace(meta.DisplayName)
-		seen[name] = connectorLexeme{
-			Name:           name,
-			DisplayName:    display,
-			DisplayCompact: compactDisplayName(display),
-			Contextual:     isContextualConnectorName(name),
-		}
+		seen[name] = newConnectorLexeme(name, meta)
 	}
 
 	connectors := make([]connectorLexeme, 0, len(seen))
@@ -66,6 +76,24 @@ func loadLexicon(root string) (lexicon, error) {
 	}
 	sort.Slice(connectors, func(i, j int) bool { return connectors[i].Name < connectors[j].Name })
 	return lexicon{connectors: connectors, byName: seen}, nil
+}
+
+func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
+	display := strings.TrimSpace(meta.DisplayName)
+	strongName := strongConnectorNameAlias(name, meta)
+	c := connectorLexeme{Name: name, DisplayName: display, weakDocs: (meta.IntegrationType == "" || strings.EqualFold(meta.IntegrationType, "api")) && strings.TrimSpace(meta.DocsURL) != ""}
+	c.addTokenAlias("source-"+name, true, false)
+	c.addTokenAlias("destination-"+name, true, false)
+	c.addLiteralAlias(name, false, !strongName)
+	if strongName {
+		c.addLiteralPrefix(name)
+		c.addIdentifierPrefix(strings.ReplaceAll(name, "-", ""))
+	}
+	for _, alias := range append([]string{display}, meta.Aliases...) {
+		c.addMetadataAlias(name, alias, meta)
+	}
+	c.sortAliases()
+	return c
 }
 
 func readMetadata(path string) metadataFile {
@@ -90,17 +118,160 @@ func compactDisplayName(display string) string {
 	return b.String()
 }
 
-func isContextualConnectorName(name string) bool {
-	// Names in this set are real connector IDs but also ordinary runtime words,
-	// package concepts, or infrastructure names. They are intentionally not
-	// matched by bare-token scans; only explicit source-/destination aliases are
-	// high-confidence enough for the boundary guard.
-	switch name {
-	case "box", "drift", "file", "float", "harness", "harvest", "height", "local", "merge", "mode", "outbox", "postgres", "rss", "sample", "segment", "tempo", "warehouse":
+func (c *connectorLexeme) addMetadataAlias(name, alias string, meta metadataFile) {
+	alias = strings.TrimSpace(alias)
+	if alias == "" {
+		return
+	}
+	strong := strongMetadataAlias(name, alias, meta)
+	c.addLiteralAlias(alias, false, !strong)
+	compact := compactDisplayName(alias)
+	if compact != "" && compact != alias {
+		c.addLiteralAlias(compact, false, !strong)
+	}
+	if !strong {
+		return
+	}
+	if compactLower := strings.ToLower(compact); len(compactLower) >= 5 {
+		c.addIdentifierPrefix(compactLower)
+		if alias != simpleDisplayName(name) {
+			c.addIdentifierContains(compactLower)
+		}
+	}
+}
+
+func (c *connectorLexeme) addLiteralAlias(value string, legacy, weak bool) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return
+	}
+	if tokenOnlyPattern.MatchString(value) {
+		c.addTokenAlias(value, legacy, weak)
+		return
+	}
+	c.addPhraseAlias(value, legacy, weak)
+}
+
+func (c *connectorLexeme) addTokenAlias(value string, legacy, weak bool) {
+	alias := lexemeAlias{Value: value, Lower: strings.ToLower(value), Alias: legacy}
+	if weak {
+		c.weakTokenAliases = append(c.weakTokenAliases, alias)
+		return
+	}
+	c.tokenAliases = append(c.tokenAliases, alias)
+}
+
+func (c *connectorLexeme) addPhraseAlias(value string, legacy, weak bool) {
+	alias := lexemeAlias{Value: value, Lower: strings.ToLower(value), Alias: legacy}
+	if weak {
+		c.weakPhraseAliases = append(c.weakPhraseAliases, alias)
+		return
+	}
+	c.phraseAliases = append(c.phraseAliases, alias)
+}
+
+func (c *connectorLexeme) addLiteralPrefix(prefix string) {
+	prefix = strings.ToLower(strings.TrimSpace(prefix))
+	if prefix != "" {
+		c.literalPrefixes = append(c.literalPrefixes, prefix)
+	}
+}
+
+func (c *connectorLexeme) addIdentifierPrefix(prefix string) {
+	prefix = strings.ToLower(strings.TrimSpace(prefix))
+	if prefix != "" {
+		c.identifierPrefixes = append(c.identifierPrefixes, prefix)
+	}
+}
+
+func (c *connectorLexeme) addIdentifierContains(alias string) {
+	alias = strings.ToLower(strings.TrimSpace(alias))
+	if alias != "" {
+		c.identifierContains = append(c.identifierContains, alias)
+	}
+}
+
+func (c *connectorLexeme) sortAliases() {
+	c.tokenAliases = uniqueAliases(c.tokenAliases)
+	c.weakTokenAliases = uniqueAliases(c.weakTokenAliases)
+	c.phraseAliases = uniqueAliases(c.phraseAliases)
+	c.weakPhraseAliases = uniqueAliases(c.weakPhraseAliases)
+	c.literalPrefixes = uniqueStrings(c.literalPrefixes)
+	c.identifierPrefixes = uniqueStrings(c.identifierPrefixes)
+	c.identifierContains = uniqueStrings(c.identifierContains)
+}
+
+func uniqueAliases(in []lexemeAlias) []lexemeAlias {
+	seen := map[string]bool{}
+	var out []lexemeAlias
+	for _, alias := range in {
+		key := alias.Lower + "\x00" + fmt.Sprint(alias.Alias)
+		if alias.Lower == "" || seen[key] {
+			continue
+		}
+		seen[key] = true
+		out = append(out, alias)
+	}
+	sort.Slice(out, func(i, j int) bool { return out[i].Lower < out[j].Lower })
+	return out
+}
+
+func uniqueStrings(in []string) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, value := range in {
+		if value == "" || seen[value] {
+			continue
+		}
+		seen[value] = true
+		out = append(out, value)
+	}
+	sort.Strings(out)
+	return out
+}
+
+func strongConnectorNameAlias(name string, meta metadataFile) bool {
+	if strings.Contains(name, "-") {
 		return true
-	default:
+	}
+	if meta.IntegrationType != "" && !strings.EqualFold(meta.IntegrationType, "api") {
 		return false
 	}
+	return strongMetadataAlias(name, meta.DisplayName, meta)
+}
+
+func strongMetadataAlias(name, alias string, meta metadataFile) bool {
+	alias = strings.TrimSpace(alias)
+	if alias == "" {
+		return false
+	}
+	if meta.IntegrationType != "" && !strings.EqualFold(meta.IntegrationType, "api") {
+		return false
+	}
+	compact := compactDisplayName(alias)
+	if compact == "" {
+		return false
+	}
+	nameCompact := strings.ReplaceAll(name, "-", "")
+	compactLower := strings.ToLower(compact)
+	if strings.Contains(name, "-") {
+		return compactLower == nameCompact || strings.Contains(nameCompact, compactLower)
+	}
+	if compactLower != nameCompact {
+		return len(compactLower) >= 5 && (strings.Contains(nameCompact, compactLower) || strings.Contains(compactLower, nameCompact))
+	}
+	return alias != simpleDisplayName(name)
+}
+
+func simpleDisplayName(name string) string {
+	parts := strings.Split(name, "-")
+	for i, part := range parts {
+		if part == "" {
+			continue
+		}
+		parts[i] = strings.ToUpper(part[:1]) + strings.ToLower(part[1:])
+	}
+	return strings.Join(parts, " ")
 }
 
 type literalMatch struct {
@@ -111,24 +282,36 @@ type literalMatch struct {
 	Exact     bool
 }
 
-func (lx lexicon) literalMatches(value string) []literalMatch {
+func (lx lexicon) literalMatches(value string, includeWeakExact, includeWeakDocs bool) []literalMatch {
 	if value == "" || len(lx.connectors) == 0 {
 		return nil
 	}
-	tokens := tokenPattern.FindAllString(value, -1)
-	if len(tokens) == 0 {
-		return nil
-	}
 	matchesByKey := map[string]literalMatch{}
+	for _, c := range lx.connectors {
+		for _, alias := range c.phraseAliases {
+			if containsDelimitedFold(value, alias.Lower) {
+				match := literalMatch{Connector: c.Name, Match: alias.Value, Alias: alias.Alias, Exact: !alias.Alias}
+				matchesByKey[literalMatchKey(match)] = match
+			}
+		}
+		if includeWeakExact || includeWeakDocs {
+			for _, alias := range c.weakPhraseAliases {
+				if c.allowWeakAlias(value, alias.Lower, includeWeakExact, includeWeakDocs) && containsDelimitedFold(value, alias.Lower) {
+					match := literalMatch{Connector: c.Name, Match: alias.Value, Alias: alias.Alias, Exact: !alias.Alias}
+					matchesByKey[literalMatchKey(match)] = match
+				}
+			}
+		}
+	}
+	tokens := tokenPattern.FindAllString(value, -1)
 	for _, token := range tokens {
 		lower := strings.ToLower(token)
 		for _, c := range lx.connectors {
-			match := matchToken(c, token, lower)
+			match := matchToken(c, token, lower, c.allowWeakAlias(value, lower, includeWeakExact, includeWeakDocs))
 			if match.Connector == "" {
 				continue
 			}
-			key := match.Connector + "\x00" + match.Match + "\x00" + fmt.Sprint(match.Policy) + "\x00" + fmt.Sprint(match.Alias) + "\x00" + fmt.Sprint(match.Exact)
-			matchesByKey[key] = match
+			matchesByKey[literalMatchKey(match)] = match
 		}
 	}
 	matches := make([]literalMatch, 0, len(matchesByKey))
@@ -147,23 +330,32 @@ func (lx lexicon) literalMatches(value string) []literalMatch {
 	return matches
 }
 
-func matchToken(c connectorLexeme, token, lower string) literalMatch {
-	if lower == "source-"+c.Name || lower == "destination-"+c.Name {
-		return literalMatch{Connector: c.Name, Match: token, Alias: true}
-	}
-	if lower == c.Name {
-		if c.Contextual {
-			return literalMatch{}
+func matchToken(c connectorLexeme, token, lower string, includeWeakExact bool) literalMatch {
+	for _, alias := range c.tokenAliases {
+		if lower == alias.Lower {
+			return literalMatch{Connector: c.Name, Match: token, Alias: alias.Alias, Exact: !alias.Alias}
 		}
-		return literalMatch{Connector: c.Name, Match: token, Exact: true}
 	}
-	if c.Contextual {
-		return literalMatch{}
+	if includeWeakExact {
+		for _, alias := range c.weakTokenAliases {
+			if lower == alias.Lower {
+				return literalMatch{Connector: c.Name, Match: token, Alias: alias.Alias, Exact: !alias.Alias}
+			}
+		}
 	}
-	if strings.HasPrefix(lower, c.Name+"_") || strings.HasPrefix(lower, c.Name+"-") {
-		return literalMatch{Connector: c.Name, Match: token, Policy: true}
+	for _, prefix := range c.literalPrefixes {
+		if tokenHasConnectorPrefix(lower, prefix) {
+			return literalMatch{Connector: c.Name, Match: token, Policy: true}
+		}
 	}
 	return literalMatch{}
+}
+
+func (c connectorLexeme) allowWeakAlias(value, lowerAlias string, includeWeakExact, includeWeakDocs bool) bool {
+	if includeWeakExact {
+		return true
+	}
+	return includeWeakDocs && c.weakDocs && literalHasConnectorCommandContext(value, lowerAlias)
 }
 
 func (lx lexicon) identifierMatches(identifier string) []literalMatch {
@@ -173,30 +365,91 @@ func (lx lexicon) identifierMatches(identifier string) []literalMatch {
 	var matches []literalMatch
 	lowerIdentifier := strings.ToLower(identifier)
 	for _, c := range lx.connectors {
-		if c.Contextual {
-			continue
-		}
-		compactName := strings.ReplaceAll(c.Name, "-", "")
-		if len(c.DisplayCompact) >= 5 && strings.Contains(identifier, c.DisplayCompact) {
-			matches = append(matches, literalMatch{Connector: c.Name, Match: identifier, Policy: true})
-			continue
-		}
-		if len(compactName) >= 5 && identifierHasConnectorPrefix(identifier, lowerIdentifier, compactName) {
+		if c.matchesIdentifier(identifier, lowerIdentifier) {
 			matches = append(matches, literalMatch{Connector: c.Name, Match: identifier, Policy: true})
 		}
 	}
 	return matches
 }
 
-func identifierHasConnectorPrefix(identifier, lowerIdentifier, compactName string) bool {
-	if !strings.HasPrefix(lowerIdentifier, compactName) {
+func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) bool {
+	for _, alias := range c.identifierContains {
+		if strings.Contains(lowerIdentifier, alias) {
+			return true
+		}
+	}
+	for _, prefix := range c.identifierPrefixes {
+		if identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
+func tokenHasConnectorPrefix(token, prefix string) bool {
+	if !strings.HasPrefix(token, prefix) || len(token) == len(prefix) {
 		return false
 	}
-	if len(identifier) == len(compactName) {
+	next := token[len(prefix)]
+	return next == '_' || next == '-'
+}
+
+func identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix string) bool {
+	if !strings.HasPrefix(lowerIdentifier, prefix) {
+		return false
+	}
+	if len(identifier) == len(prefix) {
 		return true
 	}
-	next := identifier[len(compactName)]
+	next := identifier[len(prefix)]
 	return next == '_' || next == '-' || (next >= 'A' && next <= 'Z')
+}
+
+func containsDelimitedFold(value, lowerAlias string) bool {
+	lowerValue := strings.ToLower(value)
+	start := 0
+	for {
+		idx := strings.Index(lowerValue[start:], lowerAlias)
+		if idx < 0 {
+			return false
+		}
+		idx += start
+		before := idx - 1
+		after := idx + len(lowerAlias)
+		if isAliasBoundary(lowerValue, before) && isAliasBoundary(lowerValue, after) {
+			return true
+		}
+		start = idx + 1
+	}
+}
+
+func literalHasConnectorCommandContext(value, lowerAlias string) bool {
+	lowerValue := strings.ToLower(value)
+	needles := []string{
+		"pm " + lowerAlias,
+		"pm connectors inspect " + lowerAlias,
+		"--connector " + lowerAlias,
+		"source-" + lowerAlias,
+		"destination-" + lowerAlias,
+	}
+	for _, needle := range needles {
+		if strings.Contains(lowerValue, needle) {
+			return true
+		}
+	}
+	return false
+}
+
+func isAliasBoundary(value string, idx int) bool {
+	if idx < 0 || idx >= len(value) {
+		return true
+	}
+	ch := value[idx]
+	return !((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9'))
+}
+
+func literalMatchKey(match literalMatch) string {
+	return match.Connector + "\x00" + match.Match + "\x00" + fmt.Sprint(match.Policy) + "\x00" + fmt.Sprint(match.Alias) + "\x00" + fmt.Sprint(match.Exact)
 }
 
 func rulePriority(m literalMatch) int {

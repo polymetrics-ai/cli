@@ -57,9 +57,6 @@ func classifyPath(root, rel string) pathClass {
 	if strings.HasSuffix(rel, ".go") && isGeneratedGo(root, rel) {
 		return pathClass{Class: pathClassAllowedGenerated, Allowed: true}
 	}
-	if strings.HasPrefix(rel, "internal/") && !strings.HasPrefix(rel, "internal/connectors/") && !strings.HasPrefix(rel, "internal/cli/") && !strings.HasPrefix(rel, "internal/app/") {
-		return pathClass{Class: pathClassIgnored, Allowed: true}
-	}
 	if isLegacyConnectorPackage(rel) {
 		return pathClass{Class: pathClassAllowedNative, Allowed: true}
 	}
