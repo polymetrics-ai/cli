@@ -1,7 +1,6 @@
 package boundary
 
 import (
-	"os"
 	"path/filepath"
 	"strings"
 )
@@ -27,7 +26,7 @@ type pathClass struct {
 	Description string
 }
 
-func classifyPath(root, rel string) pathClass {
+func classifyPath(rel string, lx lexicon) pathClass {
 	rel = normalizeRelPath(rel)
 	base := filepath.Base(rel)
 	if rel == "" || strings.HasPrefix(rel, ".git/") || strings.Contains(rel, "/.git/") || strings.HasPrefix(rel, "vendor/") || strings.Contains(rel, "/node_modules/") {
@@ -54,10 +53,10 @@ func classifyPath(root, rel string) pathClass {
 	if isNativeWiring(rel) {
 		return pathClass{Class: pathClassNativeWiring, Allowed: true}
 	}
-	if strings.HasSuffix(rel, ".go") && isGeneratedGo(root, rel) {
+	if isKnownGeneratedGo(rel) {
 		return pathClass{Class: pathClassAllowedGenerated, Allowed: true}
 	}
-	if isLegacyConnectorPackage(rel) {
+	if isLegacyConnectorPackage(rel, lx) {
 		return pathClass{Class: pathClassAllowedNative, Allowed: true}
 	}
 	if !strings.HasSuffix(rel, ".go") {
@@ -103,7 +102,7 @@ func isNativeWiring(rel string) bool {
 		rel == "internal/connectors/native/nativeset/promoted.go"
 }
 
-func isLegacyConnectorPackage(rel string) bool {
+func isLegacyConnectorPackage(rel string, lx lexicon) bool {
 	const prefix = "internal/connectors/"
 	if !strings.HasPrefix(rel, prefix) {
 		return false
@@ -113,24 +112,16 @@ func isLegacyConnectorPackage(rel string) bool {
 	if !ok || name == "" {
 		return false
 	}
-	switch name {
-	case "boundary", "certify", "connsdk", "commandrunner", "defs", "engine", "hooks", "native", "bundleregistry", "conformance":
-		return false
-	default:
-		return strings.HasSuffix(rel, ".go")
-	}
+	_, ok = lx.byName[name]
+	return ok && strings.HasSuffix(rel, ".go")
 }
 
-func isGeneratedGo(root, rel string) bool {
-	if strings.HasSuffix(rel, "_gen.go") {
+func isKnownGeneratedGo(rel string) bool {
+	switch rel {
+	case "internal/connectors/hooks/hookset/hookset_gen.go",
+		"internal/connectors/native/nativeset/nativeset_gen.go":
 		return true
-	}
-	b, err := os.ReadFile(filepath.Join(root, filepath.FromSlash(rel)))
-	if err != nil {
+	default:
 		return false
 	}
-	if len(b) > 2048 {
-		b = b[:2048]
-	}
-	return strings.Contains(string(b), "Code generated")
 }

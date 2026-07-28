@@ -42,11 +42,11 @@ func Scan(root string, opts Options) (Report, error) {
 		}
 	}
 
-	files, err := scanFileList(absRoot, limit)
+	files, err := scanFileList(absRoot, limit, lx)
 	if err != nil {
 		return Report{}, err
 	}
-	allFiles, err := scanFileList(absRoot, nil)
+	allFiles, err := scanFileList(absRoot, nil, lx)
 	if err != nil {
 		return Report{}, err
 	}
@@ -158,7 +158,7 @@ func validateBaseRef(baseRef string) error {
 	return nil
 }
 
-func scanFileList(root string, limit map[string]bool) ([]string, error) {
+func scanFileList(root string, limit map[string]bool, lx lexicon) ([]string, error) {
 	var files []string
 	err := filepath.WalkDir(root, func(path string, d os.DirEntry, walkErr error) error {
 		if walkErr != nil {
@@ -179,7 +179,7 @@ func scanFileList(root string, limit map[string]bool) ([]string, error) {
 		if limit != nil && !limit[rel] {
 			return nil
 		}
-		pc := classifyPath(root, rel)
+		pc := classifyPath(rel, lx)
 		if pc.ScanGo {
 			files = append(files, rel)
 		}
@@ -196,7 +196,7 @@ func scanFiles(root string, files []string, lx lexicon) ([]Finding, int, error) 
 	var findings []Finding
 	checked := 0
 	for _, rel := range files {
-		pc := classifyPath(root, rel)
+		pc := classifyPath(rel, lx)
 		if !pc.ScanGo {
 			continue
 		}
