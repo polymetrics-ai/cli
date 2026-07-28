@@ -335,6 +335,9 @@ func (client *Client) NegotiateCompatibility(ctx context.Context) (Compatibility
 	if err := compatibility.Validate(); err != nil {
 		return Compatibility{}, err
 	}
+	if !isClientVersionCompatible(client.contractVersion, compatibility) {
+		return Compatibility{}, incompatibleContractVersionError(compatibility)
+	}
 	return compatibility, nil
 }
 
@@ -398,7 +401,88 @@ func (client *Client) CreateExecutionPlan(ctx context.Context, request Execution
 	if err := plan.Validate(); err != nil {
 		return ExecutionPlan{}, err
 	}
+	if err := validateExecutionPlanRequestBinding(plan, request); err != nil {
+		return ExecutionPlan{}, err
+	}
 	return plan, nil
+}
+
+func isClientVersionCompatible(version ContractVersion, compatibility Compatibility) bool {
+	value, ok := version.headerValue()
+	if !ok || value != string(version) {
+		return false
+	}
+	if contractVersionCompare(version, compatibility.MinimumClientVersion) < 0 {
+		return false
+	}
+	for _, supported := range compatibility.SupportedVersions {
+		if supported == version {
+			return true
+		}
+	}
+	return false
+}
+
+func contractVersionCompare(left ContractVersion, right ContractVersion) int {
+	leftMajor, leftMinor, ok := parseContractVersion(left)
+	if !ok {
+		return -1
+	}
+	rightMajor, rightMinor, ok := parseContractVersion(right)
+	if !ok {
+		return -1
+	}
+	if leftMajor != rightMajor {
+		if leftMajor < rightMajor {
+			return -1
+		}
+		return 1
+	}
+	if leftMinor != rightMinor {
+		if leftMinor < rightMinor {
+			return -1
+		}
+		return 1
+	}
+	return 0
+}
+
+func parseContractVersion(version ContractVersion) (int, int, bool) {
+	parts := strings.Split(string(version), ".")
+	if len(parts) != 2 {
+		return 0, 0, false
+	}
+	major, err := strconv.Atoi(parts[0])
+	if err != nil {
+		return 0, 0, false
+	}
+	minor, err := strconv.Atoi(parts[1])
+	if err != nil {
+		return 0, 0, false
+	}
+	return major, minor, true
+}
+
+func incompatibleContractVersionError(compatibility Compatibility) *IncompatibleContractVersionError {
+	return &IncompatibleContractVersionError{
+		StatusCode: http.StatusUpgradeRequired,
+		Response: IncompatibleContractVersionErrorResponse{
+			Error: compatibility.IncompatibleVersionRefusal,
+		},
+	}
+}
+
+func validateExecutionPlanRequestBinding(plan ExecutionPlan, request ExecutionPlanRequest) error {
+	if plan.OrganizationID != request.OrganizationID ||
+		plan.WorkspaceID != request.WorkspaceID ||
+		plan.EnvironmentID != request.EnvironmentID ||
+		plan.BrokerProfileID != request.BrokerProfileID ||
+		plan.ConnectorConnectionID != request.ConnectorConnectionID ||
+		plan.IdempotencyKey != request.IdempotencyKey ||
+		!reflect.DeepEqual(plan.Intent, request.Intent) {
+		return ErrInvalidExecutionPlan
+	}
+	return nil
 }
 
 type requestOptions struct {

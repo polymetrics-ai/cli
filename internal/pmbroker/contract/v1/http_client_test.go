@@ -221,6 +221,33 @@ func TestHTTPClientStructuredErrorsRateLimitsAndCompatibilityNegotiation(t *test
 		}
 	})
 
+	t.Run("negotiate rejects configured unsupported version", func(t *testing.T) {
+		t.Parallel()
+
+		broker := contractv1.NewSyntheticBroker()
+		client, err := broker.NewHTTPClient("http://127.0.0.1:18080", syntheticAuthorization{},
+			contractv1.WithClientContractVersion(contractv1.ContractVersion("0.9")),
+		)
+		if err != nil {
+			t.Fatalf("NewHTTPClient() error = %v", err)
+		}
+
+		_, err = client.NegotiateCompatibility(context.Background())
+		if err == nil {
+			t.Fatal("NegotiateCompatibility() error = nil, want version refusal")
+		}
+		var refusal *contractv1.IncompatibleContractVersionError
+		if !errors.As(err, &refusal) {
+			t.Fatalf("NegotiateCompatibility() error type = %T, want IncompatibleContractVersionError", err)
+		}
+		if refusal.StatusCode != http.StatusUpgradeRequired {
+			t.Fatalf("StatusCode = %d, want %d", refusal.StatusCode, http.StatusUpgradeRequired)
+		}
+		if refusal.Response.Error.Code != contractv1.ErrorCodeIncompatibleContractVersion {
+			t.Fatalf("error code = %q, want %q", refusal.Response.Error.Code, contractv1.ErrorCodeIncompatibleContractVersion)
+		}
+	})
+
 	t.Run("rate limit metadata", func(t *testing.T) {
 		t.Parallel()
 
@@ -290,6 +317,140 @@ func TestHTTPClientStructuredErrorsRateLimitsAndCompatibilityNegotiation(t *test
 			t.Fatalf("correlation ID %q was not safe", brokerErr.Response.Error.CorrelationID)
 		}
 	})
+}
+
+func TestHTTPClientAcceptsEnumConnectorConnectionResponses(t *testing.T) {
+	t.Parallel()
+
+	fixtures := contractv1.AcceptedSyntheticFixtures()
+	connection := fixtures.ConnectorConnection
+	connection.ConnectorKind = "gcp"
+	connection.Status = "not_ready"
+	connection.WriteMode = "plan_only"
+
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.Method != http.MethodGet {
+			t.Errorf("method = %s, want %s", request.Method, http.MethodGet)
+			http.Error(response, "bad method", http.StatusBadRequest)
+			return
+		}
+		if request.URL.Path != "/v1/connector-connections/"+string(connection.ConnectorConnectionID) {
+			t.Errorf("path = %s, want connector connection path", request.URL.Path)
+			http.Error(response, "bad path", http.StatusBadRequest)
+			return
+		}
+		response.Header().Set("Content-Type", "application/json")
+		if err := json.NewEncoder(response).Encode(connection); err != nil {
+			t.Errorf("encode connector connection response: %v", err)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	client, err := contractv1.NewHTTPClient(server.URL, syntheticAuthorization{})
+	if err != nil {
+		t.Fatalf("NewHTTPClient() error = %v", err)
+	}
+
+	got, err := client.ConnectorConnection(context.Background(), connection.ConnectorConnectionID)
+	if err != nil {
+		t.Fatalf("ConnectorConnection() error = %v", err)
+	}
+	if !reflect.DeepEqual(got, connection) {
+		t.Fatalf("ConnectorConnection() = %#v, want %#v", got, connection)
+	}
+}
+
+func TestHTTPClientRejectsExecutionPlanResponseRequestMismatch(t *testing.T) {
+	t.Parallel()
+
+	fixtures := contractv1.AcceptedSyntheticFixtures()
+	tests := []struct {
+		name   string
+		mutate func(*contractv1.ExecutionPlan)
+	}{
+		{
+			name: "organization",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.OrganizationID = contractv1.OrganizationID("org_aaaaaaaaaaaaaaaa")
+			},
+		},
+		{
+			name: "workspace",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.WorkspaceID = contractv1.WorkspaceID("wks_aaaaaaaaaaaaaaaa")
+			},
+		},
+		{
+			name: "environment",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.EnvironmentID = contractv1.EnvironmentID("env_aaaaaaaaaaaaaaaa")
+			},
+		},
+		{
+			name: "broker profile",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.BrokerProfileID = contractv1.BrokerProfileID("bpf_aaaaaaaaaaaaaaaa")
+			},
+		},
+		{
+			name: "connector connection",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.ConnectorConnectionID = contractv1.ConnectorConnectionID("ccn_aaaaaaaaaaaaaaaa")
+				plan.Intent.ValidateConnectorConnection.ConnectorConnectionID = contractv1.ConnectorConnectionID("ccn_aaaaaaaaaaaaaaaa")
+			},
+		},
+		{
+			name: "idempotency key",
+			mutate: func(plan *contractv1.ExecutionPlan) {
+				plan.IdempotencyKey = contractv1.IdempotencyKey("idem_aaaaaaaaaaaaaaaaaaaa")
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			plan := cloneExecutionPlan(fixtures.ExecutionPlan)
+			tt.mutate(&plan)
+			server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+				if request.Method != http.MethodPost {
+					t.Errorf("method = %s, want %s", request.Method, http.MethodPost)
+					http.Error(response, "bad method", http.StatusBadRequest)
+					return
+				}
+				if request.URL.Path != "/v1/execution-plans" {
+					t.Errorf("path = %s, want /v1/execution-plans", request.URL.Path)
+					http.Error(response, "bad path", http.StatusBadRequest)
+					return
+				}
+				response.Header().Set("Content-Type", "application/json")
+				response.Header().Set(contractv1.HeaderExecutionPlanDigest, string(plan.Digest))
+				if err := json.NewEncoder(response).Encode(plan); err != nil {
+					t.Errorf("encode execution plan response: %v", err)
+				}
+			}))
+			t.Cleanup(server.Close)
+
+			client, err := contractv1.NewHTTPClient(server.URL, syntheticAuthorization{})
+			if err != nil {
+				t.Fatalf("NewHTTPClient() error = %v", err)
+			}
+
+			_, err = client.CreateExecutionPlan(context.Background(), fixtures.ExecutionPlanRequest)
+			if !errors.Is(err, contractv1.ErrInvalidExecutionPlan) {
+				t.Fatalf("CreateExecutionPlan() error = %v, want %v", err, contractv1.ErrInvalidExecutionPlan)
+			}
+		})
+	}
+}
+
+func cloneExecutionPlan(plan contractv1.ExecutionPlan) contractv1.ExecutionPlan {
+	if plan.Intent.ValidateConnectorConnection != nil {
+		intent := *plan.Intent.ValidateConnectorConnection
+		plan.Intent.ValidateConnectorConnection = &intent
+	}
+	return plan
 }
 
 func TestHTTPClientSafetySurfaceNoCredentialsNoGRPCNoGenericEscape(t *testing.T) {
