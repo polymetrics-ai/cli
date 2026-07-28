@@ -12,6 +12,7 @@ Mode: focused PM v0.1.1 correction
 - Supplemental adapter prompt inspected: `scripts/gsd prompt gsd-quick "issue 596 Gong calls list correction" --dry-run`.
 - Resume checkpoint after compaction: reread ship instructions and decision record, reran `scripts/gsd doctor`, and inspected `scripts/gsd prompt gsd-execute-phase issue-596-gong-calls-list-date-range-limit --dry-run`; continuing manual-GSD execution because the phase artifact is issue-scoped rather than a numeric GSD phase and `programming-loop` remains unavailable.
 - Reference checkpoint: current authoritative Gong OpenAPI docs verified before implementation finalization; private comparative notes are kept outside the repository and must not appear in tracked/public surfaces.
+- PR 597 architecture-revision checkpoint: read captain revision instructions, definition-driven decision, architecture report, private-reference addendum, and review-transparency correction; reconciled old no-mistakes run `01KYKYYAPSP34HVH9VH5ZKK3WN` through `no-mistakes axi status/help` and cancelled it before new edits; reran `scripts/gsd doctor` and inspected `scripts/gsd prompt gsd-execute-phase issue-596-gong-calls-list-date-range-limit --dry-run`.
 
 ## Required skills loaded
 
@@ -52,6 +53,15 @@ Implement the captain-authorized focused v0.1.1 correction for `pm gong calls li
 ## Existing convention / precedence decision
 
 Existing commandrunner `queryOverrides` treats command-specific flags as explicit request query overrides. Existing engine `buildInitialQuery` currently applies incremental `start_config_key` after request query values, which can mask an explicit `--from` mapped to the same query key. For issue #596, use the smallest general correction: preserve command-specific query overrides over config-derived incremental lower bounds when both set the same query parameter. This matches CLI explicit-input precedence and preserves `--config start_date` when `--from` is absent.
+
+## Architecture revision scope for PR 597
+
+- Remove every Gong/provider-specific validation branch from `internal/connectors/commandrunner/runner.go`.
+- Add only the smallest generic CLI-surface validation declarations/interpreter needed for string date-time format, non-empty values, one order constraint over mapped targets, config fallback when a side is absent, and definition-owned validation messages.
+- Keep provider-specific names (`fromDateTime`, `toDateTime`, `start_date`, Gong wording) in Gong connector definitions and tests/docs, not shared runner code.
+- Preserve the existing generic engine explicit-query precedence behavior with non-Gong tests.
+- Keep current dynamic connector seam: definition-driven/manual-parsed command-specific flags; no Gong-specific Cobra/Viper binding or broad CLI framework migration.
+- Revise PR 597 in place with additive transparent commits; no reset, force-push, competing PR, merge, tag, or release.
 
 ## Implementation slices
 

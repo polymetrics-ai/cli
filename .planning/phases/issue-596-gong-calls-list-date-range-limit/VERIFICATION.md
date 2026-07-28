@@ -5,6 +5,14 @@
 - [x] `scripts/gsd doctor`
 - [x] `scripts/gsd prompt gsd-execute-phase issue-596-gong-calls-list-date-range-limit --dry-run` inspected for execution overlay.
 
+## Architecture revision checks
+
+- [x] Old no-mistakes validation run reconciled/cancelled through `no-mistakes axi status/help` before edits.
+- [x] `git grep -n -E 'gong|Gong|fromDateTime|toDateTime|start_date' -- internal/connectors/commandrunner/runner.go` returns no matches.
+- [x] `go test ./internal/connectors/commandrunner -run 'TestCLI(Surface|Command).*Validation|Test.*Gong.*CallsList' -count=1`
+- [x] `go test ./cmd/connectorgen -run 'Test.*CLI.*Validation|TestGong' -count=1`
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs`
+
 ## Targeted
 
 - [x] `go test ./internal/coordination/issueguard ./cmd/prissueguard -count=1`
