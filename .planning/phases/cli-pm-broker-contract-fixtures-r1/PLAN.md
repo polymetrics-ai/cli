@@ -47,6 +47,6 @@ context, and execution lanes can import without contacting a live broker or hand
    validation mirror to `main`.
 2. Allow `fm/*` validation branches in the branch-name convention while preserving the existing
    Conventional Commit branch pattern for ordinary author branches.
-3. Exempt `fm/*` validation mirror PRs from the issue-first body guard so the authoritative PR
-   remains the place that carries normal issue/stacked-PR linkage.
-4. Verify both failing policy checks locally with deterministic shell/Go commands.
+3. Keep the issue-first body guard unchanged for `fm/*`; the workflow is authoritative for the
+   branch-name exception only.
+4. Verify the branch-name policy change locally with deterministic shell commands.
