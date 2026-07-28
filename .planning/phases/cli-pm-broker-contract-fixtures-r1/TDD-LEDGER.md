@@ -34,24 +34,24 @@ Green evidence:
 
 ## Slice: PR #595 convention CI repair
 
-Planned red checks before workflow edits:
+Planned checks before workflow edits:
 
 - `branch-name` should reproduce the CI failure for `fm/cli-pm-broker-contract-fixtures-r1`
   because the workflow only allowed Conventional Commit prefixes and a few exact exceptions.
-- `require-linked-issue` should reproduce the CI failure for PR #595 because the mirror PR body
-  intentionally points back to authoritative PR #594 instead of carrying issue-first linkage.
+- `require-linked-issue` remains governed by `.github/workflows/pr-issue-guard.yml`; this branch-name
+  repair does not add an `fm/*` exemption to that guard.
 
 Red evidence:
 
 - CI `branch-name` failed with `Invalid branch name: fm/cli-pm-broker-contract-fixtures-r1`.
-- Local `PR_BODY="$(gh pr view 595 --json body --jq .body)" go run ./cmd/prissueguard --title "feat(pmbroker): add synthetic broker v1 contract fixtures"` exited `1` with `PR body must reference an issue`.
+- Local `PR_BODY="$(gh pr view 595 --json body --jq .body)" go run ./cmd/prissueguard --title "feat(pmbroker): add synthetic broker v1 contract fixtures"` exited `1` with `PR body must reference an issue`, confirming the issue-first guard stayed enabled.
 
 Green evidence after workflow edits:
 
 - Branch policy shell check passed for `fm/cli-pm-broker-contract-fixtures-r1`, still accepted
   `feat/valid-branch`, and still rejected `feature/not-valid`.
-- Local issue-guard job condition check skipped `fm/cli-pm-broker-contract-fixtures-r1` and still
-  ran for `feat/valid-branch`.
+- Local issue-guard behavior still required issue-first linkage for `fm/*`, matching
+  `.github/workflows/pr-issue-guard.yml`.
 - `go test ./cmd/prissueguard ./internal/coordination/issueguard` passed, confirming the issue
   guard binary/package behavior itself was not loosened.
 - `git diff --check` passed.
