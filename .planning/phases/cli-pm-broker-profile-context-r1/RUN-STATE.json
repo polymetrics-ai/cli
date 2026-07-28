@@ -1,0 +1,47 @@
+{
+  "phase": "cli-pm-broker-profile-context-r1",
+  "status": "planning",
+  "baseSHA": "4b0615835b70ec3809379c0cf3e0aa91aca876b8",
+  "branch": "fm/cli-pm-broker-profile-context-r1",
+  "targetBase": "integration/pm-broker-production-program",
+  "localVerificationPassed": false,
+  "verificationPassed": false,
+  "gsd": {
+    "doctor": "passed",
+    "planPhasePrompt": "generated",
+    "programmingLoop": "manual_fallback_unavailable",
+    "adapterError": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "skills": [
+    "gsd-core",
+    "golang-how-to",
+    "golang-cli",
+    "golang-testing",
+    "golang-error-handling",
+    "golang-security",
+    "golang-documentation",
+    "golang-design-patterns",
+    "golang-structs-interfaces",
+    "golang-safety",
+    "golang-naming",
+    "golang-spf13-cobra",
+    "golang-spf13-viper"
+  ],
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "The assigned PM Broker context foundation is one dependency-ordered CLI/domain slice in an already isolated worktree; no disjoint mutating worker is needed."
+    }
+  ],
+  "humanGates": [
+    "secrets",
+    "credentialed broker/provider checks",
+    "production resources",
+    "new dependencies",
+    "auth scope changes",
+    "destructive actions",
+    "main branch merge",
+    "public stable auth registry claim"
+  ]
+}
