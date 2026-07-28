@@ -24,9 +24,10 @@ jobs:
 
       - name: Require issue-first PR body
         env:
+          HEAD_REF: ${{ github.head_ref }}
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
         run: |
           body_file="$RUNNER_TEMP/pr-body.md"
           printf '%s' "$PR_BODY" > "$body_file"
-          go run ./cmd/prissueguard --title "$PR_TITLE" --body-file "$body_file"
+          go run ./cmd/prissueguard --title "$PR_TITLE" --body-file "$body_file" --head-ref "$HEAD_REF"

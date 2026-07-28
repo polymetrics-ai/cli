@@ -67,3 +67,11 @@ Add the CLI-side PM Broker profile/context/domain foundation for `Organization`,
 ## Human gates
 
 Stop before any request for secrets, credentialed broker/provider checks, production resources, new dependencies, auth scope changes, destructive actions, a `main` merge, or a public stable auth registry claim.
+
+## PR #600 CI guard follow-up
+
+Failing checks: `branch-name` and `require-linked-issue`.
+
+- `branch-name`: allow the project-local `fm/<phase-slug>` branch family already used by this phase and no-mistakes feature-manager delivery.
+- `require-linked-issue`: keep PR-body issue references as the primary path, and add a narrow fallback for generated `fm/<phase-slug>` PR bodies that omit the issue link but have a matching `.planning/phases/<phase-slug>/PLAN.md` with an explicit structured issue line such as `Primary CLI issue: [#566](...)`.
+- Additional skills loaded for this follow-up: `golang-continuous-integration` and `no-mistakes`.

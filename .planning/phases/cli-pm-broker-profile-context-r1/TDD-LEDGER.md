@@ -89,3 +89,37 @@ make verify PASS
 ## Skills
 
 `gsd-core`, `golang-how-to`, `golang-cli`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-documentation`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-safety`, `golang-naming`, `golang-spf13-cobra`, `golang-spf13-viper`.
+
+## CI guard follow-up evidence
+
+Required routing was re-read on 2026-07-28 for PR #600 CI failures. `scripts/gsd doctor` passed,
+and `scripts/gsd prompt programming-loop init --phase pr-600-ci-guards --dry-run` failed with
+`scripts/gsd: unknown GSD command: programming-loop`; manual GSD fallback remains active.
+
+Red evidence captured before the guard fix:
+
+```text
+$ go test ./internal/coordination/issueguard -run 'TestValidatePRAcceptsStructuredPrimaryIssueLine' -count=1
+--- FAIL: TestValidatePRAcceptsStructuredPrimaryIssueLine (0.00s)
+    guard_test.go:68: ValidatePR() OK = false, violations = [PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, or explicit parent/delivery issue wording]
+FAIL
+
+$ go test ./cmd/prissueguard -run 'TestRunUsesFeatureManagerPlanningIssueFallback' -count=1
+--- FAIL: TestRunUsesFeatureManagerPlanningIssueFallback (0.00s)
+    main_test.go:92: run() exit code = 2, want 0
+        stderr: flag provided but not defined: -head-ref
+FAIL
+```
+
+Green evidence after the minimal CI guard fix:
+
+```text
+$ go test ./internal/coordination/issueguard -count=1
+ok  	polymetrics.ai/internal/coordination/issueguard	0.421s
+
+$ go test ./cmd/prissueguard -count=1
+ok  	polymetrics.ai/cmd/prissueguard	0.746s
+
+$ HEAD_REF='fm/cli-pm-broker-profile-context-r1'; pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps|fm)/[a-z0-9][a-z0-9._-]*$'; [[ "$HEAD_REF" =~ $pattern ]]
+exit=0
+```

@@ -36,3 +36,12 @@
 - [x] `make verify`
 
 `localVerificationPassed` is true. `verificationPassed` remains false until no-mistakes/PR checks pass.
+
+## PR #600 CI guard follow-up
+
+- [x] `go test ./internal/coordination/issueguard -count=1`
+- [x] `go test ./cmd/prissueguard -count=1`
+- [x] `go vet ./cmd/prissueguard ./internal/coordination/issueguard`
+- [x] `golangci-lint run ./cmd/prissueguard ./internal/coordination/issueguard`
+- [x] `HEAD_REF='fm/cli-pm-broker-profile-context-r1'; pattern='^(feat|fix|docs|chore|ci|test|refactor|perf|build|release|revert|deps|fm)/[a-z0-9][a-z0-9._-]*$'; [[ "$HEAD_REF" =~ $pattern ]]`
+- [x] `PR_TITLE="$(gh pr view 600 --json title --jq .title)" PR_BODY="$(gh pr view 600 --json body --jq .body)" HEAD_REF="$(gh pr view 600 --json headRefName --jq .headRefName)" go run ./cmd/prissueguard`

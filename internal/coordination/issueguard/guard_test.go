@@ -72,6 +72,17 @@ func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
 	}
 }
 
+func TestValidatePRAcceptsStructuredPrimaryIssueLine(t *testing.T) {
+	body := "Primary CLI issue: [#566](https://github.com/polymetrics-ai/cli/issues/566)\nParent PR: [#593](https://github.com/polymetrics-ai/cli/pull/593)\n"
+	result := ValidatePR("feat(pmbroker): add metadata-only broker context foundation", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 566 || result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v", result.Issues)
+	}
+}
+
 func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
 	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
 	if !result.OK {
