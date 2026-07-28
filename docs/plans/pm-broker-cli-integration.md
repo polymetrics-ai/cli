@@ -85,3 +85,14 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 - Migration/compatibility lanes #569, #570, and #587 depend on PM Broker #15/#26 and no-raw-export #21.
 - Provider/GCP lanes #583, #588, and #589 depend on PM Broker #5/#6/#27/#28 and must stay synthetic unless live non-production evidence is separately approved.
 - #575 and #576 run continuously against accepted slices, then become final certification/docs gates after implementation lands.
+
+## CLI-side contract fixture package
+
+The first CLI-side synthetic contract foundation for #585 lives in `internal/pmbroker/contract/v1`.
+Later profile, context, and execution CLI lanes should consume `NewSyntheticBroker().NewClient()`
+and `AcceptedSyntheticFixtures()` for deterministic tests of `/v1` compatibility negotiation,
+opaque connector references, and typed execution-plan requests. The package is intentionally
+network-free and does not expose production broker transport, arbitrary endpoints, caller-supplied
+headers, generic JSON/body execution, provider SDKs, raw-secret retrieval/export, SQL, shell, or
+runtime plugins. `auth_registry_mode` remains pinned to `internal_experimental`; this package does
+not claim a stable public authentication registry.
