@@ -36,8 +36,8 @@ func runPMBrokerContext(cfg config.Config, args []string, stdout io.Writer, json
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "PMBrokerContext", "context": ctx, "active_context": state.ActiveContext})
 		}
-		fmt.Fprintf(stdout, "Saved PM Broker context %s (%s / %s / %s)\n", ctx.Name, ctx.Organization.DisplayName, ctx.Workspace.DisplayName, ctx.Environment.DisplayName)
-		return nil
+		_, err = fmt.Fprintf(stdout, "Saved PM Broker context %s (%s / %s / %s)\n", ctx.Name, ctx.Organization.DisplayName, ctx.Workspace.DisplayName, ctx.Environment.DisplayName)
+		return err
 	case "use":
 		if len(args) < 2 {
 			return errUsage
@@ -50,8 +50,8 @@ func runPMBrokerContext(cfg config.Config, args []string, stdout io.Writer, json
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "PMBrokerContext", "context": ctx, "active_context": state.ActiveContext})
 		}
-		fmt.Fprintf(stdout, "Active PM Broker context: %s\n", args[1])
-		return nil
+		_, err = fmt.Fprintf(stdout, "Active PM Broker context: %s\n", args[1])
+		return err
 	case "show":
 		flags := parseFlags(args[1:])
 		state, err := store.Load()
@@ -71,8 +71,7 @@ func runPMBrokerContext(cfg config.Config, args []string, stdout io.Writer, json
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "PMBrokerResolvedContext", "source": string(resolved.Source), "context": resolved.Context})
 		}
-		writePMBrokerContextHuman(stdout, resolved.Context, resolved.Source)
-		return nil
+		return writePMBrokerContextHuman(stdout, resolved.Context, resolved.Source)
 	case "list":
 		state, err := store.Load()
 		if err != nil {
@@ -88,7 +87,9 @@ func runPMBrokerContext(cfg config.Config, args []string, stdout io.Writer, json
 			if ctx.Name == state.ActiveContext {
 				active = "\tactive"
 			}
-			fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s%s\n", ctx.Name, ctx.Organization.DisplayName, ctx.Workspace.DisplayName, ctx.Environment.DisplayName, ctx.Runtime.Mode, active)
+			if _, err := fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s%s\n", ctx.Name, ctx.Organization.DisplayName, ctx.Workspace.DisplayName, ctx.Environment.DisplayName, ctx.Runtime.Mode, active); err != nil {
+				return err
+			}
 		}
 		return nil
 	default:
@@ -141,7 +142,9 @@ func runPMBrokerOrganizations(state pmbroker.UserState, args []string, stdout io
 			return writeJSON(stdout, envelope{"kind": "OrganizationList", "organizations": organizations})
 		}
 		for _, org := range organizations {
-			fmt.Fprintf(stdout, "%s\t%s\n", org.ID, org.DisplayName)
+			if _, err := fmt.Fprintf(stdout, "%s\t%s\n", org.ID, org.DisplayName); err != nil {
+				return err
+			}
 		}
 		return nil
 	case "show":
@@ -153,9 +156,7 @@ func runPMBrokerOrganizations(state pmbroker.UserState, args []string, stdout io
 				if jsonOut {
 					return writeJSON(stdout, envelope{"kind": "Organization", "organization": org})
 				}
-				b, _ := json.MarshalIndent(org, "", "  ")
-				fmt.Fprintln(stdout, string(b))
-				return nil
+				return writePMBrokerMetadataHuman(stdout, org)
 			}
 		}
 		return pmBrokerValidationError(pmbroker.ErrContextNotFound)
@@ -172,7 +173,9 @@ func runPMBrokerWorkspaces(state pmbroker.UserState, args []string, flags parsed
 			return writeJSON(stdout, envelope{"kind": "WorkspaceList", "workspaces": workspaces})
 		}
 		for _, workspace := range workspaces {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\n", workspace.ID, workspace.OrganizationID, workspace.DisplayName)
+			if _, err := fmt.Fprintf(stdout, "%s\t%s\t%s\n", workspace.ID, workspace.OrganizationID, workspace.DisplayName); err != nil {
+				return err
+			}
 		}
 		return nil
 	case "show":
@@ -184,9 +187,7 @@ func runPMBrokerWorkspaces(state pmbroker.UserState, args []string, flags parsed
 				if jsonOut {
 					return writeJSON(stdout, envelope{"kind": "Workspace", "workspace": workspace})
 				}
-				b, _ := json.MarshalIndent(workspace, "", "  ")
-				fmt.Fprintln(stdout, string(b))
-				return nil
+				return writePMBrokerMetadataHuman(stdout, workspace)
 			}
 		}
 		return pmBrokerValidationError(pmbroker.ErrContextNotFound)
@@ -203,7 +204,9 @@ func runPMBrokerEnvironments(state pmbroker.UserState, args []string, flags pars
 			return writeJSON(stdout, envelope{"kind": "EnvironmentList", "environments": environments})
 		}
 		for _, env := range environments {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", env.ID, env.WorkspaceID, env.Type, env.DisplayName)
+			if _, err := fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", env.ID, env.WorkspaceID, env.Type, env.DisplayName); err != nil {
+				return err
+			}
 		}
 		return nil
 	case "show":
@@ -215,9 +218,7 @@ func runPMBrokerEnvironments(state pmbroker.UserState, args []string, flags pars
 				if jsonOut {
 					return writeJSON(stdout, envelope{"kind": "Environment", "environment": env})
 				}
-				b, _ := json.MarshalIndent(env, "", "  ")
-				fmt.Fprintln(stdout, string(b))
-				return nil
+				return writePMBrokerMetadataHuman(stdout, env)
 			}
 		}
 		return pmBrokerValidationError(pmbroker.ErrContextNotFound)
@@ -273,13 +274,33 @@ func pmBrokerContextFromFlags(name string, cfg config.Config, flags parsedFlags)
 	return ctx, nil
 }
 
-func writePMBrokerContextHuman(stdout io.Writer, ctx pmbroker.Context, source pmbroker.ResolveSource) {
-	fmt.Fprintf(stdout, "context=%s source=%s\n", ctx.Name, source)
-	fmt.Fprintf(stdout, "Organization\t%s\t%s\n", ctx.Organization.ID, ctx.Organization.DisplayName)
-	fmt.Fprintf(stdout, "Workspace\t%s\t%s\n", ctx.Workspace.ID, ctx.Workspace.DisplayName)
-	fmt.Fprintf(stdout, "Environment\t%s\t%s\t%s\n", ctx.Environment.ID, ctx.Environment.Type, ctx.Environment.DisplayName)
-	fmt.Fprintf(stdout, "BrokerProfile\t%s\t%s\n", ctx.BrokerProfile.ID, ctx.BrokerProfile.DisplayName)
-	fmt.Fprintf(stdout, "RuntimeMode\t%s\n", ctx.Runtime.Mode)
+func writePMBrokerContextHuman(stdout io.Writer, ctx pmbroker.Context, source pmbroker.ResolveSource) error {
+	if _, err := fmt.Fprintf(stdout, "context=%s source=%s\n", ctx.Name, source); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "Organization\t%s\t%s\n", ctx.Organization.ID, ctx.Organization.DisplayName); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "Workspace\t%s\t%s\n", ctx.Workspace.ID, ctx.Workspace.DisplayName); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "Environment\t%s\t%s\t%s\n", ctx.Environment.ID, ctx.Environment.Type, ctx.Environment.DisplayName); err != nil {
+		return err
+	}
+	if _, err := fmt.Fprintf(stdout, "BrokerProfile\t%s\t%s\n", ctx.BrokerProfile.ID, ctx.BrokerProfile.DisplayName); err != nil {
+		return err
+	}
+	_, err := fmt.Fprintf(stdout, "RuntimeMode\t%s\n", ctx.Runtime.Mode)
+	return err
+}
+
+func writePMBrokerMetadataHuman(stdout io.Writer, metadata any) error {
+	b, err := json.MarshalIndent(metadata, "", "  ")
+	if err != nil {
+		return fmt.Errorf("encode pm broker metadata: %w", err)
+	}
+	_, err = fmt.Fprintln(stdout, string(b))
+	return err
 }
 
 func pmBrokerStore() (pmbroker.Store, error) {

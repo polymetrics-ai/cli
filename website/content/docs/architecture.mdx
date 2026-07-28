@@ -167,10 +167,10 @@ pm perf sync-modes --records 1000 --json
 
 ```bash
 pm docs generate --dir docs/cli --connectors-dir docs/connectors
-pm docs validate --dir docs/cli --connectors-dir docs/connectors --website-dir website/content/docs
+pm docs validate --connectors-dir docs/connectors
 ```
 
-The docs validator is part of `make verify` and the repository pre-commit hook. It checks command manuals, generated CLI markdown, website command coverage, connector manuals, connector skills, icon metadata, and the connector catalog.
+The docs validator is part of `make verify` and the repository pre-commit hook. It checks generated connector manuals; embedded help and checked-in `docs/cli` drift are covered by CLI golden-doc tests in the release gate.
 
 Adding a CLI command without adding docs should fail before release:
 

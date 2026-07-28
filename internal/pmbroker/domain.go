@@ -424,10 +424,13 @@ func (s Store) Load() (UserState, error) {
 	if err != nil {
 		return UserState{}, fmt.Errorf("open pm broker context state: %w", err)
 	}
-	defer file.Close()
 	state, err := decodeUserState(file)
 	if err != nil {
+		_ = file.Close()
 		return UserState{}, err
+	}
+	if err := file.Close(); err != nil {
+		return UserState{}, fmt.Errorf("close pm broker context state: %w", err)
 	}
 	if err := state.Validate(); err != nil {
 		return UserState{}, err
