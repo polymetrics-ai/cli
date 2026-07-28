@@ -23,7 +23,7 @@ var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fi
 var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|fixed|resolve|resolves|resolved|ref|refs):?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var issueTokenPattern = regexp.MustCompile(`(?:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#?([1-9][0-9]*)\b`)
-var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
+var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?|fix(?:es|ed|ing)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 
 var closingKeywords = map[string]bool{
