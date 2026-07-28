@@ -10,6 +10,8 @@ Mode: focused PM v0.1.1 correction
 - Required GSD command attempted: `scripts/gsd prompt programming-loop init --phase issue-596 --dry-run`; unavailable in this adapter (`unknown GSD command: programming-loop`).
 - Manual-GSD fallback active per AGENTS.md and `.agents/agentic-delivery/references/gsd-pi-adapter.md`.
 - Supplemental adapter prompt inspected: `scripts/gsd prompt gsd-quick "issue 596 Gong calls list correction" --dry-run`.
+- Resume checkpoint after compaction: reread ship instructions and decision record, reran `scripts/gsd doctor`, and inspected `scripts/gsd prompt gsd-execute-phase issue-596-gong-calls-list-date-range-limit --dry-run`; continuing manual-GSD execution because the phase artifact is issue-scoped rather than a numeric GSD phase and `programming-loop` remains unavailable.
+- Reference checkpoint: current authoritative Gong OpenAPI docs verified before implementation finalization; private comparative notes are kept outside the repository and must not appear in tracked/public surfaces.
 
 ## Required skills loaded
 
@@ -71,12 +73,12 @@ Existing commandrunner `queryOverrides` treats command-specific flags as explici
 
 ## CLI help/docs/website parity checklist
 
-- [ ] `pm help gong` reflects `calls list` fields/command notes.
-- [ ] `pm gong calls list --help` documents `--from`, `--to`, and `--limit` output-cap language.
-- [ ] `docs/connectors/gong.md` updated or regenerated.
-- [ ] `docs/cli/**` generated docs updated if generator changes them.
-- [ ] `website/**` generated connector data/docs updated if source surfaces changed.
-- [ ] Tests cover help rendering and command metadata.
+- [x] `pm help gong` reflects `calls list` fields/command notes.
+- [x] `pm gong calls list --help` documents `--from`, `--to`, and `--limit` output-cap language.
+- [x] `docs/connectors/gong/MANUAL.md` and `docs/connectors/gong/SKILL.md` updated from generated output; `internal/connectors/defs/gong/docs.md` updated.
+- [x] `docs/cli/**` generated docs unchanged/not applicable for connector-specific command surface.
+- [x] `website/**` generated connector data updated from the Gong bundle/docs source.
+- [x] Tests cover help rendering and command metadata.
 
 ## Safety
 

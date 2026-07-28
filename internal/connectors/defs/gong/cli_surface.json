@@ -173,7 +173,7 @@
     {
       "name": "limit",
       "type": "integer",
-      "summary": "Maximum ETL records to emit for stream commands."
+      "summary": "Maximum PM ETL records to emit; does not control Gong page size or total provider-side results."
     },
     {
       "name": "max-bytes",
@@ -230,8 +230,24 @@
           "path": "/v2/calls"
         }
       ],
+      "flags": [
+        {
+          "name": "from",
+          "type": "string",
+          "summary": "Inclusive ISO-8601 lower bound mapped to Gong fromDateTime.",
+          "maps_to": "query.fromDateTime"
+        },
+        {
+          "name": "to",
+          "type": "string",
+          "summary": "Exclusive ISO-8601 upper bound mapped to Gong toDateTime.",
+          "maps_to": "query.toDateTime"
+        }
+      ],
+      "notes": "Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.",
       "examples": [
-        "pm gong calls list --json --limit 25"
+        "pm gong calls list --json --limit 25",
+        "pm gong calls list --json --from 2026-07-01T00:00:00Z --to 2026-07-02T00:00:00Z --limit 25"
       ]
     },
     {

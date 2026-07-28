@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"time"
 
 	"polymetrics.ai/internal/connectors"
 	"polymetrics.ai/internal/safety"
@@ -171,6 +172,9 @@ func Run(ctx context.Context, connector connectors.Connector, req Request, emit 
 
 	query, err := queryOverrides(cmd, req.Flags)
 	if err != nil {
+		return Result{}, err
+	}
+	if err := validateReadCommandQuery(connector.Name(), cmd, query); err != nil {
 		return Result{}, err
 	}
 	limit := req.Limit
@@ -525,6 +529,36 @@ func queryOverrides(cmd connectors.CommandSurfaceCommand, flags map[string][]str
 		query[target] = value
 	}
 	return query, nil
+}
+
+func validateReadCommandQuery(connectorName string, cmd connectors.CommandSurfaceCommand, query map[string]string) error {
+	if connectorName != "gong" || cmd.Path != "calls list" {
+		return nil
+	}
+	from, hasFrom, err := parseOptionalRFC3339Query(query, "fromDateTime", "from")
+	if err != nil {
+		return err
+	}
+	to, hasTo, err := parseOptionalRFC3339Query(query, "toDateTime", "to")
+	if err != nil {
+		return err
+	}
+	if hasFrom && hasTo && !from.Before(to) {
+		return fmt.Errorf("invalid Gong calls list date range: --from must be before --to (Gong treats --to as an exclusive upper bound)")
+	}
+	return nil
+}
+
+func parseOptionalRFC3339Query(query map[string]string, key, flagName string) (time.Time, bool, error) {
+	value := strings.TrimSpace(query[key])
+	if value == "" {
+		return time.Time{}, false, nil
+	}
+	parsed, err := time.Parse(time.RFC3339, value)
+	if err != nil {
+		return time.Time{}, false, fmt.Errorf("invalid --%s %q, want ISO-8601/RFC3339 timestamp", flagName, value)
+	}
+	return parsed, true, nil
 }
 
 func validateFlagValue(flag connectors.CommandSurfaceFlag, value string) error {
