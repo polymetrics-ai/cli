@@ -34,16 +34,29 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       paths_released: ${{ steps.release.outputs.paths_released }}
       pm_cli_release_created: ${{ steps.release.outputs.release_created == 'true' && contains(steps.release.outputs.paths_released, '"."') }}
+      pm_release_input: ${{ steps.pm-release-filter.outputs.pm_release_input }}
       tag_name: ${{ steps.release.outputs.tag_name }}
 
     steps:
+      - name: Checkout release calculation history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve PM CLI release input
+        id: pm-release-filter
+        run: ./scripts/release-please-pm-filter.py --github-output "$GITHUB_OUTPUT"
+
       - name: Create or update release PR
         id: release
+        if: steps.pm-release-filter.outputs.pm_release_input == 'true'
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          release-as: ${{ steps.pm-release-filter.outputs.release_as }}
 
   package-check:
     name: package-check

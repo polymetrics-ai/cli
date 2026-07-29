@@ -3,6 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 HELPER="$ROOT_DIR/scripts/notify-homebrew-formula-update.sh"
+RELEASE_FILTER="$ROOT_DIR/scripts/release-please-pm-filter.py"
 
 fail() {
   printf 'homebrew-release-notify test failed: %s\n' "$1" >&2
@@ -44,17 +45,23 @@ def require(condition, message):
         raise SystemExit(message)
 
 require(helper.exists(), "notification helper is missing")
+require((root / "scripts/release-please-pm-filter.py").exists(), "PM release filter helper is missing")
 require("permissions:\n  contents: read" in release, "release workflow must keep top-level contents: read")
 for ignored in ['"website/**"', '".github/workflows/website.yml"', '".gitlab-ci.yml"']:
     require(ignored in release, f"release workflow must ignore website-only path {ignored}")
 pm_package = release_please["packages"]["."]
 require(pm_package["package-name"] == "pm", "release-please root package must remain PM")
-expected_excludes = {"website", ".github/workflows/website.yml", ".gitlab-ci.yml"}
-require(set(pm_package.get("exclude-paths", [])) >= expected_excludes, "release-please must exclude website-only paths from PM version calculation")
+expected_excludes = {"website"}
+require(set(pm_package.get("exclude-paths", [])) == expected_excludes, "release-please directory excludes must not claim exact-file exclusions")
 require("  notify-homebrew-tap:" in release, "release workflow must define notify-homebrew-tap job")
 notify = release.split("  notify-homebrew-tap:", 1)[1]
 release_assets = release.split("  release-assets:", 1)[1].split("  notify-homebrew-tap:", 1)[0]
 release_please_job = release.split("  release-please:", 1)[1].split("  package-check:", 1)[0]
+require("Checkout release calculation history" in release_please_job, "release-please must inspect local git history first")
+require("Resolve PM CLI release input" in release_please_job, "release-please must run the PM CLI release filter before calculation")
+require("./scripts/release-please-pm-filter.py --github-output \"$GITHUB_OUTPUT\"" in release_please_job, "release-please must use the checked-in PM CLI release filter")
+require("if: steps.pm-release-filter.outputs.pm_release_input == 'true'" in release_please_job, "release-please must skip when only website/deployment commits are releasable")
+require("release-as: ${{ steps.pm-release-filter.outputs.release_as }}" in release_please_job, "release-please must use the filtered PM CLI release version")
 require("pm_cli_release_created" in release_please_job, "release-please must expose a PM CLI component release guard")
 require("needs.release-please.outputs.pm_cli_release_created == 'true'" in release_assets, "release-assets must only follow PM CLI release-please releases")
 require("release_component: ${{ steps.release-metadata.outputs.release_component }}" in release_assets, "release-assets must expose the PM release component")
@@ -88,21 +95,108 @@ require("workflow_run:" not in release, "release workflow must not be triggered 
 for forbidden in ["homebrew", "pm-formula-update", "PM_HOMEBREW"]:
     require(forbidden.lower() not in website.lower(), f"website workflow must not reference {forbidden}")
 require("release-assets:" in release and "homebrew_notification_ready" in release, "release-assets must expose a verified notification output")
-
-def website_only(paths):
-    return all(path.startswith("website/") or path in expected_excludes for path in paths)
-
-scenarios = {
-    "website only": (["website/app/page.tsx", ".github/workflows/website.yml"], False, False),
-    "go only": (["cmd/pm/main.go", "internal/app/app.go"], True, True),
-    "mixed go and website": (["cmd/pm/main.go", "website/app/page.tsx"], True, True),
-    "website gitlab only": ([".gitlab-ci.yml"], False, False),
-}
-for name, (paths, release_workflow_runs, pm_release_candidate) in scenarios.items():
-    ignored = website_only(paths)
-    require((not ignored) == release_workflow_runs, f"{name} release workflow path classification is wrong")
-    require((not ignored) == pm_release_candidate, f"{name} release-please path classification is wrong")
 PY
+}
+
+init_filter_repo() {
+  local repo_dir="$1"
+  mkdir -p "$repo_dir"
+  git -C "$repo_dir" init -b main >/dev/null
+  git -C "$repo_dir" config user.name "Release Filter Test"
+  git -C "$repo_dir" config user.email "release-filter@example.invalid"
+  printf '{".":"1.2.3"}\n' > "$repo_dir/.release-please-manifest.json"
+  printf '{"bootstrap-sha":"unused","packages":{".":{"package-name":"pm","exclude-paths":["website"]}}}\n' > "$repo_dir/release-please-config.json"
+  printf 'base\n' > "$repo_dir/README.md"
+  git -C "$repo_dir" add .
+  git -C "$repo_dir" commit -m "chore: base" >/dev/null
+  git -C "$repo_dir" tag v1.2.3
+}
+
+commit_file() {
+  local repo_dir="$1"
+  local message="$2"
+  local path="$3"
+  mkdir -p "$repo_dir/$(dirname "$path")"
+  printf '%s\n' "$message $path" >> "$repo_dir/$path"
+  git -C "$repo_dir" add "$path"
+  git -C "$repo_dir" commit -m "$message" >/dev/null
+}
+
+run_filter_json() {
+  local repo_dir="$1"
+  (cd "$repo_dir" && "$RELEASE_FILTER" --base-ref v1.2.3)
+}
+
+assert_filter_result() {
+  local json="$1"
+  local expected_input="$2"
+  local expected_release_as="$3"
+  local expected_ignored="$4"
+  python3 - "$json" "$expected_input" "$expected_release_as" "$expected_ignored" <<'PY'
+import json
+import sys
+
+result = json.loads(sys.argv[1])
+expected_input, expected_release_as, expected_ignored = sys.argv[2:5]
+if result["pm_release_input"] != expected_input:
+    raise SystemExit(f"pm_release_input got {result['pm_release_input']!r}, want {expected_input!r}")
+if result["release_as"] != expected_release_as:
+    raise SystemExit(f"release_as got {result['release_as']!r}, want {expected_release_as!r}")
+if str(result["ignored_website_commits"]) != expected_ignored:
+    raise SystemExit(f"ignored_website_commits got {result['ignored_website_commits']!r}, want {expected_ignored!r}")
+PY
+}
+
+run_release_filter_tests() {
+  [[ -x "$RELEASE_FILTER" ]] || fail "PM release filter is not executable"
+
+  local tmp_dir repo output
+  tmp_dir="$(mktemp -d)"
+  trap 'rm -rf "$tmp_dir"' RETURN
+
+  repo="$tmp_dir/website-dir-only"
+  init_filter_repo "$repo"
+  commit_file "$repo" "feat: update website docs" "website/app/page.tsx"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" false "" 1
+
+  repo="$tmp_dir/website-workflow-only"
+  init_filter_repo "$repo"
+  commit_file "$repo" "feat: update website workflow" ".github/workflows/website.yml"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" false "" 1
+
+  repo="$tmp_dir/gitlab-only"
+  init_filter_repo "$repo"
+  commit_file "$repo" "feat: update website gitlab deploy" ".gitlab-ci.yml"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" false "" 1
+
+  repo="$tmp_dir/go-only"
+  init_filter_repo "$repo"
+  commit_file "$repo" "fix: update pm command" "cmd/pm/main.go"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" true "1.2.4" 0
+
+  repo="$tmp_dir/mixed-go-website"
+  init_filter_repo "$repo"
+  commit_file "$repo" "feat: update pm command and website" "cmd/pm/main.go"
+  commit_file "$repo" "chore: update website companion" "website/app/page.tsx"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" true "1.3.0" 1
+
+  repo="$tmp_dir/historical-website-plus-go"
+  init_filter_repo "$repo"
+  commit_file "$repo" "feat: update website workflow" ".github/workflows/website.yml"
+  commit_file "$repo" "fix: update pm command" "cmd/pm/main.go"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" true "1.2.4" 1
+
+  repo="$tmp_dir/release-workflow-go-release"
+  init_filter_repo "$repo"
+  commit_file "$repo" "fix: update release workflow" ".github/workflows/release.yml"
+  output="$(run_filter_json "$repo")"
+  assert_filter_result "$output" true "1.2.4" 0
 }
 
 start_fake_github_api() {
@@ -352,5 +446,6 @@ PY
 }
 
 run_static_assertions
+run_release_filter_tests
 run_helper_tests
 printf 'homebrew release notification assertions passed\n'

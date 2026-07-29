@@ -32,6 +32,11 @@ run, the notification omits `source_run_id` rather than attributing old
 provenance to the current run. Website deployment is independent and does not
 trigger this Homebrew path.
 
+The PM release job also filters release-worthy commits before Release Please
+runs: commits that touch only `website/**`, `.github/workflows/website.yml`, or
+`.gitlab-ci.yml` are omitted from the PM version decision, while PM CLI and
+release workflow changes still participate.
+
 ## Future release asset set
 
 For a future tag such as `v0.2.0`, the GitHub release is expected to contain:

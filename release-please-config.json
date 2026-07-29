@@ -10,9 +10,7 @@
       "package-name": "pm",
       "changelog-path": "CHANGELOG.md",
       "exclude-paths": [
-        "website",
-        ".github/workflows/website.yml",
-        ".gitlab-ci.yml"
+        "website"
       ]
     }
   }
