@@ -21,12 +21,16 @@ ambient `gh` authentication.
 
 The current CLI-side rollout is dry-run only. It passes schema
 `pm-homebrew-formula/v1`, source repo `polymetrics-ai/cli`, the verified `vX.Y.Z`
-tag, release id, source release workflow run id, and
+tag, release id, the source release workflow run id for assets signed by the
+current workflow run, and
 `target_commitish_policy=ignore`. Enabling `dry_run=false` would allow the tap's
 App-owned formula branch/PR path and requires a later explicit code and operator
 documentation change; do not activate it as part of release validation.
 
-Website deployment is independent and does not trigger this Homebrew path.
+If the release already has the exact verified asset set from an earlier trusted
+run, the notification omits `source_run_id` rather than attributing old
+provenance to the current run. Website deployment is independent and does not
+trigger this Homebrew path.
 
 ## Future release asset set
 

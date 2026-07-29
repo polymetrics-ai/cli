@@ -30,12 +30,13 @@ expect_failure() {
 run_static_assertions() {
   python3 - "$ROOT_DIR" <<'PY'
 from pathlib import Path
-import re
+import json
 import sys
 
 root = Path(sys.argv[1])
 release = (root / ".github/workflows/release.yml").read_text()
 website = (root / ".github/workflows/website.yml").read_text()
+release_please = json.loads((root / "release-please-config.json").read_text())
 helper = root / "scripts/notify-homebrew-formula-update.sh"
 
 def require(condition, message):
@@ -44,10 +45,26 @@ def require(condition, message):
 
 require(helper.exists(), "notification helper is missing")
 require("permissions:\n  contents: read" in release, "release workflow must keep top-level contents: read")
+for ignored in ['"website/**"', '".github/workflows/website.yml"', '".gitlab-ci.yml"']:
+    require(ignored in release, f"release workflow must ignore website-only path {ignored}")
+pm_package = release_please["packages"]["."]
+require(pm_package["package-name"] == "pm", "release-please root package must remain PM")
+expected_excludes = {"website", ".github/workflows/website.yml", ".gitlab-ci.yml"}
+require(set(pm_package.get("exclude-paths", [])) >= expected_excludes, "release-please must exclude website-only paths from PM version calculation")
 require("  notify-homebrew-tap:" in release, "release workflow must define notify-homebrew-tap job")
 notify = release.split("  notify-homebrew-tap:", 1)[1]
+release_assets = release.split("  release-assets:", 1)[1].split("  notify-homebrew-tap:", 1)[0]
+release_please_job = release.split("  release-please:", 1)[1].split("  package-check:", 1)[0]
+require("pm_cli_release_created" in release_please_job, "release-please must expose a PM CLI component release guard")
+require("needs.release-please.outputs.pm_cli_release_created == 'true'" in release_assets, "release-assets must only follow PM CLI release-please releases")
+require("release_component: ${{ steps.release-metadata.outputs.release_component }}" in release_assets, "release-assets must expose the PM release component")
+require("echo \"release_component=pm-cli\"" in release_assets, "release metadata must classify canonical PM CLI releases")
+require("source_run_id: ${{ steps.homebrew-source-run.outputs.source_run_id }}" in release_assets, "release-assets must not hard-code current run id for existing assets")
+require("source_run_id: ${{ github.run_id }}" not in release_assets, "existing-asset notifications must not claim the current run signed old assets")
+require("SKIP_RELEASE_ASSETS" in release_assets and "source_run_id=" in release_assets, "existing verified assets must omit mismatched source run id")
 require("needs: release-assets" in notify, "notify-homebrew-tap must depend on release-assets")
 require("homebrew_notification_ready" in notify, "notify-homebrew-tap must require verified release-assets output")
+require("needs.release-assets.outputs.release_component == 'pm-cli'" in notify, "notify job must require PM CLI release component")
 require("concurrency:" in notify and "homebrew-tap-notify-${{ needs.release-assets.outputs.tag_name }}" in notify, "notify job must serialize duplicate tag notifications")
 require("cancel-in-progress: false" in notify, "duplicate notification concurrency must not cancel in-flight runs")
 require("permissions:\n      contents: read" in notify, "notify job must keep GITHUB_TOKEN read-only")
@@ -71,6 +88,20 @@ require("workflow_run:" not in release, "release workflow must not be triggered 
 for forbidden in ["homebrew", "pm-formula-update", "PM_HOMEBREW"]:
     require(forbidden.lower() not in website.lower(), f"website workflow must not reference {forbidden}")
 require("release-assets:" in release and "homebrew_notification_ready" in release, "release-assets must expose a verified notification output")
+
+def website_only(paths):
+    return all(path.startswith("website/") or path in expected_excludes for path in paths)
+
+scenarios = {
+    "website only": (["website/app/page.tsx", ".github/workflows/website.yml"], False, False),
+    "go only": (["cmd/pm/main.go", "internal/app/app.go"], True, True),
+    "mixed go and website": (["cmd/pm/main.go", "website/app/page.tsx"], True, True),
+    "website gitlab only": ([".gitlab-ci.yml"], False, False),
+}
+for name, (paths, release_workflow_runs, pm_release_candidate) in scenarios.items():
+    ignored = website_only(paths)
+    require((not ignored) == release_workflow_runs, f"{name} release workflow path classification is wrong")
+    require((not ignored) == pm_release_candidate, f"{name} release-please path classification is wrong")
 PY
 }
 
@@ -224,6 +255,18 @@ run_helper_tests() {
     --target-commitish-policy ignore
     --dry-run true
   )
+  local common_args_without_source_run=(
+    --api-base "$api_base"
+    --release-assets-verified true
+    --tag v1.2.3
+    --release-id 456789
+    --source-repo polymetrics-ai/cli
+    --tap-repo polymetrics-ai/homebrew-tap
+    --workflow pm-formula-update.yml
+    --dispatch-schema pm-homebrew-formula/v1
+    --target-commitish-policy ignore
+    --dry-run true
+  )
 
   output="$(env -u GH_TOKEN -u GITHUB_TOKEN \
     PM_HOMEBREW_PR_APP_ID=12345 \
@@ -239,14 +282,20 @@ run_helper_tests() {
     "$HELPER" "${common_args[@]}" --dispatch 2>&1)"
   [[ "$output" == *"requested Homebrew formula update dry-run for v1.2.3"* ]] || fail "duplicate dispatch summary missing"
 
+  output="$(env -u GH_TOKEN -u GITHUB_TOKEN \
+    PM_HOMEBREW_PR_APP_ID=12345 \
+    PM_HOMEBREW_PR_PRIVATE_KEY="$private_key" \
+    "$HELPER" "${common_args_without_source_run[@]}" --dispatch 2>&1)"
+  [[ "$output" == *"requested Homebrew formula update dry-run for v1.2.3"* ]] || fail "existing-assets dispatch summary missing"
+
   python3 - "$log_file" <<'PY'
 import json
 import sys
 
 events = [json.loads(line) for line in open(sys.argv[1]) if line.strip()]
 dispatches = [event for event in events if event["path"].endswith("/dispatches")]
-if len(dispatches) != 2:
-    raise SystemExit(f"expected two deterministic dry-run dispatches, got {len(dispatches)}")
+if len(dispatches) != 3:
+    raise SystemExit(f"expected three dry-run dispatches, got {len(dispatches)}")
 first = dispatches[0]["body"]
 second = dispatches[1]["body"]
 if first != second:
@@ -262,6 +311,11 @@ expected_inputs = {
 }
 if first != {"ref": "main", "inputs": expected_inputs}:
     raise SystemExit(f"unexpected dispatch payload: {first!r}")
+expected_existing_inputs = dict(expected_inputs)
+del expected_existing_inputs["source_run_id"]
+third = dispatches[2]["body"]
+if third != {"ref": "main", "inputs": expected_existing_inputs}:
+    raise SystemExit(f"unexpected existing-assets dispatch payload: {third!r}")
 for event in dispatches:
     if event["authorization"] != "Bearer app-token-for-homebrew-dispatch":
         raise SystemExit("dispatch did not use explicit App token")
@@ -292,6 +346,9 @@ PY
 
   expect_failure "live Homebrew formula mutation is not enabled" \
     env -u GH_TOKEN -u GITHUB_TOKEN "$HELPER" "${common_args[@]}" --dry-run false --no-dispatch
+
+  expect_failure "source_run_id must be a numeric Release workflow run id" \
+    env -u GH_TOKEN -u GITHUB_TOKEN "$HELPER" "${common_args_without_source_run[@]}" --source-run-id current-run --no-dispatch
 }
 
 run_static_assertions

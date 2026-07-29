@@ -28,7 +28,7 @@ dispatch="false"
 
 usage() {
   cat <<'USAGE'
-Usage: scripts/notify-homebrew-formula-update.sh --release-assets-verified true --tag vX.Y.Z --release-id N --source-run-id N --dispatch
+Usage: scripts/notify-homebrew-formula-update.sh --release-assets-verified true --tag vX.Y.Z --release-id N [--source-run-id N] --dispatch
 
 Validates and sends the initial dry-run-only PM release notification to the
 polymetrics-ai/homebrew-tap PM formula update workflow. The script never uses
@@ -144,7 +144,9 @@ API_BASE="${API_BASE%/}"
 [[ "$tag" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || \
   fail "invalid PM release tag: $tag"
 [[ "$release_id" =~ ^[0-9]+$ ]] || fail "release_id must be a numeric GitHub Release id"
-[[ "$source_run_id" =~ ^[0-9]+$ ]] || fail "source_run_id must be a numeric Release workflow run id"
+if [[ -n "$source_run_id" && ! "$source_run_id" =~ ^[0-9]+$ ]]; then
+  fail "source_run_id must be a numeric Release workflow run id"
+fi
 
 if [[ "$dispatch" != "true" ]]; then
   printf 'validated Homebrew formula update dry-run for %s (not dispatched)\n' "$tag"
@@ -300,17 +302,19 @@ dispatch_payload="$tmp_dir/workflow-dispatch.json"
 python3 - "$dispatch_payload" "$tag" "$release_id" "$source_run_id" "$DISPATCH_REF" <<'PY'
 import json
 import sys
+inputs = {
+    "dispatch_schema": "pm-homebrew-formula/v1",
+    "source_repo": "polymetrics-ai/cli",
+    "tag": sys.argv[2],
+    "release_id": sys.argv[3],
+    "target_commitish_policy": "ignore",
+    "dry_run": "true",
+}
+if sys.argv[4]:
+    inputs["source_run_id"] = sys.argv[4]
 payload = {
     "ref": sys.argv[5],
-    "inputs": {
-        "dispatch_schema": "pm-homebrew-formula/v1",
-        "source_repo": "polymetrics-ai/cli",
-        "tag": sys.argv[2],
-        "release_id": sys.argv[3],
-        "source_run_id": sys.argv[4],
-        "target_commitish_policy": "ignore",
-        "dry_run": "true",
-    },
+    "inputs": inputs,
 }
 with open(sys.argv[1], "w") as fh:
     json.dump(payload, fh, sort_keys=True, separators=(",", ":"))

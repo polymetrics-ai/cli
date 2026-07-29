@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
   pull_request:
+    paths-ignore:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
   release:
     types:
       - published
@@ -24,6 +32,8 @@ jobs:
       pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+      pm_cli_release_created: ${{ steps.release.outputs.release_created == 'true' && contains(steps.release.outputs.paths_released, '"."') }}
       tag_name: ${{ steps.release.outputs.tag_name }}
 
     steps:
@@ -95,7 +105,7 @@ jobs:
       ${{
         always() &&
         (github.event_name == 'release' ||
-         needs.release-please.outputs.release_created == 'true')
+         needs.release-please.outputs.pm_cli_release_created == 'true')
       }}
     runs-on: ubuntu-latest
     permissions:
@@ -110,8 +120,9 @@ jobs:
       homebrew_notification_ready: ${{ steps.homebrew-notification.outputs.ready }}
       tag_name: ${{ steps.release-metadata.outputs.tag_name }}
       release_version: ${{ steps.release-metadata.outputs.release_version }}
+      release_component: ${{ steps.release-metadata.outputs.release_component }}
       release_id: ${{ steps.release-metadata.outputs.release_id }}
-      source_run_id: ${{ github.run_id }}
+      source_run_id: ${{ steps.homebrew-source-run.outputs.source_run_id }}
 
     steps:
       - name: Checkout release tag
@@ -141,6 +152,10 @@ jobs:
             printf 'release tag must start with v: %s\n' "$TAG_NAME" >&2
             exit 1
           fi
+          if [[ ! "$TAG_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            printf 'release tag must be a canonical PM CLI semver tag: %s\n' "$TAG_NAME" >&2
+            exit 1
+          fi
           ./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets >/dev/null
           release_json=$(gh release view "$TAG_NAME" --json databaseId,isDraft,tagName)
           release_id=$(RELEASE_JSON="$release_json" TAG_NAME="$TAG_NAME" python3 - <<'PY'
@@ -159,6 +174,7 @@ jobs:
           {
             echo "tag_name=$TAG_NAME"
             echo "release_version=$release_version"
+            echo "release_component=pm-cli"
             echo "release_id=$release_id"
           } >> "$GITHUB_OUTPUT"
 
@@ -302,12 +318,27 @@ jobs:
         if: ${{ success() }}
         run: echo "ready=true" >> "$GITHUB_OUTPUT"
 
+      - name: Resolve Homebrew notification source run
+        id: homebrew-source-run
+        if: ${{ success() }}
+        env:
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          SKIP_RELEASE_ASSETS: ${{ steps.existing-assets.outputs.skip_release_assets }}
+        run: |
+          set -euo pipefail
+          if [[ "$SKIP_RELEASE_ASSETS" == "true" ]]; then
+            echo "source_run_id=" >> "$GITHUB_OUTPUT"
+          else
+            echo "source_run_id=$CURRENT_RUN_ID" >> "$GITHUB_OUTPUT"
+          fi
+
   notify-homebrew-tap:
     name: notify-homebrew-tap-dry-run
     needs: release-assets
     if: >-
       ${{
         github.repository == 'polymetrics-ai/cli' &&
+        needs.release-assets.outputs.release_component == 'pm-cli' &&
         needs.release-assets.outputs.homebrew_notification_ready == 'true'
       }}
     runs-on: ubuntu-latest
@@ -329,13 +360,18 @@ jobs:
         env:
           PM_HOMEBREW_PR_APP_ID: ${{ secrets.PM_HOMEBREW_PR_APP_ID }}
           PM_HOMEBREW_PR_PRIVATE_KEY: ${{ secrets.PM_HOMEBREW_PR_PRIVATE_KEY }}
+          SOURCE_RUN_ID: ${{ needs.release-assets.outputs.source_run_id }}
         run: |
           set -euo pipefail
+          source_run_args=()
+          if [[ -n "$SOURCE_RUN_ID" ]]; then
+            source_run_args=(--source-run-id "$SOURCE_RUN_ID")
+          fi
           ./scripts/notify-homebrew-formula-update.sh \
             --release-assets-verified "${{ needs.release-assets.outputs.homebrew_notification_ready }}" \
             --tag "${{ needs.release-assets.outputs.tag_name }}" \
             --release-id "${{ needs.release-assets.outputs.release_id }}" \
-            --source-run-id "${{ needs.release-assets.outputs.source_run_id }}" \
+            "${source_run_args[@]}" \
             --source-repo polymetrics-ai/cli \
             --tap-repo polymetrics-ai/homebrew-tap \
             --workflow pm-formula-update.yml \
