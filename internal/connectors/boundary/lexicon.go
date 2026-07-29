@@ -447,7 +447,7 @@ func matchToken(c connectorLexeme, token, lower string, includeWeakExact bool) l
 		}
 	}
 	for _, prefix := range c.literalPrefixes {
-		if tokenHasConnectorPrefix(lower, prefix) {
+		if tokenHasConnectorPrefix(lower, prefix) || valueHasConnectorCompoundPolicyPrefix(token, lower, prefix) {
 			return literalMatch{Connector: c.Name, Match: token, Policy: true}
 		}
 	}

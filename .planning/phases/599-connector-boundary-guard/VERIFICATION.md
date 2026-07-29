@@ -13,7 +13,7 @@
 | `go run ./cmd/connectorgen boundary . --json` | Pass | `outcome=clean`, `findings=0`, `warnings=0`, `exceptions=24`, `checked_files=129`, `connectors_loaded=548`, `gong_exceptions=0`. |
 | `go run ./cmd/connectorgen validate internal/connectors/defs --json` | Pass | `connectors_checked=548`, `findings=0`, `warnings=0`. |
 | `make connector-boundary` | Pass | `outcome=clean`, `findings=0`, `exceptions=24`, `checked_files=129`. |
-| Extracted `conventions.yml` branch-name run block | Pass | Accepted `fm/cli-connector-boundary-guard-r1`, `fix/stripe-pagination`, and `dependabot/go_modules/example`; rejected `invalid/Bad_Name`. |
+| Extracted `conventions.yml` branch-name run block | Blocked | Current source rejects legacy branch `fm/cli-connector-boundary-guard-r1` after removing the wildcard bypass for that branch family; supported migration to a conventional `<type>/<description>` branch is required before reporting this gate green. |
 | `make verify` | Pass | Exit 0. |
 | `git diff --check` | Pass | Exit 0. |
 | `/Users/karthiksivadas/karthik-agent-workspace/bin/fm-ensure-agents-md.sh .` | No change | Script reported both `AGENTS.md` and `CLAUDE.md` are real files and require manual reconciliation; no durable cross-session project knowledge was added for this guard-only slice. |

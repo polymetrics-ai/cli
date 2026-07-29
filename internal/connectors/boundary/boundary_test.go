@@ -47,6 +47,8 @@ func TestScanDetectsProviderPolicyInSharedHelper(t *testing.T) {
 		"internal/connectors/commandrunner/helper.go": `package commandrunner
 
 const helperParamFormat = "github_date_range"
+const helperFallbackFormat = "githubDateRangeFallback"
+const helperPolicyFormat = "githubOutputPolicy"
 type githubDateRangeFallback struct{}
 `,
 	})
@@ -57,6 +59,7 @@ type githubDateRangeFallback struct{}
 	}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "github_date_range")
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "githubDateRangeFallback")
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "githubOutputPolicy")
 }
 
 func TestScanDetectsWeakConnectorPolicyIdentifiers(t *testing.T) {
@@ -114,6 +117,7 @@ func mergeResponseFields() {}
 const plainBoxLiteral = "box"
 const boxOutputLiteral = "box_output"
 const modeReadQueryLiteral = "mode_read_query"
+const neutralLiteral = "githubClient"
 `,
 	})
 
