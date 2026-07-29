@@ -1,6 +1,10 @@
 package certify
 
-import "fmt"
+import (
+	"fmt"
+
+	"polymetrics.ai/internal/connectors/engine"
+)
 
 type directReadCandidate struct {
 	StageName string
@@ -18,7 +22,7 @@ func stageDirectReadSweep(rc *runContext, rep *Report) error {
 
 	candidates := directReadCandidatesFor(rc.opts.Connector, rc.opts.Config)
 	if len(candidates) == 0 {
-		reason := fmt.Sprintf("skipped: connector %q has no curated direct-read certification candidate", rc.opts.Connector)
+		reason := fmt.Sprintf("skipped: connector %q has no definition-owned direct-read certification candidate", rc.opts.Connector)
 		rep.Capabilities.DirectRead = &CapabilityResult{Result: "skipped", Reason: reason}
 		skipStage(rc, rep, "direct_read_sweep", reason)
 		return nil
@@ -49,17 +53,15 @@ func stageDirectReadSweep(rc *runContext, rep *Report) error {
 }
 
 func directReadCandidatesFor(connector string, config map[string]string) []directReadCandidate {
-	switch connector {
-	case "github":
-		filePath := configValue(config, "direct_read_path", "README.md")
-		dirPath := configValue(config, "direct_read_dir_path", "")
-		return []directReadCandidate{
-			githubDirectReadCandidate("read-file", "direct_read_sweep_repo_read_file", "repo read-file", filePath, config),
-			githubDirectReadCandidate("read-dir", "direct_read_sweep_repo_read_dir", "repo read-dir", dirPath, config),
-		}
-	default:
+	profile := certificationProfileFor(connector)
+	if profile.spec == nil || len(profile.spec.DirectReadCandidates) == 0 {
 		return nil
 	}
+	out := make([]directReadCandidate, 0, len(profile.spec.DirectReadCandidates))
+	for _, candidate := range profile.spec.DirectReadCandidates {
+		out = append(out, commandCandidateFor(connector, config, candidate))
+	}
+	return out
 }
 
 func directReadCandidateFor(connector string, config map[string]string) (directReadCandidate, bool) {
@@ -70,17 +72,12 @@ func directReadCandidateFor(connector string, config map[string]string) (directR
 	return candidates[0], true
 }
 
-func githubDirectReadCandidate(action, stageName, command, path string, config map[string]string) directReadCandidate {
-	args := []string{
-		"github", "repo", action,
-		"--credential", sourceCredentialName,
-		"--path", path,
+func commandCandidateFor(connector string, config map[string]string, candidate engine.CertificationCommandCandidate) directReadCandidate {
+	return directReadCandidate{
+		StageName: candidate.StageName,
+		Command:   candidate.Command,
+		Args:      certificationCommandArgs(connector, config, candidate),
 	}
-	if config != nil && config["direct_read_ref"] != "" {
-		args = append(args, "--ref", config["direct_read_ref"])
-	}
-	args = append(args, "--max-bytes", "1048576", "--json")
-	return directReadCandidate{StageName: stageName, Command: command, Args: args}
 }
 
 func configValue(config map[string]string, key, fallback string) string {

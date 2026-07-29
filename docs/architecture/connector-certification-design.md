@@ -24,6 +24,11 @@ Status: approved (2026-07-02). Program PRD: `docs/plans/universal-programming-lo
 6. Crontab entries carry a `# pm-schedule-<name>` sentinel (`internal/schedule/crontab.go:88,100`)
    — a verifiable roundtrip marker. `runScheduleRemove` ignores backend removal errors — certify
    verifies independently.
+7. Connector-specific certification contracts are definition-owned in optional
+   `internal/connectors/defs/<name>/certification.json`, validated by
+   `internal/connectors/engine/schema/certification.schema.json`. Shared certify Go must not carry
+   provider-specific defaults, command candidates, record schemas, or write pairings; write
+   `record_schema` remains owned by each action in `writes.json`.
 
 ## The honest answer: live-testing all 5 sync modes per connector
 
@@ -195,7 +200,9 @@ redaction/**leaks**; any leak row printed first and forces exit 3.
 **Data generation from write action `record_schema`**: required-field heuristics by name
 (`name|title|label ⇒ tag`; `email ⇒ pm-cert+<runid>@example.com`; `url ⇒
 https://example.com/pm-cert/<runid>`; numeric ⇒ 1; bool ⇒ false); optional fields unset.
-Per-connector overrides in a declarative pairing table:
+Per-connector overrides are declared in `certification.json` `write_pairings` entries, with the
+exact syntax owned by `docs/migration/conventions.md` and
+`internal/connectors/engine/schema/certification.schema.json`. The runtime shape remains:
 
 ```go
 type WritePairing struct {
@@ -209,7 +216,8 @@ type WritePairing struct {
 ```
 
 Default pairing inference: `create_X ↔ delete_X | close_X | archive_X`. **Unpaired mutating
-actions are never executed live** (`skipped: no cleanup pairing`) unless a profile supplies one.
+actions are never executed live** (`skipped: no cleanup pairing`) unless a connector definition
+supplies a safe pairing with read-back fields.
 
 **Mechanics per pair** (all via public CLI): write tagged record to local JSONL → file→warehouse
 ETL → `pm reverse plan --limit 1` → token from text output → `preview --json` → `run --approve` →
@@ -247,7 +255,7 @@ internal/connectors/certify/
   stages_source.go  # check/catalog/read/5-mode matrix/resume
   stages_write.go   # create-then-cleanup protocol
   stages_glue.go    # flow, schedule, query, redaction
-  pairing.go        # WritePairing tables + data generation
+  pairing.go        # WritePairing type/access + data generation
   ledger.go         # write-ahead leak ledger
   sweeper.go        # --sweep
   budget.go         # token bucket + call budget (transport wrapper)
@@ -287,7 +295,7 @@ always-run sweep step, uploads report artifacts; green runs open a PR refreshing
 2. Source stages (5-mode matrix, capture replay, resume) against sample/smoke-test/e2e-test +
    github/httptest. Prerequisite fix: `--credential` on `pm etl check/read` (or live check
    exclusively via `credentials test`).
-3. Write protocol + ledger + sweeper, github pairing table first.
+3. Write protocol + ledger + sweeper, GitHub `certification.json` pairings first.
 4. Flow + schedule stages.
 5. CLI wiring (single, `--all`, `--sweep`), exit-code mapping.
 6. `httpx` seam + record/replay + sanitizer + `certify-replay` make target.

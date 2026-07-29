@@ -109,10 +109,10 @@ func (s *Sweeper) Sweep(ctx context.Context) (SweepResult, error) {
 //     stages_write.go): append a tombstone record via a fresh reverse-ETL
 //     plan/run against the outbox connector, mirroring
 //     stageWriteCleanupSelfTest.
-//   - a connector with a curated WritePairing (pairing.go builtinPairings)
-//     whose Create action matches status.Action: run that pairing's real
-//     Cleanup action against the connector, mirroring
-//     stageWriteCleanupLive. This requires the connector's source
+//   - a connector with a definition-owned WritePairing whose Create action
+//     matches status.Action: run that pairing's real Cleanup action against
+//     the connector, mirroring stageWriteCleanupLive. This requires the
+//     connector's source
 //     credential (sourceCredentialName) to already exist under root, which
 //     is true whenever the ledger entry came from a real certify run
 //     against that connector in this same project.
