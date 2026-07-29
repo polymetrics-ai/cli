@@ -1094,7 +1094,7 @@
           "path": "/repos/{owner}/{repo}/contents/{path}"
         }
       ],
-      "output_policy": "github_contents_file_metadata",
+      "output_policy": "repository_contents_file_metadata",
       "examples": [
         "pm github repo read-file --path README.md --json",
         "pm github repo read-file --path docs/guide.md --ref main --json"
@@ -1128,7 +1128,7 @@
           "path": "/repos/{owner}/{repo}/contents/{path}"
         }
       ],
-      "output_policy": "github_contents_directory",
+      "output_policy": "repository_contents_directory",
       "examples": [
         "pm github repo read-dir --path docs --json",
         "pm github repo read-dir --path src --ref main --json"

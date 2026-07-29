@@ -281,7 +281,7 @@ func readOneSequence(ctx context.Context, b Bundle, stream StreamSpec, req conne
 	}
 	formattedLowerBound := ""
 	if lowerBound != "" && stream.Incremental != nil {
-		formattedLowerBound, err = formatParam(lowerBound, stream.Incremental.ParamFormat)
+		formattedLowerBound, err = formatIncrementalParam(lowerBound, stream.Incremental)
 		if err != nil {
 			return &Error{Connector: b.Name, Stream: stream.Name, Page: -1, RecordIndex: -1, Err: err}
 		}
@@ -632,9 +632,9 @@ func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor str
 }
 
 // buildInitialQuery resolves the incremental lower bound (state cursor,
-// falling back to start_config_key) formatted per param_format FIRST, then
-// stream.Query (static, templated values) against Vars that already carry
-// that resolved value as "{{ incremental.lower_bound }}" (S3 engine
+// falling back to start_config_key) formatted per param_format/operator_prefix
+// FIRST, then stream.Query (static, templated values) against Vars that already
+// carry that resolved value as "{{ incremental.lower_bound }}" (S3 engine
 // mini-wave item 1, wave1-pilot SUMMARY.md carried queue / REVIEW-A.md
 // re-review R2): this is what makes a param legacy sends ONLY when the
 // incremental lower bound resolves (chargebee's sort_by[asc]=updated_at,
@@ -663,7 +663,7 @@ func buildInitialQuery(stream StreamSpec, req connectors.ReadRequest) (url.Value
 
 	var formattedLower string
 	if lower != "" && stream.Incremental != nil {
-		formattedLower, err = formatParam(lower, stream.Incremental.ParamFormat)
+		formattedLower, err = formatIncrementalParam(lower, stream.Incremental)
 		if err != nil {
 			return nil, err
 		}
@@ -764,8 +764,27 @@ func incrementalLowerBoundValue(stream StreamSpec, req connectors.ReadRequest) (
 	return strings.TrimSpace(req.Config.Config[stream.Incremental.StartConfigKey]), nil
 }
 
+// formatIncrementalParam formats a lower-bound cursor value and applies an
+// optional definition-owned comparison prefix after timestamp normalization.
+func formatIncrementalParam(value string, incremental *IncrementalSpec) (string, error) {
+	if incremental == nil {
+		return value, nil
+	}
+	formatted, err := formatParam(value, incremental.ParamFormat)
+	if err != nil {
+		return "", err
+	}
+	prefix := incremental.OperatorPrefix
+	switch prefix {
+	case "", ">=", ">", "<=", "<":
+		return prefix + formatted, nil
+	default:
+		return "", fmt.Errorf("engine: unsupported incremental.operator_prefix %q", prefix)
+	}
+}
+
 // formatParam formats a lower-bound cursor value per param_format
-// (rfc3339|unix_seconds|date|github_date_range). An empty format defaults to
+// (rfc3339|rfc3339_utc|unix_seconds|date). An empty format defaults to
 // rfc3339 (send the value verbatim).
 //
 // The state cursor this function receives is NOT always RFC3339: the app
@@ -795,17 +814,12 @@ func formatParam(value, format string) (string, error) {
 			return "", fmt.Errorf("engine: param_format date: %w", err)
 		}
 		return t.Format("2006-01-02"), nil
-	case "github_date_range":
-		// GitHub's date-range query-qualifier shape for a lower-bound-only
-		// range (design doc's workflow_runs example declares no upper bound).
-		// A digits-only (Unix-seconds) input is normalized to RFC3339 first so
-		// the emitted qualifier is always a valid GitHub date-range value
-		// regardless of which shape the state cursor arrived in.
+	case "rfc3339_utc":
 		t, err := parseLowerBoundTime(value)
 		if err != nil {
-			return "", fmt.Errorf("engine: param_format github_date_range: %w", err)
+			return "", fmt.Errorf("engine: param_format rfc3339_utc: %w", err)
 		}
-		return ">=" + t.UTC().Format(time.RFC3339), nil
+		return t.UTC().Format(time.RFC3339), nil
 	default:
 		return "", fmt.Errorf("engine: unknown param_format %q", format)
 	}
@@ -833,8 +847,8 @@ const dateOnlyLayout = "2006-01-02"
 //     that date.
 //
 // This applies uniformly across every param_format that calls
-// parseLowerBoundTime (unix_seconds/date/github_date_range), not just
-// "date" — a date-only lower bound is equally valid input for any of them.
+// parseLowerBoundTime (unix_seconds/date/rfc3339_utc), not just "date" — a
+// date-only lower bound is equally valid input for any of them.
 func parseLowerBoundTime(value string) (time.Time, error) {
 	if isAllDigits(value) {
 		secs, err := strconv.ParseInt(value, 10, 64)

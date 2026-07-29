@@ -97,6 +97,20 @@ func TestValidatePRRejectsIncompleteNoMistakesDeliveryRecord(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsLetteredDeliveryIssueMigrationIntent(t *testing.T) {
+	body := "Implement the focused connector-boundary Issue B migration on branch refactor/connector-engine-policy-migration: remove GitHub-specific shared runtime policy names."
+	result := ValidatePR("feat(connectors): genericize repository read policies", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if !result.ExplicitIssueWording {
+		t.Fatal("ValidatePR() ExplicitIssueWording = false, want true")
+	}
+	if len(result.Issues) != 0 {
+		t.Fatalf("ValidatePR() issues = %#v, want no numeric issue refs", result.Issues)
+	}
+}
+
 func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
 	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
 	if !result.OK {
@@ -131,10 +145,14 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Mentions #123\n",
 		"Issue #123\n",
 		"Issue 123\n",
+		"Issue B\n",
+		"Implement Issue B\n",
+		"Implement issue a migration\n",
 		"References #123\n",
 		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
 		"Do not ship issue 123\n",
+		"Do not implement Issue B migration\n",
 	}
 	for _, body := range tests {
 		result := ValidatePR("feat(github): add cli surface metadata", body)

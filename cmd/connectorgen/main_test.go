@@ -482,6 +482,17 @@ func TestValidate_CLISurfaceImplementedDirectReadWithOutputPolicyPasses(t *testi
 	}
 }
 
+func TestValidate_CLISurfaceRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
+	cliSurface := strings.ReplaceAll(validDirectReadCLISurfaceJSON(), "/widgets/{path}", "/widgets/{file_path}")
+	cliSurface = strings.Replace(cliSurface, `"maps_to": "path.path"`, `"maps_to": "path.file_path"`, 1)
+	apiSurface := strings.ReplaceAll(validDirectReadAPISurface(), "/widgets/{path}", "/widgets/{file_path}")
+	report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(cliSurface, apiSurface))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+}
+
 func TestValidate_CLISurfaceImplementedDirectReadRejectsBlockedOperationLedgerEndpoint(t *testing.T) {
 	report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(validDirectReadCLISurfaceJSON(), validOperationLedgerAPISurface()))
 	if err != nil {
@@ -492,7 +503,7 @@ func TestValidate_CLISurfaceImplementedDirectReadRejectsBlockedOperationLedgerEn
 
 func TestValidate_CLISurfaceImplementedDirectReadRequiresOutputPolicy(t *testing.T) {
 	cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `
-				"output_policy": "github_contents_file_metadata",
+				"output_policy": "repository_contents_file_metadata",
 `, "", 1)
 	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
 	if err != nil {
@@ -504,8 +515,8 @@ func TestValidate_CLISurfaceImplementedDirectReadRequiresOutputPolicy(t *testing
 func TestValidate_CLISurfaceImplementedDirectReadRequiresOneEndpoint(t *testing.T) {
 	cliSurface := strings.Replace(
 		validDirectReadCLISurfaceJSON(),
-		`{ "method": "GET", "path": "/widgets/{id}" }`,
-		`{ "method": "GET", "path": "/widgets/{id}" }, { "method": "GET", "path": "/widgets" }`,
+		`{ "method": "GET", "path": "/widgets/{path}" }`,
+		`{ "method": "GET", "path": "/widgets/{path}" }, { "method": "GET", "path": "/widgets" }`,
 		1,
 	)
 	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
@@ -523,18 +534,18 @@ func TestValidate_CLISurfaceImplementedDirectReadRequiresGETRelativeEndpoint(t *
 	}{
 		{
 			name:       "post",
-			apiSurface: strings.Replace(validDirectReadAPISurface(), `"method": "GET",`+"\n"+`				"path": "/widgets/{id}"`, `"method": "POST",`+"\n"+`				"path": "/widgets/{id}"`, 1),
-			ref:        `{ "method": "POST", "path": "/widgets/{id}" }`,
+			apiSurface: strings.Replace(validDirectReadAPISurface(), `"method": "GET",`+"\n"+`				"path": "/widgets/{path}"`, `"method": "POST",`+"\n"+`				"path": "/widgets/{path}"`, 1),
+			ref:        `{ "method": "POST", "path": "/widgets/{path}" }`,
 		},
 		{
 			name:       "absolute",
-			apiSurface: strings.Replace(validDirectReadAPISurface(), `"path": "/widgets/{id}"`, `"path": "https://evil.example.test/widgets/{id}"`, 1),
-			ref:        `{ "method": "GET", "path": "https://evil.example.test/widgets/{id}" }`,
+			apiSurface: strings.Replace(validDirectReadAPISurface(), `"path": "/widgets/{path}"`, `"path": "https://evil.example.test/widgets/{path}"`, 1),
+			ref:        `{ "method": "GET", "path": "https://evil.example.test/widgets/{path}" }`,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets/{id}" }`, tt.ref, 1)
+			cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `{ "method": "GET", "path": "/widgets/{path}" }`, tt.ref, 1)
 			report, err := validateDir(directReadCLISurfaceBundleFSWithAPI(cliSurface, tt.apiSurface))
 			if err != nil {
 				t.Fatalf("validateDir: %v", err)
@@ -567,6 +578,16 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	if len(report.Findings) != 0 {
 		t.Fatalf("expected zero findings for valid operation-backed cli surface, got %+v", report.Findings)
 	}
+}
+
+func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
+	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
+	operations := strings.Replace(validOperationsJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
+	report, err := validateDir(operationCLISurfaceBundleFS(cliSurface, operations))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
 }
 
 func TestValidate_CLISurfaceUnknownOperationIsHardFinding(t *testing.T) {
@@ -928,8 +949,8 @@ func TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule(t *testing.T) {
 // validate-time guard"): formatParam's digits-passthrough (B1) is CORRECT
 // for param_format unix_seconds (an all-digits config value there really
 // does mean Unix seconds) but is a silent-misinterpretation risk for
-// param_format date/github_date_range, where a free-form (no declared
-// date-ish format) start_config_key spec property could hold a value like
+// timestamp-parsing param formats such as date or rfc3339_utc, where a
+// free-form (no declared date-ish format) start_config_key spec property could hold a value like
 // "20260101" (yyyymmdd) that would be silently treated as a 1970s-era
 // Unix-seconds lower bound instead of erroring. A property that DOES
 // declare format:date-time (or format:date) is not flagged: an operator
@@ -939,8 +960,8 @@ func TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule(t *testing.T) {
 // not Report.Findings) — never blocks validate's exit code or the "0
 // findings" self-verify contract — because it is a plausibility heuristic,
 // not a structural defect: a legitimately-Unix-seconds start_config_key
-// used with date/github_date_range (unusual but not inexpressible) would
-// otherwise be a false positive if this were a hard error.
+// used with a timestamp-parsing output format (unusual but not
+// inexpressible) would otherwise be a false positive if this were a hard error.
 
 func TestValidate_StartDateFreeFormStringWarns(t *testing.T) {
 	fsys := singleBundleFS(t, "testdata/invalid", "start-date-free-form-string")
@@ -997,6 +1018,42 @@ func TestValidate_UnixSecondsStartDateNeverWarns(t *testing.T) {
 			t.Fatalf("unexpected %s warning against the real defs corpus: %+v", ruleStartDateFreeFormString, w)
 		}
 	}
+}
+
+func TestValidate_IncrementalParamFormatRejectsWhitespace(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/streams.json"] = &fstest.MapFile{Data: []byte(`{
+		"base": {
+			"url": "{{ config.base_url }}",
+			"check": { "method": "GET", "path": "/widgets" }
+		},
+		"streams": [
+			{
+				"name": "widgets",
+				"path": "/widgets",
+				"records": { "path": "data" },
+				"incremental": { "cursor_field": "updated_at", "request_param": "since", "param_format": "rfc3339_utc " },
+				"schema": "schemas/widgets.json"
+			}
+		]
+	}`)}
+	fsys["cli-surface/schemas/widgets.json"] = &fstest.MapFile{Data: []byte(`{
+		"$schema": "http://json-schema.org/draft-07/schema#",
+		"type": "object",
+		"x-primary-key": ["id"],
+		"x-cursor-field": "updated_at",
+		"properties": {
+			"id": { "type": "integer" },
+			"name": { "type": "string" },
+			"updated_at": { "type": "string", "format": "date-time" }
+		}
+	}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleIncrementalPolicy)
 }
 
 // TestValidate_ExitCodeReflectsFindings exercises the run() entry point (the
@@ -1541,13 +1598,13 @@ func validDirectReadCLISurfaceJSON() string {
 				"availability": "implemented",
 				"source_cli_path": "clis widget read",
 				"api_surface": [
-					{ "method": "GET", "path": "/widgets/{id}" }
+					{ "method": "GET", "path": "/widgets/{path}" }
 				],
-				"output_policy": "github_contents_file_metadata",
+				"output_policy": "repository_contents_file_metadata",
 				"flags": [
-					{ "name": "id", "type": "string", "maps_to": "path.id" }
+					{ "name": "path", "type": "string", "maps_to": "path.path" }
 				],
-				"examples": ["pm cli-surface widget read --id w_1 --json"]
+				"examples": ["pm cli-surface widget read --path README.md --json"]
 			}
 		]
 	}`
@@ -1578,7 +1635,7 @@ func validOperationLedgerAPISurface() string {
 			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
 			{
 				"method": "GET",
-				"path": "/widgets/{id}",
+				"path": "/widgets/{path}",
 				"operation": {
 					"model": "direct_read",
 					"status": "blocked",
@@ -1601,7 +1658,7 @@ func validDirectReadAPISurface() string {
 			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
 			{
 				"method": "GET",
-				"path": "/widgets/{id}",
+				"path": "/widgets/{path}",
 				"covered_by": {
 					"direct_read": "widget read"
 				}

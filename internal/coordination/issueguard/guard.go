@@ -14,10 +14,11 @@ type IssueRef struct {
 }
 
 type Result struct {
-	OK             bool
-	Issues         []IssueRef
-	DeliveryRecord bool
-	Violations     []string
+	OK                   bool
+	Issues               []IssueRef
+	DeliveryRecord       bool
+	ExplicitIssueWording bool
+	Violations           []string
 }
 
 var conventionalTitlePattern = regexp.MustCompile(`^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\([a-z0-9][a-z0-9._-]*\))?!?: .+`)
@@ -25,6 +26,7 @@ var issueRefPattern = regexp.MustCompile(`(?i)\b(close|closes|closed|fix|fixes|f
 var issueTokenPattern = regexp.MustCompile(`(?:[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#?([1-9][0-9]*)\b`)
 var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
+var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 
@@ -50,15 +52,17 @@ func ValidatePR(title, body string) Result {
 
 	issues := ExtractIssueRefs(body)
 	deliveryRecord := hasNoMistakesDeliveryRecord(body)
-	if len(issues) == 0 && !deliveryRecord {
+	explicitIssueWording := hasExplicitIssueWording(body)
+	if len(issues) == 0 && !deliveryRecord && !explicitIssueWording {
 		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, or explicit parent/delivery issue wording")
 	}
 
 	return Result{
-		OK:             len(violations) == 0,
-		Issues:         issues,
-		DeliveryRecord: deliveryRecord,
-		Violations:     violations,
+		OK:                   len(violations) == 0,
+		Issues:               issues,
+		DeliveryRecord:       deliveryRecord,
+		ExplicitIssueWording: explicitIssueWording,
+		Violations:           violations,
 	}
 }
 
@@ -155,6 +159,16 @@ func addIssueRef(seen map[int]IssueRef, rawNumber, keyword string) {
 		return
 	}
 	seen[number] = ref
+}
+
+func hasExplicitIssueWording(text string) bool {
+	for _, loc := range letteredDeliveryIssuePhrasePattern.FindAllStringIndex(text, -1) {
+		if hasNegationPrefix(text, loc[0]) {
+			continue
+		}
+		return true
+	}
+	return false
 }
 
 func hasNegationPrefix(text string, start int) bool {

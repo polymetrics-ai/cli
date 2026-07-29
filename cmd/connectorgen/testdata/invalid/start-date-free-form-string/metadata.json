@@ -1,7 +1,7 @@
 {
   "name": "start-date-free-form-string",
   "display_name": "Start Date Free Form String",
-  "description": "seeded invalid corpus case for N2 (wave0 REVIEW.md carried flag): a date/github_date_range incremental start_config_key whose spec property declares no date-ish format",
+  "description": "seeded invalid corpus case for N2 (wave0 REVIEW.md carried flag): a timestamp-parsing incremental start_config_key whose spec property declares no date-ish format",
   "integration_type": "api",
   "release_stage": "ga",
   "capabilities": {

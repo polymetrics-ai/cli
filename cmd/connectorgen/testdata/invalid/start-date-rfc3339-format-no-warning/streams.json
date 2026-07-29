@@ -12,7 +12,7 @@
       "name": "events",
       "path": "/events",
       "records": { "path": "data" },
-      "incremental": { "cursor_field": "created", "request_param": "created_range", "param_format": "github_date_range", "start_config_key": "start_date" },
+      "incremental": { "cursor_field": "created", "request_param": "created_range", "param_format": "rfc3339_utc", "operator_prefix": ">=", "start_config_key": "start_date" },
       "schema": "schemas/events.json"
     }
   ]

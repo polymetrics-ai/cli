@@ -1,42 +1,6 @@
 {
   "exceptions": [
     {
-      "id": "github-connectorgen-param-format",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "cmd/connectorgen/validate.go",
-      "match": "github_date_range",
-      "reason": "bootstrap until GitHub incremental lower-bound formatting is renamed to a provider-neutral definition-owned policy",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/64",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-connectorgen-output-policy-file",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "cmd/connectorgen/validate.go",
-      "match": "github_contents_file_metadata",
-      "reason": "bootstrap until repository contents output policy validation is provider-neutral and definition-owned",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-connectorgen-output-policy-directory",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "cmd/connectorgen/validate.go",
-      "match": "github_contents_directory",
-      "reason": "bootstrap until repository contents output policy validation is provider-neutral and definition-owned",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
       "id": "github-cli-docs-help-examples",
       "rule": "docs_example",
       "connector": "github",
@@ -145,42 +109,6 @@
       "max_matches": 1
     },
     {
-      "id": "github-commandrunner-output-policy-file",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/commandrunner/runner.go",
-      "match": "github_contents_file_metadata",
-      "reason": "bootstrap until command runner output policy support is provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-commandrunner-output-policy-directory",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/commandrunner/runner.go",
-      "match": "github_contents_directory",
-      "reason": "bootstrap until command runner output policy support is provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-conformance-date-range-format",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/conformance/dynamic.go",
-      "match": "github_date_range",
-      "reason": "bootstrap until conformance lower-bound formatting is provider-neutral and definition-owned",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/64",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 2
-    },
-    {
       "id": "github-operation-secret-encryption-kind",
       "rule": "provider_policy",
       "connector": "github",
@@ -191,78 +119,6 @@
       "owner": "connector-architecture-v2",
       "expires_on": "2026-09-30",
       "max_matches": 1
-    },
-    {
-      "id": "github-engine-direct-read-policy-const-file",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/direct_read.go",
-      "match": "directReadPolicyGitHubContentsFileMetadata",
-      "reason": "bootstrap until direct-read output policies are provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 3
-    },
-    {
-      "id": "github-engine-direct-read-policy-const-directory",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/direct_read.go",
-      "match": "directReadPolicyGitHubContentsDirectory",
-      "reason": "bootstrap until direct-read output policies are provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 3
-    },
-    {
-      "id": "github-engine-direct-read-policy-value-file",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/direct_read.go",
-      "match": "github_contents_file_metadata",
-      "reason": "bootstrap until direct-read output policies are provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-engine-direct-read-policy-value-directory",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/direct_read.go",
-      "match": "github_contents_directory",
-      "reason": "bootstrap until direct-read output policies are provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 1
-    },
-    {
-      "id": "github-engine-direct-read-redaction-helper",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/direct_read.go",
-      "match": "redactGitHubContentsObject",
-      "reason": "bootstrap until repository contents redaction is provider-neutral and configured from definitions",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/60",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 3
-    },
-    {
-      "id": "github-engine-date-range-format",
-      "rule": "provider_policy",
-      "connector": "github",
-      "path": "internal/connectors/engine/read.go",
-      "match": "github_date_range",
-      "reason": "bootstrap until lower-bound formatting is provider-neutral and definition-owned",
-      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/64",
-      "owner": "connector-architecture-v2",
-      "expires_on": "2026-09-30",
-      "max_matches": 2
     },
     {
       "id": "bahmni-guide-examples",

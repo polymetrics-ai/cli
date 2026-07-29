@@ -1466,7 +1466,7 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 				APISurface: []connectors.CommandSurfaceEndpointRef{
 					{Method: "GET", Path: "/repos/{owner}/{repo}/contents/{path}"},
 				},
-				OutputPolicy: "github_contents_file_metadata",
+				OutputPolicy: "repository_contents_file_metadata",
 				Flags: []connectors.CommandSurfaceFlag{
 					{Name: "path", Type: "string", MapsTo: "path.path"},
 				},
@@ -1497,8 +1497,8 @@ func TestRunImplementedDirectReadCommand(t *testing.T) {
 	if connector.directReadReq.PathParams["path"] != "README.md" {
 		t.Fatalf("direct read path param = %q, want README.md", connector.directReadReq.PathParams["path"])
 	}
-	if connector.directReadReq.OutputPolicy != "github_contents_file_metadata" {
-		t.Fatalf("direct read output policy = %q, want github_contents_file_metadata", connector.directReadReq.OutputPolicy)
+	if connector.directReadReq.OutputPolicy != "repository_contents_file_metadata" {
+		t.Fatalf("direct read output policy = %q, want repository_contents_file_metadata", connector.directReadReq.OutputPolicy)
 	}
 }
 
@@ -1694,7 +1694,7 @@ func TestRunDirectReadRejectsUnsafeEndpointMetadata(t *testing.T) {
 						Intent:       "direct_read",
 						Availability: "implemented",
 						APISurface:   []connectors.CommandSurfaceEndpointRef{tt.endpoint},
-						OutputPolicy: "github_contents_file_metadata",
+						OutputPolicy: "repository_contents_file_metadata",
 						Flags: []connectors.CommandSurfaceFlag{
 							{Name: "path", Type: "string", MapsTo: "path.path"},
 						},
