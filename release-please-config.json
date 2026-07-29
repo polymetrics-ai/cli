@@ -8,7 +8,10 @@
   "packages": {
     ".": {
       "package-name": "pm",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "exclude-paths": [
+        "website"
+      ]
     }
   }
 }

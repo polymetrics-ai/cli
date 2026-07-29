@@ -16,6 +16,7 @@ type IssueRef struct {
 type Result struct {
 	OK                   bool
 	Issues               []IssueRef
+	DeliveryRecord       bool
 	ExplicitIssueWording bool
 	Violations           []string
 }
@@ -27,6 +28,9 @@ var issueWordNumberPattern = regexp.MustCompile(`(?i)\bissues?\s+(?:[a-z0-9_.-]+
 var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing)?|implement(?:s|ed|ing)?|complete(?:s|d|ing)?|ship(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\bissues?\b(?:\.[0-9]|[^.\n\r]){0,160}`)
 var letteredDeliveryIssuePhrasePattern = regexp.MustCompile(`\b(?:[Dd]eliver(?:s|ed|ing)?|[Ii]mplement(?:s|ed|ing)?|[Cc]omplete(?:s|d|ing)?|[Ss]hip(?:s|ped|ping)?)\b(?:\.[0-9]|[^.\n\r]){0,80}\b[Ii]ssue\s+[A-Z]\b(?:\.[0-9]|[^.\n\r]){0,60}\b(?i:migration|slice|phase|workstream|delivery|plan|scope|implementation|contract|guard)\b`)
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
+var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
+
+const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
 
 var closingKeywords = map[string]bool{
 	"close":    true,
@@ -47,14 +51,16 @@ func ValidatePR(title, body string) Result {
 	}
 
 	issues := ExtractIssueRefs(body)
+	deliveryRecord := hasNoMistakesDeliveryRecord(body)
 	explicitIssueWording := hasExplicitIssueWording(body)
-	if len(issues) == 0 && !explicitIssueWording {
+	if len(issues) == 0 && !deliveryRecord && !explicitIssueWording {
 		violations = append(violations, "PR body must reference an issue with Closes #123 for completed work, Refs #123 for stacked/incremental work, or explicit parent/delivery issue wording")
 	}
 
 	return Result{
 		OK:                   len(violations) == 0,
 		Issues:               issues,
+		DeliveryRecord:       deliveryRecord,
 		ExplicitIssueWording: explicitIssueWording,
 		Violations:           violations,
 	}
@@ -97,6 +103,27 @@ func ExtractIssueRefs(text string) []IssueRef {
 		return issues[i].Number < issues[j].Number
 	})
 	return issues
+}
+
+func hasNoMistakesDeliveryRecord(text string) bool {
+	if !strings.Contains(text, noMistakesDeliveryMarker) {
+		return false
+	}
+
+	headings := map[string]bool{}
+	for _, match := range markdownH2Pattern.FindAllStringSubmatch(text, -1) {
+		if len(match) < 2 {
+			continue
+		}
+		headings[strings.ToLower(strings.TrimSpace(match[1]))] = true
+	}
+
+	for _, required := range []string{"intent", "what changed", "testing", "pipeline"} {
+		if !headings[required] {
+			return false
+		}
+	}
+	return true
 }
 
 func addDeliveryIssueTokens(seen map[int]IssueRef, text, keyword string) {
