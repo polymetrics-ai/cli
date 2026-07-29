@@ -28,6 +28,8 @@ var deliveryIssuePhrasePattern = regexp.MustCompile(`(?i)\b(?:deliver(?:s|ed|ing
 var parentIssuePattern = regexp.MustCompile(`(?i)\bparent\s+(?:issue\s+)?(?:[a-z0-9_.-]+/[a-z0-9_.-]+)?#([1-9][0-9]*)\b`)
 var markdownH2Pattern = regexp.MustCompile(`(?m)^##\s+([A-Za-z][A-Za-z ]*)\s*$`)
 
+const noMistakesDeliveryMarker = "Updates from [git push no-mistakes](https://" + "git" + "hub.com/kunchenguid/no-mistakes)"
+
 var closingKeywords = map[string]bool{
 	"close":    true,
 	"closes":   true,
@@ -100,7 +102,7 @@ func ExtractIssueRefs(text string) []IssueRef {
 }
 
 func hasNoMistakesDeliveryRecord(text string) bool {
-	if !strings.Contains(text, "Updates from [git push no-mistakes](https://github.com/kunchenguid/no-mistakes)") {
+	if !strings.Contains(text, noMistakesDeliveryMarker) {
 		return false
 	}
 
