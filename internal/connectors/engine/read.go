@@ -632,9 +632,9 @@ func requestVars(cfg connectors.RuntimeConfig, record map[string]any, cursor str
 }
 
 // buildInitialQuery resolves the incremental lower bound (state cursor,
-// falling back to start_config_key) formatted per param_format FIRST, then
-// stream.Query (static, templated values) against Vars that already carry
-// that resolved value as "{{ incremental.lower_bound }}" (S3 engine
+// falling back to start_config_key) formatted per param_format/operator_prefix
+// FIRST, then stream.Query (static, templated values) against Vars that already
+// carry that resolved value as "{{ incremental.lower_bound }}" (S3 engine
 // mini-wave item 1, wave1-pilot SUMMARY.md carried queue / REVIEW-A.md
 // re-review R2): this is what makes a param legacy sends ONLY when the
 // incremental lower bound resolves (chargebee's sort_by[asc]=updated_at,

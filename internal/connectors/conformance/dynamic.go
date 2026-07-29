@@ -402,10 +402,10 @@ func checkRecordsMatchSchemaWithReplay(b engine.Bundle, readReplay *reusableStre
 // INCREMENTAL stream with fixtures, asserts the resulting max-observed
 // cursor is non-empty, then re-reads seeded with that cursor as read state
 // and asserts the re-read request actually carried the declared
-// incremental.request_param formatted per param_format. A bundle with no
-// incremental+fixtured stream at all is Skipped; a bundle whose ONLY
-// incremental+fixtured candidate(s) carry a skip_dynamic marker Skips with
-// that marker's reason instead (R3).
+// incremental.request_param formatted per param_format/operator_prefix. A
+// bundle with no incremental+fixtured stream at all is Skipped; a bundle whose
+// ONLY incremental+fixtured candidate(s) carry a skip_dynamic marker Skips
+// with that marker's reason instead (R3).
 func checkCursorAdvances(b engine.Bundle) CheckResult {
 	readReplay := newReusableStreamReplayServer()
 	defer readReplay.Close()

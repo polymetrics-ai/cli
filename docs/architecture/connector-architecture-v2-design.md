@@ -420,7 +420,7 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 1. Resolve `StreamSpec` by `req.Stream`; build `connsdk.Requester` (base URL, headers, auth via
    `selectAuth(cfg)`).
 2. Build initial query: static `query` + incremental lower bound from `req.State["cursor"]`
-   (fallback `start_config_key`) formatted per `param_format`.
+   (fallback `start_config_key`) formatted per `param_format` plus optional `operator_prefix`.
 3. Drive the paginator loop; per page: `RecordsAt(body, records.path)` → filter → project through
    stream schema (+ `computed_fields`, which can reach into nested raw JSON, e.g.
    `user_login: {{ record.user.login }}`) → track `MaxCursor` → `emit`.

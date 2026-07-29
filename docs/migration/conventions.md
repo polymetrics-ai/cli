@@ -374,12 +374,12 @@ representation is unaffected — `"start_page": 0` was already schema-valid (`"t
 only the Go-side unset-vs-zero ambiguity needed fixing.
 
 **`param_format` + `operator_prefix`** (`incremental.param_format`, applied by `read.go`'s
-`formatParam` to the lower-bound value before sending it as `request_param` or exposing it as
-`{{ incremental.lower_bound }}`): `rfc3339` (default; send verbatim), `rfc3339_utc` (parse digits,
-RFC3339, or date-only and emit UTC RFC3339), `unix_seconds`, and `date` (`2006-01-02`). Optional
-`operator_prefix` prepends a bounded comparison operator (`>=`, `>`, `<=`, `<`) after formatting,
-so connector definitions can express lower-bound query-qualifier shapes without provider-named
-engine policies.
+`formatIncrementalParam` to the lower-bound value before sending it as `request_param` or exposing
+it as `{{ incremental.lower_bound }}`): `rfc3339` (default; send verbatim), `rfc3339_utc` (parse
+digits, RFC3339, or date-only and emit UTC RFC3339), `unix_seconds`, and `date` (`2006-01-02`).
+Optional `operator_prefix` prepends a bounded comparison operator (`>=`, `>`, `<=`, `<`) after
+formatting, so connector definitions can express lower-bound query-qualifier shapes without
+provider-named engine policies.
 
 **`parseLowerBoundTime` accepts a bare `YYYY-MM-DD` date-only input, alongside digits/RFC3339**
 (S4 engine mini-wave item 5: marketstack's `eod`/`splits`/`dividends` streams' real wire cursor
