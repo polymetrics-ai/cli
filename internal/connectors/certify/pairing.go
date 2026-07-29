@@ -1,5 +1,5 @@
 // Package certify: pairing.go implements the create-then-cleanup write
-// protocol's declarative WritePairing table, tag generation, and
+// protocol's definition-owned WritePairing metadata, tag generation, and
 // record_schema-driven data generation (design
 // docs/architecture/connector-certification-design.md §C).
 package certify

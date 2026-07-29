@@ -14,10 +14,10 @@
 //  2. The sample/outbox self-test path (design §C prove-against note: "if
 //     no live creds, the stage self-test uses the sample/outbox reverse-ETL
 //     path the Makefile smoke target already exercises"), used automatically
-//     whenever the connector under test has no curated WritePairing (e.g.
-//     "sample" itself, which has no write capability at all). This exercises
-//     the exact same write-protocol machinery — plan/preview/create/verify/
-//     cleanup/cleanup_verify/ledger/idempotency — against the built-in
+//     whenever the connector under test has no definition-owned WritePairing
+//     (e.g. "sample" itself, which has no write capability at all). This
+//     exercises the exact same write-protocol machinery — plan/preview/create/
+//     verify/cleanup/cleanup_verify/ledger/idempotency — against the built-in
 //     "outbox" destination connector instead of a live third-party API.
 package certify
 
@@ -45,7 +45,7 @@ type writeContext struct {
 	planID        string
 	approvalToken string
 
-	// selfTest is true when no curated WritePairing exists for the
+	// selfTest is true when no definition-owned WritePairing exists for the
 	// connector under test, so the sample/outbox reverse-ETL path is used
 	// instead of the connector's own writes.json actions.
 	selfTest bool

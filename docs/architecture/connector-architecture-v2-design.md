@@ -24,8 +24,8 @@ Validated against `connectors.go`, `defs/*`, `engine/*`, `connsdk/*`, `hooks/*`,
    mapping every documented API endpoint to a stream, a write action, or an approved exclusion.
    Conformance v2 fails a connector whose API has write endpoints with no write actions declared
    and no exclusion waiver.
-5. **Conformance v2 executes the real engine against recorded fixture pages** (embedded
-   `fixtures/`), replacing the synthetic `mode=fixture` records that today bypass all real
+5. **Conformance v2 executes the real engine against recorded fixture pages** (`fixtures/` on disk
+   for conformance), replacing the synthetic `mode=fixture` records that today bypass all real
    request/pagination/cursor logic.
 
 ## A. Per-connector directory layout
@@ -36,20 +36,22 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` only by conformance). One deviation from Ruby: request/pagination/cursor
-config is **not** code — it is `streams.json`, interpreted by the engine.
+time, `api_surface.json` only by conformance, `certification.json` only by the certification
+harness). One deviation from Ruby: request/pagination/cursor config is **not** code — it is
+`streams.json`, interpreted by the engine.
 
 ### Layout
 
 ```
 internal/connectors/defs/
-  defs.go                     // package defs; //go:embed all */** ; exposes FS
+  defs.go                     // package defs; //go:embed runtime bundle files
   github/
     metadata.json             // identity, capabilities, rate limits, risk
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
     api_surface.json          // API coverage manifest (conformance input)
+    certification.json        // optional certify defaults, candidates, pairings
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
       pull_requests.json
@@ -67,11 +69,13 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */spec.json */streams.json */writes.json */api_surface.json */schemas/* */fixtures/** */docs.md
+//go:embed */metadata.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
-(`writes.json` and `fixtures/` are optional per connector; the loader tolerates absence.
+(`writes.json`, `operations.json`, `cli_surface.json`, and `certification.json` are optional per
+connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay on disk for
+authoring/conformance validation and are not embedded in the production `defs.FS`.
 Directory name = connector name = the one true identifier: `github`, not `source-github`.)
 
 ### `metadata.json` (github example)

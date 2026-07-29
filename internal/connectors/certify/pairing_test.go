@@ -75,10 +75,11 @@ func TestDefaultPairingInference(t *testing.T) {
 	}
 }
 
-// TestBuiltinPairingGithubCreateLabel proves the built-in github pairing
-// table has a real (not inferred) create_label -> delete_label entry with
-// "gone" cleanup semantics (design §C WritePairing table), since this is the
-// pairing certify's own tests exercise for a real connector's writes.json.
+// TestDefinitionOwnedPairingGithubCreateLabel proves the GitHub
+// certification metadata has a real (not inferred) create_label ->
+// delete_label entry with "gone" cleanup semantics (design §C WritePairing
+// table), since this is the pairing certify's own tests exercise for a real
+// connector's writes.json.
 func TestDefinitionOwnedPairingGithubCreateLabel(t *testing.T) {
 	pairings := certify.PairingsFor("github")
 	if len(pairings) == 0 {

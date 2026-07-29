@@ -20,6 +20,7 @@ streams.json         # base HTTP config + streams[] (required unless dynamic_sch
 writes.json          # actions[] (omit entirely when capabilities.write is false)
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
+certification.json   # optional certify metadata: defaults, safe candidates, pairings
 schemas/<stream>.json  # one draft-07 schema per stream, x-primary-key/x-cursor-field
 fixtures/
   check.json
@@ -193,6 +194,17 @@ not a full override by default.
   operation has connector-specific sensitive response fields. Do not add provider-prefixed output
   policy names in shared Go; new response families need a generic policy name and regression tests
   proving reuse by more than one connector shape.
+- **`certification.json` stays definition-owned and harness-only**: connector-specific certify
+  contracts belong beside the connector bundle, never in provider-named shared certify branches.
+  This optional file may declare `source.default_stream`, source credential defaults,
+  live-unavailable classifiers, direct-read candidates, binary-download candidates, and safe write
+  pairings. `source.default_stream` and every pairing's `verify_stream` must name declared streams;
+  pairing `create`/`cleanup` actions must name declared `writes.json` actions. The write record
+  schema remains the action's own `record_schema` in `writes.json`; certification metadata only
+  chooses the safe lifecycle and overrides. Absent metadata means no candidates, no pairings, and no
+  connector-specific cleanup behavior. `internal/connectors/engine/schema/certification.schema.json`
+  is the schema source of truth, and `connectorgen validate` scans the raw file for secret-shaped
+  literals.
 
 ## 3. The engine dialect reference
 
