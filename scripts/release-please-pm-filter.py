@@ -80,15 +80,10 @@ def next_version(version, bump):
     raise ValueError(f"unsupported bump: {bump}")
 
 
-def analyze(cwd, base_ref, current_ref):
-    manifest = json.loads((Path(cwd) / ".release-please-manifest.json").read_text())
-    current_version = manifest["."]
-    if not re.match(r"^[0-9]+\.[0-9]+\.[0-9]+$", current_version):
-        raise SystemExit(f"unsupported PM version: {current_version}")
-
-    highest_bump = None
-    relevant_commits = []
+def included_release_commits(cwd, base_ref, current_ref):
+    included_commits = []
     ignored_commits = []
+    highest_bump = None
 
     for sha in commit_shas(base_ref, current_ref, cwd):
         files = commit_files(sha, cwd)
@@ -96,14 +91,52 @@ def analyze(cwd, base_ref, current_ref):
             ignored_commits.append(sha)
             continue
 
+        included_commits.append(sha)
         message = run_git(["log", "-1", "--format=%B", sha], cwd)
         bump = release_bump(message)
         if not bump:
             continue
-
-        relevant_commits.append(sha)
         if highest_bump is None or BUMP_ORDER[bump] > BUMP_ORDER[highest_bump]:
             highest_bump = bump
+
+    return included_commits, ignored_commits, highest_bump
+
+
+def create_filtered_repo(cwd, base_ref, target_branch, output_path, included_commits):
+    output_path = output_path.resolve()
+    source_path = Path(cwd).resolve()
+    if output_path == source_path or source_path in output_path.parents:
+        raise SystemExit("filtered repo must be outside the source checkout")
+    if output_path.exists():
+        if not output_path.is_dir() or any(output_path.iterdir()):
+            raise SystemExit(f"filtered repo path is not empty: {output_path}")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    run_git(["clone", "--quiet", "--no-local", "--no-hardlinks", str(source_path), str(output_path)], cwd)
+    base_sha = run_git(["rev-parse", f"{base_ref}^{{commit}}"], output_path)
+    visible_head = included_commits[-1] if included_commits else base_sha
+
+    previous_visible = base_sha
+    for sha in included_commits:
+        parents = run_git(["rev-list", "--parents", "-n", "1", sha], output_path).split()[1:]
+        if parents != [previous_visible]:
+            run_git(["replace", "--graft", sha, previous_visible], output_path)
+        previous_visible = sha
+
+    run_git(["checkout", "--quiet", "-B", target_branch, visible_head], output_path)
+    run_git(["remote", "remove", "origin"], output_path)
+    run_git(["remote", "add", "origin", "."], output_path)
+    run_git(["update-ref", f"refs/remotes/origin/{target_branch}", "HEAD"], output_path)
+    return output_path
+
+
+def analyze(cwd, base_ref, current_ref):
+    manifest = json.loads((Path(cwd) / ".release-please-manifest.json").read_text())
+    current_version = manifest["."]
+    if not re.match(r"^[0-9]+\.[0-9]+\.[0-9]+$", current_version):
+        raise SystemExit(f"unsupported PM version: {current_version}")
+
+    included_commits, ignored_commits, highest_bump = included_release_commits(cwd, base_ref, current_ref)
 
     release_as = next_version(current_version, highest_bump) if highest_bump else ""
     return {
@@ -112,14 +145,17 @@ def analyze(cwd, base_ref, current_ref):
         "bump": highest_bump or "",
         "base_ref": base_ref,
         "current_ref": current_ref,
-        "relevant_commits": len(relevant_commits),
+        "relevant_commits": len(included_commits),
         "ignored_website_commits": len(ignored_commits),
+        "included_commit_shas": included_commits,
     }
 
 
 def write_github_output(path, result):
     with open(path, "a", encoding="utf-8") as fh:
         for key, value in result.items():
+            if isinstance(value, list):
+                value = ",".join(value)
             fh.write(f"{key}={value}\n")
 
 
@@ -127,12 +163,24 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--base-ref")
     parser.add_argument("--current-ref", default="HEAD")
+    parser.add_argument("--target-branch", default="main")
+    parser.add_argument("--filtered-repo")
     parser.add_argument("--github-output")
     args = parser.parse_args()
 
     cwd = Path.cwd()
     base_ref = args.base_ref or default_base_ref(cwd)
     result = analyze(cwd, base_ref, args.current_ref)
+    if args.filtered_repo:
+        filtered_repo = create_filtered_repo(
+            cwd,
+            base_ref,
+            args.target_branch,
+            Path(args.filtered_repo),
+            result["included_commit_shas"],
+        )
+        result["filtered_repo"] = str(filtered_repo)
+    result.pop("included_commit_shas")
 
     if args.github_output:
         write_github_output(args.github_output, result)

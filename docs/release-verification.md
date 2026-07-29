@@ -33,9 +33,10 @@ provenance to the current run. Website deployment is independent and does not
 trigger this Homebrew path.
 
 The PM release job also filters release-worthy commits before Release Please
-runs: commits that touch only `website/**`, `.github/workflows/website.yml`, or
-`.gitlab-ci.yml` are omitted from the PM version decision, while PM CLI and
-release workflow changes still participate.
+generates the PM release PR: commits that touch only `website/**`,
+`.github/workflows/website.yml`, or `.gitlab-ci.yml` are omitted from the
+isolated Release Please history, while PM CLI and release workflow changes still
+participate.
 
 ## Future release asset set
 

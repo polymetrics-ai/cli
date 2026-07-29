@@ -46,7 +46,11 @@ jobs:
 
       - name: Resolve PM CLI release input
         id: pm-release-filter
-        run: ./scripts/release-please-pm-filter.py --github-output "$GITHUB_OUTPUT"
+        run: >-
+          ./scripts/release-please-pm-filter.py
+          --target-branch main
+          --filtered-repo "$RUNNER_TEMP/pm-release-filtered"
+          --github-output "$GITHUB_OUTPUT"
 
       - name: Create GitHub release from release PR
         id: release
@@ -61,7 +65,7 @@ jobs:
         if: steps.pm-release-filter.outputs.pm_release_input == 'true'
         env:
           RELEASE_PLEASE_AUTH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
-          PM_RELEASE_AS: ${{ steps.pm-release-filter.outputs.release_as }}
+          FILTERED_RELEASE_REPO: ${{ steps.pm-release-filter.outputs.filtered_repo }}
         shell: bash
         run: |
           set -euo pipefail
@@ -70,8 +74,10 @@ jobs:
             --token <(printf '%s' "$RELEASE_PLEASE_AUTH_TOKEN") \
             --config-file release-please-config.json \
             --manifest-file .release-please-manifest.json \
+            --target-branch main \
             --path . \
-            --release-as "$PM_RELEASE_AS"
+            --local \
+            --local-path "$FILTERED_RELEASE_REPO"
 
   package-check:
     name: package-check

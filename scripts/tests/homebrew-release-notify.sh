@@ -37,6 +37,7 @@ import sys
 root = Path(sys.argv[1])
 release = (root / ".github/workflows/release.yml").read_text()
 website = (root / ".github/workflows/website.yml").read_text()
+release_docs = (root / "docs/release-verification.md").read_text()
 release_please = json.loads((root / "release-please-config.json").read_text())
 helper = root / "scripts/notify-homebrew-formula-update.sh"
 
@@ -59,10 +60,12 @@ release_assets = release.split("  release-assets:", 1)[1].split("  notify-homebr
 release_please_job = release.split("  release-please:", 1)[1].split("  package-check:", 1)[0]
 require("Checkout release calculation history" in release_please_job, "release-please must inspect local git history first")
 require("Resolve PM CLI release input" in release_please_job, "release-please must run the PM CLI release filter before calculation")
-require("./scripts/release-please-pm-filter.py --github-output \"$GITHUB_OUTPUT\"" in release_please_job, "release-please must use the checked-in PM CLI release filter")
+require("./scripts/release-please-pm-filter.py" in release_please_job, "release-please must use the checked-in PM CLI release filter")
+require("--filtered-repo \"$RUNNER_TEMP/pm-release-filtered\"" in release_please_job, "release-please must build a filtered PM history repo")
 require("Create GitHub release from release PR" in release_please_job, "release-please must keep GitHub release output creation")
 require("skip-github-pull-request: true" in release_please_job, "release-please action must not use the unfiltered manifest PR path")
 require("release-as:" not in release_please_job, "release-please action must not use ignored manifest release-as input")
+require("--release-as" not in release_please_job, "release-please PR command must not use a version-only release-as workaround")
 require("Create or update release PR from filtered PM history" in release_please_job, "release-please must calculate release PRs from filtered PM history")
 require("if: steps.pm-release-filter.outputs.pm_release_input == 'true'" in release_please_job, "release-please PR creation must skip when only website/deployment commits are releasable")
 require("shell: bash" in release_please_job, "filtered release PR command must run under bash")
@@ -71,8 +74,10 @@ for required_release_pr_arg in [
     "--token <(printf '%s' \"$RELEASE_PLEASE_AUTH_TOKEN\")",
     "--config-file release-please-config.json",
     "--manifest-file .release-please-manifest.json",
+    "--target-branch main",
     "--path .",
-    "--release-as \"$PM_RELEASE_AS\"",
+    "--local",
+    "--local-path \"$FILTERED_RELEASE_REPO\"",
 ]:
     require(required_release_pr_arg in release_please_job, f"filtered release PR command missing {required_release_pr_arg}")
 require("pm_cli_release_created" in release_please_job, "release-please must expose a PM CLI component release guard")
@@ -108,6 +113,7 @@ require("workflow_run:" not in release, "release workflow must not be triggered 
 for forbidden in ["homebrew", "pm-formula-update", "PM_HOMEBREW"]:
     require(forbidden.lower() not in website.lower(), f"website workflow must not reference {forbidden}")
 require("release-assets:" in release and "homebrew_notification_ready" in release, "release-assets must expose a verified notification output")
+require("isolated Release Please history" in release_docs, "operator docs must describe the filtered release history boundary")
 PY
 }
 
@@ -137,7 +143,8 @@ commit_file() {
 
 run_filter_json() {
   local repo_dir="$1"
-  (cd "$repo_dir" && "$RELEASE_FILTER" --base-ref v1.2.3)
+  shift
+  (cd "$repo_dir" && "$RELEASE_FILTER" --base-ref v1.2.3 "$@")
 }
 
 assert_filter_result() {
@@ -160,56 +167,95 @@ if str(result["ignored_website_commits"]) != expected_ignored:
 PY
 }
 
+assert_filtered_history() {
+  local filtered_repo="$1"
+  local expected="$2"
+  local forbidden="$3"
+  local subjects
+  git -C "$filtered_repo" fetch origin >/dev/null
+  subjects="$(git -C "$filtered_repo" log --format=%s v1.2.3..origin/main --reverse)"
+  if [[ "$subjects" != *"$expected"* ]]; then
+    printf '%s\n' "$subjects" >&2
+    fail "filtered release history missing expected subject: $expected"
+  fi
+  if [[ -n "$forbidden" && "$subjects" == *"$forbidden"* ]]; then
+    printf '%s\n' "$subjects" >&2
+    fail "filtered release history included forbidden subject: $forbidden"
+  fi
+}
+
+assert_filtered_history_empty() {
+  local filtered_repo="$1"
+  local subjects
+  git -C "$filtered_repo" fetch origin >/dev/null
+  subjects="$(git -C "$filtered_repo" log --format=%s v1.2.3..origin/main --reverse)"
+  [[ -z "$subjects" ]] || fail "filtered release history should be empty, got: $subjects"
+}
+
 run_release_filter_tests() {
   [[ -x "$RELEASE_FILTER" ]] || fail "PM release filter is not executable"
 
-  local tmp_dir repo output
+  local tmp_dir repo output filtered_repo
   tmp_dir="$(mktemp -d)"
   trap 'rm -rf "$tmp_dir"' RETURN
 
   repo="$tmp_dir/website-dir-only"
   init_filter_repo "$repo"
   commit_file "$repo" "feat: update website docs" "website/app/page.tsx"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/website-dir-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" false "" 1
+  assert_filtered_history_empty "$filtered_repo"
 
   repo="$tmp_dir/website-workflow-only"
   init_filter_repo "$repo"
   commit_file "$repo" "feat: update website workflow" ".github/workflows/website.yml"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/website-workflow-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" false "" 1
+  assert_filtered_history_empty "$filtered_repo"
 
   repo="$tmp_dir/gitlab-only"
   init_filter_repo "$repo"
   commit_file "$repo" "feat: update website gitlab deploy" ".gitlab-ci.yml"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/gitlab-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" false "" 1
+  assert_filtered_history_empty "$filtered_repo"
 
   repo="$tmp_dir/go-only"
   init_filter_repo "$repo"
   commit_file "$repo" "fix: update pm command" "cmd/pm/main.go"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/go-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" true "1.2.4" 0
+  assert_filtered_history "$filtered_repo" "fix: update pm command" ""
 
   repo="$tmp_dir/mixed-go-website"
   init_filter_repo "$repo"
   commit_file "$repo" "feat: update pm command and website" "cmd/pm/main.go"
   commit_file "$repo" "chore: update website companion" "website/app/page.tsx"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/mixed-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" true "1.3.0" 1
+  assert_filtered_history "$filtered_repo" "feat: update pm command and website" "chore: update website companion"
 
   repo="$tmp_dir/historical-website-plus-go"
   init_filter_repo "$repo"
   commit_file "$repo" "feat: update website workflow" ".github/workflows/website.yml"
   commit_file "$repo" "fix: update pm command" "cmd/pm/main.go"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/historical-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" true "1.2.4" 1
+  assert_filtered_history "$filtered_repo" "fix: update pm command" "feat: update website workflow"
 
   repo="$tmp_dir/release-workflow-go-release"
   init_filter_repo "$repo"
   commit_file "$repo" "fix: update release workflow" ".github/workflows/release.yml"
-  output="$(run_filter_json "$repo")"
+  filtered_repo="$tmp_dir/release-workflow-filtered"
+  output="$(run_filter_json "$repo" --filtered-repo "$filtered_repo")"
   assert_filter_result "$output" true "1.2.4" 0
+  assert_filtered_history "$filtered_repo" "fix: update release workflow" ""
 }
 
 start_fake_github_api() {
