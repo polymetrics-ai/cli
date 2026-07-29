@@ -21,6 +21,12 @@ func TestRunExitCodes(t *testing.T) {
 			wantStdout: "issueguard: ok (1 linked issue)",
 		},
 		{
+			name:       "valid PR with explicit issue wording passes",
+			args:       []string{"--title", "feat(connectors): genericize repository read policies", "--body", "Implement the focused connector-boundary Issue B migration on branch refactor/connector-engine-policy-migration: remove GitHub-specific shared runtime policy names."},
+			wantCode:   0,
+			wantStdout: "issueguard: ok (explicit issue wording)",
+		},
+		{
 			name:       "invalid PR is blocked",
 			args:       []string{"--title", "add issue-first delivery system", "--body", "no issue"},
 			wantCode:   1,
