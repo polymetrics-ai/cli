@@ -60,8 +60,21 @@ release_please_job = release.split("  release-please:", 1)[1].split("  package-c
 require("Checkout release calculation history" in release_please_job, "release-please must inspect local git history first")
 require("Resolve PM CLI release input" in release_please_job, "release-please must run the PM CLI release filter before calculation")
 require("./scripts/release-please-pm-filter.py --github-output \"$GITHUB_OUTPUT\"" in release_please_job, "release-please must use the checked-in PM CLI release filter")
-require("if: steps.pm-release-filter.outputs.pm_release_input == 'true'" in release_please_job, "release-please must skip when only website/deployment commits are releasable")
-require("release-as: ${{ steps.pm-release-filter.outputs.release_as }}" in release_please_job, "release-please must use the filtered PM CLI release version")
+require("Create GitHub release from release PR" in release_please_job, "release-please must keep GitHub release output creation")
+require("skip-github-pull-request: true" in release_please_job, "release-please action must not use the unfiltered manifest PR path")
+require("release-as:" not in release_please_job, "release-please action must not use ignored manifest release-as input")
+require("Create or update release PR from filtered PM history" in release_please_job, "release-please must calculate release PRs from filtered PM history")
+require("if: steps.pm-release-filter.outputs.pm_release_input == 'true'" in release_please_job, "release-please PR creation must skip when only website/deployment commits are releasable")
+require("shell: bash" in release_please_job, "filtered release PR command must run under bash")
+require("npx -y release-please@17.6.0 release-pr" in release_please_job, "release-please manifest release PR helper must be pinned")
+for required_release_pr_arg in [
+    "--token <(printf '%s' \"$RELEASE_PLEASE_AUTH_TOKEN\")",
+    "--config-file release-please-config.json",
+    "--manifest-file .release-please-manifest.json",
+    "--path .",
+    "--release-as \"$PM_RELEASE_AS\"",
+]:
+    require(required_release_pr_arg in release_please_job, f"filtered release PR command missing {required_release_pr_arg}")
 require("pm_cli_release_created" in release_please_job, "release-please must expose a PM CLI component release guard")
 require("needs.release-please.outputs.pm_cli_release_created == 'true'" in release_assets, "release-assets must only follow PM CLI release-please releases")
 require("release_component: ${{ steps.release-metadata.outputs.release_component }}" in release_assets, "release-assets must expose the PM release component")

@@ -48,15 +48,30 @@ jobs:
         id: pm-release-filter
         run: ./scripts/release-please-pm-filter.py --github-output "$GITHUB_OUTPUT"
 
-      - name: Create or update release PR
+      - name: Create GitHub release from release PR
         id: release
-        if: steps.pm-release-filter.outputs.pm_release_input == 'true'
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-          release-as: ${{ steps.pm-release-filter.outputs.release_as }}
+          skip-github-pull-request: true
+
+      - name: Create or update release PR from filtered PM history
+        if: steps.pm-release-filter.outputs.pm_release_input == 'true'
+        env:
+          RELEASE_PLEASE_AUTH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          PM_RELEASE_AS: ${{ steps.pm-release-filter.outputs.release_as }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx -y release-please@17.6.0 release-pr \
+            --repo-url "$GITHUB_REPOSITORY" \
+            --token <(printf '%s' "$RELEASE_PLEASE_AUTH_TOKEN") \
+            --config-file release-please-config.json \
+            --manifest-file .release-please-manifest.json \
+            --path . \
+            --release-as "$PM_RELEASE_AS"
 
   package-check:
     name: package-check
