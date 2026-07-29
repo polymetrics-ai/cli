@@ -20,7 +20,7 @@
   branches.
 - [x] `HEAD_REF=feat/valid-branch bash <branch-name-policy>` still accepts ordinary Conventional
   Commit branch names.
-- [x] Local evaluation of the `require-linked-issue` job condition skips `fm/*` validation mirrors.
+- [x] `require-linked-issue` still applies to `fm/*`, matching `.github/workflows/pr-issue-guard.yml`.
 - [x] `go test ./cmd/prissueguard ./internal/coordination/issueguard` passes to confirm the issue
   guard behavior itself was not loosened.
 - [x] `git diff --check` passes.

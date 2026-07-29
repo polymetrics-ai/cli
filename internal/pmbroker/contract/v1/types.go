@@ -16,6 +16,20 @@ const (
 )
 
 const (
+	connectorKindSynthetic = "synthetic"
+	connectorKindGCP       = "gcp"
+
+	connectorConnectionStatusReady    = "ready"
+	connectorConnectionStatusPending  = "pending"
+	connectorConnectionStatusNotReady = "not_ready"
+	connectorConnectionStatusError    = "error"
+
+	connectorConnectionWriteModeDeny     = "deny"
+	connectorConnectionWriteModePlanOnly = "plan_only"
+	connectorConnectionWriteModeAllow    = "allow"
+)
+
+const (
 	// HeaderAPIVersion is required on typed /v1 operations.
 	HeaderAPIVersion = "PM-Broker-API-Version"
 	// IncompatibleContractVersionMessage is the exact client-safe refusal message.
@@ -103,7 +117,7 @@ var (
 	ErrInvalidExecutionPlan = errors.New("contractv1: invalid execution plan")
 	// ErrInvalidErrorResponse means a safe error response is malformed.
 	ErrInvalidErrorResponse = errors.New("contractv1: invalid error response")
-	// ErrUnexpectedResponse means the fake broker returned an unexpected status or payload.
+	// ErrUnexpectedResponse means the broker returned an unexpected status or payload.
 	ErrUnexpectedResponse = errors.New("contractv1: unexpected broker response")
 )
 
@@ -258,7 +272,7 @@ func isSafeDisplayHint(displayHint string) bool {
 	return true
 }
 
-// ConnectorConnection is a PM Broker connector connection fixture.
+// ConnectorConnection is a typed PM Broker connector connection record.
 type ConnectorConnection struct {
 	ConnectorConnectionID ConnectorConnectionID `json:"connector_connection_id"`
 	OrganizationID        OrganizationID        `json:"organization_id"`
@@ -278,10 +292,39 @@ func (connection ConnectorConnection) Validate() error {
 		!connection.BrokerProfileID.IsValid() {
 		return ErrInvalidIdentityBoundary
 	}
-	if connection.ConnectorKind != "synthetic" || connection.Status != "ready" || connection.WriteMode != "deny" {
+	if !isAllowedConnectorKind(connection.ConnectorKind) ||
+		!isAllowedConnectorConnectionStatus(connection.Status) ||
+		!isAllowedConnectorConnectionWriteMode(connection.WriteMode) {
 		return ErrInvalidExecutionPlan
 	}
 	return connection.AuthRef.Validate()
+}
+
+func isAllowedConnectorKind(kind string) bool {
+	switch kind {
+	case connectorKindSynthetic, connectorKindGCP:
+		return true
+	default:
+		return false
+	}
+}
+
+func isAllowedConnectorConnectionStatus(status string) bool {
+	switch status {
+	case connectorConnectionStatusReady, connectorConnectionStatusPending, connectorConnectionStatusNotReady, connectorConnectionStatusError:
+		return true
+	default:
+		return false
+	}
+}
+
+func isAllowedConnectorConnectionWriteMode(writeMode string) bool {
+	switch writeMode {
+	case connectorConnectionWriteModeDeny, connectorConnectionWriteModePlanOnly, connectorConnectionWriteModeAllow:
+		return true
+	default:
+		return false
+	}
 }
 
 // ExecutionIntent is a closed typed envelope for execution-plan intents.
@@ -328,10 +371,16 @@ func (request ExecutionPlanRequest) Validate() error {
 	if !request.IdempotencyKey.IsValid() {
 		return ErrInvalidExecutionPlan
 	}
-	return request.Intent.Validate()
+	if err := request.Intent.Validate(); err != nil {
+		return err
+	}
+	if request.Intent.ValidateConnectorConnection.ConnectorConnectionID != request.ConnectorConnectionID {
+		return ErrInvalidExecutionIntent
+	}
+	return nil
 }
 
-// ExecutionPlan is the immutable planned response from the fake broker.
+// ExecutionPlan is the immutable planned response from PM Broker.
 type ExecutionPlan struct {
 	ExecutionPlanID       ExecutionPlanID       `json:"execution_plan_id"`
 	Digest                ExecutionPlanDigest   `json:"digest"`
@@ -398,7 +447,7 @@ func (response IncompatibleContractVersionErrorResponse) Validate() error {
 	return response.Error.ValidateIncompatibleVersion()
 }
 
-// SyntheticFixtures groups the deterministic fixture values accepted by PM Broker PR #35.
+// SyntheticFixtures groups the deterministic fixture values for the CLI-side /v1 contract.
 type SyntheticFixtures struct {
 	Compatibility            Compatibility                            `json:"compatibility"`
 	Organization             Organization                             `json:"organization"`

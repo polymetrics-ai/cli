@@ -61,6 +61,28 @@ func TestValidatePRAllowsNarrativeNonClosingReferences(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
+	body := "Ship the focused PM v0.1.1 Gong calls list correction for issue 596: add bounded --from/--to filters."
+	result := ValidatePR("fix(connectors): add Gong calls list date filters", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 596 || result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v, want non-closing issue 596", result.Issues)
+	}
+}
+
+func TestValidatePRAllowsFixDeliveryIssueNumberWithoutHash(t *testing.T) {
+	body := "After the investigation, they authorized a focused v0.1.1 fix on issue 596/PR 597 to make Gong calls list date-range and limit behavior correct."
+	result := ValidatePR("feat(pmbroker): add broker v1 HTTP client contract", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 596 || result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v, want non-closing issue 596", result.Issues)
+	}
+}
+
 func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
 	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
 	if !result.OK {
@@ -94,8 +116,13 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Related to #123\n",
 		"Mentions #123\n",
 		"Issue #123\n",
+		"Issue 123\n",
 		"References #123\n",
+		"Ship this. Issue 123 is unrelated.\n",
+		"This is a fix. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
+		"Do not fix issue #123\n",
+		"Do not ship issue 123\n",
 	}
 	for _, body := range tests {
 		result := ValidatePR("feat(github): add cli surface metadata", body)
