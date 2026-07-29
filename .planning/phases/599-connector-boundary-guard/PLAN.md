@@ -103,9 +103,9 @@
 ## CI repair checkpoint — 2026-07-28
 
 - Failing check: `branch-name` rejects the active PR branch `fm/cli-connector-boundary-guard-r1`.
-- Root cause: `.github/workflows/conventions.yml` enforces Conventional Commit-style branch prefixes but does not recognize the `fm/` branch family used by this issue branch.
-- Planned fix: update only the branch-name workflow convention so this existing issue branch family passes without changing connector behavior, dependencies, credentials, branch protection, repository settings, or reverse ETL behavior.
-- Focused verification: run the workflow shell logic locally with `HEAD_REF=fm/cli-connector-boundary-guard-r1`, plus negative and existing-positive branch examples.
+- Current disposition: the wildcard bypass for the `fm/` branch family was removed to preserve the repository's Conventional Commit-style branch-name rule.
+- Remaining blocker: the active legacy branch does not satisfy the current `<type>/<description>` convention and must be migrated through a supported path that preserves the active run and PR lineage.
+- Focused verification: confirm current artifacts record the branch-name blocker instead of reporting `fm/cli-connector-boundary-guard-r1` as accepted.
 
 ## Review fix checkpoint — 2026-07-29
 

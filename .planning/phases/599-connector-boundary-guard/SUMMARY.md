@@ -2,7 +2,7 @@
 
 ## Current status
 
-Implementation and local verification complete on branch `fm/cli-connector-boundary-guard-r1`.
+Implementation is complete on branch `fm/cli-connector-boundary-guard-r1`, but branch-name verification is blocked until a supported migration preserves the active PR lineage on a conventional `<type>/<description>` branch.
 
 ## What changed
 
@@ -13,7 +13,7 @@ Implementation and local verification complete on branch `fm/cli-connector-bound
 - Added synthetic tests for shared provider literals, provider policy helper placement, allowed definitions/native/hooks/generated/test/docs paths, exception stale/expired/broadened behavior, stable sorting, JSON shape, base-diff mode, CLI exit behavior, and current-main baseline.
 - Added `make connector-boundary` and a standalone always-present GitHub Actions workflow check named `connector-boundary` with read-only permissions and no path filters.
 - Added focused developer runbook at `docs/migration/connector-boundary-guard.md`.
-- Repaired the repository convention workflow so the active `fm/cli-connector-boundary-guard-r1` issue branch passes the `branch-name` check.
+- Removed the repository convention workflow's wildcard bypass for the `fm/` branch family; the active legacy branch now requires supported migration before the `branch-name` check can be reported green.
 
 ## Verification
 
@@ -21,7 +21,7 @@ Implementation and local verification complete on branch `fm/cli-connector-bound
 - `go run ./cmd/connectorgen boundary . --json` — pass (`findings=0`, `exceptions=24`, `gong_exceptions=0`).
 - `go run ./cmd/connectorgen validate internal/connectors/defs --json` — pass (`connectors_checked=548`, `findings=0`, `warnings=0`).
 - `make connector-boundary` — pass.
-- Extracted `conventions.yml` branch-name run block — pass for `fm/cli-connector-boundary-guard-r1`; invalid branch example still fails.
+- Extracted `conventions.yml` branch-name run block — blocked for `fm/cli-connector-boundary-guard-r1`; supported migration to a conventional `<type>/<description>` branch is required.
 - `make verify` — pass.
 - `git diff --check` — pass.
 
