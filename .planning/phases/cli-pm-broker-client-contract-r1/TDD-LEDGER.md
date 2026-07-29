@@ -4,7 +4,7 @@
 
 Planned red tests before production code:
 
-- `TestHTTPClientLoopbackAndRemoteShareTypedSemantics` should assert loopback and remote/container HTTP endpoints use the same typed compatibility, list, get, and create execution-plan semantics through the synthetic broker round-tripper.
+- `TestHTTPClientLoopbackAndRemoteShareTypedSemantics` should assert loopback and explicitly allowed PM Broker container HTTP endpoints use the same typed compatibility, list, get, and create execution-plan semantics through the synthetic broker round-tripper.
 - `TestHTTPClientAuthenticationCorrelationIdempotencyAndDigestTransport` should assert typed requests use an explicit auth seam, safe correlation IDs, `PM-Broker-API-Version`, `Idempotency-Key`, and immutable execution-plan digest transport.
 - `TestHTTPClientRejectsUnsafeEndpointHostOriginAndAmbientCookies` should assert credentials/userinfo/query/fragment/unsupported schemes are rejected with redacted errors, fake broker rejects unsafe Host/Origin, and state-changing requests cannot rely on cookies.
 - `TestHTTPClientStructuredErrorsRateLimitsAndCompatibilityNegotiation` should assert safe structured errors, rate-limit metadata, compatibility negotiation, and exact HTTP 426 `incompatible_contract_version` behavior.
@@ -16,7 +16,7 @@ Red evidence:
 
 Green evidence:
 
-- `go test ./internal/pmbroker/contract/v1` passed after implementing typed HTTP client, synthetic broker HTTP handler, endpoint/auth/correlation/pagination/idempotency/digest/error/rate-limit coverage.
+- `go test ./internal/pmbroker/contract/v1` passed after implementing typed HTTP client, synthetic broker HTTP handler, endpoint/auth/correlation/pagination/response-bound/idempotency/digest/error/rate-limit coverage.
 - Review hardening added coverage and fixes for endpoint path rejection, HTTPS/non-loopback HTTP policy, sanitized diagnostics for unsafe contract-version values, typed nil auth/correlation adapter failures, allowed Host pinning, global cookie rejection, and digest-header mismatch rejection.
 - `go test ./internal/pmbroker/...` passed.
 - `git diff --check` passed.

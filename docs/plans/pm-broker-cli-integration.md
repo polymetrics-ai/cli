@@ -3,7 +3,7 @@
 Status: integration-parent seed for CLI parent issue [#563](https://github.com/polymetrics-ai/cli/issues/563).
 Branch: `integration/pm-broker-production-program` from `origin/main`.
 
-This file is the minimal parent-branch tracking artifact for the PM Broker production program. It records the issue map, merge rules, GSD/TDD evidence, and live-deployment blockers needed before parallel CLI sub-issue implementation starts.
+This file is the minimal parent-branch tracking artifact for the PM Broker production program. It records the issue map, merge rules, GSD/TDD evidence, and live-deployment blockers for parallel CLI sub-issue implementation.
 
 ## GSD, TDD, and skills evidence
 
@@ -81,7 +81,7 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 ## Parallel implementation feed
 
 - Start contract-foundation lanes first: #564, #577, #585, and #586, coordinated with PM Broker #3/#4/#8/#24/#25.
-- With #585 publishing typed `/v1` fixtures plus loopback/remote HTTP client foundations, auth/context/storage/policy/audit UX lanes can proceed in parallel when write scopes do not collide: #565, #566, #567, #568, #573, #578, #579, #580, #581, #582, #590, #591.
+- With #585 publishing typed `/v1` fixtures plus the endpoint-safe HTTP client foundation, auth/context/storage/policy/audit UX lanes can proceed in parallel when write scopes do not collide: #565, #566, #567, #568, #573, #578, #579, #580, #581, #582, #590, #591.
 - Migration/compatibility lanes #569, #570, and #587 depend on PM Broker #15/#26 and no-raw-export #21.
 - Provider/GCP lanes #583, #588, and #589 depend on PM Broker #5/#6/#27/#28 and must stay synthetic unless live non-production evidence is separately approved.
 - #575 and #576 run continuously against accepted slices, then become final certification/docs gates after implementation lands.
@@ -91,10 +91,12 @@ Still blocked before live rollout: exact VPS/host, network/ingress posture, doma
 The first CLI-side synthetic contract foundation for #585 lives in `internal/pmbroker/contract/v1`.
 Later profile, context, and execution CLI lanes should consume `NewSyntheticBroker().NewClient()`,
 `NewHTTPClient()`, and `AcceptedSyntheticFixtures()` for deterministic tests of `/v1` compatibility
-negotiation, loopback/remote HTTP parity, opaque connector references, and typed execution-plan
-requests. Tests stay network-free through the fake broker transport, while production-bound HTTP
-remains a typed endpoint-safe foundation with explicit auth and correlation seams. The package does
-not expose arbitrary request methods, caller-supplied headers, generic JSON/body execution, provider
-SDKs, raw-secret retrieval/export, public gRPC, divergent socket semantics, SQL, shell, or runtime
-plugins. `auth_registry_mode` remains pinned to `internal_experimental`; this package does not claim
-a stable public authentication registry.
+negotiation, opaque connector references, and typed execution-plan requests. The exact endpoint,
+auth, correlation, pagination, and response-bounds contract is owned by
+`internal/pmbroker/contract/v1` package documentation and code. Tests stay network-free through the
+fake broker transport, while production-bound HTTP remains a typed endpoint-safe foundation with
+explicit auth and correlation seams. The package does not expose arbitrary request methods,
+caller-supplied headers, generic JSON/body execution, provider SDKs, raw-secret retrieval/export,
+public gRPC, divergent socket semantics, SQL, shell, or runtime plugins. `auth_registry_mode`
+remains pinned to `internal_experimental`; this package does not claim a stable public
+authentication registry.
