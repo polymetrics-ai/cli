@@ -106,6 +106,12 @@ jobs:
     concurrency:
       group: release-assets-${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
       cancel-in-progress: false
+    outputs:
+      homebrew_notification_ready: ${{ steps.homebrew-notification.outputs.ready }}
+      tag_name: ${{ steps.release-metadata.outputs.tag_name }}
+      release_version: ${{ steps.release-metadata.outputs.release_version }}
+      release_id: ${{ steps.release-metadata.outputs.release_id }}
+      source_run_id: ${{ github.run_id }}
 
     steps:
       - name: Checkout release tag
@@ -123,14 +129,48 @@ jobs:
       - name: Install cosign
         uses: sigstore/cosign-installer@v3
 
-      - name: Check existing release assets
-        id: existing-assets
+      - name: Resolve release metadata
+        id: release-metadata
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
         run: |
           set -euo pipefail
           release_version="${TAG_NAME#v}"
+          if [[ "$release_version" == "$TAG_NAME" ]]; then
+            printf 'release tag must start with v: %s\n' "$TAG_NAME" >&2
+            exit 1
+          fi
+          ./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets >/dev/null
+          release_json=$(gh release view "$TAG_NAME" --json databaseId,isDraft,tagName)
+          release_id=$(RELEASE_JSON="$release_json" TAG_NAME="$TAG_NAME" python3 - <<'PY'
+          import json
+          import os
+
+          release = json.loads(os.environ["RELEASE_JSON"])
+          if release.get("tagName") != os.environ["TAG_NAME"] or release.get("isDraft") is not False:
+              raise SystemExit("release metadata did not resolve to the published tag")
+          release_id = release.get("databaseId")
+          if not isinstance(release_id, int):
+              raise SystemExit("release metadata did not include a numeric databaseId")
+          print(release_id)
+          PY
+          )
+          {
+            echo "tag_name=$TAG_NAME"
+            echo "release_version=$release_version"
+            echo "release_id=$release_id"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check existing release assets
+        id: existing-assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.release-metadata.outputs.tag_name }}
+          RELEASE_VERSION: ${{ steps.release-metadata.outputs.release_version }}
+        run: |
+          set -euo pipefail
+          release_version="$RELEASE_VERSION"
           expected_assets=$(./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets | LC_ALL=C sort)
           actual_assets=$(gh release view "$TAG_NAME" --json assets --jq '.assets[].name' | LC_ALL=C sort)
           if [[ -z "$actual_assets" ]]; then
@@ -245,7 +285,7 @@ jobs:
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+          TAG_NAME: ${{ steps.release-metadata.outputs.tag_name }}
         run: |
           set -euo pipefail
           published_tag=$(gh release view "$TAG_NAME" --json isDraft,tagName --jq 'select(.isDraft == false) | .tagName')
@@ -256,3 +296,49 @@ jobs:
             assets+=("$subject" "$subject.sigstore.json")
           done < "$RUNNER_TEMP/release-trust-subjects.txt"
           gh release upload "$TAG_NAME" "${assets[@]}"
+
+      - name: Mark Homebrew dry-run notification ready
+        id: homebrew-notification
+        if: ${{ success() }}
+        run: echo "ready=true" >> "$GITHUB_OUTPUT"
+
+  notify-homebrew-tap:
+    name: notify-homebrew-tap-dry-run
+    needs: release-assets
+    if: >-
+      ${{
+        github.repository == 'polymetrics-ai/cli' &&
+        needs.release-assets.outputs.homebrew_notification_ready == 'true'
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    concurrency:
+      group: homebrew-tap-notify-${{ needs.release-assets.outputs.tag_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout notification helper
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Request Homebrew formula update dry-run
+        env:
+          PM_HOMEBREW_PR_APP_ID: ${{ secrets.PM_HOMEBREW_PR_APP_ID }}
+          PM_HOMEBREW_PR_PRIVATE_KEY: ${{ secrets.PM_HOMEBREW_PR_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          ./scripts/notify-homebrew-formula-update.sh \
+            --release-assets-verified "${{ needs.release-assets.outputs.homebrew_notification_ready }}" \
+            --tag "${{ needs.release-assets.outputs.tag_name }}" \
+            --release-id "${{ needs.release-assets.outputs.release_id }}" \
+            --source-run-id "${{ needs.release-assets.outputs.source_run_id }}" \
+            --source-repo polymetrics-ai/cli \
+            --tap-repo polymetrics-ai/homebrew-tap \
+            --workflow pm-formula-update.yml \
+            --dispatch-schema pm-homebrew-formula/v1 \
+            --target-commitish-policy ignore \
+            --dry-run true \
+            --dispatch

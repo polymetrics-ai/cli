@@ -14,7 +14,7 @@ expect_failure() {
   shift
   local output status
   set +e
-  output="$($@ 2>&1)"
+  output="$("$@" 2>&1)"
   status=$?
   set -e
   if [[ $status -eq 0 ]]; then
@@ -76,7 +76,7 @@ PY
 start_fake_github_api() {
   local log_file="$1"
   local port_file="$2"
-  python3 - "$log_file" "$port_file" <<'PY' &
+  python3 - "$log_file" "$port_file" <<'PY' >/dev/null 2>&1 &
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 import json
@@ -274,7 +274,7 @@ PY
     "$HELPER" "${common_args[@]}" --dispatch
 
   expect_failure "ambient GITHUB_TOKEN/GH_TOKEN is forbidden" \
-    env GITHUB_TOKEN=ambient-token -u GH_TOKEN -u PM_HOMEBREW_PR_APP_ID -u PM_HOMEBREW_PR_PRIVATE_KEY \
+    env -u GH_TOKEN -u PM_HOMEBREW_PR_APP_ID -u PM_HOMEBREW_PR_PRIVATE_KEY GITHUB_TOKEN=ambient-token \
     "$HELPER" "${common_args[@]}" --dispatch
 
   expect_failure "upstream PM release assets are not verified" \

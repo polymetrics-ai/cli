@@ -8,6 +8,26 @@ workstreams under polymetrics-ai/cli#550.
 Published `v0.1.0` assets were produced before this evidence existed. Do not
 expect these commands to succeed for that release.
 
+## Homebrew formula notification rollout
+
+After a future PM release's tag, assets, checksum manifest, Cosign bundles, GitHub
+SLSA provenance, and package checks pass in `.github/workflows/release.yml`, the
+release workflow requests the tap-owned `polymetrics-ai/homebrew-tap` workflow
+`.github/workflows/pm-formula-update.yml` with `dry_run=true`. The notification
+uses only the `pm-homebrew-pr-bot` GitHub App credentials named
+`PM_HOMEBREW_PR_APP_ID` and `PM_HOMEBREW_PR_PRIVATE_KEY`; missing credentials
+fail the notification job rather than falling back to a PAT, `GITHUB_TOKEN`, or
+ambient `gh` authentication.
+
+The current CLI-side rollout is dry-run only. It passes schema
+`pm-homebrew-formula/v1`, source repo `polymetrics-ai/cli`, the verified `vX.Y.Z`
+tag, release id, source release workflow run id, and
+`target_commitish_policy=ignore`. Enabling `dry_run=false` would allow the tap's
+App-owned formula branch/PR path and requires a later explicit code and operator
+documentation change; do not activate it as part of release validation.
+
+Website deployment is independent and does not trigger this Homebrew path.
+
 ## Future release asset set
 
 For a future tag such as `v0.2.0`, the GitHub release is expected to contain:

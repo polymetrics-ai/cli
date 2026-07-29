@@ -17,15 +17,24 @@ Red checks:
 
 ## Green
 
-Pending.
+- Added `scripts/notify-homebrew-formula-update.sh`, a dependency-free shell helper using `curl`, `openssl`, and `python3` to validate the release notification contract, reject ambient credentials, mint an explicit `pm-homebrew-pr-bot` installation token, verify the active tap workflow, and send only the `dry_run=true` `workflow_dispatch` payload.
+- Added `notify-homebrew-tap` to `.github/workflows/release.yml` after `release-assets`; the job needs the verified release-assets output, keeps ordinary `GITHUB_TOKEN` permissions at `contents: read`, uses only `PM_HOMEBREW_PR_APP_ID` / `PM_HOMEBREW_PR_PRIVATE_KEY`, serializes duplicate tag notifications, and passes the exact tap workflow inputs.
+- Added release metadata outputs (`tag_name`, `release_version`, `release_id`, `source_run_id`, `homebrew_notification_ready`) so notification is gated on a successfully verified release-assets job.
+- Added `scripts/tests/homebrew-release-notify.sh` and `make release-workflow-check` to cover authorized dry-run dispatch against a fake GitHub API, missing App credentials, ambient credential refusal, upstream verification ordering, duplicate dry-run payload determinism, malformed tags, wrong repo/workflow, website prohibition, and live-mutation refusal.
+- Updated `docs/release-verification.md` with the dry-run notification contract and later activation boundary.
 
 ## Refactor / hardening
 
-Pending.
+- The helper never writes the installation token to `GITHUB_OUTPUT`, never invokes `gh`, and fails if `GITHUB_TOKEN` or `GH_TOKEN` is present.
+- The initial rollout has no `dry_run=false` path; activation requires a later code and operator-doc change.
 
 ## Verification evidence
 
-Pending.
+- `scripts/tests/homebrew-release-notify.sh` passed.
+- `make release-workflow-check` passed.
+- `shellcheck scripts/notify-homebrew-formula-update.sh scripts/tests/homebrew-release-notify.sh` passed.
+- `git diff --check` passed.
+- `ruby -e 'require "yaml"; YAML.load_file(".github/workflows/release.yml"); YAML.load_file(".github/workflows/website.yml"); puts "yaml syntax ok"'` passed.
 
 ## Skills
 
