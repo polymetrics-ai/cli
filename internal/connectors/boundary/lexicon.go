@@ -488,8 +488,12 @@ func weakIdentifierTailLooksLikePolicy(components []string) bool {
 	if len(components) < 2 {
 		return false
 	}
-	last := components[len(components)-1]
-	return last == "policy" || last == "fallback"
+	for _, component := range components {
+		if component == "policy" || component == "fallback" {
+			return true
+		}
+	}
+	return false
 }
 
 func isASCIIAlphaNumeric(ch byte) bool {

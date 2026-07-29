@@ -70,8 +70,10 @@ type gongDateRangeFallback struct{}
 type GongDateRangeFallback struct{}
 type modeReadQueryFallback struct{}
 type ModeReadQueryFallback struct{}
+type ModeReadQueryPolicyConfig struct{}
 
 const boxOutputPolicy = "definition-owned"
+const modeReadQueryFallbackValue = "definition-owned"
 `,
 	})
 
@@ -83,7 +85,9 @@ const boxOutputPolicy = "definition-owned"
 	requireFinding(t, report, RuleProviderPolicy, "gong", "internal/connectors/commandrunner/weak_policy.go", "GongDateRangeFallback")
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallback")
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "ModeReadQueryFallback")
+	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "ModeReadQueryPolicyConfig")
 	requireFinding(t, report, RuleProviderPolicy, "box", "internal/connectors/commandrunner/weak_policy.go", "boxOutputPolicy")
+	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallbackValue")
 }
 
 func TestScanKeepsWeakConnectorMatchesConservative(t *testing.T) {
