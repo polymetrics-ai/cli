@@ -17,10 +17,10 @@ Implement the independent CLI-side PM Broker OpenAPI HTTP/JSON `/v1` client/tran
 ## Scope
 
 - Extend `internal/pmbroker/contract/v1` with a typed HTTP/JSON client that consumes the existing fixture-backed `/v1` contract shapes.
-- Support loopback HTTP and remote/container HTTP endpoints through the same request builder and custom round-tripper seam for deterministic tests.
+- Support the typed endpoint-safe HTTP client contract owned by `internal/pmbroker/contract/v1` package documentation and code.
 - Add explicit internal authentication and correlation seams without exposing generic request, raw JSON/body, arbitrary URL/header, gRPC, socket, SQL, shell, or provider payload escape hatches.
 - Enforce endpoint safety: no credentials/userinfo, query, fragment, unsupported schemes, or unsafe Host/Origin assumptions.
-- Add transport coverage for compatibility negotiation, exact HTTP 426 `incompatible_contract_version`, bounded pagination, idempotency headers, immutable execution-plan digest headers, structured safe errors, rate-limit metadata, and redacted diagnostics.
+- Add transport coverage for compatibility negotiation, exact HTTP 426 `incompatible_contract_version`, bounded pagination, response bounds, idempotency headers, immutable execution-plan digest headers, structured safe errors, rate-limit metadata, and redacted diagnostics.
 
 ## Non-goals and safety
 
@@ -32,7 +32,7 @@ Implement the independent CLI-side PM Broker OpenAPI HTTP/JSON `/v1` client/tran
 
 ## Implementation plan
 
-1. Add failing synthetic HTTP client tests around the existing `contract/v1` package fixtures: endpoint validation/redaction, loopback/remote transport parity, auth/correlation seams, Host/Origin rejection, pagination/idempotency/digest, structured errors, rate limits, no gRPC/socket/generic escape.
+1. Add failing synthetic HTTP client tests around the existing `contract/v1` package fixtures: endpoint validation/redaction, endpoint-safe HTTP parity, auth/correlation seams, Host/Origin rejection, pagination/response bounds/idempotency/digest, structured errors, rate limits, no gRPC/socket/generic escape.
 2. Implement the smallest internal typed HTTP client surface and fake-broker handler enhancements needed to satisfy those tests while preserving the existing fake client API.
 3. Run targeted package tests, `gofmt`, and broader deterministic Go checks as practical.
 4. Commit the green slice on `fm/cli-pm-broker-client-contract-r1` for the sub-PR base `integration/pm-broker-production-program`.
