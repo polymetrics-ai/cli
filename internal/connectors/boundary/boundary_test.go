@@ -63,9 +63,13 @@ func TestScanDetectsWeakConnectorPolicyIdentifiers(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/defs/box/metadata.json":  `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,
 		"internal/connectors/defs/gong/metadata.json": `{"name":"gong","display_name":"Gong","integration_type":"api","docs_url":"https://gong.example/docs","capabilities":{"write":true}}`,
+		"internal/connectors/defs/mode/metadata.json": `{"name":"mode","display_name":"Mode","integration_type":"api","docs_url":"https://mode.com/developer/api-reference/","capabilities":{"read":true,"write":false}}`,
 		"internal/connectors/commandrunner/weak_policy.go": `package commandrunner
 
 type gongDateRangeFallback struct{}
+type GongDateRangeFallback struct{}
+type modeReadQueryFallback struct{}
+type ModeReadQueryFallback struct{}
 
 const boxOutputPolicy = "definition-owned"
 `,
@@ -76,20 +80,28 @@ const boxOutputPolicy = "definition-owned"
 		t.Fatalf("Scan: %v", err)
 	}
 	requireFinding(t, report, RuleProviderPolicy, "gong", "internal/connectors/commandrunner/weak_policy.go", "gongDateRangeFallback")
+	requireFinding(t, report, RuleProviderPolicy, "gong", "internal/connectors/commandrunner/weak_policy.go", "GongDateRangeFallback")
+	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallback")
+	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "ModeReadQueryFallback")
 	requireFinding(t, report, RuleProviderPolicy, "box", "internal/connectors/commandrunner/weak_policy.go", "boxOutputPolicy")
 }
 
 func TestScanKeepsWeakConnectorMatchesConservative(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
-		"internal/connectors/defs/box/metadata.json":  `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,
-		"internal/connectors/defs/mode/metadata.json": `{"name":"mode","display_name":"Mode","integration_type":"api","docs_url":"https://mode.com/developer/api-reference/","capabilities":{"write":false}}`,
+		"internal/connectors/defs/box/metadata.json":   `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,
+		"internal/connectors/defs/merge/metadata.json": `{"name":"merge","display_name":"Merge","integration_type":"api","docs_url":"https://docs.merge.dev/api-reference/","capabilities":{"read":true,"write":false}}`,
+		"internal/connectors/defs/mode/metadata.json":  `{"name":"mode","display_name":"Mode","integration_type":"api","docs_url":"https://mode.com/developer/api-reference/","capabilities":{"read":true,"write":false}}`,
 		"internal/runtime/state.go": `package runtime
+
+const ModeWholeTree = "whole_tree"
 
 func selectedBox(box string, mode string) bool {
 	boxSet := map[string]bool{}
 	modeSet := map[string]bool{}
 	return boxSet[box] || modeSet[mode]
 }
+
+func mergeResponseFields() {}
 
 const plainBoxLiteral = "box"
 `,

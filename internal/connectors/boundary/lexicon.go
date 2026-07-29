@@ -44,9 +44,6 @@ type metadataFile struct {
 	IntegrationType string   `json:"integration_type"`
 	DocsURL         string   `json:"docs_url"`
 	Aliases         []string `json:"aliases"`
-	Capabilities    struct {
-		Write bool `json:"write"`
-	} `json:"capabilities"`
 }
 
 func loadLexicon(root string) (lexicon, error) {
@@ -264,7 +261,7 @@ func weakIdentifierAlias(name string, meta metadataFile) bool {
 	if meta.IntegrationType != "" && !strings.EqualFold(meta.IntegrationType, "api") {
 		return false
 	}
-	return meta.Capabilities.Write && len(strings.ReplaceAll(name, "-", "")) >= 3
+	return len(strings.ReplaceAll(name, "-", "")) >= 3
 }
 
 func strongMetadataAlias(name, alias string, meta metadataFile) bool {
@@ -441,22 +438,27 @@ func identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix st
 	if !identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix) || len(identifier) == len(prefix) {
 		return false
 	}
-	if !strings.HasPrefix(identifier, prefix) {
-		return false
-	}
-	return identifierTailComponentCount(identifier[len(prefix):]) >= 2
+	tail := identifierTailComponents(identifier[len(prefix):])
+	return weakIdentifierTailLooksLikePolicy(tail)
 }
 
-func identifierTailComponentCount(tail string) int {
-	components := 0
+func identifierTailComponents(tail string) []string {
+	var components []string
 	inComponent := false
+	startIdx := 0
 	for i := 0; i < len(tail); i++ {
 		ch := tail[i]
 		if ch == '_' || ch == '-' {
+			if inComponent {
+				components = append(components, strings.ToLower(tail[startIdx:i]))
+			}
 			inComponent = false
 			continue
 		}
 		if !isASCIIAlphaNumeric(ch) {
+			if inComponent {
+				components = append(components, strings.ToLower(tail[startIdx:i]))
+			}
 			inComponent = false
 			continue
 		}
@@ -469,11 +471,25 @@ func identifierTailComponentCount(tail string) int {
 			}
 		}
 		if start {
-			components++
+			if inComponent {
+				components = append(components, strings.ToLower(tail[startIdx:i]))
+			}
+			startIdx = i
 		}
 		inComponent = true
 	}
+	if inComponent {
+		components = append(components, strings.ToLower(tail[startIdx:]))
+	}
 	return components
+}
+
+func weakIdentifierTailLooksLikePolicy(components []string) bool {
+	if len(components) < 2 {
+		return false
+	}
+	last := components[len(components)-1]
+	return last == "policy" || last == "fallback"
 }
 
 func isASCIIAlphaNumeric(ch byte) bool {
