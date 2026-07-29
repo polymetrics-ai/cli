@@ -13,7 +13,7 @@ Implementation is complete on branch `fm/cli-connector-boundary-guard-r1`, but b
 - Added synthetic tests for shared provider literals, provider policy helper placement, allowed definitions/native/hooks/generated/test/docs paths, exception stale/expired/broadened behavior, stable sorting, JSON shape, base-diff mode, CLI exit behavior, and current-main baseline.
 - Added `make connector-boundary` and a standalone always-present GitHub Actions workflow check named `connector-boundary` with read-only permissions and no path filters.
 - Added focused developer runbook at `docs/migration/connector-boundary-guard.md`.
-- Removed the repository convention workflow's wildcard bypass for the `fm/` branch family; the active legacy branch now requires supported migration before the `branch-name` check can be reported green.
+- Confirmed the repository convention workflow has no `fm/` branch-family bypass; the active legacy branch requires supported migration before the `branch-name` check can be reported green.
 
 ## Verification
 

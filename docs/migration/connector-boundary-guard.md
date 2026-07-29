@@ -9,6 +9,9 @@ go run ./cmd/connectorgen boundary . --base origin/main
 make connector-boundary
 ```
 
+`--base <ref>` limits the primary scan to Go files changed from that git ref, including untracked
+files, while exception-ledger contracts are still checked against the whole tree.
+
 ## Output and exit status
 
 - Exit `0`: clean boundary report.

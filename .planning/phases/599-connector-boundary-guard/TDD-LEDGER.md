@@ -12,7 +12,7 @@
 | CLI exits | `TestBoundaryCommand_*` covers clean JSON exit 0, policy exit 1, invalid invocation/config exit 2, and human output. | `cmd/connectorgen` focused tests pass. | Green |
 | Base diff mode | `TestScanBaseDiffRestrictsPrimaryScan` scans against `HEAD`. | Changed file is scanned; unchanged baseline policy is ignored for primary diff findings while exception contracts remain whole-tree. | Green |
 | Current baseline | `TestCurrentRepositoryBaselinePasses` scans the real repo with fixed time. | Current baseline passes via 24 bounded exceptions; Gong has zero shared-code exceptions. | Green |
-| Branch-name CI repair | GitHub Actions `branch-name` log rejects `HEAD_REF=fm/cli-connector-boundary-guard-r1`; later review removed the wildcard bypass for the `fm/` branch family to preserve repository conventions. | Current `conventions.yml` rejects `fm/cli-connector-boundary-guard-r1`; supported migration to a conventional `<type>/<description>` branch is required before this check can be green. | Blocked |
+| Branch-name CI repair | GitHub Actions `branch-name` log rejects `HEAD_REF=fm/cli-connector-boundary-guard-r1`; current workflow has no `fm/` branch-family bypass. | Current `conventions.yml` rejects `fm/cli-connector-boundary-guard-r1`; supported migration to a conventional `<type>/<description>` branch is required before this check can be green. | Blocked |
 | Review fix: escape hatch owner | Fixtures place provider-specific Go under `internal/connectors/hooks/shared/` and `internal/connectors/native/common/`; current classifier allows those by path shape alone. | Unknown hook/native first segments scan as shared production Go; real connector hook/native dirs remain allowed. | Green |
 | Review fix: weak identifiers | Fixtures use `gongDateRangeFallback` and `boxOutputPolicy` in shared Go; current lexicon does not build identifier prefixes for weak one-word names. | Metadata-derived weak identifier prefixes catch compound provider-policy identifiers while exact weak literals and generic identifiers remain non-blocking. | Green |
 
@@ -33,7 +33,7 @@ make connector-boundary
 # outcome clean; findings 0; exceptions 24; checked_files 129
 
 branch-name validation examples
-# current conventions.yml rejects fm/cli-connector-boundary-guard-r1 after removing the wildcard bypass for that branch family; supported migration to a conventional type/description branch is required
+# current conventions.yml rejects fm/cli-connector-boundary-guard-r1; supported migration to a conventional type/description branch is required
 
 make verify
 # exit 0

@@ -53,7 +53,7 @@
     {
       "command": "extracted conventions.yml branch-name run block",
       "result": "blocked",
-      "summary": "current source rejects fm/cli-connector-boundary-guard-r1 after removing the wildcard bypass; supported migration to a conventional type/description branch is required"
+      "summary": "current source rejects fm/cli-connector-boundary-guard-r1; supported migration to a conventional type/description branch is required"
     },
     {
       "command": "make verify",
