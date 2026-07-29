@@ -30,7 +30,7 @@ func run(args []string, stdout io.Writer, stderr io.Writer, getenv func(string) 
 	if bodyFile != "" {
 		data, err := os.ReadFile(bodyFile)
 		if err != nil {
-			fmt.Fprintf(stderr, "read PR body file: %v\n", err)
+			_, _ = fmt.Fprintf(stderr, "read PR body file: %v\n", err)
 			return 2
 		}
 		body = string(data)
@@ -40,19 +40,19 @@ func run(args []string, stdout io.Writer, stderr io.Writer, getenv func(string) 
 	if result.OK {
 		if len(result.Issues) == 0 {
 			if result.DeliveryRecord {
-				fmt.Fprintln(stdout, "issueguard: ok (explicit no-mistakes delivery record)")
+				_, _ = fmt.Fprintln(stdout, "issueguard: ok (explicit no-mistakes delivery record)")
 				return 0
 			}
-			fmt.Fprintln(stdout, "issueguard: ok (explicit issue wording)")
+			_, _ = fmt.Fprintln(stdout, "issueguard: ok (explicit issue wording)")
 			return 0
 		}
-		fmt.Fprintf(stdout, "issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
+		_, _ = fmt.Fprintf(stdout, "issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
 		return 0
 	}
 
-	fmt.Fprintln(stderr, "issueguard: blocked")
+	_, _ = fmt.Fprintln(stderr, "issueguard: blocked")
 	for _, violation := range result.Violations {
-		fmt.Fprintf(stderr, "- %s\n", violation)
+		_, _ = fmt.Fprintf(stderr, "- %s\n", violation)
 	}
 	return 1
 }

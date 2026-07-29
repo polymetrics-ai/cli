@@ -96,8 +96,8 @@ This repo uses official GSD Core workflows through a project-local Pi adapter:
 - Commit and push regularly to the active issue/PR branch after each coherent green slice: plan
   checkpoint, red-test checkpoint when useful, implementation checkpoint, and review-fix checkpoint.
   Never push to `main`; stop only when a human gate is triggered.
-- PR bodies must use `Closes #N` for completed default-branch work or `Refs #N` for stacked or
-  incremental work. PR titles must follow Conventional Commits.
+- PR bodies must follow `.agents/agentic-delivery/contracts/issue-agent-contract.md` for issue-link
+  and accepted no-mistakes delivery-record requirements. PR titles must follow Conventional Commits.
 - After implementation and local verification, follow
   `.agents/agentic-delivery/workflows/claude-review-loop.md`.
 - Before requesting a review, follow

@@ -65,9 +65,13 @@ before implementation.
     CI and automatic review can run regularly. Never push to `main`; stop only when a human gate is
     triggered.
 13. Update phase or research artifacts when the issue asks for durable memory.
-14. Open a PR with a Conventional Commit title and `Closes #N` or `Refs #N` in the body.
+14. Open a PR with a Conventional Commit title and an issue-first body.
+    - Use `Closes #N` or `Refs #N` when the PR is issue-backed.
     - Use `Refs #N` for sub-PRs that target a parent branch.
     - Use `Closes #N` only for PRs that target the default branch and complete the issue.
+    - A no-mistakes-generated PR may satisfy the guard with its complete delivery record instead of
+      a manual issue link only when the body has `## Intent`, `## What Changed`, `## Testing`, and
+      `## Pipeline` sections plus the generated `git push no-mistakes` marker.
 15. After implementation and local verification, choose the automated review route using
     `.agents/agentic-delivery/workflows/automated-review-routing-loop.md`, then run the Claude
     review loop in
@@ -121,7 +125,7 @@ The parent PR into `main` always requires human approval.
 
 Every implementation PR must include:
 
-- issue link
+- issue link, or the complete generated no-mistakes delivery record when the PR is not issue-backed
 - summary of changes
 - red/green/refactor evidence when behavior changed
 - GSD programming-loop evidence, including the `/gsd...` or `scripts/gsd prompt ...` command used,
