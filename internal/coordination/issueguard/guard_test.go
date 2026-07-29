@@ -72,6 +72,31 @@ func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsNoMistakesDeliveryRecord(t *testing.T) {
+	body := noMistakesDeliveryBody()
+	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 0 {
+		t.Fatalf("ValidatePR() issues = %#v, want none", result.Issues)
+	}
+	if !result.DeliveryRecord {
+		t.Fatal("ValidatePR() DeliveryRecord = false, want true")
+	}
+}
+
+func TestValidatePRRejectsIncompleteNoMistakesDeliveryRecord(t *testing.T) {
+	body := "## Intent\n\nImplement a CI update.\n\n## Pipeline\n\nUpdates from [git push no-mistakes](https://github.com/kunchenguid/no-mistakes)\n"
+	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
+	if result.OK {
+		t.Fatal("ValidatePR() OK = true, want false")
+	}
+	if !containsViolation(result.Violations, "PR body must reference an issue") {
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
+	}
+}
+
 func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
 	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
 	if !result.OK {
@@ -149,4 +174,25 @@ func containsViolation(violations []string, want string) bool {
 		}
 	}
 	return false
+}
+
+func noMistakesDeliveryBody() string {
+	return strings.Join([]string{
+		"## Intent",
+		"",
+		"Implement the CLI-side least-privilege Homebrew tap notification.",
+		"",
+		"## What Changed",
+		"",
+		"- Added a least-privilege dry-run notification.",
+		"",
+		"## Testing",
+		"",
+		"Targeted validation passed.",
+		"",
+		"## Pipeline",
+		"",
+		"Updates from [git push no-mistakes](https://github.com/kunchenguid/no-mistakes)",
+		"",
+	}, "\n")
 }

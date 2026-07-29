@@ -38,6 +38,10 @@ func run(args []string, stdout io.Writer, stderr io.Writer, getenv func(string) 
 
 	result := issueguard.ValidatePR(title, body)
 	if result.OK {
+		if len(result.Issues) == 0 && result.DeliveryRecord {
+			fmt.Fprintln(stdout, "issueguard: ok (explicit no-mistakes delivery record)")
+			return 0
+		}
 		fmt.Fprintf(stdout, "issueguard: ok (%d linked issue%s)\n", len(result.Issues), plural(len(result.Issues)))
 		return 0
 	}
