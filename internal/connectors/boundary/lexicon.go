@@ -451,6 +451,16 @@ func matchToken(c connectorLexeme, token, lower string, includeWeakExact bool) l
 			return literalMatch{Connector: c.Name, Match: token, Policy: true}
 		}
 	}
+	for _, prefix := range c.weakIdentifierPrefixes {
+		if valueHasConnectorCompoundPolicyPrefix(token, lower, prefix) {
+			return literalMatch{Connector: c.Name, Match: token, Policy: true}
+		}
+	}
+	for _, prefix := range c.commandIdentifierRoots {
+		if valueHasConnectorCompoundPolicyPrefix(token, lower, prefix) {
+			return literalMatch{Connector: c.Name, Match: token, Policy: true}
+		}
+	}
 	return literalMatch{}
 }
 
@@ -482,17 +492,17 @@ func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) b
 		}
 	}
 	for _, prefix := range c.identifierPrefixes {
-		if identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix) {
+		if valueHasConnectorPrefix(identifier, lowerIdentifier, prefix) {
 			return true
 		}
 	}
 	for _, prefix := range c.weakIdentifierPrefixes {
-		if identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix) {
+		if valueHasConnectorCompoundPolicyPrefix(identifier, lowerIdentifier, prefix) {
 			return true
 		}
 	}
 	for _, prefix := range c.commandIdentifierRoots {
-		if identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix) {
+		if valueHasConnectorCompoundPolicyPrefix(identifier, lowerIdentifier, prefix) {
 			return true
 		}
 	}
@@ -507,22 +517,22 @@ func tokenHasConnectorPrefix(token, prefix string) bool {
 	return next == '_' || next == '-'
 }
 
-func identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix string) bool {
-	if !strings.HasPrefix(lowerIdentifier, prefix) {
+func valueHasConnectorPrefix(value, lowerValue, prefix string) bool {
+	if !strings.HasPrefix(lowerValue, prefix) {
 		return false
 	}
-	if len(identifier) == len(prefix) {
+	if len(value) == len(prefix) {
 		return true
 	}
-	next := identifier[len(prefix)]
+	next := value[len(prefix)]
 	return next == '_' || next == '-' || (next >= 'A' && next <= 'Z')
 }
 
-func identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix string) bool {
-	if !identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix) || len(identifier) == len(prefix) {
+func valueHasConnectorCompoundPolicyPrefix(value, lowerValue, prefix string) bool {
+	if !valueHasConnectorPrefix(value, lowerValue, prefix) || len(value) == len(prefix) {
 		return false
 	}
-	tail := identifierTailComponents(identifier[len(prefix):])
+	tail := identifierTailComponents(value[len(prefix):])
 	return weakIdentifierTailLooksLikePolicy(tail)
 }
 

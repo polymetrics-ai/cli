@@ -72,6 +72,8 @@ type modeReadQueryFallback struct{}
 type ModeReadQueryFallback struct{}
 type ModeReadQueryPolicyConfig struct{}
 
+const weakBoxLiteral = "box_output_policy"
+const weakModeLiteral = "mode_read_query_fallback"
 const boxOutputPolicy = "definition-owned"
 const modeReadQueryFallbackValue = "definition-owned"
 `,
@@ -86,6 +88,8 @@ const modeReadQueryFallbackValue = "definition-owned"
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallback")
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "ModeReadQueryFallback")
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "ModeReadQueryPolicyConfig")
+	requireFinding(t, report, RuleProviderPolicy, "box", "internal/connectors/commandrunner/weak_policy.go", "box_output_policy")
+	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "mode_read_query_fallback")
 	requireFinding(t, report, RuleProviderPolicy, "box", "internal/connectors/commandrunner/weak_policy.go", "boxOutputPolicy")
 	requireFinding(t, report, RuleProviderPolicy, "mode", "internal/connectors/commandrunner/weak_policy.go", "modeReadQueryFallbackValue")
 }
@@ -108,6 +112,8 @@ func selectedBox(box string, mode string) bool {
 func mergeResponseFields() {}
 
 const plainBoxLiteral = "box"
+const boxOutputLiteral = "box_output"
+const modeReadQueryLiteral = "mode_read_query"
 `,
 	})
 
@@ -129,6 +135,7 @@ type ghOutputPolicyConfig struct{}
 type GhReadQueryFallbackValue struct{}
 
 const commandExample = "gh issue list --json"
+const cliPolicyLiteral = "gh_output_policy"
 `,
 	})
 
@@ -138,6 +145,7 @@ const commandExample = "gh issue list --json"
 	}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "ghOutputPolicyConfig")
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "GhReadQueryFallbackValue")
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "gh_output_policy")
 	requireFinding(t, report, RuleConnectorLiteral, "github", "internal/connectors/commandrunner/github_cli_policy.go", "gh")
 }
 
@@ -150,6 +158,7 @@ type ghostPolicyConfig struct{}
 type ghSet struct{}
 
 const prose = "through gh-specific guidance"
+const cliOutputLiteral = "gh_output"
 `,
 	})
 
