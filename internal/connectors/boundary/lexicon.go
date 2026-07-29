@@ -2,6 +2,7 @@ package boundary
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -25,9 +26,12 @@ type connectorLexeme struct {
 	weakTokenAliases       []lexemeAlias
 	phraseAliases          []lexemeAlias
 	weakPhraseAliases      []lexemeAlias
+	commandTokenAliases    []lexemeAlias
+	commandPhraseAliases   []lexemeAlias
 	literalPrefixes        []string
 	identifierPrefixes     []string
 	weakIdentifierPrefixes []string
+	commandIdentifierRoots []string
 	identifierContains     []string
 	weakDocs               bool
 }
@@ -44,6 +48,16 @@ type metadataFile struct {
 	IntegrationType string   `json:"integration_type"`
 	DocsURL         string   `json:"docs_url"`
 	Aliases         []string `json:"aliases"`
+}
+
+type cliSurfaceFile struct {
+	SourceCLI      cliRootFile `json:"source_cli"`
+	DestinationCLI cliRootFile `json:"destination_cli"`
+}
+
+type cliRootFile struct {
+	Name    string   `json:"name"`
+	Aliases []string `json:"aliases"`
 }
 
 func loadLexicon(root string) (lexicon, error) {
@@ -63,12 +77,16 @@ func loadLexicon(root string) (lexicon, error) {
 		if err != nil {
 			return lexicon{}, fmt.Errorf("load connector metadata %s: %w", dirName, err)
 		}
+		cliSurface, err := readCLISurface(filepath.Join(defsDir, dirName, "cli_surface.json"))
+		if err != nil {
+			return lexicon{}, fmt.Errorf("load connector cli surface %s: %w", dirName, err)
+		}
 		name := strings.TrimSpace(meta.Name)
 		if name == "" {
 			return lexicon{}, fmt.Errorf("load connector metadata %s: name is required", dirName)
 		}
 		name = strings.ToLower(name)
-		seen[name] = newConnectorLexeme(name, meta)
+		seen[name] = newConnectorLexeme(name, meta, cliSurface)
 	}
 	if len(seen) == 0 {
 		return lexicon{}, fmt.Errorf("no connector metadata loaded from %s", defsDir)
@@ -82,7 +100,7 @@ func loadLexicon(root string) (lexicon, error) {
 	return lexicon{connectors: connectors, byName: seen}, nil
 }
 
-func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
+func newConnectorLexeme(name string, meta metadataFile, cliSurface cliSurfaceFile) connectorLexeme {
 	display := strings.TrimSpace(meta.DisplayName)
 	strongName := strongConnectorNameAlias(name, meta)
 	c := connectorLexeme{Name: name, DisplayName: display, weakDocs: (meta.IntegrationType == "" || strings.EqualFold(meta.IntegrationType, "api")) && strings.TrimSpace(meta.DocsURL) != ""}
@@ -98,6 +116,7 @@ func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
 	for _, alias := range append([]string{display}, meta.Aliases...) {
 		c.addMetadataAlias(name, alias, meta)
 	}
+	c.addCLISurfaceAliases(cliSurface)
 	c.sortAliases()
 	return c
 }
@@ -112,6 +131,21 @@ func readMetadata(path string) (metadataFile, error) {
 		return metadataFile{}, err
 	}
 	return meta, nil
+}
+
+func readCLISurface(path string) (cliSurfaceFile, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return cliSurfaceFile{}, nil
+		}
+		return cliSurfaceFile{}, err
+	}
+	var cliSurface cliSurfaceFile
+	if err := json.Unmarshal(b, &cliSurface); err != nil {
+		return cliSurfaceFile{}, err
+	}
+	return cliSurface, nil
 }
 
 func compactDisplayName(display string) string {
@@ -144,6 +178,29 @@ func (c *connectorLexeme) addMetadataAlias(name, alias string, meta metadataFile
 			c.addIdentifierContains(compactLower)
 		}
 	}
+}
+
+func (c *connectorLexeme) addCLISurfaceAliases(cliSurface cliSurfaceFile) {
+	for _, root := range []cliRootFile{cliSurface.SourceCLI, cliSurface.DestinationCLI} {
+		c.addCLIAlias(root.Name)
+		for _, alias := range root.Aliases {
+			c.addCLIAlias(alias)
+		}
+	}
+}
+
+func (c *connectorLexeme) addCLIAlias(value string) {
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return
+	}
+	alias := lexemeAlias{Value: value, Lower: strings.ToLower(value), Alias: false}
+	if tokenOnlyPattern.MatchString(value) {
+		c.commandTokenAliases = append(c.commandTokenAliases, alias)
+		c.addCommandIdentifierRoot(strings.ReplaceAll(alias.Lower, "-", ""))
+		return
+	}
+	c.commandPhraseAliases = append(c.commandPhraseAliases, alias)
 }
 
 func (c *connectorLexeme) addLiteralAlias(value string, legacy, weak bool) {
@@ -197,6 +254,13 @@ func (c *connectorLexeme) addWeakIdentifierPrefix(prefix string) {
 	}
 }
 
+func (c *connectorLexeme) addCommandIdentifierRoot(prefix string) {
+	prefix = strings.ToLower(strings.TrimSpace(prefix))
+	if prefix != "" {
+		c.commandIdentifierRoots = append(c.commandIdentifierRoots, prefix)
+	}
+}
+
 func (c *connectorLexeme) addIdentifierContains(alias string) {
 	alias = strings.ToLower(strings.TrimSpace(alias))
 	if alias != "" {
@@ -209,9 +273,12 @@ func (c *connectorLexeme) sortAliases() {
 	c.weakTokenAliases = uniqueAliases(c.weakTokenAliases)
 	c.phraseAliases = uniqueAliases(c.phraseAliases)
 	c.weakPhraseAliases = uniqueAliases(c.weakPhraseAliases)
+	c.commandTokenAliases = uniqueAliases(c.commandTokenAliases)
+	c.commandPhraseAliases = uniqueAliases(c.commandPhraseAliases)
 	c.literalPrefixes = uniqueStrings(c.literalPrefixes)
 	c.identifierPrefixes = uniqueStrings(c.identifierPrefixes)
 	c.weakIdentifierPrefixes = uniqueStrings(c.weakIdentifierPrefixes)
+	c.commandIdentifierRoots = uniqueStrings(c.commandIdentifierRoots)
 	c.identifierContains = uniqueStrings(c.identifierContains)
 }
 
@@ -326,6 +393,18 @@ func (lx lexicon) literalMatches(value string, includeWeakExact, includeWeakDocs
 				}
 			}
 		}
+		for _, alias := range c.commandPhraseAliases {
+			if literalHasCommandAliasContext(value, alias.Lower) {
+				match := literalMatch{Connector: c.Name, Match: alias.Value, Exact: true}
+				matchesByKey[literalMatchKey(match)] = match
+			}
+		}
+		for _, alias := range c.commandTokenAliases {
+			if literalHasCommandAliasContext(value, alias.Lower) {
+				match := literalMatch{Connector: c.Name, Match: alias.Value, Exact: true}
+				matchesByKey[literalMatchKey(match)] = match
+			}
+		}
 	}
 	tokens := tokenPattern.FindAllString(value, -1)
 	for _, token := range tokens {
@@ -408,6 +487,11 @@ func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) b
 		}
 	}
 	for _, prefix := range c.weakIdentifierPrefixes {
+		if identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix) {
+			return true
+		}
+	}
+	for _, prefix := range c.commandIdentifierRoots {
 		if identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix) {
 			return true
 		}
@@ -545,6 +629,43 @@ func literalHasConnectorCommandContext(value, lowerAlias string) bool {
 		}
 	}
 	return false
+}
+
+func literalHasCommandAliasContext(value, lowerAlias string) bool {
+	lowerValue := strings.ToLower(value)
+	start := 0
+	for {
+		idx := strings.Index(lowerValue[start:], lowerAlias)
+		if idx < 0 {
+			return false
+		}
+		idx += start
+		after := idx + len(lowerAlias)
+		if isCommandAliasStartBoundary(lowerValue, idx) && isCommandAliasEndBoundary(lowerValue, after) {
+			return true
+		}
+		start = idx + 1
+	}
+}
+
+func isCommandAliasStartBoundary(value string, idx int) bool {
+	if idx <= 0 {
+		return true
+	}
+	ch := value[idx-1]
+	return isASCIIWhitespace(ch) || strings.ContainsRune("`'\"$([{=;|&", rune(ch))
+}
+
+func isCommandAliasEndBoundary(value string, idx int) bool {
+	if idx >= len(value) {
+		return true
+	}
+	ch := value[idx]
+	return isASCIIWhitespace(ch) || strings.ContainsRune("`'\")]};|&", rune(ch))
+}
+
+func isASCIIWhitespace(ch byte) bool {
+	return ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r'
 }
 
 func isAliasBoundary(value string, idx int) bool {

@@ -120,6 +120,48 @@ const plainBoxLiteral = "box"
 	}
 }
 
+func TestScanDetectsCLISurfaceCommandAliases(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/github/cli_surface.json": `{"source_cli":{"name":"gh"}}`,
+		"internal/connectors/commandrunner/github_cli_policy.go": `package commandrunner
+
+type ghOutputPolicyConfig struct{}
+type GhReadQueryFallbackValue struct{}
+
+const commandExample = "gh issue list --json"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "ghOutputPolicyConfig")
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/github_cli_policy.go", "GhReadQueryFallbackValue")
+	requireFinding(t, report, RuleConnectorLiteral, "github", "internal/connectors/commandrunner/github_cli_policy.go", "gh")
+}
+
+func TestScanKeepsCLISurfaceAliasesBounded(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/github/cli_surface.json": `{"source_cli":{"name":"gh"}}`,
+		"internal/connectors/commandrunner/github_cli_false_positive.go": `package commandrunner
+
+type ghostPolicyConfig struct{}
+type ghSet struct{}
+
+const prose = "through gh-specific guidance"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected CLI alias matches to remain bounded, got %+v", report.Findings)
+	}
+}
+
 func TestScanDetectsLegacyConnectorPackageImport(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/engine/import_legacy.go": `package engine
@@ -344,6 +386,14 @@ func TestScanFailsClosedWhenConnectorMetadataCannotLoad(t *testing.T) {
 				"internal/connectors/defs/github/metadata.json": `{`,
 			},
 			want: "load connector metadata github",
+		},
+		{
+			name: "invalid cli surface",
+			files: map[string]string{
+				"internal/connectors/defs/github/metadata.json":    `{"name":"github","display_name":"GitHub"}`,
+				"internal/connectors/defs/github/cli_surface.json": `{`,
+			},
+			want: "load connector cli surface github",
 		},
 		{
 			name: "blank metadata name",
