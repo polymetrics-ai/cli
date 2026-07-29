@@ -17,6 +17,7 @@
 | `make verify` | Pass | Exit 0. |
 | `git diff --check` | Pass | Exit 0. |
 | `/Users/karthiksivadas/karthik-agent-workspace/bin/fm-ensure-agents-md.sh .` | No change | Script reported both `AGENTS.md` and `CLAUDE.md` are real files and require manual reconciliation; no durable cross-session project knowledge was added for this guard-only slice. |
+| `go test ./internal/connectors/boundary` | Pass | Review-fix focused gate for hook/native owner validation and weak identifier-prefix fixtures. |
 
 ## CLI/help/docs parity evidence
 

@@ -44,10 +44,10 @@ func classifyPath(rel string, lx lexicon) pathClass {
 	if strings.HasPrefix(rel, "internal/connectors/defs/") {
 		return pathClass{Class: pathClassAllowedDefs, Allowed: true}
 	}
-	if isAllowedHookImplementation(rel) {
+	if isAllowedHookImplementation(rel, lx) {
 		return pathClass{Class: pathClassAllowedHook, Allowed: true}
 	}
-	if isAllowedNativeImplementation(rel) {
+	if isAllowedNativeImplementation(rel, lx) {
 		return pathClass{Class: pathClassAllowedNative, Allowed: true}
 	}
 	if isNativeWiring(rel) {
@@ -77,24 +77,32 @@ func normalizeRelPath(path string) string {
 	return strings.Trim(path, "/")
 }
 
-func isAllowedHookImplementation(rel string) bool {
+func isAllowedHookImplementation(rel string, lx lexicon) bool {
 	const prefix = "internal/connectors/hooks/"
 	if !strings.HasPrefix(rel, prefix) {
 		return false
 	}
 	rest := strings.TrimPrefix(rel, prefix)
 	name, _, ok := strings.Cut(rest, "/")
-	return ok && name != "hookset" && name != ""
+	if !ok || name == "hookset" || name == "" {
+		return false
+	}
+	_, ok = lx.byName[name]
+	return ok
 }
 
-func isAllowedNativeImplementation(rel string) bool {
+func isAllowedNativeImplementation(rel string, lx lexicon) bool {
 	const prefix = "internal/connectors/native/"
 	if !strings.HasPrefix(rel, prefix) {
 		return false
 	}
 	rest := strings.TrimPrefix(rel, prefix)
 	name, _, ok := strings.Cut(rest, "/")
-	return ok && name != "nativeset" && name != ""
+	if !ok || name == "nativeset" || name == "" {
+		return false
+	}
+	_, ok = lx.byName[name]
+	return ok
 }
 
 func isNativeWiring(rel string) bool {

@@ -107,6 +107,14 @@
 - Planned fix: update only the branch-name workflow convention so this existing issue branch family passes without changing connector behavior, dependencies, credentials, branch protection, repository settings, or reverse ETL behavior.
 - Focused verification: run the workflow shell logic locally with `HEAD_REF=fm/cli-connector-boundary-guard-r1`, plus negative and existing-positive branch examples.
 
+## Review fix checkpoint — 2026-07-29
+
+- GSD adapter status: `scripts/gsd doctor` passed; `scripts/gsd prompt programming-loop init --phase cli-connector-boundary-guard-r1 --dry-run` still returns `unknown GSD command: programming-loop`, so this fix round uses the recorded manual-GSD fallback.
+- Required skills used: `golang-how-to`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-testing`, and `golang-lint`.
+- Finding `boundary-unvalidated-escape-hatch-dir` is legitimate and local to path classification: hook/native escape hatches validate path shape but not connector ownership. Fix by requiring the first `hooks/` or `native/` segment to be a loaded connector metadata name.
+- Finding `boundary-weak-name-identifier-blind-spot` is legitimate and local to lexicon construction: weak one-word connector names remain conservative for exact literals but lack metadata-derived identifier-prefix coverage. Fix by adding weak identifier prefixes from connector metadata with compound identifier boundaries to catch provider-policy helpers without treating generic names like `modeSet` as connector policy.
+- Focused verification for this review-fix round: `go test ./internal/connectors/boundary`.
+
 ## Commit checkpoint plan
 
 One implementation commit after planning, red tests, implementation, docs, and focused verification are green. Push/PR is deferred to the no-mistakes handoff per the worker brief.

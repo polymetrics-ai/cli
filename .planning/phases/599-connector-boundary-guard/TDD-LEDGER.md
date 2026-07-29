@@ -13,6 +13,8 @@
 | Base diff mode | `TestScanBaseDiffRestrictsPrimaryScan` scans against `HEAD`. | Changed file is scanned; unchanged baseline policy is ignored for primary diff findings while exception contracts remain whole-tree. | Green |
 | Current baseline | `TestCurrentRepositoryBaselinePasses` scans the real repo with fixed time. | Current baseline passes via 24 bounded exceptions; Gong has zero shared-code exceptions. | Green |
 | Branch-name CI repair | GitHub Actions `branch-name` log rejects `HEAD_REF=fm/cli-connector-boundary-guard-r1` because `fm` is missing from `.github/workflows/conventions.yml`. | Extracted `conventions.yml` branch-name run block accepts `fm/cli-connector-boundary-guard-r1`, `fix/stripe-pagination`, and `dependabot/go_modules/example`, while rejecting `invalid/Bad_Name`. | Green |
+| Review fix: escape hatch owner | Fixtures place provider-specific Go under `internal/connectors/hooks/shared/` and `internal/connectors/native/common/`; current classifier allows those by path shape alone. | Unknown hook/native first segments scan as shared production Go; real connector hook/native dirs remain allowed. | Green |
+| Review fix: weak identifiers | Fixtures use `gongDateRangeFallback` and `boxOutputPolicy` in shared Go; current lexicon does not build identifier prefixes for weak one-word names. | Metadata-derived weak identifier prefixes catch compound provider-policy identifiers while exact weak literals and generic identifiers remain non-blocking. | Green |
 
 ## Actual evidence
 
@@ -38,6 +40,9 @@ make verify
 
 git diff --check
 # exit 0
+
+go test ./internal/connectors/boundary
+# ok polymetrics.ai/internal/connectors/boundary
 ```
 
 ## Notes

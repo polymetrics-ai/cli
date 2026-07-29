@@ -19,16 +19,17 @@ type lexicon struct {
 }
 
 type connectorLexeme struct {
-	Name               string
-	DisplayName        string
-	tokenAliases       []lexemeAlias
-	weakTokenAliases   []lexemeAlias
-	phraseAliases      []lexemeAlias
-	weakPhraseAliases  []lexemeAlias
-	literalPrefixes    []string
-	identifierPrefixes []string
-	identifierContains []string
-	weakDocs           bool
+	Name                   string
+	DisplayName            string
+	tokenAliases           []lexemeAlias
+	weakTokenAliases       []lexemeAlias
+	phraseAliases          []lexemeAlias
+	weakPhraseAliases      []lexemeAlias
+	literalPrefixes        []string
+	identifierPrefixes     []string
+	weakIdentifierPrefixes []string
+	identifierContains     []string
+	weakDocs               bool
 }
 
 type lexemeAlias struct {
@@ -43,6 +44,9 @@ type metadataFile struct {
 	IntegrationType string   `json:"integration_type"`
 	DocsURL         string   `json:"docs_url"`
 	Aliases         []string `json:"aliases"`
+	Capabilities    struct {
+		Write bool `json:"write"`
+	} `json:"capabilities"`
 }
 
 func loadLexicon(root string) (lexicon, error) {
@@ -91,6 +95,8 @@ func newConnectorLexeme(name string, meta metadataFile) connectorLexeme {
 	if strongName {
 		c.addLiteralPrefix(name)
 		c.addIdentifierPrefix(strings.ReplaceAll(name, "-", ""))
+	} else if weakIdentifierAlias(name, meta) {
+		c.addWeakIdentifierPrefix(strings.ReplaceAll(name, "-", ""))
 	}
 	for _, alias := range append([]string{display}, meta.Aliases...) {
 		c.addMetadataAlias(name, alias, meta)
@@ -187,6 +193,13 @@ func (c *connectorLexeme) addIdentifierPrefix(prefix string) {
 	}
 }
 
+func (c *connectorLexeme) addWeakIdentifierPrefix(prefix string) {
+	prefix = strings.ToLower(strings.TrimSpace(prefix))
+	if prefix != "" {
+		c.weakIdentifierPrefixes = append(c.weakIdentifierPrefixes, prefix)
+	}
+}
+
 func (c *connectorLexeme) addIdentifierContains(alias string) {
 	alias = strings.ToLower(strings.TrimSpace(alias))
 	if alias != "" {
@@ -201,6 +214,7 @@ func (c *connectorLexeme) sortAliases() {
 	c.weakPhraseAliases = uniqueAliases(c.weakPhraseAliases)
 	c.literalPrefixes = uniqueStrings(c.literalPrefixes)
 	c.identifierPrefixes = uniqueStrings(c.identifierPrefixes)
+	c.weakIdentifierPrefixes = uniqueStrings(c.weakIdentifierPrefixes)
 	c.identifierContains = uniqueStrings(c.identifierContains)
 }
 
@@ -241,6 +255,16 @@ func strongConnectorNameAlias(name string, meta metadataFile) bool {
 		return false
 	}
 	return strongMetadataAlias(name, meta.DisplayName, meta)
+}
+
+func weakIdentifierAlias(name string, meta metadataFile) bool {
+	if strings.Contains(name, "-") {
+		return false
+	}
+	if meta.IntegrationType != "" && !strings.EqualFold(meta.IntegrationType, "api") {
+		return false
+	}
+	return meta.Capabilities.Write && len(strings.ReplaceAll(name, "-", "")) >= 3
 }
 
 func strongMetadataAlias(name, alias string, meta metadataFile) bool {
@@ -386,6 +410,11 @@ func (c connectorLexeme) matchesIdentifier(identifier, lowerIdentifier string) b
 			return true
 		}
 	}
+	for _, prefix := range c.weakIdentifierPrefixes {
+		if identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix) {
+			return true
+		}
+	}
 	return false
 }
 
@@ -406,6 +435,61 @@ func identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix string) bo
 	}
 	next := identifier[len(prefix)]
 	return next == '_' || next == '-' || (next >= 'A' && next <= 'Z')
+}
+
+func identifierHasConnectorCompoundPrefix(identifier, lowerIdentifier, prefix string) bool {
+	if !identifierHasConnectorPrefix(identifier, lowerIdentifier, prefix) || len(identifier) == len(prefix) {
+		return false
+	}
+	if !strings.HasPrefix(identifier, prefix) {
+		return false
+	}
+	return identifierTailComponentCount(identifier[len(prefix):]) >= 2
+}
+
+func identifierTailComponentCount(tail string) int {
+	components := 0
+	inComponent := false
+	for i := 0; i < len(tail); i++ {
+		ch := tail[i]
+		if ch == '_' || ch == '-' {
+			inComponent = false
+			continue
+		}
+		if !isASCIIAlphaNumeric(ch) {
+			inComponent = false
+			continue
+		}
+		start := !inComponent
+		if i > 0 && isASCIIUpper(ch) {
+			prev := tail[i-1]
+			nextLower := i+1 < len(tail) && isASCIILower(tail[i+1])
+			if isASCIILower(prev) || isASCIIDigit(prev) || (isASCIIUpper(prev) && nextLower) {
+				start = true
+			}
+		}
+		if start {
+			components++
+		}
+		inComponent = true
+	}
+	return components
+}
+
+func isASCIIAlphaNumeric(ch byte) bool {
+	return isASCIILower(ch) || isASCIIUpper(ch) || isASCIIDigit(ch)
+}
+
+func isASCIILower(ch byte) bool {
+	return ch >= 'a' && ch <= 'z'
+}
+
+func isASCIIUpper(ch byte) bool {
+	return ch >= 'A' && ch <= 'Z'
+}
+
+func isASCIIDigit(ch byte) bool {
+	return ch >= '0' && ch <= '9'
 }
 
 func containsDelimitedFold(value, lowerAlias string) bool {

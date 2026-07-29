@@ -59,6 +59,51 @@ type githubDateRangeFallback struct{}
 	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/commandrunner/helper.go", "githubDateRangeFallback")
 }
 
+func TestScanDetectsWeakConnectorPolicyIdentifiers(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/box/metadata.json":  `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,
+		"internal/connectors/defs/gong/metadata.json": `{"name":"gong","display_name":"Gong","integration_type":"api","docs_url":"https://gong.example/docs","capabilities":{"write":true}}`,
+		"internal/connectors/commandrunner/weak_policy.go": `package commandrunner
+
+type gongDateRangeFallback struct{}
+
+const boxOutputPolicy = "definition-owned"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleProviderPolicy, "gong", "internal/connectors/commandrunner/weak_policy.go", "gongDateRangeFallback")
+	requireFinding(t, report, RuleProviderPolicy, "box", "internal/connectors/commandrunner/weak_policy.go", "boxOutputPolicy")
+}
+
+func TestScanKeepsWeakConnectorMatchesConservative(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/defs/box/metadata.json":  `{"name":"box","display_name":"Box","integration_type":"api","docs_url":"https://developer.box.com/reference/","capabilities":{"write":true}}`,
+		"internal/connectors/defs/mode/metadata.json": `{"name":"mode","display_name":"Mode","integration_type":"api","docs_url":"https://mode.com/developer/api-reference/","capabilities":{"write":false}}`,
+		"internal/runtime/state.go": `package runtime
+
+func selectedBox(box string, mode string) bool {
+	boxSet := map[string]bool{}
+	modeSet := map[string]bool{}
+	return boxSet[box] || modeSet[mode]
+}
+
+const plainBoxLiteral = "box"
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected weak connector matches to remain conservative, got %+v", report.Findings)
+	}
+}
+
 func TestScanDetectsLegacyConnectorPackageImport(t *testing.T) {
 	root := newFixtureRepo(t, map[string]string{
 		"internal/connectors/engine/import_legacy.go": `package engine
@@ -178,6 +223,26 @@ const fixtureProvider = "gong"
 	if report.Outcome != OutcomeClean {
 		t.Fatalf("Outcome = %q, want %q", report.Outcome, OutcomeClean)
 	}
+}
+
+func TestScanDoesNotAllowUnknownHookOrNativeEscapeHatchDirs(t *testing.T) {
+	root := newFixtureRepo(t, map[string]string{
+		"internal/connectors/hooks/shared/policy.go": `package shared
+
+const outputPolicy = "github_date_range"
+`,
+		"internal/connectors/native/common/policy.go": `package common
+
+type githubDateRangeFallback struct{}
+`,
+	})
+
+	report, err := Scan(root, Options{Now: fixedNow})
+	if err != nil {
+		t.Fatalf("Scan: %v", err)
+	}
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/hooks/shared/policy.go", "github_date_range")
+	requireFinding(t, report, RuleProviderPolicy, "github", "internal/connectors/native/common/policy.go", "githubDateRangeFallback")
 }
 
 func TestScanDoesNotTreatUnknownConnectorSubpackagesAsNative(t *testing.T) {
