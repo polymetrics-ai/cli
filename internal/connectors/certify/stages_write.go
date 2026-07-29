@@ -6,11 +6,11 @@
 //
 // Two write-pairing sources feed this pipeline:
 //
-//  1. A curated WritePairing for the connector under test (pairing.go
-//     builtinPairings), when the connector exposes a real writes.json action
-//     with a safe cleanup (e.g. github's create_label/delete_label). The
-//     source-side connection created by stageCatalog (stage 4) is reused for
-//     the live read-back in write_verify/cleanup_verify.
+//  1. A definition-owned WritePairing for the connector under test
+//     (certification.json), when the connector exposes a real writes.json
+//     action with a safe cleanup. The source-side connection created by
+//     stageCatalog (stage 4) is reused for the live read-back in
+//     write_verify/cleanup_verify.
 //  2. The sample/outbox self-test path (design §C prove-against note: "if
 //     no live creds, the stage self-test uses the sample/outbox reverse-ETL
 //     path the Makefile smoke target already exercises"), used automatically
@@ -163,8 +163,8 @@ func stageWritePlanPreviewSelfTest(rc *runContext, rep *Report, wc *writeContext
 }
 
 // stageWritePlanPreviewLive drives the plan/preview half of the protocol
-// against a real connector's own writes.json action (github's
-// create_label/delete_label, etc.). It seeds a dedicated one-row warehouse
+// against a real connector's own writes.json action. It seeds a dedicated
+// one-row warehouse
 // table with the generated record's field values (reverse plan --map only
 // renames existing columns, per seedGeneratedSourceTable's doc comment),
 // then plans a reverse ETL from that seed table into the connector using
@@ -188,10 +188,9 @@ func stageWritePlanPreviewLive(rc *runContext, rep *Report, wc *writeContext) {
 	}
 	primaryKey := wc.pairing.IDField
 	if _, ok := record[primaryKey]; !ok {
-		// The pairing's IDField (e.g. github create_label's "name") is not
-		// itself a required field of the CREATE action's own schema in
-		// every case; fall back to the tag under that field name so the
-		// seed row still has something unique to key on.
+		// The pairing's IDField is not itself a required field of the CREATE
+		// action's own schema in every case; fall back to the tag under that
+		// field name so the seed row still has something unique to key on.
 		record[primaryKey] = wc.tag
 	}
 	wc.seedRecordFields = fieldNames(record)
@@ -826,59 +825,4 @@ func skipStage(rc *runContext, rep *Report, name, reason string) {
 	recordStage(rc, rep, name, 2, func() (bool, CLIStageInfo, string) {
 		return false, CLIStageInfo{}, reason
 	})
-}
-
-// writeActionRecordSchema looks up the record_schema for actionName among
-// connector's curated writes.json (currently only github's is embedded here
-// via builtinWriteSchemas; a future connector.DefinitionProvider-based
-// lookup can replace this once more connectors expose Definition()).
-func writeActionRecordSchema(connector, actionName string) ([]byte, error) {
-	schemas, ok := builtinWriteSchemas[connector]
-	if !ok {
-		return nil, fmt.Errorf("no curated record_schema available for connector %q", connector)
-	}
-	schema, ok := schemas[actionName]
-	if !ok {
-		return nil, fmt.Errorf("no curated record_schema available for %q action %q", connector, actionName)
-	}
-	return schema, nil
-}
-
-// builtinWriteSchemas holds the minimal record_schema JSON for each curated
-// WritePairing's Create/Cleanup action (mirroring the corresponding
-// writes.json entries under internal/connectors/defs/<connector>/writes.json,
-// design §C "Data generation from write action record_schema").
-var builtinWriteSchemas = map[string]map[string][]byte{
-	"github": {
-		"create_label": []byte(`{
-			"type": "object",
-			"required": ["name"],
-			"properties": {"name": {"type": "string"}, "color": {"type": "string"}, "description": {"type": "string"}}
-		}`),
-		"delete_label": []byte(`{
-			"type": "object",
-			"required": ["name"],
-			"properties": {"name": {"type": "string"}}
-		}`),
-		"create_issue": []byte(`{
-			"type": "object",
-			"required": ["title"],
-			"properties": {"title": {"type": "string"}, "body": {"type": "string"}}
-		}`),
-		"close_issue": []byte(`{
-			"type": "object",
-			"required": ["issue_number"],
-			"properties": {"issue_number": {"type": "integer"}}
-		}`),
-		"create_milestone": []byte(`{
-			"type": "object",
-			"required": ["title"],
-			"properties": {"title": {"type": "string"}}
-		}`),
-		"delete_milestone": []byte(`{
-			"type": "object",
-			"required": ["milestone_number"],
-			"properties": {"milestone_number": {"type": "integer"}}
-		}`),
-	},
 }

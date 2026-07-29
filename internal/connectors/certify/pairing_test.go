@@ -79,7 +79,7 @@ func TestDefaultPairingInference(t *testing.T) {
 // table has a real (not inferred) create_label -> delete_label entry with
 // "gone" cleanup semantics (design §C WritePairing table), since this is the
 // pairing certify's own tests exercise for a real connector's writes.json.
-func TestBuiltinPairingGithubCreateLabel(t *testing.T) {
+func TestDefinitionOwnedPairingGithubCreateLabel(t *testing.T) {
 	pairings := certify.PairingsFor("github")
 	if len(pairings) == 0 {
 		t.Fatalf("PairingsFor(github) returned no pairings")
@@ -108,6 +108,12 @@ func TestBuiltinPairingGithubCreateLabel(t *testing.T) {
 	}
 	if found.VerifyField == "" {
 		t.Errorf("github create_label pairing VerifyField is empty, want a field name")
+	}
+}
+
+func TestPairingsForUnknownConnectorIsNoop(t *testing.T) {
+	if pairings := certify.PairingsFor("unknown-certification-connector"); len(pairings) != 0 {
+		t.Fatalf("PairingsFor(unknown) = %+v, want empty", pairings)
 	}
 }
 

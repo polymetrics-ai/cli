@@ -267,6 +267,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkFixtureSecrets(b)...)
 	findings = append(findings, checkCLISurfaceSecrets(b)...)
 	findings = append(findings, checkOperationsSecrets(b)...)
+	findings = append(findings, checkCertificationSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
 	findings = append(findings, checkIncrementalPolicies(b)...)
@@ -307,6 +308,8 @@ func loadErrorFinding(name string, err error) Finding {
 		file = "api_surface.json"
 	case strings.Contains(msg, "cli_surface.json"):
 		file = "cli_surface.json"
+	case strings.Contains(msg, "certification.json"):
+		file = "certification.json"
 	}
 	return Finding{Connector: name, File: file, Rule: rule, Message: msg}
 }
@@ -1617,6 +1620,18 @@ func checkOperationsSecrets(b engine.Bundle) []Finding {
 		File:      "operations.json",
 		Rule:      ruleSecretLiteral,
 		Message:   "operations.json contains a secret-shaped literal",
+	}}
+}
+
+func checkCertificationSecrets(b engine.Bundle) []Finding {
+	if len(b.RawCertification) == 0 || !secretLiteralPattern.Match(b.RawCertification) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "certification.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "certification.json contains a secret-shaped literal",
 	}}
 }
 

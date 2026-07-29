@@ -19,21 +19,23 @@ var graphQLNamePattern = regexp.MustCompile(`^[_A-Za-z][_0-9A-Za-z]*$`)
 
 // Bundle is a fully loaded and structurally validated connector definition.
 type Bundle struct {
-	Name          string
-	Metadata      Metadata
-	Spec          *Schema                  // compiled spec.json; SecretKeys() from x-secret
-	RawSpec       json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
-	HTTP          HTTPBase                 // streams.json "base"; zero value when no streams.json
-	Streams       []StreamSpec             // streams.json "streams"
-	Writes        []WriteAction            // writes.json "actions"; nil when writes.json absent
-	Operations    []OperationSpec          // operations.json "operations"; nil when operations.json absent
-	RawOperations json.RawMessage          // verbatim operations.json bytes for validation/audit scanning
-	Schemas       map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
-	Surface       *APISurface              // api_surface.json
-	CLISurface    *CLISurface              // cli_surface.json
-	RawCLISurface json.RawMessage          // verbatim cli_surface.json bytes; nil when absent
-	Docs          string                   // docs.md
-	Fixtures      fs.FS                    // fixtures/ subtree; nil when absent
+	Name             string
+	Metadata         Metadata
+	Spec             *Schema                  // compiled spec.json; SecretKeys() from x-secret
+	RawSpec          json.RawMessage          // verbatim spec.json bytes (F5, REVIEW.md: Definition.Spec must serve this, not a lossy reconstruction); nil for a bundle that never loaded a real spec.json
+	HTTP             HTTPBase                 // streams.json "base"; zero value when no streams.json
+	Streams          []StreamSpec             // streams.json "streams"
+	Writes           []WriteAction            // writes.json "actions"; nil when writes.json absent
+	Operations       []OperationSpec          // operations.json "operations"; nil when operations.json absent
+	RawOperations    json.RawMessage          // verbatim operations.json bytes for validation/audit scanning
+	Schemas          map[string]*StreamSchema // stream name -> compiled schema + PK/cursor
+	Surface          *APISurface              // api_surface.json
+	CLISurface       *CLISurface              // cli_surface.json
+	RawCLISurface    json.RawMessage          // verbatim cli_surface.json bytes; nil when absent
+	Certification    *CertificationSpec       // certification.json; nil when absent
+	RawCertification json.RawMessage          // verbatim certification.json bytes; nil when absent
+	Docs             string                   // docs.md
+	Fixtures         fs.FS                    // fixtures/ subtree; nil when absent
 }
 
 // Metadata is the parsed metadata.json.
@@ -658,11 +660,73 @@ type CLIHelpTopic struct {
 	Summary string `json:"summary"`
 }
 
+// CertificationSpec is optional connector-owned metadata for the certification
+// harness. It keeps live-check bootstrap defaults, sweep candidates, and safe
+// write lifecycle pairings next to the connector definition instead of in
+// shared provider-specific Go tables.
+type CertificationSpec struct {
+	SchemaVersion        int                             `json:"schema_version"`
+	Source               CertificationSourceSpec         `json:"source,omitempty"`
+	DirectReadCandidates []CertificationCommandCandidate `json:"direct_read_candidates,omitempty"`
+	BinaryCandidates     []CertificationCommandCandidate `json:"binary_candidates,omitempty"`
+	WritePairings        []CertificationWritePairing     `json:"write_pairings,omitempty"`
+}
+
+// CertificationSourceSpec configures source-side certification setup and
+// expected live-unavailable classifications.
+type CertificationSourceSpec struct {
+	DefaultStream            string                                       `json:"default_stream,omitempty"`
+	SourceCredentialDefaults map[string]string                            `json:"source_credential_defaults,omitempty"`
+	LiveUnavailable          []CertificationLiveUnavailableClassification `json:"live_unavailable,omitempty"`
+}
+
+// CertificationLiveUnavailableClassification matches known live API failures
+// that mean a stream is unavailable for this credential rather than the whole
+// connector certification crashing unexpectedly.
+type CertificationLiveUnavailableClassification struct {
+	Kind     string   `json:"kind,omitempty"`
+	Contains []string `json:"contains"`
+}
+
+// CertificationCommandCandidate describes one CLI command candidate for a
+// direct-read or binary certification sweep.
+type CertificationCommandCandidate struct {
+	StageName string                    `json:"stage_name"`
+	Command   string                    `json:"command"`
+	Args      []CertificationCommandArg `json:"args"`
+}
+
+// CertificationCommandArg is a typed command-argument atom. Exactly one source
+// is selected: a literal string, the connector name, the certification source
+// credential name, or a config value with an optional default/empty omission.
+type CertificationCommandArg struct {
+	Literal          string `json:"literal,omitempty"`
+	ConfigKey        string `json:"config_key,omitempty"`
+	Default          string `json:"default,omitempty"`
+	OmitWhenEmpty    bool   `json:"omit_when_empty,omitempty"`
+	WhenConfigKey    string `json:"when_config_key,omitempty"`
+	Connector        bool   `json:"connector,omitempty"`
+	SourceCredential bool   `json:"source_credential,omitempty"`
+}
+
+// CertificationWritePairing mirrors the certify package's safe write lifecycle
+// contract while remaining in the engine package so bundle loading can parse it
+// without importing certify.
+type CertificationWritePairing struct {
+	Create       string         `json:"create"`
+	Cleanup      string         `json:"cleanup"`
+	CleanupKind  string         `json:"cleanup_kind,omitempty"`
+	IDField      string         `json:"id_field"`
+	VerifyStream string         `json:"verify_stream"`
+	VerifyField  string         `json:"verify_field"`
+	Overrides    map[string]any `json:"overrides,omitempty"`
+}
+
 // metaSchemas holds the compiled meta-schemas used to validate the bundle
 // files themselves, lazily compiled once from the embedded schema/ dir.
 var metaSchemas = struct {
-	metadata, spec, streams, writes, apiSurface, operations, cliSurface *Schema
-	err                                                                 error
+	metadata, spec, streams, writes, apiSurface, operations, cliSurface, certification *Schema
+	err                                                                                error
 }{}
 
 func init() {
@@ -684,6 +748,7 @@ func init() {
 	metaSchemas.apiSurface = compileMeta(apiSurfaceSchemaJSON)
 	metaSchemas.operations = compileMeta(operationsSchemaJSON)
 	metaSchemas.cliSurface = compileMeta(cliSurfaceSchemaJSON)
+	metaSchemas.certification = compileMeta(certificationSchemaJSON)
 }
 
 // requiredFiles lists the bundle files that must always exist relative to a
@@ -846,6 +911,11 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 		return Bundle{}, err
 	}
 
+	certification, rawCertification, err := loadCertification(sub, dirName, streams, writes)
+	if err != nil {
+		return Bundle{}, err
+	}
+
 	docs, err := readFileString(sub, "docs.md")
 	if err != nil {
 		return Bundle{}, fmt.Errorf("load bundle %s: %w", dirName, err)
@@ -854,21 +924,23 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	fixtures := loadFixtures(sub)
 
 	return Bundle{
-		Name:          dirName,
-		Metadata:      metadata,
-		Spec:          spec,
-		RawSpec:       rawSpec,
-		HTTP:          httpBase,
-		Streams:       streams,
-		Writes:        writes,
-		Operations:    operations,
-		RawOperations: rawOperations,
-		Schemas:       schemas,
-		Surface:       surface,
-		CLISurface:    cliSurface,
-		RawCLISurface: rawCLISurface,
-		Docs:          docs,
-		Fixtures:      fixtures,
+		Name:             dirName,
+		Metadata:         metadata,
+		Spec:             spec,
+		RawSpec:          rawSpec,
+		HTTP:             httpBase,
+		Streams:          streams,
+		Writes:           writes,
+		Operations:       operations,
+		RawOperations:    rawOperations,
+		Schemas:          schemas,
+		Surface:          surface,
+		CLISurface:       cliSurface,
+		RawCLISurface:    rawCLISurface,
+		Certification:    certification,
+		RawCertification: rawCertification,
+		Docs:             docs,
+		Fixtures:         fixtures,
 	}, nil
 }
 
@@ -1418,6 +1490,120 @@ func loadCLISurface(sub fs.FS, dirName string) (*CLISurface, json.RawMessage, er
 		return nil, nil, fmt.Errorf("load bundle %s: cli_surface.json: %w", dirName, err)
 	}
 	return &surface, json.RawMessage(raw), nil
+}
+
+func loadCertification(sub fs.FS, dirName string, streams []StreamSpec, writes []WriteAction) (*CertificationSpec, json.RawMessage, error) {
+	if !fileExists(sub, "certification.json") {
+		return nil, nil, nil
+	}
+	raw, err := readFile(sub, "certification.json")
+	if err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: %w", dirName, err)
+	}
+	if err := metaSchemas.certification.Validate(mustDecodeAny(raw)); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: certification.json: %w", dirName, err)
+	}
+	var certification CertificationSpec
+	if err := strictDecode(raw, &certification); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: certification.json: %w", dirName, err)
+	}
+	if err := validateCertification(certification, streams, writes); err != nil {
+		return nil, nil, fmt.Errorf("load bundle %s: certification.json: %w", dirName, err)
+	}
+	return &certification, json.RawMessage(raw), nil
+}
+
+func validateCertification(certification CertificationSpec, streams []StreamSpec, writes []WriteAction) error {
+	if certification.SchemaVersion != 1 {
+		return fmt.Errorf("schema_version must be 1")
+	}
+	streamNames := make(map[string]bool, len(streams))
+	for _, stream := range streams {
+		streamNames[stream.Name] = true
+	}
+	if name := strings.TrimSpace(certification.Source.DefaultStream); name != "" && !streamNames[name] {
+		return fmt.Errorf("source.default_stream %q does not match a declared stream", name)
+	}
+	for i, classifier := range certification.Source.LiveUnavailable {
+		if len(classifier.Contains) == 0 {
+			return fmt.Errorf("source.live_unavailable[%d] must declare at least one contains pattern", i)
+		}
+		for j, pattern := range classifier.Contains {
+			if strings.TrimSpace(pattern) == "" {
+				return fmt.Errorf("source.live_unavailable[%d].contains[%d] must not be empty", i, j)
+			}
+		}
+	}
+	for i, candidate := range certification.DirectReadCandidates {
+		if err := validateCertificationCommandCandidate("direct_read_candidates", i, candidate); err != nil {
+			return err
+		}
+	}
+	for i, candidate := range certification.BinaryCandidates {
+		if err := validateCertificationCommandCandidate("binary_candidates", i, candidate); err != nil {
+			return err
+		}
+	}
+	writeActions := make(map[string]bool, len(writes))
+	for _, action := range writes {
+		writeActions[action.Name] = true
+	}
+	for i, pairing := range certification.WritePairings {
+		if strings.TrimSpace(pairing.Create) == "" || strings.TrimSpace(pairing.Cleanup) == "" {
+			return fmt.Errorf("write_pairings[%d] must declare create and cleanup", i)
+		}
+		if !writeActions[pairing.Create] {
+			return fmt.Errorf("write_pairings[%d].create %q does not match a declared write action", i, pairing.Create)
+		}
+		if !writeActions[pairing.Cleanup] {
+			return fmt.Errorf("write_pairings[%d].cleanup %q does not match a declared write action", i, pairing.Cleanup)
+		}
+		if strings.TrimSpace(pairing.IDField) == "" || strings.TrimSpace(pairing.VerifyStream) == "" || strings.TrimSpace(pairing.VerifyField) == "" {
+			return fmt.Errorf("write_pairings[%d] must declare id_field, verify_stream, and verify_field", i)
+		}
+		if !streamNames[pairing.VerifyStream] {
+			return fmt.Errorf("write_pairings[%d].verify_stream %q does not match a declared stream", i, pairing.VerifyStream)
+		}
+	}
+	return nil
+}
+
+func validateCertificationCommandCandidate(section string, i int, candidate CertificationCommandCandidate) error {
+	if strings.TrimSpace(candidate.StageName) == "" || strings.TrimSpace(candidate.Command) == "" {
+		return fmt.Errorf("%s[%d] must declare stage_name and command", section, i)
+	}
+	if len(candidate.Args) == 0 {
+		return fmt.Errorf("%s[%d] must declare at least one arg", section, i)
+	}
+	for j, arg := range candidate.Args {
+		if err := validateCertificationCommandArg(arg); err != nil {
+			return fmt.Errorf("%s[%d].args[%d]: %w", section, i, j, err)
+		}
+	}
+	return nil
+}
+
+func validateCertificationCommandArg(arg CertificationCommandArg) error {
+	count := 0
+	if arg.Literal != "" {
+		count++
+	}
+	if arg.ConfigKey != "" {
+		count++
+	}
+	if arg.Connector {
+		count++
+	}
+	if arg.SourceCredential {
+		count++
+	}
+	if count != 1 {
+		return fmt.Errorf("must declare exactly one of literal, config_key, connector, or source_credential")
+	}
+	if arg.ConfigKey == "" && (arg.Default != "" || arg.OmitWhenEmpty) {
+		return fmt.Errorf("default and omit_when_empty require config_key")
+	}
+	return nil
 }
 
 func loadFixtures(sub fs.FS) fs.FS {

@@ -789,6 +789,29 @@ func TestValidate_EmptyTreeIsFine(t *testing.T) {
 	}
 }
 
+func TestValidate_RejectsMalformedCertificationMetadata(t *testing.T) {
+	fsys := cliSurfaceBundleFS(validCLISurfaceJSON())
+	fsys["cli-surface/certification.json"] = &fstest.MapFile{Data: []byte(`{"schema_version":1,"surprise":true}`)}
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	var found *Finding
+	for i := range report.Findings {
+		if report.Findings[i].Connector == "cli-surface" && report.Findings[i].File == "certification.json" {
+			found = &report.Findings[i]
+			break
+		}
+	}
+	if found == nil {
+		t.Fatalf("expected certification.json finding, got %+v", report.Findings)
+	}
+	if found.Rule != ruleMetaSchema || !strings.Contains(found.Message, "surprise") {
+		t.Fatalf("finding = %+v, want meta_schema surprise", *found)
+	}
+}
+
 // --- validate: seeded-invalid corpus (>=10 seeded, >=8 distinct classes) ----
 
 func TestValidate_RejectsSeededInvalidBundles(t *testing.T) {

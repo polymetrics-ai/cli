@@ -351,34 +351,11 @@ func cliInfoFrom(res CLIResult) CLIStageInfo {
 }
 
 func effectiveCredentialConfig(connector string, config map[string]string) map[string]string {
-	out := make(map[string]string, len(config)+1)
-	for k, v := range config {
-		out[k] = v
-	}
-	if connector == "github" && out["base_url"] == "" {
-		out["base_url"] = "https://api.github.com"
-	}
-	return out
+	return applyCertificationSourceDefaults(connector, config)
 }
 
 func liveStreamUnavailable(rc *runContext, res CLIResult) bool {
-	if rc.opts.Connector != "github" || res.Kind != "Error" {
-		return false
-	}
-	text := res.Stdout + "\n" + res.Stderr
-	if errObj, _ := res.Envelope["error"].(map[string]any); errObj != nil {
-		if msg, _ := errObj["message"].(string); msg != "" {
-			text += "\n" + msg
-		}
-	}
-	text = strings.ToLower(text)
-	return strings.Contains(text, "http 403") ||
-		strings.Contains(text, "http 404") ||
-		strings.Contains(text, "status 403") ||
-		strings.Contains(text, "status 404") ||
-		strings.Contains(text, "has not been granted the required scopes") ||
-		strings.Contains(text, "requires one of the following scopes") ||
-		strings.Contains(text, "interpolate: unresolved key")
+	return certificationLiveStreamUnavailable(rc.opts.Connector, res)
 }
 
 // streamName is the source stream certified: currentStream during --full
@@ -396,15 +373,7 @@ func (rc *runContext) streamName() string {
 }
 
 func defaultStreamName(connector string) string {
-	switch connector {
-	case "github":
-		// GitHub's full sweep needs a real bootstrap stream before the catalog
-		// has been refreshed. issues has stable id/updated_at fields and is
-		// already one of the high-value parity streams.
-		return "issues"
-	default:
-		return "customers"
-	}
+	return certificationDefaultStream(connector)
 }
 
 func (rc *runContext) streamSpec() streamSpec {

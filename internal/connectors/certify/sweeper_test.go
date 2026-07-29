@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 	"time"
 
@@ -112,6 +113,43 @@ func TestSweeperSkipsRecentEntries(t *testing.T) {
 	}
 	if status.Cleaned {
 		t.Errorf("StatusFor(%q).Cleaned = true, want false (not aged past threshold)", recentTag)
+	}
+}
+
+func TestSweeperUnknownConnectorDoesNotInventCleanup(t *testing.T) {
+	root := t.TempDir()
+	ledger, err := certify.NewLedger(root)
+	if err != nil {
+		t.Fatalf("NewLedger() error = %v", err)
+	}
+	tag := "pm-cert-unknown-aged0001-1700000000"
+	if err := ledger.RecordPlanned(certify.LedgerEntry{
+		Action:    "create_widget",
+		Tag:       tag,
+		Connector: "unknown-certification-connector",
+		PlannedAt: time.Now().UTC().Add(-48 * time.Hour),
+	}); err != nil {
+		t.Fatalf("RecordPlanned() error = %v", err)
+	}
+
+	result, err := certify.NewSweeper(certify.SweeperOptions{Root: root, OlderThan: 24 * time.Hour}).Sweep(context.Background())
+	if err != nil {
+		t.Fatalf("Sweep() error = %v", err)
+	}
+	if len(result.Cleaned) != 0 {
+		t.Fatalf("Cleaned = %v, want no cleanup for unknown connector", result.Cleaned)
+	}
+	if got := result.Failed[tag]; !strings.Contains(got, "no known cleanup mechanism") {
+		t.Fatalf("Failed[%q] = %q, want no known cleanup mechanism", tag, got)
+	}
+
+	entries, err := certify.LoadLedger(root)
+	if err != nil {
+		t.Fatalf("LoadLedger() error = %v", err)
+	}
+	status, ok := entries.StatusFor(tag)
+	if !ok || status.Cleaned {
+		t.Fatalf("StatusFor(%q) = %+v ok=%v, want uncleaned", tag, status, ok)
 	}
 }
 

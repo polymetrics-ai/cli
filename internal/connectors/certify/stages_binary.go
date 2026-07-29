@@ -21,7 +21,7 @@ func stageBinaryDownloadSweep(rc *runContext, rep *Report) error {
 
 	candidate, ok := binaryDownloadCandidateFor(rc.opts.Connector)
 	if !ok {
-		reason := fmt.Sprintf("skipped: connector %q has no curated binary-download certification candidate", rc.opts.Connector)
+		reason := fmt.Sprintf("skipped: connector %q has no definition-owned binary-download certification candidate", rc.opts.Connector)
 		rep.Capabilities.Binary = &CapabilityResult{Result: "skipped", Reason: reason}
 		skipStage(rc, rep, "binary_download_sweep", reason)
 		return nil
@@ -56,14 +56,14 @@ func stageBinaryDownloadSweep(rc *runContext, rep *Report) error {
 }
 
 func binaryDownloadCandidateFor(connector string) (binaryDownloadCandidate, bool) {
-	switch connector {
-	case "github":
-		return binaryDownloadCandidate{
-			StageName: "binary_download_sweep_release_download",
-			Command:   "release download",
-			Args:      []string{"github", "release", "download", "--credential", sourceCredentialName, "--json"},
-		}, true
-	default:
+	profile := certificationProfileFor(connector)
+	if profile.spec == nil || len(profile.spec.BinaryCandidates) == 0 {
 		return binaryDownloadCandidate{}, false
 	}
+	candidate := profile.spec.BinaryCandidates[0]
+	return binaryDownloadCandidate{
+		StageName: candidate.StageName,
+		Command:   candidate.Command,
+		Args:      certificationCommandArgs(connector, nil, candidate),
+	}, true
 }
