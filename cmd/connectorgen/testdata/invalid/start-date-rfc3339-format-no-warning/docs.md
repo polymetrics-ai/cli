@@ -1,9 +1,9 @@
 # Overview
 
-N2 no-false-positive companion to `start-date-free-form-string`: identical `incremental` shape
-(`param_format: github_date_range`, `start_config_key: start_date`), but `spec.json`'s
-`start_date` property declares `format: date-time`, so `start_date_free_form_string` must NOT
-fire.
+Seeded no-false-positive companion for N2: `events` uses the same generic comparison-prefix
+incremental formatting as `start-date-free-form-string`, but `spec.json` declares `start_date` with
+`format: date-time`, so `connectorgen validate` should not emit a `start_date_free_form_string`
+warning.
 
 ## Auth setup
 

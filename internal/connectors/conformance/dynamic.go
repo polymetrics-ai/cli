@@ -451,7 +451,7 @@ func checkCursorAdvancesWithReplay(b engine.Bundle, readReplay *reusableStreamRe
 		return CheckResult{Name: name, Error: fmt.Sprintf("stream %q: no cursor value observed across fixture records", stream.Name)}
 	}
 
-	wantParam, err := formatCursorForAssertion(maxCursor, stream.Incremental.ParamFormat)
+	wantParam, err := formatCursorForAssertion(maxCursor, stream.Incremental)
 	if err != nil {
 		return CheckResult{Name: name, Error: err.Error()}
 	}
@@ -708,26 +708,23 @@ func cursorNumericGreater(a, b string) bool {
 	return af.Cmp(bf) > 0
 }
 
-// formatCursorForAssertion mirrors read.go's unexported formatParam so this
-// package can independently assert the re-read request shape without
-// reaching into engine internals (read.go does not export formatParam; this
-// is a deliberate, small, documented duplication rather than a
-// cross-package reach-in — it exists purely so the ASSERTION is derived
-// independently of the code under test).
-//
-// N1 (wave0 REVIEW.md re-review "New findings"): the github_date_range
-// branch used to return ">=" + value VERBATIM, while the engine's real
-// formatParam parses value (digits-passthrough-as-Unix-seconds or RFC3339,
-// parseLowerBoundTime) and re-emits ">=" + t.UTC().Format(time.RFC3339) —
-// i.e. it ALWAYS normalizes to UTC second precision regardless of which
-// shape the input cursor arrived in (a bare digit string, the app-persisted
-// numeric-cursor shape, or a non-UTC-offset/fractional-second RFC3339
-// string). The verbatim version only happened to match when maxCursor was
-// already exactly-UTC-normalized RFC3339 with no fractional seconds; a
-// numeric cursor or a non-UTC offset would falsely FAIL cursor_advances.
-// This branch now shares parseLowerBoundTimeForAssertion with unix_seconds/
-// date above, so all three timestamp-parsing formats normalize identically.
-func formatCursorForAssertion(value, format string) (string, error) {
+// formatCursorForAssertion mirrors read.go's unexported incremental
+// formatting so this package can independently assert the re-read request
+// shape without reaching into engine internals. This is a deliberate, small,
+// documented duplication rather than a cross-package reach-in: the assertion
+// is derived independently of the code under test.
+func formatCursorForAssertion(value string, incremental *engine.IncrementalSpec) (string, error) {
+	if incremental == nil {
+		return value, nil
+	}
+	formatted, err := formatCursorValueForAssertion(value, incremental.ParamFormat)
+	if err != nil {
+		return "", err
+	}
+	return incremental.OperatorPrefix + formatted, nil
+}
+
+func formatCursorValueForAssertion(value, format string) (string, error) {
 	switch format {
 	case "", "rfc3339":
 		return value, nil
@@ -743,12 +740,12 @@ func formatCursorForAssertion(value, format string) (string, error) {
 			return "", fmt.Errorf("param_format date: %w", err)
 		}
 		return t.Format("2006-01-02"), nil
-	case "github_date_range":
+	case "rfc3339_utc":
 		t, err := parseLowerBoundTimeForAssertion(value)
 		if err != nil {
-			return "", fmt.Errorf("param_format github_date_range: %w", err)
+			return "", fmt.Errorf("param_format rfc3339_utc: %w", err)
 		}
-		return ">=" + t.UTC().Format(time.RFC3339), nil
+		return t.UTC().Format(time.RFC3339), nil
 	default:
 		return "", fmt.Errorf("unknown param_format %q", format)
 	}

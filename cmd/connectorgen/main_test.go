@@ -492,7 +492,7 @@ func TestValidate_CLISurfaceImplementedDirectReadRejectsBlockedOperationLedgerEn
 
 func TestValidate_CLISurfaceImplementedDirectReadRequiresOutputPolicy(t *testing.T) {
 	cliSurface := strings.Replace(validDirectReadCLISurfaceJSON(), `
-				"output_policy": "github_contents_file_metadata",
+				"output_policy": "repository_contents_file_metadata",
 `, "", 1)
 	report, err := validateDir(directReadCLISurfaceBundleFS(cliSurface))
 	if err != nil {
@@ -928,8 +928,8 @@ func TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule(t *testing.T) {
 // validate-time guard"): formatParam's digits-passthrough (B1) is CORRECT
 // for param_format unix_seconds (an all-digits config value there really
 // does mean Unix seconds) but is a silent-misinterpretation risk for
-// param_format date/github_date_range, where a free-form (no declared
-// date-ish format) start_config_key spec property could hold a value like
+// timestamp-parsing param formats such as date or rfc3339_utc, where a
+// free-form (no declared date-ish format) start_config_key spec property could hold a value like
 // "20260101" (yyyymmdd) that would be silently treated as a 1970s-era
 // Unix-seconds lower bound instead of erroring. A property that DOES
 // declare format:date-time (or format:date) is not flagged: an operator
@@ -939,8 +939,8 @@ func TestValidate_WellTypedDefaultDoesNotTriggerMismatchRule(t *testing.T) {
 // not Report.Findings) — never blocks validate's exit code or the "0
 // findings" self-verify contract — because it is a plausibility heuristic,
 // not a structural defect: a legitimately-Unix-seconds start_config_key
-// used with date/github_date_range (unusual but not inexpressible) would
-// otherwise be a false positive if this were a hard error.
+// used with a timestamp-parsing output format (unusual but not
+// inexpressible) would otherwise be a false positive if this were a hard error.
 
 func TestValidate_StartDateFreeFormStringWarns(t *testing.T) {
 	fsys := singleBundleFS(t, "testdata/invalid", "start-date-free-form-string")
@@ -1543,7 +1543,7 @@ func validDirectReadCLISurfaceJSON() string {
 				"api_surface": [
 					{ "method": "GET", "path": "/widgets/{id}" }
 				],
-				"output_policy": "github_contents_file_metadata",
+				"output_policy": "repository_contents_file_metadata",
 				"flags": [
 					{ "name": "id", "type": "string", "maps_to": "path.id" }
 				],

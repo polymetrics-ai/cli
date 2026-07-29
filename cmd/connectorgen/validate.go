@@ -37,19 +37,36 @@ const (
 	ruleStartDateFreeFormString  = "start_date_free_form_string"
 	ruleConformanceSkipReason    = "conformance_skip_reason"
 	ruleDefaultTypeMismatch      = "default_type_mismatch"
+	ruleIncrementalPolicy        = "incremental_policy"
 )
+
+var supportedParamFormats = map[string]bool{
+	"":             true,
+	"rfc3339":      true,
+	"rfc3339_utc":  true,
+	"unix_seconds": true,
+	"date":         true,
+}
+
+var allowedOperatorPrefixes = map[string]bool{
+	"":   true,
+	">=": true,
+	">":  true,
+	"<=": true,
+	"<":  true,
+}
 
 // dateShapedParamFormats are the incremental.param_format values whose
 // value-parsing path (engine/read.go parseLowerBoundTime, N4/B1) accepts an
 // all-digits input as Unix seconds and otherwise requires RFC3339. For these
-// two formats specifically (unlike unix_seconds, where digits ARE the
+// formats specifically (unlike unix_seconds, where digits ARE the
 // correct/intended shape), a digit-shaped config value that is NOT actually
 // Unix seconds — e.g. a yyyymmdd typo like "20260101" — is silently
 // misinterpreted as a 1970s-era lower bound rather than erroring (N2, wave0
 // REVIEW.md carried flag).
 var dateShapedParamFormats = map[string]bool{
-	"date":              true,
-	"github_date_range": true,
+	"date":        true,
+	"rfc3339_utc": true,
 }
 
 // dateShapedSpecFormats are the JSON Schema "format" annotation values that
@@ -102,10 +119,10 @@ var surfaceOperationRisks = map[string]bool{
 const maxCLIRecordPathArrayIndex = 128
 
 var directReadOutputPolicies = map[string]bool{
-	"github_contents_file_metadata": true,
-	"github_contents_directory":     true,
-	"json_redacted":                 true,
-	"clinical_json_redacted":        true,
+	"repository_contents_file_metadata": true,
+	"repository_contents_directory":     true,
+	"json_redacted":                     true,
+	"clinical_json_redacted":            true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -247,6 +264,7 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkOperationsSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
+	findings = append(findings, checkIncrementalPolicies(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }
@@ -1641,21 +1659,48 @@ func checkDefaultTypeMismatch(b engine.Bundle) []Finding {
 	return findings
 }
 
+func checkIncrementalPolicies(b engine.Bundle) []Finding {
+	var findings []Finding
+	for _, stream := range b.Streams {
+		if stream.Incremental == nil {
+			continue
+		}
+		format := strings.TrimSpace(stream.Incremental.ParamFormat)
+		if !supportedParamFormats[format] {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "streams.json",
+				Rule:      ruleIncrementalPolicy,
+				Message:   fmt.Sprintf("stream %q declares unsupported incremental.param_format %q", stream.Name, stream.Incremental.ParamFormat),
+			})
+		}
+		prefix := strings.TrimSpace(stream.Incremental.OperatorPrefix)
+		if !allowedOperatorPrefixes[prefix] || prefix != stream.Incremental.OperatorPrefix {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "streams.json",
+				Rule:      ruleIncrementalPolicy,
+				Message:   fmt.Sprintf("stream %q declares unsupported incremental.operator_prefix %q", stream.Name, stream.Incremental.OperatorPrefix),
+			})
+		}
+	}
+	return findings
+}
+
 // checkIncrementalStartDateFormat is N2's narrow, honest WARNING (wave0
 // REVIEW.md carried flag; SPEC.md §4 "promote to a validate-time guard"):
-// for every stream whose incremental.param_format is "date" or
-// "github_date_range" (the two formats where engine/read.go's
-// parseLowerBoundTime treats an all-digits value as Unix seconds and
-// anything else as RFC3339, N4/B1) AND which names a start_config_key,
-// check whether that spec.json property declares a date-ish JSON Schema
+// for every stream whose incremental.param_format parses timestamp input
+// through engine/read.go's parseLowerBoundTime and which names a
+// start_config_key, check whether that spec.json property declares a
+// date-ish JSON Schema
 // "format" (date-time/date). If it does not, a digit-shaped config value —
 // e.g. an operator typo like "20260101" (yyyymmdd), which is NOT Unix
 // seconds — would silently be treated as one instead of erroring, producing
 // a bogus 1970s-era lower bound. This is deliberately scoped to ONLY these
-// two param_formats: unix_seconds is excluded because there an all-digits
-// value IS the correct, intended shape (no misinterpretation risk at all),
-// and rfc3339 never attempts digit parsing in the first place (verbatim
-// passthrough). Reads spec.json's per-property "format" directly from
+// timestamp-parsing formats: unix_seconds is excluded because there an
+// all-digits value IS the correct, intended shape (no misinterpretation risk
+// at all), and rfc3339 never attempts digit parsing in the first place
+// (verbatim passthrough). Reads spec.json's per-property "format" directly from
 // b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not
 // expose annotation keywords like "format" through any accessor (schema.go:
 // "format" is accepted-but-only-preserved, never structurally enforced).

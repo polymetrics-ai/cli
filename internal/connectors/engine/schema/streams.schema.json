@@ -158,6 +158,7 @@
               "cursor_field": { "type": "string" },
               "request_param": { "type": "string" },
               "param_format": { "type": "string" },
+              "operator_prefix": { "type": "string" },
               "start_config_key": { "type": "string" },
               "client_filtered": { "type": "boolean" }
             }

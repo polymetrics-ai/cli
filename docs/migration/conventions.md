@@ -185,6 +185,14 @@ not a full override by default.
   namespaces, unmapped constraint targets, and multi-line validation messages. The shared-code
   boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside
   connector defs/hooks/native escape hatches.
+- **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
+  for a single repository file metadata response and `repository_contents_directory` for repository
+  directory listings. Both policies reject sensitive repository paths before network access and
+  redact `content` plus download URLs from returned JSON. Use `json_redacted` or
+  `clinical_json_redacted` for non-repository direct reads, paired with `redact_fields` when the
+  operation has connector-specific sensitive response fields. Do not add provider-prefixed output
+  policy names in shared Go; new response families need a generic policy name and regression tests
+  proving reuse by more than one connector shape.
 
 ## 3. The engine dialect reference
 
@@ -365,17 +373,20 @@ declares `start_page`) and returns a non-nil pointer's value verbatim, including
 representation is unaffected — `"start_page": 0` was already schema-valid (`"type": "integer"`);
 only the Go-side unset-vs-zero ambiguity needed fixing.
 
-**`param_format`** (`incremental.param_format`, applied by `read.go`'s `formatParam` to the
-RFC3339 lower-bound value before sending it as `request_param`): `rfc3339` (default; send
-verbatim), `unix_seconds`, `date` (`2006-01-02`), `github_date_range` (`>=<value>`, a
-lower-bound-only GitHub search qualifier).
+**`param_format` + `operator_prefix`** (`incremental.param_format`, applied by `read.go`'s
+`formatParam` to the lower-bound value before sending it as `request_param` or exposing it as
+`{{ incremental.lower_bound }}`): `rfc3339` (default; send verbatim), `rfc3339_utc` (parse digits,
+RFC3339, or date-only and emit UTC RFC3339), `unix_seconds`, and `date` (`2006-01-02`). Optional
+`operator_prefix` prepends a bounded comparison operator (`>=`, `>`, `<=`, `<`) after formatting,
+so connector definitions can express lower-bound query-qualifier shapes without provider-named
+engine policies.
 
 **`parseLowerBoundTime` accepts a bare `YYYY-MM-DD` date-only input, alongside digits/RFC3339**
 (S4 engine mini-wave item 5: marketstack's `eod`/`splits`/`dividends` streams' real wire cursor
 value for `param_format: date` is a bare date string with no time/offset component at all — neither
 the all-digits Unix-seconds shape nor strict RFC3339 parses it). `parseLowerBoundTime` (used by
-every `param_format` that needs to parse a timestamp — `unix_seconds`/`date`/`github_date_range`,
-not `date` alone) now tries three shapes in a fixed order: all-digits (Unix seconds) first, then
+every `param_format` that needs to parse a timestamp — `unix_seconds`/`date`/`rfc3339_utc`, not
+`date` alone) now tries three shapes in a fixed order: all-digits (Unix seconds) first, then
 strict RFC3339, then bare `YYYY-MM-DD` (parsed as midnight UTC that date) last. The order is
 unambiguous — a valid RFC3339 string always contains a `T` time-of-day separator (never all-digits,
 never date-only-parseable), and a valid date-only string can never itself parse as RFC3339 — so no
@@ -858,8 +869,9 @@ deviations (see `.planning/phases/wave0-engine-harness/traces/waveF-repair-ledge
 `gaploop-r1-ledger.md`, `gaploop-r2-ledger.md`): `PaginationSpec.MaxPages` enforcement; `EvalWhen`
 absent-key-falsy semantics (both `waveF-repair-ledger.md`; item 8 above predates the latter);
 `formatParam`/`parseLowerBoundTime` digits-only (Unix-seconds) passthrough for
-`unix_seconds`/`date`/`github_date_range` (B1 — the honest shape `internal/app`'s persisted cursor
-actually takes); stream/check path interpolation (F1); filter chains, `join:<sep>`, and
+`unix_seconds`/`date`/`rfc3339_utc` with `operator_prefix` (B1 — the honest shape
+`internal/app`'s persisted cursor actually takes); stream/check path interpolation (F1); filter
+chains, `join:<sep>`, and
 static-literal `computed_fields` (F9/F7 enablement); `link_header`'s SSRF host/scheme guard and
 fail-closed-on-unparseable-URL (M1/F2/m2); `lastRecordCursor`'s configurable records path + numeric
 last-record ids (F3); header resolution's hard-error-on-absent-secret (F4); `Bundle.RawSpec`

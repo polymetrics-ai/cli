@@ -187,7 +187,7 @@ projection**: by default the engine emits only declared properties (today's hand
       "name": "workflow_runs",
       "path": "/repos/{{ config.repository }}/actions/runs",
       "records": { "path": "workflow_runs" },
-      "incremental": { "cursor_field": "updated_at", "request_param": "created", "param_format": "github_date_range" },
+      "incremental": { "cursor_field": "updated_at", "request_param": "created", "param_format": "rfc3339_utc", "operator_prefix": ">=" },
       "schema": "schemas/workflow_runs.json"
     },
     {
@@ -380,7 +380,8 @@ type RecordsSpec struct {
 type IncrementalSpec struct {
     CursorField    string `json:"cursor_field"`
     RequestParam   string `json:"request_param,omitempty"`   // server-side lower bound ("since")
-    ParamFormat    string `json:"param_format,omitempty"`    // rfc3339|unix_seconds|date|github_date_range
+    ParamFormat    string `json:"param_format,omitempty"`    // rfc3339|rfc3339_utc|unix_seconds|date
+    OperatorPrefix string `json:"operator_prefix,omitempty"` // optional comparison prefix such as >=
     StartConfigKey string `json:"start_config_key,omitempty"`
     ClientFiltered bool   `json:"client_filtered,omitempty"` // API has no filter; engine drops old records
 }
