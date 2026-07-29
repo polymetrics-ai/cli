@@ -125,6 +125,11 @@ var directReadOutputPolicies = map[string]bool{
 	"clinical_json_redacted":            true,
 }
 
+var repositoryDirectReadOutputPolicies = map[string]bool{
+	"repository_contents_file_metadata": true,
+	"repository_contents_directory":     true,
+}
+
 var sourceRequiredOperationModels = map[string]bool{
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
@@ -882,6 +887,9 @@ func checkCLISurfaceOperationSafety(
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
 	}
+	if repositoryDirectReadOutputPolicies[cmd.OutputPolicy] && !endpointPathHasVariable(op.REST.Path, "path") {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q uses repository output policy %q but endpoint path lacks {path}", i, cmd.Path, cmd.Operation, cmd.OutputPolicy)})
+	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
@@ -1358,6 +1366,14 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
 				})
 			}
+			if repositoryDirectReadOutputPolicies[cmd.OutputPolicy] && !endpointPathHasVariable(ep.Path, "path") {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) uses repository output policy %q but endpoint path lacks {path}", i, cmd.Path, cmd.OutputPolicy),
+				})
+			}
 		}
 		if !directReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
@@ -1523,6 +1539,10 @@ func isAbsoluteHTTPURL(raw string) bool {
 	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }
 
+func endpointPathHasVariable(path, name string) bool {
+	return strings.Contains(path, "{"+name+"}")
+}
+
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).
 // Headings are matched as Markdown "# "/"## " lines by exact (trimmed) text,
 // so heading LEVEL is not enforced, only presence and text.
@@ -1666,7 +1686,7 @@ func checkIncrementalPolicies(b engine.Bundle) []Finding {
 			continue
 		}
 		format := strings.TrimSpace(stream.Incremental.ParamFormat)
-		if !supportedParamFormats[format] {
+		if !supportedParamFormats[format] || format != stream.Incremental.ParamFormat {
 			findings = append(findings, Finding{
 				Connector: b.Name,
 				File:      "streams.json",

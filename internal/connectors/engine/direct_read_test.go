@@ -288,6 +288,59 @@ func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	}
 }
 
+func TestDirectReadRejectsSensitiveRepositoryConfigPathBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/contents/{path}"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/repos/{owner}/{repo}/contents/{path}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"owner": "octo",
+			"repo":  "hello",
+			"path":  ".env",
+		}},
+		OutputPolicy: "repository_contents_file_metadata",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want sensitive path rejection")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+	if !strings.Contains(err.Error(), "blocked") {
+		t.Fatalf("DirectRead error = %q, want blocked", err.Error())
+	}
+}
+
+func TestDirectReadRepositoryPolicyRequiresPathVariableBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/contents/{file_path}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/repos/{owner}/{repo}/contents/{file_path}",
+		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+		PathParams:   map[string]string{"file_path": ".env"},
+		OutputPolicy: "repository_contents_file_metadata",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want repository path variable rejection")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+	if !strings.Contains(err.Error(), "{path}") {
+		t.Fatalf("DirectRead error = %q, want {path}", err.Error())
+	}
+}
+
 func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")

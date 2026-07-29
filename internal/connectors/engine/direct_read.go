@@ -79,7 +79,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if policy == "" {
 		policy = op.OutputPolicy
 	}
-	if err := validateDirectReadOutputPolicy(policy, req.PathParams); err != nil {
+	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	body, err := operationReadBody(op, req.Body)
@@ -151,7 +151,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	if err := validateDirectReadOutputPolicy(req.OutputPolicy, req.PathParams); err != nil {
+	if err := validateDirectReadOutputPolicy(req.OutputPolicy, req.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 
@@ -285,10 +285,14 @@ func clampDirectReadMaxBytes(maxBytes int) int {
 	return maxBytes
 }
 
-func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
+func validateDirectReadOutputPolicy(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) error {
 	switch policy {
 	case directReadPolicyRepositoryContentsFileMetadata, directReadPolicyRepositoryContentsDirectory:
-		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
+		path, err := repositoryDirectReadPathValue(policy, endpointPath, pathParams, cfg)
+		if err != nil {
+			return err
+		}
+		if err := rejectSensitiveRepositoryPath(path); err != nil {
 			return err
 		}
 		return nil
@@ -297,6 +301,28 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 	default:
 		return fmt.Errorf("direct read output policy %q is not supported", policy)
 	}
+}
+
+func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) (string, error) {
+	if !surfacePathHasVariable(endpointPath, "path") {
+		return "", fmt.Errorf("direct read output policy %q requires endpoint path variable {path}", policy)
+	}
+	if pathParams != nil && pathParams["path"] != "" {
+		return pathParams["path"], nil
+	}
+	if cfg.Config != nil {
+		return cfg.Config["path"], nil
+	}
+	return "", nil
+}
+
+func surfacePathHasVariable(template, name string) bool {
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(template, -1) {
+		if len(match) == 2 && match[1] == name {
+			return true
+		}
+	}
+	return false
 }
 
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
