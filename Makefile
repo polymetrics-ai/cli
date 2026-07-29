@@ -5,7 +5,7 @@ VERIFY_JOBS ?= 2
 # fetch the matching toolchain when the ambient one is older.
 export GOTOOLCHAIN ?= auto
 
-.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate connector-boundary
+.PHONY: fmt vet tidy-check test build icons-generate docs-check docs-check-no-build install uninstall smoke smoke-no-build release-workflow-check verify verify-parallel verify-duckdb perf-free perf-runtime runtime-doctor runtime-up runtime-down runtime-reset clean lint connectorgen-validate connector-boundary
 
 # Packages covered by `lint`: the declarative connector architecture packages.
 # Paths are filtered to existing directories so optional local trees do not
@@ -79,12 +79,15 @@ connectorgen-validate:
 connector-boundary:
 	go run ./cmd/connectorgen boundary . --json
 
-verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate connector-boundary
+release-workflow-check:
+	./scripts/tests/homebrew-release-notify.sh
+
+verify: fmt tidy-check vet test build docs-check smoke lint connectorgen-validate connector-boundary release-workflow-check
 
 # Opt-in local gate that overlaps independent read/build checks after the
 # mutating fmt/tidy steps. CI keeps using serial `verify` for stable logs.
 verify-parallel: fmt tidy-check
-	$(MAKE) -j$(VERIFY_JOBS) vet test build lint connectorgen-validate connector-boundary
+	$(MAKE) -j$(VERIFY_JOBS) vet test build lint connectorgen-validate connector-boundary release-workflow-check
 	$(MAKE) -j$(VERIFY_JOBS) docs-check-no-build smoke-no-build
 
 verify-duckdb:

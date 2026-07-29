@@ -10,10 +10,10 @@ Baseline facts before production edits:
 - Tap PR #7's approved App identity evidence is `pm-homebrew-pr-bot` with secret names `PM_HOMEBREW_PR_APP_ID` and `PM_HOMEBREW_PR_PRIVATE_KEY`.
 - `gh-axi secret list -R polymetrics-ai/cli` showed no visible configured repo secrets; missing authentication must therefore fail explicitly.
 
-Planned red checks:
+Red checks:
 
-- Static workflow assertions should fail before implementation because `notify-homebrew-tap` and the helper script are absent.
-- Functional helper tests should fail before implementation because there is no notification helper to validate dry-run inputs or reject unsafe auth/mutation paths.
+- `scripts/tests/homebrew-release-notify.sh` exited 1 before implementation with `notification helper is missing`, proving the new static/functional gate fails on the current release workflow because there is no helper/job path.
+- The test file now covers the planned behavior surfaces: authorized dry-run dispatch, missing/ambient credentials, wrong upstream verification ordering, duplicate dry-run payloads, malformed tags, wrong repository/workflow, website prohibition, and dry-run-only rollout.
 
 ## Green
 
