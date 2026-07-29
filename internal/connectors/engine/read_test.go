@@ -701,15 +701,16 @@ func TestReadStartConfigIncrementalRequestParamDoesNotOverrideExplicitRequestQue
 
 func TestReadIncrementalParamFormats(t *testing.T) {
 	cases := []struct {
-		name      string
-		format    string
-		cursor    string
-		wantParam string
+		name           string
+		format         string
+		operatorPrefix string
+		cursor         string
+		wantParam      string
 	}{
-		{"rfc3339", "rfc3339", "2026-03-01T12:00:00Z", "2026-03-01T12:00:00Z"},
-		{"unix_seconds", "unix_seconds", "2026-03-01T12:00:00Z", "1772366400"},
-		{"date", "date", "2026-03-01T12:00:00Z", "2026-03-01"},
-		{"github_date_range", "github_date_range", "2026-03-01T12:00:00Z", ">=2026-03-01T12:00:00Z"},
+		{"rfc3339", "rfc3339", "", "2026-03-01T12:00:00Z", "2026-03-01T12:00:00Z"},
+		{"unix_seconds", "unix_seconds", "", "2026-03-01T12:00:00Z", "1772366400"},
+		{"date", "date", "", "2026-03-01T12:00:00Z", "2026-03-01"},
+		{"rfc3339_utc_with_operator_prefix", "rfc3339_utc", ">=", "2026-03-01T12:00:00+05:30", ">=2026-03-01T06:30:00Z"},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -719,7 +720,12 @@ func TestReadIncrementalParamFormats(t *testing.T) {
 				_, _ = w.Write([]byte(`{"data":[]}`))
 			})
 			b := newTestBundle(t, srv, StreamSpec{
-				Incremental: &IncrementalSpec{CursorField: "updated_at", RequestParam: "since", ParamFormat: tc.format},
+				Incremental: &IncrementalSpec{
+					CursorField:    "updated_at",
+					RequestParam:   "since",
+					ParamFormat:    tc.format,
+					OperatorPrefix: tc.operatorPrefix,
+				},
 			})
 			req := connectors.ReadRequest{Stream: "widgets", State: map[string]string{"cursor": tc.cursor}}
 			_, err := readAll(t, context.Background(), b, req, nil)
@@ -730,6 +736,36 @@ func TestReadIncrementalParamFormats(t *testing.T) {
 				t.Fatalf("since = %q, want %q", got, tc.wantParam)
 			}
 		})
+	}
+}
+
+func TestReadIncrementalRejectsUnsupportedOperatorPrefix(t *testing.T) {
+	var hits int
+	srv := jsonServer(t, func(w http.ResponseWriter, r *http.Request) {
+		hits++
+		_, _ = w.Write([]byte(`{"data":[]}`))
+	})
+	b := newTestBundle(t, srv, StreamSpec{
+		Incremental: &IncrementalSpec{
+			CursorField:    "updated_at",
+			RequestParam:   "since",
+			ParamFormat:    "rfc3339_utc",
+			OperatorPrefix: "contains:",
+		},
+	})
+
+	_, err := readAll(t, context.Background(), b, connectors.ReadRequest{
+		Stream: "widgets",
+		State:  map[string]string{"cursor": "2026-03-01T12:00:00Z"},
+	}, nil)
+	if err == nil {
+		t.Fatal("Read error = nil, want unsupported operator prefix rejection")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+	if !strings.Contains(err.Error(), "operator_prefix") {
+		t.Fatalf("Read error = %q, want operator_prefix", err.Error())
 	}
 }
 
@@ -895,13 +931,13 @@ func TestFormatParamDateAcceptsDigitsPassthrough(t *testing.T) {
 	}
 }
 
-func TestFormatParamGithubDateRangeAcceptsDigitsPassthrough(t *testing.T) {
-	got, err := formatParam("1700000100", "github_date_range")
+func TestFormatParamRFC3339UTCAcceptsDigitsPassthrough(t *testing.T) {
+	got, err := formatParam("1700000100", "rfc3339_utc")
 	if err != nil {
-		t.Fatalf("formatParam(digits, github_date_range) error = %v, want the digits interpreted as unix seconds then formatted as an RFC3339 lower bound", err)
+		t.Fatalf("formatParam(digits, rfc3339_utc) error = %v, want the digits interpreted as unix seconds then formatted as UTC RFC3339", err)
 	}
-	if got != ">=2023-11-14T22:15:00Z" {
-		t.Fatalf("formatParam(digits, github_date_range) = %q, want >=2023-11-14T22:15:00Z", got)
+	if got != "2023-11-14T22:15:00Z" {
+		t.Fatalf("formatParam(digits, rfc3339_utc) = %q, want 2023-11-14T22:15:00Z", got)
 	}
 }
 
@@ -957,13 +993,13 @@ func TestFormatParamUnixSecondsAcceptsDateOnlyLowerBound(t *testing.T) {
 	}
 }
 
-func TestFormatParamGithubDateRangeAcceptsDateOnlyLowerBound(t *testing.T) {
-	got, err := formatParam("2026-01-02", "github_date_range")
+func TestFormatParamRFC3339UTCAcceptsDateOnlyLowerBound(t *testing.T) {
+	got, err := formatParam("2026-01-02", "rfc3339_utc")
 	if err != nil {
-		t.Fatalf("formatParam(date-only, github_date_range) error = %v", err)
+		t.Fatalf("formatParam(date-only, rfc3339_utc) error = %v", err)
 	}
-	if got != ">=2026-01-02T00:00:00Z" {
-		t.Fatalf("formatParam(date-only, github_date_range) = %q, want %q", got, ">=2026-01-02T00:00:00Z")
+	if got != "2026-01-02T00:00:00Z" {
+		t.Fatalf("formatParam(date-only, rfc3339_utc) = %q, want %q", got, "2026-01-02T00:00:00Z")
 	}
 }
 

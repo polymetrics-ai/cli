@@ -367,7 +367,8 @@ type FilterSpec struct {
 type IncrementalSpec struct {
 	CursorField    string `json:"cursor_field"`
 	RequestParam   string `json:"request_param,omitempty"`
-	ParamFormat    string `json:"param_format,omitempty"` // rfc3339|unix_seconds|date|github_date_range
+	ParamFormat    string `json:"param_format,omitempty"`    // rfc3339|rfc3339_utc|unix_seconds|date
+	OperatorPrefix string `json:"operator_prefix,omitempty"` // optional comparison prefix such as >=
 	StartConfigKey string `json:"start_config_key,omitempty"`
 	ClientFiltered bool   `json:"client_filtered,omitempty"`
 }
