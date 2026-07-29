@@ -60,6 +60,7 @@ write through plan/preview/approval/execute — with no GitHub-specific assumpti
 
 - `jq .` on every edited JSON file.
 - `go run ./cmd/connectorgen validate internal/connectors/defs --json` → 0 findings, 0 warnings.
+- `go run ./cmd/connectorgen boundary . --json` → clean when shared Go or the boundary exception ledger changed.
 - Secret scan clean; source-link gate clean; operation-classification gate clean.
 - `gofmt`, `go vet`, `go build ./cmd/pm`, focused package tests pass; `make verify` when feasible.
 - `pnpm run gen:website-data` idempotent (regen twice, no diff) when connector docs change.

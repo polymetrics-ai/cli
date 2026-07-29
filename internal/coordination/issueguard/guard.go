@@ -41,7 +41,7 @@ var closingKeywords = map[string]bool{
 func ValidatePR(title, body string) Result {
 	var violations []string
 	if !conventionalTitlePattern.MatchString(strings.TrimSpace(title)) {
-		violations = append(violations, "PR title must use Conventional Commits, for example feat(github): add cli surface metadata")
+		violations = append(violations, "PR title must use Conventional Commits, for example feat(connector): add cli surface metadata")
 	}
 
 	issues := ExtractIssueRefs(body)

@@ -1,0 +1,27 @@
+name: Connector Boundary
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  connector-boundary:
+    name: connector-boundary
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: '1.25.12'
+          cache: false
+
+      - name: Connector boundary
+        run: go run ./cmd/connectorgen boundary . --json
