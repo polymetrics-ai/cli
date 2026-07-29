@@ -51,6 +51,7 @@ require("homebrew_notification_ready" in notify, "notify-homebrew-tap must requi
 require("concurrency:" in notify and "homebrew-tap-notify-${{ needs.release-assets.outputs.tag_name }}" in notify, "notify job must serialize duplicate tag notifications")
 require("cancel-in-progress: false" in notify, "duplicate notification concurrency must not cancel in-flight runs")
 require("permissions:\n      contents: read" in notify, "notify job must keep GITHUB_TOKEN read-only")
+require("ref: ${{ github.workflow_sha }}" in notify, "notify job must check out the trusted workflow-source commit before exposing App secrets")
 require("PM_HOMEBREW_PR_APP_ID: ${{ secrets.PM_HOMEBREW_PR_APP_ID }}" in notify, "notify job must use approved App id secret name")
 require("PM_HOMEBREW_PR_PRIVATE_KEY: ${{ secrets.PM_HOMEBREW_PR_PRIVATE_KEY }}" in notify, "notify job must use approved App private key secret name")
 require("GH_TOKEN:" not in notify and "GITHUB_TOKEN:" not in notify, "notify job must not expose ordinary GitHub token")

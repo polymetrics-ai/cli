@@ -26,6 +26,7 @@ Red checks:
 ## Refactor / hardening
 
 - The helper never writes the installation token to `GITHUB_OUTPUT`, never invokes `gh`, and fails if `GITHUB_TOKEN` or `GH_TOKEN` is present.
+- No-mistakes review flagged that `notify-homebrew-tap` must not check out the release tag before exposing App secrets; the checkout now pins to `${{ github.workflow_sha }}` and the static assertions require that trusted workflow-source commit.
 - The initial rollout has no `dry_run=false` path; activation requires a later code and operator-doc change.
 
 ## Verification evidence

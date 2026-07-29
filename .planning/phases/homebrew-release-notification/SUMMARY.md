@@ -4,6 +4,7 @@
 
 - Added CLI release workflow dry-run notification to the merged tap workflow only after `release-assets` verifies a PM release.
 - Added `scripts/notify-homebrew-formula-update.sh` to validate inputs, reject ambient credentials/live mutation, mint the approved `pm-homebrew-pr-bot` App token, verify the tap workflow, and dispatch only `dry_run=true`.
+- Pinned the notification-helper checkout to `${{ github.workflow_sha }}` before exposing App secrets, per no-mistakes review.
 - Added focused workflow/helper assertions under `scripts/tests/homebrew-release-notify.sh` and `make release-workflow-check`.
 - Updated `docs/release-verification.md` with the dry-run notification contract and later activation boundary.
 

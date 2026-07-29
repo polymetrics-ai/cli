@@ -319,9 +319,10 @@ jobs:
       cancel-in-progress: false
 
     steps:
-      - name: Checkout notification helper
+      - name: Checkout trusted notification helper
         uses: actions/checkout@v7
         with:
+          ref: ${{ github.workflow_sha }}
           persist-credentials: false
 
       - name: Request Homebrew formula update dry-run

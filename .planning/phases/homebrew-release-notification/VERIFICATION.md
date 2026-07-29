@@ -9,6 +9,7 @@
 
 - [x] Authorized dry-run notification uses only `.github/workflows/pm-formula-update.yml` with `dry_run=true`.
 - [x] Missing App credentials fail without PAT, `GITHUB_TOKEN`, `GH_TOKEN`, or ambient fallback.
+- [x] Notification helper checkout is pinned to the trusted workflow-source commit before App secrets are exposed.
 - [x] Wrong event ordering / failed upstream verification fails before notification.
 - [x] Duplicate notifications are deterministic and dry-run only.
 - [x] Malformed tags, wrong repositories, and wrong workflows fail closed.
