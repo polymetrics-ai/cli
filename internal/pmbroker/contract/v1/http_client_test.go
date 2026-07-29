@@ -26,7 +26,8 @@ func TestHTTPClientLoopbackAndRemoteShareTypedSemantics(t *testing.T) {
 		endpoint string
 	}{
 		{name: "loopback", endpoint: "http://127.0.0.1:18080"},
-		{name: "remote container", endpoint: "http://pm-broker.internal:8080"},
+		{name: "container service", endpoint: "http://pm-broker:8080"},
+		{name: "container internal dns", endpoint: "http://pm-broker.internal:8080"},
 	}
 
 	for _, tt := range endpoints {
@@ -73,6 +74,66 @@ func TestHTTPClientLoopbackAndRemoteShareTypedSemantics(t *testing.T) {
 				t.Fatalf("CreateExecutionPlan() = %#v, want %#v", plan, fixtures.ExecutionPlan)
 			}
 		})
+	}
+}
+
+func TestHTTPClientRejectsConnectorConnectionPageAboveRequestedLimit(t *testing.T) {
+	t.Parallel()
+
+	fixtures := contractv1.AcceptedSyntheticFixtures()
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		if request.URL.Query().Get("limit") != "1" {
+			t.Errorf("limit query = %q, want 1", request.URL.Query().Get("limit"))
+			http.Error(response, "bad limit", http.StatusBadRequest)
+			return
+		}
+		response.Header().Set("Content-Type", "application/json")
+		page := contractv1.ConnectorConnectionPage{
+			ConnectorConnections: []contractv1.ConnectorConnection{
+				fixtures.ConnectorConnection,
+				fixtures.ConnectorConnection,
+			},
+		}
+		if err := json.NewEncoder(response).Encode(page); err != nil {
+			t.Errorf("encode connector connection page: %v", err)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	client, err := contractv1.NewHTTPClient(server.URL, syntheticAuthorization{})
+	if err != nil {
+		t.Fatalf("NewHTTPClient() error = %v", err)
+	}
+
+	_, err = client.ListConnectorConnections(context.Background(), contractv1.Pagination{Limit: 1})
+	if !errors.Is(err, contractv1.ErrInvalidPagination) {
+		t.Fatalf("ListConnectorConnections() error = %v, want %v", err, contractv1.ErrInvalidPagination)
+	}
+}
+
+func TestHTTPClientRejectsOversizedBrokerResponse(t *testing.T) {
+	t.Parallel()
+
+	server := httptest.NewServer(http.HandlerFunc(func(response http.ResponseWriter, request *http.Request) {
+		response.Header().Set("Content-Type", "application/json")
+		if _, err := response.Write([]byte(`{"connector_connections":[]}`)); err != nil {
+			t.Errorf("write connector connection page: %v", err)
+			return
+		}
+		if _, err := response.Write(bytes.Repeat([]byte(" "), 2<<20)); err != nil {
+			t.Errorf("write oversized response padding: %v", err)
+		}
+	}))
+	t.Cleanup(server.Close)
+
+	client, err := contractv1.NewHTTPClient(server.URL, syntheticAuthorization{})
+	if err != nil {
+		t.Fatalf("NewHTTPClient() error = %v", err)
+	}
+
+	_, err = client.ListConnectorConnections(context.Background(), contractv1.Pagination{Limit: 1})
+	if !errors.Is(err, contractv1.ErrUnexpectedResponse) {
+		t.Fatalf("ListConnectorConnections() error = %v, want %v", err, contractv1.ErrUnexpectedResponse)
 	}
 }
 
@@ -128,6 +189,9 @@ func TestHTTPClientRejectsUnsafeEndpointHostOriginAndAmbientCookies(t *testing.T
 		"https://pm-broker.example/v1?workspace=synthetic",
 		"https://pm-broker.example/#fragment",
 		"http://pm-broker.example",
+		"http://anything",
+		"http://evil.internal",
+		"http://pm-broker.evil.internal",
 		"grpc://pm-broker.example",
 		"unix:///tmp/pm-broker.sock",
 		"http://",

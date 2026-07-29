@@ -20,7 +20,12 @@ import (
 	"time"
 )
 
-const syntheticBrokerBaseURL = "http://pm-broker.synthetic.invalid"
+const (
+	syntheticBrokerBaseURL       = "http://pm-broker.synthetic.invalid"
+	defaultBrokerHTTPTimeout     = 30 * time.Second
+	maxBrokerResponseBodyBytes   = int64(1 << 20)
+	maxBrokerResponseBodyReadCap = maxBrokerResponseBodyBytes + 1
+)
 
 // SyntheticBroker is a deterministic, network-free fake PM Broker.
 type SyntheticBroker struct {
@@ -244,9 +249,10 @@ type clientConfig struct {
 	contractVersion       ContractVersion
 	roundTripper          http.RoundTripper
 	correlationIDProvider CorrelationIDProvider
+	timeout               time.Duration
 }
 
-// NewHTTPClient builds a typed PM Broker /v1 HTTP/JSON client for loopback or remote/container endpoints.
+// NewHTTPClient builds a typed PM Broker /v1 HTTP/JSON client for loopback or explicit PM Broker container endpoints.
 func NewHTTPClient(endpoint string, authenticator Authenticator, opts ...ClientOption) (*Client, error) {
 	parsedEndpoint, err := parseBrokerEndpoint(endpoint)
 	if err != nil {
@@ -257,11 +263,12 @@ func NewHTTPClient(endpoint string, authenticator Authenticator, opts ...ClientO
 		contractVersion:       ContractVersion1,
 		roundTripper:          http.DefaultTransport,
 		correlationIDProvider: CorrelationIDProviderFunc(newCorrelationID),
+		timeout:               defaultBrokerHTTPTimeout,
 	}
 	for _, opt := range opts {
 		opt(&config)
 	}
-	if config.roundTripper == nil || config.correlationIDProvider == nil {
+	if config.roundTripper == nil || config.correlationIDProvider == nil || config.timeout <= 0 {
 		return nil, ErrInvalidEndpoint
 	}
 
@@ -273,6 +280,7 @@ func NewHTTPClient(endpoint string, authenticator Authenticator, opts ...ClientO
 			CheckRedirect: func(*http.Request, []*http.Request) error {
 				return http.ErrUseLastResponse
 			},
+			Timeout: config.timeout,
 		},
 		authenticator:         authenticator,
 		correlationIDProvider: config.correlationIDProvider,
@@ -358,6 +366,9 @@ func (client *Client) ListConnectorConnections(ctx context.Context, pagination P
 	})
 	if err != nil {
 		return ConnectorConnectionPage{}, err
+	}
+	if len(page.ConnectorConnections) > pagination.Limit {
+		return ConnectorConnectionPage{}, ErrInvalidPagination
 	}
 	if err := page.Validate(); err != nil {
 		return ConnectorConnectionPage{}, err
@@ -635,19 +646,33 @@ func encodeRequestBody(requestBody any) (io.Reader, error) {
 }
 
 func decodeResponse(body io.Reader, target any) error {
-	decoder := json.NewDecoder(body)
+	limitedBody := &io.LimitedReader{R: body, N: maxBrokerResponseBodyReadCap}
+	decoder := json.NewDecoder(limitedBody)
 	decoder.DisallowUnknownFields()
 	if err := decoder.Decode(target); err != nil {
+		if limitedBody.N == 0 {
+			return responseTooLargeError()
+		}
 		return fmt.Errorf("decode broker response: %w", err)
 	}
 	var trailing struct{}
 	if err := decoder.Decode(&trailing); err != io.EOF {
+		if limitedBody.N == 0 {
+			return responseTooLargeError()
+		}
 		if err == nil {
 			return fmt.Errorf("%w: trailing JSON values", ErrUnexpectedResponse)
 		}
 		return fmt.Errorf("decode broker response trailer: %w", err)
 	}
+	if limitedBody.N == 0 {
+		return responseTooLargeError()
+	}
 	return nil
+}
+
+func responseTooLargeError() error {
+	return fmt.Errorf("%w: response body exceeds %d bytes", ErrUnexpectedResponse, maxBrokerResponseBodyBytes)
 }
 
 func decodeBrokerError(response *http.Response) (*BrokerError, error) {
@@ -902,9 +927,15 @@ func isSafeHost(host string) bool {
 
 func isAllowedPlainHTTPHost(host string) bool {
 	hostname := hostnameForPolicy(host)
-	return hostname == "localhost" || hostname == "127.0.0.1" || hostname == "::1" ||
-		hostname == "pm-broker.synthetic.invalid" || strings.HasSuffix(hostname, ".internal") ||
-		!strings.Contains(hostname, ".")
+	if ip := net.ParseIP(hostname); ip != nil {
+		return ip.IsLoopback()
+	}
+	switch hostname {
+	case "localhost", "pm-broker", "pm-broker.internal", "pm-broker.synthetic.invalid":
+		return true
+	default:
+		return false
+	}
 }
 
 func hostnameForPolicy(host string) string {
