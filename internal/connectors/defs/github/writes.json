@@ -531,7 +531,14 @@
           }
         }
       },
-      "risk": "removes a label from the repository and existing issue metadata"
+      "risk": "removes a label from the repository and existing issue metadata",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "create_milestone",
@@ -626,7 +633,14 @@
           }
         }
       },
-      "risk": "removes repository planning metadata from GitHub"
+      "risk": "removes repository planning metadata from GitHub",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "create_release",
@@ -737,7 +751,14 @@
           }
         }
       },
-      "risk": "removes release metadata from GitHub; tags are not deleted by this action"
+      "risk": "removes release metadata from GitHub; tags are not deleted by this action",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "dispatch_workflow",
@@ -836,7 +857,14 @@
           }
         }
       },
-      "risk": "removes workflow run history from GitHub"
+      "risk": "removes workflow run history from GitHub",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "create_pull_request_review",
@@ -967,7 +995,14 @@
           }
         }
       },
-      "risk": "writes a commit that removes a file from the repository"
+      "risk": "writes a commit that removes a file from the repository",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "create_webhook",
@@ -1111,7 +1146,8 @@
           404
         ]
       },
-      "risk": "removes a webhook; the target will stop receiving repository event payloads"
+      "risk": "removes a webhook; the target will stop receiving repository event payloads",
+      "confirm": "destructive"
     },
     {
       "name": "create_deploy_key",
@@ -1166,7 +1202,8 @@
           404
         ]
       },
-      "risk": "revokes an SSH deploy key's access to the repository"
+      "risk": "revokes an SSH deploy key's access to the repository",
+      "confirm": "destructive"
     },
     {
       "name": "create_or_update_environment",
@@ -1230,7 +1267,8 @@
           404
         ]
       },
-      "risk": "removes a deployment environment and its protection rules"
+      "risk": "removes a deployment environment and its protection rules",
+      "confirm": "destructive"
     },
     {
       "name": "create_commit_comment",
@@ -1325,7 +1363,8 @@
           404
         ]
       },
-      "risk": "removes a commit comment"
+      "risk": "removes a commit comment",
+      "confirm": "destructive"
     },
     {
       "name": "update_issue_comment",
@@ -1384,7 +1423,8 @@
           404
         ]
       },
-      "risk": "removes an issue or pull request comment"
+      "risk": "removes an issue or pull request comment",
+      "confirm": "destructive"
     },
     {
       "name": "lock_issue",
@@ -1442,7 +1482,8 @@
           }
         }
       },
-      "risk": "reopens an issue or pull request to comments from non-collaborators"
+      "risk": "reopens an issue or pull request to comments from non-collaborators",
+      "confirm": "destructive"
     },
     {
       "name": "set_issue_labels",
@@ -1541,7 +1582,8 @@
           404
         ]
       },
-      "risk": "removes a single label from an issue or pull request"
+      "risk": "removes a single label from an issue or pull request",
+      "confirm": "destructive"
     },
     {
       "name": "add_issue_assignees",
@@ -1607,7 +1649,8 @@
           }
         }
       },
-      "risk": "removes assignees from an issue or pull request"
+      "risk": "removes assignees from an issue or pull request",
+      "confirm": "destructive"
     },
     {
       "name": "create_review_comment",
@@ -1724,7 +1767,8 @@
           404
         ]
       },
-      "risk": "removes a pull request review comment"
+      "risk": "removes a pull request review comment",
+      "confirm": "destructive"
     },
     {
       "name": "submit_pull_request_review",
@@ -1901,7 +1945,8 @@
           404
         ]
       },
-      "risk": "removes a downloadable asset from a published release"
+      "risk": "removes a downloadable asset from a published release",
+      "confirm": "destructive"
     },
     {
       "name": "replace_repo_topics",
@@ -1989,7 +2034,8 @@
           404
         ]
       },
-      "risk": "revokes a collaborator's access to the repository"
+      "risk": "revokes a collaborator's access to the repository",
+      "confirm": "destructive"
     },
     {
       "name": "create_ref",
@@ -2390,7 +2436,8 @@
           404
         ]
       },
-      "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced"
+      "risk": "removes a repository ruleset, lifting any push/merge/deletion restrictions it enforced",
+      "confirm": "destructive"
     },
     {
       "name": "update_secret_scanning_alert",
@@ -2449,7 +2496,13 @@
         "properties": {}
       },
       "risk": "critical",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
     },
     {
       "name": "repo2",
@@ -2509,7 +2562,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_caches_cache_id",
@@ -2532,7 +2592,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_jobs_job_id_rerun",
@@ -2743,7 +2810,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels",
@@ -2766,7 +2840,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_runners_runner_id_labels3",
@@ -2840,7 +2921,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_runs_run_id_approve",
@@ -2910,7 +2998,13 @@
         }
       },
       "risk": "critical",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
     },
     {
       "name": "actions_runs_run_id_pending_deployments2",
@@ -2956,7 +3050,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_secrets_secret_name3",
@@ -3017,7 +3118,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "actions_variables_name3",
@@ -3139,7 +3247,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "automated_security_fixes",
@@ -3154,7 +3269,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "automated_security_fixes3",
@@ -3192,7 +3314,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection3",
@@ -3238,7 +3367,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_enforce_admins3",
@@ -3284,7 +3420,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_pull_request_reviews3",
@@ -3330,7 +3473,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_signatures3",
@@ -3376,7 +3526,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_status_checks3",
@@ -3422,7 +3579,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_required_status_checks_contexts3",
@@ -3491,7 +3655,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_apps",
@@ -3514,7 +3685,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_apps3",
@@ -3583,7 +3761,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_teams3",
@@ -3652,7 +3837,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "branches_branch_protection_restrictions_users3",
@@ -3920,7 +4112,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_codeql_databases_language",
@@ -3943,7 +4142,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "code_scanning_codeql_variant_analyses",
@@ -4027,7 +4233,14 @@
         }
       },
       "risk": "medium",
-      "hook": "github"
+      "hook": "github",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "codespaces_secrets_secret_name3",
@@ -4102,7 +4315,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "dependabot_secrets_secret_name",
@@ -4125,7 +4345,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "dependabot_secrets_secret_name3",
@@ -4187,7 +4414,13 @@
         }
       },
       "risk": "critical",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
     },
     {
       "name": "deployments_deployment_id_statuses2",
@@ -4276,7 +4509,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_deployment_branch_policies_branch_policy_id3",
@@ -4355,7 +4595,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_secrets_secret_name",
@@ -4383,7 +4630,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_secrets_secret_name3",
@@ -4462,7 +4716,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "environments_environment_name_variables_name3",
@@ -4624,7 +4885,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "immutable_releases3",
@@ -4654,7 +4922,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "import3",
@@ -4737,7 +5012,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "interaction_limits3",
@@ -4767,7 +5049,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "interaction_limits_pulls_bypass_list3",
@@ -4805,7 +5094,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "invitations_invitation_id2",
@@ -4851,7 +5147,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_comments_comment_id_pin2",
@@ -4925,7 +5228,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_dependencies_blocked_by2",
@@ -4976,7 +5286,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_issue_field_values2",
@@ -5050,7 +5367,14 @@
           }
         }
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_reactions2",
@@ -5101,7 +5425,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_sub_issue",
@@ -5124,7 +5455,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "issues_issue_number_sub_issues2",
@@ -5215,7 +5553,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "pages3",
@@ -5313,7 +5658,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "private_vulnerability_reporting3",
@@ -5394,7 +5746,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "pulls_pull_number_codespaces",
@@ -5440,7 +5799,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "releases_generate_notes",
@@ -5529,7 +5895,14 @@
           }
         }
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "secret_scanning_push_protection_bypasses",
@@ -5681,7 +6054,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "medium"
+      "risk": "medium",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "subscription3",
@@ -5727,7 +6107,14 @@
         "required": [],
         "properties": {}
       },
-      "risk": "high"
+      "risk": "high",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "confirm": "destructive"
     },
     {
       "name": "vulnerability_alerts3",

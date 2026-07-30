@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"reflect"
+	"strings"
 	"testing"
 )
 
@@ -68,25 +69,26 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		}
 	}
 
-	if len(surface.Endpoints) != 509 {
-		t.Fatalf("endpoints = %d, want 509", len(surface.Endpoints))
+	if len(surface.Endpoints) != 1604 {
+		t.Fatalf("endpoints = %d, want 1604 (1596 official rows plus 8 connector conformance coverage rows)", len(surface.Endpoints))
 	}
 	if covered != 440 {
 		t.Fatalf("covered endpoints = %d, want 440", covered)
 	}
-	if operations != 69 {
-		t.Fatalf("operation endpoints = %d, want 69 (only duplicate/deprecated/disallowed remain unconverted)", operations)
+	if operations != 1164 {
+		t.Fatalf("operation endpoints = %d, want 1164 blocked/planned rows", operations)
 	}
 	if excluded != 0 {
 		t.Fatalf("legacy excluded endpoints = %d, want 0", excluded)
 	}
 	assertStringIntMap(t, "totalByMethod", totalByMethod, map[string]int{
-		"DELETE":  72,
-		"GET":     259,
-		"GRAPHQL": 4,
-		"PATCH":   36,
-		"POST":    91,
-		"PUT":     47,
+		"DELETE":  187,
+		"GET":     634,
+		"GRAPHQL": 309,
+		"PATCH":   73,
+		"POST":    193,
+		"PUT":     133,
+		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "coveredByMethod", coveredByMethod, map[string]int{
 		"DELETE":  67,
@@ -97,22 +99,83 @@ func TestGitHubAPISurfaceOperationLedgerMetrics(t *testing.T) {
 		"PUT":     45,
 	})
 	assertStringIntMap(t, "operationByMethod", operationByMethod, map[string]int{
-		"DELETE": 5,
-		"GET":    54,
-		"PATCH":  2,
-		"POST":   6,
-		"PUT":    2,
+		"DELETE":  120,
+		"GET":     429,
+		"GRAPHQL": 305,
+		"PATCH":   39,
+		"POST":    108,
+		"PUT":     88,
+		"WEBHOOK": 75,
 	})
 	assertStringIntMap(t, "models", models, map[string]int{
-		"disallowed": 1,
-		"duplicate":  67,
-		"deprecated": 1,
+		"admin_reverse_etl":     402,
+		"destructive_action":    170,
+		"direct_read":           466,
+		"disallowed":            1,
+		"duplicate":             53,
+		"deprecated":            30,
+		"sensitive_reverse_etl": 42,
 	})
 	assertStringIntMap(t, "risks", risks, map[string]int{
-		"low": 69,
+		"critical": 56,
+		"high":     618,
+		"low":      413,
+		"medium":   77,
 	})
 	assertStringIntMap(t, "statuses", statuses, map[string]int{
-		"blocked": 69,
+		"blocked": 1164,
+	})
+}
+
+func TestGitHubDestructiveMetadataUsesTypedConfirmation(t *testing.T) {
+	writesRaw, err := os.ReadFile("../../internal/connectors/defs/github/writes.json")
+	if err != nil {
+		t.Fatalf("read github writes.json: %v", err)
+	}
+	var writes struct {
+		Actions []githubWriteAction `json:"actions"`
+	}
+	if err := json.Unmarshal(writesRaw, &writes); err != nil {
+		t.Fatalf("unmarshal github writes.json: %v", err)
+	}
+	destructiveWrites := map[string]bool{}
+	for _, action := range writes.Actions {
+		if action.Confirm == "destructive" {
+			destructiveWrites[action.Name] = true
+		}
+		if action.Method != "DELETE" && action.Kind != "delete" {
+			continue
+		}
+		if action.Confirm != "destructive" {
+			t.Fatalf("write action %q confirm = %q, want destructive", action.Name, action.Confirm)
+		}
+		if action.Kind == "delete" && (action.Delete == nil || !action.Delete.Idempotent || len(action.Delete.MissingOKStatus) == 0) {
+			t.Fatalf("delete action %q missing idempotency metadata: %+v", action.Name, action.Delete)
+		}
+	}
+
+	cliRaw, err := os.ReadFile("../../internal/connectors/defs/github/cli_surface.json")
+	if err != nil {
+		t.Fatalf("read github cli_surface.json: %v", err)
+	}
+	var cli struct {
+		Commands []githubCLICommand `json:"commands"`
+	}
+	if err := json.Unmarshal(cliRaw, &cli); err != nil {
+		t.Fatalf("unmarshal github cli_surface.json: %v", err)
+	}
+	unsafe := map[string]bool{}
+	for _, cmd := range cli.Commands {
+		if cmd.Availability == "unsafe_or_disallowed" {
+			unsafe[cmd.Path] = true
+		}
+		if destructiveWrites[cmd.Write] && !strings.Contains(cmd.Approval, "destructive") {
+			t.Fatalf("command %q maps destructive write %q but approval omits typed destructive confirmation: %q", cmd.Path, cmd.Write, cmd.Approval)
+		}
+	}
+	assertStringBoolMap(t, "unsafe_or_disallowed commands", unsafe, map[string]bool{
+		"api":        true,
+		"auth token": true,
 	})
 }
 
@@ -127,6 +190,26 @@ type githubOperation struct {
 	DuplicateOf      string `json:"duplicate_of"`
 }
 
+type githubWriteAction struct {
+	Name    string              `json:"name"`
+	Kind    string              `json:"kind"`
+	Method  string              `json:"method"`
+	Confirm string              `json:"confirm"`
+	Delete  *githubDeletePolicy `json:"delete"`
+}
+
+type githubDeletePolicy struct {
+	Idempotent      bool  `json:"idempotent"`
+	MissingOKStatus []int `json:"missing_ok_status"`
+}
+
+type githubCLICommand struct {
+	Path         string `json:"path"`
+	Availability string `json:"availability"`
+	Write        string `json:"write"`
+	Approval     string `json:"approval"`
+}
+
 func requiresSourceOrNotes(model string) bool {
 	switch model {
 	case "sensitive_reverse_etl", "admin_reverse_etl", "destructive_action", "disallowed":
@@ -137,6 +220,13 @@ func requiresSourceOrNotes(model string) bool {
 }
 
 func assertStringIntMap(t *testing.T, name string, got, want map[string]int) {
+	t.Helper()
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("%s = %+v, want %+v", name, got, want)
+	}
+}
+
+func assertStringBoolMap(t *testing.T, name string, got, want map[string]bool) {
 	t.Helper()
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("%s = %+v, want %+v", name, got, want)

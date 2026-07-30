@@ -1,12 +1,15 @@
 # Overview
 
-GitHub reads 37 stream(s), and accounts for 231 approved or explicitly blocked write action(s).
+GitHub reads 37 stream(s), accounts for 231 connector-owned write action(s), and tracks the full
+public GitHub REST, GraphQL, and webhook inventory in `api_surface.json`.
 
-Certification status: GitHub full certification passed for the current connector surface. The live
-certificate accounted for 509 API endpoints (440 covered, 69 blocked), 37 streams, 2 implemented
-direct-read command families, and 231 write actions. The safe `create_label` write lifecycle passed
-with read-back verification and cleanup. Remaining write actions are inventory-accounted as safe but
-untested pairings or blocked actions; destructive/admin/binary surfaces are not executed blindly.
+Certification status: this bundle is not certified by this parity slice. The current documented
+ledger contains 1,596 official operations/events (1,216 REST, 305 GraphQL, 75 webhook/changefeed)
+plus 8 connector conformance coverage rows required by the current one-target-per-row schema. The
+440 covered rows map to existing streams, write actions, direct reads, or fixed GraphQL documents;
+remaining rows are blocked/planned ledger entries, not implemented-count claims. Destructive,
+delete, and admin operations are in scope when implemented with typed schemas, idempotency notes,
+plan -> preview -> explicit approval -> execute, and typed `destructive` confirmation.
 
 The connector now declares a JSON-first command surface in `cli_surface.json`. This surface is a
 docs, validation, and safe dispatch contract for gh-inspired GitHub commands. Commands mapped to
@@ -252,7 +255,9 @@ lower bound is available.
 
 Overall write risk: external GitHub API mutation.
 
-Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
+Reverse ETL writes should be planned, previewed, approved, and then executed. Every implemented
+DELETE or `kind: delete` action declares typed `destructive` confirmation; `kind: delete` actions
+also record idempotent missing-resource handling where the engine can apply it. Declared actions:
 
 - `create_issue`: POST `/repos/{{ config.owner }}/{{ config.repo }}/issues` - kind `create`; body
   type `json`; required record fields `title`; accepted fields `assignees`, `body`, `labels`,
@@ -535,19 +540,23 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 ## Known limits
 
 - Batch defaults: read_page_size=100.
-- API coverage includes 37 stream-backed endpoint group(s), 67 write-backed endpoint group(s).
+- API coverage includes 440 covered connector rows and 1,164 blocked/planned ledger rows. The
+  official source inventory is 1,596 operations/events; 8 additional rows exist only to satisfy
+  connector conformance coverage for write-action reuse and fixed GraphQL documents.
 - GitHub CLI parity is intentionally staged. The current metadata covers selected `gh` command
   families modeled in this slice and maps implemented commands to current stream/write names. Runtime
   dispatch is limited to stream reads, guarded direct reads, and reverse ETL write commands with
   explicit `record.*` flag mappings.
 - GitHub Projects v2 and discussions now have fixed GraphQL read streams for repository-scoped
   reads. Project/discussion mutations, gist, codespaces, organization-wide views, and several status
-  or search commands still require additional GraphQL or mixed REST/GraphQL coverage.
-- Secret and variable write commands are not exposed as reverse ETL actions until encryption,
-  redaction, scope, and approval semantics are modeled explicitly.
-- Raw `gh api` and `gh api graphql` style escape hatches are classified as unsafe unless constrained
-  to connector auth, connector base URLs, allowlisted methods, mutation approval, and secret
-  redaction.
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=10, deprecated=1, destructive_admin=5, duplicate_of=67, non_data_endpoint=9,
-  out_of_scope=143, requires_elevated_scope=168.
+  or search commands still require additional fixed GraphQL or mixed REST/GraphQL coverage.
+- Secret, variable, destructive, and admin operations are tracked as in-scope ledger rows. They are
+  executable only when a bounded command/write action supplies typed schemas, redaction or
+  idempotency notes as applicable, and the existing plan -> preview -> explicit approval -> execute
+  safety path with typed `destructive` confirmation for destructive actions.
+- Raw `gh api` and `gh api graphql` style escape hatches remain disallowed unless replaced by
+  individually allowlisted operations with connector auth, connector base URLs, bounded methods,
+  mutation approval, and secret redaction.
+- Blocked/planned rows use operation-ledger classifiers (`direct_read`, `binary_read`,
+  `admin_reverse_etl`, `sensitive_reverse_etl`, `destructive_action`, `deprecated`, `duplicate`,
+  or `disallowed`) instead of legacy blanket exclusions.
