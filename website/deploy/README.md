@@ -4,8 +4,8 @@ The website pipelines build and test the Next.js app on pull requests and pushes
 
 ## Flow
 
-- GitHub Actions runs `gen:website-data`, generated-file drift checks, `typecheck`, `build`, and a Docker image build. Pushes to `main` publish `ghcr.io/<owner>/<repo>/website:<sha>` and `:main`.
-- GitLab CI runs the same website checks, builds the Docker image, and pushes `$CI_REGISTRY_IMAGE/website:<sha>` plus `:main` only on `main`.
+- GitHub Actions runs the website checks defined in `.github/workflows/website.yml`, builds the Docker image, and publishes `ghcr.io/<owner>/<repo>/website:<sha>` plus `:main` on pushes to `main`.
+- GitLab CI runs the website checks defined in `.gitlab-ci.yml`, builds the Docker image, and pushes `$CI_REGISTRY_IMAGE/website:<sha>` plus `:main` only on `main`.
 - Deployment runs `website/deploy/deploy-podman-quadlet.sh` on the origin runner. The script pulls the CI-built GHCR tag, resolves it to an immutable digest, updates the rootless Quadlet `Image=...@sha256:...`, restarts `cli-polymetrics.service`, checks loopback health, and verifies the public Cloudflare Tunnel URL.
 - `website/deploy/deploy-image.sh` and the Kubernetes manifests are retained for future Kubernetes environments, but they are not the active Polymetrics origin path.
 

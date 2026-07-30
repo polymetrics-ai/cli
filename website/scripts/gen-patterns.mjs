@@ -269,10 +269,6 @@ function moire({ spacing, angle }) {
     let s = '';
     const co = Math.cos(rot), si = Math.sin(rot);
     for (let off = -900; off <= 900; off += spacing) {
-      // vertical-ish then horizontal-ish lines rotated about center
-      for (const [dx, dy] of [[0, 1], [1, 0]]) {
-        const nx = dx ? 0 : 1, ny = dx ? 1 : 0; // unused placeholder
-      }
       const p1 = rotPt(off, -950, co, si), p2 = rotPt(off, 950, co, si);
       const q1 = rotPt(-950, off, co, si), q2 = rotPt(950, off, co, si);
       s += seg(p1[0], p1[1], p2[0], p2[1], 0.06) + seg(q1[0], q1[1], q2[0], q2[1], 0.06);
