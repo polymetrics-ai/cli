@@ -1,8 +1,23 @@
 {
-  "record": {},
+  "record": {
+    "event_name": "created-account",
+    "created_at": 1735689600,
+    "email": "contact@example.com",
+    "metadata": {
+      "source": "fixture"
+    }
+  },
   "expect": {
     "method": "POST",
-    "path": "/events"
+    "path": "/events",
+    "body": {
+      "event_name": "created-account",
+      "created_at": 1735689600,
+      "email": "contact@example.com",
+      "metadata": {
+        "source": "fixture"
+      }
+    }
   },
   "response": {
     "status": 200,

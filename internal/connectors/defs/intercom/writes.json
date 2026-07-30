@@ -13861,12 +13861,103 @@
       "path": "/contacts",
       "record_schema": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "The role of the contact."
+          },
+          "external_id": {
+            "type": "string",
+            "description": "A unique identifier for the contact which is given to Intercom"
+          },
+          "email_verified": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether the contact's email address has been verified. Set to true to indicate you have verified the contact owns this email address, or false to mark it as unverified. Must be supplied together with an email in the same request; sending it without an email returns a 400."
+          },
+          "email": {
+            "type": "string",
+            "description": "The contacts email"
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The contacts phone"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The contacts name"
+          },
+          "avatar": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "An image URL containing the avatar of a contact"
+          },
+          "signed_up_at": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "(Unix timestamp in seconds) The time specified for when a contact signed up.",
+            "format": "date-time"
+          },
+          "last_seen_at": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "description": "(Unix timestamp in seconds) The time when the contact was last seen (either where the Intercom Messenger was installed or when specified manually).",
+            "format": "date-time"
+          },
+          "owner_id": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The id of an admin that has been assigned account ownership of the contact"
+          },
+          "unsubscribed_from_emails": {
+            "type": [
+              "boolean",
+              "null"
+            ],
+            "description": "Whether the contact is unsubscribed from emails"
+          },
+          "custom_attributes": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "description": "The custom attributes which are set for the contact"
+          }
+        },
         "additionalProperties": false,
-        "minProperties": 0
+        "minProperties": 1
       },
       "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute",
-      "body_type": "none"
+      "body_fields": [
+        "role",
+        "external_id",
+        "email_verified",
+        "email",
+        "phone",
+        "name",
+        "avatar",
+        "signed_up_at",
+        "last_seen_at",
+        "owner_id",
+        "unsubscribed_from_emails",
+        "custom_attributes"
+      ]
     },
     {
       "name": "merge_contact",
@@ -16397,12 +16488,50 @@
       "path": "/events",
       "record_schema": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "event_name": {
+            "type": "string",
+            "description": "The name of the event that occurred."
+          },
+          "created_at": {
+            "type": "integer",
+            "description": "The time the event occurred as a UTC Unix timestamp",
+            "format": "date-time"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "Your identifier for the user."
+          },
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the contact (lead or user) which is given by Intercom."
+          },
+          "email": {
+            "type": "string",
+            "description": "An email address for your user. An email should only be used where your application uses email to uniquely identify users."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional metadata about the event.",
+            "additionalProperties": true
+          }
+        },
         "additionalProperties": false,
-        "minProperties": 0
+        "required": [
+          "event_name",
+          "created_at"
+        ],
+        "minProperties": 3
       },
       "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute",
-      "body_type": "none"
+      "body_fields": [
+        "event_name",
+        "created_at",
+        "user_id",
+        "id",
+        "email",
+        "metadata"
+      ]
     },
     {
       "name": "cancel_data_export",
@@ -19427,12 +19556,161 @@
       "path": "/messages",
       "record_schema": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "message_type": {
+            "type": "string",
+            "description": "The kind of message being created.",
+            "enum": [
+              "in_app",
+              "email",
+              "whatsapp"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "description": "The title of the email."
+          },
+          "body": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "The content of the message. HTML and plaintext are supported."
+          },
+          "template": {
+            "type": "string",
+            "description": "The style of the outgoing message."
+          },
+          "from": {
+            "type": "object",
+            "description": "The sender of the message. If not provided, the default sender will be used.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Always `admin`.",
+                "enum": [
+                  "admin"
+                ]
+              },
+              "id": {
+                "type": [
+                  "integer",
+                  "string"
+                ],
+                "description": "The identifier for the admin which is given by Intercom."
+              }
+            },
+            "required": [
+              "type",
+              "id"
+            ]
+          },
+          "to": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "description": "The recipients of the message.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "The role associated to the contact - `user` or `lead`.",
+                "enum": [
+                  "user",
+                  "lead"
+                ]
+              },
+              "id": {
+                "type": "string",
+                "description": "The identifier for the contact which is given by Intercom."
+              },
+              "user_id": {
+                "type": "string",
+                "description": "The external identifier for the contact."
+              },
+              "phone": {
+                "type": "integer",
+                "description": "The phone number for WhatsApp recipients."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name for WhatsApp recipients."
+              }
+            },
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "description": "The role associated to the contact - `user` or `lead`.",
+                  "enum": [
+                    "user",
+                    "lead"
+                  ]
+                },
+                "id": {
+                  "type": "string",
+                  "description": "The identifier for the contact which is given by Intercom."
+                },
+                "user_id": {
+                  "type": "string",
+                  "description": "The external identifier for the contact."
+                }
+              }
+            }
+          },
+          "cc": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "description": "The CC recipients of the message."
+          },
+          "bcc": {
+            "type": [
+              "object",
+              "array"
+            ],
+            "description": "The BCC recipients of the message."
+          },
+          "components": {
+            "type": "array",
+            "description": "WhatsApp template components.",
+            "items": {
+              "type": "object"
+            }
+          },
+          "created_at": {
+            "type": "integer",
+            "description": "The time the message was created. If not provided, the current time will be used."
+          },
+          "create_conversation_without_contact_reply": {
+            "type": "boolean",
+            "description": "Whether a conversation should be opened in the inbox for the message without the contact replying."
+          }
+        },
         "additionalProperties": false,
-        "minProperties": 0
+        "required": [
+          "message_type",
+          "from",
+          "to"
+        ],
+        "minProperties": 4
       },
       "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute",
-      "body_type": "none"
+      "body_fields": [
+        "message_type",
+        "subject",
+        "body",
+        "template",
+        "from",
+        "to",
+        "cc",
+        "bcc",
+        "components",
+        "created_at",
+        "create_conversation_without_contact_reply"
+      ]
     },
     {
       "name": "create_news_item",
@@ -21038,12 +21316,35 @@
       "path": "/visitors",
       "record_schema": {
         "type": "object",
-        "properties": {},
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identified for the visitor which is given by Intercom."
+          },
+          "user_id": {
+            "type": "string",
+            "description": "A unique identified for the visitor which is given by you."
+          },
+          "name": {
+            "type": "string",
+            "description": "The visitor's name."
+          },
+          "custom_attributes": {
+            "type": "object",
+            "description": "The custom attributes which are set for the visitor.",
+            "additionalProperties": true
+          }
+        },
         "additionalProperties": false,
-        "minProperties": 0
+        "minProperties": 1
       },
       "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute",
-      "body_type": "none"
+      "body_fields": [
+        "id",
+        "user_id",
+        "name",
+        "custom_attributes"
+      ]
     },
     {
       "name": "convert_visitor",
