@@ -41,11 +41,13 @@ func registeredDefaultRegistryBuilder() func() *Registry {
 type Record map[string]any
 
 type Capabilities struct {
-	Check   bool `json:"check"`
-	Catalog bool `json:"catalog"`
-	Read    bool `json:"read"`
-	Write   bool `json:"write"`
-	Query   bool `json:"query"`
+	Check          bool `json:"check"`
+	Catalog        bool `json:"catalog"`
+	Read           bool `json:"read"`
+	Write          bool `json:"write"`
+	Query          bool `json:"query"`
+	ProviderSearch bool `json:"provider_search"`
+	ProviderQuery  bool `json:"provider_query"`
 }
 
 type Metadata struct {
@@ -206,6 +208,56 @@ type QueryResult struct {
 	Rows []Record `json:"rows"`
 }
 
+// ProviderSearchRequest is the future typed request shape for connector-owned
+// provider search commands. It is intentionally distinct from QueryRequest,
+// whose SQL/table semantics back the local warehouse `pm query` surface.
+// No shared executor is wired in this foundation slice; connectors should not
+// implement ProviderSearcher until they can honor the serialized bounds and
+// schemas declared in their operation metadata.
+type ProviderSearchRequest struct {
+	Operation string
+	Config    RuntimeConfig
+	Request   Record
+	Limit     int
+	PageToken string
+	MaxPages  int
+	MaxBytes  int
+}
+
+// ProviderQueryRequest is the future typed request shape for bounded
+// provider-native query commands. It must never be used as a raw SQL,
+// GraphQL, or HTTP body escape hatch.
+type ProviderQueryRequest struct {
+	Operation string
+	Config    RuntimeConfig
+	Request   Record
+	Limit     int
+	PageToken string
+	MaxPages  int
+	MaxBytes  int
+}
+
+type ProviderPageInfo struct {
+	NextToken string `json:"next_token,omitempty"`
+	HasMore   bool   `json:"has_more,omitempty"`
+	Truncated bool   `json:"truncated,omitempty"`
+	MaxPages  int    `json:"max_pages,omitempty"`
+}
+
+type ProviderSearchResult struct {
+	Connector string           `json:"connector"`
+	Operation string           `json:"operation"`
+	Items     []Record         `json:"items"`
+	PageInfo  ProviderPageInfo `json:"page_info,omitempty"`
+}
+
+type ProviderQueryResult struct {
+	Connector string           `json:"connector"`
+	Operation string           `json:"operation"`
+	Rows      []Record         `json:"rows"`
+	PageInfo  ProviderPageInfo `json:"page_info,omitempty"`
+}
+
 type WritePreview struct {
 	RecordsStaged int      `json:"records_staged"`
 	Action        string   `json:"action"`
@@ -234,6 +286,14 @@ type DryRunWriter interface {
 
 type Querier interface {
 	Query(ctx context.Context, req QueryRequest) (QueryResult, error)
+}
+
+type ProviderSearcher interface {
+	ProviderSearch(ctx context.Context, req ProviderSearchRequest) (ProviderSearchResult, error)
+}
+
+type ProviderQuerier interface {
+	ProviderQuery(ctx context.Context, req ProviderQueryRequest) (ProviderQueryResult, error)
 }
 
 type CDCReader interface {
@@ -321,14 +381,15 @@ func (r *Registry) CatalogEntries() []Definition {
 		if !ok {
 			manifest := ManifestOf(connector)
 			def = Definition{
-				Name:            manifest.Metadata.Name,
-				DisplayName:     manifest.Metadata.DisplayName,
-				Description:     manifest.Metadata.Description,
-				IntegrationType: manifest.Metadata.IntegrationType,
-				Capabilities:    manifest.Metadata.Capabilities,
-				Streams:         streamSummariesFromManifest(manifest),
-				WriteActions:    writeActionInfosFromManifest(manifest),
-				Risk:            manifest.Risk,
+				Name:               manifest.Metadata.Name,
+				DisplayName:        manifest.Metadata.DisplayName,
+				Description:        manifest.Metadata.Description,
+				IntegrationType:    manifest.Metadata.IntegrationType,
+				Capabilities:       manifest.Metadata.Capabilities,
+				Streams:            streamSummariesFromManifest(manifest),
+				WriteActions:       writeActionInfosFromManifest(manifest),
+				ProviderOperations: append([]ProviderOperationInfo(nil), manifest.ProviderOperations...),
+				Risk:               manifest.Risk,
 			}
 		}
 		def.Icon = MetadataWithIcon(connector.Metadata()).Icon

@@ -61,6 +61,7 @@ export function mapCLISurface(surface, options = {}) {
       availability: trim(command.availability),
       stream: trim(command.stream),
       write: trim(command.write),
+      operation: trim(command.operation),
       [keys.sourceCliPath]: trim(command.source_cli_path),
       [keys.sourceUrl]: trim(command.source_url),
       flags: mapFlags(command.flags, options),

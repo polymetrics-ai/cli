@@ -31,7 +31,9 @@
               "local_git",
               "local_file",
               "browser_open",
-              "composite"
+              "composite",
+              "provider_search",
+              "provider_query"
             ]
           },
           "summary": { "type": "string" },
@@ -194,6 +196,54 @@
               "steps": {
                 "type": "array",
                 "items": { "type": "string" }
+              }
+            }
+          },
+          "provider": {
+            "type": "object",
+            "required": ["request_schema", "response_schema", "bounds", "pagination", "fixture"],
+            "additionalProperties": false,
+            "properties": {
+              "request_schema": { "type": "object" },
+              "response_schema": { "type": "object" },
+              "bounds": {
+                "type": "object",
+                "required": ["default_limit", "max_limit", "max_pages", "max_bytes"],
+                "additionalProperties": false,
+                "properties": {
+                  "default_limit": { "type": "integer" },
+                  "max_limit": { "type": "integer" },
+                  "max_pages": { "type": "integer" },
+                  "max_bytes": { "type": "integer" }
+                }
+              },
+              "pagination": {
+                "type": "object",
+                "required": ["type"],
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": ["none", "cursor", "page", "offset"]
+                  },
+                  "cursor_request_field": { "type": "string" },
+                  "cursor_response_field": { "type": "string" },
+                  "page_request_field": { "type": "string" },
+                  "page_size_field": { "type": "string" },
+                  "offset_request_field": { "type": "string" },
+                  "limit_request_field": { "type": "string" },
+                  "items_response_field": { "type": "string" },
+                  "has_more_field": { "type": "string" }
+                }
+              },
+              "fixture": {
+                "type": "object",
+                "required": ["request", "response"],
+                "additionalProperties": false,
+                "properties": {
+                  "request": { "type": "string" },
+                  "response": { "type": "string" }
+                }
               }
             }
           }

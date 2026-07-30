@@ -1302,6 +1302,37 @@ func TestRunImplementedOperationCommandRequiresTypedMetadata(t *testing.T) {
 	}
 }
 
+func TestRunImplementedProviderSearchCommandIsUnsupportedUntilExecutorLands(t *testing.T) {
+	connector := &fakeConnector{surface: &connectors.CommandSurface{
+		Commands: []connectors.CommandSurfaceCommand{
+			{
+				Path:         "widget search",
+				Intent:       "provider_search",
+				Availability: "implemented",
+				Operation:    "github.widgets.search",
+				OutputPolicy: "json_redacted",
+			},
+		},
+	}}
+
+	_, err := Run(context.Background(), connector, Request{Path: []string{"widget", "search"}}, func(connectors.Record) error {
+		t.Fatal("emit called for unsupported provider search command")
+		return nil
+	})
+	if err == nil {
+		t.Fatal("Run error = nil, want provider executor gate")
+	}
+	var blocked *BlockedCommandError
+	if !errors.As(err, &blocked) {
+		t.Fatalf("Run error type = %T, want BlockedCommandError", err)
+	}
+	for _, want := range []string{"provider_search", "operation github.widgets.search executor is not implemented"} {
+		if !strings.Contains(err.Error(), want) {
+			t.Fatalf("Run error = %q, want %q", err.Error(), want)
+		}
+	}
+}
+
 func reverseETLFakeConnector() *fakeConnector {
 	return &fakeConnector{
 		surface: &connectors.CommandSurface{

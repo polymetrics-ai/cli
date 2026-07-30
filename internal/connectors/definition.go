@@ -8,18 +8,19 @@ import "encoding/json"
 // interfaces; wave6 folds Metadata/ManifestProvider into it and joins
 // Definition() to the core Connector interface. See API-CONTRACT.md §1.
 type Definition struct {
-	Name            string            `json:"name"`
-	DisplayName     string            `json:"display_name"`
-	Description     string            `json:"description,omitempty"`
-	IntegrationType string            `json:"integration_type"`
-	DocsURL         string            `json:"docs_url,omitempty"`
-	ReleaseStage    string            `json:"release_stage"`
-	Capabilities    Capabilities      `json:"capabilities"`
-	Spec            json.RawMessage   `json:"spec"`
-	Streams         []StreamSummary   `json:"streams"`
-	WriteActions    []WriteActionInfo `json:"write_actions,omitempty"`
-	Risk            RiskSpec          `json:"risk"`
-	Icon            *ConnectorIcon    `json:"icon,omitempty"`
+	Name               string                  `json:"name"`
+	DisplayName        string                  `json:"display_name"`
+	Description        string                  `json:"description,omitempty"`
+	IntegrationType    string                  `json:"integration_type"`
+	DocsURL            string                  `json:"docs_url,omitempty"`
+	ReleaseStage       string                  `json:"release_stage"`
+	Capabilities       Capabilities            `json:"capabilities"`
+	Spec               json.RawMessage         `json:"spec"`
+	Streams            []StreamSummary         `json:"streams"`
+	WriteActions       []WriteActionInfo       `json:"write_actions,omitempty"`
+	ProviderOperations []ProviderOperationInfo `json:"provider_operations,omitempty"`
+	Risk               RiskSpec                `json:"risk"`
+	Icon               *ConnectorIcon          `json:"icon,omitempty"`
 }
 
 // StreamSummary is one Definition.Streams entry. SyncModes is always DERIVED
@@ -41,6 +42,49 @@ type WriteActionInfo struct {
 	Path    string `json:"path"`
 	Risk    string `json:"risk"`
 	Confirm string `json:"confirm,omitempty"`
+}
+
+// ProviderOperationInfo is a serialized, metadata-only description of a
+// provider-native search/query operation. It carries enough typed contract data
+// for docs, inspection, conformance fixtures, and future executor selection
+// without exposing a raw SQL/GraphQL/HTTP escape hatch.
+type ProviderOperationInfo struct {
+	ID             string                  `json:"id"`
+	Kind           string                  `json:"kind"`
+	Summary        string                  `json:"summary"`
+	Description    string                  `json:"description,omitempty"`
+	Risk           string                  `json:"risk,omitempty"`
+	Approval       string                  `json:"approval,omitempty"`
+	OutputPolicy   string                  `json:"output_policy"`
+	RequestSchema  json.RawMessage         `json:"request_schema"`
+	ResponseSchema json.RawMessage         `json:"response_schema"`
+	Bounds         ProviderOperationBounds `json:"bounds"`
+	Pagination     *ProviderPaginationInfo `json:"pagination,omitempty"`
+	Fixture        *ProviderFixtureInfo    `json:"fixture,omitempty"`
+}
+
+type ProviderOperationBounds struct {
+	DefaultLimit int `json:"default_limit"`
+	MaxLimit     int `json:"max_limit"`
+	MaxPages     int `json:"max_pages"`
+	MaxBytes     int `json:"max_bytes"`
+}
+
+type ProviderPaginationInfo struct {
+	Type                string `json:"type"`
+	CursorRequestField  string `json:"cursor_request_field,omitempty"`
+	CursorResponseField string `json:"cursor_response_field,omitempty"`
+	PageRequestField    string `json:"page_request_field,omitempty"`
+	PageSizeField       string `json:"page_size_field,omitempty"`
+	OffsetRequestField  string `json:"offset_request_field,omitempty"`
+	LimitRequestField   string `json:"limit_request_field,omitempty"`
+	ItemsResponseField  string `json:"items_response_field,omitempty"`
+	HasMoreField        string `json:"has_more_field,omitempty"`
+}
+
+type ProviderFixtureInfo struct {
+	Request  string `json:"request"`
+	Response string `json:"response"`
 }
 
 // DefinitionProvider is implemented by engine-backed and Tier-3 connectors in

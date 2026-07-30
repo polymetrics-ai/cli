@@ -190,11 +190,13 @@ func synthesizeMetadata(b Bundle) connectors.Metadata {
 		IntegrationType: b.Metadata.IntegrationType,
 		Description:     b.Metadata.Description,
 		Capabilities: connectors.Capabilities{
-			Check:   b.Metadata.Capabilities.Check,
-			Catalog: true,
-			Read:    b.Metadata.Capabilities.Read,
-			Write:   b.Metadata.Capabilities.Write,
-			Query:   b.Metadata.Capabilities.Query,
+			Check:          b.Metadata.Capabilities.Check,
+			Catalog:        true,
+			Read:           b.Metadata.Capabilities.Read,
+			Write:          b.Metadata.Capabilities.Write,
+			Query:          b.Metadata.Capabilities.Query,
+			ProviderSearch: b.Metadata.Capabilities.ProviderSearch,
+			ProviderQuery:  b.Metadata.Capabilities.ProviderQuery,
 		},
 	}
 }
@@ -251,12 +253,13 @@ func synthesizeManifest(b Bundle) connectors.Manifest {
 	}
 
 	return connectors.Manifest{
-		Metadata:     synthesizeMetadata(b),
-		ConfigFields: configFields,
-		SecretFields: secretFields,
-		Streams:      streams,
-		WriteActions: writeActions,
-		SyncModes:    syncModes,
+		Metadata:           synthesizeMetadata(b),
+		ConfigFields:       configFields,
+		SecretFields:       secretFields,
+		Streams:            streams,
+		WriteActions:       writeActions,
+		ProviderOperations: providerOperationInfosFromOperations(b.Operations),
+		SyncModes:          syncModes,
 		Risk: connectors.RiskSpec{
 			Read:     b.Metadata.Risk.Read,
 			Write:    b.Metadata.Risk.Write,
@@ -305,6 +308,57 @@ func appendUniqueStrings(base []string, values ...string) []string {
 	return base
 }
 
+func providerOperationInfosFromOperations(ops []OperationSpec) []connectors.ProviderOperationInfo {
+	out := []connectors.ProviderOperationInfo{}
+	for _, op := range ops {
+		if op.Provider == nil || (op.Kind != "provider_search" && op.Kind != "provider_query") {
+			continue
+		}
+		info := connectors.ProviderOperationInfo{
+			ID:             op.ID,
+			Kind:           op.Kind,
+			Summary:        op.Summary,
+			Description:    op.Description,
+			Risk:           op.Risk,
+			Approval:       op.Approval,
+			OutputPolicy:   op.OutputPolicy,
+			RequestSchema:  cloneRawMessage(op.Provider.RequestSchema),
+			ResponseSchema: cloneRawMessage(op.Provider.ResponseSchema),
+			Bounds: connectors.ProviderOperationBounds{
+				DefaultLimit: op.Provider.Bounds.DefaultLimit,
+				MaxLimit:     op.Provider.Bounds.MaxLimit,
+				MaxPages:     op.Provider.Bounds.MaxPages,
+				MaxBytes:     op.Provider.Bounds.MaxBytes,
+			},
+		}
+		if p := op.Provider.Pagination; p != nil {
+			info.Pagination = &connectors.ProviderPaginationInfo{
+				Type:                p.Type,
+				CursorRequestField:  p.CursorRequestField,
+				CursorResponseField: p.CursorResponseField,
+				PageRequestField:    p.PageRequestField,
+				PageSizeField:       p.PageSizeField,
+				OffsetRequestField:  p.OffsetRequestField,
+				LimitRequestField:   p.LimitRequestField,
+				ItemsResponseField:  p.ItemsResponseField,
+				HasMoreField:        p.HasMoreField,
+			}
+		}
+		if f := op.Provider.Fixture; f != nil {
+			info.Fixture = &connectors.ProviderFixtureInfo{Request: f.Request, Response: f.Response}
+		}
+		out = append(out, info)
+	}
+	return out
+}
+
+func cloneRawMessage(raw json.RawMessage) json.RawMessage {
+	if len(raw) == 0 {
+		return nil
+	}
+	return append(json.RawMessage(nil), raw...)
+}
+
 // synthesizeDefinition builds connectors.Definition from the bundle (design
 // §C.1). Spec is the compiled spec.json's original bytes when available; a
 // bundle built ad hoc in tests without a Spec gets an empty JSON object
@@ -337,16 +391,17 @@ func synthesizeDefinition(b Bundle) connectors.Definition {
 	}
 
 	return connectors.Definition{
-		Name:            b.Metadata.Name,
-		DisplayName:     b.Metadata.DisplayName,
-		Description:     b.Metadata.Description,
-		IntegrationType: b.Metadata.IntegrationType,
-		DocsURL:         b.Metadata.DocsURL,
-		ReleaseStage:    b.Metadata.ReleaseStage,
-		Capabilities:    synthesizeMetadata(b).Capabilities,
-		Spec:            specJSON(b),
-		Streams:         streamSummaries,
-		WriteActions:    writeActions,
+		Name:               b.Metadata.Name,
+		DisplayName:        b.Metadata.DisplayName,
+		Description:        b.Metadata.Description,
+		IntegrationType:    b.Metadata.IntegrationType,
+		DocsURL:            b.Metadata.DocsURL,
+		ReleaseStage:       b.Metadata.ReleaseStage,
+		Capabilities:       synthesizeMetadata(b).Capabilities,
+		Spec:               specJSON(b),
+		Streams:            streamSummaries,
+		WriteActions:       writeActions,
+		ProviderOperations: providerOperationInfosFromOperations(b.Operations),
 		Risk: connectors.RiskSpec{
 			Read:     b.Metadata.Risk.Read,
 			Write:    b.Metadata.Risk.Write,

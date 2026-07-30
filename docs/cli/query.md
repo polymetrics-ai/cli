@@ -9,9 +9,14 @@ SYNOPSIS
   pm query run --table <table> --agent-mode stream --fields id,email
 
 DESCRIPTION
-  The MVP query engine supports table reads and a small SELECT * FROM parser.
-  Agent mode can emit compact summary JSON or projected NDJSON rows to reduce
-  token usage for external agents.
+  The MVP query engine supports local warehouse table reads and a small SELECT *
+  FROM parser. Agent mode can emit compact summary JSON or projected NDJSON rows
+  to reduce token usage for external agents.
+
+  Provider search/query commands are connector command-surface operations, not
+  this warehouse command. pm query does not execute provider API search or
+  provider API query operations; inspect connector manuals for typed bounded
+  provider_search/provider_query metadata.
 
 FLAGS
   --table table              local warehouse table to scan

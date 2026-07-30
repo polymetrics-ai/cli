@@ -250,7 +250,7 @@ func TestBareCommandShowsManualInsteadOfUsageError(t *testing.T) {
 		args []string
 		want string
 	}{
-		{args: []string{"connectors"}, want: "pm connectors - inspect connector definitions, streams, and write actions"},
+		{args: []string{"connectors"}, want: "pm connectors - inspect connector definitions, streams, provider commands, and write actions"},
 		{args: []string{"etl"}, want: "SYNC MODES"},
 		{args: []string{"credentials"}, want: "pm credentials - manage encrypted connector credentials"},
 		{args: []string{"connections"}, want: "pm connections - configure source-to-destination sync connections"},
@@ -303,6 +303,9 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 	for _, want := range []string{
 		"declarative JSON bundles",
 		"write=true/false",
+		"provider_search/provider_query",
+		"DIRECT READ COMMANDS",
+		"PROVIDER SEARCH/QUERY",
 		"REVERSE ETL WRITE ACTIONS",
 		"pm connectors catalog --capability write --json",
 		"GITHUB AUTHENTICATION",
@@ -317,6 +320,24 @@ func TestConnectorsManualDocumentsConnectorArchitectureAndGithubExamples(t *test
 	} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("connectors manual missing %q:\n%s", want, out)
+		}
+	}
+}
+
+func TestQueryHelpDocumentsWarehouseOnlyAndNotProviderQuery(t *testing.T) {
+	var stdout, stderr bytes.Buffer
+	code := cli.Run([]string{"help", "query"}, &stdout, &stderr)
+	if code != 0 {
+		t.Fatalf("Run(help query) code = %d stderr = %s", code, stderr.String())
+	}
+	out := stdout.String()
+	for _, want := range []string{
+		"local warehouse",
+		"Provider search/query commands are connector command-surface operations",
+		"provider API query operations",
+	} {
+		if !strings.Contains(out, want) {
+			t.Fatalf("query help missing %q:\n%s", want, out)
 		}
 	}
 }

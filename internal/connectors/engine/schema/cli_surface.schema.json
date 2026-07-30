@@ -74,6 +74,8 @@
               "etl",
               "reverse_etl",
               "direct_read",
+              "provider_search",
+              "provider_query",
               "direct_write",
               "local_workflow",
               "auth",

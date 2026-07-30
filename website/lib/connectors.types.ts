@@ -3,6 +3,8 @@ export type ConnectorCapabilities = {
   read: boolean;
   write: boolean;
   query: boolean;
+  providerSearch?: boolean;
+  providerQuery?: boolean;
   cdc: boolean;
   dynamicSchema: boolean;
 };
@@ -75,6 +77,7 @@ export type ConnectorCliCommand = {
   availability: string;
   stream: string;
   write: string;
+  operation?: string;
   sourceCliPath: string;
   sourceUrl: string;
   flags: ConnectorCliFlag[];

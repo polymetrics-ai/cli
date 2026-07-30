@@ -95,6 +95,8 @@ var surfaceCategories = map[string]bool{
 
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
+	"provider_search":       true,
+	"provider_query":        true,
 	"binary_read":           true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,
@@ -856,12 +858,15 @@ func checkCLISurfaceOperationSafety(
 	if !ok {
 		return nil
 	}
+	if cmd.Intent == "provider_search" || cmd.Intent == "provider_query" {
+		return checkCLISurfaceProviderOperationSafety(b, i, cmd, op)
+	}
 	if cmd.Intent != "direct_read" {
 		return []Finding{{
 			Connector: b.Name,
 			File:      "cli_surface.json",
 			Rule:      ruleCLISurfaceSafety,
-			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read operation execution is supported", i, cmd.Path, cmd.Operation),
+			Message:   fmt.Sprintf("implemented command %d (%q) references operation %q, but only direct_read rest_read and typed provider search/query operation metadata is supported", i, cmd.Path, cmd.Operation),
 		}}
 	}
 	var findings []Finding
@@ -907,6 +912,47 @@ func checkCLISurfaceOperationSafety(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceProviderOperationSafety(b engine.Bundle, i int, cmd engine.CLICommand, op engine.OperationSpec) []Finding {
+	var findings []Finding
+	if op.Kind != cmd.Intent || op.Provider == nil {
+		return []Finding{{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented provider command %d (%q) intent %s must reference matching %s operation", i, cmd.Path, cmd.Intent, cmd.Intent)}}
+	}
+	if strings.TrimSpace(cmd.OutputPolicy) == "" || cmd.OutputPolicy != op.OutputPolicy {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented provider command %d (%q) must declare output_policy matching operation %q", i, cmd.Path, cmd.Operation)})
+	}
+	requestProps := providerRequestProperties(op.Provider.RequestSchema)
+	for _, flag := range cmd.Flags {
+		mapsTo := strings.TrimSpace(flag.MapsTo)
+		if !strings.HasPrefix(mapsTo, "request.") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented provider command %d (%q) flag --%s maps to unsupported target %q; provider commands must use request.*", i, cmd.Path, flag.Name, flag.MapsTo)})
+			continue
+		}
+		field := strings.TrimPrefix(mapsTo, "request.")
+		if field == "" || strings.Contains(field, ".") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented provider command %d (%q) flag --%s must map to a top-level provider request field", i, cmd.Path, flag.Name)})
+			continue
+		}
+		if len(requestProps) > 0 && !requestProps[field] {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceUnknownTarget, Message: fmt.Sprintf("implemented provider command %d (%q) flag --%s maps to unknown provider request field %q", i, cmd.Path, flag.Name, field)})
+		}
+	}
+	return findings
+}
+
+func providerRequestProperties(raw json.RawMessage) map[string]bool {
+	var shape struct {
+		Properties map[string]json.RawMessage `json:"properties"`
+	}
+	if len(raw) == 0 || json.Unmarshal(raw, &shape) != nil {
+		return nil
+	}
+	props := make(map[string]bool, len(shape.Properties))
+	for name := range shape.Properties {
+		props[name] = true
+	}
+	return props
 }
 
 func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
@@ -1389,6 +1435,15 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 		if len(findings) > 0 {
 			return findings
 		}
+	case "provider_search", "provider_query":
+		var findings []Finding
+		if cmd.Operation == "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceMissingMapping, Message: fmt.Sprintf("implemented provider command %d (%q) must reference a typed operation", i, cmd.Path)})
+		}
+		if strings.TrimSpace(cmd.OutputPolicy) == "" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented provider command %d (%q) must declare output_policy", i, cmd.Path)})
+		}
+		return findings
 	case "local_workflow":
 		if cmd.Operation != "" {
 			return nil

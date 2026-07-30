@@ -59,6 +59,8 @@ function mapCapabilities(capabilities = {}) {
     read: capabilities.read === true,
     write: capabilities.write === true,
     query: capabilities.query === true,
+    providerSearch: capabilities.provider_search === true,
+    providerQuery: capabilities.provider_query === true,
     cdc: capabilities.cdc === true,
     dynamicSchema: capabilities.dynamic_schema === true,
   };
@@ -69,7 +71,9 @@ function capabilityLabels(capabilities) {
     check: 'check',
     read: 'read',
     write: 'write',
-    query: 'query',
+    query: 'warehouse query',
+    providerSearch: 'provider search',
+    providerQuery: 'provider query',
     cdc: 'cdc',
     dynamicSchema: 'dynamic schema',
   })
@@ -136,6 +140,8 @@ const capabilityCounts = {
   read: 0,
   write: 0,
   query: 0,
+  providerSearch: 0,
+  providerQuery: 0,
   cdc: 0,
   dynamicSchema: 0,
 };

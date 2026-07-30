@@ -19,6 +19,8 @@
         "read": { "type": "boolean" },
         "write": { "type": "boolean" },
         "query": { "type": "boolean" },
+        "provider_search": { "type": "boolean" },
+        "provider_query": { "type": "boolean" },
         "cdc": { "type": "boolean" },
         "dynamic_schema": { "type": "boolean" }
       }

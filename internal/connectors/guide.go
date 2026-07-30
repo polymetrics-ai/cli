@@ -64,13 +64,36 @@ func guideWithCommandSurface(guide ConnectorGuide, surface *CommandSurface) Conn
 	if surface == nil || strings.TrimSpace(surface.Usage) == "" {
 		return guide
 	}
-	for _, section := range guide.Sections {
-		if strings.EqualFold(section.Title, "command surface") {
+	guide = appendGuideSectionIfMissing(guide, directReadCommandSection(surface))
+	guide = appendGuideSectionIfMissing(guide, commandSurfaceSection(surface))
+	return guide
+}
+
+func appendGuideSectionIfMissing(guide ConnectorGuide, section GuideSection) ConnectorGuide {
+	if strings.TrimSpace(section.Title) == "" || len(section.Lines) == 0 {
+		return guide
+	}
+	for _, existing := range guide.Sections {
+		if strings.EqualFold(existing.Title, section.Title) {
 			return guide
 		}
 	}
-	guide.Sections = append(guide.Sections, commandSurfaceSection(surface))
+	guide.Sections = append(guide.Sections, section)
 	return guide
+}
+
+func directReadCommandSection(surface *CommandSurface) GuideSection {
+	lines := []string{}
+	for _, cmd := range surface.Commands {
+		if cmd.Intent != "direct_read" || cmd.Availability == "unsupported_local" {
+			continue
+		}
+		lines = append(lines, renderCommandSurfaceCommand(cmd))
+	}
+	if len(lines) == 0 {
+		return GuideSection{}
+	}
+	return GuideSection{Title: "Direct Read Commands", Lines: lines}
 }
 
 func commandSurfaceSection(surface *CommandSurface) GuideSection {
@@ -180,6 +203,12 @@ func renderCommandSurfaceCommand(cmd CommandSurfaceCommand) string {
 	if cmd.Write != "" {
 		meta = append(meta, "write="+cmd.Write)
 	}
+	if cmd.Operation != "" {
+		meta = append(meta, "operation="+cmd.Operation)
+	}
+	if cmd.OutputPolicy != "" {
+		meta = append(meta, "output_policy="+cmd.OutputPolicy)
+	}
 	if cmd.Availability == "unsupported_local" || cmd.Intent == "local_workflow" {
 		meta = append(meta, "unsupported local workflow")
 	}
@@ -252,6 +281,9 @@ func ValidateConnectorGuide(c Connector) error {
 	}
 	if len(manifest.WriteActions) > 0 && !strings.Contains(manual, "REVERSE ETL ACTIONS") {
 		return fmt.Errorf("connector %q guide missing reverse ETL actions", c.Name())
+	}
+	if len(manifest.ProviderOperations) > 0 && !strings.Contains(manual, "PROVIDER SEARCH/QUERY OPERATIONS") {
+		return fmt.Errorf("connector %q guide missing provider search/query operations", c.Name())
 	}
 	if len(manifest.AuthModes) > 0 && !strings.Contains(manual, "AUTHENTICATION") {
 		return fmt.Errorf("connector %q guide missing authentication", c.Name())
@@ -391,6 +423,7 @@ func guideFromManifest(manifest Manifest) ConnectorGuide {
 		streamSection(manifest),
 		syncModeSection(manifest),
 		writeActionSection(manifest),
+		providerOperationSection(manifest),
 		paginationSection(manifest),
 		securitySection(manifest),
 	}
@@ -406,10 +439,17 @@ func guideFromManifest(manifest Manifest) ConnectorGuide {
 }
 
 func capabilitySection(manifest Manifest) GuideSection {
+	caps := manifest.Metadata.Capabilities
 	lines := []string{
-		fmt.Sprintf("check=%t catalog=%t read=%t write=%t query=%t", manifest.Metadata.Capabilities.Check, manifest.Metadata.Capabilities.Catalog, manifest.Metadata.Capabilities.Read, manifest.Metadata.Capabilities.Write, manifest.Metadata.Capabilities.Query),
-		"Integration type: " + manifest.Metadata.IntegrationType,
+		fmt.Sprintf("check=%t catalog=%t read=%t write=%t query=%t", caps.Check, caps.Catalog, caps.Read, caps.Write, caps.Query),
 	}
+	if caps.ProviderSearch || caps.ProviderQuery {
+		lines = append(lines,
+			fmt.Sprintf("provider_search=%t provider_query=%t", caps.ProviderSearch, caps.ProviderQuery),
+			fmt.Sprintf("warehouse query: %t (pm query reads local warehouse tables/SQL; provider API search/query is separate)", caps.Query),
+		)
+	}
+	lines = append(lines, "Integration type: "+manifest.Metadata.IntegrationType)
 	return GuideSection{Title: "Capabilities", Lines: lines}
 }
 
@@ -551,6 +591,41 @@ func writeActionSection(manifest Manifest) GuideSection {
 		}
 	}
 	return GuideSection{Title: "Reverse ETL Actions", Lines: lines}
+}
+
+func providerOperationSection(manifest Manifest) GuideSection {
+	if len(manifest.ProviderOperations) == 0 {
+		return GuideSection{}
+	}
+	lines := []string{}
+	for _, op := range manifest.ProviderOperations {
+		if op.Kind != "provider_search" && op.Kind != "provider_query" {
+			continue
+		}
+		line := namedDescriptionLine(op.ID, op.Summary)
+		meta := []string{}
+		if op.Kind != "" {
+			meta = append(meta, "kind="+op.Kind)
+		}
+		if op.OutputPolicy != "" {
+			meta = append(meta, "output_policy="+op.OutputPolicy)
+		}
+		meta = append(meta, fmt.Sprintf("max_limit=%d max_pages=%d max_bytes=%d", op.Bounds.MaxLimit, op.Bounds.MaxPages, op.Bounds.MaxBytes))
+		if len(meta) > 0 {
+			line += " [" + strings.Join(meta, " ") + "]"
+		}
+		lines = append(lines, line)
+		if op.Pagination != nil {
+			lines = append(lines, "  pagination: "+op.Pagination.Type)
+		}
+		if op.Fixture != nil {
+			lines = append(lines, "  fixture: "+op.Fixture.Request+" -> "+op.Fixture.Response)
+		}
+	}
+	if len(lines) == 0 {
+		return GuideSection{}
+	}
+	return GuideSection{Title: "Provider Search/Query Operations", Lines: lines}
 }
 
 func paginationSection(manifest Manifest) GuideSection {

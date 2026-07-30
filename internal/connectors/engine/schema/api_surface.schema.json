@@ -59,6 +59,8 @@
                 "type": "string",
                 "enum": [
                   "direct_read",
+                  "provider_search",
+                  "provider_query",
                   "binary_read",
                   "sensitive_reverse_etl",
                   "admin_reverse_etl",
