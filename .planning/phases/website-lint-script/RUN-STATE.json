@@ -1,8 +1,9 @@
 {
   "phase": "website-lint-script",
-  "status": "green_local_verified_ci_fix",
+  "status": "current_main_verified_ready_for_no_mistakes",
   "branch": "fix/website-lint-script",
-  "base": "origin/main@902fd9403",
+  "base": "origin/main@c85740b6f",
+  "canonical_pr": "https://github.com/polymetrics-ai/cli/pull/542",
   "gsd": {
     "doctor": "passed",
     "plan_phase_prompt": "scripts/gsd prompt plan-phase website-lint-script --skip-research --tdd",
@@ -10,28 +11,21 @@
   },
   "skills": [
     "gsd-core",
-    "gsd-programming-loop",
     "no-mistakes",
-    "javascript-testing-patterns",
     "vercel-react-best-practices",
     "context-mode"
   ],
   "verification_passed": true,
   "verification": [
-    "corepack pnpm@11.7.0 exec vitest run tests/lint-tooling.test.ts (red before, green after)",
-    "corepack pnpm@11.7.0 run lint",
-    "corepack pnpm@11.7.0 run typecheck",
-    "corepack pnpm@11.7.0 run test:unit",
-    "corepack pnpm@11.7.0 run test:e2e",
-    "BETTER_AUTH_SECRET=<build-only placeholder> corepack pnpm@11.7.0 run build",
-    "rm -rf website/node_modules && corepack pnpm@11.7.0 install --frozen-lockfile --reporter=append-only",
-    "corepack pnpm@11.7.0 exec eslint . --quiet",
-    "git diff --check",
-    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website install --frozen-lockfile --ignore-scripts --store-dir ../.pnpm-store --reporter=append-only",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website install --frozen-lockfile --store-dir ../.pnpm-store --reporter=append-only",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run gen:website-data",
     "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website exec vitest run tests/lint-tooling.test.ts --reporter=verbose",
-    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run lint",
-    "go run ./cmd/prissueguard --title \"fix(website): restore lint command\" --body \"Refs #67\"",
-    "docker build --target deps -f website/Dockerfile -t polymetrics-website-deps:ci-fix website"
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run lint (13 warnings, 0 errors)",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run typecheck",
+    "CI=true COREPACK_HOME=\"$PWD/.corepack\" corepack pnpm@11.7.0 --dir website run test:unit with temporary local postgres:17-alpine (12 files / 75 tests passed)",
+    "PLAYWRIGHT_BASE_URL=http://127.0.0.1:3107 corepack pnpm@11.7.0 --dir website run test:e2e with temporary local postgres:17-alpine (26 passed)",
+    "BETTER_AUTH_SECRET=<build-only placeholder> corepack pnpm@11.7.0 --dir website run build",
+    "git diff --check"
   ],
-  "implementation_summary": "Restored website lint by migrating from removed next lint to ESLint CLI with Next.js flat config and generated/build ignores. Follow-up CI repair pins brace-expansion to patched 5.0.8 with a minimal minimatch compatibility patch, copies pnpm patches into the Docker deps layer, and updates the live PR body with Refs #67."
+  "implementation_summary": "Reused canonical PR #542, merged current origin/main without rewriting history, kept the supported Next.js 16 ESLint CLI flat-config migration, added website lint execution to GitHub and GitLab CI, refreshed generated website connector catalog data produced by already-merged repository read policy definitions, and locally verified clean install, lint, typecheck, focused regression, unit/e2e/build, and diff whitespace checks."
 }

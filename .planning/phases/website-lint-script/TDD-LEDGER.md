@@ -43,6 +43,19 @@ Evidence:
 - Removed safe pre-existing non-product lint warnings from website generator/config files.
 - Kept `.github/workflows/pr-issue-guard.yml` and `internal/coordination/issueguard` unchanged; the fix for `require-linked-issue` is to update the live PR body with `Refs #67`.
 
+## Continuation — 2026-07-30 current-main refresh
+
+### Red / reassessment
+
+- Revalidated PR #542 against current `origin/main@c85740b6f`; GitHub/GitLab website CI installed with pnpm 11.7.0 but did not invoke the newly restored lint script.
+- Official docs confirmed the supported migration path is the ESLint CLI plus native flat config, not a legacy `.eslintrc` compatibility shim.
+
+### Green / planned continuation
+
+- Add `pnpm run lint` to both website CI definitions after generated data verification and before typecheck, preserving the same authored-source lint scope used locally.
+- Extend the focused lint-tooling regression so CI lint coverage is source-controlled and cannot silently regress back to local-only linting.
+- Refresh generated website catalog data after the current-main merge; the only generated connector data movement is GitHub output policy strings changing from `github_contents_*` to `repository_contents_*` to match already-merged repository read policy definitions.
+
 ## Skills
 
 `gsd-core`, `gsd-programming-loop`, `no-mistakes`, `javascript-testing-patterns`, `vercel-react-best-practices`, `context-mode`.

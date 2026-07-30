@@ -4,9 +4,14 @@ import path from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const rootDir = process.cwd();
+const repoDir = path.resolve(rootDir, '..');
 
 function readWebsiteFile(relativePath: string): string {
   return readFileSync(path.join(rootDir, relativePath), 'utf8');
+}
+
+function readRepoFile(relativePath: string): string {
+  return readFileSync(path.join(repoDir, relativePath), 'utf8');
 }
 
 describe('lint tooling', () => {
@@ -54,6 +59,14 @@ describe('lint tooling', () => {
 
     expect(braceExpansionEntries).toEqual(['5.0.8']);
     expect(lockfile).not.toContain('brace-expansion@1.1.16');
+  });
+
+  it('runs the restored lint command in website CI', () => {
+    const githubWorkflow = readRepoFile('.github/workflows/website.yml');
+    const gitlabWorkflow = readRepoFile('.gitlab-ci.yml');
+
+    expect(githubWorkflow).toContain('run: pnpm run lint');
+    expect(gitlabWorkflow).toContain('- pnpm run lint');
   });
 
   it('includes pnpm patches in the Docker dependency layer', () => {

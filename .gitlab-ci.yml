@@ -47,6 +47,7 @@ website:test:
         printf '%s\n' "$changed"
         exit 1
       fi
+    - pnpm run lint
     - pnpm run typecheck
     - pnpm run test:unit
     - pnpm run test:e2e
