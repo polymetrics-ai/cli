@@ -41,6 +41,91 @@ func cloneRecords(in []connectors.Record) []connectors.Record {
 	return out
 }
 
+func RedactReversePlanRecords(in []connectors.Record, fields []string) []connectors.Record {
+	out := make([]connectors.Record, 0, len(in))
+	for _, record := range in {
+		out = append(out, redactReversePlanRecord(record, fields))
+	}
+	return out
+}
+
+func redactReversePlanRecord(in connectors.Record, fields []string) connectors.Record {
+	out := deepCloneRecord(in)
+	for _, field := range fields {
+		redactReversePlanField(out, strings.TrimPrefix(strings.TrimSpace(field), "record."))
+	}
+	return out
+}
+
+func deepCloneRecord(in connectors.Record) connectors.Record {
+	out := make(connectors.Record, len(in))
+	for k, v := range in {
+		out[k] = deepCloneRecordValue(v)
+	}
+	return out
+}
+
+func deepCloneRecordValue(v any) any {
+	switch typed := v.(type) {
+	case connectors.Record:
+		return deepCloneRecord(typed)
+	case map[string]any:
+		out := make(map[string]any, len(typed))
+		for k, value := range typed {
+			out[k] = deepCloneRecordValue(value)
+		}
+		return out
+	case []any:
+		out := make([]any, len(typed))
+		for i, value := range typed {
+			out[i] = deepCloneRecordValue(value)
+		}
+		return out
+	case []connectors.Record:
+		out := make([]connectors.Record, len(typed))
+		for i, value := range typed {
+			out[i] = deepCloneRecord(value)
+		}
+		return out
+	default:
+		return v
+	}
+}
+
+func redactReversePlanField(record connectors.Record, field string) {
+	if field == "" {
+		return
+	}
+	parts := strings.Split(field, ".")
+	current := map[string]any(record)
+	for _, part := range parts[:len(parts)-1] {
+		next, ok := current[part]
+		if !ok {
+			return
+		}
+		switch typed := next.(type) {
+		case map[string]any:
+			current = typed
+		case connectors.Record:
+			current = map[string]any(typed)
+		default:
+			return
+		}
+	}
+	if _, ok := current[parts[len(parts)-1]]; ok {
+		current[parts[len(parts)-1]] = "redacted"
+	}
+}
+
+func reversePlanRedactFields(connector connectors.Connector, actionName string) []string {
+	for _, action := range connectors.ManifestOf(connector).WriteActions {
+		if action.Name == actionName {
+			return append([]string(nil), action.RedactFields...)
+		}
+	}
+	return nil
+}
+
 func mapReverseRecords(records []connectors.Record, mappings map[string]string, planID string) []connectors.Record {
 	mapped := make([]connectors.Record, 0, len(records))
 	for _, record := range records {

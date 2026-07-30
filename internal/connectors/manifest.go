@@ -37,6 +37,7 @@ type WriteActionSpec struct {
 	OptionalFields []string `json:"optional_fields,omitempty"`
 	Method         string   `json:"method,omitempty"`
 	Path           string   `json:"path,omitempty"`
+	RedactFields   []string `json:"redact_fields,omitempty"`
 	Risk           string   `json:"risk,omitempty"`
 	Confirm        string   `json:"confirm,omitempty"`
 }

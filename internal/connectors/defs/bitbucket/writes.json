@@ -1055,6 +1055,9 @@
         "repo_slug",
         "environment_uuid"
       ],
+      "redact_fields": [
+        "value"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -1087,6 +1090,9 @@
         "repo_slug",
         "environment_uuid",
         "variable_uuid"
+      ],
+      "redact_fields": [
+        "value"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -1334,6 +1340,9 @@
         "workspace",
         "repo_slug"
       ],
+      "redact_fields": [
+        "secret"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -1401,6 +1410,9 @@
         "workspace",
         "repo_slug",
         "uid"
+      ],
+      "redact_fields": [
+        "secret"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -2510,6 +2522,10 @@
         "workspace",
         "repo_slug"
       ],
+      "redact_fields": [
+        "private_key",
+        "passphrase"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -2671,6 +2687,9 @@
         "workspace",
         "repo_slug"
       ],
+      "redact_fields": [
+        "value"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -2698,6 +2717,9 @@
         "workspace",
         "repo_slug",
         "variable_uuid"
+      ],
+      "redact_fields": [
+        "value"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -4012,6 +4034,9 @@
       "path_fields": [
         "username"
       ],
+      "redact_fields": [
+        "value"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -4034,6 +4059,9 @@
       "path_fields": [
         "username",
         "variable_uuid"
+      ],
+      "redact_fields": [
+        "value"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -4153,6 +4181,9 @@
       "path_fields": [
         "selected_user"
       ],
+      "redact_fields": [
+        "value"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -4175,6 +4206,9 @@
       "path_fields": [
         "selected_user",
         "variable_uuid"
+      ],
+      "redact_fields": [
+        "value"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -4393,6 +4427,9 @@
       "path_fields": [
         "workspace"
       ],
+      "redact_fields": [
+        "secret"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -4450,6 +4487,9 @@
       "path_fields": [
         "workspace",
         "uid"
+      ],
+      "redact_fields": [
+        "secret"
       ],
       "record_schema": {
         "additionalProperties": true,
@@ -4561,6 +4601,9 @@
       "path_fields": [
         "workspace"
       ],
+      "redact_fields": [
+        "value"
+      ],
       "record_schema": {
         "additionalProperties": true,
         "properties": {
@@ -4583,6 +4626,9 @@
       "path_fields": [
         "workspace",
         "variable_uuid"
+      ],
+      "redact_fields": [
+        "value"
       ],
       "record_schema": {
         "additionalProperties": true,
