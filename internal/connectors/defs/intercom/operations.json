@@ -14223,7 +14223,78 @@
         "method": "POST",
         "path": "/contacts",
         "max_bytes": 1048576,
-        "content_type": "application/json"
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "role": {
+              "type": "string"
+            },
+            "external_id": {
+              "type": "string"
+            },
+            "email_verified": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "name": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "avatar": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "signed_up_at": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "last_seen_at": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "owner_id": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "unsubscribed_from_emails": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            },
+            "custom_attributes": {
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "minProperties": 1
+        }
       }
     },
     {
@@ -16883,7 +16954,37 @@
         "method": "POST",
         "path": "/events",
         "max_bytes": 1048576,
-        "content_type": "application/json"
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "event_name": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "integer",
+              "format": "date-time"
+            },
+            "user_id": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "metadata": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "required": [
+            "event_name",
+            "created_at"
+          ],
+          "minProperties": 3
+        }
       }
     },
     {
@@ -20270,7 +20371,89 @@
         "method": "POST",
         "path": "/messages",
         "max_bytes": 1048576,
-        "content_type": "application/json"
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "message_type": {
+              "type": "string",
+              "enum": [
+                "in_app",
+                "email",
+                "whatsapp"
+              ]
+            },
+            "subject": {
+              "type": "string"
+            },
+            "body": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "template": {
+              "type": "string"
+            },
+            "from": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "admin"
+                  ]
+                },
+                "id": {
+                  "type": [
+                    "integer",
+                    "string"
+                  ]
+                }
+              },
+              "required": [
+                "type",
+                "id"
+              ]
+            },
+            "to": {
+              "type": [
+                "object",
+                "array"
+              ]
+            },
+            "cc": {
+              "type": [
+                "object",
+                "array"
+              ]
+            },
+            "bcc": {
+              "type": [
+                "object",
+                "array"
+              ]
+            },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "created_at": {
+              "type": "integer"
+            },
+            "create_conversation_without_contact_reply": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "message_type",
+            "from",
+            "to"
+          ],
+          "minProperties": 4
+        }
       }
     },
     {
@@ -22081,7 +22264,26 @@
         "method": "PUT",
         "path": "/visitors",
         "max_bytes": 1048576,
-        "content_type": "application/json"
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "user_id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "custom_attributes": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "minProperties": 1
+        }
       }
     },
     {

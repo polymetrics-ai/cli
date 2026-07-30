@@ -1,8 +1,15 @@
 {
-  "record": {},
+  "record": {
+    "id": "visitor_id_fixture",
+    "name": "Fixture Visitor"
+  },
   "expect": {
     "method": "PUT",
-    "path": "/visitors"
+    "path": "/visitors",
+    "body": {
+      "id": "visitor_id_fixture",
+      "name": "Fixture Visitor"
+    }
   },
   "response": {
     "status": 200,
