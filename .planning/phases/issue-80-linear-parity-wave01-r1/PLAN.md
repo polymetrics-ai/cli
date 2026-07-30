@@ -9,7 +9,7 @@
 
 ## Scope
 
-Allowed production paths are connector-local Linear artifacts only: `internal/connectors/defs/linear/**` including schemas, fixtures, docs, operation ledger, command metadata, and certification metadata when needed. No shared runtime, hook, native, CLI, provider-call, credential, merge, or default-branch work.
+Primary production paths are connector-local Linear artifacts: `internal/connectors/defs/linear/**` including schemas, fixtures, docs, operation ledger, command metadata, and certification metadata when needed. Minimal shared CLI help-topic rendering and golden/test updates are allowed only for provider CLI/help parity. No shared runtime, hook, native, provider-call, credential, merge, or default-branch work.
 
 ## Source inventory
 
