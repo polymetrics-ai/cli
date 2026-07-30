@@ -1,0 +1,25 @@
+{
+  "reviewed_at": "2026-07-30",
+  "sources": {
+    "shopify_admin_graphql_full_index": "https://shopify.dev/docs/api/admin-graphql/latest/full-index",
+    "shopify_sitemap_standard_xml_gz": "https://shopify.dev/sitemap_standard.xml.gz",
+    "shopify_admin_rest_resource_pages": 67
+  },
+  "counts": {
+    "graphql_queries": 287,
+    "graphql_mutations": 518,
+    "rest_non_delete_rows": 264,
+    "rest_delete_rows": 34,
+    "rest_delete_implemented_path_parameter_rows": 32,
+    "rest_delete_blocked_query_identifier_rows": 2,
+    "api_surface_rows": 1103,
+    "api_surface_covered_rows": 33,
+    "api_surface_blocked_operation_rows": 1070,
+    "operations_json_rows": 0
+  },
+  "notes": [
+    "Official current source inventory includes REST DELETE rows under the captain policy addendum; existing GitHub issue count tables were preserved and are not treated as implemented counts.",
+    "All non-executable rows are blocked operation-ledger rows, not blanket unsafe exclusions.",
+    "operations.json is intentionally omitted in this connector-local slice because non-executable operation rows live in api_surface.json and fixed GraphQL documents are not fabricated."
+  ]
+}

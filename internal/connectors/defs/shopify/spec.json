@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shopify Connection Specification",
+  "type": "object",
+  "required": [
+    "shop_domain",
+    "access_token"
+  ],
+  "properties": {
+    "shop_domain": {
+      "type": "string",
+      "description": "Shop domain, for example fixture-shop.myshopify.com. Do not include a scheme or path.",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*(\\.myshopify\\.com|\\.[A-Za-z0-9.-]+)$"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "Shopify Admin API access token supplied through the credential store or environment, never inline in docs or fixtures.",
+      "x-secret": true
+    }
+  }
+}

@@ -1,0 +1,1014 @@
+{
+  "actions": [
+    {
+      "name": "delete_blogs_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/blogs/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/blogs/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_blogs_id_articles_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/blogs/{{ record.id1 }}/articles/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/blogs/{id1}/articles/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_blogs_id_metafields_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/blogs/{{ record.id1 }}/metafields/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/blogs/{id1}/metafields/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_carrier_services_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/carrier_services/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/carrier_services/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_collection_listings_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/collection_listings/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/collection_listings/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_collects_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/collects/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/collects/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_countries_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/countries/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/countries/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_custom_collections_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/custom_collections/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/custom_collections/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_customers_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/customers/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/customers/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_customers_id_addresses_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/customers/{{ record.id1 }}/addresses/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/customers/{id1}/addresses/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_draft_orders_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/draft_orders/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/draft_orders/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_fulfillment_services_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/fulfillment_services/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/fulfillment_services/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_marketing_events_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/marketing_events/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/marketing_events/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_mobile_platform_applications_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/mobile_platform_applications/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/mobile_platform_applications/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_orders_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/orders/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/orders/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_orders_id_fulfillments_id_events_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/orders/{{ record.id1 }}/fulfillments/{{ record.id2 }}/events/{{ record.id3 }}.json",
+      "path_fields": [
+        "id1",
+        "id2",
+        "id3"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2",
+          "id3"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          },
+          "id3": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/orders/{id1}/fulfillments/{id2}/events/{id3}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_orders_id_risks_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/orders/{{ record.id1 }}/risks/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/orders/{id1}/risks/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_pages_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/pages/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/pages/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_price_rules_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/price_rules/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/price_rules/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_price_rules_id_discount_codes_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/price_rules/{{ record.id1 }}/discount_codes/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/price_rules/{id1}/discount_codes/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_product_listings_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/product_listings/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/product_listings/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_products_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/products/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/products/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_products_id_images_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/products/{{ record.id1 }}/images/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/products/{id1}/images/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_products_id_variants_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/products/{{ record.id1 }}/variants/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/products/{id1}/variants/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_recurring_application_charges_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/recurring_application_charges/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/recurring_application_charges/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_redirects_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/redirects/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/redirects/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_script_tags_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/script_tags/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/script_tags/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_shopify_payments_disputes_id_dispute_file_uploads_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/shopify_payments/disputes/{{ record.id1 }}/dispute_file_uploads/{{ record.id2 }}.json",
+      "path_fields": [
+        "id1",
+        "id2"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1",
+          "id2"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          },
+          "id2": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/shopify_payments/disputes/{id1}/dispute_file_uploads/{id2}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_smart_collections_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/smart_collections/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/smart_collections/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_storefront_access_tokens_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/storefront_access_tokens/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/storefront_access_tokens/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_themes_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/themes/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/themes/{id1}.json.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "delete_webhooks_id",
+      "kind": "delete",
+      "method": "DELETE",
+      "path": "/admin/api/latest/webhooks/{{ record.id1 }}.json",
+      "path_fields": [
+        "id1"
+      ],
+      "body_type": "none",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id1"
+        ],
+        "properties": {
+          "id1": {
+            "type": "integer"
+          }
+        }
+      },
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      },
+      "risk": "Permanently deletes the Shopify Admin REST resource at /admin/api/latest/webhooks/{id1}.json.",
+      "confirm": "destructive"
+    }
+  ]
+}

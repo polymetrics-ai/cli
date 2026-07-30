@@ -1,0 +1,89 @@
+{
+  "tagline": "Shopify Admin API connector-owned parity metadata with no raw API passthrough.",
+  "usage": "Use standard `pm connectors`, `pm etl`, and reverse ETL flows with the `shopify` connector; planned provider-style commands are metadata only until fixed operation bindings exist.",
+  "source_cli": {
+    "name": "Shopify Admin API docs",
+    "docs": "https://shopify.dev/docs/api/admin-graphql/latest/full-index",
+    "source": "official_docs"
+  },
+  "groups": [
+    {
+      "id": "read",
+      "title": "Fixed reads",
+      "commands": [
+        "shop read",
+        "graphql query <fixed-operation>"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Typed writes",
+      "commands": [
+        "delete <fixed-delete-action>",
+        "graphql mutation <fixed-operation>"
+      ]
+    },
+    {
+      "id": "ledger",
+      "title": "Ledger metadata",
+      "commands": [
+        "ledger inspect"
+      ]
+    }
+  ],
+  "commands": [
+    {
+      "path": "ledger inspect",
+      "summary": "Inspect the connector-owned Shopify operation ledger and source inventory.",
+      "intent": "docs_only",
+      "availability": "planned",
+      "notes": "Docs/metadata only in this slice; no provider call or raw API execution."
+    },
+    {
+      "path": "shop read",
+      "summary": "Read the fixed Shopify Shop REST resource through the ETL stream.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "shop",
+      "examples": [
+        "pm etl run --source shopify --stream shop --limit 1 --json"
+      ],
+      "notes": "Uses the fixed `shop` stream; no arbitrary REST path is accepted."
+    },
+    {
+      "path": "delete <fixed-delete-action>",
+      "summary": "Run a connector-owned typed Shopify REST DELETE action after preview and destructive confirmation.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Destructive deletes require action-specific record schemas and `destructive` typed confirmation.",
+      "approval": "plan -> preview -> explicit approval -> execute with typed destructive confirmation",
+      "notes": "Individual implemented delete actions are exposed through reverse ETL action names; this metadata is not a raw method/path command."
+    },
+    {
+      "path": "graphql query <fixed-operation>",
+      "summary": "Future fixed Shopify Admin GraphQL query commands generated only from reviewed operation documents.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "notes": "No arbitrary GraphQL document, variables blob, or passthrough is accepted."
+    },
+    {
+      "path": "graphql mutation <fixed-operation>",
+      "summary": "Future fixed Shopify Admin GraphQL mutations generated only from reviewed typed write schemas.",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "risk": "Mutations require action-specific schemas, redaction, preview, approval, and destructive confirmation where applicable.",
+      "approval": "plan -> preview -> explicit approval -> execute",
+      "notes": "No arbitrary GraphQL mutation passthrough is accepted."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "shopify safety",
+      "summary": "No Shopify writes execute without plan, preview, explicit approval, and typed destructive confirmation where applicable."
+    },
+    {
+      "name": "shopify ledger",
+      "summary": "Operation ledger rows are source-linked and blocked/planned unless covered by a stream or typed write action."
+    }
+  ]
+}

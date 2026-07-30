@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id1": 1001,
+    "id2": 1002
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/admin/api/latest/products/1001/images/1002.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "shopify",
+  "display_name": "Shopify",
+  "description": "Connector-owned Shopify Admin API parity ledger with a fixture-backed Shop stream and typed destructive REST delete actions; remaining official operations are blocked/planned with source evidence.",
+  "integration_type": "api",
+  "docs_url": "https://shopify.dev/docs/api/admin-graphql/latest/full-index",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": true,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 1,
+    "write_batch_size": 1
+  },
+  "risk": {
+    "read": "Fixed Shopify Admin REST/GraphQL reads only; no raw query or arbitrary API passthrough.",
+    "write": "Typed reverse-ETL actions only; destructive deletes require `destructive` confirmation and preview approval.",
+    "approval": "Reverse ETL remains plan -> preview -> explicit approval -> execute; fixture-only evidence is not certification."
+  }
+}
