@@ -36,6 +36,7 @@ connector's slice is considered integrated.
 
 - [ ] `jq .` on every edited JSON file (JSON parses).
 - [ ] `go run ./cmd/connectorgen validate internal/connectors/defs --json` → 0 findings, 0 warnings.
+- [ ] `go run ./cmd/connectorgen boundary . --json` → clean when shared Go or the boundary exception ledger changed.
 - [ ] Secret scan: no secret values, tokens, or PEMs in any artifact (docs, examples, previews, fixtures, errors).
 - [ ] Source-link gate: every `api_surface` row has a non-empty `source_url`.
 - [ ] Operation-classification gate: every row has an `execution_model` (no `partial`/`planned`/`unsupported_api` for API-backed commands unless explicitly gap-documented).

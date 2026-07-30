@@ -172,8 +172,8 @@ Canonical topics:
 
 ## Contributing
 
-Connector PRs are the best first contribution. Start with the setup guide, copy
-an existing connector package, add focused tests, and run verification before
+Connector PRs are the best first contribution. Start with `CONTRIBUTING.md` and
+`docs/migration/conventions.md`, add focused tests, and run verification before
 opening a PR.
 
 ```bash
@@ -184,7 +184,7 @@ make verify-duckdb
 Use Conventional Commits:
 
 - `fix(github): handle paginated issue labels`
-- `feat(connector): add source-linear`
+- `feat(connector): add linear`
 - `docs(readme): clarify local-first quickstart`
 
 ## Roadmap

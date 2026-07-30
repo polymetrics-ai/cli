@@ -18,6 +18,12 @@ handoff.
 - Common findings: write action with no `covered_by` entry in `api_surface.json`, schema mismatch,
   missing required file (`metadata.json`/`spec.json`/`streams.json`), unknown execution model.
 
+## Connector boundary guard gate
+
+- `go run ./cmd/connectorgen boundary . --json`
+- Must return `outcome: "clean"` when shared Go or the boundary exception ledger changed.
+- The runbook and exception rules live in `docs/migration/connector-boundary-guard.md`.
+
 ## Secret-scan gate
 
 - No secret values, API tokens, OAuth tokens, PEM private keys, passwords, or bearer strings in

@@ -1,0 +1,76 @@
+{
+  "exceptions": [
+    {
+      "id": "github-cli-docs-help-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/docs.go",
+      "match": "github",
+      "reason": "bootstrap until provider examples in CLI help text are generated from connector definitions",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 4
+    },
+    {
+      "id": "github-cli-connector-docs-catalog-validation",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/connector_docs.go",
+      "match": "github",
+      "reason": "bootstrap until generated connector catalog validation examples are provider-neutral",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 2
+    },
+    {
+      "id": "github-cli-skills-examples",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/cli/skills.go",
+      "match": "github",
+      "reason": "bootstrap until provider skill recipes are generated from connector definitions",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 5
+    },
+    {
+      "id": "github-operation-secret-encryption-kind",
+      "rule": "provider_policy",
+      "connector": "github",
+      "path": "internal/connectors/engine/bundle.go",
+      "match": "github_secret_encryption",
+      "reason": "bootstrap until operation kinds are provider-neutral or owned by GitHub definition metadata",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/65",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 1
+    },
+    {
+      "id": "bahmni-guide-examples",
+      "rule": "docs_example",
+      "connector": "bahmni",
+      "path": "internal/connectors/guide.go",
+      "match": "bahmni",
+      "reason": "bootstrap until provider-specific guide examples are definition-owned or generated",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/535",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 5
+    },
+    {
+      "id": "github-guide-examples-and-links",
+      "rule": "docs_example",
+      "connector": "github",
+      "path": "internal/connectors/guide.go",
+      "match": "github",
+      "reason": "bootstrap until GitHub guide examples/resources are definition-owned or generated",
+      "migration_issue_url": "https://github.com/polymetrics-ai/cli/issues/67",
+      "owner": "connector-architecture-v2",
+      "expires_on": "2026-09-30",
+      "max_matches": 34
+    }
+  ]
+}

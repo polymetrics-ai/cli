@@ -4,7 +4,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
   pull_request:
+    paths-ignore:
+      - "website/**"
+      - ".github/workflows/website.yml"
+      - ".gitlab-ci.yml"
   release:
     types:
       - published
@@ -24,16 +32,52 @@ jobs:
       pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+      paths_released: ${{ steps.release.outputs.paths_released }}
+      pm_cli_release_created: ${{ steps.release.outputs.release_created == 'true' && contains(steps.release.outputs.paths_released, '"."') }}
+      pm_release_input: ${{ steps.pm-release-filter.outputs.pm_release_input }}
       tag_name: ${{ steps.release.outputs.tag_name }}
 
     steps:
-      - name: Create or update release PR
+      - name: Checkout release calculation history
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Resolve PM CLI release input
+        id: pm-release-filter
+        run: >-
+          ./scripts/release-please-pm-filter.py
+          --target-branch main
+          --filtered-repo "$RUNNER_TEMP/pm-release-filtered"
+          --github-output "$GITHUB_OUTPUT"
+
+      - name: Create GitHub release from release PR
         id: release
         uses: googleapis/release-please-action@v5
         with:
           token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+          skip-github-pull-request: true
+
+      - name: Create or update release PR from filtered PM history
+        if: steps.pm-release-filter.outputs.pm_release_input == 'true'
+        env:
+          RELEASE_PLEASE_AUTH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          FILTERED_RELEASE_REPO: ${{ steps.pm-release-filter.outputs.filtered_repo }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx -y release-please@17.6.0 release-pr \
+            --repo-url "$GITHUB_REPOSITORY" \
+            --token <(printf '%s' "$RELEASE_PLEASE_AUTH_TOKEN") \
+            --config-file release-please-config.json \
+            --manifest-file .release-please-manifest.json \
+            --target-branch main \
+            --path . \
+            --local \
+            --local-path "$FILTERED_RELEASE_REPO"
 
   package-check:
     name: package-check
@@ -95,7 +139,7 @@ jobs:
       ${{
         always() &&
         (github.event_name == 'release' ||
-         needs.release-please.outputs.release_created == 'true')
+         needs.release-please.outputs.pm_cli_release_created == 'true')
       }}
     runs-on: ubuntu-latest
     permissions:
@@ -106,6 +150,13 @@ jobs:
     concurrency:
       group: release-assets-${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
       cancel-in-progress: false
+    outputs:
+      homebrew_notification_ready: ${{ steps.homebrew-notification.outputs.ready }}
+      tag_name: ${{ steps.release-metadata.outputs.tag_name }}
+      release_version: ${{ steps.release-metadata.outputs.release_version }}
+      release_component: ${{ steps.release-metadata.outputs.release_component }}
+      release_id: ${{ steps.release-metadata.outputs.release_id }}
+      source_run_id: ${{ steps.homebrew-source-run.outputs.source_run_id }}
 
     steps:
       - name: Checkout release tag
@@ -123,14 +174,53 @@ jobs:
       - name: Install cosign
         uses: sigstore/cosign-installer@v3
 
-      - name: Check existing release assets
-        id: existing-assets
+      - name: Resolve release metadata
+        id: release-metadata
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
         run: |
           set -euo pipefail
           release_version="${TAG_NAME#v}"
+          if [[ "$release_version" == "$TAG_NAME" ]]; then
+            printf 'release tag must start with v: %s\n' "$TAG_NAME" >&2
+            exit 1
+          fi
+          if [[ ! "$TAG_NAME" =~ ^v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]]; then
+            printf 'release tag must be a canonical PM CLI semver tag: %s\n' "$TAG_NAME" >&2
+            exit 1
+          fi
+          ./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets >/dev/null
+          release_json=$(gh release view "$TAG_NAME" --json databaseId,isDraft,tagName)
+          release_id=$(RELEASE_JSON="$release_json" TAG_NAME="$TAG_NAME" python3 - <<'PY'
+          import json
+          import os
+
+          release = json.loads(os.environ["RELEASE_JSON"])
+          if release.get("tagName") != os.environ["TAG_NAME"] or release.get("isDraft") is not False:
+              raise SystemExit("release metadata did not resolve to the published tag")
+          release_id = release.get("databaseId")
+          if not isinstance(release_id, int):
+              raise SystemExit("release metadata did not include a numeric databaseId")
+          print(release_id)
+          PY
+          )
+          {
+            echo "tag_name=$TAG_NAME"
+            echo "release_version=$release_version"
+            echo "release_component=pm-cli"
+            echo "release_id=$release_id"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check existing release assets
+        id: existing-assets
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ steps.release-metadata.outputs.tag_name }}
+          RELEASE_VERSION: ${{ steps.release-metadata.outputs.release_version }}
+        run: |
+          set -euo pipefail
+          release_version="$RELEASE_VERSION"
           expected_assets=$(./scripts/verify-release-assets.sh --release-version "$release_version" --print-expected-release-assets | LC_ALL=C sort)
           actual_assets=$(gh release view "$TAG_NAME" --json assets --jq '.assets[].name' | LC_ALL=C sort)
           if [[ -z "$actual_assets" ]]; then
@@ -245,7 +335,7 @@ jobs:
         if: steps.existing-assets.outputs.skip_release_assets != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ github.event.release.tag_name || needs.release-please.outputs.tag_name }}
+          TAG_NAME: ${{ steps.release-metadata.outputs.tag_name }}
         run: |
           set -euo pipefail
           published_tag=$(gh release view "$TAG_NAME" --json isDraft,tagName --jq 'select(.isDraft == false) | .tagName')
@@ -256,3 +346,70 @@ jobs:
             assets+=("$subject" "$subject.sigstore.json")
           done < "$RUNNER_TEMP/release-trust-subjects.txt"
           gh release upload "$TAG_NAME" "${assets[@]}"
+
+      - name: Mark Homebrew dry-run notification ready
+        id: homebrew-notification
+        if: ${{ success() }}
+        run: echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Resolve Homebrew notification source run
+        id: homebrew-source-run
+        if: ${{ success() }}
+        env:
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          SKIP_RELEASE_ASSETS: ${{ steps.existing-assets.outputs.skip_release_assets }}
+        run: |
+          set -euo pipefail
+          if [[ "$SKIP_RELEASE_ASSETS" == "true" ]]; then
+            echo "source_run_id=" >> "$GITHUB_OUTPUT"
+          else
+            echo "source_run_id=$CURRENT_RUN_ID" >> "$GITHUB_OUTPUT"
+          fi
+
+  notify-homebrew-tap:
+    name: notify-homebrew-tap-dry-run
+    needs: release-assets
+    if: >-
+      ${{
+        github.repository == 'polymetrics-ai/cli' &&
+        needs.release-assets.outputs.release_component == 'pm-cli' &&
+        needs.release-assets.outputs.homebrew_notification_ready == 'true'
+      }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    concurrency:
+      group: homebrew-tap-notify-${{ needs.release-assets.outputs.tag_name }}
+      cancel-in-progress: false
+
+    steps:
+      - name: Checkout trusted notification helper
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.workflow_sha }}
+          persist-credentials: false
+
+      - name: Request Homebrew formula update dry-run
+        env:
+          PM_HOMEBREW_PR_APP_ID: ${{ secrets.PM_HOMEBREW_PR_APP_ID }}
+          PM_HOMEBREW_PR_PRIVATE_KEY: ${{ secrets.PM_HOMEBREW_PR_PRIVATE_KEY }}
+          SOURCE_RUN_ID: ${{ needs.release-assets.outputs.source_run_id }}
+        run: |
+          set -euo pipefail
+          source_run_args=()
+          if [[ -n "$SOURCE_RUN_ID" ]]; then
+            source_run_args=(--source-run-id "$SOURCE_RUN_ID")
+          fi
+          ./scripts/notify-homebrew-formula-update.sh \
+            --release-assets-verified "${{ needs.release-assets.outputs.homebrew_notification_ready }}" \
+            --tag "${{ needs.release-assets.outputs.tag_name }}" \
+            --release-id "${{ needs.release-assets.outputs.release_id }}" \
+            "${source_run_args[@]}" \
+            --source-repo polymetrics-ai/cli \
+            --tap-repo polymetrics-ai/homebrew-tap \
+            --workflow pm-formula-update.yml \
+            --dispatch-schema pm-homebrew-formula/v1 \
+            --target-commitish-policy ignore \
+            --dry-run true \
+            --dispatch

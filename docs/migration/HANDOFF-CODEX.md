@@ -107,5 +107,7 @@ Required push rules:
 ## GSD loop
 
 These are GSD phases. Per phase: PLAN → EXECUTE test-first → gate (`go build ./...` &&
-`connectorgen validate` 0 findings && conformance PASS && `make lint`) → VERIFY. Codex reads
+`connectorgen validate` 0 findings && `make connector-boundary` clean && conformance PASS &&
+`make lint`) → VERIFY. Codex reads
 `AGENTS.md`; the `.planning/` phase artifacts and `docs/migration/*` are the shared source of truth.
+The boundary guard runbook is `docs/migration/connector-boundary-guard.md`.

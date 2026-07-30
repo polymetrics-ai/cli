@@ -13,6 +13,10 @@ func TestEffectiveCredentialConfigAddsGitHubBaseURL(t *testing.T) {
 	if got["base_url"] != "https://github.example/api" || orig["owner"] != "octo" {
 		t.Fatalf("effective config = %+v orig=%+v", got, orig)
 	}
+	unknown := effectiveCredentialConfig("unknown-certification-connector", nil)
+	if unknown["base_url"] != "" {
+		t.Fatalf("unknown connector base_url = %q, want no invented default", unknown["base_url"])
+	}
 }
 
 func TestLiveStreamUnavailableClassifiesGitHubUnavailableErrors(t *testing.T) {
@@ -28,6 +32,10 @@ func TestLiveStreamUnavailableClassifiesGitHubUnavailableErrors(t *testing.T) {
 		if !liveStreamUnavailable(rc, res) {
 			t.Fatalf("liveStreamUnavailable(%q) = false, want true", res.Stdout)
 		}
+	}
+	unknown := &runContext{opts: Options{Connector: "unknown-certification-connector"}}
+	if liveStreamUnavailable(unknown, cases[0]) {
+		t.Fatalf("liveStreamUnavailable unknown connector = true, want safe false")
 	}
 }
 

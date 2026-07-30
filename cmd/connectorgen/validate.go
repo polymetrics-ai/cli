@@ -37,19 +37,36 @@ const (
 	ruleStartDateFreeFormString  = "start_date_free_form_string"
 	ruleConformanceSkipReason    = "conformance_skip_reason"
 	ruleDefaultTypeMismatch      = "default_type_mismatch"
+	ruleIncrementalPolicy        = "incremental_policy"
 )
+
+var supportedParamFormats = map[string]bool{
+	"":             true,
+	"rfc3339":      true,
+	"rfc3339_utc":  true,
+	"unix_seconds": true,
+	"date":         true,
+}
+
+var allowedOperatorPrefixes = map[string]bool{
+	"":   true,
+	">=": true,
+	">":  true,
+	"<=": true,
+	"<":  true,
+}
 
 // dateShapedParamFormats are the incremental.param_format values whose
 // value-parsing path (engine/read.go parseLowerBoundTime, N4/B1) accepts an
 // all-digits input as Unix seconds and otherwise requires RFC3339. For these
-// two formats specifically (unlike unix_seconds, where digits ARE the
+// formats specifically (unlike unix_seconds, where digits ARE the
 // correct/intended shape), a digit-shaped config value that is NOT actually
 // Unix seconds — e.g. a yyyymmdd typo like "20260101" — is silently
 // misinterpreted as a 1970s-era lower bound rather than erroring (N2, wave0
 // REVIEW.md carried flag).
 var dateShapedParamFormats = map[string]bool{
-	"date":              true,
-	"github_date_range": true,
+	"date":        true,
+	"rfc3339_utc": true,
 }
 
 // dateShapedSpecFormats are the JSON Schema "format" annotation values that
@@ -102,10 +119,15 @@ var surfaceOperationRisks = map[string]bool{
 const maxCLIRecordPathArrayIndex = 128
 
 var directReadOutputPolicies = map[string]bool{
-	"github_contents_file_metadata": true,
-	"github_contents_directory":     true,
-	"json_redacted":                 true,
-	"clinical_json_redacted":        true,
+	"repository_contents_file_metadata": true,
+	"repository_contents_directory":     true,
+	"json_redacted":                     true,
+	"clinical_json_redacted":            true,
+}
+
+var repositoryDirectReadOutputPolicies = map[string]bool{
+	"repository_contents_file_metadata": true,
+	"repository_contents_directory":     true,
 }
 
 var sourceRequiredOperationModels = map[string]bool{
@@ -245,8 +267,10 @@ func validateBundleDir(fsys fs.FS, name string) (findings, warnings []Finding) {
 	findings = append(findings, checkFixtureSecrets(b)...)
 	findings = append(findings, checkCLISurfaceSecrets(b)...)
 	findings = append(findings, checkOperationsSecrets(b)...)
+	findings = append(findings, checkCertificationSecrets(b)...)
 	findings = append(findings, checkConformanceSkipReason(b)...)
 	findings = append(findings, checkDefaultTypeMismatch(b)...)
+	findings = append(findings, checkIncrementalPolicies(b)...)
 	warnings = append(warnings, checkIncrementalStartDateFormat(b)...)
 	return findings, warnings
 }
@@ -284,6 +308,8 @@ func loadErrorFinding(name string, err error) Finding {
 		file = "api_surface.json"
 	case strings.Contains(msg, "cli_surface.json"):
 		file = "cli_surface.json"
+	case strings.Contains(msg, "certification.json"):
+		file = "certification.json"
 	}
 	return Finding{Connector: name, File: file, Rule: rule, Message: msg}
 }
@@ -752,6 +778,7 @@ func checkCLISurface(b engine.Bundle) []Finding {
 		findings = append(findings, checkCLISurfaceOperationSafety(b, i, cmd, operations)...)
 		findings = append(findings, checkCLISurfaceIntent(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceRiskApproval(b, i, cmd)...)
+		findings = append(findings, checkCLISurfaceValidationDeclarations(b, i, cmd)...)
 		findings = append(findings, checkCLISurfaceWriteFlags(b, i, cmd, writes)...)
 		findings = append(findings, checkCLISurfaceEndpointCoverage(b, i, cmd, endpoints)...)
 	}
@@ -863,6 +890,9 @@ func checkCLISurfaceOperationSafety(
 	if !directReadOutputPolicies[cmd.OutputPolicy] {
 		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q must declare a supported output_policy", i, cmd.Path, cmd.Operation)})
 	}
+	if repositoryDirectReadOutputPolicies[cmd.OutputPolicy] && !endpointPathHasVariable(op.REST.Path, "path") {
+		findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("implemented direct read command %d (%q) operation %q uses repository output policy %q but endpoint path lacks {path}", i, cmd.Path, cmd.Operation, cmd.OutputPolicy)})
+	}
 	for _, flag := range cmd.Flags {
 		mapsTo := strings.TrimSpace(flag.MapsTo)
 		switch {
@@ -877,6 +907,107 @@ func checkCLISurfaceOperationSafety(
 		}
 	}
 	return findings
+}
+
+func checkCLISurfaceValidationDeclarations(b engine.Bundle, i int, cmd engine.CLICommand) []Finding {
+	mappedTargets := map[string]string{}
+	var findings []Finding
+	for _, flag := range cmd.Flags {
+		if strings.TrimSpace(flag.MapsTo) != "" {
+			mappedTargets[flag.MapsTo] = flag.Name
+		}
+		if flag.Format != "" && flag.Format != "date-time" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s declares unsupported format %q", i, cmd.Path, flag.Name, flag.Format)})
+		}
+		if flag.Format != "" && flag.Type != "string" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s format validation requires string type", i, cmd.Path, flag.Name)})
+		}
+		if flag.AllowEmpty != nil && flag.Type != "string" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) flag --%s allow_empty is supported only for string flags", i, cmd.Path, flag.Name)})
+		}
+	}
+	for j, constraint := range cmd.Constraints {
+		if constraint.Kind != "order" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported kind %q", i, cmd.Path, j, constraint.Kind)})
+		}
+		if constraint.Op != "lt" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d declares unsupported op %q", i, cmd.Path, j, constraint.Op)})
+		}
+		if constraint.ValueType != "date-time" {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d must declare value_type date-time", i, cmd.Path, j)})
+		}
+		for _, ref := range []struct {
+			role   string
+			target string
+		}{
+			{role: "left", target: constraint.Left},
+			{role: "right", target: constraint.Right},
+		} {
+			if err := validateCLIConstraintMappedTarget(ref.target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
+				continue
+			}
+			if mappedTargets[ref.target] == "" {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s target %q is not mapped by a command flag", i, cmd.Path, j, ref.role, ref.target)})
+			}
+		}
+		for _, ref := range []struct {
+			role   string
+			target string
+		}{
+			{role: "left_fallback", target: constraint.LeftFallback},
+			{role: "right_fallback", target: constraint.RightFallback},
+		} {
+			if ref.target == "" {
+				continue
+			}
+			if err := validateCLIConstraintConfigFallback(ref.target); err != nil {
+				findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d %s %q is invalid: %v", i, cmd.Path, j, ref.role, ref.target, err)})
+			}
+		}
+		if strings.ContainsAny(constraint.Message, "\r\n") {
+			findings = append(findings, Finding{Connector: b.Name, File: "cli_surface.json", Rule: ruleCLISurfaceSafety, Message: fmt.Sprintf("command %d (%q) constraint %d message must be a single line", i, cmd.Path, j)})
+		}
+	}
+	return findings
+}
+
+func validateCLIConstraintMappedTarget(target string) error {
+	switch {
+	case strings.HasPrefix(target, "query."):
+		return validateCLIConstraintPath(strings.TrimPrefix(target, "query."))
+	case strings.HasPrefix(target, "body."):
+		return validateCLIConstraintPath(strings.TrimPrefix(target, "body."))
+	default:
+		return fmt.Errorf("must use query. or body. target")
+	}
+}
+
+func validateCLIConstraintConfigFallback(target string) error {
+	if !strings.HasPrefix(target, "config.") {
+		return fmt.Errorf("must use config. fallback")
+	}
+	return validateCLIConstraintPath(strings.TrimPrefix(target, "config."))
+}
+
+func validateCLIConstraintPath(path string) error {
+	if strings.TrimSpace(path) == "" {
+		return fmt.Errorf("path is required")
+	}
+	for _, r := range path {
+		switch {
+		case r >= 'a' && r <= 'z':
+		case r >= 'A' && r <= 'Z':
+		case r >= '0' && r <= '9':
+		case r == '_' || r == '-' || r == '.':
+		default:
+			return fmt.Errorf("path contains invalid character %q", r)
+		}
+	}
+	if strings.Contains(path, "..") {
+		return fmt.Errorf("path must not contain empty segments")
+	}
+	return nil
 }
 
 func checkCLISurfaceWriteFlags(
@@ -1238,6 +1369,14 @@ func checkCLISurfaceIntent(b engine.Bundle, i int, cmd engine.CLICommand) []Find
 					Message:   fmt.Sprintf("implemented direct read command %d (%q) must reference a connector-relative api_surface endpoint", i, cmd.Path),
 				})
 			}
+			if repositoryDirectReadOutputPolicies[cmd.OutputPolicy] && !endpointPathHasVariable(ep.Path, "path") {
+				findings = append(findings, Finding{
+					Connector: b.Name,
+					File:      "cli_surface.json",
+					Rule:      ruleCLISurfaceSafety,
+					Message:   fmt.Sprintf("implemented direct read command %d (%q) uses repository output policy %q but endpoint path lacks {path}", i, cmd.Path, cmd.OutputPolicy),
+				})
+			}
 		}
 		if !directReadOutputPolicies[cmd.OutputPolicy] {
 			findings = append(findings, Finding{
@@ -1403,6 +1542,10 @@ func isAbsoluteHTTPURL(raw string) bool {
 	return strings.HasPrefix(lower, "http://") || strings.HasPrefix(lower, "https://")
 }
 
+func endpointPathHasVariable(path, name string) bool {
+	return strings.Contains(path, "{"+name+"}")
+}
+
 // checkDocsHeadings enforces the fixed docs.md heading set (design §F.6).
 // Headings are matched as Markdown "# "/"## " lines by exact (trimmed) text,
 // so heading LEVEL is not enforced, only presence and text.
@@ -1480,6 +1623,18 @@ func checkOperationsSecrets(b engine.Bundle) []Finding {
 	}}
 }
 
+func checkCertificationSecrets(b engine.Bundle) []Finding {
+	if len(b.RawCertification) == 0 || !secretLiteralPattern.Match(b.RawCertification) {
+		return nil
+	}
+	return []Finding{{
+		Connector: b.Name,
+		File:      "certification.json",
+		Rule:      ruleSecretLiteral,
+		Message:   "certification.json contains a secret-shaped literal",
+	}}
+}
+
 // checkConformanceSkipReason enforces R3's skip-marker contract (docs/
 // migration/conventions.md §4/§6): a bundle-level (metadata.json) or
 // stream-level (streams.json) "conformance": {"skip_dynamic": true} marker
@@ -1539,21 +1694,48 @@ func checkDefaultTypeMismatch(b engine.Bundle) []Finding {
 	return findings
 }
 
+func checkIncrementalPolicies(b engine.Bundle) []Finding {
+	var findings []Finding
+	for _, stream := range b.Streams {
+		if stream.Incremental == nil {
+			continue
+		}
+		format := strings.TrimSpace(stream.Incremental.ParamFormat)
+		if !supportedParamFormats[format] || format != stream.Incremental.ParamFormat {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "streams.json",
+				Rule:      ruleIncrementalPolicy,
+				Message:   fmt.Sprintf("stream %q declares unsupported incremental.param_format %q", stream.Name, stream.Incremental.ParamFormat),
+			})
+		}
+		prefix := strings.TrimSpace(stream.Incremental.OperatorPrefix)
+		if !allowedOperatorPrefixes[prefix] || prefix != stream.Incremental.OperatorPrefix {
+			findings = append(findings, Finding{
+				Connector: b.Name,
+				File:      "streams.json",
+				Rule:      ruleIncrementalPolicy,
+				Message:   fmt.Sprintf("stream %q declares unsupported incremental.operator_prefix %q", stream.Name, stream.Incremental.OperatorPrefix),
+			})
+		}
+	}
+	return findings
+}
+
 // checkIncrementalStartDateFormat is N2's narrow, honest WARNING (wave0
 // REVIEW.md carried flag; SPEC.md §4 "promote to a validate-time guard"):
-// for every stream whose incremental.param_format is "date" or
-// "github_date_range" (the two formats where engine/read.go's
-// parseLowerBoundTime treats an all-digits value as Unix seconds and
-// anything else as RFC3339, N4/B1) AND which names a start_config_key,
-// check whether that spec.json property declares a date-ish JSON Schema
+// for every stream whose incremental.param_format parses timestamp input
+// through engine/read.go's parseLowerBoundTime and which names a
+// start_config_key, check whether that spec.json property declares a
+// date-ish JSON Schema
 // "format" (date-time/date). If it does not, a digit-shaped config value —
 // e.g. an operator typo like "20260101" (yyyymmdd), which is NOT Unix
 // seconds — would silently be treated as one instead of erroring, producing
 // a bogus 1970s-era lower bound. This is deliberately scoped to ONLY these
-// two param_formats: unix_seconds is excluded because there an all-digits
-// value IS the correct, intended shape (no misinterpretation risk at all),
-// and rfc3339 never attempts digit parsing in the first place (verbatim
-// passthrough). Reads spec.json's per-property "format" directly from
+// timestamp-parsing formats: unix_seconds is excluded because there an
+// all-digits value IS the correct, intended shape (no misinterpretation risk
+// at all), and rfc3339 never attempts digit parsing in the first place
+// (verbatim passthrough). Reads spec.json's per-property "format" directly from
 // b.RawSpec (F5, REVIEW.md) since the compiled *engine.Schema does not
 // expose annotation keywords like "format" through any accessor (schema.go:
 // "format" is accepted-but-only-preserved, never structurally enforced).

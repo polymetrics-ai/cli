@@ -177,6 +177,90 @@ func TestBundleLoadOptionalFilesAbsent(t *testing.T) {
 	if b.CLISurface != nil {
 		t.Fatalf("CLISurface should be nil when cli_surface.json is absent")
 	}
+	if b.Certification != nil {
+		t.Fatalf("Certification should be nil when certification.json is absent")
+	}
+}
+
+func TestBundleLoadParsesCertification(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{
+		"schema_version": 1,
+		"source": {
+			"default_stream": "widgets",
+			"source_credential_defaults": {"base_url": "https://api.example.test"},
+			"live_unavailable": [{"kind": "Error", "contains": ["status 403"]}]
+		},
+		"direct_read_candidates": [{
+			"stage_name": "direct_read_sweep_widget",
+			"command": "widget get",
+			"args": [
+				{"connector": true},
+				{"literal": "widget"},
+				{"config_key": "widget_id", "default": "fixture-widget"},
+				{"source_credential": true}
+			]
+		}]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if b.Certification == nil {
+		t.Fatalf("Certification is nil")
+	}
+	if b.Certification.Source.DefaultStream != "widgets" {
+		t.Fatalf("default_stream = %q", b.Certification.Source.DefaultStream)
+	}
+	if got := b.Certification.Source.SourceCredentialDefaults["base_url"]; got != "https://api.example.test" {
+		t.Fatalf("source_credential_defaults.base_url = %q", got)
+	}
+	if len(b.Certification.DirectReadCandidates) != 1 {
+		t.Fatalf("DirectReadCandidates = %+v", b.Certification.DirectReadCandidates)
+	}
+}
+
+func TestBundleLoadRejectsUnknownCertificationKey(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{"schema_version":1,"surprise":true}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unknown certification key to fail")
+	}
+	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "surprise") {
+		t.Fatalf("Load error = %q, want certification.json surprise rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsCertificationUnknownStream(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/certification.json"] = &fstest.MapFile{Data: []byte(`{"schema_version":1,"source":{"default_stream":"missing"}}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected unknown default stream to fail")
+	}
+	if !strings.Contains(err.Error(), "certification.json") || !strings.Contains(err.Error(), "default_stream") {
+		t.Fatalf("Load error = %q, want default_stream rejection", err.Error())
+	}
+}
+
+func TestBundleLoadEmbeddedGitHubCertification(t *testing.T) {
+	b, err := Load(defs.FS, "github")
+	if err != nil {
+		t.Fatalf("Load(defs.FS, github): %v", err)
+	}
+	if b.Certification == nil {
+		t.Fatalf("GitHub Certification is nil; defs.FS must embed certification.json")
+	}
+	if b.Certification.Source.DefaultStream != "issues" {
+		t.Fatalf("GitHub certification default stream = %q", b.Certification.Source.DefaultStream)
+	}
+	if len(b.Certification.WritePairings) != 3 {
+		t.Fatalf("GitHub certification write pairings = %d, want 3", len(b.Certification.WritePairings))
+	}
 }
 
 func TestBundleLoadParsesGraphQLStreamAndWriteAction(t *testing.T) {

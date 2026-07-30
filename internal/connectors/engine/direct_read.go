@@ -18,13 +18,13 @@ import (
 )
 
 const (
-	defaultDirectReadMaxBytes                  = 1 << 20
-	maxOperationDirectReadBytes                = 16 << 20
-	defaultDirectReadTimeout                   = 30 * time.Second
-	directReadPolicyGitHubContentsFileMetadata = "github_contents_file_metadata"
-	directReadPolicyGitHubContentsDirectory    = "github_contents_directory"
-	directReadPolicyJSONRedacted               = "json_redacted"
-	directReadPolicyClinicalJSONRedacted       = "clinical_json_redacted"
+	defaultDirectReadMaxBytes                      = 1 << 20
+	maxOperationDirectReadBytes                    = 16 << 20
+	defaultDirectReadTimeout                       = 30 * time.Second
+	directReadPolicyRepositoryContentsFileMetadata = "repository_contents_file_metadata"
+	directReadPolicyRepositoryContentsDirectory    = "repository_contents_directory"
+	directReadPolicyJSONRedacted                   = "json_redacted"
+	directReadPolicyClinicalJSONRedacted           = "clinical_json_redacted"
 )
 
 var surfacePathVarPattern = regexp.MustCompile(`\{([A-Za-z_][A-Za-z0-9_]*)\}`)
@@ -79,7 +79,7 @@ func OperationDirectRead(ctx context.Context, b Bundle, req connectors.Operation
 	if policy == "" {
 		policy = op.OutputPolicy
 	}
-	if err := validateDirectReadOutputPolicy(policy, req.PathParams); err != nil {
+	if err := validateDirectReadOutputPolicy(policy, op.REST.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 	body, err := operationReadBody(op, req.Body)
@@ -151,7 +151,7 @@ func DirectRead(ctx context.Context, b Bundle, req connectors.DirectReadRequest,
 	if err != nil {
 		return connectors.DirectReadResult{}, err
 	}
-	if err := validateDirectReadOutputPolicy(req.OutputPolicy, req.PathParams); err != nil {
+	if err := validateDirectReadOutputPolicy(req.OutputPolicy, req.Path, req.PathParams, cfg); err != nil {
 		return connectors.DirectReadResult{}, err
 	}
 
@@ -285,10 +285,14 @@ func clampDirectReadMaxBytes(maxBytes int) int {
 	return maxBytes
 }
 
-func validateDirectReadOutputPolicy(policy string, pathParams map[string]string) error {
+func validateDirectReadOutputPolicy(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) error {
 	switch policy {
-	case directReadPolicyGitHubContentsFileMetadata, directReadPolicyGitHubContentsDirectory:
-		if err := rejectSensitiveRepositoryPath(pathParams["path"]); err != nil {
+	case directReadPolicyRepositoryContentsFileMetadata, directReadPolicyRepositoryContentsDirectory:
+		path, err := repositoryDirectReadPathValue(policy, endpointPath, pathParams, cfg)
+		if err != nil {
+			return err
+		}
+		if err := rejectSensitiveRepositoryPath(path); err != nil {
 			return err
 		}
 		return nil
@@ -299,9 +303,31 @@ func validateDirectReadOutputPolicy(policy string, pathParams map[string]string)
 	}
 }
 
+func repositoryDirectReadPathValue(policy, endpointPath string, pathParams map[string]string, cfg connectors.RuntimeConfig) (string, error) {
+	if !surfacePathHasVariable(endpointPath, "path") {
+		return "", fmt.Errorf("direct read output policy %q requires endpoint path variable {path}", policy)
+	}
+	if pathParams != nil && pathParams["path"] != "" {
+		return pathParams["path"], nil
+	}
+	if cfg.Config != nil {
+		return cfg.Config["path"], nil
+	}
+	return "", nil
+}
+
+func surfacePathHasVariable(template, name string) bool {
+	for _, match := range surfacePathVarPattern.FindAllStringSubmatch(template, -1) {
+		if len(match) == 2 && match[1] == name {
+			return true
+		}
+	}
+	return false
+}
+
 func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 	switch policy {
-	case directReadPolicyGitHubContentsFileMetadata:
+	case directReadPolicyRepositoryContentsFileMetadata:
 		obj, ok := body.(map[string]any)
 		if !ok {
 			return nil, fmt.Errorf("direct read output policy %q requires a file metadata object", policy)
@@ -309,8 +335,8 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		if typ, _ := obj["type"].(string); typ == "dir" {
 			return nil, fmt.Errorf("direct read output policy %q received a directory response", policy)
 		}
-		return redactGitHubContentsObject(obj), nil
-	case directReadPolicyGitHubContentsDirectory:
+		return redactRepositoryContentsObject(obj), nil
+	case directReadPolicyRepositoryContentsDirectory:
 		items, ok := body.([]any)
 		if !ok {
 			return nil, fmt.Errorf("direct read output policy %q requires a directory listing array", policy)
@@ -318,7 +344,7 @@ func applyDirectReadOutputPolicy(policy string, body any) (any, error) {
 		out := make([]any, 0, len(items))
 		for _, item := range items {
 			if obj, ok := item.(map[string]any); ok {
-				out = append(out, redactGitHubContentsObject(obj))
+				out = append(out, redactRepositoryContentsObject(obj))
 				continue
 			}
 			out = append(out, item)
@@ -446,7 +472,7 @@ func normalizeJSONFieldName(name string) string {
 	return strings.ToLower(strings.NewReplacer("-", "_", " ", "_", ".", "_").Replace(name))
 }
 
-func redactGitHubContentsObject(in map[string]any) map[string]any {
+func redactRepositoryContentsObject(in map[string]any) map[string]any {
 	out := make(map[string]any, len(in)+2)
 	for k, v := range in {
 		switch k {

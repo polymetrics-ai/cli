@@ -61,6 +61,56 @@ func TestValidatePRAllowsNarrativeNonClosingReferences(t *testing.T) {
 	}
 }
 
+func TestValidatePRAllowsDeliveryIssueNumberWithoutHash(t *testing.T) {
+	body := "Ship the focused PM v0.1.1 Gong calls list correction for issue 596: add bounded --from/--to filters."
+	result := ValidatePR("fix(connectors): add Gong calls list date filters", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 1 || result.Issues[0].Number != 596 || result.Issues[0].Closing {
+		t.Fatalf("ValidatePR() issues = %#v, want non-closing issue 596", result.Issues)
+	}
+}
+
+func TestValidatePRAllowsNoMistakesDeliveryRecord(t *testing.T) {
+	body := noMistakesDeliveryBody()
+	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if len(result.Issues) != 0 {
+		t.Fatalf("ValidatePR() issues = %#v, want none", result.Issues)
+	}
+	if !result.DeliveryRecord {
+		t.Fatal("ValidatePR() DeliveryRecord = false, want true")
+	}
+}
+
+func TestValidatePRRejectsIncompleteNoMistakesDeliveryRecord(t *testing.T) {
+	body := "## Intent\n\nImplement a CI update.\n\n## Pipeline\n\nUpdates from [git push no-mistakes](https://github.com/kunchenguid/no-mistakes)\n"
+	result := ValidatePR("ci: add dry-run Homebrew tap notification", body)
+	if result.OK {
+		t.Fatal("ValidatePR() OK = true, want false")
+	}
+	if !containsViolation(result.Violations, "PR body must reference an issue") {
+		t.Fatalf("ValidatePR() violations = %v", result.Violations)
+	}
+}
+
+func TestValidatePRAllowsLetteredDeliveryIssueMigrationIntent(t *testing.T) {
+	body := "Implement the focused connector-boundary Issue B migration on branch refactor/connector-engine-policy-migration: remove GitHub-specific shared runtime policy names."
+	result := ValidatePR("feat(connectors): genericize repository read policies", body)
+	if !result.OK {
+		t.Fatalf("ValidatePR() OK = false, violations = %v", result.Violations)
+	}
+	if !result.ExplicitIssueWording {
+		t.Fatal("ValidatePR() ExplicitIssueWording = false, want true")
+	}
+	if len(result.Issues) != 0 {
+		t.Fatalf("ValidatePR() issues = %#v, want no numeric issue refs", result.Issues)
+	}
+}
+
 func TestValidatePRAcceptsCrossRepositoryClosingReference(t *testing.T) {
 	result := ValidatePR("feat: add release provenance and linux packages", "Closes polymetrics-ai/cli#551\n")
 	if !result.OK {
@@ -94,8 +144,15 @@ func TestValidatePRRejectsAmbiguousIssueRelationship(t *testing.T) {
 		"Related to #123\n",
 		"Mentions #123\n",
 		"Issue #123\n",
+		"Issue 123\n",
+		"Issue B\n",
+		"Implement Issue B\n",
+		"Implement issue a migration\n",
 		"References #123\n",
+		"Ship this. Issue 123 is unrelated.\n",
 		"Do not implement issue #123\n",
+		"Do not ship issue 123\n",
+		"Do not implement Issue B migration\n",
 	}
 	for _, body := range tests {
 		result := ValidatePR("feat(github): add cli surface metadata", body)
@@ -135,4 +192,25 @@ func containsViolation(violations []string, want string) bool {
 		}
 	}
 	return false
+}
+
+func noMistakesDeliveryBody() string {
+	return strings.Join([]string{
+		"## Intent",
+		"",
+		"Implement the CLI-side least-privilege Homebrew tap notification.",
+		"",
+		"## What Changed",
+		"",
+		"- Added a least-privilege dry-run notification.",
+		"",
+		"## Testing",
+		"",
+		"Targeted validation passed.",
+		"",
+		"## Pipeline",
+		"",
+		"Updates from [git push no-mistakes](https://github.com/kunchenguid/no-mistakes)",
+		"",
+	}, "\n")
 }

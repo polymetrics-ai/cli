@@ -24,8 +24,8 @@ Validated against `connectors.go`, `defs/*`, `engine/*`, `connsdk/*`, `hooks/*`,
    mapping every documented API endpoint to a stream, a write action, or an approved exclusion.
    Conformance v2 fails a connector whose API has write endpoints with no write actions declared
    and no exclusion waiver.
-5. **Conformance v2 executes the real engine against recorded fixture pages** (embedded
-   `fixtures/`), replacing the synthetic `mode=fixture` records that today bypass all real
+5. **Conformance v2 executes the real engine against recorded fixture pages** (`fixtures/` on disk
+   for conformance), replacing the synthetic `mode=fixture` records that today bypass all real
    request/pagination/cursor logic.
 
 ## A. Per-connector directory layout
@@ -36,20 +36,22 @@ Follow the Ruby pattern (`connection_specification.json` / `metadata.json` / `sc
 agent-readability (a 60-line schema file, not a 4,000-line manifest), diff hygiene (one stream =
 one file; parallel authoring doesn't conflict), concern separation matching the runtime
 (`spec.json` at connection-setup time, `streams.json` at read time, `writes.json` at reverse-ETL
-time, `api_surface.json` only by conformance). One deviation from Ruby: request/pagination/cursor
-config is **not** code — it is `streams.json`, interpreted by the engine.
+time, `api_surface.json` only by conformance, `certification.json` only by the certification
+harness). One deviation from Ruby: request/pagination/cursor config is **not** code — it is
+`streams.json`, interpreted by the engine.
 
 ### Layout
 
 ```
 internal/connectors/defs/
-  defs.go                     // package defs; //go:embed all */** ; exposes FS
+  defs.go                     // package defs; //go:embed runtime bundle files
   github/
     metadata.json             // identity, capabilities, rate limits, risk
     spec.json                 // connection specification (JSON Schema draft-07)
     streams.json              // declarative read config: base HTTP + streams
     writes.json               // declarative write actions
     api_surface.json          // API coverage manifest (conformance input)
+    certification.json        // optional certify defaults, candidates, pairings
     schemas/
       issues.json             // per-stream record schema (draft-07 + x- extensions)
       pull_requests.json
@@ -67,11 +69,13 @@ package defs
 
 import "embed"
 
-//go:embed */metadata.json */spec.json */streams.json */writes.json */api_surface.json */schemas/* */fixtures/** */docs.md
+//go:embed */metadata.json */spec.json */streams.json */writes.json */schemas/* */docs.md */operations.json */cli_surface.json */certification.json
 var FS embed.FS
 ```
 
-(`writes.json` and `fixtures/` are optional per connector; the loader tolerates absence.
+(`writes.json`, `operations.json`, `cli_surface.json`, and `certification.json` are optional per
+connector; the loader tolerates absence. `api_surface.json` and `fixtures/` stay on disk for
+authoring/conformance validation and are not embedded in the production `defs.FS`.
 Directory name = connector name = the one true identifier: `github`, not `source-github`.)
 
 ### `metadata.json` (github example)
@@ -187,7 +191,7 @@ projection**: by default the engine emits only declared properties (today's hand
       "name": "workflow_runs",
       "path": "/repos/{{ config.repository }}/actions/runs",
       "records": { "path": "workflow_runs" },
-      "incremental": { "cursor_field": "updated_at", "request_param": "created", "param_format": "github_date_range" },
+      "incremental": { "cursor_field": "updated_at", "request_param": "created", "param_format": "rfc3339_utc", "operator_prefix": ">=" },
       "schema": "schemas/workflow_runs.json"
     },
     {
@@ -380,7 +384,8 @@ type RecordsSpec struct {
 type IncrementalSpec struct {
     CursorField    string `json:"cursor_field"`
     RequestParam   string `json:"request_param,omitempty"`   // server-side lower bound ("since")
-    ParamFormat    string `json:"param_format,omitempty"`    // rfc3339|unix_seconds|date|github_date_range
+    ParamFormat    string `json:"param_format,omitempty"`    // rfc3339|rfc3339_utc|unix_seconds|date
+    OperatorPrefix string `json:"operator_prefix,omitempty"` // optional comparison prefix such as >=
     StartConfigKey string `json:"start_config_key,omitempty"`
     ClientFiltered bool   `json:"client_filtered,omitempty"` // API has no filter; engine drops old records
 }
@@ -419,7 +424,7 @@ func (c *Connector) Read(ctx context.Context, req connectors.ReadRequest, emit f
 1. Resolve `StreamSpec` by `req.Stream`; build `connsdk.Requester` (base URL, headers, auth via
    `selectAuth(cfg)`).
 2. Build initial query: static `query` + incremental lower bound from `req.State["cursor"]`
-   (fallback `start_config_key`) formatted per `param_format`.
+   (fallback `start_config_key`) formatted per `param_format` plus optional `operator_prefix`.
 3. Drive the paginator loop; per page: `RecordsAt(body, records.path)` → filter → project through
    stream schema (+ `computed_fields`, which can reach into nested raw JSON, e.g.
    `user_login: {{ record.user.login }}`) → track `MaxCursor` → `emit`.

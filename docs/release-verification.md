@@ -8,6 +8,36 @@ workstreams under polymetrics-ai/cli#550.
 Published `v0.1.0` assets were produced before this evidence existed. Do not
 expect these commands to succeed for that release.
 
+## Homebrew formula notification rollout
+
+After a future PM release's tag, assets, checksum manifest, Cosign bundles, GitHub
+SLSA provenance, and package checks pass in `.github/workflows/release.yml`, the
+release workflow requests the tap-owned `polymetrics-ai/homebrew-tap` workflow
+`.github/workflows/pm-formula-update.yml` with `dry_run=true`. The notification
+uses only the `pm-homebrew-pr-bot` GitHub App credentials named
+`PM_HOMEBREW_PR_APP_ID` and `PM_HOMEBREW_PR_PRIVATE_KEY`; missing credentials
+fail the notification job rather than falling back to a PAT, `GITHUB_TOKEN`, or
+ambient `gh` authentication.
+
+The current CLI-side rollout is dry-run only. It passes schema
+`pm-homebrew-formula/v1`, source repo `polymetrics-ai/cli`, the verified `vX.Y.Z`
+tag, release id, the source release workflow run id for assets signed by the
+current workflow run, and
+`target_commitish_policy=ignore`. Enabling `dry_run=false` would allow the tap's
+App-owned formula branch/PR path and requires a later explicit code and operator
+documentation change; do not activate it as part of release validation.
+
+If the release already has the exact verified asset set from an earlier trusted
+run, the notification omits `source_run_id` rather than attributing old
+provenance to the current run. Website deployment is independent and does not
+trigger this Homebrew path.
+
+The PM release job also filters release-worthy commits before Release Please
+generates the PM release PR: commits that touch only `website/**`,
+`.github/workflows/website.yml`, or `.gitlab-ci.yml` are omitted from the
+isolated Release Please history, while PM CLI and release workflow changes still
+participate.
+
 ## Future release asset set
 
 For a future tag such as `v0.2.0`, the GitHub release is expected to contain:

@@ -1,5 +1,5 @@
 // Package certify: pairing.go implements the create-then-cleanup write
-// protocol's declarative WritePairing table, tag generation, and
+// protocol's definition-owned WritePairing metadata, tag generation, and
 // record_schema-driven data generation (design
 // docs/architecture/connector-certification-design.md §C).
 package certify
@@ -100,49 +100,12 @@ func InferPairing(createAction string, available []string) (WritePairing, bool) 
 	return WritePairing{}, false
 }
 
-// builtinPairings holds hand-curated, real (not merely inferred)
-// WritePairing tables for connectors whose writes.json this task has
-// verified end-to-end (design §C "Per-connector overrides in a declarative
-// pairing table"). github's create_label/delete_label pair is keyed by the
-// label's own "name" field (labels have no separate numeric ID — the name
-// IS the identifier GitHub's API dereferences), giving cleanup_verify a
-// clean "entity gone" check via a live read-back of the labels stream.
-var builtinPairings = map[string][]WritePairing{
-	"github": {
-		{
-			Create:       "create_label",
-			Cleanup:      "delete_label",
-			CleanupKind:  "delete",
-			IDField:      "name",
-			VerifyStream: "labels",
-			VerifyField:  "name",
-			Overrides:    map[string]any{"color": "ededed"},
-		},
-		{
-			Create:       "create_issue",
-			Cleanup:      "close_issue",
-			CleanupKind:  "close",
-			IDField:      "number",
-			VerifyStream: "issues",
-			VerifyField:  "title",
-		},
-		{
-			Create:       "create_milestone",
-			Cleanup:      "delete_milestone",
-			CleanupKind:  "delete",
-			IDField:      "number",
-			VerifyStream: "milestones",
-			VerifyField:  "title",
-		},
-	},
-}
-
-// PairingsFor returns the known WritePairing entries for connector (empty if
-// none are curated). Callers needing a single best pairing for a self-test
-// or a --write run should take the first entry with a non-empty
+// PairingsFor returns the definition-owned WritePairing entries for connector
+// (empty if none are declared). Callers needing a single best pairing for a
+// self-test or a --write run should take the first entry with a non-empty
 // VerifyStream.
 func PairingsFor(connector string) []WritePairing {
-	return builtinPairings[connector]
+	return certificationPairingsFor(connector)
 }
 
 // schemaDoc is the minimal subset of a JSON Schema (draft-07, per writes.json

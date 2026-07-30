@@ -194,14 +194,14 @@ Reads Gong users, calls, scorecards, settings, flows, and related public API res
   - --connection (string): Alias for --credential.
   - --config (string_array): Connector config override as key=value.
   - --json (boolean): Emit machine-readable JSON output.
-  - --limit (integer): Maximum ETL records to emit for stream commands.
+  - --limit (integer): Maximum PM ETL records to emit; does not control Gong page size or total provider-side results.
   - --max-bytes (integer): Maximum direct-read response bytes; typed operations are capped at 16 MiB and each operation may declare a lower limit.
   - --plan (string): Execute an approved reverse-ETL plan by id.
   - --preview (boolean): Preview a reverse-ETL write command without making a network mutation.
   - --approve (string): Approval token required to execute a reverse-ETL plan.
   - --confirm (string): Typed confirmation challenge for destructive reverse-ETL writes.
 - Calls
-  - calls list - List Gong calls as ETL records. [intent=etl availability=implemented stream=calls]
+  - calls list - List Gong calls as ETL records. [intent=etl availability=implemented stream=calls]; notes: Use --from/--to for provider-side Gong call time bounds. --to is an exclusive upper bound. Global --limit caps PM output records only; Gong request page size remains the connector page_size config for compatibility.; flags: --from, --to
   - calls get - Retrieve data for a specific call (/v2/calls/{id}) [intent=direct_read availability=implemented]; risk: bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted; flags: --id
   - calls create - sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval [intent=reverse_etl availability=partial write=add_call]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: high: sends call, engagement, or digital interaction content to Gong; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.; flags: --actualStart, --clientUniqueId, --direction, --parties, --primaryUser
   - calls users-access add - mutates Gong API state; requires reverse ETL approval [intent=reverse_etl availability=partial write=add_calls_users_access]; approval: Use reverse ETL plan -> preview -> approval -> execute. Connector command execution is metadata-only for complex object/array records; use typed reverse ETL records.; risk: medium: mutates Gong API state; requires reverse ETL approval; notes: No raw HTTP body is accepted. Object and array payloads must come from typed reverse-ETL records validated by writes.json.

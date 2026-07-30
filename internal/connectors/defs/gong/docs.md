@@ -17,7 +17,7 @@ Connection fields:
 - `base_url` (optional, string); default `https://api.gong.io/v2`; format `uri`; Gong API base URL override for tests or proxies.
 - `max_pages` (optional, string); default `0`; maximum pages; use 0, all, or unlimited to exhaust a paginated stream.
 - `mode` (optional, string); fixture mode is used by credential-free conformance.
-- `page_size` (optional, string); default `100`; records per page (1-100).
+- `page_size` (optional, string); default `100`; compatibility page-size request value for legacy Gong list streams; current Gong OpenAPI does not document a provider-side page-size parameter. CLI `--limit` remains the PM output cap.
 - `start_date` (optional, string); format `date-time`; RFC3339 lower bound for supported incremental streams.
 
 Secret fields are redacted in logs and write previews: `access_key`, `access_key_secret`.
@@ -30,7 +30,7 @@ Connection checks call GET `/users` with query `limit`=`1`.
 
 Default pagination: cursor pagination; cursor parameter `cursor`; next token from `records.cursor`.
 
-The original incremental streams remain `users`, `calls`, and `scorecards`; additional list streams are full-refresh stream runners over public Gong list endpoints. Commands such as `pm gong workspaces list --json` use the same credential and bounded `--limit` behavior as other connector stream commands.
+The original incremental streams remain `users`, `calls`, and `scorecards`; additional list streams are full-refresh stream runners over public Gong list endpoints. `pm gong calls list` accepts `--from` and `--to` ISO-8601/RFC3339 bounds mapped to Gong `fromDateTime` and `toDateTime`; the upper bound is exclusive. Commands such as `pm gong workspaces list --json` use the same credential and bounded PM output `--limit` behavior as other connector stream commands. Global `--limit` caps emitted PM records only; it does not claim to control Gong page size or total provider-side results.
 
 ## Write actions & risks
 

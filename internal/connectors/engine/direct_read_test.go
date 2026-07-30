@@ -33,7 +33,7 @@ func TestDirectReadExecutesFixedGETOperation(t *testing.T) {
 		}},
 		PathParams:   map[string]string{"path": "docs/README.md"},
 		MaxBytes:     1024,
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err != nil {
 		t.Fatalf("DirectRead: %v", err)
@@ -78,7 +78,7 @@ func TestDirectReadResolvesPathWithConfigDefaults(t *testing.T) {
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{}},
 		PathParams:   map[string]string{"path": "README.md"},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err != nil {
 		t.Fatalf("DirectRead: %v", err)
@@ -90,7 +90,7 @@ func TestDirectReadRejectsAbsoluteURL(t *testing.T) {
 		Method:       http.MethodGet,
 		Path:         "https://evil.example.test/repos/{owner}/{repo}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want absolute URL rejection")
@@ -105,7 +105,7 @@ func TestDirectReadRejectsMutationMethod(t *testing.T) {
 		Method:       http.MethodPost,
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want mutation rejection")
@@ -126,7 +126,7 @@ func TestDirectReadMissingPathVariableFailsBeforeNetwork(t *testing.T) {
 		Method:       http.MethodGet,
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want missing path variable")
@@ -148,7 +148,7 @@ func TestDirectReadRejectsPathTraversalBeforeNetwork(t *testing.T) {
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
 		PathParams:   map[string]string{"path": "../secret"},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want path traversal rejection")
@@ -171,7 +171,7 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
 		PathParams:   map[string]string{"path": "README.md"},
 		MaxBytes:     8,
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want oversized response")
@@ -181,7 +181,7 @@ func TestDirectReadRejectsOversizedResponse(t *testing.T) {
 	}
 }
 
-func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
+func TestDirectReadRedactsRepositoryFileContent(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_, _ = w.Write([]byte(`{
@@ -199,7 +199,7 @@ func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
 		PathParams:   map[string]string{"path": "README.md"},
 		MaxBytes:     1024,
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err != nil {
 		t.Fatalf("DirectRead: %v", err)
@@ -219,6 +219,50 @@ func TestDirectReadRedactsGitHubFileContent(t *testing.T) {
 	}
 }
 
+func TestDirectReadRepositoryContentsPolicyIsConnectorNeutral(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path != "/projects/acme/repository/files/src/main.go" {
+			t.Fatalf("path = %s, want generic repository file endpoint", r.URL.Path)
+		}
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(`{"name":"main.go","type":"file","content":"U0VDUkVU","download_url":"https://files.example.test/acme/main.go"}`))
+	}))
+	defer srv.Close()
+
+	b := Bundle{
+		Name: "artifact-host",
+		HTTP: HTTPBase{URL: srv.URL},
+		Surface: &APISurface{Endpoints: []SurfaceEndpoint{{
+			Method: http.MethodGet,
+			Path:   "/projects/{project}/repository/files/{path}",
+			CoveredBy: &SurfaceCoverage{
+				DirectRead: "repository file read",
+			},
+		}}},
+	}
+
+	result, err := DirectRead(context.Background(), b, connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/projects/{project}/repository/files/{path}",
+		PathParams:   map[string]string{"project": "acme", "path": "src/main.go"},
+		MaxBytes:     1024,
+		OutputPolicy: "repository_contents_file_metadata",
+	}, nil)
+	if err != nil {
+		t.Fatalf("DirectRead: %v", err)
+	}
+	body, ok := result.Body.(map[string]any)
+	if !ok {
+		t.Fatalf("body type = %T, want map", result.Body)
+	}
+	if _, ok := body["content"]; ok || body["content_redacted"] != true {
+		t.Fatalf("content was not redacted generically: %+v", body)
+	}
+	if _, ok := body["download_url"]; ok || body["download_url_redacted"] != true {
+		t.Fatalf("download_url was not redacted generically: %+v", body)
+	}
+}
+
 func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	var hits int
 	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
@@ -231,7 +275,7 @@ func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
 		PathParams:   map[string]string{"path": ".env"},
-		OutputPolicy: "github_contents_file_metadata",
+		OutputPolicy: "repository_contents_file_metadata",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want sensitive path rejection")
@@ -241,6 +285,59 @@ func TestDirectReadRejectsSensitiveRepositoryPathBeforeNetwork(t *testing.T) {
 	}
 	if !strings.Contains(err.Error(), "blocked") {
 		t.Fatalf("DirectRead error = %q, want blocked", err.Error())
+	}
+}
+
+func TestDirectReadRejectsSensitiveRepositoryConfigPathBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/contents/{path}"), connectors.DirectReadRequest{
+		Method: http.MethodGet,
+		Path:   "/repos/{owner}/{repo}/contents/{path}",
+		Config: connectors.RuntimeConfig{Config: map[string]string{
+			"owner": "octo",
+			"repo":  "hello",
+			"path":  ".env",
+		}},
+		OutputPolicy: "repository_contents_file_metadata",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want sensitive path rejection")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+	if !strings.Contains(err.Error(), "blocked") {
+		t.Fatalf("DirectRead error = %q, want blocked", err.Error())
+	}
+}
+
+func TestDirectReadRepositoryPolicyRequiresPathVariableBeforeNetwork(t *testing.T) {
+	var hits int
+	srv := httptest.NewServer(http.HandlerFunc(func(http.ResponseWriter, *http.Request) {
+		hits++
+	}))
+	defer srv.Close()
+
+	_, err := DirectRead(context.Background(), directReadBundle(srv.URL, http.MethodGet, "/repos/{owner}/{repo}/contents/{file_path}"), connectors.DirectReadRequest{
+		Method:       http.MethodGet,
+		Path:         "/repos/{owner}/{repo}/contents/{file_path}",
+		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
+		PathParams:   map[string]string{"file_path": ".env"},
+		OutputPolicy: "repository_contents_file_metadata",
+	}, nil)
+	if err == nil {
+		t.Fatal("DirectRead error = nil, want repository path variable rejection")
+	}
+	if hits != 0 {
+		t.Fatalf("server hits = %d, want 0", hits)
+	}
+	if !strings.Contains(err.Error(), "{path}") {
+		t.Fatalf("DirectRead error = %q, want {path}", err.Error())
 	}
 }
 
@@ -256,7 +353,7 @@ func TestDirectReadDirectoryPolicyRejectsFileResponse(t *testing.T) {
 		Path:         "/repos/{owner}/{repo}/contents/{path}",
 		Config:       connectors.RuntimeConfig{Config: map[string]string{"owner": "octo", "repo": "hello"}},
 		PathParams:   map[string]string{"path": "README.md"},
-		OutputPolicy: "github_contents_directory",
+		OutputPolicy: "repository_contents_directory",
 	}, nil)
 	if err == nil {
 		t.Fatal("DirectRead error = nil, want directory policy shape rejection")
@@ -526,7 +623,7 @@ func TestDirectReadAvoidsDoubleVersionPrefixWhenBaseURLAlreadyContainsVersion(t 
 
 func directReadBundle(baseURL, method, endpointPath string) Bundle {
 	return Bundle{
-		Name: "github",
+		Name: "code-host",
 		HTTP: HTTPBase{URL: baseURL},
 		Surface: &APISurface{
 			OperationLedgerVersion: 1,

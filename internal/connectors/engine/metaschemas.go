@@ -27,3 +27,6 @@ var operationsSchemaJSON string
 
 //go:embed schema/cli_surface.schema.json
 var cliSurfaceSchemaJSON string
+
+//go:embed schema/certification.schema.json
+var certificationSchemaJSON string
