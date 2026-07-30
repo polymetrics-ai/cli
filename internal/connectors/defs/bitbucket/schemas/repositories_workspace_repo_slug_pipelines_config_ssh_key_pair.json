@@ -28,17 +28,6 @@
         "null"
       ]
     },
-    "private_key": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
     "public_key": {
       "type": [
         "string",

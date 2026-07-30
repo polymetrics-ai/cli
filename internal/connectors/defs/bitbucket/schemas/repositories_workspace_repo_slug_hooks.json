@@ -72,17 +72,6 @@
         "null"
       ]
     },
-    "secret": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
-    },
     "secret_set": {
       "type": [
         "string",
