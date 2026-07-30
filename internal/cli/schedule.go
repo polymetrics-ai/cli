@@ -63,7 +63,7 @@ func runScheduleCreate(root string, args []string, stdout io.Writer, jsonOut boo
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "Schedule", "ok": true, "schedule": m})
 	}
-	fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", m.Name, m.Cron, m.Flow)
+	_, _ = fmt.Fprintf(stdout, "Created schedule %s (cron: %s, flow: %s)\n", m.Name, m.Cron, m.Flow)
 	return nil
 }
 
@@ -80,7 +80,7 @@ func runScheduleList(root string, args []string, stdout io.Writer, jsonOut bool)
 		return writeJSON(stdout, envelope{"kind": "ScheduleList", "schedules": manifests})
 	}
 	for _, m := range manifests {
-		fmt.Fprintf(stdout, "%s\t%s\t%s\n", m.Name, m.Cron, m.Flow)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\n", m.Name, m.Cron, m.Flow)
 	}
 	return nil
 }
@@ -113,7 +113,7 @@ func runScheduleInstall(ctx context.Context, cfg config.Config, root string, arg
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleInstall", "ok": true, "schedule": m, "backend": string(backend.Kind())})
 	}
-	fmt.Fprintf(stdout, "Installed schedule %s via %s\n", m.Name, backend.Kind())
+	_, _ = fmt.Fprintf(stdout, "Installed schedule %s via %s\n", m.Name, backend.Kind())
 	return nil
 }
 
@@ -148,7 +148,7 @@ func runScheduleRemove(ctx context.Context, cfg config.Config, root string, args
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ScheduleRemove", "ok": true, "name": name})
 	}
-	fmt.Fprintf(stdout, "Removed schedule %s\n", name)
+	_, _ = fmt.Fprintf(stdout, "Removed schedule %s\n", name)
 	return nil
 }
 

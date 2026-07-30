@@ -224,7 +224,7 @@ func writeCertifyReport(stdout io.Writer, jsonOut bool, rep certify.Report) erro
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ConnectorCertification", "report": rep})
 	}
-	fmt.Fprint(stdout, renderCertifyReportText(rep))
+	_, _ = fmt.Fprint(stdout, renderCertifyReportText(rep))
 	return nil
 }
 
@@ -268,7 +268,7 @@ func writeCertifyBatchReport(stdout io.Writer, jsonOut bool, batch certify.Batch
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "ConnectorCertificationBatch", "batch": batch, "matrix": batch.SummaryMatrix().Rows})
 	}
-	fmt.Fprint(stdout, renderBatchMatrixText(batch))
+	_, _ = fmt.Fprint(stdout, renderBatchMatrixText(batch))
 	return nil
 }
 
@@ -302,7 +302,7 @@ func writeCertifySweepReport(stdout io.Writer, jsonOut bool, results map[string]
 		fmt.Fprintf(&b, "%s: scanned=%d cleaned=%d skipped=%d failed=%d\n",
 			name, res.Scanned, len(res.Cleaned), len(res.Skipped), len(res.Failed))
 	}
-	fmt.Fprint(stdout, b.String())
+	_, _ = fmt.Fprint(stdout, b.String())
 	return nil
 }
 

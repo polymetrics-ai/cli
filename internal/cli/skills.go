@@ -34,7 +34,7 @@ func runSkills(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "SkillGeneration", "dir": dir, "skills": generated})
 	}
-	fmt.Fprintf(stdout, "Generated skills in %s\n", dir)
+	_, _ = fmt.Fprintf(stdout, "Generated skills in %s\n", dir)
 	return nil
 }
 

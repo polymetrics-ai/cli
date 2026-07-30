@@ -146,6 +146,6 @@ func writeError(stdout, stderr io.Writer, err error, jsonOut bool) int {
 			},
 		})
 	}
-	fmt.Fprintf(stderr, "error: %s\n", message)
+	_, _ = fmt.Fprintf(stderr, "error: %s\n", message)
 	return exitCodeFor(ce)
 }

@@ -42,7 +42,7 @@ func runAgentImage(ctx context.Context, cfg config.Config, root string, args []s
 			if jsonOut {
 				return writeJSON(stdout, envelope{"kind": "AgentImageEnsure", "image": image, "status": "present"})
 			}
-			fmt.Fprintf(stdout, "agent image present: %s\n", image)
+			_, _ = fmt.Fprintf(stdout, "agent image present: %s\n", image)
 			return nil
 		}
 		cmd := exec.CommandContext(ctx, bin, "pull", image)
@@ -61,6 +61,6 @@ func runPodmanStreaming(cmd *exec.Cmd, stdout io.Writer, jsonOut bool, kind, ima
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": kind, "image": image, "status": "ok"})
 	}
-	fmt.Fprintf(stdout, "%s ok: %s\n", kind, image)
+	_, _ = fmt.Fprintf(stdout, "%s ok: %s\n", kind, image)
 	return nil
 }

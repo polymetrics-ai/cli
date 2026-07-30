@@ -23,6 +23,6 @@ func runVersion(args []string, stdout io.Writer, jsonOut bool) error {
 			"date":    buildDate,
 		})
 	}
-	fmt.Fprintf(stdout, "pm %s\ncommit: %s\nbuilt: %s\n", version, commit, buildDate)
+	_, _ = fmt.Fprintf(stdout, "pm %s\ncommit: %s\nbuilt: %s\n", version, commit, buildDate)
 	return nil
 }

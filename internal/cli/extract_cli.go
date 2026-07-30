@@ -74,7 +74,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 				env["note"] = fmt.Sprintf("rlm_analysis route; agent backend unavailable: %v", err)
 			} else {
 				if closer != nil {
-					defer closer()
+					defer func() { _ = closer() }()
 				}
 				rlmReq := rlm.RunRequest{
 					Spec:         &rlm.Spec{Name: valueOr(flags.first("spec-name"), "extract")},
@@ -97,7 +97,7 @@ func runExtract(ctx context.Context, a *app.App, cfg config.Config, root string,
 		return writeJSON(stdout, env)
 	}
 	b, _ := json.MarshalIndent(env, "", "  ")
-	fmt.Fprintln(stdout, string(b))
+	_, _ = fmt.Fprintln(stdout, string(b))
 	return nil
 }
 

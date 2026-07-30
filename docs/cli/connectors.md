@@ -13,10 +13,11 @@ DESCRIPTION
   connectors are declarative JSON bundles interpreted by the connector engine;
   hooks or native components cover APIs and protocols that need custom behavior.
 
-  Each connector exposes ETL read streams. Connectors whose APIs expose
-  mutation endpoints also declare reverse ETL write actions. Run
-  pm connectors inspect <name> to see write=true/false, ETL STREAMS, and
-  REVERSE ETL ACTIONS without reading credentials.
+  Connectors expose local metadata for ETL read streams and reverse ETL write
+  actions when those executable surfaces are implemented. Planned ledger-only
+  connectors remain visible in the catalog without executable streams or write
+  actions. Run pm connectors inspect <name> to see write=true/false, ETL
+  STREAMS, and REVERSE ETL ACTIONS without reading credentials.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
