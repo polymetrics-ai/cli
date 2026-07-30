@@ -81,8 +81,16 @@ call was used to create this ledger.
   intentionally lacks an operation-backed binary/file executor in this slice. Direct-read operations
   requiring integer/object array body flags or whole-object payload flags are also blocked operation
   rows until typed body flags exist.
-- `27` reverse-ETL operations remain blocked for shared-foundation gaps: 5 raw scalar or binary request bodies, 3 App Migration writes requiring `Atlassian-Transfer-Id`, 3 JSON Patch media-type bodies, 2 repeated `columns` form-field bodies, and 14 required raw/dynamic JSON request bodies. Implementing them needs shared write body/header/content-type dialect support rather than connector-local approximations.
-- Provider-style one-off CLI commands cannot express required nested JSON objects, integer arrays, object arrays, property-optional required bodies, or whole-object direct-read payloads as flags. Where the underlying write action can require at least one JSON body field safely, record-driven reverse ETL remains available and the command metadata is marked partial instead of pretending scalar flags are sufficient.
+- `27` reverse-ETL operations remain blocked for shared-foundation gaps: 5 raw scalar or binary
+  request bodies, 3 App Migration writes requiring `Atlassian-Transfer-Id`, 3 JSON Patch media-type
+  bodies, 2 repeated `columns` form-field bodies, and 14 required raw/dynamic JSON request bodies.
+  Implementing them needs shared write body/header/content-type dialect support rather than
+  connector-local approximations.
+- Provider-style one-off CLI commands cannot express required nested JSON objects, integer arrays,
+  object arrays, property-optional required bodies, or whole-object direct-read payloads as flags.
+  Where the underlying write action can require at least one JSON body field safely, record-driven
+  reverse ETL remains available and the command metadata is marked partial instead of pretending
+  scalar flags are sufficient.
 - Fixture-only and replay evidence does not certify live Jira behavior. Live certification requires
   separate credentials, sandbox policy, and write cleanup approval.
 - Operation-ledger blocked row models: admin_reverse_etl=27, binary_read=2, deprecated=28, direct_read=15.
