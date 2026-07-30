@@ -12,6 +12,6 @@
 - [x] `./pm docs generate --dir docs/cli --connectors-dir docs/connectors` then reverted unrelated generator drift and kept Linear docs/catalog deltas only.
 - [x] `./pm docs validate --connectors-dir docs/connectors` — passed.
 - [x] `git diff --check` — passed.
-- [x] `git status --short` scoped to Linear connector artifacts, generated CLI golden transcript, generated Linear connector docs/catalog, and GSD evidence only (149 status entries; no out-of-scope shared runtime/provider files).
+- [x] `git status --short` scoped to Linear connector artifacts, CLI help parity support/goldens, generated Linear connector docs/catalog, GSD evidence, and documentation housekeeping only; no out-of-scope shared runtime/provider files.
 - [x] Confirm no live credentials/provider calls, no shared runtime edits, no merges.
 - [x] Confirm issue addendum exists on #80 and #97-#103 without count changes.

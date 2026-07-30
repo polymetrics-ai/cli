@@ -9,7 +9,8 @@ then hand results back for validation. Read `docs/migration/conventions.md` and
 
 - **On the new architecture: 523 / 557** — 517 JSON bundles (`internal/connectors/defs/`) + 6 Tier-3
   natives (`internal/connectors/native/`: postgres, dynamodb, amazon-sqs, bing-ads, tally-prime,
-  faker) + 47 hook packages. 31 typed-blocked (`docs/migration/quarantine.json`).
+  faker) + 47 hook packages. Typed blocker state is owned by `docs/migration/quarantine.json`;
+  Linear was moved to connector-local operation-ledger blocked rows.
 - **Full API surface (Pass B / wave 5): ~240 / 517 done**, ~275 still at migration parity. A Pass B
   fan-out is **actively running in the primary Claude session** and owns those 275 `defs/` dirs.
 - **Certify harness complete** (`internal/connectors/certify/`, 21 stages + batch + `pm connectors
@@ -43,8 +44,8 @@ Build everything up to (but NOT including) any deletion or the registry flip swi
 HUMAN GATE: do not delete anything or flip the production default. Deliver a branch + a written
 cutover plan for approval.
 
-### B. Quarantine 31 + CDC (Codex) — files: `internal/connectors/hooks/<name>/`, `native/<name>/`, their `defs/`
-- Un-block the 31 in `docs/migration/quarantine.json` (mostly AUTH_COMPLEX → Tier-2 OAuth-refresh
+### B. Quarantine + CDC (Codex) — files: `internal/connectors/hooks/<name>/`, `native/<name>/`, their `defs/`
+- Un-block the remaining entries in `docs/migration/quarantine.json` (mostly AUTH_COMPLEX → Tier-2 OAuth-refresh
   hooks copying `internal/connectors/hooks/gmail/hooks.go`; a few NON_REST → Tier-3 native). These
   `defs/` dirs are NOT in the Pass B roster, so they don't collide.
 - CDC decoder: implement the postgres pgoutput Insert/Update/Delete → `connectors.CDCEvent` decoder
