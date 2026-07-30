@@ -1,0 +1,11 @@
+{
+  "expect": {
+    "method": "DELETE",
+    "path": "/addon"
+  },
+  "record": {},
+  "response": {
+    "body": {},
+    "status": 204
+  }
+}

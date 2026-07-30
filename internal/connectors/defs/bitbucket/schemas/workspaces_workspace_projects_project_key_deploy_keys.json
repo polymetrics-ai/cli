@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": true,
+  "properties": {
+    "added_on": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "comment": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "created_by": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "created_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "null"
+      ]
+    },
+    "key": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "label": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "last_used": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "links": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "project": {
+      "type": [
+        "string",
+        "integer",
+        "number",
+        "boolean",
+        "object",
+        "array",
+        "null"
+      ]
+    },
+    "slug": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "updated_on": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "uuid": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "title": "workspaces_workspace_projects_project_key_deploy_keys",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ]
+}

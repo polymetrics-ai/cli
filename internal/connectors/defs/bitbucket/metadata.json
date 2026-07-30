@@ -1,0 +1,28 @@
+{
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "capabilities": {
+    "cdc": false,
+    "check": true,
+    "dynamic_schema": false,
+    "query": true,
+    "read": true,
+    "write": true
+  },
+  "description": "Reads Bitbucket Cloud workspace, repository, pull request, issue, commit, pipeline, deployment, snippet, and project resources; declares typed reverse-ETL actions for documented mutations with destructive confirmation on deletes.",
+  "display_name": "Bitbucket",
+  "docs_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+  "integration_type": "api",
+  "name": "bitbucket",
+  "rate_limit": {
+    "requests_per_minute": 1000
+  },
+  "release_stage": "alpha",
+  "risk": {
+    "approval": "Reverse ETL writes require plan, preview, explicit approval, and typed destructive confirmation for destructive actions.",
+    "read": "Read-only Bitbucket Cloud REST calls against configured workspaces, repositories, or typed resource identifiers.",
+    "write": "Typed Bitbucket Cloud mutations only; DELETE actions carry destructive confirmation and all writes use reverse-ETL plan, preview, approval, execute."
+  }
+}
