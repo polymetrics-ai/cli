@@ -1,0 +1,34 @@
+{
+  "phase": "issue-2997-gong-official-api-parity",
+  "issue": 2997,
+  "branch": "fm/cli-gong-parity-wave01-r1",
+  "gsdAdapter": {
+    "doctor": "passed",
+    "programmingLoopPrompt": "failed: scripts/gsd: unknown GSD command: programming-loop",
+    "fallback": "manual-GSD"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "all seven Gong subissues share the same connector-owned defs/command metadata write scope; parallel mutating workers would collide"
+    },
+    {
+      "cycle": "red",
+      "decision": "local_critical_path",
+      "reason": "connector-owned test expectation updated first to capture the fresh 69-operation official source inventory"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "implementation stayed connector-local across Gong defs, command metadata, fixtures, docs, and connector-owned tests"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "all required local gates were run inline; no mutating workers remained to spawn"
+    }
+  ],
+  "verificationPassed": true,
+  "verificationStatus": "passed targeted connector-local gates; no live certification performed"
+}

@@ -1,9 +1,9 @@
 {
   "api": "Gong API v2 (OpenAPI 3.0.1)",
   "docs": "https://gong.app.gong.io/ajax/settings/api/documentation/specs?version=",
-  "reviewed_at": "2026-07-10",
+  "reviewed_at": "2026-07-30",
   "operation_ledger_version": 1,
-  "scope": "Exact public Gong OpenAPI 3.0.1 surface: 57 paths / 67 operations. GET list/detail endpoints are covered by streams or bounded direct reads; JSON mutations are typed reverse-ETL write actions; POST read-query and multipart/array-body gaps are typed operation metadata blocked by executor shape, not by risk alone.",
+  "scope": "Complete official Gong API v2 OpenAPI 3.0.1 operation inventory fetched unauthenticated from the Gong documentation spec on 2026-07-30. Every documented operation is covered by a stream, bounded direct read/provider query command, or typed reverse-ETL write action; DELETE/destructive operations are in scope through typed destructive confirmation and plan -> preview -> explicit approval -> execute.",
   "endpoints": [
     {
       "method": "GET",
@@ -472,6 +472,20 @@
       "path": "/v2/all-permission-profiles",
       "covered_by": {
         "stream": "permission_profiles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/targets",
+      "covered_by": {
+        "direct_read": "targets list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v2/targets/{targetId}/assignments",
+      "covered_by": {
+        "write": "upload_target_assignments"
       }
     }
   ]
