@@ -1,0 +1,13 @@
+{
+  "record": {
+    "path_issueIdOrKey": "FIX-1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/api/3/issue/FIX-1"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

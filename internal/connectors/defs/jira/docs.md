@@ -1,13 +1,22 @@
 # Overview
 
 Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth
-(email + API token). Read-only.
+(email + API token). The connector also declares a complete Jira Cloud REST API v3 operation ledger
+from the official Atlassian OpenAPI document and exposes connector-owned bounded command metadata.
 
-Readable streams: `issues`, `projects`, `users`.
+Readable ETL streams: `issues`, `projects`, `users`.
 
-This connector is read-only; no write actions are declared.
+Operation ledger source: https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json
 
-Service API documentation: https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/.
+Source evidence:
+
+- sha256: `8439da27e1b2dd7b013a0ae721b8aeaa7746bc8e2d816fa28aa1a582e8597501`
+- md5: `ae49a3d84a12210d4686315cb36442be`
+- operations inventoried: `616`
+- executable reverse-ETL write actions: `291`
+- blocked reverse-ETL shared-foundation gaps: `5`
+- implemented bounded direct-read commands: `286`
+- blocked binary/direct operation rows: `3`
 
 ## Auth setup
 
@@ -43,15 +52,38 @@ Default pagination: offset/limit pagination; offset parameter `startAt`; limit p
 - `users`: GET `/rest/api/3/users/search` - records path `.`; offset/limit pagination; offset
   parameter `startAt`; limit parameter `maxResults`; page size 50.
 
+The API-surface ledger includes every official Jira Cloud REST API v3 operation exactly once as an
+ETL stream, bounded direct read, reverse-ETL write, or blocked operation-ledger row. Direct reads are
+fixed endpoint commands; there is no raw method/path/body passthrough.
+
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Jira Cloud API read of issue, project, and user
-data.
+Jira write actions are named reverse-ETL actions in `writes.json`; they do not run directly from
+inspection or docs commands. They use the existing plan -> preview -> explicit approval -> execute
+flow. DELETE actions and other destructive actions declare `confirm: "destructive"`, so execution
+also requires the typed `--confirm destructive` challenge printed by the plan output.
+
+Generated write command metadata:
+
+- implemented provider-style write commands with scalar required fields: `283`
+- partial/provider-style commands that require structured JSON records through reverse ETL: `8`
+- no live write certification is claimed by this bundle.
+
+Representative fixture-backed write shapes are included for safe replay only; no live Jira provider
+call was used to create this ledger.
 
 ## Known limits
 
-- Batch defaults: read_page_size=50.
-- API coverage includes 3 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=1, duplicate_of=3, non_data_endpoint=1, out_of_scope=3,
-  requires_elevated_scope=3.
+- Official operation inventory is generated from Atlassian's OpenAPI file; if that source changes,
+  regenerate the ledger and update counts rather than editing totals by hand.
+- Bounded binary downloads are declared as blocked operation rows because the shared command runner
+  intentionally lacks an operation-backed binary/file executor in this slice.
+- `5` reverse-ETL operations that require raw scalar or binary request bodies are
+  recorded as blocked operation rows; implementing them needs a shared raw-body write dialect rather
+  than connector-local JSON approximations.
+- Provider-style one-off CLI commands cannot express required nested JSON object fields as flags.
+  Those actions remain available to reverse ETL record-driven plans, and their command metadata is
+  marked partial instead of pretending scalar flags are sufficient.
+- Fixture-only and replay evidence does not certify live Jira behavior. Live certification requires
+  separate credentials, sandbox policy, and write cleanup approval.
+- Operation-ledger blocked row models: admin_reverse_etl=5, binary_read=2, deprecated=28, direct_read=1.

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "issues",
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "status 401",
+          "status 403",
+          "oauth 2.0 scopes",
+          "scope does not match"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [
+    {
+      "stage_name": "direct_read_sweep_jira_announcement_banner_get_banner",
+      "command": "announcement-banner get-banner",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "announcement-banner"
+        },
+        {
+          "literal": "get-banner"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--max-bytes"
+        },
+        {
+          "literal": "1048576"
+        },
+        {
+          "literal": "--json"
+        }
+      ]
+    }
+  ],
+  "binary_candidates": [
+    {
+      "stage_name": "binary_download_sweep_jira_issue_attachments_get_attachment_content",
+      "command": "issue-attachments get-attachment-content",
+      "args": [
+        {
+          "connector": true
+        },
+        {
+          "literal": "issue-attachments"
+        },
+        {
+          "literal": "get-attachment-content"
+        },
+        {
+          "literal": "--credential"
+        },
+        {
+          "source_credential": true
+        },
+        {
+          "literal": "--json"
+        }
+      ]
+    }
+  ]
+}

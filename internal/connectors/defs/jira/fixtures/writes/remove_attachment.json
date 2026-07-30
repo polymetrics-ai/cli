@@ -1,0 +1,13 @@
+{
+  "record": {
+    "path_id": "10001"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/rest/api/3/attachment/10001"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

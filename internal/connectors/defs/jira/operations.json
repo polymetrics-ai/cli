@@ -1,0 +1,1145 @@
+{
+  "operations": [
+    {
+      "id": "jira.get-custom-fields-configurations",
+      "kind": "rest_read",
+      "summary": "Bulk get custom field configurations",
+      "description": "Bounded Jira provider read/search operation `getCustomFieldsConfigurations`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/app/field/context/configuration/list",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "fieldIdsOrKeys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "fieldIdsOrKeys"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-attachment-content",
+      "kind": "binary_download",
+      "summary": "Get attachment content",
+      "description": "Blocked bounded binary download for Jira operation `getAttachmentContent`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "blocked until bounded binary/file output executor is implemented",
+      "output_policy": "file",
+      "mutation_class": "none",
+      "destructive": false,
+      "binary": {
+        "method": "GET",
+        "path": "/rest/api/3/attachment/content/{id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "jira.get-attachment-thumbnail",
+      "kind": "binary_download",
+      "summary": "Get attachment thumbnail",
+      "description": "Blocked bounded binary download for Jira operation `getAttachmentThumbnail`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "blocked until bounded binary/file output executor is implemented",
+      "output_policy": "file",
+      "mutation_class": "none",
+      "destructive": false,
+      "binary": {
+        "method": "GET",
+        "path": "/rest/api/3/attachment/thumbnail/{id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "jira.get-bulk-changelogs",
+      "kind": "rest_read",
+      "summary": "Bulk fetch changelogs",
+      "description": "Bounded Jira provider read/search operation `getBulkChangelogs`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/changelog/bulkfetch",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "fieldIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "issueIdsOrKeys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "maxResults": {
+              "type": "integer"
+            },
+            "nextPageToken": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "issueIdsOrKeys"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-comments-by-ids",
+      "kind": "rest_read",
+      "summary": "Get comments by IDs",
+      "description": "Bounded Jira provider read/search operation `getCommentsByIds`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/comment/list",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "ids": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": [
+            "ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.analyse-expression",
+      "kind": "rest_read",
+      "summary": "Analyse Jira expression",
+      "description": "Bounded Jira provider read/search operation `analyseExpression`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/expression/analyse",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "contextVariables": {
+              "type": "object"
+            },
+            "expressions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "expressions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.evaluate-jsis-jira-expression",
+      "kind": "rest_read",
+      "summary": "Evaluate Jira expression using enhanced search API",
+      "description": "Bounded Jira provider read/search operation `evaluateJSISJiraExpression`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/expression/evaluate",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "context": {
+              "type": "object"
+            },
+            "expression": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "expression"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-custom-field-contexts-for-projects-and-issue-types",
+      "kind": "rest_read",
+      "summary": "Get custom field contexts for projects and issue types",
+      "description": "Bounded Jira provider read/search operation `getCustomFieldContextsForProjectsAndIssueTypes`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/field/{fieldId}/context/mapping",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "mappings": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "mappings"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-is-watching-issue-bulk",
+      "kind": "rest_read",
+      "summary": "Get is watching issue bulk",
+      "description": "Bounded Jira provider read/search operation `getIsWatchingIssueBulk`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/watching",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "issueIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "issueIds"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-change-logs-by-ids",
+      "kind": "rest_read",
+      "summary": "Get changelogs by IDs",
+      "description": "Bounded Jira provider read/search operation `getChangeLogsByIds`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/changelog/list",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "changelogIds": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": [
+            "changelogIds"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.add-watcher",
+      "kind": "rest_write",
+      "summary": "Add watcher",
+      "description": "Blocked Jira write operation `addWatcher` needing raw scalar/binary request body support.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issue/{issueIdOrKey}/watchers",
+        "content_type": "application/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.export-archived-issues",
+      "kind": "rest_write",
+      "summary": "Export archived issue(s)",
+      "description": "Jira read/export-like operation `exportArchivedIssues` requires a method or executor not supported by operation direct reads.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "blocked until a bounded non-GET/POST direct-read/export executor exists",
+      "output_policy": "json_redacted",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/issues/archive/export",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.create-issue-type-avatar",
+      "kind": "rest_write",
+      "summary": "Load issue type avatar",
+      "description": "Blocked Jira write operation `createIssueTypeAvatar` needing raw scalar/binary request body support.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/issuetype/{id}/avatar2",
+        "content_type": "*/*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.get-auto-complete-post",
+      "kind": "rest_read",
+      "summary": "Get field reference data (POST)",
+      "description": "Bounded Jira provider read/search operation `getAutoCompletePost`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/autocompletedata",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "includeCollapsedFields": {
+              "type": "boolean"
+            },
+            "projectIds": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.get-precomputations-by-id",
+      "kind": "rest_read",
+      "summary": "Get precomputations by ID (apps)",
+      "description": "Bounded Jira provider read/search operation `getPrecomputationsByID`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/function/computation/search",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "precomputationIDs": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.match-issues",
+      "kind": "rest_read",
+      "summary": "Check issues against JQL",
+      "description": "Bounded Jira provider read/search operation `matchIssues`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/match",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "issueIds": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            },
+            "jqls": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "issueIds",
+            "jqls"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.parse-jql-queries",
+      "kind": "rest_read",
+      "summary": "Parse JQL query",
+      "description": "Bounded Jira provider read/search operation `parseJqlQueries`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/parse",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "queries": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "queries"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.migrate-queries",
+      "kind": "rest_read",
+      "summary": "Convert user identifiers to account IDs in JQL queries",
+      "description": "Bounded Jira provider read/search operation `migrateQueries`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/pdcleaner",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "queryStrings": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.sanitise-jql-queries",
+      "kind": "rest_read",
+      "summary": "Sanitize JQL queries",
+      "description": "Bounded Jira provider read/search operation `sanitiseJqlQueries`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/jql/sanitize",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "queries": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "queries"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.set-preference",
+      "kind": "rest_write",
+      "summary": "Set preference",
+      "description": "Blocked Jira write operation `setPreference` needing raw scalar/binary request body support.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "PUT",
+        "path": "/rest/api/3/mypreferences",
+        "content_type": "application/json",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.get-bulk-permissions",
+      "kind": "rest_read",
+      "summary": "Get bulk permissions",
+      "description": "Bounded Jira provider read/search operation `getBulkPermissions`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/permissions/check",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string"
+            },
+            "globalPermissions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "projectPermissions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.get-permitted-projects",
+      "kind": "rest_read",
+      "summary": "Get permitted projects",
+      "description": "Bounded Jira provider read/search operation `getPermittedProjects`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/permissions/project",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "permissions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "permissions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.suggested-priorities-for-mappings",
+      "kind": "rest_read",
+      "summary": "Suggested priorities for mappings",
+      "description": "Bounded Jira provider read/search operation `suggestedPrioritiesForMappings`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/priorityscheme/mappings",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "maxResults": {
+              "type": "integer"
+            },
+            "priorities": {
+              "type": "object"
+            },
+            "projects": {
+              "type": "object"
+            },
+            "schemeId": {
+              "type": "integer"
+            },
+            "startAt": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.create-project-avatar",
+      "kind": "rest_write",
+      "summary": "Load project avatar",
+      "description": "Blocked Jira write operation `createProjectAvatar` needing raw scalar/binary request body support.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "high",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
+      "output_policy": "json",
+      "mutation_class": "create",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/project/{projectIdOrKey}/avatar2",
+        "content_type": "*/*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.count-issues",
+      "kind": "rest_read",
+      "summary": "Count issues using JQL",
+      "description": "Bounded Jira provider read/search operation `countIssues`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/search/approximate-count",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "jql": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.search-and-reconsile-issues-using-jql-post",
+      "kind": "rest_read",
+      "summary": "Search for issues using JQL enhanced search (POST)",
+      "description": "Bounded Jira provider read/search operation `searchAndReconsileIssuesUsingJqlPost`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/search/jql",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "expand": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "fieldsByKeys": {
+              "type": "boolean"
+            },
+            "jql": {
+              "type": "string"
+            },
+            "maxResults": {
+              "type": "integer"
+            },
+            "nextPageToken": {
+              "type": "string"
+            },
+            "properties": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "reconcileIssues": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.store-avatar",
+      "kind": "rest_write",
+      "summary": "Load avatar",
+      "description": "Blocked Jira write operation `storeAvatar` needing raw scalar/binary request body support.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "medium",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
+      "output_policy": "json",
+      "mutation_class": "update",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/universal_avatar/type/{type}/owner/{entityId}",
+        "content_type": "*/*",
+        "max_bytes": 16777216
+      }
+    },
+    {
+      "id": "jira.read-workflow-from-history",
+      "kind": "rest_read",
+      "summary": "Read workflow version from history",
+      "description": "Bounded Jira provider read/search operation `readWorkflowFromHistory`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflow/history",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "integer"
+            },
+            "workflowId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.list-workflow-history",
+      "kind": "rest_read",
+      "summary": "List workflow history entries",
+      "description": "Bounded Jira provider read/search operation `listWorkflowHistory`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflow/history/list",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "workflowId": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.read-workflows",
+      "kind": "rest_read",
+      "summary": "Bulk get workflows",
+      "description": "Bounded Jira provider read/search operation `readWorkflows`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "projectAndIssueTypes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            },
+            "workflowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "workflowNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.validate-create-workflows",
+      "kind": "rest_read",
+      "summary": "Validate create workflows",
+      "description": "Bounded Jira provider read/search operation `validateCreateWorkflows`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows/create/validation",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": "object"
+            },
+            "validationOptions": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "payload"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.read-workflow-previews",
+      "kind": "rest_read",
+      "summary": "Preview workflow",
+      "description": "Bounded Jira provider read/search operation `readWorkflowPreviews`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows/preview",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "issueTypeIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "projectId": {
+              "type": "string"
+            },
+            "workflowIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "workflowNames": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "required": [
+            "projectId"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.validate-update-workflows",
+      "kind": "rest_read",
+      "summary": "Validate update workflows",
+      "description": "Bounded Jira provider read/search operation `validateUpdateWorkflows`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflows/update/validation",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "payload": {
+              "type": "object"
+            },
+            "validationOptions": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "payload"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.read-workflow-schemes",
+      "kind": "rest_read",
+      "summary": "Bulk get workflow schemes",
+      "description": "Bounded Jira provider read/search operation `readWorkflowSchemes`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/read",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "projectIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "workflowSchemeIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "jira.get-required-workflow-scheme-mappings",
+      "kind": "rest_read",
+      "summary": "Get required status mappings for workflow scheme update",
+      "description": "Bounded Jira provider read/search operation `getRequiredWorkflowSchemeMappings`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/update/mappings",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "defaultWorkflowId": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "workflowsForIssueTypes": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "workflowsForIssueTypes"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-worklogs-for-ids",
+      "kind": "rest_read",
+      "summary": "Get worklogs",
+      "description": "Bounded Jira provider read/search operation `getWorklogsForIds`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/api/3/worklog/list",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "ids": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "required": [
+            "ids"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jira.get-worklogs-by-issue-id-and-worklog-id",
+      "kind": "rest_read",
+      "summary": "Get worklogs by issue id and worklog id",
+      "description": "Bounded Jira provider read/search operation `getWorklogsByIssueIdAndWorklogId`.",
+      "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+      "risk": "low",
+      "approval": "none",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "destructive": false,
+      "rest": {
+        "method": "POST",
+        "path": "/rest/internal/api/latest/worklog/bulk",
+        "content_type": "application/json",
+        "max_bytes": 16777216,
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "requests": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
