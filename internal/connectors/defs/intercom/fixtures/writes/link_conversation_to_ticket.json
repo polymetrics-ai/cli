@@ -1,0 +1,17 @@
+{
+  "record": {
+    "ticket_id": "ticket_id_fixture",
+    "conversation_id": "conversation_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/ticket_id_fixture/linked_conversations",
+    "body": {
+      "conversation_id": "conversation_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

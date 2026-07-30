@@ -1,0 +1,13 @@
+{
+  "record": {
+    "job_identifier": "job_identifier_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/export/cancel/job_identifier_fixture"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

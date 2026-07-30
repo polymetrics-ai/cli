@@ -1,14 +1,446 @@
 {
-  "api": "Intercom REST API (https://api.intercom.io)",
-  "docs": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 5 legacy-parity read streams only (contacts, companies, conversations, admins, tags); write/mutation endpoints and any additional list resources are out of scope outside this connector's current declared surface",
+  "api": "Intercom API 2.16 (https://api.intercom.io)",
+  "docs": "https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io; https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json; https://developers.intercom.com/page-data/docs/references/rest-api/api.intercom.io/data.json",
+  "reviewed_at": "2026-07-30",
+  "operation_ledger_version": 1,
+  "scope": "Complete official Intercom OpenAPI 2.16 inventory: 230 documented operations from the official shared OpenAPI JSON. Existing read streams remain fixture-backed; reverse-ETL write actions are connector-local typed actions with plan/preview/approval/execute and destructive confirmation where applicable. Direct/binary/CDC operations are ledgered as blocked-by-default typed command candidates until shared execution foundations and fixtures prove them.",
   "endpoints": [
     {
       "method": "GET",
-      "path": "/contacts",
+      "path": "/admins",
       "covered_by": {
-        "stream": "contacts"
+        "stream": "admins"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins/activity_log_event_types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=listActivityLogEventTypes; summary=List all activity log event types"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins/activity_logs",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=listActivityLogs; summary=List all activity logs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/admins/activity_logs/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=searchActivityLogs; summary=Search activity logs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/admins/{admin_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveAdmin; summary=Retrieve an admin"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/admins/{admin_id}/away",
+      "covered_by": {
+        "write": "set_away_admin"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listContentImportSources; summary=List content import sources"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/content_import_sources",
+      "covered_by": {
+        "write": "create_content_import_source"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ai/content_import_sources/{source_id}",
+      "covered_by": {
+        "write": "delete_content_import_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/content_import_sources/{source_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getContentImportSource; summary=Retrieve a content import source"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/content_import_sources/{source_id}",
+      "covered_by": {
+        "write": "update_content_import_source"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listExternalPages; summary=List external pages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ai/external_pages",
+      "covered_by": {
+        "write": "create_external_page"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ai/external_pages/{page_id}",
+      "covered_by": {
+        "write": "delete_external_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ai/external_pages/{page_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getExternalPage; summary=Retrieve an external page"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ai/external_pages/{page_id}",
+      "covered_by": {
+        "write": "update_external_page"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listArticles; summary=List all articles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles",
+      "covered_by": {
+        "write": "create_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=searchArticles; summary=Search for articles"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}",
+      "covered_by": {
+        "write": "delete_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveArticle; summary=Retrieve an article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/articles/{article_id}",
+      "covered_by": {
+        "write": "update_article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{article_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/articles/{article_id}/tags/{id}",
+      "covered_by": {
+        "write": "detach_tag_from_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}/versions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listArticleVersions; summary=List article versions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{article_id}/versions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveArticleVersion; summary=Retrieve an article version"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/articles/{id}/draft",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveArticleDraft; summary=Retrieve an article draft"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/articles/{id}/draft",
+      "covered_by": {
+        "write": "stage_article_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/articles/{id}/draft/publish",
+      "covered_by": {
+        "write": "publish_article_draft"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listAudiences; summary=List all audiences"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/audiences",
+      "covered_by": {
+        "write": "create_audience"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/audiences/{id}",
+      "covered_by": {
+        "write": "delete_audience"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audiences/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveAudience; summary=Retrieve an audience"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/audiences/{id}",
+      "covered_by": {
+        "write": "update_audience"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/away_status_reasons",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listAwayStatusReasons; summary=List all away status reasons"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listBrands; summary=List all brands"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/brands/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveBrand; summary=Retrieve a brand"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listCalls; summary=List all calls"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/calls/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listCallsWithTranscripts; summary=List calls with transcripts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=showCall; summary=Get a call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/recording",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=showCallRecording; summary=Get call recording by call id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/calls/{call_id}/transcript",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=showCallTranscript; summary=Get call transcript by call id"
       }
     },
     {
@@ -19,6 +451,435 @@
       }
     },
     {
+      "method": "POST",
+      "path": "/companies",
+      "covered_by": {
+        "write": "create_or_update_company"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/list",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listAllCompanies; summary=List all companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/scroll",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=scrollOverAllCompanies; summary=Scroll over all companies"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/companies/{company_id}",
+      "covered_by": {
+        "write": "delete_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=RetrieveACompanyById; summary=Retrieve a company by ID"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/companies/{company_id}",
+      "covered_by": {
+        "write": "update_company"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/contacts",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=ListAttachedContacts; summary=List attached contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/notes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listCompanyNotes; summary=List all company notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/companies/{company_id}/notes",
+      "covered_by": {
+        "write": "create_company_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/companies/{company_id}/segments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=ListAttachedSegmentsForCompanies; summary=List attached segments for companies"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts",
+      "covered_by": {
+        "stream": "contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/find_by_external_id/{external_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=ShowContactByExternalId; summary=Get a contact by External ID"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "covered_by": {
+        "write": "merge_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=SearchContacts; summary=Search contacts"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "delete_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=ShowContact; summary=Get a contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "update_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/archive",
+      "covered_by": {
+        "write": "archive_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/block",
+      "covered_by": {
+        "write": "block_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/companies",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listCompaniesForAContact; summary=List attached companies for contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/companies",
+      "covered_by": {
+        "write": "attach_contact_to_acompany"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/companies/{company_id}",
+      "covered_by": {
+        "write": "detach_contact_from_acompany"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/notes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listNotes; summary=List all notes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/notes",
+      "covered_by": {
+        "write": "create_note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/segments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listSegmentsForAContact; summary=List attached segments for contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listSubscriptionsForAContact; summary=List subscriptions for a contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/subscriptions",
+      "covered_by": {
+        "write": "attach_subscription_type_to_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/subscriptions/{subscription_id}",
+      "covered_by": {
+        "write": "detach_subscription_type_to_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/tags",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listTagsForAContact; summary=List tags attached to a contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_contact"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/unarchive",
+      "covered_by": {
+        "write": "unarchive_contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/banners",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listContactBanners; summary=List banners for a contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{id}/banners/{view_id}/dismiss",
+      "covered_by": {
+        "write": "dismiss_contact_banner"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{id}/merge_history",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=ListContactMergeHistory; summary=Get contact merge history"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content/bulk_actions",
+      "covered_by": {
+        "write": "bulk_content_actions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=searchContent; summary=Search knowledge base contents"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_snippets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listContentSnippets; summary=List all content snippets"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_snippets",
+      "covered_by": {
+        "write": "create_content_snippet"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/content_snippets/{content_snippet_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_content_snippet"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/content_snippets/{content_snippet_id}/tags/{id}",
+      "covered_by": {
+        "write": "detach_tag_from_content_snippet"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/content_snippets/{id}",
+      "covered_by": {
+        "write": "delete_content_snippet"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/content_snippets/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getContentSnippet; summary=Retrieve a content snippet"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/content_snippets/{id}",
+      "covered_by": {
+        "write": "update_content_snippet"
+      }
+    },
+    {
       "method": "GET",
       "path": "/conversations",
       "covered_by": {
@@ -26,10 +887,1142 @@
       }
     },
     {
-      "method": "GET",
-      "path": "/admins",
+      "method": "POST",
+      "path": "/conversations",
       "covered_by": {
-        "stream": "admins"
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/attributes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listConversationAttributes; summary=List all conversation attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/attributes",
+      "covered_by": {
+        "write": "create_conversation_attribute"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/attributes/{id}",
+      "covered_by": {
+        "write": "delete_conversation_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/attributes/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getConversationAttribute; summary=Get a conversation attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/attributes/{id}",
+      "covered_by": {
+        "write": "update_conversation_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/attributes/{id}/options",
+      "covered_by": {
+        "write": "create_conversation_attribute_option"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/attributes/{id}/options/{option_id}",
+      "covered_by": {
+        "write": "delete_conversation_attribute_option"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/attributes/{id}/options/{option_id}",
+      "covered_by": {
+        "write": "update_conversation_attribute_option"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/deleted",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=listDeletedConversationIds; summary=List all deleted conversation IDs"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/redact",
+      "covered_by": {
+        "write": "redact_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=searchConversations; summary=Search conversations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "delete_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveConversation; summary=Retrieve a conversation"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/convert",
+      "covered_by": {
+        "write": "convert_conversation_to_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/customers",
+      "covered_by": {
+        "write": "attach_contact_to_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/customers/{contact_id}",
+      "covered_by": {
+        "write": "detach_contact_from_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/parts",
+      "covered_by": {
+        "write": "manage_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/reply",
+      "covered_by": {
+        "write": "reply_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{id}/handling_events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listHandlingEvents; summary=List handling events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{id}/merge",
+      "covered_by": {
+        "write": "merge_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{id}/side_conversations",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listSideConversations; summary=List side conversations"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listCustomObjectInstances; summary=List Custom Object Instances"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/custom_object_instances/{custom_object_type_identifier}",
+      "covered_by": {
+        "write": "create_custom_object_instances"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "covered_by": {
+        "write": "delete_custom_object_instances_by_external_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getCustomObjectInstancesById; summary=Get Custom Object Instance by ID"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_attributes",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=lisDataAttributes; summary=List all data attributes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_attributes",
+      "covered_by": {
+        "write": "create_data_attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/data_attributes/{data_attribute_id}",
+      "covered_by": {
+        "write": "update_data_attribute"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=listDataConnectors; summary=List all data connectors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/data_connectors",
+      "covered_by": {
+        "write": "create_data_connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{data_connector_id}/execution_results",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=listDataConnectorExecutionResults; summary=List execution results for a data connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{data_connector_id}/execution_results/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=showDataConnectorExecutionResult; summary=Retrieve an execution result"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/data_connectors/{id}",
+      "covered_by": {
+        "write": "delete_data_connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/data_connectors/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=RetrieveDataConnector; summary=Retrieve a data connector"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/data_connectors/{id}",
+      "covered_by": {
+        "write": "update_data_connector"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/content/data/{job_identifier}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=downloadDataExport; summary=Download content data export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/reporting_data/{job_identifier}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=not-recorded; summary=Download completed export job data"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emails",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listEmails; summary=List all email settings"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/emails/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveEmail; summary=Retrieve an email setting"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=lisDataEvents; summary=List all data events"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events",
+      "covered_by": {
+        "write": "create_data_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/events/summaries",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=dataEventSummaries; summary=Create event summaries"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/cancel/{job_identifier}",
+      "covered_by": {
+        "write": "cancel_data_export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/content/data",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=createDataExport; summary=Create content data export"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/content/data/{job_identifier}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=getDataExport; summary=Show content data export"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/export/reporting_data/enqueue",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=not-recorded; summary=Enqueue a new reporting data export job"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/get_datasets",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=not-recorded; summary=List available datasets and attributes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/reporting_data/{job_identifier}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=not-recorded; summary=Get export job status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/export/workflows/{id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom file/export operation; connector-local metadata is bounded, but live binary execution remains blocked until a fixture-only direct/binary runner candidate is approved.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=binary_file; operationId=exportWorkflow; summary=Export a workflow"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/reply",
+      "covered_by": {
+        "write": "reply_to_fin"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin/start",
+      "covered_by": {
+        "write": "start_fin_conversation"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/collect/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=collectFinVoiceCallById; summary=Collect Fin Voice call by ID"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/conversation/{conversation_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=collectFinVoiceCallsByConversationId; summary=Collect Fin Voice calls by conversation ID"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/external_id/{external_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=collectFinVoiceCallByExternalId; summary=Collect Fin Voice call by external ID"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/fin_voice/phone_number/{phone_number}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=collectFinVoiceCallByPhoneNumber; summary=Collect Fin Voice call by phone number"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/fin_voice/register",
+      "covered_by": {
+        "write": "register_fin_voice_call"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listAllCollections; summary=List all collections"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/help_center/collections",
+      "covered_by": {
+        "write": "create_collection"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/help_center/collections/{collection_id}",
+      "covered_by": {
+        "write": "delete_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/collections/{collection_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveCollection; summary=Retrieve a collection"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/help_center/collections/{collection_id}",
+      "covered_by": {
+        "write": "update_collection"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listHelpCenters; summary=List all Help Centers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveHelpCenter; summary=Retrieve a Help Center"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}/redirects",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listHelpCenterRedirects; summary=List all redirects for a help center"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/help_center/help_centers/{help_center_id}/redirects",
+      "covered_by": {
+        "write": "create_help_center_redirect"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+      "covered_by": {
+        "write": "delete_help_center_redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/help_center/help_centers/{help_center_id}/redirects/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveHelpCenterRedirect; summary=Retrieve a redirect"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listInternalArticles; summary=List all articles"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/internal_articles",
+      "covered_by": {
+        "write": "create_internal_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=searchInternalArticles; summary=Search for internal articles"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/internal_articles/{internal_article_id}",
+      "covered_by": {
+        "write": "delete_internal_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/internal_articles/{internal_article_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveInternalArticle; summary=Retrieve an internal article"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/internal_articles/{internal_article_id}",
+      "covered_by": {
+        "write": "update_internal_article"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/internal_articles/{internal_article_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_internal_article"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/internal_articles/{internal_article_id}/tags/{id}",
+      "covered_by": {
+        "write": "detach_tag_from_internal_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ip_allowlist",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getIpAllowlist; summary=Get IP allowlist settings"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ip_allowlist",
+      "covered_by": {
+        "write": "update_ip_allowlist"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/jobs/status/{job_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=jobsStatus; summary=Retrieve job status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listMacros; summary=List all macros"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/macros/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getMacro; summary=Retrieve a macro"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/me",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Duplicate account identity endpoint; /admins covers admin identity for check/read parity, so this remains ledgered as duplicate rather than excluded unsafe.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=excluded_not_applicable; operationId=identifyAdmin; summary=Identify an admin",
+        "duplicate_of": "GET /admins"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages",
+      "covered_by": {
+        "write": "create_message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom changefeed/audit/status operation; CDC truthfulness/state foundations #2986/#2988 are required before claiming CDC execution.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=cdc_changefeed; operationId=getWhatsAppMessageStatus; summary=Get statuses of all messages sent based on the specified ruleset_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/whatsapp/status",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=RetrieveWhatsAppMessageStatus; summary=Retrieve WhatsApp message delivery status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listNewsItems; summary=List all news items"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/news/news_items",
+      "covered_by": {
+        "write": "create_news_item"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/news/news_items/{news_item_id}",
+      "covered_by": {
+        "write": "delete_news_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/news_items/{news_item_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveNewsItem; summary=Retrieve a news item"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/news/news_items/{news_item_id}",
+      "covered_by": {
+        "write": "update_news_item"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listNewsfeeds; summary=List all newsfeeds"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveNewsfeed; summary=Retrieve a newsfeed"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/news/newsfeeds/{newsfeed_id}/items",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listLiveNewsfeedItems; summary=List all live newsfeed items"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/notes/{note_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveNote; summary=Retrieve a note"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listOfficeHoursSchedules; summary=List all office hours schedules"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/office_hours_schedules",
+      "covered_by": {
+        "write": "create_office_hours_schedule"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/office_hours_schedules/{id}",
+      "covered_by": {
+        "write": "delete_office_hours_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getOfficeHoursSchedule; summary=Retrieve an office hours schedule"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/office_hours_schedules/{id}",
+      "covered_by": {
+        "write": "update_office_hours_schedule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listOfficeHoursExceptions; summary=List all office hours exceptions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions",
+      "covered_by": {
+        "write": "create_office_hours_exception"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "covered_by": {
+        "write": "delete_office_hours_exception"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getOfficeHoursException; summary=Retrieve an office hours exception"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}",
+      "covered_by": {
+        "write": "update_office_hours_exception"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/phone_call_redirects",
+      "covered_by": {
+        "write": "create_phone_switch"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listSegments; summary=List all segments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/segments/{segment_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveSegment; summary=Retrieve a segment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/subscription_types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listSubscriptionTypes; summary=List subscription types"
       }
     },
     {
@@ -41,42 +2034,258 @@
     },
     {
       "method": "POST",
-      "path": "/contacts",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
-    },
-    {
-      "method": "PUT",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
-      }
-    },
-    {
-      "method": "POST",
-      "path": "/conversations/{id}/reply",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "mutation is not exposed as a reverse-ETL action for this connector's current write scope"
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
       }
     },
     {
       "method": "DELETE",
-      "path": "/contacts/{id}",
-      "excluded": {
-        "category": "destructive_admin",
-        "reason": "destructive contact deletion, not a syncable read"
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
       }
     },
     {
       "method": "GET",
-      "path": "/me",
-      "excluded": {
-        "category": "duplicate_of",
-        "reason": "identical account-identity info to /admins; check uses /admins instead"
+      "path": "/tags/{tag_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=findTag; summary=Find a specific tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listTeams; summary=List all teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveTeam; summary=Retrieve a team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/metrics",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getTeamMetrics; summary=Retrieve team metrics"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_states",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listTicketStates; summary=List all ticket states"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=listTicketTypes; summary=List all ticket types"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types",
+      "covered_by": {
+        "write": "create_ticket_type"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ticket_types/{ticket_type_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getTicketType; summary=Retrieve a ticket type"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}",
+      "covered_by": {
+        "write": "update_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ticket_types/{ticket_type_id}/attributes",
+      "covered_by": {
+        "write": "create_ticket_type_attribute"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}",
+      "covered_by": {
+        "write": "update_ticket_type_attribute"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets",
+      "covered_by": {
+        "write": "create_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/enqueue",
+      "covered_by": {
+        "write": "enqueue_create_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/search",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented operation remains blocked by default until implemented with typed connector-local safety metadata.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=etl_read; operationId=searchTickets; summary=Search tickets"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "delete_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tickets/{ticket_id}",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=getTicket; summary=Retrieve a ticket"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tickets/{ticket_id}",
+      "covered_by": {
+        "write": "update_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/change_type",
+      "covered_by": {
+        "write": "change_ticket_type"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/linked_conversations",
+      "covered_by": {
+        "write": "link_conversation_to_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/linked_conversations/{id}",
+      "covered_by": {
+        "write": "unlink_conversation_from_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/reply",
+      "covered_by": {
+        "write": "reply_ticket"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tickets/{ticket_id}/tags",
+      "covered_by": {
+        "write": "attach_tag_to_ticket"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tickets/{ticket_id}/tags/{tag_id}",
+      "covered_by": {
+        "write": "detach_tag_from_ticket"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/visitors",
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Documented Intercom direct read/search/detail operation; planned as a typed bounded command, not a generic raw API escape hatch.",
+        "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+        "notes": "lane=direct_read_query_search; operationId=retrieveVisitorWithUserId; summary=Retrieve a visitor with User ID"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/visitors",
+      "covered_by": {
+        "write": "update_visitor"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/visitors/convert",
+      "covered_by": {
+        "write": "convert_visitor"
       }
     }
   ]

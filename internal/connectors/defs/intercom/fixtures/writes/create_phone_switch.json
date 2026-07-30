@@ -1,0 +1,16 @@
+{
+  "record": {
+    "phone": "+15550100"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/phone_call_redirects",
+    "body": {
+      "phone": "+15550100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

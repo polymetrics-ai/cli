@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "PUT",
+    "path": "/visitors"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

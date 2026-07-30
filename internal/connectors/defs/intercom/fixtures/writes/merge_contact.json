@@ -1,0 +1,18 @@
+{
+  "record": {
+    "from": "from_fixture",
+    "into": "into_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/merge",
+    "body": {
+      "from": "from_fixture",
+      "into": "into_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

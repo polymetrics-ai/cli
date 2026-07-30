@@ -1,0 +1,13 @@
+{
+  "record": {
+    "page_id": "page_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ai/external_pages/page_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

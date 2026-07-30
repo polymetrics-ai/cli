@@ -1,0 +1,19 @@
+{
+  "record": {
+    "source_id": "source_id_fixture",
+    "sync_behavior": "api",
+    "url": "https://example.invalid/intercom-fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ai/content_import_sources/source_id_fixture",
+    "body": {
+      "sync_behavior": "api",
+      "url": "https://example.invalid/intercom-fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

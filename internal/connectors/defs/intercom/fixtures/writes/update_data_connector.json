@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/data_connectors/id_fixture",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

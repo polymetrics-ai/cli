@@ -1,0 +1,17 @@
+{
+  "record": {
+    "ticket_id": "ticket_id_fixture",
+    "message_type": "comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/ticket_id_fixture/reply",
+    "body": {
+      "message_type": "comment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

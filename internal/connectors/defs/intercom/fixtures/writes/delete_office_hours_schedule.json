@@ -1,0 +1,13 @@
+{
+  "record": {
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/office_hours_schedules/id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

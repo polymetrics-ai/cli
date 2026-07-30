@@ -1,0 +1,16 @@
+{
+  "record": {
+    "title": "title_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/content_snippets",
+    "body": {
+      "title": "title_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

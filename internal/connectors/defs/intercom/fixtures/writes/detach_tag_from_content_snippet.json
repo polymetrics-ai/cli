@@ -1,0 +1,14 @@
+{
+  "record": {
+    "content_snippet_id": "content_snippet_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/content_snippets/content_snippet_id_fixture/tags/id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

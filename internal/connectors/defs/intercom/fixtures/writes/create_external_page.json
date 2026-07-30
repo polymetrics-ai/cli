@@ -1,0 +1,24 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "html": "html_fixture",
+    "locale": "en",
+    "source_id": 123,
+    "external_id": "external_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ai/external_pages",
+    "body": {
+      "title": "title_fixture",
+      "html": "html_fixture",
+      "locale": "en",
+      "source_id": 123,
+      "external_id": "external_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

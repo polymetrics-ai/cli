@@ -1,0 +1,20 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "owner_id": 123,
+    "author_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/internal_articles",
+    "body": {
+      "title": "title_fixture",
+      "author_id": 123,
+      "owner_id": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

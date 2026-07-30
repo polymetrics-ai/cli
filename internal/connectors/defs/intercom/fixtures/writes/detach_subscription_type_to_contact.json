@@ -1,0 +1,14 @@
+{
+  "record": {
+    "contact_id": "contact_id_fixture",
+    "subscription_id": "subscription_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contacts/contact_id_fixture/subscriptions/subscription_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

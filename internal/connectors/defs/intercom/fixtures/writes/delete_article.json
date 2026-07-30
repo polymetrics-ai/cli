@@ -1,0 +1,13 @@
+{
+  "record": {
+    "article_id": "article_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/articles/article_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

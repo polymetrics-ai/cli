@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "option_id": "option_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/conversations/attributes/id_fixture/options/option_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

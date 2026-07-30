@@ -1,0 +1,17 @@
+{
+  "record": {
+    "collection_id": "collection_id_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/help_center/collections/collection_id_fixture",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

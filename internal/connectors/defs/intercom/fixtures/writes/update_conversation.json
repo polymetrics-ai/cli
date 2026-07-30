@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture",
+    "read": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/conversations/conversation_id_fixture",
+    "body": {
+      "read": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

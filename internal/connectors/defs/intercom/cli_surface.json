@@ -1,0 +1,3827 @@
+{
+  "tagline": "Intercom connector operations are definition-owned, typed, and bounded; live writes require reverse-ETL approval gates.",
+  "usage": "pm intercom <resource> <operation> [--json]",
+  "source_cli": {
+    "name": "Intercom REST API",
+    "docs": "https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io",
+    "reference": "OpenAPI 2.16 official shared JSON",
+    "source": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json"
+  },
+  "groups": [
+    {
+      "id": "implemented_streams",
+      "title": "Implemented ETL streams",
+      "commands": [
+        "contacts list",
+        "companies list",
+        "conversations list",
+        "admins list",
+        "tags list"
+      ]
+    },
+    {
+      "id": "planned_operations",
+      "title": "Planned typed operation candidates",
+      "commands": [
+        "admins list all activity log event types",
+        "admins list all activity logs",
+        "admins search activity logs",
+        "admins retrieve an admin",
+        "admins set an admin to away",
+        "ai content list content import sources",
+        "ai content create a content import source",
+        "ai content delete a content import source",
+        "ai content retrieve a content import source",
+        "ai content update a content import source",
+        "ai content list external pages",
+        "ai content create an external page or update an external page by external id",
+        "ai content delete an external page",
+        "ai content retrieve an external page",
+        "ai content update an external page",
+        "articles list all articles",
+        "articles create an article",
+        "articles search for articles",
+        "articles delete an article",
+        "articles retrieve an article",
+        "articles update an article",
+        "articles add a tag to an article",
+        "articles remove a tag from an article",
+        "articles list article versions",
+        "articles retrieve an article version",
+        "articles retrieve an article draft",
+        "articles stage an article draft",
+        "articles publish an article draft",
+        "audiences list all audiences",
+        "audiences create an audience",
+        "audiences delete an audience",
+        "audiences retrieve an audience",
+        "audiences update an audience",
+        "away status reasons list all away status reasons",
+        "brands list all brands",
+        "brands retrieve a brand",
+        "calls list all calls",
+        "calls list calls with transcripts",
+        "calls get a call",
+        "calls get call recording by call id",
+        "calls get call transcript by call id",
+        "companies create or update a company",
+        "companies list all companies",
+        "companies scroll over all companies",
+        "companies delete a company",
+        "companies retrieve a company by id",
+        "companies update a company",
+        "companies list attached contacts",
+        "notes list all company notes",
+        "notes create a company note"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Emit machine-readable JSON when supported."
+    },
+    {
+      "name": "limit",
+      "type": "integer",
+      "summary": "Bound local output rows for ETL/direct read commands."
+    }
+  ],
+  "commands": [
+    {
+      "path": "contacts list",
+      "summary": "List Intercom contacts as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "contacts",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts"
+        }
+      ],
+      "examples": [
+        "pm intercom contacts list --json --limit 25"
+      ]
+    },
+    {
+      "path": "companies list",
+      "summary": "List Intercom companies as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "companies",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies"
+        }
+      ],
+      "examples": [
+        "pm intercom companies list --json --limit 25"
+      ]
+    },
+    {
+      "path": "conversations list",
+      "summary": "List Intercom conversations as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "conversations",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations"
+        }
+      ],
+      "examples": [
+        "pm intercom conversations list --json --limit 25"
+      ]
+    },
+    {
+      "path": "admins list",
+      "summary": "List Intercom admins as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "admins",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins"
+        }
+      ],
+      "examples": [
+        "pm intercom admins list --json --limit 25"
+      ]
+    },
+    {
+      "path": "tags list",
+      "summary": "List Intercom tags as ETL records.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "tags",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags"
+        }
+      ],
+      "examples": [
+        "pm intercom tags list --json --limit 25"
+      ]
+    },
+    {
+      "path": "admins list all activity log event types",
+      "summary": "List all activity log event types",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins/activity_log_event_types"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.admins.list_activity_log_event_types",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "admins list all activity logs",
+      "summary": "List all activity logs",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins/activity_logs"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.admins.list_activity_logs",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "admins search activity logs",
+      "summary": "Search activity logs",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/admins/activity_logs/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.admins.search_activity_logs",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "admins retrieve an admin",
+      "summary": "Retrieve an admin",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/admins/{admin_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.admins.retrieve_admin"
+    },
+    {
+      "path": "admins set an admin to away",
+      "summary": "Set an admin to away",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/admins/{admin_id}/away"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "set_away_admin",
+      "risk": "Set an admin to away: live Intercom mutation against /admins/{admin_id}/away; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ai content list content import sources",
+      "summary": "List content import sources",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ai/content_import_sources"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ai_content.list_content_import_sources"
+    },
+    {
+      "path": "ai content create a content import source",
+      "summary": "Create a content import source",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ai/content_import_sources"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_content_import_source",
+      "risk": "Create a content import source: live Intercom mutation against /ai/content_import_sources; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ai content delete a content import source",
+      "summary": "Delete a content import source",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ai/content_import_sources/{source_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_content_import_source",
+      "risk": "Delete a content import source: live Intercom mutation against /ai/content_import_sources/{source_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "ai content retrieve a content import source",
+      "summary": "Retrieve a content import source",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ai/content_import_sources/{source_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ai_content.get_content_import_source"
+    },
+    {
+      "path": "ai content update a content import source",
+      "summary": "Update a content import source",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ai/content_import_sources/{source_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_content_import_source",
+      "risk": "Update a content import source: live Intercom mutation against /ai/content_import_sources/{source_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ai content list external pages",
+      "summary": "List external pages",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ai/external_pages"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ai_content.list_external_pages"
+    },
+    {
+      "path": "ai content create an external page or update an external page by external id",
+      "summary": "Create an external page (or update an external page by external ID)",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ai/external_pages"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_external_page",
+      "risk": "Create an external page (or update an external page by external ID): live Intercom mutation against /ai/external_pages; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ai content delete an external page",
+      "summary": "Delete an external page",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/ai/external_pages/{page_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_external_page",
+      "risk": "Delete an external page: live Intercom mutation against /ai/external_pages/{page_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "ai content retrieve an external page",
+      "summary": "Retrieve an external page",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ai/external_pages/{page_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ai_content.get_external_page"
+    },
+    {
+      "path": "ai content update an external page",
+      "summary": "Update an external page",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ai/external_pages/{page_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_external_page",
+      "risk": "Update an external page: live Intercom mutation against /ai/external_pages/{page_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "articles list all articles",
+      "summary": "List all articles",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.list_articles"
+    },
+    {
+      "path": "articles create an article",
+      "summary": "Create an article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/articles"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_article",
+      "risk": "Create an article: live Intercom mutation against /articles; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "articles search for articles",
+      "summary": "Search for articles",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.search_articles"
+    },
+    {
+      "path": "articles delete an article",
+      "summary": "Delete an article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/articles/{article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_article",
+      "risk": "Delete an article: live Intercom mutation against /articles/{article_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "articles retrieve an article",
+      "summary": "Retrieve an article",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles/{article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.retrieve_article"
+    },
+    {
+      "path": "articles update an article",
+      "summary": "Update an article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/articles/{article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_article",
+      "risk": "Update an article: live Intercom mutation against /articles/{article_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "articles add a tag to an article",
+      "summary": "Add a tag to an article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/articles/{article_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_article",
+      "risk": "Add a tag to an article: live Intercom mutation against /articles/{article_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "articles remove a tag from an article",
+      "summary": "Remove a tag from an article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/articles/{article_id}/tags/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_article",
+      "risk": "Remove a tag from an article: live Intercom mutation against /articles/{article_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "articles list article versions",
+      "summary": "List article versions",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles/{article_id}/versions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.list_article_versions"
+    },
+    {
+      "path": "articles retrieve an article version",
+      "summary": "Retrieve an article version",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles/{article_id}/versions/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.retrieve_article_version"
+    },
+    {
+      "path": "articles retrieve an article draft",
+      "summary": "Retrieve an article draft",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/articles/{id}/draft"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.articles.retrieve_article_draft"
+    },
+    {
+      "path": "articles stage an article draft",
+      "summary": "Stage an article draft",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/articles/{id}/draft"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "stage_article_draft",
+      "risk": "Stage an article draft: live Intercom mutation against /articles/{id}/draft; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "articles publish an article draft",
+      "summary": "Publish an article draft",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/articles/{id}/draft/publish"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "publish_article_draft",
+      "risk": "Publish an article draft: live Intercom mutation against /articles/{id}/draft/publish; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "audiences list all audiences",
+      "summary": "List all audiences",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audiences"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.audiences.list_audiences"
+    },
+    {
+      "path": "audiences create an audience",
+      "summary": "Create an audience",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/audiences"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_audience",
+      "risk": "Create an audience: live Intercom mutation against /audiences; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "audiences delete an audience",
+      "summary": "Delete an audience",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/audiences/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_audience",
+      "risk": "Delete an audience: live Intercom mutation against /audiences/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "audiences retrieve an audience",
+      "summary": "Retrieve an audience",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/audiences/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.audiences.retrieve_audience"
+    },
+    {
+      "path": "audiences update an audience",
+      "summary": "Update an audience",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/audiences/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_audience",
+      "risk": "Update an audience: live Intercom mutation against /audiences/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "away status reasons list all away status reasons",
+      "summary": "List all away status reasons",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/away_status_reasons"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.away_status_reasons.list_away_status_reasons"
+    },
+    {
+      "path": "brands list all brands",
+      "summary": "List all brands",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/brands"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.brands.list_brands"
+    },
+    {
+      "path": "brands retrieve a brand",
+      "summary": "Retrieve a brand",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/brands/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.brands.retrieve_brand"
+    },
+    {
+      "path": "calls list all calls",
+      "summary": "List all calls",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.list_calls"
+    },
+    {
+      "path": "calls list calls with transcripts",
+      "summary": "List calls with transcripts",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/calls/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.list_calls_with_transcripts"
+    },
+    {
+      "path": "calls get a call",
+      "summary": "Get a call",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls/{call_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.show_call"
+    },
+    {
+      "path": "calls get call recording by call id",
+      "summary": "Get call recording by call id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls/{call_id}/recording"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.show_call_recording"
+    },
+    {
+      "path": "calls get call transcript by call id",
+      "summary": "Get call transcript by call id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/calls/{call_id}/transcript"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.show_call_transcript"
+    },
+    {
+      "path": "companies create or update a company",
+      "summary": "Create or Update a company",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_or_update_company",
+      "risk": "Create or Update a company: live Intercom mutation against /companies; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "companies list all companies",
+      "summary": "List all companies",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/list"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.companies.list_all_companies"
+    },
+    {
+      "path": "companies scroll over all companies",
+      "summary": "Scroll over all companies",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/scroll"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.companies.scroll_over_all_companies"
+    },
+    {
+      "path": "companies delete a company",
+      "summary": "Delete a company",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_company",
+      "risk": "Delete a company: live Intercom mutation against /companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "companies retrieve a company by id",
+      "summary": "Retrieve a company by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.companies.retrieve_acompany_by_id"
+    },
+    {
+      "path": "companies update a company",
+      "summary": "Update a company",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/companies/{company_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_company",
+      "risk": "Update a company: live Intercom mutation against /companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "companies list attached contacts",
+      "summary": "List attached contacts",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/contacts"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.companies.list_attached_contacts"
+    },
+    {
+      "path": "notes list all company notes",
+      "summary": "List all company notes",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/notes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.notes.list_company_notes"
+    },
+    {
+      "path": "notes create a company note",
+      "summary": "Create a company note",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/companies/{company_id}/notes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_company_note",
+      "risk": "Create a company note: live Intercom mutation against /companies/{company_id}/notes; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "companies list attached segments for companies",
+      "summary": "List attached segments for companies",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/companies/{company_id}/segments"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.companies.list_attached_segments_for_companies"
+    },
+    {
+      "path": "contacts create contact",
+      "summary": "Create contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_contact",
+      "risk": "Create contact: live Intercom mutation against /contacts; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "contacts get a contact by external id",
+      "summary": "Get a contact by External ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/find_by_external_id/{external_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.show_contact_by_external_id"
+    },
+    {
+      "path": "contacts merge a lead and a user",
+      "summary": "Merge a lead and a user",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/merge"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "merge_contact",
+      "risk": "Merge a lead and a user: live Intercom mutation against /contacts/merge; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts search contacts",
+      "summary": "Search contacts",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.search_contacts"
+    },
+    {
+      "path": "contacts delete a contact",
+      "summary": "Delete a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_contact",
+      "risk": "Delete a contact: live Intercom mutation against /contacts/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts get a contact",
+      "summary": "Get a contact",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.show_contact"
+    },
+    {
+      "path": "contacts update a contact",
+      "summary": "Update a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/contacts/{contact_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_contact",
+      "risk": "Update a contact: live Intercom mutation against /contacts/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "contacts archive contact",
+      "summary": "Archive contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/archive"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "archive_contact",
+      "risk": "Archive contact: live Intercom mutation against /contacts/{contact_id}/archive; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts block contact",
+      "summary": "Block contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/block"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "block_contact",
+      "risk": "Block contact: live Intercom mutation against /contacts/{contact_id}/block; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts list attached companies for contact",
+      "summary": "List attached companies for contact",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/companies"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.list_companies_for_acontact"
+    },
+    {
+      "path": "companies attach a contact to a company",
+      "summary": "Attach a Contact to a Company",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/companies"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_contact_to_acompany",
+      "risk": "Attach a Contact to a Company: live Intercom mutation against /contacts/{contact_id}/companies; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "companies detach a contact from a company",
+      "summary": "Detach a contact from a company",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}/companies/{company_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_contact_from_acompany",
+      "risk": "Detach a contact from a company: live Intercom mutation against /contacts/{contact_id}/companies/{company_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "notes list all notes",
+      "summary": "List all notes",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/notes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.notes.list_notes"
+    },
+    {
+      "path": "notes create a note",
+      "summary": "Create a note",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/notes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_note",
+      "risk": "Create a note: live Intercom mutation against /contacts/{contact_id}/notes; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "contacts list attached segments for contact",
+      "summary": "List attached segments for contact",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/segments"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.list_segments_for_acontact"
+    },
+    {
+      "path": "contacts list subscriptions for a contact",
+      "summary": "List subscriptions for a contact",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/subscriptions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.list_subscriptions_for_acontact"
+    },
+    {
+      "path": "subscription types add subscription to a contact",
+      "summary": "Add subscription to a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/subscriptions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_subscription_type_to_contact",
+      "risk": "Add subscription to a contact: live Intercom mutation against /contacts/{contact_id}/subscriptions; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "subscription types remove subscription from a contact",
+      "summary": "Remove subscription from a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}/subscriptions/{subscription_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_subscription_type_to_contact",
+      "risk": "Remove subscription from a contact: live Intercom mutation against /contacts/{contact_id}/subscriptions/{subscription_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts list tags attached to a contact",
+      "summary": "List tags attached to a contact",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{contact_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.list_tags_for_acontact"
+    },
+    {
+      "path": "tags add tag to a contact",
+      "summary": "Add tag to a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_contact",
+      "risk": "Add tag to a contact: live Intercom mutation against /contacts/{contact_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags remove tag from a contact",
+      "summary": "Remove tag from a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/contacts/{contact_id}/tags/{tag_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_contact",
+      "risk": "Remove tag from a contact: live Intercom mutation against /contacts/{contact_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "contacts unarchive contact",
+      "summary": "Unarchive contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{contact_id}/unarchive"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "unarchive_contact",
+      "risk": "Unarchive contact: live Intercom mutation against /contacts/{contact_id}/unarchive; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "banners list banners for a contact",
+      "summary": "List banners for a contact",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}/banners"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.banners.list_contact_banners"
+    },
+    {
+      "path": "banners dismiss a banner for a contact",
+      "summary": "Dismiss a banner for a contact",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/contacts/{id}/banners/{view_id}/dismiss"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "dismiss_contact_banner",
+      "risk": "Dismiss a banner for a contact: live Intercom mutation against /contacts/{id}/banners/{view_id}/dismiss; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "contacts get contact merge history",
+      "summary": "Get contact merge history",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/contacts/{id}/merge_history"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.contacts.list_contact_merge_history"
+    },
+    {
+      "path": "content run a bulk action on knowledge hub content",
+      "summary": "Run a bulk action on Knowledge Hub content",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/content/bulk_actions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "bulk_content_actions",
+      "risk": "Run a bulk action on Knowledge Hub content: live Intercom mutation against /content/bulk_actions; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "content search knowledge base contents",
+      "summary": "Search knowledge base contents",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/content/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.content.search_content"
+    },
+    {
+      "path": "content snippets list all content snippets",
+      "summary": "List all content snippets",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/content_snippets"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.content_snippets.list_content_snippets"
+    },
+    {
+      "path": "content snippets create a content snippet",
+      "summary": "Create a content snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/content_snippets"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_content_snippet",
+      "risk": "Create a content snippet: live Intercom mutation against /content_snippets; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "content snippets add a tag to a content snippet",
+      "summary": "Add a tag to a content snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/content_snippets/{content_snippet_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_content_snippet",
+      "risk": "Add a tag to a content snippet: live Intercom mutation against /content_snippets/{content_snippet_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "content snippets remove a tag from a content snippet",
+      "summary": "Remove a tag from a content snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/content_snippets/{content_snippet_id}/tags/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_content_snippet",
+      "risk": "Remove a tag from a content snippet: live Intercom mutation against /content_snippets/{content_snippet_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "content snippets delete a content snippet",
+      "summary": "Delete a content snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/content_snippets/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_content_snippet",
+      "risk": "Delete a content snippet: live Intercom mutation against /content_snippets/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "content snippets retrieve a content snippet",
+      "summary": "Retrieve a content snippet",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/content_snippets/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.content_snippets.get_content_snippet"
+    },
+    {
+      "path": "content snippets update a content snippet",
+      "summary": "Update a content snippet",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/content_snippets/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_content_snippet",
+      "risk": "Update a content snippet: live Intercom mutation against /content_snippets/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations creates a conversation",
+      "summary": "Creates a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_conversation",
+      "risk": "Creates a conversation: live Intercom mutation against /conversations; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations attributes list all conversation attributes",
+      "summary": "List all conversation attributes",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/attributes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations_attributes.list_conversation_attributes"
+    },
+    {
+      "path": "conversations attributes create a conversation attribute",
+      "summary": "Create a conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/attributes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_conversation_attribute",
+      "risk": "Create a conversation attribute: live Intercom mutation against /conversations/attributes; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations attributes delete archive a conversation attribute",
+      "summary": "Delete (archive) a conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/attributes/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_conversation_attribute",
+      "risk": "Delete (archive) a conversation attribute: live Intercom mutation against /conversations/attributes/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations attributes get a conversation attribute",
+      "summary": "Get a conversation attribute",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/attributes/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations_attributes.get_conversation_attribute"
+    },
+    {
+      "path": "conversations attributes update a conversation attribute",
+      "summary": "Update a conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/conversations/attributes/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_conversation_attribute",
+      "risk": "Update a conversation attribute: live Intercom mutation against /conversations/attributes/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations attributes add an option to a list conversation attribute",
+      "summary": "Add an option to a list conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/attributes/{id}/options"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_conversation_attribute_option",
+      "risk": "Add an option to a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations attributes archive an option on a list conversation attribute",
+      "summary": "Archive an option on a list conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/attributes/{id}/options/{option_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_conversation_attribute_option",
+      "risk": "Archive an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations attributes update an option on a list conversation attribute",
+      "summary": "Update an option on a list conversation attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/conversations/attributes/{id}/options/{option_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_conversation_attribute_option",
+      "risk": "Update an option on a list conversation attribute: live Intercom mutation against /conversations/attributes/{id}/options/{option_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations list all deleted conversation ids",
+      "summary": "List all deleted conversation IDs",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/deleted"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations.list_deleted_conversation_ids",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "conversations redact a conversation part",
+      "summary": "Redact a conversation part",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/redact"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "redact_conversation",
+      "risk": "Redact a conversation part: live Intercom mutation against /conversations/redact; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations search conversations",
+      "summary": "Search conversations",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations.search_conversations"
+    },
+    {
+      "path": "conversations delete a conversation",
+      "summary": "Delete a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_conversation",
+      "risk": "Delete a conversation: live Intercom mutation against /conversations/{conversation_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations retrieve a conversation",
+      "summary": "Retrieve a conversation",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations.retrieve_conversation"
+    },
+    {
+      "path": "conversations update a conversation",
+      "summary": "Update a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/conversations/{conversation_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_conversation",
+      "risk": "Update a conversation: live Intercom mutation against /conversations/{conversation_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations convert a conversation to a ticket",
+      "summary": "Convert a conversation to a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/convert"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "convert_conversation_to_ticket",
+      "risk": "Convert a conversation to a ticket: live Intercom mutation against /conversations/{conversation_id}/convert; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations attach a contact to a conversation",
+      "summary": "Attach a contact to a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/customers"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_contact_to_conversation",
+      "risk": "Attach a contact to a conversation: live Intercom mutation against /conversations/{conversation_id}/customers; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations detach a contact from a group conversation",
+      "summary": "Detach a contact from a group conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/{conversation_id}/customers/{contact_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_contact_from_conversation",
+      "risk": "Detach a contact from a group conversation: live Intercom mutation against /conversations/{conversation_id}/customers/{contact_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations manage a conversation",
+      "summary": "Manage a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/parts"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "manage_conversation",
+      "risk": "Manage a conversation: live Intercom mutation against /conversations/{conversation_id}/parts; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "conversations reply to a conversation",
+      "summary": "Reply to a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/reply"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "reply_conversation",
+      "risk": "Reply to a conversation: live Intercom mutation against /conversations/{conversation_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags add tag to a conversation",
+      "summary": "Add tag to a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{conversation_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_conversation",
+      "risk": "Add tag to a conversation: live Intercom mutation against /conversations/{conversation_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags remove tag from a conversation",
+      "summary": "Remove tag from a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/conversations/{conversation_id}/tags/{tag_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_conversation",
+      "risk": "Remove tag from a conversation: live Intercom mutation against /conversations/{conversation_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations list handling events",
+      "summary": "List handling events",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/{id}/handling_events"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations.list_handling_events"
+    },
+    {
+      "path": "conversations merge a conversation",
+      "summary": "Merge a conversation",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/conversations/{id}/merge"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "merge_conversation",
+      "risk": "Merge a conversation: live Intercom mutation against /conversations/{id}/merge; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "conversations list side conversations",
+      "summary": "List side conversations",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/conversations/{id}/side_conversations"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.conversations.list_side_conversations"
+    },
+    {
+      "path": "custom object instances delete a custom object instance by external id",
+      "summary": "Delete a Custom Object Instance by External ID",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom_object_instances/{custom_object_type_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_custom_object_instances_by_id",
+      "risk": "Delete a Custom Object Instance by External ID: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "custom object instances list custom object instances",
+      "summary": "List Custom Object Instances",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_object_instances/{custom_object_type_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.custom_object_instances.list_custom_object_instances"
+    },
+    {
+      "path": "custom object instances create or update a custom object instance",
+      "summary": "Create or Update a Custom Object Instance",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/custom_object_instances/{custom_object_type_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_custom_object_instances",
+      "risk": "Create or Update a Custom Object Instance: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "custom object instances delete a custom object instance by id",
+      "summary": "Delete a Custom Object Instance by ID",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_custom_object_instances_by_external_id",
+      "risk": "Delete a Custom Object Instance by ID: live Intercom mutation against /custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "custom object instances get custom object instance by id",
+      "summary": "Get Custom Object Instance by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/custom_object_instances/{custom_object_type_identifier}/{custom_object_instance_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.custom_object_instances.get_custom_object_instances_by_id"
+    },
+    {
+      "path": "data attributes list all data attributes",
+      "summary": "List all data attributes",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_attributes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_attributes.lis_data_attributes"
+    },
+    {
+      "path": "data attributes create a data attribute",
+      "summary": "Create a data attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data_attributes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_data_attribute",
+      "risk": "Create a data attribute: live Intercom mutation against /data_attributes; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "data attributes update a data attribute",
+      "summary": "Update a data attribute",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/data_attributes/{data_attribute_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_data_attribute",
+      "risk": "Update a data attribute: live Intercom mutation against /data_attributes/{data_attribute_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "data connectors list all data connectors",
+      "summary": "List all data connectors",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_connectors"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_connectors.list_data_connectors",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data connectors create a data connector",
+      "summary": "Create a data connector",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/data_connectors"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_data_connector",
+      "risk": "Create a data connector: live Intercom mutation against /data_connectors; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "data connectors list execution results for a data connector",
+      "summary": "List execution results for a data connector",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_connectors/{data_connector_id}/execution_results"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_connectors.list_data_connector_execution_results",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data connectors retrieve an execution result",
+      "summary": "Retrieve an execution result",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_connectors/{data_connector_id}/execution_results/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_connectors.show_data_connector_execution_result",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data connectors delete a data connector",
+      "summary": "Delete a data connector",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/data_connectors/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_data_connector",
+      "risk": "Delete a data connector: live Intercom mutation against /data_connectors/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "data connectors retrieve a data connector",
+      "summary": "Retrieve a data connector",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/data_connectors/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_connectors.retrieve_data_connector",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data connectors update a data connector",
+      "summary": "Update a data connector",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PATCH",
+          "path": "/data_connectors/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_data_connector",
+      "risk": "Update a data connector: live Intercom mutation against /data_connectors/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "data export download content data export",
+      "summary": "Download content data export",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/download/content/data/{job_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_export.download_data_export",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "reporting data export download completed export job data",
+      "summary": "Download completed export job data",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/download/reporting_data/{job_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.reporting_data_export.download_completed_export_job_data",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "emails list all email settings",
+      "summary": "List all email settings",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.emails.list_emails"
+    },
+    {
+      "path": "emails retrieve an email setting",
+      "summary": "Retrieve an email setting",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/emails/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.emails.retrieve_email"
+    },
+    {
+      "path": "data events list all data events",
+      "summary": "List all data events",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/events"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_events.lis_data_events",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data events submit a data event",
+      "summary": "Submit a data event",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_data_event",
+      "risk": "Submit a data event: live Intercom mutation against /events; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "data events create event summaries",
+      "summary": "Create event summaries",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/events/summaries"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_events.data_event_summaries",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "data export cancel content data export",
+      "summary": "Cancel content data export",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/export/cancel/{job_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "cancel_data_export",
+      "risk": "Cancel content data export: live Intercom mutation against /export/cancel/{job_identifier}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "data export create content data export",
+      "summary": "Create content data export",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/export/content/data"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_export.create_data_export",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "data export show content data export",
+      "summary": "Show content data export",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export/content/data/{job_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.data_export.get_data_export",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "reporting data export enqueue a new reporting data export job",
+      "summary": "Enqueue a new reporting data export job",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/export/reporting_data/enqueue"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.reporting_data_export.enqueue_a_new_reporting_data_export_job",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "reporting data export list available datasets and attributes",
+      "summary": "List available datasets and attributes",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export/reporting_data/get_datasets"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.reporting_data_export.list_available_datasets_and_attributes"
+    },
+    {
+      "path": "reporting data export get export job status",
+      "summary": "Get export job status",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export/reporting_data/{job_identifier}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.reporting_data_export.get_export_job_status",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "workflows export a workflow",
+      "summary": "Export a workflow",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/export/workflows/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=binary_file. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.workflows.export_workflow",
+      "risk": "Reads or stages provider export/download data; output must stay bounded and redacted.",
+      "approval": "No live binary execution in this connector-local slice."
+    },
+    {
+      "path": "fin agent reply to fin",
+      "summary": "Reply to Fin",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fin/reply"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "reply_to_fin",
+      "risk": "Reply to Fin: live Intercom mutation against /fin/reply; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "fin agent start a conversation with fin",
+      "summary": "Start a conversation with Fin",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fin/start"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "start_fin_conversation",
+      "risk": "Start a conversation with Fin: live Intercom mutation against /fin/start; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "calls collect fin voice call by id",
+      "summary": "Collect Fin Voice call by ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fin_voice/collect/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.collect_fin_voice_call_by_id"
+    },
+    {
+      "path": "calls collect fin voice calls by conversation id",
+      "summary": "Collect Fin Voice calls by conversation ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fin_voice/conversation/{conversation_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.collect_fin_voice_calls_by_conversation_id"
+    },
+    {
+      "path": "calls collect fin voice call by external id",
+      "summary": "Collect Fin Voice call by external ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fin_voice/external_id/{external_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.collect_fin_voice_call_by_external_id"
+    },
+    {
+      "path": "calls collect fin voice call by phone number",
+      "summary": "Collect Fin Voice call by phone number",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/fin_voice/phone_number/{phone_number}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.calls.collect_fin_voice_call_by_phone_number"
+    },
+    {
+      "path": "calls register a fin voice call",
+      "summary": "Register a Fin Voice call",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/fin_voice/register"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "register_fin_voice_call",
+      "risk": "Register a Fin Voice call: live Intercom mutation against /fin_voice/register; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "help center list all collections",
+      "summary": "List all collections",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/collections"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.list_all_collections"
+    },
+    {
+      "path": "help center create a collection",
+      "summary": "Create a collection",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/help_center/collections"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_collection",
+      "risk": "Create a collection: live Intercom mutation against /help_center/collections; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "help center delete a collection",
+      "summary": "Delete a collection",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/help_center/collections/{collection_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_collection",
+      "risk": "Delete a collection: live Intercom mutation against /help_center/collections/{collection_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "help center retrieve a collection",
+      "summary": "Retrieve a collection",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/collections/{collection_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.retrieve_collection"
+    },
+    {
+      "path": "help center update a collection",
+      "summary": "Update a collection",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/help_center/collections/{collection_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_collection",
+      "risk": "Update a collection: live Intercom mutation against /help_center/collections/{collection_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "help center list all help centers",
+      "summary": "List all Help Centers",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/help_centers"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.list_help_centers"
+    },
+    {
+      "path": "help center retrieve a help center",
+      "summary": "Retrieve a Help Center",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/help_centers/{help_center_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.retrieve_help_center"
+    },
+    {
+      "path": "help center list all redirects for a help center",
+      "summary": "List all redirects for a help center",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/help_centers/{help_center_id}/redirects"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.list_help_center_redirects"
+    },
+    {
+      "path": "help center create a redirect",
+      "summary": "Create a redirect",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/help_center/help_centers/{help_center_id}/redirects"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_help_center_redirect",
+      "risk": "Create a redirect: live Intercom mutation against /help_center/help_centers/{help_center_id}/redirects; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "help center delete a redirect",
+      "summary": "Delete a redirect",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/help_center/help_centers/{help_center_id}/redirects/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_help_center_redirect",
+      "risk": "Delete a redirect: live Intercom mutation against /help_center/help_centers/{help_center_id}/redirects/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "help center retrieve a redirect",
+      "summary": "Retrieve a redirect",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/help_center/help_centers/{help_center_id}/redirects/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.help_center.retrieve_help_center_redirect"
+    },
+    {
+      "path": "internal articles list all articles",
+      "summary": "List all articles",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/internal_articles"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.internal_articles.list_internal_articles"
+    },
+    {
+      "path": "internal articles create an internal article",
+      "summary": "Create an internal article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/internal_articles"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_internal_article",
+      "risk": "Create an internal article: live Intercom mutation against /internal_articles; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "internal articles search for internal articles",
+      "summary": "Search for internal articles",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/internal_articles/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.internal_articles.search_internal_articles"
+    },
+    {
+      "path": "internal articles delete an internal article",
+      "summary": "Delete an internal article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/internal_articles/{internal_article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_internal_article",
+      "risk": "Delete an internal article: live Intercom mutation against /internal_articles/{internal_article_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "internal articles retrieve an internal article",
+      "summary": "Retrieve an internal article",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/internal_articles/{internal_article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.internal_articles.retrieve_internal_article"
+    },
+    {
+      "path": "internal articles update an internal article",
+      "summary": "Update an internal article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/internal_articles/{internal_article_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_internal_article",
+      "risk": "Update an internal article: live Intercom mutation against /internal_articles/{internal_article_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "internal articles add a tag to an internal article",
+      "summary": "Add a tag to an internal article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/internal_articles/{internal_article_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_internal_article",
+      "risk": "Add a tag to an internal article: live Intercom mutation against /internal_articles/{internal_article_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "internal articles remove a tag from an internal article",
+      "summary": "Remove a tag from an internal article",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/internal_articles/{internal_article_id}/tags/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_internal_article",
+      "risk": "Remove a tag from an internal article: live Intercom mutation against /internal_articles/{internal_article_id}/tags/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "ip allowlist get ip allowlist settings",
+      "summary": "Get IP allowlist settings",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ip_allowlist"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ip_allowlist.get_ip_allowlist"
+    },
+    {
+      "path": "ip allowlist update ip allowlist settings",
+      "summary": "Update IP allowlist settings",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ip_allowlist"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_ip_allowlist",
+      "risk": "Update IP allowlist settings: live Intercom mutation against /ip_allowlist; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "jobs retrieve job status",
+      "summary": "Retrieve job status",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/jobs/status/{job_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.jobs.jobs_status",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "macros list all macros",
+      "summary": "List all macros",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.macros.list_macros"
+    },
+    {
+      "path": "macros retrieve a macro",
+      "summary": "Retrieve a macro",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/macros/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.macros.get_macro"
+    },
+    {
+      "path": "admins identify an admin",
+      "summary": "Identify an admin",
+      "intent": "direct_read",
+      "availability": "excluded",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/me"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=excluded_not_applicable. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.admins.identify_admin"
+    },
+    {
+      "path": "messages create a message",
+      "summary": "Create a message",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/messages"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_message",
+      "risk": "Create a message: live Intercom mutation against /messages; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "messages get statuses of all messages sent based on the specified ruleset id",
+      "summary": "Get statuses of all messages sent based on the specified ruleset_id",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/status"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=cdc_changefeed. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.messages.get_whats_app_message_status",
+      "risk": "Reads operational/audit/changefeed-like provider data.",
+      "approval": "Blocked pending CDC truthfulness/state foundations #2986/#2988."
+    },
+    {
+      "path": "messages retrieve whats app message delivery status",
+      "summary": "Retrieve WhatsApp message delivery status",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/messages/whatsapp/status"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.messages.retrieve_whats_app_message_status"
+    },
+    {
+      "path": "news list all news items",
+      "summary": "List all news items",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news/news_items"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.news.list_news_items"
+    },
+    {
+      "path": "news create a news item",
+      "summary": "Create a news item",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/news/news_items"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_news_item",
+      "risk": "Create a news item: live Intercom mutation against /news/news_items; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "news delete a news item",
+      "summary": "Delete a news item",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/news/news_items/{news_item_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_news_item",
+      "risk": "Delete a news item: live Intercom mutation against /news/news_items/{news_item_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "news retrieve a news item",
+      "summary": "Retrieve a news item",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news/news_items/{news_item_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.news.retrieve_news_item"
+    },
+    {
+      "path": "news update a news item",
+      "summary": "Update a news item",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/news/news_items/{news_item_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_news_item",
+      "risk": "Update a news item: live Intercom mutation against /news/news_items/{news_item_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "news list all newsfeeds",
+      "summary": "List all newsfeeds",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news/newsfeeds"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.news.list_newsfeeds"
+    },
+    {
+      "path": "news retrieve a newsfeed",
+      "summary": "Retrieve a newsfeed",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news/newsfeeds/{newsfeed_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.news.retrieve_newsfeed"
+    },
+    {
+      "path": "news list all live newsfeed items",
+      "summary": "List all live newsfeed items",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/news/newsfeeds/{newsfeed_id}/items"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.news.list_live_newsfeed_items"
+    },
+    {
+      "path": "notes retrieve a note",
+      "summary": "Retrieve a note",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/notes/{note_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.notes.retrieve_note"
+    },
+    {
+      "path": "office hours list all office hours schedules",
+      "summary": "List all office hours schedules",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/office_hours_schedules"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.office_hours.list_office_hours_schedules"
+    },
+    {
+      "path": "office hours create an office hours schedule",
+      "summary": "Create an office hours schedule",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/office_hours_schedules"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_office_hours_schedule",
+      "risk": "Create an office hours schedule: live Intercom mutation against /office_hours_schedules; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "office hours delete an office hours schedule",
+      "summary": "Delete an office hours schedule",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/office_hours_schedules/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_office_hours_schedule",
+      "risk": "Delete an office hours schedule: live Intercom mutation against /office_hours_schedules/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "office hours retrieve an office hours schedule",
+      "summary": "Retrieve an office hours schedule",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/office_hours_schedules/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.office_hours.get_office_hours_schedule"
+    },
+    {
+      "path": "office hours update an office hours schedule",
+      "summary": "Update an office hours schedule",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/office_hours_schedules/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_office_hours_schedule",
+      "risk": "Update an office hours schedule: live Intercom mutation against /office_hours_schedules/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "office hours list all office hours exceptions",
+      "summary": "List all office hours exceptions",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.office_hours.list_office_hours_exceptions"
+    },
+    {
+      "path": "office hours create an office hours exception",
+      "summary": "Create an office hours exception",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_office_hours_exception",
+      "risk": "Create an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "office hours delete an office hours exception",
+      "summary": "Delete an office hours exception",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_office_hours_exception",
+      "risk": "Delete an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "office hours retrieve an office hours exception",
+      "summary": "Retrieve an office hours exception",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.office_hours.get_office_hours_exception"
+    },
+    {
+      "path": "office hours update an office hours exception",
+      "summary": "Update an office hours exception",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_office_hours_exception",
+      "risk": "Update an office hours exception: live Intercom mutation against /office_hours_schedules/{office_hours_schedule_id}/office_hours_exceptions/{id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "switch create a phone switch",
+      "summary": "Create a phone Switch",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/phone_call_redirects"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_phone_switch",
+      "risk": "Create a phone Switch: live Intercom mutation against /phone_call_redirects; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "segments list all segments",
+      "summary": "List all segments",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.segments.list_segments"
+    },
+    {
+      "path": "segments retrieve a segment",
+      "summary": "Retrieve a segment",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/segments/{segment_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.segments.retrieve_segment"
+    },
+    {
+      "path": "subscription types list subscription types",
+      "summary": "List subscription types",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/subscription_types"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.subscription_types.list_subscription_types"
+    },
+    {
+      "path": "tags create or update a tag tag or untag companies tag contacts",
+      "summary": "Create or update a tag, Tag or untag companies, Tag contacts",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_tag",
+      "risk": "Create or update a tag, Tag or untag companies, Tag contacts: live Intercom mutation against /tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags delete tag",
+      "summary": "Delete tag",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tags/{tag_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_tag",
+      "risk": "Delete tag: live Intercom mutation against /tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "tags find a specific tag",
+      "summary": "Find a specific tag",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tags/{tag_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.tags.find_tag"
+    },
+    {
+      "path": "teams list all teams",
+      "summary": "List all teams",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.teams.list_teams"
+    },
+    {
+      "path": "teams retrieve a team",
+      "summary": "Retrieve a team",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.teams.retrieve_team"
+    },
+    {
+      "path": "teams retrieve team metrics",
+      "summary": "Retrieve team metrics",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/teams/{team_id}/metrics"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.teams.get_team_metrics"
+    },
+    {
+      "path": "ticket states list all ticket states",
+      "summary": "List all ticket states",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_states"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ticket_states.list_ticket_states"
+    },
+    {
+      "path": "ticket types list all ticket types",
+      "summary": "List all ticket types",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_types"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ticket_types.list_ticket_types"
+    },
+    {
+      "path": "ticket types create a ticket type",
+      "summary": "Create a ticket type",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ticket_types"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_ticket_type",
+      "risk": "Create a ticket type: live Intercom mutation against /ticket_types; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ticket types retrieve a ticket type",
+      "summary": "Retrieve a ticket type",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/ticket_types/{ticket_type_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.ticket_types.get_ticket_type"
+    },
+    {
+      "path": "ticket types update a ticket type",
+      "summary": "Update a ticket type",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ticket_types/{ticket_type_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_ticket_type",
+      "risk": "Update a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ticket type attributes create a new attribute for a ticket type",
+      "summary": "Create a new attribute for a ticket type",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/ticket_types/{ticket_type_id}/attributes"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_ticket_type_attribute",
+      "risk": "Create a new attribute for a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}/attributes; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "ticket type attributes update an existing attribute for a ticket type",
+      "summary": "Update an existing attribute for a ticket type",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/ticket_types/{ticket_type_id}/attributes/{attribute_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_ticket_type_attribute",
+      "risk": "Update an existing attribute for a ticket type: live Intercom mutation against /ticket_types/{ticket_type_id}/attributes/{attribute_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets create a ticket",
+      "summary": "Create a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "create_ticket",
+      "risk": "Create a ticket: live Intercom mutation against /tickets; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets enqueue create ticket",
+      "summary": "Enqueue create ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/enqueue"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "enqueue_create_ticket",
+      "risk": "Enqueue create ticket: live Intercom mutation against /tickets/enqueue; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets search tickets",
+      "summary": "Search tickets",
+      "intent": "docs_only",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/search"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=etl_read. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.tickets.search_tickets"
+    },
+    {
+      "path": "tickets delete a ticket",
+      "summary": "Delete a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "delete_ticket",
+      "risk": "Delete a ticket: live Intercom mutation against /tickets/{ticket_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "tickets retrieve a ticket",
+      "summary": "Retrieve a ticket",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/tickets/{ticket_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.tickets.get_ticket"
+    },
+    {
+      "path": "tickets update a ticket",
+      "summary": "Update a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/tickets/{ticket_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_ticket",
+      "risk": "Update a ticket: live Intercom mutation against /tickets/{ticket_id}; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets change ticket type",
+      "summary": "Change ticket type",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/change_type"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "change_ticket_type",
+      "risk": "Change ticket type: live Intercom mutation against /tickets/{ticket_id}/change_type; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets link a conversation to a ticket",
+      "summary": "Link a conversation to a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/linked_conversations"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "link_conversation_to_ticket",
+      "risk": "Link a conversation to a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tickets unlink a conversation from a ticket",
+      "summary": "Unlink a conversation from a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/linked_conversations/{id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "unlink_conversation_from_ticket",
+      "risk": "Unlink a conversation from a ticket: live Intercom mutation against /tickets/{ticket_id}/linked_conversations/{id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "tickets reply to a ticket",
+      "summary": "Reply to a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/reply"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "reply_ticket",
+      "risk": "Reply to a ticket: live Intercom mutation against /tickets/{ticket_id}/reply; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags add tag to a ticket",
+      "summary": "Add tag to a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/tickets/{ticket_id}/tags"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "attach_tag_to_ticket",
+      "risk": "Add tag to a ticket: live Intercom mutation against /tickets/{ticket_id}/tags; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "tags remove tag from a ticket",
+      "summary": "Remove tag from a ticket",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "DELETE",
+          "path": "/tickets/{ticket_id}/tags/{tag_id}"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "detach_tag_from_ticket",
+      "risk": "Remove tag from a ticket: live Intercom mutation against /tickets/{ticket_id}/tags/{tag_id}; reverse ETL requires plan, preview, explicit approval, execute and typed destructive confirmation",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute and typed destructive confirmation."
+    },
+    {
+      "path": "visitors retrieve a visitor with user id",
+      "summary": "Retrieve a visitor with User ID",
+      "intent": "direct_read",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/visitors"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=direct_read_query_search. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "operation": "intercom.visitors.retrieve_visitor_with_user_id"
+    },
+    {
+      "path": "visitors update a visitor",
+      "summary": "Update a visitor",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "PUT",
+          "path": "/visitors"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "update_visitor",
+      "risk": "Update a visitor: live Intercom mutation against /visitors; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    },
+    {
+      "path": "visitors convert a visitor",
+      "summary": "Convert a visitor",
+      "intent": "reverse_etl",
+      "availability": "planned",
+      "source_url": "https://developers.intercom.com/page-data/shared/oas-docs/references/%402.16/rest-api/api.intercom.io.yaml.json",
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/visitors/convert"
+        }
+      ],
+      "notes": "Official Intercom operation ledger row; lane=reverse_etl_write. This command metadata is definition-owned and does not expose a generic raw API escape hatch.",
+      "write": "convert_visitor",
+      "risk": "Convert a visitor: live Intercom mutation against /visitors/convert; reverse ETL requires plan, preview, explicit approval, execute",
+      "approval": "Reverse ETL writes require plan, preview, explicit approval, execute."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "intercom-safety",
+      "summary": "Intercom writes require plan, preview, explicit approval, execute; destructive operations require typed destructive confirmation."
+    },
+    {
+      "name": "intercom-coverage",
+      "summary": "Official Intercom OpenAPI 2.16 inventory is ledgered in api_surface.json with implemented vs blocked/planned coverage."
+    }
+  ]
+}

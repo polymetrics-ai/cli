@@ -1,0 +1,17 @@
+{
+  "record": {
+    "contact_id": "contact_id_fixture",
+    "body": "body_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/contact_id_fixture/notes",
+    "body": {
+      "body": "body_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

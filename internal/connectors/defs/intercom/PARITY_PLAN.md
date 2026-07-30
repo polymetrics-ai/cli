@@ -64,10 +64,13 @@ Issue scope: parent #164 and subissues #165-#171 for `internal/connectors/defs/i
 
 ## Verification checklist
 
-- [ ] `node`/script inventory confirms 230 official Intercom operations and lane classifications.
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1`.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs` (or summarized Intercom-scoped equivalent if full-root output is too large).
-- [ ] `go vet ./internal/connectors/...` if connector-local generated JSON affects Go load paths.
-- [ ] `go build ./cmd/pm`.
-- [ ] `make connector-boundary`.
-- [ ] `git diff --check`.
+- [x] `node`/script inventory confirms 230 official Intercom operations and lane classifications (`OFFICIAL_INVENTORY.md`: 55 read, 113 write, 42 direct, 7 binary, 12 CDC/changefeed-like, 1 duplicate/not-applicable).
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/intercom' -count=1`.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs --json`.
+- [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1`.
+- [x] `go vet ./internal/connectors/... ./internal/cli/...`.
+- [x] `go build ./cmd/pm`.
+- [x] `make connector-boundary`.
+- [x] `git diff --check`.
+- [x] CLI help parity smoke checks: `./pm help intercom`, `./pm intercom --help`, `./pm intercom contacts list --help`, `./pm intercom ai content create content import source --help`.
+- [x] `gh-axi` captain-policy addendum applied once to #164-#171; marker `intercom-captain-policy-addendum-destructive-r1` appears exactly once per issue.

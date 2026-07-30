@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "title": "title_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/content_snippets/id_fixture",
+    "body": {
+      "title": "title_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
