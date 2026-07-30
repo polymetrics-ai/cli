@@ -1,8 +1,13 @@
 {
-  "record": {},
+  "record": {
+    "email": "contact@example.com"
+  },
   "expect": {
     "method": "POST",
-    "path": "/contacts"
+    "path": "/contacts",
+    "body": {
+      "email": "contact@example.com"
+    }
   },
   "response": {
     "status": 200,

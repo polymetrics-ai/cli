@@ -1,8 +1,31 @@
 {
-  "record": {},
+  "record": {
+    "message_type": "in_app",
+    "from": {
+      "type": "admin",
+      "id": 394051
+    },
+    "to": {
+      "type": "user",
+      "id": "contact_id_fixture"
+    },
+    "body": "Hello from fixture"
+  },
   "expect": {
     "method": "POST",
-    "path": "/messages"
+    "path": "/messages",
+    "body": {
+      "message_type": "in_app",
+      "from": {
+        "type": "admin",
+        "id": 394051
+      },
+      "to": {
+        "type": "user",
+        "id": "contact_id_fixture"
+      },
+      "body": "Hello from fixture"
+    }
   },
   "response": {
     "status": 200,
