@@ -11,8 +11,8 @@
     "fallback_reason": "scripts/gsd: unknown GSD command: programming-loop"
   },
   "verificationPassed": true,
-  "terminal": false,
-  "verificationNote": "PR #3166 review-fix gates passed, including make verify; commit/push/PR body update still pending",
+  "terminal": true,
+  "verificationNote": "PR #3166 review-fix gates passed, make verify passed, branch pushed, and PR body updated with review disposition",
   "orchestrationDecisions": [
     {
       "cycle": "plan-relocation",
@@ -52,7 +52,12 @@
     {
       "cycle": "review-fix-verify",
       "decision": "local_critical_path",
-      "reason": "requested verification block and make verify passed locally; push and PR update remain"
+      "reason": "requested verification block and make verify passed locally"
+    },
+    {
+      "cycle": "review-fix-handoff",
+      "decision": "local_critical_path",
+      "reason": "branch pushed and PR body updated; worker handoff ready"
     }
   ]
 }

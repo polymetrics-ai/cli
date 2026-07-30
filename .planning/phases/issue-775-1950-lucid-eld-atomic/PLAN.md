@@ -139,4 +139,4 @@ Also run `make verify`; record exact pass/fail and name any unrelated baseline f
 - [x] Red focused CLI/runtime flag-behavior test captured for PR #3166 review findings.
 - [x] Misleading Lucid ELD date/page/limit/status command flags removed or reworded to match engine support.
 - [x] Review-fix verification commands pass, including `make verify`.
-- [ ] Review-fix commit pushed and PR #3166 body updated with disposition.
+- [x] Review-fix commit pushed and PR #3166 body updated with disposition.

@@ -35,4 +35,4 @@ Manual GSD fallback active.
 
 Red evidence captured before atomic-pilot production edits. Focused gates passed, `go vet ./...` passed, and `make verify` passed for the prior slice.
 
-Review-fix verification: focused red CLI/runtime flag-behavior test captured; JSON/docs corrections applied; requested verification block, help/manual stale-flag grep, and `make verify` passed. Commit, push, and PR #3166 body update pending.
+Review-fix verification: focused red CLI/runtime flag-behavior test captured; JSON/docs corrections applied; requested verification block, help/manual stale-flag grep, and `make verify` passed. Branch pushed and PR #3166 body updated with review disposition.

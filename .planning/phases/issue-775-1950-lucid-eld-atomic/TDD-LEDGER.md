@@ -45,6 +45,7 @@ Note: `.pi/skills/go-implementation/SKILL.md` is not present in this checkout; l
 | 2026-07-30T04:50Z | RED-REVIEW-FIX | `go test ./internal/cli -run 'TestCobraRouterDynamicLucidELD' -count=1` | fail before JSON/docs edits | FAIL exit=1; old Lucid CLI accepted `--start-date`, drivers `--page`, vehicles `--status`, and latest-status `--page` instead of rejecting removed provider overrides |
 | 2026-07-30T05:00Z | GREEN-REVIEW-FIX | `gofmt -w internal/cli/cobra_router_test.go && go test ./internal/cli -run 'TestCobraRouterDynamicLucidELD' -count=1` | pass after CLI surface/docs corrections | PASS; `ok   polymetrics.ai/internal/cli 9.677s` |
 | 2026-07-30T05:24Z | VERIFY-REVIEW-FIX | requested re-verification block + `make verify` + stale-help grep | pass | PASS; validate/conformance/CLI/vet/build/boundary/GSD/diff/gofmt all green; `make verify` passed; help/manual/dynamic help stale-flag grep passed |
+| 2026-07-30T05:35Z | DELIVERY-REVIEW-FIX | `git push origin feat/1950-lucid-eld-operation-ledger`; PR #3166 body update | pass | PASS push `e840583bd..10e650320`; `gh pr edit` hit Projects-classic GraphQL deprecation, then `gh api repos/polymetrics-ai/cli/pulls/3166 -X PATCH` updated PR body |
 
 ## Manual GSD fallback evidence
 

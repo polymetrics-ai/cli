@@ -119,6 +119,8 @@ make verify
 | `gofmt -l cmd internal` | pass | no output |
 | `make verify` | pass | `go test -timeout 20m ./...` passed; `./pm docs validate --connectors-dir docs/connectors` -> `Validated connector docs in docs/connectors`; smoke ok; `0 issues.`; `connectorgen validate: 549 connector(s) checked, 0 findings`; boundary clean; homebrew release notification assertions passed |
 | `./pm help lucid-eld` / `./pm connectors inspect lucid-eld` / `./pm lucid-eld --help` stale-flag grep | pass | no `--start-date`, `--end-date`, `--status active`, provider `flags: --limit`, or provider `flags: --page` text found |
+| `git push origin feat/1950-lucid-eld-operation-ledger` | pass | `e840583bd..10e650320  feat/1950-lucid-eld-operation-ledger -> feat/1950-lucid-eld-operation-ledger` |
+| PR #3166 body update | pass | `gh pr edit` failed on Projects-classic GraphQL deprecation; fallback `gh api repos/polymetrics-ai/cli/pulls/3166 -X PATCH` returned `https://github.com/polymetrics-ai/cli/pull/3166` |
 
 ## Secret/fixture scanner
 
