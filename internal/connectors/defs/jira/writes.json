@@ -233,15 +233,20 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
+        "required": [
+          "targetToMultipleSourceMapping"
+        ],
         "properties": {
           "sendBulkNotification": {
             "type": "boolean"
           },
+          "targetToMultipleSourceMapping": {
+            "type": "object"
+          },
           "targetToSourcesMapping": {
             "type": "object"
           }
-        },
-        "minProperties": 1
+        }
       },
       "risk": "Mutates Jira data/configuration for operation `submitBulkMove`."
     },
@@ -4113,7 +4118,8 @@
         "type": "object",
         "required": [
           "path_schemeId",
-          "path_levelId"
+          "path_levelId",
+          "securitySchemeLevelMembers"
         ],
         "properties": {
           "path_schemeId": {
@@ -4127,9 +4133,14 @@
             "items": {
               "type": "object"
             }
+          },
+          "securitySchemeLevelMembers": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
           }
-        },
-        "minProperties": 3
+        }
       },
       "risk": "Mutates Jira data/configuration for operation `addSecurityLevelMembers`."
     },
