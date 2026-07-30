@@ -10020,7 +10020,7 @@
     {
       "path": "operations autocomplete_users_post",
       "summary": "Autocomplete Users by Request Body",
-      "intent": "reverse_etl",
+      "intent": "direct_read",
       "availability": "planned",
       "operation": "zendesk-support.autocomplete_users_post",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
@@ -10030,8 +10030,8 @@
           "path": "/api/v2/users/autocomplete"
         }
       ],
-      "risk": "critical",
-      "approval": "plan -> preview -> explicit approval -> execute",
+      "risk": "medium",
+      "approval": "none: read-only metadata; executor blocked by default",
       "notes": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented."
     },
     {

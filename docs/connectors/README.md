@@ -548,7 +548,7 @@
 - [zapsign](zapsign/MANUAL.md): Reads and writes ZapSign documents, signers, templates, and webhooks.
 - [zendesk-chat](zendesk-chat/MANUAL.md): Reads Zendesk Chat agents, chats, departments, shortcuts, and triggers through the Zendesk Chat REST API v2.
 - [zendesk-sunshine](zendesk-sunshine/MANUAL.md): Reads and writes Zendesk Sunshine legacy custom object types, objects, relationship types, and relationships.
-- [zendesk-support](zendesk-support/MANUAL.md): Reads and writes allow-listed Zendesk Support resources through the Zendesk Support REST API v2; Pass B expands top-level read streams from the public Airbyte/Zendesk surface.
+- [zendesk-support](zendesk-support/MANUAL.md): Reads and writes allow-listed Zendesk Support resources and carries a complete blocked-by-default operation ledger for the Zendesk Support REST API v2 official OAS.
 - [zendesk-talk](zendesk-talk/MANUAL.md): Reads Zendesk Talk phone numbers, greetings, greeting categories, IVRs, and agent activity statistics through the Zendesk Talk (voice) REST API.
 - [zenefits](zenefits/MANUAL.md): Reads Zenefits people, companies, departments, locations, employments, custom fields/values, bank accounts, labor groups, and time-off data.
 - [zoho-analytics-metadata-api](zoho-analytics-metadata-api/MANUAL.md): Reads Zoho Analytics workspace/view/table/organization/folder/query-table/datasource metadata and triggers datasource/view data syncs, via the Zoho OAuth 2.0 refresh-token grant.
