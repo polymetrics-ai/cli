@@ -13,10 +13,11 @@ Source evidence:
 - sha256: `8439da27e1b2dd7b013a0ae721b8aeaa7746bc8e2d816fa28aa1a582e8597501`
 - md5: `ae49a3d84a12210d4686315cb36442be`
 - operations inventoried: `616`
-- executable reverse-ETL write actions: `291`
-- blocked reverse-ETL shared-foundation gaps: `5`
-- implemented bounded direct-read commands: `286`
-- blocked binary/direct operation rows: `3`
+- executable reverse-ETL write actions: `286`
+- blocked reverse-ETL shared-foundation gaps: `10`
+- implemented bounded direct-read commands: `272`
+- partial bounded direct-read commands awaiting typed body flags: `14`
+- blocked binary/direct operation rows: `17`
 
 ## Auth setup
 
@@ -65,8 +66,8 @@ also requires the typed `--confirm destructive` challenge printed by the plan ou
 
 Generated write command metadata:
 
-- implemented provider-style write commands with scalar required fields: `283`
-- partial/provider-style commands that require structured JSON records through reverse ETL: `8`
+- implemented provider-style write commands with scalar required fields: `258`
+- partial provider-style write commands that require record-driven reverse ETL or future typed flags: `28`
 - no live write certification is claimed by this bundle.
 
 Representative fixture-backed write shapes are included for safe replay only; no live Jira provider
@@ -77,13 +78,11 @@ call was used to create this ledger.
 - Official operation inventory is generated from Atlassian's OpenAPI file; if that source changes,
   regenerate the ledger and update counts rather than editing totals by hand.
 - Bounded binary downloads are declared as blocked operation rows because the shared command runner
-  intentionally lacks an operation-backed binary/file executor in this slice.
-- `5` reverse-ETL operations that require raw scalar or binary request bodies are
-  recorded as blocked operation rows; implementing them needs a shared raw-body write dialect rather
-  than connector-local JSON approximations.
-- Provider-style one-off CLI commands cannot express required nested JSON object fields as flags.
-  Those actions remain available to reverse ETL record-driven plans, and their command metadata is
-  marked partial instead of pretending scalar flags are sufficient.
+  intentionally lacks an operation-backed binary/file executor in this slice. Direct-read operations
+  requiring integer/object array body flags or whole-object payload flags are also blocked operation
+  rows until typed body flags exist.
+- `10` reverse-ETL operations remain blocked for shared-foundation gaps: 5 raw scalar or binary request bodies, 3 App Migration writes requiring `Atlassian-Transfer-Id`, and 2 repeated `columns` form-field bodies. Implementing them needs shared write body/header dialect support rather than connector-local approximations.
+- Provider-style one-off CLI commands cannot express required nested JSON objects, integer arrays, object arrays, or whole-object direct-read payloads as flags. Where the underlying write action is otherwise supported, record-driven reverse ETL remains available and the command metadata is marked partial instead of pretending scalar flags are sufficient.
 - Fixture-only and replay evidence does not certify live Jira behavior. Live certification requires
   separate credentials, sandbox policy, and write cleanup approval.
-- Operation-ledger blocked row models: admin_reverse_etl=5, binary_read=2, deprecated=28, direct_read=1.
+- Operation-ledger blocked row models: admin_reverse_etl=10, binary_read=2, deprecated=28, direct_read=15.

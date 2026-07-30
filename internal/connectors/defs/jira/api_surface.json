@@ -244,8 +244,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/comment/list",
-      "covered_by": {
-        "direct_read": "issue-comments get-comments-by-ids"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-comments-by-ids; command=issue-comments get-comments-by-ids"
       }
     },
     {
@@ -749,8 +755,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/field/{fieldId}/context/mapping",
-      "covered_by": {
-        "direct_read": "issue-custom-field-contexts get-custom-field-contexts-for-projects-and-issue-types"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-custom-field-contexts-for-projects-and-issue-types; command=issue-custom-field-contexts get-custom-field-contexts-for-projects-and-issue-types"
       }
     },
     {
@@ -1497,8 +1509,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/issue/{issueIdOrKey}/changelog/list",
-      "covered_by": {
-        "direct_read": "issues get-change-logs-by-ids"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-change-logs-by-ids; command=issues get-change-logs-by-ids"
       }
     },
     {
@@ -2194,8 +2212,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/jql/autocompletedata",
-      "covered_by": {
-        "direct_read": "jql get-auto-complete-post"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-auto-complete-post; command=jql get-auto-complete-post"
       }
     },
     {
@@ -2229,8 +2253,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/jql/match",
-      "covered_by": {
-        "direct_read": "issue-search match-issues"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.match-issues; command=issue-search match-issues"
       }
     },
     {
@@ -2250,8 +2280,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/jql/sanitize",
-      "covered_by": {
-        "direct_read": "jql sanitise-jql-queries"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.sanitise-jql-queries; command=jql sanitise-jql-queries"
       }
     },
     {
@@ -2401,8 +2437,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/permissions/check",
-      "covered_by": {
-        "direct_read": "permissions get-bulk-permissions"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-bulk-permissions; command=permissions get-bulk-permissions"
       }
     },
     {
@@ -3456,8 +3498,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/search/jql",
-      "covered_by": {
-        "direct_read": "issue-search search-and-reconsile-issues-using-jql-post"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.search-and-reconsile-issues-using-jql-post; command=issue-search search-and-reconsile-issues-using-jql-post"
       }
     },
     {
@@ -3484,8 +3532,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/settings/columns",
-      "covered_by": {
-        "write": "set_issue_navigator_default_columns"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "repeated columns multipart/form-data form-field body cannot be represented by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setIssueNavigatorDefaultColumns; operation=jira.set-issue-navigator-default-columns"
       }
     },
     {
@@ -3735,8 +3789,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/user/columns",
-      "covered_by": {
-        "write": "set_user_columns"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "repeated columns multipart/form-data form-field body cannot be represented by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setUserColumns; operation=jira.set-user-columns"
       }
     },
     {
@@ -4053,8 +4113,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/workflows",
-      "covered_by": {
-        "direct_read": "workflows read-workflows"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.read-workflows; command=workflows read-workflows"
       }
     },
     {
@@ -4074,8 +4140,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/workflows/create/validation",
-      "covered_by": {
-        "direct_read": "workflows validate-create-workflows"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.validate-create-workflows; command=workflows validate-create-workflows"
       }
     },
     {
@@ -4109,8 +4181,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/workflows/update/validation",
-      "covered_by": {
-        "direct_read": "workflows validate-update-workflows"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.validate-update-workflows; command=workflows validate-update-workflows"
       }
     },
     {
@@ -4165,8 +4243,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/workflowscheme/update/mappings",
-      "covered_by": {
-        "direct_read": "workflow-schemes get-required-workflow-scheme-mappings"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-required-workflow-scheme-mappings; command=workflow-schemes get-required-workflow-scheme-mappings"
       }
     },
     {
@@ -4368,8 +4452,14 @@
     {
       "method": "POST",
       "path": "/rest/api/3/worklog/list",
-      "covered_by": {
-        "direct_read": "issue-worklogs get-worklogs-for-ids"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-worklogs-for-ids; command=issue-worklogs get-worklogs-for-ids"
       }
     },
     {
@@ -4431,22 +4521,40 @@
     {
       "method": "PUT",
       "path": "/rest/atlassian-connect/1/migration/field",
-      "covered_by": {
-        "write": "app_issue_field_value_update_resource_update_issue_fields_put"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required Atlassian-Transfer-Id request header cannot be represented by the current declarative writes.json per-action header dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=AppIssueFieldValueUpdateResource.updateIssueFields_put; operation=jira.app-issue-field-value-update-resource-update-issue-fields-put"
       }
     },
     {
       "method": "PUT",
       "path": "/rest/atlassian-connect/1/migration/properties/{entityType}",
-      "covered_by": {
-        "write": "migration_resource_update_entity_properties_value_put"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required Atlassian-Transfer-Id request header cannot be represented by the current declarative writes.json per-action header dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=MigrationResource.updateEntityPropertiesValue_put; operation=jira.migration-resource-update-entity-properties-value-put"
       }
     },
     {
       "method": "POST",
       "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
-      "covered_by": {
-        "write": "migration_resource_workflow_rule_search_post"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required Atlassian-Transfer-Id request header cannot be represented by the current declarative writes.json per-action header dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=MigrationResource.workflowRuleSearch_post; operation=jira.migration-resource-workflow-rule-search-post"
       }
     },
     {
@@ -4501,8 +4609,14 @@
     {
       "method": "POST",
       "path": "/rest/internal/api/latest/worklog/bulk",
-      "covered_by": {
-        "direct_read": "api get-worklogs-by-issue-id-and-worklog-id"
+      "operation": {
+        "model": "direct_read",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "provider-style command requires typed integer/object array or whole-object JSON body flags not supported by the shared command runner",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation=jira.get-worklogs-by-issue-id-and-worklog-id; command=api get-worklogs-by-issue-id-and-worklog-id"
       }
     }
   ]

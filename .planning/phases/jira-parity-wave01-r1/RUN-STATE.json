@@ -1,6 +1,14 @@
 {
   "issue": 81,
-  "subissues": [104, 105, 106, 107, 108, 109, 110],
+  "subissues": [
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
   "branch": "fm/cli-jira-parity-wave01-r1",
   "status": "implemented_local_verification_passed",
   "gsdCommandPath": {
@@ -35,11 +43,18 @@
   },
   "jiraLedger": {
     "surfaceRows": 616,
-    "executableWrites": 291,
+    "executableWrites": 286,
     "rawBodyReverseBlockers": 5,
     "deleteActions": 86,
     "destructiveConfirmedWrites": 103,
-    "implementedDirectReadCommands": 286
+    "implementedDirectReadCommands": 272,
+    "sharedFoundationReverseBlockers": 10,
+    "partialDirectReadCommands": 14,
+    "providerStyleWriteCommands": 258,
+    "partialProviderStyleWriteCommands": 28,
+    "blockedBinaryReadOperations": 2,
+    "blockedDirectReadOperations": 15,
+    "blockedBinaryDirectOperationRows": 17
   },
   "verificationPassed": true,
   "humanGate": "no live credentials/provider calls/writes/certification, no shared runtime edits, no merge to main"

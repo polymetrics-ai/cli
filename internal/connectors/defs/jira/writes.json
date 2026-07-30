@@ -7541,39 +7541,6 @@
       "risk": "Mutates Jira data/configuration for operation `updateScreenScheme`."
     },
     {
-      "name": "set_issue_navigator_default_columns",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/settings/columns",
-      "body_type": "multipart",
-      "multipart": {
-        "max_bytes": 16777216,
-        "parts": [
-          {
-            "name": "file",
-            "type": "file",
-            "field": "file_path",
-            "content_type": "application/octet-stream",
-            "required": true,
-            "max_bytes": 16777216
-          }
-        ]
-      },
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "file_path"
-        ],
-        "properties": {
-          "file_path": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setIssueNavigatorDefaultColumns`."
-    },
-    {
       "name": "delete_statuses_by_id",
       "kind": "delete",
       "method": "DELETE",
@@ -7913,39 +7880,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `resetUserColumns`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_user_columns",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/user/columns",
-      "body_type": "multipart",
-      "multipart": {
-        "max_bytes": 16777216,
-        "parts": [
-          {
-            "name": "file",
-            "type": "file",
-            "field": "file_path",
-            "content_type": "application/octet-stream",
-            "required": true,
-            "max_bytes": 16777216
-          }
-        ]
-      },
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "file_path"
-        ],
-        "properties": {
-          "file_path": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setUserColumns`."
     },
     {
       "name": "delete_user_property",
@@ -9463,102 +9397,6 @@
         }
       },
       "risk": "Mutates Jira data/configuration for operation `DynamicModulesResource.registerModules_post`."
-    },
-    {
-      "name": "app_issue_field_value_update_resource_update_issue_fields_put",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/atlassian-connect/1/migration/field",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {
-          "updateValueList": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `AppIssueFieldValueUpdateResource.updateIssueFields_put`."
-    },
-    {
-      "name": "migration_resource_update_entity_properties_value_put",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/atlassian-connect/1/migration/properties/{{ record.path_entityType }}",
-      "path_fields": [
-        "path_entityType"
-      ],
-      "body_type": "json_array",
-      "body_field": "items",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_entityType",
-          "items"
-        ],
-        "properties": {
-          "path_entityType": {
-            "type": "string",
-            "enum": [
-              "IssueProperty",
-              "CommentProperty",
-              "DashboardItemProperty",
-              "IssueTypeProperty",
-              "ProjectProperty",
-              "UserProperty",
-              "WorklogProperty",
-              "BoardProperty",
-              "SprintProperty"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "object"
-            }
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `MigrationResource.updateEntityPropertiesValue_put`.",
-      "body_schema": {
-        "type": "array",
-        "items": {
-          "type": "object"
-        }
-      }
-    },
-    {
-      "name": "migration_resource_workflow_rule_search_post",
-      "kind": "update",
-      "method": "POST",
-      "path": "/rest/atlassian-connect/1/migration/workflow/rule/search",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "ruleIds",
-          "workflowEntityId"
-        ],
-        "properties": {
-          "expand": {
-            "type": "string"
-          },
-          "ruleIds": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "workflowEntityId": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `MigrationResource.workflowRuleSearch_post`."
     },
     {
       "name": "connect_to_forge_migration_task_submission_resource_submit_task_post",

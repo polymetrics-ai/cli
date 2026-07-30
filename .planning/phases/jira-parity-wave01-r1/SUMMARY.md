@@ -10,10 +10,10 @@ Status: implemented and locally verified.
 - Manual GSD fallback is recorded because the repo-local `scripts/gsd` registry does not expose `programming-loop` in this checkout.
 - Generated Jira connector-local parity metadata from the official Atlassian Jira Cloud OpenAPI v3 source:
   - 616 `api_surface.json` rows.
-  - 291 executable reverse-ETL write actions.
-  - 286 implemented bounded JSON direct-read commands.
-  - 5 raw scalar/binary body reverse-ETL shared-foundation blockers.
-  - 2 blocked binary download rows.
+  - 286 executable reverse-ETL write actions.
+  - 272 implemented bounded JSON direct-read commands.
+  - 10 reverse-ETL shared-foundation blockers.
+  - 2 blocked binary download rows and 15 blocked direct-read operation rows.
   - 86 DELETE actions; all require `confirm: "destructive"`.
   - 103 total destructive-confirmed write actions.
 - Added Jira `operations.json`, `cli_surface.json`, `writes.json`, `certification.json`, and write fixtures.
@@ -25,4 +25,4 @@ See `VERIFICATION.md`. Focused local gates passed, including connectorgen valida
 
 ## Blocked/not claimed
 
-No live Jira certification or provider behavior is claimed. Binary download execution and raw scalar/binary request body writes remain shared-foundation gaps and are recorded as blocked operation rows instead of being counted as executable writes.
+No live Jira certification or provider behavior is claimed. Binary download execution, unsupported typed direct-read body flags, raw scalar/binary request bodies, required per-action migration headers, and repeated form-field write bodies remain shared-foundation gaps and are recorded as blocked operation rows instead of being counted as executable surfaces.
