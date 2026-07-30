@@ -52,9 +52,9 @@ pm connectors inspect github --json
 pm connectors inspect postgres --json
 ```
 
-The registry is generated from connector definition bundles. The public catalog has one page per bundle and uses capabilities to describe what each connector can do: check, read, write, query, CDC, and dynamic schema.
+The registry is generated from connector definition bundles. The public catalog has one page per bundle and uses capabilities to describe what each connector can do: check, read, write, local warehouse query, provider search/query metadata, CDC, and dynamic schema.
 
-Connector operations are narrow: check, catalog, read, write, query, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, SQL write, or shell execution tools.
+Connector operations are narrow: check, catalog, read, fixed direct reads, typed bounded provider search/query metadata, write, ETL, and reverse ETL. Agents get capability metadata and schemas, not generic HTTP, raw provider SQL, SQL write, raw GraphQL, or shell execution tools.
 
 ## ETL engine
 

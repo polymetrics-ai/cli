@@ -54,6 +54,53 @@ func TestDefinitionProviderRoundTrip(t *testing.T) {
 	}
 }
 
+func TestDefinitionProviderOperationsJSONShape(t *testing.T) {
+	def := Definition{
+		Name:            "acme",
+		DisplayName:     "Acme",
+		IntegrationType: "api",
+		ReleaseStage:    "ga",
+		Capabilities:    Capabilities{Check: true, Read: true, ProviderSearch: true, ProviderQuery: false, Query: false},
+		Spec:            json.RawMessage(`{}`),
+		Streams:         []StreamSummary{},
+		ProviderOperations: []ProviderOperationInfo{
+			{
+				ID:             "acme.widgets.search",
+				Kind:           "provider_search",
+				Summary:        "Search widgets",
+				OutputPolicy:   "json_redacted",
+				RequestSchema:  json.RawMessage(`{"type":"object","properties":{"term":{"type":"string"}}}`),
+				ResponseSchema: json.RawMessage(`{"type":"object","properties":{"items":{"type":"array"}}}`),
+				Bounds: ProviderOperationBounds{
+					DefaultLimit: 25,
+					MaxLimit:     50,
+					MaxPages:     2,
+					MaxBytes:     65536,
+				},
+				Pagination: &ProviderPaginationInfo{Type: "cursor", CursorRequestField: "cursor", CursorResponseField: "next_cursor"},
+				Fixture:    &ProviderFixtureInfo{Request: "fixtures/provider/acme.widgets.search/request.json", Response: "fixtures/provider/acme.widgets.search/response.json"},
+			},
+		},
+		Risk: RiskSpec{Read: "low"},
+	}
+
+	raw, err := json.Marshal(def)
+	if err != nil {
+		t.Fatalf("Marshal: %v", err)
+	}
+	var decoded map[string]any
+	if err := json.Unmarshal(raw, &decoded); err != nil {
+		t.Fatalf("Unmarshal: %v", err)
+	}
+	if _, ok := decoded["provider_operations"]; !ok {
+		t.Fatalf("Definition JSON missing provider_operations: %s", raw)
+	}
+	caps, ok := decoded["capabilities"].(map[string]any)
+	if !ok || caps["provider_search"] != true || caps["query"] != false {
+		t.Fatalf("capabilities JSON = %#v, want provider_search true and warehouse query false", decoded["capabilities"])
+	}
+}
+
 // TestDefinitionJSONShape locks the wire shape: field names/omitempty
 // behavior per API-CONTRACT.md §1, so downstream JSON consumers (CLI --json,
 // certify) don't silently drift.

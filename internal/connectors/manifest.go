@@ -51,17 +51,18 @@ type AuthModeSpec struct {
 }
 
 type Manifest struct {
-	Metadata             Metadata          `json:"metadata"`
-	ConfigFields         []ConfigField     `json:"config_fields,omitempty"`
-	SecretFields         []SecretField     `json:"secret_fields,omitempty"`
-	AuthModes            []AuthModeSpec    `json:"auth_modes,omitempty"`
-	Streams              []Stream          `json:"streams,omitempty"`
-	WriteActions         []WriteActionSpec `json:"write_actions,omitempty"`
-	SyncModes            []string          `json:"sync_modes,omitempty"`
-	SourceSyncModes      []string          `json:"source_sync_modes,omitempty"`
-	DestinationSyncModes []string          `json:"destination_sync_modes,omitempty"`
-	Pagination           PaginationSpec    `json:"pagination,omitempty"`
-	Risk                 RiskSpec          `json:"risk"`
+	Metadata             Metadata                `json:"metadata"`
+	ConfigFields         []ConfigField           `json:"config_fields,omitempty"`
+	SecretFields         []SecretField           `json:"secret_fields,omitempty"`
+	AuthModes            []AuthModeSpec          `json:"auth_modes,omitempty"`
+	Streams              []Stream                `json:"streams,omitempty"`
+	WriteActions         []WriteActionSpec       `json:"write_actions,omitempty"`
+	ProviderOperations   []ProviderOperationInfo `json:"provider_operations,omitempty"`
+	SyncModes            []string                `json:"sync_modes,omitempty"`
+	SourceSyncModes      []string                `json:"source_sync_modes,omitempty"`
+	DestinationSyncModes []string                `json:"destination_sync_modes,omitempty"`
+	Pagination           PaginationSpec          `json:"pagination,omitempty"`
+	Risk                 RiskSpec                `json:"risk"`
 }
 
 type ManifestProvider interface {

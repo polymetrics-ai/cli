@@ -16,7 +16,9 @@ const CAPABILITY_ROWS: CapabilityRow[] = [
   { label: 'Check', key: 'check' },
   { label: 'Read', key: 'read' },
   { label: 'Write', key: 'write' },
-  { label: 'Query', key: 'query' },
+  { label: 'Warehouse query', key: 'query' },
+  { label: 'Provider search', key: 'providerSearch' },
+  { label: 'Provider query', key: 'providerQuery' },
   { label: 'CDC', key: 'cdc' },
   { label: 'Dynamic schema', key: 'dynamicSchema' },
 ];

@@ -240,6 +240,8 @@ for (const dirName of entries) {
       read: bool(capabilities.read),
       write: bool(capabilities.write),
       query: bool(capabilities.query),
+      provider_search: bool(capabilities.provider_search),
+      provider_query: bool(capabilities.provider_query),
       cdc: bool(capabilities.cdc),
       dynamic_schema: bool(capabilities.dynamic_schema),
     },

@@ -67,6 +67,8 @@ var surfaceCategories = map[string]bool{
 
 var surfaceOperationModels = map[string]bool{
 	"direct_read":           true,
+	"provider_search":       true,
+	"provider_query":        true,
 	"binary_read":           true,
 	"sensitive_reverse_etl": true,
 	"admin_reverse_etl":     true,

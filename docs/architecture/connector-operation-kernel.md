@@ -15,6 +15,12 @@ Command surface entries may reference exactly one executable target:
 - `write`
 - `operation`
 
+Provider search/query operations are modeled as `operation` targets with
+`kind=provider_search` or `kind=provider_query`. They require request/response
+schemas, positive result/page/byte bounds, pagination metadata, and fixture seams.
+They are separate from `pm query`, which remains local warehouse SQL/table
+inspection.
+
 API surface rows that are already executable through fixed direct-read command
 metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 `api_surface.operation` rows remain ledger-only and are not an execution
@@ -40,6 +46,8 @@ operations.
 - `local_file`
 - `browser_open`
 - `composite`
+- `provider_search`
+- `provider_query`
 
 Unknown kinds are rejected at load time. There is intentionally no generic
 shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
@@ -51,6 +59,9 @@ shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 - Secrets must not appear in operation metadata, fixtures, logs, examples, or
   review comments.
 - GraphQL operations must use fixed documents and checked variables.
+- Provider search/query operations must use typed request fields, explicit bounds,
+  pagination metadata, response schemas, and fixtures; raw SQL, raw GraphQL,
+  raw HTTP method/path/url/body, or arbitrary payload fields are rejected.
 - File and binary operations must define bounded output policy before becoming
   executable.
 - Local git/file operations must use allowlisted structured actions, never a

@@ -1,10 +1,10 @@
 ```
 NAME
-  pm connectors - inspect connector definitions, streams, and write actions
+  pm connectors - inspect connector definitions, streams, provider commands, and write actions
 
 SYNOPSIS
   pm connectors list [--all] [--json]
-  pm connectors catalog [--capability read|write|cdc|query] [--stage stage] [--json]
+  pm connectors catalog [--capability read|write|cdc|query|provider_search|provider_query] [--stage stage] [--json]
   pm connectors inspect <name> [--json]
   pm connectors help <name>
 
@@ -13,10 +13,15 @@ DESCRIPTION
   connectors are declarative JSON bundles interpreted by the connector engine;
   hooks or native components cover APIs and protocols that need custom behavior.
 
-  Each connector exposes ETL read streams. Connectors whose APIs expose
-  mutation endpoints also declare reverse ETL write actions. Run
-  pm connectors inspect <name> to see write=true/false, ETL STREAMS, and
-  REVERSE ETL ACTIONS without reading credentials.
+  Each connector exposes ETL read streams. Command surfaces may additionally
+  declare DIRECT READ COMMANDS for fixed single-shot reads and typed bounded
+  PROVIDER SEARCH/QUERY operations for provider-native search/query APIs. These
+  are not the local warehouse pm query SQL/table surface. Connectors whose
+  APIs expose mutation endpoints also declare reverse ETL write actions. Run
+  pm connectors inspect <name> to see write=true/false,
+  provider_search/provider_query, ETL STREAMS, DIRECT READ COMMANDS,
+  PROVIDER SEARCH/QUERY OPERATIONS, and REVERSE ETL ACTIONS without reading
+  credentials.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -27,7 +32,10 @@ CATALOG
   runtime catalog has 552 bare-name entries: 548 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
-  Use --capability read, write, cdc, or query to filter by executable surface.
+  Use --capability read, write, cdc, query, provider_search, or provider_query
+  to filter by declared surface. The query capability means local warehouse
+  query support; provider_search/provider_query are connector API command
+  metadata with typed schemas and explicit bounds.
 
 GITHUB AUTHENTICATION
   public
@@ -70,8 +78,9 @@ REVERSE ETL WRITE ACTIONS
   supported mutations.
 
   Run pm connectors inspect <name> to see a connector's write=true/false
-  capability, ETL streams, reverse ETL write actions, required fields, and risk
-  notes.
+  capability, provider_search/provider_query capability, ETL streams, direct
+  read commands, provider search/query operations, reverse ETL write actions,
+  required fields, and risk notes.
 
   GitHub is one writable connector example. It supports approved write actions
   such as create_issue, create_pull_request, comment_issue, update_issue,

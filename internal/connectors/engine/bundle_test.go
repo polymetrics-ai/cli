@@ -713,6 +713,132 @@ func TestBundleLoadParsesOperations(t *testing.T) {
 	}
 }
 
+func TestBundleLoadParsesProviderSearchOperation(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "provider_search": true, "provider_query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.search",
+				"kind": "provider_search",
+				"summary": "Search widgets with typed bounded provider parameters",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"provider": {
+					"request_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["term"],
+						"properties": {
+							"term": { "type": "string" },
+							"limit": { "type": "integer" }
+						}
+					},
+					"response_schema": {
+						"type": "object",
+						"required": ["items"],
+						"properties": {
+							"items": { "type": "array", "items": { "type": "object" } },
+							"next_cursor": { "type": "string" }
+						}
+					},
+					"bounds": { "default_limit": 25, "max_limit": 50, "max_pages": 2, "max_bytes": 65536 },
+					"pagination": { "type": "cursor", "cursor_request_field": "cursor", "cursor_response_field": "next_cursor" },
+					"fixture": { "request": "fixtures/provider/acme.widgets.search/request.json", "response": "fixtures/provider/acme.widgets.search/response.json" }
+				}
+			}
+		]
+	}`)}
+
+	b, err := Load(fsys, "acme")
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if !b.Metadata.Capabilities.ProviderSearch || b.Metadata.Capabilities.ProviderQuery {
+		t.Fatalf("provider capabilities = %+v", b.Metadata.Capabilities)
+	}
+	if len(b.Operations) != 1 || b.Operations[0].Provider == nil {
+		t.Fatalf("provider operation missing: %+v", b.Operations)
+	}
+	provider := b.Operations[0].Provider
+	if provider.Bounds.MaxLimit != 50 || provider.Bounds.MaxPages != 2 || provider.Bounds.MaxBytes != 65536 {
+		t.Fatalf("provider bounds = %+v", provider.Bounds)
+	}
+	if provider.Pagination == nil || provider.Pagination.Type != "cursor" || provider.Pagination.CursorResponseField != "next_cursor" {
+		t.Fatalf("provider pagination = %+v", provider.Pagination)
+	}
+	if provider.Fixture == nil || provider.Fixture.Request == "" || provider.Fixture.Response == "" {
+		t.Fatalf("provider fixture seam = %+v", provider.Fixture)
+	}
+}
+
+func TestBundleLoadRejectsProviderMetadataOnlyCapability(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "provider_search": true, "provider_query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected provider_search capability without operation metadata to fail")
+	}
+	if !strings.Contains(err.Error(), "provider_search") || !strings.Contains(err.Error(), "operations.json") {
+		t.Fatalf("Load error = %q, want metadata-only provider_search rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsProviderOperationWithRawRequestField(t *testing.T) {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "provider_search": false, "provider_query": true, "cdc": false, "dynamic_schema": false }
+	}`)}
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
+		"operations": [
+			{
+				"id": "acme.widgets.raw_query",
+				"kind": "provider_query",
+				"summary": "Unsafe raw provider query",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"provider": {
+					"request_schema": { "type": "object", "additionalProperties": false, "properties": { "sql": { "type": "string" } } },
+					"response_schema": { "type": "object", "properties": { "rows": { "type": "array" } } },
+					"bounds": { "default_limit": 10, "max_limit": 10, "max_pages": 1, "max_bytes": 32768 },
+					"pagination": { "type": "none" },
+					"fixture": { "request": "fixtures/provider/acme.widgets.raw_query/request.json", "response": "fixtures/provider/acme.widgets.raw_query/response.json" }
+				}
+			}
+		]
+	}`)}
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected raw provider query request field to fail")
+	}
+	if !strings.Contains(err.Error(), "sql") || !strings.Contains(err.Error(), "raw") {
+		t.Fatalf("Load error = %q, want raw sql request-field rejection", err.Error())
+	}
+}
+
 func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{

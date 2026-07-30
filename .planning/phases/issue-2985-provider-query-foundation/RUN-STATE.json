@@ -1,0 +1,15 @@
+{
+  "phase": "issue-2985-provider-query-foundation",
+  "issue": 2985,
+  "branch": "feat/connector-provider-query-2985",
+  "status": "in_progress",
+  "gsdMode": "manual_fallback_programming_loop_unavailable",
+  "verificationPassed": true,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single isolated worker owns shared connector contract changes; subagent fan-out would increase collision risk"
+    }
+  ]
+}

@@ -580,6 +580,49 @@ func TestValidate_CLISurfaceOperationReferencePasses(t *testing.T) {
 	}
 }
 
+func TestValidate_ProviderSearchOperationReferencePasses(t *testing.T) {
+	report, err := validateDir(providerOperationBundleFS(validProviderCLISurfaceJSON(), validProviderOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for valid provider search operation, got %+v", report.Findings)
+	}
+}
+
+func TestValidate_ProviderMetadataOnlyEnablementIsHardFinding(t *testing.T) {
+	fsys := providerOperationBundleFS(validProviderCLISurfaceJSON(), validProviderOperationsJSON())
+	delete(fsys, "cli-surface/operations.json")
+	delete(fsys, "cli-surface/cli_surface.json")
+
+	report, err := validateDir(fsys)
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
+	assertFindingMessage(t, report, "provider_search")
+}
+
+func TestValidate_CLISurfaceProviderOperationKindMismatchIsHardFinding(t *testing.T) {
+	cliSurface := strings.Replace(validProviderCLISurfaceJSON(), `"intent": "provider_search"`, `"intent": "provider_query"`, 1)
+	report, err := validateDir(providerOperationBundleFS(cliSurface, validProviderOperationsJSON()))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleCLISurfaceSafety)
+	assertFindingMessage(t, report, "provider_query")
+}
+
+func TestValidate_ProviderOperationRejectsRawSQLRequestField(t *testing.T) {
+	ops := strings.Replace(validProviderOperationsJSON(), `"term": { "type": "string" }`, `"sql": { "type": "string" }`, 1)
+	report, err := validateDir(providerOperationBundleFS(validProviderCLISurfaceJSON(), ops))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	assertFindingRule(t, report, "cli-surface", ruleMetaSchema)
+	assertFindingMessage(t, report, "sql")
+}
+
 func TestValidate_CLISurfaceOperationRepositoryOutputPolicyRequiresPathVariable(t *testing.T) {
 	cliSurface := strings.Replace(validOperationCLISurfaceJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
 	operations := strings.Replace(validOperationsJSON(), `"output_policy": "json_redacted"`, `"output_policy": "repository_contents_file_metadata"`, 1)
@@ -1420,6 +1463,16 @@ func assertFindingRule(t *testing.T, report Report, connector, rule string) {
 	t.Fatalf("no finding for connector %q with rule %q; findings=%+v", connector, rule, report.Findings)
 }
 
+func assertFindingMessage(t *testing.T, report Report, want string) {
+	t.Helper()
+	for _, f := range report.Findings {
+		if strings.Contains(f.Message, want) {
+			return
+		}
+	}
+	t.Fatalf("no finding message contains %q; findings=%+v", want, report.Findings)
+}
+
 func cliSurfaceBundleFS(cliSurface string) fstest.MapFS {
 	return fstest.MapFS{
 		"cli-surface/metadata.json": &fstest.MapFile{Data: []byte(`{
@@ -1551,6 +1604,91 @@ func validOperationCLISurfaceJSON() string {
 				"output_policy": "json_redacted",
 				"source_cli_path": "clis widget view",
 				"examples": ["pm cli-surface widget view --id w_1 --json"]
+			}
+		]
+	}`
+}
+
+func providerOperationBundleFS(cliSurface, operations string) fstest.MapFS {
+	fsys := operationCLISurfaceBundleFS(cliSurface, operations)
+	fsys["cli-surface/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "cli-surface",
+		"display_name": "CLI Surface",
+		"description": "test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": true, "query": false, "provider_search": true, "provider_query": false, "cdc": false, "dynamic_schema": false }
+	}`)}
+	fsys["cli-surface/api_surface.json"] = &fstest.MapFile{Data: []byte(`{
+		"api": "test API v1",
+		"operation_ledger_version": 1,
+		"endpoints": [
+			{ "method": "GET", "path": "/widgets", "covered_by": { "stream": "widgets" } },
+			{ "method": "POST", "path": "/widgets", "covered_by": { "write": "create_widget" } },
+			{ "method": "POST", "path": "/widgets/search", "operation": { "model": "provider_search", "status": "blocked", "risk": "low", "blocked_by_default": true, "reason": "typed bounded provider search operation" } }
+		]
+	}`)}
+	return fsys
+}
+
+func validProviderOperationsJSON() string {
+	return `{
+		"operations": [
+			{
+				"id": "cli-surface.widgets.search",
+				"kind": "provider_search",
+				"summary": "Search widgets with typed bounded parameters",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"provider": {
+					"request_schema": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": ["term"],
+						"properties": {
+							"term": { "type": "string" },
+							"limit": { "type": "integer" }
+						}
+					},
+					"response_schema": {
+						"type": "object",
+						"required": ["items"],
+						"properties": {
+							"items": { "type": "array", "items": { "type": "object" } },
+							"next_cursor": { "type": "string" }
+						}
+					},
+					"bounds": { "default_limit": 25, "max_limit": 50, "max_pages": 2, "max_bytes": 65536 },
+					"pagination": { "type": "cursor", "cursor_request_field": "cursor", "cursor_response_field": "next_cursor" },
+					"fixture": { "request": "fixtures/provider/cli-surface.widgets.search/request.json", "response": "fixtures/provider/cli-surface.widgets.search/response.json" }
+				}
+			}
+		]
+	}`
+}
+
+func validProviderCLISurfaceJSON() string {
+	return `{
+		"tagline": "Work with CLI Surface from the command line.",
+		"usage": "pm cli-surface <command> [flags]",
+		"commands": [
+			{
+				"path": "widget search",
+				"summary": "Search widgets through a typed bounded provider capability",
+				"intent": "provider_search",
+				"availability": "implemented",
+				"operation": "cli-surface.widgets.search",
+				"api_surface": [
+					{ "method": "POST", "path": "/widgets/search" }
+				],
+				"output_policy": "json_redacted",
+				"source_cli_path": "clis widget search",
+				"flags": [
+					{ "name": "term", "type": "string", "summary": "Search term.", "maps_to": "request.term", "allow_empty": false },
+					{ "name": "limit", "type": "integer", "summary": "Maximum results.", "maps_to": "request.limit" }
+				],
+				"examples": ["pm cli-surface widget search --term alpha --limit 25 --json"]
 			}
 		]
 	}`

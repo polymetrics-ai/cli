@@ -35,7 +35,26 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: 'Other',
 };
 
-type CapabilityFilter = 'all' | 'read' | 'write' | 'query' | 'cdc' | 'dynamicSchema';
+type CapabilityFilter =
+  | 'all'
+  | 'read'
+  | 'write'
+  | 'query'
+  | 'providerSearch'
+  | 'providerQuery'
+  | 'cdc'
+  | 'dynamicSchema';
+
+const CAPABILITY_FILTER_LABELS: Record<CapabilityFilter, string> = {
+  all: 'All capabilities',
+  read: 'read',
+  write: 'write',
+  query: 'warehouse query',
+  providerSearch: 'provider search',
+  providerQuery: 'provider query',
+  cdc: 'cdc',
+  dynamicSchema: 'Dynamic schema',
+};
 
 function ConnectorCard({ c }: { c: ConnectorMeta }) {
   return (
@@ -77,6 +96,8 @@ function ConnectorCard({ c }: { c: ConnectorMeta }) {
         </Badge>
         {c.capabilities.read && <Badge variant="capability">read</Badge>}
         {c.capabilities.write && <Badge variant="capability">write</Badge>}
+        {c.capabilities.providerSearch && <Badge variant="capability">provider search</Badge>}
+        {c.capabilities.providerQuery && <Badge variant="capability">provider query</Badge>}
       </div>
       <span className="mt-1 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-wider text-text-disabled transition-colors group-hover:text-line-cta">
         Open connector
@@ -175,13 +196,24 @@ export function ConnectorBrowser() {
               spacing={1}
               className="flex w-full flex-wrap"
             >
-              {(['all', 'read', 'write', 'query', 'cdc', 'dynamicSchema'] as CapabilityFilter[]).map((t) => (
+              {(
+                [
+                  'all',
+                  'read',
+                  'write',
+                  'query',
+                  'providerSearch',
+                  'providerQuery',
+                  'cdc',
+                  'dynamicSchema',
+                ] as CapabilityFilter[]
+              ).map((t) => (
                 <ToggleGroupItem
                   key={t}
                   value={t}
                   className="border-line-structure bg-surface-bg px-3 font-sans text-[12px] text-text-secondary data-[state=on]:border-line-cta data-[state=on]:bg-surface-2 data-[state=on]:text-line-cta"
                 >
-                  {t === 'all' ? 'All capabilities' : t === 'dynamicSchema' ? 'Dynamic schema' : t}
+                  {CAPABILITY_FILTER_LABELS[t]}
                 </ToggleGroupItem>
               ))}
             </ToggleGroup>

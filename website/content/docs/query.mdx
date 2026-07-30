@@ -5,6 +5,10 @@ description: Run table scans or read-only SQL over local warehouse data using pm
 
 After an extraction lands data in the local warehouse, `pm query run` lets you inspect it without leaving the local workspace. The default binary uses a pure-Go JSONL query engine for table reads and conservative SELECT parsing. Building with `-tags duckdb` unlocks the DuckDB-backed engine for richer analytical SQL.
 
+<Callout type="info">
+  `pm query` is local warehouse-only. Provider-native search/query surfaces are connector command-surface operations advertised as `provider_search` / `provider_query` with typed schemas and explicit bounds; they are not raw provider SQL, raw GraphQL, or this warehouse SQL command.
+</Callout>
+
 ## Basic usage
 
 ```bash

@@ -51,7 +51,7 @@ func TestConnectorCatalogFiltersAndInspect(t *testing.T) {
 	if code == 0 {
 		t.Fatalf("Run(connectors catalog --type destination) code = 0, want migration error")
 	}
-	if !strings.Contains(stdout.String()+stderr.String(), "use --capability read|write|cdc|query") {
+	if !strings.Contains(stdout.String()+stderr.String(), "use --capability read|write|cdc|query|provider_search|provider_query") {
 		t.Fatalf("old direction filter did not explain capability replacement: stdout=%s stderr=%s", stdout.String(), stderr.String())
 	}
 

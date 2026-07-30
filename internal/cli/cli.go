@@ -256,13 +256,13 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 
 func connectorCatalogEntries(registry *connectors.Registry, flags parsedFlags) ([]connectors.Definition, error) {
 	if flags.first("type") != "" {
-		return nil, validationErrorf("legacy --type source|destination was removed; use --capability read|write|cdc|query")
+		return nil, validationErrorf("legacy --type source|destination was removed; use --capability read|write|cdc|query|provider_search|provider_query")
 	}
 	capability := strings.TrimSpace(strings.ToLower(flags.first("capability")))
 	switch capability {
-	case "", "read", "write", "cdc", "query":
+	case "", "read", "write", "cdc", "query", "provider_search", "provider_query":
 	default:
-		return nil, validationErrorf("invalid --capability %q, want read|write|cdc|query", capability)
+		return nil, validationErrorf("invalid --capability %q, want read|write|cdc|query|provider_search|provider_query", capability)
 	}
 	stage := strings.TrimSpace(flags.first("stage"))
 	defs := registry.CatalogEntries()
@@ -289,6 +289,10 @@ func definitionHasCapability(registry *connectors.Registry, def connectors.Defin
 		return def.Capabilities.Write
 	case "query":
 		return def.Capabilities.Query
+	case "provider_search":
+		return def.Capabilities.ProviderSearch
+	case "provider_query":
+		return def.Capabilities.ProviderQuery
 	case "cdc":
 		connector, ok := registry.Get(def.Name)
 		if !ok {

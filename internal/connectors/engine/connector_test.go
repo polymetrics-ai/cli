@@ -156,8 +156,26 @@ func TestConnectorDefinitionSynthesizedFromBundle(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
 	t.Cleanup(srv.Close)
 	b := newConnectorTestBundle(t, srv)
+	b.Metadata.Capabilities.ProviderSearch = true
 	b.Writes = []WriteAction{
 		{Name: "update_widget", Kind: "update", Method: "PATCH", Path: "/widgets/{{ record.id }}", Risk: "medium"},
+	}
+	b.Operations = []OperationSpec{
+		{
+			ID:           "acme.widgets.search",
+			Kind:         "provider_search",
+			Summary:      "Search widgets",
+			Risk:         "low",
+			Approval:     "none",
+			OutputPolicy: "json_redacted",
+			Provider: &ProviderOperationSpec{
+				RequestSchema:  json.RawMessage(`{"type":"object","additionalProperties":false,"properties":{"term":{"type":"string"}}}`),
+				ResponseSchema: json.RawMessage(`{"type":"object","properties":{"items":{"type":"array"}}}`),
+				Bounds:         ProviderOperationBounds{DefaultLimit: 25, MaxLimit: 50, MaxPages: 2, MaxBytes: 65536},
+				Pagination:     &ProviderPaginationSpec{Type: "none"},
+				Fixture:        &ProviderFixtureSpec{Request: "fixtures/provider/acme.widgets.search/request.json", Response: "fixtures/provider/acme.widgets.search/response.json"},
+			},
+		},
 	}
 
 	c := New(b, nil)
@@ -181,6 +199,12 @@ func TestConnectorDefinitionSynthesizedFromBundle(t *testing.T) {
 	}
 	if def.WriteActions[0].Method != "PATCH" || def.WriteActions[0].Risk != "medium" {
 		t.Fatalf("Definition().WriteActions[0] = %+v, want method=PATCH risk=medium", def.WriteActions[0])
+	}
+	if len(def.ProviderOperations) != 1 || def.ProviderOperations[0].ID != "acme.widgets.search" {
+		t.Fatalf("Definition().ProviderOperations = %+v, want provider search operation", def.ProviderOperations)
+	}
+	if !def.Capabilities.ProviderSearch || def.Capabilities.Query {
+		t.Fatalf("Definition().Capabilities = %+v, want provider_search true and warehouse query false", def.Capabilities)
 	}
 }
 

@@ -71,12 +71,14 @@ type ConformanceMarker struct {
 
 // Capabilities mirrors metadata.json.capabilities.
 type Capabilities struct {
-	Check         bool `json:"check"`
-	Read          bool `json:"read"`
-	Write         bool `json:"write"`
-	Query         bool `json:"query"`
-	CDC           bool `json:"cdc"`
-	DynamicSchema bool `json:"dynamic_schema"`
+	Check          bool `json:"check"`
+	Read           bool `json:"read"`
+	Write          bool `json:"write"`
+	Query          bool `json:"query"`
+	ProviderSearch bool `json:"provider_search"`
+	ProviderQuery  bool `json:"provider_query"`
+	CDC            bool `json:"cdc"`
+	DynamicSchema  bool `json:"dynamic_schema"`
 }
 
 // BatchSpec mirrors metadata.json.batch.
@@ -498,6 +500,7 @@ type OperationSpec struct {
 	LocalFile       *LocalFileOperationSpec `json:"local_file,omitempty"`
 	Browser         *BrowserOperationSpec   `json:"browser,omitempty"`
 	Composite       *CompositeOperationSpec `json:"composite,omitempty"`
+	Provider        *ProviderOperationSpec  `json:"provider,omitempty"`
 }
 
 type RESTOperationSpec struct {
@@ -572,6 +575,38 @@ type BrowserOperationSpec struct {
 
 type CompositeOperationSpec struct {
 	Steps []string `json:"steps"`
+}
+
+type ProviderOperationSpec struct {
+	RequestSchema  json.RawMessage         `json:"request_schema"`
+	ResponseSchema json.RawMessage         `json:"response_schema"`
+	Bounds         ProviderOperationBounds `json:"bounds"`
+	Pagination     *ProviderPaginationSpec `json:"pagination,omitempty"`
+	Fixture        *ProviderFixtureSpec    `json:"fixture,omitempty"`
+}
+
+type ProviderOperationBounds struct {
+	DefaultLimit int `json:"default_limit"`
+	MaxLimit     int `json:"max_limit"`
+	MaxPages     int `json:"max_pages"`
+	MaxBytes     int `json:"max_bytes"`
+}
+
+type ProviderPaginationSpec struct {
+	Type                string `json:"type"`
+	CursorRequestField  string `json:"cursor_request_field,omitempty"`
+	CursorResponseField string `json:"cursor_response_field,omitempty"`
+	PageRequestField    string `json:"page_request_field,omitempty"`
+	PageSizeField       string `json:"page_size_field,omitempty"`
+	OffsetRequestField  string `json:"offset_request_field,omitempty"`
+	LimitRequestField   string `json:"limit_request_field,omitempty"`
+	ItemsResponseField  string `json:"items_response_field,omitempty"`
+	HasMoreField        string `json:"has_more_field,omitempty"`
+}
+
+type ProviderFixtureSpec struct {
+	Request  string `json:"request"`
+	Response string `json:"response"`
 }
 
 // CLISurface is the parsed cli_surface.json. It is docs/help metadata only:
@@ -894,6 +929,9 @@ func Load(fsys fs.FS, dirName string) (Bundle, error) {
 	operations, rawOperations, err := loadOperations(sub, dirName)
 	if err != nil {
 		return Bundle{}, err
+	}
+	if err := validateProviderCapabilities(metadata, operations); err != nil {
+		return Bundle{}, fmt.Errorf("load bundle %s: operations.json: %w", dirName, err)
 	}
 
 	schemas, err := loadStreamSchemas(sub, dirName, streams)
@@ -1279,6 +1317,26 @@ func validateOperations(ops []OperationSpec) error {
 	return nil
 }
 
+func validateProviderCapabilities(metadata Metadata, ops []OperationSpec) error {
+	counts := map[string]int{}
+	for _, op := range ops {
+		counts[op.Kind]++
+	}
+	if metadata.Capabilities.ProviderSearch && counts["provider_search"] == 0 {
+		return fmt.Errorf("provider_search capability requires at least one provider_search operation")
+	}
+	if metadata.Capabilities.ProviderQuery && counts["provider_query"] == 0 {
+		return fmt.Errorf("provider_query capability requires at least one provider_query operation")
+	}
+	if !metadata.Capabilities.ProviderSearch && counts["provider_search"] > 0 {
+		return fmt.Errorf("provider_search operation requires metadata.capabilities.provider_search=true")
+	}
+	if !metadata.Capabilities.ProviderQuery && counts["provider_query"] > 0 {
+		return fmt.Errorf("provider_query operation requires metadata.capabilities.provider_query=true")
+	}
+	return nil
+}
+
 func operationExecutionBlock(op OperationSpec) (string, int) {
 	var block string
 	count := 0
@@ -1298,6 +1356,7 @@ func operationExecutionBlock(op OperationSpec) (string, int) {
 	add("local_file", op.LocalFile != nil)
 	add("browser", op.Browser != nil)
 	add("composite", op.Composite != nil)
+	add("provider", op.Provider != nil)
 	return block, count
 }
 
@@ -1321,6 +1380,8 @@ func expectedOperationBlock(kind string) string {
 		return "browser"
 	case "stream_etl", "composite":
 		return "composite"
+	case "provider_search", "provider_query":
+		return "provider"
 	default:
 		return ""
 	}
@@ -1383,9 +1444,174 @@ func validateOperationSemantics(i int, op OperationSpec) error {
 		if op.LocalFile.Action == "write" && op.LocalFile.MaxBytes <= 0 {
 			return fmt.Errorf("operation %d (%q) local_file write must declare positive max_bytes", i, op.ID)
 		}
+	case "provider_search", "provider_query":
+		if err := validateProviderOperation(i, op); err != nil {
+			return err
+		}
 	}
 	if err := validateSensitivePolicy(i, op); err != nil {
 		return err
+	}
+	return nil
+}
+
+func validateProviderOperation(i int, op OperationSpec) error {
+	if op.Provider == nil {
+		return fmt.Errorf("operation %d (%q) %s must declare provider block", i, op.ID, op.Kind)
+	}
+	if strings.TrimSpace(op.Approval) != "none" {
+		return fmt.Errorf("operation %d (%q) %s must be read-only and declare approval none", i, op.ID, op.Kind)
+	}
+	if strings.TrimSpace(op.MutationClass) != "" && op.MutationClass != "none" {
+		return fmt.Errorf("operation %d (%q) %s must not declare mutating mutation_class %q", i, op.ID, op.Kind, op.MutationClass)
+	}
+	if op.Destructive || op.SecretSensitive {
+		return fmt.Errorf("operation %d (%q) %s must not be destructive or secret_sensitive", i, op.ID, op.Kind)
+	}
+	switch strings.TrimSpace(op.OutputPolicy) {
+	case "json", "json_redacted":
+		// allowed
+	default:
+		return fmt.Errorf("operation %d (%q) %s must declare output_policy json or json_redacted", i, op.ID, op.Kind)
+	}
+	if err := validateProviderBounds(i, op); err != nil {
+		return err
+	}
+	if err := validateProviderPagination(i, op); err != nil {
+		return err
+	}
+	if _, err := validateProviderJSONSchema(i, op, "request_schema", op.Provider.RequestSchema, true); err != nil {
+		return err
+	}
+	if _, err := validateProviderJSONSchema(i, op, "response_schema", op.Provider.ResponseSchema, false); err != nil {
+		return err
+	}
+	if err := validateProviderFixture(i, op); err != nil {
+		return err
+	}
+	return nil
+}
+
+func validateProviderBounds(i int, op OperationSpec) error {
+	bounds := op.Provider.Bounds
+	if bounds.DefaultLimit <= 0 {
+		return fmt.Errorf("operation %d (%q) %s provider.bounds.default_limit must be positive", i, op.ID, op.Kind)
+	}
+	if bounds.MaxLimit <= 0 {
+		return fmt.Errorf("operation %d (%q) %s provider.bounds.max_limit must be positive", i, op.ID, op.Kind)
+	}
+	if bounds.DefaultLimit > bounds.MaxLimit {
+		return fmt.Errorf("operation %d (%q) %s provider.bounds.default_limit must be <= max_limit", i, op.ID, op.Kind)
+	}
+	if bounds.MaxPages <= 0 {
+		return fmt.Errorf("operation %d (%q) %s provider.bounds.max_pages must be positive", i, op.ID, op.Kind)
+	}
+	if bounds.MaxBytes <= 0 {
+		return fmt.Errorf("operation %d (%q) %s provider.bounds.max_bytes must be positive", i, op.ID, op.Kind)
+	}
+	return nil
+}
+
+func validateProviderPagination(i int, op OperationSpec) error {
+	pagination := op.Provider.Pagination
+	if pagination == nil {
+		return fmt.Errorf("operation %d (%q) %s provider.pagination is required", i, op.ID, op.Kind)
+	}
+	switch strings.TrimSpace(pagination.Type) {
+	case "none":
+		return nil
+	case "cursor":
+		if pagination.CursorRequestField == "" || pagination.CursorResponseField == "" {
+			return fmt.Errorf("operation %d (%q) %s cursor pagination requires cursor_request_field and cursor_response_field", i, op.ID, op.Kind)
+		}
+	case "page":
+		if pagination.PageRequestField == "" || pagination.PageSizeField == "" {
+			return fmt.Errorf("operation %d (%q) %s page pagination requires page_request_field and page_size_field", i, op.ID, op.Kind)
+		}
+	case "offset":
+		if pagination.OffsetRequestField == "" || pagination.LimitRequestField == "" {
+			return fmt.Errorf("operation %d (%q) %s offset pagination requires offset_request_field and limit_request_field", i, op.ID, op.Kind)
+		}
+	default:
+		return fmt.Errorf("operation %d (%q) %s provider.pagination.type %q is unsupported", i, op.ID, op.Kind, pagination.Type)
+	}
+	return nil
+}
+
+func validateProviderJSONSchema(i int, op OperationSpec, field string, raw json.RawMessage, request bool) (map[string]bool, error) {
+	if len(raw) == 0 {
+		return nil, fmt.Errorf("operation %d (%q) %s provider.%s is required", i, op.ID, op.Kind, field)
+	}
+	if _, err := CompileSchema(raw); err != nil {
+		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must compile: %w", i, op.ID, op.Kind, field, err)
+	}
+	var shape struct {
+		Type                 string                     `json:"type"`
+		AdditionalProperties json.RawMessage            `json:"additionalProperties"`
+		Properties           map[string]json.RawMessage `json:"properties"`
+	}
+	if err := json.Unmarshal(raw, &shape); err != nil {
+		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must be JSON object schema: %w", i, op.ID, op.Kind, field, err)
+	}
+	if shape.Type != "object" {
+		return nil, fmt.Errorf("operation %d (%q) %s provider.%s root type must be object", i, op.ID, op.Kind, field)
+	}
+	props := make(map[string]bool, len(shape.Properties))
+	for name := range shape.Properties {
+		trimmed := strings.TrimSpace(name)
+		props[trimmed] = true
+		if request {
+			if reason, ok := forbiddenProviderRequestFields[strings.ToLower(trimmed)]; ok {
+				return nil, fmt.Errorf("operation %d (%q) %s provider.request_schema property %q is a raw %s escape hatch; declare typed bounded request fields instead", i, op.ID, op.Kind, trimmed, reason)
+			}
+		}
+	}
+	if len(props) == 0 {
+		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must declare typed properties", i, op.ID, op.Kind, field)
+	}
+	if request {
+		var additional bool
+		if len(shape.AdditionalProperties) == 0 || json.Unmarshal(shape.AdditionalProperties, &additional) != nil || additional {
+			return nil, fmt.Errorf("operation %d (%q) %s provider.request_schema must set additionalProperties=false", i, op.ID, op.Kind)
+		}
+	}
+	return props, nil
+}
+
+var forbiddenProviderRequestFields = map[string]string{
+	"sql":           "SQL",
+	"raw_sql":       "SQL",
+	"graphql":       "GraphQL",
+	"graphql_query": "GraphQL",
+	"document":      "GraphQL document",
+	"method":        "HTTP method",
+	"http_method":   "HTTP method",
+	"path":          "HTTP path",
+	"url":           "HTTP URL",
+	"endpoint":      "HTTP endpoint",
+	"body":          "HTTP body",
+	"raw":           "payload",
+	"payload":       "payload",
+}
+
+func validateProviderFixture(i int, op OperationSpec) error {
+	fixture := op.Provider.Fixture
+	if fixture == nil {
+		return fmt.Errorf("operation %d (%q) %s provider.fixture is required", i, op.ID, op.Kind)
+	}
+	for _, ref := range []struct {
+		name  string
+		value string
+	}{
+		{name: "request", value: fixture.Request},
+		{name: "response", value: fixture.Response},
+	} {
+		if strings.TrimSpace(ref.value) == "" {
+			return fmt.Errorf("operation %d (%q) %s provider.fixture.%s is required", i, op.ID, op.Kind, ref.name)
+		}
+		if strings.HasPrefix(ref.value, "/") || strings.Contains(ref.value, "\\") || strings.Contains(ref.value, "..") || !strings.HasPrefix(ref.value, "fixtures/provider/") {
+			return fmt.Errorf("operation %d (%q) %s provider.fixture.%s must be a relative fixtures/provider/ path", i, op.ID, op.Kind, ref.name)
+		}
 	}
 	return nil
 }
