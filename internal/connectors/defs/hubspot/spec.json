@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "HubSpot Connection Specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "base_url": {
+      "type": "string",
+      "format": "uri",
+      "default": "https://api.hubapi.com",
+      "description": "HubSpot API base URL."
+    },
+    "access_token": {
+      "type": "string",
+      "x-secret": true,
+      "description": "Private app or OAuth access token supplied through credential storage, environment, or stdin; never inline in docs or issue text."
+    },
+    "portal_id": {
+      "type": "string",
+      "description": "Optional HubSpot portal/account identifier for future typed commands that require one."
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "hubspot",
+  "display_name": "HubSpot",
+  "description": "Connector-local HubSpot official API operation ledger and planned typed command surface.",
+  "integration_type": "api",
+  "docs_url": "https://developers.hubspot.com/docs/api/overview",
+  "release_stage": "planned",
+  "capabilities": {
+    "check": false,
+    "read": false,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100,
+    "write_batch_size": 1
+  },
+  "rate_limit": {
+    "requests_per_minute": 100
+  },
+  "risk": {
+    "read": "No HubSpot read execution is enabled in this connector-local ledger slice; official read operations are inventoried as blocked/planned rows.",
+    "write": "No HubSpot write execution is enabled in this connector-local ledger slice; DELETE/destructive writes are included as typed destructive-confirmation candidates, not exclusions.",
+    "approval": "Future reverse ETL actions must use plan -> preview -> explicit approval -> execute; destructive actions must require typed destructive confirmation."
+  }
+}
