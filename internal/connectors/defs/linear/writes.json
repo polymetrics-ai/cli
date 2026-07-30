@@ -14,10 +14,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -55,10 +52,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -96,10 +90,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -130,10 +121,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -171,10 +159,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -205,10 +190,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -246,10 +228,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -288,16 +267,10 @@
         ],
         "properties": {
           "sourceCustomerId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "targetCustomerId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -332,10 +305,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -367,10 +337,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -402,10 +369,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -443,10 +407,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -484,10 +445,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -519,10 +477,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -554,10 +509,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -588,10 +540,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -629,10 +578,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -664,10 +610,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -705,10 +648,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -739,10 +679,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -774,10 +711,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -815,10 +749,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -856,10 +787,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -897,10 +825,7 @@
         ],
         "properties": {
           "assetUrl": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -938,10 +863,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -979,10 +901,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1020,10 +939,7 @@
         ],
         "properties": {
           "url": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1055,16 +971,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1099,10 +1009,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1134,10 +1041,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1175,10 +1079,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1216,10 +1117,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1250,10 +1148,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1268,7 +1163,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "initiative_relation_delete",
@@ -1284,10 +1180,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1326,16 +1219,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1371,10 +1258,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1412,10 +1296,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1447,10 +1328,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1482,10 +1360,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1517,10 +1392,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1553,16 +1425,10 @@
         ],
         "properties": {
           "githubUrl": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "organizationName": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1617,10 +1483,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1651,10 +1514,7 @@
         ],
         "properties": {
           "integrationId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1686,10 +1546,7 @@
         ],
         "properties": {
           "integrationId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1787,10 +1644,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1821,10 +1675,7 @@
         ],
         "properties": {
           "integrationId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1855,10 +1706,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1897,16 +1745,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1942,16 +1784,10 @@
         ],
         "properties": {
           "description": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -1986,10 +1822,7 @@
         ],
         "properties": {
           "attachmentId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2004,7 +1837,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "issue_import_delete",
@@ -2020,10 +1854,7 @@
         ],
         "properties": {
           "issueImportId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2061,10 +1892,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2102,10 +1930,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2136,10 +1961,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2154,7 +1976,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "issue_relation_delete",
@@ -2170,10 +1993,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2212,16 +2032,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "reminderAt": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2257,16 +2071,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2303,16 +2111,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "userId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2347,10 +2149,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2389,16 +2188,10 @@
         ],
         "properties": {
           "issueId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "releaseId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2440,10 +2233,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2476,16 +2266,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "userId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2521,10 +2305,7 @@
         ],
         "properties": {
           "organizationId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2556,10 +2337,7 @@
         ],
         "properties": {
           "sessionId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2591,10 +2369,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2626,10 +2401,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2661,10 +2433,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2696,10 +2465,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2731,10 +2497,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2820,10 +2583,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2854,10 +2614,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2895,10 +2652,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2936,10 +2690,7 @@
         ],
         "properties": {
           "authId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -2971,16 +2722,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3015,10 +2760,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3056,10 +2798,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3097,10 +2836,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3131,10 +2867,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3149,7 +2882,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "project_milestone_delete",
@@ -3165,10 +2899,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3207,16 +2938,10 @@
         ],
         "properties": {
           "newProjectStatusId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "originalProjectStatusId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3251,10 +2976,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3293,16 +3015,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "labelId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3338,10 +3054,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3373,10 +3086,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3408,10 +3118,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3443,10 +3150,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3478,10 +3182,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3513,10 +3214,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3554,10 +3252,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3595,10 +3290,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3630,10 +3322,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3671,10 +3360,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3712,10 +3398,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3747,10 +3430,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3788,10 +3468,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3823,10 +3500,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3858,10 +3532,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3893,10 +3564,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3928,10 +3596,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3962,10 +3627,7 @@
         ],
         "properties": {
           "email": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -3996,10 +3658,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4037,10 +3696,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4078,10 +3734,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4119,10 +3772,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4154,10 +3804,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4195,10 +3842,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4236,10 +3880,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4270,10 +3911,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4311,10 +3949,7 @@
         ],
         "properties": {
           "service": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4346,10 +3981,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4382,16 +4014,10 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           },
           "sessionId": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4427,10 +4053,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4445,7 +4068,8 @@
           }
         }
       },
-      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
     },
     {
       "name": "view_preferences_delete",
@@ -4461,10 +4085,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4502,10 +4123,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4543,10 +4161,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
@@ -4578,10 +4193,7 @@
         ],
         "properties": {
           "id": {
-            "type": [
-              "string",
-              "null"
-            ]
+            "type": "string"
           }
         },
         "additionalProperties": false
