@@ -1,0 +1,17 @@
+{
+  "record": {
+    "company_id": "company_id_fixture",
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/companies/company_id_fixture",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

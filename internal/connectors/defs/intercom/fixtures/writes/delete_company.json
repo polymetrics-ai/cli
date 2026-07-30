@@ -1,0 +1,13 @@
+{
+  "record": {
+    "company_id": "company_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/companies/company_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

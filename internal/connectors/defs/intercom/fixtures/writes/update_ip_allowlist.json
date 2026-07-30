@@ -1,0 +1,16 @@
+{
+  "record": {
+    "type": "type_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ip_allowlist",
+    "body": {
+      "type": "type_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

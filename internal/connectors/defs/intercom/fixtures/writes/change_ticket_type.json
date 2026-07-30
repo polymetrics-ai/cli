@@ -1,0 +1,19 @@
+{
+  "record": {
+    "ticket_id": "ticket_id_fixture",
+    "ticket_type_id": "ticket_type_id_fixture",
+    "ticket_state_id": "ticket_state_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/ticket_id_fixture/change_type",
+    "body": {
+      "ticket_type_id": "ticket_type_id_fixture",
+      "ticket_state_id": "ticket_state_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

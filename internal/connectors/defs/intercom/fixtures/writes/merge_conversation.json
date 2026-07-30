@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "merge_into_conversation_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/id_fixture/merge",
+    "body": {
+      "merge_into_conversation_id": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

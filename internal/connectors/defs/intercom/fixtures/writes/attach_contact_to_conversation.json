@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture",
+    "admin_id": "admin_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/conversation_id_fixture/customers",
+    "body": {
+      "admin_id": "admin_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

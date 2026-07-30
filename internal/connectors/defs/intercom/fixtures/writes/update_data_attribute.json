@@ -1,0 +1,25 @@
+{
+  "record": {
+    "data_attribute_id": "data_attribute_id_fixture",
+    "options": [
+      {
+        "value": "value_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/data_attributes/data_attribute_id_fixture",
+    "body": {
+      "options": [
+        {
+          "value": "value_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

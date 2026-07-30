@@ -1,0 +1,26 @@
+{
+  "record": {
+    "contacts": [
+      {
+        "id": "id_fixture"
+      }
+    ],
+    "ticket_type_id": "ticket_type_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/tickets/enqueue",
+    "body": {
+      "ticket_type_id": "ticket_type_id_fixture",
+      "contacts": [
+        {
+          "id": "id_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

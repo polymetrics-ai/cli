@@ -1,0 +1,19 @@
+{
+  "record": {
+    "admin_id": "admin_id_fixture",
+    "away_mode_enabled": true,
+    "away_mode_reassign": true
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/admins/admin_id_fixture/away",
+    "body": {
+      "away_mode_enabled": true,
+      "away_mode_reassign": true
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

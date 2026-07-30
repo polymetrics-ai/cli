@@ -1,0 +1,18 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "author_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/articles",
+    "body": {
+      "title": "title_fixture",
+      "author_id": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

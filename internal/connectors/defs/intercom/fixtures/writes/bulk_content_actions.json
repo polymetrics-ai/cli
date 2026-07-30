@@ -1,0 +1,28 @@
+{
+  "record": {
+    "action": "publish",
+    "content_ids": [
+      {
+        "type": "article",
+        "id": "id_fixture"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/content/bulk_actions",
+    "body": {
+      "action": "publish",
+      "content_ids": [
+        {
+          "type": "article",
+          "id": "id_fixture"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

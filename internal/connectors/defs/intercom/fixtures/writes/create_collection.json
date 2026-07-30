@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/help_center/collections",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

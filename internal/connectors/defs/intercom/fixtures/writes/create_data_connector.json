@@ -1,0 +1,16 @@
+{
+  "record": {
+    "name": "name_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/data_connectors",
+    "body": {
+      "name": "name_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

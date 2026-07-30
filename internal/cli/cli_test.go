@@ -774,7 +774,7 @@ func TestRootHelpListsDynamicConnectorCommands(t *testing.T) {
 		t.Fatalf("root help code = %d stderr=%s", code, stderr.String())
 	}
 	out := stdout.String()
-	for _, want := range []string{"CONNECTOR COMMANDS", "pm bahmni <command>", "pm github <command>", "pm gong <command>"} {
+	for _, want := range []string{"CONNECTOR COMMANDS", "pm bahmni <command>", "pm github <command>", "pm gong <command>", "pm intercom <command>"} {
 		if !strings.Contains(out, want) {
 			t.Fatalf("root help missing %q:\n%s", want, out)
 		}

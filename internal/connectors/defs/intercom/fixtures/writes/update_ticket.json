@@ -1,0 +1,21 @@
+{
+  "record": {
+    "ticket_id": "ticket_id_fixture",
+    "ticket_attributes": {
+      "fixture_key": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/tickets/ticket_id_fixture",
+    "body": {
+      "ticket_attributes": {
+        "fixture_key": "fixture_value"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

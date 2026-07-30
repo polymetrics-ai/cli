@@ -1,0 +1,18 @@
+{
+  "record": {
+    "office_hours_schedule_id": "office_hours_schedule_id_fixture",
+    "id": "id_fixture",
+    "exception_date": "2026-01-01T00:00:00Z"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/office_hours_schedules/office_hours_schedule_id_fixture/office_hours_exceptions/id_fixture",
+    "body": {
+      "exception_date": "2026-01-01T00:00:00Z"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

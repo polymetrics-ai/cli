@@ -1,0 +1,18 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture",
+    "contact_id": "contact_id_fixture",
+    "admin_id": "admin_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/conversations/conversation_id_fixture/customers/contact_id_fixture",
+    "body": {
+      "admin_id": "admin_id_fixture"
+    }
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}
