@@ -459,7 +459,7 @@
 | `stigg` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Stigg | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.stigg.io/reference/api-overview) | bundle definition |
 | `stockdata` | [`icons/stockdata.svg`](../icons/stockdata.svg) | StockData | `api` | ga | check, catalog, read | 15 | 0 | [Documentation](https://www.stockdata.org/documentation) | bundle definition |
 | `strava` | [`icons/strava.svg`](../icons/strava.svg) | Strava | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://developers.strava.com/docs/reference/) | bundle definition |
-| `stripe` | [`icons/stripe.svg`](../icons/stripe.svg) | Stripe | `api` | ga | check, catalog, read, write | 5 | 2 | [Documentation](https://stripe.com/docs/api) | bundle definition |
+| `stripe` | [`icons/stripe.svg`](../icons/stripe.svg) | Stripe | `api` | ga | check, catalog, read, write | 5 | 3 | [Documentation](https://stripe.com/docs/api) | bundle definition |
 | `survey-sparrow` | [`icons/surveysparrow.svg`](../icons/surveysparrow.svg) | SurveySparrow | `api` | ga | check, catalog, read, write | 22 | 33 | [Documentation](https://developers.surveysparrow.com/) | bundle definition |
 | `surveycto` | [`icons/surveycto.svg`](../icons/surveycto.svg) | SurveyCTO | `api` | ga | check, catalog, read, write | 6 | 7 | [Documentation](https://developer.surveycto.com/) | bundle definition |
 | `surveymonkey` | [`icons/surveymonkey.svg`](../icons/surveymonkey.svg) | SurveyMonkey | `api` | ga | check, catalog, read, write | 82 | 53 | [Documentation](https://developer.surveymonkey.com/api/v3/) | bundle definition |

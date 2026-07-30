@@ -1,7 +1,7 @@
 # Overview
 
 Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse
-ETL customer actions through the Stripe REST API.
+ETL customer create, update, and typed destructive delete actions through the Stripe REST API.
 
 Readable streams: `customers`, `charges`, `invoices`, `subscriptions`, `products`.
 
@@ -72,7 +72,8 @@ lower bound is available.
 
 ## Write actions & risks
 
-Overall write risk: external Stripe API mutation.
+Overall write risk: external Stripe API mutation, including typed destructive customer deletion when
+explicitly confirmed.
 
 Reverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:
 
