@@ -1255,6 +1255,7 @@ func safeReversePlanForOutput(plan app.ReversePlan) app.ReversePlan {
 	plan.ApprovalToken = ""
 	plan.ApprovalTokenHash = ""
 	plan.ConnectorCommandRecord = nil
+	plan.Sample = app.RedactReversePlanRecords(plan.Sample, plan.RedactFields)
 	return plan
 }
 

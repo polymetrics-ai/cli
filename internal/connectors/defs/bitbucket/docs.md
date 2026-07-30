@@ -16,6 +16,8 @@ The stream ledger is generated from every official JSON GET operation not classi
 
 Every generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: "destructive"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.
 
+Secret-bearing write actions for pipeline variables, webhooks, and repository pipeline SSH key pairs declare `redact_fields` for variable `value`, webhook `secret`, and SSH private key/passphrase fields so reverse-plan samples, previews, and write errors do not display those values while approved execution still submits the original payload.
+
 ## Known limits
 
 - No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.
