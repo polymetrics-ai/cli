@@ -6,6 +6,7 @@
 - Required programming-loop command attempted: `scripts/gsd prompt programming-loop init --phase issue-79-bitbucket-parity --dry-run`.
 - Adapter result: `unknown GSD command: programming-loop`; `scripts/gsd help programming-loop` and `scripts/gsd sources pm-gsd-loop` were also unavailable.
 - Manual-GSD fallback is active for this worker. This file records the plan, TDD ledger, verification checklist, and execution decisions before connector production edits.
+- Merge-readiness resume command: `scripts/gsd prompt progress --do "resume issue 79 Bitbucket connector parity through no-mistakes validation, PR creation, and green checks without live-provider work or merge"`.
 
 ## Required skills loaded
 
@@ -21,6 +22,7 @@
 - `golang-documentation`
 - `golang-spf13-cobra`
 - `golang-lint`
+- `no-mistakes`
 - `.agents/agentic-delivery/references/required-skills-routing.md`
 - `.agents/agentic-delivery/references/cli-help-docs-website-parity.md`
 - `docs/migration/HANDOFF-CODEX.md`
@@ -68,6 +70,12 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
    - Run focused conformance if the bundle reaches dynamic readiness; otherwise record exact blocker.
    - Run `git diff --check`, connector boundary if available, and commit the coherent connector-local slice.
 
+6. **Merge-readiness gate**
+   - Invoke `/no-mistakes` as `no-mistakes axi run --intent ...` on the committed feature branch.
+   - Let the no-mistakes pipeline own review, fixes, tests, docs, lint, push, PR creation, and CI gates while it is active.
+   - Do not run live-provider or credentialed Bitbucket checks, do not merge, and preserve typed destructive confirmation and fixtures.
+   - Stop only at `checks-passed`/green PR checks or an explicit blocker that needs human input.
+
 ## TDD ledger
 
 | Step | Command/evidence | Result |
@@ -85,6 +93,7 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 | Boundary | `make connector-boundary` | passed with clean outcome |
 | Diff hygiene | `git diff --check` | passed |
 | Scope guard | `git status --short` and path review | working tree changes are the Bitbucket defs bundle, generated Bitbucket/catalog docs, CLI golden/catalog metadata required by the new connector, and this connector-local GSD artifact |
+| Merge-readiness plan | `scripts/gsd prompt progress --do "resume issue 79 Bitbucket connector parity through no-mistakes validation, PR creation, and green checks without live-provider work or merge"` | prompt generated; proceeding with no-mistakes AXI gate on the committed feature branch |
 
 ## Verification checklist
 
@@ -95,6 +104,8 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 - [x] `go build ./cmd/pm`
 - [x] `make connector-boundary`
 - [x] `git diff --check`
+- [ ] `no-mistakes axi run --intent "Implement complete documented Bitbucket connector parity for issue #79 and subissues #90-#96, preserving typed destructive confirmation, sanitized fixtures, issue policy addenda, no live-provider work, and no merge."`
+- [ ] PR opened/updated and checks green
 
 ## Project memory hook
 
