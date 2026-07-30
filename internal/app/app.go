@@ -685,6 +685,7 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		return ReversePlan{}, err
 	}
 	sampleCount := min(3, len(mapped))
+	redactFields := reversePlanRedactFields(destination, req.Action)
 	plan := ReversePlan{
 		ID:                    id,
 		Name:                  req.Name,
@@ -697,8 +698,9 @@ func (a *App) PlanReverseETL(ctx context.Context, req PlanReverseETLRequest) (Re
 		Mappings:              cloneStringMap(req.Mappings),
 		PayloadIdentity:       payloadIdentity,
 		ConfirmationChallenge: a.confirmationChallengeForAction(req.DestinationConnector, req.Action),
+		RedactFields:          redactFields,
 		RecordCount:           len(records),
-		Sample:                cloneRecords(mapped[:sampleCount]),
+		Sample:                RedactReversePlanRecords(mapped[:sampleCount], redactFields),
 		PlanHash:              planHash,
 		ApprovalTokenHash:     hashString(token),
 		ApprovalToken:         token,

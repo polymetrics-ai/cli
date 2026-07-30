@@ -143,6 +143,7 @@ type ReversePlan struct {
 	ConnectorCommandRecord connectors.Record   `json:"connector_command_record,omitempty"`
 	PayloadIdentity        []PayloadIdentity   `json:"payload_identity,omitempty"`
 	ConfirmationChallenge  string              `json:"confirmation_challenge,omitempty"`
+	RedactFields           []string            `json:"redact_fields,omitempty"`
 	RecordCount            int                 `json:"record_count"`
 	Sample                 []connectors.Record `json:"sample,omitempty"`
 	PlanHash               string              `json:"plan_hash"`
