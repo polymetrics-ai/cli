@@ -72029,15 +72029,15 @@
   {
     "name": "linear",
     "display_name": "Linear",
-    "description": "Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.",
+    "description": "Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL reverse-ETL mutations where connector-local schemas can do so without raw GraphQL passthrough.",
     "integration_type": "api",
     "docs_url": "https://developers.linear.app/docs",
     "release_stage": "ga",
     "capabilities": {
-      "check": true,
+      "check": false,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -72050,17 +72050,17 @@
           "type": "string",
           "format": "uri",
           "default": "https://api.linear.app/graphql",
-          "description": "Full Linear GraphQL endpoint URL override for tests or proxies. Must be the complete endpoint (including any path); unlike legacy, a bare-host override is NOT auto-suffixed with /graphql by this bundle (see docs.md Known limits). Defaults to https://api.linear.app/graphql."
+          "description": "Full Linear GraphQL endpoint URL override for tests or proxies."
         },
         "api_key": {
           "type": "string",
           "x-secret": true,
-          "description": "Linear personal API key, sent as a bare Authorization header (no Bearer prefix). Provide either api_key or access_token."
+          "description": "Linear personal API key, sent as a bare Authorization header (no Bearer prefix)."
         },
         "access_token": {
           "type": "string",
           "x-secret": true,
-          "description": "Linear OAuth access token, sent as a Bearer Authorization header. Provide either api_key or access_token; access_token takes priority when both are set."
+          "description": "Linear OAuth access token, sent as a Bearer Authorization header. Takes priority when both secrets are configured."
         },
         "auth_type": {
           "type": "string",
@@ -72070,16 +72070,7 @@
             "oauth2.0"
           ],
           "default": "",
-          "description": "Optional. Set to oauth or oauth2.0 to send api_key with a Bearer prefix instead of the default bare personal-API-key header (legacy's isOAuth config-forced-Bearer path). Not needed when access_token is set (access_token always uses Bearer regardless of this value)."
-        },
-        "page_size": {
-          "type": "string",
-          "default": "50",
-          "description": "GraphQL connection page size (1-250, Linear's own cap). Hooks-consumed; see docs.md Known limits."
-        },
-        "max_pages": {
-          "type": "string",
-          "description": "Optional hard cap on the number of pages read per stream. Empty, \"all\", or \"unlimited\" means unbounded (the default). Hooks-consumed; see docs.md Known limits."
+          "description": "Set to oauth or oauth2.0 to send api_key with a Bearer prefix instead of the default bare personal API key header."
         }
       }
     },
@@ -72089,27 +72080,11 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updated_at",
+        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
-        ]
-      },
-      {
-        "name": "teams",
-        "primary_key": [
-          "id"
-        ],
-        "cursor_field": "updated_at",
-        "sync_modes": [
-          "full_refresh_append",
-          "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -72117,13 +72092,23 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updated_at",
+        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "teams",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       },
       {
@@ -72131,19 +72116,1678 @@
         "primary_key": [
           "id"
         ],
-        "cursor_field": "updated_at",
+        "cursor_field": "updatedAt",
         "sync_modes": [
           "full_refresh_append",
           "full_refresh_overwrite",
-          "full_refresh_overwrite_deduped",
-          "incremental_append",
-          "incremental_append_deduped"
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "administrable_teams",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "agent_activities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "agent_sessions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "agent_skills",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "archived_integrations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "archived_teams",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "attachments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "attachments_for_url",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_entries",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "audit_entry_types",
+        "primary_key": [
+          "__typename"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "authentication_sessions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "comments",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "custom_views",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "customer_needs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "customer_statuses",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "customer_tiers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "customers",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "cycles",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "documents",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "emojis",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "external_users",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "failures_for_oauth_webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "createdAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "favorites",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "initiative_labels",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "initiative_relations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "initiative_to_projects",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "initiative_updates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "initiatives",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "integration_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "integrations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_figma_file_key_search",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_labels",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_priority_values",
+        "primary_key": [
+          "__typename"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_relations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_search",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "issue_to_releases",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "oauth_applications",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "organization_invites",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_labels",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_milestones",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_relations",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_statuses",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "project_updates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "recent_releases_by_access_key",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "release_notes",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "release_pipelines",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "release_search",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "release_stages",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "releases",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "roadmap_to_projects",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "roadmaps",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "sla_configurations",
+        "primary_key": [
+          "id"
+        ],
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "team_memberships",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "templates_for_integration",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "time_schedules",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "triage_responsibilities",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "user_sessions",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "webhooks",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
+        ]
+      },
+      {
+        "name": "workflow_states",
+        "primary_key": [
+          "id"
+        ],
+        "cursor_field": "updatedAt",
+        "sync_modes": [
+          "full_refresh_append",
+          "full_refresh_overwrite",
+          "full_refresh_overwrite_deduped"
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "agent_skill_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "attachment_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "attachment_sync_to_slack",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "comment_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "comment_unresolve",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "custom_view_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_merge",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "customer_need_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_need_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_status_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_tier_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "customer_unsync",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "cycle_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "cycle_start_upcoming_cycle_today",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "document_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "document_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "email_intake_address_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "email_intake_address_refresh_ses_domain_status",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "email_intake_address_rotate",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "emoji_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "entity_external_link_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "favorite_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "file_upload_dangerously_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "git_automation_state_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "git_automation_target_branch_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "image_upload_from_url",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "initiative_add_label",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "initiative_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_label_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_label_restore",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "initiative_label_retire",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "initiative_relation_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_remove_label",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_to_project_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_update_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "initiative_update_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "integration_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "integration_git_hub_enterprise_server_connect",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_github_commit_create",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_github_import_refresh",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_github_remove_code_access",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "integration_gitlab_test_connection",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_intercom_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "integration_opsgenie_refresh_schedule_mappings",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_pager_duty_refresh_schedule_mappings",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_salesforce_metadata_refresh",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_slack_or_asks_update_slack_team_name",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "integration_template_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_add_label",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_description_update_from_front",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_external_sync_disable",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_import_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_label_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_label_restore",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_label_retire",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_relation_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_reminder",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_remove_label",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_share",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "issue_to_release_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_to_release_delete_by_issue_and_release",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "issue_unshare",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "leave_organization",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "logout_session",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "notification_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "notification_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "oauth_application_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "oauth_application_rotate_secret",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "oauth_application_rotate_webhook_secret",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "organization_cancel_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "organization_delete_challenge",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "organization_domain_claim",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "organization_domain_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "organization_invite_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "passkey_login_start",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "project_add_label",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "project_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_label_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_label_restore",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "project_label_retire",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "project_milestone_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_reassign_status",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "project_relation_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_remove_label",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_status_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_status_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_update_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "project_update_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "push_subscription_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "reaction_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_note_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_pipeline_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_pipeline_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_pipeline_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_stage_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_stage_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "release_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "resend_organization_invite",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "resend_organization_invite_by_email",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "team_cycles_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "team_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "team_key_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "team_unarchive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "template_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "time_schedule_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "time_schedule_refresh_integration_schedule",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "triage_responsibility_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_external_user_disconnect",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_revoke_all_sessions",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_revoke_session",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "user_unlink_from_identity_provider",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+      },
+      {
+        "name": "view_preferences_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "webhook_delete",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "webhook_rotate_secret",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      },
+      {
+        "name": "workflow_state_archive",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Linear GraphQL API read of issues/teams/projects/users",
-      "approval": "none; read-only source connector"
+      "read": "fixed Linear GraphQL documents against documented root Query list/connection fields",
+      "write": "fixed Linear GraphQL mutations; destructive/delete/archive operations require typed destructive confirmation when implemented",
+      "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions require typed confirmation"
     },
     "icon": {
       "id": "pm-sample",

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "organizationInvites": {
+          "nodes": [
+            {
+              "__typename": "OrganizationInvite",
+              "id": "organization_invites_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "email": "email_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

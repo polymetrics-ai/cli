@@ -1,0 +1,1430 @@
+{
+  "operations": [
+    {
+      "id": "linear.query.dummy",
+      "kind": "graphql_query",
+      "summary": "Linear Query._dummy: String!",
+      "description": "",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDummy",
+        "document": "query LinearDummy { _dummy }"
+      }
+    },
+    {
+      "id": "linear.query.agent_activity",
+      "kind": "graphql_query",
+      "summary": "Linear Query.agentActivity: AgentActivity!",
+      "description": "A specific agent activity.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAgentActivity",
+        "document": "query LinearAgentActivity { agentActivity }"
+      }
+    },
+    {
+      "id": "linear.query.agent_session",
+      "kind": "graphql_query",
+      "summary": "Linear Query.agentSession: AgentSession!",
+      "description": "A specific agent session.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAgentSession",
+        "document": "query LinearAgentSession { agentSession }"
+      }
+    },
+    {
+      "id": "linear.query.agent_session_sandbox",
+      "kind": "graphql_query",
+      "summary": "Linear Query.agentSessionSandbox: CodingAgentSandboxPayload",
+      "description": "[Internal] Retrieves coding agent sandbox details for a given agent session ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAgentSessionSandbox",
+        "document": "query LinearAgentSessionSandbox { agentSessionSandbox }"
+      }
+    },
+    {
+      "id": "linear.query.agent_skill",
+      "kind": "graphql_query",
+      "summary": "Linear Query.agentSkill: AgentSkill!",
+      "description": "A specific agent skill.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAgentSkill",
+        "document": "query LinearAgentSkill { agentSkill }"
+      }
+    },
+    {
+      "id": "linear.query.application_info",
+      "kind": "graphql_query",
+      "summary": "Linear Query.applicationInfo: Application!",
+      "description": "Retrieves public information about an OAuth application by its client ID. Used during the authorization flow to display application details to the user.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearApplicationInfo",
+        "document": "query LinearApplicationInfo { applicationInfo }"
+      }
+    },
+    {
+      "id": "linear.query.attachment",
+      "kind": "graphql_query",
+      "summary": "Linear Query.attachment: Attachment!",
+      "description": "One specific issue attachment. [Deprecated] 'url' can no longer be used as the 'id' parameter. Use 'attachmentsForUrl' instead",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAttachment",
+        "document": "query LinearAttachment { attachment }"
+      }
+    },
+    {
+      "id": "linear.query.attachment_issue",
+      "kind": "graphql_query",
+      "summary": "Linear Query.attachmentIssue: Issue!",
+      "description": "Query an issue by its associated attachment, and its id.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAttachmentIssue",
+        "document": "query LinearAttachmentIssue { attachmentIssue }"
+      }
+    },
+    {
+      "id": "linear.query.attachment_sources",
+      "kind": "graphql_query",
+      "summary": "Linear Query.attachmentSources: AttachmentSourcesPayload!",
+      "description": "[Internal] Get a list of all unique attachment sources in the workspace.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAttachmentSources",
+        "document": "query LinearAttachmentSources { attachmentSources }"
+      }
+    },
+    {
+      "id": "linear.query.available_users",
+      "kind": "graphql_query",
+      "summary": "Linear Query.availableUsers: AuthResolverResponse!",
+      "description": "Fetch users belonging to this user account.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAvailableUsers",
+        "document": "query LinearAvailableUsers { availableUsers }"
+      }
+    },
+    {
+      "id": "linear.query.comment",
+      "kind": "graphql_query",
+      "summary": "Linear Query.comment: Comment!",
+      "description": "A specific comment.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearComment",
+        "document": "query LinearComment { comment }"
+      }
+    },
+    {
+      "id": "linear.query.custom_view",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customView: CustomView!",
+      "description": "One specific custom view, looked up by ID or slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomView",
+        "document": "query LinearCustomView { customView }"
+      }
+    },
+    {
+      "id": "linear.query.custom_view_details_suggestion",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customViewDetailsSuggestion: CustomViewSuggestionPayload!",
+      "description": "[INTERNAL] Suggests metadata (name, description, icon) for a view based on its filters using AI. Rate-limited to 30 requests per minute.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomViewDetailsSuggestion",
+        "document": "query LinearCustomViewDetailsSuggestion { customViewDetailsSuggestion }"
+      }
+    },
+    {
+      "id": "linear.query.custom_view_has_subscribers",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customViewHasSubscribers: CustomViewHasSubscribersPayload!",
+      "description": "Whether a custom view has active notification subscribers other than the current user. Useful for warning before deleting a shared view.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomViewHasSubscribers",
+        "document": "query LinearCustomViewHasSubscribers { customViewHasSubscribers }"
+      }
+    },
+    {
+      "id": "linear.query.customer",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customer: Customer!",
+      "description": "Retrieves a single customer by ID or slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomer",
+        "document": "query LinearCustomer { customer }"
+      }
+    },
+    {
+      "id": "linear.query.customer_need",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customerNeed: CustomerNeed!",
+      "description": "Retrieves a single customer need by ID or hash.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomerNeed",
+        "document": "query LinearCustomerNeed { customerNeed }"
+      }
+    },
+    {
+      "id": "linear.query.customer_status",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customerStatus: CustomerStatus!",
+      "description": "One specific customer status.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomerStatus",
+        "document": "query LinearCustomerStatus { customerStatus }"
+      }
+    },
+    {
+      "id": "linear.query.customer_tier",
+      "kind": "graphql_query",
+      "summary": "Linear Query.customerTier: CustomerTier!",
+      "description": "One specific customer tier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCustomerTier",
+        "document": "query LinearCustomerTier { customerTier }"
+      }
+    },
+    {
+      "id": "linear.query.cycle",
+      "kind": "graphql_query",
+      "summary": "Linear Query.cycle: Cycle!",
+      "description": "One specific cycle, looked up by ID or slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearCycle",
+        "document": "query LinearCycle { cycle }"
+      }
+    },
+    {
+      "id": "linear.query.diff",
+      "kind": "graphql_query",
+      "summary": "Linear Query.diff: Diff!",
+      "description": "[Internal] A specific diff.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDiff",
+        "document": "query LinearDiff { diff }"
+      }
+    },
+    {
+      "id": "linear.query.document",
+      "kind": "graphql_query",
+      "summary": "Linear Query.document: Document!",
+      "description": "A specific document by ID or slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDocument",
+        "document": "query LinearDocument { document }"
+      }
+    },
+    {
+      "id": "linear.query.document_content_history",
+      "kind": "graphql_query",
+      "summary": "Linear Query.documentContentHistory: DocumentContentHistoryPayload!",
+      "description": "A collection of document content history entries.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDocumentContentHistory",
+        "document": "query LinearDocumentContentHistory { documentContentHistory }"
+      }
+    },
+    {
+      "id": "linear.query.document_content_history_entries",
+      "kind": "graphql_query",
+      "summary": "Linear Query.documentContentHistoryEntries: DocumentContentHistoryPayload!",
+      "description": "[Internal] Fetches document content history entries by their IDs, including content data.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDocumentContentHistoryEntries",
+        "document": "query LinearDocumentContentHistoryEntries { documentContentHistoryEntries }"
+      }
+    },
+    {
+      "id": "linear.query.document_content_history_timeline",
+      "kind": "graphql_query",
+      "summary": "Linear Query.documentContentHistoryTimeline: DocumentContentHistoryTimelinePayload!",
+      "description": "[Internal] Fetches the fresh document content history timeline for the client history dialog.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearDocumentContentHistoryTimeline",
+        "document": "query LinearDocumentContentHistoryTimeline { documentContentHistoryTimeline }"
+      }
+    },
+    {
+      "id": "linear.query.email_intake_address",
+      "kind": "graphql_query",
+      "summary": "Linear Query.emailIntakeAddress: EmailIntakeAddress!",
+      "description": "One specific email intake address.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearEmailIntakeAddress",
+        "document": "query LinearEmailIntakeAddress { emailIntakeAddress }"
+      }
+    },
+    {
+      "id": "linear.query.emoji",
+      "kind": "graphql_query",
+      "summary": "Linear Query.emoji: Emoji!",
+      "description": "A specific custom emoji by ID or name.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearEmoji",
+        "document": "query LinearEmoji { emoji }"
+      }
+    },
+    {
+      "id": "linear.query.entity_external_link",
+      "kind": "graphql_query",
+      "summary": "Linear Query.entityExternalLink: EntityExternalLink!",
+      "description": "Retrieves a single entity external link by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearEntityExternalLink",
+        "document": "query LinearEntityExternalLink { entityExternalLink }"
+      }
+    },
+    {
+      "id": "linear.query.external_user",
+      "kind": "graphql_query",
+      "summary": "Linear Query.externalUser: ExternalUser!",
+      "description": "Retrieves a single external user by their identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearExternalUser",
+        "document": "query LinearExternalUser { externalUser }"
+      }
+    },
+    {
+      "id": "linear.query.favorite",
+      "kind": "graphql_query",
+      "summary": "Linear Query.favorite: Favorite!",
+      "description": "A specific favorite by ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearFavorite",
+        "document": "query LinearFavorite { favorite }"
+      }
+    },
+    {
+      "id": "linear.query.fetch_data",
+      "kind": "graphql_query",
+      "summary": "Linear Query.fetchData: FetchDataPayload!",
+      "description": "[Internal] Fetch an arbitrary set of data using natural language query. Be specific about what you want including properties for each entity, sort order, filters, limit and properties.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearFetchData",
+        "document": "query LinearFetchData { fetchData }"
+      }
+    },
+    {
+      "id": "linear.query.initiative",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiative: Initiative!",
+      "description": "Returns a single initiative by its identifier or URL slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiative",
+        "document": "query LinearInitiative { initiative }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_filter_suggestion",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeFilterSuggestion: InitiativeFilterSuggestionPayload!",
+      "description": "Suggests filters for an initiative view based on a text prompt.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeFilterSuggestion",
+        "document": "query LinearInitiativeFilterSuggestion { initiativeFilterSuggestion }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_label",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeLabel: InitiativeLabel!",
+      "description": "Returns a single initiative label by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeLabel",
+        "document": "query LinearInitiativeLabel { initiativeLabel }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_lead_team_change_impact",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeLeadTeamChangeImpact: InitiativeLeadTeamChangeImpact!",
+      "description": "[Internal] Returns the impact of changing an initiative's lead team before applying the update to matching sub-initiatives.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeLeadTeamChangeImpact",
+        "document": "query LinearInitiativeLeadTeamChangeImpact { initiativeLeadTeamChangeImpact }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_relation",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeRelation: InitiativeRelation!",
+      "description": "Returns a single initiative relation by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeRelation",
+        "document": "query LinearInitiativeRelation { initiativeRelation }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_to_project",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeToProject: InitiativeToProject!",
+      "description": "Returns a single initiative-to-project association by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeToProject",
+        "document": "query LinearInitiativeToProject { initiativeToProject }"
+      }
+    },
+    {
+      "id": "linear.query.initiative_update",
+      "kind": "graphql_query",
+      "summary": "Linear Query.initiativeUpdate: InitiativeUpdate!",
+      "description": "Returns a single initiative update by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearInitiativeUpdate",
+        "document": "query LinearInitiativeUpdate { initiativeUpdate }"
+      }
+    },
+    {
+      "id": "linear.query.integration",
+      "kind": "graphql_query",
+      "summary": "Linear Query.integration: Integration!",
+      "description": "Retrieves a single integration by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIntegration",
+        "document": "query LinearIntegration { integration }"
+      }
+    },
+    {
+      "id": "linear.query.integration_has_scopes",
+      "kind": "graphql_query",
+      "summary": "Linear Query.integrationHasScopes: IntegrationHasScopesPayload!",
+      "description": "Checks if the integration has all required scopes.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIntegrationHasScopes",
+        "document": "query LinearIntegrationHasScopes { integrationHasScopes }"
+      }
+    },
+    {
+      "id": "linear.query.integration_template",
+      "kind": "graphql_query",
+      "summary": "Linear Query.integrationTemplate: IntegrationTemplate!",
+      "description": "Retrieves a single integration template connection by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIntegrationTemplate",
+        "document": "query LinearIntegrationTemplate { integrationTemplate }"
+      }
+    },
+    {
+      "id": "linear.query.integrations_settings",
+      "kind": "graphql_query",
+      "summary": "Linear Query.integrationsSettings: IntegrationsSettings!",
+      "description": "Retrieves a specific integration settings configuration by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIntegrationsSettings",
+        "document": "query LinearIntegrationsSettings { integrationsSettings }"
+      }
+    },
+    {
+      "id": "linear.query.issue",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issue: Issue!",
+      "description": "One specific issue, looked up by its unique identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssue",
+        "document": "query LinearIssue { issue }"
+      }
+    },
+    {
+      "id": "linear.query.issue_filter_suggestion",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueFilterSuggestion: IssueFilterSuggestionPayload!",
+      "description": "Suggests filters for an issue view based on a text prompt.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueFilterSuggestion",
+        "document": "query LinearIssueFilterSuggestion { issueFilterSuggestion }"
+      }
+    },
+    {
+      "id": "linear.query.issue_import_check_csv",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueImportCheckCSV: IssueImportCheckPayload!",
+      "description": "Checks a CSV file validity against a specific import service.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueImportCheckCsv",
+        "document": "query LinearIssueImportCheckCsv { issueImportCheckCSV }"
+      }
+    },
+    {
+      "id": "linear.query.issue_import_check_sync",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueImportCheckSync: IssueImportSyncCheckPayload!",
+      "description": "Checks whether it will be possible to set up sync for this project or repository at the end of import.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueImportCheckSync",
+        "document": "query LinearIssueImportCheckSync { issueImportCheckSync }"
+      }
+    },
+    {
+      "id": "linear.query.issue_import_jql_check",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueImportJqlCheck: IssueImportJqlCheckPayload!",
+      "description": "Checks whether a custom JQL query is valid and can be used to filter issues of a Jira import.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueImportJqlCheck",
+        "document": "query LinearIssueImportJqlCheck { issueImportJqlCheck }"
+      }
+    },
+    {
+      "id": "linear.query.issue_label",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueLabel: IssueLabel!",
+      "description": "One specific label, looked up by its unique identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueLabel",
+        "document": "query LinearIssueLabel { issueLabel }"
+      }
+    },
+    {
+      "id": "linear.query.issue_relation",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueRelation: IssueRelation!",
+      "description": "One specific issue relation, looked up by its unique identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueRelation",
+        "document": "query LinearIssueRelation { issueRelation }"
+      }
+    },
+    {
+      "id": "linear.query.issue_repository_suggestions",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueRepositorySuggestions: RepositorySuggestionsPayload!",
+      "description": "Returns code repositories that are most likely to be relevant for implementing an issue.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueRepositorySuggestions",
+        "document": "query LinearIssueRepositorySuggestions { issueRepositorySuggestions }"
+      }
+    },
+    {
+      "id": "linear.query.issue_title_suggestion_from_customer_request",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueTitleSuggestionFromCustomerRequest: IssueTitleSuggestionFromCustomerRequestPayload!",
+      "description": "Suggests an issue title based on a customer request message using AI summarization.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueTitleSuggestionFromCustomerRequest",
+        "document": "query LinearIssueTitleSuggestionFromCustomerRequest { issueTitleSuggestionFromCustomerRequest }"
+      }
+    },
+    {
+      "id": "linear.query.issue_to_release",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueToRelease: IssueToRelease!",
+      "description": "One specific issue-to-release association, looked up by its unique identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueToRelease",
+        "document": "query LinearIssueToRelease { issueToRelease }"
+      }
+    },
+    {
+      "id": "linear.query.issue_vcs_branch_search",
+      "kind": "graphql_query",
+      "summary": "Linear Query.issueVcsBranchSearch: Issue",
+      "description": "Find issue based on the VCS branch name.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearIssueVcsBranchSearch",
+        "document": "query LinearIssueVcsBranchSearch { issueVcsBranchSearch }"
+      }
+    },
+    {
+      "id": "linear.query.latest_release_by_access_key",
+      "kind": "graphql_query",
+      "summary": "Linear Query.latestReleaseByAccessKey: Release",
+      "description": "Returns the latest release for the pipeline associated with the access key.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearLatestReleaseByAccessKey",
+        "document": "query LinearLatestReleaseByAccessKey { latestReleaseByAccessKey }"
+      }
+    },
+    {
+      "id": "linear.query.microsoft_teams_channels",
+      "kind": "graphql_query",
+      "summary": "Linear Query.microsoftTeamsChannels: MicrosoftTeamsChannelsPayload!",
+      "description": "[Internal] Lists Microsoft Teams teams and channels accessible to the connecting user. Uses the user's microsoftPersonal integration for auth. Used by the project channel picker dialog to populate the team/channel dropdowns.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearMicrosoftTeamsChannels",
+        "document": "query LinearMicrosoftTeamsChannels { microsoftTeamsChannels }"
+      }
+    },
+    {
+      "id": "linear.query.notification",
+      "kind": "graphql_query",
+      "summary": "Linear Query.notification: Notification!",
+      "description": "A specific notification by ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearNotification",
+        "document": "query LinearNotification { notification }"
+      }
+    },
+    {
+      "id": "linear.query.notification_subscription",
+      "kind": "graphql_query",
+      "summary": "Linear Query.notificationSubscription: NotificationSubscription!",
+      "description": "A specific notification subscription by ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearNotificationSubscription",
+        "document": "query LinearNotificationSubscription { notificationSubscription }"
+      }
+    },
+    {
+      "id": "linear.query.notification_subscriptions",
+      "kind": "graphql_query",
+      "summary": "Linear Query.notificationSubscriptions: NotificationSubscriptionConnection!",
+      "description": "The authenticated user's notification subscriptions. These subscriptions control which notifications the user receives for specific entities such as teams, projects, cycles, labels, custom views, initiatives, customers, and users.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearNotificationSubscriptions",
+        "document": "query LinearNotificationSubscriptions { notificationSubscriptions }"
+      }
+    },
+    {
+      "id": "linear.query.notifications",
+      "kind": "graphql_query",
+      "summary": "Linear Query.notifications: NotificationConnection!",
+      "description": "The authenticated user's notifications.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearNotifications",
+        "document": "query LinearNotifications { notifications }"
+      }
+    },
+    {
+      "id": "linear.query.notifications_unread_count",
+      "kind": "graphql_query",
+      "summary": "Linear Query.notificationsUnreadCount: Int!",
+      "description": "[Internal] A number of unread notifications.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearNotificationsUnreadCount",
+        "document": "query LinearNotificationsUnreadCount { notificationsUnreadCount }"
+      }
+    },
+    {
+      "id": "linear.query.oauth_application",
+      "kind": "graphql_query",
+      "summary": "Linear Query.oauthApplication: OAuthApplication!",
+      "description": "[ALPHA] A specific OAuth application created by the calling OAuth application through the public API.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOauthApplication",
+        "document": "query LinearOauthApplication { oauthApplication }"
+      }
+    },
+    {
+      "id": "linear.query.organization",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organization: Organization!",
+      "description": "The authenticated user's workspace.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganization",
+        "document": "query LinearOrganization { organization }"
+      }
+    },
+    {
+      "id": "linear.query.organization_domain_claim_request",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organizationDomainClaimRequest: OrganizationDomainClaimPayload!",
+      "description": "[INTERNAL] Checks whether the domain can be claimed.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganizationDomainClaimRequest",
+        "document": "query LinearOrganizationDomainClaimRequest { organizationDomainClaimRequest }"
+      }
+    },
+    {
+      "id": "linear.query.organization_exists",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organizationExists: OrganizationExistsPayload!",
+      "description": "Checks whether a workspace with the given URL key exists.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganizationExists",
+        "document": "query LinearOrganizationExists { organizationExists }"
+      }
+    },
+    {
+      "id": "linear.query.organization_invite",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organizationInvite: OrganizationInvite!",
+      "description": "Fetches a specific workspace invite by its ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganizationInvite",
+        "document": "query LinearOrganizationInvite { organizationInvite }"
+      }
+    },
+    {
+      "id": "linear.query.organization_invite_details",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organizationInviteDetails: OrganizationInviteDetailsPayload!",
+      "description": "Fetches public details of a specific workspace invite by its ID. This query does not require authentication and is used for invite acceptance flows.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganizationInviteDetails",
+        "document": "query LinearOrganizationInviteDetails { organizationInviteDetails }"
+      }
+    },
+    {
+      "id": "linear.query.organization_meta",
+      "kind": "graphql_query",
+      "summary": "Linear Query.organizationMeta: OrganizationMeta",
+      "description": "[INTERNAL] Get workspace metadata by URL key or workspace ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearOrganizationMeta",
+        "document": "query LinearOrganizationMeta { organizationMeta }"
+      }
+    },
+    {
+      "id": "linear.query.partner_offer_details",
+      "kind": "graphql_query",
+      "summary": "Linear Query.partnerOfferDetails: PartnerOfferDetailsPayload",
+      "description": "[Internal] Fetches public details of an active partner-program offer by its partner slug. Returns null when no active offer matches the slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearPartnerOfferDetails",
+        "document": "query LinearPartnerOfferDetails { partnerOfferDetails }"
+      }
+    },
+    {
+      "id": "linear.query.project",
+      "kind": "graphql_query",
+      "summary": "Linear Query.project: Project!",
+      "description": "Returns a single project by its identifier or URL slug.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProject",
+        "document": "query LinearProject { project }"
+      }
+    },
+    {
+      "id": "linear.query.project_filter_suggestion",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectFilterSuggestion: ProjectFilterSuggestionPayload!",
+      "description": "Suggests filters for a project view based on a text prompt.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectFilterSuggestion",
+        "document": "query LinearProjectFilterSuggestion { projectFilterSuggestion }"
+      }
+    },
+    {
+      "id": "linear.query.project_label",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectLabel: ProjectLabel!",
+      "description": "Returns a single project label by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectLabel",
+        "document": "query LinearProjectLabel { projectLabel }"
+      }
+    },
+    {
+      "id": "linear.query.project_milestone",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectMilestone: ProjectMilestone!",
+      "description": "Returns a single project milestone by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectMilestone",
+        "document": "query LinearProjectMilestone { projectMilestone }"
+      }
+    },
+    {
+      "id": "linear.query.project_relation",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectRelation: ProjectRelation!",
+      "description": "Returns a single project relation by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectRelation",
+        "document": "query LinearProjectRelation { projectRelation }"
+      }
+    },
+    {
+      "id": "linear.query.project_status",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectStatus: ProjectStatus!",
+      "description": "Returns a single project status by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectStatus",
+        "document": "query LinearProjectStatus { projectStatus }"
+      }
+    },
+    {
+      "id": "linear.query.project_status_project_count",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectStatusProjectCount: ProjectStatusCountPayload!",
+      "description": "[INTERNAL] Count of projects using this project status across the workspace.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectStatusProjectCount",
+        "document": "query LinearProjectStatusProjectCount { projectStatusProjectCount }"
+      }
+    },
+    {
+      "id": "linear.query.project_update",
+      "kind": "graphql_query",
+      "summary": "Linear Query.projectUpdate: ProjectUpdate!",
+      "description": "Returns a single project update by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearProjectUpdate",
+        "document": "query LinearProjectUpdate { projectUpdate }"
+      }
+    },
+    {
+      "id": "linear.query.push_subscription_test",
+      "kind": "graphql_query",
+      "summary": "Linear Query.pushSubscriptionTest: PushSubscriptionTestPayload!",
+      "description": "Sends a test push notification to the authenticated user's registered devices. Useful for verifying that push notification delivery is working correctly.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearPushSubscriptionTest",
+        "document": "query LinearPushSubscriptionTest { pushSubscriptionTest }"
+      }
+    },
+    {
+      "id": "linear.query.rate_limit_status",
+      "kind": "graphql_query",
+      "summary": "Linear Query.rateLimitStatus: RateLimitPayload!",
+      "description": "The current rate limit status for the authenticated client, including remaining quota and reset timing for each limit type.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearRateLimitStatus",
+        "document": "query LinearRateLimitStatus { rateLimitStatus }"
+      }
+    },
+    {
+      "id": "linear.query.release",
+      "kind": "graphql_query",
+      "summary": "Linear Query.release: Release!",
+      "description": "Fetch a single release by its UUID or slug identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearRelease",
+        "document": "query LinearRelease { release }"
+      }
+    },
+    {
+      "id": "linear.query.release_note",
+      "kind": "graphql_query",
+      "summary": "Linear Query.releaseNote: ReleaseNote!",
+      "description": "Fetch a release note by its UUID or slug identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearReleaseNote",
+        "document": "query LinearReleaseNote { releaseNote }"
+      }
+    },
+    {
+      "id": "linear.query.release_pipeline",
+      "kind": "graphql_query",
+      "summary": "Linear Query.releasePipeline: ReleasePipeline!",
+      "description": "Fetch a single release pipeline by its UUID or slug identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearReleasePipeline",
+        "document": "query LinearReleasePipeline { releasePipeline }"
+      }
+    },
+    {
+      "id": "linear.query.release_pipeline_by_access_key",
+      "kind": "graphql_query",
+      "summary": "Linear Query.releasePipelineByAccessKey: ReleasePipeline!",
+      "description": "Returns a release pipeline by ID. Requires the access key to have access to the pipeline.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearReleasePipelineByAccessKey",
+        "document": "query LinearReleasePipelineByAccessKey { releasePipelineByAccessKey }"
+      }
+    },
+    {
+      "id": "linear.query.release_stage",
+      "kind": "graphql_query",
+      "summary": "Linear Query.releaseStage: ReleaseStage!",
+      "description": "Fetch a single release stage by its UUID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearReleaseStage",
+        "document": "query LinearReleaseStage { releaseStage }"
+      }
+    },
+    {
+      "id": "linear.query.roadmap",
+      "kind": "graphql_query",
+      "summary": "Linear Query.roadmap: Roadmap!",
+      "description": "[Deprecated] Returns a single roadmap by its identifier. Use initiatives instead.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearRoadmap",
+        "document": "query LinearRoadmap { roadmap }"
+      }
+    },
+    {
+      "id": "linear.query.roadmap_to_project",
+      "kind": "graphql_query",
+      "summary": "Linear Query.roadmapToProject: RoadmapToProject!",
+      "description": "[Deprecated] Returns a single roadmap-to-project association. Use InitiativeToProject instead.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearRoadmapToProject",
+        "document": "query LinearRoadmapToProject { roadmapToProject }"
+      }
+    },
+    {
+      "id": "linear.query.search_documents",
+      "kind": "graphql_query",
+      "summary": "Linear Query.searchDocuments: DocumentSearchPayload!",
+      "description": "Search documents by text query using full-text and vector search. Results are ranked by relevance unless an orderBy parameter is specified. Rate-limited to 30 requests per minute.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearSearchDocuments",
+        "document": "query LinearSearchDocuments { searchDocuments }"
+      }
+    },
+    {
+      "id": "linear.query.search_issues",
+      "kind": "graphql_query",
+      "summary": "Linear Query.searchIssues: IssueSearchPayload!",
+      "description": "Search issues by text query using full-text and vector search. Results are ranked by relevance unless an orderBy parameter is specified. Supports optional issue filters and comment inclusion. Rate-limited to 30 requests per minute.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearSearchIssues",
+        "document": "query LinearSearchIssues { searchIssues }"
+      }
+    },
+    {
+      "id": "linear.query.search_projects",
+      "kind": "graphql_query",
+      "summary": "Linear Query.searchProjects: ProjectSearchPayload!",
+      "description": "Search projects by text query using full-text and vector search. Results are ranked by relevance unless an orderBy parameter is specified. Rate-limited to 30 requests per minute.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearSearchProjects",
+        "document": "query LinearSearchProjects { searchProjects }"
+      }
+    },
+    {
+      "id": "linear.query.semantic_search",
+      "kind": "graphql_query",
+      "summary": "Linear Query.semanticSearch: SemanticSearchPayload!",
+      "description": "Search for issues, projects, initiatives, and documents using natural language. Uses vector-based semantic search with optional full-text search and reranking. Results can be filtered by type and by entity-specific filters. Rate-limited to 30 requests per minute.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearSemanticSearch",
+        "document": "query LinearSemanticSearch { semanticSearch }"
+      }
+    },
+    {
+      "id": "linear.query.sso_url_from_email",
+      "kind": "graphql_query",
+      "summary": "Linear Query.ssoUrlFromEmail: SsoUrlFromEmailResponse!",
+      "description": "Fetch SSO login URL for the email provided.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearSsoUrlFromEmail",
+        "document": "query LinearSsoUrlFromEmail { ssoUrlFromEmail }"
+      }
+    },
+    {
+      "id": "linear.query.team",
+      "kind": "graphql_query",
+      "summary": "Linear Query.team: Team!",
+      "description": "Fetches a specific team by its ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearTeam",
+        "document": "query LinearTeam { team }"
+      }
+    },
+    {
+      "id": "linear.query.team_membership",
+      "kind": "graphql_query",
+      "summary": "Linear Query.teamMembership: TeamMembership!",
+      "description": "Fetches a specific team membership by its ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearTeamMembership",
+        "document": "query LinearTeamMembership { teamMembership }"
+      }
+    },
+    {
+      "id": "linear.query.template",
+      "kind": "graphql_query",
+      "summary": "Linear Query.template: Template!",
+      "description": "A specific template.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearTemplate",
+        "document": "query LinearTemplate { template }"
+      }
+    },
+    {
+      "id": "linear.query.time_schedule",
+      "kind": "graphql_query",
+      "summary": "Linear Query.timeSchedule: TimeSchedule!",
+      "description": "A specific time schedule.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearTimeSchedule",
+        "document": "query LinearTimeSchedule { timeSchedule }"
+      }
+    },
+    {
+      "id": "linear.query.triage_responsibility",
+      "kind": "graphql_query",
+      "summary": "Linear Query.triageResponsibility: TriageResponsibility!",
+      "description": "A specific triage responsibility.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearTriageResponsibility",
+        "document": "query LinearTriageResponsibility { triageResponsibility }"
+      }
+    },
+    {
+      "id": "linear.query.user",
+      "kind": "graphql_query",
+      "summary": "Linear Query.user: User!",
+      "description": "Fetches a specific user by their ID.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearUser",
+        "document": "query LinearUser { user }"
+      }
+    },
+    {
+      "id": "linear.query.user_settings",
+      "kind": "graphql_query",
+      "summary": "Linear Query.userSettings: UserSettings!",
+      "description": "The authenticated user's notification and UI settings.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearUserSettings",
+        "document": "query LinearUserSettings { userSettings }"
+      }
+    },
+    {
+      "id": "linear.query.verify_git_hub_enterprise_server_installation",
+      "kind": "graphql_query",
+      "summary": "Linear Query.verifyGitHubEnterpriseServerInstallation: GitHubEnterpriseServerInstallVerificationPayload!",
+      "description": "Verify that we received the correct response from the GitHub Enterprise Server.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearVerifyGitHubEnterpriseServerInstallation",
+        "document": "query LinearVerifyGitHubEnterpriseServerInstallation { verifyGitHubEnterpriseServerInstallation }"
+      }
+    },
+    {
+      "id": "linear.query.viewer",
+      "kind": "graphql_query",
+      "summary": "Linear Query.viewer: User!",
+      "description": "The currently authenticated user making the API request.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearViewer",
+        "document": "query LinearViewer { viewer }"
+      }
+    },
+    {
+      "id": "linear.query.webhook",
+      "kind": "graphql_query",
+      "summary": "Linear Query.webhook: Webhook!",
+      "description": "Retrieves a single webhook by its identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearWebhook",
+        "document": "query LinearWebhook { webhook }"
+      }
+    },
+    {
+      "id": "linear.query.workflow_state",
+      "kind": "graphql_query",
+      "summary": "Linear Query.workflowState: WorkflowState!",
+      "description": "One specific workflow state (issue status), looked up by its unique identifier.",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "low",
+      "approval": "none when implemented as a fixed bounded GraphQL operation; currently blocked, not executable",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearWorkflowState",
+        "document": "query LinearWorkflowState { workflowState }"
+      }
+    },
+    {
+      "id": "linear.query.attachments",
+      "kind": "graphql_query",
+      "summary": "Linear Query.attachments fixed operation (planned).",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "blocked until fixed GraphQL operation execution foundation is available",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAttachments",
+        "document": "query LinearAttachments { _dummy }"
+      }
+    },
+    {
+      "id": "linear.subscription.agent_activity_created",
+      "kind": "graphql_query",
+      "summary": "Linear Subscription.agentActivityCreated fixed operation (planned).",
+      "source_url": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql",
+      "risk": "medium",
+      "approval": "blocked until fixed GraphQL operation execution foundation is available",
+      "output_policy": "json_redacted",
+      "graphql": {
+        "operation_name": "LinearAgentActivityCreated",
+        "document": "query LinearAgentActivityCreated { _dummy }"
+      }
+    }
+  ]
+}

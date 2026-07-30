@@ -1,0 +1,32 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "initiatives": {
+          "nodes": [
+            {
+              "__typename": "Initiative",
+              "id": "initiatives_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "name": "name_fixture",
+              "identifier": "identifier_fixture",
+              "url": "url_fixture",
+              "description": "description_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

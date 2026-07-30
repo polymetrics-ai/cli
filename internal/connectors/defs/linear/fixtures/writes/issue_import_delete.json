@@ -1,0 +1,22 @@
+{
+  "record": {
+    "issueImportId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIssueImportDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "issueImportDelete": {
+          "__typename": "IssueImportDeletePayload"
+        }
+      }
+    }
+  }
+}

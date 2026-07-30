@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "audit_entry_types",
+  "type": "object",
+  "x-primary-key": [
+    "__typename"
+  ],
+  "properties": {
+    "__typename": {
+      "type": "string"
+    },
+    "type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

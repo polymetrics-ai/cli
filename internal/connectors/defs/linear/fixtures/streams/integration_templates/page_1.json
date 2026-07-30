@@ -1,0 +1,28 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "integrationTemplates": {
+          "nodes": [
+            {
+              "__typename": "IntegrationTemplate",
+              "id": "integration_templates_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearAgentSkillDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "agentSkillDelete": {
+          "__typename": "DeletePayload"
+        }
+      }
+    }
+  }
+}

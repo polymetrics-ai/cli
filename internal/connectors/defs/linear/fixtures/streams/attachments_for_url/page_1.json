@@ -1,0 +1,33 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "attachmentsForURL": {
+          "nodes": [
+            {
+              "__typename": "Attachment",
+              "id": "attachments_for_url_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "title": "title_fixture",
+              "url": "url_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  },
+  "read_query": {
+    "url": "fixture_url"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearOauthApplicationArchive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "oauthApplicationArchive": {
+          "__typename": "OAuthApplicationArchivePayload"
+        }
+      }
+    }
+  }
+}

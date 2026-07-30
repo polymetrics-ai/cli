@@ -1,0 +1,23 @@
+{
+  "record": {
+    "newProjectStatusId": "fixture_string",
+    "originalProjectStatusId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearProjectReassignStatus"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "projectReassignStatus": {
+          "__typename": "SuccessPayload"
+        }
+      }
+    }
+  }
+}

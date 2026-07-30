@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "fixture_string",
+    "userId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIssueUnshare"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "issueUnshare": {
+          "__typename": "IssuePayload"
+        }
+      }
+    }
+  }
+}

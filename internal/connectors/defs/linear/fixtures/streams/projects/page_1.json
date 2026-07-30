@@ -1,5 +1,8 @@
 {
-  "request": { "method": "POST", "path": "/" },
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,20 +10,21 @@
         "projects": {
           "nodes": [
             {
-              "id": "proj_fixture_1",
-              "name": "Fixture project 1",
-              "description": "fixture record",
-              "state": "started",
-              "progress": 0.5,
-              "url": "https://linear.app/example/project/1",
-              "createdAt": "2026-01-01T00:00:00.000Z",
-              "updatedAt": "2026-01-02T00:00:00.000Z",
-              "startedAt": "2026-01-01T00:00:00.000Z",
-              "completedAt": null,
-              "canceledAt": null
+              "__typename": "Project",
+              "id": "projects_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "name": "name_fixture",
+              "url": "url_fixture",
+              "state": "state_fixture",
+              "description": "description_fixture"
             }
           ],
-          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
         }
       }
     }
