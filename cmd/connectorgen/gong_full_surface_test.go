@@ -60,10 +60,10 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		} `json:"operations"`
 	}](t, "../../internal/connectors/defs/gong/operations.json")
 
-	if got, want := len(writes.Actions), 26; got != want {
+	if got, want := len(writes.Actions), 27; got != want {
 		t.Fatalf("write actions = %d, want %d", got, want)
 	}
-	if got, want := len(ops.Operations), 16; got != want {
+	if got, want := len(ops.Operations), 69; got != want {
 		t.Fatalf("operations = %d, want %d", got, want)
 	}
 	for _, flag := range cli.GlobalFlags {
@@ -83,7 +83,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			coverage["operation"]++
 		}
 	}
-	wantCoverage := map[string]int{"stream": 12, "direct_read": 29, "write": 26}
+	wantCoverage := map[string]int{"stream": 12, "direct_read": 30, "write": 27}
 	for key, want := range wantCoverage {
 		if got := coverage[key]; got != want {
 			t.Fatalf("coverage[%s] = %d, want %d (all coverage: %+v)", key, got, want, coverage)
@@ -121,6 +121,8 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		{path: "calls transcript", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "meetings integration-status", intent: "direct_read", availability: "implemented", target: "json_redacted"},
 		{path: "crm upload-entities", intent: "reverse_etl", availability: "implemented", target: "upload_crm_entities"},
+		{path: "targets list", intent: "direct_read", availability: "implemented", target: "json_redacted"},
+		{path: "targets upload-assignments", intent: "reverse_etl", availability: "implemented", target: "upload_target_assignments"},
 	} {
 		cmd, ok := commandsByPath[tc.path]
 		if !ok {
@@ -185,7 +187,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 		}
 	}
 
-	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task", "upload_call_media", "upload_crm_entities", "upload_crm_entity_schema"} {
+	for _, name := range []string{"add_call", "update_permission_profile", "delete_meeting", "integration_settings", "purge_phone_number", "update_task", "upload_call_media", "upload_crm_entities", "upload_crm_entity_schema", "upload_target_assignments"} {
 		if _, ok := writesByName[name]; !ok {
 			t.Fatalf("missing write action %q", name)
 		}
@@ -206,7 +208,7 @@ func TestGongFullSurfaceCommandAndOperationCoverage(t *testing.T) {
 			rest, sensitivePolicy                             json.RawMessage
 		}{op.Kind, op.Risk, op.Approval, op.OutputPolicy, op.MutationClass, op.SecretSensitive, op.REST, op.SensitivePolicy}
 	}
-	for _, id := range []string{"gong.calls_extensive", "gong.stats_interaction", "gong.calls_transcript", "gong.calls_media_upload", "gong.crm_upload_entities"} {
+	for _, id := range []string{"gong.calls_extensive", "gong.stats_interaction", "gong.calls_transcript", "gong.calls_media_upload", "gong.crm_upload_entities", "gong.list_target_definitions", "gong.upload_assignments"} {
 		if _, ok := opsByID[id]; !ok {
 			t.Fatalf("missing operation %q", id)
 		}
