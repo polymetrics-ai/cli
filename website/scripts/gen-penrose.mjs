@@ -16,7 +16,6 @@ const OUT = resolve(__dirname, '../public/penrose-dots.svg');
 const PHI = (1 + Math.sqrt(5)) / 2;
 
 // ── point helpers ([x, y]) ──────────────────────────────────────────────
-const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
 const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
 
 // ── seed: wheel of 10 Robinson (acute) triangles around the origin ──────

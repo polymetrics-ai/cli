@@ -24,6 +24,7 @@ Website checks:
 cd website
 pnpm install --frozen-lockfile
 pnpm run gen:website-data
+pnpm run lint
 pnpm run typecheck
 pnpm run test:unit
 pnpm run test:e2e

@@ -9,6 +9,7 @@ RUN npm install -g "pnpm@${PNPM_VERSION}"
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY patches ./patches
 RUN pnpm install --frozen-lockfile --ignore-scripts --reporter=silent
 
 # ── builder ───────────────────────────────────────────────────────────────────

@@ -14,7 +14,7 @@
     "gen:docs": "node scripts/gen-docs-data.mjs",
     "gen:website-data": "node scripts/gen-docs-data.mjs && node scripts/gen-connector-bundles.mjs && node scripts/gen-connector-catalog.mjs && node scripts/gen-connectors.mjs",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint",
+    "lint": "eslint .",
     "test": "vitest run && playwright test",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
@@ -45,6 +45,8 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.2.12",
     "tailwindcss": "^4",
     "typescript": "^6",
     "vitest": "^4.1.9"
