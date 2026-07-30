@@ -32,7 +32,6 @@ Wave 6 removed the legacy Airbyte-style `catalog_data.json`. The names below wer
 - google-sheets
 - greythr
 - hardcoded-records
-- hubspot
 - jina-ai-reader
 - kafka
 - linnworks
