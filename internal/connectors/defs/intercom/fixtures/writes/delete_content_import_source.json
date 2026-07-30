@@ -1,0 +1,13 @@
+{
+  "record": {
+    "source_id": "source_id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/ai/content_import_sources/source_id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "locales": [
+      "locales_item_fixture"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/articles/id_fixture/draft/publish",
+    "body": {
+      "locales": [
+        "locales_item_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

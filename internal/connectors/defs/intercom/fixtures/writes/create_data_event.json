@@ -1,0 +1,11 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/events"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

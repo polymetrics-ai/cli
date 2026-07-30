@@ -1,0 +1,21 @@
+{
+  "record": {
+    "ticket_type_id": "ticket_type_id_fixture",
+    "name": "name_fixture",
+    "description": "description_fixture",
+    "data_type": "string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/ticket_types/ticket_type_id_fixture/attributes",
+    "body": {
+      "name": "name_fixture",
+      "description": "description_fixture",
+      "data_type": "string"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

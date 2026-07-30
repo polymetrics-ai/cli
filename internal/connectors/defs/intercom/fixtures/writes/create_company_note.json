@@ -1,0 +1,17 @@
+{
+  "record": {
+    "company_id": "company_id_fixture",
+    "body": "body_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/companies/company_id_fixture/notes",
+    "body": {
+      "body": "body_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

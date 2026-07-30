@@ -1,23 +1,25 @@
 {
   "name": "intercom",
   "display_name": "Intercom",
-  "description": "Reads Intercom contacts, companies, conversations, admins, and tags through the Intercom REST API.",
+  "description": "Reads Intercom contacts, companies, conversations, admins, and tags; declares typed reverse-ETL write actions for official Intercom API mutations.",
   "integration_type": "api",
-  "docs_url": "https://developers.intercom.com/docs/build-an-integration/learn-more/rest-apis/unversioned-changes#unversioned-changes",
+  "docs_url": "https://developers.intercom.com/docs/references/2.16/rest-api/api.intercom.io",
   "release_stage": "ga",
   "capabilities": {
     "check": true,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Intercom API read of contact and conversation data",
-    "approval": "none; read-only source"
+    "read": "external Intercom API read of contact, company, conversation, admin, tag, and operational data",
+    "write": "Intercom mutations can create, update, archive, block, merge, redact, detach, or delete provider data; reverse ETL requires plan, preview, explicit approval, execute, and destructive confirmation where declared",
+    "approval": "reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive actions require typed confirmation value `destructive`"
   }
 }

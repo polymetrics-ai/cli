@@ -1,0 +1,17 @@
+{
+  "record": {
+    "content_snippet_id": "content_snippet_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/content_snippets/content_snippet_id_fixture/tags",
+    "body": {
+      "id": "id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

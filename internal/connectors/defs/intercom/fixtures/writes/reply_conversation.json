@@ -1,0 +1,17 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture",
+    "message_type": "comment"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/conversation_id_fixture/reply",
+    "body": {
+      "message_type": "comment"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

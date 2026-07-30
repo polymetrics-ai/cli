@@ -1,0 +1,28 @@
+{
+  "record": {
+    "type": "type_fixture",
+    "user": {
+      "fixture_key": "fixture_value"
+    },
+    "visitor": {
+      "fixture_key": "fixture_value"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/visitors/convert",
+    "body": {
+      "type": "type_fixture",
+      "user": {
+        "fixture_key": "fixture_value"
+      },
+      "visitor": {
+        "fixture_key": "fixture_value"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

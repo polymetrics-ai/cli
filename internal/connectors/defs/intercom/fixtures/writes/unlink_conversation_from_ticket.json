@@ -1,0 +1,14 @@
+{
+  "record": {
+    "ticket_id": "ticket_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tickets/ticket_id_fixture/linked_conversations/id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

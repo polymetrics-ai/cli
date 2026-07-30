@@ -1,0 +1,13 @@
+{
+  "record": {
+    "custom_object_type_identifier": "custom_object_type_identifier_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/custom_object_instances/custom_object_type_identifier_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

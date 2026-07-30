@@ -1,0 +1,14 @@
+{
+  "record": {
+    "help_center_id": "help_center_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/help_center/help_centers/help_center_id_fixture/redirects/id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "label": "label_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/attributes/id_fixture/options",
+    "body": {
+      "label": "label_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "title": "title_fixture",
+    "sender_id": 123
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/news/news_items",
+    "body": {
+      "title": "title_fixture",
+      "sender_id": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "record": {
+    "page_id": "page_id_fixture",
+    "title": "title_fixture",
+    "html": "html_fixture",
+    "url": "https://example.invalid/intercom-fixture",
+    "locale": "en",
+    "source_id": 123
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/ai/external_pages/page_id_fixture",
+    "body": {
+      "title": "title_fixture",
+      "html": "html_fixture",
+      "url": "https://example.invalid/intercom-fixture",
+      "locale": "en",
+      "source_id": 123
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "type": "conversation_part"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/conversations/redact",
+    "body": {
+      "type": "conversation_part"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

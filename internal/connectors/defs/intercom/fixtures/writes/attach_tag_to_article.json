@@ -1,0 +1,17 @@
+{
+  "record": {
+    "article_id": "article_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/articles/article_id_fixture/tags",
+    "body": {
+      "id": "id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

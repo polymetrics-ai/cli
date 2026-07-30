@@ -1,0 +1,17 @@
+{
+  "record": {
+    "contact_id": "contact_id_fixture",
+    "role": "role_fixture"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/contacts/contact_id_fixture",
+    "body": {
+      "role": "role_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "record": {
+    "custom_object_type_identifier": "custom_object_type_identifier_fixture",
+    "external_id": "external_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/custom_object_instances/custom_object_type_identifier_fixture",
+    "body": {
+      "external_id": "external_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "record": {
+    "conversation_id": "conversation_id_fixture",
+    "message": {
+      "author": "user",
+      "body": "body_fixture",
+      "timestamp": "2026-01-01T00:00:00Z"
+    },
+    "user": {
+      "id": "id_fixture"
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/fin/start",
+    "body": {
+      "conversation_id": "conversation_id_fixture",
+      "message": {
+        "author": "user",
+        "body": "body_fixture",
+        "timestamp": "2026-01-01T00:00:00Z"
+      },
+      "user": {
+        "id": "id_fixture"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "record": {
+    "data_type": "options"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/data_attributes",
+    "body": {
+      "data_type": "options"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

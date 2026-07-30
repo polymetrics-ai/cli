@@ -1,0 +1,23 @@
+{
+  "record": {
+    "help_center_id": "help_center_id_fixture",
+    "from_url": "https://example.invalid/intercom-fixture",
+    "locale": "locale_fixture",
+    "target_type": "article",
+    "target_id": "target_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/help_center/help_centers/help_center_id_fixture/redirects",
+    "body": {
+      "from_url": "https://example.invalid/intercom-fixture",
+      "locale": "locale_fixture",
+      "target_type": "article",
+      "target_id": "target_id_fixture"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

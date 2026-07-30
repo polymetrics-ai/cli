@@ -1,0 +1,13 @@
+{
+  "record": {
+    "contact_id": "contact_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/contact_id_fixture/unarchive"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

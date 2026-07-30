@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "contacts",
+    "live_unavailable": [
+      {
+        "kind": "fixture_only",
+        "contains": [
+          "no live Intercom credentials supplied",
+          "Intercom certification remains 0 until a separately approved live-safe executor records redacted artifacts"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}

@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "name_fixture",
+    "time_zone_name": "2026-01-01T00:00:00Z",
+    "time_intervals": [
+      {
+        "start_minute": 123
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/office_hours_schedules",
+    "body": {
+      "name": "name_fixture",
+      "time_zone_name": "2026-01-01T00:00:00Z",
+      "time_intervals": [
+        {
+          "start_minute": 123
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

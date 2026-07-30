@@ -1,0 +1,14 @@
+{
+  "record": {
+    "office_hours_schedule_id": "office_hours_schedule_id_fixture",
+    "id": "id_fixture"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/office_hours_schedules/office_hours_schedule_id_fixture/office_hours_exceptions/id_fixture"
+  },
+  "response": {
+    "status": 204,
+    "body": {}
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "id": "id_fixture",
+    "view_id": "view_id_fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/id_fixture/banners/view_id_fixture/dismiss"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
