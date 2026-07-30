@@ -1,6 +1,6 @@
 # Summary — Issue #1950 Lucid ELD Atomic Pilot Bundle
 
-Status: local implementation and verification complete; ready for push/PR update.
+Status: PR #3166 review-fix implementation and verification complete; commit/push/PR body update pending.
 
 Reason: PR #3166 shipped only `api_surface.json`; connector-def dirs must be atomic, independently loadable bundles. Parent PM authorized #1950 as Lucid ELD atomic pilot/bootstrap child.
 
@@ -10,4 +10,6 @@ Manual GSD fallback: `scripts/gsd prompt programming-loop init --phase issue-775
 
 Completed scope: added atomic Lucid ELD Tier-1 declarative bundle files, synthetic conformance fixtures, generated connector docs/catalog/manual parity, single-bundle validation-path coverage, and required connector count parity updates. `writes.json` remains intentionally absent and `capabilities.write=false`.
 
-Verification: focused connector/conformance/CLI/boundary/GSD gates passed, `go vet ./...` passed, and `make verify` passed.
+Verification: atomic-pilot focused connector/conformance/CLI/boundary/GSD gates passed, `go vet ./...` passed, and `make verify` passed. Review-fix cycle also captured focused red evidence, applied CLI/docs corrections, re-ran the requested verification block, and passed `make verify`.
+
+Review-fix delivered: removed misleading Lucid ELD command-specific date/page/limit/status provider flag claims that do not match engine/CLI mechanics; documented config-backed date windows and fixed Tier-1 provider pagination defaults; added focused dynamic CLI test coverage.

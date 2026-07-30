@@ -18,13 +18,15 @@ Every official operation requires both credential-shaped headers:
 
 The connection spec stores these as `provider_api_key` and `company_api_key`, and both fields are marked `x-secret: true`. The bundle sends them only as headers. No OpenAPI `securityDefinitions` block exists in the official document.
 
-`base_url` defaults to the public origin hosting the official Swagger document, `https://api.drivehos.app`; override it only if Lucid/DriveHOS supplies a different Partner API origin. `vehicle_location_history` also requires `vehicle_id`, `start_date`, and `end_date` config values. The official wire date format is `MM-DD-YYYY`; this bundle does not reformat dates to RFC3339.
+`base_url` defaults to the public origin hosting the official Swagger document, `https://api.drivehos.app`; override it only if Lucid/DriveHOS supplies a different Partner API origin. `vehicle_location_history` also requires `vehicle_id`, `start_date`, and `end_date` config values. Supply them through stored connector config or explicit `--config vehicle_id=... --config start_date=... --config end_date=...` overrides. The official wire date format is `MM-DD-YYYY`; this bundle does not reformat dates to RFC3339.
 
 ## Streams notes
 
-`drivers` and `vehicles` use page-number pagination with `page` and `limit`, `start_page: 1`, `page_size: 100`, and a deterministic `max_pages: 2` Tier-1 bound so replay fixtures exercise two-page pagination without unbounded test loops.
+`drivers` and `vehicles` use page-number pagination with provider query parameters `page` and `limit`, `start_page: 1`, `page_size: 100`, and a deterministic `max_pages: 2` Tier-1 bound so replay fixtures exercise two-page pagination without unbounded test loops. The Lucid ELD command surface does not expose provider `page`, provider page-size `limit`, or vehicle `status` filters in this Tier-1 pilot; the global `--limit` flag remains a client-side ETL row cap only.
 
-`vehicle_location_history` uses cursor pagination with request query parameter `next_page_token` and response envelope field `next_page_token`. It sends `start_date`, `end_date`, and `limit=100`; `start_date` and `end_date` must already be in `MM-DD-YYYY` format.
+`vehicle_location_history` uses cursor pagination with request query parameter `next_page_token` and response envelope field `next_page_token`. It sends `start_date` and `end_date` from connector config plus fixed `limit=100`; `start_date` and `end_date` must already be in `MM-DD-YYYY` format. The engine resolves required `config.start_date` and `config.end_date` templates before request-query overrides, so separate command flags cannot substitute for the config values.
+
+The latest-status direct reads expose only the optional `driver_id`/`vehicle_id` query filters. They use the fixed operation default `query.limit=100` and do not expose provider `page` or page-size overrides.
 
 Fixture files under `fixtures/streams/**` are synthetic conformance test doubles, not captured live data and not assertions about real DriveHOS record fields. They contain plausible synthetic values only to exercise the documented response envelope, pagination, CLI, and conformance plumbing.
 
@@ -40,4 +42,4 @@ Official envelope documents `data` as untyped `{}`, no sample response available
 
 Because no primary keys are evidenced, sync-mode derivation exposes full-refresh append/overwrite modes without dedup variants. This is a tracked follow-up for #1951/#1955 once live or sample response evidence becomes available. WithTerminal field-coverage tables must not be copied into these schemas unless future DriveHOS wire evidence independently proves those field names.
 
-The `max_pages: 2` bounds are a deterministic Tier-1 pilot choice for local conformance and small reads, not evidence of a provider-side limit. Expand or make this operator-configurable only with a separate engine-supported design and provider evidence.
+The `max_pages: 2` bounds and fixed provider page sizes are deterministic Tier-1 pilot choices for local conformance and small reads, not evidence of a provider-side limit. Expand or make provider pagination/status filters operator-configurable only with a separate engine-supported design and focused CLI/runtime tests proving the flags reach the actual request without colliding with global CLI semantics.

@@ -83,20 +83,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "drivers",
-      "flags": [
-        {
-          "name": "limit",
-          "type": "integer",
-          "summary": "Records per provider page; official default 100, max 1000.",
-          "maps_to": "query.limit"
-        },
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "Provider page number; official default 1.",
-          "maps_to": "query.page"
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -104,9 +90,9 @@
         }
       ],
       "examples": [
-        "pm lucid-eld drivers list --json --limit 25"
+        "pm lucid-eld drivers list --json"
       ],
-      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped."
+      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped. Provider pagination uses the fixed Tier-1 page size of 100; the global --limit flag remains a client-side ETL row cap only."
     },
     {
       "path": "vehicles list",
@@ -114,30 +100,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "vehicles",
-      "flags": [
-        {
-          "name": "status",
-          "type": "enum",
-          "summary": "Optional provider status filter.",
-          "values": [
-            "active",
-            "inactive"
-          ],
-          "maps_to": "query.status"
-        },
-        {
-          "name": "limit",
-          "type": "integer",
-          "summary": "Records per provider page; official default 100, max 1000.",
-          "maps_to": "query.limit"
-        },
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "Provider page number; official default 1.",
-          "maps_to": "query.page"
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -145,9 +107,9 @@
         }
       ],
       "examples": [
-        "pm lucid-eld vehicles list --json --status active --limit 25"
+        "pm lucid-eld vehicles list --json"
       ],
-      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped."
+      "notes": "The stream schema is passthrough because the official OpenAPI response envelope leaves data untyped. Provider status/page/limit query controls are not exposed in this Tier-1 pilot; pagination uses the fixed page size of 100 and the global --limit flag remains a client-side ETL row cap only."
     },
     {
       "path": "vehicle-location-history list",
@@ -155,28 +117,6 @@
       "intent": "etl",
       "availability": "implemented",
       "stream": "vehicle_location_history",
-      "flags": [
-        {
-          "name": "start-date",
-          "type": "string",
-          "summary": "Start date in the official wire format MM-DD-YYYY.",
-          "maps_to": "query.start_date",
-          "allow_empty": false
-        },
-        {
-          "name": "end-date",
-          "type": "string",
-          "summary": "End date in the official wire format MM-DD-YYYY.",
-          "maps_to": "query.end_date",
-          "allow_empty": false
-        },
-        {
-          "name": "limit",
-          "type": "integer",
-          "summary": "Records per provider page; official default 100, max 1000.",
-          "maps_to": "query.limit"
-        }
-      ],
       "api_surface": [
         {
           "method": "GET",
@@ -184,9 +124,9 @@
         }
       ],
       "examples": [
-        "pm lucid-eld vehicle-location-history list --json --config vehicle_id=vehicle_fixture_001 --start-date 01-01-2026 --end-date 01-02-2026"
+        "pm lucid-eld vehicle-location-history list --json --config vehicle_id=vehicle_fixture_001 --config start_date=01-01-2026 --config end_date=01-02-2026"
       ],
-      "notes": "vehicle_id is a connector config value for this stream path; start-date/end-date flags override the configured date window for the request query."
+      "notes": "vehicle_id, start_date, and end_date are connector config values for this stream. The engine resolves those config templates before request-query overrides, so this Tier-1 command does not expose separate date or provider limit flags."
     },
     {
       "path": "company info get",
@@ -265,7 +205,7 @@
     },
     {
       "path": "latest driver statuses list",
-      "summary": "Retrieve latest Lucid ELD driver statuses with optional driver_id, limit, and page filters.",
+      "summary": "Retrieve latest Lucid ELD driver statuses with an optional driver_id filter and fixed provider limit.",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "lucid-eld.latest_driver_statuses_list",
@@ -276,18 +216,6 @@
           "summary": "Optional driver ID query filter.",
           "maps_to": "query.driver_id",
           "allow_empty": false
-        },
-        {
-          "name": "limit",
-          "type": "integer",
-          "summary": "Records per provider page; official default 100, max 1000.",
-          "maps_to": "query.limit"
-        },
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "Provider page number.",
-          "maps_to": "query.page"
         }
       ],
       "api_surface": [
@@ -300,12 +228,13 @@
       "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
       "approval": "none: read-only bounded GET",
       "examples": [
-        "pm lucid-eld latest driver statuses list --json --driver-id <driver_id> --limit 25"
-      ]
+        "pm lucid-eld latest driver statuses list --json --driver-id <driver_id>"
+      ],
+      "notes": "The operation declares fixed query.limit=100. The global --limit flag is not a provider page-size override for direct reads."
     },
     {
       "path": "latest vehicle statuses list",
-      "summary": "Retrieve latest Lucid ELD vehicle statuses with optional vehicle_id, limit, and page filters.",
+      "summary": "Retrieve latest Lucid ELD vehicle statuses with an optional vehicle_id filter and fixed provider limit.",
       "intent": "direct_read",
       "availability": "implemented",
       "operation": "lucid-eld.latest_vehicle_statuses_list",
@@ -316,18 +245,6 @@
           "summary": "Optional vehicle ID query filter.",
           "maps_to": "query.vehicle_id",
           "allow_empty": false
-        },
-        {
-          "name": "limit",
-          "type": "integer",
-          "summary": "Records per provider page; official default 100, max 200.",
-          "maps_to": "query.limit"
-        },
-        {
-          "name": "page",
-          "type": "integer",
-          "summary": "Provider page number.",
-          "maps_to": "query.page"
         }
       ],
       "api_surface": [
@@ -340,8 +257,9 @@
       "risk": "bounded read-only DriveHOS/Lucid ELD JSON read; secret-shaped fields are redacted.",
       "approval": "none: read-only bounded GET",
       "examples": [
-        "pm lucid-eld latest vehicle statuses list --json --vehicle-id <vehicle_id> --limit 25"
-      ]
+        "pm lucid-eld latest vehicle statuses list --json --vehicle-id <vehicle_id>"
+      ],
+      "notes": "The operation declares fixed query.limit=100. The global --limit flag is not a provider page-size override for direct reads."
     }
   ],
   "help_topics": [

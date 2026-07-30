@@ -7,6 +7,7 @@
 - Branch: `feat/1950-lucid-eld-operation-ledger`
 - PR: #3166, base `feat/775-lucid-eld-full-parity`
 - Execution decision: `local_critical_path` (isolated worker cwd already assigned; recursive subagents blocked for worker role)
+- Review-fix cycle: PR #3166 adversarial review disposition for two blocking findings plus stale checklist advisory.
 
 ## Corrective scope authorized by parent PM orchestrator
 
@@ -24,6 +25,13 @@ Allowed planning scope:
 - `.planning/phases/issue-775-1950-lucid-eld-atomic/**`
 - Preserve/move old `.planning/issue-775/1950/**` evidence and planning files into this phase path.
 - Do not edit parent `.planning/issue-775/STATE.md` or parent branch artifacts.
+
+Review-fix scope for PR #3166:
+
+- Remove or reword Lucid ELD command flags whose `maps_to` behavior is not end-to-end functional for the actual engine/CLI path.
+- Keep `vehicle_location_history` date window as `--config start_date=... end_date=...` because stream query template resolution requires `config.*` before request-query overrides can apply.
+- Keep provider page size/page number defaults fixed for this Tier-1 pilot (`page_size: 100`, operation `query.limit: "100"`) and avoid command-specific `--limit` collisions with the global client-side ETL row cap.
+- Add focused CLI/runtime test coverage proving corrected flag behavior, then regenerate generated connector manual/skill artifacts as required.
 
 Pulled-forward scope (siblings remain open):
 
@@ -106,6 +114,13 @@ Also run `make verify`; record exact pass/fail and name any unrelated baseline f
 - Update PR #3166 title/body with `Refs #1950` / `Refs #775`, atomic-pilot scope decision, manual-GSD fallback, loaded skills, safety notes, and exact verification.
 - Do not request `@claude review`; orchestrator owns review routing.
 
+### Slice 5 — Review-fix cycle for PR #3166
+
+- Re-confirm engine/commandrunner/CLI override mechanics before edits: `stream.Query` resolves before `ReadRequest.Query`; page-number paginator overwrites `page`/`limit`; CLI strips global `--limit` from command flags; operation direct reads merge fixed operation query before request query, but full CLI never passes command-level `--limit` because of the global collision.
+- Add failing focused CLI test that expects removed Lucid provider flags to be rejected and expects config-backed date windows/fixed provider query defaults to reach the HTTP request.
+- Update `internal/connectors/defs/lucid-eld/cli_surface.json`, `docs.md`, generated connector manual/skill artifacts, and any examples/notes to match actual behavior.
+- Re-run the requested focused and broad gates, commit, push to `feat/1950-lucid-eld-operation-ledger`, and update PR #3166 with a short review disposition.
+
 ## Acceptance checklist
 
 - [x] Required reading completed before edits.
@@ -119,4 +134,9 @@ Also run `make verify`; record exact pass/fail and name any unrelated baseline f
 - [x] Schemas avoid invented properties and stream projection is passthrough.
 - [x] Synthetic fixture caveat documented.
 - [x] Required verification commands pass; `make verify` passed.
-- [ ] PR #3166 updated and branch pushed.
+- [x] PR #3166 updated and branch pushed for the atomic-pilot slice before review-fix.
+- [x] Review-fix plan/TDD/verification checklist updated before review-fix production edits.
+- [x] Red focused CLI/runtime flag-behavior test captured for PR #3166 review findings.
+- [x] Misleading Lucid ELD date/page/limit/status command flags removed or reworded to match engine support.
+- [x] Review-fix verification commands pass, including `make verify`.
+- [ ] Review-fix commit pushed and PR #3166 body updated with disposition.

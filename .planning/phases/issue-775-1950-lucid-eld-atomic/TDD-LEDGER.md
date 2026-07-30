@@ -20,6 +20,8 @@
 
 Note: `.pi/skills/go-implementation/SKILL.md` is not present in this checkout; loaded repo-routed Go skills above are the applicable implementation guidance.
 
+2026-07-30 review-fix re-load: re-read `gsd-core`, `caveman`, `golang-how-to`, `golang-cli`, `golang-spf13-cobra`, `golang-spf13-viper`, `golang-testing`, `golang-error-handling`, `golang-security`, `golang-safety`, `golang-lint`, `golang-design-patterns`, `golang-structs-interfaces`, `golang-context`, and `golang-documentation` before edits. Key rules applied: Cobra Best Practices #1/#3/#4, Viper Best Practices #4/#5, Go Testing Best Practices #1/#5, Go Error Handling Best Practices #1/#2/#7, Go Security Thinking #1/#2/#3, Go Safety Best Practices #2/#4/#8, Go Lint Development Workflow #1/#3, Go Design Patterns #20/#21, Go Structs/Interfaces small-interface/no-premature-interface principles, Go Context Best Practices #1/#5, Go Documentation writing principles “no invented context” and “preserve meaning”.
+
 ## Red / green / refactor ledger
 
 | Time (UTC) | Phase | Artifact/command | Expected | Actual |
@@ -38,6 +40,11 @@ Note: `.pi/skills/go-implementation/SKILL.md` is not present in this checkout; l
 | 2026-07-30T03:45Z | RED-BROAD | `make verify` | pass after registry count update | FAIL; `TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides`: `bundle count = 549, want 548` |
 | 2026-07-30T03:47Z | GREEN-BROAD | `go test ./internal/connectors/bundleregistry -count=1` | pass after count update | PASS; `ok   polymetrics.ai/internal/connectors/bundleregistry 5.112s` |
 | 2026-07-30T03:55Z | BROAD | `make verify` | pass | PASS; `connectorgen validate: 549 connector(s) checked, 0 findings`; `0 issues.`; `homebrew release notification assertions passed` |
+| 2026-07-30T04:48Z | REVIEW-RECON | `scripts/gsd doctor && scripts/gsd list && scripts/gsd prompt programming-loop init --phase issue-775-1950-lucid-eld-atomic --dry-run` | doctor/list pass; programming-loop fallback remains recorded | PASS doctor/list; FALLBACK exit=1 `scripts/gsd: unknown GSD command: programming-loop` |
+| 2026-07-30T04:48Z | REVIEW-RECON | source reads: `engine/read.go`, `engine/paginate.go`, `commandrunner/runner.go`, `internal/cli/cli.go`, Lucid `cli_surface.json`/`streams.json`/`operations.json`/`docs.md`, GitHub/Gong precedents | determine whether advertised flags are functional | CONFIRMED: `stream.Query` resolves required `config.*` before `ReadRequest.Query`; paginator overwrites `page`/`limit`; CLI strips global `--limit`; operation direct reads can merge request query but full CLI does not pass provider `--limit` due global collision |
+| 2026-07-30T04:50Z | RED-REVIEW-FIX | `go test ./internal/cli -run 'TestCobraRouterDynamicLucidELD' -count=1` | fail before JSON/docs edits | FAIL exit=1; old Lucid CLI accepted `--start-date`, drivers `--page`, vehicles `--status`, and latest-status `--page` instead of rejecting removed provider overrides |
+| 2026-07-30T05:00Z | GREEN-REVIEW-FIX | `gofmt -w internal/cli/cobra_router_test.go && go test ./internal/cli -run 'TestCobraRouterDynamicLucidELD' -count=1` | pass after CLI surface/docs corrections | PASS; `ok   polymetrics.ai/internal/cli 9.677s` |
+| 2026-07-30T05:24Z | VERIFY-REVIEW-FIX | requested re-verification block + `make verify` + stale-help grep | pass | PASS; validate/conformance/CLI/vet/build/boundary/GSD/diff/gofmt all green; `make verify` passed; help/manual/dynamic help stale-flag grep passed |
 
 ## Manual GSD fallback evidence
 

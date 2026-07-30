@@ -4,6 +4,8 @@
 
 Task: repair child issue #1950 on PR #3166, parent #775. Branch `feat/1950-lucid-eld-operation-ledger`, cwd isolated. Corrective cycle authorized by parent PM orchestrator.
 
+Review-fix task: PR #3166 adversarial review found non-functional/misleading Lucid ELD CLI date and pagination flags plus stale planning checklist. Fix command surface/docs/tests, re-run gates, push, update PR body. Do not request `@claude review`.
+
 ## GSD command attempted
 
 ```bash
@@ -31,4 +33,6 @@ Manual GSD fallback active.
 
 ## Verification result
 
-Red evidence captured before production edits. Focused gates passed, `go vet ./...` passed, and `make verify` passed.
+Red evidence captured before atomic-pilot production edits. Focused gates passed, `go vet ./...` passed, and `make verify` passed for the prior slice.
+
+Review-fix verification: focused red CLI/runtime flag-behavior test captured; JSON/docs corrections applied; requested verification block, help/manual stale-flag grep, and `make verify` passed. Commit, push, and PR #3166 body update pending.
