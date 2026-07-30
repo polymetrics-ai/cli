@@ -61,6 +61,8 @@ func TestDynamicConnectorHelpAndBareNamespace(t *testing.T) {
 		{name: "bare connector", args: []string{"gong"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 		{name: "connector help flag", args: []string{"gong", "--help"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 		{name: "command help flag", args: []string{"gong", "calls", "transcript", "--help"}, want: []string{"pm gong calls transcript", "INTENT", "direct_read", "FLAGS"}},
+		{name: "connector help topic", args: []string{"help", "linear safety"}, want: []string{`pm help "linear safety"`, "pm linear safety", "Linear writes use reverse ETL"}},
+		{name: "connector help topic command", args: []string{"linear", "safety"}, want: []string{`pm help "linear safety"`, "pm linear safety", "Linear writes use reverse ETL"}},
 		{name: "flag only namespace", args: []string{"gong", "--credential", "gong-local"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 		{name: "false preview is passive", args: []string{"gong", "--preview=false"}, want: []string{"pm gong - Gong command surface", "COMMAND GROUPS", "calls"}},
 	}
