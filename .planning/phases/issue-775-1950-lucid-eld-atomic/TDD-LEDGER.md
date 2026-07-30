@@ -28,10 +28,16 @@ Note: `.pi/skills/go-implementation/SKILL.md` is not present in this checkout; l
 | 2026-07-30 (prior cycle) | GREEN-LEDGER | `python3 .planning/issue-775/1950/tools/validate_surface.py --surface internal/connectors/defs/lucid-eld/api_surface.json --openapi .planning/issue-775/1950/evidence/openapi-doc.json` | pass: 8/8 official operations exactly once | PASS; `8 endpoint(s) match official OpenAPI` |
 | 2026-07-30T02:52Z | RED-CI | `scripts/verify-gsd-workflow feat/775-lucid-eld-full-parity` | fail before relocation: recognized phase evidence missing | FAIL exit=1; `verify-gsd-workflow: cmd/internal changed, but no GSD planning evidence changed.` |
 | 2026-07-30T02:52Z | RED-CI | `make connector-boundary` | fail before bundle completion: metadata missing | FAIL exit=2; `connectorgen boundary: load connector metadata lucid-eld: open .../internal/connectors/defs/lucid-eld/metadata.json: no such file or directory` |
-| pending | GREEN | `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` | pass, includes secret-literal scanner for fixtures/docs/operations | pending |
-| pending | GREEN | `go test ./internal/connectors/conformance -run 'TestConformance/lucid-eld' -count=1` | pass | pending |
-| pending | GREEN | focused CLI/vet/build/boundary/GSD/diff/gofmt gates | pass | pending |
-| pending | BROAD | `make verify` | pass or exact unrelated baseline blocker | pending |
+| 2026-07-30T03:10Z | RED-TOOL | `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` | should validate the named bundle only | FAIL exit=1; treated `fixtures/` and `schemas/` as connector dirs and reported missing metadata |
+| 2026-07-30T03:17Z | GREEN-TOOL | `go test ./cmd/connectorgen -run 'TestValidate_Accepts(SingleBundleDirectory|GoodBundle)$' -count=1` | pass | PASS; `ok   polymetrics.ai/cmd/connectorgen 0.789s` |
+| 2026-07-30T03:17Z | GREEN | `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` | pass, includes secret-literal scanner for fixtures/docs/operations | PASS; `connectorgen validate: 1 connector(s) checked, 0 findings` |
+| 2026-07-30T03:17Z | GREEN | `go test ./internal/connectors/conformance -run 'TestConformance/lucid-eld' -count=1` | pass | PASS; `ok   polymetrics.ai/internal/connectors/conformance 1.973s` |
+| 2026-07-30T03:25Z | RED-PARITY | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` | pass after CLI/docs parity update | FAIL; root golden transcripts and connector catalog count did not include `lucid-eld` |
+| 2026-07-30T03:31Z | GREEN-PARITY | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` | pass after generated golden/docs/count updates | PASS; `ok   polymetrics.ai/internal/cli 138.199s` |
+| 2026-07-30T03:38Z | GREEN | final focused gates | pass | PASS; validate/conformance/CLI/vet/build/boundary/GSD/diff/gofmt all green |
+| 2026-07-30T03:45Z | RED-BROAD | `make verify` | pass after registry count update | FAIL; `TestNewLoadsDeclarativeBundlesWithHooksAndNativeOverrides`: `bundle count = 549, want 548` |
+| 2026-07-30T03:47Z | GREEN-BROAD | `go test ./internal/connectors/bundleregistry -count=1` | pass after count update | PASS; `ok   polymetrics.ai/internal/connectors/bundleregistry 5.112s` |
+| 2026-07-30T03:55Z | BROAD | `make verify` | pass | PASS; `connectorgen validate: 549 connector(s) checked, 0 findings`; `0 issues.`; `homebrew release notification assertions passed` |
 
 ## Manual GSD fallback evidence
 
@@ -49,4 +55,4 @@ scripts/gsd: unknown GSD command: programming-loop
 
 ## Test-first decision
 
-No new production Go test is added: this corrective cycle is definition-only under `internal/connectors/defs/lucid-eld/**`. Red evidence is current branch/CI failure from incomplete atomic bundle and unrecognized GSD phase evidence, plus existing planning validator red fixtures. Production bundle edits start only after this ledger/plan/verification update.
+Primary production behavior remains the Lucid ELD Tier-1 definition bundle. Red evidence was captured before bundle edits for incomplete atomic metadata/boundary and unrecognized GSD phase evidence, plus existing operation-ledger red fixtures. A generic `cmd/connectorgen` validation-path fix was added only after the exact required single-bundle validation command failed; its green coverage is `TestValidate_AcceptsSingleBundleDirectory`. CLI/docs golden and registry count updates are parity artifacts required by the new connector bundle.

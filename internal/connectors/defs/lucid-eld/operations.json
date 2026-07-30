@@ -1,0 +1,90 @@
+{
+  "operations": [
+    {
+      "id": "lucid-eld.company_info_get",
+      "kind": "rest_read",
+      "summary": "Get Lucid ELD company info.",
+      "description": "Official DriveHOS/Lucid ELD Partner API v2 GET /v2/company-info bounded direct read.",
+      "source_url": "https://api.drivehos.app/partner/swagger/doc.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded GET",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "rest": {
+        "method": "GET",
+        "path": "/v2/company-info",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lucid-eld.drivers_get",
+      "kind": "rest_read",
+      "summary": "Get one Lucid ELD driver by ID.",
+      "description": "Official DriveHOS/Lucid ELD Partner API v2 GET /v2/driver/{driver_id} bounded direct read.",
+      "source_url": "https://api.drivehos.app/partner/swagger/doc.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded GET",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "rest": {
+        "method": "GET",
+        "path": "/v2/driver/{driver_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lucid-eld.vehicles_get",
+      "kind": "rest_read",
+      "summary": "Get one Lucid ELD vehicle by ID.",
+      "description": "Official DriveHOS/Lucid ELD Partner API v2 GET /v2/vehicle/{vehicle_id} bounded direct read.",
+      "source_url": "https://api.drivehos.app/partner/swagger/doc.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded GET",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "rest": {
+        "method": "GET",
+        "path": "/v2/vehicle/{vehicle_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "lucid-eld.latest_driver_statuses_list",
+      "kind": "rest_read",
+      "summary": "List latest Lucid ELD driver statuses.",
+      "description": "Official DriveHOS/Lucid ELD Partner API v2 GET /v2/latest-driver-status bounded direct read with allow-listed query filters.",
+      "source_url": "https://api.drivehos.app/partner/swagger/doc.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded GET",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "rest": {
+        "method": "GET",
+        "path": "/v2/latest-driver-status",
+        "max_bytes": 1048576,
+        "query": {
+          "limit": "100"
+        }
+      }
+    },
+    {
+      "id": "lucid-eld.latest_vehicle_statuses_list",
+      "kind": "rest_read",
+      "summary": "List latest Lucid ELD vehicle statuses.",
+      "description": "Official DriveHOS/Lucid ELD Partner API v2 GET /v2/latest-vehicle-status bounded direct read with allow-listed query filters.",
+      "source_url": "https://api.drivehos.app/partner/swagger/doc.json",
+      "risk": "medium",
+      "approval": "none: read-only bounded GET",
+      "output_policy": "json_redacted",
+      "secret_sensitive": false,
+      "rest": {
+        "method": "GET",
+        "path": "/v2/latest-vehicle-status",
+        "max_bytes": 1048576,
+        "query": {
+          "limit": "100"
+        }
+      }
+    }
+  ]
+}

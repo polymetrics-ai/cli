@@ -1,0 +1,524 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/vehicles",
+    "query": {
+      "page": "1",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vehicle_fixture_001",
+          "vehicle_id": "vehicle_fixture_001",
+          "name": "Synthetic Vehicle 001"
+        },
+        {
+          "id": "vehicle_fixture_002",
+          "vehicle_id": "vehicle_fixture_002",
+          "name": "Synthetic Vehicle 002"
+        },
+        {
+          "id": "vehicle_fixture_003",
+          "vehicle_id": "vehicle_fixture_003",
+          "name": "Synthetic Vehicle 003"
+        },
+        {
+          "id": "vehicle_fixture_004",
+          "vehicle_id": "vehicle_fixture_004",
+          "name": "Synthetic Vehicle 004"
+        },
+        {
+          "id": "vehicle_fixture_005",
+          "vehicle_id": "vehicle_fixture_005",
+          "name": "Synthetic Vehicle 005"
+        },
+        {
+          "id": "vehicle_fixture_006",
+          "vehicle_id": "vehicle_fixture_006",
+          "name": "Synthetic Vehicle 006"
+        },
+        {
+          "id": "vehicle_fixture_007",
+          "vehicle_id": "vehicle_fixture_007",
+          "name": "Synthetic Vehicle 007"
+        },
+        {
+          "id": "vehicle_fixture_008",
+          "vehicle_id": "vehicle_fixture_008",
+          "name": "Synthetic Vehicle 008"
+        },
+        {
+          "id": "vehicle_fixture_009",
+          "vehicle_id": "vehicle_fixture_009",
+          "name": "Synthetic Vehicle 009"
+        },
+        {
+          "id": "vehicle_fixture_010",
+          "vehicle_id": "vehicle_fixture_010",
+          "name": "Synthetic Vehicle 010"
+        },
+        {
+          "id": "vehicle_fixture_011",
+          "vehicle_id": "vehicle_fixture_011",
+          "name": "Synthetic Vehicle 011"
+        },
+        {
+          "id": "vehicle_fixture_012",
+          "vehicle_id": "vehicle_fixture_012",
+          "name": "Synthetic Vehicle 012"
+        },
+        {
+          "id": "vehicle_fixture_013",
+          "vehicle_id": "vehicle_fixture_013",
+          "name": "Synthetic Vehicle 013"
+        },
+        {
+          "id": "vehicle_fixture_014",
+          "vehicle_id": "vehicle_fixture_014",
+          "name": "Synthetic Vehicle 014"
+        },
+        {
+          "id": "vehicle_fixture_015",
+          "vehicle_id": "vehicle_fixture_015",
+          "name": "Synthetic Vehicle 015"
+        },
+        {
+          "id": "vehicle_fixture_016",
+          "vehicle_id": "vehicle_fixture_016",
+          "name": "Synthetic Vehicle 016"
+        },
+        {
+          "id": "vehicle_fixture_017",
+          "vehicle_id": "vehicle_fixture_017",
+          "name": "Synthetic Vehicle 017"
+        },
+        {
+          "id": "vehicle_fixture_018",
+          "vehicle_id": "vehicle_fixture_018",
+          "name": "Synthetic Vehicle 018"
+        },
+        {
+          "id": "vehicle_fixture_019",
+          "vehicle_id": "vehicle_fixture_019",
+          "name": "Synthetic Vehicle 019"
+        },
+        {
+          "id": "vehicle_fixture_020",
+          "vehicle_id": "vehicle_fixture_020",
+          "name": "Synthetic Vehicle 020"
+        },
+        {
+          "id": "vehicle_fixture_021",
+          "vehicle_id": "vehicle_fixture_021",
+          "name": "Synthetic Vehicle 021"
+        },
+        {
+          "id": "vehicle_fixture_022",
+          "vehicle_id": "vehicle_fixture_022",
+          "name": "Synthetic Vehicle 022"
+        },
+        {
+          "id": "vehicle_fixture_023",
+          "vehicle_id": "vehicle_fixture_023",
+          "name": "Synthetic Vehicle 023"
+        },
+        {
+          "id": "vehicle_fixture_024",
+          "vehicle_id": "vehicle_fixture_024",
+          "name": "Synthetic Vehicle 024"
+        },
+        {
+          "id": "vehicle_fixture_025",
+          "vehicle_id": "vehicle_fixture_025",
+          "name": "Synthetic Vehicle 025"
+        },
+        {
+          "id": "vehicle_fixture_026",
+          "vehicle_id": "vehicle_fixture_026",
+          "name": "Synthetic Vehicle 026"
+        },
+        {
+          "id": "vehicle_fixture_027",
+          "vehicle_id": "vehicle_fixture_027",
+          "name": "Synthetic Vehicle 027"
+        },
+        {
+          "id": "vehicle_fixture_028",
+          "vehicle_id": "vehicle_fixture_028",
+          "name": "Synthetic Vehicle 028"
+        },
+        {
+          "id": "vehicle_fixture_029",
+          "vehicle_id": "vehicle_fixture_029",
+          "name": "Synthetic Vehicle 029"
+        },
+        {
+          "id": "vehicle_fixture_030",
+          "vehicle_id": "vehicle_fixture_030",
+          "name": "Synthetic Vehicle 030"
+        },
+        {
+          "id": "vehicle_fixture_031",
+          "vehicle_id": "vehicle_fixture_031",
+          "name": "Synthetic Vehicle 031"
+        },
+        {
+          "id": "vehicle_fixture_032",
+          "vehicle_id": "vehicle_fixture_032",
+          "name": "Synthetic Vehicle 032"
+        },
+        {
+          "id": "vehicle_fixture_033",
+          "vehicle_id": "vehicle_fixture_033",
+          "name": "Synthetic Vehicle 033"
+        },
+        {
+          "id": "vehicle_fixture_034",
+          "vehicle_id": "vehicle_fixture_034",
+          "name": "Synthetic Vehicle 034"
+        },
+        {
+          "id": "vehicle_fixture_035",
+          "vehicle_id": "vehicle_fixture_035",
+          "name": "Synthetic Vehicle 035"
+        },
+        {
+          "id": "vehicle_fixture_036",
+          "vehicle_id": "vehicle_fixture_036",
+          "name": "Synthetic Vehicle 036"
+        },
+        {
+          "id": "vehicle_fixture_037",
+          "vehicle_id": "vehicle_fixture_037",
+          "name": "Synthetic Vehicle 037"
+        },
+        {
+          "id": "vehicle_fixture_038",
+          "vehicle_id": "vehicle_fixture_038",
+          "name": "Synthetic Vehicle 038"
+        },
+        {
+          "id": "vehicle_fixture_039",
+          "vehicle_id": "vehicle_fixture_039",
+          "name": "Synthetic Vehicle 039"
+        },
+        {
+          "id": "vehicle_fixture_040",
+          "vehicle_id": "vehicle_fixture_040",
+          "name": "Synthetic Vehicle 040"
+        },
+        {
+          "id": "vehicle_fixture_041",
+          "vehicle_id": "vehicle_fixture_041",
+          "name": "Synthetic Vehicle 041"
+        },
+        {
+          "id": "vehicle_fixture_042",
+          "vehicle_id": "vehicle_fixture_042",
+          "name": "Synthetic Vehicle 042"
+        },
+        {
+          "id": "vehicle_fixture_043",
+          "vehicle_id": "vehicle_fixture_043",
+          "name": "Synthetic Vehicle 043"
+        },
+        {
+          "id": "vehicle_fixture_044",
+          "vehicle_id": "vehicle_fixture_044",
+          "name": "Synthetic Vehicle 044"
+        },
+        {
+          "id": "vehicle_fixture_045",
+          "vehicle_id": "vehicle_fixture_045",
+          "name": "Synthetic Vehicle 045"
+        },
+        {
+          "id": "vehicle_fixture_046",
+          "vehicle_id": "vehicle_fixture_046",
+          "name": "Synthetic Vehicle 046"
+        },
+        {
+          "id": "vehicle_fixture_047",
+          "vehicle_id": "vehicle_fixture_047",
+          "name": "Synthetic Vehicle 047"
+        },
+        {
+          "id": "vehicle_fixture_048",
+          "vehicle_id": "vehicle_fixture_048",
+          "name": "Synthetic Vehicle 048"
+        },
+        {
+          "id": "vehicle_fixture_049",
+          "vehicle_id": "vehicle_fixture_049",
+          "name": "Synthetic Vehicle 049"
+        },
+        {
+          "id": "vehicle_fixture_050",
+          "vehicle_id": "vehicle_fixture_050",
+          "name": "Synthetic Vehicle 050"
+        },
+        {
+          "id": "vehicle_fixture_051",
+          "vehicle_id": "vehicle_fixture_051",
+          "name": "Synthetic Vehicle 051"
+        },
+        {
+          "id": "vehicle_fixture_052",
+          "vehicle_id": "vehicle_fixture_052",
+          "name": "Synthetic Vehicle 052"
+        },
+        {
+          "id": "vehicle_fixture_053",
+          "vehicle_id": "vehicle_fixture_053",
+          "name": "Synthetic Vehicle 053"
+        },
+        {
+          "id": "vehicle_fixture_054",
+          "vehicle_id": "vehicle_fixture_054",
+          "name": "Synthetic Vehicle 054"
+        },
+        {
+          "id": "vehicle_fixture_055",
+          "vehicle_id": "vehicle_fixture_055",
+          "name": "Synthetic Vehicle 055"
+        },
+        {
+          "id": "vehicle_fixture_056",
+          "vehicle_id": "vehicle_fixture_056",
+          "name": "Synthetic Vehicle 056"
+        },
+        {
+          "id": "vehicle_fixture_057",
+          "vehicle_id": "vehicle_fixture_057",
+          "name": "Synthetic Vehicle 057"
+        },
+        {
+          "id": "vehicle_fixture_058",
+          "vehicle_id": "vehicle_fixture_058",
+          "name": "Synthetic Vehicle 058"
+        },
+        {
+          "id": "vehicle_fixture_059",
+          "vehicle_id": "vehicle_fixture_059",
+          "name": "Synthetic Vehicle 059"
+        },
+        {
+          "id": "vehicle_fixture_060",
+          "vehicle_id": "vehicle_fixture_060",
+          "name": "Synthetic Vehicle 060"
+        },
+        {
+          "id": "vehicle_fixture_061",
+          "vehicle_id": "vehicle_fixture_061",
+          "name": "Synthetic Vehicle 061"
+        },
+        {
+          "id": "vehicle_fixture_062",
+          "vehicle_id": "vehicle_fixture_062",
+          "name": "Synthetic Vehicle 062"
+        },
+        {
+          "id": "vehicle_fixture_063",
+          "vehicle_id": "vehicle_fixture_063",
+          "name": "Synthetic Vehicle 063"
+        },
+        {
+          "id": "vehicle_fixture_064",
+          "vehicle_id": "vehicle_fixture_064",
+          "name": "Synthetic Vehicle 064"
+        },
+        {
+          "id": "vehicle_fixture_065",
+          "vehicle_id": "vehicle_fixture_065",
+          "name": "Synthetic Vehicle 065"
+        },
+        {
+          "id": "vehicle_fixture_066",
+          "vehicle_id": "vehicle_fixture_066",
+          "name": "Synthetic Vehicle 066"
+        },
+        {
+          "id": "vehicle_fixture_067",
+          "vehicle_id": "vehicle_fixture_067",
+          "name": "Synthetic Vehicle 067"
+        },
+        {
+          "id": "vehicle_fixture_068",
+          "vehicle_id": "vehicle_fixture_068",
+          "name": "Synthetic Vehicle 068"
+        },
+        {
+          "id": "vehicle_fixture_069",
+          "vehicle_id": "vehicle_fixture_069",
+          "name": "Synthetic Vehicle 069"
+        },
+        {
+          "id": "vehicle_fixture_070",
+          "vehicle_id": "vehicle_fixture_070",
+          "name": "Synthetic Vehicle 070"
+        },
+        {
+          "id": "vehicle_fixture_071",
+          "vehicle_id": "vehicle_fixture_071",
+          "name": "Synthetic Vehicle 071"
+        },
+        {
+          "id": "vehicle_fixture_072",
+          "vehicle_id": "vehicle_fixture_072",
+          "name": "Synthetic Vehicle 072"
+        },
+        {
+          "id": "vehicle_fixture_073",
+          "vehicle_id": "vehicle_fixture_073",
+          "name": "Synthetic Vehicle 073"
+        },
+        {
+          "id": "vehicle_fixture_074",
+          "vehicle_id": "vehicle_fixture_074",
+          "name": "Synthetic Vehicle 074"
+        },
+        {
+          "id": "vehicle_fixture_075",
+          "vehicle_id": "vehicle_fixture_075",
+          "name": "Synthetic Vehicle 075"
+        },
+        {
+          "id": "vehicle_fixture_076",
+          "vehicle_id": "vehicle_fixture_076",
+          "name": "Synthetic Vehicle 076"
+        },
+        {
+          "id": "vehicle_fixture_077",
+          "vehicle_id": "vehicle_fixture_077",
+          "name": "Synthetic Vehicle 077"
+        },
+        {
+          "id": "vehicle_fixture_078",
+          "vehicle_id": "vehicle_fixture_078",
+          "name": "Synthetic Vehicle 078"
+        },
+        {
+          "id": "vehicle_fixture_079",
+          "vehicle_id": "vehicle_fixture_079",
+          "name": "Synthetic Vehicle 079"
+        },
+        {
+          "id": "vehicle_fixture_080",
+          "vehicle_id": "vehicle_fixture_080",
+          "name": "Synthetic Vehicle 080"
+        },
+        {
+          "id": "vehicle_fixture_081",
+          "vehicle_id": "vehicle_fixture_081",
+          "name": "Synthetic Vehicle 081"
+        },
+        {
+          "id": "vehicle_fixture_082",
+          "vehicle_id": "vehicle_fixture_082",
+          "name": "Synthetic Vehicle 082"
+        },
+        {
+          "id": "vehicle_fixture_083",
+          "vehicle_id": "vehicle_fixture_083",
+          "name": "Synthetic Vehicle 083"
+        },
+        {
+          "id": "vehicle_fixture_084",
+          "vehicle_id": "vehicle_fixture_084",
+          "name": "Synthetic Vehicle 084"
+        },
+        {
+          "id": "vehicle_fixture_085",
+          "vehicle_id": "vehicle_fixture_085",
+          "name": "Synthetic Vehicle 085"
+        },
+        {
+          "id": "vehicle_fixture_086",
+          "vehicle_id": "vehicle_fixture_086",
+          "name": "Synthetic Vehicle 086"
+        },
+        {
+          "id": "vehicle_fixture_087",
+          "vehicle_id": "vehicle_fixture_087",
+          "name": "Synthetic Vehicle 087"
+        },
+        {
+          "id": "vehicle_fixture_088",
+          "vehicle_id": "vehicle_fixture_088",
+          "name": "Synthetic Vehicle 088"
+        },
+        {
+          "id": "vehicle_fixture_089",
+          "vehicle_id": "vehicle_fixture_089",
+          "name": "Synthetic Vehicle 089"
+        },
+        {
+          "id": "vehicle_fixture_090",
+          "vehicle_id": "vehicle_fixture_090",
+          "name": "Synthetic Vehicle 090"
+        },
+        {
+          "id": "vehicle_fixture_091",
+          "vehicle_id": "vehicle_fixture_091",
+          "name": "Synthetic Vehicle 091"
+        },
+        {
+          "id": "vehicle_fixture_092",
+          "vehicle_id": "vehicle_fixture_092",
+          "name": "Synthetic Vehicle 092"
+        },
+        {
+          "id": "vehicle_fixture_093",
+          "vehicle_id": "vehicle_fixture_093",
+          "name": "Synthetic Vehicle 093"
+        },
+        {
+          "id": "vehicle_fixture_094",
+          "vehicle_id": "vehicle_fixture_094",
+          "name": "Synthetic Vehicle 094"
+        },
+        {
+          "id": "vehicle_fixture_095",
+          "vehicle_id": "vehicle_fixture_095",
+          "name": "Synthetic Vehicle 095"
+        },
+        {
+          "id": "vehicle_fixture_096",
+          "vehicle_id": "vehicle_fixture_096",
+          "name": "Synthetic Vehicle 096"
+        },
+        {
+          "id": "vehicle_fixture_097",
+          "vehicle_id": "vehicle_fixture_097",
+          "name": "Synthetic Vehicle 097"
+        },
+        {
+          "id": "vehicle_fixture_098",
+          "vehicle_id": "vehicle_fixture_098",
+          "name": "Synthetic Vehicle 098"
+        },
+        {
+          "id": "vehicle_fixture_099",
+          "vehicle_id": "vehicle_fixture_099",
+          "name": "Synthetic Vehicle 099"
+        },
+        {
+          "id": "vehicle_fixture_100",
+          "vehicle_id": "vehicle_fixture_100",
+          "name": "Synthetic Vehicle 100"
+        }
+      ],
+      "description": "synthetic fixture response",
+      "next_page_token": "",
+      "page": 1,
+      "size": 100,
+      "status_code": 200,
+      "total_elements": 101,
+      "total_pages": 2
+    }
+  }
+}

@@ -26,8 +26,9 @@ Manual GSD fallback active.
 - `RUN-STATE.json`: updated for current cycle decisions.
 - `SUMMARY.md`: updated.
 - Evidence/fixtures: moved under recognized phase path; large remote snippet dumps trimmed.
-- `internal/connectors/defs/lucid-eld/**`: production bundle pending.
+- `internal/connectors/defs/lucid-eld/**`: atomic Tier-1 production bundle completed.
+- Generated CLI/docs parity artifacts and generic single-bundle validation-path repair completed.
 
 ## Verification result
 
-Red evidence captured; green verification pending.
+Red evidence captured before production edits. Focused gates passed, `go vet ./...` passed, and `make verify` passed.

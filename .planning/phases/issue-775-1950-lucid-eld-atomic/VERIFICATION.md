@@ -36,6 +36,19 @@ make: *** [connector-boundary] Error 1
 
 Exit: 2
 
+### `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld`
+
+Result: fail (expected before generic validation-path repair)
+
+```text
+fixtures: metadata.json: [missing_file] load bundle fixtures: missing required file metadata.json
+schemas: metadata.json: [missing_file] load bundle schemas: missing required file metadata.json
+connectorgen validate: 2 connector(s) checked, 2 finding(s)
+exit status 1
+```
+
+Exit: 1
+
 ## Required green verification commands
 
 ```bash
@@ -60,17 +73,19 @@ make verify
 | pre-production `scripts/verify-gsd-workflow feat/775-lucid-eld-full-parity` | fail-red | exact output above / exit=1 |
 | pre-production `make connector-boundary` | fail-red | exact output above / exit=2 |
 | planning validator red/negative fixtures | pass-red | carried from prior cycle; fixtures intentionally fail before final ledger |
-| final planning validator, relocated path | pending | pending |
-| `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` | pending | pending |
-| `go test ./internal/connectors/conformance -run 'TestConformance/lucid-eld' -count=1` | pending | pending |
-| `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` | pending | pending |
-| `go vet ./internal/connectors/... ./internal/cli/...` | pending | pending |
-| `go build ./cmd/pm` | pending | pending |
-| `make connector-boundary` | pending | pending |
-| `scripts/verify-gsd-workflow feat/775-lucid-eld-full-parity` | pending | pending |
-| `git diff --check feat/775-lucid-eld-full-parity...HEAD` | pending | pending |
-| `gofmt -l cmd internal` | pending | pending |
-| `make verify` | pending | pending |
+| final planning validator, relocated path | pass | `PASS internal/connectors/defs/lucid-eld/api_surface.json: 8 endpoint(s) match official OpenAPI` |
+| `go test ./cmd/connectorgen -run 'TestValidate_Accepts(SingleBundleDirectory|GoodBundle)$' -count=1` | pass | `ok   polymetrics.ai/cmd/connectorgen 0.789s` |
+| `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` | pass | `connectorgen validate: 1 connector(s) checked, 0 findings` |
+| `go test ./internal/connectors/conformance -run 'TestConformance/lucid-eld' -count=1` | pass | `ok   polymetrics.ai/internal/connectors/conformance 1.973s` |
+| `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` | pass | `ok   polymetrics.ai/internal/cli 138.199s` |
+| `go vet ./internal/connectors/... ./internal/cli/...` | pass | no output |
+| `go build ./cmd/pm` | pass | no output |
+| `make connector-boundary` | pass | `outcome=clean`, `connectors_loaded=549`, findings/warnings empty |
+| `scripts/verify-gsd-workflow feat/775-lucid-eld-full-parity` | pass | `verify-gsd-workflow: implementation changes have GSD/TDD evidence against feat/775-lucid-eld-full-parity` |
+| `git diff --check feat/775-lucid-eld-full-parity...HEAD` | pass | no output |
+| `gofmt -l cmd internal` | pass | no output |
+| `go vet ./...` | pass | no output |
+| `make verify` | pass | `go test -timeout 20m ./...` passed; `go run ./cmd/connectorgen validate internal/connectors/defs` -> `549 connector(s) checked, 0 findings`; connector boundary clean; `0 issues.` from golangci-lint |
 
 ## Secret/fixture scanner
 

@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/vehicles",
+    "query": {
+      "page": "2",
+      "limit": "100"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "vehicle_fixture_101",
+          "vehicle_id": "vehicle_fixture_101",
+          "name": "Synthetic Vehicle 101"
+        }
+      ],
+      "description": "synthetic fixture response",
+      "next_page_token": "",
+      "page": 2,
+      "size": 1,
+      "status_code": 200,
+      "total_elements": 101,
+      "total_pages": 2
+    }
+  }
+}

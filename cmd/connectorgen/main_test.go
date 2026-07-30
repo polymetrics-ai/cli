@@ -123,6 +123,19 @@ func TestValidate_AcceptsGoodBundle(t *testing.T) {
 	}
 }
 
+func TestValidate_AcceptsSingleBundleDirectory(t *testing.T) {
+	report, err := validateDir(os.DirFS("testdata/valid/goodconn"))
+	if err != nil {
+		t.Fatalf("validateDir: %v", err)
+	}
+	if len(report.Findings) != 0 {
+		t.Fatalf("expected zero findings for the direct bundle path, got %+v", report.Findings)
+	}
+	if report.ConnectorsChecked != 1 {
+		t.Fatalf("ConnectorsChecked = %d, want 1", report.ConnectorsChecked)
+	}
+}
+
 // TestValidate_WhenClauseEqualityAndMembershipAgainstSpecKnownKeyPasses is the
 // S3 engine mini-wave item 2 regression case (wave1-pilot SUMMARY.md carried
 // queue / REVIEW-A.md re-review R1/R3): a `when` clause using the `==`/`in`

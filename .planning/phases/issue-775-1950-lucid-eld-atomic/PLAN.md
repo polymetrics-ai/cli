@@ -15,7 +15,9 @@
 Allowed production scope:
 
 - `internal/connectors/defs/lucid-eld/**`
-- No provider-specific Go, hooks, natives, shared CLI/engine branches, generated shared files, new dependencies, live credentialed calls, or `writes.json`.
+- Required generated/help parity artifacts for the new connector: `docs/cli/connectors.md`, `docs/connectors/{README.md,catalog/**,lucid-eld/**}`, internal golden transcripts/count tests.
+- Generic `cmd/connectorgen` single-bundle validation-path repair required by the exact local gate.
+- No provider-specific Go, hooks, natives, new dependencies, live credentialed calls, or `writes.json`.
 
 Allowed planning scope:
 
@@ -73,6 +75,12 @@ Note: `.pi/skills/go-implementation/SKILL.md` is not present in this checkout; r
 - Use `projection: "passthrough"` and intentionally open object schemas for all three streams because official `data` is untyped `{}` and no sample/live response exists.
 - Synthetic fixtures exercise envelope/pagination plumbing only and must not claim real provider field truth.
 
+### Slice 2a — Generic validation-path repair if required
+
+- If the required command `go run ./cmd/connectorgen validate internal/connectors/defs/lucid-eld` treats `schemas/` and `fixtures/` as sibling connectors, repair `cmd/connectorgen` generically so a directory containing `metadata.json` is validated as one bundle rooted at its parent/name.
+- This is not provider-specific connector logic; red evidence is the exact failing command output in `TDD-LEDGER.md`.
+- Add/adjust focused `cmd/connectorgen` test coverage before claiming green.
+
 ### Slice 3 — Focused green gates
 
 Run and record:
@@ -104,11 +112,11 @@ Also run `make verify`; record exact pass/fail and name any unrelated baseline f
 - [x] Required skills loaded and recorded.
 - [x] Manual-GSD fallback recorded with exact command/result.
 - [x] Red CI/local evidence captured before production edits.
-- [ ] Planning evidence relocated to `.planning/phases/issue-775-1950-lucid-eld-atomic/**` and old child phase path removed.
-- [ ] Lucid ELD bundle is a complete Tier-1 declarative bundle.
-- [ ] All 8 official GET operations executable via stream or direct-read metadata.
-- [ ] `writes.json` absent; write capability false.
-- [ ] Schemas avoid invented properties and stream projection is passthrough.
-- [ ] Synthetic fixture caveat documented.
-- [ ] Required verification commands pass or exact unrelated baseline blocker recorded.
+- [x] Planning evidence relocated to `.planning/phases/issue-775-1950-lucid-eld-atomic/**` and old child phase path removed.
+- [x] Lucid ELD bundle is a complete Tier-1 declarative bundle.
+- [x] All 8 official GET operations executable via stream or direct-read metadata.
+- [x] `writes.json` absent; write capability false.
+- [x] Schemas avoid invented properties and stream projection is passthrough.
+- [x] Synthetic fixture caveat documented.
+- [x] Required verification commands pass; `make verify` passed.
 - [ ] PR #3166 updated and branch pushed.

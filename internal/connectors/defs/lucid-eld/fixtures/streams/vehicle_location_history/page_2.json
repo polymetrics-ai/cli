@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/v2/vehicle-location-history/synthetic-conformance-value",
+    "query": {
+      "start_date": "01-01-2026",
+      "end_date": "01-02-2026",
+      "limit": "100",
+      "next_page_token": "history_token_2"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "location_fixture_003",
+          "vehicle_id": "synthetic-conformance-value",
+          "sequence": 3
+        }
+      ],
+      "description": "synthetic fixture response",
+      "next_page_token": "",
+      "page": 2,
+      "size": 1,
+      "status_code": 200,
+      "total_elements": 3,
+      "total_pages": 2
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "lucid-eld",
+  "display_name": "Lucid ELD",
+  "description": "Reads DriveHOS/Lucid ELD Partner API v2 company, driver, vehicle, latest status, and vehicle location history data through bounded read-only GET endpoints. The official API surface documents no mutations, reports, webhooks, or binary/media operations.",
+  "integration_type": "api",
+  "docs_url": "https://api.drivehos.app/partner/swagger/doc.json",
+  "release_stage": "alpha",
+  "capabilities": {
+    "check": true,
+    "read": true,
+    "write": false,
+    "query": false,
+    "cdc": false,
+    "dynamic_schema": false
+  },
+  "batch": {
+    "read_page_size": 100
+  },
+  "risk": {
+    "read": "read-only DriveHOS/Lucid ELD Partner API GET requests can return company, driver, vehicle, latest status, and vehicle location history data; outputs are bounded and secret-shaped fields are redacted by generic policies"
+  }
+}
