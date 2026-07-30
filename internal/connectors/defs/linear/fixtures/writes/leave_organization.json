@@ -1,0 +1,22 @@
+{
+  "record": {
+    "organizationId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearLeaveOrganization"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "leaveOrganization": {
+          "__typename": "CreateOrJoinOrganizationResponse"
+        }
+      }
+    }
+  }
+}

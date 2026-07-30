@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "issues",
+    "live_unavailable": [
+      {
+        "kind": "no_live_credentials",
+        "contains": [
+          "No live Linear credentials or provider calls were requested or run in this connector-local parity slice."
+        ]
+      },
+      {
+        "kind": "fixture_only",
+        "contains": [
+          "Fixture replay and static validation are not live certification."
+        ]
+      }
+    ]
+  }
+}

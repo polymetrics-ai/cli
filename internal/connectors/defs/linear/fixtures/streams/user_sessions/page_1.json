@@ -1,0 +1,25 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "userSessions": [
+          {
+            "__typename": "AuthenticationSessionResponse",
+            "id": "user_sessions_fixture_1",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z",
+            "name": "name_fixture"
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "id": "fixture_id"
+  }
+}

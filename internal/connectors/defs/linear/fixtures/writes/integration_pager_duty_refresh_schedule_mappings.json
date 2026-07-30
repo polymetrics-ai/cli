@@ -1,0 +1,20 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIntegrationPagerDutyRefreshScheduleMappings"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "integrationPagerDutyRefreshScheduleMappings": {
+          "__typename": "IntegrationPayload"
+        }
+      }
+    }
+  }
+}

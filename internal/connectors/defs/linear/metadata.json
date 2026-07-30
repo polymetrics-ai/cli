@@ -1,23 +1,25 @@
 {
   "name": "linear",
   "display_name": "Linear",
-  "description": "Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.",
+  "description": "Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL reverse-ETL mutations where connector-local schemas can do so without raw GraphQL passthrough.",
   "integration_type": "api",
   "docs_url": "https://developers.linear.app/docs",
   "release_stage": "ga",
   "capabilities": {
-    "check": true,
+    "check": false,
     "read": true,
-    "write": false,
+    "write": true,
     "query": false,
     "cdc": false,
     "dynamic_schema": false
   },
   "batch": {
-    "read_page_size": 50
+    "read_page_size": 50,
+    "write_batch_size": 1
   },
   "risk": {
-    "read": "external Linear GraphQL API read of issues/teams/projects/users",
-    "approval": "none; read-only source connector"
+    "read": "fixed Linear GraphQL documents against documented root Query list/connection fields",
+    "write": "fixed Linear GraphQL mutations; destructive/delete/archive operations require typed destructive confirmation when implemented",
+    "approval": "reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions require typed confirmation"
   }
 }

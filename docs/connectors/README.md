@@ -261,7 +261,7 @@
 - [less-annoying-crm](less-annoying-crm/MANUAL.md): Reads Less Annoying CRM users, contacts, tasks, notes, and events through the Less Annoying CRM v2 API.
 - [lever-hiring](lever-hiring/MANUAL.md): Reads Lever Hiring opportunities, postings, users, requisitions, and stages through the Lever Data API. Read-only (full-refresh).
 - [lightspeed-retail](lightspeed-retail/MANUAL.md): Reads Lightspeed Retail (X-Series) products, customers, sales, outlets, and registers through the Lightspeed REST API. Read-only.
-- [linear](linear/MANUAL.md): Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.
+- [linear](linear/MANUAL.md): Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL reverse-ETL mutations where connector-local schemas can do so without raw GraphQL passthrough.
 - [linkedin-ads](linkedin-ads/MANUAL.md): Reads LinkedIn Ads accounts, campaign groups, campaigns, and creatives through the LinkedIn Marketing REST API.
 - [linkedin-pages](linkedin-pages/MANUAL.md): Reads LinkedIn organization (company page) profile, follower statistics, share statistics, and total follower count through the LinkedIn Community Management REST API.
 - [linkrunner](linkrunner/MANUAL.md): Reads Linkrunner mobile attribution campaigns and attributed users from the Linkrunner Data API.

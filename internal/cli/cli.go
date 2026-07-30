@@ -162,9 +162,31 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 func dynamicConnectorManual(name string) (string, bool) {
 	connector, ok := dynamicConnectorWithCommandSurface(name)
 	if !ok {
-		return "", false
+		return dynamicConnectorHelpTopicManual(name)
 	}
 	return connectors.RenderConnectorManual(connector), true
+}
+
+func dynamicConnectorHelpTopicManual(name string) (string, bool) {
+	topicName := strings.TrimSpace(name)
+	if topicName == "" {
+		return "", false
+	}
+	registry := appRegistry()
+	for _, meta := range registry.List() {
+		connector, ok := registry.Get(meta.Name)
+		if !ok {
+			continue
+		}
+		provider, ok := connector.(connectors.CommandSurfaceProvider)
+		if !ok || provider.CommandSurface() == nil {
+			continue
+		}
+		if topic, ok := connectorSurfaceHelpTopic(provider.CommandSurface(), meta.Name, []string{topicName}); ok {
+			return renderConnectorHelpTopicManual(meta.Name, connector, topic), true
+		}
+	}
+	return "", false
 }
 
 func isDynamicConnectorCommand(name string) bool {
@@ -644,8 +666,8 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
 		}
-		fmt.Fprint(stdout, manual)
-		return nil
+		_, err := fmt.Fprint(stdout, manual)
+		return err
 	}
 	flags := parseFlags(args)
 	path := flags.values["_"]
@@ -653,6 +675,18 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		return usageErrorf("missing connector command path")
 	}
 	if err := validateConnectorLifecycleFlagValues(flags); err != nil {
+		return err
+	}
+	if topic, ok := connectorSurfaceHelpTopic(surface, connectorName, path); ok && connectorHelpFlagsArePassive(flags, surface) {
+		manual := renderConnectorHelpTopicManual(connectorName, connector, topic)
+		command := strings.TrimSpace(topic.Name)
+		if command == "" {
+			command = connectorName + " " + strings.Join(path, " ")
+		}
+		if jsonOut {
+			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
+		}
+		_, err := fmt.Fprint(stdout, manual)
 		return err
 	}
 	if err := commandrunner.Preflight(connector, path); err != nil {
@@ -740,6 +774,47 @@ func renderConnectorCommandManual(connectorName string, connector connectors.Con
 		}
 	}
 	return connectorName, renderConnectorCommandRoot(connectorName, connector, surface)
+}
+
+func connectorSurfaceHelpTopic(surface *connectors.CommandSurface, connectorName string, path []string) (connectors.CommandSurfaceHelpTopic, bool) {
+	if surface == nil {
+		return connectors.CommandSurfaceHelpTopic{}, false
+	}
+	query := strings.TrimSpace(strings.Join(path, " "))
+	if query == "" {
+		return connectors.CommandSurfaceHelpTopic{}, false
+	}
+	connectorQualifiedQuery := strings.TrimSpace(connectorName + " " + query)
+	for _, topic := range surface.HelpTopics {
+		topicName := strings.TrimSpace(topic.Name)
+		if topicName == "" {
+			continue
+		}
+		if query == topicName || connectorQualifiedQuery == topicName {
+			return topic, true
+		}
+		if !strings.HasPrefix(topicName, connectorName+" ") && query == connectorName+" "+topicName {
+			return topic, true
+		}
+	}
+	return connectors.CommandSurfaceHelpTopic{}, false
+}
+
+func renderConnectorHelpTopicManual(connectorName string, connector connectors.Connector, topic connectors.CommandSurfaceHelpTopic) string {
+	topicName := strings.TrimSpace(topic.Name)
+	displayName := valueOr(connector.Metadata().DisplayName, connectorName)
+	var b strings.Builder
+	b.WriteString("NAME\n")
+	fmt.Fprintf(&b, "  pm help %q - %s help topic\n\n", topicName, displayName)
+	b.WriteString("SYNOPSIS\n")
+	fmt.Fprintf(&b, "  pm help %q\n", topicName)
+	if shortName, ok := strings.CutPrefix(topicName, connectorName+" "); ok && shortName != "" {
+		fmt.Fprintf(&b, "  pm %s %s\n", connectorName, shortName)
+	}
+	fmt.Fprintf(&b, "  pm %s --help\n\n", connectorName)
+	b.WriteString("DESCRIPTION\n")
+	fmt.Fprintf(&b, "  %s\n", topic.Summary)
+	return b.String()
 }
 
 func connectorHelpPath(path []string) []string {

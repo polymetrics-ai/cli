@@ -1,0 +1,22 @@
+{
+  "record": {
+    "email": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearResendOrganizationInviteByEmail"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "resendOrganizationInviteByEmail": {
+          "__typename": "DeletePayload"
+        }
+      }
+    }
+  }
+}

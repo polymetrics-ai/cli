@@ -1,0 +1,1721 @@
+{
+  "tagline": "Work with Linear through connector-owned fixed GraphQL operations.",
+  "usage": "pm linear <command> [flags]",
+  "source_cli": {
+    "name": "Linear GraphQL API",
+    "docs": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+    "reference": "https://developers.linear.app/docs/graphql/working-with-the-graphql-api",
+    "source": "https://raw.githubusercontent.com/linear/linear/master/packages/sdk/src/schema.graphql"
+  },
+  "groups": [
+    {
+      "id": "read",
+      "title": "Read/list commands",
+      "commands": [
+        "administrable",
+        "agent",
+        "archived",
+        "attachments",
+        "audit",
+        "authentication",
+        "comments",
+        "custom",
+        "customer",
+        "customers",
+        "cycles",
+        "documents",
+        "emojis",
+        "external",
+        "failures",
+        "favorites",
+        "initiative",
+        "initiatives",
+        "integration",
+        "integrations",
+        "issue",
+        "issues",
+        "oauth",
+        "organization",
+        "project",
+        "projects",
+        "recent",
+        "release",
+        "releases",
+        "roadmap",
+        "roadmaps",
+        "sla",
+        "team",
+        "teams",
+        "templates",
+        "time",
+        "triage",
+        "user",
+        "users",
+        "webhooks"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Typed reverse-ETL mutation commands",
+      "commands": [
+        "agent",
+        "attachment",
+        "comment",
+        "custom",
+        "customer",
+        "cycle",
+        "document",
+        "email",
+        "emoji",
+        "entity",
+        "favorite",
+        "file",
+        "git",
+        "initiative",
+        "integration",
+        "issue",
+        "leave",
+        "logout",
+        "notification",
+        "oauth",
+        "organization",
+        "project",
+        "push",
+        "reaction",
+        "release",
+        "team",
+        "template",
+        "time",
+        "triage",
+        "user",
+        "view",
+        "webhook",
+        "workflow"
+      ]
+    },
+    {
+      "id": "planned",
+      "title": "Planned direct/binary/changefeed commands",
+      "commands": [
+        "attachment",
+        "attachments",
+        "agent"
+      ]
+    }
+  ],
+  "global_flags": [
+    {
+      "name": "json",
+      "type": "boolean",
+      "summary": "Write machine-readable JSON output."
+    },
+    {
+      "name": "connection",
+      "type": "string",
+      "summary": "Use a saved Linear connector credential.",
+      "maps_to": "connection"
+    }
+  ],
+  "commands": [
+    {
+      "path": "issues list",
+      "summary": "List Linear issues.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issues",
+      "flags": [],
+      "examples": [
+        "pm linear issues list --json"
+      ]
+    },
+    {
+      "path": "projects list",
+      "summary": "List Linear projects.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "projects",
+      "flags": [],
+      "examples": [
+        "pm linear projects list --json"
+      ]
+    },
+    {
+      "path": "teams list",
+      "summary": "List Linear teams.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "teams",
+      "flags": [],
+      "examples": [
+        "pm linear teams list --json"
+      ]
+    },
+    {
+      "path": "users list",
+      "summary": "List Linear users.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "users",
+      "flags": [],
+      "examples": [
+        "pm linear users list --json"
+      ]
+    },
+    {
+      "path": "administrable teams list",
+      "summary": "List Linear administrableTeams.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "administrable_teams",
+      "flags": [],
+      "examples": [
+        "pm linear administrable teams list --json"
+      ]
+    },
+    {
+      "path": "agent activities list",
+      "summary": "List Linear agentActivities.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agent_activities",
+      "flags": [],
+      "examples": [
+        "pm linear agent activities list --json"
+      ]
+    },
+    {
+      "path": "agent sessions list",
+      "summary": "List Linear agentSessions.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agent_sessions",
+      "flags": [],
+      "examples": [
+        "pm linear agent sessions list --json"
+      ]
+    },
+    {
+      "path": "agent skills list",
+      "summary": "List Linear agentSkills.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "agent_skills",
+      "flags": [],
+      "examples": [
+        "pm linear agent skills list --json"
+      ]
+    },
+    {
+      "path": "archived integrations list",
+      "summary": "List Linear archivedIntegrations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "archived_integrations",
+      "flags": [],
+      "examples": [
+        "pm linear archived integrations list --json"
+      ]
+    },
+    {
+      "path": "archived teams list",
+      "summary": "List Linear archivedTeams.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "archived_teams",
+      "flags": [],
+      "examples": [
+        "pm linear archived teams list --json"
+      ]
+    },
+    {
+      "path": "attachments for url list",
+      "summary": "List Linear attachmentsForURL.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "attachments_for_url",
+      "flags": [
+        {
+          "name": "url",
+          "type": "string",
+          "summary": "url argument for Linear attachmentsForURL.",
+          "maps_to": "query.url",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear attachments for url list --json"
+      ]
+    },
+    {
+      "path": "attachments list",
+      "summary": "List Linear attachments.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "attachments",
+      "flags": [],
+      "examples": [
+        "pm linear attachments list --json"
+      ]
+    },
+    {
+      "path": "audit entries list",
+      "summary": "List Linear auditEntries.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_entries",
+      "flags": [],
+      "examples": [
+        "pm linear audit entries list --json"
+      ]
+    },
+    {
+      "path": "audit entry types list",
+      "summary": "List Linear auditEntryTypes.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "audit_entry_types",
+      "flags": [],
+      "examples": [
+        "pm linear audit entry types list --json"
+      ]
+    },
+    {
+      "path": "authentication sessions list",
+      "summary": "List Linear authenticationSessions.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "authentication_sessions",
+      "flags": [],
+      "examples": [
+        "pm linear authentication sessions list --json"
+      ]
+    },
+    {
+      "path": "comments list",
+      "summary": "List Linear comments.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "comments",
+      "flags": [],
+      "examples": [
+        "pm linear comments list --json"
+      ]
+    },
+    {
+      "path": "custom views list",
+      "summary": "List Linear customViews.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "custom_views",
+      "flags": [],
+      "examples": [
+        "pm linear custom views list --json"
+      ]
+    },
+    {
+      "path": "customer needs list",
+      "summary": "List Linear customerNeeds.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_needs",
+      "flags": [],
+      "examples": [
+        "pm linear customer needs list --json"
+      ]
+    },
+    {
+      "path": "customer statuses list",
+      "summary": "List Linear customerStatuses.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_statuses",
+      "flags": [],
+      "examples": [
+        "pm linear customer statuses list --json"
+      ]
+    },
+    {
+      "path": "customer tiers list",
+      "summary": "List Linear customerTiers.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customer_tiers",
+      "flags": [],
+      "examples": [
+        "pm linear customer tiers list --json"
+      ]
+    },
+    {
+      "path": "customers list",
+      "summary": "List Linear customers.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "customers",
+      "flags": [],
+      "examples": [
+        "pm linear customers list --json"
+      ]
+    },
+    {
+      "path": "cycles list",
+      "summary": "List Linear cycles.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "cycles",
+      "flags": [],
+      "examples": [
+        "pm linear cycles list --json"
+      ]
+    },
+    {
+      "path": "documents list",
+      "summary": "List Linear documents.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "documents",
+      "flags": [],
+      "examples": [
+        "pm linear documents list --json"
+      ]
+    },
+    {
+      "path": "emojis list",
+      "summary": "List Linear emojis.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "emojis",
+      "flags": [],
+      "examples": [
+        "pm linear emojis list --json"
+      ]
+    },
+    {
+      "path": "external users list",
+      "summary": "List Linear externalUsers.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "external_users",
+      "flags": [],
+      "examples": [
+        "pm linear external users list --json"
+      ]
+    },
+    {
+      "path": "failures for oauth webhooks list",
+      "summary": "List Linear failuresForOauthWebhooks.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "failures_for_oauth_webhooks",
+      "flags": [
+        {
+          "name": "oauthClientId",
+          "type": "string",
+          "summary": "oauthClientId argument for Linear failuresForOauthWebhooks.",
+          "maps_to": "query.oauthClientId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear failures for oauth webhooks list --json"
+      ]
+    },
+    {
+      "path": "favorites list",
+      "summary": "List Linear favorites.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "favorites",
+      "flags": [],
+      "examples": [
+        "pm linear favorites list --json"
+      ]
+    },
+    {
+      "path": "initiative labels list",
+      "summary": "List Linear initiativeLabels.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "initiative_labels",
+      "flags": [],
+      "examples": [
+        "pm linear initiative labels list --json"
+      ]
+    },
+    {
+      "path": "initiative relations list",
+      "summary": "List Linear initiativeRelations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "initiative_relations",
+      "flags": [],
+      "examples": [
+        "pm linear initiative relations list --json"
+      ]
+    },
+    {
+      "path": "initiative to projects list",
+      "summary": "List Linear initiativeToProjects.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "initiative_to_projects",
+      "flags": [],
+      "examples": [
+        "pm linear initiative to projects list --json"
+      ]
+    },
+    {
+      "path": "initiative updates list",
+      "summary": "List Linear initiativeUpdates.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "initiative_updates",
+      "flags": [],
+      "examples": [
+        "pm linear initiative updates list --json"
+      ]
+    },
+    {
+      "path": "initiatives list",
+      "summary": "List Linear initiatives.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "initiatives",
+      "flags": [],
+      "examples": [
+        "pm linear initiatives list --json"
+      ]
+    },
+    {
+      "path": "integration templates list",
+      "summary": "List Linear integrationTemplates.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integration_templates",
+      "flags": [],
+      "examples": [
+        "pm linear integration templates list --json"
+      ]
+    },
+    {
+      "path": "integrations list",
+      "summary": "List Linear integrations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "integrations",
+      "flags": [],
+      "examples": [
+        "pm linear integrations list --json"
+      ]
+    },
+    {
+      "path": "issue figma file key search list",
+      "summary": "List Linear issueFigmaFileKeySearch.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_figma_file_key_search",
+      "flags": [
+        {
+          "name": "fileKey",
+          "type": "string",
+          "summary": "fileKey argument for Linear issueFigmaFileKeySearch.",
+          "maps_to": "query.fileKey",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear issue figma file key search list --json"
+      ]
+    },
+    {
+      "path": "issue labels list",
+      "summary": "List Linear issueLabels.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_labels",
+      "flags": [],
+      "examples": [
+        "pm linear issue labels list --json"
+      ]
+    },
+    {
+      "path": "issue priority values list",
+      "summary": "List Linear issuePriorityValues.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_priority_values",
+      "flags": [],
+      "examples": [
+        "pm linear issue priority values list --json"
+      ]
+    },
+    {
+      "path": "issue relations list",
+      "summary": "List Linear issueRelations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_relations",
+      "flags": [],
+      "examples": [
+        "pm linear issue relations list --json"
+      ]
+    },
+    {
+      "path": "issue search list",
+      "summary": "List Linear issueSearch.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_search",
+      "flags": [],
+      "examples": [
+        "pm linear issue search list --json"
+      ]
+    },
+    {
+      "path": "issue to releases list",
+      "summary": "List Linear issueToReleases.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "issue_to_releases",
+      "flags": [],
+      "examples": [
+        "pm linear issue to releases list --json"
+      ]
+    },
+    {
+      "path": "oauth applications list",
+      "summary": "List Linear oauthApplications.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "oauth_applications",
+      "flags": [],
+      "examples": [
+        "pm linear oauth applications list --json"
+      ]
+    },
+    {
+      "path": "organization invites list",
+      "summary": "List Linear organizationInvites.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "organization_invites",
+      "flags": [],
+      "examples": [
+        "pm linear organization invites list --json"
+      ]
+    },
+    {
+      "path": "project labels list",
+      "summary": "List Linear projectLabels.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_labels",
+      "flags": [],
+      "examples": [
+        "pm linear project labels list --json"
+      ]
+    },
+    {
+      "path": "project milestones list",
+      "summary": "List Linear projectMilestones.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_milestones",
+      "flags": [],
+      "examples": [
+        "pm linear project milestones list --json"
+      ]
+    },
+    {
+      "path": "project relations list",
+      "summary": "List Linear projectRelations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_relations",
+      "flags": [],
+      "examples": [
+        "pm linear project relations list --json"
+      ]
+    },
+    {
+      "path": "project statuses list",
+      "summary": "List Linear projectStatuses.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_statuses",
+      "flags": [],
+      "examples": [
+        "pm linear project statuses list --json"
+      ]
+    },
+    {
+      "path": "project updates list",
+      "summary": "List Linear projectUpdates.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "project_updates",
+      "flags": [],
+      "examples": [
+        "pm linear project updates list --json"
+      ]
+    },
+    {
+      "path": "recent releases by access key list",
+      "summary": "List Linear recentReleasesByAccessKey.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "recent_releases_by_access_key",
+      "flags": [],
+      "examples": [
+        "pm linear recent releases by access key list --json"
+      ]
+    },
+    {
+      "path": "release notes list",
+      "summary": "List Linear releaseNotes.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "release_notes",
+      "flags": [],
+      "examples": [
+        "pm linear release notes list --json"
+      ]
+    },
+    {
+      "path": "release pipelines list",
+      "summary": "List Linear releasePipelines.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "release_pipelines",
+      "flags": [],
+      "examples": [
+        "pm linear release pipelines list --json"
+      ]
+    },
+    {
+      "path": "release search list",
+      "summary": "List Linear releaseSearch.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "release_search",
+      "flags": [],
+      "examples": [
+        "pm linear release search list --json"
+      ]
+    },
+    {
+      "path": "release stages list",
+      "summary": "List Linear releaseStages.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "release_stages",
+      "flags": [],
+      "examples": [
+        "pm linear release stages list --json"
+      ]
+    },
+    {
+      "path": "releases list",
+      "summary": "List Linear releases.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "releases",
+      "flags": [],
+      "examples": [
+        "pm linear releases list --json"
+      ]
+    },
+    {
+      "path": "roadmap to projects list",
+      "summary": "List Linear roadmapToProjects.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roadmap_to_projects",
+      "flags": [],
+      "examples": [
+        "pm linear roadmap to projects list --json"
+      ]
+    },
+    {
+      "path": "roadmaps list",
+      "summary": "List Linear roadmaps.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "roadmaps",
+      "flags": [],
+      "examples": [
+        "pm linear roadmaps list --json"
+      ]
+    },
+    {
+      "path": "sla configurations list",
+      "summary": "List Linear slaConfigurations.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "sla_configurations",
+      "flags": [
+        {
+          "name": "teamId",
+          "type": "string",
+          "summary": "teamId argument for Linear slaConfigurations.",
+          "maps_to": "query.teamId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear sla configurations list --json"
+      ]
+    },
+    {
+      "path": "team memberships list",
+      "summary": "List Linear teamMemberships.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "team_memberships",
+      "flags": [],
+      "examples": [
+        "pm linear team memberships list --json"
+      ]
+    },
+    {
+      "path": "templates for integration list",
+      "summary": "List Linear templatesForIntegration.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates_for_integration",
+      "flags": [
+        {
+          "name": "integrationType",
+          "type": "string",
+          "summary": "integrationType argument for Linear templatesForIntegration.",
+          "maps_to": "query.integrationType",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear templates for integration list --json"
+      ]
+    },
+    {
+      "path": "templates list",
+      "summary": "List Linear templates.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "templates",
+      "flags": [],
+      "examples": [
+        "pm linear templates list --json"
+      ]
+    },
+    {
+      "path": "time schedules list",
+      "summary": "List Linear timeSchedules.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "time_schedules",
+      "flags": [],
+      "examples": [
+        "pm linear time schedules list --json"
+      ]
+    },
+    {
+      "path": "triage responsibilities list",
+      "summary": "List Linear triageResponsibilities.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "triage_responsibilities",
+      "flags": [],
+      "examples": [
+        "pm linear triage responsibilities list --json"
+      ]
+    },
+    {
+      "path": "user sessions list",
+      "summary": "List Linear userSessions.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "user_sessions",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument for Linear userSessions.",
+          "maps_to": "query.id",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm linear user sessions list --json"
+      ]
+    },
+    {
+      "path": "webhooks list",
+      "summary": "List Linear webhooks.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "webhooks",
+      "flags": [],
+      "examples": [
+        "pm linear webhooks list --json"
+      ]
+    },
+    {
+      "path": "workflow states list",
+      "summary": "List Linear workflowStates.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "workflow_states",
+      "flags": [],
+      "examples": [
+        "pm linear workflow states list --json"
+      ]
+    },
+    {
+      "path": "agent skill delete",
+      "summary": "Run Linear mutation agentSkillDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "agent_skill_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear agent skill delete --json"
+      ]
+    },
+    {
+      "path": "attachment delete",
+      "summary": "Run Linear mutation attachmentDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "attachment_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear attachment delete --json"
+      ]
+    },
+    {
+      "path": "comment delete",
+      "summary": "Run Linear mutation commentDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "comment_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear comment delete --json"
+      ]
+    },
+    {
+      "path": "custom view delete",
+      "summary": "Run Linear mutation customViewDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "custom_view_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear custom view delete --json"
+      ]
+    },
+    {
+      "path": "customer delete",
+      "summary": "Run Linear mutation customerDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer delete --json"
+      ]
+    },
+    {
+      "path": "customer need archive",
+      "summary": "Run Linear mutation customerNeedArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_need_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer need archive --json"
+      ]
+    },
+    {
+      "path": "customer need unarchive",
+      "summary": "Run Linear mutation customerNeedUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_need_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer need unarchive --json"
+      ]
+    },
+    {
+      "path": "customer status delete",
+      "summary": "Run Linear mutation customerStatusDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_status_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer status delete --json"
+      ]
+    },
+    {
+      "path": "customer tier delete",
+      "summary": "Run Linear mutation customerTierDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_tier_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer tier delete --json"
+      ]
+    },
+    {
+      "path": "customer unsync",
+      "summary": "Run Linear mutation customerUnsync.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "customer_unsync",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear customer unsync --json"
+      ]
+    },
+    {
+      "path": "cycle archive",
+      "summary": "Run Linear mutation cycleArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "cycle_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear cycle archive --json"
+      ]
+    },
+    {
+      "path": "document delete",
+      "summary": "Run Linear mutation documentDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "document_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear document delete --json"
+      ]
+    },
+    {
+      "path": "document unarchive",
+      "summary": "Run Linear mutation documentUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "document_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear document unarchive --json"
+      ]
+    },
+    {
+      "path": "email intake address delete",
+      "summary": "Run Linear mutation emailIntakeAddressDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "email_intake_address_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear email intake address delete --json"
+      ]
+    },
+    {
+      "path": "email intake address rotate",
+      "summary": "Run Linear mutation emailIntakeAddressRotate.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "email_intake_address_rotate",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear email intake address rotate --json"
+      ]
+    },
+    {
+      "path": "emoji delete",
+      "summary": "Run Linear mutation emojiDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "emoji_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear emoji delete --json"
+      ]
+    },
+    {
+      "path": "entity external link delete",
+      "summary": "Run Linear mutation entityExternalLinkDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "entity_external_link_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear entity external link delete --json"
+      ]
+    },
+    {
+      "path": "favorite delete",
+      "summary": "Run Linear mutation favoriteDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "favorite_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear favorite delete --json"
+      ]
+    },
+    {
+      "path": "file upload dangerously delete",
+      "summary": "Run Linear mutation fileUploadDangerouslyDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "file_upload_dangerously_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "asset-url",
+          "type": "string",
+          "summary": "assetUrl argument.",
+          "maps_to": "record.assetUrl"
+        }
+      ],
+      "examples": [
+        "pm linear file upload dangerously delete --json"
+      ]
+    },
+    {
+      "path": "git automation state delete",
+      "summary": "Run Linear mutation gitAutomationStateDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_automation_state_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear git automation state delete --json"
+      ]
+    },
+    {
+      "path": "git automation target branch delete",
+      "summary": "Run Linear mutation gitAutomationTargetBranchDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "git_automation_target_branch_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear git automation target branch delete --json"
+      ]
+    },
+    {
+      "path": "initiative archive",
+      "summary": "Run Linear mutation initiativeArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative archive --json"
+      ]
+    },
+    {
+      "path": "initiative delete",
+      "summary": "Run Linear mutation initiativeDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative delete --json"
+      ]
+    },
+    {
+      "path": "initiative label delete",
+      "summary": "Run Linear mutation initiativeLabelDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_label_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative label delete --json"
+      ]
+    },
+    {
+      "path": "initiative relation delete",
+      "summary": "Run Linear mutation initiativeRelationDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_relation_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative relation delete --json"
+      ]
+    },
+    {
+      "path": "initiative remove label",
+      "summary": "Run Linear mutation initiativeRemoveLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_remove_label",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear initiative remove label --json"
+      ]
+    },
+    {
+      "path": "initiative to project delete",
+      "summary": "Run Linear mutation initiativeToProjectDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_to_project_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative to project delete --json"
+      ]
+    },
+    {
+      "path": "initiative unarchive",
+      "summary": "Run Linear mutation initiativeUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative unarchive --json"
+      ]
+    },
+    {
+      "path": "initiative update archive",
+      "summary": "Run Linear mutation initiativeUpdateArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_update_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative update archive --json"
+      ]
+    },
+    {
+      "path": "initiative update unarchive",
+      "summary": "Run Linear mutation initiativeUpdateUnarchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "initiative_update_unarchive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear initiative update unarchive --json"
+      ]
+    },
+    {
+      "path": "integration archive",
+      "summary": "Run Linear mutation integrationArchive.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_archive",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear integration archive --json"
+      ]
+    },
+    {
+      "path": "integration github remove code access",
+      "summary": "Run Linear mutation integrationGithubRemoveCodeAccess.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_github_remove_code_access",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "integration-id",
+          "type": "string",
+          "summary": "integrationId argument.",
+          "maps_to": "record.integrationId"
+        }
+      ],
+      "examples": [
+        "pm linear integration github remove code access --json"
+      ]
+    },
+    {
+      "path": "integration intercom delete",
+      "summary": "Run Linear mutation integrationIntercomDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_intercom_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [],
+      "examples": [
+        "pm linear integration intercom delete --json"
+      ]
+    },
+    {
+      "path": "integration template delete",
+      "summary": "Run Linear mutation integrationTemplateDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "integration_template_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear integration template delete --json"
+      ]
+    },
+    {
+      "path": "issue add label",
+      "summary": "Run Linear mutation issueAddLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_add_label",
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear issue add label --json"
+      ]
+    },
+    {
+      "path": "issue import delete",
+      "summary": "Run Linear mutation issueImportDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_import_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "issue-import-id",
+          "type": "string",
+          "summary": "issueImportId argument.",
+          "maps_to": "record.issueImportId"
+        }
+      ],
+      "examples": [
+        "pm linear issue import delete --json"
+      ]
+    },
+    {
+      "path": "issue label delete",
+      "summary": "Run Linear mutation issueLabelDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_label_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue label delete --json"
+      ]
+    },
+    {
+      "path": "issue relation delete",
+      "summary": "Run Linear mutation issueRelationDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_relation_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue relation delete --json"
+      ]
+    },
+    {
+      "path": "issue remove label",
+      "summary": "Run Linear mutation issueRemoveLabel.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_remove_label",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        },
+        {
+          "name": "label-id",
+          "type": "string",
+          "summary": "labelId argument.",
+          "maps_to": "record.labelId"
+        }
+      ],
+      "examples": [
+        "pm linear issue remove label --json"
+      ]
+    },
+    {
+      "path": "issue to release delete",
+      "summary": "Run Linear mutation issueToReleaseDelete.",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "write": "issue_to_release_delete",
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "approval": "Reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation.",
+      "flags": [
+        {
+          "name": "id",
+          "type": "string",
+          "summary": "id argument.",
+          "maps_to": "record.id"
+        }
+      ],
+      "examples": [
+        "pm linear issue to release delete --json"
+      ]
+    },
+    {
+      "path": "attachment get",
+      "summary": "Planned bounded Linear Query.attachment command.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "linear.query.attachment",
+      "output_policy": "json_redacted",
+      "notes": "Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice."
+    },
+    {
+      "path": "attachments list",
+      "summary": "Planned bounded Linear Query.attachments command.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "linear.query.attachments",
+      "output_policy": "json_redacted",
+      "notes": "Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice."
+    },
+    {
+      "path": "agent activity events",
+      "summary": "Planned bounded Linear Subscription.agentActivityCreated command.",
+      "intent": "direct_read",
+      "availability": "planned",
+      "operation": "linear.subscription.agent_activity_created",
+      "output_policy": "json_redacted",
+      "notes": "Planned only: fixed GraphQL direct operation execution is not enabled for Linear in this connector-local slice."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "linear auth",
+      "summary": "Configure Linear api_key or access_token without printing secret values."
+    },
+    {
+      "name": "linear safety",
+      "summary": "Linear writes use reverse ETL plan, preview, explicit approval, execute, and typed destructive confirmation where applicable."
+    }
+  ]
+}

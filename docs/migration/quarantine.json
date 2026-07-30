@@ -36,24 +36,6 @@
     ]
   },
   {
-    "name": "linear",
-    "blocker_type": "ENGINE_GAP",
-    "reason": "Full Pass B coverage for Linear requires GraphQL POST-body read streams with cursor state carried in request variables, plus mutation actions whose request body must include fixed GraphQL documents and variables. The current declarative read path ignores stream.body, write actions can only send record-shaped bodies, and exposing a generic GraphQL mutation/query body would violate the connector tool-surface rule against generic write tools. This shard is restricted to defs/linear and may not create or edit a Linear StreamHook/WriteHook package.",
-    "evidence": [
-      "https://linear.app/developers/graphql documents Linear's GraphQL API as the path for queries and mutations.",
-      "https://studio.apollographql.com/public/Linear-API/variant/current/schema/reference publishes Linear's Query and Mutation schema surfaces.",
-      "internal/connectors/linear/linear.go harvest builds a GraphQL JSON body with query and variables, then paginates via pageInfo.hasNextPage/endCursor into the next after variable.",
-      "internal/connectors/engine/read.go readOneSequence calls Requester.Do(ctx, methodOrDefault(stream.Method), reqPath, query, nil), so declared stream.body is not transmitted.",
-      "internal/connectors/engine/write.go executeWriteRecord builds JSON bodies from record fields only; it has no static or templated body document facility for fixed GraphQL mutation documents.",
-      "No internal/connectors/hooks/linear package exists in this worktree."
-    ],
-    "attempts": [
-      "Reviewed the existing linear bundle, legacy Go package, and current Linear developer docs; confirmed every additional documented read/write goes through POST /graphql with a request body.",
-      "Confirmed the existing docs referenced internal/connectors/hooks/linear and internal/connectors/paritytest/linear, but neither path exists in this worktree.",
-      "Validated the existing legacy-parity linear bundle still has zero connectorgen findings and passes TestConformance/linear, and go build ./internal/connectors/... succeeds."
-    ]
-  },
-  {
     "name": "microsoft-entra-id",
     "blocker_type": "ENGINE_GAP",
     "reason": "Full Pass B read coverage for Microsoft Entra ID requires Microsoft Graph collection pagination through the literal top-level @odata.nextLink response key. The declarative next_url paginator reads next_url_path through a dotted-path helper and cannot address a key that itself contains a dot. The existing Tier-2 StreamHook handles this for only the five legacy streams; expanding additional documented Graph collections would require editing internal/connectors/hooks/microsoft-entra-id/hooks.go's routing and mapping tables, which this shard is explicitly forbidden to touch.",

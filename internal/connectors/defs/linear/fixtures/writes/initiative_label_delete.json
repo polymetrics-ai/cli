@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearInitiativeLabelDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "initiativeLabelDelete": {
+          "__typename": "DeletePayload"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearCommentUnresolve"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "commentUnresolve": {
+          "__typename": "CommentPayload"
+        }
+      }
+    }
+  }
+}

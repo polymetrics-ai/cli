@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearOrganizationInviteDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "organizationInviteDelete": {
+          "__typename": "DeletePayload"
+        }
+      }
+    }
+  }
+}

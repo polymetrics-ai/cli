@@ -1,5 +1,8 @@
 {
-  "request": { "method": "POST", "path": "/" },
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,17 +10,23 @@
         "users": {
           "nodes": [
             {
-              "id": "user_fixture_1",
-              "name": "Fixture User",
-              "displayName": "fixture1",
-              "email": "fixture1@example.com",
-              "active": true,
-              "admin": false,
-              "createdAt": "2026-01-01T00:00:00.000Z",
-              "updatedAt": "2026-01-02T00:00:00.000Z"
+              "__typename": "User",
+              "id": "users_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "name": "name_fixture",
+              "title": "title_fixture",
+              "url": "url_fixture",
+              "email": "email_fixture",
+              "displayName": "displayName_fixture",
+              "description": "description_fixture"
             }
           ],
-          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
         }
       }
     }

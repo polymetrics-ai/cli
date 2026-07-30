@@ -1,0 +1,23 @@
+{
+  "record": {
+    "id": "fixture_string",
+    "sessionId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearUserRevokeSession"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "userRevokeSession": {
+          "__typename": "UserAdminPayload"
+        }
+      }
+    }
+  }
+}

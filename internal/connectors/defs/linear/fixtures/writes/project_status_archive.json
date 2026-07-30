@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearProjectStatusArchive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "projectStatusArchive": {
+          "__typename": "ProjectStatusArchivePayload"
+        }
+      }
+    }
+  }
+}

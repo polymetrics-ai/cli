@@ -1,72 +1,48 @@
 # Overview
 
-Reads Linear issues, teams, projects, and users through the Linear GraphQL API. Read-only.
+Linear is modeled from the official Linear GraphQL schema, pinned to blob `3934265499c95f1d6b8e4d5c695ad0b6f1d52fec` from `packages/sdk/src/schema.graphql`.
 
-Readable streams: `issues`, `teams`, `projects`, `users`.
+This connector-local bundle now inventories every parsed root GraphQL operation in `api_surface.json` operation-ledger mode. It implements fixed GraphQL ETL streams for list/connection Query fields and fixed GraphQL reverse-ETL write actions for scalar-required mutations that can be represented safely by the current declarative engine. It does not expose a raw GraphQL query/mutation/body escape hatch.
 
-This connector is read-only; no write actions are declared.
+Connector-local generated counts from the pinned blob:
 
-Service API documentation: https://developers.linear.app/docs.
+| query root fields | mutation root fields | subscription root fields | surface rows | streams | write actions | blocked operation rows |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 164 | 371 | 80 | 615 | 64 | 122 | 429 |
+
+The GitHub parent/subissue r2 dispatch counts remain preserved in those issue bodies. This connector-local evidence does not claim live certification and does not fabricate implemented counts beyond the concrete stream/write rows present in this bundle.
 
 ## Auth setup
 
 Connection fields:
 
-- `access_token` (optional, secret, string); Linear OAuth access token, sent as a Bearer
-  Authorization header. Provide either api_key or access_token; access_token takes priority when
-  both are set.
-- `api_key` (optional, secret, string); Linear personal API key, sent as a bare Authorization header
-  (no Bearer prefix). Provide either api_key or access_token.
-- `auth_type` (optional, string); default ; allowed values `oauth`, `oauth2.0`; Optional. Not needed
-  when access_token is set (access_token always uses Bearer regardless of this value).
-- `base_url` (optional, string); default `https://api.linear.app/graphql`; format `uri`; Full Linear
-  GraphQL endpoint URL override for tests or proxies. Defaults to https://api.linear.app/graphql.
-- `max_pages` (optional, string); Optional hard cap on the number of pages read per stream. Empty,
-  "all", or "unlimited" means unbounded (the default). Hooks-consumed; see docs.md Known limits.
-- `page_size` (optional, string); default `50`; GraphQL connection page size (1-250, Linear's own
-  cap). Hooks-consumed; see docs.md Known limits.
+- `access_token` (secret): Linear OAuth access token. When present, it is sent as a Bearer Authorization header and takes priority.
+- `api_key` (secret): Linear personal API key. By default it is sent as the bare Authorization header value; set `auth_type` to `oauth` or `oauth2.0` to send it as Bearer.
+- `auth_type` (optional): ``, `oauth`, or `oauth2.0`; default ``.
+- `base_url` (optional): full GraphQL endpoint, default `https://api.linear.app/graphql`.
+- Fixed stream documents request 50 records per GraphQL connection page.
 
-Secret fields are redacted in logs and write previews: `access_token`, `api_key`.
-
-Default configuration values: `auth_type=`, `base_url=https://api.linear.app/graphql`,
-`page_size=50`.
-
-Authentication behavior:
-
-- Bearer token authentication using `secrets.access_token` when `{{ secrets.access_token }}`.
-- Bearer token authentication using `secrets.api_key` when `{{ config.auth_type in ['oauth',
-  'oauth2.0'] }}`.
-- API key authentication in `Authorization` using `secrets.api_key` when `{{ secrets.api_key }}`.
-- No authentication.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Never place secret values in command text, fixtures, docs, or issue bodies. Add credentials from environment variables or stdin through the credential manager.
 
 ## Streams notes
 
-Default pagination: single request; no pagination.
+Streams are fixed GraphQL Query documents generated from root fields returning connection/list object data. Connection streams use `first` and `after` variables with cursor pagination capped at 100 pages per read; list streams are single-request full refreshes. Runtime request bodies are fixed in `streams.json` and only declared variables are populated.
 
-Incremental streams use their declared cursor fields and send lower-bound parameters only when a
-lower bound is available.
-
-- `issues`: POST connector-managed request path - records path `data.issues.nodes`; incremental
-  cursor `updated_at`; formatted as `rfc3339`.
-- `teams`: POST connector-managed request path - records path `data.teams.nodes`; incremental cursor
-  `updated_at`; formatted as `rfc3339`.
-- `projects`: POST connector-managed request path - records path `data.projects.nodes`; incremental
-  cursor `updated_at`; formatted as `rfc3339`.
-- `users`: POST connector-managed request path - records path `data.users.nodes`; incremental cursor
-  `updated_at`; formatted as `rfc3339`.
+Representative streams include `issues`, `teams`, `projects`, and `users`; additional generated streams cover other documented list/connection root Query fields from the pinned schema. Stream fixtures under `fixtures/streams/*/page_1.json` are sanitized synthetic GraphQL response shapes and are for local conformance only.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external Linear GraphQL API read of
-issues/teams/projects/users.
+`writes.json` contains 122 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, and non-secret-shaped in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`.
+
+93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
+
+Fixture write captures under `fixtures/writes/*.json` are synthetic replay examples. They do not perform live Linear writes.
 
 ## Known limits
 
-- Batch defaults: read_page_size=50.
-- API coverage includes 4 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=2.
+- No live Linear provider calls, credentials, writes, subscriptions, or certification were run.
+- `api_surface.json` uses operation-ledger blocked rows instead of legacy `excluded` rows for direct/binary/CDC and unsupported mutation shapes.
+- GraphQL direct-read/query/search and binary execution remains blocked by the provider search/query foundation (#2985); `operations.json` and `cli_surface.json` keep planned commands bounded and fixed-document only.
+- Linear subscriptions/changefeeds remain blocked by CDC foundations (#2986/#2988); no connector-local stream pretends to execute a live subscription.
+- Input-object, optional-argument, list, JSON, secret-sensitive, deprecated, and internal-only mutation shapes remain blocked until shared fixed GraphQL variable/object support can omit absent optional `record.*` fields safely without a raw GraphQL escape hatch or provider-specific hook.
+- Declarative `Check()` cannot send a fixed GraphQL body, so `capabilities.check` is false in this bundle; fixture-only stream/write replay is not live health certification.

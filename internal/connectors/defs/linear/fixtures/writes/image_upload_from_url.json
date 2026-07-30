@@ -1,0 +1,22 @@
+{
+  "record": {
+    "url": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearImageUploadFromUrl"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "imageUploadFromUrl": {
+          "__typename": "ImageUploadFromUrlPayload"
+        }
+      }
+    }
+  }
+}

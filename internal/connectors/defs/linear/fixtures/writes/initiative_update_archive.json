@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearInitiativeUpdateArchive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "initiativeUpdateArchive": {
+          "__typename": "InitiativeUpdateArchivePayload"
+        }
+      }
+    }
+  }
+}

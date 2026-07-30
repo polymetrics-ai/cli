@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearReleaseUnarchive"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "releaseUnarchive": {
+          "__typename": "ReleaseArchivePayload"
+        }
+      }
+    }
+  }
+}

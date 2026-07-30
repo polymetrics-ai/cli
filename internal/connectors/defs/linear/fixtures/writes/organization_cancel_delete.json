@@ -1,0 +1,20 @@
+{
+  "record": {},
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearOrganizationCancelDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "organizationCancelDelete": {
+          "__typename": "OrganizationCancelDeletePayload"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "failuresForOauthWebhooks": [
+          {
+            "__typename": "WebhookFailureEvent",
+            "id": "failures_for_oauth_webhooks_fixture_1",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "url": "url_fixture"
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "oauthClientId": "fixture_oauth_client_id"
+  }
+}
