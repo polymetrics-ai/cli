@@ -46,7 +46,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UpdateEmailSettingsRequest"
+          "type": "object",
+          "title": "UpdateEmailSettingsRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -225,23 +227,25 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ApprovalRequestCreateRequest"
+          "type": "object",
+          "title": "ApprovalRequestCreateRequest",
+          "additionalProperties": true
         }
       }
     },
     {
       "id": "zendesk-support.show_attachment",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Show Attachment (GET /api/v2/attachments/{attachment_id})",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/attachments/{attachment_id}",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -260,7 +264,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/AttachmentUpdateRequest"
+          "type": "object",
+          "title": "AttachmentUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -477,7 +483,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BookmarkCreateRequest"
+          "type": "object",
+          "title": "BookmarkCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -559,7 +567,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BrandCreateRequest"
+          "type": "object",
+          "title": "BrandCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -594,7 +604,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BrandUpdateRequest"
+          "type": "object",
+          "title": "BrandUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -811,7 +823,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketCreateVoicemailTicketRequest"
+          "type": "object",
+          "title": "TicketCreateVoicemailTicketRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -924,7 +938,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectsCreateRequest"
+          "type": "object",
+          "title": "CustomObjectsCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1005,7 +1021,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/AccessRuleCreateRequest"
+          "type": "object",
+          "title": "AccessRuleCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1040,7 +1058,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/AccessRuleUpdateRequest"
+          "type": "object",
+          "title": "AccessRuleUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1106,7 +1126,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectFieldsCreateRequest"
+          "type": "object",
+          "title": "CustomObjectFieldsCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1187,7 +1209,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectRecordsBulkCreateRequest"
+          "type": "object",
+          "title": "CustomObjectRecordsBulkCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1252,7 +1276,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/PermissionPolicyUpdateRequest"
+          "type": "object",
+          "title": "PermissionPolicyUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1287,7 +1313,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectRecordsCreateRequest"
+          "type": "object",
+          "title": "CustomObjectRecordsCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1307,7 +1335,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectRecordsUpsertRequest"
+          "type": "object",
+          "title": "CustomObjectRecordsUpsertRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1375,17 +1405,17 @@
     },
     {
       "id": "zendesk-support.list_custom_object_record_attachments",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List Custom Object Record Attachments (GET /api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -1434,7 +1464,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomObjectRecordAttachmentUpdateRequest"
+          "type": "object",
+          "title": "CustomObjectRecordAttachmentUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1531,10 +1563,14 @@
         "body_schema": {
           "anyOf": [
             {
-              "$ref": "#/components/schemas/CustomObjectRecordsFilteredSearchRequestBasic"
+              "type": "object",
+              "title": "CustomObjectRecordsFilteredSearchRequestBasic",
+              "additionalProperties": true
             },
             {
-              "$ref": "#/components/schemas/CustomObjectRecordsFilteredSearchRequestComplex"
+              "type": "object",
+              "title": "CustomObjectRecordsFilteredSearchRequestComplex",
+              "additionalProperties": true
             }
           ]
         }
@@ -1571,7 +1607,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ObjectTriggerRequest"
+          "type": "object",
+          "title": "ObjectTriggerRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1606,7 +1644,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ObjectTriggerRequest"
+          "type": "object",
+          "title": "ObjectTriggerRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1703,7 +1743,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ObjectTriggerBulkUpdateRequest"
+          "type": "object",
+          "title": "ObjectTriggerBulkUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1814,7 +1856,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BulkUpdateDefaultCustomStatusRequest"
+          "type": "object",
+          "title": "BulkUpdateDefaultCustomStatusRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1849,7 +1893,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomStatusCreateRequest"
+          "type": "object",
+          "title": "CustomStatusCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -1884,7 +1930,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CustomStatusUpdateRequest"
+          "type": "object",
+          "title": "CustomStatusUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -2099,7 +2147,9 @@
           "type": "object",
           "properties": {
             "deletion_schedule": {
-              "$ref": "#/components/schemas/DeletionSchedule"
+              "type": "object",
+              "title": "DeletionSchedule",
+              "additionalProperties": true
             }
           }
         }
@@ -2139,7 +2189,9 @@
           "type": "object",
           "properties": {
             "deletion_schedule": {
-              "$ref": "#/components/schemas/DeletionSchedule"
+              "type": "object",
+              "title": "DeletionSchedule",
+              "additionalProperties": true
             }
           }
         }
@@ -2537,7 +2589,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CreateGroupMembershipRequest"
+          "type": "object",
+          "title": "CreateGroupMembershipRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -2603,7 +2657,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BulkCreateGroupMembershipsRequest"
+          "type": "object",
+          "title": "BulkCreateGroupMembershipsRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -2895,7 +2951,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketImportRequest"
+          "type": "object",
+          "title": "TicketImportRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -2915,158 +2973,160 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketBulkImportRequest"
+          "type": "object",
+          "title": "TicketBulkImportRequest",
+          "additionalProperties": true
         }
       }
     },
     {
       "id": "zendesk-support.incremental_sample_export",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Sample Export (GET /api/v2/incremental/{incremental_resource}/sample)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/{incremental_resource}/sample",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_custom_object_record_export_cursor",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Custom Object Record Export, Cursor Based (GET /api/v2/incremental/custom_objects/{custom_object_key}/cursor)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/custom_objects/{custom_object_key}/cursor",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_organization_export",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Organization Export (GET /api/v2/incremental/organizations)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/organizations",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_skil_based_routing_attribute_values_export",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Attributes Values Export (GET /api/v2/incremental/routing/attribute_values)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/attribute_values",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_skil_based_routing_attributes_export",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Attributes Export (GET /api/v2/incremental/routing/attributes)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/attributes",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_skil_based_routing_instance_values_export",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Instance Values Export (GET /api/v2/incremental/routing/instance_values)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/routing/instance_values",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_ticket_export_time",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Ticket Export, Time Based (GET /api/v2/incremental/tickets)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/tickets",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_ticket_export_cursor",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental Ticket Export, Cursor Based (GET /api/v2/incremental/tickets/cursor)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/tickets/cursor",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_user_export_time",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental User Export, Time Based (GET /api/v2/incremental/users)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/users",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.incremental_user_export_cursor",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Incremental User Export, Cursor Based (GET /api/v2/incremental/users/cursor)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/incremental/users/cursor",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -3100,7 +3160,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetTypeCreateRequest"
+          "type": "object",
+          "title": "ItamAssetTypeCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3181,7 +3243,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetFieldCreateRequest"
+          "type": "object",
+          "title": "ItamAssetFieldCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3262,7 +3326,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetCreateRequest"
+          "type": "object",
+          "title": "ItamAssetCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3328,7 +3394,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetBulkJobRequest"
+          "type": "object",
+          "title": "ItamAssetBulkJobRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3364,10 +3432,14 @@
         "body_schema": {
           "anyOf": [
             {
-              "$ref": "#/components/schemas/ItamAssetFilteredSearchRequestBasic"
+              "type": "object",
+              "title": "ItamAssetFilteredSearchRequestBasic",
+              "additionalProperties": true
             },
             {
-              "$ref": "#/components/schemas/ItamAssetFilteredSearchRequestComplex"
+              "type": "object",
+              "title": "ItamAssetFilteredSearchRequestComplex",
+              "additionalProperties": true
             }
           ]
         }
@@ -3404,7 +3476,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetLocationCreateRequest"
+          "type": "object",
+          "title": "ItamAssetLocationCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3485,7 +3559,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetStatusCreateRequest"
+          "type": "object",
+          "title": "ItamAssetStatusCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3520,7 +3596,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/ItamAssetStatusUpdateRequest"
+          "type": "object",
+          "title": "ItamAssetStatusUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -3707,17 +3785,17 @@
     },
     {
       "id": "zendesk-support.list_macro_attachments",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List Macro Attachments (GET /api/v2/macros/{macro_id}/attachments)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/macros/{macro_id}/attachments",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -3782,17 +3860,17 @@
     },
     {
       "id": "zendesk-support.show_macro_attachment",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Show Macro Attachment (GET /api/v2/macros/attachments/{attachment_id})",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/macros/attachments/{attachment_id}",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -3887,7 +3965,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/MacroUpdateManyInput"
+          "type": "object",
+          "title": "MacroUpdateManyInput",
+          "additionalProperties": true
         }
       }
     },
@@ -4363,7 +4443,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/OrganizationSubscriptionCreateRequest"
+          "type": "object",
+          "title": "OrganizationSubscriptionCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -4430,7 +4512,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/OrganizationMergeRequest"
+          "type": "object",
+          "title": "OrganizationMergeRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -4808,7 +4892,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/PushNotificationDevicesRequest"
+          "type": "object",
+          "title": "PushNotificationDevicesRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -5344,7 +5430,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BulkSkillBasedRoutingAttributeValuesRequest"
+          "type": "object",
+          "title": "BulkSkillBasedRoutingAttributeValuesRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -5621,7 +5709,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/SavedSearchInput"
+          "type": "object",
+          "title": "SavedSearchInput",
+          "additionalProperties": true
         }
       }
     },
@@ -5641,7 +5731,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/SavedSearchInput"
+          "type": "object",
+          "title": "SavedSearchInput",
+          "additionalProperties": true
         }
       }
     },
@@ -5663,17 +5755,17 @@
     },
     {
       "id": "zendesk-support.list_search_results",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List Search Results (GET /api/v2/search)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/search",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -5693,17 +5785,17 @@
     },
     {
       "id": "zendesk-support.export_search_results",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Export Search Results (GET /api/v2/search/export)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/search/export",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -6234,7 +6326,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TaskListTemplateCreateRequest"
+          "type": "object",
+          "title": "TaskListTemplateCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -6269,7 +6363,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TaskListTemplateUpdateRequest"
+          "type": "object",
+          "title": "TaskListTemplateUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -6641,7 +6737,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketFormStatusesParams"
+          "type": "object",
+          "title": "TicketFormStatusesParams",
+          "additionalProperties": true
         }
       }
     },
@@ -6661,7 +6759,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UpdateTicketFormStatusesParams"
+          "type": "object",
+          "title": "UpdateTicketFormStatusesParams",
+          "additionalProperties": true
         }
       }
     },
@@ -6711,7 +6811,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UpdateTicketFormStatusesParams"
+          "type": "object",
+          "title": "UpdateTicketFormStatusesParams",
+          "additionalProperties": true
         }
       }
     },
@@ -6883,17 +6985,17 @@
     },
     {
       "id": "zendesk-support.list_ticket_comments",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "List Comments (GET /api/v2/tickets/{ticket_id}/comments)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/tickets/{ticket_id}/comments",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -7065,7 +7167,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketMergeInput"
+          "type": "object",
+          "title": "TicketMergeInput",
+          "additionalProperties": true
         }
       }
     },
@@ -7221,7 +7325,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TaskListCreateRequest"
+          "type": "object",
+          "title": "TaskListCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -7256,7 +7362,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketsCreateRequest"
+          "type": "object",
+          "title": "TicketsCreateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -7353,7 +7461,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TicketsUpdateRequest"
+          "type": "object",
+          "title": "TicketsUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -7443,7 +7553,9 @@
           "type": "object",
           "properties": {
             "trigger_category": {
-              "$ref": "#/components/schemas/TriggerCategoryRequest"
+              "type": "object",
+              "title": "TriggerCategoryRequest",
+              "additionalProperties": true
             }
           }
         }
@@ -7481,7 +7593,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/BatchJobRequest"
+          "type": "object",
+          "title": "BatchJobRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -7622,7 +7736,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/TriggerBulkUpdateRequest"
+          "type": "object",
+          "title": "TriggerBulkUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -7933,7 +8049,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/CreateUserGroupMembershipRequest"
+          "type": "object",
+          "title": "CreateUserGroupMembershipRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -8195,7 +8313,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UserRequest"
+          "type": "object",
+          "title": "UserRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -8689,23 +8809,13 @@
     },
     {
       "id": "zendesk-support.autocomplete_users_post",
-      "kind": "rest_write",
+      "kind": "rest_read",
       "summary": "Autocomplete Users by Request Body (POST /api/v2/users/autocomplete)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
-      "risk": "critical",
-      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
-      "output_policy": "write_result_redacted",
-      "mutation_class": "secret",
-      "secret_sensitive": true,
-      "sensitive_policy": {
-        "input_mode": "env_or_stdin",
-        "redact_fields": [
-          "body"
-        ],
-        "transform": "none",
-        "approval_mode": "typed_confirmation"
-      },
+      "risk": "medium",
+      "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
+      "output_policy": "json_redacted",
       "rest": {
         "method": "POST",
         "path": "/api/v2/users/autocomplete",
@@ -8802,7 +8912,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UsersRequest"
+          "type": "object",
+          "title": "UsersRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -8831,7 +8943,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UserRequest"
+          "type": "object",
+          "title": "UserRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -8851,7 +8965,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UsersRequest"
+          "type": "object",
+          "title": "UsersRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -8993,7 +9109,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UserSettingsUpdateRequest"
+          "type": "object",
+          "title": "UserSettingsUpdateRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -9013,7 +9131,9 @@
         "max_bytes": 1048576,
         "content_type": "application/json",
         "body_schema": {
-          "$ref": "#/components/schemas/UserRequest"
+          "type": "object",
+          "title": "UserRequest",
+          "additionalProperties": true
         }
       }
     },
@@ -9065,13 +9185,17 @@
         "body_schema": {
           "oneOf": [
             {
-              "$ref": "#/components/schemas/UserUpdateRequest"
+              "type": "object",
+              "title": "UserUpdateRequest",
+              "additionalProperties": true
             },
             {
-              "$ref": "#/components/schemas/UsersRequest"
+              "type": "object",
+              "title": "UsersRequest",
+              "additionalProperties": true
             }
           ],
-          "additionalProperties": "true"
+          "additionalProperties": true
         }
       }
     },
@@ -9107,32 +9231,32 @@
     },
     {
       "id": "zendesk-support.execute_view",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Execute View (GET /api/v2/views/{view_id}/execute)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "medium",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/views/{view_id}/execute",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
       "id": "zendesk-support.export_view",
-      "kind": "binary_download",
+      "kind": "rest_read",
       "summary": "Export View (GET /api/v2/views/{view_id}/export)",
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
       "approval": "none: read-only bounded operation metadata; executor remains blocked by default",
-      "output_policy": "binary_bounded_redacted",
-      "binary": {
+      "output_policy": "json_redacted",
+      "rest": {
         "method": "GET",
         "path": "/api/v2/views/{view_id}/export",
-        "max_bytes": 10485760
+        "max_bytes": 1048576
       }
     },
     {
@@ -9355,7 +9479,9 @@
           "type": "object",
           "properties": {
             "workspace": {
-              "$ref": "#/components/schemas/WorkspaceInput"
+              "type": "object",
+              "title": "WorkspaceInput",
+              "additionalProperties": true
             }
           }
         }
@@ -9395,7 +9521,9 @@
           "type": "object",
           "properties": {
             "workspace": {
-              "$ref": "#/components/schemas/WorkspaceInput"
+              "type": "object",
+              "title": "WorkspaceInput",
+              "additionalProperties": true
             }
           }
         }

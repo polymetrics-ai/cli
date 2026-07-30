@@ -198,11 +198,11 @@
       "method": "GET",
       "path": "/api/v2/attachments/{attachment_id}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ShowAttachment; summary=Show Attachment; tags=Attachments"
       }
@@ -1130,11 +1130,11 @@
       "method": "GET",
       "path": "/api/v2/custom_objects/{custom_object_key}/records/{record_id}/attachments",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListCustomObjectRecordAttachments; summary=List Custom Object Record Attachments; tags=Custom Object Record Attachments"
       }
@@ -2375,11 +2375,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/{incremental_resource}/sample",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalSampleExport; summary=Incremental Sample Export; tags=Incremental Export"
       }
@@ -2388,11 +2388,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/custom_objects/{custom_object_key}/cursor",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalCustomObjectRecordExportCursor; summary=Incremental Custom Object Record Export, Cursor Based; tags=Custom Object Records, Incremental Export"
       }
@@ -2401,11 +2401,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/organizations",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalOrganizationExport; summary=Incremental Organization Export; tags=Incremental Export"
       }
@@ -2414,11 +2414,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/routing/attribute_values",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalSkilBasedRoutingAttributeValuesExport; summary=Incremental Attributes Values Export; tags=Incremental Skill Based Routing"
       }
@@ -2427,11 +2427,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/routing/attributes",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalSkilBasedRoutingAttributesExport; summary=Incremental Attributes Export; tags=Incremental Skill Based Routing"
       }
@@ -2440,11 +2440,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/routing/instance_values",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalSkilBasedRoutingInstanceValuesExport; summary=Incremental Instance Values Export; tags=Incremental Skill Based Routing"
       }
@@ -2467,11 +2467,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/tickets",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalTicketExportTime; summary=Incremental Ticket Export, Time Based; tags=Incremental Export"
       }
@@ -2480,11 +2480,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/tickets/cursor",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalTicketExportCursor; summary=Incremental Ticket Export, Cursor Based; tags=Incremental Export"
       }
@@ -2493,11 +2493,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/users",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalUserExportTime; summary=Incremental User Export, Time Based; tags=Incremental Export"
       }
@@ -2506,11 +2506,11 @@
       "method": "GET",
       "path": "/api/v2/incremental/users/cursor",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=IncrementalUserExportCursor; summary=Incremental User Export, Cursor Based; tags=Incremental Export"
       }
@@ -3054,11 +3054,11 @@
       "method": "GET",
       "path": "/api/v2/macros/{macro_id}/attachments",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListMacroAttachments; summary=List Macro Attachments; tags=Macros"
       }
@@ -3119,11 +3119,11 @@
       "method": "GET",
       "path": "/api/v2/macros/attachments/{attachment_id}",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ShowMacroAttachment; summary=Show Macro Attachment; tags=Macros"
       }
@@ -4703,11 +4703,11 @@
       "method": "GET",
       "path": "/api/v2/search",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListSearchResults; summary=List Search Results; tags=Search"
       }
@@ -4729,11 +4729,11 @@
       "method": "GET",
       "path": "/api/v2/search/export",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ExportSearchResults; summary=Export Search Results; tags=Search"
       }
@@ -5756,11 +5756,11 @@
       "method": "GET",
       "path": "/api/v2/tickets/{ticket_id}/comments",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ListTicketComments; summary=List Comments; tags=Ticket Comments"
       }
@@ -7236,11 +7236,11 @@
       "method": "POST",
       "path": "/api/v2/users/autocomplete",
       "operation": {
-        "model": "sensitive_reverse_etl",
+        "model": "direct_read",
         "status": "blocked",
-        "risk": "critical",
+        "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed write action, non-inline sensitive input policy, redaction, and typed confirmation are implemented.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=AutocompleteUsersPost; summary=Autocomplete Users by Request Body; tags=Users"
       }
@@ -7524,11 +7524,11 @@
       "method": "GET",
       "path": "/api/v2/views/{view_id}/execute",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "medium",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ExecuteView; summary=Execute View; tags=Views"
       }
@@ -7537,11 +7537,11 @@
       "method": "GET",
       "path": "/api/v2/views/{view_id}/export",
       "operation": {
-        "model": "binary_read",
+        "model": "direct_read",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a bounded binary/file executor and output policy are available; metadata only, no unbounded download.",
+        "reason": "Blocked by default until a bounded provider direct-read/search command is reviewed and enabled by shared foundation #2985; metadata only, no raw API passthrough.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=ExportView; summary=Export View; tags=Views"
       }
