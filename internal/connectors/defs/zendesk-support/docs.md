@@ -1,6 +1,6 @@
 # Overview
 
-Zendesk Support reads 33 stream(s), and writes through 27 action(s).
+Zendesk Support inventories 625 official Support API operation(s) from the Zendesk OAS 2.0.0 ledger. The executable fixture-backed bundle currently reads 33 stream(s), and writes through 27 action(s).
 
 Readable streams: `tickets`, `users`, `organizations`, `groups`, `satisfaction_ratings`,
 `deleted_tickets`, `account_attributes`, `attribute_definitions`, `brands`, `custom_roles`,
@@ -258,7 +258,9 @@ Reverse ETL writes should be planned, previewed, approved, and then executed. De
 
 ## Known limits
 
-- Batch defaults: read_page_size=100.
-- API coverage includes 33 stream-backed endpoint group(s), 27 write-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  binary_payload=1, destructive_admin=1, duplicate_of=3, out_of_scope=11.
+- Official ledger source: Zendesk Support OAS 2.0.0 from `https://developer.zendesk.com/zendesk/oas.yaml`. `api_surface.json` inventories all 625 official operations exactly once, plus 6 supplemental `covered_by` row(s) for existing fixture-backed bundle surfaces that are not present in that Support OAS.
+- Executable fixture-backed surfaces remain limited to 33 streams and 27 reverse-ETL write actions. `operations.json` and planned `cli_surface.json` entries are typed, connector-owned metadata only; they do not enable a raw API escape hatch or claim live certification.
+- Destructive and `DELETE` operations are in scope. Existing delete write actions use `confirm: "destructive"` and idempotent 404 handling. Remaining destructive official operations are blocked by default until a connector-local typed action declares schema, risk, redaction/idempotency where applicable, and the plan -> preview -> explicit approval -> execute path with typed destructive confirmation.
+- Direct/provider-search/query operations are blocked pending the bounded provider command foundation (#2985); CDC/changefeed-style rows are blocked pending CDC truthfulness/state foundations (#2986/#2988); binary/file rows are blocked pending bounded binary output policy/executor support.
+- The current draft-07 subset cannot express the `access_token` OR (`api_token` AND `email`) credential pairing. The schema documents the required pairing, and invalid combinations fail at the credential-free check request rather than reading or printing secret values.
+- Fixture-only evidence remains uncertified (`certified=0`). This bundle does not run live Zendesk credentials, live provider calls, live writes, VPS/Thaalam work, or release certification.

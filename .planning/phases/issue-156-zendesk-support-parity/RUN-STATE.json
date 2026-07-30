@@ -1,0 +1,43 @@
+{
+  "phase": "issue-156-zendesk-support-parity",
+  "branch": "fm/cli-zendesk-support-parity-wave01-r1",
+  "state": "verified",
+  "gsd": {
+    "doctor": "passed",
+    "plan_prompt": "scripts/gsd prompt plan-phase issue-156-zendesk-support-parity --skip-research",
+    "quick_prompt": "scripts/gsd prompt quick issue-156 Zendesk Support parity connector-local implementation",
+    "programming_loop": "unavailable: scripts/gsd reports unknown GSD command: programming-loop",
+    "fallback": "manual GSD programming-loop fallback"
+  },
+  "spawn_decision": "local_critical_path",
+  "spawn_reason": "All seven subissues share the same zendesk-support connector definition write scope in this isolated worker worktree.",
+  "inventory": {
+    "official_oas_operations": 625,
+    "api_surface_rows": 631,
+    "covered_streams": 33,
+    "covered_writes": 27,
+    "blocked_operation_rows": 571,
+    "operations_json_entries": 571,
+    "cli_surface_commands": 631,
+    "supplemental_existing_bundle_rows": 6,
+    "certified": 0
+  },
+  "safety": {
+    "live_credentials": false,
+    "provider_calls": false,
+    "live_writes": false,
+    "shared_runtime_edits": false,
+    "certification": false
+  },
+  "verification": {
+    "connectorgen_validate_all_defs": "passed",
+    "zendesk_conformance": "passed",
+    "internal_cli_connector_dynamic_golden": "passed",
+    "connectorgen_tests": "passed",
+    "go_vet_connectors_cli": "passed",
+    "go_build_pm": "passed",
+    "docs_validate": "passed",
+    "connector_boundary": "clean",
+    "diff_check": "passed"
+  }
+}
