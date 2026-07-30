@@ -86,6 +86,9 @@ jobs:
             exit 1
           fi
 
+      - name: Lint
+        run: pnpm run lint
+
       - name: Typecheck
         run: pnpm run typecheck
 
