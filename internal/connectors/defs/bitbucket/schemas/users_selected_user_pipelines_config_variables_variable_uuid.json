@@ -73,17 +73,6 @@
         "string",
         "null"
       ]
-    },
-    "value": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
     }
   },
   "title": "users_selected_user_pipelines_config_variables_variable_uuid",

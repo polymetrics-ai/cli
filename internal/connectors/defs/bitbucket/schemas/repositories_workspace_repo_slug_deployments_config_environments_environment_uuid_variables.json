@@ -73,17 +73,6 @@
         "string",
         "null"
       ]
-    },
-    "value": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
     }
   },
   "title": "repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",

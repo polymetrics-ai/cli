@@ -7,7 +7,7 @@
     "cdc": false,
     "check": true,
     "dynamic_schema": false,
-    "query": true,
+    "query": false,
     "read": true,
     "write": true
   },
