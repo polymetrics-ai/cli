@@ -2370,12 +2370,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -2631,12 +2625,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/rest/api/3/config/fieldschemes/fields"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -2645,12 +2633,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/config/fieldschemes/fields"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -2659,12 +2641,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "DELETE",
-          "path": "/rest/api/3/config/fieldschemes/fields/parameters"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -2673,12 +2649,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/config/fieldschemes/fields/parameters"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -2726,12 +2696,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/config/fieldschemes/projects"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -3617,12 +3581,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -7369,12 +7327,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -8140,12 +8092,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -9219,12 +9165,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -11286,12 +11226,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePlan`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/plans/plan/{planId}"
-        }
-      ],
       "flags": [
         {
           "name": "plan-id",
@@ -11516,12 +11450,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateAtlassianTeam`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}"
-        }
-      ],
       "flags": [
         {
           "name": "plan-id",
@@ -11652,12 +11580,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePlanOnlyTeam`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}"
-        }
-      ],
       "flags": [
         {
           "name": "plan-id",
@@ -13149,12 +13071,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -15432,12 +15348,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setIssueNavigatorDefaultColumns`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/settings/columns"
-        }
-      ],
       "flags": [
         {
           "name": "columns",
@@ -16655,12 +16565,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setUserColumns`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/user/columns"
-        }
-      ],
       "flags": [
         {
           "name": "columns",
@@ -17014,12 +16918,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/api/3/user/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -19624,12 +19522,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
@@ -19705,12 +19597,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `AppIssueFieldValueUpdateResource.updateIssueFields_put`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/atlassian-connect/1/migration/field"
-        }
-      ],
       "notes": "Blocked until declarative writes support required per-action Atlassian-Transfer-Id request headers."
     },
     {
@@ -19721,12 +19607,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `MigrationResource.updateEntityPropertiesValue_put`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/atlassian-connect/1/migration/properties/{entityType}"
-        }
-      ],
       "flags": [
         {
           "name": "entity-type",
@@ -19751,12 +19631,6 @@
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `MigrationResource.workflowRuleSearch_post`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
-      "api_surface": [
-        {
-          "method": "POST",
-          "path": "/rest/atlassian-connect/1/migration/workflow/rule/search"
-        }
-      ],
       "flags": [
         {
           "name": "rule-ids",
@@ -19947,12 +19821,6 @@
       "intent": "reverse_etl",
       "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "api_surface": [
-        {
-          "method": "PUT",
-          "path": "/rest/forge/1/app/properties/{propertyKey}"
-        }
-      ],
       "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
