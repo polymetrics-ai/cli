@@ -34,7 +34,7 @@ Representative streams include `issues`, `teams`, `projects`, and `users`; addit
 
 `writes.json` contains 122 fixed GraphQL reverse-ETL actions whose complete argument list is required, scalar, and non-secret-shaped in the schema. The action document is connector-owned metadata; callers provide only typed record fields declared in `record_schema`.
 
-88 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
+93 write action(s) carry `confirm: "destructive"` for delete/archive/remove/revoke/rotate/cancel/disconnect-style mutations. These operations are in scope under the captain policy, but they execute only through reverse ETL plan → preview → explicit approval → execute with typed destructive confirmation. Blocked mutation rows in `api_surface.json` are not excluded as unsafe; they name the missing shared foundation instead.
 
 Fixture write captures under `fixtures/writes/*.json` are synthetic replay examples. They do not perform live Linear writes.
 
