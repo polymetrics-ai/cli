@@ -1,0 +1,28 @@
+{
+  "phase": "stripe-parity-3005",
+  "branch": "fm/cli-stripe-parity-wave01-r1",
+  "status": "in_progress",
+  "gsdCommandPath": {
+    "doctor": "scripts/gsd doctor",
+    "list": "scripts/gsd list",
+    "attemptedProgrammingLoop": "scripts/gsd prompt programming-loop init --phase stripe-parity-3005 --dry-run",
+    "fallback": "manual-gsd",
+    "fallbackReason": "scripts/gsd returned: unknown GSD command: programming-loop"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Single Stripe connector-owned write scope in one isolated worktree; mutating subagents would collide. Manual GSD fallback active because scripts/gsd lacks programming-loop command."
+    }
+  ],
+  "verificationPassed": false,
+  "verification": [],
+  "safety": {
+    "liveCredentials": false,
+    "providerCalls": false,
+    "providerWrites": false,
+    "sharedRuntimeEdits": false,
+    "newDependencies": false
+  }
+}
