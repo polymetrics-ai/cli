@@ -1,0 +1,26 @@
+{
+  "issue": 1950,
+  "parent_issue": 775,
+  "phase": "issue-775-1950-lucid-eld-operation-ledger",
+  "branch": "feat/1950-lucid-eld-operation-ledger",
+  "gsd": {
+    "mode": "manual_fallback",
+    "doctor_passed": true,
+    "command_attempted": "scripts/gsd prompt programming-loop init --phase issue-775-1950-lucid-eld-operation-ledger --dry-run",
+    "fallback_reason": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "verificationPassed": false,
+  "terminal": false,
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "isolated worker already assigned one sub-issue/branch/write scope; recursive subagents are blocked"
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "planning-owned red and negative corpus fixtures created under fixed write scope before production api_surface edit"
+    }
+  ]
+}

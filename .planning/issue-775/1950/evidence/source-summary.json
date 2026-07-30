@@ -1,0 +1,398 @@
+{
+  "openapi": {
+    "basePath": "",
+    "bytes": 19882,
+    "content_type": "application/json",
+    "definitions": [
+      "handlers.ResponseV2"
+    ],
+    "fetched_at": "2026-07-30T01:56:20.128346+00:00",
+    "host": "",
+    "operation_count": 8,
+    "operations": [
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "path": "/v2/company-info",
+        "responses": [
+          "200",
+          "401",
+          "500"
+        ],
+        "summary": "Get company info",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Driver ID",
+            "in": "path",
+            "name": "driver_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "path": "/v2/driver/{driver_id}",
+        "responses": [
+          "200",
+          "401",
+          "500"
+        ],
+        "summary": "Get driver by ID",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "default": 100,
+            "description": "Limit (default 100, max 1000)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "default": 1,
+            "description": "Page",
+            "in": "query",
+            "name": "page",
+            "type": "integer"
+          }
+        ],
+        "path": "/v2/drivers",
+        "responses": [
+          "200",
+          "500"
+        ],
+        "summary": "Get drivers list",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Driver ID",
+            "in": "query",
+            "name": "driver_id",
+            "type": "string"
+          },
+          {
+            "description": "Limit (default 100, max 1000)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Page",
+            "in": "query",
+            "name": "page",
+            "type": "integer"
+          }
+        ],
+        "path": "/v2/latest-driver-status",
+        "responses": [
+          "200",
+          "401",
+          "500"
+        ],
+        "summary": "Get drivers last status",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Vehicle ID",
+            "in": "query",
+            "name": "vehicle_id",
+            "type": "string"
+          },
+          {
+            "description": "Limit (default 100, max 200)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Page",
+            "in": "query",
+            "name": "page",
+            "type": "integer"
+          }
+        ],
+        "path": "/v2/latest-vehicle-status",
+        "responses": [
+          "200",
+          "400",
+          "401",
+          "500"
+        ],
+        "summary": "Get last vehicle status",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Vehicle ID",
+            "in": "path",
+            "name": "vehicle_id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Start date in MM-DD-YYYY format",
+            "in": "query",
+            "name": "start_date",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "End date in MM-DD-YYYY format",
+            "in": "query",
+            "name": "end_date",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Token for next",
+            "in": "query",
+            "name": "next_page_token",
+            "type": "string"
+          },
+          {
+            "description": "Records per page (default 100, max 1000)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          }
+        ],
+        "path": "/v2/vehicle-location-history/{vehicle_id}",
+        "responses": [
+          "200",
+          "400",
+          "401",
+          "500"
+        ],
+        "summary": "Get vehicle location history",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Vehicle ID",
+            "in": "path",
+            "name": "vehicle_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "path": "/v2/vehicle/{vehicle_id}",
+        "responses": [
+          "200",
+          "401",
+          "500"
+        ],
+        "summary": "Get vehicle by ID",
+        "tags": [
+          "partner-v2"
+        ]
+      },
+      {
+        "method": "GET",
+        "operation_id": "",
+        "parameters": [
+          {
+            "description": "Provider API Key (with rate limiting)",
+            "in": "header",
+            "name": "X-API-Provider-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Company API Key (no rate limiting)",
+            "in": "header",
+            "name": "X-API-Company-Key",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "description": "Filter by status (active/inactive)",
+            "in": "query",
+            "name": "status",
+            "type": "string"
+          },
+          {
+            "description": "Limit (default 100, max 1000)",
+            "in": "query",
+            "name": "limit",
+            "type": "integer"
+          },
+          {
+            "description": "Page",
+            "in": "query",
+            "name": "page",
+            "type": "integer"
+          }
+        ],
+        "path": "/v2/vehicles",
+        "responses": [
+          "200",
+          "401",
+          "500"
+        ],
+        "summary": "Get list of vehicles",
+        "tags": [
+          "partner-v2"
+        ]
+      }
+    ],
+    "schemes": [],
+    "security": [],
+    "securityDefinitions": {},
+    "sha256": "1b3756f4c69c9133e24754a856d2fe9ec2b08768edd5dec25b899f564ddb7ec4",
+    "status": 200,
+    "swagger": "2.0",
+    "url": "https://api.drivehos.app/partner/swagger/doc.json"
+  },
+  "swagger_ui": {
+    "bytes": 3609,
+    "content_type": "text/html",
+    "fetched_at": "2026-07-30T01:56:21.417976+00:00",
+    "sha256": "f5f4f0a04d06a641aaafd89d531bbaf22c7ae91c338e6c611cfc6cec69bfe060",
+    "snippet_count": 2,
+    "snippet_file": "swagger_ui-snippets.txt",
+    "status": 200,
+    "url": "https://api.drivehos.app/partner/swagger"
+  },
+  "withterminal": {
+    "bytes": 424597,
+    "content_type": "text/html; charset=utf-8",
+    "fetched_at": "2026-07-30T01:56:21.715682+00:00",
+    "sha256": "bb31d3cf65ae2fe7bf33a3b7591f6f258a56a487cf81ac1d47f44f8ad07ec5af",
+    "snippet_count": 40,
+    "snippet_file": "withterminal-snippets.txt",
+    "status": 200,
+    "url": "https://docs.withterminal.com/providers/tsp/lucid-eld"
+  }
+}

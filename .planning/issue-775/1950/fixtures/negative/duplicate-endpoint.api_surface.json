@@ -1,0 +1,71 @@
+{
+  "api": "Lucid ELD Partner API v2 (OpenAPI 2.0)",
+  "docs": "https://api.drivehos.app/partner/swagger/doc.json",
+  "reviewed_at": "2026-07-30",
+  "scope": "Fixture baseline for issue #1950 planning validator.",
+  "endpoints": [
+    {
+      "method": "GET",
+      "path": "/v2/company-info",
+      "covered_by": {
+        "direct_read": "company info get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/driver/{driver_id}",
+      "covered_by": {
+        "direct_read": "drivers get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/drivers",
+      "covered_by": {
+        "stream": "drivers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/latest-driver-status",
+      "covered_by": {
+        "direct_read": "latest driver statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/latest-vehicle-status",
+      "covered_by": {
+        "direct_read": "latest vehicle statuses list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicle-location-history/{vehicle_id}",
+      "covered_by": {
+        "stream": "vehicle_location_history"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicle/{vehicle_id}",
+      "covered_by": {
+        "direct_read": "vehicles get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/vehicles",
+      "covered_by": {
+        "stream": "vehicles"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v2/company-info",
+      "covered_by": {
+        "direct_read": "company info get"
+      }
+    }
+  ]
+}
