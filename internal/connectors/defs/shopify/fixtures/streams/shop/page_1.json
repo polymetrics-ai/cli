@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/admin/api/latest/shop.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "shop": {
+        "id": 1001,
+        "name": "Fixture Shop",
+        "email": "shop.fixture@example.invalid",
+        "domain": "fixture-shop.example.invalid",
+        "myshopify_domain": "fixture-shop.myshopify.com",
+        "created_at": "2026-01-01T00:00:00Z",
+        "updated_at": "2026-01-02T00:00:00Z",
+        "currency": "USD",
+        "timezone": "(GMT-05:00) Eastern Time (US & Canada)",
+        "iana_timezone": "America/New_York"
+      }
+    }
+  }
+}

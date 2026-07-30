@@ -1,0 +1,54 @@
+{
+  "base": {
+    "url": "https://{{ config.shop_domain }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "auth": [
+      {
+        "mode": "api_key_header",
+        "header": "X-Shopify-Access-Token",
+        "value": "{{ secrets.access_token }}"
+      }
+    ],
+    "check": {
+      "method": "GET",
+      "path": "/admin/api/latest/shop.json"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "Shopify access token is missing or expired; re-add the Shopify credential without printing the token"
+      },
+      {
+        "status": 403,
+        "hint": "Shopify token lacks the required Admin API scope for this fixed operation"
+      },
+      {
+        "status": 404,
+        "hint": "Shopify shop or resource not found for the configured shop domain"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "Shopify Admin API rate limit reached; retry after the provider window resets"
+      }
+    ]
+  },
+  "streams": [
+    {
+      "name": "shop",
+      "method": "GET",
+      "path": "/admin/api/latest/shop.json",
+      "records": {
+        "path": "shop",
+        "single_object": true
+      },
+      "pagination": {
+        "type": "none"
+      },
+      "schema": "schemas/shop.json"
+    }
+  ]
+}
