@@ -1,0 +1,22 @@
+{
+  "record": {
+    "integrationId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIntegrationGithubRemoveCodeAccess"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "integrationGithubRemoveCodeAccess": {
+          "__typename": "IntegrationGithubRemoveCodeAccessPayload"
+        }
+      }
+    }
+  }
+}

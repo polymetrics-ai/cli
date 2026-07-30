@@ -1,0 +1,29 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "customerNeeds": {
+          "nodes": [
+            {
+              "__typename": "CustomerNeed",
+              "id": "customer_needs_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "url": "url_fixture"
+            }
+          ],
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
+        }
+      }
+    }
+  }
+}

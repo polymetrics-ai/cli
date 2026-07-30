@@ -1,0 +1,22 @@
+{
+  "record": {
+    "id": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearProjectRelationDelete"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "projectRelationDelete": {
+          "__typename": "DeletePayload"
+        }
+      }
+    }
+  }
+}

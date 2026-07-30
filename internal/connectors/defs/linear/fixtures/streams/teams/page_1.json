@@ -1,5 +1,8 @@
 {
-  "request": { "method": "POST", "path": "/" },
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
   "response": {
     "status": 200,
     "body": {
@@ -7,16 +10,21 @@
         "teams": {
           "nodes": [
             {
-              "id": "team_fixture_1",
-              "key": "T1",
-              "name": "Fixture team 1",
-              "description": "fixture record",
-              "private": false,
-              "createdAt": "2026-01-01T00:00:00.000Z",
-              "updatedAt": "2026-01-02T00:00:00.000Z"
+              "__typename": "Team",
+              "id": "teams_fixture_1",
+              "createdAt": "2026-01-01T00:00:00Z",
+              "updatedAt": "2026-01-01T00:00:00Z",
+              "archivedAt": "2026-01-01T00:00:00Z",
+              "name": "name_fixture",
+              "key": "key_fixture",
+              "displayName": "displayName_fixture",
+              "description": "description_fixture"
             }
           ],
-          "pageInfo": { "hasNextPage": false, "endCursor": "cursor_fixture_2" }
+          "pageInfo": {
+            "hasNextPage": false,
+            "endCursor": null
+          }
         }
       }
     }

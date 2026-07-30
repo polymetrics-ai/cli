@@ -1,0 +1,22 @@
+{
+  "record": {
+    "integrationId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIntegrationGitlabTestConnection"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "integrationGitlabTestConnection": {
+          "__typename": "GitLabTestConnectionPayload"
+        }
+      }
+    }
+  }
+}

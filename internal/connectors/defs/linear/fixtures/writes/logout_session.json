@@ -1,0 +1,22 @@
+{
+  "record": {
+    "sessionId": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearLogoutSession"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "logoutSession": {
+          "__typename": "LogoutResponse"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "sla_configurations",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "__typename": {
+      "type": "string"
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "conditions": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "removesSla": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "sla": {
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

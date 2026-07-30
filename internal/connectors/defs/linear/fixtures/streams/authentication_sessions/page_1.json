@@ -1,0 +1,22 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "authenticationSessions": [
+          {
+            "__typename": "AuthenticationSessionResponse",
+            "id": "authentication_sessions_fixture_1",
+            "createdAt": "2026-01-01T00:00:00Z",
+            "updatedAt": "2026-01-01T00:00:00Z",
+            "name": "name_fixture"
+          }
+        ]
+      }
+    }
+  }
+}

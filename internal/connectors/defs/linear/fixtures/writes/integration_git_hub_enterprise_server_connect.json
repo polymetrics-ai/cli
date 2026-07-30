@@ -1,0 +1,23 @@
+{
+  "record": {
+    "githubUrl": "fixture_string",
+    "organizationName": "fixture_string"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "LinearIntegrationGitHubEnterpriseServerConnect"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "integrationGitHubEnterpriseServerConnect": {
+          "__typename": "GitHubEnterpriseServerPayload"
+        }
+      }
+    }
+  }
+}

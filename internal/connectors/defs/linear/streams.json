@@ -3,16 +3,40 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.access_token }}", "when": "{{ secrets.access_token }}" },
-      { "mode": "bearer", "token": "{{ secrets.api_key }}", "when": "{{ config.auth_type in ['oauth', 'oauth2.0'] }}" },
-      { "mode": "api_key_header", "header": "Authorization", "value": "{{ secrets.api_key }}", "prefix": "", "when": "{{ secrets.api_key }}" },
-      { "mode": "none" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}",
+        "when": "{{ config.auth_type in ['oauth', 'oauth2.0'] }}"
+      },
+      {
+        "mode": "api_key_header",
+        "header": "Authorization",
+        "value": "{{ secrets.api_key }}",
+        "prefix": "",
+        "when": "{{ secrets.api_key }}"
+      },
+      {
+        "mode": "none"
+      }
     ],
-    "pagination": { "type": "none" },
-    "check": { "method": "POST", "path": "" },
+    "pagination": {
+      "type": "none"
+    },
     "error_map": [
-      { "status": 401, "hint": "linear api_key/access_token is missing or invalid; re-run pm credentials add linear" },
-      { "status": 429, "class": "rate_limited", "hint": "linear rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "linear api_key/access_token is missing or invalid; re-run pm credentials add linear"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "linear rate limit exceeded; retry after backoff"
+      }
     ]
   },
   "streams": [
@@ -20,37 +44,1639 @@
       "name": "issues",
       "method": "POST",
       "path": "",
-      "records": { "path": "data.issues.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "graphql": {
+        "operation_name": "LinearIssues",
+        "document": "query LinearIssues($first: Int!, $after: String) { issues(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      number\n      identifier\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.issues.nodes"
+      },
       "schema": "schemas/issues.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
-    },
-    {
-      "name": "teams",
-      "method": "POST",
-      "path": "",
-      "records": { "path": "data.teams.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
-      "schema": "schemas/teams.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issues.pageInfo.endCursor",
+        "stop_path": "data.issues.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
     },
     {
       "name": "projects",
       "method": "POST",
       "path": "",
-      "records": { "path": "data.projects.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "graphql": {
+        "operation_name": "LinearProjects",
+        "document": "query LinearProjects($first: Int!, $after: String) { projects(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n      state\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projects.nodes"
+      },
       "schema": "schemas/projects.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projects.pageInfo.endCursor",
+        "stop_path": "data.projects.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "teams",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTeams",
+        "document": "query LinearTeams($first: Int!, $after: String) { teams(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      key\n      displayName\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.teams.nodes"
+      },
+      "schema": "schemas/teams.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.teams.pageInfo.endCursor",
+        "stop_path": "data.teams.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
     },
     {
       "name": "users",
       "method": "POST",
       "path": "",
-      "records": { "path": "data.users.nodes" },
-      "incremental": { "cursor_field": "updated_at", "param_format": "rfc3339" },
+      "graphql": {
+        "operation_name": "LinearUsers",
+        "document": "query LinearUsers($first: Int!, $after: String) { users(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      title\n      url\n      email\n      displayName\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.users.nodes"
+      },
       "schema": "schemas/users.json",
-      "conformance": { "skip_dynamic": true, "reason": "GraphQL POST-body read path is quarantined for linear: stream.body is not transmitted by the declarative read engine, and no internal/connectors/hooks/linear package exists in this worktree." }
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.users.pageInfo.endCursor",
+        "stop_path": "data.users.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "administrable_teams",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAdministrableTeams",
+        "document": "query LinearAdministrableTeams($first: Int!, $after: String) { administrableTeams(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      key\n      displayName\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.administrableTeams.nodes"
+      },
+      "schema": "schemas/administrable_teams.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.administrableTeams.pageInfo.endCursor",
+        "stop_path": "data.administrableTeams.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "agent_activities",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAgentActivities",
+        "document": "query LinearAgentActivities($first: Int!, $after: String) { agentActivities(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.agentActivities.nodes"
+      },
+      "schema": "schemas/agent_activities.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.agentActivities.pageInfo.endCursor",
+        "stop_path": "data.agentActivities.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "agent_sessions",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAgentSessions",
+        "document": "query LinearAgentSessions($first: Int!, $after: String) { agentSessions(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.agentSessions.nodes"
+      },
+      "schema": "schemas/agent_sessions.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.agentSessions.pageInfo.endCursor",
+        "stop_path": "data.agentSessions.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "agent_skills",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAgentSkills",
+        "document": "query LinearAgentSkills($first: Int!, $after: String) { agentSkills(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.agentSkills.nodes"
+      },
+      "schema": "schemas/agent_skills.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.agentSkills.pageInfo.endCursor",
+        "stop_path": "data.agentSkills.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "archived_integrations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearArchivedIntegrations",
+        "document": "query LinearArchivedIntegrations { archivedIntegrations {\n    __typename\n    id\n    archivedAt\n    codeAccess\n    enterpriseUrl\n    externalOrgId\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.archivedIntegrations"
+      },
+      "schema": "schemas/archived_integrations.json"
+    },
+    {
+      "name": "archived_teams",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearArchivedTeams",
+        "document": "query LinearArchivedTeams { archivedTeams {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    key\n    displayName\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.archivedTeams"
+      },
+      "schema": "schemas/archived_teams.json"
+    },
+    {
+      "name": "attachments",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAttachments",
+        "document": "query LinearAttachments($first: Int!, $after: String) { attachments(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.attachments.nodes"
+      },
+      "schema": "schemas/attachments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.attachments.pageInfo.endCursor",
+        "stop_path": "data.attachments.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "attachments_for_url",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAttachmentsForUrl",
+        "document": "query LinearAttachmentsForUrl($first: Int!, $after: String, $url: String!) { attachmentsForURL(after: $after, first: $first, url: $url) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "url": {
+            "template": "{{ query.url }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.attachmentsForURL.nodes"
+      },
+      "schema": "schemas/attachments_for_url.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.attachmentsForURL.pageInfo.endCursor",
+        "stop_path": "data.attachmentsForURL.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "audit_entries",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAuditEntries",
+        "document": "query LinearAuditEntries($first: Int!, $after: String) { auditEntries(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      type\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.auditEntries.nodes"
+      },
+      "schema": "schemas/audit_entries.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.auditEntries.pageInfo.endCursor",
+        "stop_path": "data.auditEntries.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "audit_entry_types",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAuditEntryTypes",
+        "document": "query LinearAuditEntryTypes { auditEntryTypes {\n    __typename\n    type\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.auditEntryTypes"
+      },
+      "schema": "schemas/audit_entry_types.json"
+    },
+    {
+      "name": "authentication_sessions",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearAuthenticationSessions",
+        "document": "query LinearAuthenticationSessions { authenticationSessions {\n    __typename\n    id\n    createdAt\n    updatedAt\n    name\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.authenticationSessions"
+      },
+      "schema": "schemas/authentication_sessions.json"
+    },
+    {
+      "name": "comments",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearComments",
+        "document": "query LinearComments($first: Int!, $after: String) { comments(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.comments.nodes"
+      },
+      "schema": "schemas/comments.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.comments.pageInfo.endCursor",
+        "stop_path": "data.comments.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "custom_views",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCustomViews",
+        "document": "query LinearCustomViews($first: Int!, $after: String) { customViews(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.customViews.nodes"
+      },
+      "schema": "schemas/custom_views.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.customViews.pageInfo.endCursor",
+        "stop_path": "data.customViews.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "customer_needs",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCustomerNeeds",
+        "document": "query LinearCustomerNeeds($first: Int!, $after: String) { customerNeeds(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.customerNeeds.nodes"
+      },
+      "schema": "schemas/customer_needs.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.customerNeeds.pageInfo.endCursor",
+        "stop_path": "data.customerNeeds.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "customer_statuses",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCustomerStatuses",
+        "document": "query LinearCustomerStatuses($first: Int!, $after: String) { customerStatuses(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      displayName\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.customerStatuses.nodes"
+      },
+      "schema": "schemas/customer_statuses.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.customerStatuses.pageInfo.endCursor",
+        "stop_path": "data.customerStatuses.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "customer_tiers",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCustomerTiers",
+        "document": "query LinearCustomerTiers($first: Int!, $after: String) { customerTiers(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      displayName\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.customerTiers.nodes"
+      },
+      "schema": "schemas/customer_tiers.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.customerTiers.pageInfo.endCursor",
+        "stop_path": "data.customerTiers.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "customers",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCustomers",
+        "document": "query LinearCustomers($first: Int!, $after: String) { customers(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.customers.nodes"
+      },
+      "schema": "schemas/customers.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.customers.pageInfo.endCursor",
+        "stop_path": "data.customers.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "cycles",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearCycles",
+        "document": "query LinearCycles($first: Int!, $after: String) { cycles(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      number\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.cycles.nodes"
+      },
+      "schema": "schemas/cycles.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.cycles.pageInfo.endCursor",
+        "stop_path": "data.cycles.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "documents",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearDocuments",
+        "document": "query LinearDocuments($first: Int!, $after: String) { documents(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.documents.nodes"
+      },
+      "schema": "schemas/documents.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.documents.pageInfo.endCursor",
+        "stop_path": "data.documents.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "emojis",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearEmojis",
+        "document": "query LinearEmojis($first: Int!, $after: String) { emojis(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.emojis.nodes"
+      },
+      "schema": "schemas/emojis.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.emojis.pageInfo.endCursor",
+        "stop_path": "data.emojis.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "external_users",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearExternalUsers",
+        "document": "query LinearExternalUsers($first: Int!, $after: String) { externalUsers(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      email\n      displayName\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.externalUsers.nodes"
+      },
+      "schema": "schemas/external_users.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.externalUsers.pageInfo.endCursor",
+        "stop_path": "data.externalUsers.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "failures_for_oauth_webhooks",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearFailuresForOauthWebhooks",
+        "document": "query LinearFailuresForOauthWebhooks($oauthClientId: String!) { failuresForOauthWebhooks(oauthClientId: $oauthClientId) {\n    __typename\n    id\n    createdAt\n    url\n  } }",
+        "variables": {
+          "oauthClientId": {
+            "template": "{{ query.oauthClientId }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.failuresForOauthWebhooks"
+      },
+      "schema": "schemas/failures_for_oauth_webhooks.json"
+    },
+    {
+      "name": "favorites",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearFavorites",
+        "document": "query LinearFavorites($first: Int!, $after: String) { favorites(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      url\n      type\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.favorites.nodes"
+      },
+      "schema": "schemas/favorites.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.favorites.pageInfo.endCursor",
+        "stop_path": "data.favorites.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "initiative_labels",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearInitiativeLabels",
+        "document": "query LinearInitiativeLabels($first: Int!, $after: String) { initiativeLabels(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.initiativeLabels.nodes"
+      },
+      "schema": "schemas/initiative_labels.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.initiativeLabels.pageInfo.endCursor",
+        "stop_path": "data.initiativeLabels.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "initiative_relations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearInitiativeRelations",
+        "document": "query LinearInitiativeRelations($first: Int!, $after: String) { initiativeRelations(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.initiativeRelations.nodes"
+      },
+      "schema": "schemas/initiative_relations.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.initiativeRelations.pageInfo.endCursor",
+        "stop_path": "data.initiativeRelations.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "initiative_to_projects",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearInitiativeToProjects",
+        "document": "query LinearInitiativeToProjects($first: Int!, $after: String) { initiativeToProjects(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.initiativeToProjects.nodes"
+      },
+      "schema": "schemas/initiative_to_projects.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.initiativeToProjects.pageInfo.endCursor",
+        "stop_path": "data.initiativeToProjects.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "initiative_updates",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearInitiativeUpdates",
+        "document": "query LinearInitiativeUpdates($first: Int!, $after: String) { initiativeUpdates(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.initiativeUpdates.nodes"
+      },
+      "schema": "schemas/initiative_updates.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.initiativeUpdates.pageInfo.endCursor",
+        "stop_path": "data.initiativeUpdates.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "initiatives",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearInitiatives",
+        "document": "query LinearInitiatives($first: Int!, $after: String) { initiatives(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      identifier\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.initiatives.nodes"
+      },
+      "schema": "schemas/initiatives.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.initiatives.pageInfo.endCursor",
+        "stop_path": "data.initiatives.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "integration_templates",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIntegrationTemplates",
+        "document": "query LinearIntegrationTemplates($first: Int!, $after: String) { integrationTemplates(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.integrationTemplates.nodes"
+      },
+      "schema": "schemas/integration_templates.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.integrationTemplates.pageInfo.endCursor",
+        "stop_path": "data.integrationTemplates.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "integrations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIntegrations",
+        "document": "query LinearIntegrations($first: Int!, $after: String) { integrations(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.integrations.nodes"
+      },
+      "schema": "schemas/integrations.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.integrations.pageInfo.endCursor",
+        "stop_path": "data.integrations.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "issue_figma_file_key_search",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssueFigmaFileKeySearch",
+        "document": "query LinearIssueFigmaFileKeySearch($first: Int!, $after: String, $fileKey: String!) { issueFigmaFileKeySearch(after: $after, fileKey: $fileKey, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      number\n      identifier\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          },
+          "fileKey": {
+            "template": "{{ query.fileKey }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.issueFigmaFileKeySearch.nodes"
+      },
+      "schema": "schemas/issue_figma_file_key_search.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issueFigmaFileKeySearch.pageInfo.endCursor",
+        "stop_path": "data.issueFigmaFileKeySearch.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "issue_labels",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssueLabels",
+        "document": "query LinearIssueLabels($first: Int!, $after: String) { issueLabels(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.issueLabels.nodes"
+      },
+      "schema": "schemas/issue_labels.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issueLabels.pageInfo.endCursor",
+        "stop_path": "data.issueLabels.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "issue_priority_values",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssuePriorityValues",
+        "document": "query LinearIssuePriorityValues { issuePriorityValues {\n    __typename\n    label\n    priority\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.issuePriorityValues"
+      },
+      "schema": "schemas/issue_priority_values.json"
+    },
+    {
+      "name": "issue_relations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssueRelations",
+        "document": "query LinearIssueRelations($first: Int!, $after: String) { issueRelations(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      type\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.issueRelations.nodes"
+      },
+      "schema": "schemas/issue_relations.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issueRelations.pageInfo.endCursor",
+        "stop_path": "data.issueRelations.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "issue_search",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssueSearch",
+        "document": "query LinearIssueSearch($first: Int!, $after: String) { issueSearch(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      number\n      identifier\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.issueSearch.nodes"
+      },
+      "schema": "schemas/issue_search.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issueSearch.pageInfo.endCursor",
+        "stop_path": "data.issueSearch.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "issue_to_releases",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearIssueToReleases",
+        "document": "query LinearIssueToReleases($first: Int!, $after: String) { issueToReleases(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.issueToReleases.nodes"
+      },
+      "schema": "schemas/issue_to_releases.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.issueToReleases.pageInfo.endCursor",
+        "stop_path": "data.issueToReleases.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "oauth_applications",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearOauthApplications",
+        "document": "query LinearOauthApplications { oauthApplications {\n    __typename\n    id\n    createdAt\n    updatedAt\n    name\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.oauthApplications"
+      },
+      "schema": "schemas/oauth_applications.json"
+    },
+    {
+      "name": "organization_invites",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearOrganizationInvites",
+        "document": "query LinearOrganizationInvites($first: Int!, $after: String) { organizationInvites(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      email\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.organizationInvites.nodes"
+      },
+      "schema": "schemas/organization_invites.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.organizationInvites.pageInfo.endCursor",
+        "stop_path": "data.organizationInvites.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "project_labels",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearProjectLabels",
+        "document": "query LinearProjectLabels($first: Int!, $after: String) { projectLabels(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projectLabels.nodes"
+      },
+      "schema": "schemas/project_labels.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projectLabels.pageInfo.endCursor",
+        "stop_path": "data.projectLabels.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "project_milestones",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearProjectMilestones",
+        "document": "query LinearProjectMilestones($first: Int!, $after: String) { projectMilestones(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projectMilestones.nodes"
+      },
+      "schema": "schemas/project_milestones.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projectMilestones.pageInfo.endCursor",
+        "stop_path": "data.projectMilestones.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "project_relations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearProjectRelations",
+        "document": "query LinearProjectRelations($first: Int!, $after: String) { projectRelations(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      type\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projectRelations.nodes"
+      },
+      "schema": "schemas/project_relations.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projectRelations.pageInfo.endCursor",
+        "stop_path": "data.projectRelations.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "project_statuses",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearProjectStatuses",
+        "document": "query LinearProjectStatuses($first: Int!, $after: String) { projectStatuses(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projectStatuses.nodes"
+      },
+      "schema": "schemas/project_statuses.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projectStatuses.pageInfo.endCursor",
+        "stop_path": "data.projectStatuses.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "project_updates",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearProjectUpdates",
+        "document": "query LinearProjectUpdates($first: Int!, $after: String) { projectUpdates(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.projectUpdates.nodes"
+      },
+      "schema": "schemas/project_updates.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.projectUpdates.pageInfo.endCursor",
+        "stop_path": "data.projectUpdates.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "recent_releases_by_access_key",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearRecentReleasesByAccessKey",
+        "document": "query LinearRecentReleasesByAccessKey { recentReleasesByAccessKey {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    url\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.recentReleasesByAccessKey"
+      },
+      "schema": "schemas/recent_releases_by_access_key.json"
+    },
+    {
+      "name": "release_notes",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearReleaseNotes",
+        "document": "query LinearReleaseNotes($first: Int!, $after: String) { releaseNotes(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      title\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.releaseNotes.nodes"
+      },
+      "schema": "schemas/release_notes.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.releaseNotes.pageInfo.endCursor",
+        "stop_path": "data.releaseNotes.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "release_pipelines",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearReleasePipelines",
+        "document": "query LinearReleasePipelines($first: Int!, $after: String) { releasePipelines(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.releasePipelines.nodes"
+      },
+      "schema": "schemas/release_pipelines.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.releasePipelines.pageInfo.endCursor",
+        "stop_path": "data.releasePipelines.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "release_search",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearReleaseSearch",
+        "document": "query LinearReleaseSearch { releaseSearch {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    url\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.releaseSearch"
+      },
+      "schema": "schemas/release_search.json"
+    },
+    {
+      "name": "release_stages",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearReleaseStages",
+        "document": "query LinearReleaseStages($first: Int!, $after: String) { releaseStages(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.releaseStages.nodes"
+      },
+      "schema": "schemas/release_stages.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.releaseStages.pageInfo.endCursor",
+        "stop_path": "data.releaseStages.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "releases",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearReleases",
+        "document": "query LinearReleases($first: Int!, $after: String) { releases(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.releases.nodes"
+      },
+      "schema": "schemas/releases.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.releases.pageInfo.endCursor",
+        "stop_path": "data.releases.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "roadmap_to_projects",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearRoadmapToProjects",
+        "document": "query LinearRoadmapToProjects($first: Int!, $after: String) { roadmapToProjects(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.roadmapToProjects.nodes"
+      },
+      "schema": "schemas/roadmap_to_projects.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.roadmapToProjects.pageInfo.endCursor",
+        "stop_path": "data.roadmapToProjects.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "roadmaps",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearRoadmaps",
+        "document": "query LinearRoadmaps($first: Int!, $after: String) { roadmaps(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      url\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.roadmaps.nodes"
+      },
+      "schema": "schemas/roadmaps.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.roadmaps.pageInfo.endCursor",
+        "stop_path": "data.roadmaps.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "sla_configurations",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearSlaConfigurations",
+        "document": "query LinearSlaConfigurations($teamId: String!) { slaConfigurations(teamId: $teamId) {\n    __typename\n    id\n    name\n    conditions\n    removesSla\n    sla\n  } }",
+        "variables": {
+          "teamId": {
+            "template": "{{ query.teamId }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.slaConfigurations"
+      },
+      "schema": "schemas/sla_configurations.json"
+    },
+    {
+      "name": "team_memberships",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTeamMemberships",
+        "document": "query LinearTeamMemberships($first: Int!, $after: String) { teamMemberships(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.teamMemberships.nodes"
+      },
+      "schema": "schemas/team_memberships.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.teamMemberships.pageInfo.endCursor",
+        "stop_path": "data.teamMemberships.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "templates",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTemplates",
+        "document": "query LinearTemplates { templates {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    type\n    description\n  } }",
+        "variables": {}
+      },
+      "records": {
+        "path": "data.templates"
+      },
+      "schema": "schemas/templates.json"
+    },
+    {
+      "name": "templates_for_integration",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTemplatesForIntegration",
+        "document": "query LinearTemplatesForIntegration($integrationType: String!) { templatesForIntegration(integrationType: $integrationType) {\n    __typename\n    id\n    createdAt\n    updatedAt\n    archivedAt\n    name\n    type\n    description\n  } }",
+        "variables": {
+          "integrationType": {
+            "template": "{{ query.integrationType }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.templatesForIntegration"
+      },
+      "schema": "schemas/templates_for_integration.json"
+    },
+    {
+      "name": "time_schedules",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTimeSchedules",
+        "document": "query LinearTimeSchedules($first: Int!, $after: String) { timeSchedules(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.timeSchedules.nodes"
+      },
+      "schema": "schemas/time_schedules.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.timeSchedules.pageInfo.endCursor",
+        "stop_path": "data.timeSchedules.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "triage_responsibilities",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearTriageResponsibilities",
+        "document": "query LinearTriageResponsibilities($first: Int!, $after: String) { triageResponsibilities(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.triageResponsibilities.nodes"
+      },
+      "schema": "schemas/triage_responsibilities.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.triageResponsibilities.pageInfo.endCursor",
+        "stop_path": "data.triageResponsibilities.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "user_sessions",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearUserSessions",
+        "document": "query LinearUserSessions($id: String!) { userSessions(id: $id) {\n    __typename\n    id\n    createdAt\n    updatedAt\n    name\n  } }",
+        "variables": {
+          "id": {
+            "template": "{{ query.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "records": {
+        "path": "data.userSessions"
+      },
+      "schema": "schemas/user_sessions.json"
+    },
+    {
+      "name": "webhooks",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearWebhooks",
+        "document": "query LinearWebhooks($first: Int!, $after: String) { webhooks(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      url\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.webhooks.nodes"
+      },
+      "schema": "schemas/webhooks.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.webhooks.pageInfo.endCursor",
+        "stop_path": "data.webhooks.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
+    },
+    {
+      "name": "workflow_states",
+      "method": "POST",
+      "path": "",
+      "graphql": {
+        "operation_name": "LinearWorkflowStates",
+        "document": "query LinearWorkflowStates($first: Int!, $after: String) { workflowStates(after: $after, first: $first) { nodes {\n      __typename\n      id\n      createdAt\n      updatedAt\n      archivedAt\n      name\n      type\n      description\n    } pageInfo { hasNextPage endCursor } } }",
+        "variables": {
+          "first": 50,
+          "after": {
+            "template": "{{ cursor }}",
+            "type": "string",
+            "omit_when_empty": true
+          }
+        }
+      },
+      "records": {
+        "path": "data.workflowStates.nodes"
+      },
+      "schema": "schemas/workflow_states.json",
+      "pagination": {
+        "type": "cursor",
+        "cursor_param": "after",
+        "token_path": "data.workflowStates.pageInfo.endCursor",
+        "stop_path": "data.workflowStates.pageInfo.hasNextPage",
+        "max_pages": 100
+      }
     }
   ]
 }

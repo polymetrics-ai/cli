@@ -1,0 +1,4603 @@
+{
+  "actions": [
+    {
+      "name": "agent_skill_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearAgentSkillDelete",
+        "document": "mutation LinearAgentSkillDelete($id: String!) { agentSkillDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "attachment_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearAttachmentDelete",
+        "document": "mutation LinearAttachmentDelete($id: String!) { attachmentDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "attachment_sync_to_slack",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearAttachmentSyncToSlack",
+        "document": "mutation LinearAttachmentSyncToSlack($id: String!) { attachmentSyncToSlack(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "comment_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCommentDelete",
+        "document": "mutation LinearCommentDelete($id: String!) { commentDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "comment_unresolve",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCommentUnresolve",
+        "document": "mutation LinearCommentUnresolve($id: String!) { commentUnresolve(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "custom_view_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomViewDelete",
+        "document": "mutation LinearCustomViewDelete($id: String!) { customViewDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "customer_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerDelete",
+        "document": "mutation LinearCustomerDelete($id: String!) { customerDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "customer_merge",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sourceCustomerId",
+          "targetCustomerId"
+        ],
+        "properties": {
+          "sourceCustomerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "targetCustomerId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerMerge",
+        "document": "mutation LinearCustomerMerge($sourceCustomerId: String!, $targetCustomerId: String!) { customerMerge(sourceCustomerId: $sourceCustomerId, targetCustomerId: $targetCustomerId) { __typename } }",
+        "variables": {
+          "sourceCustomerId": {
+            "template": "{{ record.sourceCustomerId }}",
+            "type": "string"
+          },
+          "targetCustomerId": {
+            "template": "{{ record.targetCustomerId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "customer_need_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerNeedArchive",
+        "document": "mutation LinearCustomerNeedArchive($id: String!) { customerNeedArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "customer_need_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerNeedUnarchive",
+        "document": "mutation LinearCustomerNeedUnarchive($id: String!) { customerNeedUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "customer_status_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerStatusDelete",
+        "document": "mutation LinearCustomerStatusDelete($id: String!) { customerStatusDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "customer_tier_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerTierDelete",
+        "document": "mutation LinearCustomerTierDelete($id: String!) { customerTierDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "customer_unsync",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCustomerUnsync",
+        "document": "mutation LinearCustomerUnsync($id: String!) { customerUnsync(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cycle_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCycleArchive",
+        "document": "mutation LinearCycleArchive($id: String!) { cycleArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "cycle_start_upcoming_cycle_today",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearCycleStartUpcomingCycleToday",
+        "document": "mutation LinearCycleStartUpcomingCycleToday($id: String!) { cycleStartUpcomingCycleToday(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "document_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearDocumentDelete",
+        "document": "mutation LinearDocumentDelete($id: String!) { documentDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "document_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearDocumentUnarchive",
+        "document": "mutation LinearDocumentUnarchive($id: String!) { documentUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "email_intake_address_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearEmailIntakeAddressDelete",
+        "document": "mutation LinearEmailIntakeAddressDelete($id: String!) { emailIntakeAddressDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "email_intake_address_refresh_ses_domain_status",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearEmailIntakeAddressRefreshSesDomainStatus",
+        "document": "mutation LinearEmailIntakeAddressRefreshSesDomainStatus($id: String!) { emailIntakeAddressRefreshSesDomainStatus(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "email_intake_address_rotate",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearEmailIntakeAddressRotate",
+        "document": "mutation LinearEmailIntakeAddressRotate($id: String!) { emailIntakeAddressRotate(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "emoji_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearEmojiDelete",
+        "document": "mutation LinearEmojiDelete($id: String!) { emojiDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "entity_external_link_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearEntityExternalLinkDelete",
+        "document": "mutation LinearEntityExternalLinkDelete($id: String!) { entityExternalLinkDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "favorite_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearFavoriteDelete",
+        "document": "mutation LinearFavoriteDelete($id: String!) { favoriteDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "file_upload_dangerously_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "assetUrl"
+        ],
+        "properties": {
+          "assetUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearFileUploadDangerouslyDelete",
+        "document": "mutation LinearFileUploadDangerouslyDelete($assetUrl: String!) { fileUploadDangerouslyDelete(assetUrl: $assetUrl) { __typename } }",
+        "variables": {
+          "assetUrl": {
+            "template": "{{ record.assetUrl }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "git_automation_state_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearGitAutomationStateDelete",
+        "document": "mutation LinearGitAutomationStateDelete($id: String!) { gitAutomationStateDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "git_automation_target_branch_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearGitAutomationTargetBranchDelete",
+        "document": "mutation LinearGitAutomationTargetBranchDelete($id: String!) { gitAutomationTargetBranchDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "image_upload_from_url",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearImageUploadFromUrl",
+        "document": "mutation LinearImageUploadFromUrl($url: String!) { imageUploadFromUrl(url: $url) { __typename } }",
+        "variables": {
+          "url": {
+            "template": "{{ record.url }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "initiative_add_label",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeAddLabel",
+        "document": "mutation LinearInitiativeAddLabel($id: String!, $labelId: String!) { initiativeAddLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "initiative_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeArchive",
+        "document": "mutation LinearInitiativeArchive($id: String!) { initiativeArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeDelete",
+        "document": "mutation LinearInitiativeDelete($id: String!) { initiativeDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "initiative_label_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeLabelDelete",
+        "document": "mutation LinearInitiativeLabelDelete($id: String!) { initiativeLabelDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "initiative_label_restore",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeLabelRestore",
+        "document": "mutation LinearInitiativeLabelRestore($id: String!) { initiativeLabelRestore(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "initiative_label_retire",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeLabelRetire",
+        "document": "mutation LinearInitiativeLabelRetire($id: String!) { initiativeLabelRetire(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "initiative_relation_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeRelationDelete",
+        "document": "mutation LinearInitiativeRelationDelete($id: String!) { initiativeRelationDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "initiative_remove_label",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeRemoveLabel",
+        "document": "mutation LinearInitiativeRemoveLabel($id: String!, $labelId: String!) { initiativeRemoveLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_to_project_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeToProjectDelete",
+        "document": "mutation LinearInitiativeToProjectDelete($id: String!) { initiativeToProjectDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "initiative_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeUnarchive",
+        "document": "mutation LinearInitiativeUnarchive($id: String!) { initiativeUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_update_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeUpdateArchive",
+        "document": "mutation LinearInitiativeUpdateArchive($id: String!) { initiativeUpdateArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "initiative_update_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearInitiativeUpdateUnarchive",
+        "document": "mutation LinearInitiativeUpdateUnarchive($id: String!) { initiativeUpdateUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationArchive",
+        "document": "mutation LinearIntegrationArchive($id: String!) { integrationArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_git_hub_enterprise_server_connect",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "githubUrl",
+          "organizationName"
+        ],
+        "properties": {
+          "githubUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "organizationName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationGitHubEnterpriseServerConnect",
+        "document": "mutation LinearIntegrationGitHubEnterpriseServerConnect($githubUrl: String!, $organizationName: String!) { integrationGitHubEnterpriseServerConnect(githubUrl: $githubUrl, organizationName: $organizationName) { __typename } }",
+        "variables": {
+          "githubUrl": {
+            "template": "{{ record.githubUrl }}",
+            "type": "string"
+          },
+          "organizationName": {
+            "template": "{{ record.organizationName }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_github_commit_create",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationGithubCommitCreate",
+        "document": "mutation LinearIntegrationGithubCommitCreate { integrationGithubCommitCreate { __typename } }",
+        "variables": {}
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_github_import_refresh",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationGithubImportRefresh",
+        "document": "mutation LinearIntegrationGithubImportRefresh($id: String!) { integrationGithubImportRefresh(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_github_remove_code_access",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "integrationId"
+        ],
+        "properties": {
+          "integrationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationGithubRemoveCodeAccess",
+        "document": "mutation LinearIntegrationGithubRemoveCodeAccess($integrationId: String!) { integrationGithubRemoveCodeAccess(integrationId: $integrationId) { __typename } }",
+        "variables": {
+          "integrationId": {
+            "template": "{{ record.integrationId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "integration_gitlab_test_connection",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "integrationId"
+        ],
+        "properties": {
+          "integrationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationGitlabTestConnection",
+        "document": "mutation LinearIntegrationGitlabTestConnection($integrationId: String!) { integrationGitlabTestConnection(integrationId: $integrationId) { __typename } }",
+        "variables": {
+          "integrationId": {
+            "template": "{{ record.integrationId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_intercom_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationIntercomDelete",
+        "document": "mutation LinearIntegrationIntercomDelete { integrationIntercomDelete { __typename } }",
+        "variables": {}
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "integration_opsgenie_refresh_schedule_mappings",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationOpsgenieRefreshScheduleMappings",
+        "document": "mutation LinearIntegrationOpsgenieRefreshScheduleMappings { integrationOpsgenieRefreshScheduleMappings { __typename } }",
+        "variables": {}
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_pager_duty_refresh_schedule_mappings",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationPagerDutyRefreshScheduleMappings",
+        "document": "mutation LinearIntegrationPagerDutyRefreshScheduleMappings { integrationPagerDutyRefreshScheduleMappings { __typename } }",
+        "variables": {}
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_salesforce_metadata_refresh",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationSalesforceMetadataRefresh",
+        "document": "mutation LinearIntegrationSalesforceMetadataRefresh($id: String!) { integrationSalesforceMetadataRefresh(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_slack_or_asks_update_slack_team_name",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "integrationId"
+        ],
+        "properties": {
+          "integrationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationSlackOrAsksUpdateSlackTeamName",
+        "document": "mutation LinearIntegrationSlackOrAsksUpdateSlackTeamName($integrationId: String!) { integrationSlackOrAsksUpdateSlackTeamName(integrationId: $integrationId) { __typename } }",
+        "variables": {
+          "integrationId": {
+            "template": "{{ record.integrationId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "integration_template_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIntegrationTemplateDelete",
+        "document": "mutation LinearIntegrationTemplateDelete($id: String!) { integrationTemplateDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_add_label",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueAddLabel",
+        "document": "mutation LinearIssueAddLabel($id: String!, $labelId: String!) { issueAddLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_description_update_from_front",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "description",
+          "id"
+        ],
+        "properties": {
+          "description": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueDescriptionUpdateFromFront",
+        "document": "mutation LinearIssueDescriptionUpdateFromFront($description: String!, $id: String!) { issueDescriptionUpdateFromFront(description: $description, id: $id) { __typename } }",
+        "variables": {
+          "description": {
+            "template": "{{ record.description }}",
+            "type": "string"
+          },
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_external_sync_disable",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "attachmentId"
+        ],
+        "properties": {
+          "attachmentId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueExternalSyncDisable",
+        "document": "mutation LinearIssueExternalSyncDisable($attachmentId: String!) { issueExternalSyncDisable(attachmentId: $attachmentId) { __typename } }",
+        "variables": {
+          "attachmentId": {
+            "template": "{{ record.attachmentId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_import_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issueImportId"
+        ],
+        "properties": {
+          "issueImportId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueImportDelete",
+        "document": "mutation LinearIssueImportDelete($issueImportId: String!) { issueImportDelete(issueImportId: $issueImportId) { __typename } }",
+        "variables": {
+          "issueImportId": {
+            "template": "{{ record.issueImportId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_label_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueLabelDelete",
+        "document": "mutation LinearIssueLabelDelete($id: String!) { issueLabelDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_label_restore",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueLabelRestore",
+        "document": "mutation LinearIssueLabelRestore($id: String!) { issueLabelRestore(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_label_retire",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueLabelRetire",
+        "document": "mutation LinearIssueLabelRetire($id: String!) { issueLabelRetire(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_relation_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueRelationDelete",
+        "document": "mutation LinearIssueRelationDelete($id: String!) { issueRelationDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_reminder",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "reminderAt"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "reminderAt": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueReminder",
+        "document": "mutation LinearIssueReminder($id: String!, $reminderAt: DateTime!) { issueReminder(id: $id, reminderAt: $reminderAt) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "reminderAt": {
+            "template": "{{ record.reminderAt }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_remove_label",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueRemoveLabel",
+        "document": "mutation LinearIssueRemoveLabel($id: String!, $labelId: String!) { issueRemoveLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "issue_share",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "userId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "userId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueShare",
+        "document": "mutation LinearIssueShare($id: String!, $userId: String!) { issueShare(id: $id, userId: $userId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "userId": {
+            "template": "{{ record.userId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "issue_to_release_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueToReleaseDelete",
+        "document": "mutation LinearIssueToReleaseDelete($id: String!) { issueToReleaseDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_to_release_delete_by_issue_and_release",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "issueId",
+          "releaseId"
+        ],
+        "properties": {
+          "issueId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "releaseId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueToReleaseDeleteByIssueAndRelease",
+        "document": "mutation LinearIssueToReleaseDeleteByIssueAndRelease($issueId: String!, $releaseId: String!) { issueToReleaseDeleteByIssueAndRelease(issueId: $issueId, releaseId: $releaseId) { __typename } }",
+        "variables": {
+          "issueId": {
+            "template": "{{ record.issueId }}",
+            "type": "string"
+          },
+          "releaseId": {
+            "template": "{{ record.releaseId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "issue_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueUnarchive",
+        "document": "mutation LinearIssueUnarchive($id: String!) { issueUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "issue_unshare",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "userId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "userId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearIssueUnshare",
+        "document": "mutation LinearIssueUnshare($id: String!, $userId: String!) { issueUnshare(id: $id, userId: $userId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "userId": {
+            "template": "{{ record.userId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "leave_organization",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "organizationId"
+        ],
+        "properties": {
+          "organizationId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearLeaveOrganization",
+        "document": "mutation LinearLeaveOrganization($organizationId: String!) { leaveOrganization(organizationId: $organizationId) { __typename } }",
+        "variables": {
+          "organizationId": {
+            "template": "{{ record.organizationId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "logout_session",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "sessionId"
+        ],
+        "properties": {
+          "sessionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearLogoutSession",
+        "document": "mutation LinearLogoutSession($sessionId: String!) { logoutSession(sessionId: $sessionId) { __typename } }",
+        "variables": {
+          "sessionId": {
+            "template": "{{ record.sessionId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "notification_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearNotificationArchive",
+        "document": "mutation LinearNotificationArchive($id: String!) { notificationArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "notification_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearNotificationUnarchive",
+        "document": "mutation LinearNotificationUnarchive($id: String!) { notificationUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOauthApplicationArchive",
+        "document": "mutation LinearOauthApplicationArchive($id: String!) { oauthApplicationArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_rotate_secret",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOauthApplicationRotateSecret",
+        "document": "mutation LinearOauthApplicationRotateSecret($id: String!) { oauthApplicationRotateSecret(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "oauth_application_rotate_webhook_secret",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOauthApplicationRotateWebhookSecret",
+        "document": "mutation LinearOauthApplicationRotateWebhookSecret($id: String!) { oauthApplicationRotateWebhookSecret(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "organization_cancel_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOrganizationCancelDelete",
+        "document": "mutation LinearOrganizationCancelDelete { organizationCancelDelete { __typename } }",
+        "variables": {}
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "organization_delete_challenge",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [],
+        "properties": {},
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOrganizationDeleteChallenge",
+        "document": "mutation LinearOrganizationDeleteChallenge { organizationDeleteChallenge { __typename } }",
+        "variables": {}
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "organization_domain_claim",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOrganizationDomainClaim",
+        "document": "mutation LinearOrganizationDomainClaim($id: String!) { organizationDomainClaim(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "organization_domain_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOrganizationDomainDelete",
+        "document": "mutation LinearOrganizationDomainDelete($id: String!) { organizationDomainDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "organization_invite_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearOrganizationInviteDelete",
+        "document": "mutation LinearOrganizationInviteDelete($id: String!) { organizationInviteDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "passkey_login_start",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "authId"
+        ],
+        "properties": {
+          "authId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearPasskeyLoginStart",
+        "document": "mutation LinearPasskeyLoginStart($authId: String!) { passkeyLoginStart(authId: $authId) { __typename } }",
+        "variables": {
+          "authId": {
+            "template": "{{ record.authId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "project_add_label",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectAddLabel",
+        "document": "mutation LinearProjectAddLabel($id: String!, $labelId: String!) { projectAddLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "project_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectDelete",
+        "document": "mutation LinearProjectDelete($id: String!) { projectDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "project_label_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectLabelDelete",
+        "document": "mutation LinearProjectLabelDelete($id: String!) { projectLabelDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "project_label_restore",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectLabelRestore",
+        "document": "mutation LinearProjectLabelRestore($id: String!) { projectLabelRestore(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "project_label_retire",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectLabelRetire",
+        "document": "mutation LinearProjectLabelRetire($id: String!) { projectLabelRetire(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "project_milestone_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectMilestoneDelete",
+        "document": "mutation LinearProjectMilestoneDelete($id: String!) { projectMilestoneDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "project_reassign_status",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "newProjectStatusId",
+          "originalProjectStatusId"
+        ],
+        "properties": {
+          "newProjectStatusId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "originalProjectStatusId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectReassignStatus",
+        "document": "mutation LinearProjectReassignStatus($newProjectStatusId: String!, $originalProjectStatusId: String!) { projectReassignStatus(newProjectStatusId: $newProjectStatusId, originalProjectStatusId: $originalProjectStatusId) { __typename } }",
+        "variables": {
+          "newProjectStatusId": {
+            "template": "{{ record.newProjectStatusId }}",
+            "type": "string"
+          },
+          "originalProjectStatusId": {
+            "template": "{{ record.originalProjectStatusId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "project_relation_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectRelationDelete",
+        "document": "mutation LinearProjectRelationDelete($id: String!) { projectRelationDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "project_remove_label",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "labelId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "labelId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectRemoveLabel",
+        "document": "mutation LinearProjectRemoveLabel($id: String!, $labelId: String!) { projectRemoveLabel(id: $id, labelId: $labelId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "labelId": {
+            "template": "{{ record.labelId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_status_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectStatusArchive",
+        "document": "mutation LinearProjectStatusArchive($id: String!) { projectStatusArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_status_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectStatusUnarchive",
+        "document": "mutation LinearProjectStatusUnarchive($id: String!) { projectStatusUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectUnarchive",
+        "document": "mutation LinearProjectUnarchive($id: String!) { projectUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_update_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectUpdateArchive",
+        "document": "mutation LinearProjectUpdateArchive($id: String!) { projectUpdateArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "project_update_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearProjectUpdateUnarchive",
+        "document": "mutation LinearProjectUpdateUnarchive($id: String!) { projectUpdateUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "push_subscription_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearPushSubscriptionDelete",
+        "document": "mutation LinearPushSubscriptionDelete($id: String!) { pushSubscriptionDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "reaction_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReactionDelete",
+        "document": "mutation LinearReactionDelete($id: String!) { reactionDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "release_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseArchive",
+        "document": "mutation LinearReleaseArchive($id: String!) { releaseArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "release_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseDelete",
+        "document": "mutation LinearReleaseDelete($id: String!) { releaseDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "release_note_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseNoteDelete",
+        "document": "mutation LinearReleaseNoteDelete($id: String!) { releaseNoteDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "release_pipeline_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleasePipelineArchive",
+        "document": "mutation LinearReleasePipelineArchive($id: String!) { releasePipelineArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "release_pipeline_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleasePipelineDelete",
+        "document": "mutation LinearReleasePipelineDelete($id: String!) { releasePipelineDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "release_pipeline_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleasePipelineUnarchive",
+        "document": "mutation LinearReleasePipelineUnarchive($id: String!) { releasePipelineUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "release_stage_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseStageArchive",
+        "document": "mutation LinearReleaseStageArchive($id: String!) { releaseStageArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "release_stage_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseStageUnarchive",
+        "document": "mutation LinearReleaseStageUnarchive($id: String!) { releaseStageUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "release_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearReleaseUnarchive",
+        "document": "mutation LinearReleaseUnarchive($id: String!) { releaseUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "resend_organization_invite",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearResendOrganizationInvite",
+        "document": "mutation LinearResendOrganizationInvite($id: String!) { resendOrganizationInvite(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "resend_organization_invite_by_email",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearResendOrganizationInviteByEmail",
+        "document": "mutation LinearResendOrganizationInviteByEmail($email: String!) { resendOrganizationInviteByEmail(email: $email) { __typename } }",
+        "variables": {
+          "email": {
+            "template": "{{ record.email }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "team_cycles_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTeamCyclesDelete",
+        "document": "mutation LinearTeamCyclesDelete($id: String!) { teamCyclesDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "team_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTeamDelete",
+        "document": "mutation LinearTeamDelete($id: String!) { teamDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "team_key_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTeamKeyDelete",
+        "document": "mutation LinearTeamKeyDelete($id: String!) { teamKeyDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "team_unarchive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTeamUnarchive",
+        "document": "mutation LinearTeamUnarchive($id: String!) { teamUnarchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "template_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTemplateDelete",
+        "document": "mutation LinearTemplateDelete($id: String!) { templateDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "time_schedule_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTimeScheduleDelete",
+        "document": "mutation LinearTimeScheduleDelete($id: String!) { timeScheduleDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "time_schedule_refresh_integration_schedule",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTimeScheduleRefreshIntegrationSchedule",
+        "document": "mutation LinearTimeScheduleRefreshIntegrationSchedule($id: String!) { timeScheduleRefreshIntegrationSchedule(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "triage_responsibility_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearTriageResponsibilityDelete",
+        "document": "mutation LinearTriageResponsibilityDelete($id: String!) { triageResponsibilityDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "user_external_user_disconnect",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "service"
+        ],
+        "properties": {
+          "service": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearUserExternalUserDisconnect",
+        "document": "mutation LinearUserExternalUserDisconnect($service: String!) { userExternalUserDisconnect(service: $service) { __typename } }",
+        "variables": {
+          "service": {
+            "template": "{{ record.service }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "user_revoke_all_sessions",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearUserRevokeAllSessions",
+        "document": "mutation LinearUserRevokeAllSessions($id: String!) { userRevokeAllSessions(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "user_revoke_session",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id",
+          "sessionId"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sessionId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearUserRevokeSession",
+        "document": "mutation LinearUserRevokeSession($id: String!, $sessionId: String!) { userRevokeSession(id: $id, sessionId: $sessionId) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          },
+          "sessionId": {
+            "template": "{{ record.sessionId }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "user_unlink_from_identity_provider",
+      "kind": "custom",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearUserUnlinkFromIdentityProvider",
+        "document": "mutation LinearUserUnlinkFromIdentityProvider($id: String!) { userUnlinkFromIdentityProvider(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+    },
+    {
+      "name": "view_preferences_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearViewPreferencesDelete",
+        "document": "mutation LinearViewPreferencesDelete($id: String!) { viewPreferencesDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "webhook_delete",
+      "kind": "delete",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearWebhookDelete",
+        "document": "mutation LinearWebhookDelete($id: String!) { webhookDelete(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "webhook_rotate_secret",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearWebhookRotateSecret",
+        "document": "mutation LinearWebhookRotateSecret($id: String!) { webhookRotateSecret(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    },
+    {
+      "name": "workflow_state_archive",
+      "kind": "update",
+      "method": "POST",
+      "path": "",
+      "body_type": "graphql",
+      "record_schema": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "graphql": {
+        "operation_name": "LinearWorkflowStateArchive",
+        "document": "mutation LinearWorkflowStateArchive($id: String!) { workflowStateArchive(id: $id) { __typename } }",
+        "variables": {
+          "id": {
+            "template": "{{ record.id }}",
+            "type": "string"
+          }
+        }
+      },
+      "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+      "confirm": "destructive"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "slaConfigurations": [
+          {
+            "__typename": "SlaConfiguration",
+            "id": "sla_configurations_fixture_1",
+            "name": "name_fixture",
+            "conditions": "conditions_fixture",
+            "removesSla": false,
+            "sla": 1.5
+          }
+        ]
+      }
+    }
+  },
+  "read_query": {
+    "teamId": "fixture_team_id"
+  }
+}

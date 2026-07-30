@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "archived_integrations",
+  "type": "object",
+  "x-primary-key": [
+    "id"
+  ],
+  "properties": {
+    "__typename": {
+      "type": "string"
+    },
+    "id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "archivedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "codeAccess": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "enterpriseUrl": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "externalOrgId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}
