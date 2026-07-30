@@ -1737,6 +1737,63 @@
       },
       "risk": "high: uploads CRM entity schema as a bounded top-level JSON array; use only reviewed table mappings and reverse ETL approval",
       "confirm": "destructive"
+    },
+    {
+      "name": "upload_target_assignments",
+      "kind": "upsert",
+      "method": "POST",
+      "path": "/targets/{{ record.targetId }}/assignments?workspaceId={{ record.workspaceId }}&validateOnly={{ record.validateOnly }}",
+      "path_fields": [
+        "targetId",
+        "workspaceId",
+        "validateOnly"
+      ],
+      "body_type": "multipart",
+      "multipart": {
+        "max_bytes": 52428800,
+        "parts": [
+          {
+            "name": "file",
+            "type": "file",
+            "field": "assignments_file_path",
+            "content_type": "text/csv",
+            "required": true,
+            "max_bytes": 52428800
+          }
+        ]
+      },
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "targetId",
+          "workspaceId",
+          "validateOnly",
+          "assignments_file_path"
+        ],
+        "properties": {
+          "targetId": {
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$",
+            "description": "Unique Gong target identifier from GET /v2/targets."
+          },
+          "workspaceId": {
+            "type": "string",
+            "pattern": "^[0-9]{1,20}$",
+            "description": "Workspace identifier that owns the target."
+          },
+          "validateOnly": {
+            "type": "boolean",
+            "description": "When true, Gong validates the CSV without writing assignments."
+          },
+          "assignments_file_path": {
+            "type": "string",
+            "description": "Project-relative CSV file path containing target assignments (maximum 10,000 data rows per Gong docs)."
+          }
+        },
+        "additionalProperties": false
+      },
+      "risk": "high: uploads target assignment CSV data from a bounded project-local file path to Gong; use validateOnly=true for validation-only checks; file path/content are redacted in plans and require reverse ETL approval",
+      "confirm": "destructive"
     }
   ]
 }

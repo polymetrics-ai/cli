@@ -147,6 +147,13 @@
       "commands": [
         "integration-settings"
       ]
+    },
+    {
+      "id": "targets",
+      "title": "Targets",
+      "commands": [
+        "targets"
+      ]
     }
   ],
   "global_flags": [
@@ -2341,6 +2348,76 @@
       "approval": "reverse ETL plan -> preview -> approval -> execute; destructive confirmation required",
       "notes": "Write action supports schema-gated top-level array bodies for table/reverse-ETL mappings; provider-style raw JSON CLI flags remain intentionally unavailable.",
       "write": "upload_crm_entity_schema"
+    },
+    {
+      "path": "targets list",
+      "summary": "List target definitions (/v2/targets)",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "flags": [
+        {
+          "name": "workspaceId",
+          "type": "integer",
+          "summary": "Workspace identifier whose target definitions should be listed.",
+          "maps_to": "query.workspaceId"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "GET",
+          "path": "/v2/targets"
+        }
+      ],
+      "output_policy": "json_redacted",
+      "risk": "bounded Gong JSON read; response is limited to 1 MiB and secret/download/content-shaped fields are redacted",
+      "examples": [
+        "pm gong targets list --workspaceId 123 --json --max-bytes 1048576"
+      ]
+    },
+    {
+      "path": "targets upload-assignments",
+      "summary": "Upload target assignments from a bounded CSV file (/v2/targets/{targetId}/assignments)",
+      "intent": "reverse_etl",
+      "availability": "implemented",
+      "risk": "high: uploads target assignment CSV data from a bounded project-local file path; file path/content are redacted in plans",
+      "approval": "reverse ETL plan -> preview -> explicit approval -> execute; destructive confirmation required",
+      "notes": "Uses typed multipart write support with a declared CSV file part; no generic upload command is exposed. Set validateOnly=true to ask Gong to validate without writing data.",
+      "write": "upload_target_assignments",
+      "flags": [
+        {
+          "name": "target-id",
+          "type": "string",
+          "summary": "Gong target ID from the target definitions list.",
+          "maps_to": "record.targetId"
+        },
+        {
+          "name": "workspace-id",
+          "type": "string",
+          "summary": "Workspace ID that owns the target.",
+          "maps_to": "record.workspaceId"
+        },
+        {
+          "name": "validate-only",
+          "type": "boolean",
+          "summary": "Validate the CSV without writing assignments when true.",
+          "maps_to": "record.validateOnly"
+        },
+        {
+          "name": "assignments-file-path",
+          "type": "string",
+          "summary": "Project-relative target assignments CSV file path to upload.",
+          "maps_to": "record.assignments_file_path"
+        }
+      ],
+      "api_surface": [
+        {
+          "method": "POST",
+          "path": "/v2/targets/{targetId}/assignments"
+        }
+      ],
+      "examples": [
+        "pm gong targets upload-assignments --target-id 12345678901234567890 --workspace-id 123 --validate-only --assignments-file-path internal/connectors/defs/gong/fixtures/files/target_assignments.csv"
+      ]
     }
   ],
   "help_topics": [
