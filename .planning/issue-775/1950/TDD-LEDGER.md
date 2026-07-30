@@ -23,8 +23,8 @@
 |---|---|---|---|---|
 | 2026-07-30 | RED | `python3 .planning/issue-775/1950/tools/validate_surface.py --surface .planning/issue-775/1950/fixtures/red/missing-endpoints.api_surface.json --openapi .planning/issue-775/1950/evidence/openapi-doc.json` | fail: missing known endpoint(s) | FAIL exit=1; `missing official endpoint GET /v2/company-info` |
 | 2026-07-30 | NEGATIVE | duplicate/unknown-target/invalid-category/wildcard/stale fixtures | fail for each intended rule | all fixtures failed with intended rule(s); wildcard also reported missing official endpoint and extra wildcard endpoint |
-| implementation | GREEN planned | same validator against `internal/connectors/defs/lucid-eld/api_surface.json` | pass: 8/8 official operations exactly once | pending |
-| verification | REPO planned | issue verification command block | pass or documented incomplete-bundle failures | pending |
+| 2026-07-30 | GREEN | `python3 .planning/issue-775/1950/tools/validate_surface.py --surface internal/connectors/defs/lucid-eld/api_surface.json --openapi .planning/issue-775/1950/evidence/openapi-doc.json` | pass: 8/8 official operations exactly once | PASS; `8 endpoint(s) match official OpenAPI` |
+| 2026-07-30 | REPO | issue verification command block | pass or documented incomplete-bundle failures | CLI tests/vet/build/diff-check passed; conformance and boundary failed on missing `metadata.json`, deferred to #1951 |
 
 ## TDD scope note
 

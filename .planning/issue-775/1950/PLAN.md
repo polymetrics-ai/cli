@@ -62,12 +62,12 @@ Ground rule: OpenAPI JSON is wire-schema ground truth; WithTerminal names are ca
 
 ## Acceptance checklist
 
-- [ ] Full body of #1950 and parent #775 read.
-- [ ] Required repo docs and connector architecture docs read.
-- [ ] Required skills recorded in TDD ledger and handoff.
-- [ ] Public OpenAPI JSON fetched directly and reconciled.
-- [ ] Every documented operation appears once in `api_surface.json`.
-- [ ] `reviewed_at` current.
-- [ ] No generic/raw HTTP, wildcard, shell, SQL, GraphQL escape hatch.
-- [ ] No credentials, real driver/vehicle/customer data, or authenticated calls.
-- [ ] Required verification run and exact results recorded.
+- [x] Full body of #1950 and parent #775 read.
+- [x] Required repo docs and connector architecture docs read.
+- [x] Required skills recorded in TDD ledger and handoff.
+- [x] Public OpenAPI JSON fetched directly and reconciled.
+- [x] Every documented operation appears once in `api_surface.json`.
+- [x] `reviewed_at` current.
+- [x] No generic/raw HTTP, wildcard, shell, SQL, GraphQL escape hatch.
+- [x] No credentials, real driver/vehicle/customer data, or authenticated calls.
+- [x] Required verification run and exact results recorded.
