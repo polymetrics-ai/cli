@@ -8365,8 +8365,8 @@
         }
       ],
       "risk": "high",
-      "approval": "plan -> preview -> explicit approval -> execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "approval": "plan -> preview -> explicit approval -> execute; typed destructive confirmation required",
+      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations show_ticket_metrics_by_ticket",
@@ -9487,8 +9487,8 @@
         }
       ],
       "risk": "high",
-      "approval": "plan -> preview -> explicit approval -> execute",
-      "notes": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute."
+      "approval": "plan -> preview -> explicit approval -> execute; typed destructive confirmation required",
+      "notes": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute."
     },
     {
       "path": "operations list_user_organization_memberships",

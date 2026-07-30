@@ -5899,11 +5899,11 @@
       "method": "POST",
       "path": "/api/v2/tickets/{ticket_id}/merge",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MergeTicketsIntoTargetTicket; summary=Merge Tickets into Target Ticket; tags=Tickets"
       }
@@ -6820,11 +6820,11 @@
       "method": "PUT",
       "path": "/api/v2/users/{user_id}/merge",
       "operation": {
-        "model": "admin_reverse_etl",
+        "model": "destructive_action",
         "status": "blocked",
         "risk": "high",
         "blocked_by_default": true,
-        "reason": "Blocked by default until a connector-local typed reverse-ETL action implements plan, preview, explicit approval, and execute.",
+        "reason": "In scope, but blocked by default until represented by a typed action with confirm:\"destructive\", idempotency notes where applicable, and plan/preview/explicit approval/execute.",
         "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
         "notes": "operationId=MergeEndUsers; summary=Merge End Users; tags=Users"
       }

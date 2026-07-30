@@ -7158,9 +7158,9 @@
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
       "output_policy": "write_result_redacted",
-      "mutation_class": "create",
+      "mutation_class": "destructive",
       "rest": {
         "method": "POST",
         "path": "/api/v2/tickets/{ticket_id}/merge",
@@ -7171,7 +7171,8 @@
           "title": "TicketMergeInput",
           "additionalProperties": true
         }
-      }
+      },
+      "destructive": true
     },
     {
       "id": "zendesk-support.show_ticket_metrics_by_ticket",
@@ -8304,9 +8305,9 @@
       "description": "Connector-owned metadata for an official Zendesk Support operation. It is blocked by default and does not enable a raw API escape hatch.",
       "source_url": "https://developer.zendesk.com/zendesk/oas.yaml",
       "risk": "high",
-      "approval": "reverse ETL plan, preview, explicit approval, execute",
+      "approval": "reverse ETL plan, preview, explicit approval, execute; typed destructive confirmation required",
       "output_policy": "write_result_redacted",
-      "mutation_class": "update",
+      "mutation_class": "destructive",
       "rest": {
         "method": "PUT",
         "path": "/api/v2/users/{user_id}/merge",
@@ -8317,7 +8318,8 @@
           "title": "UserRequest",
           "additionalProperties": true
         }
-      }
+      },
+      "destructive": true
     },
     {
       "id": "zendesk-support.list_user_organization_memberships",
