@@ -1,0 +1,33 @@
+{
+  "issue": 1950,
+  "parent_issue": 775,
+  "phase": "issue-775-1950-lucid-eld-atomic",
+  "branch": "feat/1950-lucid-eld-operation-ledger",
+  "pr": 3166,
+  "gsd": {
+    "mode": "manual_fallback",
+    "doctor_passed": true,
+    "command_attempted": "scripts/gsd prompt programming-loop init --phase issue-775-1950-lucid-eld-atomic --dry-run",
+    "fallback_reason": "scripts/gsd: unknown GSD command: programming-loop"
+  },
+  "verificationPassed": false,
+  "terminal": false,
+  "verificationNote": "pre-production red evidence captured: gsd-workflow evidence path not recognized and connector-boundary fails on missing lucid-eld metadata.json; green verification pending atomic bundle completion",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan-relocation",
+      "decision": "local_critical_path",
+      "reason": "isolated worker owns one child issue/branch/cwd; recursive subagents are blocked"
+    },
+    {
+      "cycle": "tdd-red",
+      "decision": "local_critical_path",
+      "reason": "current branch already red from incomplete connector bundle and unrecognized GSD evidence path; red commands captured before production edits"
+    },
+    {
+      "cycle": "execute-atomic-bundle",
+      "decision": "local_critical_path",
+      "reason": "one connector-def directory is the only production write scope; no independent subagent lane exists"
+    }
+  ]
+}

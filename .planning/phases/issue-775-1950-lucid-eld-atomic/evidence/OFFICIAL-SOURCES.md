@@ -5,8 +5,8 @@ Fetched at: 2026-07-30T01:56:20.128346+00:00
 ## Sources
 - openapi: https://api.drivehos.app/partner/swagger/doc.json status=200 content_type=application/json bytes=19882 sha256=1b3756f4c69c9133e24754a856d2fe9ec2b08768edd5dec25b899f564ddb7ec4
 - swagger_ui: https://api.drivehos.app/partner/swagger status=200 content_type=text/html bytes=3609 sha256=f5f4f0a04d06a641aaafd89d531bbaf22c7ae91c338e6c611cfc6cec69bfe060
-- withterminal: https://docs.withterminal.com/providers/tsp/lucid-eld status=200 content_type=text/html; charset=utf-8 bytes=424597 sha256=bb31d3cf65ae2fe7bf33a3b7591f6f258a56a487cf81ac1d47f44f8ad07ec5af
-- withterminal_markdown: https://docs.withterminal.com/providers/tsp/lucid-eld.md status=200 content_type=text/markdown; charset=utf-8 bytes=13495 sha256=df18b088f94701c22763e354b624cb45aec46327d0100a2448ae385e611b9821
+- withterminal: https://docs.withterminal.com/providers/tsp/lucid-eld status=200 content_type=text/html; charset=utf-8 bytes=424597 sha256=bb31d3cf65ae2fe7bf33a3b7591f6f258a56a487cf81ac1d47f44f8ad07ec5af (summary only retained; full HTML/snippet dump trimmed)
+- withterminal_markdown: https://docs.withterminal.com/providers/tsp/lucid-eld.md status=200 content_type=text/markdown; charset=utf-8 bytes=13495 sha256=df18b088f94701c22763e354b624cb45aec46327d0100a2448ae385e611b9821 (summary only retained; full markdown field tables are not wire-schema evidence)
 
 ## OpenAPI inventory
 
