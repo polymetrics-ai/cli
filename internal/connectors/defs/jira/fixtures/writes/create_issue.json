@@ -1,0 +1,32 @@
+{
+  "record": {
+    "fields": {
+      "project": {
+        "key": "FIX"
+      },
+      "summary": "Fixture issue",
+      "issuetype": {
+        "name": "Task"
+      }
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/rest/api/3/issue",
+    "body": {
+      "fields": {
+        "project": {
+          "key": "FIX"
+        },
+        "summary": "Fixture issue",
+        "issuetype": {
+          "name": "Task"
+        }
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {}
+  }
+}

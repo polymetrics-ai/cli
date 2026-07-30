@@ -68279,7 +68279,7 @@
   {
     "name": "jira",
     "display_name": "Jira",
-    "description": "Reads Jira issues, projects, and users through the Jira Cloud REST API v3 using HTTP Basic auth (email + API token). Read-only.",
+    "description": "Reads Jira Cloud issues, projects, and users; exposes bounded JSON direct reads; and declares approval-gated reverse ETL actions from the official Jira Cloud REST API v3 ledger (269 executable write actions, 616 operations accounted).",
     "integration_type": "api",
     "docs_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
     "release_stage": "ga",
@@ -68287,7 +68287,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -68352,9 +68352,1996 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "set_banner",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/announcementBanner",
+        "risk": "Mutates Jira data/configuration for operation `setBanner`."
+      },
+      {
+        "name": "update_multiple_custom_field_values",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/app/field/value",
+        "risk": "Mutates Jira data/configuration for operation `updateMultipleCustomFieldValues`."
+      },
+      {
+        "name": "update_custom_field_configuration",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/app/field/{{ record.path_fieldIdOrKey }}/context/configuration",
+        "risk": "Mutates Jira data/configuration for operation `updateCustomFieldConfiguration`."
+      },
+      {
+        "name": "update_custom_field_value",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/app/field/{{ record.path_fieldIdOrKey }}/value",
+        "risk": "Mutates Jira data/configuration for operation `updateCustomFieldValue`."
+      },
+      {
+        "name": "set_application_property",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/application-properties/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `setApplicationProperty`."
+      },
+      {
+        "name": "remove_attachment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/attachment/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeAttachment`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "submit_bulk_delete",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/delete",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `submitBulkDelete`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "submit_bulk_edit",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/fields",
+        "risk": "Mutates Jira data/configuration for operation `submitBulkEdit`."
+      },
+      {
+        "name": "submit_bulk_move",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/move",
+        "risk": "Mutates Jira data/configuration for operation `submitBulkMove`."
+      },
+      {
+        "name": "submit_bulk_transition",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/transition",
+        "risk": "Mutates Jira data/configuration for operation `submitBulkTransition`."
+      },
+      {
+        "name": "submit_bulk_unwatch",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/unwatch",
+        "risk": "Mutates Jira data/configuration for operation `submitBulkUnwatch`."
+      },
+      {
+        "name": "submit_bulk_watch",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/bulk/issues/watch",
+        "risk": "Mutates Jira data/configuration for operation `submitBulkWatch`."
+      },
+      {
+        "name": "delete_comment_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/comment/{{ record.path_commentId }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteCommentProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_component",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/component",
+        "risk": "Mutates Jira data/configuration for operation `createComponent`."
+      },
+      {
+        "name": "delete_component",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/component/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteComponent`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_component",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/component/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateComponent`."
+      },
+      {
+        "name": "create_field_association_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/config/fieldschemes",
+        "risk": "Mutates Jira data/configuration for operation `createFieldAssociationScheme`."
+      },
+      {
+        "name": "delete_field_association_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/config/fieldschemes/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteFieldAssociationScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_field_association_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/config/fieldschemes/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateFieldAssociationScheme`."
+      },
+      {
+        "name": "clone_field_association_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/config/fieldschemes/{{ record.path_id }}/clone",
+        "risk": "Mutates Jira data/configuration for operation `cloneFieldAssociationScheme`."
+      },
+      {
+        "name": "select_time_tracking_implementation",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/configuration/timetracking",
+        "risk": "Mutates Jira data/configuration for operation `selectTimeTrackingImplementation`."
+      },
+      {
+        "name": "set_shared_time_tracking_configuration",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/configuration/timetracking/options",
+        "risk": "Mutates Jira data/configuration for operation `setSharedTimeTrackingConfiguration`."
+      },
+      {
+        "name": "create_dashboard",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/dashboard",
+        "risk": "Mutates Jira data/configuration for operation `createDashboard`."
+      },
+      {
+        "name": "bulk_edit_dashboards",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/dashboard/bulk/edit",
+        "risk": "Mutates Jira data/configuration for operation `bulkEditDashboards`."
+      },
+      {
+        "name": "add_gadget",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/dashboard/{{ record.path_dashboardId }}/gadget",
+        "risk": "Mutates Jira data/configuration for operation `addGadget`."
+      },
+      {
+        "name": "remove_gadget",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/dashboard/{{ record.path_dashboardId }}/gadget/{{ record.path_gadgetId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeGadget`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_gadget",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/dashboard/{{ record.path_dashboardId }}/gadget/{{ record.path_gadgetId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateGadget`."
+      },
+      {
+        "name": "delete_dashboard_item_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/dashboard/{{ record.path_dashboardId }}/items/{{ record.path_itemId }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDashboardItemProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_dashboard",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/dashboard/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDashboard`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_dashboard",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/dashboard/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateDashboard`."
+      },
+      {
+        "name": "copy_dashboard",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/dashboard/{{ record.path_id }}/copy",
+        "risk": "Mutates Jira data/configuration for operation `copyDashboard`."
+      },
+      {
+        "name": "create_custom_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/field",
+        "risk": "Mutates Jira data/configuration for operation `createCustomField`."
+      },
+      {
+        "name": "remove_associations",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/association",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeAssociations`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_associations",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/field/association",
+        "risk": "Mutates Jira data/configuration for operation `createAssociations`."
+      },
+      {
+        "name": "update_custom_field",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateCustomField`."
+      },
+      {
+        "name": "create_custom_field_context",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context",
+        "risk": "Mutates Jira data/configuration for operation `createCustomFieldContext`."
+      },
+      {
+        "name": "delete_custom_field_context",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteCustomFieldContext`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_custom_field_context",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateCustomFieldContext`."
+      },
+      {
+        "name": "add_issue_types_to_context",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/issuetype",
+        "risk": "Mutates Jira data/configuration for operation `addIssueTypesToContext`."
+      },
+      {
+        "name": "remove_issue_types_from_context",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/issuetype/remove",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `removeIssueTypesFromContext`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_custom_field_option",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/option",
+        "risk": "Mutates Jira data/configuration for operation `createCustomFieldOption`."
+      },
+      {
+        "name": "update_custom_field_option",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/option",
+        "risk": "Mutates Jira data/configuration for operation `updateCustomFieldOption`."
+      },
+      {
+        "name": "reorder_custom_field_options",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/option/move",
+        "risk": "Mutates Jira data/configuration for operation `reorderCustomFieldOptions`."
+      },
+      {
+        "name": "delete_custom_field_option",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/option/{{ record.path_optionId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteCustomFieldOption`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "replace_custom_field_option",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/option/{{ record.path_optionId }}/issue",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `replaceCustomFieldOption`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "assign_projects_to_custom_field_context",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/project",
+        "risk": "Mutates Jira data/configuration for operation `assignProjectsToCustomFieldContext`."
+      },
+      {
+        "name": "remove_custom_field_context_from_projects",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_fieldId }}/context/{{ record.path_contextId }}/project/remove",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `removeCustomFieldContextFromProjects`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issue_field_option",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_fieldKey }}/option",
+        "risk": "Mutates Jira data/configuration for operation `createIssueFieldOption`."
+      },
+      {
+        "name": "delete_issue_field_option",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_fieldKey }}/option/{{ record.path_optionId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueFieldOption`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_issue_field_option",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/field/{{ record.path_fieldKey }}/option/{{ record.path_optionId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueFieldOption`."
+      },
+      {
+        "name": "replace_issue_field_option",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_fieldKey }}/option/{{ record.path_optionId }}/issue",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `replaceIssueFieldOption`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_custom_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/field/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteCustomField`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore_custom_field",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_id }}/restore",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `restoreCustomField`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "trash_custom_field",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/field/{{ record.path_id }}/trash",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `trashCustomField`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_filter",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/filter",
+        "risk": "Mutates Jira data/configuration for operation `createFilter`."
+      },
+      {
+        "name": "set_default_share_scope",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/filter/defaultShareScope",
+        "risk": "Mutates Jira data/configuration for operation `setDefaultShareScope`."
+      },
+      {
+        "name": "delete_filter",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/filter/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteFilter`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_filter",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/filter/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateFilter`."
+      },
+      {
+        "name": "reset_columns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/columns",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `resetColumns`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_columns",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/columns",
+        "risk": "Mutates Jira data/configuration for operation `setColumns`."
+      },
+      {
+        "name": "delete_favourite_for_filter",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/favourite",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteFavouriteForFilter`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_favourite_for_filter",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/favourite",
+        "risk": "Mutates Jira data/configuration for operation `setFavouriteForFilter`."
+      },
+      {
+        "name": "change_filter_owner",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/owner",
+        "risk": "Mutates Jira data/configuration for operation `changeFilterOwner`."
+      },
+      {
+        "name": "add_share_permission",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/permission",
+        "risk": "Mutates Jira data/configuration for operation `addSharePermission`."
+      },
+      {
+        "name": "delete_share_permission",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/filter/{{ record.path_id }}/permission/{{ record.path_permissionId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteSharePermission`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "bulk_pin_unpin_projects_async",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/forge/panel/action/bulk/async",
+        "risk": "Mutates Jira data/configuration for operation `bulkPinUnpinProjectsAsync`."
+      },
+      {
+        "name": "remove_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/group",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeGroup`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/group",
+        "risk": "Mutates Jira data/configuration for operation `createGroup`."
+      },
+      {
+        "name": "remove_user_from_group",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/group/user?accountId={{ record.query_accountId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeUserFromGroup`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_user_to_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/group/user",
+        "risk": "Mutates Jira data/configuration for operation `addUserToGroup`."
+      },
+      {
+        "name": "create_issue",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue",
+        "risk": "Mutates Jira data/configuration for operation `createIssue`."
+      },
+      {
+        "name": "archive_issues_async",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/issue/archive",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssuesAsync`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_issues",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/archive",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssues`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issues",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue/bulk",
+        "risk": "Mutates Jira data/configuration for operation `createIssues`."
+      },
+      {
+        "name": "bulk_fetch_issues",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/bulkfetch",
+        "risk": "Mutates Jira data/configuration for operation `bulkFetchIssues`."
+      },
+      {
+        "name": "bulk_set_issues_properties_list",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/properties",
+        "risk": "Mutates Jira data/configuration for operation `bulkSetIssuesPropertiesList`."
+      },
+      {
+        "name": "bulk_set_issue_properties_by_issue",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/properties/multi",
+        "risk": "Mutates Jira data/configuration for operation `bulkSetIssuePropertiesByIssue`."
+      },
+      {
+        "name": "bulk_delete_issue_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteIssueProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "bulk_set_issue_property",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/properties/{{ record.path_propertyKey }}",
+        "risk": "Mutates Jira data/configuration for operation `bulkSetIssueProperty`."
+      },
+      {
+        "name": "unarchive_issues",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/unarchive",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `unarchiveIssues`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_issue",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssue`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "edit_issue",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}",
+        "risk": "Mutates Jira data/configuration for operation `editIssue`."
+      },
+      {
+        "name": "assign_issue",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/assignee",
+        "risk": "Mutates Jira data/configuration for operation `assignIssue`."
+      },
+      {
+        "name": "add_attachment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/attachments",
+        "risk": "Mutates Jira data/configuration for operation `addAttachment`."
+      },
+      {
+        "name": "add_comment",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/comment",
+        "risk": "Mutates Jira data/configuration for operation `addComment`."
+      },
+      {
+        "name": "delete_comment",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/comment/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteComment`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_comment",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/comment/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateComment`."
+      },
+      {
+        "name": "notify",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/notify",
+        "risk": "Mutates Jira data/configuration for operation `notify`."
+      },
+      {
+        "name": "delete_issue_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_remote_issue_link_by_global_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/remotelink?globalId={{ record.query_globalId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteRemoteIssueLinkByGlobalId`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_or_update_remote_issue_link",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/remotelink",
+        "risk": "Mutates Jira data/configuration for operation `createOrUpdateRemoteIssueLink`."
+      },
+      {
+        "name": "delete_remote_issue_link_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/remotelink/{{ record.path_linkId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteRemoteIssueLinkById`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_remote_issue_link",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/remotelink/{{ record.path_linkId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateRemoteIssueLink`."
+      },
+      {
+        "name": "do_transition",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/transitions",
+        "risk": "Mutates Jira data/configuration for operation `doTransition`."
+      },
+      {
+        "name": "remove_vote",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/votes",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeVote`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_vote",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/votes",
+        "risk": "Mutates Jira data/configuration for operation `addVote`."
+      },
+      {
+        "name": "remove_watcher",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/watchers",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeWatcher`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "bulk_delete_worklogs",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteWorklogs`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_worklog",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog",
+        "risk": "Mutates Jira data/configuration for operation `addWorklog`."
+      },
+      {
+        "name": "bulk_move_worklogs",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog/move",
+        "risk": "Mutates Jira data/configuration for operation `bulkMoveWorklogs`."
+      },
+      {
+        "name": "delete_worklog",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorklog`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_worklog",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateWorklog`."
+      },
+      {
+        "name": "delete_worklog_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog/{{ record.path_worklogId }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorklogProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "link_issues",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issueLink",
+        "risk": "Mutates Jira data/configuration for operation `linkIssues`."
+      },
+      {
+        "name": "delete_issue_link",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issueLink/{{ record.path_linkId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueLink`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issue_link_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issueLinkType",
+        "risk": "Mutates Jira data/configuration for operation `createIssueLinkType`."
+      },
+      {
+        "name": "delete_issue_link_type",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issueLinkType/{{ record.path_issueLinkTypeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueLinkType`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_issue_link_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issueLinkType/{{ record.path_issueLinkTypeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueLinkType`."
+      },
+      {
+        "name": "create_issue_security_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issuesecurityschemes",
+        "risk": "Mutates Jira data/configuration for operation `createIssueSecurityScheme`."
+      },
+      {
+        "name": "set_default_levels",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/level/default",
+        "risk": "Mutates Jira data/configuration for operation `setDefaultLevels`."
+      },
+      {
+        "name": "associate_schemes_to_projects",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/project",
+        "risk": "Mutates Jira data/configuration for operation `associateSchemesToProjects`."
+      },
+      {
+        "name": "update_issue_security_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueSecurityScheme`."
+      },
+      {
+        "name": "delete_security_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteSecurityScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_security_level",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}/level",
+        "risk": "Mutates Jira data/configuration for operation `addSecurityLevel`."
+      },
+      {
+        "name": "remove_level",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}/level/{{ record.path_levelId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeLevel`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_security_level",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}/level/{{ record.path_levelId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateSecurityLevel`."
+      },
+      {
+        "name": "add_security_level_members",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}/level/{{ record.path_levelId }}/member",
+        "risk": "Mutates Jira data/configuration for operation `addSecurityLevelMembers`."
+      },
+      {
+        "name": "remove_member_from_security_level",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuesecurityschemes/{{ record.path_schemeId }}/level/{{ record.path_levelId }}/member/{{ record.path_memberId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeMemberFromSecurityLevel`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issue_type",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issuetype",
+        "risk": "Mutates Jira data/configuration for operation `createIssueType`."
+      },
+      {
+        "name": "delete_issue_type",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuetype/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueType`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_issue_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetype/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueType`."
+      },
+      {
+        "name": "delete_issue_type_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuetype/{{ record.path_issueTypeId }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueTypeProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issue_type_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issuetypescheme",
+        "risk": "Mutates Jira data/configuration for operation `createIssueTypeScheme`."
+      },
+      {
+        "name": "assign_issue_type_scheme_to_project",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescheme/project",
+        "risk": "Mutates Jira data/configuration for operation `assignIssueTypeSchemeToProject`."
+      },
+      {
+        "name": "delete_issue_type_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuetypescheme/{{ record.path_issueTypeSchemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueTypeScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_issue_type_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescheme/{{ record.path_issueTypeSchemeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScheme`."
+      },
+      {
+        "name": "add_issue_types_to_issue_type_scheme",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescheme/{{ record.path_issueTypeSchemeId }}/issuetype",
+        "risk": "Mutates Jira data/configuration for operation `addIssueTypesToIssueTypeScheme`."
+      },
+      {
+        "name": "reorder_issue_types_in_issue_type_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescheme/{{ record.path_issueTypeSchemeId }}/issuetype/move",
+        "risk": "Mutates Jira data/configuration for operation `reorderIssueTypesInIssueTypeScheme`."
+      },
+      {
+        "name": "remove_issue_type_from_issue_type_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuetypescheme/{{ record.path_issueTypeSchemeId }}/issuetype/{{ record.path_issueTypeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeIssueTypeFromIssueTypeScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_issue_type_screen_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/issuetypescreenscheme",
+        "risk": "Mutates Jira data/configuration for operation `createIssueTypeScreenScheme`."
+      },
+      {
+        "name": "assign_issue_type_screen_scheme_to_project",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescreenscheme/project",
+        "risk": "Mutates Jira data/configuration for operation `assignIssueTypeScreenSchemeToProject`."
+      },
+      {
+        "name": "delete_issue_type_screen_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/issuetypescreenscheme/{{ record.path_issueTypeScreenSchemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueTypeScreenScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_issue_type_screen_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescreenscheme/{{ record.path_issueTypeScreenSchemeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScreenScheme`."
+      },
+      {
+        "name": "append_mappings_for_issue_type_screen_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescreenscheme/{{ record.path_issueTypeScreenSchemeId }}/mapping",
+        "risk": "Mutates Jira data/configuration for operation `appendMappingsForIssueTypeScreenScheme`."
+      },
+      {
+        "name": "update_default_screen_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/issuetypescreenscheme/{{ record.path_issueTypeScreenSchemeId }}/mapping/default",
+        "risk": "Mutates Jira data/configuration for operation `updateDefaultScreenScheme`."
+      },
+      {
+        "name": "remove_mappings_from_issue_type_screen_scheme",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/issuetypescreenscheme/{{ record.path_issueTypeScreenSchemeId }}/mapping/remove",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `removeMappingsFromIssueTypeScreenScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_precomputations",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/jql/function/computation",
+        "risk": "Mutates Jira data/configuration for operation `updatePrecomputations`."
+      },
+      {
+        "name": "remove_preference",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/mypreferences?key={{ record.query_key }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removePreference`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_notification_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/notificationscheme",
+        "risk": "Mutates Jira data/configuration for operation `createNotificationScheme`."
+      },
+      {
+        "name": "update_notification_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/notificationscheme/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateNotificationScheme`."
+      },
+      {
+        "name": "add_notifications",
+        "kind": "create",
+        "method": "PUT",
+        "path": "/rest/api/3/notificationscheme/{{ record.path_id }}/notification",
+        "risk": "Mutates Jira data/configuration for operation `addNotifications`."
+      },
+      {
+        "name": "delete_notification_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/notificationscheme/{{ record.path_notificationSchemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteNotificationScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_notification_from_notification_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/notificationscheme/{{ record.path_notificationSchemeId }}/notification/{{ record.path_notificationId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeNotificationFromNotificationScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_permission_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/permissionscheme",
+        "risk": "Mutates Jira data/configuration for operation `createPermissionScheme`."
+      },
+      {
+        "name": "delete_permission_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/permissionscheme/{{ record.path_schemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePermissionScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_permission_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/permissionscheme/{{ record.path_schemeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updatePermissionScheme`."
+      },
+      {
+        "name": "create_permission_grant",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/permissionscheme/{{ record.path_schemeId }}/permission",
+        "risk": "Mutates Jira data/configuration for operation `createPermissionGrant`."
+      },
+      {
+        "name": "delete_permission_scheme_entity",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/permissionscheme/{{ record.path_schemeId }}/permission/{{ record.path_permissionId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePermissionSchemeEntity`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_plan",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/plans/plan",
+        "risk": "Mutates Jira data/configuration for operation `createPlan`."
+      },
+      {
+        "name": "archive_plan",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/archive",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `archivePlan`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "duplicate_plan",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/duplicate",
+        "risk": "Mutates Jira data/configuration for operation `duplicatePlan`."
+      },
+      {
+        "name": "add_atlassian_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/atlassian",
+        "risk": "Mutates Jira data/configuration for operation `addAtlassianTeam`."
+      },
+      {
+        "name": "remove_atlassian_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/atlassian/{{ record.path_atlassianTeamId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeAtlassianTeam`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_plan_only_team",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/planonly",
+        "risk": "Mutates Jira data/configuration for operation `createPlanOnlyTeam`."
+      },
+      {
+        "name": "delete_plan_only_team",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/planonly/{{ record.path_planOnlyTeamId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePlanOnlyTeam`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "trash_plan",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/trash",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `trashPlan`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_priority",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/priority",
+        "risk": "Mutates Jira data/configuration for operation `createPriority`."
+      },
+      {
+        "name": "set_default_priority",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/priority/default",
+        "risk": "Mutates Jira data/configuration for operation `setDefaultPriority`."
+      },
+      {
+        "name": "move_priorities",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/priority/move",
+        "risk": "Mutates Jira data/configuration for operation `movePriorities`."
+      },
+      {
+        "name": "delete_priority",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/priority/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePriority`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_priority",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/priority/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updatePriority`."
+      },
+      {
+        "name": "create_priority_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/priorityscheme",
+        "risk": "Mutates Jira data/configuration for operation `createPriorityScheme`."
+      },
+      {
+        "name": "delete_priority_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/priorityscheme/{{ record.path_schemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePriorityScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_priority_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/priorityscheme/{{ record.path_schemeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updatePriorityScheme`."
+      },
+      {
+        "name": "create_project",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/project",
+        "risk": "Mutates Jira data/configuration for operation `createProject`."
+      },
+      {
+        "name": "create_project_with_custom_template",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/project-template",
+        "risk": "Mutates Jira data/configuration for operation `createProjectWithCustomTemplate`."
+      },
+      {
+        "name": "edit_template",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project-template/edit-template",
+        "risk": "Mutates Jira data/configuration for operation `editTemplate`."
+      },
+      {
+        "name": "remove_template",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project-template/remove-template?templateKey={{ record.query_templateKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeTemplate`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "save_template",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/project-template/save-template",
+        "risk": "Mutates Jira data/configuration for operation `saveTemplate`."
+      },
+      {
+        "name": "delete_project",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProject`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_project",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}",
+        "risk": "Mutates Jira data/configuration for operation `updateProject`."
+      },
+      {
+        "name": "archive_project",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/archive",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveProject`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_project_avatar",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/avatar",
+        "risk": "Mutates Jira data/configuration for operation `updateProjectAvatar`."
+      },
+      {
+        "name": "delete_project_avatar",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/avatar/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProjectAvatar`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_default_project_classification",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/classification-level/default",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeDefaultProjectClassification`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_default_project_classification",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/classification-level/default",
+        "risk": "Mutates Jira data/configuration for operation `updateDefaultProjectClassification`."
+      },
+      {
+        "name": "delete_project_asynchronously",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/delete",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `deleteProjectAsynchronously`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "toggle_feature_for_project",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/features/{{ record.path_featureKey }}",
+        "risk": "Mutates Jira data/configuration for operation `toggleFeatureForProject`."
+      },
+      {
+        "name": "delete_project_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProjectProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "restore",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/restore",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `restore`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_actor",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/role/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteActor`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_actor_users",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/role/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `addActorUsers`."
+      },
+      {
+        "name": "set_actors",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/role/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `setActors`."
+      },
+      {
+        "name": "update_project_email",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectId }}/email",
+        "risk": "Mutates Jira data/configuration for operation `updateProjectEmail`."
+      },
+      {
+        "name": "assign_permission_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/project/{{ record.path_projectKeyOrId }}/permissionscheme",
+        "risk": "Mutates Jira data/configuration for operation `assignPermissionScheme`."
+      },
+      {
+        "name": "create_project_category",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/projectCategory",
+        "risk": "Mutates Jira data/configuration for operation `createProjectCategory`."
+      },
+      {
+        "name": "remove_project_category",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/projectCategory/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeProjectCategory`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_project_category",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/projectCategory/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateProjectCategory`."
+      },
+      {
+        "name": "redact",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/redact",
+        "risk": "Mutates Jira data/configuration for operation `redact`."
+      },
+      {
+        "name": "create_resolution",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/resolution",
+        "risk": "Mutates Jira data/configuration for operation `createResolution`."
+      },
+      {
+        "name": "set_default_resolution",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/resolution/default",
+        "risk": "Mutates Jira data/configuration for operation `setDefaultResolution`."
+      },
+      {
+        "name": "move_resolutions",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/resolution/move",
+        "risk": "Mutates Jira data/configuration for operation `moveResolutions`."
+      },
+      {
+        "name": "delete_resolution",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/resolution/{{ record.path_id }}?replaceWith={{ record.query_replaceWith }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteResolution`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_resolution",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/resolution/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateResolution`."
+      },
+      {
+        "name": "create_project_role",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/role",
+        "risk": "Mutates Jira data/configuration for operation `createProjectRole`."
+      },
+      {
+        "name": "delete_project_role",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/role/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProjectRole`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "partial_update_project_role",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/role/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `partialUpdateProjectRole`."
+      },
+      {
+        "name": "fully_update_project_role",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/role/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `fullyUpdateProjectRole`."
+      },
+      {
+        "name": "delete_project_role_actors_from_role",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/role/{{ record.path_id }}/actors",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProjectRoleActorsFromRole`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_project_role_actors_to_role",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/role/{{ record.path_id }}/actors",
+        "risk": "Mutates Jira data/configuration for operation `addProjectRoleActorsToRole`."
+      },
+      {
+        "name": "create_screen",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/screens",
+        "risk": "Mutates Jira data/configuration for operation `createScreen`."
+      },
+      {
+        "name": "add_field_to_default_screen",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/screens/addToDefault/{{ record.path_fieldId }}",
+        "risk": "Mutates Jira data/configuration for operation `addFieldToDefaultScreen`."
+      },
+      {
+        "name": "delete_screen",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteScreen`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_screen",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateScreen`."
+      },
+      {
+        "name": "add_screen_tab",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs",
+        "risk": "Mutates Jira data/configuration for operation `addScreenTab`."
+      },
+      {
+        "name": "delete_screen_tab",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteScreenTab`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "rename_screen_tab",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}",
+        "risk": "Mutates Jira data/configuration for operation `renameScreenTab`."
+      },
+      {
+        "name": "add_screen_tab_field",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}/fields",
+        "risk": "Mutates Jira data/configuration for operation `addScreenTabField`."
+      },
+      {
+        "name": "remove_screen_tab_field",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}/fields/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeScreenTabField`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "move_screen_tab_field",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}/fields/{{ record.path_id }}/move",
+        "risk": "Mutates Jira data/configuration for operation `moveScreenTabField`."
+      },
+      {
+        "name": "move_screen_tab",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/screens/{{ record.path_screenId }}/tabs/{{ record.path_tabId }}/move/{{ record.path_pos }}",
+        "risk": "Mutates Jira data/configuration for operation `moveScreenTab`."
+      },
+      {
+        "name": "create_screen_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/screenscheme",
+        "risk": "Mutates Jira data/configuration for operation `createScreenScheme`."
+      },
+      {
+        "name": "delete_screen_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/screenscheme/{{ record.path_screenSchemeId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteScreenScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_screen_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/screenscheme/{{ record.path_screenSchemeId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateScreenScheme`."
+      },
+      {
+        "name": "delete_statuses_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/statuses?id={{ record.query_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteStatusesById`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_statuses",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/statuses",
+        "risk": "Mutates Jira data/configuration for operation `createStatuses`."
+      },
+      {
+        "name": "update_statuses",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/statuses",
+        "risk": "Mutates Jira data/configuration for operation `updateStatuses`."
+      },
+      {
+        "name": "cancel_task",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/task/{{ record.path_taskId }}/cancel",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `cancelTask`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_ui_modification",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/uiModifications",
+        "risk": "Mutates Jira data/configuration for operation `createUiModification`."
+      },
+      {
+        "name": "delete_ui_modification",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/uiModifications/{{ record.path_uiModificationId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteUiModification`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_ui_modification",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/uiModifications/{{ record.path_uiModificationId }}",
+        "risk": "Mutates Jira data/configuration for operation `updateUiModification`."
+      },
+      {
+        "name": "delete_avatar",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/universal_avatar/type/{{ record.path_type }}/owner/{{ record.path_owningObjectId }}/avatar/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteAvatar`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_user",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/user?accountId={{ record.query_accountId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `removeUser`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_user",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/user",
+        "risk": "Mutates Jira data/configuration for operation `createUser`."
+      },
+      {
+        "name": "reset_user_columns",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/user/columns",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `resetUserColumns`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_user_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/user/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteUserProperty`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_version",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/version",
+        "risk": "Mutates Jira data/configuration for operation `createVersion`."
+      },
+      {
+        "name": "update_version",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/version/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateVersion`."
+      },
+      {
+        "name": "merge_versions",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/version/{{ record.path_id }}/mergeto/{{ record.path_moveIssuesTo }}",
+        "risk": "Mutates Jira data/configuration for operation `mergeVersions`."
+      },
+      {
+        "name": "move_version",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/version/{{ record.path_id }}/move",
+        "risk": "Mutates Jira data/configuration for operation `moveVersion`."
+      },
+      {
+        "name": "create_related_work",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/version/{{ record.path_id }}/relatedwork",
+        "risk": "Mutates Jira data/configuration for operation `createRelatedWork`."
+      },
+      {
+        "name": "update_related_work",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/version/{{ record.path_id }}/relatedwork",
+        "risk": "Mutates Jira data/configuration for operation `updateRelatedWork`."
+      },
+      {
+        "name": "delete_and_replace_version",
+        "kind": "custom",
+        "method": "POST",
+        "path": "/rest/api/3/version/{{ record.path_id }}/removeAndSwap",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `deleteAndReplaceVersion`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_related_work",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/version/{{ record.path_versionId }}/relatedwork/{{ record.path_relatedWorkId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteRelatedWork`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook_by_id",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/webhook",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWebhookById`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "register_dynamic_webhooks",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/webhook",
+        "risk": "Mutates Jira data/configuration for operation `registerDynamicWebhooks`."
+      },
+      {
+        "name": "refresh_webhooks",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/webhook/refresh",
+        "risk": "Mutates Jira data/configuration for operation `refreshWebhooks`."
+      },
+      {
+        "name": "update_workflow_transition_rule_configurations",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflow/rule/config",
+        "risk": "Mutates Jira data/configuration for operation `updateWorkflowTransitionRuleConfigurations`."
+      },
+      {
+        "name": "delete_workflow_transition_rule_configurations",
+        "kind": "custom",
+        "method": "PUT",
+        "path": "/rest/api/3/workflow/rule/config/delete",
+        "risk": "Mutates Jira data/configuration with destructive semantics for operation `deleteWorkflowTransitionRuleConfigurations`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_inactive_workflow",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflow/{{ record.path_entityId }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteInactiveWorkflow`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_workflows",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/workflows/create",
+        "risk": "Mutates Jira data/configuration for operation `createWorkflows`."
+      },
+      {
+        "name": "update_workflows",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/workflows/update",
+        "risk": "Mutates Jira data/configuration for operation `updateWorkflows`."
+      },
+      {
+        "name": "create_workflow_scheme",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme",
+        "risk": "Mutates Jira data/configuration for operation `createWorkflowScheme`."
+      },
+      {
+        "name": "assign_scheme_to_project",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/project",
+        "risk": "Mutates Jira data/configuration for operation `assignSchemeToProject`."
+      },
+      {
+        "name": "switch_workflow_scheme_for_project",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/project/switch",
+        "risk": "Mutates Jira data/configuration for operation `switchWorkflowSchemeForProject`."
+      },
+      {
+        "name": "update_schemes",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/update",
+        "risk": "Mutates Jira data/configuration for operation `updateSchemes`."
+      },
+      {
+        "name": "delete_workflow_scheme",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorkflowScheme`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_workflow_scheme",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}",
+        "risk": "Mutates Jira data/configuration for operation `updateWorkflowScheme`."
+      },
+      {
+        "name": "create_workflow_scheme_draft_from_parent",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/createdraft",
+        "risk": "Mutates Jira data/configuration for operation `createWorkflowSchemeDraftFromParent`."
+      },
+      {
+        "name": "delete_default_workflow",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/default",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDefaultWorkflow`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_default_workflow",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/default",
+        "risk": "Mutates Jira data/configuration for operation `updateDefaultWorkflow`."
+      },
+      {
+        "name": "delete_workflow_scheme_draft",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorkflowSchemeDraft`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_workflow_scheme_draft",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft",
+        "risk": "Mutates Jira data/configuration for operation `updateWorkflowSchemeDraft`."
+      },
+      {
+        "name": "delete_draft_default_workflow",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/default",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDraftDefaultWorkflow`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_draft_default_workflow",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/default",
+        "risk": "Mutates Jira data/configuration for operation `updateDraftDefaultWorkflow`."
+      },
+      {
+        "name": "delete_workflow_scheme_draft_issue_type",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/issuetype/{{ record.path_issueType }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorkflowSchemeDraftIssueType`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_workflow_scheme_draft_issue_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/issuetype/{{ record.path_issueType }}",
+        "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeDraftIssueType`."
+      },
+      {
+        "name": "publish_draft_workflow_scheme",
+        "kind": "update",
+        "method": "POST",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/publish",
+        "risk": "Mutates Jira data/configuration for operation `publishDraftWorkflowScheme`."
+      },
+      {
+        "name": "delete_draft_workflow_mapping",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/workflow?workflowName={{ record.query_workflowName }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDraftWorkflowMapping`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_draft_workflow_mapping",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/draft/workflow?workflowName={{ record.query_workflowName }}",
+        "risk": "Mutates Jira data/configuration for operation `updateDraftWorkflowMapping`."
+      },
+      {
+        "name": "delete_workflow_scheme_issue_type",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/issuetype/{{ record.path_issueType }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorkflowSchemeIssueType`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_workflow_scheme_issue_type",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/issuetype/{{ record.path_issueType }}",
+        "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeIssueType`."
+      },
+      {
+        "name": "delete_workflow_mapping",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/workflow?workflowName={{ record.query_workflowName }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorkflowMapping`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_workflow_mapping",
+        "kind": "update",
+        "method": "PUT",
+        "path": "/rest/api/3/workflowscheme/{{ record.path_id }}/workflow?workflowName={{ record.query_workflowName }}",
+        "risk": "Mutates Jira data/configuration for operation `updateWorkflowMapping`."
+      },
+      {
+        "name": "addon_properties_resource_delete_addon_property_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/atlassian-connect/1/addons/{{ record.path_addonKey }}/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `AddonPropertiesResource.deleteAddonProperty_delete`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dynamic_modules_resource_remove_modules_delete",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/atlassian-connect/1/app/module/dynamic",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `DynamicModulesResource.removeModules_delete`.",
+        "confirm": "destructive"
+      },
+      {
+        "name": "dynamic_modules_resource_register_modules_post",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/atlassian-connect/1/app/module/dynamic",
+        "risk": "Mutates Jira data/configuration for operation `DynamicModulesResource.registerModules_post`."
+      },
+      {
+        "name": "connect_to_forge_migration_task_submission_resource_submit_task_post",
+        "kind": "create",
+        "method": "POST",
+        "path": "/rest/atlassian-connect/1/migration/{{ record.path_connectKey }}/{{ record.path_jiraIssueFieldsKey }}/task",
+        "risk": "Mutates Jira data/configuration for operation `ConnectToForgeMigrationTaskSubmissionResource.submitTask_post`."
+      },
+      {
+        "name": "delete_forge_app_property",
+        "kind": "delete",
+        "method": "DELETE",
+        "path": "/rest/forge/1/app/properties/{{ record.path_propertyKey }}",
+        "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteForgeAppProperty`.",
+        "confirm": "destructive"
+      }
+    ],
     "risk": {
-      "read": "external Jira Cloud API read of issue, project, and user data",
-      "approval": "none; read-only, no reverse-ETL writes"
+      "read": "external Jira Cloud API read of issues, projects, users, and bounded JSON direct-read endpoints",
+      "write": "external Jira Cloud API mutation through named reverse ETL actions only; DELETE/destructive actions require typed confirmation",
+      "approval": "reverse ETL plan, preview, explicit approval, execute; destructive actions require --confirm destructive"
     },
     "icon": {
       "id": "jira",

@@ -1,0 +1,64 @@
+{
+  "issue": 81,
+  "subissues": [
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110
+  ],
+  "branch": "fm/cli-jira-parity-wave01-r1",
+  "status": "implemented_local_verification_passed",
+  "gsdCommandPath": {
+    "doctor": "scripts/gsd doctor",
+    "planPrompt": "scripts/gsd prompt plan-phase jira-parity-wave01-r1 --skip-research",
+    "programmingLoopAttempt": "scripts/gsd prompt programming-loop init --phase jira-parity-wave01-r1 --dry-run",
+    "programmingLoopResult": "unavailable: scripts/gsd reports unknown GSD command: programming-loop",
+    "fallback": "manual GSD loop using .pi/prompts/pm-gsd-loop.md and gsd-universal-runtime-loop.md"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single Jira connector-owned write scope in an isolated worktree; mutating subworkers would collide on internal/connectors/defs/jira"
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "generated connector-local Jira ledger, writes, command metadata, fixtures, docs, and certification metadata without shared runtime edits"
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "focused local gates passed; broad no-mistakes/PR validation remains firstmate-owned after commit"
+    }
+  ],
+  "officialSource": {
+    "url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+    "sha256": "8439da27e1b2dd7b013a0ae721b8aeaa7746bc8e2d816fa28aa1a582e8597501",
+    "md5": "ae49a3d84a12210d4686315cb36442be",
+    "operations": 616
+  },
+  "jiraLedger": {
+    "surfaceRows": 616,
+    "executableWrites": 269,
+    "rawBodyReverseBlockers": 5,
+    "deleteActions": 84,
+    "destructiveConfirmedWrites": 101,
+    "implementedDirectReadCommands": 272,
+    "sharedFoundationReverseBlockers": 27,
+    "partialDirectReadCommands": 14,
+    "providerStyleWriteCommands": 155,
+    "partialProviderStyleWriteCommands": 114,
+    "blockedBinaryReadOperations": 2,
+    "blockedDirectReadOperations": 15,
+    "blockedBinaryDirectOperationRows": 17,
+    "jsonPatchReverseBlockers": 3,
+    "plannedProviderStyleWriteCommands": 22,
+    "requiredRawDynamicJSONReverseBlockers": 14
+  },
+  "verificationPassed": true,
+  "humanGate": "no live credentials/provider calls/writes/certification, no shared runtime edits, no merge to main"
+}
