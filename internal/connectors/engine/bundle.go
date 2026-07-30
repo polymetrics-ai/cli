@@ -1542,40 +1542,109 @@ func validateProviderJSONSchema(i int, op OperationSpec, field string, raw json.
 	if len(raw) == 0 {
 		return nil, fmt.Errorf("operation %d (%q) %s provider.%s is required", i, op.ID, op.Kind, field)
 	}
-	if _, err := CompileSchema(raw); err != nil {
+	compiled, err := CompileSchema(raw)
+	if err != nil {
 		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must compile: %w", i, op.ID, op.Kind, field, err)
 	}
-	var shape struct {
-		Type                 string                     `json:"type"`
-		AdditionalProperties json.RawMessage            `json:"additionalProperties"`
-		Properties           map[string]json.RawMessage `json:"properties"`
-	}
-	if err := json.Unmarshal(raw, &shape); err != nil {
-		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must be JSON object schema: %w", i, op.ID, op.Kind, field, err)
-	}
-	if shape.Type != "object" {
+	if !providerSchemaHasExactType(compiled.node, "object") {
 		return nil, fmt.Errorf("operation %d (%q) %s provider.%s root type must be object", i, op.ID, op.Kind, field)
 	}
-	props := make(map[string]bool, len(shape.Properties))
-	for name := range shape.Properties {
+	props := make(map[string]bool, len(compiled.node.properties))
+	for name := range compiled.node.properties {
 		trimmed := strings.TrimSpace(name)
 		props[trimmed] = true
-		if request {
-			if reason, ok := forbiddenProviderRequestFields[strings.ToLower(trimmed)]; ok {
-				return nil, fmt.Errorf("operation %d (%q) %s provider.request_schema property %q is a raw %s escape hatch; declare typed bounded request fields instead", i, op.ID, op.Kind, trimmed, reason)
-			}
-		}
 	}
 	if len(props) == 0 {
 		return nil, fmt.Errorf("operation %d (%q) %s provider.%s must declare typed properties", i, op.ID, op.Kind, field)
 	}
 	if request {
-		var additional bool
-		if len(shape.AdditionalProperties) == 0 || json.Unmarshal(shape.AdditionalProperties, &additional) != nil || additional {
-			return nil, fmt.Errorf("operation %d (%q) %s provider.request_schema must set additionalProperties=false", i, op.ID, op.Kind)
+		if err := validateProviderRequestSchemaNode(i, op, compiled.node, nil); err != nil {
+			return nil, err
 		}
 	}
 	return props, nil
+}
+
+func providerSchemaHasExactType(node *schemaNode, want string) bool {
+	if node == nil || len(node.types) != 1 {
+		return false
+	}
+	return node.types[0] == want
+}
+
+func providerSchemaHasConcreteType(node *schemaNode) bool {
+	if node == nil {
+		return false
+	}
+	for _, typ := range node.types {
+		if typ != "null" {
+			return true
+		}
+	}
+	return false
+}
+
+func providerSchemaIncludesType(node *schemaNode, want string) bool {
+	if node == nil {
+		return false
+	}
+	for _, typ := range node.types {
+		if typ == want {
+			return true
+		}
+	}
+	return false
+}
+
+func validateProviderRequestSchemaNode(i int, op OperationSpec, node *schemaNode, path []string) error {
+	if !providerSchemaHasConcreteType(node) {
+		return fmt.Errorf("operation %d (%q) %s %s must declare a non-null type", i, op.ID, op.Kind, providerRequestSchemaPath(path))
+	}
+	if providerSchemaIncludesType(node, "object") {
+		if !node.hasAdditionalProps || node.additionalProperties {
+			if len(path) == 0 {
+				return fmt.Errorf("operation %d (%q) %s provider.request_schema must set additionalProperties=false", i, op.ID, op.Kind)
+			}
+			return fmt.Errorf("operation %d (%q) %s %s object must set additionalProperties=false", i, op.ID, op.Kind, providerRequestSchemaPath(path))
+		}
+		for name, child := range node.properties {
+			trimmed := strings.TrimSpace(name)
+			childPath := append(append([]string{}, path...), trimmed)
+			if reason, ok := forbiddenProviderRequestFields[strings.ToLower(trimmed)]; ok {
+				return fmt.Errorf("operation %d (%q) %s provider.request_schema property %q is a raw %s escape hatch; declare typed bounded request fields instead", i, op.ID, op.Kind, providerRequestSchemaPath(childPath), reason)
+			}
+			if err := validateProviderRequestSchemaNode(i, op, child, childPath); err != nil {
+				return err
+			}
+		}
+	}
+	if providerSchemaIncludesType(node, "array") {
+		if node.items == nil {
+			return fmt.Errorf("operation %d (%q) %s %s array must declare typed items", i, op.ID, op.Kind, providerRequestSchemaPath(path))
+		}
+		itemPath := append(append([]string{}, path...), "[]")
+		if err := validateProviderRequestSchemaNode(i, op, node.items, itemPath); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func providerRequestSchemaPath(path []string) string {
+	if len(path) == 0 {
+		return "provider.request_schema"
+	}
+	var b strings.Builder
+	b.WriteString("provider.request_schema")
+	for _, part := range path {
+		if part == "[]" {
+			b.WriteString(part)
+			continue
+		}
+		b.WriteString(".")
+		b.WriteString(part)
+	}
+	return b.String()
 }
 
 var forbiddenProviderRequestFields = map[string]string{
@@ -1584,6 +1653,7 @@ var forbiddenProviderRequestFields = map[string]string{
 	"graphql":       "GraphQL",
 	"graphql_query": "GraphQL",
 	"document":      "GraphQL document",
+	"http":          "HTTP",
 	"method":        "HTTP method",
 	"http_method":   "HTTP method",
 	"path":          "HTTP path",

@@ -839,6 +839,159 @@ func TestBundleLoadRejectsProviderOperationWithRawRequestField(t *testing.T) {
 	}
 }
 
+func TestBundleLoadRejectsProviderOperationWithNestedRawRequestField(t *testing.T) {
+	tests := []struct {
+		name      string
+		fieldName string
+		reason    string
+	}{
+		{name: "sql", fieldName: "sql", reason: "raw SQL"},
+		{name: "graphql", fieldName: "graphql", reason: "raw GraphQL"},
+		{name: "url", fieldName: "url", reason: "raw HTTP URL"},
+		{name: "payload", fieldName: "payload", reason: "raw payload"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			fsys := providerRequestSchemaBundleFS(fmt.Sprintf(`{
+				"type": "object",
+				"additionalProperties": false,
+				"properties": {
+					"filters": {
+						"type": "object",
+						"additionalProperties": false,
+						"properties": {
+							%q: { "type": "string" }
+						}
+					}
+				}
+			}`, tt.fieldName))
+
+			_, err := Load(fsys, "acme")
+			if err == nil {
+				t.Fatalf("Load: expected nested raw provider request field to fail")
+			}
+			if !strings.Contains(err.Error(), "provider.request_schema.filters."+tt.fieldName) || !strings.Contains(err.Error(), tt.reason) {
+				t.Fatalf("Load error = %q, want nested %s request-field rejection", err.Error(), tt.fieldName)
+			}
+		})
+	}
+}
+
+func TestBundleLoadRejectsProviderOperationWithFreeformNestedObject(t *testing.T) {
+	fsys := providerRequestSchemaBundleFS(`{
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"filters": {
+				"type": "object",
+				"properties": {
+					"state": { "type": "string" }
+				}
+			}
+		}
+	}`)
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected free-form nested provider request object to fail")
+	}
+	if !strings.Contains(err.Error(), "provider.request_schema.filters") || !strings.Contains(err.Error(), "additionalProperties=false") {
+		t.Fatalf("Load error = %q, want nested object additionalProperties rejection", err.Error())
+	}
+}
+
+func TestBundleLoadRejectsProviderOperationWithFreeformNestedArray(t *testing.T) {
+	fsys := providerRequestSchemaBundleFS(`{
+		"type": "object",
+		"additionalProperties": false,
+		"properties": {
+			"filters": { "type": "array" }
+		}
+	}`)
+
+	_, err := Load(fsys, "acme")
+	if err == nil {
+		t.Fatalf("Load: expected free-form nested provider request array to fail")
+	}
+	if !strings.Contains(err.Error(), "provider.request_schema.filters") || !strings.Contains(err.Error(), "typed items") {
+		t.Fatalf("Load error = %q, want nested array typed-items rejection", err.Error())
+	}
+}
+
+func TestBundleLoadAcceptsProviderOperationWithTypedNestedRequestSchema(t *testing.T) {
+	fsys := providerRequestSchemaBundleFS(`{
+		"type": "object",
+		"additionalProperties": false,
+		"required": ["filters"],
+		"properties": {
+			"filters": {
+				"type": ["object", "null"],
+				"additionalProperties": false,
+				"required": ["term"],
+				"properties": {
+					"term": { "type": "string" },
+					"states": { "type": "array", "items": { "type": "string" } },
+					"ranges": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"field": { "type": "string" },
+								"from": { "type": ["string", "null"], "format": "date-time" },
+								"to": { "type": ["string", "null"], "format": "date-time" }
+							}
+						}
+					}
+				}
+			},
+			"limit": { "type": ["integer", "null"] }
+		}
+	}`)
+
+	if _, err := Load(fsys, "acme"); err != nil {
+		t.Fatalf("Load: typed nested provider request schema should be accepted: %v", err)
+	}
+}
+
+func providerRequestSchemaBundleFS(requestSchema string) fstest.MapFS {
+	fsys := fullValidBundleFS("acme")
+	fsys["acme/metadata.json"] = &fstest.MapFile{Data: []byte(`{
+		"name": "acme",
+		"display_name": "Test Connector",
+		"description": "a test connector",
+		"integration_type": "api",
+		"release_stage": "ga",
+		"capabilities": { "check": true, "read": true, "write": false, "query": false, "provider_search": false, "provider_query": true, "cdc": false, "dynamic_schema": false }
+	}`)}
+	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(fmt.Sprintf(`{
+		"operations": [
+			{
+				"id": "acme.widgets.query",
+				"kind": "provider_query",
+				"summary": "Typed bounded provider query",
+				"risk": "low",
+				"approval": "none",
+				"output_policy": "json_redacted",
+				"provider": {
+					"request_schema": %s,
+					"response_schema": {
+						"type": "object",
+						"properties": {
+							"rows": { "type": "array", "items": { "type": "object" } }
+						}
+					},
+					"bounds": { "default_limit": 10, "max_limit": 10, "max_pages": 1, "max_bytes": 32768 },
+					"pagination": { "type": "none" },
+					"fixture": { "request": "fixtures/provider/acme.widgets.query/request.json", "response": "fixtures/provider/acme.widgets.query/response.json" }
+				}
+			}
+		]
+	}`, requestSchema))}
+	return fsys
+}
+
 func TestBundleLoadRejectsUnsafeOperationKind(t *testing.T) {
 	fsys := fullValidBundleFS("acme")
 	fsys["acme/operations.json"] = &fstest.MapFile{Data: []byte(`{
