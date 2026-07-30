@@ -1,0 +1,25 @@
+# Bitbucket connector
+
+## Overview
+
+This bundle records the complete official Bitbucket Cloud REST API 2.0 OpenAPI inventory from `https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json`. The inventory observed 331 operations with method counts {'DELETE': 54, 'GET': 179, 'POST': 50, 'PUT': 48} and source SHA-256 `efd23d3948bf0b4d4ff5ad6ae6bab9479d8f00200783751e871df66b8db232c2`. The connector declares declarative streams for JSON GET operations that the current engine can express, typed reverse-ETL write actions for JSON/path mutations, and connector-local blocked operation rows for binary transfer, multipart upload, and provider-search/query surfaces whose shared bounded-command foundations are not present in this worktree.
+
+## Auth setup
+
+Use credentials from the credential store only. Configure `access_token` as a secret for bearer auth, or configure `username` plus secret `app_password` for Bitbucket app-password basic auth. Do not pass tokens, app passwords, OAuth refresh material, or authorization headers in command text, fixtures, docs examples, issue comments, or logs. `base_url` defaults to `https://api.bitbucket.org/2.0`.
+
+## Streams notes
+
+The stream ledger is generated from every official JSON GET operation not classified as binary transfer or provider search/query. Paginated Bitbucket collection responses use `page` and `pagelen` with a bounded `max_pages` cap; singleton GET responses are modeled as single-object streams. Resource-scoped streams use optional config properties matching Bitbucket path parameter names such as `workspace`, `repo_slug`, `pull_request_id`, `commit`, and `issue_id`; a read of those streams fails closed if the needed config is absent. Fixtures are sanitized synthetic Bitbucket-shaped pages and do not come from live credentials.
+
+## Write actions & risks
+
+Every generated JSON/path mutation is a named reverse-ETL action with a record schema for path parameters and a schema-permissive typed payload for official request-body fields. `DELETE` actions use `kind: delete`, `body_type: none`, idempotent `missing_ok_status: [404]`, and `confirm: "destructive"`; they remain in scope under the captain policy correction only through the existing plan -> preview -> explicit approval -> execute path plus typed destructive confirmation. File/multipart upload operations are not exposed as raw writes; they are blocked in `api_surface.json`/`operations.json` until a bounded file-transfer foundation can bind file snapshots, byte caps, and approvals without generic raw bytes.
+
+## Known limits
+
+- No live Bitbucket credentials, provider calls, writes, certification, VPS, or Thaalam work were performed. Certification remains fixture-only and `uncertified` until an approved live-safe executor records redacted artifacts.
+- Provider search/query and direct/binary command execution are connector-local metadata only here. Provider query/search is blocked on shared foundation #2985; binary/file transfer execution needs the bounded transfer foundation described in the direct/binary lane.
+- CDC/changefeed semantics for webhook delivery are not claimed because CDC truthfulness/state foundations #2986 and #2988 are outside this connector-local scope. Webhook REST resources are ledgered as ordinary REST rows only; no CDC capability is advertised.
+- The generated stream schemas intentionally use passthrough projection plus permissive additional properties because this worker could not safely hand-curate 331 official response shapes without live provider samples. This preserves raw fixture shape while keeping primary-key/catalog metadata present.
+- The repository operation-count tables in GitHub issues are preserved by the captain-policy addendum and are not rewritten by this connector-local bundle.

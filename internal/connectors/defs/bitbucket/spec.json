@@ -1,0 +1,233 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "access_token": {
+      "description": "OAuth access token or app password-compatible bearer token.",
+      "type": "string",
+      "x-secret": true
+    },
+    "addon_key": {
+      "description": "Bitbucket path parameter `addon_key` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "annotationId": {
+      "description": "Bitbucket path parameter `annotationId` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "app_key": {
+      "description": "Bitbucket path parameter `app_key` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "app_password": {
+      "description": "Bitbucket app password for basic auth.",
+      "type": "string",
+      "x-secret": true
+    },
+    "base_url": {
+      "default": "https://api.bitbucket.org/2.0",
+      "description": "Bitbucket Cloud API base URL.",
+      "format": "uri",
+      "type": "string"
+    },
+    "cache_uuid": {
+      "description": "Bitbucket path parameter `cache_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "change_id": {
+      "description": "Bitbucket path parameter `change_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "comment_id": {
+      "description": "Bitbucket path parameter `comment_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "commit": {
+      "description": "Bitbucket path parameter `commit` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "component_id": {
+      "description": "Bitbucket path parameter `component_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "deployment_uuid": {
+      "description": "Bitbucket path parameter `deployment_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "email": {
+      "description": "Bitbucket path parameter `email` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "encoded_id": {
+      "description": "Bitbucket path parameter `encoded_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "environment_uuid": {
+      "description": "Bitbucket path parameter `environment_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "filename": {
+      "description": "Bitbucket path parameter `filename` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "fingerprint": {
+      "description": "Bitbucket path parameter `fingerprint` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "group_slug": {
+      "description": "Bitbucket path parameter `group_slug` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "id": {
+      "description": "Bitbucket path parameter `id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "issue_id": {
+      "description": "Bitbucket path parameter `issue_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "key": {
+      "description": "Bitbucket path parameter `key` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "key_id": {
+      "description": "Bitbucket path parameter `key_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "known_host_uuid": {
+      "description": "Bitbucket path parameter `known_host_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "log_uuid": {
+      "description": "Bitbucket path parameter `log_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "member": {
+      "description": "Bitbucket path parameter `member` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "milestone_id": {
+      "description": "Bitbucket path parameter `milestone_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "name": {
+      "description": "Bitbucket path parameter `name` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "node_id": {
+      "description": "Bitbucket path parameter `node_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "path": {
+      "description": "Bitbucket path parameter `path` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "pipeline_uuid": {
+      "description": "Bitbucket path parameter `pipeline_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "project_key": {
+      "description": "Bitbucket path parameter `project_key` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "property_name": {
+      "description": "Bitbucket path parameter `property_name` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "pull_request_id": {
+      "description": "Bitbucket path parameter `pull_request_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "pullrequest_id": {
+      "description": "Bitbucket path parameter `pullrequest_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "repo_name": {
+      "description": "Bitbucket path parameter `repo_name` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "repo_slug": {
+      "description": "Bitbucket path parameter `repo_slug` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "reportId": {
+      "description": "Bitbucket path parameter `reportId` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "revision": {
+      "description": "Bitbucket path parameter `revision` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "revspec": {
+      "description": "Bitbucket path parameter `revspec` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "runner_uuid": {
+      "description": "Bitbucket path parameter `runner_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "schedule_uuid": {
+      "description": "Bitbucket path parameter `schedule_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "selected_user": {
+      "description": "Bitbucket path parameter `selected_user` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "selected_user_id": {
+      "description": "Bitbucket path parameter `selected_user_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "spec": {
+      "description": "Bitbucket path parameter `spec` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "start_date": {
+      "description": "Optional lower bound for future incremental streams.",
+      "format": "date-time",
+      "type": "string"
+    },
+    "step_uuid": {
+      "description": "Bitbucket path parameter `step_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "subject_type": {
+      "description": "Bitbucket path parameter `subject_type` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "target_username": {
+      "description": "Bitbucket path parameter `target_username` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "task_id": {
+      "description": "Bitbucket path parameter `task_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "test_case_uuid": {
+      "description": "Bitbucket path parameter `test_case_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "uid": {
+      "description": "Bitbucket path parameter `uid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "username": {
+      "description": "Bitbucket username for app-password basic auth.",
+      "type": "string"
+    },
+    "variable_uuid": {
+      "description": "Bitbucket path parameter `variable_uuid` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "version_id": {
+      "description": "Bitbucket path parameter `version_id` used by resource-scoped streams.",
+      "type": "string"
+    },
+    "workspace": {
+      "description": "Bitbucket path parameter `workspace` used by resource-scoped streams.",
+      "type": "string"
+    }
+  },
+  "required": [],
+  "title": "Bitbucket Connection Specification",
+  "type": "object"
+}

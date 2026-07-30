@@ -1,0 +1,528 @@
+{
+  "operations": [
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/addon/{addon_key}/client-key"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_addon_addon_key_client_key",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the client key of a Connect addon"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/diff/{spec}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_diff_spec",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Compare two commits"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_downloads",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List download artifacts"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_downloads",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload a download artifact"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/downloads/{filename}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_downloads_filename",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a download artifact link"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/export/{repo_name}-issues-{task_id}.zip"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_export_repo_name_issues_task_id_zip",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check issue export status"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/attachments/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_attachments_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get attachment for an issue"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if current user voted for an issue"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if current user is watching a issue"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/patch/{spec}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_patch_spec",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a patch for two commits"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/log"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_log",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get log file for a step"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/logs/{log_uuid}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_logs_log_uuid",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the logs for the build container or a service container for a given step of a pipeline."
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a summary of test reports for a given step of a pipeline."
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_test_cases",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get test cases for a given step of a pipeline."
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_t_65938444",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get test case reasons (output) for a given test case in a step of a pipeline."
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/activity"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_activity",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List a pull request activity log"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/activity"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_activity",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List a pull request activity log"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/commits"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_commits",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List commits on a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/conflicts"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_conflicts",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get file conflicts for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diff"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_diff",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "List changes in a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/diffstat"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_diffstat",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the diff stat for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge/task-status/{task_id}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_merge_task_status_task_id",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the merge task status for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/patch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pullrequests_pull_request_id_patch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the patch for a pull request"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/src/{commit}/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_src_commit_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get file or directory contents"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/files/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_files_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a snippet's raw file at HEAD"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_watch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if the current user is watching a snippet"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_node_id_files_path",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get a snippet's raw file"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/diff"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_revision_diff",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get snippet changes between versions"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/{revision}/patch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_revision_patch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get snippet patch between versions"
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_teams_username_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/teams/{username}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a team's repositories"
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_users_selected_user_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/users/{selected_user}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a user's repositories"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_well_known_openid_configuration",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get OpenID configuration for OIDC in Pipelines"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_keys_json",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get keys for OIDC in Pipelines"
+    },
+    {
+      "approval": "blocked pending #2985 typed provider-query foundation",
+      "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
+      "id": "get_workspaces_workspace_search_code",
+      "kind": "rest_read",
+      "output_policy": "json_redacted",
+      "rest": {
+        "max_bytes": 1048576,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/search/code"
+      },
+      "risk": "low",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Search for code in a workspace"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/settings/gpg/public-key"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_workspaces_workspace_settings_gpg_public_key",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get the workspace system GPG public key(s)"
+    }
+  ]
+}
