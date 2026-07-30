@@ -11,10 +11,10 @@ DESCRIPTION
   connectors, ETL, reverse ETL plans, local warehouse tables, and agent-safe
   JSON output from one Go binary.
 
-  Connectors expose ETL read streams across the catalog. Connectors whose APIs
-  support mutations also expose approval-gated reverse ETL write actions. Use
-  pm connectors inspect <name> to see a connector's streams, write=true/false,
-  and write actions.
+  Connectors expose catalog metadata across the catalog. Executable ETL read
+  streams and approval-gated reverse ETL write actions are present only when a
+  connector implements those surfaces. Use pm connectors inspect <name> to see
+  a connector's streams, write=true/false, and write actions.
 
   Every command group is also a manual page. Run pm connectors, pm etl,
   pm credentials, or any other command group without a subcommand to read its
@@ -292,10 +292,11 @@ DESCRIPTION
   connectors are declarative JSON bundles interpreted by the connector engine;
   hooks or native components cover APIs and protocols that need custom behavior.
 
-  Each connector exposes ETL read streams. Connectors whose APIs expose
-  mutation endpoints also declare reverse ETL write actions. Run
-  pm connectors inspect <name> to see write=true/false, ETL STREAMS, and
-  REVERSE ETL ACTIONS without reading credentials.
+  Connectors expose local metadata for ETL read streams and reverse ETL write
+  actions when those executable surfaces are implemented. Planned ledger-only
+  connectors remain visible in the catalog without executable streams or write
+  actions. Run pm connectors inspect <name> to see write=true/false, ETL
+  STREAMS, and REVERSE ETL ACTIONS without reading credentials.
 
   The catalog command is generated from declarative bundles and Tier-3 native
   connectors. pm does not execute connector container images or accept legacy
@@ -303,7 +304,7 @@ DESCRIPTION
 
 CATALOG
   The connector catalog is generated from local connector metadata. The current
-  runtime catalog has 552 bare-name entries: 548 declarative bundles plus the
+  runtime catalog has 553 bare-name entries: 549 declarative bundles plus the
   local sample, file, warehouse, and outbox primitives. Use --all or the catalog
   subcommand when an agent needs to discover the complete connector universe.
   Use --capability read, write, cdc, or query to filter by executable surface.

@@ -25,7 +25,7 @@ connector dirs so workers can run in parallel without shared-file collisions).
 
 | Connector | Provider | Why | Notes |
 | --- | --- | --- | --- |
-| hubspot | HubSpot | CRM REST + GraphQL; high reverse-ETL demand. | Private apps (token); OAuth for more scopes. |
+| hubspot | HubSpot | Ledger scaffold exists; future lanes still need executable streams/writes. | See `internal/connectors/defs/hubspot/docs.md` before planning more work. |
 | notion | Notion | REST API; block/page model. | Sensitive writes (page mutations). |
 | salesforce | Salesforce | REST + SOQL; enterprise CRM. | OAuth + bulk API; large surface, shard. |
 | pagerduty | PagerDuty | REST v2; incidents/oncall. | Incident write actions are sensitive. |

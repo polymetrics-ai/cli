@@ -124,7 +124,7 @@ func runInit(root string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "InitResult", "project_dir": filepath.Join(root, ".polymetrics")})
 	}
-	fmt.Fprintf(stdout, "Initialized Polymetrics project at %s\n", filepath.Join(root, ".polymetrics"))
+	_, _ = fmt.Fprintf(stdout, "Initialized Polymetrics project at %s\n", filepath.Join(root, ".polymetrics"))
 	return nil
 }
 
@@ -155,7 +155,7 @@ func writeManual(topic string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"kind": "CommandManual", "command": topic, "manual": text})
 	}
-	fmt.Fprint(stdout, text)
+	_, _ = fmt.Fprint(stdout, text)
 	return nil
 }
 
@@ -206,7 +206,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 				return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 			}
 			for _, item := range defs {
-				fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
+				_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 			}
 			return nil
 		}
@@ -215,7 +215,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "ConnectorList", "connectors": list})
 		}
 		for _, item := range list {
-			fmt.Fprintf(stdout, "%s\t%s\t%+v\n", item.Name, item.IntegrationType, item.Capabilities)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\t%+v\n", item.Name, item.IntegrationType, item.Capabilities)
 		}
 		return nil
 	case "catalog":
@@ -228,7 +228,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "ConnectorCatalog", "count": len(defs), "connectors": defs})
 		}
 		for _, item := range defs {
-			fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%t\twrite=%t\tquery=%t\n", item.Name, item.IntegrationType, item.Capabilities.Read, item.Capabilities.Write, item.Capabilities.Query)
 		}
 		return nil
 	case "inspect", "help", "man", "docs":
@@ -245,7 +245,7 @@ func runConnectors(ctx context.Context, root string, args []string, stdout io.Wr
 			if jsonOut {
 				return writeJSON(stdout, envelope{"kind": "Connector", "connector": connectors.MetadataWithIcon(c.Metadata()), "manifest": connectors.ManifestOf(c)})
 			}
-			fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
+			_, _ = fmt.Fprint(stdout, connectors.RenderConnectorManual(c))
 			return nil
 		}
 		return fmt.Errorf("connector %q not found", args[1])
@@ -361,7 +361,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
 		}
-		fmt.Fprintf(stdout, "Saved credential %s for connector %s\n", cred.Name, cred.Connector)
+		_, _ = fmt.Fprintf(stdout, "Saved credential %s for connector %s\n", cred.Name, cred.Connector)
 		return nil
 	case "list":
 		creds := a.ListCredentials()
@@ -369,7 +369,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "CredentialList", "credentials": creds})
 		}
 		for _, cred := range creds {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\n", cred.Name, cred.ID, cred.Connector)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\n", cred.Name, cred.ID, cred.Connector)
 		}
 		return nil
 	case "inspect":
@@ -384,7 +384,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "Credential", "credential": cred})
 		}
 		b, _ := json.MarshalIndent(cred, "", "  ")
-		fmt.Fprintln(stdout, string(b))
+		_, _ = fmt.Fprintln(stdout, string(b))
 		return nil
 	case "test":
 		if len(args) < 2 {
@@ -397,7 +397,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CredentialTest", "status": "ok", "credential": cred})
 		}
-		fmt.Fprintf(stdout, "Credential %s validated\n", cred.Name)
+		_, _ = fmt.Fprintf(stdout, "Credential %s validated\n", cred.Name)
 		return nil
 	case "remove":
 		if len(args) < 2 {
@@ -406,7 +406,7 @@ func runCredentials(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if err := a.RemoveCredential(ctx, args[1]); err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "Removed credential %s\n", args[1])
+		_, _ = fmt.Fprintf(stdout, "Removed credential %s\n", args[1])
 		return nil
 	default:
 		return errUsage
@@ -463,7 +463,7 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "Connection", "connection": conn})
 		}
-		fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
+		_, _ = fmt.Fprintf(stdout, "Created connection %s\n", conn.Name)
 		return nil
 	case "list":
 		conns := a.ListConnections()
@@ -471,7 +471,7 @@ func runConnections(ctx context.Context, a *app.App, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "ConnectionList", "connections": conns})
 		}
 		for _, conn := range conns {
-			fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s:%s -> %s:%s\n", conn.Name, conn.Source.Connector, conn.Source.Credential, conn.Destination.Connector, conn.Destination.Credential)
 		}
 		return nil
 	default:
@@ -505,7 +505,7 @@ func runCatalog(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		return writeJSON(stdout, envelope{"kind": "Catalog", "catalog": snapshot})
 	}
 	for _, stream := range snapshot.Catalog.Streams {
-		fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
 	}
 	return nil
 }
@@ -526,7 +526,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ETLCheck", "connector": connector.Name(), "status": "ok"})
 		}
-		fmt.Fprintf(stdout, "Connector %s check ok\n", connector.Name())
+		_, _ = fmt.Fprintf(stdout, "Connector %s check ok\n", connector.Name())
 		return nil
 	case "catalog":
 		connector, cfg, err := directConnector(a, args[1:])
@@ -541,7 +541,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			return writeJSON(stdout, envelope{"kind": "ETLCatalog", "connector": connector.Name(), "catalog": catalog})
 		}
 		for _, stream := range catalog.Streams {
-			fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\n", stream.Name, stream.Description)
 		}
 		return nil
 	case "read":
@@ -571,7 +571,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		}
 		for _, row := range rows {
 			b, _ := json.Marshal(row)
-			fmt.Fprintln(stdout, string(b))
+			_, _ = fmt.Fprintln(stdout, string(b))
 		}
 		return nil
 	case "run":
@@ -599,10 +599,10 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run, "runtime_recorded": runtimeRecorded})
 		}
 		if runtimeRecorded {
-			fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+			_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d runtime_recorded=true\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 			return nil
 		}
-		fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+		_, _ = fmt.Fprintf(stdout, "ETL run %s completed: read=%d loaded=%d failed=%d\n", run.ID, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 		return nil
 	case "status":
 		if len(args) < 2 {
@@ -615,7 +615,7 @@ func runETL(ctx context.Context, a *app.App, args []string, stdout io.Writer, js
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ETLRun", "run": run})
 		}
-		fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\tread=%d loaded=%d failed=%d\n", run.ID, run.Status, run.RecordsRead, run.RecordsLoaded, run.RecordsFailed)
 		return nil
 	default:
 		return errUsage
@@ -644,7 +644,7 @@ func runMaybeConnectorCommand(ctx context.Context, root, connectorName string, a
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "CommandManual", "command": command, "manual": manual})
 		}
-		fmt.Fprint(stdout, manual)
+		_, _ = fmt.Fprint(stdout, manual)
 		return nil
 	}
 	flags := parseFlags(args)
@@ -1086,7 +1086,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 			})
 		}
 		b, _ := json.MarshalIndent(result.DirectRead.Body, "", "  ")
-		fmt.Fprintln(stdout, string(b))
+		_, _ = fmt.Fprintln(stdout, string(b))
 		return nil
 	}
 	if jsonOut {
@@ -1101,7 +1101,7 @@ func runConnectorCommand(ctx context.Context, a *app.App, connectorName string, 
 	}
 	for _, row := range rows {
 		b, _ := json.Marshal(row)
-		fmt.Fprintln(stdout, string(b))
+		_, _ = fmt.Fprintln(stdout, string(b))
 	}
 	return nil
 }
@@ -1156,13 +1156,13 @@ func runConnectorWriteCommand(ctx context.Context, a *app.App, connectorName, cr
 		}
 		return writeJSON(stdout, env)
 	}
-	fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
+	_, _ = fmt.Fprintf(stdout, "Created connector command plan %s for %s\nApproval token: %s\n", plan.ID, plan.ConnectorCommand, plan.ApprovalToken)
 	if plan.ConfirmationChallenge != "" {
-		fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+		_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 	}
 	if writePreview != nil {
 		for _, warning := range writePreview.Warnings {
-			fmt.Fprintf(stdout, "- %s\n", warning)
+			_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
 		}
 	}
 	return nil
@@ -1184,7 +1184,7 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
 		}
-		fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil
 	}
 	if preview {
@@ -1199,9 +1199,9 @@ func runConnectorWriteCommandFromPlan(ctx context.Context, a *app.App, connector
 				"write_preview": writePreview,
 			})
 		}
-		fmt.Fprintf(stdout, "Reverse plan %s previews %s via %s\n", plan.ID, plan.ConnectorCommand, plan.Action)
+		_, _ = fmt.Fprintf(stdout, "Reverse plan %s previews %s via %s\n", plan.ID, plan.ConnectorCommand, plan.Action)
 		for _, warning := range writePreview.Warnings {
-			fmt.Fprintf(stdout, "- %s\n", warning)
+			_, _ = fmt.Fprintf(stdout, "- %s\n", warning)
 		}
 		return nil
 	}
@@ -1325,7 +1325,7 @@ func runQuery(ctx context.Context, a *app.App, args []string, stdout io.Writer, 
 	}
 	for _, row := range rows {
 		b, _ := json.Marshal(row)
-		fmt.Fprintln(stdout, string(b))
+		_, _ = fmt.Fprintln(stdout, string(b))
 	}
 	return nil
 }
@@ -1378,12 +1378,12 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return writeJSON(stdout, envelope{"kind": "ReversePlanList", "plans": safeReversePlansForOutput(plans), "runs": runs})
 		}
 		for _, plan := range plans {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\trecords=%d\n", plan.ID, plan.Status, plan.Name, plan.RecordCount)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\trecords=%d\n", plan.ID, plan.Status, plan.Name, plan.RecordCount)
 		}
 		if len(runs) > 0 {
-			fmt.Fprintln(stdout, "\nRUNS")
+			_, _ = fmt.Fprintln(stdout, "\nRUNS")
 			for _, run := range runs {
-				fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tsucceeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsSucceeded, run.RecordsFailed)
+				_, _ = fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tsucceeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsSucceeded, run.RecordsFailed)
 			}
 		}
 		return nil
@@ -1420,9 +1420,9 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReversePlan", "plan": safeReversePlanForOutput(plan), "approval_required": true})
 		}
-		fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
+		_, _ = fmt.Fprintf(stdout, "Created reverse plan %s with %d records\nApproval token: %s\n", plan.ID, plan.RecordCount, plan.ApprovalToken)
 		if plan.ConfirmationChallenge != "" {
-			fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
+			_, _ = fmt.Fprintf(stdout, "Confirmation required: --confirm %s\n", plan.ConfirmationChallenge)
 		}
 		return nil
 	case "preview":
@@ -1446,7 +1446,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 			return writeJSON(stdout, env)
 		}
 		b, _ := json.MarshalIndent(safeReversePlanForOutput(plan), "", "  ")
-		fmt.Fprintln(stdout, string(b))
+		_, _ = fmt.Fprintln(stdout, string(b))
 		return nil
 	case "run":
 		if len(args) < 2 {
@@ -1460,7 +1460,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
 		}
-		fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
+		_, _ = fmt.Fprintf(stdout, "Reverse ETL run %s completed: succeeded=%d failed=%d\n", run.ID, run.RecordsSucceeded, run.RecordsFailed)
 		return nil
 	case "status":
 		if len(args) < 2 {
@@ -1473,7 +1473,7 @@ func runReverse(ctx context.Context, a *app.App, args []string, stdout io.Writer
 		if jsonOut {
 			return writeJSON(stdout, envelope{"kind": "ReverseRun", "run": run})
 		}
-		fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tstaged=%d succeeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsStaged, run.RecordsSucceeded, run.RecordsFailed)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\tplan=%s\tstaged=%d succeeded=%d failed=%d\n", run.ID, run.Status, run.PlanID, run.RecordsStaged, run.RecordsSucceeded, run.RecordsFailed)
 		return nil
 	default:
 		return errUsage
@@ -1506,7 +1506,7 @@ func runAgent(ctx context.Context, cfg config.Config, root string, args []string
 		return writeJSON(stdout, result)
 	}
 	for _, step := range steps {
-		fmt.Fprintln(stdout, step)
+		_, _ = fmt.Fprintln(stdout, step)
 	}
 	return nil
 }
@@ -1538,14 +1538,14 @@ func runDocs(args []string, stdout io.Writer) error {
 		if err := writeConnectorDocs(connectorsDir, appRegistry()); err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
+		_, _ = fmt.Fprintf(stdout, "Generated docs in %s and connector docs in %s\n", dir, connectorsDir)
 		return nil
 	case "validate":
 		dir := valueOr(flags.first("connectors-dir"), valueOr(flags.first("dir"), "docs/connectors"))
 		if err := validateConnectorDocs(dir, appRegistry()); err != nil {
 			return err
 		}
-		fmt.Fprintf(stdout, "Validated connector docs in %s\n", dir)
+		_, _ = fmt.Fprintf(stdout, "Validated connector docs in %s\n", dir)
 		return nil
 	default:
 		return errUsage
@@ -1565,13 +1565,13 @@ func runRuntime(ctx context.Context, cfg config.Config, args []string, stdout io
 			"report": report,
 		})
 	}
-	fmt.Fprintf(stdout, "mode=%s duration=%s\n", report.Mode, report.Duration)
+	_, _ = fmt.Fprintf(stdout, "mode=%s duration=%s\n", report.Mode, report.Duration)
 	for _, check := range report.Checks {
 		if check.Error != "" {
-			fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s\n", check.Name, check.Status, check.Endpoint, check.Latency, check.Error)
+			_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\t%s\n", check.Name, check.Status, check.Endpoint, check.Latency, check.Error)
 			continue
 		}
-		fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", check.Name, check.Status, check.Endpoint, check.Latency)
+		_, _ = fmt.Fprintf(stdout, "%s\t%s\t%s\t%s\n", check.Name, check.Status, check.Endpoint, check.Latency)
 	}
 	return nil
 }
@@ -1602,8 +1602,8 @@ func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Wr
 		if comparison.RuntimeBacked != nil {
 			printPerfResult(stdout, *comparison.RuntimeBacked)
 		}
-		fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
-		fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
+		_, _ = fmt.Fprintf(stdout, "\nDependency-free: %s\n", comparison.Explanation["dependency_free"])
+		_, _ = fmt.Fprintf(stdout, "Runtime-backed: %s\n", comparison.Explanation["runtime_backed"])
 		return nil
 	case "sync-modes":
 		flags := parseFlags(args[1:])
@@ -1621,13 +1621,13 @@ func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Wr
 			return writeJSON(stdout, envelope{"kind": "SyncModeBenchmark", "benchmark": benchmark})
 		}
 		for _, result := range benchmark.Results {
-			fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
+			_, _ = fmt.Fprintf(stdout, "%s\trecords=%d\tduration=%s\trecords_per_sec=%.2f", result.Mode, result.Records, result.Duration, result.RecordsPerSec)
 			if result.Error != "" {
-				fmt.Fprintf(stdout, "\terror=%s", result.Error)
+				_, _ = fmt.Fprintf(stdout, "\terror=%s", result.Error)
 			}
-			fmt.Fprintln(stdout)
+			_, _ = fmt.Fprintln(stdout)
 		}
-		fmt.Fprintln(stdout, benchmark.Explanation)
+		_, _ = fmt.Fprintln(stdout, benchmark.Explanation)
 		return nil
 	default:
 		return errUsage
@@ -1636,10 +1636,10 @@ func runPerf(ctx context.Context, cfg config.Config, args []string, stdout io.Wr
 
 func printPerfResult(stdout io.Writer, result perf.Result) {
 	if result.Error != "" {
-		fmt.Fprintf(stdout, "%s\titerations=%d\terror=%s\n", result.Mode, result.Iterations, result.Error)
+		_, _ = fmt.Fprintf(stdout, "%s\titerations=%d\terror=%s\n", result.Mode, result.Iterations, result.Error)
 		return
 	}
-	fmt.Fprintf(stdout, "%s\titerations=%d\trecords=%d\tduration=%s\tavg=%s\trecords_per_sec=%.2f\n",
+	_, _ = fmt.Fprintf(stdout, "%s\titerations=%d\trecords=%d\tduration=%s\tavg=%s\trecords_per_sec=%.2f\n",
 		result.Mode,
 		result.Iterations,
 		result.Records,

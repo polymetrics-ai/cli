@@ -1,0 +1,38 @@
+{
+  "base": {
+    "url": "{{ config.base_url }}",
+    "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Accept": "application/json"
+    },
+    "auth": [
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.access_token }}",
+        "when": "{{ secrets.access_token }}"
+      },
+      {
+        "mode": "none"
+      }
+    ],
+    "pagination": {
+      "type": "none"
+    },
+    "error_map": [
+      {
+        "status": 401,
+        "hint": "HubSpot credential is missing or expired; re-add the credential without printing the token."
+      },
+      {
+        "status": 403,
+        "hint": "HubSpot credential lacks the required operation scope."
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "HubSpot rate limit reached; retry after the provider window resets."
+      }
+    ]
+  },
+  "streams": []
+}

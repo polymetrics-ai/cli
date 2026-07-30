@@ -46,7 +46,7 @@ func runWorkerServe(ctx context.Context, cfg config.Config, stdout io.Writer, js
 	if jsonOut {
 		_ = writeJSON(stdout, envelope{"kind": "WorkerServe", "status": "starting", "addr": addr, "task_queue": worker.TaskQueue})
 	} else {
-		fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
+		_, _ = fmt.Fprintf(stdout, "pm worker serving on task queue %q (temporal=%s); Ctrl-C to stop\n", worker.TaskQueue, addr)
 	}
 	activities := worker.NewPodmanActivities(cfg.RLM.PodmanBin, cfg.RLM.Image)
 	return workerServe(ctx, addr, activities)
@@ -72,9 +72,9 @@ func runWorkerStatus(ctx context.Context, cfg config.Config, stdout io.Writer, j
 		})
 	}
 	if addr == "" {
-		fmt.Fprintln(stdout, "worker status: POLYMETRICS_TEMPORAL_ADDR not set (RLM agent backend disabled)")
+		_, _ = fmt.Fprintln(stdout, "worker status: POLYMETRICS_TEMPORAL_ADDR not set (RLM agent backend disabled)")
 		return nil
 	}
-	fmt.Fprintf(stdout, "worker status: temporal=%s reachable=%v task_queue=%s\n", addr, reachable, worker.TaskQueue)
+	_, _ = fmt.Fprintf(stdout, "worker status: temporal=%s reachable=%v task_queue=%s\n", addr, reachable, worker.TaskQueue)
 	return nil
 }

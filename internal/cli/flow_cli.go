@@ -128,9 +128,9 @@ func flowPlan(_ context.Context, args []string, stdout io.Writer, jsonOut bool, 
 			"order":  order,
 		})
 	}
-	fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
+	_, _ = fmt.Fprintf(stdout, "Flow: %s  status=%s\n", m.Name, status)
 	for i, id := range order {
-		fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
+		_, _ = fmt.Fprintf(stdout, "  %d. %s\n", i+1, id)
 	}
 	return nil
 }
@@ -189,7 +189,7 @@ func flowRun(ctx context.Context, cfg config.Config, a *app.App, args []string, 
 	if jsonOut {
 		return writeJSON(stdout, result)
 	}
-	fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
+	_, _ = fmt.Fprintf(stdout, "Flow %s: %s\n", result.FlowName, result.Status)
 	return nil
 }
 
@@ -232,9 +232,9 @@ func flowStatus(args []string, stdout io.Writer, jsonOut bool) error {
 	if jsonOut {
 		return writeJSON(stdout, envelope{"flow": name, "steps": statuses})
 	}
-	fmt.Fprintf(stdout, "Flow: %s\n", name)
+	_, _ = fmt.Fprintf(stdout, "Flow: %s\n", name)
 	for _, s := range statuses {
-		fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
+		_, _ = fmt.Fprintf(stdout, "  %s: %s\n", s.ID, s.Status)
 	}
 	return nil
 }
@@ -267,11 +267,11 @@ func flowList(args []string, stdout io.Writer, jsonOut bool) error {
 		return err
 	}
 	if len(flows) == 0 {
-		fmt.Fprintln(stdout, "(no flows)")
+		_, _ = fmt.Fprintln(stdout, "(no flows)")
 		return nil
 	}
 	for _, f := range flows {
-		fmt.Fprintln(stdout, f)
+		_, _ = fmt.Fprintln(stdout, f)
 	}
 	return nil
 }
@@ -335,7 +335,7 @@ func (a *appFlowAdapter) RLMRun(ctx context.Context, req flow.RLMRunRequest) (fl
 		return flow.RLMResult{}, err
 	}
 	if closer != nil {
-		defer closer()
+		defer func() { _ = closer() }()
 	}
 
 	result, err := analyzer.Run(ctx, rlm.RunRequest{

@@ -188,9 +188,11 @@ pm etl run --connection gh --stream pull_requests --batch-size 100 --json
 pm credentials add github --connector github --config repository=OWNER/REPO --config max_pages=0
 ```
 
-The same pattern works for `stripe`, `postgres`, `slack`, `hubspot`, and the rest —
-only the credential config and stream names change. Use `pm connectors inspect <name>`
-to see a connector's streams, cursors, and required config.
+The same pattern works for `stripe`, `postgres`, `slack`, and other connectors with
+enabled read streams. Planned ledger-only connectors such as `hubspot` remain visible
+in the catalog but list no executable streams until their future implementation lanes
+ship. Use `pm connectors inspect <name>` to see a connector's streams, cursors, and
+required config.
 
 ---
 
@@ -254,8 +256,9 @@ able to perform them unsupervised.
 **Write actions** are connector-specific and allow-listed. GitHub, for example,
 supports `create_issue`, `update_issue`, `comment_issue`, `close_issue`,
 `create_pull_request`, `update_pull_request`, `close_pull_request`,
-`request_reviewers`, and `merge_pull_request`. HubSpot supports
-`create_contact` / `update_contact`. Inspect a connector to see its actions:
+`request_reviewers`, and `merge_pull_request`. Planned ledger-only connectors such
+as HubSpot intentionally report no executable write actions until connector-owned
+actions and evidence ship. Inspect a connector to see its actions:
 
 ```bash
 pm connectors inspect github --json   # → manifest.write_actions
