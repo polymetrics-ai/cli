@@ -11520,8 +11520,7 @@
       "path": "plans update-plan",
       "summary": "Update plan",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_plan",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePlan`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
@@ -11539,9 +11538,7 @@
           "maps_to": "record.path_planId"
         }
       ],
-      "examples": [
-        "pm jira plans update-plan --credential <name> --plan --preview --json"
-      ]
+      "notes": "Blocked until declarative writes support application/json-patch+json request bodies."
     },
     {
       "path": "plans archive-plan",
@@ -11753,8 +11750,7 @@
       "path": "teams-in-plan update-atlassian-team",
       "summary": "Update Atlassian team in plan",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_atlassian_team",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateAtlassianTeam`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
@@ -11778,9 +11774,7 @@
           "maps_to": "record.path_atlassianTeamId"
         }
       ],
-      "examples": [
-        "pm jira teams-in-plan update-atlassian-team --credential <name> --plan --preview --json"
-      ]
+      "notes": "Blocked until declarative writes support application/json-patch+json request bodies."
     },
     {
       "path": "teams-in-plan create-plan-only-team",
@@ -11892,8 +11886,7 @@
       "path": "teams-in-plan update-plan-only-team",
       "summary": "Update plan-only team",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_plan_only_team",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePlanOnlyTeam`.",
       "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
@@ -11917,9 +11910,7 @@
           "maps_to": "record.path_planOnlyTeamId"
         }
       ],
-      "examples": [
-        "pm jira teams-in-plan update-plan-only-team --credential <name> --plan --preview --json"
-      ]
+      "notes": "Blocked until declarative writes support application/json-patch+json request bodies."
     },
     {
       "path": "plans trash-plan",

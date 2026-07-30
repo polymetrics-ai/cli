@@ -11,8 +11,8 @@
   - 616 operations inventoried.
 - Green ledger invariant:
   - 616 `api_surface.json` rows.
-  - 286 executable `writes.json` actions.
-  - 10 blocked reverse-ETL shared-foundation gaps.
+  - 283 executable `writes.json` actions.
+  - 13 blocked reverse-ETL shared-foundation gaps.
   - 86 DELETE actions; every DELETE action declares `confirm: "destructive"`.
   - 103 total destructive-confirmed write actions.
   - endpoint `(method,path)` rows are unique.
@@ -50,5 +50,6 @@
   - typed integer/object array or whole-object body flags for bounded direct reads;
   - raw scalar/binary request body write dialect for watcher/preference/avatar operations;
   - required `Atlassian-Transfer-Id` request headers for App Migration writes;
+  - `application/json-patch+json` request bodies for plan/team updates;
   - repeated `columns` form-field request bodies for Jira column defaults.
 - Fixture-only/replay metadata does not claim live certification.

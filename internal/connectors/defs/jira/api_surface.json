@@ -2541,8 +2541,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/plans/plan/{planId}",
-      "covered_by": {
-        "write": "update_plan"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "application/json-patch+json request bodies cannot be represented by the current declarative writes.json body/content-type dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=updatePlan; operation=jira.update-plan; command=plans update-plan"
       }
     },
     {
@@ -2590,8 +2596,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/plans/plan/{planId}/team/atlassian/{atlassianTeamId}",
-      "covered_by": {
-        "write": "update_atlassian_team"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "application/json-patch+json request bodies cannot be represented by the current declarative writes.json body/content-type dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=updateAtlassianTeam; operation=jira.update-atlassian-team; command=teams-in-plan update-atlassian-team"
       }
     },
     {
@@ -2618,8 +2630,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/plans/plan/{planId}/team/planonly/{planOnlyTeamId}",
-      "covered_by": {
-        "write": "update_plan_only_team"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "application/json-patch+json request bodies cannot be represented by the current declarative writes.json body/content-type dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=updatePlanOnlyTeam; operation=jira.update-plan-only-team; command=teams-in-plan update-plan-only-team"
       }
     },
     {

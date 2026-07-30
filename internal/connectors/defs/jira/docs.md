@@ -13,8 +13,8 @@ Source evidence:
 - sha256: `8439da27e1b2dd7b013a0ae721b8aeaa7746bc8e2d816fa28aa1a582e8597501`
 - md5: `ae49a3d84a12210d4686315cb36442be`
 - operations inventoried: `616`
-- executable reverse-ETL write actions: `286`
-- blocked reverse-ETL shared-foundation gaps: `10`
+- executable reverse-ETL write actions: `283`
+- blocked reverse-ETL shared-foundation gaps: `13`
 - implemented bounded direct-read commands: `272`
 - partial bounded direct-read commands awaiting typed body flags: `14`
 - blocked binary/direct operation rows: `17`
@@ -66,7 +66,7 @@ also requires the typed `--confirm destructive` challenge printed by the plan ou
 
 Generated write command metadata:
 
-- implemented provider-style write commands with scalar required fields: `258`
+- implemented provider-style write commands with scalar required fields: `255`
 - partial provider-style write commands that require record-driven reverse ETL or future typed flags: `28`
 - no live write certification is claimed by this bundle.
 
@@ -81,8 +81,8 @@ call was used to create this ledger.
   intentionally lacks an operation-backed binary/file executor in this slice. Direct-read operations
   requiring integer/object array body flags or whole-object payload flags are also blocked operation
   rows until typed body flags exist.
-- `10` reverse-ETL operations remain blocked for shared-foundation gaps: 5 raw scalar or binary request bodies, 3 App Migration writes requiring `Atlassian-Transfer-Id`, and 2 repeated `columns` form-field bodies. Implementing them needs shared write body/header dialect support rather than connector-local approximations.
+- `13` reverse-ETL operations remain blocked for shared-foundation gaps: 5 raw scalar or binary request bodies, 3 App Migration writes requiring `Atlassian-Transfer-Id`, 3 JSON Patch media-type bodies, and 2 repeated `columns` form-field bodies. Implementing them needs shared write body/header/content-type dialect support rather than connector-local approximations.
 - Provider-style one-off CLI commands cannot express required nested JSON objects, integer arrays, object arrays, or whole-object direct-read payloads as flags. Where the underlying write action is otherwise supported, record-driven reverse ETL remains available and the command metadata is marked partial instead of pretending scalar flags are sufficient.
 - Fixture-only and replay evidence does not certify live Jira behavior. Live certification requires
   separate credentials, sandbox policy, and write cleanup approval.
-- Operation-ledger blocked row models: admin_reverse_etl=10, binary_read=2, deprecated=28, direct_read=15.
+- Operation-ledger blocked row models: admin_reverse_etl=13, binary_read=2, deprecated=28, direct_read=15.

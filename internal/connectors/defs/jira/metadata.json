@@ -1,7 +1,7 @@
 {
   "name": "jira",
   "display_name": "Jira",
-  "description": "Reads Jira Cloud issues, projects, and users; exposes bounded JSON direct reads; and declares approval-gated reverse ETL actions from the official Jira Cloud REST API v3 ledger (291 executable write actions, 616 operations accounted).",
+  "description": "Reads Jira Cloud issues, projects, and users; exposes bounded JSON direct reads; and declares approval-gated reverse ETL actions from the official Jira Cloud REST API v3 ledger (283 executable write actions, 616 operations accounted).",
   "integration_type": "api",
   "docs_url": "https://developer.atlassian.com/cloud/jira/platform/rest/v3/intro/",
   "release_stage": "ga",

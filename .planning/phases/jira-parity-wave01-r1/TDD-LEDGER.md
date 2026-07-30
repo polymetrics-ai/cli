@@ -22,9 +22,9 @@ Actual current failure captured before production edits: `red_baseline_exit=1` b
 
 - Generated connector-local Jira operation ledger from official Atlassian OpenAPI v3.
 - Official source hash recorded: `sha256:8439da27e1b2dd7b013a0ae721b8aeaa7746bc8e2d816fa28aa1a582e8597501`.
-- Green invariant passed: 616 surface rows, 286 executable write actions, 10 reverse-ETL shared-foundation blockers, 86 DELETE actions all typed `destructive`, 103 destructive-confirmed writes total.
+- Green invariant passed: 616 surface rows, 283 executable write actions, 13 reverse-ETL shared-foundation blockers, 86 DELETE actions all typed `destructive`, 103 destructive-confirmed writes total.
 - Generated bounded direct-read command metadata and operation specs for JSON GET/POST read/search operations, with unsupported typed-body command shapes marked partial and blocked in the operation ledger.
-- Recorded binary/raw-body, required-header, and repeated form-field shared executor gaps as blocked ledger/operation rows rather than fake execution.
+- Recorded binary/raw-body, required-header, JSON Patch media-type, and repeated form-field shared executor gaps as blocked ledger/operation rows rather than fake execution.
 - Existing sanitized read fixtures still pass; representative write fixtures added for `create_issue`, `delete_issue`, and `remove_attachment`.
 
 ## Verification targets

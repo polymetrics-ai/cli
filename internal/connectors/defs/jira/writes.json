@@ -5287,28 +5287,6 @@
       "risk": "Mutates Jira data/configuration for operation `createPlan`."
     },
     {
-      "name": "update_plan",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/plans/plan/{{ record.path_planId }}",
-      "path_fields": [
-        "path_planId"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_planId"
-        ],
-        "properties": {
-          "path_planId": {
-            "type": "integer"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `updatePlan`."
-    },
-    {
       "name": "archive_plan",
       "kind": "custom",
       "method": "PUT",
@@ -5436,33 +5414,6 @@
       "confirm": "destructive"
     },
     {
-      "name": "update_atlassian_team",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/atlassian/{{ record.path_atlassianTeamId }}",
-      "path_fields": [
-        "path_planId",
-        "path_atlassianTeamId"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_planId",
-          "path_atlassianTeamId"
-        ],
-        "properties": {
-          "path_planId": {
-            "type": "integer"
-          },
-          "path_atlassianTeamId": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `updateAtlassianTeam`."
-    },
-    {
       "name": "create_plan_only_team",
       "kind": "create",
       "method": "POST",
@@ -5545,33 +5496,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deletePlanOnlyTeam`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "update_plan_only_team",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/plans/plan/{{ record.path_planId }}/team/planonly/{{ record.path_planOnlyTeamId }}",
-      "path_fields": [
-        "path_planId",
-        "path_planOnlyTeamId"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_planId",
-          "path_planOnlyTeamId"
-        ],
-        "properties": {
-          "path_planId": {
-            "type": "integer"
-          },
-          "path_planOnlyTeamId": {
-            "type": "integer"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `updatePlanOnlyTeam`."
     },
     {
       "name": "trash_plan",
