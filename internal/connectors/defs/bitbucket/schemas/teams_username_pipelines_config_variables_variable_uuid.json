@@ -73,17 +73,6 @@
         "string",
         "null"
       ]
-    },
-    "value": {
-      "type": [
-        "string",
-        "integer",
-        "number",
-        "boolean",
-        "object",
-        "array",
-        "null"
-      ]
     }
   },
   "title": "teams_username_pipelines_config_variables_variable_uuid",

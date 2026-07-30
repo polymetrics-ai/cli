@@ -19,7 +19,7 @@ ICON
   review_url: https://github.com/polymetrics-ai/cli
 
 CAPABILITIES
-  check=true catalog=true read=true write=true query=true
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
@@ -172,7 +172,7 @@ ETL STREAMS
     fields: created_on(), environment(), id(), links(), name(), release(), slug(), state(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_deployments_deployment_uuid:
     primary key: id
     fields: created_on(), environment(), id(), links(), name(), release(), slug(), state(), type(), updated_on(), uuid()
@@ -202,10 +202,10 @@ ETL STREAMS
     fields: created_on(), description(), fork_policy(), full_name(), has_issues(), has_wiki(), id(), is_private(), language(), links(), mainbranch(), name(), owner(), parent(), project(), scm(), size(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_hooks:
     primary key: id
-    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
   repositories_workspace_repo_slug_hooks_uid:
     primary key: id
-    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
   repositories_workspace_repo_slug_issues:
     primary key: id
     fields: assignee(), component(), content(), created_on(), edited_on(), id(), kind(), links(), milestone(), name(), priority(), reporter(), repository(), slug(), state(), title(), type(), updated_on(), uuid(), version(), votes()
@@ -283,7 +283,7 @@ ETL STREAMS
     fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_pipelines_config_ssh_key_pair:
     primary key: id
-    fields: created_on(), id(), links(), name(), private_key(), public_key(), slug(), type(), updated_on(), uuid()
+    fields: created_on(), id(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_pipelines_config_ssh_known_hosts:
     primary key: id
     fields: created_on(), hostname(), id(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
@@ -292,10 +292,10 @@ ETL STREAMS
     fields: created_on(), hostname(), id(), links(), name(), public_key(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_pipelines_config_variables:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   repositories_workspace_repo_slug_pipelines_pipeline_uuid:
     primary key: id
     fields: build_number(), build_seconds_used(), completed_on(), configuration_sources(), created_on(), creator(), id(), links(), name(), repository(), slug(), state(), target(), trigger(), type(), updated_on(), uuid(), variables()
@@ -388,10 +388,10 @@ ETL STREAMS
     fields: created_on(), display_name(), id(), links(), name(), slug(), type(), updated_on(), uuid()
   teams_username_pipelines_config_variables:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   teams_username_pipelines_config_variables_variable_uuid:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   user:
     primary key: id
     fields: created_on(), display_name(), id(), links(), name(), slug(), type(), updated_on(), uuid()
@@ -427,10 +427,10 @@ ETL STREAMS
     fields: added_on(), created_on(), expires_on(), fingerprint(), id(), key(), key_id(), last_used(), links(), name(), owner(), parent_fingerprint(), slug(), subkeys(), type(), updated_on(), uuid()
   users_selected_user_pipelines_config_variables:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   users_selected_user_pipelines_config_variables_variable_uuid:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   users_selected_user_properties_app_key_property_name:
     primary key: id
     fields: _attributes(), created_on(), id(), links(), name(), slug(), type(), updated_on(), uuid()
@@ -448,10 +448,10 @@ ETL STREAMS
     fields: created_on(), forking_mode(), id(), is_privacy_enforced(), is_private(), links(), name(), slug(), type(), updated_on(), uuid()
   workspaces_workspace_hooks:
     primary key: id
-    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
   workspaces_workspace_hooks_uid:
     primary key: id
-    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
+    fields: active(), created_at(), created_on(), description(), events(), id(), links(), name(), secret_set(), slug(), subject(), subject_type(), type(), updated_on(), url(), uuid()
   workspaces_workspace_members:
     primary key: id
     fields: created_on(), id(), links(), name(), slug(), type(), updated_on(), user(), uuid(), workspace()
@@ -475,10 +475,10 @@ ETL STREAMS
     fields: created_on(), id(), labels(), links(), name(), oauth_client(), slug(), state(), type(), updated_on(), uuid()
   workspaces_workspace_pipelines_config_variables:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   workspaces_workspace_pipelines_config_variables_variable_uuid:
     primary key: id
-    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid(), value()
+    fields: created_on(), id(), key(), links(), name(), secured(), slug(), type(), updated_on(), uuid()
   workspaces_workspace_projects:
     primary key: id
     fields: created_on(), description(), has_publicly_visible_repos(), id(), is_private(), key(), links(), name(), owner(), slug(), type(), updated_on(), uuid()

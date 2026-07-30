@@ -477,7 +477,7 @@
         "type": "page_number"
       },
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/deployments_config/environments/{{ config.environment_uuid }}/variables",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -636,7 +636,7 @@
         "type": "page_number"
       },
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -646,7 +646,7 @@
       "method": "GET",
       "name": "repositories_workspace_repo_slug_hooks_uid",
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/hooks/{{ config.uid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1016,7 +1016,7 @@
       "method": "GET",
       "name": "repositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/ssh/key_pair",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1064,7 +1064,7 @@
         "type": "page_number"
       },
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -1074,7 +1074,7 @@
       "method": "GET",
       "name": "repositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pipelines_config/variables/{{ config.variable_uuid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1535,7 +1535,7 @@
         "type": "page_number"
       },
       "path": "/teams/{{ config.username }}/pipelines_config/variables",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -1545,7 +1545,7 @@
       "method": "GET",
       "name": "teams_username_pipelines_config_variables_variable_uuid",
       "path": "/teams/{{ config.username }}/pipelines_config/variables/{{ config.variable_uuid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1720,7 +1720,7 @@
         "type": "page_number"
       },
       "path": "/users/{{ config.selected_user }}/pipelines_config/variables",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -1730,7 +1730,7 @@
       "method": "GET",
       "name": "users_selected_user_pipelines_config_variables_variable_uuid",
       "path": "/users/{{ config.selected_user }}/pipelines_config/variables/{{ config.variable_uuid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1818,7 +1818,7 @@
         "type": "page_number"
       },
       "path": "/workspaces/{{ config.workspace }}/hooks",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -1828,7 +1828,7 @@
       "method": "GET",
       "name": "workspaces_workspace_hooks_uid",
       "path": "/workspaces/{{ config.workspace }}/hooks/{{ config.uid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
@@ -1959,7 +1959,7 @@
         "type": "page_number"
       },
       "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": "values"
       },
@@ -1969,7 +1969,7 @@
       "method": "GET",
       "name": "workspaces_workspace_pipelines_config_variables_variable_uuid",
       "path": "/workspaces/{{ config.workspace }}/pipelines-config/variables/{{ config.variable_uuid }}",
-      "projection": "passthrough",
+      "projection": "schema",
       "records": {
         "path": ".",
         "single_object": true
