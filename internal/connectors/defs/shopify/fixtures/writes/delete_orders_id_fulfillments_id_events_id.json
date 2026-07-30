@@ -1,0 +1,15 @@
+{
+  "record": {
+    "id1": 1001,
+    "id2": 1002,
+    "id3": 1003
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/admin/api/latest/orders/1001/fulfillments/1002/events/1003.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

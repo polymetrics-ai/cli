@@ -1,0 +1,28 @@
+{
+  "phase": "issue-3013-shopify-parity",
+  "status": "verification_passed",
+  "branch": "fm/cli-shopify-parity-wave01-r1",
+  "verificationPassed": true,
+  "gsdCommand": "scripts/gsd prompt quick \"Implement documented Shopify connector parity for issue 3013 within connector-local definition bundle, including destructive/delete operations with typed confirmation and plan-preview-approval-execute safety, no live credentials or provider calls\"",
+  "programmingLoopFallback": "scripts/gsd prompt programming-loop init --phase issue-3013-shopify-parity --dry-run returned unknown GSD command: programming-loop",
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "single connector-local worktree and write scope; subissues all target the same Shopify bundle so mutating worker fan-out would collide"
+    }
+  ],
+  "verification": [
+    "go run ./cmd/connectorgen validate internal/connectors/defs",
+    "go test ./internal/connectors/conformance -run 'TestConformance/shopify' -count=1",
+    "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+    "go vet ./internal/connectors/... ./internal/cli/...",
+    "go build ./cmd/pm",
+    "make connector-boundary",
+    "git diff --check"
+  ],
+  "liveProviderCalls": false,
+  "credentialsUsed": false,
+  "writesExecuted": false,
+  "certificationClaimed": false
+}
