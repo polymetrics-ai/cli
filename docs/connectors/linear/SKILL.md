@@ -423,7 +423,7 @@ Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL revers
 - initiative_label_retire:
   - endpoint: POST
   - required fields: id
-  - risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+  - risk: destructive Linear GraphQL mutation; requires typed confirmation
 - initiative_relation_delete:
   - endpoint: POST
   - required fields: id
@@ -503,7 +503,7 @@ Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL revers
 - issue_external_sync_disable:
   - endpoint: POST
   - required fields: attachmentId
-  - risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+  - risk: destructive Linear GraphQL mutation; requires typed confirmation
 - issue_import_delete:
   - endpoint: POST
   - required fields: issueImportId
@@ -519,7 +519,7 @@ Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL revers
 - issue_label_retire:
   - endpoint: POST
   - required fields: id
-  - risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+  - risk: destructive Linear GraphQL mutation; requires typed confirmation
 - issue_relation_delete:
   - endpoint: POST
   - required fields: id
@@ -621,7 +621,7 @@ Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL revers
 - project_label_retire:
   - endpoint: POST
   - required fields: id
-  - risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+  - risk: destructive Linear GraphQL mutation; requires typed confirmation
 - project_milestone_delete:
   - endpoint: POST
   - required fields: id
@@ -757,7 +757,7 @@ Reads Linear GraphQL list/connection data and exposes typed fixed GraphQL revers
 - user_unlink_from_identity_provider:
   - endpoint: POST
   - required fields: id
-  - risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+  - risk: destructive Linear GraphQL mutation; requires typed confirmation
 - view_preferences_delete:
   - endpoint: POST
   - required fields: id

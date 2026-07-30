@@ -419,7 +419,7 @@ REVERSE ETL ACTIONS
   initiative_label_retire:
     endpoint: POST
     required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear GraphQL mutation; requires typed confirmation
   initiative_relation_delete:
     endpoint: POST
     required fields: id
@@ -499,7 +499,7 @@ REVERSE ETL ACTIONS
   issue_external_sync_disable:
     endpoint: POST
     required fields: attachmentId
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear GraphQL mutation; requires typed confirmation
   issue_import_delete:
     endpoint: POST
     required fields: issueImportId
@@ -515,7 +515,7 @@ REVERSE ETL ACTIONS
   issue_label_retire:
     endpoint: POST
     required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear GraphQL mutation; requires typed confirmation
   issue_relation_delete:
     endpoint: POST
     required fields: id
@@ -617,7 +617,7 @@ REVERSE ETL ACTIONS
   project_label_retire:
     endpoint: POST
     required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear GraphQL mutation; requires typed confirmation
   project_milestone_delete:
     endpoint: POST
     required fields: id
@@ -753,7 +753,7 @@ REVERSE ETL ACTIONS
   user_unlink_from_identity_provider:
     endpoint: POST
     required fields: id
-    risk: typed Linear GraphQL mutation; executes only through reverse ETL approval
+    risk: destructive Linear GraphQL mutation; requires typed confirmation
   view_preferences_delete:
     endpoint: POST
     required fields: id

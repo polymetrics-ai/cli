@@ -75277,7 +75277,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "",
-        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
       },
       {
         "name": "initiative_relation_delete",
@@ -75434,7 +75435,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "",
-        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
       },
       {
         "name": "issue_import_delete",
@@ -75464,7 +75466,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "",
-        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
       },
       {
         "name": "issue_relation_delete",
@@ -75665,7 +75668,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "",
-        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
       },
       {
         "name": "project_milestone_delete",
@@ -75932,7 +75936,8 @@
         "kind": "custom",
         "method": "POST",
         "path": "",
-        "risk": "typed Linear GraphQL mutation; executes only through reverse ETL approval"
+        "risk": "destructive Linear GraphQL mutation; requires typed confirmation",
+        "confirm": "destructive"
       },
       {
         "name": "view_preferences_delete",
