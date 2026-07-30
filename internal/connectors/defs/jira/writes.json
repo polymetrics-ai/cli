@@ -21,7 +21,8 @@
           "visibility": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `setBanner`."
     },
@@ -40,7 +41,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `updateMultipleCustomFieldValues`."
     },
@@ -97,7 +99,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldValue`."
     },
@@ -125,7 +128,8 @@
           "value": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `setApplicationProperty`."
     },
@@ -236,7 +240,8 @@
           "targetToSourcesMapping": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `submitBulkMove`."
     },
@@ -345,33 +350,6 @@
       "confirm": "destructive"
     },
     {
-      "name": "set_comment_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/comment/{{ record.path_commentId }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_commentId",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_commentId",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_commentId": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setCommentProperty`."
-    },
-    {
       "name": "create_component",
       "kind": "create",
       "method": "POST",
@@ -440,7 +418,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createComponent`."
     },
@@ -552,7 +531,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateComponent`."
     },
@@ -577,82 +557,6 @@
         }
       },
       "risk": "Mutates Jira data/configuration for operation `createFieldAssociationScheme`."
-    },
-    {
-      "name": "remove_fields_associated_with_schemes",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/rest/api/3/config/fieldschemes/fields",
-      "body_type": "none",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {}
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
-      "risk": "Permanently deletes or removes Jira data/configuration for operation `removeFieldsAssociatedWithSchemes`.",
-      "confirm": "destructive"
-    },
-    {
-      "name": "update_fields_associated_with_schemes",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/config/fieldschemes/fields",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {}
-      },
-      "risk": "Mutates Jira data/configuration for operation `updateFieldsAssociatedWithSchemes`."
-    },
-    {
-      "name": "remove_field_association_scheme_item_parameters",
-      "kind": "delete",
-      "method": "DELETE",
-      "path": "/rest/api/3/config/fieldschemes/fields/parameters",
-      "body_type": "none",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {}
-      },
-      "delete": {
-        "idempotent": true,
-        "missing_ok_status": [
-          404
-        ]
-      },
-      "risk": "Permanently deletes or removes Jira data/configuration for operation `removeFieldAssociationSchemeItemParameters`.",
-      "confirm": "destructive"
-    },
-    {
-      "name": "update_field_association_scheme_item_parameters",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/config/fieldschemes/fields/parameters",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {}
-      },
-      "risk": "Mutates Jira data/configuration for operation `updateFieldAssociationSchemeItemParameters`."
-    },
-    {
-      "name": "associate_projects_to_field_association_schemes",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/config/fieldschemes/projects",
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "properties": {}
-      },
-      "risk": "Mutates Jira data/configuration for operation `associateProjectsToFieldAssociationSchemes`."
     },
     {
       "name": "delete_field_association_scheme",
@@ -708,7 +612,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateFieldAssociationScheme`."
     },
@@ -921,7 +826,8 @@
           "uri": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `addGadget`."
     },
@@ -992,7 +898,8 @@
           "title": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateGadget`."
     },
@@ -1035,38 +942,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteDashboardItemProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_dashboard_item_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/dashboard/{{ record.path_dashboardId }}/items/{{ record.path_itemId }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_dashboardId",
-        "path_itemId",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_dashboardId",
-          "path_itemId",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_dashboardId": {
-            "type": "string"
-          },
-          "path_itemId": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setDashboardItemProperty`."
     },
     {
       "name": "delete_dashboard",
@@ -1237,7 +1112,25 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "properties": {}
+        "properties": {
+          "associationContexts": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          },
+          "fields": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "required": [
+          "associationContexts",
+          "fields"
+        ],
+        "additionalProperties": false
       },
       "delete": {
         "idempotent": true,
@@ -1246,7 +1139,11 @@
         ]
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `removeAssociations`.",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "associationContexts",
+        "fields"
+      ]
     },
     {
       "name": "create_associations",
@@ -1319,7 +1216,8 @@
               "com.atlassian.jira.plugin.system.customfieldtypes:versionsearcher"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateCustomField`."
     },
@@ -1431,7 +1329,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldContext`."
     },
@@ -1533,7 +1432,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `createCustomFieldOption`."
     },
@@ -1566,7 +1466,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldOption`."
     },
@@ -2231,7 +2132,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `setColumns`."
     },
@@ -2510,7 +2412,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `addUserToGroup`."
     },
@@ -2541,7 +2444,8 @@
           "update": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createIssue`."
     },
@@ -2557,7 +2461,8 @@
           "jql": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssuesAsync`.",
       "confirm": "destructive"
@@ -2577,7 +2482,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssues`.",
       "confirm": "destructive"
@@ -2597,7 +2503,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createIssues`."
     },
@@ -2662,7 +2569,8 @@
           "properties": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssuesPropertiesList`."
     },
@@ -2681,7 +2589,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssuePropertiesByIssue`."
     },
@@ -2703,8 +2612,17 @@
         "properties": {
           "path_propertyKey": {
             "type": "string"
+          },
+          "currentValue": {},
+          "entityIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
-        }
+        },
+        "minProperties": 2,
+        "additionalProperties": false
       },
       "delete": {
         "idempotent": true,
@@ -2713,7 +2631,11 @@
         ]
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteIssueProperty`.",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "currentValue",
+        "entityIds"
+      ]
     },
     {
       "name": "bulk_set_issue_property",
@@ -2750,7 +2672,8 @@
               "null"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssueProperty`."
     },
@@ -2769,7 +2692,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `unarchiveIssues`.",
       "confirm": "destructive"
@@ -2840,7 +2764,8 @@
           "update": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `editIssue`."
     },
@@ -2916,7 +2841,8 @@
           "timeZone": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `assignIssue`."
     },
@@ -3025,7 +2951,8 @@
           "visibility": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `addComment`."
     },
@@ -3134,7 +3061,8 @@
           "visibility": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateComment`."
     },
@@ -3171,7 +3099,8 @@
           "to": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `notify`."
     },
@@ -3209,33 +3138,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_issue_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_issueIdOrKey",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_issueIdOrKey",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_issueIdOrKey": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setIssueProperty`."
     },
     {
       "name": "delete_remote_issue_link_by_global_id",
@@ -3418,7 +3320,8 @@
           "update": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `doTransition`."
     },
@@ -3517,13 +3420,21 @@
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
         "required": [
-          "path_issueIdOrKey"
+          "path_issueIdOrKey",
+          "ids"
         ],
         "properties": {
           "path_issueIdOrKey": {
             "type": "string"
+          },
+          "ids": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
           }
-        }
+        },
+        "additionalProperties": false
       },
       "delete": {
         "idempotent": true,
@@ -3532,7 +3443,10 @@
         ]
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteWorklogs`.",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "ids"
+      ]
     },
     {
       "name": "add_worklog",
@@ -3602,7 +3516,8 @@
           "visibility": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `addWorklog`."
     },
@@ -3633,7 +3548,8 @@
           "issueIdOrKey": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `bulkMoveWorklogs`."
     },
@@ -3745,7 +3661,8 @@
           "visibility": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateWorklog`."
     },
@@ -3788,38 +3705,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWorklogProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_worklog_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/issue/{{ record.path_issueIdOrKey }}/worklog/{{ record.path_worklogId }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_issueIdOrKey",
-        "path_worklogId",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_issueIdOrKey",
-          "path_worklogId",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_issueIdOrKey": {
-            "type": "string"
-          },
-          "path_worklogId": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setWorklogProperty`."
     },
     {
       "name": "link_issues",
@@ -3905,7 +3790,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createIssueLinkType`."
     },
@@ -3972,7 +3858,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateIssueLinkType`."
     },
@@ -4079,7 +3966,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateIssueSecurityScheme`."
     },
@@ -4137,7 +4025,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `addSecurityLevel`."
     },
@@ -4205,7 +4094,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateSecurityLevel`."
     },
@@ -4238,7 +4128,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `addSecurityLevelMembers`."
     },
@@ -4371,7 +4262,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateIssueType`."
     },
@@ -4409,33 +4301,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteIssueTypeProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_issue_type_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/issuetype/{{ record.path_issueTypeId }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_issueTypeId",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_issueTypeId",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_issueTypeId": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setIssueTypeProperty`."
     },
     {
       "name": "create_issue_type_scheme",
@@ -4549,7 +4414,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScheme`."
     },
@@ -4700,7 +4566,8 @@
           "projectId": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `assignIssueTypeScreenSchemeToProject`."
     },
@@ -4758,7 +4625,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScreenScheme`."
     },
@@ -4862,7 +4730,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `updatePrecomputations`."
     },
@@ -4948,7 +4817,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateNotificationScheme`."
     },
@@ -5193,7 +5063,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `createPermissionGrant`."
     },
@@ -5706,7 +5577,8 @@
           "statusColor": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updatePriority`."
     },
@@ -5818,7 +5690,8 @@
           "projects": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updatePriorityScheme`."
     },
@@ -5964,7 +5837,8 @@
           "template": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createProjectWithCustomTemplate`."
     },
@@ -5989,7 +5863,8 @@
           "templateName": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `editTemplate`."
     },
@@ -6041,7 +5916,8 @@
           "templateName": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `saveTemplate`."
     },
@@ -6139,7 +6015,8 @@
           "url": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateProject`."
     },
@@ -6355,7 +6232,8 @@
               "COMING_SOON"
             ]
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `toggleFeatureForProject`."
     },
@@ -6393,33 +6271,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteProjectProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "set_project_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/project/{{ record.path_projectIdOrKey }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_projectIdOrKey",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_projectIdOrKey",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_projectIdOrKey": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setProjectProperty`."
     },
     {
       "name": "restore",
@@ -6520,7 +6371,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `addActorUsers`."
     },
@@ -6553,7 +6405,8 @@
           "id": {
             "type": "integer"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `setActors`."
     },
@@ -6584,7 +6437,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateProjectEmail`."
     },
@@ -6635,7 +6489,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createProjectCategory`."
     },
@@ -6699,7 +6554,8 @@
           "self": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateProjectCategory`."
     },
@@ -6718,7 +6574,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `redact`."
     },
@@ -6870,7 +6727,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createProjectRole`."
     },
@@ -6928,7 +6786,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `partialUpdateProjectRole`."
     },
@@ -6956,7 +6815,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `fullyUpdateProjectRole`."
     },
@@ -7026,7 +6886,8 @@
               "type": "string"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `addProjectRoleActorsToRole`."
     },
@@ -7128,7 +6989,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateScreen`."
     },
@@ -7341,7 +7203,8 @@
               "Last"
             ]
           }
-        }
+        },
+        "minProperties": 4
       },
       "risk": "Mutates Jira data/configuration for operation `moveScreenTabField`."
     },
@@ -7460,7 +7323,8 @@
           "screens": {
             "type": "object"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateScreenScheme`."
     },
@@ -7659,7 +7523,8 @@
           "name": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateUiModification`."
     },
@@ -7836,28 +7701,6 @@
       "confirm": "destructive"
     },
     {
-      "name": "set_user_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/api/3/user/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `setUserProperty`."
-    },
-    {
       "name": "create_version",
       "kind": "create",
       "method": "POST",
@@ -7929,7 +7772,8 @@
           "userStartDate": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createVersion`."
     },
@@ -8014,7 +7858,8 @@
           "userStartDate": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateVersion`."
     },
@@ -8075,7 +7920,8 @@
               "Last"
             ]
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `moveVersion`."
     },
@@ -8185,7 +8031,8 @@
           "moveFixIssuesTo": {
             "type": "integer"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `deleteAndReplaceVersion`.",
       "confirm": "destructive"
@@ -8234,7 +8081,18 @@
       "record_schema": {
         "$schema": "http://json-schema.org/draft-07/schema#",
         "type": "object",
-        "properties": {}
+        "properties": {
+          "webhookIds": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          }
+        },
+        "required": [
+          "webhookIds"
+        ],
+        "additionalProperties": false
       },
       "delete": {
         "idempotent": true,
@@ -8243,7 +8101,10 @@
         ]
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWebhookById`.",
-      "confirm": "destructive"
+      "confirm": "destructive",
+      "body_fields": [
+        "webhookIds"
+      ]
     },
     {
       "name": "register_dynamic_webhooks",
@@ -8392,7 +8253,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createWorkflows`."
     },
@@ -8417,7 +8279,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `updateWorkflows`."
     },
@@ -8469,7 +8332,8 @@
           "updateDraftIfNeeded": {
             "type": "boolean"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `createWorkflowScheme`."
     },
@@ -8516,7 +8380,8 @@
           "targetSchemeId": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 1
       },
       "risk": "Mutates Jira data/configuration for operation `switchWorkflowSchemeForProject`."
     },
@@ -8659,7 +8524,8 @@
           "updateDraftIfNeeded": {
             "type": "boolean"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowScheme`."
     },
@@ -8831,7 +8697,8 @@
           "updateDraftIfNeeded": {
             "type": "boolean"
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowSchemeDraft`."
     },
@@ -8961,7 +8828,8 @@
           "workflow": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeDraftIssueType`."
     },
@@ -8989,7 +8857,8 @@
               "type": "object"
             }
           }
-        }
+        },
+        "minProperties": 2
       },
       "risk": "Mutates Jira data/configuration for operation `publishDraftWorkflowScheme`."
     },
@@ -9066,7 +8935,8 @@
           "workflow": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateDraftWorkflowMapping`."
     },
@@ -9137,7 +9007,8 @@
           "workflow": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeIssueType`."
     },
@@ -9214,7 +9085,8 @@
           "workflow": {
             "type": "string"
           }
-        }
+        },
+        "minProperties": 3
       },
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowMapping`."
     },
@@ -9252,33 +9124,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `AddonPropertiesResource.deleteAddonProperty_delete`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "addon_properties_resource_put_addon_property_put",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/atlassian-connect/1/addons/{{ record.path_addonKey }}/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_addonKey",
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_addonKey",
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_addonKey": {
-            "type": "string"
-          },
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `AddonPropertiesResource.putAddonProperty_put`."
     },
     {
       "name": "dynamic_modules_resource_remove_modules_delete",
@@ -9378,28 +9223,6 @@
       },
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteForgeAppProperty`.",
       "confirm": "destructive"
-    },
-    {
-      "name": "put_forge_app_property",
-      "kind": "update",
-      "method": "PUT",
-      "path": "/rest/forge/1/app/properties/{{ record.path_propertyKey }}",
-      "path_fields": [
-        "path_propertyKey"
-      ],
-      "record_schema": {
-        "$schema": "http://json-schema.org/draft-07/schema#",
-        "type": "object",
-        "required": [
-          "path_propertyKey"
-        ],
-        "properties": {
-          "path_propertyKey": {
-            "type": "string"
-          }
-        }
-      },
-      "risk": "Mutates Jira data/configuration for operation `putForgeAppProperty`."
     }
   ]
 }

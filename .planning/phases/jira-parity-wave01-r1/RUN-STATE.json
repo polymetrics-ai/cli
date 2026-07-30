@@ -43,20 +43,21 @@
   },
   "jiraLedger": {
     "surfaceRows": 616,
-    "executableWrites": 283,
+    "executableWrites": 269,
     "rawBodyReverseBlockers": 5,
-    "deleteActions": 86,
-    "destructiveConfirmedWrites": 103,
+    "deleteActions": 84,
+    "destructiveConfirmedWrites": 101,
     "implementedDirectReadCommands": 272,
-    "sharedFoundationReverseBlockers": 13,
+    "sharedFoundationReverseBlockers": 27,
     "partialDirectReadCommands": 14,
-    "providerStyleWriteCommands": 255,
-    "partialProviderStyleWriteCommands": 28,
+    "providerStyleWriteCommands": 155,
+    "partialProviderStyleWriteCommands": 114,
     "blockedBinaryReadOperations": 2,
     "blockedDirectReadOperations": 15,
     "blockedBinaryDirectOperationRows": 17,
     "jsonPatchReverseBlockers": 3,
-    "plannedProviderStyleWriteCommands": 8
+    "plannedProviderStyleWriteCommands": 22,
+    "requiredRawDynamicJSONReverseBlockers": 14
   },
   "verificationPassed": true,
   "humanGate": "no live credentials/provider calls/writes/certification, no shared runtime edits, no merge to main"

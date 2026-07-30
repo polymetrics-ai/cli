@@ -1308,7 +1308,7 @@
       "path": "announcement-banner set-banner",
       "summary": "Update announcement banner configuration",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_banner",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setBanner`.",
@@ -1319,9 +1319,7 @@
           "path": "/rest/api/3/announcementBanner"
         }
       ],
-      "examples": [
-        "pm jira announcement-banner set-banner --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-custom-field-configuration-apps get-custom-fields-configurations",
@@ -1397,7 +1395,7 @@
       "path": "issue-custom-field-values-apps update-multiple-custom-field-values",
       "summary": "Update custom fields",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_multiple_custom_field_values",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateMultipleCustomFieldValues`.",
@@ -1408,9 +1406,7 @@
           "path": "/rest/api/3/app/field/value"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-values-apps update-multiple-custom-field-values --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-custom-field-configuration-apps get-custom-field-configuration",
@@ -1516,7 +1512,7 @@
       "path": "issue-custom-field-values-apps update-custom-field-value",
       "summary": "Update custom field value",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_custom_field_value",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldValue`.",
@@ -1535,9 +1531,7 @@
           "maps_to": "record.path_fieldIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-values-apps update-custom-field-value --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "jira-settings get-application-property",
@@ -1602,7 +1596,7 @@
       "path": "jira-settings set-application-property",
       "summary": "Set application property",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_application_property",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setApplicationProperty`.",
@@ -1621,9 +1615,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira jira-settings set-application-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "application-roles get-all-application-roles",
@@ -2009,7 +2001,7 @@
       "path": "issue-bulk-operations submit-bulk-move",
       "summary": "Bulk move issues",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "submit_bulk_move",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `submitBulkMove`.",
@@ -2020,9 +2012,7 @@
           "path": "/rest/api/3/bulk/issues/move"
         }
       ],
-      "examples": [
-        "pm jira issue-bulk-operations submit-bulk-move --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-bulk-operations get-available-transitions",
@@ -2378,34 +2368,15 @@
       "path": "issue-comment-properties set-comment-property",
       "summary": "Set comment property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_comment_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setCommentProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "comment-id",
-          "type": "string",
-          "summary": "path_commentId record field.",
-          "maps_to": "record.path_commentId"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira issue-comment-properties set-comment-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "project-components find-components-for-projects",
@@ -2462,7 +2433,7 @@
       "path": "project-components create-component",
       "summary": "Create component",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_component",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createComponent`.",
@@ -2473,9 +2444,7 @@
           "path": "/rest/api/3/component"
         }
       ],
-      "examples": [
-        "pm jira project-components create-component --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-components delete-component",
@@ -2536,7 +2505,7 @@
       "path": "project-components update-component",
       "summary": "Update component",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_component",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateComponent`.",
@@ -2555,9 +2524,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-components update-component --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-components get-component-related-issues",
@@ -2662,79 +2629,57 @@
       "path": "field-schemes remove-fields-associated-with-schemes",
       "summary": "Remove fields associated with field schemes",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "remove_fields_associated_with_schemes",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Permanently deletes or removes Jira data/configuration for operation `removeFieldsAssociatedWithSchemes`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/rest/api/3/config/fieldschemes/fields"
         }
       ],
-      "examples": [
-        "pm jira field-schemes remove-fields-associated-with-schemes --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "field-schemes update-fields-associated-with-schemes",
       "summary": "Update fields associated with field schemes",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_fields_associated_with_schemes",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `updateFieldsAssociatedWithSchemes`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/config/fieldschemes/fields"
         }
       ],
-      "examples": [
-        "pm jira field-schemes update-fields-associated-with-schemes --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "field-schemes remove-field-association-scheme-item-parameters",
       "summary": "Remove field parameters",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "remove_field_association_scheme_item_parameters",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Permanently deletes or removes Jira data/configuration for operation `removeFieldAssociationSchemeItemParameters`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "DELETE",
           "path": "/rest/api/3/config/fieldschemes/fields/parameters"
         }
       ],
-      "examples": [
-        "pm jira field-schemes remove-field-association-scheme-item-parameters --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "field-schemes update-field-association-scheme-item-parameters",
       "summary": "Update field parameters",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "update_field_association_scheme_item_parameters",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `updateFieldAssociationSchemeItemParameters`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/config/fieldschemes/fields/parameters"
         }
       ],
-      "examples": [
-        "pm jira field-schemes update-field-association-scheme-item-parameters --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "field-schemes get-projects-with-field-schemes",
@@ -2779,20 +2724,15 @@
       "path": "field-schemes associate-projects-to-field-association-schemes",
       "summary": "Associate projects to field schemes",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "associate_projects_to_field_association_schemes",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `associateProjectsToFieldAssociationSchemes`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/config/fieldschemes/projects"
         }
       ],
-      "examples": [
-        "pm jira field-schemes associate-projects-to-field-association-schemes --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "field-schemes delete-field-association-scheme",
@@ -2853,7 +2793,7 @@
       "path": "field-schemes update-field-association-scheme",
       "summary": "Update field scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_field_association_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateFieldAssociationScheme`.",
@@ -2872,9 +2812,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira field-schemes update-field-association-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "field-schemes clone-field-association-scheme",
@@ -3475,7 +3413,7 @@
       "path": "dashboards add-gadget",
       "summary": "Add gadget to dashboard",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_gadget",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addGadget`.",
@@ -3494,9 +3432,7 @@
           "maps_to": "record.path_dashboardId"
         }
       ],
-      "examples": [
-        "pm jira dashboards add-gadget --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "dashboards remove-gadget",
@@ -3536,7 +3472,7 @@
       "path": "dashboards update-gadget",
       "summary": "Update gadget on dashboard",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_gadget",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateGadget`.",
@@ -3561,9 +3497,7 @@
           "maps_to": "record.path_gadgetId"
         }
       ],
-      "examples": [
-        "pm jira dashboards update-gadget --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "dashboards get-dashboard-item-property-keys",
@@ -3681,40 +3615,15 @@
       "path": "dashboards set-dashboard-item-property",
       "summary": "Set dashboard item property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_dashboard_item_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setDashboardItemProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "dashboard-id",
-          "type": "string",
-          "summary": "path_dashboardId record field.",
-          "maps_to": "record.path_dashboardId"
-        },
-        {
-          "name": "item-id",
-          "type": "string",
-          "summary": "path_itemId record field.",
-          "maps_to": "record.path_itemId"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira dashboards set-dashboard-item-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "dashboards delete-dashboard",
@@ -4049,7 +3958,7 @@
       "path": "issue-custom-field-associations remove-associations",
       "summary": "Remove associations",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "remove_associations",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Permanently deletes or removes Jira data/configuration for operation `removeAssociations`.",
@@ -4060,10 +3969,7 @@
           "path": "/rest/api/3/field/association"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-associations remove-associations --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-custom-field-associations create-associations",
@@ -4226,7 +4132,7 @@
       "path": "issue-fields update-custom-field",
       "summary": "Update custom field",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_custom_field",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateCustomField`.",
@@ -4245,9 +4151,7 @@
           "maps_to": "record.path_fieldId"
         }
       ],
-      "examples": [
-        "pm jira issue-fields update-custom-field --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-fields get-field-project-associations",
@@ -4601,7 +4505,7 @@
       "path": "issue-custom-field-contexts update-custom-field-context",
       "summary": "Update custom field context",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_custom_field_context",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldContext`.",
@@ -4626,9 +4530,7 @@
           "maps_to": "record.path_contextId"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-contexts update-custom-field-context --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-custom-field-contexts add-issue-types-to-context",
@@ -4770,7 +4672,7 @@
       "path": "issue-custom-field-options create-custom-field-option",
       "summary": "Create custom field options (context)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_custom_field_option",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createCustomFieldOption`.",
@@ -4795,15 +4697,13 @@
           "maps_to": "record.path_contextId"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-options create-custom-field-option --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-custom-field-options update-custom-field-option",
       "summary": "Update custom field options (context)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_custom_field_option",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateCustomFieldOption`.",
@@ -4828,9 +4728,7 @@
           "maps_to": "record.path_contextId"
         }
       ],
-      "examples": [
-        "pm jira issue-custom-field-options update-custom-field-option --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-custom-field-options reorder-custom-field-options",
@@ -5859,7 +5757,7 @@
       "path": "filters set-columns",
       "summary": "Set columns",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_columns",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setColumns`.",
@@ -5878,9 +5776,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira filters set-columns --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "filters delete-favourite-for-filter",
@@ -6315,7 +6211,7 @@
       "path": "groups add-user-to-group",
       "summary": "Add user to group",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_user_to_group",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addUserToGroup`.",
@@ -6326,9 +6222,7 @@
           "path": "/rest/api/3/group/user"
         }
       ],
-      "examples": [
-        "pm jira groups add-user-to-group --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "groups find-groups",
@@ -6498,7 +6392,7 @@
       "path": "issues create-issue",
       "summary": "Create issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_issue",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createIssue`.",
@@ -6509,15 +6403,13 @@
           "path": "/rest/api/3/issue"
         }
       ],
-      "examples": [
-        "pm jira issues create-issue --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues archive-issues-async",
       "summary": "Archive issue(s) by JQL",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "archive_issues_async",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssuesAsync`.",
@@ -6528,16 +6420,13 @@
           "path": "/rest/api/3/issue/archive"
         }
       ],
-      "examples": [
-        "pm jira issues archive-issues-async --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issues archive-issues",
       "summary": "Archive issue(s) by issue ID/key",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "archive_issues",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `archiveIssues`.",
@@ -6548,16 +6437,13 @@
           "path": "/rest/api/3/issue/archive"
         }
       ],
-      "examples": [
-        "pm jira issues archive-issues --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues create-issues",
       "summary": "Bulk create issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_issues",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createIssues`.",
@@ -6568,9 +6454,7 @@
           "path": "/rest/api/3/issue/bulk"
         }
       ],
-      "examples": [
-        "pm jira issues create-issues --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues bulk-fetch-issues",
@@ -6771,7 +6655,7 @@
       "path": "issue-properties bulk-set-issues-properties-list",
       "summary": "Bulk set issues properties by list",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_set_issues_properties_list",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssuesPropertiesList`.",
@@ -6782,15 +6666,13 @@
           "path": "/rest/api/3/issue/properties"
         }
       ],
-      "examples": [
-        "pm jira issue-properties bulk-set-issues-properties-list --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-properties bulk-set-issue-properties-by-issue",
       "summary": "Bulk set issue properties by issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_set_issue_properties_by_issue",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssuePropertiesByIssue`.",
@@ -6801,15 +6683,13 @@
           "path": "/rest/api/3/issue/properties/multi"
         }
       ],
-      "examples": [
-        "pm jira issue-properties bulk-set-issue-properties-by-issue --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-properties bulk-delete-issue-property",
       "summary": "Bulk delete issue property",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_delete_issue_property",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteIssueProperty`.",
@@ -6828,16 +6708,13 @@
           "maps_to": "record.path_propertyKey"
         }
       ],
-      "examples": [
-        "pm jira issue-properties bulk-delete-issue-property --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-properties bulk-set-issue-property",
       "summary": "Bulk set issue property",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_set_issue_property",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `bulkSetIssueProperty`.",
@@ -6856,15 +6733,13 @@
           "maps_to": "record.path_propertyKey"
         }
       ],
-      "examples": [
-        "pm jira issue-properties bulk-set-issue-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues unarchive-issues",
       "summary": "Unarchive issue(s) by issue keys/ID",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "unarchive_issues",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `unarchiveIssues`.",
@@ -6875,10 +6750,7 @@
           "path": "/rest/api/3/issue/unarchive"
         }
       ],
-      "examples": [
-        "pm jira issues unarchive-issues --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-watchers get-is-watching-issue-bulk",
@@ -7003,7 +6875,7 @@
       "path": "issues edit-issue",
       "summary": "Edit issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "edit_issue",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `editIssue`.",
@@ -7022,15 +6894,13 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issues edit-issue --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues assign-issue",
       "summary": "Assign issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "assign_issue",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `assignIssue`.",
@@ -7049,9 +6919,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issues assign-issue --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-attachments add-attachment",
@@ -7212,7 +7080,7 @@
       "path": "issue-comments add-comment",
       "summary": "Add comment",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_comment",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addComment`.",
@@ -7231,9 +7099,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issue-comments add-comment --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-comments delete-comment",
@@ -7312,7 +7178,7 @@
       "path": "issue-comments update-comment",
       "summary": "Update comment",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_comment",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateComment`.",
@@ -7337,9 +7203,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-comments update-comment --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issues get-edit-issue-meta",
@@ -7384,7 +7248,7 @@
       "path": "issues notify",
       "summary": "Send notification for issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "notify",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `notify`.",
@@ -7403,9 +7267,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issues notify --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-properties get-issue-property-keys",
@@ -7505,34 +7367,15 @@
       "path": "issue-properties set-issue-property",
       "summary": "Set issue property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_issue_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setIssueProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "issue-id-or-key",
-          "type": "string",
-          "summary": "path_issueIdOrKey record field.",
-          "maps_to": "record.path_issueIdOrKey"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira issue-properties set-issue-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "issue-remote-links delete-remote-issue-link-by-global-id",
@@ -7785,7 +7628,7 @@
       "path": "issues do-transition",
       "summary": "Transition issue",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "do_transition",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `doTransition`.",
@@ -7804,9 +7647,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issues do-transition --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-votes remove-vote",
@@ -7949,7 +7790,7 @@
       "path": "issue-worklogs bulk-delete-worklogs",
       "summary": "Bulk delete worklogs",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_delete_worklogs",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Permanently deletes or removes Jira data/configuration for operation `bulkDeleteWorklogs`.",
@@ -7968,10 +7809,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issue-worklogs bulk-delete-worklogs --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-worklogs get-issue-worklog",
@@ -8034,7 +7872,7 @@
       "path": "issue-worklogs add-worklog",
       "summary": "Add worklog",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_worklog",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addWorklog`.",
@@ -8053,15 +7891,13 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issue-worklogs add-worklog --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-worklogs bulk-move-worklogs",
       "summary": "Bulk move worklogs",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "bulk_move_worklogs",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `bulkMoveWorklogs`.",
@@ -8080,9 +7916,7 @@
           "maps_to": "record.path_issueIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira issue-worklogs bulk-move-worklogs --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-worklogs delete-worklog",
@@ -8161,7 +7995,7 @@
       "path": "issue-worklogs update-worklog",
       "summary": "Update worklog",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_worklog",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateWorklog`.",
@@ -8186,9 +8020,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-worklogs update-worklog --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-worklog-properties get-worklog-property-keys",
@@ -8306,40 +8138,15 @@
       "path": "issue-worklog-properties set-worklog-property",
       "summary": "Set worklog property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_worklog_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setWorklogProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "issue-id-or-key",
-          "type": "string",
-          "summary": "path_issueIdOrKey record field.",
-          "maps_to": "record.path_issueIdOrKey"
-        },
-        {
-          "name": "worklog-id",
-          "type": "string",
-          "summary": "path_worklogId record field.",
-          "maps_to": "record.path_worklogId"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira issue-worklog-properties set-worklog-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "issue-links link-issues",
@@ -8437,7 +8244,7 @@
       "path": "issue-link-types create-issue-link-type",
       "summary": "Create issue link type",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_issue_link_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createIssueLinkType`.",
@@ -8448,9 +8255,7 @@
           "path": "/rest/api/3/issueLinkType"
         }
       ],
-      "examples": [
-        "pm jira issue-link-types create-issue-link-type --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-link-types delete-issue-link-type",
@@ -8511,7 +8316,7 @@
       "path": "issue-link-types update-issue-link-type",
       "summary": "Update issue link type",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_issue_link_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateIssueLinkType`.",
@@ -8530,9 +8335,7 @@
           "maps_to": "record.path_issueLinkTypeId"
         }
       ],
-      "examples": [
-        "pm jira issue-link-types update-issue-link-type --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-security-schemes get-issue-security-schemes",
@@ -8868,7 +8671,7 @@
       "path": "issue-security-schemes update-issue-security-scheme",
       "summary": "Update issue security scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_issue_security_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateIssueSecurityScheme`.",
@@ -8887,9 +8690,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-security-schemes update-issue-security-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-security-level get-issue-security-level-members",
@@ -8974,7 +8775,7 @@
       "path": "issue-security-schemes add-security-level",
       "summary": "Add issue security levels",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_security_level",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addSecurityLevel`.",
@@ -8993,9 +8794,7 @@
           "maps_to": "record.path_schemeId"
         }
       ],
-      "examples": [
-        "pm jira issue-security-schemes add-security-level --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-security-schemes remove-level",
@@ -9035,7 +8834,7 @@
       "path": "issue-security-schemes update-security-level",
       "summary": "Update issue security level",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_security_level",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateSecurityLevel`.",
@@ -9060,15 +8859,13 @@
           "maps_to": "record.path_levelId"
         }
       ],
-      "examples": [
-        "pm jira issue-security-schemes update-security-level --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-security-schemes add-security-level-members",
       "summary": "Add issue security level members",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_security_level_members",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addSecurityLevelMembers`.",
@@ -9093,9 +8890,7 @@
           "maps_to": "record.path_levelId"
         }
       ],
-      "examples": [
-        "pm jira issue-security-schemes add-security-level-members --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-security-schemes remove-member-from-security-level",
@@ -9276,7 +9071,7 @@
       "path": "issue-types update-issue-type",
       "summary": "Update issue type",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_issue_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateIssueType`.",
@@ -9295,9 +9090,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-types update-issue-type --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-types get-alternative-issue-types",
@@ -9424,34 +9217,15 @@
       "path": "issue-type-properties set-issue-type-property",
       "summary": "Set issue type property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_issue_type_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setIssueTypeProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "issue-type-id",
-          "type": "string",
-          "summary": "path_issueTypeId record field.",
-          "maps_to": "record.path_issueTypeId"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira issue-type-properties set-issue-type-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "issue-type-schemes get-all-issue-type-schemes",
@@ -9686,7 +9460,7 @@
       "path": "issue-type-schemes update-issue-type-scheme",
       "summary": "Update issue type scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_issue_type_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScheme`.",
@@ -9705,9 +9479,7 @@
           "maps_to": "record.path_issueTypeSchemeId"
         }
       ],
-      "examples": [
-        "pm jira issue-type-schemes update-issue-type-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-type-schemes add-issue-types-to-issue-type-scheme",
@@ -9979,7 +9751,7 @@
       "path": "issue-type-screen-schemes assign-issue-type-screen-scheme-to-project",
       "summary": "Assign issue type screen scheme to project",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "assign_issue_type_screen_scheme_to_project",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `assignIssueTypeScreenSchemeToProject`.",
@@ -9990,9 +9762,7 @@
           "path": "/rest/api/3/issuetypescreenscheme/project"
         }
       ],
-      "examples": [
-        "pm jira issue-type-screen-schemes assign-issue-type-screen-scheme-to-project --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-type-screen-schemes delete-issue-type-screen-scheme",
@@ -10026,7 +9796,7 @@
       "path": "issue-type-screen-schemes update-issue-type-screen-scheme",
       "summary": "Update issue type screen scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_issue_type_screen_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateIssueTypeScreenScheme`.",
@@ -10045,9 +9815,7 @@
           "maps_to": "record.path_issueTypeScreenSchemeId"
         }
       ],
-      "examples": [
-        "pm jira issue-type-screen-schemes update-issue-type-screen-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-type-screen-schemes append-mappings-for-issue-type-screen-scheme",
@@ -10338,7 +10106,7 @@
       "path": "jql-functions-apps update-precomputations",
       "summary": "Update precomputations (apps)",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_precomputations",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePrecomputations`.",
@@ -10349,9 +10117,7 @@
           "path": "/rest/api/3/jql/function/computation"
         }
       ],
-      "examples": [
-        "pm jira jql-functions-apps update-precomputations --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "jql-functions-apps get-precomputations-by-id",
@@ -10924,7 +10690,7 @@
       "path": "issue-notification-schemes update-notification-scheme",
       "summary": "Update notification scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_notification_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateNotificationScheme`.",
@@ -10943,9 +10709,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-notification-schemes update-notification-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-notification-schemes add-notifications",
@@ -11311,7 +11075,7 @@
       "path": "permission-schemes create-permission-grant",
       "summary": "Create permission grant",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_permission_grant",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createPermissionGrant`.",
@@ -11330,9 +11094,7 @@
           "maps_to": "record.path_schemeId"
         }
       ],
-      "examples": [
-        "pm jira permission-schemes create-permission-grant --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "permission-schemes delete-permission-scheme-entity",
@@ -12149,7 +11911,7 @@
       "path": "issue-priorities update-priority",
       "summary": "Update priority",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_priority",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePriority`.",
@@ -12168,9 +11930,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira issue-priorities update-priority --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "priority-schemes get-priority-schemes",
@@ -12401,7 +12161,7 @@
       "path": "priority-schemes update-priority-scheme",
       "summary": "Update priority scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_priority_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updatePriorityScheme`.",
@@ -12420,9 +12180,7 @@
           "maps_to": "record.path_schemeId"
         }
       ],
-      "examples": [
-        "pm jira priority-schemes update-priority-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "priority-schemes get-priorities-by-priority-scheme",
@@ -12551,7 +12309,7 @@
       "path": "project-templates create-project-with-custom-template",
       "summary": "Create custom project",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_project_with_custom_template",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createProjectWithCustomTemplate`.",
@@ -12562,15 +12320,13 @@
           "path": "/rest/api/3/project-template"
         }
       ],
-      "examples": [
-        "pm jira project-templates create-project-with-custom-template --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-templates edit-template",
       "summary": "Edit a custom project template",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "edit_template",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `editTemplate`.",
@@ -12581,9 +12337,7 @@
           "path": "/rest/api/3/project-template/edit-template"
         }
       ],
-      "examples": [
-        "pm jira project-templates edit-template --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-templates live-template",
@@ -12650,7 +12404,7 @@
       "path": "project-templates save-template",
       "summary": "Save a custom project template",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "save_template",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `saveTemplate`.",
@@ -12661,9 +12415,7 @@
           "path": "/rest/api/3/project-template/save-template"
         }
       ],
-      "examples": [
-        "pm jira project-templates save-template --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "projects get-recent",
@@ -12863,7 +12615,7 @@
       "path": "projects update-project",
       "summary": "Update project",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_project",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateProject`.",
@@ -12882,9 +12634,7 @@
           "maps_to": "record.path_projectIdOrKey"
         }
       ],
-      "examples": [
-        "pm jira projects update-project --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "projects archive-project",
@@ -13272,7 +13022,7 @@
       "path": "project-features toggle-feature-for-project",
       "summary": "Set project feature state",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "toggle_feature_for_project",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `toggleFeatureForProject`.",
@@ -13297,9 +13047,7 @@
           "maps_to": "record.path_featureKey"
         }
       ],
-      "examples": [
-        "pm jira project-features toggle-feature-for-project --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-properties get-project-property-keys",
@@ -13399,34 +13147,15 @@
       "path": "project-properties set-project-property",
       "summary": "Set project property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_project_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setProjectProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "project-id-or-key",
-          "type": "string",
-          "summary": "path_projectIdOrKey record field.",
-          "maps_to": "record.path_projectIdOrKey"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira project-properties set-project-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "projects restore",
@@ -13560,7 +13289,7 @@
       "path": "project-role-actors add-actor-users",
       "summary": "Add actors to project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_actor_users",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addActorUsers`.",
@@ -13585,15 +13314,13 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-role-actors add-actor-users --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-role-actors set-actors",
       "summary": "Set actors for project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_actors",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setActors`.",
@@ -13618,9 +13345,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-role-actors set-actors --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-roles get-project-role-details",
@@ -13821,7 +13546,7 @@
       "path": "project-email update-project-email",
       "summary": "Set project's sender email",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_project_email",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateProjectEmail`.",
@@ -13840,9 +13565,7 @@
           "maps_to": "record.path_projectId"
         }
       ],
-      "examples": [
-        "pm jira project-email update-project-email --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "projects get-hierarchy",
@@ -14048,7 +13771,7 @@
       "path": "project-categories create-project-category",
       "summary": "Create project category",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_project_category",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createProjectCategory`.",
@@ -14059,9 +13782,7 @@
           "path": "/rest/api/3/projectCategory"
         }
       ],
-      "examples": [
-        "pm jira project-categories create-project-category --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-categories remove-project-category",
@@ -14122,7 +13843,7 @@
       "path": "project-categories update-project-category",
       "summary": "Update project category",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_project_category",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateProjectCategory`.",
@@ -14141,9 +13862,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-categories update-project-category --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "issue-fields get-project-fields",
@@ -14281,7 +14000,7 @@
       "path": "issue-redaction redact",
       "summary": "Redact",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "redact",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `redact`.",
@@ -14292,9 +14011,7 @@
           "path": "/rest/api/3/redact"
         }
       ],
-      "examples": [
-        "pm jira issue-redaction redact --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-redaction get-redaction-status",
@@ -14567,7 +14284,7 @@
       "path": "project-roles create-project-role",
       "summary": "Create project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_project_role",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createProjectRole`.",
@@ -14578,9 +14295,7 @@
           "path": "/rest/api/3/role"
         }
       ],
-      "examples": [
-        "pm jira project-roles create-project-role --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-roles delete-project-role",
@@ -14641,7 +14356,7 @@
       "path": "project-roles partial-update-project-role",
       "summary": "Partial update project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "partial_update_project_role",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `partialUpdateProjectRole`.",
@@ -14660,15 +14375,13 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-roles partial-update-project-role --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-roles fully-update-project-role",
       "summary": "Fully update project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "fully_update_project_role",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `fullyUpdateProjectRole`.",
@@ -14687,9 +14400,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-roles fully-update-project-role --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-role-actors delete-project-role-actors-from-role",
@@ -14750,7 +14461,7 @@
       "path": "project-role-actors add-project-role-actors-to-role",
       "summary": "Add default actors to project role",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "add_project_role_actors_to_role",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `addProjectRoleActorsToRole`.",
@@ -14769,9 +14480,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-role-actors add-project-role-actors-to-role --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "screens get-screens",
@@ -14961,7 +14670,7 @@
       "path": "screens update-screen",
       "summary": "Update screen",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_screen",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateScreen`.",
@@ -14980,9 +14689,7 @@
           "maps_to": "record.path_screenId"
         }
       ],
-      "examples": [
-        "pm jira screens update-screen --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "screens get-available-screen-fields",
@@ -15272,7 +14979,7 @@
       "path": "screen-tab-fields move-screen-tab-field",
       "summary": "Move screen tab field",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "move_screen_tab_field",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `moveScreenTabField`.",
@@ -15303,9 +15010,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira screen-tab-fields move-screen-tab-field --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "screen-tabs move-screen-tab",
@@ -15460,7 +15165,7 @@
       "path": "screen-schemes update-screen-scheme",
       "summary": "Update screen scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_screen_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateScreenScheme`.",
@@ -15479,9 +15184,7 @@
           "maps_to": "record.path_screenSchemeId"
         }
       ],
-      "examples": [
-        "pm jira screen-schemes update-screen-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "issue-search count-issues",
@@ -16310,7 +16013,7 @@
       "path": "ui-modifications-apps update-ui-modification",
       "summary": "Update UI modification",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_ui_modification",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateUiModification`.",
@@ -16329,9 +16032,7 @@
           "maps_to": "record.path_uiModificationId"
         }
       ],
-      "examples": [
-        "pm jira ui-modifications-apps update-ui-modification --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "avatars get-avatars",
@@ -17311,28 +17012,15 @@
       "path": "user-properties set-user-property",
       "summary": "Set user property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "set_user_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `setUserProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/api/3/user/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira user-properties set-user-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "user-search find-users",
@@ -17575,7 +17263,7 @@
       "path": "project-versions create-version",
       "summary": "Create version",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_version",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createVersion`.",
@@ -17586,9 +17274,7 @@
           "path": "/rest/api/3/version"
         }
       ],
-      "examples": [
-        "pm jira project-versions create-version --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-versions get-version",
@@ -17627,7 +17313,7 @@
       "path": "project-versions update-version",
       "summary": "Update version",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_version",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateVersion`.",
@@ -17646,9 +17332,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-versions update-version --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-versions merge-versions",
@@ -17687,7 +17371,7 @@
       "path": "project-versions move-version",
       "summary": "Move version",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "move_version",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `moveVersion`.",
@@ -17706,9 +17390,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-versions move-version --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "project-versions get-version-related-issues",
@@ -17834,7 +17516,7 @@
       "path": "project-versions delete-and-replace-version",
       "summary": "Delete and replace version",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "delete_and_replace_version",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration with destructive semantics for operation `deleteAndReplaceVersion`.",
@@ -17853,10 +17535,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira project-versions delete-and-replace-version --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "project-versions get-version-unresolved-issues",
@@ -17923,7 +17602,7 @@
       "path": "webhooks delete-webhook-by-id",
       "summary": "Delete webhooks by ID",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "delete_webhook_by_id",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Permanently deletes or removes Jira data/configuration for operation `deleteWebhookById`.",
@@ -17934,10 +17613,7 @@
           "path": "/rest/api/3/webhook"
         }
       ],
-      "examples": [
-        "pm jira webhooks delete-webhook-by-id --credential <name> --plan --preview --json"
-      ],
-      "notes": "Requires --confirm destructive when executing the approved reverse plan."
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "webhooks get-dynamic-webhooks-for-app",
@@ -18480,7 +18156,7 @@
       "path": "workflows create-workflows",
       "summary": "Bulk create workflows",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_workflows",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createWorkflows`.",
@@ -18491,9 +18167,7 @@
           "path": "/rest/api/3/workflows/create"
         }
       ],
-      "examples": [
-        "pm jira workflows create-workflows --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflows validate-create-workflows",
@@ -18653,7 +18327,7 @@
       "path": "workflows update-workflows",
       "summary": "Bulk update workflows",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_workflows",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateWorkflows`.",
@@ -18664,9 +18338,7 @@
           "path": "/rest/api/3/workflows/update"
         }
       ],
-      "examples": [
-        "pm jira workflows update-workflows --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflows validate-update-workflows",
@@ -18724,7 +18396,7 @@
       "path": "workflow-schemes create-workflow-scheme",
       "summary": "Create workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "create_workflow_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `createWorkflowScheme`.",
@@ -18735,9 +18407,7 @@
           "path": "/rest/api/3/workflowscheme"
         }
       ],
-      "examples": [
-        "pm jira workflow-schemes create-workflow-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-scheme-project-associations get-workflow-scheme-project-associations",
@@ -18797,7 +18467,7 @@
       "path": "workflow-schemes switch-workflow-scheme-for-project",
       "summary": "Switch workflow scheme for project",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "switch_workflow_scheme_for_project",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `switchWorkflowSchemeForProject`.",
@@ -18808,9 +18478,7 @@
           "path": "/rest/api/3/workflowscheme/project/switch"
         }
       ],
-      "examples": [
-        "pm jira workflow-schemes switch-workflow-scheme-for-project --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-schemes read-workflow-schemes",
@@ -18986,7 +18654,7 @@
       "path": "workflow-schemes update-workflow-scheme",
       "summary": "Classic update workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_workflow_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowScheme`.",
@@ -19005,9 +18673,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira workflow-schemes update-workflow-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-scheme-drafts create-workflow-scheme-draft-from-parent",
@@ -19189,7 +18855,7 @@
       "path": "workflow-scheme-drafts update-workflow-scheme-draft",
       "summary": "Update draft workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_workflow_scheme_draft",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowSchemeDraft`.",
@@ -19208,9 +18874,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira workflow-scheme-drafts update-workflow-scheme-draft --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-scheme-drafts delete-draft-default-workflow",
@@ -19371,7 +19035,7 @@
       "path": "workflow-scheme-drafts set-workflow-scheme-draft-issue-type",
       "summary": "Set workflow for issue type in draft workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_workflow_scheme_draft_issue_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeDraftIssueType`.",
@@ -19396,15 +19060,13 @@
           "maps_to": "record.path_issueType"
         }
       ],
-      "examples": [
-        "pm jira workflow-scheme-drafts set-workflow-scheme-draft-issue-type --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "workflow-scheme-drafts publish-draft-workflow-scheme",
       "summary": "Publish draft workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "publish_draft_workflow_scheme",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `publishDraftWorkflowScheme`.",
@@ -19423,9 +19085,7 @@
           "maps_to": "record.path_id"
         }
       ],
-      "examples": [
-        "pm jira workflow-scheme-drafts publish-draft-workflow-scheme --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-scheme-drafts delete-draft-workflow-mapping",
@@ -19498,7 +19158,7 @@
       "path": "workflow-scheme-drafts update-draft-workflow-mapping",
       "summary": "Set issue types for workflow in workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_draft_workflow_mapping",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateDraftWorkflowMapping`.",
@@ -19523,9 +19183,7 @@
           "maps_to": "record.query_workflowName"
         }
       ],
-      "examples": [
-        "pm jira workflow-scheme-drafts update-draft-workflow-mapping --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-schemes delete-workflow-scheme-issue-type",
@@ -19604,7 +19262,7 @@
       "path": "workflow-schemes set-workflow-scheme-issue-type",
       "summary": "Set workflow for issue type in workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "set_workflow_scheme_issue_type",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `setWorkflowSchemeIssueType`.",
@@ -19629,9 +19287,7 @@
           "maps_to": "record.path_issueType"
         }
       ],
-      "examples": [
-        "pm jira workflow-schemes set-workflow-scheme-issue-type --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits required-body flag validation."
     },
     {
       "path": "workflow-schemes delete-workflow-mapping",
@@ -19710,7 +19366,7 @@
       "path": "workflow-schemes update-workflow-mapping",
       "summary": "Set issue types for workflow in workflow scheme",
       "intent": "reverse_etl",
-      "availability": "implemented",
+      "availability": "partial",
       "write": "update_workflow_mapping",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
       "risk": "Mutates Jira data/configuration for operation `updateWorkflowMapping`.",
@@ -19735,9 +19391,7 @@
           "maps_to": "record.query_workflowName"
         }
       ],
-      "examples": [
-        "pm jira workflow-schemes update-workflow-mapping --credential <name> --plan --preview --json"
-      ]
+      "notes": "Reverse ETL action is implemented for record-driven plans; provider-style one-off command awaits typed JSON body flag support for this required request body."
     },
     {
       "path": "workflow-schemes get-project-usages-for-workflow-scheme",
@@ -19968,34 +19622,15 @@
       "path": "app-properties addon-properties-resource-put-addon-property-put",
       "summary": "Set app property",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "addon_properties_resource_put_addon_property_put",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `AddonPropertiesResource.putAddonProperty_put`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "addon-key",
-          "type": "string",
-          "summary": "path_addonKey record field.",
-          "maps_to": "record.path_addonKey"
-        },
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira app-properties addon-properties-resource-put-addon-property-put --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "dynamic-modules dynamic-modules-resource-remove-modules-delete",
@@ -20310,28 +19945,15 @@
       "path": "app-properties put-forge-app-property",
       "summary": "Set app property (Forge)",
       "intent": "reverse_etl",
-      "availability": "implemented",
-      "write": "put_forge_app_property",
+      "availability": "planned",
       "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
-      "risk": "Mutates Jira data/configuration for operation `putForgeAppProperty`.",
-      "approval": "Reverse ETL writes require plan, preview, explicit approval, and execute; destructive actions also require typed `destructive` confirmation.",
       "api_surface": [
         {
           "method": "PUT",
           "path": "/rest/forge/1/app/properties/{propertyKey}"
         }
       ],
-      "flags": [
-        {
-          "name": "property-key",
-          "type": "string",
-          "summary": "path_propertyKey record field.",
-          "maps_to": "record.path_propertyKey"
-        }
-      ],
-      "examples": [
-        "pm jira app-properties put-forge-app-property --credential <name> --plan --preview --json"
-      ]
+      "notes": "Provider-style command is planned until raw or dynamic JSON request-body support can represent this required body safely."
     },
     {
       "path": "api get-worklogs-by-issue-id-and-worklog-id",

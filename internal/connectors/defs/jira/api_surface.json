@@ -278,8 +278,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/comment/{commentId}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_comment_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setCommentProperty; operation=jira.issue-comment-properties.set-comment-property; command=issue-comment-properties set-comment-property"
       }
     },
     {
@@ -341,29 +347,53 @@
     {
       "method": "DELETE",
       "path": "/rest/api/3/config/fieldschemes/fields",
-      "covered_by": {
-        "write": "remove_fields_associated_with_schemes"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=removeFieldsAssociatedWithSchemes; operation=jira.field-schemes.remove-fields-associated-with-schemes; command=field-schemes remove-fields-associated-with-schemes"
       }
     },
     {
       "method": "PUT",
       "path": "/rest/api/3/config/fieldschemes/fields",
-      "covered_by": {
-        "write": "update_fields_associated_with_schemes"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=updateFieldsAssociatedWithSchemes; operation=jira.field-schemes.update-fields-associated-with-schemes; command=field-schemes update-fields-associated-with-schemes"
       }
     },
     {
       "method": "DELETE",
       "path": "/rest/api/3/config/fieldschemes/fields/parameters",
-      "covered_by": {
-        "write": "remove_field_association_scheme_item_parameters"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=removeFieldAssociationSchemeItemParameters; operation=jira.field-schemes.remove-field-association-scheme-item-parameters; command=field-schemes remove-field-association-scheme-item-parameters"
       }
     },
     {
       "method": "PUT",
       "path": "/rest/api/3/config/fieldschemes/fields/parameters",
-      "covered_by": {
-        "write": "update_field_association_scheme_item_parameters"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=updateFieldAssociationSchemeItemParameters; operation=jira.field-schemes.update-field-association-scheme-item-parameters; command=field-schemes update-field-association-scheme-item-parameters"
       }
     },
     {
@@ -376,8 +406,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/config/fieldschemes/projects",
-      "covered_by": {
-        "write": "associate_projects_to_field_association_schemes"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=associateProjectsToFieldAssociationSchemes; operation=jira.field-schemes.associate-projects-to-field-association-schemes; command=field-schemes associate-projects-to-field-association-schemes"
       }
     },
     {
@@ -565,8 +601,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/dashboard/{dashboardId}/items/{itemId}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_dashboard_item_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setDashboardItemProperty; operation=jira.dashboards.set-dashboard-item-property; command=dashboards set-dashboard-item-property"
       }
     },
     {
@@ -1592,8 +1634,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/issue/{issueIdOrKey}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_issue_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setIssueProperty; operation=jira.issue-properties.set-issue-property; command=issue-properties set-issue-property"
       }
     },
     {
@@ -1773,8 +1821,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/issue/{issueIdOrKey}/worklog/{worklogId}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_worklog_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setWorklogProperty; operation=jira.issue-worklog-properties.set-worklog-property; command=issue-worklog-properties set-worklog-property"
       }
     },
     {
@@ -2051,8 +2105,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/issuetype/{issueTypeId}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_issue_type_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setIssueTypeProperty; operation=jira.issue-type-properties.set-issue-type-property; command=issue-type-properties set-issue-type-property"
       }
     },
     {
@@ -3009,8 +3069,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/project/{projectIdOrKey}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_project_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setProjectProperty; operation=jira.project-properties.set-project-property; command=project-properties set-project-property"
       }
     },
     {
@@ -3876,8 +3942,14 @@
     {
       "method": "PUT",
       "path": "/rest/api/3/user/properties/{propertyKey}",
-      "covered_by": {
-        "write": "set_user_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=setUserProperty; operation=jira.user-properties.set-user-property; command=user-properties set-user-property"
       }
     },
     {
@@ -4511,8 +4583,14 @@
     {
       "method": "PUT",
       "path": "/rest/atlassian-connect/1/addons/{addonKey}/properties/{propertyKey}",
-      "covered_by": {
-        "write": "addon_properties_resource_put_addon_property_put"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=AddonPropertiesResource.putAddonProperty_put; operation=jira.app-properties.addon-properties-resource-put-addon-property-put; command=app-properties addon-properties-resource-put-addon-property-put"
       }
     },
     {
@@ -4620,8 +4698,14 @@
     {
       "method": "PUT",
       "path": "/rest/forge/1/app/properties/{propertyKey}",
-      "covered_by": {
-        "write": "put_forge_app_property"
+      "operation": {
+        "model": "admin_reverse_etl",
+        "status": "blocked",
+        "risk": "medium",
+        "blocked_by_default": true,
+        "reason": "required JSON request body is raw, dynamic-map, or otherwise unmodelled by the current declarative writes.json body dialect without shared runtime support",
+        "source_url": "https://developer.atlassian.com/cloud/jira/platform/swagger-v3.v3.json",
+        "notes": "operation_id=putForgeAppProperty; operation=jira.app-properties.put-forge-app-property; command=app-properties put-forge-app-property"
       }
     },
     {
