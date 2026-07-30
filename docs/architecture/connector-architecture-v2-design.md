@@ -88,7 +88,7 @@ Directory name = connector name = the one true identifier: `github`, not `source
   "integration_type": "api",
   "docs_url": "https://docs.github.com/en/rest",
   "release_stage": "ga",
-  "capabilities": { "check": true, "read": true, "write": true, "query": false, "cdc": false, "dynamic_schema": false },
+  "capabilities": { "check": true, "read": true, "write": true, "query": false, "provider_search": false, "provider_query": false, "cdc": false, "dynamic_schema": false },
   "batch": { "read_page_size": 100, "write_batch_size": 1 },
   "rate_limit": { "strategy": "retry_after_header", "requests_per_hour": 5000 },
   "risk": {
@@ -602,7 +602,7 @@ parsing.
 | legacy generated registry package/command | delete; replaced by hookset/nativeset + `cmd/connectorgen` |
 | `cmd/pm-cataloggen` | delete |
 | `Manifest`/`ManifestProvider`/`ConfigField`/`SecretField`/`AuthModeSpec`/`PaginationSpec`/`WriteActionSpec` in `manifest.go` | delete; `Definition` replaces |
-| CLI: any `source-`/`destination-` acceptance, `--type source|destination` filters | bare names only; direction filters become `--capability read|write|cdc|query` |
+| CLI: any `source-`/`destination-` acceptance, `--type source|destination` filters | bare names only; direction filters become `--capability read|write|cdc|query|provider_search|provider_query` |
 | `internal/app/types.go` connector name values | bare names; no legacy parsing; clear migration error for `source-*` |
 | Saved sync state | untouched — `streamStateKey` is `connection:stream`, connector-name-free (verified) |
 | Docs: porting guide, status policy, guide.go legacy sections | rewrite for bundle authoring |
@@ -634,15 +634,20 @@ write actions.
 
 Rules (enforced by `connectorgen validate` + conformance):
 
-1. Every endpoint entry has exactly one of `covered_by` or `excluded`.
-2. `covered_by.stream`/`covered_by.write` must resolve to a declared stream/action — and vice
-   versa: every stream and write action must appear in the surface.
-3. `excluded.category` from the closed vocabulary: `destructive_admin`,
+1. Every endpoint entry has exactly one classifier: `covered_by`, `excluded`, or, in
+   `operation_ledger_version: 1` mode, blocked `operation` metadata.
+2. `covered_by.stream`/`covered_by.write`/`covered_by.direct_read(s)` must resolve to a declared
+   stream, action, or implemented direct-read command — and vice versa: every stream and write
+   action must appear in the surface.
+3. `operation.model` rows are ledger-only and are not an execution allowlist; the closed vocabulary
+   includes `direct_read`, `provider_search`, and `provider_query` for typed command candidates that
+   remain blocked until an executor exists.
+4. `excluded.category` from the closed vocabulary: `destructive_admin`,
    `requires_elevated_scope`, `binary_payload`, `deprecated`, `non_data_endpoint`,
    `duplicate_of`, `out_of_scope` (with `scope` prose justifying it).
-4. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
+5. **Fail-first-run**: `capabilities.write == false` is only legal when the surface contains zero
    non-excluded POST/PUT/PATCH/DELETE endpoints. Same rule for GET endpoints vs streams.
-5. Freshness: `reviewed_at` older than 12 months → warning (not failure).
+6. Freshness: `reviewed_at` older than 12 months → warning (not failure).
 
 ### E.2 Conformance v2 (`internal/connectors/conformance/`)
 

@@ -18,6 +18,7 @@ metadata.json        # identity + capabilities + risk (engine/bundle.go Metadata
 spec.json            # draft-07 connection spec; x-secret marks secret fields
 streams.json         # base HTTP config + streams[] (required unless dynamic_schema)
 writes.json          # actions[] (omit entirely when capabilities.write is false)
+operations.json      # optional typed command operation contracts; see connector-operation-kernel.md
 api_surface.json     # coverage manifest (always required)
 cli_surface.json     # optional provider-style CLI/help metadata
 certification.json   # optional certify metadata: defaults, safe candidates, pairings
@@ -161,14 +162,15 @@ not a full override by default.
   not add a "supported_sync_modes" field anywhere — there isn't one in this dialect; the engine
   derives it from schema/stream shape at runtime.
 - **`api_surface.json` depth — minimal-honest for wave0/pilot** (DECISIONS.md #4): list every
-  implemented stream/write under `covered_by`; everything else documented as `excluded: {category:
-  "out_of_scope", reason: "Pass B capability expansion"}` (see stripe's `api_surface.json` for the
-  pattern — 5 covered streams, 2 covered writes, the remaining known Stripe surface excluded
-  out-of-scope, one `non_data_endpoint` for `/v1/balance`). Full API-surface research (every
-  documented endpoint actually implemented) is Pass B (wave5), not wave0/pilot/Pass-A fan-out. The
-  closed exclusion-category vocabulary (design §E.1 rule 3, enforced by the loader's meta-schema
-  enum): `destructive_admin`, `requires_elevated_scope`, `binary_payload`, `deprecated`,
-  `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
+  implemented stream/write/direct-read command under `covered_by`; use `operation` ledger rows for
+  blocked direct-read/provider-search/provider-query candidates; everything else is documented as
+  `excluded: {category: "out_of_scope", reason: "Pass B capability expansion"}` (see stripe's
+  `api_surface.json` for the pattern — 5 covered streams, 2 covered writes, the remaining known
+  Stripe surface excluded out-of-scope, one `non_data_endpoint` for `/v1/balance`). Full API-surface
+  research (every documented endpoint actually implemented) is Pass B (wave5), not wave0/pilot/
+  Pass-A fan-out. The closed exclusion-category vocabulary (design §E.1 rule 3, enforced by the
+  loader's meta-schema enum): `destructive_admin`, `requires_elevated_scope`, `binary_payload`,
+  `deprecated`, `non_data_endpoint`, `duplicate_of`, `out_of_scope`.
 - **`docs.md` required headings** (exact text, `#`/`##` either level; `conformance`'s
   `docs_present` and `connectorgen validate`'s `docs_heading` rule both check presence by trimmed
   text only): `Overview`, `Auth setup`, `Streams notes`, `Write actions & risks`, `Known limits`.
@@ -186,6 +188,12 @@ not a full override by default.
   namespaces, unmapped constraint targets, and multi-line validation messages. The shared-code
   boundary guard (`docs/migration/connector-boundary-guard.md`) enforces this ownership rule outside
   connector defs/hooks/native escape hatches.
+- **`operations.json` stays operation-kernel-owned**: provider search/query contracts are typed
+  command metadata referenced from `cli_surface.json` by operation id. The detailed shape is owned by
+  `docs/architecture/connector-operation-kernel.md` and
+  `internal/connectors/engine/schema/operations.schema.json`; do not add raw SQL, raw GraphQL, raw
+  HTTP method/path/url/body, arbitrary payload fields, or provider-specific shared runner branches.
+  Runtime provider search/query commands remain blocked until a typed executor lands.
 - **Direct-read `output_policy` stays generic and bounded**: use `repository_contents_file_metadata`
   for a single repository file metadata response and `repository_contents_directory` for repository
   directory listings. Both policies reject sensitive repository paths before network access and

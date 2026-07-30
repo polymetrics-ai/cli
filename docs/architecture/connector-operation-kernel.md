@@ -1,6 +1,6 @@
 # Connector Operation Kernel
 
-Status: foundation slice for GitHub CLI parity (#56).
+Status: foundation slice for typed connector command operations.
 
 ## Purpose
 
@@ -26,10 +26,10 @@ metadata use `covered_by.direct_read` or `covered_by.direct_reads`. Blocked
 `api_surface.operation` rows remain ledger-only and are not an execution
 allowlist.
 
-The #56 foundation loads and validates operation metadata but keeps operation
+The foundation loads and validates operation metadata but keeps operation
 execution blocked by default. Later issues add executors for fixed REST,
-GraphQL, XML, binary/file, local git, local file, browser, and composite
-operations.
+GraphQL, XML, binary/file, local git, local file, browser, composite, and
+provider search/query operations.
 
 ## Supported Operation Kinds
 
@@ -69,7 +69,7 @@ shell, unrestricted HTTP write, generic SQL write, or arbitrary GraphQL kind.
 - Generated candidates from provider specs are not executable until reviewed
   and promoted to production metadata.
 
-## Runtime Behavior In #56
+## Runtime Behavior While Executors Are Pending
 
 If a command references `operation`, `commandrunner` returns a blocked command
 error naming the operation ID and explaining that its executor is not yet

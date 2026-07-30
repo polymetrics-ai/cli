@@ -178,7 +178,7 @@ pm connectors inspect 100ms --json
 pm connectors help 100ms
 ```
 
-`pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, write actions, and schema information.
+`pm connectors list` shows bundle-backed connectors. `pm connectors list --all` and `pm connectors catalog` expose the generated connector catalog with capability metadata, streams, provider search/query operation metadata, write actions, and schema information. The `query` capability is local warehouse query support; provider-native search/query surfaces use `provider_search` and `provider_query`.
 
 ## Extract, query, and write
 
