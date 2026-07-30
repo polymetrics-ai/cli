@@ -45,5 +45,28 @@ Expected green evidence after ledger update:
 
 ## Green / verification log
 
-Pending.
+### 2026-07-30 — official operation inventory parity green
 
+Observed after regenerating `internal/connectors/defs/stripe/api_surface.json` from the official Stripe OpenAPI source:
+
+```text
+GREEN stripe official operation inventory parity
+official_count 589 local_count 589 missing_count 0 extra_count 0 duplicate_count 0
+covered 8 operation_blocked 581
+methods {'GET': 263, 'POST': 294, 'DELETE': 32}
+official_lanes {'direct_read_query_search': 9, 'reverse_etl_write': 316, 'etl_read': 242, 'excluded_not_applicable': 8, 'cdc_changefeed': 7, 'binary_file': 7}
+```
+
+### 2026-07-30 — destructive write slice green
+
+- Added `delete_customer` write action with `kind: delete`, `body_type: none`, `delete.missing_ok_status: [404]`, and `confirm: "destructive"`.
+- Added `fixtures/writes/delete_customer.json`.
+- Hardened customer create/update/delete write schemas with `additionalProperties: false`, non-empty string patterns for mutable fields, and `^cus_[A-Za-z0-9_]+$` customer ID patterns so empty effective writes/deletes do not validate.
+- Removed optional `base_url` config and hard-coded `https://api.stripe.com/v1` so write preview/execution do not rely on shared write-default materialization.
+- `go test ./internal/connectors/conformance -run 'TestConformance/stripe' -count=1` passed, including delete semantics.
+
+### 2026-07-30 — connector metadata and CLI/help surface green
+
+- Added Stripe-owned `cli_surface.json` for existing stream commands and customer create/update/delete plan commands.
+- Regenerated `docs/connectors/stripe/MANUAL.md`, `docs/connectors/stripe/SKILL.md`, and CLI golden transcripts affected by the new provider command listing.
+- Verified `pm help stripe`, `pm stripe`, `pm stripe customers --help`, and `pm stripe customers delete --help` without credentials or provider calls.

@@ -1,7 +1,7 @@
 {
   "phase": "stripe-parity-3005",
   "branch": "fm/cli-stripe-parity-wave01-r1",
-  "status": "in_progress",
+  "status": "implemented",
   "gsdCommandPath": {
     "doctor": "scripts/gsd doctor",
     "list": "scripts/gsd list",
@@ -14,15 +14,71 @@
       "cycle": "plan",
       "decision": "local_critical_path",
       "reason": "Single Stripe connector-owned write scope in one isolated worktree; mutating subagents would collide. Manual GSD fallback active because scripts/gsd lacks programming-loop command."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Implemented connector-local Stripe ledger, destructive delete write, cli_surface, fixtures, and docs without spawning mutating subagents."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran targeted credential-free validation locally; full make verify deferred to no-mistakes/final pipeline."
     }
   ],
   "verificationPassed": false,
-  "verification": [],
+  "verification": [
+    {
+      "command": "official Stripe OpenAPI inventory comparison",
+      "result": "pass: 589 official operations, local 589, missing 0, extra 0, duplicate 0"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate internal/connectors/defs",
+      "result": "pass: 548 connectors checked, 0 findings"
+    },
+    {
+      "command": "temp defs-root Stripe-only connectorgen validate",
+      "result": "pass: 1 connector checked, 0 findings"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/stripe' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1",
+      "result": "pass after updating generated golden transcripts"
+    },
+    {
+      "command": "go vet ./internal/connectors/... ./internal/cli/...",
+      "result": "pass"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass"
+    },
+    {
+      "command": "make connector-boundary",
+      "result": "pass: outcome clean"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "pm help stripe; pm stripe; pm stripe customers --help; pm stripe customers delete --help",
+      "result": "pass: help only, no credentials/provider calls"
+    },
+    {
+      "command": "gh-axi issue addendum marker verification",
+      "result": "pass: #3005 and #3006-#3012 each contain exactly one captain-policy addendum marker"
+    }
+  ],
   "safety": {
     "liveCredentials": false,
     "providerCalls": false,
     "providerWrites": false,
     "sharedRuntimeEdits": false,
     "newDependencies": false
-  }
+  },
+  "notes": "verificationPassed remains false because full make verify was not run in this worker turn; targeted gates are green."
 }

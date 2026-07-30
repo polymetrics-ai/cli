@@ -4,14 +4,15 @@ Run credential-free only. Do not call live Stripe APIs.
 
 ## Targeted gates
 
-- [ ] Official operation inventory script: 589 official operations and zero missing ledger rows.
-- [ ] `go run ./cmd/connectorgen validate internal/connectors/defs/stripe`
-- [ ] `go test ./internal/connectors/conformance -run 'TestConformance/stripe' -count=1`
-- [ ] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` (if connector command/help metadata changed)
-- [ ] `go vet ./internal/connectors/... ./internal/cli/...`
-- [ ] `go build ./cmd/pm`
-- [ ] `make connector-boundary`
-- [ ] `git diff --check`
+- [x] Official operation inventory script: 589 official operations and zero missing ledger rows.
+- [x] `go run ./cmd/connectorgen validate internal/connectors/defs` (548 connectors, 0 findings).
+- [x] Stripe-only temp defs-root validation (`connectorgen validate` expects a parent defs root): 1 connector, 0 findings.
+- [x] `go test ./internal/connectors/conformance -run 'TestConformance/stripe' -count=1`
+- [x] `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` (after golden update; passed in 121.770s).
+- [x] `go vet ./internal/connectors/... ./internal/cli/...`
+- [x] `go build ./cmd/pm`
+- [x] `make connector-boundary`
+- [x] `git diff --check`
 
 ## Full local gates (time permitting before handoff)
 
@@ -23,8 +24,8 @@ Run credential-free only. Do not call live Stripe APIs.
 
 ## Safety evidence
 
-- [ ] No live credentials requested, printed, summarized, or stored.
-- [ ] No provider writes or live certification run.
-- [ ] No shared runtime files edited.
-- [ ] Any unimplemented operation remains truthfully blocked/planned or fixture-only/uncertified.
+- [x] No live credentials requested, printed, summarized, or stored.
+- [x] No provider writes or live certification run.
+- [x] No shared runtime files edited.
+- [x] Any unimplemented operation remains truthfully blocked/planned or fixture-only/uncertified.
 

@@ -7,7 +7,7 @@ description: Stripe connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer actions through the Stripe REST API.
+Reads Stripe customers, charges, invoices, subscriptions, and products, and writes approved reverse ETL customer create, update, and typed destructive delete actions through the Stripe REST API.
 
 ## Icon
 
@@ -28,7 +28,6 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
 ## Configuration
 
 - account_id
-- base_url
 - max_pages
 - mode
 - page_size
@@ -71,13 +70,40 @@ Reads Stripe customers, charges, invoices, subscriptions, and products, and writ
   - endpoint: POST /customers/{{ record.id }}
   - required fields: id
   - risk: external mutation; approval required
+- delete_customer:
+  - endpoint: DELETE /customers/{{ record.id }}
+  - required fields: id
+  - risk: destructive external mutation; deletes a Stripe customer; reverse ETL approval and typed destructive confirmation required
 
 ## Security
 
 - read risk: external Stripe API read of customer and billing data
-- write risk: external Stripe API mutation
-- approval: reverse ETL plan approval required before writes
+- write risk: external Stripe API mutation, including typed destructive customer deletion when explicitly confirmed
+- approval: reverse ETL plan approval required before writes; destructive actions require typed confirmation
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Read Stripe billing streams and safely plan customer write actions.
+- Usage: pm stripe <command> [flags]
+- Source CLI: Stripe API (OpenAPI spec3 2026-07-29.dahlia)
+- Global flags:
+  - --credential (string): Credential name to use for the Stripe request.
+  - --connection (string): Connection name whose Stripe credential/config should be used.
+  - --config (string_array): Connector config override as key=value; never pass secret values here.
+  - --limit (integer): Maximum records to emit from stream commands.
+- Customers
+  - customers list - Read Stripe customers through the declared ETL stream. [intent=etl availability=implemented stream=customers]
+  - customers create - Plan creation of a Stripe customer through reverse ETL. [intent=reverse_etl availability=implemented write=create_customer]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Creates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --email, --name, --description, --phone
+  - customers update - Plan an update to a Stripe customer through reverse ETL. [intent=reverse_etl availability=implemented write=update_customer]; approval: Plan first, inspect preview output, then run only with the generated approval token.; risk: Mutates customer data in Stripe; requires reverse ETL plan, preview, explicit approval, then execute.; flags: --id, --email, --name, --description, --phone
+  - customers delete - Plan deletion of a Stripe customer with typed destructive confirmation. [intent=reverse_etl availability=implemented write=delete_customer]; approval: Plan first, inspect preview output, then run only with the generated approval token and typed --confirm destructive challenge.; risk: Destructive Stripe customer deletion; requires reverse ETL plan, preview, explicit approval, and --confirm destructive before execute.; flags: --id
+- Billing streams
+  - charges list - Read Stripe charges through the declared ETL stream. [intent=etl availability=implemented stream=charges]
+  - invoices list - Read Stripe invoices through the declared ETL stream. [intent=etl availability=implemented stream=invoices]
+  - subscriptions list - Read Stripe subscriptions through the declared ETL stream. [intent=etl availability=implemented stream=subscriptions]
+  - products list - Read Stripe products through the declared ETL stream. [intent=etl availability=implemented stream=products]
+- Help topics:
+  - destructive-confirmation - Stripe DELETE/destructive operations are in scope only through typed destructive confirmation and the reverse ETL plan → preview → approval → execute path.
 
 ## Commands
 
