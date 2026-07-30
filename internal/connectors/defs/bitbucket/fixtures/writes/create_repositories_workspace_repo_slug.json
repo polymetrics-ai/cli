@@ -1,0 +1,23 @@
+{
+  "expect": {
+    "body": {
+      "is_private": true,
+      "scm": "git"
+    },
+    "method": "POST",
+    "path": "/repositories/workspace_fixture/repo-fixture"
+  },
+  "record": {
+    "is_private": true,
+    "repo_slug": "repo-fixture",
+    "scm": "git",
+    "workspace": "workspace_fixture"
+  },
+  "response": {
+    "body": {
+      "slug": "repo-fixture",
+      "type": "repository"
+    },
+    "status": 200
+  }
+}

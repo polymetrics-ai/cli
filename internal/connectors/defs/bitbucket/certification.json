@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "repositories",
+    "live_unavailable": [
+      {
+        "contains": [
+          "fixture-only Bitbucket bundle; no live credentials or provider calls were used"
+        ],
+        "kind": "not_certified"
+      }
+    ]
+  }
+}
