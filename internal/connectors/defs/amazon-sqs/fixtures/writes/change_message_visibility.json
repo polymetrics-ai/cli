@@ -1,0 +1,10 @@
+{
+  "record": {
+    "receipt_handle": "fixture-receipt-handle",
+    "visibility_timeout": 30
+  },
+  "expect": {
+    "method": "POST",
+    "path": "SQS.ChangeMessageVisibility"
+  }
+}
