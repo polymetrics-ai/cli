@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","messageId":"fixture_message_id"},"expect":{"method":"DELETE","path":"/live_webinars/fixture_webinar_id/chat/messages/fixture_message_id"},"response":{"status":200,"body":{"ok":true}}}

@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","attendees":[{"id":"fixture_item"}],"ttl":1},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/invite_links","body":{"attendees":[{"id":"fixture_item"}],"ttl":1}},"response":{"status":201,"body":{"ok":true}}}

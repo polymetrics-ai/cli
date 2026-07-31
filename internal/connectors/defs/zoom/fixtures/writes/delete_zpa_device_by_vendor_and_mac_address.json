@@ -1,0 +1,1 @@
+{"record":{"vendor":"fixture_vendor","macAddress":"fixture_mac_address"},"expect":{"method":"DELETE","path":"/devices/zpa/vendors/fixture_vendor/mac_addresses/fixture_mac_address"},"response":{"status":200,"body":{"ok":true}}}

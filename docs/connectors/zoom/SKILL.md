@@ -7,7 +7,7 @@ description: Zoom connector knowledge and safe action guide.
 
 ## Purpose
 
-Reads Zoom users, meetings, and webinars through the Zoom REST API.
+Reads, queries, and safely plans typed mutations for the documented Zoom Meeting API surface.
 
 ## Icon
 
@@ -18,7 +18,7 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 
 ## Capabilities
 
-- check=true catalog=true read=true write=false query=false
+- check=true catalog=true read=true write=true query=false
 - Integration type: api
 
 ## Authentication
@@ -28,33 +28,596 @@ Reads Zoom users, meetings, and webinars through the Zoom REST API.
 ## Configuration
 
 - base_url
-- max_pages
+- deviceId
+- fieldId
+- fileId
+- macAddress
+- meetingId
+- meetingUUID
+- messageId
 - mode
+- nameTagId
 - page_size
-- user_id
+- panelistId
+- phoneId
+- pollId
+- recordingId
+- registrantId
+- tspId
+- userId
+- vendor
+- webinarId
+- zdmGroupId
 - access_token (secret)
 
 ## ETL Streams
 
-- users:
+- list_devices:
   - primary key: id
-  - fields: email(), id(), name(), updated_at()
+  - fields: id()
+- getzdmgroupinfo:
+  - primary key: id
+  - fields: id()
+- get_zpa_device_list_profile_setting_ofa_user:
+  - primary key: id
+  - fields: id()
+- get_zpa_versioninfo:
+  - primary key: id
+  - fields: id()
+- get_device:
+  - primary key: id
+  - fields: id()
+- device_list:
+  - primary key: id
+  - fields: id()
+- meeting_registrants:
+  - primary key: id
+  - fields: id()
+- meeting_registrants_questions_get:
+  - primary key: id
+  - fields: id()
+- meeting_registrant_get:
+  - primary key: id
+  - fields: id()
+- meeting:
+  - primary key: id
+  - fields: id()
+- past_meeting_details:
+  - primary key: id
+  - fields: id()
+- past_meetings:
+  - primary key: id
+  - fields: id()
+- list_past_meeting_qa:
+  - primary key: id
+  - fields: id()
 - meetings:
   - primary key: id
-  - fields: email(), id(), name(), updated_at()
+  - fields: id()
+- list_upcoming_meeting:
+  - primary key: id
+  - fields: id()
+- user_pa_cs:
+  - primary key: id
+  - fields: id()
+- meeting_polls:
+  - primary key: id
+  - fields: id()
+- meeting_poll_get:
+  - primary key: id
+  - fields: id()
+- list_past_meeting_polls:
+  - primary key: id
+  - fields: id()
+- list_sip_phone_phones:
+  - primary key: id
+  - fields: id()
+- listmeetingsummaries:
+  - primary key: id
+  - fields: id()
+- getameetingsummary:
+  - primary key: id
+  - fields: id()
+- tsp:
+  - primary key: id
+  - fields: id()
+- user_ts_ps:
+  - primary key: id
+  - fields: id()
+- user_tsp:
+  - primary key: id
+  - fields: id()
+- list_meeting_templates:
+  - primary key: id
+  - fields: id()
+- trackingfield_list:
+  - primary key: id
+  - fields: id()
+- trackingfield_get:
+  - primary key: id
+  - fields: id()
+- webinar_absentees:
+  - primary key: id
+  - fields: id()
+- past_webinars:
+  - primary key: id
+  - fields: id()
+- list_past_webinar_poll_results:
+  - primary key: id
+  - fields: id()
+- list_past_webinar_qa:
+  - primary key: id
+  - fields: id()
+- list_webinar_templates:
+  - primary key: id
+  - fields: id()
 - webinars:
   - primary key: id
-  - fields: email(), id(), name(), updated_at()
+  - fields: id()
+- webinar:
+  - primary key: id
+  - fields: id()
+- get_webinar_branding:
+  - primary key: id
+  - fields: id()
+- webinar_live_streaming_join_token:
+  - primary key: id
+  - fields: id()
+- webinar_local_archiving_archive_token:
+  - primary key: id
+  - fields: id()
+- webinar_local_recording_join_token:
+  - primary key: id
+  - fields: id()
+- get_webinar_live_stream_details:
+  - primary key: id
+  - fields: id()
+- webinar_panelists:
+  - primary key: id
+  - fields: id()
+- webinar_polls:
+  - primary key: id
+  - fields: id()
+- webinar_poll_get:
+  - primary key: id
+  - fields: id()
+- webinar_registrants:
+  - primary key: id
+  - fields: id()
+- webinar_registrants_questions_get:
+  - primary key: id
+  - fields: id()
+- webinar_registrant_get:
+  - primary key: id
+  - fields: id()
+- webinar_token:
+  - primary key: id
+  - fields: id()
+- get_tracking_sources:
+  - primary key: id
+  - fields: id()
 
 ## Sync Modes
 
 - ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped
 
+## Reverse ETL Actions
+
+- update_archived_file:
+  - endpoint: PATCH /archive_files/{{ record.fileId }}
+  - required fields: fileId
+  - risk: Update an archived file's auto-delete status; mutates Zoom provider state through a typed connector action.
+- delete_archived_files:
+  - endpoint: DELETE /past_meetings/{{ record.meetingUUID }}/archive_files
+  - required fields: meetingUUID
+  - risk: Delete a meeting's archived files; mutates Zoom provider state through a typed connector action.
+- recording_delete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/recordings
+  - required fields: meetingId
+  - risk: Delete meeting or webinar recordings; mutates Zoom provider state through a typed connector action.
+- meeting_recording_registrant_create:
+  - endpoint: POST /meetings/{{ record.meetingId }}/recordings/registrants
+  - required fields: meetingId
+  - risk: Create a recording registrant; mutates Zoom provider state through a typed connector action.
+- recording_registrant_question_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/recordings/registrants/questions
+  - required fields: meetingId
+  - risk: Update registration questions; mutates Zoom provider state through a typed connector action.
+- meeting_recording_registrant_status:
+  - endpoint: PUT /meetings/{{ record.meetingId }}/recordings/registrants/status
+  - required fields: meetingId
+  - risk: Update a registrant's status; mutates Zoom provider state through a typed connector action.
+- recording_settings_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/recordings/settings
+  - required fields: meetingId
+  - risk: Update meeting recording settings; mutates Zoom provider state through a typed connector action.
+- recording_delete_one:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/recordings/{{ record.recordingId }}
+  - required fields: meetingId, recordingId
+  - risk: Delete a recording file for a meeting or webinar; mutates Zoom provider state through a typed connector action.
+- recording_status_update_one:
+  - endpoint: PUT /meetings/{{ record.meetingId }}/recordings/{{ record.recordingId }}/status
+  - required fields: meetingId, recordingId
+  - risk: Recover a single recording; mutates Zoom provider state through a typed connector action.
+- delete_meeting_transcript:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/transcript
+  - required fields: meetingId
+  - risk: Delete a meeting or webinar transcript; mutates Zoom provider state through a typed connector action.
+- recording_status_update:
+  - endpoint: PUT /meetings/{{ record.meetingUUID }}/recordings/status
+  - required fields: meetingUUID
+  - risk: Recover meeting recordings; mutates Zoom provider state through a typed connector action.
+- add_device:
+  - endpoint: POST /devices
+  - risk: Add a new device; mutates Zoom provider state through a typed connector action.
+- assigndevicetoauser_commonarea:
+  - endpoint: POST /devices/zpa/assignment
+  - risk: Assign a device to a user or commonarea; mutates Zoom provider state through a typed connector action.
+- upgrade_zpas_app:
+  - endpoint: POST /devices/zpa/upgrade
+  - risk: Upgrade ZPA firmware or app; mutates Zoom provider state through a typed connector action.
+- delete_zpa_device_by_vendor_and_mac_address:
+  - endpoint: DELETE /devices/zpa/vendors/{{ record.vendor }}/mac_addresses/{{ record.macAddress }}
+  - required fields: vendor, macAddress
+  - risk: Delete ZPA device by vendor and mac address; mutates Zoom provider state through a typed connector action.
+- delete_device:
+  - endpoint: DELETE /devices/{{ record.deviceId }}
+  - required fields: deviceId
+  - risk: Delete device; mutates Zoom provider state through a typed connector action.
+- update_device:
+  - endpoint: PATCH /devices/{{ record.deviceId }}
+  - required fields: deviceId
+  - risk: Change device ; mutates Zoom provider state through a typed connector action.
+- assgin_group:
+  - endpoint: PATCH /devices/{{ record.deviceId }}/assign_group
+  - required fields: deviceId
+  - risk: Assign a device to a group; mutates Zoom provider state through a typed connector action.
+- change_device_association:
+  - endpoint: PATCH /devices/{{ record.deviceId }}/assignment
+  - required fields: deviceId
+  - risk: Change device association; mutates Zoom provider state through a typed connector action.
+- device_create:
+  - endpoint: POST /h323/devices
+  - risk: Create a H.323/SIP device; mutates Zoom provider state through a typed connector action.
+- device_delete:
+  - endpoint: DELETE /h323/devices/{{ record.deviceId }}
+  - required fields: deviceId
+  - risk: Delete a H.323/SIP device; mutates Zoom provider state through a typed connector action.
+- device_update:
+  - endpoint: PATCH /h323/devices/{{ record.deviceId }}
+  - required fields: deviceId
+  - risk: Update a H.323/SIP device; mutates Zoom provider state through a typed connector action.
+- meeting_app_add:
+  - endpoint: POST /meetings/{{ record.meetingId }}/open_apps
+  - required fields: meetingId
+  - risk: Add a meeting app; mutates Zoom provider state through a typed connector action.
+- meeting_app_delete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/open_apps
+  - required fields: meetingId
+  - risk: Delete a meeting app; mutates Zoom provider state through a typed connector action.
+- delete_meeting_chat_message_by_id:
+  - endpoint: DELETE /live_meetings/{{ record.meetingId }}/chat/messages/{{ record.messageId }}
+  - required fields: meetingId, messageId
+  - risk: Delete a live meeting message; mutates Zoom provider state through a typed connector action.
+- update_meeting_chat_message_by_id:
+  - endpoint: PATCH /live_meetings/{{ record.meetingId }}/chat/messages/{{ record.messageId }}
+  - required fields: meetingId, messageId
+  - risk: Update a live meeting message; mutates Zoom provider state through a typed connector action.
+- in_meeting_control:
+  - endpoint: PATCH /live_meetings/{{ record.meetingId }}/events
+  - required fields: meetingId
+  - risk: In-meeting controls; mutates Zoom provider state through a typed connector action.
+- add_batch_registrants:
+  - endpoint: POST /meetings/{{ record.meetingId }}/batch_registrants
+  - required fields: meetingId
+  - risk: Perform batch registration; mutates Zoom provider state through a typed connector action.
+- meeting_invite_links_create:
+  - endpoint: POST /meetings/{{ record.meetingId }}/invite_links
+  - required fields: meetingId
+  - risk: Create a meeting's invite links; mutates Zoom provider state through a typed connector action.
+- meeting_registrant_create:
+  - endpoint: POST /meetings/{{ record.meetingId }}/registrants
+  - required fields: meetingId
+  - risk: Add a meeting registrant; mutates Zoom provider state through a typed connector action.
+- meeting_registrant_question_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/registrants/questions
+  - required fields: meetingId
+  - risk: Update registration questions; mutates Zoom provider state through a typed connector action.
+- meeting_registrant_status:
+  - endpoint: PUT /meetings/{{ record.meetingId }}/registrants/status
+  - required fields: meetingId
+  - risk: Update registrant's status; mutates Zoom provider state through a typed connector action.
+- meetingregistrantdelete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/registrants/{{ record.registrantId }}
+  - required fields: meetingId, registrantId
+  - risk: Delete a meeting registrant; mutates Zoom provider state through a typed connector action.
+- meeting_live_stream_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/livestream
+  - required fields: meetingId
+  - risk: Update a livestream; mutates Zoom provider state through a typed connector action.
+- meeting_live_stream_status_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/livestream/status
+  - required fields: meetingId
+  - risk: Update livestream status; mutates Zoom provider state through a typed connector action.
+- meeting_rtms_status_update:
+  - endpoint: PATCH /live_meetings/{{ record.meetingId }}/rtms_app/status
+  - required fields: meetingId
+  - risk: Update participant Real-Time Media Streams (RTMS) app status; mutates Zoom provider state through a typed connector action.
+- meeting_delete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}
+  - required fields: meetingId
+  - risk: Delete a meeting; mutates Zoom provider state through a typed connector action.
+- meeting_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}
+  - required fields: meetingId
+  - risk: Update a meeting; mutates Zoom provider state through a typed connector action.
+- get_sip_dialing_with_passcode:
+  - endpoint: POST /meetings/{{ record.meetingId }}/sip_dialing
+  - required fields: meetingId
+  - risk: Get a meeting SIP URI with passcode; mutates Zoom provider state through a typed connector action.
+- meeting_status:
+  - endpoint: PUT /meetings/{{ record.meetingId }}/status
+  - required fields: meetingId
+  - risk: Update meeting status; mutates Zoom provider state through a typed connector action.
+- meeting_create:
+  - endpoint: POST /users/{{ record.userId }}/meetings
+  - required fields: userId
+  - risk: Create a meeting; mutates Zoom provider state through a typed connector action.
+- create_batch_polls:
+  - endpoint: POST /meetings/{{ record.meetingId }}/batch_polls
+  - required fields: meetingId
+  - risk: Perform batch poll creation; mutates Zoom provider state through a typed connector action.
+- meeting_poll_create:
+  - endpoint: POST /meetings/{{ record.meetingId }}/polls
+  - required fields: meetingId
+  - risk: Create a meeting poll; mutates Zoom provider state through a typed connector action.
+- meeting_poll_update:
+  - endpoint: PUT /meetings/{{ record.meetingId }}/polls/{{ record.pollId }}
+  - required fields: meetingId, pollId
+  - risk: Update a meeting poll; mutates Zoom provider state through a typed connector action.
+- meeting_poll_delete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/polls/{{ record.pollId }}
+  - required fields: meetingId, pollId
+  - risk: Delete a meeting poll; mutates Zoom provider state through a typed connector action.
+- enable_sip_phone_phones:
+  - endpoint: POST /sip_phones/phones
+  - risk: Enable SIP phone; mutates Zoom provider state through a typed connector action.
+- delete_sip_phone_phones:
+  - endpoint: DELETE /sip_phones/phones/{{ record.phoneId }}
+  - required fields: phoneId
+  - risk: Delete SIP phone; mutates Zoom provider state through a typed connector action.
+- update_sip_phone_phones:
+  - endpoint: PATCH /sip_phones/phones/{{ record.phoneId }}
+  - required fields: phoneId
+  - risk: Update SIP phone; mutates Zoom provider state through a typed connector action.
+- deletemeetingorwebinarsummary:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/meeting_summary
+  - required fields: meetingId
+  - risk: Delete a meeting or webinar summary; mutates Zoom provider state through a typed connector action.
+- meeting_survey_delete:
+  - endpoint: DELETE /meetings/{{ record.meetingId }}/survey
+  - required fields: meetingId
+  - risk: Delete a meeting survey; mutates Zoom provider state through a typed connector action.
+- meeting_survey_update:
+  - endpoint: PATCH /meetings/{{ record.meetingId }}/survey
+  - required fields: meetingId
+  - risk: Update a meeting survey; mutates Zoom provider state through a typed connector action.
+- tsp_update:
+  - endpoint: PATCH /tsp
+  - risk: Update an account's TSP information; mutates Zoom provider state through a typed connector action.
+- user_tsp_create:
+  - endpoint: POST /users/{{ record.userId }}/tsp
+  - required fields: userId
+  - risk: Add a user's TSP account; mutates Zoom provider state through a typed connector action.
+- tsp_url_update:
+  - endpoint: PATCH /users/{{ record.userId }}/tsp/settings
+  - required fields: userId
+  - risk: Set global dial-in URL for a TSP user; mutates Zoom provider state through a typed connector action.
+- user_tsp_delete:
+  - endpoint: DELETE /users/{{ record.userId }}/tsp/{{ record.tspId }}
+  - required fields: userId, tspId
+  - risk: Delete a user's TSP account; mutates Zoom provider state through a typed connector action.
+- user_tsp_update:
+  - endpoint: PATCH /users/{{ record.userId }}/tsp/{{ record.tspId }}
+  - required fields: userId, tspId
+  - risk: Update a TSP account; mutates Zoom provider state through a typed connector action.
+- meeting_template_create:
+  - endpoint: POST /users/{{ record.userId }}/meeting_templates
+  - required fields: userId
+  - risk: Create a meeting template from an existing meeting; mutates Zoom provider state through a typed connector action.
+- trackingfield_create:
+  - endpoint: POST /tracking_fields
+  - risk: Create a tracking field; mutates Zoom provider state through a typed connector action.
+- trackingfield_delete:
+  - endpoint: DELETE /tracking_fields/{{ record.fieldId }}
+  - required fields: fieldId
+  - risk: Delete a tracking field; mutates Zoom provider state through a typed connector action.
+- trackingfield_update:
+  - endpoint: PATCH /tracking_fields/{{ record.fieldId }}
+  - required fields: fieldId
+  - risk: Update a tracking field; mutates Zoom provider state through a typed connector action.
+- delete_webinar_chat_message_by_id:
+  - endpoint: DELETE /live_webinars/{{ record.webinarId }}/chat/messages/{{ record.messageId }}
+  - required fields: webinarId, messageId
+  - risk: Delete a live webinar message; mutates Zoom provider state through a typed connector action.
+- webinar_template_create:
+  - endpoint: POST /users/{{ record.userId }}/webinar_templates
+  - required fields: userId
+  - risk: Create a webinar template; mutates Zoom provider state through a typed connector action.
+- webinar_create:
+  - endpoint: POST /users/{{ record.userId }}/webinars
+  - required fields: userId
+  - risk: Create a webinar; mutates Zoom provider state through a typed connector action.
+- webinar_delete:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}
+  - required fields: webinarId
+  - risk: Delete a webinar; mutates Zoom provider state through a typed connector action.
+- webinar_update:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}
+  - required fields: webinarId
+  - risk: Update a webinar; mutates Zoom provider state through a typed connector action.
+- add_batch_webinar_registrants:
+  - endpoint: POST /webinars/{{ record.webinarId }}/batch_registrants
+  - required fields: webinarId
+  - risk: Perform batch registration; mutates Zoom provider state through a typed connector action.
+- create_webinar_branding_name_tag:
+  - endpoint: POST /webinars/{{ record.webinarId }}/branding/name_tags
+  - required fields: webinarId
+  - risk: Create a webinar's branding name tag; mutates Zoom provider state through a typed connector action.
+- delete_webinar_branding_name_tag:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/branding/name_tags
+  - required fields: webinarId
+  - risk: Delete a webinar's branding name tag; mutates Zoom provider state through a typed connector action.
+- update_webinar_branding_name_tag:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/branding/name_tags/{{ record.nameTagId }}
+  - required fields: webinarId, nameTagId
+  - risk: Update a webinar's branding name tag; mutates Zoom provider state through a typed connector action.
+- upload_webinar_branding_vb:
+  - endpoint: POST /webinars/{{ record.webinarId }}/branding/virtual_backgrounds
+  - required fields: webinarId, file
+  - risk: Upload a webinar's branding virtual background; mutates Zoom provider state through a typed connector action.
+- delete_webinar_branding_vb:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/branding/virtual_backgrounds
+  - required fields: webinarId
+  - risk: Delete a webinar's branding virtual backgrounds; mutates Zoom provider state through a typed connector action.
+- set_webinar_branding_vb:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/branding/virtual_backgrounds
+  - required fields: webinarId
+  - risk: Set webinar's default branding virtual background; mutates Zoom provider state through a typed connector action.
+- upload_webinar_branding_wallpaper:
+  - endpoint: POST /webinars/{{ record.webinarId }}/branding/wallpaper
+  - required fields: webinarId, file
+  - risk: Upload a webinar's branding wallpaper; mutates Zoom provider state through a typed connector action.
+- delete_webinar_branding_wallpaper:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/branding/wallpaper
+  - required fields: webinarId
+  - risk: Delete a webinar's branding wallpaper; mutates Zoom provider state through a typed connector action.
+- webinar_invite_links_create:
+  - endpoint: POST /webinars/{{ record.webinarId }}/invite_links
+  - required fields: webinarId
+  - risk: Create webinar's invite links; mutates Zoom provider state through a typed connector action.
+- webinar_live_stream_update:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/livestream
+  - required fields: webinarId
+  - risk: Update a live stream; mutates Zoom provider state through a typed connector action.
+- webinar_live_stream_status_update:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/livestream/status
+  - required fields: webinarId
+  - risk: Update live stream status; mutates Zoom provider state through a typed connector action.
+- webinar_panelist_create:
+  - endpoint: POST /webinars/{{ record.webinarId }}/panelists
+  - required fields: webinarId
+  - risk: Add panelists; mutates Zoom provider state through a typed connector action.
+- webinar_panelists_delete:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/panelists
+  - required fields: webinarId
+  - risk: Remove all panelists; mutates Zoom provider state through a typed connector action.
+- webinar_panelist_delete:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/panelists/{{ record.panelistId }}
+  - required fields: webinarId, panelistId
+  - risk: Remove a panelist; mutates Zoom provider state through a typed connector action.
+- webinar_poll_create:
+  - endpoint: POST /webinars/{{ record.webinarId }}/polls
+  - required fields: webinarId
+  - risk: Create a webinar's poll; mutates Zoom provider state through a typed connector action.
+- webinar_poll_update:
+  - endpoint: PUT /webinars/{{ record.webinarId }}/polls/{{ record.pollId }}
+  - required fields: webinarId, pollId
+  - risk: Update a webinar poll; mutates Zoom provider state through a typed connector action.
+- webinar_poll_delete:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/polls/{{ record.pollId }}
+  - required fields: webinarId, pollId
+  - risk: Delete a webinar poll; mutates Zoom provider state through a typed connector action.
+- webinar_registrant_create:
+  - endpoint: POST /webinars/{{ record.webinarId }}/registrants
+  - required fields: webinarId
+  - risk: Add a webinar registrant; mutates Zoom provider state through a typed connector action.
+- webinar_registrant_question_update:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/registrants/questions
+  - required fields: webinarId
+  - risk: Update registration questions; mutates Zoom provider state through a typed connector action.
+- webinar_registrant_status:
+  - endpoint: PUT /webinars/{{ record.webinarId }}/registrants/status
+  - required fields: webinarId
+  - risk: Update registrant's status; mutates Zoom provider state through a typed connector action.
+- delete_webinar_registrant:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/registrants/{{ record.registrantId }}
+  - required fields: webinarId, registrantId
+  - risk: Delete a webinar registrant; mutates Zoom provider state through a typed connector action.
+- get_webinar_sip_dialing_with_passcode:
+  - endpoint: POST /webinars/{{ record.webinarId }}/sip_dialing
+  - required fields: webinarId
+  - risk: Get a webinar SIP URI with passcode; mutates Zoom provider state through a typed connector action.
+- webinar_status:
+  - endpoint: PUT /webinars/{{ record.webinarId }}/status
+  - required fields: webinarId
+  - risk: Update webinar status; mutates Zoom provider state through a typed connector action.
+- webinar_survey_delete:
+  - endpoint: DELETE /webinars/{{ record.webinarId }}/survey
+  - required fields: webinarId
+  - risk: Delete a webinar survey; mutates Zoom provider state through a typed connector action.
+- webinar_survey_update:
+  - endpoint: PATCH /webinars/{{ record.webinarId }}/survey
+  - required fields: webinarId
+  - risk: Update a webinar survey; mutates Zoom provider state through a typed connector action.
+
 ## Security
 
-- read risk: external Zoom API read of user, meeting, and webinar data
-- approval: none; read-only
+- read risk: external Zoom Meeting API reads with bounded page sizes and redacted fixture replay
+- write risk: typed Zoom Meeting API mutations only; reverse ETL requires plan, preview, approval, execute, with destructive confirmation for deletes
+- approval: reverse ETL writes require plan → preview → explicit approval → execute; fixture-only certification is not a live-provider claim
 - Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+## Command Surface
+
+- Read Zoom Meeting API data and safely plan typed Zoom mutations without raw API passthrough.
+- Usage: pm zoom <etl|direct|binary|reverse> <operation> [flags]
+- Other Commands
+  - binary list-archived-files view - List archived files [intent=direct_read availability=implemented]; flags: --page-size, --next-page-token, --from, --to, --query-date-type, --group-id, --group-ids
+  - binary get-archived-file-statistics view - Get archived file statistics [intent=direct_read availability=implemented]; flags: --from, --to
+  - binary meeting-local-archiving-archive-token view - Get a meeting's archive token for local archiving [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary get-archived-files view - Get a meeting's archived files [intent=direct_read availability=implemented]; flags: --meeting-uuid
+  - binary recording-get view - Get meeting recordings [intent=direct_read availability=implemented]; flags: --meeting-id, --include-fields, --ttl
+  - binary analytics-details view - Get a meeting or webinar recording's analytics details [intent=direct_read availability=implemented]; flags: --meeting-id, --page-size, --next-page-token, --from, --to, --type
+  - binary analytics-summary view - Get a meeting or webinar recording's analytics summary [intent=direct_read availability=implemented]; flags: --meeting-id, --from, --to
+  - binary meeting-recording-registrants view - List recording registrants [intent=direct_read availability=implemented]; flags: --meeting-id, --status, --page-size, --page-number, --next-page-token
+  - binary recording-registrants-questions-get view - Get registration questions [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary recording-setting-update view - Get meeting recording settings [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary get-meeting-transcript view - Get a meeting transcript [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary recordings-list view - List all recordings [intent=direct_read availability=implemented]; flags: --user-id, --page-size, --next-page-token, --mc, --trash, --from, --to, --trash-type, --meeting-id
+  - binary meeting-local-recording-join-token view - Get a meeting's join token for local recording [intent=direct_read availability=implemented]; flags: --meeting-id, --bypass-waiting-room
+  - binary meeting-token view - Get meeting's token [intent=direct_read availability=implemented]; flags: --meeting-id, --type
+  - direct meeting-invitation view - Get meeting invitation [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary meeting-live-streaming-join-token view - Get a meeting's join token for live streaming [intent=direct_read availability=implemented]; flags: --meeting-id
+  - binary get-meeting-live-stream-details view - Get livestream details [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct past-meeting-participants view - Get past meeting participants [intent=direct_read availability=implemented]; flags: --meeting-id, --page-size, --next-page-token
+  - direct report-sign-in-sign-out-activities view - Get sign In / sign out activity report [intent=direct_read availability=implemented]; flags: --from, --to, --page-size, --next-page-token
+  - direct get-billing-report view - Get billing reports [intent=direct_read availability=implemented]
+  - direct get-billing-invoices-reports view - Get billing invoice reports [intent=direct_read availability=implemented]; flags: --billing-id
+  - direct report-cloud-recording view - Get cloud recording usage report [intent=direct_read availability=implemented]; flags: --from, --to, --group-id
+  - direct report-daily view - Get daily usage report [intent=direct_read availability=implemented]; flags: --year, --month, --group-id
+  - direct getdisclaimerreport view - Get disclaimer report [intent=direct_read availability=implemented]; flags: --from, --to, --search-value, --disclaimer-type, --group-id, --page-size, --next-page-token
+  - direct gethistorymeetingandwebinarlist view - Get history meeting and webinar list [intent=direct_read availability=implemented]; flags: --from, --to, --date-type, --meeting-type, --report-type, --search-key, --page-size, --next-page-token, --group-id, --meeting-feature
+  - direct report-meetingactivitylogs view - Get a meeting activities report [intent=direct_read availability=implemented]; flags: --from, --to, --page-size, --next-page-token, --meeting-number, --search-key, --activity-type
+  - direct report-meeting-details view - Get meeting detail reports [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct report-meeting-participants view - Get meeting participant reports [intent=direct_read availability=implemented]; flags: --meeting-id, --page-size, --next-page-token, --include-fields
+  - direct report-meeting-polls view - Get meeting poll reports [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct report-meeting-qa view - Get meeting Q&A report [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct report-meeting-survey view - Get meeting survey report [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct report-operation-logs view - Get operation logs report [intent=direct_read availability=implemented]; flags: --from, --to, --page-size, --next-page-token, --category-type
+  - direct getremotesupportreport view - Get remote support report [intent=direct_read availability=implemented]; flags: --from, --to, --next-page-token, --page-size
+  - direct report-telephone view - Get telephone reports [intent=direct_read availability=implemented]; flags: --type, --query-date-type, --from, --to, --page-size, --page-number, --next-page-token
+  - direct report-upcoming-events view - Get upcoming events report [intent=direct_read availability=implemented]; flags: --from, --to, --page-size, --next-page-token, --type, --group-id
+  - direct report-users view - Get active or inactive host reports [intent=direct_read availability=implemented]; flags: --type, --from, --to, --page-size, --page-number, --next-page-token, --group-id
+  - direct report-meetings view - Get meeting reports [intent=direct_read availability=implemented]; flags: --user-id, --from, --to, --page-size, --next-page-token, --type
+  - direct report-webinar-details view - Get webinar detail reports [intent=direct_read availability=implemented]; flags: --webinar-id
+  - direct report-webinar-participants view - Get webinar participant reports [intent=direct_read availability=implemented]; flags: --webinar-id, --page-size, --next-page-token, --include-fields
+  - direct report-webinar-polls view - Get webinar poll reports [intent=direct_read availability=implemented]; flags: --webinar-id
+  - direct report-webinar-qa view - Get webinar Q&A report [intent=direct_read availability=implemented]; flags: --webinar-id
+  - direct report-webinar-survey view - Get webinar survey report [intent=direct_read availability=implemented]; flags: --webinar-id
+  - direct meeting-survey-get view - Get a meeting survey [intent=direct_read availability=implemented]; flags: --meeting-id
+  - direct list-webinar-participants view - List webinar participants [intent=direct_read availability=implemented]; flags: --webinar-id, --page-size, --next-page-token
+  - direct webinar-survey-get view - Get a webinar survey [intent=direct_read availability=implemented]; flags: --webinar-id
 
 ## Commands
 
@@ -75,3 +638,4 @@ pm connectors inspect zoom --json
 - Run pm connectors inspect zoom before creating credentials or plans.
 - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
 - Never ask the user to paste secret values into chat.
+- For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.

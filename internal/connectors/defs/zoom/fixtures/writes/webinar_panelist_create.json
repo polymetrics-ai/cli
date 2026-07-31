@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","panelists":[{"id":"fixture_item"}]},"expect":{"method":"POST","path":"/webinars/fixture_webinar_id/panelists","body":{"panelists":[{"id":"fixture_item"}]}},"response":{"status":201,"body":{"ok":true}}}

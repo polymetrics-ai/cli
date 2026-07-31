@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","passcode":"fixture_passcode"},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/sip_dialing","body":{"passcode":"fixture_passcode"}},"response":{"status":201,"body":{"ok":true}}}

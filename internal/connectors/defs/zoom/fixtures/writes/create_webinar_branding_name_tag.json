@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","name":"fixture_name","text_color":"fixture_text_color","accent_color":"fixture_accent_color"},"expect":{"method":"POST","path":"/webinars/fixture_webinar_id/branding/name_tags","body":{"name":"fixture_name","text_color":"fixture_text_color","accent_color":"fixture_accent_color"}},"response":{"status":201,"body":{"ok":true}}}

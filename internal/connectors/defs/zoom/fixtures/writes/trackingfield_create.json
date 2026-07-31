@@ -1,0 +1,1 @@
+{"record":{"field":"fixture_field","recommended_values":["fixture_item"],"required":true},"expect":{"method":"POST","path":"/tracking_fields","body":{"field":"fixture_field","recommended_values":["fixture_item"],"required":true}},"response":{"status":201,"body":{"ok":true}}}

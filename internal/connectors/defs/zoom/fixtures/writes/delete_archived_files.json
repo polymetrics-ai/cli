@@ -1,0 +1,1 @@
+{"record":{"meetingUUID":"fixture_meeting_uuid"},"expect":{"method":"DELETE","path":"/past_meetings/fixture_meeting_uuid/archive_files"},"response":{"status":200,"body":{"ok":true}}}

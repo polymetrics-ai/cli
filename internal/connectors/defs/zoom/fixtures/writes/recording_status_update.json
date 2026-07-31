@@ -1,0 +1,1 @@
+{"record":{"meetingUUID":"fixture_meeting_uuid","action":"fixture_action"},"expect":{"method":"PUT","path":"/meetings/fixture_meeting_uuid/recordings/status","body":{"action":"fixture_action"}},"response":{"status":200,"body":{"ok":true}}}

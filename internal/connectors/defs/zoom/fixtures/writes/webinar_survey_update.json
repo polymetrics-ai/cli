@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id","custom_survey":{"id":"fixture_object"},"show_in_the_browser":true,"show_in_the_follow_up_email":true},"expect":{"method":"PATCH","path":"/webinars/fixture_webinar_id/survey","body":{"custom_survey":{"id":"fixture_object"},"show_in_the_browser":true,"show_in_the_follow_up_email":true}},"response":{"status":200,"body":{"ok":true}}}

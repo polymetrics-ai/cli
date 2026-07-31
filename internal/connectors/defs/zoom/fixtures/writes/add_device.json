@@ -1,0 +1,1 @@
+{"record":{"device_name":"fixture_device_name","mac_address":"fixture_mac_address","serial_number":"fixture_serial_number"},"expect":{"method":"POST","path":"/devices","body":{"device_name":"fixture_device_name","mac_address":"fixture_mac_address","serial_number":"fixture_serial_number"}},"response":{"status":201,"body":{"ok":true}}}

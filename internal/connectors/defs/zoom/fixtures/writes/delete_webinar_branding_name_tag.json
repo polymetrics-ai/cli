@@ -1,0 +1,1 @@
+{"record":{"webinarId":"fixture_webinar_id"},"expect":{"method":"DELETE","path":"/webinars/fixture_webinar_id/branding/name_tags"},"response":{"status":200,"body":{"ok":true}}}

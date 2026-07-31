@@ -1,0 +1,1 @@
+{"record":{"phoneId":"fixture_phone_id"},"expect":{"method":"DELETE","path":"/sip_phones/phones/fixture_phone_id"},"response":{"status":200,"body":{"ok":true}}}

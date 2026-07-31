@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","auto_approve":true,"registrants_confirmation_email":true,"registrants":[{"id":"fixture_item"}]},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/batch_registrants","body":{"auto_approve":true,"registrants_confirmation_email":true,"registrants":[{"id":"fixture_item"}]}},"response":{"status":201,"body":{"ok":true}}}

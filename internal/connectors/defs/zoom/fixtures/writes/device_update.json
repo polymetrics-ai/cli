@@ -1,0 +1,1 @@
+{"record":{"deviceId":"fixture_device_id","encryption":"fixture_encryption","ip":"fixture_ip","name":"fixture_name"},"expect":{"method":"PATCH","path":"/h323/devices/fixture_device_id","body":{"encryption":"fixture_encryption","ip":"fixture_ip","name":"fixture_name"}},"response":{"status":200,"body":{"ok":true}}}

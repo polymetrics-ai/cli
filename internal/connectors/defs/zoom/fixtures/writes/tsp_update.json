@@ -1,0 +1,1 @@
+{"record":{"dial_in_number_unrestricted":true,"enable":true,"master_account_setting_extended":true},"expect":{"method":"PATCH","path":"/tsp","body":{"dial_in_number_unrestricted":true,"enable":true,"master_account_setting_extended":true}},"response":{"status":200,"body":{"ok":true}}}

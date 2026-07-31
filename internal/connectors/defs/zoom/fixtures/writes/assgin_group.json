@@ -1,0 +1,1 @@
+{"record":{"deviceId":"fixture_device_id"},"expect":{"method":"PATCH","path":"/devices/fixture_device_id/assign_group"},"response":{"status":200,"body":{"ok":true}}}

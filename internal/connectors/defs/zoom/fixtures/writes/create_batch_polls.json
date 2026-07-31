@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","polls":[{"id":"fixture_item"}]},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/batch_polls","body":{"polls":[{"id":"fixture_item"}]}},"response":{"status":201,"body":{"ok":true}}}

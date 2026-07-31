@@ -1,0 +1,1 @@
+{"record":{"meetingId":"fixture_meeting_id","address":"fixture_address","city":"fixture_city","comments":"fixture_comments"},"expect":{"method":"POST","path":"/meetings/fixture_meeting_id/recordings/registrants","body":{"address":"fixture_address","city":"fixture_city","comments":"fixture_comments"}},"response":{"status":201,"body":{"ok":true}}}

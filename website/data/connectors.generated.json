@@ -217902,21 +217902,117 @@
   {
     "slug": "zoom",
     "name": "Zoom",
-    "description": "Reads Zoom users, meetings, and webinars through the Zoom REST API.",
-    "docs_url": "https://developers.zoom.us/docs/api/",
+    "description": "Reads, queries, and safely plans typed mutations for the documented Zoom Meeting API surface.",
+    "docs_url": "https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/",
     "integration_type": "api",
     "release_stage": "ga",
     "capabilities": {
       "check": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false,
       "cdc": false,
       "dynamic_schema": false
     },
     "streams": [
       {
-        "name": "users",
+        "name": "list_devices",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "getzdmgroupinfo",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_zpa_device_list_profile_setting_ofa_user",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_zpa_versioninfo",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_device",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "device_list",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting_registrants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting_registrants_questions_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting_registrant_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "past_meeting_details",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "past_meetings",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_past_meeting_qa",
         "primary_key": [
           "id"
         ],
@@ -217932,7 +218028,271 @@
         "incremental": false
       },
       {
+        "name": "list_upcoming_meeting",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_pa_cs",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting_polls",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "meeting_poll_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_past_meeting_polls",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_sip_phone_phones",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "listmeetingsummaries",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "getameetingsummary",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "tsp",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_ts_ps",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "user_tsp",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_meeting_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "trackingfield_list",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "trackingfield_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_absentees",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "past_webinars",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_past_webinar_poll_results",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_past_webinar_qa",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "list_webinar_templates",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
         "name": "webinars",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_webinar_branding",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_live_streaming_join_token",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_local_archiving_archive_token",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_local_recording_join_token",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_webinar_live_stream_details",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_panelists",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_polls",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_poll_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_registrants",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_registrants_questions_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_registrant_get",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "webinar_token",
+        "primary_key": [
+          "id"
+        ],
+        "cursor": "",
+        "incremental": false
+      },
+      {
+        "name": "get_tracking_sources",
         "primary_key": [
           "id"
         ],
@@ -217940,9 +218300,2340 @@
         "incremental": false
       }
     ],
-    "write_actions": [],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads Zoom users, meetings, and webinars through the Zoom REST API.\n\nReadable streams: `users`, `meetings`, `webinars`.\n\nThis connector is read-only; no write actions are declared.\n\nService API documentation: https://developers.zoom.us/docs/api/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Zoom OAuth access token, sent as a Bearer token\n  (Authorization: Bearer <access_token>). Never logged.\n- `base_url` (optional, string); default `https://api.zoom.us/v2`; format `uri`; Zoom API base URL\n  override for tests or proxies.\n- `max_pages` (optional, string); default `0`; Maximum pages; use 0, all, or unlimited to exhaust\n  the stream.\n- `mode` (optional, string).\n- `page_size` (optional, string); default `100`; Records per page (1-300); sent as the 'page_size'\n  query param.\n- `user_id` (optional, string); Zoom user id or email the 'meetings' and 'webinars' streams are\n  scoped to (required for those streams; substituted into the user-scoped path).\n\nSecret fields are redacted in logs and write previews: `access_token`.\n\nDefault configuration values: `base_url=https://api.zoom.us/v2`, `max_pages=0`, `page_size=100`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `/users` with query `page_size`=`1`.\n\n## Streams notes\n\nDefault pagination: cursor pagination; cursor parameter `next_page_token`; next token from\n`next_page_token`.\n\n- `users`: GET `/users` - records path `users`; query `page_size`=`{{ config.page_size }}`; cursor\n  pagination; cursor parameter `next_page_token`; next token from `next_page_token`; computed output\n  fields `name`, `updated_at`; emits passthrough records.\n- `meetings`: GET `/users/{{ config.user_id }}/meetings` - records path `meetings`; query\n  `page_size`=`{{ config.page_size }}`; cursor pagination; cursor parameter `next_page_token`; next\n  token from `next_page_token`; computed output fields `id`, `name`, `updated_at`; emits passthrough\n  records.\n- `webinars`: GET `/users/{{ config.user_id }}/webinars` - records path `webinars`; query\n  `page_size`=`{{ config.page_size }}`; cursor pagination; cursor parameter `next_page_token`; next\n  token from `next_page_token`; computed output fields `id`, `name`, `updated_at`; emits passthrough\n  records.\n\n## Write actions & risks\n\nThis connector is read-only. Read behavior: external Zoom API read of user, meeting, and webinar\ndata.\n\n## Known limits\n\n- Batch defaults: read_page_size=100.\n- API coverage includes 3 stream-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  out_of_scope=4.\n",
+    "write_actions": [
+      {
+        "name": "update_archived_file",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_archived_files",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "recording_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "meeting_recording_registrant_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "recording_registrant_question_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_recording_registrant_status",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "recording_settings_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "recording_delete_one",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "recording_status_update_one",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_meeting_transcript",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "recording_status_update",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "add_device",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "assigndevicetoauser_commonarea",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "upgrade_zpas_app",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_zpa_device_by_vendor_and_mac_address",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_device",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_device",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "assgin_group",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "change_device_association",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "device_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "device_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "device_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_app_add",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_app_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_meeting_chat_message_by_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_meeting_chat_message_by_id",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "in_meeting_control",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "add_batch_registrants",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_invite_links_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_registrant_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_registrant_question_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_registrant_status",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "meetingregistrantdelete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "meeting_live_stream_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_live_stream_status_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_rtms_status_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "meeting_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "get_sip_dialing_with_passcode",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_status",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_batch_polls",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_poll_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "meeting_poll_update",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_poll_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "enable_sip_phone_phones",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_sip_phone_phones",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_sip_phone_phones",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "deletemeetingorwebinarsummary",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "meeting_survey_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "meeting_survey_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "tsp_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "user_tsp_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "tsp_url_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "user_tsp_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "user_tsp_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "meeting_template_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "trackingfield_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "trackingfield_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "trackingfield_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "delete_webinar_chat_message_by_id",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_template_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "add_batch_webinar_registrants",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "create_webinar_branding_name_tag",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_webinar_branding_name_tag",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "update_webinar_branding_name_tag",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "upload_webinar_branding_vb",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_webinar_branding_vb",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "set_webinar_branding_vb",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "upload_webinar_branding_wallpaper",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "delete_webinar_branding_wallpaper",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_invite_links_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_live_stream_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "webinar_live_stream_status_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "webinar_panelist_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_panelists_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_panelist_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_poll_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_poll_update",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "webinar_poll_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_registrant_create",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_registrant_question_update",
+        "method": "PATCH",
+        "kind": "update"
+      },
+      {
+        "name": "webinar_registrant_status",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "delete_webinar_registrant",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "get_webinar_sip_dialing_with_passcode",
+        "method": "POST",
+        "kind": "create"
+      },
+      {
+        "name": "webinar_status",
+        "method": "PUT",
+        "kind": "update"
+      },
+      {
+        "name": "webinar_survey_delete",
+        "method": "DELETE",
+        "kind": "delete"
+      },
+      {
+        "name": "webinar_survey_update",
+        "method": "PATCH",
+        "kind": "update"
+      }
+    ],
+    "cli_surface": {
+      "tagline": "Read Zoom Meeting API data and safely plan typed Zoom mutations without raw API passthrough.",
+      "usage": "pm zoom <etl|direct|binary|reverse> <operation> [flags]",
+      "source_cli": null,
+      "groups": [],
+      "global_flags": [],
+      "commands": [
+        {
+          "path": "binary list-archived-files view",
+          "summary": "List archived files",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The query start date, in `yyyy-MM-dd'T'HH:mm:ssZ` format. This value and the `to` query parameter value cannot exceed seven days.",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The query end date, in `yyyy-MM-dd'T'HH:mm:ssZ` format. This value and the `from` query parameter value cannot exceed seven days.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "query-date-type",
+              "type": "string",
+              "summary": "The type of query date.\n* `meeting_start_time` \n* `archive_complete_time` \n\n This value defaults to `meeting_start_time`.",
+              "values": [],
+              "maps_to": "query.query_date_type",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "Deprecated. Please use 'group_ids' for querying.",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            },
+            {
+              "name": "group-ids",
+              "type": "string",
+              "summary": "The group IDs. To get a group ID, use the [List groups](/docs/api/rest/reference/scim-api/methods/#operation/groupSCIM2List) API.\n(The maximum number of support",
+              "values": [],
+              "maps_to": "query.group_ids",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary get-archived-file-statistics view",
+          "summary": "Get archived file statistics",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The query start date, in `yyyy-MM-dd'T'HH:mm:ssZ` format. This value and the `to` query parameter value cannot exceed seven days.",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The query end date, in `yyyy-MM-dd'T'HH:mm:ssZ` format. This value and the `from` query parameter value cannot exceed seven days.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary meeting-local-archiving-archive-token view",
+          "summary": "Get a meeting's archive token for local archiving",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary get-archived-files view",
+          "summary": "Get a meeting's archived files",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-uuid",
+              "type": "string",
+              "summary": "meetingUUID path parameter.",
+              "values": [],
+              "maps_to": "path.meetingUUID",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary recording-get view",
+          "summary": "Get meeting recordings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "include-fields",
+              "type": "string",
+              "summary": "Include fields in the response. Currently, only accepts `download_access_token` to get this token field and value for downloading the meeting's recordings. The",
+              "values": [],
+              "maps_to": "query.include_fields",
+              "allow_empty": false
+            },
+            {
+              "name": "ttl",
+              "type": "integer",
+              "summary": "The `download_access_token` Time to Live (TTL) value. This parameter is only valid if the `include_fields` query parameter contains the value `download_access_t",
+              "values": [],
+              "maps_to": "query.ttl"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary analytics-details view",
+          "summary": "Get a meeting or webinar recording's analytics details",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date for the monthly range to query. The maximum range can be a month. If you do not provide this value, this defaults to the current date.",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date for the monthly range to query. The maximum range can be a month.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "The type of analytics details: \n* `by_view` &mdash; by_view. \n* `by_download` &mdash; by_download.",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary analytics-summary view",
+          "summary": "Get a meeting or webinar recording's analytics summary",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date for the monthly range to query. The maximum range can be a month. If you do not provide this value, this defaults to the current date.",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date for the monthly range to query. The maximum range can be a month.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary meeting-recording-registrants view",
+          "summary": "List recording registrants",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "status",
+              "type": "string",
+              "summary": "Query by the registrant's status. \n* `pending` - The registration is pending. \n* `approved` - The registrant is approved. \n* `denied` - The registration is deni",
+              "values": [],
+              "maps_to": "query.status",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "page-number",
+              "type": "integer",
+              "summary": "**Deprecated.** We will no longer support this field in a future release. Instead, use the `next_page_token` for pagination.",
+              "values": [],
+              "maps_to": "query.page_number"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary recording-registrants-questions-get view",
+          "summary": "Get registration questions",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary recording-setting-update view",
+          "summary": "Get meeting recording settings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary get-meeting-transcript view",
+          "summary": "Get a meeting transcript",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary recordings-list view",
+          "summary": "List all recordings",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "userId path parameter.",
+              "values": [],
+              "maps_to": "path.userId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "The next page token paginates through a large set of results. A next page token returns whenever the set of available results exceeds the current page size. The",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "mc",
+              "type": "string",
+              "summary": "The query metadata of the recording if using an on-premise meeting connector for the meeting.",
+              "values": [],
+              "maps_to": "query.mc",
+              "allow_empty": false
+            },
+            {
+              "name": "trash",
+              "type": "boolean",
+              "summary": "The query trash.\n* `true` - List recordings from trash.  \n* `false` - Do not list recordings from the trash.  \n\nThe default value is `false`. If you set it to `",
+              "values": [],
+              "maps_to": "query.trash"
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date in 'yyyy-mm-dd' UTC format for the date range where you would like to retrieve recordings. The maximum range can be a month. If no value is provi",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date in 'yyyy-mm-dd' 'yyyy-mm-dd' UTC format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "trash-type",
+              "type": "string",
+              "summary": "The type of cloud recording to retrieve from the trash. \n \n *   `meeting_recordings`: List all meeting recordings from the trash.  \n *  `recording_file`: List a",
+              "values": [],
+              "maps_to": "query.trash_type",
+              "allow_empty": false
+            },
+            {
+              "name": "meeting-id",
+              "type": "integer",
+              "summary": "The meeting ID.",
+              "values": [],
+              "maps_to": "query.meeting_id"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary meeting-local-recording-join-token view",
+          "summary": "Get a meeting's join token for local recording",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "bypass-waiting-room",
+              "type": "boolean",
+              "summary": "Whether to bypass the waiting room.",
+              "values": [],
+              "maps_to": "query.bypass_waiting_room"
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary meeting-token view",
+          "summary": "Get meeting's token",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "The meeting token type. \n* `closed_caption_token` - The third-party closed caption API token. \n\nThis defaults to `closed_caption_token`.",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct meeting-invitation view",
+          "summary": "Get meeting invitation",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary meeting-live-streaming-join-token view",
+          "summary": "Get a meeting's join token for live streaming",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "binary get-meeting-live-stream-details view",
+          "summary": "Get livestream details",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct past-meeting-participants view",
+          "summary": "Get past meeting participants",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-sign-in-sign-out-activities view",
+          "summary": "Get sign In / sign out activity report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date for which you would like to view the activity logs report. Using the `from` and `to` parameters, specify a monthly date range for the report as the A",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date up to which you would like to view the activity logs report.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records to be returned within a single API call",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Next page token is used to paginate through large result sets",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct get-billing-report view",
+          "summary": "Get billing reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct get-billing-invoices-reports view",
+          "summary": "Get billing invoice reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "billing-id",
+              "type": "string",
+              "summary": "The billing report's unique identifier. Retrieve this ID from the response of **Get Billing Reports** API request.",
+              "values": [],
+              "maps_to": "query.billing_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-cloud-recording view",
+          "summary": "Get cloud recording usage report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' format. The date range defined by the &quot;from&quot; and &quot;to&quot; parameters should only be one month as the report includes",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The group ID. To get a group ID, use the [**List groups**](/api-reference/zoom-api/methods#operation/groups) API. \n\n **Note:** The API response will only contai",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-daily view",
+          "summary": "Get daily usage report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "year",
+              "type": "integer",
+              "summary": "Year for this report",
+              "values": [],
+              "maps_to": "query.year"
+            },
+            {
+              "name": "month",
+              "type": "integer",
+              "summary": "Month for this report",
+              "values": [],
+              "maps_to": "query.month"
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The group ID. To get a group ID, use the [**List groups**](/docs/api/users/#tag/groups/GET/groups) API. \n\n **Note:** The API response will only contain users wh",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct getdisclaimerreport view",
+          "summary": "Get disclaimer report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date in `yyyy-MM-dd` format. The date range defined by the `from` and `to` parameters should only be one month, as the report includes only one month'",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date in `yyyy-MM-dd` format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "search-value",
+              "type": "string",
+              "summary": "The user email or meeting number",
+              "values": [],
+              "maps_to": "query.search_value",
+              "allow_empty": false
+            },
+            {
+              "name": "disclaimer-type",
+              "type": "string",
+              "summary": "The disclaimer type.",
+              "values": [],
+              "maps_to": "query.disclaimer_type",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The user's group ID.",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned in a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct gethistorymeetingandwebinarlist view",
+          "summary": "Get history meeting and webinar list",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date in `yyyy-mm-dd` format. The date range defined by the `from` and `to` parameters should only be one month, as the report includes only one month",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date in `yyyy-mm-dd` format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "date-type",
+              "type": "string",
+              "summary": "The type of date to query.\n* `start_time` - Query by meeting's start time. \n* `end_time` - Query by meeting's end time. \n\nThis value defaults to `start_time`.",
+              "values": [],
+              "maps_to": "query.date_type",
+              "allow_empty": false
+            },
+            {
+              "name": "meeting-type",
+              "type": "string",
+              "summary": "The meeting type to query. \n- `all` - rerturn meetings and webinars \n- `meeting` - only return meetings \n- `webinar` - only return webinars",
+              "values": [],
+              "maps_to": "query.meeting_type",
+              "allow_empty": false
+            },
+            {
+              "name": "report-type",
+              "type": "string",
+              "summary": "Query meetings that have this type of report.\n- `all` - all meetings\n- `poll` - meetings with poll data \n- `survey` - meetings with survey data \n- `qa` - meetin",
+              "values": [],
+              "maps_to": "query.report_type",
+              "allow_empty": false
+            },
+            {
+              "name": "search-key",
+              "type": "string",
+              "summary": "The keywords of meeting topic or meeting ID.",
+              "values": [],
+              "maps_to": "query.search_key",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records to be returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The group ID. To get a group ID, use the [**List groups**](/docs/api/rest/reference/user/methods/#operation/groups) API. \n\n **Note:** The API response will only",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            },
+            {
+              "name": "meeting-feature",
+              "type": "string",
+              "summary": "The meeting features to query and return history meetings that use one or more of these features. To provide multiple values, separate them with commas, like `m",
+              "values": [],
+              "maps_to": "query.meeting_feature",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meetingactivitylogs view",
+          "summary": "Get a meeting activities report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date in 'yyyy-MM-dd'format. The date range defined by the `from` and `to` parameters should only be one month, as the report includes only one month's",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date 'yyyy-MM-dd' format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records to be returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "meeting-number",
+              "type": "string",
+              "summary": "The meeting's number.",
+              "values": [],
+              "maps_to": "query.meeting_number",
+              "allow_empty": false
+            },
+            {
+              "name": "search-key",
+              "type": "string",
+              "summary": "An operator's name or email.",
+              "values": [],
+              "maps_to": "query.search_key",
+              "allow_empty": false
+            },
+            {
+              "name": "activity-type",
+              "type": "string",
+              "summary": "Activity type. \n-1 - All activities. \n0 - Meeting created. \n1 - Meeting started. \n2 - User joined. \n3 - User left. \n4 - Remote control. \n5 - In-meeting chat. \n9",
+              "values": [],
+              "maps_to": "query.activity_type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meeting-details view",
+          "summary": "Get meeting detail reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meeting-participants view",
+          "summary": "Get meeting participant reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "include-fields",
+              "type": "string",
+              "summary": "Provide `registrant_id` as the value for this field if you would like to see the registrant ID attribute in the response of this API call. A registrant ID is a",
+              "values": [],
+              "maps_to": "query.include_fields",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meeting-polls view",
+          "summary": "Get meeting poll reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meeting-qa view",
+          "summary": "Get meeting Q&A report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meeting-survey view",
+          "summary": "Get meeting survey report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-operation-logs view",
+          "summary": "Get operation logs report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' or 'yyyy-MM-dd HH:mm' format. The date range defined by the `from` and `to` parameters should only be one month as the report include",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date in 'yyyy-mm-dd' or 'yyyy-MM-dd HH:mm' format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "category-type",
+              "type": "string",
+              "summary": "**Optional**  \n \nFilter your response by a category type to see reports for a specific category.\nThe value for this field can be one of the following:  \n  `all`",
+              "values": [],
+              "maps_to": "query.category_type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct getremotesupportreport view",
+          "summary": "Get remote support report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "The start date in `yyyy-MM-dd` format. The date range defined by the `from` and `to` parameters should only be one month, as the report includes only one month'",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "The end date in `yyyy-MM-dd` format.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "string",
+              "summary": "The number of records to be returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-telephone view",
+          "summary": "Get telephone reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Audio types:  \n `1` - Toll-free Call-in &amp; Call-out.  \n `2` - Toll   \n \n`3` - SIP Connected Audio",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            },
+            {
+              "name": "query-date-type",
+              "type": "string",
+              "summary": "The type of date to query. \n* `start_time` &mdash; Query by call start time. \n* `end_time` &mdash; Query by call end time. \n* `meeting_start_time` &mdash; Query",
+              "values": [],
+              "maps_to": "query.query_date_type",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' format. The date range defined by the &quot;from&quot; and &quot;to&quot; parameters should only be one month as the report includes",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "page-number",
+              "type": "integer",
+              "summary": "The page number of the current page in the returned records. This field is **not** available if the `query_date_type` parameter is the `meeting_start_time` or `",
+              "values": [],
+              "maps_to": "query.page_number"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current page",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-upcoming-events view",
+          "summary": "Get upcoming events report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' format. The date range defined by the &quot;from&quot; and &quot;to&quot; parameters should only be one month as the report includes",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "The type of event to query. \n* `meeting` &mdash; A meeting event. \n* `webinar` &mdash; A webinar event. \n* `all` &mdash; Both meeting and webinar events.\n\nThis",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The group ID. To get a group ID, use the [**List groups**](/api-reference/zoom-api/methods#operation/groups) API. \n\n **Note:** The API response will only contai",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-users view",
+          "summary": "Get active or inactive host reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "Active or inactive hosts.  \n `active` - Active hosts.   \n `inactive` - Inactive hosts.",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' format. The date range defined by the `from` and `to` parameters should only be one month as the report includes only one month worth",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "page-number",
+              "type": "integer",
+              "summary": "The page number of the current page in the returned records.",
+              "values": [],
+              "maps_to": "query.page_number"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "The next page token is used to paginate through large result sets. A next page token will be returned whenever the set of available results exceeds the current",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "group-id",
+              "type": "string",
+              "summary": "The group ID. To get a group ID, use the [**List groups**](/docs/api/rest/reference/user/methods/#operation/groups) API. \n\n **Note:** The API response will only",
+              "values": [],
+              "maps_to": "query.group_id",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-meetings view",
+          "summary": "Get meeting reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "user-id",
+              "type": "string",
+              "summary": "userId path parameter.",
+              "values": [],
+              "maps_to": "path.userId",
+              "allow_empty": false
+            },
+            {
+              "name": "from",
+              "type": "string",
+              "summary": "Start date in 'yyyy-mm-dd' format. The date range defined by the &quot;from&quot; and &quot;to&quot; parameters should only be one month as the report includes",
+              "values": [],
+              "maps_to": "query.from",
+              "allow_empty": false
+            },
+            {
+              "name": "to",
+              "type": "string",
+              "summary": "End date.",
+              "values": [],
+              "maps_to": "query.to",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "type",
+              "type": "string",
+              "summary": "The meeting type to query for: \n* `past` - All past meetings. \n* `pastOne` - A single past user meeting. \n* `pastJoined` - All past meetings the account's users",
+              "values": [],
+              "maps_to": "query.type",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-webinar-details view",
+          "summary": "Get webinar detail reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-webinar-participants view",
+          "summary": "Get webinar participant reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            },
+            {
+              "name": "include-fields",
+              "type": "string",
+              "summary": "The additional query parameters to include. \n* `registrant_id` - Include the registrant's ID in the API response. The registrant ID is the webinar participant's",
+              "values": [],
+              "maps_to": "query.include_fields",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-webinar-polls view",
+          "summary": "Get webinar poll reports",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-webinar-qa view",
+          "summary": "Get webinar Q&A report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct report-webinar-survey view",
+          "summary": "Get webinar survey report",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct meeting-survey-get view",
+          "summary": "Get a meeting survey",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "meeting-id",
+              "type": "string",
+              "summary": "meetingId path parameter.",
+              "values": [],
+              "maps_to": "path.meetingId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct list-webinar-participants view",
+          "summary": "List webinar participants",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            },
+            {
+              "name": "page-size",
+              "type": "integer",
+              "summary": "The number of records returned within a single API call.",
+              "values": [],
+              "maps_to": "query.page_size"
+            },
+            {
+              "name": "next-page-token",
+              "type": "string",
+              "summary": "Use the next page token to paginate through large result sets. A next page token is returned whenever the set of available results exceeds the current page size",
+              "values": [],
+              "maps_to": "query.next_page_token",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "direct webinar-survey-get view",
+          "summary": "Get a webinar survey",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [
+            {
+              "name": "webinar-id",
+              "type": "string",
+              "summary": "webinarId path parameter.",
+              "values": [],
+              "maps_to": "path.webinarId",
+              "allow_empty": false
+            }
+          ],
+          "examples": [],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        }
+      ],
+      "help_topics": []
+    },
+    "docs_md": "# Overview\n\nZoom connector parity for the official Zoom Meeting API reference page. The source inventory is the packed OpenAPI 3.0 document embedded in Zoom Developer Docs at `https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/`.\n\nThis bundle covers all 184 official operations exactly once:\n\n| lane | official count | executable surface |\n| --- | ---: | --- |\n| ETL/read streams | 48 | 48 declared streams with sanitized fixture replay |\n| Direct/provider reads | 29 | fixed `rest_read` command operations with bounded redacted JSON output |\n| Binary/file lane | 29 | fixed binary/file-lane reads or typed write actions; no raw file passthrough |\n| Reverse ETL writes | 78 | typed write actions; plus 13 mutating binary/file-lane operations implemented as typed writes |\n| CDC/changefeed | 0 | no Zoom changefeed operation in the landed audit |\n| Excluded/not-applicable | 0 | no exclusions in the landed audit |\n\n## Auth setup\n\nUse a Zoom OAuth access token saved through Polymetrics credentials. The `access_token` field is marked `x-secret` and is sent only as `Authorization: Bearer ...`; never pass it as a CLI flag or commit it to fixtures.\n\nConfiguration fields:\n\n- `base_url` defaults to `https://api.zoom.us/v2`.\n- `page_size` defaults to `100` for paginated stream reads.\n- Path-scoped operations use typed config or command flags for documented Zoom path parameters such as `userId`, `meetingId`, `webinarId`, `deviceId`, and related IDs.\n\nConnection checks call `GET /users?page_size=1` against the configured base URL.\n\n## Streams notes\n\nThe connector declares 48 Zoom streams. Paginated list streams use Zoom's `next_page_token` cursor convention where documented and replay fixtures prove the paginator terminates. Detail-style GET operations assigned to ETL are represented as single-object streams with explicit path-parameter config rather than provider-search passthrough.\n\nAll stream fixtures are synthetic (`example.invalid`, fixture IDs, and non-secret timestamps). They are recorded-real-shape enough for engine pagination/projection/conformance without containing live Zoom data.\n\n## Write actions & risks\n\nThe connector declares 91 typed write actions: the landed audit's 78 reverse-ETL write operations plus 13 mutating binary/file-lane operations that still change provider state. Every write action has a closed record schema, fixed method/path, risk text, and command metadata. DELETE actions use `confirm: destructive`, redact path identifiers in previews/errors, and treat `404` as an idempotent already-absent cleanup response.\n\nReverse ETL execution remains plan → preview → explicit approval → execute. This bundle does not expose a raw method/path/body command, arbitrary GraphQL, shell, SQL, generic HTTP, local file passthrough, or unrestricted binary escape hatch.\n\n## Known limits\n\n- Fixture replay is not live certification. `certified=0` until a separately approved live-safe certification run records redacted provider evidence.\n- The existing direct-read executor supports bounded JSON `rest_read` operations. File-transfer-style binary downloads remain represented with fixed metadata and safety notes; this slice does not edit shared binary execution runtime.\n- The official source fetched during implementation has the same 184-operation total as the landed r2 audit but a newer page ETag/build id: ETag `\"08322c4f0fa086914cd5d144268b61bf\"`, Last-Modified `Fri, 31 Jul 2026 17:15:56 GMT`, Next build id `2026-07-31T11-05-34-06-00`, extracted OpenAPI SHA256 `7490bae1a0815d82721af85b894e90f5662489c0aacaa2300277758562213ab9`.\n",
     "icon": {
       "id": "zoom",
       "path": "icons/zoom.svg",
