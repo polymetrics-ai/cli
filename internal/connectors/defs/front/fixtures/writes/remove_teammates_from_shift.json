@@ -1,0 +1,23 @@
+{
+  "record": {
+    "shift_id": "fixture_shift_id",
+    "teammate_ids": [
+      "fixture_teammate_ids"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/shifts/fixture_shift_id/teammates",
+    "body": {
+      "teammate_ids": [
+        "fixture_teammate_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

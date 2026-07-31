@@ -1,0 +1,598 @@
+{
+  "operations": [
+    {
+      "id": "front.create_analytics_export",
+      "kind": "rest_read",
+      "summary": "Create a new analytics export",
+      "description": "Create a new analytics export of messages or events (activities) over a specific time span.\nThe export will be executed asynchronously. The response will include a link that can be used to retrieve the export status & result. Refer to the [Analytics](https://dev.frontapp.com/reference/analytics) topic for details about specific metrics.\n\n\nRequired scope: `analytics:read`",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-export.md",
+      "risk": "high",
+      "approval": "none: fixed Front provider read/query endpoint with bounded JSON output",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/analytics/exports",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "columns": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "Message ID",
+                  "Segment ID",
+                  "Conversation ID",
+                  "Ticket IDs",
+                  "Segment",
+                  "Direction",
+                  "Status",
+                  "Inbox",
+                  "Inbox API ID",
+                  "Inbox at activity time",
+                  "Inbox API IDs at activity time",
+                  "Message date",
+                  "Autoreply",
+                  "Reaction time",
+                  "Total reply time",
+                  "Handle time",
+                  "Response time",
+                  "Attributed to",
+                  "Assignee",
+                  "Author",
+                  "Contact name",
+                  "Contact handle",
+                  "Account names",
+                  "From",
+                  "To",
+                  "Cc",
+                  "Bcc",
+                  "Extract",
+                  "Tags",
+                  "Tag API IDs",
+                  "Message API ID",
+                  "Conversation API ID",
+                  "New Conversation",
+                  "First response",
+                  "Business hours",
+                  "Subject",
+                  "Segment start",
+                  "Segment end",
+                  "Segment closed",
+                  "Last segment activity",
+                  "Segment cumulative teammates",
+                  "Ticket status name",
+                  "Ticket status category",
+                  "Custom Field"
+                ]
+              }
+            }
+          },
+          "required": [
+            "columns"
+          ],
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "id": "front.get_analytics_export",
+      "kind": "rest_read",
+      "summary": "Fetch an analytics export",
+      "description": "Fetch an analytics exports. Refer to the [Analytics](https://dev.frontapp.com/reference/analytics) topic for details about specific metrics.\n\nRequired scope: `analytics:read`",
+      "source_url": "https://dev.frontapp.com/reference/get-analytics-export.md",
+      "risk": "high",
+      "approval": "none: fixed Front provider read/query endpoint with bounded JSON output",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/exports/{export_id}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "front.create_analytics_report",
+      "kind": "rest_read",
+      "summary": "Create a new analytics report",
+      "description": "Create a new analytics report for a set of metrics over a specific time span. Different filters (e.g. Inbox v Tag v Teammates) will be joined with AND logic, but the IDs within a filter will be joined with OR logic (e.g. Inbox A or Inbox B, Tag A or Tag B).\nThe report will be executed asynchronously. The response will include a link that can be used to retrieve the\nreport status & result. Refer to the [Analytics](https://dev.frontapp.com/reference/analytics) topic for details about specific metrics.\n\n\nRequired scope: `analytics:read`",
+      "source_url": "https://dev.frontapp.com/reference/create-analytics-report.md",
+      "risk": "high",
+      "approval": "none: fixed Front provider read/query endpoint with bounded JSON output",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "POST",
+        "path": "/analytics/reports",
+        "max_bytes": 1048576,
+        "content_type": "application/json",
+        "body_schema": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "number"
+            },
+            "end": {
+              "type": "number"
+            },
+            "timezone": {
+              "type": "string"
+            },
+            "filters": {
+              "type": "object",
+              "properties": {
+                "tag_ids": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "required": [
+                "tag_ids"
+              ],
+              "additionalProperties": true
+            },
+            "metrics": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "avg_csat_survey_response",
+                  "avg_first_response_time",
+                  "avg_handle_time",
+                  "avg_replies_to_resolution",
+                  "avg_resolution_time",
+                  "avg_response_time",
+                  "avg_sla_breach_time",
+                  "avg_total_reply_time",
+                  "new_segments_count",
+                  "num_active_segments_full",
+                  "num_archived_segments",
+                  "num_archived_segments_with_reply",
+                  "num_csat_survey_response",
+                  "num_messages_received",
+                  "num_messages_sent",
+                  "num_sla_breach",
+                  "pct_csat_survey_satisfaction",
+                  "pct_resolved_on_first_reply",
+                  "pct_tagged_conversations",
+                  "num_closed_segments",
+                  "num_open_segments_start",
+                  "num_open_segments_end",
+                  "num_resolved_segments",
+                  "num_unresolved_active_segments",
+                  "num_workload_segments"
+                ]
+              }
+            }
+          },
+          "required": [
+            "start",
+            "end",
+            "metrics"
+          ],
+          "additionalProperties": true
+        }
+      }
+    },
+    {
+      "id": "front.get_analytics_report",
+      "kind": "rest_read",
+      "summary": "Fetch an analytics report",
+      "description": "Fetch an analytics report. Refer to the [Analytics](https://dev.frontapp.com/reference/analytics) topic for details about specific metrics.\n\nRequired scope: `analytics:read`",
+      "source_url": "https://dev.frontapp.com/reference/get-analytics-report.md",
+      "risk": "high",
+      "approval": "none: fixed Front provider read/query endpoint with bounded JSON output",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/analytics/reports/{report_uid}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "front.search_conversations",
+      "kind": "rest_read",
+      "summary": "Search conversations",
+      "description": "Search for conversations. Response will include a count of total matches and an array of conversations in descending order by last activity.\nSee the [search syntax documentation](https://dev.frontapp.com/docs/search-1) for usage examples.\n**Note:** This endpoint is subject to [proportional rate limiting](https://dev.frontapp.com/docs/rate-limiting#additional-proportional-limiting) at 40% of your company's rate limit.\n\n\nRequired scope: `conversations:read`",
+      "source_url": "https://dev.frontapp.com/reference/search-conversations.md",
+      "risk": "medium",
+      "approval": "none: fixed Front provider read/query endpoint with bounded JSON output",
+      "output_policy": "json_redacted",
+      "mutation_class": "none",
+      "rest": {
+        "method": "GET",
+        "path": "/conversations/search/{query}",
+        "max_bytes": 1048576
+      }
+    },
+    {
+      "id": "front.download_attachment_for_a_comment",
+      "kind": "binary_download",
+      "summary": "Download attachment for a comment",
+      "description": "Download an attachment file for a given comment ID\n\nRequired scope: `attachments:read`",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-comment.md",
+      "risk": "high",
+      "approval": "planned: binary download execution needs the shared bounded file-output contract before this connector can claim executable local downloads",
+      "output_policy": "binary_bounded_redacted",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/comments/{comment_id}/download/{attachment_link_id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "front.download_attachment",
+      "kind": "binary_download",
+      "summary": "Download attachment",
+      "description": "Download an attachment file.\n\nRequired scope: `attachments:read`",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment.md",
+      "risk": "high",
+      "approval": "planned: binary download execution needs the shared bounded file-output contract before this connector can claim executable local downloads",
+      "output_policy": "binary_bounded_redacted",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/download/{attachment_link_id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "front.download_attachment_from_an_article",
+      "kind": "binary_download",
+      "summary": "Download attachment from an article",
+      "description": "Downloads the attachment from an article.\n\nRequired scope: `knowledge_bases:read`",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment-from-an-article.md",
+      "risk": "high",
+      "approval": "planned: binary download execution needs the shared bounded file-output contract before this connector can claim executable local downloads",
+      "output_policy": "binary_bounded_redacted",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/knowledge_base_articles/{article_id}/download/{attachment_id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "front.download_attachment_for_a_message_template",
+      "kind": "binary_download",
+      "summary": "Download attachment for a message template",
+      "description": "Download an attachment file for a given message template ID\n\nRequired scope: `attachments:read`",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message-template.md",
+      "risk": "high",
+      "approval": "planned: binary download execution needs the shared bounded file-output contract before this connector can claim executable local downloads",
+      "output_policy": "binary_bounded_redacted",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/message_templates/{message_template_id}/download/{attachment_link_id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "front.download_attachment_for_a_message",
+      "kind": "binary_download",
+      "summary": "Download attachment for a message",
+      "description": "Download an attachment file for a given message id. Should be used by partner channels.\n\nRequired scope: `attachments:read`",
+      "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message.md",
+      "risk": "high",
+      "approval": "planned: binary download execution needs the shared bounded file-output contract before this connector can claim executable local downloads",
+      "output_policy": "binary_bounded_redacted",
+      "mutation_class": "none",
+      "binary": {
+        "method": "GET",
+        "path": "/messages/{message_id}/download/{attachment_link_id}",
+        "max_bytes": 16777216,
+        "allow_overwrite": false,
+        "extract_archives": false
+      }
+    },
+    {
+      "id": "front.add_call_recording",
+      "kind": "rest_write",
+      "summary": "Add call recording",
+      "description": "Adds a recording to a call in Front. Send `multipart/form-data` with exactly one file in the `attachments` field, `Content-Type: audio/*`, and required `recording_type` (`call` or `voicemail`).\n",
+      "source_url": "https://dev.frontapp.com/reference/add-call-recording.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "external_call_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/calls/{external_call_id}/recording",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.add_call_summary",
+      "kind": "rest_write",
+      "summary": "Add call summary",
+      "description": "Adds a summary to a call in Front.",
+      "source_url": "https://dev.frontapp.com/reference/add-call-summary.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "external_call_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/calls/{external_call_id}/summary",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.add_call_transcript",
+      "kind": "rest_write",
+      "summary": "Add call transcript",
+      "description": "Adds a transcript to a call in Front.",
+      "source_url": "https://dev.frontapp.com/reference/add-call-transcript.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "external_call_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/calls/{external_call_id}/transcript",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.create_call",
+      "kind": "rest_write",
+      "summary": "Create a call",
+      "description": "Creates a call in Front.",
+      "source_url": "https://dev.frontapp.com/reference/create-call.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/calls",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.sync_application_message_template",
+      "kind": "rest_write",
+      "summary": "Sync application message template",
+      "description": "Import an application message template from an external service (such as WhatsApp or Facebook). The message template becomes available for use by the channel specified if configured as described in [this topic](https://dev.frontapp.com/update/docs/application-channel-message-templates).",
+      "source_url": "https://dev.frontapp.com/reference/sync-application-message-template.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/channels/{channel_id}/application_message_templates",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.sync_inbound_message",
+      "kind": "rest_write",
+      "summary": "Sync inbound message",
+      "description": "Import a message that was received by the channel.",
+      "source_url": "https://dev.frontapp.com/reference/sync-inbound-message.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/inbound_messages",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.sync_outbound_message",
+      "kind": "rest_write",
+      "summary": "Sync outbound message",
+      "description": "Import a message that was sent from the channel.",
+      "source_url": "https://dev.frontapp.com/reference/sync-outbound-message.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "POST",
+        "path": "/channels/{channel_id}/outbound_messages",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.update_application_message_template",
+      "kind": "rest_write",
+      "summary": "Update application message template",
+      "description": "Update an application message template that already exists in Front.",
+      "source_url": "https://dev.frontapp.com/reference/update-application-message-template.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "external_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "PATCH",
+        "path": "/channels/{channel_id}/application_message_templates/{external_id}",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.update_call",
+      "kind": "rest_write",
+      "summary": "Update call status",
+      "description": "Updates the call status of a call in Front.",
+      "source_url": "https://dev.frontapp.com/reference/update-call.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "external_call_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "PATCH",
+        "path": "/channels/{channel_id}/calls/{external_call_id}",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.update_channel",
+      "kind": "rest_write",
+      "summary": "Update Channel",
+      "description": "Update a channel.",
+      "source_url": "https://dev.frontapp.com/reference/update-channel-1.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "PATCH",
+        "path": "/channels/{channel_id}",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    },
+    {
+      "id": "front.update_external_message_status",
+      "kind": "rest_write",
+      "summary": "Update external message status",
+      "description": "Update the status of an outbound message by external ID. This endpoint is used by external systems (like SMS providers or custom channels)\nto notify Front when a message's delivery status has changed.\n\n**Available status changes:**\n- `failed`: Mark a message as failed. When marked as failed, the conversation is reopened so the team can take action.\n\n**Note:** This endpoint is only available for outbound messages.\n",
+      "source_url": "https://dev.frontapp.com/reference/update-external-message-status.md",
+      "risk": "critical",
+      "approval": "not applicable in this connector: application-channel, voice-channel, or plugin SDK surface is recorded for parity but blocked by default and not exposed as a generic write",
+      "output_policy": "json_redacted",
+      "mutation_class": "destructive",
+      "destructive": true,
+      "sensitive_policy": {
+        "input_mode": "env_or_file",
+        "redact_fields": [
+          "channel_id",
+          "conv_ext_id",
+          "message_ext_id"
+        ],
+        "approval_mode": "typed_confirmation",
+        "transform": "none"
+      },
+      "rest": {
+        "method": "PUT",
+        "path": "/channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status",
+        "max_bytes": 1048576,
+        "content_type": "application/json"
+      }
+    }
+  ]
+}

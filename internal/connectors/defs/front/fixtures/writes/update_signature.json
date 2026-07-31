@@ -1,0 +1,15 @@
+{
+  "record": {
+    "signature_id": "fixture_signature_id"
+  },
+  "expect": {
+    "method": "PATCH",
+    "path": "/signatures/fixture_signature_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

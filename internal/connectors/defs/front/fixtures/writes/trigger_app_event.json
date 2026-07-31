@@ -1,0 +1,19 @@
+{
+  "record": {
+    "application_uid": "fixture_application_uid",
+    "event_type": "fixture_event_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/applications/fixture_application_uid/events",
+    "body": {
+      "event_type": "fixture_event_type"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

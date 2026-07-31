@@ -1,0 +1,15 @@
+{
+  "record": {
+    "channel_id": "fixture_channel_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/channels/fixture_channel_id/validate"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

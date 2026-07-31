@@ -1,0 +1,28 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "color": "black",
+    "timezone": "fixture_timezone",
+    "teammate_ids": [
+      "fixture_teammate_ids"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/shifts",
+    "body": {
+      "name": "fixture_name",
+      "color": "black",
+      "timezone": "fixture_timezone",
+      "teammate_ids": [
+        "fixture_teammate_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

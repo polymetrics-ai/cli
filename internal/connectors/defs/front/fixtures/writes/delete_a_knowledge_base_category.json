@@ -1,0 +1,15 @@
+{
+  "record": {
+    "category_id": "fixture_category_id"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/knowledge_base_categories/fixture_category_id"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}
