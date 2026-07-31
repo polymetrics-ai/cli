@@ -10,7 +10,7 @@ SYNOPSIS
   pm credentials add <name> --connector monday [--config key=value] [--from-env field=ENV] [--value-stdin field]
 
 DESCRIPTION
-  Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.
+  Reads monday.com GraphQL streams and bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.
 
 ICON
   asset: icons/monday.svg
@@ -19,7 +19,7 @@ ICON
   review_url: https://developer.monday.com/api-reference/docs
 
 CAPABILITIES
-  check=true catalog=true read=true write=false query=false
+  check=true catalog=true read=true write=true query=false
   Integration type: api
 
 AUTHENTICATION
@@ -55,10 +55,691 @@ ETL STREAMS
 SYNC MODES
   ETL sync modes: full_refresh_append, full_refresh_overwrite, full_refresh_overwrite_deduped, incremental_append, incremental_append_deduped
 
+REVERSE ETL ACTIONS
+  activate_form:
+    endpoint: POST
+    required fields: formToken
+    risk: medium: runs Monday mutation activate_form; reverse ETL approval required
+  activate_managed_column:
+    endpoint: POST
+    required fields: id
+    risk: high: runs Monday mutation activate_managed_column; reverse ETL approval required
+  add_content_to_doc_from_markdown:
+    endpoint: POST
+    required fields: docId, markdown
+    risk: high: runs Monday mutation add_content_to_doc_from_markdown; reverse ETL approval required
+  add_required_column:
+    endpoint: POST
+    required fields: id, column_id
+    risk: high: runs Monday mutation add_required_column; reverse ETL approval required
+  archive_board:
+    endpoint: POST
+    required fields: board_id
+    risk: critical: runs Monday mutation archive_board; reverse ETL approval required
+  archive_group:
+    endpoint: POST
+    required fields: board_id, group_id
+    risk: critical: runs Monday mutation archive_group; reverse ETL approval required
+  archive_item:
+    endpoint: POST
+    required fields: item_id
+    risk: critical: runs Monday mutation archive_item; reverse ETL approval required
+  archive_object:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation archive_object; reverse ETL approval required
+  assign_department_owner:
+    endpoint: POST
+    required fields: department_id, user_id
+    risk: high: runs Monday mutation assign_department_owner; reverse ETL approval required
+  attach_status_managed_column:
+    endpoint: POST
+    required fields: board_id, managed_column_id, title, description
+    risk: high: runs Monday mutation attach_status_managed_column; reverse ETL approval required
+  backfill_items:
+    endpoint: POST
+    required fields: board_id, group_id
+    risk: medium: runs Monday mutation backfill_items; reverse ETL approval required
+  change_column_metadata:
+    endpoint: POST
+    required fields: board_id, column_id, value
+    risk: medium: runs Monday mutation change_column_metadata; reverse ETL approval required
+  change_column_title:
+    endpoint: POST
+    required fields: board_id, column_id, title
+    risk: medium: runs Monday mutation change_column_title; reverse ETL approval required
+  change_column_value:
+    endpoint: POST
+    required fields: board_id, item_id, column_id, value
+    risk: medium: runs Monday mutation change_column_value; reverse ETL approval required
+  change_item_position:
+    endpoint: POST
+    required fields: item_id, relative_to
+    risk: medium: runs Monday mutation change_item_position; reverse ETL approval required
+  change_multiple_column_values:
+    endpoint: POST
+    required fields: item_id, board_id, column_values
+    risk: medium: runs Monday mutation change_multiple_column_values; reverse ETL approval required
+  change_simple_column_value:
+    endpoint: POST
+    required fields: item_id, board_id, column_id, value
+    risk: medium: runs Monday mutation change_simple_column_value; reverse ETL approval required
+  clear_item_updates:
+    endpoint: POST
+    required fields: item_id
+    risk: critical: runs Monday mutation clear_item_updates; reverse ETL approval required
+  configure_extract_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, source_column_id
+    risk: medium: runs Monday mutation configure_extract_ai_column; reverse ETL approval required
+  configure_improve_text_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, source_column_id
+    risk: medium: runs Monday mutation configure_improve_text_ai_column; reverse ETL approval required
+  configure_open_block_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, ai_query
+    risk: medium: runs Monday mutation configure_open_block_ai_column; reverse ETL approval required
+  configure_person_assignment_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, groups
+    risk: medium: runs Monday mutation configure_person_assignment_ai_column; reverse ETL approval required
+  configure_summarize_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, additional_instructions
+    risk: medium: runs Monday mutation configure_summarize_ai_column; reverse ETL approval required
+  configure_translate_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id
+    risk: medium: runs Monday mutation configure_translate_ai_column; reverse ETL approval required
+  configure_write_me_ai_column:
+    endpoint: POST
+    required fields: board_id, column_id, ai_query
+    risk: medium: runs Monday mutation configure_write_me_ai_column; reverse ETL approval required
+  connect_board_to_object_schema:
+    endpoint: POST
+    required fields: board_id, object_schema_id
+    risk: high: runs Monday mutation connect_board_to_object_schema; reverse ETL approval required
+  connect_project_to_portfolio:
+    endpoint: POST
+    required fields: projectBoardId, portfolioBoardId
+    risk: high: runs Monday mutation connect_project_to_portfolio; reverse ETL approval required
+  create_app_feature:
+    endpoint: POST
+    required fields: slug, app_id
+    risk: high: runs Monday mutation create_app_feature; reverse ETL approval required
+  create_article:
+    endpoint: POST
+    required fields: name, workspace_id, folder_id
+    risk: medium: runs Monday mutation create_article; reverse ETL approval required
+  create_column:
+    endpoint: POST
+    required fields: board_id, title, defaults
+    risk: medium: runs Monday mutation create_column; reverse ETL approval required
+  create_custom_activity:
+    endpoint: POST
+    required fields: name
+    risk: medium: runs Monday mutation create_custom_activity; reverse ETL approval required
+  create_doc_block:
+    endpoint: POST
+    required fields: doc_id, after_block_id, content
+    risk: critical: runs Monday mutation create_doc_block; reverse ETL approval required
+  create_folder:
+    endpoint: POST
+    required fields: name, workspace_id
+    risk: medium: runs Monday mutation create_folder; reverse ETL approval required
+  create_form:
+    endpoint: POST
+    required fields: destination_folder_id, destination_folder_name, destination_name, destination_workspace_id
+    risk: medium: runs Monday mutation create_form; reverse ETL approval required
+  create_group:
+    endpoint: POST
+    required fields: board_id, group_name, relative_to, group_color
+    risk: medium: runs Monday mutation create_group; reverse ETL approval required
+  create_item:
+    endpoint: POST
+    required fields: board_id, item_name, column_values
+    risk: medium: runs Monday mutation create_item; reverse ETL approval required
+  create_notification:
+    endpoint: POST
+    required fields: user_id, target_id, text
+    risk: high: runs Monday mutation create_notification; reverse ETL approval required
+  create_object_schema:
+    endpoint: POST
+    required fields: name, description
+    risk: high: runs Monday mutation create_object_schema; reverse ETL approval required
+  create_or_get_tag:
+    endpoint: POST
+    required fields: tag_name
+    risk: medium: runs Monday mutation create_or_get_tag; reverse ETL approval required
+  create_portfolio:
+    endpoint: POST
+    required fields: boardName, boardPrivacy, destinationWorkspaceId, callback_url
+    risk: high: runs Monday mutation create_portfolio; reverse ETL approval required
+  create_subitem:
+    endpoint: POST
+    required fields: parent_item_id, item_name
+    risk: medium: runs Monday mutation create_subitem; reverse ETL approval required
+  create_view_table:
+    endpoint: POST
+    required fields: board_id, name
+    risk: medium: runs Monday mutation create_view_table; reverse ETL approval required
+  create_webhook:
+    endpoint: POST
+    required fields: board_id, url, config
+    risk: high: runs Monday mutation create_webhook; reverse ETL approval required
+  create_workspace:
+    endpoint: POST
+    required fields: name, description, account_product_id
+    risk: high: runs Monday mutation create_workspace; reverse ETL approval required
+  deactivate_form:
+    endpoint: POST
+    required fields: formToken
+    risk: critical: runs Monday mutation deactivate_form; reverse ETL approval required
+  deactivate_managed_column:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation deactivate_managed_column; reverse ETL approval required
+  delete_app_lifecycle_subscription:
+    endpoint: POST
+    required fields: entity_identifier, entity_type
+    risk: critical: runs Monday mutation delete_app_lifecycle_subscription; reverse ETL approval required
+  delete_article:
+    endpoint: POST
+    required fields: object_id
+    risk: critical: runs Monday mutation delete_article; reverse ETL approval required
+  delete_board:
+    endpoint: POST
+    required fields: board_id
+    risk: critical: runs Monday mutation delete_board; reverse ETL approval required
+  delete_column:
+    endpoint: POST
+    required fields: board_id, column_id
+    risk: critical: runs Monday mutation delete_column; reverse ETL approval required
+  delete_custom_activity:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_custom_activity; reverse ETL approval required
+  delete_dashboard:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_dashboard; reverse ETL approval required
+  delete_department:
+    endpoint: POST
+    required fields: department_id
+    risk: critical: runs Monday mutation delete_department; reverse ETL approval required
+  delete_doc:
+    endpoint: POST
+    required fields: docId
+    risk: critical: runs Monday mutation delete_doc; reverse ETL approval required
+  delete_doc_block:
+    endpoint: POST
+    required fields: block_id
+    risk: critical: runs Monday mutation delete_doc_block; reverse ETL approval required
+  delete_folder:
+    endpoint: POST
+    required fields: folder_id
+    risk: critical: runs Monday mutation delete_folder; reverse ETL approval required
+  delete_group:
+    endpoint: POST
+    required fields: board_id, group_id
+    risk: critical: runs Monday mutation delete_group; reverse ETL approval required
+  delete_item:
+    endpoint: POST
+    required fields: item_id
+    risk: critical: runs Monday mutation delete_item; reverse ETL approval required
+  delete_managed_column:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_managed_column; reverse ETL approval required
+  delete_marketplace_app_discount:
+    endpoint: POST
+    required fields: account_slug, app_id
+    risk: critical: runs Monday mutation delete_marketplace_app_discount; reverse ETL approval required
+  delete_object:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_object; reverse ETL approval required
+  delete_object_relation:
+    endpoint: POST
+    required fields: source_object_id, relation_id
+    risk: critical: runs Monday mutation delete_object_relation; reverse ETL approval required
+  delete_object_schema:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_object_schema; reverse ETL approval required
+  delete_question:
+    endpoint: POST
+    required fields: formToken, questionId
+    risk: critical: runs Monday mutation delete_question; reverse ETL approval required
+  delete_team:
+    endpoint: POST
+    required fields: team_id
+    risk: critical: runs Monday mutation delete_team; reverse ETL approval required
+  delete_timeline_item:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_timeline_item; reverse ETL approval required
+  delete_update:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_update; reverse ETL approval required
+  delete_validation_rule:
+    endpoint: POST
+    required fields: id, rule_id
+    risk: critical: runs Monday mutation delete_validation_rule; reverse ETL approval required
+  delete_view:
+    endpoint: POST
+    required fields: board_id, view_id
+    risk: critical: runs Monday mutation delete_view; reverse ETL approval required
+  delete_webhook:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_webhook; reverse ETL approval required
+  delete_widget:
+    endpoint: POST
+    required fields: id
+    risk: critical: runs Monday mutation delete_widget; reverse ETL approval required
+  delete_workspace:
+    endpoint: POST
+    required fields: workspace_id
+    risk: critical: runs Monday mutation delete_workspace; reverse ETL approval required
+  duplicate_board:
+    endpoint: POST
+    required fields: board_id
+    risk: medium: runs Monday mutation duplicate_board; reverse ETL approval required
+  duplicate_doc:
+    endpoint: POST
+    required fields: docId
+    risk: high: runs Monday mutation duplicate_doc; reverse ETL approval required
+  duplicate_group:
+    endpoint: POST
+    required fields: board_id, group_id, add_to_top
+    risk: medium: runs Monday mutation duplicate_group; reverse ETL approval required
+  duplicate_item:
+    endpoint: POST
+    required fields: board_id, item_id, with_updates
+    risk: medium: runs Monday mutation duplicate_item; reverse ETL approval required
+  edit_update:
+    endpoint: POST
+    required fields: id, body
+    risk: medium: runs Monday mutation edit_update; reverse ETL approval required
+  import_doc_from_html:
+    endpoint: POST
+    required fields: html, workspaceId, title, folderId
+    risk: high: runs Monday mutation import_doc_from_html; reverse ETL approval required
+  increase_app_subscription_operations:
+    endpoint: POST
+    required fields: kind, increment_by
+    risk: high: runs Monday mutation increase_app_subscription_operations; reverse ETL approval required
+  like_update:
+    endpoint: POST
+    required fields: update_id
+    risk: medium: runs Monday mutation like_update; reverse ETL approval required
+  move_item_to_group:
+    endpoint: POST
+    required fields: item_id, group_id
+    risk: medium: runs Monday mutation move_item_to_group; reverse ETL approval required
+  pin_to_top:
+    endpoint: POST
+    required fields: id, item_id
+    risk: medium: runs Monday mutation pin_to_top; reverse ETL approval required
+  promote_app:
+    endpoint: POST
+    required fields: app_id
+    risk: high: runs Monday mutation promote_app; reverse ETL approval required
+  remove_ai_from_column:
+    endpoint: POST
+    required fields: board_id, column_id
+    risk: critical: runs Monday mutation remove_ai_from_column; reverse ETL approval required
+  remove_mock_app_subscription:
+    endpoint: POST
+    required fields: app_id, partial_signing_secret
+    risk: critical: runs Monday mutation remove_mock_app_subscription; reverse ETL approval required
+  remove_required_column:
+    endpoint: POST
+    required fields: id, column_id
+    risk: critical: runs Monday mutation remove_required_column; reverse ETL approval required
+  set_board_permission:
+    endpoint: POST
+    required fields: board_id
+    risk: high: runs Monday mutation set_board_permission; reverse ETL approval required
+  set_item_description_content:
+    endpoint: POST
+    required fields: item_id, markdown
+    risk: medium: runs Monday mutation set_item_description_content; reverse ETL approval required
+  set_mock_app_subscription:
+    endpoint: POST
+    required fields: app_id, partial_signing_secret, is_trial, plan_id, max_units
+    risk: high: runs Monday mutation set_mock_app_subscription; reverse ETL approval required
+  set_object_schema_column_active_state:
+    endpoint: POST
+    required fields: object_schema_id, column_id
+    risk: high: runs Monday mutation set_object_schema_column_active_state; reverse ETL approval required
+  shorten_form_url:
+    endpoint: POST
+    required fields: formToken
+    risk: medium: runs Monday mutation shorten_form_url; reverse ETL approval required
+  unlike_update:
+    endpoint: POST
+    required fields: update_id
+    risk: medium: runs Monday mutation unlike_update; reverse ETL approval required
+  unpin_from_top:
+    endpoint: POST
+    required fields: id, item_id
+    risk: medium: runs Monday mutation unpin_from_top; reverse ETL approval required
+  update_board:
+    endpoint: POST
+    required fields: board_id, new_value
+    risk: medium: runs Monday mutation update_board; reverse ETL approval required
+  update_column:
+    endpoint: POST
+    required fields: board_id, id, title, description, width, revision
+    risk: medium: runs Monday mutation update_column; reverse ETL approval required
+  update_dashboard:
+    endpoint: POST
+    required fields: id, board_folder_id, name, workspace_id
+    risk: medium: runs Monday mutation update_dashboard; reverse ETL approval required
+  update_doc_block:
+    endpoint: POST
+    required fields: block_id, content
+    risk: critical: runs Monday mutation update_doc_block; reverse ETL approval required
+  update_doc_name:
+    endpoint: POST
+    required fields: docId, name
+    risk: high: runs Monday mutation update_doc_name; reverse ETL approval required
+  update_group:
+    endpoint: POST
+    required fields: board_id, group_id, new_value
+    risk: medium: runs Monday mutation update_group; reverse ETL approval required
+  update_mute_board_settings:
+    endpoint: POST
+    required fields: board_id
+    risk: medium: runs Monday mutation update_mute_board_settings; reverse ETL approval required
+  update_object_schema:
+    endpoint: POST
+    required fields: id, revision, description
+    risk: high: runs Monday mutation update_object_schema; reverse ETL approval required
+  use_template:
+    endpoint: POST
+    required fields: template_id, destination_workspace_id
+    risk: medium: runs Monday mutation use_template; reverse ETL approval required
+
 SECURITY
-  read risk: external monday.com GraphQL API read of boards/items/users/teams/tags
-  approval: none; read-only source connector
+  read risk: external monday.com GraphQL API reads; direct query commands use fixed documents, bounded response bytes, and redacted JSON output
+  write risk: typed monday.com GraphQL mutations through named reverse-ETL actions only; complex-input mutations remain planned/blocked instead of raw GraphQL
+  approval: reverse ETL writes require plan -> preview -> explicit approval -> execute; destructive/admin actions require typed destructive confirmation
   Never pass secret values in chat, shell arguments, logs, docs, or JSON output.
+
+COMMAND SURFACE
+  Read and safely plan typed monday.com GraphQL operations.
+  Usage: pm monday <stream|query|reverse> <operation> [flags]
+  Source CLI: monday.com GraphQL API (developer.monday.com sitemap/reference pages)
+  Global flags:
+    --credential (string): Credential profile name; never pass secret values as flags.: maps_to=config.credential
+    --json (boolean): Render machine-readable JSON output.
+    --limit (integer): Maximum ETL records to emit for stream commands.
+    --max-bytes (integer): Maximum bytes to return for bounded direct query commands.
+  ETL streams
+    stream boards - Read Monday boards [intent=etl availability=implemented stream=boards]
+    stream items - Read Monday items [intent=etl availability=implemented stream=items]
+    stream tags - Read Monday tags [intent=etl availability=implemented stream=tags]
+    stream teams - Read Monday teams [intent=etl availability=implemented stream=teams]
+    stream users - Read Monday users [intent=etl availability=implemented stream=users]
+  Bounded GraphQL query commands
+    query account - Run fixed Monday account query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for account; no raw query text is accepted.
+    query account-roles - Run fixed Monday account_roles query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for account_roles; no raw query text is accepted.
+    query aggregate - Planned fixed Monday aggregate query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query all-widgets-schema - Run fixed Monday all_widgets_schema query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for all_widgets_schema; no raw query text is accepted.
+    query allowed-sequences-to-enroll - Run fixed Monday allowed_sequences_to_enroll query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for allowed_sequences_to_enroll; no raw query text is accepted.; flags: --board-id
+    query app - Run fixed Monday app query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for app; no raw query text is accepted.; flags: --id
+    query app-installs - Run fixed Monday app_installs query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for app_installs; no raw query text is accepted.; flags: --app-id, --account-id
+    query app-subscription - Run fixed Monday app_subscription query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for app_subscription; no raw query text is accepted.
+    query app-subscription-operations - Run fixed Monday app_subscription_operations query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for app_subscription_operations; no raw query text is accepted.; flags: --kind
+    query app-subscriptions - Run fixed Monday app_subscriptions query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for app_subscriptions; no raw query text is accepted.; flags: --app-id
+    query apps-monetization-info - Run fixed Monday apps_monetization_info query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for apps_monetization_info; no raw query text is accepted.
+    query apps-monetization-status - Run fixed Monday apps_monetization_status query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for apps_monetization_status; no raw query text is accepted.
+    query article-blocks - Run fixed Monday article_blocks query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for article_blocks; no raw query text is accepted.; flags: --object-id, --limit, --page
+    query articles - Planned fixed Monday articles query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query ask-developer-docs - Run fixed Monday ask_developer_docs query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for ask_developer_docs; no raw query text is accepted.; flags: --query
+    query audit-event-catalogue - Run fixed Monday audit_event_catalogue query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for audit_event_catalogue; no raw query text is accepted.
+    query audit-logs - Planned fixed Monday audit_logs query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query complexity - Run fixed Monday complexity query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for complexity; no raw query text is accepted.
+    query connection-board-ids - Run fixed Monday connection_board_ids query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for connection_board_ids; no raw query text is accepted.; flags: --connection-id
+    query custom-activity - Run fixed Monday custom_activity query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for custom_activity; no raw query text is accepted.
+    query departments - Planned fixed Monday departments query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query doc-version-diff - Run fixed Monday doc_version_diff query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for doc_version_diff; no raw query text is accepted.; flags: --doc-id, --date, --prev-date
+    query doc-version-history - Run fixed Monday doc_version_history query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for doc_version_history; no raw query text is accepted.; flags: --doc-id, --since
+    query docs - Run fixed Monday docs query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for docs; no raw query text is accepted.; flags: --ids
+    query export-markdown-from-doc - Planned fixed Monday export_markdown_from_doc query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query favorites - Run fixed Monday favorites query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for favorites; no raw query text is accepted.
+    query fetch-job-status - Run fixed Monday fetch_job_status query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for fetch_job_status; no raw query text is accepted.; flags: --job-id
+    query folders - Planned fixed Monday folders query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query form - Run fixed Monday form query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for form; no raw query text is accepted.; flags: --formtoken
+    query get-app-lifecycle-subscriptions - Run fixed Monday get_app_lifecycle_subscriptions query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for get_app_lifecycle_subscriptions; no raw query text is accepted.; flags: --app-id, --version-id
+    query get-column-type-schema - Run fixed Monday get_column_type_schema query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for get_column_type_schema; no raw query text is accepted.
+    query get-directory-resources - Run fixed Monday get_directory_resources query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for get_directory_resources; no raw query text is accepted.; flags: --limit
+    query get-object-schemas - Run fixed Monday get_object_schemas query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for get_object_schemas; no raw query text is accepted.; flags: --limit, --page
+    query get-view-schema-by-type - Run fixed Monday get_view_schema_by_type query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for get_view_schema_by_type; no raw query text is accepted.
+    query items-page-by-column-values - Planned fixed Monday items_page_by_column_values query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query job-status - Run fixed Monday job_status query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for job_status; no raw query text is accepted.; flags: --job-id
+    query knowledge-base-search - Run fixed Monday knowledge_base_search query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for knowledge_base_search; no raw query text is accepted.; flags: --query, --limit
+    query managed-column - Run fixed Monday managed_column query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for managed_column; no raw query text is accepted.
+    query marketplace-app-discounts - Run fixed Monday marketplace_app_discounts query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for marketplace_app_discounts; no raw query text is accepted.; flags: --app-id
+    query me - Run fixed Monday me query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for me; no raw query text is accepted.
+    query mute-board-settings - Planned fixed Monday mute_board_settings query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query next-items-page - Run fixed Monday next_items_page query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for next_items_page; no raw query text is accepted.; flags: --cursor, --limit
+    query notetaker - Run fixed Monday notetaker query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for notetaker; no raw query text is accepted.
+    query notifications - Run fixed Monday notifications query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for notifications; no raw query text is accepted.; flags: --filter-read
+    query notifications-settings - Planned fixed Monday notifications_settings query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query object-relations - Run fixed Monday object_relations query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for object_relations; no raw query text is accepted.; flags: --object-id
+    query object-types-unique-keys - Run fixed Monday object_types_unique_keys query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for object_types_unique_keys; no raw query text is accepted.
+    query objects - Run fixed Monday objects query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for objects; no raw query text is accepted.; flags: --limit
+    query platform-api - Run fixed Monday platform_api query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for platform_api; no raw query text is accepted.
+    query replies - Planned fixed Monday replies query [intent=direct_read availability=planned]; approval: none; risk: planned bounded GraphQL read; notes: Blocked on connector-local schema for complex GraphQL variables; no raw GraphQL escape hatch.
+    query search - Run fixed Monday search query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for search; no raw query text is accepted.
+    query template-installation-status - Run fixed Monday template_installation_status query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for template_installation_status; no raw query text is accepted.; flags: --process-id
+    query timeline - Run fixed Monday timeline query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for timeline; no raw query text is accepted.; flags: --id
+    query timeline-item - Run fixed Monday timeline_item query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for timeline_item; no raw query text is accepted.; flags: --id
+    query updates - Run fixed Monday updates query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for updates; no raw query text is accepted.; flags: --limit, --to-date, --from-date
+    query user-configs - Run fixed Monday user_configs query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for user_configs; no raw query text is accepted.
+    query validations - Run fixed Monday validations query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for validations; no raw query text is accepted.; flags: --id
+    query version - Run fixed Monday version query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for version; no raw query text is accepted.
+    query versions - Run fixed Monday versions query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for versions; no raw query text is accepted.
+    query webhooks - Run fixed Monday webhooks query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for webhooks; no raw query text is accepted.; flags: --board-id
+    query workspaces - Run fixed Monday workspaces query [intent=direct_read availability=implemented]; approval: none; risk: bounded GraphQL read; output is capped and redacted; notes: Fixed GraphQL document for workspaces; no raw query text is accepted.; flags: --ids
+  Reverse ETL GraphQL mutations
+    reverse activate-form - Plan and execute Monday activate_form [intent=reverse_etl availability=implemented write=activate_form]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation activate_form; reverse ETL approval required; notes: Fixed GraphQL mutation document for activate_form; no raw query text is accepted.; flags: --formtoken
+    reverse activate-managed-column - Plan and execute Monday activate_managed_column [intent=reverse_etl availability=implemented write=activate_managed_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation activate_managed_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for activate_managed_column; no raw query text is accepted.; flags: --id
+    reverse activate-users - Planned Monday activate_users mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-content-to-doc-from-markdown - Plan and execute Monday add_content_to_doc_from_markdown [intent=reverse_etl availability=implemented write=add_content_to_doc_from_markdown]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high: runs Monday mutation add_content_to_doc_from_markdown; reverse ETL approval required; notes: Fixed GraphQL mutation document for add_content_to_doc_from_markdown; no raw query text is accepted.; flags: --docid, --markdown
+    reverse add-file-to-column - Plan and execute Monday add_file_to_column [intent=reverse_etl availability=planned]; approval: blocked until typed multipart/binary GraphQL upload contract exists; no raw file upload escape hatch; risk: planned high-risk binary/file mutation; notes: Planned/blocked connector-local command metadata only; file bytes are never accepted by this command.
+    reverse add-file-to-update - Plan and execute Monday add_file_to_update [intent=reverse_etl availability=planned]; approval: blocked until typed multipart/binary GraphQL upload contract exists; no raw file upload escape hatch; risk: planned high-risk binary/file mutation; notes: Planned/blocked connector-local command metadata only; file bytes are never accepted by this command.
+    reverse add-required-column - Plan and execute Monday add_required_column [intent=reverse_etl availability=implemented write=add_required_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation add_required_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for add_required_column; no raw query text is accepted.; flags: --id, --column-id
+    reverse add-subscribers-to-object - Planned Monday add_subscribers_to_object mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-teams-to-board - Planned Monday add_teams_to_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-teams-to-workspace - Planned Monday add_teams_to_workspace mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-users-to-board - Planned Monday add_users_to_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-users-to-team - Planned Monday add_users_to_team mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse add-users-to-workspace - Planned Monday add_users_to_workspace mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse archive-board - Plan and execute Monday archive_board [intent=reverse_etl availability=implemented write=archive_board]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation archive_board; reverse ETL approval required; notes: Fixed GraphQL mutation document for archive_board; no raw query text is accepted.; flags: --board-id
+    reverse archive-group - Plan and execute Monday archive_group [intent=reverse_etl availability=implemented write=archive_group]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation archive_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for archive_group; no raw query text is accepted.; flags: --board-id, --group-id
+    reverse archive-item - Plan and execute Monday archive_item [intent=reverse_etl availability=implemented write=archive_item]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation archive_item; reverse ETL approval required; notes: Fixed GraphQL mutation document for archive_item; no raw query text is accepted.; flags: --item-id
+    reverse archive-object - Plan and execute Monday archive_object [intent=reverse_etl availability=implemented write=archive_object]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation archive_object; reverse ETL approval required; notes: Fixed GraphQL mutation document for archive_object; no raw query text is accepted.; flags: --id
+    reverse assign-department-members - Planned Monday assign_department_members mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse assign-department-owner - Plan and execute Monday assign_department_owner [intent=reverse_etl availability=implemented write=assign_department_owner]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation assign_department_owner; reverse ETL approval required; notes: Fixed GraphQL mutation document for assign_department_owner; no raw query text is accepted.; flags: --department-id, --user-id
+    reverse assign-team-owners - Planned Monday assign_team_owners mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse attach-dropdown-managed-column - Planned Monday attach_dropdown_managed_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse attach-status-managed-column - Plan and execute Monday attach_status_managed_column [intent=reverse_etl availability=implemented write=attach_status_managed_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation attach_status_managed_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for attach_status_managed_column; no raw query text is accepted.; flags: --board-id, --managed-column-id, --title, --description
+    reverse backfill-items - Plan and execute Monday backfill_items [intent=reverse_etl availability=implemented write=backfill_items]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation backfill_items; reverse ETL approval required; notes: Fixed GraphQL mutation document for backfill_items; no raw query text is accepted.; flags: --board-id, --group-id
+    reverse batch-extend-trial-period - Planned Monday batch_extend_trial_period mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse bulk-object-schema-column-actions - Planned Monday bulk_object_schema_column_actions mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse change-column-metadata - Plan and execute Monday change_column_metadata [intent=reverse_etl availability=implemented write=change_column_metadata]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_column_metadata; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_column_metadata; no raw query text is accepted.; flags: --board-id, --column-id, --value
+    reverse change-column-title - Plan and execute Monday change_column_title [intent=reverse_etl availability=implemented write=change_column_title]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_column_title; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_column_title; no raw query text is accepted.; flags: --board-id, --column-id, --title
+    reverse change-column-value - Plan and execute Monday change_column_value [intent=reverse_etl availability=implemented write=change_column_value]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_column_value; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_column_value; no raw query text is accepted.; flags: --board-id, --item-id, --column-id, --value
+    reverse change-item-position - Plan and execute Monday change_item_position [intent=reverse_etl availability=implemented write=change_item_position]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_item_position; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_item_position; no raw query text is accepted.; flags: --item-id, --relative-to
+    reverse change-multiple-column-values - Plan and execute Monday change_multiple_column_values [intent=reverse_etl availability=implemented write=change_multiple_column_values]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_multiple_column_values; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_multiple_column_values; no raw query text is accepted.; flags: --item-id, --board-id, --column-values
+    reverse change-simple-column-value - Plan and execute Monday change_simple_column_value [intent=reverse_etl availability=implemented write=change_simple_column_value]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation change_simple_column_value; reverse ETL approval required; notes: Fixed GraphQL mutation document for change_simple_column_value; no raw query text is accepted.; flags: --item-id, --board-id, --column-id, --value
+    reverse clear-item-updates - Plan and execute Monday clear_item_updates [intent=reverse_etl availability=implemented write=clear_item_updates]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation clear_item_updates; reverse ETL approval required; notes: Fixed GraphQL mutation document for clear_item_updates; no raw query text is accepted.; flags: --item-id
+    reverse clear-users-department - Planned Monday clear_users_department mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse configure-categorize-ai-column - Planned Monday configure_categorize_ai_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse configure-extract-ai-column - Plan and execute Monday configure_extract_ai_column [intent=reverse_etl availability=implemented write=configure_extract_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_extract_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_extract_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --source-column-id
+    reverse configure-improve-text-ai-column - Plan and execute Monday configure_improve_text_ai_column [intent=reverse_etl availability=implemented write=configure_improve_text_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_improve_text_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_improve_text_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --source-column-id
+    reverse configure-open-block-ai-column - Plan and execute Monday configure_open_block_ai_column [intent=reverse_etl availability=implemented write=configure_open_block_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_open_block_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_open_block_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --ai-query
+    reverse configure-person-assignment-ai-column - Plan and execute Monday configure_person_assignment_ai_column [intent=reverse_etl availability=implemented write=configure_person_assignment_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_person_assignment_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_person_assignment_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --groups
+    reverse configure-summarize-ai-column - Plan and execute Monday configure_summarize_ai_column [intent=reverse_etl availability=implemented write=configure_summarize_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_summarize_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_summarize_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --additional-instructions
+    reverse configure-translate-ai-column - Plan and execute Monday configure_translate_ai_column [intent=reverse_etl availability=implemented write=configure_translate_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_translate_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_translate_ai_column; no raw query text is accepted.; flags: --board-id, --column-id
+    reverse configure-write-me-ai-column - Plan and execute Monday configure_write_me_ai_column [intent=reverse_etl availability=implemented write=configure_write_me_ai_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation configure_write_me_ai_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for configure_write_me_ai_column; no raw query text is accepted.; flags: --board-id, --column-id, --ai-query
+    reverse connect-board-to-object-schema - Plan and execute Monday connect_board_to_object_schema [intent=reverse_etl availability=implemented write=connect_board_to_object_schema]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation connect_board_to_object_schema; reverse ETL approval required; notes: Fixed GraphQL mutation document for connect_board_to_object_schema; no raw query text is accepted.; flags: --board-id, --object-schema-id
+    reverse connect-project-to-portfolio - Plan and execute Monday connect_project_to_portfolio [intent=reverse_etl availability=implemented write=connect_project_to_portfolio]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation connect_project_to_portfolio; reverse ETL approval required; notes: Fixed GraphQL mutation document for connect_project_to_portfolio; no raw query text is accepted.; flags: --projectboardid, --portfolioboardid
+    reverse convert-board-to-project - Planned Monday convert_board_to_project mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-app - Planned Monday create_app mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-app-feature - Plan and execute Monday create_app_feature [intent=reverse_etl availability=implemented write=create_app_feature]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation create_app_feature; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_app_feature; no raw query text is accepted.; flags: --slug, --app-id
+    reverse create-article - Plan and execute Monday create_article [intent=reverse_etl availability=implemented write=create_article]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_article; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_article; no raw query text is accepted.; flags: --name, --workspace-id, --folder-id
+    reverse create-board - Planned Monday create_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-column - Plan and execute Monday create_column [intent=reverse_etl availability=implemented write=create_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_column; no raw query text is accepted.; flags: --board-id, --title, --defaults
+    reverse create-custom-activity - Plan and execute Monday create_custom_activity [intent=reverse_etl availability=implemented write=create_custom_activity]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_custom_activity; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_custom_activity; no raw query text is accepted.; flags: --name
+    reverse create-dashboard - Planned Monday create_dashboard mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-department - Planned Monday create_department mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-doc - Planned Monday create_doc mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-doc-block - Plan and execute Monday create_doc_block [intent=reverse_etl availability=implemented write=create_doc_block]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation create_doc_block; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_doc_block; no raw query text is accepted.; flags: --doc-id, --after-block-id, --content
+    reverse create-doc-blocks - Planned Monday create_doc_blocks mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-dropdown-column - Planned Monday create_dropdown_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-dropdown-managed-column - Planned Monday create_dropdown_managed_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-favorite - Planned Monday create_favorite mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-folder - Plan and execute Monday create_folder [intent=reverse_etl availability=implemented write=create_folder]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_folder; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_folder; no raw query text is accepted.; flags: --name, --workspace-id
+    reverse create-form - Plan and execute Monday create_form [intent=reverse_etl availability=implemented write=create_form]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_form; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_form; no raw query text is accepted.; flags: --destination-folder-id, --destination-folder-name, --destination-name, --destination-workspace-id
+    reverse create-form-question - Planned Monday create_form_question mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-form-tag - Planned Monday create_form_tag mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-group - Plan and execute Monday create_group [intent=reverse_etl availability=implemented write=create_group]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_group; no raw query text is accepted.; flags: --board-id, --group-name, --relative-to, --group-color
+    reverse create-item - Plan and execute Monday create_item [intent=reverse_etl availability=implemented write=create_item]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_item; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_item; no raw query text is accepted.; flags: --board-id, --item-name, --column-values
+    reverse create-marketplace-app-discount-offer - Planned Monday create_marketplace_app_discount_offer mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-notification - Plan and execute Monday create_notification [intent=reverse_etl availability=implemented write=create_notification]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high: runs Monday mutation create_notification; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_notification; no raw query text is accepted.; flags: --user-id, --target-id, --text
+    reverse create-object - Planned Monday create_object mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-object-relations - Planned Monday create_object_relations mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-object-schema - Plan and execute Monday create_object_schema [intent=reverse_etl availability=implemented write=create_object_schema]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation create_object_schema; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_object_schema; no raw query text is accepted.; flags: --name, --description
+    reverse create-object-schema-columns - Planned Monday create_object_schema_columns mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-or-get-tag - Plan and execute Monday create_or_get_tag [intent=reverse_etl availability=implemented write=create_or_get_tag]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_or_get_tag; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_or_get_tag; no raw query text is accepted.; flags: --tag-name
+    reverse create-portfolio - Plan and execute Monday create_portfolio [intent=reverse_etl availability=implemented write=create_portfolio]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation create_portfolio; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_portfolio; no raw query text is accepted.; flags: --boardname, --boardprivacy, --destinationworkspaceid, --callback-url
+    reverse create-project - Planned Monday create_project mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-status-column - Planned Monday create_status_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-status-managed-column - Planned Monday create_status_managed_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-subitem - Plan and execute Monday create_subitem [intent=reverse_etl availability=implemented write=create_subitem]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_subitem; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_subitem; no raw query text is accepted.; flags: --parent-item-id, --item-name
+    reverse create-team - Planned Monday create_team mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-timeline-item - Planned Monday create_timeline_item mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-update - Planned Monday create_update mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-validation-rule - Planned Monday create_validation_rule mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-view - Planned Monday create_view mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-view-table - Plan and execute Monday create_view_table [intent=reverse_etl availability=implemented write=create_view_table]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation create_view_table; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_view_table; no raw query text is accepted.; flags: --board-id, --name
+    reverse create-webhook - Plan and execute Monday create_webhook [intent=reverse_etl availability=implemented write=create_webhook]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation create_webhook; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_webhook; no raw query text is accepted.; flags: --board-id, --url, --config
+    reverse create-widget - Planned Monday create_widget mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse create-workspace - Plan and execute Monday create_workspace [intent=reverse_etl availability=implemented write=create_workspace]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation create_workspace; reverse ETL approval required; notes: Fixed GraphQL mutation document for create_workspace; no raw query text is accepted.; flags: --name, --description, --account-product-id
+    reverse deactivate-form - Plan and execute Monday deactivate_form [intent=reverse_etl availability=implemented write=deactivate_form]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation deactivate_form; reverse ETL approval required; notes: Fixed GraphQL mutation document for deactivate_form; no raw query text is accepted.; flags: --formtoken
+    reverse deactivate-managed-column - Plan and execute Monday deactivate_managed_column [intent=reverse_etl availability=implemented write=deactivate_managed_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation deactivate_managed_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for deactivate_managed_column; no raw query text is accepted.; flags: --id
+    reverse deactivate-users - Planned Monday deactivate_users mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-app-lifecycle-subscription - Plan and execute Monday delete_app_lifecycle_subscription [intent=reverse_etl availability=implemented write=delete_app_lifecycle_subscription]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_app_lifecycle_subscription; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_app_lifecycle_subscription; no raw query text is accepted.; flags: --entity-identifier, --entity-type
+    reverse delete-article - Plan and execute Monday delete_article [intent=reverse_etl availability=implemented write=delete_article]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_article; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_article; no raw query text is accepted.; flags: --object-id
+    reverse delete-board - Plan and execute Monday delete_board [intent=reverse_etl availability=implemented write=delete_board]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_board; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_board; no raw query text is accepted.; flags: --board-id
+    reverse delete-column - Plan and execute Monday delete_column [intent=reverse_etl availability=implemented write=delete_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_column; no raw query text is accepted.; flags: --board-id, --column-id
+    reverse delete-custom-activity - Plan and execute Monday delete_custom_activity [intent=reverse_etl availability=implemented write=delete_custom_activity]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_custom_activity; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_custom_activity; no raw query text is accepted.; flags: --id
+    reverse delete-dashboard - Plan and execute Monday delete_dashboard [intent=reverse_etl availability=implemented write=delete_dashboard]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_dashboard; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_dashboard; no raw query text is accepted.; flags: --id
+    reverse delete-department - Plan and execute Monday delete_department [intent=reverse_etl availability=implemented write=delete_department]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_department; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_department; no raw query text is accepted.; flags: --department-id
+    reverse delete-doc - Plan and execute Monday delete_doc [intent=reverse_etl availability=implemented write=delete_doc]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_doc; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_doc; no raw query text is accepted.; flags: --docid
+    reverse delete-doc-block - Plan and execute Monday delete_doc_block [intent=reverse_etl availability=implemented write=delete_doc_block]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_doc_block; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_doc_block; no raw query text is accepted.; flags: --block-id
+    reverse delete-favorite - Planned Monday delete_favorite mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-folder - Plan and execute Monday delete_folder [intent=reverse_etl availability=implemented write=delete_folder]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_folder; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_folder; no raw query text is accepted.; flags: --folder-id
+    reverse delete-form-tag - Planned Monday delete_form_tag mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-group - Plan and execute Monday delete_group [intent=reverse_etl availability=implemented write=delete_group]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_group; no raw query text is accepted.; flags: --board-id, --group-id
+    reverse delete-item - Plan and execute Monday delete_item [intent=reverse_etl availability=implemented write=delete_item]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_item; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_item; no raw query text is accepted.; flags: --item-id
+    reverse delete-managed-column - Plan and execute Monday delete_managed_column [intent=reverse_etl availability=implemented write=delete_managed_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_managed_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_managed_column; no raw query text is accepted.; flags: --id
+    reverse delete-marketplace-app-discount - Plan and execute Monday delete_marketplace_app_discount [intent=reverse_etl availability=implemented write=delete_marketplace_app_discount]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_marketplace_app_discount; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_marketplace_app_discount; no raw query text is accepted.; flags: --account-slug, --app-id
+    reverse delete-object - Plan and execute Monday delete_object [intent=reverse_etl availability=implemented write=delete_object]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_object; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_object; no raw query text is accepted.; flags: --id
+    reverse delete-object-relation - Plan and execute Monday delete_object_relation [intent=reverse_etl availability=implemented write=delete_object_relation]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_object_relation; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_object_relation; no raw query text is accepted.; flags: --source-object-id, --relation-id
+    reverse delete-object-schema - Plan and execute Monday delete_object_schema [intent=reverse_etl availability=implemented write=delete_object_schema]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_object_schema; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_object_schema; no raw query text is accepted.; flags: --id
+    reverse delete-object-schema-columns - Planned Monday delete_object_schema_columns mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-question - Plan and execute Monday delete_question [intent=reverse_etl availability=implemented write=delete_question]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_question; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_question; no raw query text is accepted.; flags: --formtoken, --questionid
+    reverse delete-subscribers-from-board - Planned Monday delete_subscribers_from_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-team - Plan and execute Monday delete_team [intent=reverse_etl availability=implemented write=delete_team]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_team; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_team; no raw query text is accepted.; flags: --team-id
+    reverse delete-teams-from-board - Planned Monday delete_teams_from_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-teams-from-workspace - Planned Monday delete_teams_from_workspace mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-timeline-item - Plan and execute Monday delete_timeline_item [intent=reverse_etl availability=implemented write=delete_timeline_item]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_timeline_item; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_timeline_item; no raw query text is accepted.; flags: --id
+    reverse delete-update - Plan and execute Monday delete_update [intent=reverse_etl availability=implemented write=delete_update]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_update; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_update; no raw query text is accepted.; flags: --id
+    reverse delete-users-from-workspace - Planned Monday delete_users_from_workspace mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse delete-validation-rule - Plan and execute Monday delete_validation_rule [intent=reverse_etl availability=implemented write=delete_validation_rule]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_validation_rule; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_validation_rule; no raw query text is accepted.; flags: --id, --rule-id
+    reverse delete-view - Plan and execute Monday delete_view [intent=reverse_etl availability=implemented write=delete_view]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_view; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_view; no raw query text is accepted.; flags: --board-id, --view-id
+    reverse delete-webhook - Plan and execute Monday delete_webhook [intent=reverse_etl availability=implemented write=delete_webhook]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_webhook; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_webhook; no raw query text is accepted.; flags: --id
+    reverse delete-widget - Plan and execute Monday delete_widget [intent=reverse_etl availability=implemented write=delete_widget]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_widget; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_widget; no raw query text is accepted.; flags: --id
+    reverse delete-workspace - Plan and execute Monday delete_workspace [intent=reverse_etl availability=implemented write=delete_workspace]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation delete_workspace; reverse ETL approval required; notes: Fixed GraphQL mutation document for delete_workspace; no raw query text is accepted.; flags: --workspace-id
+    reverse detach-boards-from-object-schema - Planned Monday detach_boards_from_object_schema mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse duplicate-board - Plan and execute Monday duplicate_board [intent=reverse_etl availability=implemented write=duplicate_board]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation duplicate_board; reverse ETL approval required; notes: Fixed GraphQL mutation document for duplicate_board; no raw query text is accepted.; flags: --board-id
+    reverse duplicate-doc - Plan and execute Monday duplicate_doc [intent=reverse_etl availability=implemented write=duplicate_doc]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high: runs Monday mutation duplicate_doc; reverse ETL approval required; notes: Fixed GraphQL mutation document for duplicate_doc; no raw query text is accepted.; flags: --docid
+    reverse duplicate-group - Plan and execute Monday duplicate_group [intent=reverse_etl availability=implemented write=duplicate_group]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation duplicate_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for duplicate_group; no raw query text is accepted.; flags: --board-id, --group-id, --add-to-top
+    reverse duplicate-item - Plan and execute Monday duplicate_item [intent=reverse_etl availability=implemented write=duplicate_item]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation duplicate_item; reverse ETL approval required; notes: Fixed GraphQL mutation document for duplicate_item; no raw query text is accepted.; flags: --board-id, --item-id, --with-updates
+    reverse edit-update - Plan and execute Monday edit_update [intent=reverse_etl availability=implemented write=edit_update]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation edit_update; reverse ETL approval required; notes: Fixed GraphQL mutation document for edit_update; no raw query text is accepted.; flags: --id, --body
+    reverse enroll-items-to-sequence - Planned Monday enroll_items_to_sequence mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse grant-marketplace-app-discount - Planned Monday grant_marketplace_app_discount mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse import-doc-from-html - Plan and execute Monday import_doc_from_html [intent=reverse_etl availability=implemented write=import_doc_from_html]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high: runs Monday mutation import_doc_from_html; reverse ETL approval required; notes: Fixed GraphQL mutation document for import_doc_from_html; no raw query text is accepted.; flags: --html, --workspaceid, --title, --folderid
+    reverse increase-app-subscription-operations - Plan and execute Monday increase_app_subscription_operations [intent=reverse_etl availability=implemented write=increase_app_subscription_operations]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation increase_app_subscription_operations; reverse ETL approval required; notes: Fixed GraphQL mutation document for increase_app_subscription_operations; no raw query text is accepted.; flags: --kind, --increment-by
+    reverse ingest-items - Planned Monday ingest_items mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse invite-users - Planned Monday invite_users mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse like-update - Plan and execute Monday like_update [intent=reverse_etl availability=implemented write=like_update]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation like_update; reverse ETL approval required; notes: Fixed GraphQL mutation document for like_update; no raw query text is accepted.; flags: --update-id
+    reverse move-item-to-board - Planned Monday move_item_to_board mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse move-item-to-group - Plan and execute Monday move_item_to_group [intent=reverse_etl availability=implemented write=move_item_to_group]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation move_item_to_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for move_item_to_group; no raw query text is accepted.; flags: --item-id, --group-id
+    reverse pin-to-top - Plan and execute Monday pin_to_top [intent=reverse_etl availability=implemented write=pin_to_top]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation pin_to_top; reverse ETL approval required; notes: Fixed GraphQL mutation document for pin_to_top; no raw query text is accepted.; flags: --id, --item-id
+    reverse promote-app - Plan and execute Monday promote_app [intent=reverse_etl availability=implemented write=promote_app]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation promote_app; reverse ETL approval required; notes: Fixed GraphQL mutation document for promote_app; no raw query text is accepted.; flags: --app-id
+    reverse publish-article - Planned Monday publish_article mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse remove-ai-from-column - Plan and execute Monday remove_ai_from_column [intent=reverse_etl availability=implemented write=remove_ai_from_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation remove_ai_from_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for remove_ai_from_column; no raw query text is accepted.; flags: --board-id, --column-id
+    reverse remove-mock-app-subscription - Plan and execute Monday remove_mock_app_subscription [intent=reverse_etl availability=implemented write=remove_mock_app_subscription]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation remove_mock_app_subscription; reverse ETL approval required; notes: Fixed GraphQL mutation document for remove_mock_app_subscription; no raw query text is accepted.; flags: --app-id, --partial-signing-secret
+    reverse remove-required-column - Plan and execute Monday remove_required_column [intent=reverse_etl availability=implemented write=remove_required_column]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation remove_required_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for remove_required_column; no raw query text is accepted.; flags: --id, --column-id
+    reverse remove-team-owners - Planned Monday remove_team_owners mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse remove-users-from-team - Planned Monday remove_users_from_team mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned critical mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse run-prompt - Planned Monday run_prompt mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse set-board-permission - Plan and execute Monday set_board_permission [intent=reverse_etl availability=implemented write=set_board_permission]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation set_board_permission; reverse ETL approval required; notes: Fixed GraphQL mutation document for set_board_permission; no raw query text is accepted.; flags: --board-id
+    reverse set-form-password - Planned Monday set_form_password mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse set-item-description-content - Plan and execute Monday set_item_description_content [intent=reverse_etl availability=implemented write=set_item_description_content]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation set_item_description_content; reverse ETL approval required; notes: Fixed GraphQL mutation document for set_item_description_content; no raw query text is accepted.; flags: --item-id, --markdown
+    reverse set-mock-app-subscription - Plan and execute Monday set_mock_app_subscription [intent=reverse_etl availability=implemented write=set_mock_app_subscription]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation set_mock_app_subscription; reverse ETL approval required; notes: Fixed GraphQL mutation document for set_mock_app_subscription; no raw query text is accepted.; flags: --app-id, --partial-signing-secret, --is-trial, --plan-id, --max-units
+    reverse set-object-schema-column-active-state - Plan and execute Monday set_object_schema_column_active_state [intent=reverse_etl availability=implemented write=set_object_schema_column_active_state]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation set_object_schema_column_active_state; reverse ETL approval required; notes: Fixed GraphQL mutation document for set_object_schema_column_active_state; no raw query text is accepted.; flags: --object-schema-id, --column-id
+    reverse shorten-form-url - Plan and execute Monday shorten_form_url [intent=reverse_etl availability=implemented write=shorten_form_url]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation shorten_form_url; reverse ETL approval required; notes: Fixed GraphQL mutation document for shorten_form_url; no raw query text is accepted.; flags: --formtoken
+    reverse unassign-department-owners - Planned Monday unassign_department_owners mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse unlike-update - Plan and execute Monday unlike_update [intent=reverse_etl availability=implemented write=unlike_update]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation unlike_update; reverse ETL approval required; notes: Fixed GraphQL mutation document for unlike_update; no raw query text is accepted.; flags: --update-id
+    reverse unpin-from-top - Plan and execute Monday unpin_from_top [intent=reverse_etl availability=implemented write=unpin_from_top]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation unpin_from_top; reverse ETL approval required; notes: Fixed GraphQL mutation document for unpin_from_top; no raw query text is accepted.; flags: --id, --item-id
+    reverse update-app - Planned Monday update_app mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-app-feature - Planned Monday update_app_feature mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-app-lifecycle-subscription - Planned Monday update_app_lifecycle_subscription mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-assets-on-item - Planned Monday update_assets_on_item mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-board - Plan and execute Monday update_board [intent=reverse_etl availability=implemented write=update_board]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation update_board; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_board; no raw query text is accepted.; flags: --board-id, --new-value
+    reverse update-board-hierarchy - Planned Monday update_board_hierarchy mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-column - Plan and execute Monday update_column [intent=reverse_etl availability=implemented write=update_column]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation update_column; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_column; no raw query text is accepted.; flags: --board-id, --id, --title, --description, --width, --revision
+    reverse update-dashboard - Plan and execute Monday update_dashboard [intent=reverse_etl availability=implemented write=update_dashboard]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation update_dashboard; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_dashboard; no raw query text is accepted.; flags: --id, --board-folder-id, --name, --workspace-id
+    reverse update-department - Planned Monday update_department mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-directory-resources-attributes - Planned Monday update_directory_resources_attributes mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-doc-block - Plan and execute Monday update_doc_block [intent=reverse_etl availability=implemented write=update_doc_block]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: critical: runs Monday mutation update_doc_block; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_doc_block; no raw query text is accepted.; flags: --block-id, --content
+    reverse update-doc-name - Plan and execute Monday update_doc_name [intent=reverse_etl availability=implemented write=update_doc_name]; approval: reverse ETL plan, preview, explicit approval, execute; risk: high: runs Monday mutation update_doc_name; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_doc_name; no raw query text is accepted.; flags: --docid, --name
+    reverse update-dropdown-column - Planned Monday update_dropdown_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-dropdown-managed-column - Planned Monday update_dropdown_managed_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-email-domain - Planned Monday update_email_domain mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-favorite-position - Planned Monday update_favorite_position mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-folder - Planned Monday update_folder mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-form - Planned Monday update_form mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-form-question - Planned Monday update_form_question mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-form-settings - Planned Monday update_form_settings mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-group - Plan and execute Monday update_group [intent=reverse_etl availability=implemented write=update_group]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation update_group; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_group; no raw query text is accepted.; flags: --board-id, --group-id, --new-value
+    reverse update-multiple-users - Planned Monday update_multiple_users mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-mute-board-settings - Plan and execute Monday update_mute_board_settings [intent=reverse_etl availability=implemented write=update_mute_board_settings]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation update_mute_board_settings; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_mute_board_settings; no raw query text is accepted.; flags: --board-id
+    reverse update-object - Planned Monday update_object mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-object-schema - Plan and execute Monday update_object_schema [intent=reverse_etl availability=implemented write=update_object_schema]; approval: reverse ETL plan, preview, explicit approval, execute; type destructive to confirm; risk: high: runs Monday mutation update_object_schema; reverse ETL approval required; notes: Fixed GraphQL mutation document for update_object_schema; no raw query text is accepted.; flags: --id, --revision, --description
+    reverse update-object-schema-columns - Planned Monday update_object_schema_columns mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-overview-hierarchy - Planned Monday update_overview_hierarchy mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-status-column - Planned Monday update_status_column mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-users-role - Planned Monday update_users_role mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-validation-rule - Planned Monday update_validation_rule mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-view - Planned Monday update_view mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-view-table - Planned Monday update_view_table mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse update-workspace - Planned Monday update_workspace mutation [intent=reverse_etl availability=planned]; approval: blocked until a typed safe GraphQL input contract exists; no raw mutation execution; risk: planned high mutation; notes: Planned/blocked connector-local command metadata only.
+    reverse use-template - Plan and execute Monday use_template [intent=reverse_etl availability=implemented write=use_template]; approval: reverse ETL plan, preview, explicit approval, execute; risk: medium: runs Monday mutation use_template; reverse ETL approval required; notes: Fixed GraphQL mutation document for use_template; no raw query text is accepted.; flags: --template-id, --destination-workspace-id
+  Help topics:
+    monday safety - Monday reverse ETL uses plan -> preview -> explicit approval -> execute; destructive/admin commands require typed destructive confirmation.
+    monday sources - Operation metadata is generated from official developer.monday.com reference pages without live provider calls.
 
 EXAMPLES
   # Inspect as a manual
@@ -71,6 +752,7 @@ AGENT WORKFLOW
   - Run pm connectors inspect monday before creating credentials or plans.
   - Use --json only when the caller needs structured output; use the manual for human-readable guidance.
   - Never ask the user to paste secret values into chat.
+  - For reverse ETL writes, create a plan, show the preview, wait for explicit approval, then run with the approval token.
 
 EXIT STATUS
   0 success
