@@ -46,20 +46,6 @@
       "summary": "List download artifacts"
     },
     {
-      "approval": "blocked pending bounded file upload approval binding",
-      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
-      "file": {
-        "direction": "upload",
-        "max_bytes": 104857600
-      },
-      "id": "post_repositories_workspace_repo_slug_downloads",
-      "kind": "file_upload",
-      "output_policy": "none",
-      "risk": "high",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "summary": "Upload a download artifact"
-    },
-    {
       "approval": "blocked pending bounded binary executor; no generic download is exposed",
       "binary": {
         "max_bytes": 104857600,
@@ -199,21 +185,6 @@
       "binary": {
         "max_bytes": 104857600,
         "method": "GET",
-        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
-      },
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_test_cases",
-      "kind": "binary_download",
-      "output_policy": "binary_file_bounded",
-      "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "summary": "Get test cases for a given step of a pipeline."
-    },
-    {
-      "approval": "blocked pending bounded binary executor; no generic download is exposed",
-      "binary": {
-        "max_bytes": 104857600,
-        "method": "GET",
         "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases/{test_case_uuid}/test_case_reasons"
       },
       "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
@@ -223,6 +194,21 @@
       "risk": "medium",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get test case reasons (output) for a given test case in a step of a pipeline."
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/steps/{step_uuid}/test_reports/test_cases"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_repositories_workspace_repo_slug_pipelines_pipeline_uuid_steps_step_uuid_test_reports_test_cases",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get test cases for a given step of a pipeline."
     },
     {
       "approval": "blocked pending bounded binary executor; no generic download is exposed",
@@ -379,21 +365,6 @@
       "binary": {
         "max_bytes": 104857600,
         "method": "GET",
-        "path": "/snippets/{workspace}/{encoded_id}/watch"
-      },
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "id": "get_snippets_workspace_encoded_id_watch",
-      "kind": "binary_download",
-      "output_policy": "binary_file_bounded",
-      "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "summary": "Check if the current user is watching a snippet"
-    },
-    {
-      "approval": "blocked pending bounded binary executor; no generic download is exposed",
-      "binary": {
-        "max_bytes": 104857600,
-        "method": "GET",
         "path": "/snippets/{workspace}/{encoded_id}/{node_id}/files/{path}"
       },
       "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
@@ -435,6 +406,21 @@
       "summary": "Get snippet patch between versions"
     },
     {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_snippets_workspace_encoded_id_watch",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Check if the current user is watching a snippet"
+    },
+    {
       "approval": "blocked pending #2985 typed provider-query foundation",
       "description": "Provider search/query requires the shared typed provider-query boundary foundation (#2985); no raw query escape hatch is exposed.",
       "id": "get_teams_username_search_code",
@@ -469,21 +455,6 @@
       "binary": {
         "max_bytes": 104857600,
         "method": "GET",
-        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
-      },
-      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
-      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_well_known_openid_configuration",
-      "kind": "binary_download",
-      "output_policy": "binary_file_bounded",
-      "risk": "medium",
-      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
-      "summary": "Get OpenID configuration for OIDC in Pipelines"
-    },
-    {
-      "approval": "blocked pending bounded binary executor; no generic download is exposed",
-      "binary": {
-        "max_bytes": 104857600,
-        "method": "GET",
         "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/keys.json"
       },
       "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
@@ -493,6 +464,21 @@
       "risk": "medium",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get keys for OIDC in Pipelines"
+    },
+    {
+      "approval": "blocked pending bounded binary executor; no generic download is exposed",
+      "binary": {
+        "max_bytes": 104857600,
+        "method": "GET",
+        "path": "/workspaces/{workspace}/pipelines-config/identity/oidc/.well-known/openid-configuration"
+      },
+      "description": "Binary transfer requires a bounded direct/binary executor; this connector-local row records the official operation without exposing a generic byte stream.",
+      "id": "get_workspaces_workspace_pipelines_config_identity_oidc_well_known_openid_configuration",
+      "kind": "binary_download",
+      "output_policy": "binary_file_bounded",
+      "risk": "medium",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Get OpenID configuration for OIDC in Pipelines"
     },
     {
       "approval": "blocked pending #2985 typed provider-query foundation",
@@ -523,6 +509,20 @@
       "risk": "medium",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Get the workspace system GPG public key(s)"
+    },
+    {
+      "approval": "blocked pending bounded file upload approval binding",
+      "description": "File or multipart upload needs a bounded file-transfer foundation; this row is connector-local evidence and does not expose inline raw bytes.",
+      "file": {
+        "direction": "upload",
+        "max_bytes": 104857600
+      },
+      "id": "post_repositories_workspace_repo_slug_downloads",
+      "kind": "file_upload",
+      "output_policy": "none",
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Upload a download artifact"
     },
     {
       "approval": "blocked pending bounded file upload foundation plus destructive confirmation",
@@ -595,6 +595,737 @@
       "summary": "Create a workspace snippet with file bodies"
     },
     {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_branch_restrictions",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/branch-restrictions until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commit_commit_approve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/approve"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commit/{commit}/approve until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commit_commit_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commit/{commit}/comments until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commit_commit_reports_reportid_annotations",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commit_commit_statuses_build",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commits",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commits until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_commits_revision",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/commits/{revision}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/commits/{revision} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_deploy_keys",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/deploy-keys until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_environments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/environments until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_environments_environment_uuid_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/environments/{environment_uuid}/changes until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_forks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/forks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/forks until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_hooks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/hooks until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_issues",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/issues until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_issues_export",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/export"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/issues/export until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_issues_issue_id_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/changes until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_issues_issue_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines_config_runners",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines-config/runners until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines_config_schedules",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines_config/schedules until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines_config_ssh_known_hosts",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines_config/variables until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pipelines_pipeline_uuid_stoppipeline",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pipelines/{pipeline_uuid}/stopPipeline until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_approve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/approve until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id_resolve",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}/resolve until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_decline",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/decline until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_merge",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/merge until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_request_changes",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/request-changes until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_pullrequests_pull_request_id_tasks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_refs_branches",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/branches"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/refs/branches until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postrepositories_workspace_repo_slug_refs_tags",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/repositories/{workspace}/{repo_slug}/refs/tags"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /repositories/{workspace}/{repo_slug}/refs/tags until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postsnippets_workspace_encoded_id_comments",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/snippets/{workspace}/{encoded_id}/comments"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /snippets/{workspace}/{encoded_id}/comments until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postteams_username_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/teams/{username}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /teams/{username}/pipelines_config/variables until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postusers_selected_user_gpg_keys",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/users/{selected_user}/gpg-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /users/{selected_user}/gpg-keys until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postusers_selected_user_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/users/{selected_user}/pipelines_config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /users/{selected_user}/pipelines_config/variables until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postusers_selected_user_ssh_keys",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/users/{selected_user}/ssh-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /users/{selected_user}/ssh-keys until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postworkspaces_workspace_hooks",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/workspaces/{workspace}/hooks"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /workspaces/{workspace}/hooks until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postworkspaces_workspace_pipelines_config_runners",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/runners"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /workspaces/{workspace}/pipelines-config/runners until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postworkspaces_workspace_pipelines_config_variables",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/workspaces/{workspace}/pipelines-config/variables"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /workspaces/{workspace}/pipelines-config/variables until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postworkspaces_workspace_projects",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /workspaces/{workspace}/projects until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "postworkspaces_workspace_projects_project_key_deploy_keys",
+      "kind": "rest_write",
+      "mutation_class": "create",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "POST",
+        "path": "/workspaces/{workspace}/projects/{project_key}/deploy-keys"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked POST /workspaces/{workspace}/projects/{project_key}/deploy-keys until typed request evidence exists"
+    },
+    {
       "approval": "blocked pending bounded file upload approval binding",
       "description": "Snippet update uses multipart/file body content and remains non-executable until bounded file snapshots, byte caps, and approvals are available.",
       "file": {
@@ -621,6 +1352,771 @@
       "risk": "high",
       "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
       "summary": "Update a snippet file node"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_branch_restrictions_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branch-restrictions/{id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/branch-restrictions/{id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_branching_model_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/branching-model/settings"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/branching-model/settings until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_commit_commit_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/comments/{comment_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_commit_commit_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/properties/{app_key}/{property_name} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_commit_commit_reports_reportid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_commit_commit_reports_reportid_annotations_annotationid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/reports/{reportId}/annotations/{annotationId} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_commit_commit_statuses_build_key",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/commit/{commit}/statuses/build/{key} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_default_reviewers_target_username",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/default-reviewers/{target_username}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/default-reviewers/{target_username} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_deploy_keys_key_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deploy-keys/{key_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/deploy-keys/{key_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_deployments_config_environments_environment_uuid_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/deployments_config/environments/{environment_uuid}/variables/{variable_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_hooks_uid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/hooks/{uid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/hooks/{uid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_issues_issue_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_issues_issue_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/comments/{comment_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_issues_issue_id_vote",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/vote until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_issues_issue_id_watch",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/issues/{issue_id}/watch until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_override_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/override-settings"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/override-settings until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_permissions_config_groups_group_slug",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/permissions-config/groups/{group_slug} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_permissions_config_users_selected_user_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/permissions-config/users/{selected_user_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_build_number",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/build_number"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config/build_number until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_runners_runner_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines-config/runners/{runner_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_schedules_schedule_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config/schedules/{schedule_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_ssh_key_pair",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/key_pair until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_ssh_known_hosts_known_host_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config/ssh/known_hosts/{known_host_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pipelines_config/variables/{variable_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/properties/{app_key}/{property_name} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pullrequests_pull_request_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pullrequests_pull_request_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/comments/{comment_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pullrequests_pull_request_id_tasks_task_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pull_request_id}/tasks/{task_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putrepositories_workspace_repo_slug_pullrequests_pullrequest_id_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /repositories/{workspace}/{repo_slug}/pullrequests/{pullrequest_id}/properties/{app_key}/{property_name} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putsnippets_workspace_encoded_id_comments_comment_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/comments/{comment_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /snippets/{workspace}/{encoded_id}/comments/{comment_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putsnippets_workspace_encoded_id_watch",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/snippets/{workspace}/{encoded_id}/watch"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /snippets/{workspace}/{encoded_id}/watch until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putteams_username_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/teams/{username}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /teams/{username}/pipelines_config/variables/{variable_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putusers_selected_user_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/users/{selected_user}/pipelines_config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /users/{selected_user}/pipelines_config/variables/{variable_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putusers_selected_user_properties_app_key_property_name",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/users/{selected_user}/properties/{app_key}/{property_name}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /users/{selected_user}/properties/{app_key}/{property_name} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putusers_selected_user_ssh_keys_key_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/users/{selected_user}/ssh-keys/{key_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /users/{selected_user}/ssh-keys/{key_id} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_hooks_uid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/hooks/{uid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/hooks/{uid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_pipelines_config_runners_runner_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/runners/{runner_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/pipelines-config/runners/{runner_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_pipelines_config_variables_variable_uuid",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/pipelines-config/variables/{variable_uuid}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/pipelines-config/variables/{variable_uuid} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_projects_project_key",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/projects/{project_key} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_projects_project_key_branching_model_settings",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/branching-model/settings"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/projects/{project_key}/branching-model/settings until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_projects_project_key_default_reviewers_selected_user",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/projects/{project_key}/default-reviewers/{selected_user} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_projects_project_key_permissions_config_groups_group_slug",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/groups/{group_slug} until typed request evidence exists"
+    },
+    {
+      "approval": "blocked pending connector-local typed request schema, sanitized write fixture, and conformance request-shape evidence",
+      "description": "JSON mutation remains blocked because a path-only reverse-ETL action would not prove the request body contract or safe request shape.",
+      "id": "putworkspaces_workspace_projects_project_key_permissions_config_users_selected_user_id",
+      "kind": "rest_write",
+      "mutation_class": "update",
+      "output_policy": "none",
+      "rest": {
+        "content_type": "application/json",
+        "max_bytes": 1048576,
+        "method": "PUT",
+        "path": "/workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id}"
+      },
+      "risk": "high",
+      "source_url": "https://developer.atlassian.com/cloud/bitbucket/swagger.v3.json",
+      "summary": "Blocked PUT /workspaces/{workspace}/projects/{project_key}/permissions-config/users/{selected_user_id} until typed request evidence exists"
     }
   ]
 }

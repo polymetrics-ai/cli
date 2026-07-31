@@ -62,7 +62,7 @@ Evidence: `gh-axi issue edit` updated #79 and #90-#96 with marker `captain-polic
    - Add sanitized check, read, and write fixtures sufficient for conformance.
    - Document auth setup, streams, write risks, known limits, dependency blockers, and evidence.
 
-Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 145 rows are declarative streams, 151 rows are typed reverse-ETL writes, and 35 rows are blocked connector-local operation metadata for binary/provider-query/upload foundations. All 54 DELETE writes carry `confirm: "destructive"`.
+Implemented connector-local inventory summary: `api_surface.json` has 331 official rows (GET 179, POST 50, PUT 48, DELETE 54); 148 rows are declarative streams, 53 rows are typed reverse-ETL writes, and 130 rows are blocked connector-local operation metadata for binary/provider-query/upload or missing typed request-schema foundations. All executable DELETE writes carry `confirm: "destructive"`.
 
 5. **Verification and commit**
    - Red: focused validation fails before bundle files exist.
@@ -86,7 +86,7 @@ Implemented connector-local inventory summary: `api_surface.json` has 331 offici
 | Conformance | `go test ./internal/connectors/conformance -run 'TestConformance/bitbucket' -count=1` | passed |
 | CLI/golden targeted | `go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1` and `go test ./internal/cli -run 'TestConnectorCatalogCLIJSON|TestGoldenTranscripts|TestGoldenDocsGenerateMatchesTrackedCLIManuals|TestDocsGenerateIncludesConnectorCatalog' -count=1` | passed after generated golden/catalog docs updates |
 | Focused connector packages | `go test ./internal/connectors/engine ./internal/connectors/conformance -count=1` | passed |
-| Runtime help/inspect spot checks | `pm connectors inspect bitbucket --json`, `pm bitbucket --help`, `pm bitbucket repositories delete --help` via `go run ./cmd/pm` | passed; inspect reported 145 streams and 151 write actions, delete help shows destructive confirmation path |
+| Runtime help/inspect spot checks | `pm connectors inspect bitbucket --json`, `pm bitbucket --help`, `pm bitbucket repositories delete --help` via `go run ./cmd/pm` | passed; inspect reported 148 streams and 53 write actions, delete help shows destructive confirmation path |
 | Broad package attempts | `go test ./internal/connectors/...` timed out at 300s; `go test ./internal/cli -count=1` timed out at 240s with no failure output before timeout | incomplete broad gates; focused connector/CLI gates above passed |
 | Vet | `go vet ./internal/connectors/... ./internal/cli/...` | passed |
 | Build | `go build ./cmd/pm` | passed |

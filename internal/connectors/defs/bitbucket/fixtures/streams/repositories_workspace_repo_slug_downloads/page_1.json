@@ -1,0 +1,1419 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/downloads",
+    "query": {
+      "page": "1",
+      "pagelen": "100"
+    }
+  },
+  "response": {
+    "body": {
+      "page": 1,
+      "pagelen": 100,
+      "size": 101,
+      "values": [
+        {
+          "created_on": "2026-01-01T00:00:01Z",
+          "id": "download-001",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/1"
+            }
+          },
+          "name": "artifact-001.zip",
+          "size": 1025,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:01Z",
+          "uuid": "{fixture-download-001}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:02Z",
+          "id": "download-002",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/2"
+            }
+          },
+          "name": "artifact-002.zip",
+          "size": 1026,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:02Z",
+          "uuid": "{fixture-download-002}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:03Z",
+          "id": "download-003",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/3"
+            }
+          },
+          "name": "artifact-003.zip",
+          "size": 1027,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:03Z",
+          "uuid": "{fixture-download-003}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:04Z",
+          "id": "download-004",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/4"
+            }
+          },
+          "name": "artifact-004.zip",
+          "size": 1028,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:04Z",
+          "uuid": "{fixture-download-004}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:05Z",
+          "id": "download-005",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/5"
+            }
+          },
+          "name": "artifact-005.zip",
+          "size": 1029,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:05Z",
+          "uuid": "{fixture-download-005}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:06Z",
+          "id": "download-006",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/6"
+            }
+          },
+          "name": "artifact-006.zip",
+          "size": 1030,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:06Z",
+          "uuid": "{fixture-download-006}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:07Z",
+          "id": "download-007",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/7"
+            }
+          },
+          "name": "artifact-007.zip",
+          "size": 1031,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:07Z",
+          "uuid": "{fixture-download-007}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:08Z",
+          "id": "download-008",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/8"
+            }
+          },
+          "name": "artifact-008.zip",
+          "size": 1032,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:08Z",
+          "uuid": "{fixture-download-008}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:09Z",
+          "id": "download-009",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/9"
+            }
+          },
+          "name": "artifact-009.zip",
+          "size": 1033,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:09Z",
+          "uuid": "{fixture-download-009}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:10Z",
+          "id": "download-010",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/10"
+            }
+          },
+          "name": "artifact-010.zip",
+          "size": 1034,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:10Z",
+          "uuid": "{fixture-download-010}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:11Z",
+          "id": "download-011",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/11"
+            }
+          },
+          "name": "artifact-011.zip",
+          "size": 1035,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:11Z",
+          "uuid": "{fixture-download-011}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:12Z",
+          "id": "download-012",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/12"
+            }
+          },
+          "name": "artifact-012.zip",
+          "size": 1036,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:12Z",
+          "uuid": "{fixture-download-012}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:13Z",
+          "id": "download-013",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/13"
+            }
+          },
+          "name": "artifact-013.zip",
+          "size": 1037,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:13Z",
+          "uuid": "{fixture-download-013}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:14Z",
+          "id": "download-014",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/14"
+            }
+          },
+          "name": "artifact-014.zip",
+          "size": 1038,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:14Z",
+          "uuid": "{fixture-download-014}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:15Z",
+          "id": "download-015",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/15"
+            }
+          },
+          "name": "artifact-015.zip",
+          "size": 1039,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:15Z",
+          "uuid": "{fixture-download-015}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:16Z",
+          "id": "download-016",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/16"
+            }
+          },
+          "name": "artifact-016.zip",
+          "size": 1040,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:16Z",
+          "uuid": "{fixture-download-016}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:17Z",
+          "id": "download-017",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/17"
+            }
+          },
+          "name": "artifact-017.zip",
+          "size": 1041,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:17Z",
+          "uuid": "{fixture-download-017}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:18Z",
+          "id": "download-018",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/18"
+            }
+          },
+          "name": "artifact-018.zip",
+          "size": 1042,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:18Z",
+          "uuid": "{fixture-download-018}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:19Z",
+          "id": "download-019",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/19"
+            }
+          },
+          "name": "artifact-019.zip",
+          "size": 1043,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:19Z",
+          "uuid": "{fixture-download-019}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:20Z",
+          "id": "download-020",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/20"
+            }
+          },
+          "name": "artifact-020.zip",
+          "size": 1044,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:20Z",
+          "uuid": "{fixture-download-020}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:21Z",
+          "id": "download-021",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/21"
+            }
+          },
+          "name": "artifact-021.zip",
+          "size": 1045,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:21Z",
+          "uuid": "{fixture-download-021}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:22Z",
+          "id": "download-022",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/22"
+            }
+          },
+          "name": "artifact-022.zip",
+          "size": 1046,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:22Z",
+          "uuid": "{fixture-download-022}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:23Z",
+          "id": "download-023",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/23"
+            }
+          },
+          "name": "artifact-023.zip",
+          "size": 1047,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:23Z",
+          "uuid": "{fixture-download-023}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:24Z",
+          "id": "download-024",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/24"
+            }
+          },
+          "name": "artifact-024.zip",
+          "size": 1048,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:24Z",
+          "uuid": "{fixture-download-024}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:25Z",
+          "id": "download-025",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/25"
+            }
+          },
+          "name": "artifact-025.zip",
+          "size": 1049,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:25Z",
+          "uuid": "{fixture-download-025}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:26Z",
+          "id": "download-026",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/26"
+            }
+          },
+          "name": "artifact-026.zip",
+          "size": 1050,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:26Z",
+          "uuid": "{fixture-download-026}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:27Z",
+          "id": "download-027",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/27"
+            }
+          },
+          "name": "artifact-027.zip",
+          "size": 1051,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:27Z",
+          "uuid": "{fixture-download-027}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:28Z",
+          "id": "download-028",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/28"
+            }
+          },
+          "name": "artifact-028.zip",
+          "size": 1052,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:28Z",
+          "uuid": "{fixture-download-028}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:29Z",
+          "id": "download-029",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/29"
+            }
+          },
+          "name": "artifact-029.zip",
+          "size": 1053,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:29Z",
+          "uuid": "{fixture-download-029}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:30Z",
+          "id": "download-030",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/30"
+            }
+          },
+          "name": "artifact-030.zip",
+          "size": 1054,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:30Z",
+          "uuid": "{fixture-download-030}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:31Z",
+          "id": "download-031",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/31"
+            }
+          },
+          "name": "artifact-031.zip",
+          "size": 1055,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:31Z",
+          "uuid": "{fixture-download-031}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:32Z",
+          "id": "download-032",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/32"
+            }
+          },
+          "name": "artifact-032.zip",
+          "size": 1056,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:32Z",
+          "uuid": "{fixture-download-032}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:33Z",
+          "id": "download-033",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/33"
+            }
+          },
+          "name": "artifact-033.zip",
+          "size": 1057,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:33Z",
+          "uuid": "{fixture-download-033}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:34Z",
+          "id": "download-034",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/34"
+            }
+          },
+          "name": "artifact-034.zip",
+          "size": 1058,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:34Z",
+          "uuid": "{fixture-download-034}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:35Z",
+          "id": "download-035",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/35"
+            }
+          },
+          "name": "artifact-035.zip",
+          "size": 1059,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:35Z",
+          "uuid": "{fixture-download-035}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:36Z",
+          "id": "download-036",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/36"
+            }
+          },
+          "name": "artifact-036.zip",
+          "size": 1060,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:36Z",
+          "uuid": "{fixture-download-036}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:37Z",
+          "id": "download-037",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/37"
+            }
+          },
+          "name": "artifact-037.zip",
+          "size": 1061,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:37Z",
+          "uuid": "{fixture-download-037}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:38Z",
+          "id": "download-038",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/38"
+            }
+          },
+          "name": "artifact-038.zip",
+          "size": 1062,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:38Z",
+          "uuid": "{fixture-download-038}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:39Z",
+          "id": "download-039",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/39"
+            }
+          },
+          "name": "artifact-039.zip",
+          "size": 1063,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:39Z",
+          "uuid": "{fixture-download-039}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:40Z",
+          "id": "download-040",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/40"
+            }
+          },
+          "name": "artifact-040.zip",
+          "size": 1064,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:40Z",
+          "uuid": "{fixture-download-040}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:41Z",
+          "id": "download-041",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/41"
+            }
+          },
+          "name": "artifact-041.zip",
+          "size": 1065,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:41Z",
+          "uuid": "{fixture-download-041}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:42Z",
+          "id": "download-042",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/42"
+            }
+          },
+          "name": "artifact-042.zip",
+          "size": 1066,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:42Z",
+          "uuid": "{fixture-download-042}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:43Z",
+          "id": "download-043",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/43"
+            }
+          },
+          "name": "artifact-043.zip",
+          "size": 1067,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:43Z",
+          "uuid": "{fixture-download-043}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:44Z",
+          "id": "download-044",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/44"
+            }
+          },
+          "name": "artifact-044.zip",
+          "size": 1068,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:44Z",
+          "uuid": "{fixture-download-044}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:45Z",
+          "id": "download-045",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/45"
+            }
+          },
+          "name": "artifact-045.zip",
+          "size": 1069,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:45Z",
+          "uuid": "{fixture-download-045}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:46Z",
+          "id": "download-046",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/46"
+            }
+          },
+          "name": "artifact-046.zip",
+          "size": 1070,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:46Z",
+          "uuid": "{fixture-download-046}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:47Z",
+          "id": "download-047",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/47"
+            }
+          },
+          "name": "artifact-047.zip",
+          "size": 1071,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:47Z",
+          "uuid": "{fixture-download-047}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:48Z",
+          "id": "download-048",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/48"
+            }
+          },
+          "name": "artifact-048.zip",
+          "size": 1072,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:48Z",
+          "uuid": "{fixture-download-048}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:49Z",
+          "id": "download-049",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/49"
+            }
+          },
+          "name": "artifact-049.zip",
+          "size": 1073,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:49Z",
+          "uuid": "{fixture-download-049}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:50Z",
+          "id": "download-050",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/50"
+            }
+          },
+          "name": "artifact-050.zip",
+          "size": 1074,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:50Z",
+          "uuid": "{fixture-download-050}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:51Z",
+          "id": "download-051",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/51"
+            }
+          },
+          "name": "artifact-051.zip",
+          "size": 1075,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:51Z",
+          "uuid": "{fixture-download-051}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:52Z",
+          "id": "download-052",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/52"
+            }
+          },
+          "name": "artifact-052.zip",
+          "size": 1076,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:52Z",
+          "uuid": "{fixture-download-052}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:53Z",
+          "id": "download-053",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/53"
+            }
+          },
+          "name": "artifact-053.zip",
+          "size": 1077,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:53Z",
+          "uuid": "{fixture-download-053}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:54Z",
+          "id": "download-054",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/54"
+            }
+          },
+          "name": "artifact-054.zip",
+          "size": 1078,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:54Z",
+          "uuid": "{fixture-download-054}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:55Z",
+          "id": "download-055",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/55"
+            }
+          },
+          "name": "artifact-055.zip",
+          "size": 1079,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:55Z",
+          "uuid": "{fixture-download-055}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:56Z",
+          "id": "download-056",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/56"
+            }
+          },
+          "name": "artifact-056.zip",
+          "size": 1080,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:56Z",
+          "uuid": "{fixture-download-056}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:57Z",
+          "id": "download-057",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/57"
+            }
+          },
+          "name": "artifact-057.zip",
+          "size": 1081,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:57Z",
+          "uuid": "{fixture-download-057}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:58Z",
+          "id": "download-058",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/58"
+            }
+          },
+          "name": "artifact-058.zip",
+          "size": 1082,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:58Z",
+          "uuid": "{fixture-download-058}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:59Z",
+          "id": "download-059",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/59"
+            }
+          },
+          "name": "artifact-059.zip",
+          "size": 1083,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:59Z",
+          "uuid": "{fixture-download-059}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:00Z",
+          "id": "download-060",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/60"
+            }
+          },
+          "name": "artifact-060.zip",
+          "size": 1084,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:00Z",
+          "uuid": "{fixture-download-060}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:01Z",
+          "id": "download-061",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/61"
+            }
+          },
+          "name": "artifact-061.zip",
+          "size": 1085,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:01Z",
+          "uuid": "{fixture-download-061}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:02Z",
+          "id": "download-062",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/62"
+            }
+          },
+          "name": "artifact-062.zip",
+          "size": 1086,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:02Z",
+          "uuid": "{fixture-download-062}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:03Z",
+          "id": "download-063",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/63"
+            }
+          },
+          "name": "artifact-063.zip",
+          "size": 1087,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:03Z",
+          "uuid": "{fixture-download-063}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:04Z",
+          "id": "download-064",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/64"
+            }
+          },
+          "name": "artifact-064.zip",
+          "size": 1088,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:04Z",
+          "uuid": "{fixture-download-064}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:05Z",
+          "id": "download-065",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/65"
+            }
+          },
+          "name": "artifact-065.zip",
+          "size": 1089,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:05Z",
+          "uuid": "{fixture-download-065}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:06Z",
+          "id": "download-066",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/66"
+            }
+          },
+          "name": "artifact-066.zip",
+          "size": 1090,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:06Z",
+          "uuid": "{fixture-download-066}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:07Z",
+          "id": "download-067",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/67"
+            }
+          },
+          "name": "artifact-067.zip",
+          "size": 1091,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:07Z",
+          "uuid": "{fixture-download-067}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:08Z",
+          "id": "download-068",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/68"
+            }
+          },
+          "name": "artifact-068.zip",
+          "size": 1092,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:08Z",
+          "uuid": "{fixture-download-068}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:09Z",
+          "id": "download-069",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/69"
+            }
+          },
+          "name": "artifact-069.zip",
+          "size": 1093,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:09Z",
+          "uuid": "{fixture-download-069}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:10Z",
+          "id": "download-070",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/70"
+            }
+          },
+          "name": "artifact-070.zip",
+          "size": 1094,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:10Z",
+          "uuid": "{fixture-download-070}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:11Z",
+          "id": "download-071",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/71"
+            }
+          },
+          "name": "artifact-071.zip",
+          "size": 1095,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:11Z",
+          "uuid": "{fixture-download-071}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:12Z",
+          "id": "download-072",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/72"
+            }
+          },
+          "name": "artifact-072.zip",
+          "size": 1096,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:12Z",
+          "uuid": "{fixture-download-072}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:13Z",
+          "id": "download-073",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/73"
+            }
+          },
+          "name": "artifact-073.zip",
+          "size": 1097,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:13Z",
+          "uuid": "{fixture-download-073}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:14Z",
+          "id": "download-074",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/74"
+            }
+          },
+          "name": "artifact-074.zip",
+          "size": 1098,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:14Z",
+          "uuid": "{fixture-download-074}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:15Z",
+          "id": "download-075",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/75"
+            }
+          },
+          "name": "artifact-075.zip",
+          "size": 1099,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:15Z",
+          "uuid": "{fixture-download-075}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:16Z",
+          "id": "download-076",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/76"
+            }
+          },
+          "name": "artifact-076.zip",
+          "size": 1100,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:16Z",
+          "uuid": "{fixture-download-076}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:17Z",
+          "id": "download-077",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/77"
+            }
+          },
+          "name": "artifact-077.zip",
+          "size": 1101,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:17Z",
+          "uuid": "{fixture-download-077}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:18Z",
+          "id": "download-078",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/78"
+            }
+          },
+          "name": "artifact-078.zip",
+          "size": 1102,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:18Z",
+          "uuid": "{fixture-download-078}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:19Z",
+          "id": "download-079",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/79"
+            }
+          },
+          "name": "artifact-079.zip",
+          "size": 1103,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:19Z",
+          "uuid": "{fixture-download-079}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:20Z",
+          "id": "download-080",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/80"
+            }
+          },
+          "name": "artifact-080.zip",
+          "size": 1104,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:20Z",
+          "uuid": "{fixture-download-080}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:21Z",
+          "id": "download-081",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/81"
+            }
+          },
+          "name": "artifact-081.zip",
+          "size": 1105,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:21Z",
+          "uuid": "{fixture-download-081}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:22Z",
+          "id": "download-082",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/82"
+            }
+          },
+          "name": "artifact-082.zip",
+          "size": 1106,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:22Z",
+          "uuid": "{fixture-download-082}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:23Z",
+          "id": "download-083",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/83"
+            }
+          },
+          "name": "artifact-083.zip",
+          "size": 1107,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:23Z",
+          "uuid": "{fixture-download-083}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:24Z",
+          "id": "download-084",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/84"
+            }
+          },
+          "name": "artifact-084.zip",
+          "size": 1108,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:24Z",
+          "uuid": "{fixture-download-084}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:25Z",
+          "id": "download-085",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/85"
+            }
+          },
+          "name": "artifact-085.zip",
+          "size": 1109,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:25Z",
+          "uuid": "{fixture-download-085}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:26Z",
+          "id": "download-086",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/86"
+            }
+          },
+          "name": "artifact-086.zip",
+          "size": 1110,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:26Z",
+          "uuid": "{fixture-download-086}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:27Z",
+          "id": "download-087",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/87"
+            }
+          },
+          "name": "artifact-087.zip",
+          "size": 1111,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:27Z",
+          "uuid": "{fixture-download-087}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:28Z",
+          "id": "download-088",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/88"
+            }
+          },
+          "name": "artifact-088.zip",
+          "size": 1112,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:28Z",
+          "uuid": "{fixture-download-088}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:29Z",
+          "id": "download-089",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/89"
+            }
+          },
+          "name": "artifact-089.zip",
+          "size": 1113,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:29Z",
+          "uuid": "{fixture-download-089}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:30Z",
+          "id": "download-090",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/90"
+            }
+          },
+          "name": "artifact-090.zip",
+          "size": 1114,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:30Z",
+          "uuid": "{fixture-download-090}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:31Z",
+          "id": "download-091",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/91"
+            }
+          },
+          "name": "artifact-091.zip",
+          "size": 1115,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:31Z",
+          "uuid": "{fixture-download-091}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:32Z",
+          "id": "download-092",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/92"
+            }
+          },
+          "name": "artifact-092.zip",
+          "size": 1116,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:32Z",
+          "uuid": "{fixture-download-092}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:33Z",
+          "id": "download-093",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/93"
+            }
+          },
+          "name": "artifact-093.zip",
+          "size": 1117,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:33Z",
+          "uuid": "{fixture-download-093}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:34Z",
+          "id": "download-094",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/94"
+            }
+          },
+          "name": "artifact-094.zip",
+          "size": 1118,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:34Z",
+          "uuid": "{fixture-download-094}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:35Z",
+          "id": "download-095",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/95"
+            }
+          },
+          "name": "artifact-095.zip",
+          "size": 1119,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:35Z",
+          "uuid": "{fixture-download-095}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:36Z",
+          "id": "download-096",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/96"
+            }
+          },
+          "name": "artifact-096.zip",
+          "size": 1120,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:36Z",
+          "uuid": "{fixture-download-096}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:37Z",
+          "id": "download-097",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/97"
+            }
+          },
+          "name": "artifact-097.zip",
+          "size": 1121,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:37Z",
+          "uuid": "{fixture-download-097}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:38Z",
+          "id": "download-098",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/98"
+            }
+          },
+          "name": "artifact-098.zip",
+          "size": 1122,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:38Z",
+          "uuid": "{fixture-download-098}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:39Z",
+          "id": "download-099",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/99"
+            }
+          },
+          "name": "artifact-099.zip",
+          "size": 1123,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:39Z",
+          "uuid": "{fixture-download-099}"
+        },
+        {
+          "created_on": "2026-01-01T00:00:40Z",
+          "id": "download-100",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/downloads/100"
+            }
+          },
+          "name": "artifact-100.zip",
+          "size": 1124,
+          "type": "download",
+          "updated_on": "2026-01-02T00:00:40Z",
+          "uuid": "{fixture-download-100}"
+        }
+      ]
+    }
+  }
+}

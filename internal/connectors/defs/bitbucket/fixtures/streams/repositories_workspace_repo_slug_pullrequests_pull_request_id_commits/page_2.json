@@ -1,0 +1,37 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/repositories/synthetic-conformance-value/synthetic-conformance-value/pullrequests/synthetic-conformance-value/commits",
+    "query": {
+      "page": "2",
+      "pagelen": "100"
+    }
+  },
+  "response": {
+    "body": {
+      "page": 2,
+      "pagelen": 100,
+      "size": 101,
+      "values": [
+        {
+          "author": {
+            "raw": "Fixture Author 101 <fixture-101@example.invalid>"
+          },
+          "date": "2026-01-03T00:00:41Z",
+          "hash": "commit-hash-fixture-101",
+          "links": {
+            "self": {
+              "href": "https://bitbucket.example.invalid/commits/101"
+            }
+          },
+          "message": "Fixture commit 101",
+          "parents": [],
+          "summary": {
+            "raw": "Fixture commit 101"
+          },
+          "type": "commit"
+        }
+      ]
+    }
+  }
+}

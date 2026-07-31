@@ -514,6 +514,24 @@
     },
     {
       "method": "GET",
+      "name": "repositories_workspace_repo_slug_downloads",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/downloads",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_downloads.json"
+    },
+    {
+      "method": "GET",
       "name": "repositories_workspace_repo_slug_effective_branching_model",
       "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/effective-branching-model",
       "projection": "passthrough",
@@ -1160,6 +1178,42 @@
         "single_object": true
       },
       "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_commits",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/commits",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_commits.json"
+    },
+    {
+      "method": "GET",
+      "name": "repositories_workspace_repo_slug_pullrequests_pull_request_id_diffstat",
+      "pagination": {
+        "max_pages": 100,
+        "page_param": "page",
+        "page_size": 100,
+        "size_param": "pagelen",
+        "start_page": 1,
+        "type": "page_number"
+      },
+      "path": "/repositories/{{ config.workspace }}/{{ config.repo_slug }}/pullrequests/{{ config.pull_request_id }}/diffstat",
+      "projection": "passthrough",
+      "records": {
+        "path": "values"
+      },
+      "schema": "schemas/repositories_workspace_repo_slug_pullrequests_pull_request_id_diffstat.json"
     },
     {
       "method": "GET",
