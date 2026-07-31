@@ -87177,7 +87177,7 @@
   {
     "name": "monday",
     "display_name": "Monday",
-    "description": "Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API. Read-only.",
+    "description": "Reads monday.com GraphQL streams and bounded query operations; models typed Monday GraphQL mutations for reverse ETL through named actions with approval gates.",
     "integration_type": "api",
     "docs_url": "https://developer.monday.com/api-reference/docs",
     "release_stage": "ga",
@@ -87185,7 +87185,7 @@
       "check": true,
       "catalog": true,
       "read": true,
-      "write": false,
+      "write": true,
       "query": false
     },
     "spec": {
@@ -87288,9 +87288,781 @@
         ]
       }
     ],
+    "write_actions": [
+      {
+        "name": "activate_form",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation activate_form; reverse ETL approval required"
+      },
+      {
+        "name": "activate_managed_column",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation activate_managed_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "add_content_to_doc_from_markdown",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation add_content_to_doc_from_markdown; reverse ETL approval required"
+      },
+      {
+        "name": "add_required_column",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation add_required_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_board",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation archive_board; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_group",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation archive_group; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_item",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation archive_item; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "archive_object",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation archive_object; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "assign_department_owner",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation assign_department_owner; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "attach_status_managed_column",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation attach_status_managed_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "backfill_items",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation backfill_items; reverse ETL approval required"
+      },
+      {
+        "name": "change_column_metadata",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_column_metadata; reverse ETL approval required"
+      },
+      {
+        "name": "change_column_title",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_column_title; reverse ETL approval required"
+      },
+      {
+        "name": "change_column_value",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_column_value; reverse ETL approval required"
+      },
+      {
+        "name": "change_item_position",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_item_position; reverse ETL approval required"
+      },
+      {
+        "name": "change_multiple_column_values",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_multiple_column_values; reverse ETL approval required"
+      },
+      {
+        "name": "change_simple_column_value",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation change_simple_column_value; reverse ETL approval required"
+      },
+      {
+        "name": "clear_item_updates",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation clear_item_updates; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "configure_extract_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_extract_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_improve_text_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_improve_text_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_open_block_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_open_block_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_person_assignment_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_person_assignment_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_summarize_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_summarize_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_translate_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_translate_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "configure_write_me_ai_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation configure_write_me_ai_column; reverse ETL approval required"
+      },
+      {
+        "name": "connect_board_to_object_schema",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation connect_board_to_object_schema; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "connect_project_to_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation connect_project_to_portfolio; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_app_feature",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_app_feature; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_article",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_article; reverse ETL approval required"
+      },
+      {
+        "name": "create_column",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_column; reverse ETL approval required"
+      },
+      {
+        "name": "create_custom_activity",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_custom_activity; reverse ETL approval required"
+      },
+      {
+        "name": "create_doc_block",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation create_doc_block; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_folder",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_folder; reverse ETL approval required"
+      },
+      {
+        "name": "create_form",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_form; reverse ETL approval required"
+      },
+      {
+        "name": "create_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_group; reverse ETL approval required"
+      },
+      {
+        "name": "create_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_item; reverse ETL approval required"
+      },
+      {
+        "name": "create_notification",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_notification; reverse ETL approval required"
+      },
+      {
+        "name": "create_object_schema",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_object_schema; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_or_get_tag",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_or_get_tag; reverse ETL approval required"
+      },
+      {
+        "name": "create_portfolio",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_portfolio; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_subitem",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_subitem; reverse ETL approval required"
+      },
+      {
+        "name": "create_view_table",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation create_view_table; reverse ETL approval required"
+      },
+      {
+        "name": "create_webhook",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_webhook; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "create_workspace",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation create_workspace; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deactivate_form",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation deactivate_form; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "deactivate_managed_column",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation deactivate_managed_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_app_lifecycle_subscription",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_app_lifecycle_subscription; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_article",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_article; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_board",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_board; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_column",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_custom_activity",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_custom_activity; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_dashboard",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_dashboard; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_department",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_department; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_doc",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_doc; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_doc_block",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_doc_block; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_folder",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_folder; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_group",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_group; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_item",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_item; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_managed_column",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_managed_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_marketplace_app_discount",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_marketplace_app_discount; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_object",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_object; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_object_relation",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_object_relation; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_object_schema",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_object_schema; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_question",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_question; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_team",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_team; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_timeline_item",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_timeline_item; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_update",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_update; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_validation_rule",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_validation_rule; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_view",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_view; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_webhook",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_webhook; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_widget",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_widget; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "delete_workspace",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation delete_workspace; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "duplicate_board",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation duplicate_board; reverse ETL approval required"
+      },
+      {
+        "name": "duplicate_doc",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation duplicate_doc; reverse ETL approval required"
+      },
+      {
+        "name": "duplicate_group",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation duplicate_group; reverse ETL approval required"
+      },
+      {
+        "name": "duplicate_item",
+        "kind": "create",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation duplicate_item; reverse ETL approval required"
+      },
+      {
+        "name": "edit_update",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation edit_update; reverse ETL approval required"
+      },
+      {
+        "name": "import_doc_from_html",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation import_doc_from_html; reverse ETL approval required"
+      },
+      {
+        "name": "increase_app_subscription_operations",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation increase_app_subscription_operations; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "like_update",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation like_update; reverse ETL approval required"
+      },
+      {
+        "name": "move_item_to_group",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation move_item_to_group; reverse ETL approval required"
+      },
+      {
+        "name": "pin_to_top",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation pin_to_top; reverse ETL approval required"
+      },
+      {
+        "name": "promote_app",
+        "kind": "custom",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation promote_app; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_ai_from_column",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation remove_ai_from_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_mock_app_subscription",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation remove_mock_app_subscription; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "remove_required_column",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation remove_required_column; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_board_permission",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation set_board_permission; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_item_description_content",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation set_item_description_content; reverse ETL approval required"
+      },
+      {
+        "name": "set_mock_app_subscription",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation set_mock_app_subscription; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "set_object_schema_column_active_state",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation set_object_schema_column_active_state; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "shorten_form_url",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation shorten_form_url; reverse ETL approval required"
+      },
+      {
+        "name": "unlike_update",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation unlike_update; reverse ETL approval required"
+      },
+      {
+        "name": "unpin_from_top",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation unpin_from_top; reverse ETL approval required"
+      },
+      {
+        "name": "update_board",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation update_board; reverse ETL approval required"
+      },
+      {
+        "name": "update_column",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation update_column; reverse ETL approval required"
+      },
+      {
+        "name": "update_dashboard",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation update_dashboard; reverse ETL approval required"
+      },
+      {
+        "name": "update_doc_block",
+        "kind": "delete",
+        "method": "POST",
+        "path": "",
+        "risk": "critical: runs Monday mutation update_doc_block; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "update_doc_name",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation update_doc_name; reverse ETL approval required"
+      },
+      {
+        "name": "update_group",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation update_group; reverse ETL approval required"
+      },
+      {
+        "name": "update_mute_board_settings",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation update_mute_board_settings; reverse ETL approval required"
+      },
+      {
+        "name": "update_object_schema",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "high: runs Monday mutation update_object_schema; reverse ETL approval required",
+        "confirm": "destructive"
+      },
+      {
+        "name": "use_template",
+        "kind": "update",
+        "method": "POST",
+        "path": "",
+        "risk": "medium: runs Monday mutation use_template; reverse ETL approval required"
+      }
+    ],
     "risk": {
-      "read": "external monday.com GraphQL API read of boards/items/users/teams/tags",
-      "approval": "none; read-only source connector"
+      "read": "external monday.com GraphQL API reads; direct query commands use fixed documents, bounded response bytes, and redacted JSON output",
+      "write": "typed monday.com GraphQL mutations through named reverse-ETL actions only; complex-input mutations remain planned/blocked instead of raw GraphQL",
+      "approval": "reverse ETL writes require plan -\u003e preview -\u003e explicit approval -\u003e execute; destructive/admin actions require typed destructive confirmation"
     },
     "icon": {
       "id": "monday",

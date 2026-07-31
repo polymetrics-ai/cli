@@ -1,0 +1,1 @@
+connectorgen validate: 549 connector(s) checked, 0 findings

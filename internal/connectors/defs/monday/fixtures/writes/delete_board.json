@@ -1,0 +1,25 @@
+{
+  "record": {
+    "board_id": "1234567890"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "operationName": "Monday_delete_board",
+      "variables": {
+        "board_id": "1234567890"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": {
+        "delete_board": {
+          "id": "fixture_result"
+        }
+      }
+    }
+  }
+}

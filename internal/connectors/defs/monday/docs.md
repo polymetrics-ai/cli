@@ -1,75 +1,43 @@
 # Overview
 
-Reads monday.com boards, items, users, teams, and tags through the monday.com GraphQL API.
-Read-only.
+The Monday connector reads monday.com GraphQL data and exposes connector-owned metadata for the official monday.com GraphQL reference. Existing ETL streams remain `boards`, `items`, `users`, `teams`, and `tags`. Additional documented query operations are represented as fixed, bounded direct-query commands when the current connector runtime can safely execute their scalar inputs; complex query shapes remain planned/blocked with source evidence.
 
-Readable streams: `boards`, `items`, `users`, `teams`, `tags`.
-
-This connector is read-only; no write actions are declared.
-
-Service API documentation: https://developer.monday.com/api-reference/docs.
+This bundle now records 254 official docs operations from the developer.monday.com sitemap/reference pages: 66 queries and 188 mutations. The parent issue's r3 audit records 292 operations from `monday_graphql_schema_current`; this worker did not fetch `https://api.monday.com/v2/get_schema` because the task forbids live provider calls, so schema-only operations not present in public docs pages remain a recorded source dependency, not fabricated rows.
 
 ## Auth setup
 
 Connection fields:
 
-- `access_token` (optional, secret, string); monday.com OAuth access token, sent verbatim (no Bearer
-  prefix) as the Authorization header. Provide either api_token or access_token.
-- `api_token` (optional, secret, string); monday.com personal API token, sent verbatim (no Bearer
-  prefix) as the Authorization header. Provide either api_token or access_token.
-- `api_version` (optional, string); Optional monday.com API-Version header value (e.g. 2024-01).
-  Omitted entirely when unset.
-- `base_url` (optional, string); default `https://api.monday.com/v2`; format `uri`; monday.com
-  GraphQL API base URL override for tests or proxies. Defaults to https://api.monday.com/v2.
-- `max_pages` (optional, string); Permissive parse, never errors: an empty value, "all",
-  "unlimited", or any non-positive-integer string means unbounded (0, the same as leaving this
-  unset); a positive integer string caps the page count at that value. Was previously consumed by
-  the hook but undeclared here (a dead-config-surface gap the S3 engine mini-wave carried-minor
-  cleanup closed) - see docs.md Known limits.
-- `page_size` (optional, string); default `50`; Records per GraphQL page (1-500).
+- `api_token` (optional, secret): monday.com personal API token sent verbatim as the `Authorization` header.
+- `access_token` (optional, secret): monday.com OAuth access token sent verbatim as the `Authorization` header.
+- `api_version` (optional): sent as the `API-Version` header when configured.
+- `base_url` (optional): defaults to `https://api.monday.com/v2`; used by fixture replay and proxies.
+- `page_size` (optional): defaults to `50` for hook-backed streams.
+- `max_pages` (optional): positive integer cap for hook-backed stream pagination; empty, `all`, `unlimited`, or non-positive values mean unbounded up to the hook safety cap.
 
-Secret fields are redacted in logs and write previews: `access_token`, `api_token`.
-
-Default configuration values: `base_url=https://api.monday.com/v2`, `page_size=50`.
-
-Authentication behavior:
-
-- API key authentication in `Authorization` using `secrets.api_token` when `{{ secrets.api_token
-  }}`.
-- API key authentication in `Authorization` using `secrets.access_token` when `{{
-  secrets.access_token }}`.
-- No authentication: requests fall back to unauthenticated only when both `api_token` and
-  `access_token` are absent; unauthenticated requests fail with a 401.
-
-Requests use the configured `base_url` value after applying defaults.
-
-Connection checks use a connector-managed request.
+Never pass token values in chat, CLI arguments, docs, fixtures, or logs. Use environment variables or stdin-backed credential loading.
 
 ## Streams notes
 
-All stream reads are GraphQL POST requests with pagination state carried in the request body:
-`boards`/`users`/`teams`/`tags` use page-number pagination (`limit`/`page`), while `items` uses
-cursor pagination (`limit`/`cursor`).
+The five legacy-parity ETL streams are still handled by the Monday StreamHook because monday.com carries pagination state inside GraphQL POST bodies:
 
-Reads are always full syncs: cursor fields are advertised in the catalog but are not used to
-filter or advance reads.
+- `boards`, `users`, `teams`, and `tags` use page-number pagination.
+- `items` uses `boards { items_page }` followed by `next_items_page` cursor pagination.
 
-- `boards`: POST connector-managed request path - records path `data.boards`; catalog cursor
-  `updated_at`; formatted as `rfc3339`.
-- `items`: POST connector-managed request path - records path `data.next_items_page.items`;
-  catalog cursor `updated_at`; formatted as `rfc3339`.
-- `users`: POST connector-managed request path - records path `data.users`.
-- `teams`: POST connector-managed request path - records path `data.teams`.
-- `tags`: POST connector-managed request path - records path `data.tags`.
+Additional docs-sourced query operations are modeled in `operations.json` and `cli_surface.json`. Commands with scalar-only arguments can run as bounded fixed-document direct reads through the existing operation direct-read path. Operations with array/object GraphQL arguments stay planned/blocked until a connector-local or shared typed variable contract can pass those inputs without becoming a raw GraphQL escape hatch.
 
 ## Write actions & risks
 
-This connector is read-only. Read behavior: external monday.com GraphQL API read of
-boards/items/users/teams/tags.
+Monday reverse ETL is enabled only through named GraphQL write actions in `writes.json`; no arbitrary GraphQL document, method, path, or body command is exposed. This bundle declares 102 executable scalar-input mutation actions and keeps 86 complex/binary-input mutations planned/blocked with source evidence.
+
+Every write action uses a fixed GraphQL mutation document, a draft-07 record schema, and the existing reverse ETL safety path: plan -> preview -> explicit approval -> execute. Destructive/admin/delete-class actions (for example `delete_board`) set `confirm: "destructive"` so execution requires typed destructive confirmation in addition to approval.
+
+Representative fixtures under `fixtures/writes/` prove the GraphQL request shape for `update_board` and destructive `delete_board` without contacting monday.com.
 
 ## Known limits
 
-- Batch defaults: read_page_size=50.
-- API coverage includes 5 stream-backed endpoint group(s).
-- Other documented endpoints are not exposed by this connector where they are classified as
-  non_data_endpoint=1, out_of_scope=2.
+- No live monday.com provider calls, credentials, writes, or certification were performed for this parity slice.
+- The live `/v2/get_schema` source named by #82 was not fetched under the no-live-provider-call gate. The public docs reference inventory currently yields 254 operations, while #82 preserves the previous r3 count of 292; this count divergence is recorded for firstmate/human reconciliation.
+- Complex GraphQL input objects, arrays, and multipart/binary file uploads are not passed through scalar template variables by the existing write/direct-read foundations. Those operations are present as planned/blocked rows instead of an unsafe generic GraphQL or file-upload escape hatch.
+- Direct query command output is capped and redacted with `json_redacted`; binary/file-like operations remain planned/blocked unless represented by a bounded fixed operation.
+- Fixture evidence is not live certification. Certification remains a separate human-gated lane.

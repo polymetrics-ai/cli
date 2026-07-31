@@ -1,0 +1,1 @@
+Validated connector docs in docs/connectors

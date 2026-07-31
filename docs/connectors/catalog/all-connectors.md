@@ -294,7 +294,7 @@
 | `mixmax` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mixmax | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.mixmax.com/) | bundle definition |
 | `mixpanel` | [`icons/mixpanel.svg`](../icons/mixpanel.svg) | Mixpanel | `api` | ga | check, catalog, read | 10 | 0 | [Documentation](https://developer.mixpanel.com/reference/overview) | bundle definition |
 | `mode` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mode | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://mode.com/developer/api-reference/) | bundle definition |
-| `monday` | [`icons/monday.svg`](../icons/monday.svg) | Monday | `api` | ga | check, catalog, read | 5 | 0 | [Documentation](https://developer.monday.com/api-reference/docs) | bundle definition |
+| `monday` | [`icons/monday.svg`](../icons/monday.svg) | Monday | `api` | ga | check, catalog, read, write | 5 | 102 | [Documentation](https://developer.monday.com/api-reference/docs) | bundle definition |
 | `mux` | [`icons/pm-sample.svg`](../icons/pm-sample.svg) | Mux | `api` | ga | check, catalog, read | 4 | 0 | [Documentation](https://docs.mux.com/api-reference) | bundle definition |
 | `my-hours` | [`icons/my-hours.svg`](../icons/my-hours.svg) | My Hours | `api` | alpha | check, catalog, read | 5 | 0 | [Documentation](https://myhours.com/api) | bundle definition |
 | `n8n` | [`icons/n8n.svg`](../icons/n8n.svg) | n8n | `api` | ga | check, catalog, read, write | 21 | 29 | [Documentation](https://docs.n8n.io/connect/n8n-api/api-reference) | bundle definition |

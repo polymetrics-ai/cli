@@ -1,0 +1,62 @@
+{
+  "issue": 82,
+  "branch": "fm/cli-monday-parity-wave02-r1",
+  "status": "implemented_pending_commit",
+  "workflow": {
+    "worktree_isolation_verified": true,
+    "no_mistakes_doctor": "passed",
+    "gsd_programming_loop": "manual_fallback_unknown_command",
+    "skills_used": [
+      "gsd-core",
+      "golang-how-to",
+      "golang-cli",
+      "golang-testing",
+      "golang-error-handling",
+      "golang-security",
+      "golang-safety",
+      "golang-documentation",
+      "golang-design-patterns",
+      "golang-structs-interfaces",
+      "golang-graphql",
+      "context-mode"
+    ]
+  },
+  "issue_updates": {
+    "tool": "gh-axi",
+    "issues": [82, 111, 112, 113, 114, 115, 116, 117],
+    "marker": "captain-policy-monday-parity-wave02-r1",
+    "verified_marker_count_each": 1
+  },
+  "monday_inventory": {
+    "source": "developer.monday.com sitemap/reference pages",
+    "live_schema_get_schema_called": false,
+    "documented_operations": 254,
+    "queries": 66,
+    "mutations": 188,
+    "parent_issue_live_schema_count": 292,
+    "reconciliation": "schema-only names absent from public docs inventory are recorded as source-blocked/uninvented under the no-live-provider-call gate"
+  },
+  "implementation": {
+    "streams": 5,
+    "bounded_direct_read_commands": 51,
+    "write_actions": 102,
+    "blocked_queries": 10,
+    "blocked_mutations": 86,
+    "destructive_confirmation": "confirm: destructive on destructive/admin delete/archive/remove/clear-style executable writes",
+    "raw_escape_hatches_exposed": false
+  },
+  "verification_summary": {
+    "connectorgen_validate_defs": "passed",
+    "monday_conformance": "passed",
+    "connectorgen_tests": "passed",
+    "focused_internal_cli_docs_help_golden": "passed",
+    "go_vet_targeted": "passed",
+    "go_vet_all": "passed",
+    "go_test_all_timeout20m": "passed",
+    "go_build_pm": "passed",
+    "connector_boundary": "passed",
+    "git_diff_check": "passed",
+    "docs_validate": "passed",
+    "make_verify": "passed"
+  }
+}
