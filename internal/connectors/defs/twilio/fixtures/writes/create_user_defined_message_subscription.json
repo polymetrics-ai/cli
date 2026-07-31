@@ -1,0 +1,15 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "Callback": "fixture_value",
+    "IdempotencyKey": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/UserDefinedMessageSubscriptions.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

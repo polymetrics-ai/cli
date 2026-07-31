@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/Queues/synthetic-conformance-value/Members/synthetic-conformance-value.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "call_sid": "fixture_sid"
+    }
+  }
+}

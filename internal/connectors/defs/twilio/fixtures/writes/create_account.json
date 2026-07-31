@@ -1,0 +1,13 @@
+{
+  "record": {
+    "FriendlyName": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "record": {
+    "sid": "fixture_sid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/Accounts/synthetic-conformance-secret/IncomingPhoneNumbers/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

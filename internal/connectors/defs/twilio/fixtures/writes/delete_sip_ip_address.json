@@ -1,0 +1,14 @@
+{
+  "record": {
+    "ip_access_control_list_sid": "fixture_sid",
+    "sid": "fixture_sid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/IpAccessControlLists/fixture_sid/IpAddresses/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

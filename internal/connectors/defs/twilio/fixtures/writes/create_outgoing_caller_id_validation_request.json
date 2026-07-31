@@ -1,0 +1,14 @@
+{
+  "record": {
+    "PhoneNumber": "+15550100000",
+    "FriendlyName": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/OutgoingCallerIds.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

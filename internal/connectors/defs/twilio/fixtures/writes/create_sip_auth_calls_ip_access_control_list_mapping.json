@@ -1,0 +1,14 @@
+{
+  "record": {
+    "domain_sid": "fixture_sid",
+    "IpAccessControlListSid": "fixture_sid"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/Domains/fixture_sid/Auth/Calls/IpAccessControlListMappings.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

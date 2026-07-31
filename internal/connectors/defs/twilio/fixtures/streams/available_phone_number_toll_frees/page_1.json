@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/AvailablePhoneNumbers/synthetic-conformance-value/TollFree.json",
+    "query": {
+      "Page": "0",
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 1,
+      "available_phone_numbers": [
+        {
+          "phone_number": "+15550100000"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "record": {
+    "conference_sid": "fixture_sid",
+    "call_sid": "fixture_sid",
+    "Muted": true
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences/fixture_sid/Participants/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

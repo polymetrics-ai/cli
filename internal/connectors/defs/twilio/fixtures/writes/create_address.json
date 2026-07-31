@@ -1,0 +1,19 @@
+{
+  "record": {
+    "CustomerName": "fixture_value",
+    "Street": "fixture_value",
+    "City": "fixture_value",
+    "Region": "fixture_value",
+    "PostalCode": "fixture_value",
+    "IsoCountry": "fixture_value",
+    "FriendlyName": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Addresses.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

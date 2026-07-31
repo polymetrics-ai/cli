@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/CredentialLists/synthetic-conformance-value/Credentials.json",
+    "query": {
+      "Page": "0",
+      "PageSize": "50"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "next_page_uri": null,
+      "page": 0,
+      "page_size": 1,
+      "credentials": [
+        {
+          "sid": "fixture_sid"
+        }
+      ]
+    }
+  }
+}

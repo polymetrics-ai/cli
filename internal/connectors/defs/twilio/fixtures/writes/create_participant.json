@@ -1,0 +1,16 @@
+{
+  "record": {
+    "conference_sid": "fixture_sid",
+    "From": "+15550100000",
+    "To": "+15550100000",
+    "StatusCallback": "active"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences/fixture_sid/Participants.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

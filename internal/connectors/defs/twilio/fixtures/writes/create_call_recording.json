@@ -1,0 +1,14 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "RecordingStatusCallbackEvent": []
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/Recordings.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

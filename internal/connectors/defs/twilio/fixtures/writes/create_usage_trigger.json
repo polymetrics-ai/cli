@@ -1,0 +1,16 @@
+{
+  "record": {
+    "CallbackUrl": "https://example.invalid/twilio/fixture",
+    "TriggerValue": "fixture_value",
+    "UsageCategory": "fixture_value",
+    "CallbackMethod": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Usage/Triggers.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

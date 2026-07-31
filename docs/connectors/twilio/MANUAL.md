@@ -375,6 +375,7 @@ REVERSE ETL ACTIONS
     risk: creates Twilio account resources in the connected account; approval required
   create_address:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Addresses.json
+    required fields: CustomerName, Street, City, Region, PostalCode, IsoCountry
     risk: creates Twilio address resources in the connected account; approval required
   delete_address:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Addresses/{{ record.sid }}.json
@@ -397,14 +398,15 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio application resources in the connected account; approval required
   create_call:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls.json
+    required fields: To, From
     risk: creates Twilio call resources in the connected account; approval required
   create_payments:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments.json
-    required fields: call_sid
+    required fields: call_sid, IdempotencyKey, StatusCallback
     risk: creates Twilio payments resources in the connected account; approval required
   update_payments:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Payments/{{ record.sid }}.json
-    required fields: call_sid, sid
+    required fields: call_sid, sid, IdempotencyKey, StatusCallback
     risk: mutates Twilio payments resources in the connected account; approval required
   create_call_recording:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings.json
@@ -416,7 +418,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio call recording resources in the connected account; approval required
   update_call_recording:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Recordings/{{ record.sid }}.json
-    required fields: call_sid, sid
+    required fields: call_sid, sid, Status
     risk: mutates Twilio call recording resources in the connected account; approval required
   create_siprec:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec.json
@@ -424,15 +426,15 @@ REVERSE ETL ACTIONS
     risk: creates Twilio siprec resources in the connected account; approval required
   update_siprec:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Siprec/{{ record.sid }}.json
-    required fields: call_sid, sid
+    required fields: call_sid, sid, Status
     risk: mutates Twilio siprec resources in the connected account; approval required
   create_stream:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams.json
-    required fields: call_sid
+    required fields: call_sid, Url
     risk: creates Twilio stream resources in the connected account; approval required
   update_stream:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Streams/{{ record.sid }}.json
-    required fields: call_sid, sid
+    required fields: call_sid, sid, Status
     risk: mutates Twilio stream resources in the connected account; approval required
   create_realtime_transcription:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions.json
@@ -440,15 +442,15 @@ REVERSE ETL ACTIONS
     risk: creates Twilio realtime transcription resources in the connected account; approval required
   update_realtime_transcription:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/Transcriptions/{{ record.sid }}.json
-    required fields: call_sid, sid
+    required fields: call_sid, sid, Status
     risk: mutates Twilio realtime transcription resources in the connected account; approval required
   create_user_defined_message:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessages.json
-    required fields: call_sid
+    required fields: call_sid, Content
     risk: creates Twilio user defined message resources in the connected account; approval required
   create_user_defined_message_subscription:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions.json
-    required fields: call_sid
+    required fields: call_sid, Callback
     risk: creates Twilio user defined message subscription resources in the connected account; approval required
   delete_user_defined_message_subscription:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Calls/{{ record.call_sid }}/UserDefinedMessageSubscriptions/{{ record.sid }}.json
@@ -464,7 +466,7 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio call resources in the connected account; approval required
   create_participant:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants.json
-    required fields: conference_sid
+    required fields: conference_sid, From, To
     risk: creates Twilio participant resources in the connected account; approval required
   delete_participant:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Participants/{{ record.call_sid }}.json
@@ -480,7 +482,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio conference recording resources in the connected account; approval required
   update_conference_recording:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.conference_sid }}/Recordings/{{ record.sid }}.json
-    required fields: conference_sid, sid
+    required fields: conference_sid, sid, Status
     risk: mutates Twilio conference recording resources in the connected account; approval required
   update_conference:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Conferences/{{ record.sid }}.json
@@ -499,7 +501,7 @@ REVERSE ETL ACTIONS
     risk: creates Twilio incoming phone number resources in the connected account; approval required
   create_incoming_phone_number_assigned_add_on:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns.json
-    required fields: resource_sid
+    required fields: resource_sid, InstalledAddOnSid
     risk: creates Twilio incoming phone number assigned add on resources in the connected account; approval required
   delete_incoming_phone_number_assigned_add_on:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/{{ record.resource_sid }}/AssignedAddOns/{{ record.sid }}.json
@@ -515,12 +517,15 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio incoming phone number resources in the connected account; approval required
   create_incoming_phone_number_local:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Local.json
+    required fields: PhoneNumber
     risk: creates Twilio incoming phone number local resources in the connected account; approval required
   create_incoming_phone_number_mobile:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/Mobile.json
+    required fields: PhoneNumber
     risk: creates Twilio incoming phone number mobile resources in the connected account; approval required
   create_incoming_phone_number_toll_free:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/IncomingPhoneNumbers/TollFree.json
+    required fields: PhoneNumber
     risk: creates Twilio incoming phone number toll free resources in the connected account; approval required
   create_key:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Keys.json
@@ -535,6 +540,7 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio key resources in the connected account; approval required
   create_message:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages.json
+    required fields: To
     risk: creates Twilio message resources in the connected account; approval required
   create_message_feedback:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Messages/{{ record.message_sid }}/Feedback.json
@@ -554,6 +560,7 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio message resources in the connected account; approval required
   create_outgoing_caller_id_validation_request:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds.json
+    required fields: PhoneNumber
     risk: creates Twilio validation request resources in the connected account; approval required
   delete_outgoing_caller_id:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/OutgoingCallerIds/{{ record.sid }}.json
@@ -565,10 +572,11 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio outgoing caller id resources in the connected account; approval required
   create_queue:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues.json
+    required fields: FriendlyName
     risk: creates Twilio queue resources in the connected account; approval required
   update_member:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Queues/{{ record.queue_sid }}/Members/{{ record.call_sid }}.json
-    required fields: queue_sid, call_sid
+    required fields: queue_sid, call_sid, Url
     risk: mutates Twilio member resources in the connected account; approval required
   delete_queue:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Queues/{{ record.sid }}.json
@@ -607,10 +615,11 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio signing key resources in the connected account; approval required
   create_sip_credential_list:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists.json
+    required fields: FriendlyName
     risk: creates Twilio sip credential list resources in the connected account; approval required
   create_sip_credential:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials.json
-    required fields: credential_list_sid
+    required fields: credential_list_sid, Username, Password
     risk: creates Twilio sip credential resources in the connected account; approval required
   delete_sip_credential:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.credential_list_sid }}/Credentials/{{ record.sid }}.json
@@ -626,14 +635,15 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip credential list resources in the connected account; approval required
   update_sip_credential_list:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/CredentialLists/{{ record.sid }}.json
-    required fields: sid
+    required fields: sid, FriendlyName
     risk: mutates Twilio sip credential list resources in the connected account; approval required
   create_sip_domain:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains.json
+    required fields: DomainName
     risk: creates Twilio sip domain resources in the connected account; approval required
   create_sip_auth_calls_credential_list_mapping:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings.json
-    required fields: domain_sid
+    required fields: domain_sid, CredentialListSid
     risk: creates Twilio sip auth calls credential list mapping resources in the connected account; approval required
   delete_sip_auth_calls_credential_list_mapping:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/CredentialListMappings/{{ record.sid }}.json
@@ -641,7 +651,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip auth calls credential list mapping resources in the connected account; approval required
   create_sip_auth_calls_ip_access_control_list_mapping:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings.json
-    required fields: domain_sid
+    required fields: domain_sid, IpAccessControlListSid
     risk: creates Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
   delete_sip_auth_calls_ip_access_control_list_mapping:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Calls/IpAccessControlListMappings/{{ record.sid }}.json
@@ -649,7 +659,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip auth calls ip access control list mapping resources in the connected account; approval required
   create_sip_auth_registrations_credential_list_mapping:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings.json
-    required fields: domain_sid
+    required fields: domain_sid, CredentialListSid
     risk: creates Twilio sip auth registrations credential list mapping resources in the connected account; approval required
   delete_sip_auth_registrations_credential_list_mapping:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/Auth/Registrations/CredentialListMappings/{{ record.sid }}.json
@@ -657,7 +667,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip auth registrations credential list mapping resources in the connected account; approval required
   create_sip_credential_list_mapping:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings.json
-    required fields: domain_sid
+    required fields: domain_sid, CredentialListSid
     risk: creates Twilio sip credential list mapping resources in the connected account; approval required
   delete_sip_credential_list_mapping:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/CredentialListMappings/{{ record.sid }}.json
@@ -665,7 +675,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip credential list mapping resources in the connected account; approval required
   create_sip_ip_access_control_list_mapping:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings.json
-    required fields: domain_sid
+    required fields: domain_sid, IpAccessControlListSid
     risk: creates Twilio sip ip access control list mapping resources in the connected account; approval required
   delete_sip_ip_access_control_list_mapping:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/Domains/{{ record.domain_sid }}/IpAccessControlListMappings/{{ record.sid }}.json
@@ -681,10 +691,11 @@ REVERSE ETL ACTIONS
     risk: mutates Twilio sip domain resources in the connected account; approval required
   create_sip_ip_access_control_list:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists.json
+    required fields: FriendlyName
     risk: creates Twilio sip ip access control list resources in the connected account; approval required
   create_sip_ip_address:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses.json
-    required fields: ip_access_control_list_sid
+    required fields: ip_access_control_list_sid, FriendlyName, IpAddress
     risk: creates Twilio sip ip address resources in the connected account; approval required
   delete_sip_ip_address:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.ip_access_control_list_sid }}/IpAddresses/{{ record.sid }}.json
@@ -700,7 +711,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio sip ip access control list resources in the connected account; approval required
   update_sip_ip_access_control_list:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SIP/IpAccessControlLists/{{ record.sid }}.json
-    required fields: sid
+    required fields: sid, FriendlyName
     risk: mutates Twilio sip ip access control list resources in the connected account; approval required
   update_short_code:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/SMS/ShortCodes/{{ record.sid }}.json
@@ -715,6 +726,7 @@ REVERSE ETL ACTIONS
     risk: deletes Twilio transcription resources in the connected account; approval required
   create_usage_trigger:
     endpoint: POST /Accounts/{{ secrets.account_sid }}/Usage/Triggers.json
+    required fields: CallbackUrl, TriggerValue, UsageCategory
     risk: creates Twilio usage trigger resources in the connected account; approval required
   delete_usage_trigger:
     endpoint: DELETE /Accounts/{{ secrets.account_sid }}/Usage/Triggers/{{ record.sid }}.json

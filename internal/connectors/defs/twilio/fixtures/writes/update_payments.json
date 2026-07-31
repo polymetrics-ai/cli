@@ -1,0 +1,17 @@
+{
+  "record": {
+    "call_sid": "fixture_sid",
+    "sid": "fixture_sid",
+    "IdempotencyKey": "fixture_value",
+    "StatusCallback": "active",
+    "Capture": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Calls/fixture_sid/Payments/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

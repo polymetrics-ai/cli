@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/Accounts/synthetic-conformance-secret/SIP/IpAccessControlLists/synthetic-conformance-value/IpAddresses/synthetic-conformance-value.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "sid": "fixture_sid"
+    }
+  }
+}

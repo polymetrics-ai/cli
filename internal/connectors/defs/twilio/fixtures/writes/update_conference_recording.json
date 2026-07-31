@@ -1,0 +1,16 @@
+{
+  "record": {
+    "conference_sid": "fixture_sid",
+    "sid": "fixture_sid",
+    "Status": "active",
+    "PauseBehavior": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences/fixture_sid/Recordings/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

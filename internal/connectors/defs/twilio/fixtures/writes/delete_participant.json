@@ -1,0 +1,14 @@
+{
+  "record": {
+    "conference_sid": "fixture_sid",
+    "call_sid": "fixture_sid"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/Accounts/synthetic-conformance-secret/Conferences/fixture_sid/Participants/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

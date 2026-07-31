@@ -1,0 +1,14 @@
+{
+  "record": {
+    "message_sid": "fixture_sid",
+    "Outcome": "fixture_value"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/Messages/fixture_sid/Feedback.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

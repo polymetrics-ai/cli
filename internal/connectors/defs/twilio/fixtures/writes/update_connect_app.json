@@ -1,0 +1,14 @@
+{
+  "record": {
+    "sid": "fixture_sid",
+    "AuthorizeRedirectUrl": "https://example.invalid/twilio/fixture"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/Accounts/synthetic-conformance-secret/ConnectApps/fixture_sid.json"
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}
