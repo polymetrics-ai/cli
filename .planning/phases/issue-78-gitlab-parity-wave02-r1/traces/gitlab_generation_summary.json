@@ -1,0 +1,20 @@
+{
+  "official_operations": 1146,
+  "lane_counts": {
+    "etl_read": 308,
+    "reverse_etl_write": 498,
+    "binary_file": 298,
+    "cdc_changefeed": 34,
+    "direct_read_query_search": 6,
+    "excluded_not_applicable": 2
+  },
+  "covered_streams": [
+    "groups",
+    "issues",
+    "projects",
+    "users"
+  ],
+  "blocked_or_planned": 1140,
+  "excluded_not_applicable": 2,
+  "source": "https://gitlab.com/gitlab-org/gitlab/-/raw/9cd04099eb59d87335798e4f57a2bc5a2622e4cc/doc/api/openapi/openapi_v2.yaml"
+}

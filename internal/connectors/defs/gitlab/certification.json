@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "source": {
+    "default_stream": "projects",
+    "source_credential_defaults": {
+      "base_url": "https://gitlab.com/api/v4"
+    },
+    "live_unavailable": [
+      {
+        "kind": "Error",
+        "contains": [
+          "http 401",
+          "http 403",
+          "http 404",
+          "status 401",
+          "status 403",
+          "status 404",
+          "token lacks access",
+          "interpolate: unresolved key"
+        ]
+      }
+    ]
+  },
+  "direct_read_candidates": [],
+  "binary_candidates": [],
+  "write_pairings": []
+}
