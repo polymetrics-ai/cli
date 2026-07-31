@@ -1,0 +1,25 @@
+{
+  "record": {
+    "team_id": "fixture_team_id",
+    "name": "fixture_name",
+    "inbox_ids": [
+      "fixture_inbox_ids"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/teams/fixture_team_id/views",
+    "body": {
+      "name": "fixture_name",
+      "inbox_ids": [
+        "fixture_inbox_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

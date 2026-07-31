@@ -1,0 +1,22 @@
+{
+  "record": {
+    "contact_ids": [
+      "fixture_contact_ids"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/contacts/merge",
+    "body": {
+      "contact_ids": [
+        "fixture_contact_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

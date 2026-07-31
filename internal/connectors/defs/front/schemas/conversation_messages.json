@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "conversation_messages",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "id": {
+      "type": [
+        "string",
+        "number",
+        "integer",
+        "null"
+      ]
+    }
+  }
+}

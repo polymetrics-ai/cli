@@ -3,61 +3,1355 @@
     "url": "{{ config.base_url }}",
     "user_agent": "polymetrics-go-cli",
     "auth": [
-      { "mode": "bearer", "token": "{{ secrets.api_key }}" }
+      {
+        "mode": "bearer",
+        "token": "{{ secrets.api_key }}"
+      }
     ],
     "pagination": {
       "type": "next_url",
       "next_url_path": "_pagination.next"
     },
-    "check": { "method": "GET", "path": "/inboxes" },
+    "check": {
+      "method": "GET",
+      "path": "/inboxes"
+    },
     "error_map": [
-      { "status": 401, "hint": "front api key is missing or invalid; re-run pm credentials add front" },
-      { "status": 403, "hint": "front account lacks access for this request" },
-      { "status": 429, "class": "rate_limited", "hint": "front rate limit exceeded; the connector will retry with backoff" }
+      {
+        "status": 401,
+        "hint": "front api key is missing or invalid; re-run pm credentials add front"
+      },
+      {
+        "status": 403,
+        "hint": "front account lacks access for this request"
+      },
+      {
+        "status": 404,
+        "hint": "front resource not found or token lacks access"
+      },
+      {
+        "status": 429,
+        "class": "rate_limited",
+        "hint": "front rate limit exceeded; the connector will retry with backoff"
+      }
     ]
   },
   "streams": [
     {
       "name": "contacts",
       "path": "/contacts",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/contacts.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contacts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     },
     {
       "name": "conversations",
       "path": "/conversations",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/conversations.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     },
     {
       "name": "inboxes",
       "path": "/inboxes",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/inboxes.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     },
     {
       "name": "tags",
       "path": "/tags",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/tags.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tags.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     },
     {
       "name": "teammates",
       "path": "/teammates",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/teammates.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     },
     {
       "name": "channels",
       "path": "/channels",
-      "query": { "limit": "{{ config.page_limit }}" },
-      "records": { "path": "_results" },
-      "schema": "schemas/channels.json"
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/channels.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "account_contacts",
+      "path": "/accounts/{{ config.account_id }}/contacts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_contacts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "an_account",
+      "path": "/accounts/{{ config.account_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/an_account.json"
+    },
+    {
+      "name": "account_custom_fields",
+      "path": "/accounts/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/account_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "accounts",
+      "path": "/accounts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/accounts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "channel",
+      "path": "/channels/{{ config.channel_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/channel.json"
+    },
+    {
+      "name": "comment_mentions",
+      "path": "/comments/{{ config.comment_id }}/mentions",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/comment_mentions.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "comment",
+      "path": "/comments/{{ config.comment_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/comment.json"
+    },
+    {
+      "name": "all_company_rules",
+      "path": "/company/rules",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/all_company_rules.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "ticket_status_by_id",
+      "path": "/company/statuses/{{ config.status_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/ticket_status_by_id.json"
+    },
+    {
+      "name": "company_ticket_statuses",
+      "path": "/company/statuses",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_ticket_statuses.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "company_tags",
+      "path": "/company/tags",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_tags.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "contacts_in_group",
+      "path": "/contact_groups/{{ config.contact_group_id }}/contacts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contacts_in_group.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "groups",
+      "path": "/contact_groups",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/groups.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "contacts_in_contact_list",
+      "path": "/contact_lists/{{ config.contact_list_id }}/contacts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contacts_in_contact_list.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "contact_lists",
+      "path": "/contact_lists",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_lists.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "contact_conversations",
+      "path": "/contacts/{{ config.contact_id }}/conversations",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "notes",
+      "path": "/contacts/{{ config.contact_id }}/notes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/notes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "contact",
+      "path": "/contacts/{{ config.contact_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact.json"
+    },
+    {
+      "name": "contact_custom_fields",
+      "path": "/contacts/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/contact_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_comments",
+      "path": "/conversations/{{ config.conversation_id }}/comments",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_comments.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_drafts",
+      "path": "/conversations/{{ config.conversation_id }}/drafts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_drafts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_events",
+      "path": "/conversations/{{ config.conversation_id }}/events",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_events.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_followers",
+      "path": "/conversations/{{ config.conversation_id }}/followers",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_followers.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_inboxes",
+      "path": "/conversations/{{ config.conversation_id }}/inboxes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_messages",
+      "path": "/conversations/{{ config.conversation_id }}/messages",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_messages.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "conversation_by_id",
+      "path": "/conversations/{{ config.conversation_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_by_id.json"
+    },
+    {
+      "name": "conversation_custom_fields",
+      "path": "/conversations/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/conversation_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "custom_fields",
+      "path": "/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "event",
+      "path": "/events/{{ config.event_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/event.json"
+    },
+    {
+      "name": "events",
+      "path": "/events",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/events.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "inbox_channels",
+      "path": "/inboxes/{{ config.inbox_id }}/channels",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inbox_channels.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "inbox_conversations",
+      "path": "/inboxes/{{ config.inbox_id }}/conversations",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inbox_conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "inbox_access",
+      "path": "/inboxes/{{ config.inbox_id }}/teammates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inbox_access.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "inbox",
+      "path": "/inboxes/{{ config.inbox_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inbox.json"
+    },
+    {
+      "name": "inbox_custom_fields",
+      "path": "/inboxes/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/inbox_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "knowledge_base_article_with_content_in_default_locale",
+      "path": "/knowledge_base_articles/{{ config.article_id }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_base_article_with_content_in_default_locale.json"
+    },
+    {
+      "name": "knowledge_base_article_with_content_in_specified_locale",
+      "path": "/knowledge_base_articles/{{ config.article_id }}/locales/{{ config.locale }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_base_article_with_content_in_specified_locale.json"
+    },
+    {
+      "name": "a_knowledge_base_article",
+      "path": "/knowledge_base_articles/{{ config.article_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/a_knowledge_base_article.json"
+    },
+    {
+      "name": "articles_in_a_category",
+      "path": "/knowledge_base_categories/{{ config.category_id }}/articles",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/articles_in_a_category.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "knowledge_base_category_content_in_default_locale",
+      "path": "/knowledge_base_categories/{{ config.category_id }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_base_category_content_in_default_locale.json"
+    },
+    {
+      "name": "knowledge_base_category_with_content_in_specified_locale",
+      "path": "/knowledge_base_categories/{{ config.category_id }}/locales/{{ config.locale }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_base_category_with_content_in_specified_locale.json"
+    },
+    {
+      "name": "a_knowledge_base_category",
+      "path": "/knowledge_base_categories/{{ config.category_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/a_knowledge_base_category.json"
+    },
+    {
+      "name": "articles_in_a_knowledge_base",
+      "path": "/knowledge_bases/{{ config.knowledge_base_id }}/articles",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/articles_in_a_knowledge_base.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "categories_in_a_knowledge_base",
+      "path": "/knowledge_bases/{{ config.knowledge_base_id }}/categories",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/categories_in_a_knowledge_base.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "a_knowledge_base_with_content_in_default_locale",
+      "path": "/knowledge_bases/{{ config.knowledge_base_id }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/a_knowledge_base_with_content_in_default_locale.json"
+    },
+    {
+      "name": "a_knowledge_base_with_content_in_specified_locale",
+      "path": "/knowledge_bases/{{ config.knowledge_base_id }}/locales/{{ config.locale }}/content",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/a_knowledge_base_with_content_in_specified_locale.json"
+    },
+    {
+      "name": "a_knowledge_base",
+      "path": "/knowledge_bases/{{ config.knowledge_base_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/a_knowledge_base.json"
+    },
+    {
+      "name": "knowledge_bases",
+      "path": "/knowledge_bases",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/knowledge_bases.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "link_conversations",
+      "path": "/links/{{ config.link_id }}/conversations",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/link_conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "link",
+      "path": "/links/{{ config.link_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/link.json"
+    },
+    {
+      "name": "link_custom_fields",
+      "path": "/links/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/link_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "links",
+      "path": "/links",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/links.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "api_token_details",
+      "path": "/me",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/api_token_details.json"
+    },
+    {
+      "name": "child_folders",
+      "path": "/message_template_folders/{{ config.message_template_folder_id }}/message_template_folders",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/child_folders.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "child_templates",
+      "path": "/message_template_folders/{{ config.message_template_folder_id }}/message_templates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/child_templates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "folder",
+      "path": "/message_template_folders/{{ config.message_template_folder_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/folder.json"
+    },
+    {
+      "name": "folders",
+      "path": "/message_template_folders",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/folders.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "message_template",
+      "path": "/message_templates/{{ config.message_template_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/message_template.json"
+    },
+    {
+      "name": "message_templates",
+      "path": "/message_templates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/message_templates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "message_seen_status",
+      "path": "/messages/{{ config.message_id }}/seen",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/message_seen_status.json"
+    },
+    {
+      "name": "message",
+      "path": "/messages/{{ config.message_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/message.json"
+    },
+    {
+      "name": "rule",
+      "path": "/rules/{{ config.rule_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/rule.json"
+    },
+    {
+      "name": "rules",
+      "path": "/rules",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/rules.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "shifts_teammates",
+      "path": "/shifts/{{ config.shift_id }}/teammates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shifts_teammates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "shift",
+      "path": "/shifts/{{ config.shift_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shift.json"
+    },
+    {
+      "name": "shifts",
+      "path": "/shifts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/shifts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "signatures",
+      "path": "/signatures/{{ config.signature_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/signatures.json"
+    },
+    {
+      "name": "tag_children",
+      "path": "/tags/{{ config.tag_id }}/children",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tag_children.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "tagged_conversations",
+      "path": "/tags/{{ config.tag_id }}/conversations",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tagged_conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "tag",
+      "path": "/tags/{{ config.tag_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/tag.json"
+    },
+    {
+      "name": "company_teammate_group_team_inboxes",
+      "path": "/teammate_groups/{{ config.teammate_group_id }}/inboxes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_teammate_group_team_inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "company_teammate_group_teammates",
+      "path": "/teammate_groups/{{ config.teammate_group_id }}/teammates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_teammate_group_teammates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "company_teammate_group_teams",
+      "path": "/teammate_groups/{{ config.teammate_group_id }}/teams",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_teammate_group_teams.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "company_teammate_group",
+      "path": "/teammate_groups/{{ config.teammate_group_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_teammate_group.json"
+    },
+    {
+      "name": "company_teammate_groups",
+      "path": "/teammate_groups",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/company_teammate_groups.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_channels",
+      "path": "/teammates/{{ config.teammate_id }}/channels",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_channels.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_groups",
+      "path": "/teammates/{{ config.teammate_id }}/contact_groups",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_groups.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_contact_lists",
+      "path": "/teammates/{{ config.teammate_id }}/contact_lists",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_contact_lists.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_contacts",
+      "path": "/teammates/{{ config.teammate_id }}/contacts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_contacts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "assigned_conversations",
+      "path": "/teammates/{{ config.teammate_id }}/conversations",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/assigned_conversations.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_inboxes",
+      "path": "/teammates/{{ config.teammate_id }}/inboxes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_folders",
+      "path": "/teammates/{{ config.teammate_id }}/message_template_folders",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_folders.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_message_templates",
+      "path": "/teammates/{{ config.teammate_id }}/message_templates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_message_templates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_private_inboxes",
+      "path": "/teammates/{{ config.teammate_id }}/private_inboxes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_private_inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_rules",
+      "path": "/teammates/{{ config.teammate_id }}/rules",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_rules.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_shifts",
+      "path": "/teammates/{{ config.teammate_id }}/shifts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_shifts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_signatures",
+      "path": "/teammates/{{ config.teammate_id }}/signatures",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_signatures.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_tags",
+      "path": "/teammates/{{ config.teammate_id }}/tags",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_tags.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate_time_offs",
+      "path": "/teammates/{{ config.teammate_id }}/time_offs",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_time_offs.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "teammate",
+      "path": "/teammates/{{ config.teammate_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate.json"
+    },
+    {
+      "name": "teammate_custom_fields",
+      "path": "/teammates/custom_fields",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teammate_custom_fields.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_channels",
+      "path": "/teams/{{ config.team_id }}/channels",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_channels.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_groups",
+      "path": "/teams/{{ config.team_id }}/contact_groups",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_groups.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_contact_lists",
+      "path": "/teams/{{ config.team_id }}/contact_lists",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_contact_lists.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_contacts",
+      "path": "/teams/{{ config.team_id }}/contacts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_contacts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_inboxes",
+      "path": "/teams/{{ config.team_id }}/inboxes",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_inboxes.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_folders",
+      "path": "/teams/{{ config.team_id }}/message_template_folders",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_folders.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_message_templates",
+      "path": "/teams/{{ config.team_id }}/message_templates",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_message_templates.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_rules",
+      "path": "/teams/{{ config.team_id }}/rules",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_rules.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_shifts",
+      "path": "/teams/{{ config.team_id }}/shifts",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_shifts.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_signatures",
+      "path": "/teams/{{ config.team_id }}/signatures",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_signatures.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_tags",
+      "path": "/teams/{{ config.team_id }}/tags",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_tags.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_time_offs",
+      "path": "/teams/{{ config.team_id }}/time_offs",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_time_offs.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team_views",
+      "path": "/teams/{{ config.team_id }}/views",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team_views.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "team",
+      "path": "/teams/{{ config.team_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/team.json"
+    },
+    {
+      "name": "teams",
+      "path": "/teams",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/teams.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
+    },
+    {
+      "name": "time_off",
+      "path": "/time_offs/{{ config.time_off_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/time_off.json"
+    },
+    {
+      "name": "view",
+      "path": "/views/{{ config.view_id }}",
+      "records": {
+        "path": ".",
+        "single_object": true
+      },
+      "projection": "passthrough",
+      "schema": "schemas/view.json"
+    },
+    {
+      "name": "views",
+      "path": "/views",
+      "records": {
+        "path": "_results"
+      },
+      "projection": "passthrough",
+      "schema": "schemas/views.json",
+      "query": {
+        "limit": "{{ config.page_limit }}"
+      }
     }
   ]
 }

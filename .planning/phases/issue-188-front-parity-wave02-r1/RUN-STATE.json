@@ -1,0 +1,73 @@
+{
+  "phase": "issue-188-front-parity-wave02-r1",
+  "branch": "fm/cli-front-parity-wave02-r1",
+  "status": "issue_addenda_complete_local_gates_passed",
+  "verificationPassed": false,
+  "verificationNote": "Full make verify was not run; issue-local gates passed. verificationPassed remains false per universal loop policy until full declared phase equivalent make verify exits 0.",
+  "gsd": {
+    "doctor": "passed",
+    "programmingLoopCommand": "scripts/gsd prompt programming-loop init --phase issue-188-front-parity --dry-run",
+    "programmingLoopAvailable": false,
+    "fallback": "manual Pi GSD loop using .pi/prompts/pm-gsd-loop.md and scripts/gsd prompt quick --full trace",
+    "trace": ".planning/traces/issue-188-front-parity-wave02-r1-gsd-quick.prompt.md"
+  },
+  "orchestrationDecisions": [
+    {
+      "cycle": "plan",
+      "decision": "local_critical_path",
+      "reason": "Firstmate assigned one combined Front parent/subissue worker in an isolated worktree; mutating sub-workers would collide on internal/connectors/defs/front and GitHub issue bodies."
+    },
+    {
+      "cycle": "execute",
+      "decision": "local_critical_path",
+      "reason": "Generated connector-local Front bundle files from official Front reference OpenAPI snippets; no shared foundation edits were allowed."
+    },
+    {
+      "cycle": "verify",
+      "decision": "local_critical_path",
+      "reason": "Ran connector-local and issue checklist gates in the same isolated worktree; no reviewer/no-mistakes/PR stage requested yet."
+    }
+  ],
+  "gates": [
+    {
+      "command": "targeted temp-root go run ./cmd/connectorgen validate <tmp>",
+      "result": "pass",
+      "notes": "1 connector checked, 0 findings, 0 warnings"
+    },
+    {
+      "command": "go run ./cmd/connectorgen validate",
+      "result": "pass",
+      "notes": "549 connectors checked, 0 findings"
+    },
+    {
+      "command": "go test ./internal/connectors/conformance -run 'TestConformance/front' -count=1",
+      "result": "pass"
+    },
+    {
+      "command": "go test ./internal/cli -run 'Connector|Dynamic|Golden' -count=1 -timeout=8m",
+      "result": "pass"
+    },
+    {
+      "command": "go vet ./internal/connectors/... ./internal/cli/...",
+      "result": "pass"
+    },
+    {
+      "command": "go build ./cmd/pm",
+      "result": "pass"
+    },
+    {
+      "command": "make connector-boundary",
+      "result": "pass",
+      "notes": "outcome clean"
+    },
+    {
+      "command": "git diff --check",
+      "result": "pass"
+    },
+    {
+      "command": "gh-axi issue edit #188 #189-#195 captain-policy addendum",
+      "result": "pass",
+      "notes": "marker appears exactly once in each issue body"
+    }
+  ]
+}

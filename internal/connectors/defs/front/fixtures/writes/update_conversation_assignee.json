@@ -1,0 +1,19 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "assignee_id": "fixture_assignee_id"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/conversations/fixture_conversation_id/assignee",
+    "body": {
+      "assignee_id": "fixture_assignee_id"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

@@ -1,9 +1,24 @@
 {
-  "api": "Front Core REST API",
-  "docs": "https://dev.frontapp.com/reference/introduction",
-  "reviewed_at": "2026-07-03",
-  "scope": "wave2 fan-out migration: the 6 legacy-parity read streams only (contacts, conversations, inboxes, tags, teammates, channels); Front's write/action endpoints (send message, create draft, archive/assign conversation) are out of scope (legacy itself ships no writes; capabilities.write is false).",
+  "api": "Front Platform API",
+  "docs": "https://dev.frontapp.com/llms.txt",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "All documented Front reference/*.md OpenAPI operation pages discovered from llms.txt; fixed Core REST operations are implemented as streams, writes, or direct reads, binary downloads are planned with typed metadata, and application-channel/voice/plugin-adjacent surfaces are blocked/not-applicable without generic passthrough.",
   "endpoints": [
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}",
+      "operation": {
+        "model": "duplicate",
+        "status": "blocked",
+        "risk": "low",
+        "blocked_by_default": true,
+        "reason": "Duplicate application-channel documentation for the Core API update-channel endpoint; the executable Front write action is represented once by update_channel.",
+        "source_url": "https://dev.frontapp.com/reference/update-channel-1.md",
+        "notes": "lane=duplicate; operation_id=update-channel; duplicate documentation row preserved for official count reconciliation",
+        "duplicate_of": "PATCH /channels/{channel_id} is also documented by the Core API update-channel page and covered by the update_channel write action"
+      }
+    },
     {
       "method": "GET",
       "path": "/contacts",
@@ -47,35 +62,1829 @@
       }
     },
     {
-      "method": "POST",
-      "path": "/conversations/{conversation_id}/messages",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      "method": "GET",
+      "path": "/accounts/{account_id}/contacts",
+      "covered_by": {
+        "stream": "account_contacts"
       }
     },
     {
-      "method": "PATCH",
-      "path": "/conversations/{conversation_id}",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "legacy connector never implemented writes; not implemented in this bundle"
+      "method": "GET",
+      "path": "/accounts/{account_id}",
+      "covered_by": {
+        "stream": "an_account"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/custom_fields",
+      "covered_by": {
+        "stream": "account_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts",
+      "covered_by": {
+        "stream": "accounts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/channels/{channel_id}",
+      "covered_by": {
+        "stream": "channel"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}/mentions",
+      "covered_by": {
+        "stream": "comment_mentions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}",
+      "covered_by": {
+        "stream": "comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/rules",
+      "covered_by": {
+        "stream": "all_company_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/statuses/{status_id}",
+      "covered_by": {
+        "stream": "ticket_status_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/statuses",
+      "covered_by": {
+        "stream": "company_ticket_statuses"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/company/tags",
+      "covered_by": {
+        "stream": "company_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "covered_by": {
+        "stream": "contacts_in_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_groups",
+      "covered_by": {
+        "stream": "groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "covered_by": {
+        "stream": "contacts_in_contact_list"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contact_lists",
+      "covered_by": {
+        "stream": "contact_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/conversations",
+      "covered_by": {
+        "stream": "contact_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}/notes",
+      "covered_by": {
+        "stream": "notes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "stream": "contact"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/contacts/custom_fields",
+      "covered_by": {
+        "stream": "contact_custom_fields"
       }
     },
     {
       "method": "GET",
       "path": "/conversations/{conversation_id}/comments",
-      "excluded": {
-        "category": "out_of_scope",
-        "reason": "not modeled by legacy; not implemented in this bundle"
+      "covered_by": {
+        "stream": "conversation_comments"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/drafts",
+      "covered_by": {
+        "stream": "conversation_drafts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/events",
+      "covered_by": {
+        "stream": "conversation_events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/followers",
+      "covered_by": {
+        "stream": "conversation_followers"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/inboxes",
+      "covered_by": {
+        "stream": "conversation_inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "stream": "conversation_messages"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "stream": "conversation_by_id"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/custom_fields",
+      "covered_by": {
+        "stream": "conversation_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/custom_fields",
+      "covered_by": {
+        "stream": "custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events/{event_id}",
+      "covered_by": {
+        "stream": "event"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/events",
+      "covered_by": {
+        "stream": "events"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/channels",
+      "covered_by": {
+        "stream": "inbox_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/conversations",
+      "covered_by": {
+        "stream": "inbox_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "covered_by": {
+        "stream": "inbox_access"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/{inbox_id}",
+      "covered_by": {
+        "stream": "inbox"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/inboxes/custom_fields",
+      "covered_by": {
+        "stream": "inbox_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/content",
+      "covered_by": {
+        "stream": "knowledge_base_article_with_content_in_default_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/locales/{locale}/content",
+      "covered_by": {
+        "stream": "knowledge_base_article_with_content_in_specified_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}",
+      "covered_by": {
+        "stream": "a_knowledge_base_article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/articles",
+      "covered_by": {
+        "stream": "articles_in_a_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/content",
+      "covered_by": {
+        "stream": "knowledge_base_category_content_in_default_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}/locales/{locale}/content",
+      "covered_by": {
+        "stream": "knowledge_base_category_with_content_in_specified_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_categories/{category_id}",
+      "covered_by": {
+        "stream": "a_knowledge_base_category"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/articles",
+      "covered_by": {
+        "stream": "articles_in_a_knowledge_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/categories",
+      "covered_by": {
+        "stream": "categories_in_a_knowledge_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/content",
+      "covered_by": {
+        "stream": "a_knowledge_base_with_content_in_default_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/content",
+      "covered_by": {
+        "stream": "a_knowledge_base_with_content_in_specified_locale"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases/{knowledge_base_id}",
+      "covered_by": {
+        "stream": "a_knowledge_base"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_bases",
+      "covered_by": {
+        "stream": "knowledge_bases"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/{link_id}/conversations",
+      "covered_by": {
+        "stream": "link_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/{link_id}",
+      "covered_by": {
+        "stream": "link"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links/custom_fields",
+      "covered_by": {
+        "stream": "link_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/links",
+      "covered_by": {
+        "stream": "links"
       }
     },
     {
       "method": "GET",
       "path": "/me",
-      "excluded": {
-        "category": "non_data_endpoint",
-        "reason": "authenticated-teammate profile introspection, not a syncable object stream"
+      "covered_by": {
+        "stream": "api_token_details"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}/message_template_folders",
+      "covered_by": {
+        "stream": "child_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}/message_templates",
+      "covered_by": {
+        "stream": "child_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "covered_by": {
+        "stream": "folder"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_template_folders",
+      "covered_by": {
+        "stream": "folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates/{message_template_id}",
+      "covered_by": {
+        "stream": "message_template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates",
+      "covered_by": {
+        "stream": "message_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}/seen",
+      "covered_by": {
+        "stream": "message_seen_status"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}",
+      "covered_by": {
+        "stream": "message"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules/{rule_id}",
+      "covered_by": {
+        "stream": "rule"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rules",
+      "covered_by": {
+        "stream": "rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts/{shift_id}/teammates",
+      "covered_by": {
+        "stream": "shifts_teammates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts/{shift_id}",
+      "covered_by": {
+        "stream": "shift"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shifts",
+      "covered_by": {
+        "stream": "shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/signatures/{signature_id}",
+      "covered_by": {
+        "stream": "signatures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}/children",
+      "covered_by": {
+        "stream": "tag_children"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}/conversations",
+      "covered_by": {
+        "stream": "tagged_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "stream": "tag"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "covered_by": {
+        "stream": "company_teammate_group_team_inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "covered_by": {
+        "stream": "company_teammate_group_teammates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "covered_by": {
+        "stream": "company_teammate_group_teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "covered_by": {
+        "stream": "company_teammate_group"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammate_groups",
+      "covered_by": {
+        "stream": "company_teammate_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/channels",
+      "covered_by": {
+        "stream": "teammate_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/contact_groups",
+      "covered_by": {
+        "stream": "teammate_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/contact_lists",
+      "covered_by": {
+        "stream": "teammate_contact_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/contacts",
+      "covered_by": {
+        "stream": "teammate_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/conversations",
+      "covered_by": {
+        "stream": "assigned_conversations"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/inboxes",
+      "covered_by": {
+        "stream": "teammate_inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/message_template_folders",
+      "covered_by": {
+        "stream": "teammate_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/message_templates",
+      "covered_by": {
+        "stream": "teammate_message_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/private_inboxes",
+      "covered_by": {
+        "stream": "teammate_private_inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/rules",
+      "covered_by": {
+        "stream": "teammate_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/shifts",
+      "covered_by": {
+        "stream": "teammate_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/signatures",
+      "covered_by": {
+        "stream": "teammate_signatures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/tags",
+      "covered_by": {
+        "stream": "teammate_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}/time_offs",
+      "covered_by": {
+        "stream": "teammate_time_offs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/{teammate_id}",
+      "covered_by": {
+        "stream": "teammate"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teammates/custom_fields",
+      "covered_by": {
+        "stream": "teammate_custom_fields"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/channels",
+      "covered_by": {
+        "stream": "team_channels"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contact_groups",
+      "covered_by": {
+        "stream": "team_groups"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contact_lists",
+      "covered_by": {
+        "stream": "team_contact_lists"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/contacts",
+      "covered_by": {
+        "stream": "team_contacts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/inboxes",
+      "covered_by": {
+        "stream": "team_inboxes"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/message_template_folders",
+      "covered_by": {
+        "stream": "team_folders"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/message_templates",
+      "covered_by": {
+        "stream": "team_message_templates"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/rules",
+      "covered_by": {
+        "stream": "team_rules"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/shifts",
+      "covered_by": {
+        "stream": "team_shifts"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/signatures",
+      "covered_by": {
+        "stream": "team_signatures"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/tags",
+      "covered_by": {
+        "stream": "team_tags"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/time_offs",
+      "covered_by": {
+        "stream": "team_time_offs"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}/views",
+      "covered_by": {
+        "stream": "team_views"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams/{team_id}",
+      "covered_by": {
+        "stream": "team"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/teams",
+      "covered_by": {
+        "stream": "teams"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/time_offs/{time_off_id}",
+      "covered_by": {
+        "stream": "time_off"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views/{view_id}",
+      "covered_by": {
+        "stream": "view"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/views",
+      "covered_by": {
+        "stream": "views"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}/contacts",
+      "covered_by": {
+        "write": "remove_contact_from_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts/{account_id}/contacts",
+      "covered_by": {
+        "write": "add_contact_to_account"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/accounts/{account_id}",
+      "covered_by": {
+        "write": "delete_an_account"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/{account_id}",
+      "covered_by": {
+        "write": "update_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "covered_by": {
+        "write": "create_account"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/applications/{application_uid}/events",
+      "covered_by": {
+        "write": "trigger_app_event"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/drafts",
+      "covered_by": {
+        "write": "create_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/incoming_messages",
+      "covered_by": {
+        "write": "receive_custom_messages"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/messages",
+      "covered_by": {
+        "write": "create_message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/validate",
+      "covered_by": {
+        "write": "validate_channel"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}",
+      "covered_by": {
+        "write": "update_channel"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/comments/{comment_id}/",
+      "covered_by": {
+        "write": "update_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/comments/{comment_id}/replies",
+      "covered_by": {
+        "write": "add_comment_reply"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/company/tags",
+      "covered_by": {
+        "write": "create_company_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "covered_by": {
+        "write": "remove_contacts_from_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_groups/{contact_group_id}/contacts",
+      "covered_by": {
+        "write": "add_contacts_to_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_groups/{contact_group_id}",
+      "covered_by": {
+        "write": "delete_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_groups",
+      "covered_by": {
+        "write": "create_group"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "covered_by": {
+        "write": "remove_contacts_from_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_lists/{contact_list_id}/contacts",
+      "covered_by": {
+        "write": "add_contacts_to_contact_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contact_lists/{contact_list_id}",
+      "covered_by": {
+        "write": "delete_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contact_lists",
+      "covered_by": {
+        "write": "create_contact_list"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}/handles",
+      "covered_by": {
+        "write": "delete_contact_handle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/handles",
+      "covered_by": {
+        "write": "add_contact_handle"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/{contact_id}/notes",
+      "covered_by": {
+        "write": "add_note"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "delete_a_contact"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/contacts/{contact_id}",
+      "covered_by": {
+        "write": "update_a_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts/merge",
+      "covered_by": {
+        "write": "merge_contacts"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/contacts",
+      "covered_by": {
+        "write": "create_contact"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/conversations/{conversation_id}/assignee",
+      "covered_by": {
+        "write": "update_conversation_assignee"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/comments",
+      "covered_by": {
+        "write": "add_comment"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/drafts",
+      "covered_by": {
+        "write": "create_draft_reply"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/followers",
+      "covered_by": {
+        "write": "delete_conversation_followers"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/followers",
+      "covered_by": {
+        "write": "add_conversation_followers"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/links",
+      "covered_by": {
+        "write": "remove_conversation_links"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/links",
+      "covered_by": {
+        "write": "add_conversation_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/messages",
+      "covered_by": {
+        "write": "create_message_reply"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}/reminders",
+      "covered_by": {
+        "write": "update_conversation_reminders"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "remove_conversation_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations/{conversation_id}/tags",
+      "covered_by": {
+        "write": "add_conversation_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "delete_conversation"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/conversations/{conversation_id}",
+      "covered_by": {
+        "write": "update_conversation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/conversations",
+      "covered_by": {
+        "write": "create_conversation"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/drafts/{draft_id}",
+      "covered_by": {
+        "write": "delete_draft"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/drafts/{message_id}/",
+      "covered_by": {
+        "write": "edit_draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/channels",
+      "covered_by": {
+        "write": "create_a_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/imported_messages",
+      "covered_by": {
+        "write": "import_inbox_message"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "covered_by": {
+        "write": "removes_inbox_access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes/{inbox_id}/teammates",
+      "covered_by": {
+        "write": "add_inbox_access"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/inboxes",
+      "covered_by": {
+        "write": "create_inbox"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{article_id}/content",
+      "covered_by": {
+        "write": "update_article_content_in_default_locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_articles/{article_id}/locales/{locale}/content",
+      "covered_by": {
+        "write": "update_article_content_in_specified_locale"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/knowledge_base_articles/{article_id}",
+      "covered_by": {
+        "write": "delete_an_article"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{category_id}/content",
+      "covered_by": {
+        "write": "update_knowledge_base_category_in_default_locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_base_categories/{category_id}/locales/{locale}/content",
+      "covered_by": {
+        "write": "update_knowledge_base_category_in_specified_locale"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/knowledge_base_categories/{category_id}",
+      "covered_by": {
+        "write": "delete_a_knowledge_base_category"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/articles",
+      "covered_by": {
+        "write": "create_article_in_a_knowledge_base_in_default_locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/categories",
+      "covered_by": {
+        "write": "create_knowledge_base_category_in_default_locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_bases/{knowledge_base_id}/content",
+      "covered_by": {
+        "write": "update_knowledge_base_in_default_locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/articles",
+      "covered_by": {
+        "write": "create_article_in_a_knowledge_base_in_specified_locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/categories",
+      "covered_by": {
+        "write": "create_knowledge_base_category_in_specified_locale"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/knowledge_bases/{knowledge_base_id}/locales/{locale}/content",
+      "covered_by": {
+        "write": "update_knowledge_base_in_specified_locale"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/knowledge_bases",
+      "covered_by": {
+        "write": "create_a_knowledge_base"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/links/{link_id}",
+      "covered_by": {
+        "write": "update_a_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/links",
+      "covered_by": {
+        "write": "create_link"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders/{message_template_folder_id}/message_template_folders",
+      "covered_by": {
+        "write": "create_child_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders/{message_template_folder_id}/message_templates",
+      "covered_by": {
+        "write": "create_child_template"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "covered_by": {
+        "write": "delete_folder"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/message_template_folders/{message_template_folder_id}",
+      "covered_by": {
+        "write": "update_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_template_folders",
+      "covered_by": {
+        "write": "create_folder"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/message_templates/{message_template_id}",
+      "covered_by": {
+        "write": "delete_message_template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/message_templates/{message_template_id}",
+      "covered_by": {
+        "write": "update_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/message_templates",
+      "covered_by": {
+        "write": "create_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/messages/{message_id}/seen",
+      "covered_by": {
+        "write": "mark_message_seen"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shifts/{shift_id}/teammates",
+      "covered_by": {
+        "write": "remove_teammates_from_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shifts/{shift_id}/teammates",
+      "covered_by": {
+        "write": "add_teammates_to_shift"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/shifts/{shift_id}",
+      "covered_by": {
+        "write": "update_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shifts",
+      "covered_by": {
+        "write": "create_shift"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/signatures/{signature_id}",
+      "covered_by": {
+        "write": "delete_signature"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/signatures/{signature_id}",
+      "covered_by": {
+        "write": "update_signature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags/{tag_id}/children",
+      "covered_by": {
+        "write": "create_child_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "write": "delete_tag"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/tags/{tag_id}",
+      "covered_by": {
+        "write": "update_a_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tags",
+      "covered_by": {
+        "write": "create_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "covered_by": {
+        "write": "remove_company_teammate_group_team_inboxes"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/inboxes",
+      "covered_by": {
+        "write": "add_company_teammate_group_team_inboxes"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "covered_by": {
+        "write": "remove_company_teammate_group_teammates"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/teammates",
+      "covered_by": {
+        "write": "add_company_teammate_group_teammates"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "covered_by": {
+        "write": "remove_company_teammate_group_teams"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups/{teammate_group_id}/teams",
+      "covered_by": {
+        "write": "add_company_teammate_group_teams"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "covered_by": {
+        "write": "delete_company_teammate_group"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/teammate_groups/{teammate_group_id}",
+      "covered_by": {
+        "write": "update_a_company_teammate_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammate_groups",
+      "covered_by": {
+        "write": "create_company_teammate_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contact_groups",
+      "covered_by": {
+        "write": "create_teammate_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contact_lists",
+      "covered_by": {
+        "write": "create_teammate_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/contacts",
+      "covered_by": {
+        "write": "create_teammate_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/message_template_folders",
+      "covered_by": {
+        "write": "create_teammate_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/message_templates",
+      "covered_by": {
+        "write": "create_teammate_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/private_inboxes",
+      "covered_by": {
+        "write": "create_teammate_private_inbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/signatures",
+      "covered_by": {
+        "write": "create_teammate_signature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/tags",
+      "covered_by": {
+        "write": "create_teammate_tag"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teammates/{teammate_id}/time_offs",
+      "covered_by": {
+        "write": "create_time_off"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/teammates/{teammate_id}",
+      "covered_by": {
+        "write": "update_teammate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contact_groups",
+      "covered_by": {
+        "write": "create_team_group"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contact_lists",
+      "covered_by": {
+        "write": "create_team_contact_list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/contacts",
+      "covered_by": {
+        "write": "create_team_contact"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/inboxes",
+      "covered_by": {
+        "write": "create_team_inbox"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/message_template_folders",
+      "covered_by": {
+        "write": "create_team_folder"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/message_templates",
+      "covered_by": {
+        "write": "create_team_message_template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/shifts",
+      "covered_by": {
+        "write": "create_team_shift"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/signatures",
+      "covered_by": {
+        "write": "create_team_signature"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/tags",
+      "covered_by": {
+        "write": "create_team_tag"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/teams/{team_id}/teammates",
+      "covered_by": {
+        "write": "remove_teammates_from_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/teammates",
+      "covered_by": {
+        "write": "add_teammates_to_team"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/teams/{team_id}/views",
+      "covered_by": {
+        "write": "create_team_view"
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/time_offs/{time_off_id}",
+      "covered_by": {
+        "write": "delete_time_off"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/time_offs/{time_off_id}",
+      "covered_by": {
+        "write": "update_time_off"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/views/{view_id}/teammates",
+      "covered_by": {
+        "write": "add_view_teammates"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/views/{view_id}",
+      "covered_by": {
+        "write": "update_view"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/analytics/exports",
+      "covered_by": {
+        "direct_read": "analytics exports create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/exports/{export_id}",
+      "covered_by": {
+        "direct_read": "analytics exports get"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/analytics/reports",
+      "covered_by": {
+        "direct_read": "analytics reports create"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/analytics/reports/{report_uid}",
+      "covered_by": {
+        "direct_read": "analytics reports get"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/conversations/search/{query}",
+      "covered_by": {
+        "direct_read": "conversations search"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/comments/{comment_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-comment.md",
+        "notes": "lane=binary_read; operation_id=download-attachment-for-a-comment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment.md",
+        "notes": "lane=binary_read; operation_id=download-attachment"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/knowledge_base_articles/{article_id}/download/{attachment_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-from-an-article.md",
+        "notes": "lane=binary_read; operation_id=download-attachment-from-an-article"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/message_templates/{message_template_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message-template.md",
+        "notes": "lane=binary_read; operation_id=download-attachment-for-a-message-template"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/messages/{message_id}/download/{attachment_link_id}",
+      "operation": {
+        "model": "binary_read",
+        "status": "blocked",
+        "risk": "high",
+        "blocked_by_default": true,
+        "reason": "Front binary attachment download is documented and typed in operations.json but remains planned until the shared bounded file-output execution contract is available for connector-local binary commands.",
+        "source_url": "https://dev.frontapp.com/reference/download-attachment-for-a-message.md",
+        "notes": "lane=binary_read; operation_id=download-attachment-for-a-message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/recording",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-recording.md",
+        "notes": "lane=disallowed; operation_id=add-call-recording"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/summary",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-summary.md",
+        "notes": "lane=disallowed; operation_id=add-call-summary"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls/{external_call_id}/transcript",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/add-call-transcript.md",
+        "notes": "lane=disallowed; operation_id=add-call-transcript"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/calls",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/create-call.md",
+        "notes": "lane=disallowed; operation_id=create-call"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/channels/{channel_id}/application_message_templates",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/sync-application-message-template.md",
+        "notes": "lane=disallowed; operation_id=sync-application-message-template"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/inbound_messages",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/sync-inbound-message.md",
+        "notes": "lane=disallowed; operation_id=sync-inbound-message"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/channels/{channel_id}/outbound_messages",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/sync-outbound-message.md",
+        "notes": "lane=disallowed; operation_id=sync-outbound-message"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}/application_message_templates/{external_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/update-application-message-template.md",
+        "notes": "lane=disallowed; operation_id=update-application-message-template"
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/channels/{channel_id}/calls/{external_call_id}",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/update-call.md",
+        "notes": "lane=disallowed; operation_id=update-call"
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/channels/{channel_id}/conversations/{conv_ext_id}/messages/{message_ext_id}/status",
+      "operation": {
+        "model": "disallowed",
+        "status": "blocked",
+        "risk": "critical",
+        "blocked_by_default": true,
+        "reason": "Front application-channel, voice-channel, or plugin-adjacent operation is documented but not applicable to the Core REST ETL/reverse-ETL connector; it is blocked by default and not exposed as a generic write.",
+        "source_url": "https://dev.frontapp.com/reference/update-external-message-status.md",
+        "notes": "lane=disallowed; operation_id=update-external-message-status"
       }
     }
   ]

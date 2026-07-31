@@ -1,0 +1,23 @@
+{
+  "record": {
+    "conversation_id": "fixture_conversation_id",
+    "teammate_ids": [
+      "fixture_teammate_ids"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/conversations/fixture_conversation_id/followers",
+    "body": {
+      "teammate_ids": [
+        "fixture_teammate_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

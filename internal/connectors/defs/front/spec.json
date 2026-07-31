@@ -2,7 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Front Connection Specification",
   "type": "object",
-  "required": ["api_key"],
+  "required": [
+    "api_key"
+  ],
   "properties": {
     "api_key": {
       "type": "string",
@@ -18,7 +20,115 @@
     "page_limit": {
       "type": "string",
       "default": "50",
-      "description": "Records per page (1-100)."
+      "description": "Records per page for paginated Front list streams (1-100)."
+    },
+    "account_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): account_id."
+    },
+    "article_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): article_id."
+    },
+    "category_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): category_id."
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): channel_id."
+    },
+    "comment_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): comment_id."
+    },
+    "contact_group_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): contact_group_id."
+    },
+    "contact_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): contact_id."
+    },
+    "contact_list_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): contact_list_id."
+    },
+    "conversation_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): conversation_id."
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): event_id."
+    },
+    "inbox_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): inbox_id."
+    },
+    "knowledge_base_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): knowledge_base_id."
+    },
+    "link_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): link_id."
+    },
+    "locale": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): locale."
+    },
+    "message_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): message_id."
+    },
+    "message_template_folder_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): message_template_folder_id."
+    },
+    "message_template_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): message_template_id."
+    },
+    "rule_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): rule_id."
+    },
+    "shift_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): shift_id."
+    },
+    "signature_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): signature_id."
+    },
+    "status_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): status_id."
+    },
+    "tag_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): tag_id."
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): team_id."
+    },
+    "teammate_group_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): teammate_group_id."
+    },
+    "teammate_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): teammate_id."
+    },
+    "time_off_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): time_off_id."
+    },
+    "view_id": {
+      "type": "string",
+      "description": "Optional Front path parameter used by parameterized stream(s): view_id."
     }
   }
 }

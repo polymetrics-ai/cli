@@ -1,0 +1,15 @@
+{
+  "record": {
+    "message_id": "fixture_message_id"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/messages/fixture_message_id/seen"
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

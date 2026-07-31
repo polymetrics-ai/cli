@@ -1,0 +1,23 @@
+{
+  "record": {
+    "account_id": "fixture_account_id",
+    "contact_ids": [
+      "fixture_contact_ids"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/accounts/fixture_account_id/contacts",
+    "body": {
+      "contact_ids": [
+        "fixture_contact_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

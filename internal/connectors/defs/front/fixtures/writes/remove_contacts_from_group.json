@@ -1,0 +1,23 @@
+{
+  "record": {
+    "contact_group_id": "fixture_contact_group_id",
+    "contact_ids": [
+      "fixture_contact_ids"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/contact_groups/fixture_contact_group_id/contacts",
+    "body": {
+      "contact_ids": [
+        "fixture_contact_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "record": {
+    "inbox_id": "fixture_inbox_id",
+    "teammate_ids": [
+      "fixture_teammate_ids"
+    ]
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/inboxes/fixture_inbox_id/teammates",
+    "body": {
+      "teammate_ids": [
+        "fixture_teammate_ids"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

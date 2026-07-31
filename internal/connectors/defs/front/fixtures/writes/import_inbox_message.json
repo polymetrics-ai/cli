@@ -1,0 +1,41 @@
+{
+  "record": {
+    "inbox_id": "fixture_inbox_id",
+    "sender": {
+      "handle": "fixture_handle"
+    },
+    "to": [
+      "fixture_to"
+    ],
+    "body": "fixture_body",
+    "external_id": "fixture_external_id",
+    "created_at": 1,
+    "metadata": {
+      "is_inbound": true
+    }
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/inboxes/fixture_inbox_id/imported_messages",
+    "body": {
+      "sender": {
+        "handle": "fixture_handle"
+      },
+      "to": [
+        "fixture_to"
+      ],
+      "body": "fixture_body",
+      "external_id": "fixture_external_id",
+      "created_at": 1,
+      "metadata": {
+        "is_inbound": true
+      }
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}

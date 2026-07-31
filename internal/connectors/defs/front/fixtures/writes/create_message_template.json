@@ -1,0 +1,20 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "body": "fixture_body"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/message_templates",
+    "body": {
+      "name": "fixture_name",
+      "body": "fixture_body"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "id": "front_fixture_response"
+    }
+  }
+}
