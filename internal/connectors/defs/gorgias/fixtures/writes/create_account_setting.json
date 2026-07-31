@@ -1,0 +1,12 @@
+{
+  "record": {
+    "type": "fixture_type"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/account/settings",
+    "body": {
+      "type": "fixture_type"
+    }
+  }
+}

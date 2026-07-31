@@ -1,0 +1,13 @@
+{
+  "record": {
+    "filters": {},
+    "name": "overview"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/stats/overview",
+    "body": {
+      "filters": {}
+    }
+  }
+}

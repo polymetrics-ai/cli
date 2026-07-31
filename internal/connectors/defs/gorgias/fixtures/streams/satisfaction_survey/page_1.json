@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/satisfaction-surveys/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-satisfaction-survey",
+      "summary": "Retrieve a survey",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture satisfaction_survey",
+      "title": "Retrieve a survey",
+      "status": "active",
+      "type": "Satisfaction Surveys",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

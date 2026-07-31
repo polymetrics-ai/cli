@@ -1,0 +1,15 @@
+{
+  "record": {
+    "disagreement_type": "fixture_disagreement_type",
+    "metric_category": "fixture_metric_category",
+    "slug": "fixture_slug"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/metric-cards/fixture_slug/feedback",
+    "body": {
+      "disagreement_type": "fixture_disagreement_type",
+      "metric_category": "fixture_metric_category"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "record": {
+    "name": "fixture_name",
+    "type": "http"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/integrations",
+    "body": {
+      "name": "fixture_name",
+      "type": "http"
+    }
+  }
+}

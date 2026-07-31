@@ -1,0 +1,10 @@
+{
+  "record": {
+    "ticket_id": 123,
+    "id": 123
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/tickets/123/messages/123"
+  }
+}

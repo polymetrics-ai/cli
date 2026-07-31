@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/events/synthetic-conformance-value"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "id": 1,
+      "operation_id": "get-event",
+      "summary": "Retrieve an event",
+      "created_datetime": "2026-01-01T00:00:01Z",
+      "updated_datetime": "2026-01-02T00:00:01Z",
+      "name": "Fixture event",
+      "title": "Retrieve an event",
+      "status": "active",
+      "type": "Events",
+      "data": {
+        "source": "fixture"
+      }
+    }
+  }
+}

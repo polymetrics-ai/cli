@@ -1,0 +1,2814 @@
+{
+  "source": "https://developers.gorgias.com/llms.txt",
+  "source_url_count": 145,
+  "operation_count": 114,
+  "method_counts": {
+    "DELETE": 18,
+    "GET": 46,
+    "POST": 23,
+    "PUT": 27
+  },
+  "lane_counts": {
+    "binary_file": 6,
+    "cdc_changefeed": 4,
+    "direct_read_query_search": 3,
+    "etl_read": 38,
+    "reverse_etl_write": 63
+  },
+  "operations": [
+    {
+      "operation_id": "get-account",
+      "method": "GET",
+      "official_path": "/api/account",
+      "connector_path": "/account",
+      "summary": "Retrieve your account",
+      "tags": [
+        "Account"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-account.md",
+      "parameters": [],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-account-settings",
+      "method": "GET",
+      "official_path": "/api/account/settings",
+      "connector_path": "/account/settings",
+      "summary": "List settings",
+      "tags": [
+        "Account"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-account-settings.md",
+      "parameters": [
+        {
+          "name": "type",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-account-setting",
+      "method": "POST",
+      "official_path": "/api/account/settings",
+      "connector_path": "/account/settings",
+      "summary": "Create a setting",
+      "tags": [
+        "Account"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-account-setting.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "update-account-setting",
+      "method": "PUT",
+      "official_path": "/api/account/settings/{id}",
+      "connector_path": "/account/settings/{id}",
+      "summary": "Update a setting",
+      "tags": [
+        "Account"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-account-setting.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-customers",
+      "method": "DELETE",
+      "official_path": "/api/customers",
+      "connector_path": "/customers",
+      "summary": "Delete customers",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-customers.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-customers",
+      "method": "GET",
+      "official_path": "/api/customers",
+      "connector_path": "/customers",
+      "summary": "List customers",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-customers.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "email",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "external_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "language",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "name",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "timezone",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "view_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "channel_type",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "channel_address",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-customer",
+      "method": "POST",
+      "official_path": "/api/customers",
+      "connector_path": "/customers",
+      "summary": "Create a customer",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-customer.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "merge-customers",
+      "method": "PUT",
+      "official_path": "/api/customers/merge",
+      "connector_path": "/customers/merge",
+      "summary": "Merge two customers",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/merge-customers.md",
+      "parameters": [
+        {
+          "name": "source_id",
+          "in": "query",
+          "required": true
+        },
+        {
+          "name": "target_id",
+          "in": "query",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-customer-custom-fields-values",
+      "method": "GET",
+      "official_path": "/api/customers/{customer_id}/custom-fields",
+      "connector_path": "/customers/{customer_id}/custom-fields",
+      "summary": "List customer field values",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-customer-custom-fields-values.md",
+      "parameters": [
+        {
+          "name": "customer_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-customer-custom-field-values",
+      "method": "PUT",
+      "official_path": "/api/customers/{customer_id}/custom-fields",
+      "connector_path": "/customers/{customer_id}/custom-fields",
+      "summary": "Update customer fields values",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-values.md",
+      "parameters": [
+        {
+          "name": "customer_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-customer-custom-field-value",
+      "method": "DELETE",
+      "official_path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "connector_path": "/customers/{customer_id}/custom-fields/{id}",
+      "summary": "Delete customer field value",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-customer-custom-field-value.md",
+      "parameters": [
+        {
+          "name": "customer_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-customer-custom-field-value",
+      "method": "PUT",
+      "official_path": "/api/customers/{customer_id}/custom-fields/{id}",
+      "connector_path": "/customers/{customer_id}/custom-fields/{id}",
+      "summary": "Update customer field value",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-custom-field-value.md",
+      "parameters": [
+        {
+          "name": "customer_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "update-customer-data",
+      "method": "PUT",
+      "official_path": "/api/customers/{customer_id}/data",
+      "connector_path": "/customers/{customer_id}/data",
+      "summary": "Set customer data",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-customer-data.md",
+      "parameters": [
+        {
+          "name": "customer_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-customer",
+      "method": "DELETE",
+      "official_path": "/api/customers/{id}",
+      "connector_path": "/customers/{id}",
+      "summary": "Delete a customer",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-customer.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-customer",
+      "method": "GET",
+      "official_path": "/api/customers/{id}",
+      "connector_path": "/customers/{id}",
+      "summary": "Retrieve a customer",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-customer.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "relationships",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-customer",
+      "method": "PUT",
+      "official_path": "/api/customers/{id}",
+      "connector_path": "/customers/{id}",
+      "summary": "Update a customer",
+      "tags": [
+        "Customers"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-customer.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-custom-fields",
+      "method": "GET",
+      "official_path": "/api/custom-fields",
+      "connector_path": "/custom-fields",
+      "summary": "List custom fields",
+      "tags": [
+        "Custom Fields"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-custom-fields.md",
+      "parameters": [
+        {
+          "name": "object_type",
+          "in": "query",
+          "required": true
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "archived",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-custom-field",
+      "method": "POST",
+      "official_path": "/api/custom-fields",
+      "connector_path": "/custom-fields",
+      "summary": "Create a custom field",
+      "tags": [
+        "Custom Fields"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-custom-field.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "update-custom-fields",
+      "method": "PUT",
+      "official_path": "/api/custom-fields",
+      "connector_path": "/custom-fields",
+      "summary": "Bulk update a list of custom fields",
+      "tags": [
+        "Custom Fields"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-custom-fields.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "get-custom-field",
+      "method": "GET",
+      "official_path": "/api/custom-fields/{id}",
+      "connector_path": "/custom-fields/{id}",
+      "summary": "Retrieve a custom field",
+      "tags": [
+        "Custom Fields"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-custom-field.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-custom-field",
+      "method": "PUT",
+      "official_path": "/api/custom-fields/{id}",
+      "connector_path": "/custom-fields/{id}",
+      "summary": "Update a custom field",
+      "tags": [
+        "Custom Fields"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-custom-field.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-events",
+      "method": "GET",
+      "official_path": "/api/events",
+      "connector_path": "/events",
+      "summary": "List events",
+      "tags": [
+        "Events"
+      ],
+      "lane": "cdc_changefeed",
+      "source_url": "https://developers.gorgias.com/reference/list-events.md",
+      "parameters": [
+        {
+          "name": "created_datetime",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "object_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "object_type",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "types",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "user_ids",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-event",
+      "method": "GET",
+      "official_path": "/api/events/{id}",
+      "connector_path": "/events/{id}",
+      "summary": "Retrieve an event",
+      "tags": [
+        "Events"
+      ],
+      "lane": "cdc_changefeed",
+      "source_url": "https://developers.gorgias.com/reference/get-event.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "post_api-upload",
+      "method": "POST",
+      "official_path": "/api/upload",
+      "connector_path": "/upload",
+      "summary": "Upload files",
+      "tags": [
+        "Files"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/post_api-upload.md",
+      "parameters": [
+        {
+          "name": "type",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": [
+        "multipart/form-data"
+      ]
+    },
+    {
+      "operation_id": "download-file",
+      "method": "GET",
+      "official_path": "/api/{file_type}/download/{domain_hash}/{resource_name}",
+      "connector_path": "/{file_type}/download/{domain_hash}/{resource_name}",
+      "summary": "Download a file",
+      "tags": [
+        "Files"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/download-file.md",
+      "parameters": [
+        {
+          "name": "file_type",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "domain_hash",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "resource_name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-integrations",
+      "method": "GET",
+      "official_path": "/api/integrations",
+      "connector_path": "/integrations",
+      "summary": "List integrations",
+      "tags": [
+        "Integrations"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-integrations.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-integration",
+      "method": "POST",
+      "official_path": "/api/integrations",
+      "connector_path": "/integrations",
+      "summary": "Create an integration",
+      "tags": [
+        "Integrations"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-integration.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-integration",
+      "method": "DELETE",
+      "official_path": "/api/integrations/{id}",
+      "connector_path": "/integrations/{id}",
+      "summary": "Delete an integration",
+      "tags": [
+        "Integrations"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-integration.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-integration",
+      "method": "GET",
+      "official_path": "/api/integrations/{id}",
+      "connector_path": "/integrations/{id}",
+      "summary": "Retrieve an integration",
+      "tags": [
+        "Integrations"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-integration.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-integration",
+      "method": "PUT",
+      "official_path": "/api/integrations/{id}",
+      "connector_path": "/integrations/{id}",
+      "summary": "Update an integration",
+      "tags": [
+        "Integrations"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-integration.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-jobs",
+      "method": "GET",
+      "official_path": "/api/jobs",
+      "connector_path": "/jobs",
+      "summary": "List jobs",
+      "tags": [
+        "Jobs"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-jobs.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "type",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-job",
+      "method": "POST",
+      "official_path": "/api/jobs",
+      "connector_path": "/jobs",
+      "summary": "Create a job",
+      "tags": [
+        "Jobs"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-job.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "cancel-job",
+      "method": "DELETE",
+      "official_path": "/api/jobs/{id}",
+      "connector_path": "/jobs/{id}",
+      "summary": "Cancel a job",
+      "tags": [
+        "Jobs"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/cancel-job.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-job",
+      "method": "GET",
+      "official_path": "/api/jobs/{id}",
+      "connector_path": "/jobs/{id}",
+      "summary": "Retrieve a job",
+      "tags": [
+        "Jobs"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-job.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-job",
+      "method": "PUT",
+      "official_path": "/api/jobs/{id}",
+      "connector_path": "/jobs/{id}",
+      "summary": "Update a job",
+      "tags": [
+        "Jobs"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-job.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-macros",
+      "method": "GET",
+      "official_path": "/api/macros",
+      "connector_path": "/macros",
+      "summary": "List macros",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-macros.md",
+      "parameters": [
+        {
+          "name": "tags",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "languages",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "message_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ticket_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "number_predictions",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "archived",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-macro",
+      "method": "POST",
+      "official_path": "/api/macros",
+      "connector_path": "/macros",
+      "summary": "Create a macro",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-macro.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "bulk-archive-macros",
+      "method": "PUT",
+      "official_path": "/api/macros/archive",
+      "connector_path": "/macros/archive",
+      "summary": "Archive macros",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/bulk-archive-macros.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "bulk-unarchive-macros",
+      "method": "PUT",
+      "official_path": "/api/macros/unarchive",
+      "connector_path": "/macros/unarchive",
+      "summary": "Unarchive macros",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/bulk-unarchive-macros.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-macro",
+      "method": "DELETE",
+      "official_path": "/api/macros/{id}",
+      "connector_path": "/macros/{id}",
+      "summary": "Delete a macro",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-macro.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-macro",
+      "method": "GET",
+      "official_path": "/api/macros/{id}",
+      "connector_path": "/macros/{id}",
+      "summary": "Retrieve a macro",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-macro.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-macro",
+      "method": "PUT",
+      "official_path": "/api/macros/{id}",
+      "connector_path": "/macros/{id}",
+      "summary": "Update a macro",
+      "tags": [
+        "Macros"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-macro.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "get-metric-card",
+      "method": "GET",
+      "official_path": "/api/metric-cards/{slug}",
+      "connector_path": "/metric-cards/{slug}",
+      "summary": "Retrieve a metric card by slug",
+      "tags": [
+        "Metric Cards"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-metric-card.md",
+      "parameters": [
+        {
+          "name": "slug",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "search-metric-cards",
+      "method": "GET",
+      "official_path": "/api/metric-cards",
+      "connector_path": "/metric-cards",
+      "summary": "Search metric cards",
+      "tags": [
+        "Metric Cards"
+      ],
+      "lane": "direct_read_query_search",
+      "source_url": "https://developers.gorgias.com/reference/search-metric-cards.md",
+      "parameters": [
+        {
+          "name": "category",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "q",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "include",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-metric-card-feedback",
+      "method": "POST",
+      "official_path": "/api/metric-cards/{slug}/feedback",
+      "connector_path": "/metric-cards/{slug}/feedback",
+      "summary": "Submit feedback on a metric card definition",
+      "tags": [
+        "Metric Cards"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-metric-card-feedback.md",
+      "parameters": [
+        {
+          "name": "slug",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-rules",
+      "method": "GET",
+      "official_path": "/api/rules",
+      "connector_path": "/rules",
+      "summary": "List rules",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-rules.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-rule",
+      "method": "POST",
+      "official_path": "/api/rules",
+      "connector_path": "/rules",
+      "summary": "Create a rule",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-rule.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "update-rules-priorities",
+      "method": "POST",
+      "official_path": "/api/rules/priorities",
+      "connector_path": "/rules/priorities",
+      "summary": "Update rules' priorities",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-rules-priorities.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-rule",
+      "method": "DELETE",
+      "official_path": "/api/rules/{id}",
+      "connector_path": "/rules/{id}",
+      "summary": "Delete a rule",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-rule.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-rule",
+      "method": "GET",
+      "official_path": "/api/rules/{id}",
+      "connector_path": "/rules/{id}",
+      "summary": "Retrieve a rule",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-rule.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-rule",
+      "method": "PUT",
+      "official_path": "/api/rules/{id}",
+      "connector_path": "/rules/{id}",
+      "summary": "Update a rule",
+      "tags": [
+        "Rules"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-rule.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-satisfaction-surveys",
+      "method": "GET",
+      "official_path": "/api/satisfaction-surveys",
+      "connector_path": "/satisfaction-surveys",
+      "summary": "List surveys",
+      "tags": [
+        "Satisfaction Surveys"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-satisfaction-surveys.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ticket_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-satisfaction-survey",
+      "method": "POST",
+      "official_path": "/api/satisfaction-surveys",
+      "connector_path": "/satisfaction-surveys",
+      "summary": "Create a survey",
+      "tags": [
+        "Satisfaction Surveys"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-satisfaction-survey.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "get-satisfaction-survey",
+      "method": "GET",
+      "official_path": "/api/satisfaction-surveys/{id}",
+      "connector_path": "/satisfaction-surveys/{id}",
+      "summary": "Retrieve a survey",
+      "tags": [
+        "Satisfaction Surveys"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-satisfaction-survey.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-satisfaction-survey",
+      "method": "PUT",
+      "official_path": "/api/satisfaction-surveys/{id}",
+      "connector_path": "/satisfaction-surveys/{id}",
+      "summary": "Update a survey",
+      "tags": [
+        "Satisfaction Surveys"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-satisfaction-survey.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "search",
+      "method": "POST",
+      "official_path": "/api/search",
+      "connector_path": "/search",
+      "summary": "Search for resources",
+      "tags": [
+        "Search"
+      ],
+      "lane": "direct_read_query_search",
+      "source_url": "https://developers.gorgias.com/reference/search-1.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "get-legacy-statistic",
+      "method": "POST",
+      "official_path": "/api/stats/{name}",
+      "connector_path": "/stats/{name}",
+      "summary": "Retrieve a statistic",
+      "tags": [
+        "Statistics"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/get-legacy-statistic.md",
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "download-legacy-statistic",
+      "method": "POST",
+      "official_path": "/api/stats/{name}/download",
+      "connector_path": "/stats/{name}/download",
+      "summary": "Download a statistic",
+      "tags": [
+        "Statistics"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/download-legacy-statistic.md",
+      "parameters": [
+        {
+          "name": "name",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-tags",
+      "method": "DELETE",
+      "official_path": "/api/tags",
+      "connector_path": "/tags",
+      "summary": "Delete tags",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-tags.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-tags",
+      "method": "GET",
+      "official_path": "/api/tags",
+      "connector_path": "/tags",
+      "summary": "List tags",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-tags.md",
+      "parameters": [
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-tag",
+      "method": "POST",
+      "official_path": "/api/tags",
+      "connector_path": "/tags",
+      "summary": "Create a tag",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-tag.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "merge-tags",
+      "method": "PUT",
+      "official_path": "/api/tags/{destination_tag_id}/merge",
+      "connector_path": "/tags/{destination_tag_id}/merge",
+      "summary": "Merge tags",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/merge-tags.md",
+      "parameters": [
+        {
+          "name": "destination_tag_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-tag",
+      "method": "DELETE",
+      "official_path": "/api/tags/{id}",
+      "connector_path": "/tags/{id}",
+      "summary": "Delete a tag",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-tag.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-tag",
+      "method": "GET",
+      "official_path": "/api/tags/{id}",
+      "connector_path": "/tags/{id}",
+      "summary": "Retrieve a tag",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-tag.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-tag",
+      "method": "PUT",
+      "official_path": "/api/tags/{id}",
+      "connector_path": "/tags/{id}",
+      "summary": "Update a tag",
+      "tags": [
+        "Tags"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-tag.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-teams",
+      "method": "GET",
+      "official_path": "/api/teams",
+      "connector_path": "/teams",
+      "summary": "List teams",
+      "tags": [
+        "Teams"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-teams.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-team",
+      "method": "POST",
+      "official_path": "/api/teams",
+      "connector_path": "/teams",
+      "summary": "Create a team",
+      "tags": [
+        "Teams"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-team.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-team",
+      "method": "DELETE",
+      "official_path": "/api/teams/{id}",
+      "connector_path": "/teams/{id}",
+      "summary": "Delete a team",
+      "tags": [
+        "Teams"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-team.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-team",
+      "method": "GET",
+      "official_path": "/api/teams/{id}",
+      "connector_path": "/teams/{id}",
+      "summary": "Retrieve a team",
+      "tags": [
+        "Teams"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-team.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-team",
+      "method": "PUT",
+      "official_path": "/api/teams/{id}",
+      "connector_path": "/teams/{id}",
+      "summary": "Update a team",
+      "tags": [
+        "Teams"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-team.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-tickets",
+      "method": "GET",
+      "official_path": "/api/tickets",
+      "connector_path": "/tickets",
+      "summary": "List tickets",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-tickets.md",
+      "parameters": [
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "customer_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "trashed",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "external_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "view_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "rule_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ticket_ids",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-ticket",
+      "method": "POST",
+      "official_path": "/api/tickets",
+      "connector_path": "/tickets",
+      "summary": "Create a ticket",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-ticket",
+      "method": "DELETE",
+      "official_path": "/api/tickets/{id}",
+      "connector_path": "/tickets/{id}",
+      "summary": "Delete a ticket",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-ticket",
+      "method": "GET",
+      "official_path": "/api/tickets/{id}",
+      "connector_path": "/tickets/{id}",
+      "summary": "Retrieve a ticket",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "relationships",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-ticket",
+      "method": "PUT",
+      "official_path": "/api/tickets/{id}",
+      "connector_path": "/tickets/{id}",
+      "summary": "Update a ticket",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-ticket-custom-fields",
+      "method": "GET",
+      "official_path": "/api/tickets/{ticket_id}/custom-fields",
+      "connector_path": "/tickets/{ticket_id}/custom-fields",
+      "summary": "List ticket field values",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-custom-fields.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-ticket-custom-fields",
+      "method": "PUT",
+      "official_path": "/api/tickets/{ticket_id}/custom-fields",
+      "connector_path": "/tickets/{ticket_id}/custom-fields",
+      "summary": "Update ticket fields values",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-fields.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-ticket-custom-field",
+      "method": "DELETE",
+      "official_path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "connector_path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "summary": "Delete ticket field value",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-custom-field.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-ticket-custom-field",
+      "method": "PUT",
+      "official_path": "/api/tickets/{ticket_id}/custom-fields/{id}",
+      "connector_path": "/tickets/{ticket_id}/custom-fields/{id}",
+      "summary": "Update ticket field value",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-custom-field.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-ticket-tags",
+      "method": "DELETE",
+      "official_path": "/api/tickets/{ticket_id}/tags",
+      "connector_path": "/tickets/{ticket_id}/tags",
+      "summary": "Remove ticket tags",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-tags.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "create-ticket-tags",
+      "method": "POST",
+      "official_path": "/api/tickets/{ticket_id}/tags",
+      "connector_path": "/tickets/{ticket_id}/tags",
+      "summary": "Add ticket tags",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-tags.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "update-ticket-tags",
+      "method": "PUT",
+      "official_path": "/api/tickets/{ticket_id}/tags",
+      "connector_path": "/tickets/{ticket_id}/tags",
+      "summary": "Set ticket tags",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-tags.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-ticket-tags",
+      "method": "GET",
+      "official_path": "/api/tickets/{ticket_id}/tags",
+      "connector_path": "/tickets/{ticket_id}/tags",
+      "summary": "List ticket tags",
+      "tags": [
+        "Tickets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-tags.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-messages",
+      "method": "GET",
+      "official_path": "/api/messages",
+      "connector_path": "/messages",
+      "summary": "List messages",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-messages.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ticket_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-ticket-messages",
+      "method": "GET",
+      "official_path": "/api/tickets/{ticket_id}/messages",
+      "connector_path": "/tickets/{ticket_id}/messages",
+      "summary": "List messages of a ticket",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-ticket-messages.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-ticket-message",
+      "method": "POST",
+      "official_path": "/api/tickets/{ticket_id}/messages",
+      "connector_path": "/tickets/{ticket_id}/messages",
+      "summary": "Create a message",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-ticket-message.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "action",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-ticket-message",
+      "method": "DELETE",
+      "official_path": "/api/tickets/{ticket_id}/messages/{id}",
+      "connector_path": "/tickets/{ticket_id}/messages/{id}",
+      "summary": "Delete a message",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-ticket-message.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-ticket-message",
+      "method": "GET",
+      "official_path": "/api/tickets/{ticket_id}/messages/{id}",
+      "connector_path": "/tickets/{ticket_id}/messages/{id}",
+      "summary": "Retrieve a message",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-ticket-message.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-ticket-message",
+      "method": "PUT",
+      "official_path": "/api/tickets/{ticket_id}/messages/{id}",
+      "connector_path": "/tickets/{ticket_id}/messages/{id}",
+      "summary": "Update a message",
+      "tags": [
+        "Ticket Messages"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-ticket-message.md",
+      "parameters": [
+        {
+          "name": "ticket_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "action",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-users",
+      "method": "GET",
+      "official_path": "/api/users",
+      "connector_path": "/users",
+      "summary": "List users",
+      "tags": [
+        "Users"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-users.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "external_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "email",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "roles",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "search",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "available_first",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-user",
+      "method": "POST",
+      "official_path": "/api/users",
+      "connector_path": "/users",
+      "summary": "Create a user",
+      "tags": [
+        "Users"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-user.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-user",
+      "method": "DELETE",
+      "official_path": "/api/users/{id}",
+      "connector_path": "/users/{id}",
+      "summary": "Delete a user",
+      "tags": [
+        "Users"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-user.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-user",
+      "method": "GET",
+      "official_path": "/api/users/{id}",
+      "connector_path": "/users/{id}",
+      "summary": "Retrieve a user",
+      "tags": [
+        "Users"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-user.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-user",
+      "method": "PUT",
+      "official_path": "/api/users/{id}",
+      "connector_path": "/users/{id}",
+      "summary": "Update a user",
+      "tags": [
+        "Users"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-user.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-views",
+      "method": "GET",
+      "official_path": "/api/views",
+      "connector_path": "/views",
+      "summary": "List views",
+      "tags": [
+        "Views"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-views.md",
+      "parameters": [
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "category",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-view",
+      "method": "POST",
+      "official_path": "/api/views",
+      "connector_path": "/views",
+      "summary": "Create a view",
+      "tags": [
+        "Views"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-view.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-view",
+      "method": "DELETE",
+      "official_path": "/api/views/{id}",
+      "connector_path": "/views/{id}",
+      "summary": "Delete a view",
+      "tags": [
+        "Views"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-view.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-view",
+      "method": "GET",
+      "official_path": "/api/views/{id}",
+      "connector_path": "/views/{id}",
+      "summary": "Retrieve a view",
+      "tags": [
+        "Views"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-view.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-view",
+      "method": "PUT",
+      "official_path": "/api/views/{id}",
+      "connector_path": "/views/{id}",
+      "summary": "Update a view",
+      "tags": [
+        "Views"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-view.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-view-items",
+      "method": "GET",
+      "official_path": "/api/views/{view_id}/items",
+      "connector_path": "/views/{view_id}/items",
+      "summary": "List view's items",
+      "tags": [
+        "Views"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-view-items.md",
+      "parameters": [
+        {
+          "name": "view_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "direction",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ignored_item",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-view-items",
+      "method": "PUT",
+      "official_path": "/api/views/{view_id}/items",
+      "connector_path": "/views/{view_id}/items",
+      "summary": "Search for view's items",
+      "tags": [
+        "Views"
+      ],
+      "lane": "direct_read_query_search",
+      "source_url": "https://developers.gorgias.com/reference/update-view-items.md",
+      "parameters": [
+        {
+          "name": "view_id",
+          "in": "path",
+          "required": true
+        },
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "direction",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ignored_item",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "list-voice-calls",
+      "method": "GET",
+      "official_path": "/api/phone/voice-calls",
+      "connector_path": "/phone/voice-calls",
+      "summary": "List voice calls",
+      "tags": [
+        "Voice Calls"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-calls.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "ticket_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-voice-call",
+      "method": "GET",
+      "official_path": "/api/phone/voice-calls/{id}",
+      "connector_path": "/phone/voice-calls/{id}",
+      "summary": "Retrieve a voice call",
+      "tags": [
+        "Voice Calls"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-voice-call-recordings",
+      "method": "GET",
+      "official_path": "/api/phone/voice-call-recordings",
+      "connector_path": "/phone/voice-call-recordings",
+      "summary": "List voice call recordings",
+      "tags": [
+        "Voice Call Recordings"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-recordings.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "call_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "delete-voice-call-recording",
+      "method": "DELETE",
+      "official_path": "/api/phone/voice-call-recordings/{id}",
+      "connector_path": "/phone/voice-call-recordings/{id}",
+      "summary": "Delete a voice call recording",
+      "tags": [
+        "Voice Call Recordings"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/delete-voice-call-recording.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-voice-call-recording",
+      "method": "GET",
+      "official_path": "/api/phone/voice-call-recordings/{id}",
+      "connector_path": "/phone/voice-call-recordings/{id}",
+      "summary": "Retrieve a voice call recording",
+      "tags": [
+        "Voice Call Recordings"
+      ],
+      "lane": "binary_file",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-recording.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-voice-call-events",
+      "method": "GET",
+      "official_path": "/api/phone/voice-call-events",
+      "connector_path": "/phone/voice-call-events",
+      "summary": "List voice call events",
+      "tags": [
+        "Voice Call Events"
+      ],
+      "lane": "cdc_changefeed",
+      "source_url": "https://developers.gorgias.com/reference/list-voice-call-events.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "call_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-voice-call-event",
+      "method": "GET",
+      "official_path": "/api/phone/voice-call-events/{id}",
+      "connector_path": "/phone/voice-call-events/{id}",
+      "summary": "Retrieve a voice call event",
+      "tags": [
+        "Voice Call Events"
+      ],
+      "lane": "cdc_changefeed",
+      "source_url": "https://developers.gorgias.com/reference/get-voice-call-event.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "list-widgets",
+      "method": "GET",
+      "official_path": "/api/widgets",
+      "connector_path": "/widgets",
+      "summary": "List widgets",
+      "tags": [
+        "Widgets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/list-widgets.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "order_by",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "integration_id",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "app_id",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "create-widget",
+      "method": "POST",
+      "official_path": "/api/widgets",
+      "connector_path": "/widgets",
+      "summary": "Create a widget",
+      "tags": [
+        "Widgets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/create-widget.md",
+      "parameters": [],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "delete-widget",
+      "method": "DELETE",
+      "official_path": "/api/widgets/{id}",
+      "connector_path": "/widgets/{id}",
+      "summary": "Delete a widget",
+      "tags": [
+        "Widgets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/delete-widget.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "get-widget",
+      "method": "GET",
+      "official_path": "/api/widgets/{id}",
+      "connector_path": "/widgets/{id}",
+      "summary": "Retrieve a widget",
+      "tags": [
+        "Widgets"
+      ],
+      "lane": "etl_read",
+      "source_url": "https://developers.gorgias.com/reference/get-widget.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": []
+    },
+    {
+      "operation_id": "update-widget",
+      "method": "PUT",
+      "official_path": "/api/widgets/{id}",
+      "connector_path": "/widgets/{id}",
+      "summary": "Update a widget",
+      "tags": [
+        "Widgets"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/update-widget.md",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    },
+    {
+      "operation_id": "get-statistic",
+      "method": "POST",
+      "official_path": "/api/reporting/stats",
+      "connector_path": "/reporting/stats",
+      "summary": "Retrieve a statistic",
+      "tags": [
+        "Reporting Statistics"
+      ],
+      "lane": "reverse_etl_write",
+      "source_url": "https://developers.gorgias.com/reference/get-statistic.md",
+      "parameters": [
+        {
+          "name": "cursor",
+          "in": "query",
+          "required": false
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "required": false
+        }
+      ],
+      "request_body_content_types": [
+        "application/json"
+      ]
+    }
+  ]
+}
