@@ -1,0 +1,16 @@
+{
+  "record": {
+    "credit_note_id": "credit_note_id_fixture_1",
+    "allocation_id": "allocation_id_fixture_1"
+  },
+  "expect": {
+    "method": "DELETE",
+    "path": "/CreditNotes/credit_note_id_fixture_1/Allocations/allocation_id_fixture_1"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

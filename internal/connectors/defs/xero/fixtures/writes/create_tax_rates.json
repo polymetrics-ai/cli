@@ -1,0 +1,22 @@
+{
+  "record": {
+    "TaxRates": [
+      "tax_rate_fixture"
+    ]
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/TaxRates",
+    "body": {
+      "TaxRates": [
+        "tax_rate_fixture"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}

@@ -1,22 +1,28 @@
 {
-  "request": { "method": "GET", "path": "/Contacts", "query": { "page": "1" } },
+  "request": {
+    "method": "GET",
+    "path": "/Contacts"
+  },
   "response": {
     "status": 200,
     "body": {
-      "Id": "fixture-1",
+      "Id": "fixture-response",
       "Status": "OK",
       "Contacts": [
         {
-          "ContactID": "contact_fixture_1",
+          "id": "id_fixture_1",
+          "ContactID": "contact_id_fixture_1",
           "ContactStatus": "ACTIVE",
-          "Name": "Fixture Customer",
-          "FirstName": "Fixture",
-          "LastName": "Customer",
-          "EmailAddress": "fixture1@example.com",
+          "status": "ACTIVE",
+          "Name": "name_fixture",
+          "FirstName": "first_name_fixture",
+          "LastName": "last_name_fixture",
+          "EmailAddress": "fixture@example.invalid",
           "IsSupplier": false,
-          "IsCustomer": true,
-          "AccountNumber": "ACC-1",
-          "UpdatedDateUTC": "2026-01-01T00:00:00Z"
+          "IsCustomer": false,
+          "AccountNumber": "account_number_fixture",
+          "UpdatedDateUTC": "2026-01-02T00:00:00Z",
+          "updated_at": "2026-01-02T00:00:00Z"
         }
       ]
     }

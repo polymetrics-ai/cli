@@ -212941,6 +212941,16 @@
         "kind": "create"
       },
       {
+        "name": "delete_bank_transfers",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
+        "name": "delete_bank_transfer",
+        "method": "POST",
+        "kind": "delete"
+      },
+      {
         "name": "create_bank_transfer_history_record",
         "method": "PUT",
         "kind": "create"
@@ -213326,8 +213336,1556 @@
         "kind": "update"
       }
     ],
-    "cli_surface": null,
-    "docs_md": "# Overview\n\nReads and writes Xero Accounting API resources through data streams and typed\nwrite actions.\n\nReadable streams: `invoices`, `contacts`, `accounts`, `bank_transactions`, `items`, `payments`,\n`account`, `account_attachments`, `bank_transaction`, `bank_transaction_attachments`,\n`bank_transactions_history`, `bank_transfer`, `bank_transfer_attachments`, `bank_transfer_history`,\n`bank_transfers`, `batch_payment`, `batch_payment_history`, `batch_payments`, `branding_theme`,\n`branding_theme_payment_services`, `branding_themes`, `budget`, `budgets`, `contact`,\n`contact_attachments`, `contact_by_contact_number`, `contact_cis_settings`, `contact_group`,\n`contact_groups`, `contact_history`, `credit_note`, `credit_note_attachments`,\n`credit_note_history`, `credit_notes`, `currencies`, `expense_claim`, `expense_claim_history`,\n`expense_claims`, `invoice`, `invoice_attachments`, `invoice_history`, `invoice_reminders`, `item`,\n`item_history`, `journal`, `journal_by_number`, `journals`, `linked_transaction`,\n`linked_transactions`, `manual_journal`, `manual_journal_attachments`, `manual_journals`,\n`manual_journals_history`, `online_invoice`, `organisation_actions`, `organisation_cis_settings`,\n`organisations`, `overpayment`, `overpayment_history`, `overpayments`, `payment`, `payment_history`,\n`payment_services`, `prepayment`, `prepayment_history`, `prepayments`, `purchase_order`,\n`purchase_order_attachments`, `purchase_order_by_number`, `purchase_order_history`,\n`purchase_orders`, `quote`, `quote_attachments`, `quote_history`, `quotes`, `receipt`,\n`receipt_attachments`, `receipt_history`, `receipts`, `repeating_invoice`,\n`repeating_invoice_attachments`, `repeating_invoice_history`, `repeating_invoices`,\n`report_aged_payables_by_contact`, `report_aged_receivables_by_contact`, `report_balance_sheet`,\n`report_bank_summary`, `report_budget_summary`, `report_executive_summary`, `report_from_id`,\n`report_profit_and_loss`, `report_ten_ninety_nine`, `report_trial_balance`, `reports_list`,\n`tax_rate_by_tax_type`, `tax_rates`, `tracking_categories`, `tracking_category`, `user`, `users`.\n\nWrite actions: `create_account`, `delete_account`, `update_account`, `upsert_bank_transactions`,\n`create_bank_transactions`, `update_bank_transaction`, `create_bank_transaction_history_record`,\n`create_bank_transfer`, `create_bank_transfer_history_record`, `delete_batch_payment`,\n`create_batch_payment`, `delete_batch_payment_by_url_param`, `create_batch_payment_history_record`,\n`create_branding_theme_payment_services`, `create_contact_group`, `update_contact_group`,\n`delete_contact_group_contacts`, `create_contact_group_contacts`, `delete_contact_group_contact`,\n`upsert_contacts`, `create_contacts`, `update_contact`, `create_contact_history`,\n`upsert_credit_notes`, `create_credit_notes`, `update_credit_note`, `create_credit_note_allocation`,\n`delete_credit_note_allocations`, `create_credit_note_history`, `create_currency`,\n`create_expense_claims`, `update_expense_claim`, `create_expense_claim_history`, `upsert_invoices`,\n`create_invoices`, `update_invoice`, `email_invoice`, `create_invoice_history`, `upsert_items`,\n`create_items`, `delete_item`, `update_item`, `create_item_history`, `create_linked_transaction`,\n`delete_linked_transaction`, `update_linked_transaction`, `upsert_manual_journals`,\n`create_manual_journals`, `update_manual_journal`, `create_manual_journal_history_record`,\n`create_overpayment_allocations`, `delete_overpayment_allocations`, `create_overpayment_history`,\n`create_payment`, `create_payments`, `delete_payment`, `create_payment_history`,\n`create_payment_service`, `create_prepayment_allocations`, `delete_prepayment_allocations`,\n`create_prepayment_history`, `upsert_purchase_orders`, `create_purchase_orders`,\n`update_purchase_order`, `create_purchase_order_history`, `upsert_quotes`, `create_quotes`,\n`update_quote`, `create_quote_history`, `create_receipt`, `update_receipt`,\n`create_receipt_history`, `upsert_repeating_invoices`, `create_repeating_invoices`,\n`update_repeating_invoice`, `create_repeating_invoice_history`, `setup_organisation`,\n`update_tax_rate`, `create_tax_rates`, `create_tracking_category`, and 5 more.\n\nService API documentation: https://developer.xero.com/documentation/.\n\n## Auth setup\n\nConnection fields:\n\n- `access_token` (required, secret, string); Xero OAuth2 access token. Sent as a Bearer token; never\n  logged.\n- `account_id` (optional, string); Xero account id path parameter for docs-derived streams.\n- `bank_transaction_id` (optional, string); Xero bank transaction id path parameter for docs-derived\n  streams.\n- `bank_transfer_id` (optional, string); Xero bank transfer id path parameter for docs-derived\n  streams.\n- `base_url` (optional, string); default `https://api.xero.com/api.xro/2.0`; format `uri`; Xero\n  Accounting API base URL override for tests or proxies.\n- `batch_payment_id` (optional, string); Xero batch payment id path parameter for docs-derived\n  streams.\n- `branding_theme_id` (optional, string); Xero branding theme id path parameter for docs-derived\n  streams.\n- `budget_id` (optional, string); Xero budget id path parameter for docs-derived streams.\n- `contact_group_id` (optional, string); Xero contact group id path parameter for docs-derived\n  streams.\n- `contact_id` (optional, string); Xero contact id path parameter for docs-derived streams.\n- `contact_number` (optional, string); Xero contact number path parameter for docs-derived streams.\n- `credit_note_id` (optional, string); Xero credit note id path parameter for docs-derived streams.\n- `expense_claim_id` (optional, string); Xero expense claim id path parameter for docs-derived\n  streams.\n- `invoice_id` (optional, string); Xero invoice id path parameter for docs-derived streams.\n- `item_id` (optional, string); Xero item id path parameter for docs-derived streams.\n- `journal_id` (optional, string); Xero journal id path parameter for docs-derived streams.\n- `journal_number` (optional, string); Xero journal number path parameter for docs-derived streams.\n- `linked_transaction_id` (optional, string); Xero linked transaction id path parameter for\n  docs-derived streams.\n- `manual_journal_id` (optional, string); Xero manual journal id path parameter for docs-derived\n  streams.\n- `organisation_id` (optional, string); Xero organisation id path parameter for docs-derived\n  streams.\n- `overpayment_id` (optional, string); Xero overpayment id path parameter for docs-derived streams.\n- `payment_id` (optional, string); Xero payment id path parameter for docs-derived streams.\n- `prepayment_id` (optional, string); Xero prepayment id path parameter for docs-derived streams.\n- `purchase_order_id` (optional, string); Xero purchase order id path parameter for docs-derived\n  streams.\n- `purchase_order_number` (optional, string); Xero purchase order number path parameter for\n  docs-derived streams.\n- `quote_id` (optional, string); Xero quote id path parameter for docs-derived streams.\n- `receipt_id` (optional, string); Xero receipt id path parameter for docs-derived streams.\n- `repeating_invoice_id` (optional, string); Xero repeating invoice id path parameter for\n  docs-derived streams.\n- `report_id` (optional, string); Xero report id path parameter for docs-derived streams.\n- `tax_type` (optional, string); Xero tax type path parameter for docs-derived streams.\n- `tenant_id` (required, secret, string); Xero tenant (organisation) id. Sent as the Xero-tenant-id\n  header; never logged.\n- `tracking_category_id` (optional, string); Xero tracking category id path parameter for\n  docs-derived streams.\n- `user_id` (optional, string); Xero user id path parameter for docs-derived streams.\n\nSecret fields are redacted in logs and write previews: `access_token`, `tenant_id`.\n\nDefault configuration values: `base_url=https://api.xero.com/api.xro/2.0`.\n\nAuthentication behavior:\n\n- Bearer token authentication using `secrets.access_token`.\n\nRequests use the configured `base_url` value after applying defaults.\n\nConnection checks call GET `Organisation`.\n\n## Streams notes\n\nDefault pagination: page-number pagination; page parameter `page`; no page-size parameter; starts at\n1; page size 100.\n\nPagination by stream: none: `account`, `account_attachments`, `bank_transaction`,\n`bank_transaction_attachments`, `bank_transactions_history`, `bank_transfer`,\n`bank_transfer_attachments`, `bank_transfer_history`, `bank_transfers`, `batch_payment`,\n`batch_payment_history`, `batch_payments`, `branding_theme`, `branding_theme_payment_services`,\n`branding_themes`, `budget`, `budgets`, `contact`, `contact_attachments`,\n`contact_by_contact_number`, `contact_cis_settings`, `contact_group`, `contact_groups`,\n`contact_history`, `credit_note`, `credit_note_attachments`, `credit_note_history`, `currencies`,\n`expense_claim`, `expense_claim_history`, `expense_claims`, `invoice`, `invoice_attachments`,\n`invoice_history`, `invoice_reminders`, `item`, `item_history`, `journal`, `journal_by_number`,\n`journals`, `linked_transaction`, `manual_journal`, `manual_journal_attachments`,\n`manual_journals_history`, `online_invoice`, `organisation_actions`, `organisation_cis_settings`,\n`organisations`, `overpayment`, `overpayment_history`, `payment`, `payment_history`,\n`payment_services`, `prepayment`, `prepayment_history`, `purchase_order`,\n`purchase_order_attachments`, `purchase_order_by_number`, `purchase_order_history`, `quote`, and 27\nmore; page_number: `invoices`, `contacts`, `accounts`, `bank_transactions`, `items`, `payments`,\n`credit_notes`, `linked_transactions`, `manual_journals`, `overpayments`, `prepayments`,\n`purchase_orders`, `quotes`.\n\n- `invoices`: GET `Invoices` - records path `Invoices`; page-number pagination; page parameter\n  `page`; no page-size parameter; starts at 1; page size 100; computed output fields `ContactID`,\n  `id`, `status`, `type`, `updated_at`.\n- `contacts`: GET `Contacts` - records path `Contacts`; page-number pagination; page parameter\n  `page`; no page-size parameter; starts at 1; page size 100; computed output fields `id`, `status`,\n  `updated_at`.\n- `accounts`: GET `Accounts` - records path `Accounts`; page-number pagination; page parameter\n  `page`; no page-size parameter; starts at 1; page size 100; computed output fields `id`, `status`,\n  `type`, `updated_at`.\n- `bank_transactions`: GET `BankTransactions` - records path `BankTransactions`; page-number\n  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 100; computed\n  output fields `ContactID`, `id`, `status`, `type`, `updated_at`.\n- `items`: GET `Items` - records path `Items`; page-number pagination; page parameter `page`; no\n  page-size parameter; starts at 1; page size 100; computed output fields `id`, `updated_at`.\n- `payments`: GET `Payments` - records path `Payments`; page-number pagination; page parameter\n  `page`; no page-size parameter; starts at 1; page size 100; computed output fields `id`, `status`,\n  `updated_at`.\n- `account`: GET `Accounts/{{ config.account_id }}` - records path `Accounts`; emits passthrough\n  records.\n- `account_attachments`: GET `Accounts/{{ config.account_id }}/Attachments` - records path\n  `Attachments`; emits passthrough records.\n- `bank_transaction`: GET `BankTransactions/{{ config.bank_transaction_id }}` - records path\n  `BankTransactions`; emits passthrough records.\n- `bank_transaction_attachments`: GET `BankTransactions/{{ config.bank_transaction_id\n  }}/Attachments` - records path `Attachments`; emits passthrough records.\n- `bank_transactions_history`: GET `BankTransactions/{{ config.bank_transaction_id }}/History` -\n  records path `HistoryRecords`; emits passthrough records.\n- `bank_transfer`: GET `BankTransfers/{{ config.bank_transfer_id }}` - records path `BankTransfers`;\n  emits passthrough records.\n- `bank_transfer_attachments`: GET `BankTransfers/{{ config.bank_transfer_id }}/Attachments` -\n  records path `Attachments`; emits passthrough records.\n- `bank_transfer_history`: GET `BankTransfers/{{ config.bank_transfer_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `bank_transfers`: GET `BankTransfers` - records path `BankTransfers`; emits passthrough records.\n- `batch_payment`: GET `BatchPayments/{{ config.batch_payment_id }}` - records path `BatchPayments`;\n  emits passthrough records.\n- `batch_payment_history`: GET `BatchPayments/{{ config.batch_payment_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `batch_payments`: GET `BatchPayments` - records path `BatchPayments`; emits passthrough records.\n- `branding_theme`: GET `BrandingThemes/{{ config.branding_theme_id }}` - records path\n  `BrandingThemes`; emits passthrough records.\n- `branding_theme_payment_services`: GET `BrandingThemes/{{ config.branding_theme_id\n  }}/PaymentServices` - records path `PaymentServices`; emits passthrough records.\n- `branding_themes`: GET `BrandingThemes` - records path `BrandingThemes`; emits passthrough\n  records.\n- `budget`: GET `Budgets/{{ config.budget_id }}` - records path `Budgets`; emits passthrough\n  records.\n- `budgets`: GET `Budgets` - records path `Budgets`; emits passthrough records.\n- `contact`: GET `Contacts/{{ config.contact_id }}` - records path `Contacts`; emits passthrough\n  records.\n- `contact_attachments`: GET `Contacts/{{ config.contact_id }}/Attachments` - records path\n  `Attachments`; emits passthrough records.\n- `contact_by_contact_number`: GET `Contacts/{{ config.contact_number }}` - records path `Contacts`;\n  emits passthrough records.\n- `contact_cis_settings`: GET `Contacts/{{ config.contact_id }}/CISSettings` - records path\n  `CISSettings`; emits passthrough records.\n- `contact_group`: GET `ContactGroups/{{ config.contact_group_id }}` - records path `ContactGroups`;\n  emits passthrough records.\n- `contact_groups`: GET `ContactGroups` - records path `ContactGroups`; emits passthrough records.\n- `contact_history`: GET `Contacts/{{ config.contact_id }}/History` - records path `HistoryRecords`;\n  emits passthrough records.\n- `credit_note`: GET `CreditNotes/{{ config.credit_note_id }}` - records path `CreditNotes`; emits\n  passthrough records.\n- `credit_note_attachments`: GET `CreditNotes/{{ config.credit_note_id }}/Attachments` - records\n  path `Attachments`; emits passthrough records.\n- `credit_note_history`: GET `CreditNotes/{{ config.credit_note_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `credit_notes`: GET `CreditNotes` - records path `CreditNotes`; page-number pagination; page\n  parameter `page`; no page-size parameter; starts at 1; page size 100; emits passthrough records.\n- `currencies`: GET `Currencies` - records path `Currencies`; emits passthrough records.\n- `expense_claim`: GET `ExpenseClaims/{{ config.expense_claim_id }}` - records path `ExpenseClaims`;\n  emits passthrough records.\n- `expense_claim_history`: GET `ExpenseClaims/{{ config.expense_claim_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `expense_claims`: GET `ExpenseClaims` - records path `ExpenseClaims`; emits passthrough records.\n- `invoice`: GET `Invoices/{{ config.invoice_id }}` - records path `Invoices`; emits passthrough\n  records.\n- `invoice_attachments`: GET `Invoices/{{ config.invoice_id }}/Attachments` - records path\n  `Attachments`; emits passthrough records.\n- `invoice_history`: GET `Invoices/{{ config.invoice_id }}/History` - records path `HistoryRecords`;\n  emits passthrough records.\n- `invoice_reminders`: GET `InvoiceReminders/Settings` - records path `InvoiceReminders`; emits\n  passthrough records.\n- `item`: GET `Items/{{ config.item_id }}` - records path `Items`; emits passthrough records.\n- `item_history`: GET `Items/{{ config.item_id }}/History` - records path `HistoryRecords`; emits\n  passthrough records.\n- `journal`: GET `Journals/{{ config.journal_id }}` - records path `Journals`; emits passthrough\n  records.\n- `journal_by_number`: GET `Journals/{{ config.journal_number }}` - records path `Journals`; emits\n  passthrough records.\n- `journals`: GET `Journals` - records path `Journals`; emits passthrough records.\n- `linked_transaction`: GET `LinkedTransactions/{{ config.linked_transaction_id }}` - records path\n  `LinkedTransactions`; emits passthrough records.\n- `linked_transactions`: GET `LinkedTransactions` - records path `LinkedTransactions`; page-number\n  pagination; page parameter `page`; no page-size parameter; starts at 1; page size 100; emits\n  passthrough records.\n- `manual_journal`: GET `ManualJournals/{{ config.manual_journal_id }}` - records path\n  `ManualJournals`; emits passthrough records.\n- `manual_journal_attachments`: GET `ManualJournals/{{ config.manual_journal_id }}/Attachments` -\n  records path `Attachments`; emits passthrough records.\n- `manual_journals`: GET `ManualJournals` - records path `ManualJournals`; page-number pagination;\n  page parameter `page`; no page-size parameter; starts at 1; page size 100; emits passthrough\n  records.\n- `manual_journals_history`: GET `ManualJournals/{{ config.manual_journal_id }}/History` - records\n  path `HistoryRecords`; emits passthrough records.\n- `online_invoice`: GET `Invoices/{{ config.invoice_id }}/OnlineInvoice` - records path\n  `OnlineInvoices`; emits passthrough records.\n- `organisation_actions`: GET `Organisation/Actions` - records path `Actions`; emits passthrough\n  records.\n- `organisation_cis_settings`: GET `Organisation/{{ config.organisation_id }}/CISSettings` - records\n  path `CISSettings`; emits passthrough records.\n- `organisations`: GET `Organisation` - records path `Organisations`; emits passthrough records.\n- `overpayment`: GET `Overpayments/{{ config.overpayment_id }}` - records path `Overpayments`; emits\n  passthrough records.\n- `overpayment_history`: GET `Overpayments/{{ config.overpayment_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `overpayments`: GET `Overpayments` - records path `Overpayments`; page-number pagination; page\n  parameter `page`; no page-size parameter; starts at 1; page size 100; emits passthrough records.\n- `payment`: GET `Payments/{{ config.payment_id }}` - records path `Payments`; emits passthrough\n  records.\n- `payment_history`: GET `Payments/{{ config.payment_id }}/History` - records path `HistoryRecords`;\n  emits passthrough records.\n- `payment_services`: GET `PaymentServices` - records path `PaymentServices`; emits passthrough\n  records.\n- `prepayment`: GET `Prepayments/{{ config.prepayment_id }}` - records path `Prepayments`; emits\n  passthrough records.\n- `prepayment_history`: GET `Prepayments/{{ config.prepayment_id }}/History` - records path\n  `HistoryRecords`; emits passthrough records.\n- `prepayments`: GET `Prepayments` - records path `Prepayments`; page-number pagination; page\n  parameter `page`; no page-size parameter; starts at 1; page size 100; emits passthrough records.\n- `purchase_order`: GET `PurchaseOrders/{{ config.purchase_order_id }}` - records path\n  `PurchaseOrders`; emits passthrough records.\n- `purchase_order_attachments`: GET `PurchaseOrders/{{ config.purchase_order_id }}/Attachments` -\n  records path `Attachments`; emits passthrough records.\n- `purchase_order_by_number`: GET `PurchaseOrders/{{ config.purchase_order_number }}` - records path\n  `PurchaseOrders`; emits passthrough records.\n- `purchase_order_history`: GET `PurchaseOrders/{{ config.purchase_order_id }}/History` - records\n  path `HistoryRecords`; emits passthrough records.\n- `purchase_orders`: GET `PurchaseOrders` - records path `PurchaseOrders`; page-number pagination;\n  page parameter `page`; no page-size parameter; starts at 1; page size 100; emits passthrough\n  records.\n- `quote`: GET `Quotes/{{ config.quote_id }}` - records path `Quotes`; emits passthrough records.\n- `quote_attachments`: GET `Quotes/{{ config.quote_id }}/Attachments` - records path `Attachments`;\n  emits passthrough records.\n- `quote_history`: GET `Quotes/{{ config.quote_id }}/History` - records path `HistoryRecords`; emits\n  passthrough records.\n- `quotes`: GET `Quotes` - records path `Quotes`; page-number pagination; page parameter `page`; no\n  page-size parameter; starts at 1; page size 100; emits passthrough records.\n- `receipt`: GET `Receipts/{{ config.receipt_id }}` - records path `Receipts`; emits passthrough\n  records.\n- `receipt_attachments`: GET `Receipts/{{ config.receipt_id }}/Attachments` - records path\n  `Attachments`; emits passthrough records.\n- `receipt_history`: GET `Receipts/{{ config.receipt_id }}/History` - records path `HistoryRecords`;\n  emits passthrough records.\n- `receipts`: GET `Receipts` - records path `Receipts`; emits passthrough records.\n- `repeating_invoice`: GET `RepeatingInvoices/{{ config.repeating_invoice_id }}` - records path\n  `RepeatingInvoices`; emits passthrough records.\n- `repeating_invoice_attachments`: GET `RepeatingInvoices/{{ config.repeating_invoice_id\n  }}/Attachments` - records path `Attachments`; emits passthrough records.\n- `repeating_invoice_history`: GET `RepeatingInvoices/{{ config.repeating_invoice_id }}/History` -\n  records path `HistoryRecords`; emits passthrough records.\n- `repeating_invoices`: GET `RepeatingInvoices` - records path `RepeatingInvoices`; emits\n  passthrough records.\n- `report_aged_payables_by_contact`: GET `Reports/AgedPayablesByContact` - records path `Reports`;\n  emits passthrough records.\n- `report_aged_receivables_by_contact`: GET `Reports/AgedReceivablesByContact` - records path\n  `Reports`; emits passthrough records.\n- `report_balance_sheet`: GET `Reports/BalanceSheet` - records path `Reports`; emits passthrough\n  records.\n- `report_bank_summary`: GET `Reports/BankSummary` - records path `Reports`; emits passthrough\n  records.\n- `report_budget_summary`: GET `Reports/BudgetSummary` - records path `Reports`; emits passthrough\n  records.\n- `report_executive_summary`: GET `Reports/ExecutiveSummary` - records path `Reports`; emits\n  passthrough records.\n- `report_from_id`: GET `Reports/{{ config.report_id }}` - records path `Reports`; emits passthrough\n  records.\n- `report_profit_and_loss`: GET `Reports/ProfitAndLoss` - records path `Reports`; emits passthrough\n  records.\n- `report_ten_ninety_nine`: GET `Reports/TenNinetyNine` - records path `Reports`; emits passthrough\n  records.\n- `report_trial_balance`: GET `Reports/TrialBalance` - records path `Reports`; emits passthrough\n  records.\n- `reports_list`: GET `Reports` - records path `Reports`; emits passthrough records.\n- `tax_rate_by_tax_type`: GET `TaxRates/{{ config.tax_type }}` - records path `TaxRates`; emits\n  passthrough records.\n- `tax_rates`: GET `TaxRates` - records path `TaxRates`; emits passthrough records.\n- `tracking_categories`: GET `TrackingCategories` - records path `TrackingCategories`; emits\n  passthrough records.\n- `tracking_category`: GET `TrackingCategories/{{ config.tracking_category_id }}` - records path\n  `TrackingCategories`; emits passthrough records.\n- `user`: GET `Users/{{ config.user_id }}` - records path `Users`; emits passthrough records.\n- `users`: GET `Users` - records path `Users`; emits passthrough records.\n\n## Write actions & risks\n\nOverall write risk: creates, updates, emails, sets up, and deletes Xero Accounting API resources in\nthe connected tenant.\n\nReverse ETL writes should be planned, previewed, approved, and then executed. Declared actions:\n\n- `create_account`: PUT `Accounts` - kind `create`; body type `json`; accepted fields `AccountID`,\n  `AddToWatchlist`, `BankAccountNumber`, `BankAccountType`, `Class`, `Code`, `CurrencyCode`,\n  `Description`, `EnablePaymentsToAccount`, `HasAttachments`, `Name`, `ReportingCode`,\n  `ReportingCodeName`, `ShowInExpenseClaims`, `Status`, `SystemAccount`, `TaxType`, `Type`, and 2\n  more; risk: creates Xero account resources in the connected tenant; approval required.\n- `delete_account`: DELETE `Accounts/{{ record.account_id }}` - kind `delete`; body type `none`;\n  path fields `account_id`; required record fields `account_id`; accepted fields `account_id`;\n  missing records treated as success for status `404`; confirmation `destructive`; risk: deletes\n  Xero account resources in the connected tenant; approval required.\n- `update_account`: POST `Accounts/{{ record.account_id }}` - kind `update`; body type `json`; path\n  fields `account_id`; required record fields `account_id`; accepted fields `Accounts`,\n  `account_id`; risk: mutates Xero account resources in the connected tenant; approval required.\n- `upsert_bank_transactions`: POST `BankTransactions` - kind `update`; body type `json`; accepted\n  fields `BankTransactions`, `Warnings`, `pagination`; risk: mutates Xero bank transactions\n  resources in the connected tenant; approval required.\n- `create_bank_transactions`: PUT `BankTransactions` - kind `create`; body type `json`; accepted\n  fields `BankTransactions`, `Warnings`, `pagination`; risk: creates Xero bank transactions\n  resources in the connected tenant; approval required.\n- `update_bank_transaction`: POST `BankTransactions/{{ record.bank_transaction_id }}` - kind\n  `update`; body type `json`; path fields `bank_transaction_id`; required record fields\n  `bank_transaction_id`; accepted fields `BankTransactions`, `Warnings`, `bank_transaction_id`,\n  `pagination`; risk: mutates Xero bank transaction resources in the connected tenant; approval\n  required.\n- `create_bank_transaction_history_record`: PUT `BankTransactions/{{ record.bank_transaction_id\n  }}/History` - kind `create`; body type `none`; path fields `bank_transaction_id`; required record\n  fields `bank_transaction_id`; accepted fields `bank_transaction_id`; risk: creates Xero bank\n  transaction history record resources in the connected tenant; approval required.\n- `create_bank_transfer`: PUT `BankTransfers` - kind `create`; body type `json`; accepted fields\n  `BankTransfers`; risk: creates Xero bank transfer resources in the connected tenant; approval\n  required.\n- `create_bank_transfer_history_record`: PUT `BankTransfers/{{ record.bank_transfer_id }}/History` -\n  kind `create`; body type `none`; path fields `bank_transfer_id`; required record fields\n  `bank_transfer_id`; accepted fields `bank_transfer_id`; risk: creates Xero bank transfer history\n  record resources in the connected tenant; approval required.\n- `delete_batch_payment`: POST `BatchPayments` - kind `delete`; body type `json`; required record\n  fields `Status`, `BatchPaymentID`; accepted fields `BatchPaymentID`, `Status`; confirmation\n  `destructive`; risk: deletes Xero batch payment resources in the connected tenant; approval\n  required.\n- `create_batch_payment`: PUT `BatchPayments` - kind `create`; body type `json`; accepted fields\n  `BatchPayments`; risk: creates Xero batch payment resources in the connected tenant; approval\n  required.\n- `delete_batch_payment_by_url_param`: POST `BatchPayments/{{ record.batch_payment_id }}` - kind\n  `delete`; body type `json`; path fields `batch_payment_id`; required record fields\n  `batch_payment_id`, `Status`; accepted fields `Status`, `batch_payment_id`; confirmation\n  `destructive`; risk: deletes Xero batch payment by url param resources in the connected tenant;\n  approval required.\n- `create_batch_payment_history_record`: PUT `BatchPayments/{{ record.batch_payment_id }}/History` -\n  kind `create`; body type `none`; path fields `batch_payment_id`; required record fields\n  `batch_payment_id`; accepted fields `batch_payment_id`; risk: creates Xero batch payment history\n  record resources in the connected tenant; approval required.\n- `create_branding_theme_payment_services`: POST `BrandingThemes/{{ record.branding_theme_id\n  }}/PaymentServices` - kind `create`; body type `json`; path fields `branding_theme_id`; required\n  record fields `branding_theme_id`; accepted fields `PaymentServices`, `branding_theme_id`; risk:\n  creates Xero branding theme payment services resources in the connected tenant; approval required.\n- `create_contact_group`: PUT `ContactGroups` - kind `create`; body type `json`; accepted fields\n  `ContactGroups`; risk: creates Xero contact group resources in the connected tenant; approval\n  required.\n- `update_contact_group`: POST `ContactGroups/{{ record.contact_group_id }}` - kind `update`; body\n  type `json`; path fields `contact_group_id`; required record fields `contact_group_id`; accepted\n  fields `ContactGroups`, `contact_group_id`; risk: mutates Xero contact group resources in the\n  connected tenant; approval required.\n- `delete_contact_group_contacts`: DELETE `ContactGroups/{{ record.contact_group_id }}/Contacts` -\n  kind `delete`; body type `none`; path fields `contact_group_id`; required record fields\n  `contact_group_id`; accepted fields `contact_group_id`; missing records treated as success for\n  status `404`; confirmation `destructive`; risk: deletes Xero contact group contacts resources in\n  the connected tenant; approval required.\n- `create_contact_group_contacts`: PUT `ContactGroups/{{ record.contact_group_id }}/Contacts` - kind\n  `create`; body type `json`; path fields `contact_group_id`; required record fields\n  `contact_group_id`; accepted fields `Contacts`, `Warnings`, `contact_group_id`, `pagination`;\n  risk: creates Xero contact group contacts resources in the connected tenant; approval required.\n- `delete_contact_group_contact`: DELETE `ContactGroups/{{ record.contact_group_id }}/Contacts/{{\n  record.contact_id }}` - kind `delete`; body type `none`; path fields `contact_group_id`,\n  `contact_id`; required record fields `contact_group_id`, `contact_id`; accepted fields\n  `contact_group_id`, `contact_id`; missing records treated as success for status `404`;\n  confirmation `destructive`; risk: deletes Xero contact group contact resources in the connected\n  tenant; approval required.\n- `upsert_contacts`: POST `Contacts` - kind `update`; body type `json`; accepted fields `Contacts`,\n  `Warnings`, `pagination`; risk: mutates Xero contacts resources in the connected tenant; approval\n  required.\n- `create_contacts`: PUT `Contacts` - kind `create`; body type `json`; accepted fields `Contacts`,\n  `Warnings`, `pagination`; risk: creates Xero contacts resources in the connected tenant; approval\n  required.\n- `update_contact`: POST `Contacts/{{ record.contact_id }}` - kind `update`; body type `json`; path\n  fields `contact_id`; required record fields `contact_id`; accepted fields `Contacts`, `Warnings`,\n  `contact_id`, `pagination`; risk: mutates Xero contact resources in the connected tenant; approval\n  required.\n- `create_contact_history`: PUT `Contacts/{{ record.contact_id }}/History` - kind `create`; body\n  type `none`; path fields `contact_id`; required record fields `contact_id`; accepted fields\n  `contact_id`; risk: creates Xero contact history resources in the connected tenant; approval\n  required.\n- `upsert_credit_notes`: POST `CreditNotes` - kind `update`; body type `json`; accepted fields\n  `CreditNotes`, `Warnings`, `pagination`; risk: mutates Xero credit notes resources in the\n  connected tenant; approval required.\n- `create_credit_notes`: PUT `CreditNotes` - kind `create`; body type `json`; accepted fields\n  `CreditNotes`, `Warnings`, `pagination`; risk: creates Xero credit notes resources in the\n  connected tenant; approval required.\n- `update_credit_note`: POST `CreditNotes/{{ record.credit_note_id }}` - kind `update`; body type\n  `json`; path fields `credit_note_id`; required record fields `credit_note_id`; accepted fields\n  `CreditNotes`, `Warnings`, `credit_note_id`, `pagination`; risk: mutates Xero credit note\n  resources in the connected tenant; approval required.\n- `create_credit_note_allocation`: PUT `CreditNotes/{{ record.credit_note_id }}/Allocations` - kind\n  `create`; body type `json`; path fields `credit_note_id`; required record fields `credit_note_id`;\n  accepted fields `Allocations`, `credit_note_id`; risk: creates Xero credit note allocation\n  resources in the connected tenant; approval required.\n- `delete_credit_note_allocations`: DELETE `CreditNotes/{{ record.credit_note_id }}/Allocations/{{\n  record.allocation_id }}` - kind `delete`; body type `none`; path fields `credit_note_id`,\n  `allocation_id`; required record fields `credit_note_id`, `allocation_id`; accepted fields\n  `allocation_id`, `credit_note_id`; missing records treated as success for status `404`;\n  confirmation `destructive`; risk: deletes Xero credit note allocations resources in the connected\n  tenant; approval required.\n- `create_credit_note_history`: PUT `CreditNotes/{{ record.credit_note_id }}/History` - kind\n  `create`; body type `none`; path fields `credit_note_id`; required record fields `credit_note_id`;\n  accepted fields `credit_note_id`; risk: creates Xero credit note history resources in the\n  connected tenant; approval required.\n- `create_currency`: PUT `Currencies` - kind `create`; body type `json`; accepted fields `Code`,\n  `Description`; risk: creates Xero currency resources in the connected tenant; approval required.\n- `create_expense_claims`: PUT `ExpenseClaims` - kind `create`; body type `json`; accepted fields\n  `ExpenseClaims`; risk: creates Xero expense claims resources in the connected tenant; approval\n  required.\n- `update_expense_claim`: POST `ExpenseClaims/{{ record.expense_claim_id }}` - kind `update`; body\n  type `json`; path fields `expense_claim_id`; required record fields `expense_claim_id`; accepted\n  fields `ExpenseClaims`, `expense_claim_id`; risk: mutates Xero expense claim resources in the\n  connected tenant; approval required.\n- `create_expense_claim_history`: PUT `ExpenseClaims/{{ record.expense_claim_id }}/History` - kind\n  `create`; body type `none`; path fields `expense_claim_id`; required record fields\n  `expense_claim_id`; accepted fields `expense_claim_id`; risk: creates Xero expense claim history\n  resources in the connected tenant; approval required.\n- `upsert_invoices`: POST `Invoices` - kind `update`; body type `json`; accepted fields `Invoices`,\n  `Warnings`, `pagination`; risk: mutates Xero invoices resources in the connected tenant; approval\n  required.\n- `create_invoices`: PUT `Invoices` - kind `create`; body type `json`; accepted fields `Invoices`,\n  `Warnings`, `pagination`; risk: creates Xero invoices resources in the connected tenant; approval\n  required.\n- `update_invoice`: POST `Invoices/{{ record.invoice_id }}` - kind `update`; body type `json`; path\n  fields `invoice_id`; required record fields `invoice_id`; accepted fields `Invoices`, `Warnings`,\n  `invoice_id`, `pagination`; risk: mutates Xero invoice resources in the connected tenant; approval\n  required.\n- `email_invoice`: POST `Invoices/{{ record.invoice_id }}/Email` - kind `custom`; body type `json`;\n  path fields `invoice_id`; required record fields `invoice_id`; accepted fields `Status`,\n  `invoice_id`; risk: executes Xero email invoice resources in the connected tenant; approval\n  required.\n- `create_invoice_history`: PUT `Invoices/{{ record.invoice_id }}/History` - kind `create`; body\n  type `none`; path fields `invoice_id`; required record fields `invoice_id`; accepted fields\n  `invoice_id`; risk: creates Xero invoice history resources in the connected tenant; approval\n  required.\n- `upsert_items`: POST `Items` - kind `update`; body type `json`; accepted fields `Items`; risk:\n  mutates Xero items resources in the connected tenant; approval required.\n- `create_items`: PUT `Items` - kind `create`; body type `json`; accepted fields `Items`; risk:\n  creates Xero items resources in the connected tenant; approval required.\n- `delete_item`: DELETE `Items/{{ record.item_id }}` - kind `delete`; body type `none`; path fields\n  `item_id`; required record fields `item_id`; accepted fields `item_id`; missing records treated as\n  success for status `404`; confirmation `destructive`; risk: deletes Xero item resources in the\n  connected tenant; approval required.\n- `update_item`: POST `Items/{{ record.item_id }}` - kind `update`; body type `json`; path fields\n  `item_id`; required record fields `item_id`; accepted fields `Items`, `item_id`; risk: mutates\n  Xero item resources in the connected tenant; approval required.\n- `create_item_history`: PUT `Items/{{ record.item_id }}/History` - kind `create`; body type `none`;\n  path fields `item_id`; required record fields `item_id`; accepted fields `item_id`; risk: creates\n  Xero item history resources in the connected tenant; approval required.\n- `create_linked_transaction`: PUT `LinkedTransactions` - kind `create`; body type `json`; accepted\n  fields `ContactID`, `LinkedTransactionID`, `SourceLineItemID`, `SourceTransactionID`,\n  `SourceTransactionTypeCode`, `Status`, `TargetLineItemID`, `TargetTransactionID`, `Type`,\n  `UpdatedDateUTC`, `ValidationErrors`; risk: creates Xero linked transaction resources in the\n  connected tenant; approval required.\n- `delete_linked_transaction`: DELETE `LinkedTransactions/{{ record.linked_transaction_id }}` - kind\n  `delete`; body type `none`; path fields `linked_transaction_id`; required record fields\n  `linked_transaction_id`; accepted fields `linked_transaction_id`; missing records treated as\n  success for status `404`; confirmation `destructive`; risk: deletes Xero linked transaction\n  resources in the connected tenant; approval required.\n- `update_linked_transaction`: POST `LinkedTransactions/{{ record.linked_transaction_id }}` - kind\n  `update`; body type `json`; path fields `linked_transaction_id`; required record fields\n  `linked_transaction_id`; accepted fields `LinkedTransactions`, `linked_transaction_id`; risk:\n  mutates Xero linked transaction resources in the connected tenant; approval required.\n- `upsert_manual_journals`: POST `ManualJournals` - kind `update`; body type `json`; accepted fields\n  `ManualJournals`, `Warnings`, `pagination`; risk: mutates Xero manual journals resources in the\n  connected tenant; approval required.\n- `create_manual_journals`: PUT `ManualJournals` - kind `create`; body type `json`; accepted fields\n  `ManualJournals`, `Warnings`, `pagination`; risk: creates Xero manual journals resources in the\n  connected tenant; approval required.\n- `update_manual_journal`: POST `ManualJournals/{{ record.manual_journal_id }}` - kind `update`;\n  body type `json`; path fields `manual_journal_id`; required record fields `manual_journal_id`;\n  accepted fields `ManualJournals`, `Warnings`, `manual_journal_id`, `pagination`; risk: mutates\n  Xero manual journal resources in the connected tenant; approval required.\n- `create_manual_journal_history_record`: PUT `ManualJournals/{{ record.manual_journal_id\n  }}/History` - kind `create`; body type `none`; path fields `manual_journal_id`; required record\n  fields `manual_journal_id`; accepted fields `manual_journal_id`; risk: creates Xero manual journal\n  history record resources in the connected tenant; approval required.\n- `create_overpayment_allocations`: PUT `Overpayments/{{ record.overpayment_id }}/Allocations` -\n  kind `create`; body type `json`; path fields `overpayment_id`; required record fields\n  `overpayment_id`; accepted fields `Allocations`, `overpayment_id`; risk: creates Xero overpayment\n  allocations resources in the connected tenant; approval required.\n- `delete_overpayment_allocations`: DELETE `Overpayments/{{ record.overpayment_id }}/Allocations/{{\n  record.allocation_id }}` - kind `delete`; body type `none`; path fields `overpayment_id`,\n  `allocation_id`; required record fields `overpayment_id`, `allocation_id`; accepted fields\n  `allocation_id`, `overpayment_id`; missing records treated as success for status `404`;\n  confirmation `destructive`; risk: deletes Xero overpayment allocations resources in the connected\n  tenant; approval required.\n- `create_overpayment_history`: PUT `Overpayments/{{ record.overpayment_id }}/History` - kind\n  `create`; body type `none`; path fields `overpayment_id`; required record fields `overpayment_id`;\n  accepted fields `overpayment_id`; risk: creates Xero overpayment history resources in the\n  connected tenant; approval required.\n- `create_payment`: POST `Payments` - kind `create`; body type `json`; accepted fields `Account`,\n  `Amount`, `BankAccountNumber`, `BankAmount`, `BatchPayment`, `BatchPaymentID`, `Code`,\n  `CreditNote`, `CreditNoteNumber`, `CurrencyRate`, `Date`, `Details`, `HasAccount`,\n  `HasValidationErrors`, `Invoice`, `InvoiceNumber`, `IsReconciled`, `Overpayment`, and 10 more;\n  risk: creates Xero payment resources in the connected tenant; approval required.\n- `create_payments`: PUT `Payments` - kind `create`; body type `json`; accepted fields `Payments`,\n  `Warnings`, `pagination`; risk: creates Xero payments resources in the connected tenant; approval\n  required.\n- `delete_payment`: POST `Payments/{{ record.payment_id }}` - kind `delete`; body type `json`; path\n  fields `payment_id`; required record fields `payment_id`, `Status`; accepted fields `Status`,\n  `payment_id`; confirmation `destructive`; risk: deletes Xero payment resources in the connected\n  tenant; approval required.\n- `create_payment_history`: PUT `Payments/{{ record.payment_id }}/History` - kind `create`; body\n  type `none`; path fields `payment_id`; required record fields `payment_id`; accepted fields\n  `payment_id`; risk: creates Xero payment history resources in the connected tenant; approval\n  required.\n- `create_payment_service`: PUT `PaymentServices` - kind `create`; body type `json`; accepted fields\n  `PaymentServices`; risk: creates Xero payment service resources in the connected tenant; approval\n  required.\n- `create_prepayment_allocations`: PUT `Prepayments/{{ record.prepayment_id }}/Allocations` - kind\n  `create`; body type `json`; path fields `prepayment_id`; required record fields `prepayment_id`;\n  accepted fields `Allocations`, `prepayment_id`; risk: creates Xero prepayment allocations\n  resources in the connected tenant; approval required.\n- `delete_prepayment_allocations`: DELETE `Prepayments/{{ record.prepayment_id }}/Allocations/{{\n  record.allocation_id }}` - kind `delete`; body type `none`; path fields `prepayment_id`,\n  `allocation_id`; required record fields `prepayment_id`, `allocation_id`; accepted fields\n  `allocation_id`, `prepayment_id`; missing records treated as success for status `404`;\n  confirmation `destructive`; risk: deletes Xero prepayment allocations resources in the connected\n  tenant; approval required.\n- `create_prepayment_history`: PUT `Prepayments/{{ record.prepayment_id }}/History` - kind `create`;\n  body type `none`; path fields `prepayment_id`; required record fields `prepayment_id`; accepted\n  fields `prepayment_id`; risk: creates Xero prepayment history resources in the connected tenant;\n  approval required.\n- `upsert_purchase_orders`: POST `PurchaseOrders` - kind `update`; body type `json`; accepted fields\n  `PurchaseOrders`, `Warnings`, `pagination`; risk: mutates Xero purchase orders resources in the\n  connected tenant; approval required.\n- `create_purchase_orders`: PUT `PurchaseOrders` - kind `create`; body type `json`; accepted fields\n  `PurchaseOrders`, `Warnings`, `pagination`; risk: creates Xero purchase orders resources in the\n  connected tenant; approval required.\n- `update_purchase_order`: POST `PurchaseOrders/{{ record.purchase_order_id }}` - kind `update`;\n  body type `json`; path fields `purchase_order_id`; required record fields `purchase_order_id`;\n  accepted fields `PurchaseOrders`, `Warnings`, `pagination`, `purchase_order_id`; risk: mutates\n  Xero purchase order resources in the connected tenant; approval required.\n- `create_purchase_order_history`: PUT `PurchaseOrders/{{ record.purchase_order_id }}/History` -\n  kind `create`; body type `none`; path fields `purchase_order_id`; required record fields\n  `purchase_order_id`; accepted fields `purchase_order_id`; risk: creates Xero purchase order\n  history resources in the connected tenant; approval required.\n- `upsert_quotes`: POST `Quotes` - kind `update`; body type `json`; accepted fields `Quotes`; risk:\n  mutates Xero quotes resources in the connected tenant; approval required.\n- `create_quotes`: PUT `Quotes` - kind `create`; body type `json`; accepted fields `Quotes`; risk:\n  creates Xero quotes resources in the connected tenant; approval required.\n- `update_quote`: POST `Quotes/{{ record.quote_id }}` - kind `update`; body type `json`; path fields\n  `quote_id`; required record fields `quote_id`; accepted fields `Quotes`, `quote_id`; risk: mutates\n  Xero quote resources in the connected tenant; approval required.\n- `create_quote_history`: PUT `Quotes/{{ record.quote_id }}/History` - kind `create`; body type\n  `none`; path fields `quote_id`; required record fields `quote_id`; accepted fields `quote_id`;\n  risk: creates Xero quote history resources in the connected tenant; approval required.\n- `create_receipt`: PUT `Receipts` - kind `create`; body type `json`; accepted fields `Receipts`;\n  risk: creates Xero receipt resources in the connected tenant; approval required.\n- `update_receipt`: POST `Receipts/{{ record.receipt_id }}` - kind `update`; body type `json`; path\n  fields `receipt_id`; required record fields `receipt_id`; accepted fields `Receipts`,\n  `receipt_id`; risk: mutates Xero receipt resources in the connected tenant; approval required.\n- `create_receipt_history`: PUT `Receipts/{{ record.receipt_id }}/History` - kind `create`; body\n  type `none`; path fields `receipt_id`; required record fields `receipt_id`; accepted fields\n  `receipt_id`; risk: creates Xero receipt history resources in the connected tenant; approval\n  required.\n- `upsert_repeating_invoices`: POST `RepeatingInvoices` - kind `update`; body type `json`; accepted\n  fields `RepeatingInvoices`; risk: mutates Xero repeating invoices resources in the connected\n  tenant; approval required.\n- `create_repeating_invoices`: PUT `RepeatingInvoices` - kind `create`; body type `json`; accepted\n  fields `RepeatingInvoices`; risk: creates Xero repeating invoices resources in the connected\n  tenant; approval required.\n- `update_repeating_invoice`: POST `RepeatingInvoices/{{ record.repeating_invoice_id }}` - kind\n  `update`; body type `json`; path fields `repeating_invoice_id`; required record fields\n  `repeating_invoice_id`; accepted fields `RepeatingInvoices`, `repeating_invoice_id`; risk: mutates\n  Xero repeating invoice resources in the connected tenant; approval required.\n- `create_repeating_invoice_history`: PUT `RepeatingInvoices/{{ record.repeating_invoice_id\n  }}/History` - kind `create`; body type `none`; path fields `repeating_invoice_id`; required record\n  fields `repeating_invoice_id`; accepted fields `repeating_invoice_id`; risk: creates Xero\n  repeating invoice history resources in the connected tenant; approval required.\n- `setup_organisation`: POST `Setup` - kind `update`; body type `json`; accepted fields `Accounts`,\n  `ConversionBalances`, `ConversionDate`; risk: mutates Xero setup resources in the connected\n  tenant; approval required.\n- `update_tax_rate`: POST `TaxRates` - kind `update`; body type `json`; accepted fields `TaxRates`;\n  risk: mutates Xero tax rate resources in the connected tenant; approval required.\n- `create_tax_rates`: PUT `TaxRates` - kind `create`; body type `json`; accepted fields `TaxRates`;\n  risk: creates Xero tax rates resources in the connected tenant; approval required.\n- `create_tracking_category`: PUT `TrackingCategories` - kind `create`; body type `json`; accepted\n  fields `Name`, `Option`, `Options`, `Status`, `TrackingCategoryID`, `TrackingOptionID`; risk:\n  creates Xero tracking category resources in the connected tenant; approval required.\n- `delete_tracking_category`: DELETE `TrackingCategories/{{ record.tracking_category_id }}` - kind\n  `delete`; body type `none`; path fields `tracking_category_id`; required record fields\n  `tracking_category_id`; accepted fields `tracking_category_id`; missing records treated as success\n  for status `404`; confirmation `destructive`; risk: deletes Xero tracking category resources in\n  the connected tenant; approval required.\n- `update_tracking_category`: POST `TrackingCategories/{{ record.tracking_category_id }}` - kind\n  `update`; body type `json`; path fields `tracking_category_id`; required record fields\n  `tracking_category_id`; accepted fields `Name`, `Option`, `Options`, `Status`,\n  `TrackingCategoryID`, `TrackingOptionID`, `tracking_category_id`; risk: mutates Xero tracking\n  category resources in the connected tenant; approval required.\n- `create_tracking_options`: PUT `TrackingCategories/{{ record.tracking_category_id }}/Options` -\n  kind `create`; body type `json`; path fields `tracking_category_id`; required record fields\n  `tracking_category_id`; accepted fields `Name`, `Status`, `TrackingCategoryID`,\n  `TrackingOptionID`, `tracking_category_id`; risk: creates Xero tracking options resources in the\n  connected tenant; approval required.\n- `delete_tracking_options`: DELETE `TrackingCategories/{{ record.tracking_category_id }}/Options/{{\n  record.tracking_option_id }}` - kind `delete`; body type `none`; path fields\n  `tracking_category_id`, `tracking_option_id`; required record fields `tracking_category_id`,\n  `tracking_option_id`; accepted fields `tracking_category_id`, `tracking_option_id`; missing\n  records treated as success for status `404`; confirmation `destructive`; risk: deletes Xero\n  tracking options resources in the connected tenant; approval required.\n- `update_tracking_options`: POST `TrackingCategories/{{ record.tracking_category_id }}/Options/{{\n  record.tracking_option_id }}` - kind `update`; body type `json`; path fields\n  `tracking_category_id`, `tracking_option_id`; required record fields `tracking_category_id`,\n  `tracking_option_id`; accepted fields `Name`, `Status`, `TrackingCategoryID`, `TrackingOptionID`,\n  `tracking_category_id`, `tracking_option_id`; risk: mutates Xero tracking options resources in the\n  connected tenant; approval required.\n\n## Known limits\n\n- Batch defaults: read_page_size=100, write_batch_size=1.\n- API coverage includes 100 stream-backed endpoint group(s), 85 write-backed endpoint group(s).\n- Other documented endpoints are not exposed by this connector where they are classified as\n  binary_payload=48.\n",
+    "cli_surface": {
+      "tagline": "Run bounded Xero Accounting API streams, report reads, and approved reverse-ETL writes.",
+      "usage": "pm connectors command xero <group> <action> --credential <name> [flags] --json",
+      "source_cli": {
+        "name": "Xero Accounting API",
+        "docs": "https://developer.xero.com/documentation/api/accounting/overview",
+        "reference": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+        "source": "official OpenAPI operation ids; no separate provider CLI is required for parity"
+      },
+      "groups": [
+        {
+          "id": "reports",
+          "title": "Bounded report direct reads",
+          "commands": [
+            "reports ten_ninety_nine",
+            "reports aged_payables_by_contact",
+            "reports aged_receivables_by_contact",
+            "reports balance_sheet",
+            "reports bank_summary",
+            "reports get",
+            "reports budget_summary",
+            "reports executive_summary",
+            "reports list",
+            "reports profit_and_loss",
+            "reports trial_balance"
+          ]
+        },
+        {
+          "id": "streams",
+          "title": "ETL stream shortcuts",
+          "commands": [
+            "streams invoices",
+            "streams contacts",
+            "streams accounts",
+            "streams bank_transactions",
+            "streams items",
+            "streams payments",
+            "streams account",
+            "streams account_attachments",
+            "streams bank_transaction",
+            "streams bank_transaction_attachments",
+            "streams bank_transactions_history",
+            "streams bank_transfer"
+          ]
+        }
+      ],
+      "global_flags": [
+        {
+          "name": "credential",
+          "type": "string",
+          "summary": "Named Xero credential; secrets are loaded from the credential store and never from prompt text.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "json",
+          "type": "boolean",
+          "summary": "Emit machine-readable JSON output.",
+          "values": [],
+          "maps_to": ""
+        },
+        {
+          "name": "max-bytes",
+          "type": "integer",
+          "summary": "Clamp direct-read response size; report reads are capped by the operation definition.",
+          "values": [],
+          "maps_to": ""
+        }
+      ],
+      "commands": [
+        {
+          "path": "streams invoices",
+          "summary": "Read the Xero `invoices` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "invoices",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams invoices --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams contacts",
+          "summary": "Read the Xero `contacts` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "contacts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams contacts --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams accounts",
+          "summary": "Read the Xero `accounts` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "accounts",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams accounts --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams bank_transactions",
+          "summary": "Read the Xero `bank_transactions` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bank_transactions",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams bank_transactions --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams items",
+          "summary": "Read the Xero `items` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "items",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams items --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams payments",
+          "summary": "Read the Xero `payments` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "payments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams payments --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams account",
+          "summary": "Read the Xero `account` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "account",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams account --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams account_attachments",
+          "summary": "Read the Xero `account_attachments` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "account_attachments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams account_attachments --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams bank_transaction",
+          "summary": "Read the Xero `bank_transaction` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bank_transaction",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams bank_transaction --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams bank_transaction_attachments",
+          "summary": "Read the Xero `bank_transaction_attachments` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bank_transaction_attachments",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams bank_transaction_attachments --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams bank_transactions_history",
+          "summary": "Read the Xero `bank_transactions_history` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bank_transactions_history",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams bank_transactions_history --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "streams bank_transfer",
+          "summary": "Read the Xero `bank_transfer` stream through the ETL engine.",
+          "intent": "etl",
+          "availability": "implemented",
+          "stream": "bank_transfer",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero streams bank_transfer --credential xero-local --limit 100 --json"
+          ],
+          "output_policy": "",
+          "risk": "",
+          "approval": "",
+          "notes": ""
+        },
+        {
+          "path": "reports ten_ninety_nine",
+          "summary": "Retrieve reports for 1099",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "report-year",
+              "type": "string",
+              "summary": "The year of the 1099 report",
+              "values": [],
+              "maps_to": "query.reportYear",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports ten_ninety_nine --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports aged_payables_by_contact",
+          "summary": "Retrieves report for aged payables by contact",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "contact-id",
+              "type": "string",
+              "summary": "Unique identifier for a Contact",
+              "values": [],
+              "maps_to": "query.contactId",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date of the Aged Payables By Contact report",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            },
+            {
+              "name": "from-date",
+              "type": "string",
+              "summary": "filter by the from date of the report e.g. 2021-02-01",
+              "values": [],
+              "maps_to": "query.fromDate",
+              "allow_empty": false
+            },
+            {
+              "name": "to-date",
+              "type": "string",
+              "summary": "filter by the to date of the report e.g. 2021-02-28",
+              "values": [],
+              "maps_to": "query.toDate",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports aged_payables_by_contact --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports aged_receivables_by_contact",
+          "summary": "Retrieves report for aged receivables by contact",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "contact-id",
+              "type": "string",
+              "summary": "Unique identifier for a Contact",
+              "values": [],
+              "maps_to": "query.contactId",
+              "allow_empty": false
+            },
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date of the Aged Receivables By Contact report",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            },
+            {
+              "name": "from-date",
+              "type": "string",
+              "summary": "filter by the from date of the report e.g. 2021-02-01",
+              "values": [],
+              "maps_to": "query.fromDate",
+              "allow_empty": false
+            },
+            {
+              "name": "to-date",
+              "type": "string",
+              "summary": "filter by the to date of the report e.g. 2021-02-28",
+              "values": [],
+              "maps_to": "query.toDate",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports aged_receivables_by_contact --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports balance_sheet",
+          "summary": "Retrieves report for balancesheet",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date of the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            },
+            {
+              "name": "periods",
+              "type": "integer",
+              "summary": "The number of periods for the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.periods"
+            },
+            {
+              "name": "timeframe",
+              "type": "string",
+              "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
+              "values": [],
+              "maps_to": "query.timeframe",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-option-id-1",
+              "type": "string",
+              "summary": "The tracking option 1 for the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.trackingOptionID1",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-option-id-2",
+              "type": "string",
+              "summary": "The tracking option 2 for the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.trackingOptionID2",
+              "allow_empty": false
+            },
+            {
+              "name": "standard-layout",
+              "type": "boolean",
+              "summary": "The standard layout boolean for the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.standardLayout"
+            },
+            {
+              "name": "payments-only",
+              "type": "boolean",
+              "summary": "return a cash basis for the Balance Sheet report",
+              "values": [],
+              "maps_to": "query.paymentsOnly"
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports balance_sheet --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports bank_summary",
+          "summary": "Retrieves report for bank summary",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "from-date",
+              "type": "string",
+              "summary": "filter by the from date of the report e.g. 2021-02-01",
+              "values": [],
+              "maps_to": "query.fromDate",
+              "allow_empty": false
+            },
+            {
+              "name": "to-date",
+              "type": "string",
+              "summary": "filter by the to date of the report e.g. 2021-02-28",
+              "values": [],
+              "maps_to": "query.toDate",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports bank_summary --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports get",
+          "summary": "Retrieves a specific report using a unique ReportID",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "report-id",
+              "type": "string",
+              "summary": "Unique identifier for a Report",
+              "values": [],
+              "maps_to": "path.ReportID",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports get --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports budget_summary",
+          "summary": "Retrieves report for budget summary",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date for the Bank Summary report e.g. 2018-03-31",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            },
+            {
+              "name": "periods",
+              "type": "integer",
+              "summary": "The number of periods to compare (integer between 1 and 12)",
+              "values": [],
+              "maps_to": "query.periods"
+            },
+            {
+              "name": "timeframe",
+              "type": "integer",
+              "summary": "The period size to compare to (1=month, 3=quarter, 12=year)",
+              "values": [],
+              "maps_to": "query.timeframe"
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports budget_summary --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports executive_summary",
+          "summary": "Retrieves report for executive summary",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date for the Bank Summary report e.g. 2018-03-31",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports executive_summary --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports list",
+          "summary": "Retrieves a list of the organistaions unique reports that require a uuid to fetch",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [
+            "pm connectors command xero reports list --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports profit_and_loss",
+          "summary": "Retrieves report for profit and loss",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "from-date",
+              "type": "string",
+              "summary": "filter by the from date of the report e.g. 2021-02-01",
+              "values": [],
+              "maps_to": "query.fromDate",
+              "allow_empty": false
+            },
+            {
+              "name": "to-date",
+              "type": "string",
+              "summary": "filter by the to date of the report e.g. 2021-02-28",
+              "values": [],
+              "maps_to": "query.toDate",
+              "allow_empty": false
+            },
+            {
+              "name": "periods",
+              "type": "integer",
+              "summary": "The number of periods to compare (integer between 1 and 12)",
+              "values": [],
+              "maps_to": "query.periods"
+            },
+            {
+              "name": "timeframe",
+              "type": "string",
+              "summary": "The period size to compare to (MONTH, QUARTER, YEAR)",
+              "values": [],
+              "maps_to": "query.timeframe",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-category-id",
+              "type": "string",
+              "summary": "The trackingCategory 1 for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.trackingCategoryID",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-category-id-2",
+              "type": "string",
+              "summary": "The trackingCategory 2 for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.trackingCategoryID2",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-option-id",
+              "type": "string",
+              "summary": "The tracking option 1 for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.trackingOptionID",
+              "allow_empty": false
+            },
+            {
+              "name": "tracking-option-id-2",
+              "type": "string",
+              "summary": "The tracking option 2 for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.trackingOptionID2",
+              "allow_empty": false
+            },
+            {
+              "name": "standard-layout",
+              "type": "boolean",
+              "summary": "Return the standard layout for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.standardLayout"
+            },
+            {
+              "name": "payments-only",
+              "type": "boolean",
+              "summary": "Return cash only basis for the ProfitAndLoss report",
+              "values": [],
+              "maps_to": "query.paymentsOnly"
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports profit_and_loss --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "reports trial_balance",
+          "summary": "Retrieves report for trial balance",
+          "intent": "direct_read",
+          "availability": "implemented",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [
+            {
+              "name": "date",
+              "type": "string",
+              "summary": "The date for the Trial Balance report e.g. 2018-03-31",
+              "values": [],
+              "maps_to": "query.date",
+              "allow_empty": false
+            },
+            {
+              "name": "payments-only",
+              "type": "boolean",
+              "summary": "Return cash only basis for the Trial Balance report",
+              "values": [],
+              "maps_to": "query.paymentsOnly"
+            }
+          ],
+          "examples": [
+            "pm connectors command xero reports trial_balance --credential xero-local --json"
+          ],
+          "output_policy": "json_redacted",
+          "risk": "bounded read; report responses are capped at 16 MiB and redacted before JSON output",
+          "approval": "none",
+          "notes": ""
+        },
+        {
+          "path": "attachments get_account_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific account using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_account_attachment_by_file_name",
+          "summary": "Retrieves an attachment for a specific account by filename",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_account_attachment_by_file_name",
+          "summary": "Updates attachment on a specific account by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_account_attachment_by_file_name",
+          "summary": "Creates an attachment on a specific account",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_bank_transaction_attachment_by_id",
+          "summary": "Retrieves specific attachments from a specific BankTransaction using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_bank_transaction_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific bank transaction by filename",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_bank_transaction_attachment_by_file_name",
+          "summary": "Updates a specific attachment from a specific bank transaction by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_bank_transaction_attachment_by_file_name",
+          "summary": "Creates an attachment for a specific bank transaction by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_bank_transfer_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific bank transfer using a unique attachment ID",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_bank_transfer_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment on a specific bank transfer by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_bank_transfer_attachment_by_file_name",
+          "summary": "updateBankTransferAttachmentByFileName",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_bank_transfer_attachment_by_file_name",
+          "summary": "createBankTransferAttachmentByFileName",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_contact_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific contact using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_contact_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific contact by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_contact_attachment_by_file_name",
+          "summary": "updateContactAttachmentByFileName",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_contact_attachment_by_file_name",
+          "summary": "createContactAttachmentByFileName",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_credit_note_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific credit note using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_credit_note_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment on a specific credit note by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_credit_note_attachment_by_file_name",
+          "summary": "Updates attachments on a specific credit note by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_credit_note_attachment_by_file_name",
+          "summary": "Creates an attachment for a specific credit note",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_credit_note_as_pdf",
+          "summary": "Retrieves credit notes as PDF files",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_invoice_as_pdf",
+          "summary": "Retrieves invoices or purchase bills as PDF files",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_invoice_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific invoices or purchase bills by using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_invoice_attachment_by_file_name",
+          "summary": "Retrieves an attachment from a specific invoice or purchase bill by filename",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_invoice_attachment_by_file_name",
+          "summary": "Updates an attachment from a specific invoices or purchase bill by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_invoice_attachment_by_file_name",
+          "summary": "Creates an attachment for a specific invoice or purchase bill by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_manual_journal_attachment_by_id",
+          "summary": "Allows you to retrieve a specific attachment from a specific manual journal using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_manual_journal_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific manual journal by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_manual_journal_attachment_by_file_name",
+          "summary": "Updates a specific attachment from a specific manual journal by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_manual_journal_attachment_by_file_name",
+          "summary": "Creates a specific attachment for a specific manual journal by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_purchase_order_as_pdf",
+          "summary": "Retrieves specific purchase order as PDF files using a unique purchase order Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_purchase_order_attachment_by_id",
+          "summary": "Retrieves specific attachment for a specific purchase order using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_purchase_order_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment for a specific purchase order by filename",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_purchase_order_attachment_by_file_name",
+          "summary": "Updates a specific attachment for a specific purchase order by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_purchase_order_attachment_by_file_name",
+          "summary": "Creates attachment for a specific purchase order",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_quote_as_pdf",
+          "summary": "Retrieves a specific quote as a PDF file using a unique quote Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_quote_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific quote using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_quote_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific quote by filename",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_quote_attachment_by_file_name",
+          "summary": "Updates a specific attachment from a specific quote by filename",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_quote_attachment_by_file_name",
+          "summary": "Creates attachment for a specific quote",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_receipt_attachment_by_id",
+          "summary": "Retrieves a specific attachments from a specific expense claim receipts by using a unique attachment Id",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_receipt_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific expense claim receipts by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_receipt_attachment_by_file_name",
+          "summary": "Updates a specific attachment on a specific expense claim receipts by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_receipt_attachment_by_file_name",
+          "summary": "Creates an attachment on a specific expense claim receipts by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_repeating_invoice_attachment_by_id",
+          "summary": "Retrieves a specific attachment from a specific repeating invoice",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments get_repeating_invoice_attachment_by_file_name",
+          "summary": "Retrieves a specific attachment from a specific repeating invoices by file name",
+          "intent": "direct_read",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "none",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments update_repeating_invoice_attachment_by_file_name",
+          "summary": "Updates a specific attachment from a specific repeating invoices by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        },
+        {
+          "path": "attachments create_repeating_invoice_attachment_by_file_name",
+          "summary": "Creates an attachment from a specific repeating invoices by file name",
+          "intent": "reverse_etl",
+          "availability": "planned",
+          "stream": "",
+          "write": "",
+          "source_cli_path": "",
+          "source_url": "https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml",
+          "flags": [],
+          "examples": [],
+          "output_policy": "",
+          "risk": "blocked shared-runtime binary/file transfer dependency",
+          "approval": "binary/file uploads require plan, preview, explicit approval, and payload digest approval before execution",
+          "notes": "Operation is bounded in operations.json; no raw path/body/method escape hatch is exposed."
+        }
+      ],
+      "help_topics": [
+        {
+          "name": "xero reports",
+          "summary": "Bounded direct reads for Xero Accounting report endpoints with typed query/path flags."
+        },
+        {
+          "name": "xero reverse-etl",
+          "summary": "Reverse ETL writes use typed schemas and require plan, preview, explicit approval, and execute."
+        },
+        {
+          "name": "xero attachments",
+          "summary": "Attachment metadata streams are available; binary/PDF download and upload execution is blocked on the shared binary/file runner."
+        }
+      ]
+    },
+    "docs_md": "# Overview\n\nXero (`xero`) reads and writes the provider-owned Xero Accounting API using the official XeroAPI/Xero-OpenAPI `xero_accounting.yaml` document. This connector intentionally scopes to Accounting API operations only; Xero assets, bankfeeds, files, finance, payroll, projects, webhooks, identity, and app-store OpenAPI products are not counted here.\n\nCurrent fixture-backed operation ledger:\n\n| Lane | Official operations | Connector disposition |\n| --- | ---: | --- |\n| ETL/read streams | 78 | 78 covered by typed streams and sanitized stream fixtures |\n| Direct/provider report reads | 11 | 11 covered by bounded `rest_read` operations and provider-style CLI commands |\n| Reverse ETL writes | 87 | 87 covered by typed write actions and sanitized write fixtures |\n| Binary/file attachment and PDF operations | 59 | 11 attachment metadata list streams implemented; 48 binary/PDF download or attachment upload operations are bounded in `operations.json` and blocked on the shared binary/file executor |\n| CDC/changefeed | 0 | No Accounting API CDC/changefeed operation is present in the official source |\n\nNo live Xero call, credentialed check, certification, or provider write was performed to produce these fixtures.\n\n## Auth setup\n\nCreate a Xero OAuth2 credential outside prompt text. The connector expects:\n\n- `access_token` (`x-secret: true`): OAuth2 bearer access token.\n- `tenant_id` (`x-secret: true`): Xero tenant/organisation id sent as the `Xero-tenant-id` header.\n- `base_url` (optional): defaults to `https://api.xero.com/api.xro/2.0`.\n\nAdd credentials from environment variables or stdin, not chat or shell history. Secret fields are redacted in logs, direct-read output, and write previews.\n\n## Streams notes\n\nThe official Accounting API has 78 non-report, non-binary GET operations and all are represented in `streams.json`. The bundle also retains report and attachment metadata streams for ETL compatibility, but `api_surface.json` classifies official report endpoints as direct/provider reads and attachment/PDF endpoints as binary/file lane operations.\n\nPagination is bounded by the declarative `page_number` paginator for Xero list endpoints. Generated conformance fixtures include at least one sanitized page for every stream; the first eligible paginated stream includes a second page to exercise pagination termination without inflating every embedded fixture.\n\n## Write actions & risks\n\nAll 87 non-attachment Accounting API mutations are named reverse-ETL write actions in `writes.json`. Write actions use closed record schemas, deterministic request construction, redaction for path identifiers, fixture-backed request-shape coverage, and the CLI reverse-ETL lifecycle: plan → preview → explicit approval → execute.\n\nDestructive delete/status-delete actions declare `confirm: \"destructive\"`. Xero exposes several delete operations as `POST` requests that set `Status: DELETED`; where the provider exposes idempotent HTTP delete semantics the action records `missing_ok_status: [404]`. For provider status-delete calls without a documented idempotency key, operators must de-duplicate records by the Xero identifier before approval.\n\nAttachment uploads are not exposed as generic write actions. They are tracked as bounded file-upload operations in `operations.json` and blocked until the shared binary/file runner supports approved payload digests and provider-bound paths.\n\n## Known limits\n\n- Fixture-only evidence is not live certification. `certification.json` records safe defaults and one direct-read candidate, but this branch does not claim certified live Xero behavior.\n- The 48 attachment/PDF download or attachment upload operations that transfer file bytes are bounded and source-linked, but blocked on shared runtime support for binary/file execution. No connector-local generic HTTP/file escape hatch was added.\n- Provider report commands are bounded direct reads with fixed operation definitions. They do not alter warehouse `pm query` semantics and do not expose raw query/path/body passthrough.\n- Official source re-audit used Xero Accounting OpenAPI `info.version=16.1.0` fetched from `https://raw.githubusercontent.com/XeroAPI/Xero-OpenAPI/master/xero_accounting.yaml` on 2026-07-31. The semantic binary count treats PDF endpoints as binary/file operations even though the landed r2 issue table grouped only attachment paths under binary_file.\n",
     "icon": {
       "id": "xero",
       "path": "icons/xero.svg",

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "path": "/TaxRates"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Id": "fixture-response",
+      "Status": "OK",
+      "TaxRates": [
+        {
+          "Name": "name_fixture",
+          "TaxType": "tax_type_fixture_1",
+          "TaxComponents": [
+            "tax_component_fixture"
+          ],
+          "Status": "ACTIVE",
+          "ReportTaxType": "STANDARD",
+          "CanApplyToAssets": false,
+          "CanApplyToEquity": false,
+          "CanApplyToExpenses": false,
+          "CanApplyToLiabilities": false,
+          "CanApplyToRevenue": false,
+          "DisplayTaxRate": 12.34,
+          "EffectiveRate": 12.34
+        }
+      ]
+    }
+  }
+}

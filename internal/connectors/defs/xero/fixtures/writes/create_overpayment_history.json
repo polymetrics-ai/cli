@@ -1,0 +1,15 @@
+{
+  "record": {
+    "overpayment_id": "overpayment_id_fixture_1"
+  },
+  "expect": {
+    "method": "PUT",
+    "path": "/Overpayments/overpayment_id_fixture_1/History"
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Status": "OK"
+    }
+  }
+}
