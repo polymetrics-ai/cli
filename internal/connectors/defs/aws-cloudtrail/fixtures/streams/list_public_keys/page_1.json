@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "PublicKeyList": [
+        {
+          "pm_record_id": "list_public_keys_fixture_1",
+          "operation": "ListPublicKeys",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  }
+}

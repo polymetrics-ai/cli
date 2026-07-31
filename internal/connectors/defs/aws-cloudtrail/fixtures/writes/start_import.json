@@ -1,0 +1,20 @@
+{
+  "record": {
+    "Destinations": [
+      "fixture-destinations"
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "Destinations": [
+        "fixture-destinations"
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

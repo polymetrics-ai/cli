@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "get_trail_status",
+  "type": "object",
+  "x-primary-key": [
+    "pm_record_id"
+  ],
+  "properties": {
+    "pm_record_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "IsLogging": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "LatestCloudWatchLogsDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestCloudWatchLogsDeliveryTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "LatestDeliveryAttemptSucceeded": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryAttemptTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDeliveryTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "LatestDigestDeliveryError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestDigestDeliveryTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "LatestNotificationAttemptSucceeded": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationAttemptTime": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationError": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "LatestNotificationTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "StartLoggingTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "StopLoggingTime": {
+      "type": [
+        "string",
+        "integer",
+        "null"
+      ],
+      "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+    },
+    "TimeLoggingStarted": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "TimeLoggingStopped": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "additionalProperties": true
+}

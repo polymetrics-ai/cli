@@ -1,0 +1,19 @@
+{
+  "request": {
+    "method": "POST",
+    "path": "/",
+    "query": {}
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "Imports": [
+        {
+          "pm_record_id": "list_imports_fixture_1",
+          "operation": "ListImports",
+          "NextToken": "fixture-next-token"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1195 @@
+{
+  "tagline": "AWS CloudTrail fixed-action reads, provider queries, and approval-gated administration actions.",
+  "usage": "pm aws-cloudtrail <command> [flags] --credential <name> [--json]",
+  "source_cli": {
+    "name": "AWS CloudTrail API",
+    "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
+    "reference": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
+    "source": "official AWS documentation"
+  },
+  "groups": [
+    {
+      "id": "read",
+      "title": "ETL read streams",
+      "commands": [
+        "read describe-trails",
+        "read get-channel",
+        "read get-dashboard",
+        "read get-event-configuration",
+        "read get-event-data-store",
+        "read get-event-selectors",
+        "read get-import",
+        "read get-insight-selectors",
+        "read get-resource-policy",
+        "read get-trail",
+        "read get-trail-status",
+        "read list-channels",
+        "read list-dashboards",
+        "read list-event-data-stores",
+        "read list-import-failures",
+        "read list-imports",
+        "read list-public-keys",
+        "read list-tags",
+        "read list-trails"
+      ]
+    },
+    {
+      "id": "query",
+      "title": "Bounded query and lookup operations",
+      "commands": [
+        "query cancel",
+        "query describe",
+        "query generate",
+        "query results",
+        "insights data",
+        "insights metric-data",
+        "query list",
+        "events lookup",
+        "sample-queries search",
+        "query start"
+      ]
+    },
+    {
+      "id": "write",
+      "title": "Reverse ETL writes",
+      "commands": []
+    }
+  ],
+  "commands": [
+    {
+      "path": "read describe-trails",
+      "summary": "Run the documented AWS CloudTrail DescribeTrails operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "describe_trails",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DescribeTrails.html",
+      "flags": [
+        {
+          "name": "include-shadow-trails",
+          "type": "boolean",
+          "summary": "includeShadowTrails.",
+          "maps_to": "query.includeShadowTrails"
+        },
+        {
+          "name": "trail-name-list",
+          "type": "string_array",
+          "summary": "trailNameList.",
+          "maps_to": "query.trailNameList"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read describe-trails --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-channel",
+      "summary": "Run the documented AWS CloudTrail GetChannel operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_channel",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetChannel.html",
+      "flags": [
+        {
+          "name": "channel",
+          "type": "string",
+          "summary": "Channel.",
+          "maps_to": "query.Channel",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-channel --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-dashboard",
+      "summary": "Run the documented AWS CloudTrail GetDashboard operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_dashboard",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetDashboard.html",
+      "flags": [
+        {
+          "name": "dashboard-id",
+          "type": "string",
+          "summary": "DashboardId.",
+          "maps_to": "query.DashboardId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-dashboard --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-event-configuration",
+      "summary": "Run the documented AWS CloudTrail GetEventConfiguration operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_event_configuration",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetEventConfiguration.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "query.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "trail-name",
+          "type": "string",
+          "summary": "TrailName.",
+          "maps_to": "query.TrailName",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-event-configuration --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-event-data-store",
+      "summary": "Run the documented AWS CloudTrail GetEventDataStore operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_event_data_store",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetEventDataStore.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "query.EventDataStore",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-event-data-store --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-event-selectors",
+      "summary": "Run the documented AWS CloudTrail GetEventSelectors operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_event_selectors",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetEventSelectors.html",
+      "flags": [
+        {
+          "name": "trail-name",
+          "type": "string",
+          "summary": "TrailName.",
+          "maps_to": "query.TrailName",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-event-selectors --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-import",
+      "summary": "Run the documented AWS CloudTrail GetImport operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_import",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetImport.html",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "ImportId.",
+          "maps_to": "query.ImportId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-import --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-insight-selectors",
+      "summary": "Run the documented AWS CloudTrail GetInsightSelectors operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_insight_selectors",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetInsightSelectors.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "query.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "trail-name",
+          "type": "string",
+          "summary": "TrailName.",
+          "maps_to": "query.TrailName",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-insight-selectors --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-resource-policy",
+      "summary": "Run the documented AWS CloudTrail GetResourcePolicy operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_resource_policy",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetResourcePolicy.html",
+      "flags": [
+        {
+          "name": "resource-arn",
+          "type": "string",
+          "summary": "ResourceArn.",
+          "maps_to": "query.ResourceArn",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-resource-policy --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-trail",
+      "summary": "Run the documented AWS CloudTrail GetTrail operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_trail",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetTrail.html",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Name.",
+          "maps_to": "query.Name",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-trail --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read get-trail-status",
+      "summary": "Run the documented AWS CloudTrail GetTrailStatus operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "get_trail_status",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetTrailStatus.html",
+      "flags": [
+        {
+          "name": "name",
+          "type": "string",
+          "summary": "Name.",
+          "maps_to": "query.Name",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read get-trail-status --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-channels",
+      "summary": "Run the documented AWS CloudTrail ListChannels operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_channels",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListChannels.html",
+      "flags": [
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "query.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-channels --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-dashboards",
+      "summary": "Run the documented AWS CloudTrail ListDashboards operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_dashboards",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListDashboards.html",
+      "flags": [
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "query.MaxResults"
+        },
+        {
+          "name": "name-prefix",
+          "type": "string",
+          "summary": "NamePrefix.",
+          "maps_to": "query.NamePrefix",
+          "allow_empty": false
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "summary": "Type.",
+          "maps_to": "query.Type",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-dashboards --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-event-data-stores",
+      "summary": "Run the documented AWS CloudTrail ListEventDataStores operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_event_data_stores",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListEventDataStores.html",
+      "flags": [
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "query.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-event-data-stores --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-import-failures",
+      "summary": "Run the documented AWS CloudTrail ListImportFailures operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_import_failures",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListImportFailures.html",
+      "flags": [
+        {
+          "name": "import-id",
+          "type": "string",
+          "summary": "ImportId.",
+          "maps_to": "query.ImportId",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "query.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-import-failures --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-imports",
+      "summary": "Run the documented AWS CloudTrail ListImports operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_imports",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListImports.html",
+      "flags": [
+        {
+          "name": "destination",
+          "type": "string",
+          "summary": "Destination.",
+          "maps_to": "query.Destination",
+          "allow_empty": false
+        },
+        {
+          "name": "import-status",
+          "type": "string",
+          "summary": "ImportStatus.",
+          "maps_to": "query.ImportStatus",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "query.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-imports --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-public-keys",
+      "summary": "Run the documented AWS CloudTrail ListPublicKeys operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_public_keys",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListPublicKeys.html",
+      "flags": [
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "EndTime.",
+          "maps_to": "query.EndTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "StartTime.",
+          "maps_to": "query.StartTime",
+          "allow_empty": false,
+          "format": "date-time"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-public-keys --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-tags",
+      "summary": "Run the documented AWS CloudTrail ListTags operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_tags",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListTags.html",
+      "flags": [
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "resource-id-list",
+          "type": "string_array",
+          "summary": "ResourceIdList.",
+          "maps_to": "query.ResourceIdList"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-tags --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "read list-trails",
+      "summary": "Run the documented AWS CloudTrail ListTrails operation through a fixed signed JSON-RPC request.",
+      "intent": "etl",
+      "availability": "implemented",
+      "stream": "list_trails",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListTrails.html",
+      "flags": [
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "query.NextToken",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail read list-trails --credential cloudtrail --json"
+      ],
+      "notes": "Runs a fixed CloudTrail JSON-RPC read action; request fields are allow-listed command flags."
+    },
+    {
+      "path": "query cancel",
+      "summary": "Run the documented AWS CloudTrail CancelQuery operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.cancel_query",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_CancelQuery.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "body.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "event-data-store-owner-account-id",
+          "type": "string",
+          "summary": "EventDataStoreOwnerAccountId.",
+          "maps_to": "body.EventDataStoreOwnerAccountId",
+          "allow_empty": false
+        },
+        {
+          "name": "query-id",
+          "type": "string",
+          "summary": "QueryId.",
+          "maps_to": "body.QueryId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query cancel --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "high",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "query describe",
+      "summary": "Run the documented AWS CloudTrail DescribeQuery operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.describe_query",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_DescribeQuery.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "body.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "event-data-store-owner-account-id",
+          "type": "string",
+          "summary": "EventDataStoreOwnerAccountId.",
+          "maps_to": "body.EventDataStoreOwnerAccountId",
+          "allow_empty": false
+        },
+        {
+          "name": "query-alias",
+          "type": "string",
+          "summary": "QueryAlias.",
+          "maps_to": "body.QueryAlias",
+          "allow_empty": false
+        },
+        {
+          "name": "query-id",
+          "type": "string",
+          "summary": "QueryId.",
+          "maps_to": "body.QueryId",
+          "allow_empty": false
+        },
+        {
+          "name": "refresh-id",
+          "type": "string",
+          "summary": "RefreshId.",
+          "maps_to": "body.RefreshId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query describe --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "query generate",
+      "summary": "Run the documented AWS CloudTrail GenerateQuery operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.generate_query",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GenerateQuery.html",
+      "flags": [
+        {
+          "name": "event-data-stores",
+          "type": "string_array",
+          "summary": "EventDataStores.",
+          "maps_to": "body.EventDataStores"
+        },
+        {
+          "name": "prompt",
+          "type": "string",
+          "summary": "Prompt.",
+          "maps_to": "body.Prompt",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query generate --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "high",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "query results",
+      "summary": "Run the documented AWS CloudTrail GetQueryResults operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.get_query_results",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_GetQueryResults.html",
+      "flags": [
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "body.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "event-data-store-owner-account-id",
+          "type": "string",
+          "summary": "EventDataStoreOwnerAccountId.",
+          "maps_to": "body.EventDataStoreOwnerAccountId",
+          "allow_empty": false
+        },
+        {
+          "name": "max-query-results",
+          "type": "integer",
+          "summary": "MaxQueryResults.",
+          "maps_to": "body.MaxQueryResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "query-id",
+          "type": "string",
+          "summary": "QueryId.",
+          "maps_to": "body.QueryId",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query results --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "insights data",
+      "summary": "Run the documented AWS CloudTrail ListInsightsData operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.list_insights_data",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListInsightsData.html",
+      "flags": [
+        {
+          "name": "data-type",
+          "type": "string",
+          "summary": "DataType.",
+          "maps_to": "body.DataType",
+          "allow_empty": false
+        },
+        {
+          "name": "dimensions",
+          "type": "string",
+          "summary": "Dimensions.",
+          "maps_to": "body.Dimensions",
+          "allow_empty": false
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "EndTime.",
+          "maps_to": "body.EndTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "insight-source",
+          "type": "string",
+          "summary": "InsightSource.",
+          "maps_to": "body.InsightSource",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "body.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "StartTime.",
+          "maps_to": "body.StartTime",
+          "allow_empty": false,
+          "format": "date-time"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail insights data --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "insights metric-data",
+      "summary": "Run the documented AWS CloudTrail ListInsightsMetricData operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.list_insights_metric_data",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListInsightsMetricData.html",
+      "flags": [
+        {
+          "name": "data-type",
+          "type": "string",
+          "summary": "DataType.",
+          "maps_to": "body.DataType",
+          "allow_empty": false
+        },
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "EndTime.",
+          "maps_to": "body.EndTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "error-code",
+          "type": "string",
+          "summary": "ErrorCode.",
+          "maps_to": "body.ErrorCode",
+          "allow_empty": false
+        },
+        {
+          "name": "event-name",
+          "type": "string",
+          "summary": "EventName.",
+          "maps_to": "body.EventName",
+          "allow_empty": false
+        },
+        {
+          "name": "event-source",
+          "type": "string",
+          "summary": "EventSource.",
+          "maps_to": "body.EventSource",
+          "allow_empty": false
+        },
+        {
+          "name": "insight-type",
+          "type": "string",
+          "summary": "InsightType.",
+          "maps_to": "body.InsightType",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "body.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "period",
+          "type": "integer",
+          "summary": "Period.",
+          "maps_to": "body.Period"
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "StartTime.",
+          "maps_to": "body.StartTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "trail-name",
+          "type": "string",
+          "summary": "TrailName.",
+          "maps_to": "body.TrailName",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail insights metric-data --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "query list",
+      "summary": "Run the documented AWS CloudTrail ListQueries operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.list_queries",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_ListQueries.html",
+      "flags": [
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "EndTime.",
+          "maps_to": "body.EndTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "event-data-store",
+          "type": "string",
+          "summary": "EventDataStore.",
+          "maps_to": "body.EventDataStore",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "body.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "query-status",
+          "type": "string",
+          "summary": "QueryStatus.",
+          "maps_to": "body.QueryStatus",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "StartTime.",
+          "maps_to": "body.StartTime",
+          "allow_empty": false,
+          "format": "date-time"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query list --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "events lookup",
+      "summary": "Run the documented AWS CloudTrail LookupEvents operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.lookup_events",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_LookupEvents.html",
+      "flags": [
+        {
+          "name": "end-time",
+          "type": "string",
+          "summary": "EndTime.",
+          "maps_to": "body.EndTime",
+          "allow_empty": false,
+          "format": "date-time"
+        },
+        {
+          "name": "event-category",
+          "type": "string",
+          "summary": "EventCategory.",
+          "maps_to": "body.EventCategory",
+          "allow_empty": false
+        },
+        {
+          "name": "lookup-attributes",
+          "type": "string",
+          "summary": "LookupAttributes.",
+          "maps_to": "body.LookupAttributes",
+          "allow_empty": false
+        },
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "body.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "start-time",
+          "type": "string",
+          "summary": "StartTime.",
+          "maps_to": "body.StartTime",
+          "allow_empty": false,
+          "format": "date-time"
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail events lookup --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "sample-queries search",
+      "summary": "Run the documented AWS CloudTrail SearchSampleQueries operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.search_sample_queries",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_SearchSampleQueries.html",
+      "flags": [
+        {
+          "name": "max-results",
+          "type": "integer",
+          "summary": "MaxResults.",
+          "maps_to": "body.MaxResults"
+        },
+        {
+          "name": "next-token",
+          "type": "string",
+          "summary": "NextToken.",
+          "maps_to": "body.NextToken",
+          "allow_empty": false
+        },
+        {
+          "name": "search-phrase",
+          "type": "string",
+          "summary": "SearchPhrase.",
+          "maps_to": "body.SearchPhrase",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail sample-queries search --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "medium",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    },
+    {
+      "path": "query start",
+      "summary": "Run the documented AWS CloudTrail StartQuery operation through a fixed signed JSON-RPC request.",
+      "intent": "direct_read",
+      "availability": "implemented",
+      "operation": "aws-cloudtrail.start_query",
+      "source_url": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_StartQuery.html",
+      "flags": [
+        {
+          "name": "delivery-s3-uri",
+          "type": "string",
+          "summary": "DeliveryS3Uri.",
+          "maps_to": "body.DeliveryS3Uri",
+          "allow_empty": false
+        },
+        {
+          "name": "event-data-store-owner-account-id",
+          "type": "string",
+          "summary": "EventDataStoreOwnerAccountId.",
+          "maps_to": "body.EventDataStoreOwnerAccountId",
+          "allow_empty": false
+        },
+        {
+          "name": "query-alias",
+          "type": "string",
+          "summary": "QueryAlias.",
+          "maps_to": "body.QueryAlias",
+          "allow_empty": false
+        },
+        {
+          "name": "query-parameters",
+          "type": "string_array",
+          "summary": "QueryParameters.",
+          "maps_to": "body.QueryParameters"
+        },
+        {
+          "name": "query-statement",
+          "type": "string",
+          "summary": "QueryStatement.",
+          "maps_to": "body.QueryStatement",
+          "allow_empty": false
+        }
+      ],
+      "examples": [
+        "pm aws-cloudtrail query start --credential cloudtrail --json"
+      ],
+      "output_policy": "json_redacted",
+      "redact_fields": [
+        "CloudTrailEvent",
+        "AccessKeyId",
+        "userIdentity",
+        "requestParameters",
+        "responseElements",
+        "additionalEventData"
+      ],
+      "risk": "high",
+      "approval": "none: typed bounded CloudTrail provider query/lookup operation",
+      "notes": "No raw query text escape hatch is exposed beyond the documented CloudTrail QueryStatement field on StartQuery."
+    }
+  ],
+  "help_topics": [
+    {
+      "name": "aws-cloudtrail",
+      "summary": "AWS CloudTrail connector command surface and safety contract."
+    },
+    {
+      "name": "aws-cloudtrail writes",
+      "summary": "Use pm reverse plan/preview/run with aws-cloudtrail write actions; direct provider shortcuts are intentionally not exposed."
+    }
+  ]
+}

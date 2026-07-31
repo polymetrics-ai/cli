@@ -1,0 +1,3 @@
+/Users/karthiksivadas/.treehouse/cli-83d592/43/cli/.gsd/commands.json
+/Users/karthiksivadas/.treehouse/cli-83d592/43/cli/.gsd/upstream.lock.json
+/Users/karthiksivadas/.treehouse/cli-83d592/43/cli/.gsd/official-docs/COMMANDS.md

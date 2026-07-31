@@ -1,0 +1,962 @@
+{
+  "actions": [
+    {
+      "name": "add_tags",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ResourceId",
+          "TagsList"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ResourceId": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail AddTags through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "create_channel",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Destinations",
+          "Name",
+          "Source"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Destinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "Name": {
+            "type": "string"
+          },
+          "Source": {
+            "type": "string"
+          },
+          "Tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail CreateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "create_dashboard",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "RefreshSchedule": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "TagsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          },
+          "Widgets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail CreateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "create_event_data_store",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "BillingMode": {
+            "type": "string"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "MultiRegionEnabled": {
+            "type": "boolean"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "OrganizationEnabled": {
+            "type": "boolean"
+          },
+          "RetentionPeriod": {
+            "type": "integer"
+          },
+          "StartIngestion": {
+            "type": "boolean"
+          },
+          "TagsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail CreateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "create_trail",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name",
+          "S3BucketName"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "CloudWatchLogsLogGroupArn": {
+            "type": "string"
+          },
+          "CloudWatchLogsRoleArn": {
+            "type": "string"
+          },
+          "EnableLogFileValidation": {
+            "type": "boolean"
+          },
+          "IncludeGlobalServiceEvents": {
+            "type": "boolean"
+          },
+          "IsMultiRegionTrail": {
+            "type": "boolean"
+          },
+          "IsOrganizationTrail": {
+            "type": "boolean"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "S3BucketName": {
+            "type": "string"
+          },
+          "S3KeyPrefix": {
+            "type": "string"
+          },
+          "SnsTopicName": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail CreateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "delete_channel",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Channel"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Channel": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeleteChannel through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_dashboard",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "DashboardId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "DashboardId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeleteDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_event_data_store",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeleteEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_resource_policy",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ResourceArn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ResourceArn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeleteResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "delete_trail",
+      "kind": "delete",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeleteTrail through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "delete": {
+        "idempotent": true,
+        "missing_ok_status": [
+          404
+        ]
+      }
+    },
+    {
+      "name": "deregister_organization_delegated_admin",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "DelegatedAdminAccountId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "DelegatedAdminAccountId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DeregisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "disable_federation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail DisableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "enable_federation",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore",
+          "FederationRoleArn"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          },
+          "FederationRoleArn": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail EnableFederation through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "put_event_configuration",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "additionalProperties": false,
+        "properties": {
+          "AggregationConfigurations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "ContextKeySelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "EventDataStore": {
+            "type": "string"
+          },
+          "MaxEventSize": {
+            "type": "string"
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail PutEventConfiguration through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "put_event_selectors",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "TrailName"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "EventSelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail PutEventSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "put_insight_selectors",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "InsightSelectors"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          },
+          "InsightsDestination": {
+            "type": "string"
+          },
+          "InsightSelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "TrailName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail PutInsightSelectors through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "put_resource_policy",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ResourceArn",
+          "ResourcePolicy"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ResourceArn": {
+            "type": "string"
+          },
+          "ResourcePolicy": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail PutResourcePolicy through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive",
+      "redact_fields": [
+        "ResourcePolicy"
+      ]
+    },
+    {
+      "name": "register_organization_delegated_admin",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "MemberAccountId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "MemberAccountId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail RegisterOrganizationDelegatedAdmin through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "remove_tags",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ResourceId",
+          "TagsList"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ResourceId": {
+            "type": "string"
+          },
+          "TagsList": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail RemoveTags through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "restore_event_data_store",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail RestoreEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "start_dashboard_refresh",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "DashboardId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "DashboardId": {
+            "type": "string"
+          },
+          "QueryParameterValues": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StartDashboardRefresh through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "start_event_data_store_ingestion",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StartEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "start_import",
+      "kind": "create",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [],
+        "additionalProperties": false,
+        "properties": {
+          "Destinations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "EndEventTime": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+          },
+          "ImportId": {
+            "type": "string"
+          },
+          "ImportSource": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "StartEventTime": {
+            "type": [
+              "string",
+              "integer"
+            ],
+            "description": "AWS timestamp; CLI flags use RFC3339, native requests send Unix seconds."
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StartImport through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "start_logging",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StartLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "stop_event_data_store_ingestion",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "EventDataStore": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StopEventDataStoreIngestion through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "stop_import",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "ImportId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ImportId": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StopImport through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "stop_logging",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail StopLogging through a fixed typed JSON-RPC action; no raw action or path is accepted.",
+      "confirm": "destructive"
+    },
+    {
+      "name": "update_channel",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Channel"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "Channel": {
+            "type": "string"
+          },
+          "Destinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "Name": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail UpdateChannel through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "update_dashboard",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "DashboardId"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "DashboardId": {
+            "type": "string"
+          },
+          "RefreshSchedule": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          },
+          "Widgets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail UpdateDashboard through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "update_event_data_store",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "EventDataStore"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "AdvancedEventSelectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "BillingMode": {
+            "type": "string"
+          },
+          "EventDataStore": {
+            "type": "string"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "MultiRegionEnabled": {
+            "type": "boolean"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "OrganizationEnabled": {
+            "type": "boolean"
+          },
+          "RetentionPeriod": {
+            "type": "integer"
+          },
+          "TerminationProtectionEnabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail UpdateEventDataStore through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    },
+    {
+      "name": "update_trail",
+      "kind": "update",
+      "method": "POST",
+      "path": "/",
+      "body_type": "json",
+      "record_schema": {
+        "type": "object",
+        "required": [
+          "Name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "CloudWatchLogsLogGroupArn": {
+            "type": "string"
+          },
+          "CloudWatchLogsRoleArn": {
+            "type": "string"
+          },
+          "EnableLogFileValidation": {
+            "type": "boolean"
+          },
+          "IncludeGlobalServiceEvents": {
+            "type": "boolean"
+          },
+          "IsMultiRegionTrail": {
+            "type": "boolean"
+          },
+          "IsOrganizationTrail": {
+            "type": "boolean"
+          },
+          "KmsKeyId": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "S3BucketName": {
+            "type": "string"
+          },
+          "S3KeyPrefix": {
+            "type": "string"
+          },
+          "SnsTopicName": {
+            "type": "string"
+          }
+        }
+      },
+      "risk": "Executes AWS CloudTrail UpdateTrail through a fixed typed JSON-RPC action; no raw action or path is accepted."
+    }
+  ]
+}

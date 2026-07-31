@@ -1,0 +1,18 @@
+{
+  "record": {
+    "Name": "trail-fixture",
+    "S3BucketName": "fixture-cloudtrail-logs"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "Name": "trail-fixture",
+      "S3BucketName": "fixture-cloudtrail-logs"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

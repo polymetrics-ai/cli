@@ -201,7 +201,10 @@ func validateDir(fsys fs.FS) (Report, error) {
 	if err != nil {
 		return Report{}, err
 	}
+	return validateNamedBundleDirs(fsys, names), nil
+}
 
+func validateNamedBundleDirs(fsys fs.FS, names []string) Report {
 	// Always non-nil so JSON output renders "findings": [] / "warnings": []
 	// rather than null on a clean run (the --json contract promises arrays).
 	findings := []Finding{}
@@ -225,7 +228,7 @@ func validateDir(fsys fs.FS) (Report, error) {
 	sortFindings(findings)
 	sortFindings(warnings)
 
-	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}, nil
+	return Report{Findings: findings, Warnings: warnings, ConnectorsChecked: len(names)}
 }
 
 // bundleDirNames returns the sorted top-level directory names of fsys, the

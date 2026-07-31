@@ -27,8 +27,8 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	if !caps.Check || !caps.Catalog || !caps.Read {
 		t.Fatalf("capabilities = %+v, want Check, Catalog, and Read", caps)
 	}
-	if caps.Write {
-		t.Fatalf("%s is read-only; Write capability must be false", wantName)
+	if !caps.Write {
+		t.Fatalf("%s parity connector must expose typed reverse-ETL writes", wantName)
 	}
 	cfg := connectors.RuntimeConfig{Config: map[string]string{"mode": "fixture"}}
 	if err := c.Check(context.Background(), cfg); err != nil {
@@ -41,7 +41,7 @@ func assertConnectorContract(t *testing.T, c connectors.Connector, wantName stri
 	if cat.Connector != wantName {
 		t.Fatalf("Catalog().Connector = %q, want %q", cat.Connector, wantName)
 	}
-	if len(cat.Streams) == 0 {
-		t.Fatal("Catalog returned zero streams")
+	if got, want := len(cat.Streams), 19; got != want {
+		t.Fatalf("Catalog streams = %d, want %d", got, want)
 	}
 }

@@ -1,0 +1,18 @@
+{
+  "record": {
+    "ResourceArn": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+    "ResourcePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[]}"
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "ResourceArn": "arn:aws:cloudtrail:us-east-1:123456789012:eventdatastore/fixture-store",
+      "ResourcePolicy": "{\"Version\":\"2012-10-17\",\"Statement\":[]}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

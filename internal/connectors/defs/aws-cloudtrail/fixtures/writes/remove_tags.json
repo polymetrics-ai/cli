@@ -1,0 +1,28 @@
+{
+  "record": {
+    "ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+    "TagsList": [
+      {
+        "Key": "fixture-key",
+        "Value": "fixture-value"
+      }
+    ]
+  },
+  "expect": {
+    "method": "POST",
+    "path": "/",
+    "body": {
+      "ResourceId": "arn:aws:cloudtrail:us-east-1:123456789012:trail/fixture-trail",
+      "TagsList": [
+        {
+          "Key": "fixture-key",
+          "Value": "fixture-value"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {}
+  }
+}

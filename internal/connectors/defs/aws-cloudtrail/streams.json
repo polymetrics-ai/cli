@@ -1,7 +1,11 @@
 {
   "base": {
-    "url": "{{ config.base_url }}",
+    "url": "https://cloudtrail.{{ config.aws_region_name }}.amazonaws.com",
     "user_agent": "polymetrics-go-cli",
+    "headers": {
+      "Content-Type": "application/x-amz-json-1.1",
+      "Accept": "application/x-amz-json-1.1"
+    },
     "auth": [
       {
         "mode": "none"
@@ -11,63 +15,219 @@
       "type": "none"
     },
     "check": {
-      "method": "GET",
-      "path": "/__legacy_hook/check"
+      "method": "POST",
+      "path": "/"
     },
-    "error_map": []
+    "error_map": [
+      {
+        "status": 400,
+        "match_body": "InvalidClientTokenId",
+        "class": "auth_failed",
+        "hint": "AWS rejected the access key; rotate aws_key_id/aws_secret_key."
+      },
+      {
+        "status": 400,
+        "match_body": "AccessDenied",
+        "class": "permission_denied",
+        "hint": "credential lacks permission for the fixed CloudTrail action."
+      },
+      {
+        "status": 403,
+        "class": "permission_denied",
+        "hint": "credential lacks permission for CloudTrail."
+      }
+    ]
   },
   "streams": [
     {
-      "name": "management_events",
-      "method": "GET",
-      "path": "/__legacy_hook/management_events",
+      "name": "describe_trails",
+      "method": "POST",
+      "path": "/",
       "records": {
         "path": "data"
       },
-      "schema": "schemas/management_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/describe_trails.json",
+      "projection": "passthrough"
     },
     {
-      "name": "read_only_events",
-      "method": "GET",
-      "path": "/__legacy_hook/read_only_events",
+      "name": "get_channel",
+      "method": "POST",
+      "path": "/",
       "records": {
         "path": "data"
       },
-      "schema": "schemas/read_only_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/get_channel.json",
+      "projection": "passthrough"
     },
     {
-      "name": "write_only_events",
-      "method": "GET",
-      "path": "/__legacy_hook/write_only_events",
+      "name": "get_dashboard",
+      "method": "POST",
+      "path": "/",
       "records": {
         "path": "data"
       },
-      "schema": "schemas/write_only_events.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/get_dashboard.json",
+      "projection": "passthrough"
     },
     {
-      "name": "console_logins",
-      "method": "GET",
-      "path": "/__legacy_hook/console_logins",
+      "name": "get_event_configuration",
+      "method": "POST",
+      "path": "/",
       "records": {
         "path": "data"
       },
-      "schema": "schemas/console_logins.json",
-      "incremental": {
-        "cursor_field": "EventTime",
-        "client_filtered": true
-      }
+      "schema": "schemas/get_event_configuration.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_event_data_store",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_event_data_store.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_event_selectors",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_event_selectors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_import",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_import.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_insight_selectors",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_insight_selectors.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_resource_policy",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_resource_policy.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_trail",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_trail.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "get_trail_status",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/get_trail_status.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_channels",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_channels.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_dashboards",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_dashboards.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_event_data_stores",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_event_data_stores.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_import_failures",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_import_failures.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_imports",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_imports.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_public_keys",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_public_keys.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_tags",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_tags.json",
+      "projection": "passthrough"
+    },
+    {
+      "name": "list_trails",
+      "method": "POST",
+      "path": "/",
+      "records": {
+        "path": "data"
+      },
+      "schema": "schemas/list_trails.json",
+      "projection": "passthrough"
     }
   ]
 }

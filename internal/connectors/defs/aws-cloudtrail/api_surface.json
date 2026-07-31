@@ -1,35 +1,428 @@
 {
-  "api": "AWS CloudTrail legacy connector hook surface",
-  "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-user-guide.html",
-  "reviewed_at": "2026-07-04",
-  "scope": "Tier-2 quarantine migration for the legacy aws-cloudtrail connector. The declared streams and schemas mirror legacy Catalog(); live request/auth/pagination behavior is owned by internal/connectors/hooks/aws-cloudtrail, which delegates to internal/connectors/aws-cloudtrail until the human-gated wave 6 cutover.",
+  "api": "AWS CloudTrail API Reference actions",
+  "docs": "https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_Operations.html",
+  "reviewed_at": "2026-07-31",
+  "operation_ledger_version": 1,
+  "scope": "Complete AWS CloudTrail API action inventory from the official Actions page. The official CloudTrail event-record contents page documents 31 top-level event record fields for LookupEvents payloads; those are schema fields, not separate API operations or CDC feeds.",
   "endpoints": [
     {
-      "method": "HOOK",
-      "path": "internal/connectors/aws-cloudtrail management_events read path",
+      "method": "POST",
+      "path": "cloudtrail_api_action:AddTags",
       "covered_by": {
-        "stream": "management_events"
+        "write": "add_tags"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/aws-cloudtrail read_only_events read path",
+      "method": "POST",
+      "path": "cloudtrail_api_action:CancelQuery",
       "covered_by": {
-        "stream": "read_only_events"
+        "direct_read": "query cancel"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/aws-cloudtrail write_only_events read path",
+      "method": "POST",
+      "path": "cloudtrail_api_action:CreateChannel",
       "covered_by": {
-        "stream": "write_only_events"
+        "write": "create_channel"
       }
     },
     {
-      "method": "HOOK",
-      "path": "internal/connectors/aws-cloudtrail console_logins read path",
+      "method": "POST",
+      "path": "cloudtrail_api_action:CreateDashboard",
       "covered_by": {
-        "stream": "console_logins"
+        "write": "create_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:CreateEventDataStore",
+      "covered_by": {
+        "write": "create_event_data_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:CreateTrail",
+      "covered_by": {
+        "write": "create_trail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeleteChannel",
+      "covered_by": {
+        "write": "delete_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeleteDashboard",
+      "covered_by": {
+        "write": "delete_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeleteEventDataStore",
+      "covered_by": {
+        "write": "delete_event_data_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeleteResourcePolicy",
+      "covered_by": {
+        "write": "delete_resource_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeleteTrail",
+      "covered_by": {
+        "write": "delete_trail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DeregisterOrganizationDelegatedAdmin",
+      "covered_by": {
+        "write": "deregister_organization_delegated_admin"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DescribeQuery",
+      "covered_by": {
+        "direct_read": "query describe"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DescribeTrails",
+      "covered_by": {
+        "stream": "describe_trails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:DisableFederation",
+      "covered_by": {
+        "write": "disable_federation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:EnableFederation",
+      "covered_by": {
+        "write": "enable_federation"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GenerateQuery",
+      "covered_by": {
+        "direct_read": "query generate"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetChannel",
+      "covered_by": {
+        "stream": "get_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetDashboard",
+      "covered_by": {
+        "stream": "get_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetEventConfiguration",
+      "covered_by": {
+        "stream": "get_event_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetEventDataStore",
+      "covered_by": {
+        "stream": "get_event_data_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetEventSelectors",
+      "covered_by": {
+        "stream": "get_event_selectors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetImport",
+      "covered_by": {
+        "stream": "get_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetInsightSelectors",
+      "covered_by": {
+        "stream": "get_insight_selectors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetQueryResults",
+      "covered_by": {
+        "direct_read": "query results"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetResourcePolicy",
+      "covered_by": {
+        "stream": "get_resource_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetTrail",
+      "covered_by": {
+        "stream": "get_trail"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:GetTrailStatus",
+      "covered_by": {
+        "stream": "get_trail_status"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListChannels",
+      "covered_by": {
+        "stream": "list_channels"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListDashboards",
+      "covered_by": {
+        "stream": "list_dashboards"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListEventDataStores",
+      "covered_by": {
+        "stream": "list_event_data_stores"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListImportFailures",
+      "covered_by": {
+        "stream": "list_import_failures"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListImports",
+      "covered_by": {
+        "stream": "list_imports"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListInsightsData",
+      "covered_by": {
+        "direct_read": "insights data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListInsightsMetricData",
+      "covered_by": {
+        "direct_read": "insights metric-data"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListPublicKeys",
+      "covered_by": {
+        "stream": "list_public_keys"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListQueries",
+      "covered_by": {
+        "direct_read": "query list"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListTags",
+      "covered_by": {
+        "stream": "list_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:ListTrails",
+      "covered_by": {
+        "stream": "list_trails"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:LookupEvents",
+      "covered_by": {
+        "direct_read": "events lookup"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:PutEventConfiguration",
+      "covered_by": {
+        "write": "put_event_configuration"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:PutEventSelectors",
+      "covered_by": {
+        "write": "put_event_selectors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:PutInsightSelectors",
+      "covered_by": {
+        "write": "put_insight_selectors"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:PutResourcePolicy",
+      "covered_by": {
+        "write": "put_resource_policy"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:RegisterOrganizationDelegatedAdmin",
+      "covered_by": {
+        "write": "register_organization_delegated_admin"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:RemoveTags",
+      "covered_by": {
+        "write": "remove_tags"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:RestoreEventDataStore",
+      "covered_by": {
+        "write": "restore_event_data_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:SearchSampleQueries",
+      "covered_by": {
+        "direct_read": "sample-queries search"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StartDashboardRefresh",
+      "covered_by": {
+        "write": "start_dashboard_refresh"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StartEventDataStoreIngestion",
+      "covered_by": {
+        "write": "start_event_data_store_ingestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StartImport",
+      "covered_by": {
+        "write": "start_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StartLogging",
+      "covered_by": {
+        "write": "start_logging"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StartQuery",
+      "covered_by": {
+        "direct_read": "query start"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StopEventDataStoreIngestion",
+      "covered_by": {
+        "write": "stop_event_data_store_ingestion"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StopImport",
+      "covered_by": {
+        "write": "stop_import"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:StopLogging",
+      "covered_by": {
+        "write": "stop_logging"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:UpdateChannel",
+      "covered_by": {
+        "write": "update_channel"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:UpdateDashboard",
+      "covered_by": {
+        "write": "update_dashboard"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:UpdateEventDataStore",
+      "covered_by": {
+        "write": "update_event_data_store"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "cloudtrail_api_action:UpdateTrail",
+      "covered_by": {
+        "write": "update_trail"
       }
     }
   ]
