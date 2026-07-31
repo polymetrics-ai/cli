@@ -26,7 +26,7 @@
       "approval": "Requires reverse ETL plan -> preview -> explicit approval -> execute.",
       "availability": "implemented",
       "examples": [
-        "pm bitbucket repositories create --workspace <workspace> --repo-slug <slug> --scm git --preview"
+        "pm bitbucket repositories create --workspace <workspace> --repo-slug <slug> --scm git --private=false --preview"
       ],
       "flags": [
         {
